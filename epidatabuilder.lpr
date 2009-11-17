@@ -7,16 +7,14 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, main, LResources
-  { you can add units after this };
+  Forms, main, LResources, design_frame;
 
 {$IFDEF WINDOWS}{$R epidatabuilder.rc}{$ENDIF}
 
 begin
   {$I epidatabuilder.lrs}
-  Application.Title := 'EpiData Builder';
   Application.Initialize;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.
 

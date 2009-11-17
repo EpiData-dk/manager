@@ -1,0 +1,37 @@
+object DesignFrame: TDesignFrame
+  Left = 0
+  Height = 634
+  Top = 0
+  Width = 878
+  ClientHeight = 634
+  ClientWidth = 878
+  DockSite = True
+  OnDockDrop = FrameDockDrop
+  OnDockOver = FrameDockOver
+  TabOrder = 0
+  DesignLeft = 528
+  DesignTop = 271
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 878
+    Caption = 'ToolBar1'
+    Color = clTeal
+    ParentColor = False
+    TabOrder = 0
+    object IntFieldBtn: TToolButton
+      Left = 1
+      Top = 2
+      Action = NewIntField
+    end
+  end
+  object ActionList1: TActionList
+    left = 480
+    top = 263
+    object NewIntField: TAction
+      Caption = 'Integer Field'
+      OnExecute = NewIntFieldExecute
+    end
+  end
+end

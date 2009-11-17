@@ -1,8 +1,87 @@
-object Form1: TForm1
-  Left = 729
-  Height = 300
-  Top = 303
-  Width = 400
-  Caption = 'Form1'
+object MainForm: TMainForm
+  Left = 532
+  Height = 655
+  Top = 247
+  Width = 975
+  ActiveControl = ProgressPanel
+  Caption = 'MainForm'
+  ClientHeight = 630
+  ClientWidth = 975
+  Menu = MainFormMenu
   LCLVersion = '0.9.29'
+  object ProgressPanel: TPanel
+    Left = 0
+    Height = 50
+    Top = 0
+    Width = 975
+    Align = alTop
+    ClientHeight = 50
+    ClientWidth = 975
+    TabOrder = 0
+    object DesignBtn: TBitBtn
+      Left = 8
+      Height = 30
+      Top = 8
+      Width = 144
+      Caption = 'Design Dataform'
+      OnClick = DesignBtnClick
+      TabOrder = 0
+    end
+    object MetaDataBtn: TBitBtn
+      Left = 184
+      Height = 30
+      Top = 8
+      Width = 152
+      Caption = 'Assign Metadata'
+      TabOrder = 1
+    end
+    object ControlBtn: TBitBtn
+      Left = 368
+      Height = 30
+      Top = 8
+      Width = 155
+      Caption = 'Controls'
+      TabOrder = 2
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 21
+    Top = 609
+    Width = 975
+    Panels = <    
+      item
+        Width = 700
+      end    
+      item
+        Bevel = pbRaised
+        Text = '|'
+        Width = 12
+      end    
+      item
+        Width = 300
+      end>
+    SimplePanel = False
+  end
+  object MainFormMenu: TMainMenu
+    left = 544
+    top = 288
+    object FileMenu: TMenuItem
+      Caption = 'File'
+      Hint = 'Exit'
+      object ExitMenuItem: TMenuItem
+        Action = FileExit1
+      end
+    end
+  end
+  object MainFormActionList: TActionList
+    left = 544
+    top = 352
+    object FileExit1: TFileExit
+      Category = 'File'
+      Caption = 'E&xit'
+      Hint = 'Exit'
+      ShortCut = 121
+    end
+  end
 end

@@ -5,10 +5,25 @@ unit main;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs; 
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls;
 
 type
-  TForm1 = class(TForm)
+
+  { TMainForm }
+
+  TMainForm = class(TForm)
+    ControlBtn: TBitBtn;
+    MetaDataBtn: TBitBtn;
+    DesignBtn: TBitBtn;
+    MainFormActionList: TActionList;
+    FileExit1: TFileExit;
+    MainFormMenu: TMainMenu;
+    FileMenu: TMenuItem;
+    ExitMenuItem: TMenuItem;
+    ProgressPanel: TPanel;
+    StatusBar1: TStatusBar;
+    procedure DesignBtnClick(Sender: TObject);
   private
     { private declarations }
   public
@@ -16,9 +31,25 @@ type
   end; 
 
 var
-  Form1: TForm1; 
+  MainForm: TMainForm;
 
 implementation
+
+uses
+  design_frame;
+
+var
+  Frame: TFrame;
+
+{ TMainForm }
+
+procedure TMainForm.DesignBtnClick(Sender: TObject);
+begin
+  Frame := TDesignFrame.Create(self);
+  Frame.Align := alClient;
+  Frame.BringToFront;
+  Frame.Parent := Self;
+end;
 
 initialization
   {$I main.lrs}
