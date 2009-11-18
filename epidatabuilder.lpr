@@ -7,7 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, main, LResources, design_frame;
+  Forms, main, LResources, design_frame, fieldedit, Design_Field_Frame,
+designutils;
 
 {$IFDEF WINDOWS}{$R epidatabuilder.rc}{$ENDIF}
 

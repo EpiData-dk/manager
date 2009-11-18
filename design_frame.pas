@@ -6,49 +6,79 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList, StdCtrls,
-  Controls, MaskEdit;
+  Controls, MaskEdit, Buttons, ExtCtrls, UEpiDataFile, FieldEdit;
 
 type
 
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
-    NewIntField: TAction;
     ActionList1: TActionList;
-    ToolBar1: TToolBar;
+    FieldToolBar: TToolBar;
+    FieldToolBarImageList: TImageList;
     IntFieldBtn: TToolButton;
-    procedure Edit1EndDrag(Sender, Target: TObject; X, Y: Integer);
+    DesignPanel: TPanel;
+    SelectorButton: TToolButton;
+    FloatFieldBtn: TToolButton;
+    SepToolBtn1: TToolButton;
+    ToolButton1: TToolButton;
+    ClearToolBtn: TToolButton;
+    procedure ClearToolBtnClick(Sender: TObject);
     procedure FrameDockDrop(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer);
     procedure FrameDockOver(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer; State: TDragState; var Accept: Boolean);
-    procedure NewIntFieldExecute(Sender: TObject);
+    procedure FrameMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure ToolBtnClick(Sender: TObject);
   private
     { private declarations }
+    ActiveButton: TToolButton;
+    function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer): TFieldEdit;
   public
     { public declarations }
+    constructor Create(TheOwner: TComponent); override;
   end;
 
 implementation
 
 uses
-  main, graphics;
+  main, graphics, UDataFileTypes, Design_Field_Frame, designutils;
 
 { TDesignFrame }
 
-procedure TDesignFrame.NewIntFieldExecute(Sender: TObject);
+function TDesignFrame.NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer
+  ): TFieldEdit;
 var
-  NewField:  TEdit;
+  FieldForm: TFieldCreateForm;
 begin
-  NewField := TEdit.Create(Self);
-  NewField.Parent := self;
-  NewField.Left := 5;
-  NewField.Top := 15;
-  NewField.Width := 100;
-  NewField.Height := 12;
-  NewField.DragMode := dmAutomatic;
-  NewField.DragKind := dkDock;
-  NewField.OnEndDrag := @Edit1EndDrag;
+  Result := nil;
+
+  FieldForm := TFieldCreateForm.Create(Self, AField.FieldType = ftFloat);
+  FieldForm.Top := Self.Parent.Top + ATop;
+  FieldForm.Left := Self.Parent.Left + ALeft;
+  if FieldForm.ShowModal = mrCancel then exit;
+
+  Result := TFieldEdit.Create(AField, DesignPanel);
+  Result.Parent := DesignPanel;
+  Result.Left := ALeft;
+  Result.Top := ATop;
+  Result.DragMode := dmAutomatic;
+  Result.DragKind := dkDock;
+end;
+
+constructor TDesignFrame.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+  ActiveButton := SelectorButton;
+end;
+
+procedure TDesignFrame.ToolBtnClick(Sender: TObject);
+begin
+  if not (Sender is TToolButton) then exit;
+  ActiveButton.Down := false;
+  TToolButton(Sender).Down := true;
+  ActiveButton := TToolButton(Sender);
 end;
 
 procedure TDesignFrame.FrameDockDrop(Sender: TObject; Source: TDragDockObject;
@@ -59,6 +89,21 @@ begin
     [Sender.ClassName, Source.Control.ClassName, X, Y]);
   Source.Control.Left := X - Source.DockOffset.X;
   Source.Control.Top := Y - Source.DockOffset.Y;
+end;
+
+procedure TDesignFrame.ClearToolBtnClick(Sender: TObject);
+var
+  Comp: TControl;
+begin
+  while DesignPanel.ControlCount > 0 do
+  begin
+    Comp := DesignPanel.Controls[DesignPanel.ControlCount-1];
+    if Comp is TFieldEdit then
+      // Currently destroy field, later remove through DF!
+      TFieldEdit(Comp).Field.Free;
+    DesignPanel.RemoveControl(Comp);
+    FreeAndNil(Comp);
+  end;
 end;
 
 procedure TDesignFrame.FrameDockOver(Sender: TObject; Source: TDragDockObject;
@@ -73,11 +118,19 @@ begin
     [Sender.ClassName, Source.Control.ClassName, X, Y, S, t]);
 end;
 
-procedure TDesignFrame.Edit1EndDrag(Sender, Target: TObject; X, Y: Integer);
+procedure TDesignFrame.FrameMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  TmpField: TEpiField;
 begin
-  MainForm.StatusBar1.Panels[0].Text := Format(
-    'Sender: %s, Target: %s, X: %d, Y: %d',
-    [Sender.ClassName, Target.ClassName, X, Y]);
+  if Button <> mbLeft then exit;
+  if ActiveButton.Tag = 0 then Exit;
+  case ActiveButton.Tag of
+    1: TmpField := TEpiField.CreateField(ftInteger);
+    2: TmpField := TEpiField.CreateField(ftFloat);
+  end;
+  NewFieldEdit(TmpField, X, Y);
+  ToolBtnClick(SelectorButton);
 end;
 
 initialization

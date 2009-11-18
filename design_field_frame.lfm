@@ -1,0 +1,102 @@
+object FieldCreateForm: TFieldCreateForm
+  Left = 663
+  Height = 124
+  Top = 473
+  Width = 248
+  ActiveControl = FieldNameEdit
+  ClientHeight = 124
+  ClientWidth = 248
+  OnCloseQuery = FormCloseQuery
+  LCLVersion = '0.9.29'
+  object Label1: TLabel
+    Left = 0
+    Height = 18
+    Top = 9
+    Width = 79
+    Caption = 'Field Name:'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 0
+    Height = 18
+    Top = 41
+    Width = 94
+    Caption = 'Variable label:'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 0
+    Height = 18
+    Top = 73
+    Width = 32
+    Caption = 'Size:'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 0
+    Height = 18
+    Top = 105
+    Width = 62
+    Caption = 'Decimals'
+    ParentColor = False
+    Visible = False
+  end
+  object FieldNameEdit: TEdit
+    Left = 108
+    Height = 27
+    Top = 0
+    Width = 140
+    TabOrder = 0
+  end
+  object LabelEdit: TEdit
+    Left = 108
+    Height = 27
+    Top = 32
+    Width = 140
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 108
+    Height = 25
+    Top = 96
+    Width = 60
+    Anchors = [akRight, akBottom]
+    Caption = 'Ok'
+    ModalResult = 1
+    TabOrder = 4
+  end
+  object Button2: TButton
+    Left = 184
+    Height = 25
+    Top = 96
+    Width = 59
+    Anchors = [akRight, akBottom]
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 5
+  end
+  object FieldSizeEdit: TMaskEdit
+    Left = 108
+    Height = 27
+    Top = 64
+    Width = 135
+    CharCase = ecNormal
+    MaxLength = 3
+    TabOrder = 2
+    EditMask = '999;0;_'
+    SpaceChar = '_'
+  end
+  object FieldDecimalSizeEdit: TMaskEdit
+    Left = 108
+    Height = 27
+    Top = 96
+    Width = 135
+    CharCase = ecNormal
+    Enabled = False
+    MaxLength = 3
+    TabOrder = 3
+    Visible = False
+    EditMask = '999;0;_'
+    SpaceChar = '_'
+  end
+end

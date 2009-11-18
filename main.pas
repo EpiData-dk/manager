@@ -49,6 +49,7 @@ begin
   Frame.Align := alClient;
   Frame.BringToFront;
   Frame.Parent := Self;
+  DesignBtn.Enabled := false;
 end;
 
 initialization
