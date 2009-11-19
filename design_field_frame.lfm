@@ -10,47 +10,47 @@ object FieldCreateForm: TFieldCreateForm
   LCLVersion = '0.9.29'
   object Label1: TLabel
     Left = 0
-    Height = 18
+    Height = 14
     Top = 9
-    Width = 79
+    Width = 57
     Caption = 'Field Name:'
     ParentColor = False
   end
   object Label2: TLabel
     Left = 0
-    Height = 18
+    Height = 14
     Top = 41
-    Width = 94
+    Width = 68
     Caption = 'Variable label:'
     ParentColor = False
   end
   object Label3: TLabel
     Left = 0
-    Height = 18
+    Height = 14
     Top = 73
-    Width = 32
+    Width = 24
     Caption = 'Size:'
     ParentColor = False
   end
   object Label4: TLabel
     Left = 0
-    Height = 18
+    Height = 14
     Top = 105
-    Width = 62
+    Width = 42
     Caption = 'Decimals'
     ParentColor = False
     Visible = False
   end
   object FieldNameEdit: TEdit
     Left = 108
-    Height = 27
+    Height = 21
     Top = 0
     Width = 140
     TabOrder = 0
   end
   object LabelEdit: TEdit
     Left = 108
-    Height = 27
+    Height = 21
     Top = 32
     Width = 140
     TabOrder = 1
@@ -77,7 +77,7 @@ object FieldCreateForm: TFieldCreateForm
   end
   object FieldSizeEdit: TMaskEdit
     Left = 108
-    Height = 27
+    Height = 21
     Top = 64
     Width = 135
     CharCase = ecNormal
@@ -88,7 +88,7 @@ object FieldCreateForm: TFieldCreateForm
   end
   object FieldDecimalSizeEdit: TMaskEdit
     Left = 108
-    Height = 27
+    Height = 21
     Top = 96
     Width = 135
     CharCase = ecNormal

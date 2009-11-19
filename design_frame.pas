@@ -93,6 +93,16 @@ begin
   Result.AutoSelect := false;
   Result.AutoSize := false;
 
+  With Result do
+  begin
+    VariableLabel.Left := Left - VariableLabel.Width + 10;
+    VariableLabel.Top := Top;
+    VariableLabel.Parent := DesignPanel;
+    VariableLabel.Caption := FieldForm.LabelEdit.Text;
+    VariableLabel.DragMode := dmAutomatic;
+    VariableLabel.DragKind := dkDock;
+  end;
+
   AField.FieldName := Result.Text;
   AField.FieldLength := StrToInt(FieldForm.FieldSizeEdit.Text);
   if AField.FieldType = ftFloat then
@@ -110,11 +120,8 @@ var
   S: string;
 begin
   DragObject := TDragDockObject.Create(TControl(Sender));
-  with TFieldEdit(Sender) do
-  begin
-    OldWidth := Width;
-    OldHeight := Height;
-  end;
+//  if Sender is TFieldEdit then
+//    TFieldEdit(Sender).VariableLabel.BeginDrag(false);
 
   {$IFDEF VER2.4}
   WriteStr(S, DesignPanel.DockSite);
@@ -189,9 +196,8 @@ begin
   while DesignPanel.ControlCount > 0 do
   begin
     Comp := DesignPanel.Controls[DesignPanel.ControlCount-1];
-    Label4.Caption := Comp.ClassName;
 //    Field := (Sender as TFieldEdit).Field;
-    ActiveDatafile.RemoveField(Field, true);
+//    ActiveDatafile.RemoveField(Field, true);
     DesignPanel.RemoveControl(Comp);
     FreeAndNil(Comp);
   end;

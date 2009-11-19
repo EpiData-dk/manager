@@ -1,11 +1,11 @@
 object MainForm: TMainForm
-  Left = 502
+  Left = 340
   Height = 655
-  Top = 251
+  Top = 219
   Width = 975
   ActiveControl = ProgressPanel
   Caption = 'MainForm'
-  ClientHeight = 630
+  ClientHeight = 636
   ClientWidth = 975
   Menu = MainFormMenu
   LCLVersion = '0.9.29'
@@ -46,8 +46,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 588
+    Height = 20
+    Top = 596
     Width = 975
     Panels = <    
       item
@@ -65,8 +65,8 @@ object MainForm: TMainForm
   end
   object StatusBar2: TStatusBar
     Left = 0
-    Height = 21
-    Top = 609
+    Height = 20
+    Top = 616
     Width = 975
     Panels = <    
       item
