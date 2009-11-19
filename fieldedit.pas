@@ -14,15 +14,19 @@ type
   TFieldEdit = class(TEdit)
   private
     FField: TEpiField;
-
+    FOldWidth: Integer;
+    FOldHeight: Integer;
   protected
 
   public
     constructor Create(AField: TEpiField; AOwner: TComponent);
     destructor Destroy; override;
     property Field: TEpiField read FField write FField;
+    property OldWidth: Integer read FOldWidth write FOldWidth;
+    property OldHeight: Integer read FOldHeight write FOldHeight;
   published
-
+    property OnStartDock;
+    property OnEndDock;
   end;
 
 implementation
@@ -38,6 +42,7 @@ end;
 destructor TFieldEdit.Destroy;
 begin
   inherited Destroy;
+  FField := nil;
 end;
 
 end.

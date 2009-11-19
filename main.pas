@@ -23,6 +23,7 @@ type
     ExitMenuItem: TMenuItem;
     ProgressPanel: TPanel;
     StatusBar1: TStatusBar;
+    StatusBar2: TStatusBar;
     procedure DesignBtnClick(Sender: TObject);
   private
     { private declarations }

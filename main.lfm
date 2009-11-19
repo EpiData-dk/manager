@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 532
+  Left = 502
   Height = 655
-  Top = 247
+  Top = 251
   Width = 975
   ActiveControl = ProgressPanel
   Caption = 'MainForm'
@@ -47,7 +47,7 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 634
+    Top = 588
     Width = 975
     Panels = <    
       item
@@ -60,6 +60,20 @@ object MainForm: TMainForm
       end    
       item
         Width = 300
+      end>
+    SimplePanel = False
+  end
+  object StatusBar2: TStatusBar
+    Left = 0
+    Height = 21
+    Top = 609
+    Width = 975
+    Panels = <    
+      item
+        Width = 400
+      end    
+      item
+        Width = 400
       end>
     SimplePanel = False
   end
