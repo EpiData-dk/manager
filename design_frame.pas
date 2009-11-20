@@ -57,6 +57,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
   end;
 
 implementation
@@ -123,7 +124,7 @@ begin
 //  if Sender is TFieldEdit then
 //    TFieldEdit(Sender).VariableLabel.BeginDrag(false);
 
-  {$IFDEF VER2.4}
+  {$IFDEF VER2_4}
   WriteStr(S, DesignPanel.DockSite);
   {$ELSE}
   S := '';
@@ -152,6 +153,13 @@ begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
   ActiveDatafile := TEpiDataFile.Create();
+end;
+
+destructor TDesignFrame.Destroy;
+begin
+  if Assigned(ActiveDatafile) then
+   FreeAndNil(ActiveDatafile);
+  inherited Destroy;
 end;
 
 
@@ -209,7 +217,7 @@ procedure TDesignFrame.DesignPanelGetSiteInfo(Sender: TObject;
 var
   s: string;
 begin
-  {$IFDEF VER2.4}
+  {$IFDEF VER2_4}
   writestr(s, candock);
   {$ELSE}
   s := '';
@@ -233,7 +241,7 @@ var
  s: string;
  t: String;
 begin
-  {$IFDEF VER2.4}
+  {$IFDEF VER2_4}
   writestr(s, allow);
   {$ELSE}
   s := '';
@@ -258,7 +266,7 @@ procedure TDesignFrame.FrameDockOver(Sender: TObject; Source: TDragDockObject;
 var
   s, t: string;
 begin
-  {$IFDEF VER2.4}
+  {$IFDEF VER2_4}
   WriteStr(S, State);
   WriteStr(t, Accept);
   {$ELSE}

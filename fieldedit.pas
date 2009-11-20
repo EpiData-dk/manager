@@ -58,7 +58,8 @@ destructor TFieldEdit.Destroy;
 begin
   inherited Destroy;
   FField := nil;
-  FVarLabel.Free;
+  // Do not destroy - it's handled byt the visual destruction of the frame.
+  FVarLabel := nil;
 end;
 
 { TFieldLabel }

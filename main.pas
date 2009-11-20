@@ -21,6 +21,7 @@ type
     MainFormMenu: TMainMenu;
     FileMenu: TMenuItem;
     ExitMenuItem: TMenuItem;
+    PageControl1: TPageControl;
     ProgressPanel: TPanel;
     StatusBar1: TStatusBar;
     StatusBar2: TStatusBar;
@@ -39,18 +40,26 @@ implementation
 uses
   design_frame;
 
-var
-  Frame: TFrame;
 
 { TMainForm }
 
 procedure TMainForm.DesignBtnClick(Sender: TObject);
+var
+  Frame: TFrame;
+  TabSheet: TTabSheet;
 begin
+  TabSheet := TTabSheet.Create(PageControl1);
+  TabSheet.PageControl := PageControl1;
+  TabSheet.Name := 'TabSheet' + IntToStr(PageControl1.PageCount);
+  PageControl1.ActivePage := TabSheet;
+
+  if PageControl1.PageCount > 1 then
+    PageControl1.ShowTabs := true;
+
   Frame := TDesignFrame.Create(self);
+  Frame.Name := 'Frame' + IntToStr(PageControl1.PageCount);
   Frame.Align := alClient;
-  Frame.BringToFront;
-  Frame.Parent := Self;
-  DesignBtn.Enabled := false;
+  Frame.Parent := TabSheet;
 end;
 
 initialization
