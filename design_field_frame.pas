@@ -35,6 +35,9 @@ implementation
 uses
   Controls;
 
+var
+  LastFieldNo: Integer = 1;
+
 { TFieldCreateForm }
 
 procedure TFieldCreateForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
@@ -55,12 +58,18 @@ end;
 constructor TFieldCreateForm.Create(TheOwner: TComponent; ShowDecimals: boolean);
 begin
   inherited Create(TheOwner);
+
+  FieldNameEdit.Text := 'V' + IntToStr(LastFieldNo);
+  FieldSizeEdit.Text := '5';
+  Inc(LastFieldNo);
+
   if not ShowDecimals then exit;
 
-  Height := Height + FieldDecimalSizeEdit.Height;
+  Height := Height + FieldDecimalSizeEdit.Height + 5;
   Label4.Visible := true;
   FieldDecimalSizeEdit.Visible := true;
   FieldDecimalSizeEdit.Enabled := true;
+  FieldDecimalSizeEdit.Text    := '2';
 end;
 
 initialization

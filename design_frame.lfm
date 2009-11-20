@@ -6,8 +6,8 @@ object DesignFrame: TDesignFrame
   ClientHeight = 665
   ClientWidth = 993
   TabOrder = 0
-  DesignLeft = 553
-  DesignTop = 316
+  DesignLeft = 438
+  DesignTop = 239
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -140,23 +140,23 @@ object DesignFrame: TDesignFrame
       WordWrap = True
     end
     object Edit1: TEdit
-      Left = 240
+      Left = 16
       Height = 27
-      Top = 494
+      Top = 422
       Width = 80
       TabOrder = 0
       Text = 'Edit1'
     end
   end
   object ActionList1: TActionList
-    left = 288
-    top = 376
+    left = 312
+    top = 208
   end
   object FieldToolBarImageList: TImageList
     Height = 24
     Width = 24
-    left = 296
-    top = 224
+    left = 312
+    top = 112
     Bitmap = {
       4C69050000001800000018000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -525,5 +525,13 @@ object DesignFrame: TDesignFrame
     Filter = 'EpiData XML|*.recxml'
     left = 216
     top = 112
+  end
+  object FieldPopUp: TPopupMenu
+    left = 216
+    top = 208
+    object EditFieldMenuItem: TMenuItem
+      Caption = 'Edit Field'
+      OnClick = EditFieldMenuItemClick
+    end
   end
 end

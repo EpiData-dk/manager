@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList, StdCtrls,
-  Controls, MaskEdit, Buttons, ExtCtrls, Dialogs, UEpiDataFile, FieldEdit;
+  Controls, MaskEdit, Buttons, ExtCtrls, Dialogs, Menus, UEpiDataFile,
+  FieldEdit, Design_Field_Frame;
 
 type
 
@@ -23,7 +24,9 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    EditFieldMenuItem: TMenuItem;
     Panel1: TPanel;
+    FieldPopUp: TPopupMenu;
     SaveDialog1: TSaveDialog;
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
@@ -39,6 +42,7 @@ type
     procedure DesignPanelUnDock(Sender: TObject; Client: TControl;
       NewTarget: TWinControl; var Allow: Boolean);
     procedure EditChange(Sender: TObject);
+    procedure EditFieldMenuItemClick(Sender: TObject);
     procedure FrameDockDrop(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer);
     procedure FrameDockOver(Sender: TObject; Source: TDragDockObject; X,
@@ -51,9 +55,17 @@ type
     { private declarations }
     ActiveButton: TToolButton;
     ActiveDatafile: TEpiDataFile;
-    function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer): TFieldEdit;
-    procedure StartDock(Sender: TObject; var DragObject: TDragDockObject);
-    procedure EndDock(Sender, Target: TObject; X,Y: Integer);
+    ClickedField: TFieldEdit;
+    function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer;
+      CreateForm: boolean = true): TFieldEdit;
+    procedure UpdateFieldEditFromForm(FieldEdit: TFieldEdit;
+      FieldForm: TFieldCreateForm; ATop, ALeft: Integer);
+    procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
+    procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
+    procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure StartFieldLabelDock(Sender: TObject; var DragObject: TDragDockObject);
+    procedure EndFieldLabelDock(Sender, Target: TObject; X,Y: Integer);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -63,66 +75,80 @@ type
 implementation
 
 uses
-  main, graphics, UDataFileTypes, Design_Field_Frame, designutils,
-  types;
+  main, graphics, UDataFileTypes, designutils,
+  types, math;
 
 { TDesignFrame }
 
-function TDesignFrame.NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer
-  ): TFieldEdit;
+function TDesignFrame.NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer;
+  CreateForm: boolean): TFieldEdit;
 var
   FieldForm: TFieldCreateForm;
+  Pt: TPoint;
 begin
   Result := nil;
 
+//  if CreateForm then begin;
   FieldForm := TFieldCreateForm.Create(Self, AField.FieldType = ftFloat);
-  FieldForm.Top := Self.Parent.Top + ATop;
-  FieldForm.Left := Self.Parent.Left + ALeft;
+  Pt := ClientToScreen(Point(ATop, ALeft));
+  FieldForm.Top := Pt.Y;
+  FieldForm.Left := Pt.X;
   if FieldForm.ShowModal = mrCancel then exit;
 
   Result := TFieldEdit.Create(AField, DesignPanel);
   Result.Parent := DesignPanel;
-  Result.Left := ALeft;
-  Result.Top := ATop;
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
-  Result.OnStartDock := @StartDock;
-  Result.OnEndDock := @EndDock;
-  Result.Text := FieldForm.FieldNameEdit.Text;
+  Result.OnStartDock := @StartFieldDock;
+  Result.OnEndDock := @EndFieldDock;
   Result.OnChange := @EditChange;
   Result.AutoSelect := false;
   Result.AutoSize := false;
+  Result.PopupMenu := FieldPopUp;
+  Result.OnMouseDown := @FieldMouseDown;
 
   With Result do
   begin
-    VariableLabel.Left := Left - VariableLabel.Width + 10;
-    VariableLabel.Top := Top;
     VariableLabel.Parent := DesignPanel;
-    VariableLabel.Caption := FieldForm.LabelEdit.Text;
     VariableLabel.DragMode := dmAutomatic;
     VariableLabel.DragKind := dkDock;
   end;
 
-  AField.FieldName := Result.Text;
-  AField.FieldLength := StrToInt(FieldForm.FieldSizeEdit.Text);
-  if AField.FieldType = ftFloat then
-    AField.FieldDecimals := StrToInt(FieldForm.FieldDecimalSizeEdit.Text);
-  AField.FieldX := ALeft;
-  AField.FieldY := ATop;
-  AField.VariableLabel := FieldForm.LabelEdit.Text;
+  UpdateFieldEditFromForm(Result, FieldForm, ATop, ALeft);
 
   FreeAndNil(FieldForm);
 end;
 
-procedure TDesignFrame.StartDock(Sender: TObject;
+procedure TDesignFrame.UpdateFieldEditFromForm(FieldEdit: TFieldEdit;
+  FieldForm: TFieldCreateForm; ATop, ALeft: Integer);
+begin
+  FieldEdit.Text := FieldForm.FieldNameEdit.Text;
+  FieldEdit.Left := ALeft;
+  FieldEdit.Top  := ATop;
+
+  With FieldEdit do
+  begin
+    VariableLabel.Caption := FieldForm.LabelEdit.Text;
+    VariableLabel.Left    := Left - VariableLabel.Width + 10;
+    VariableLabel.Top     := ATop;
+
+    Field.FieldName       := FieldForm.FieldNameEdit.Text;
+    Field.VariableLabel   := FieldForm.LabelEdit.Text;
+    Field.FieldLength     := StrToInt(FieldForm.FieldSizeEdit.Text);
+    if Field.FieldType = ftFloat then
+      Field.FieldDecimals := StrToInt(FieldForm.FieldDecimalSizeEdit.Text);
+    Field.FieldX          := ALeft;
+    Field.FieldY          := ATop;
+  end;
+end;
+
+procedure TDesignFrame.StartFieldDock(Sender: TObject;
   var DragObject: TDragDockObject);
 var
   S: string;
 begin
-  DragObject := TDragDockObject.Create(TControl(Sender));
-//  if Sender is TFieldEdit then
-//    TFieldEdit(Sender).VariableLabel.BeginDrag(false);
+  DragObject := TFieldDockObject.Create(TControl(Sender));
 
   {$IFDEF VER2_4}
   WriteStr(S, DesignPanel.DockSite);
@@ -134,7 +160,7 @@ begin
     [s, DesignPanel.DockClientCount ]);
 end;
 
-procedure TDesignFrame.EndDock(Sender, Target: TObject; X, Y: Integer);
+procedure TDesignFrame.EndFieldDock(Sender, Target: TObject; X, Y: Integer);
 begin
   if not (Sender is TFieldEdit) then exit;
 
@@ -148,11 +174,32 @@ begin
   end;
 end;
 
+procedure TDesignFrame.FieldMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button <> mbRight then exit;
+  if not (Sender is TFieldEdit) then exit;
+  ClickedField := TFieldEdit(Sender);
+end;
+
+procedure TDesignFrame.StartFieldLabelDock(Sender: TObject;
+  var DragObject: TDragDockObject);
+begin
+  DragObject := TDragDockObject.Create(TControl(Sender));
+end;
+
+procedure TDesignFrame.EndFieldLabelDock(Sender, Target: TObject; X, Y: Integer
+  );
+begin
+  //
+end;
+
 constructor TDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
   ActiveDatafile := TEpiDataFile.Create();
+  ClickedField := nil;
 end;
 
 destructor TDesignFrame.Destroy;
@@ -261,11 +308,47 @@ begin
   TFieldEdit(Sender).Text := TFieldEdit(Sender).Field.FieldName;
 end;
 
+procedure TDesignFrame.EditFieldMenuItemClick(Sender: TObject);
+var
+  FieldForm: TFieldCreateForm;
+begin
+  if not Assigned(ClickedField) then exit;
+  With ClickedField do
+  begin
+    FieldForm := TFieldCreateForm.Create(Self, Field.FieldType = ftFloat);
+    FieldForm.FieldNameEdit.Text := Field.FieldName;
+    FieldForm.LabelEdit.Text     := Field.VariableLabel;
+    FieldForm.FieldSizeEdit.Text := IntToSTr(Field.FieldLength);
+    if Field.FieldType = ftFloat then
+      FieldForm.FieldDecimalSizeEdit.Text := IntToStr(Field.FieldDecimals);
+    if FieldForm.ShowModal = mrCancel then exit;
+
+    UpdateFieldEditFromForm(ClickedField, FieldForm, ClickedField.Top, ClickedField.Left);
+  end;
+end;
+
 procedure TDesignFrame.FrameDockOver(Sender: TObject; Source: TDragDockObject;
   X, Y: Integer; State: TDragState; var Accept: Boolean);
 var
   s, t: string;
+  rect: TRect;
 begin
+
+{  Source.ShowDragImage;
+  with TFieldEdit(Source.Control) do
+  begin
+    Rect.Left := Min(Left, VariableLabel.Left);
+    Rect.Top := Min(Top, VariableLabel.Top);
+    Rect.Right := Max(
+      Left + Width,
+      VariableLabel.Left + VariableLabel.Width);
+    Rect.Bottom := Max(
+      Top + Height,
+      VariableLabel.Top + VariableLabel.Height);
+    Source.DockRect := Rect;
+  end;        }
+
+
   {$IFDEF VER2_4}
   WriteStr(S, State);
   WriteStr(t, Accept);
