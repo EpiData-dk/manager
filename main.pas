@@ -33,6 +33,7 @@ type
     StatusBar1: TStatusBar;
     StatusBar2: TStatusBar;
     procedure Button1Click(Sender: TObject);
+    procedure ControlBtnClick(Sender: TObject);
     procedure DesignBtnClick(Sender: TObject);
   private
     { private declarations }
@@ -85,6 +86,11 @@ begin
   for i := 0 to Panel1.ControlCount - 1 do
     if Panel1.Controls[i] is TLabel then
       TLabel(Panel1.Controls[i]).Caption := Panel1.Controls[i].Name;
+end;
+
+procedure TMainForm.ControlBtnClick(Sender: TObject);
+begin
+
 end;
 
 procedure TMainForm.CloseTab(Sender: TObject);

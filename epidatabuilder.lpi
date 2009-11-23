@@ -13,6 +13,7 @@
       <UseVersionInfo Value="True"/>
       <CurrentMajorRevNr Value="1"/>
       <ProjectVersion Value="0.1.0.0"/>
+      <Language Value="0809"/>
     </VersionInfo>
     <PublishOptions>
       <Version Value="2"/>
@@ -90,7 +91,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="True"/>
+        <UseLineInfoUnit Value="False"/>
       </Debugging>
       <LinkSmart Value="True"/>
       <Options>

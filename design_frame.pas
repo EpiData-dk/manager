@@ -14,6 +14,8 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    FontDialog1: TFontDialog;
+    Label1: TLabel;
     NewFloatFieldAction: TAction;
     NewIntFieldAction: TAction;
     ActionList1: TActionList;
@@ -27,16 +29,23 @@ type
     SaveDialog1: TSaveDialog;
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
-    SepToolBtn1: TToolButton;
-    ToolButton1: TToolButton;
     ClearToolBtn: TToolButton;
     SaveToolBtn: TToolButton;
+    FontSelectButton: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
     procedure ClearToolBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
     procedure DesignPanelMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
     procedure EditChange(Sender: TObject);
     procedure EditFieldMenuItemClick(Sender: TObject);
+    procedure FontSelectButtonClick(Sender: TObject);
     procedure FrameDockDrop(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer);
     procedure FrameMouseDown(Sender: TObject; Button: TMouseButton;
@@ -125,6 +134,7 @@ begin
       Field.FieldDecimals := StrToInt(FieldForm.FieldDecimalSizeEdit.Text);
     Field.FieldX          := ALeft;
     Field.FieldY          := ATop;
+
   end;
 end;
 
@@ -267,6 +277,15 @@ begin
   end;
 end;
 
+procedure TDesignFrame.FontSelectButtonClick(Sender: TObject);
+begin
+  if FontDialog1.Execute then
+    begin
+      DesignPanel.Font := FontDialog1.Font;
+      DesignPanel.Repaint;
+    end;
+end;
+
 procedure TDesignFrame.FrameMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
@@ -286,13 +305,13 @@ end;
 procedure TDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
 begin
   ActiveButton := FloatFieldBtn;
-  FrameMouseDown(nil, mbLeft, [], 10, 10);
+  FrameMouseDown(nil, mbLeft, [], 150, 40+(ActiveDatafile.DataFields.Count*30));
 end;
 
 procedure TDesignFrame.NewIntFieldActionExecute(Sender: TObject);
 begin
   ActiveButton := IntFieldBtn;
-  FrameMouseDown(nil, mbLeft, [], 10, 10);
+  FrameMouseDown(nil, mbLeft, [], 150,40+(ActiveDatafile.DataFields.Count*30));
 end;
 
 initialization

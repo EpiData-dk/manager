@@ -1,13 +1,15 @@
 object MainForm: TMainForm
-  Left = 386
+  Cursor = crIBeam
+  Left = 239
   Height = 655
-  Top = 261
+  Top = 197
   Width = 975
   ActiveControl = ProgressPanel
-  Caption = 'MainForm'
-  ClientHeight = 630
+  Caption = 'EpiData file builder'
+  ClientHeight = 633
   ClientWidth = 975
   Menu = MainFormMenu
+  Position = poDesktopCenter
   LCLVersion = '0.9.29'
   object ProgressPanel: TPanel
     Left = 0
@@ -41,13 +43,14 @@ object MainForm: TMainForm
       Top = 8
       Width = 155
       Caption = 'Controls'
+      OnClick = ControlBtnClick
       TabOrder = 2
     end
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 588
+    Height = 20
+    Top = 593
     Width = 975
     Panels = <    
       item
@@ -65,8 +68,8 @@ object MainForm: TMainForm
   end
   object StatusBar2: TStatusBar
     Left = 0
-    Height = 21
-    Top = 609
+    Height = 20
+    Top = 613
     Width = 975
     Panels = <    
       item
@@ -79,26 +82,28 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 538
+    Height = 543
     Top = 50
     Width = 622
     Align = alClient
+    ParentShowHint = False
+    ShowHint = True
     ShowTabs = False
     TabOrder = 3
   end
   object Panel1: TPanel
     Left = 622
-    Height = 538
+    Height = 543
     Top = 50
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 538
+    ClientHeight = 543
     ClientWidth = 353
     TabOrder = 4
     object Label1: TLabel
       Left = 18
-      Height = 18
+      Height = 14
       Top = 70
       Width = 308
       Caption = 'label1'
@@ -107,7 +112,7 @@ object MainForm: TMainForm
     end
     object Label2: TLabel
       Left = 18
-      Height = 18
+      Height = 14
       Top = 136
       Width = 308
       Caption = 'Label2'
@@ -116,7 +121,7 @@ object MainForm: TMainForm
     end
     object Label3: TLabel
       Left = 20
-      Height = 18
+      Height = 14
       Top = 200
       Width = 308
       Caption = 'Label2'
@@ -125,7 +130,7 @@ object MainForm: TMainForm
     end
     object Label4: TLabel
       Left = 20
-      Height = 18
+      Height = 14
       Top = 280
       Width = 308
       Caption = 'Label2'
@@ -134,7 +139,7 @@ object MainForm: TMainForm
     end
     object Label5: TLabel
       Left = 20
-      Height = 18
+      Height = 14
       Top = 368
       Width = 308
       Caption = 'Label2'
