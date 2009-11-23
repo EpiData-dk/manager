@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 502
+  Left = 386
   Height = 655
-  Top = 251
+  Top = 261
   Width = 975
   ActiveControl = ProgressPanel
   Caption = 'MainForm'
@@ -81,10 +81,75 @@ object MainForm: TMainForm
     Left = 0
     Height = 538
     Top = 50
-    Width = 975
+    Width = 622
     Align = alClient
     ShowTabs = False
     TabOrder = 3
+  end
+  object Panel1: TPanel
+    Left = 622
+    Height = 538
+    Top = 50
+    Width = 353
+    Align = alRight
+    BevelInner = bvRaised
+    ClientHeight = 538
+    ClientWidth = 353
+    TabOrder = 4
+    object Label1: TLabel
+      Left = 18
+      Height = 18
+      Top = 70
+      Width = 308
+      Caption = 'label1'
+      ParentColor = False
+      WordWrap = True
+    end
+    object Label2: TLabel
+      Left = 18
+      Height = 18
+      Top = 136
+      Width = 308
+      Caption = 'Label2'
+      ParentColor = False
+      WordWrap = True
+    end
+    object Label3: TLabel
+      Left = 20
+      Height = 18
+      Top = 200
+      Width = 308
+      Caption = 'Label2'
+      ParentColor = False
+      WordWrap = True
+    end
+    object Label4: TLabel
+      Left = 20
+      Height = 18
+      Top = 280
+      Width = 308
+      Caption = 'Label2'
+      ParentColor = False
+      WordWrap = True
+    end
+    object Label5: TLabel
+      Left = 20
+      Height = 18
+      Top = 368
+      Width = 308
+      Caption = 'Label2'
+      ParentColor = False
+      WordWrap = True
+    end
+    object Button1: TButton
+      Left = 20
+      Height = 25
+      Top = 14
+      Width = 75
+      Caption = 'Clear'
+      OnClick = Button1Click
+      TabOrder = 0
+    end
   end
   object MainFormMenu: TMainMenu
     left = 544

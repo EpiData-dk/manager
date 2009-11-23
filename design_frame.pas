@@ -14,19 +14,16 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    NewFloatFieldAction: TAction;
+    NewIntFieldAction: TAction;
     ActionList1: TActionList;
-    Edit1: TEdit;
     FieldToolBar: TToolBar;
     FieldToolBarImageList: TImageList;
     IntFieldBtn: TToolButton;
     DesignPanel: TPanel;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
     EditFieldMenuItem: TMenuItem;
-    Panel1: TPanel;
     FieldPopUp: TPopupMenu;
+    DeleteFieldMenuItem: TMenuItem;
     SaveDialog1: TSaveDialog;
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
@@ -35,20 +32,17 @@ type
     ClearToolBtn: TToolButton;
     SaveToolBtn: TToolButton;
     procedure ClearToolBtnClick(Sender: TObject);
-    procedure DesignPanelGetSiteInfo(Sender: TObject; DockClient: TControl;
-      var InfluenceRect: TRect; MousePos: TPoint; var CanDock: Boolean);
+    procedure DeleteFieldMenuItemClick(Sender: TObject);
     procedure DesignPanelMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
-    procedure DesignPanelUnDock(Sender: TObject; Client: TControl;
-      NewTarget: TWinControl; var Allow: Boolean);
     procedure EditChange(Sender: TObject);
     procedure EditFieldMenuItemClick(Sender: TObject);
     procedure FrameDockDrop(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer);
-    procedure FrameDockOver(Sender: TObject; Source: TDragDockObject; X,
-      Y: Integer; State: TDragState; var Accept: Boolean);
     procedure FrameMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure NewFloatFieldActionExecute(Sender: TObject);
+    procedure NewIntFieldActionExecute(Sender: TObject);
     procedure ToolBtnClick(Sender: TObject);
     procedure SaveToolBtnClick(Sender: TObject);
   private
@@ -64,8 +58,6 @@ type
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure StartFieldLabelDock(Sender: TObject; var DragObject: TDragDockObject);
-    procedure EndFieldLabelDock(Sender, Target: TObject; X,Y: Integer);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -89,7 +81,7 @@ begin
   Result := nil;
 
 //  if CreateForm then begin;
-  FieldForm := TFieldCreateForm.Create(Self, AField.FieldType = ftFloat);
+  FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType = ftFloat);
   Pt := ClientToScreen(Point(ATop, ALeft));
   FieldForm.Top := Pt.Y;
   FieldForm.Left := Pt.X;
@@ -108,13 +100,6 @@ begin
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
 
-  With Result do
-  begin
-    VariableLabel.Parent := DesignPanel;
-    VariableLabel.DragMode := dmAutomatic;
-    VariableLabel.DragKind := dkDock;
-  end;
-
   UpdateFieldEditFromForm(Result, FieldForm, ATop, ALeft);
 
   FreeAndNil(FieldForm);
@@ -130,8 +115,8 @@ begin
   With FieldEdit do
   begin
     VariableLabel.Caption := FieldForm.LabelEdit.Text;
-    VariableLabel.Left    := Left - VariableLabel.Width + 10;
-    VariableLabel.Top     := ATop;
+    VariableLabel.Left    := Left - (VariableLabel.Width + 20);
+    VariableLabel.Top     := Top + (Height - VariableLabel.Height);
 
     Field.FieldName       := FieldForm.FieldNameEdit.Text;
     Field.VariableLabel   := FieldForm.LabelEdit.Text;
@@ -149,15 +134,6 @@ var
   S: string;
 begin
   DragObject := TFieldDockObject.Create(TControl(Sender));
-
-  {$IFDEF VER2_4}
-  WriteStr(S, DesignPanel.DockSite);
-  {$ELSE}
-  S := '';
-  {$ENDIF}
-  Label1.Caption := Format(
-    'DockSite: %s, DockClientCount: %d',
-    [s, DesignPanel.DockClientCount ]);
 end;
 
 procedure TDesignFrame.EndFieldDock(Sender, Target: TObject; X, Y: Integer);
@@ -180,18 +156,6 @@ begin
   if Button <> mbRight then exit;
   if not (Sender is TFieldEdit) then exit;
   ClickedField := TFieldEdit(Sender);
-end;
-
-procedure TDesignFrame.StartFieldLabelDock(Sender: TObject;
-  var DragObject: TDragDockObject);
-begin
-  DragObject := TDragDockObject.Create(TControl(Sender));
-end;
-
-procedure TDesignFrame.EndFieldLabelDock(Sender, Target: TObject; X, Y: Integer
-  );
-begin
-  //
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent);
@@ -235,9 +199,6 @@ procedure TDesignFrame.FrameDockDrop(Sender: TObject; Source: TDragDockObject;
 var
  s: string;
 begin
-  MainForm.StatusBar1.Panels[0].Text := Format(
-    'Sender: %s,  Source: %s, X: %d, Y: %d',
-    [Sender.ClassName, Source.Control.ClassName, X, Y]);
   Source.Control.Left := X - Source.DockOffset.X;
   Source.Control.Top := Y - Source.DockOffset.Y;
 end;
@@ -246,32 +207,31 @@ procedure TDesignFrame.ClearToolBtnClick(Sender: TObject);
 var
   Comp: TControl;
   Field: TEpiField;
+  i: Integer;
 begin
   Field := nil;
-  while DesignPanel.ControlCount > 0 do
+  for i := DesignPanel.ControlCount - 1 downto  0 do
   begin
-    Comp := DesignPanel.Controls[DesignPanel.ControlCount-1];
-//    Field := (Sender as TFieldEdit).Field;
-//    ActiveDatafile.RemoveField(Field, true);
+    Comp := DesignPanel.Controls[i];
+    if not (Comp is TFieldEdit) then continue;
+    Field :=TFieldEdit(Comp).Field;
+    ActiveDatafile.RemoveField(Field, true);
     DesignPanel.RemoveControl(Comp);
     FreeAndNil(Comp);
   end;
 end;
 
-procedure TDesignFrame.DesignPanelGetSiteInfo(Sender: TObject;
-  DockClient: TControl; var InfluenceRect: TRect; MousePos: TPoint;
-  var CanDock: Boolean);
+procedure TDesignFrame.DeleteFieldMenuItemClick(Sender: TObject);
 var
-  s: string;
+  TmpField: TEpiField;
 begin
-  {$IFDEF VER2_4}
-  writestr(s, candock);
-  {$ELSE}
-  s := '';
-  {$ENDIF}
-  Label3.Caption := Format(
-    'Sender: %s, DockClient: %s, CanDock: %s',
-    [Sender.ClassName, DockClient.ClassName, s]);
+  if not Assigned(ClickedField) then exit;
+
+  TmpField := ClickedField.Field;
+  ActiveDatafile.RemoveField(TmpField, true);
+
+  DesignPanel.RemoveControl(ClickedField);
+  FreeAndNil(ClickedField);
 end;
 
 procedure TDesignFrame.DesignPanelMouseMove(Sender: TObject;
@@ -280,27 +240,6 @@ begin
   MainForm.StatusBar2.Panels[1].Text := Format(
     'Mouse - X: %d Y: %d',
     [X, Y]);
-end;
-
-procedure TDesignFrame.DesignPanelUnDock(Sender: TObject; Client: TControl;
-  NewTarget: TWinControl; var Allow: Boolean);
-var
- s: string;
- t: String;
-begin
-  {$IFDEF VER2_4}
-  writestr(s, allow);
-  {$ELSE}
-  s := '';
-  {$ENDIF}
-  t := 'Sender: %s, ';
-  if Assigned(client) then
-    t := t + 'Client: ' + client.ClassName + ',';
-  if Assigned(NewTarget) then
-    t := t + 'NewTarget: ' + NewTarget.ClassName + ', Allow: %s';
-
-  Label2.Caption := Format(T,
-    [sender.ClassName, S]);
 end;
 
 procedure TDesignFrame.EditChange(Sender: TObject);
@@ -315,10 +254,11 @@ begin
   if not Assigned(ClickedField) then exit;
   With ClickedField do
   begin
-    FieldForm := TFieldCreateForm.Create(Self, Field.FieldType = ftFloat);
+    FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType = ftFloat, false);
     FieldForm.FieldNameEdit.Text := Field.FieldName;
     FieldForm.LabelEdit.Text     := Field.VariableLabel;
     FieldForm.FieldSizeEdit.Text := IntToSTr(Field.FieldLength);
+    FieldForm.OldFieldName := Field.FieldName;
     if Field.FieldType = ftFloat then
       FieldForm.FieldDecimalSizeEdit.Text := IntToStr(Field.FieldDecimals);
     if FieldForm.ShowModal = mrCancel then exit;
@@ -327,51 +267,12 @@ begin
   end;
 end;
 
-procedure TDesignFrame.FrameDockOver(Sender: TObject; Source: TDragDockObject;
-  X, Y: Integer; State: TDragState; var Accept: Boolean);
-var
-  s, t: string;
-  rect: TRect;
-begin
-
-{  Source.ShowDragImage;
-  with TFieldEdit(Source.Control) do
-  begin
-    Rect.Left := Min(Left, VariableLabel.Left);
-    Rect.Top := Min(Top, VariableLabel.Top);
-    Rect.Right := Max(
-      Left + Width,
-      VariableLabel.Left + VariableLabel.Width);
-    Rect.Bottom := Max(
-      Top + Height,
-      VariableLabel.Top + VariableLabel.Height);
-    Source.DockRect := Rect;
-  end;        }
-
-
-  {$IFDEF VER2_4}
-  WriteStr(S, State);
-  WriteStr(t, Accept);
-  {$ELSE}
-  S := 'na';
-  T := S;
-  {$ENDIF}
-  MainForm.StatusBar1.Panels[0].Text := Format(
-    'Sender: %s,  Source: %s, X: %d, Y: %d, State: %s, Accept: %s',
-    [Sender.ClassName, Source.Control.ClassName, X, Y, S, t]);
-end;
-
 procedure TDesignFrame.FrameMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
   TmpField: TEpiField;
 begin
   if Button <> mbLeft then exit;
-
-{  MainForm.StatusBar2.SimpleText := Format(
-    'Mouse - X: %d Y:%d',
-    [X, Y]);              }
-
   if ActiveButton.Tag = 0 then Exit;
   case ActiveButton.Tag of
     1: TmpField := TEpiField.CreateField(ftInteger);
@@ -380,6 +281,18 @@ begin
   NewFieldEdit(TmpField, Y, X);
   ActiveDatafile.AddField(TmpField);
   ToolBtnClick(SelectorButton);
+end;
+
+procedure TDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
+begin
+  ActiveButton := FloatFieldBtn;
+  FrameMouseDown(nil, mbLeft, [], 10, 10);
+end;
+
+procedure TDesignFrame.NewIntFieldActionExecute(Sender: TObject);
+begin
+  ActiveButton := IntFieldBtn;
+  FrameMouseDown(nil, mbLeft, [], 10, 10);
 end;
 
 initialization

@@ -15,11 +15,15 @@ type
   private
     FField: TEpiField;
     FVarLabel: TLabel;
+    FLabelOffset: TPoint;
   protected
-
+    procedure SetParent(NewParent: TWinControl); override;
+    procedure CalculateDockSizes;
   public
     constructor Create(AField: TEpiField; AOwner: TComponent);
     destructor Destroy; override;
+    procedure DoStartDock(var DragObject: TDragObject); override;
+    procedure DoEndDock(Target: TObject; X, Y: Integer); override;
     property Field: TEpiField read FField write FField;
     property VariableLabel: TLabel read FVarLabel write FVarLabel;
   published
@@ -63,9 +67,20 @@ type
 implementation
 
 uses
-  InterfaceBase, LCLType, Math, LCLProc;
+  InterfaceBase, LCLType, Math, LCLProc, main;
 
 { TFieldEdit }
+
+procedure TFieldEdit.SetParent(NewParent: TWinControl);
+begin
+  inherited SetParent(NewParent);
+  FVarLabel.Parent := NewParent;
+end;
+
+procedure TFieldEdit.CalculateDockSizes;
+begin
+  inherited CalculateDockSizes;
+end;
 
 constructor TFieldEdit.Create(AField: TEpiField; AOwner: TComponent);
 begin
@@ -80,6 +95,19 @@ begin
   FField := nil;
   // Do not destroy - it's handled byt the visual destruction of the frame.
   FVarLabel := nil;
+end;
+
+procedure TFieldEdit.DoStartDock(var DragObject: TDragObject);
+begin
+  inherited DoStartDock(DragObject);
+  FLabelOffset := Point(Left - FVarLabel.Left, Top - FVarLabel.Top);
+end;
+
+procedure TFieldEdit.DoEndDock(Target: TObject; X, Y: Integer);
+begin
+  inherited DoEndDock(Target, X, Y);
+  FVarLabel.Left := Left - FLabelOffset.X;
+  FVarLabel.Top := Top - FLabelOffset.Y;
 end;
 
 { TFieldLabel }
@@ -101,8 +129,13 @@ end;
 procedure TFieldDockObject.AdjustDockRect(ARect: TRect);
 begin
   inherited AdjustDockRect(ARect);
-  with DockOffset do
-    OffsetRect(FieldRec, X, Y);
+  with ARect do
+    MainForm.Label1.Caption := Format(
+     'AdjustDockRect - Top: %d, Left: %d, Bottom: %d, Right: %d',
+     [Top, Left, Bottom, Right]);
+
+{  with DockOffset do
+    OffsetRect(FieldRec, -X, -Y);      }
 end;
 
 procedure TFieldDockObject.InitDock(APosition: TPoint);
@@ -115,8 +148,12 @@ begin
   // Since the undocked extent of the control doesn't change, we fix the hotspot offset.
   // Usage: OffsetRect(DockRect, FDockOffset);
 
+  MainForm.Label2.Caption := Format(
+    'InitDock. Position - X: %d , Y: %d',
+    [APosition.X, APosition.Y]);
+
   // mouse click offset from control TopLeft in screen coordinates
-  with FieldRec do
+  with DockRect do
   begin
     TopLeft := Control.ClientToScreen(Point(0, 0));
     TmpPoint := TFieldEdit(Control).VariableLabel.ClientToScreen(Point(0,0));
@@ -132,34 +169,47 @@ begin
     Bottom := Max(Bottom, TmpPoint.Y);
     Right  := Max(Right, TmpPoint.X);
   end;
-  OldFieldRec := Rect(MaxInt, 0, MaxInt, 0);
+//  OldFieldRec := Rect(MaxInt, 0, MaxInt, 0);
 end;
 
 procedure TFieldDockObject.ShowDockImage;
 begin
   Inherited ShowDockImage;
-  WidgetSet.DrawDefaultDockImage(OldFieldRec, FieldRec, disShow);
-  OldFieldRec := FieldRec;
+  With FieldRec do
+    MainForm.Label3.Caption := Format(
+      'ShowDockImage: FieldRect - Top: %d, Left: %d, Bottom: %d, Right: %d',
+      [Top, Left, Bottom, Right]);
+
+{  WidgetSet.DrawDefaultDockImage(OldFieldRec, FieldRec, disShow);
+  OldFieldRec := FieldRec;    }
 end;
 
 procedure TFieldDockObject.MoveDockImage;
 begin
   inherited MoveDockImage;
+  With FieldRec do
+    MainForm.Label4.Caption := Format(
+      'MoveDockImage: FieldRect - Top: %d, Left: %d, Bottom: %d, Right: %d',
+      [Top, Left, Bottom, Right]);
 
-  //Draw the form outlines when the position has changed
+{  //Draw the form outlines when the position has changed
   if not CompareMem(@FieldRec, @OldFieldRec, SizeOf(TRect)) then
   begin
     WidgetSet.DrawDefaultDockImage(OldFieldRec, FieldRec, disMove);
     OldFieldRec := FieldRec;
-  end;
+  end;   }
 end;
 
 procedure TFieldDockObject.HideDockImage;
 begin
   inherited HideDockImage;
-
+  With FieldRec do
+    MainForm.Label5.Caption := Format(
+      'HideDockImage: FieldRect - Top: %d, Left: %d, Bottom: %d, Right: %d',
+      [Top, Left, Bottom, Right]);
+{
   WidgetSet.DrawDefaultDockImage(OldFieldRec, FieldRec, disHide);
-  OldFieldRec := Rect(MaxInt, 0, MaxInt, 0);
+  OldFieldRec := Rect(MaxInt, 0, MaxInt, 0);  }
 end;
 
 constructor TFieldDockObject.Create(AControl: TControl);

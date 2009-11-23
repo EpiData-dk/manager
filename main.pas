@@ -6,14 +6,20 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls;
+  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    Button1: TButton;
     ControlBtn: TBitBtn;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     MetaDataBtn: TBitBtn;
     DesignBtn: TBitBtn;
     MainFormActionList: TActionList;
@@ -22,9 +28,11 @@ type
     FileMenu: TMenuItem;
     ExitMenuItem: TMenuItem;
     PageControl1: TPageControl;
+    Panel1: TPanel;
     ProgressPanel: TPanel;
     StatusBar1: TStatusBar;
     StatusBar2: TStatusBar;
+    procedure Button1Click(Sender: TObject);
     procedure DesignBtnClick(Sender: TObject);
   private
     { private declarations }
@@ -68,6 +76,15 @@ begin
   Frame.Parent := TabSheet;
 
   Inc(TabNameCount);
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i := 0 to Panel1.ControlCount - 1 do
+    if Panel1.Controls[i] is TLabel then
+      TLabel(Panel1.Controls[i]).Caption := Panel1.Controls[i].Name;
 end;
 
 procedure TMainForm.CloseTab(Sender: TObject);

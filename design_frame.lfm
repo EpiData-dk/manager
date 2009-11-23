@@ -6,8 +6,8 @@ object DesignFrame: TDesignFrame
   ClientHeight = 665
   ClientWidth = 993
   TabOrder = 0
-  DesignLeft = 438
-  DesignTop = 239
+  DesignLeft = 611
+  DesignTop = 257
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -80,82 +80,34 @@ object DesignFrame: TDesignFrame
     Left = 0
     Height = 639
     Top = 26
-    Width = 656
+    Width = 993
     Align = alClient
     BevelOuter = bvLowered
     DockSite = True
     TabOrder = 1
     UseDockManager = False
     OnDockDrop = FrameDockDrop
-    OnDockOver = FrameDockOver
-    OnGetSiteInfo = DesignPanelGetSiteInfo
     OnMouseMove = DesignPanelMouseMove
     OnMouseUp = FrameMouseDown
-    OnUnDock = DesignPanelUnDock
-  end
-  object Panel1: TPanel
-    Left = 656
-    Height = 639
-    Top = 26
-    Width = 337
-    Align = alRight
-    BevelInner = bvRaised
-    ClientHeight = 639
-    ClientWidth = 337
-    TabOrder = 2
-    object Label1: TLabel
-      Left = 16
-      Height = 18
-      Top = 28
-      Width = 308
-      Caption = 'label1'
-      ParentColor = False
-      WordWrap = True
-    end
-    object Label2: TLabel
-      Left = 16
-      Height = 18
-      Top = 172
-      Width = 308
-      Caption = 'Label2'
-      ParentColor = False
-      WordWrap = True
-    end
-    object Label3: TLabel
-      Left = 16
-      Height = 18
-      Top = 308
-      Width = 308
-      Caption = 'Label2'
-      ParentColor = False
-      WordWrap = True
-    end
-    object Label4: TLabel
-      Left = 16
-      Height = 18
-      Top = 460
-      Width = 308
-      Caption = 'Label2'
-      ParentColor = False
-      WordWrap = True
-    end
-    object Edit1: TEdit
-      Left = 16
-      Height = 27
-      Top = 422
-      Width = 80
-      TabOrder = 0
-      Text = 'Edit1'
-    end
   end
   object ActionList1: TActionList
-    left = 312
-    top = 208
+    left = 400
+    top = 280
+    object NewIntFieldAction: TAction
+      Caption = 'NewIntFieldAction'
+      OnExecute = NewIntFieldActionExecute
+      ShortCut = 24649
+    end
+    object NewFloatFieldAction: TAction
+      Caption = 'NewFloatFieldAction'
+      OnExecute = NewFloatFieldActionExecute
+      ShortCut = 24646
+    end
   end
   object FieldToolBarImageList: TImageList
     Height = 24
     Width = 24
-    left = 312
+    left = 400
     top = 112
     Bitmap = {
       4C69050000001800000018000000000000000000000000000000000000000000
@@ -528,10 +480,14 @@ object DesignFrame: TDesignFrame
   end
   object FieldPopUp: TPopupMenu
     left = 216
-    top = 208
+    top = 280
     object EditFieldMenuItem: TMenuItem
       Caption = 'Edit Field'
       OnClick = EditFieldMenuItemClick
+    end
+    object DeleteFieldMenuItem: TMenuItem
+      Caption = 'Delete Field'
+      OnClick = DeleteFieldMenuItemClick
     end
   end
 end

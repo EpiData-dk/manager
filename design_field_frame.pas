@@ -5,7 +5,8 @@ unit Design_Field_Frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, StdCtrls, MaskEdit;
+  Classes, SysUtils, FileUtil, LResources, Forms, StdCtrls, MaskEdit,
+  UEpiDataFile;
 
 type
 
@@ -25,9 +26,13 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   private
     { private declarations }
+    FDf: TEpiDataFile;
+    FNewField: boolean;
+    FOldFieldName: string;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; ShowDecimals: boolean = false);
+    constructor Create(TheOwner: TComponent; DataFile: TEpiDataFile; ShowDecimals: boolean = false; NewField: boolean = true);
+    property OldFieldName: string Read FOldFieldName write FOldFieldName;
   end; 
 
 implementation
@@ -42,22 +47,58 @@ var
 
 procedure TFieldCreateForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
   );
+var
+  S: string;
+  L, D: LongInt;
 begin
   CanClose := true;
+
   if (Sender is TButton) and
      ((Sender as TButton).ModalResult = mrCancel) then exit;
   if ModalResult = mrCancel then exit;
 
-  if Trim(UTF8Decode(FieldNameEdit.Text)) = '' then
+  // Sanity checks.
+  // - variable name
+  S := UTF8Encode(Trim(UTF8Decode(FieldNameEdit.Text)));
+  if S = '' then
     CanClose := false;
 
-  if Trim(UTF8Decode(FieldSizeEdit.Text)) = '' then
+  if FNewField or (OldFieldName <> S) then
+  begin
+    if FDf.FieldExists(S) then
+      CanClose := false;
+    if FDf.FileProperties.DefineExists(S) then
+      CanClose := false;
+  end;
+
+  // - FieldLength (no need to ut8-handle this. It's always plain ASCII.
+  S := Trim(FieldSizeEdit.Text);
+  if S = '' then
+    CanClose := false;
+  L := StrToInt(S);
+  if L <= 0 then
+    CanClose := false;
+
+  // - FieldDecimals (no need to ut8-handle this. It's always plain ASCII.
+  if not FieldDecimalSizeEdit.Enabled then exit;
+  S := Trim(FieldDecimalSizeEdit.Text);
+  if S = '' then
+    CanClose := false;
+  D := StrToInt(S);
+  if D <= 0 then
+    CanClose := false;
+  if D >= (L - 1) then
     CanClose := false;
 end;
 
-constructor TFieldCreateForm.Create(TheOwner: TComponent; ShowDecimals: boolean);
+constructor TFieldCreateForm.Create(TheOwner: TComponent;
+  DataFile: TEpiDataFile; ShowDecimals: boolean; NewField: boolean);
 begin
   inherited Create(TheOwner);
+  if DataFile = nil then Close;
+
+  FDf := DataFile;
+  FNewField := NewField;
 
   FieldNameEdit.Text := 'V' + IntToStr(LastFieldNo);
   FieldSizeEdit.Text := '5';
