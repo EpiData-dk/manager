@@ -34,11 +34,9 @@ type
     FontSelectButton: TToolButton;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
+    LabelFieldBtn: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
-    ToolButton6: TToolButton;
-    ToolButton7: TToolButton;
     procedure ClearToolBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
     procedure DesignPanelMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -67,17 +65,20 @@ type
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    function  GetLowestControlPosition(var XCtrl, YCtrl: TControl; IgnoreCtrl: TControl): TPoint;
+    function  FindNewAutoControlPostion: TPoint;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+    procedure UpdateAllFields;
   end;
 
 implementation
 
 uses
   main, graphics, UDataFileTypes, designutils,
-  types, math;
+  types, math, settings;
 
 { TDesignFrame }
 
@@ -124,7 +125,7 @@ begin
   With FieldEdit do
   begin
     VariableLabel.Caption := FieldForm.LabelEdit.Text;
-    VariableLabel.Left    := Left - (VariableLabel.Width + 20);
+    VariableLabel.Left    := Left - (VariableLabel.Width + 5);
     VariableLabel.Top     := Top + (Height - VariableLabel.Height);
 
     Field.FieldName       := FieldForm.FieldNameEdit.Text;
@@ -135,6 +136,13 @@ begin
     Field.FieldX          := ALeft;
     Field.FieldY          := ATop;
 
+    FieldNameLabel.Caption := Field.FieldName;
+    FieldNameLabel.Left    := VariableLabel.Left - (FieldNameLabel.Width + 5);
+    FieldNameLabel.Top     := VariableLabel.Top;
+    if BuilderSettings.ShowFieldNamesInLabel then
+      FieldNameLabel.Parent := DesignPanel
+    else
+      FieldNameLabel.Parent := nil;
   end;
 end;
 
@@ -153,10 +161,13 @@ begin
   with TFieldEdit(Sender) do
   begin
     Align := alNone;
+
     // Using to positional controls of the Edit since its position is updated correctly in the
     // FrameDockDrop event.
     Field.FieldX := Left;
     Field.FieldY := Top;
+    Field.LabelX := VariableLabel.Left;
+    Field.LabelY := VariableLabel.Top;
   end;
 end;
 
@@ -166,6 +177,54 @@ begin
   if Button <> mbRight then exit;
   if not (Sender is TFieldEdit) then exit;
   ClickedField := TFieldEdit(Sender);
+end;
+
+function TDesignFrame.GetLowestControlPosition(var XCtrl, YCtrl: TControl;
+  IgnoreCtrl: TControl): TPoint;
+var
+  i: Integer;
+begin
+  result := Point(0,0);
+  YCtrl := nil;
+  XCtrl := nil;
+  for i := 0 to DesignPanel.ControlCount - 1 do
+  with DesignPanel do
+  begin
+    if not (Controls[i] is TFieldEdit) then continue;
+    if Controls[i] = IgnoreCtrl then continue;
+
+
+    if Controls[i].Left > Result.X then
+    begin
+      XCtrl := Controls[i];
+      Result.X := Controls[i].Left;
+    end;
+
+    if Controls[i].Top > Result.Y then
+    begin
+      YCtrl := Controls[i];
+      Result.Y := Controls[i].Top;
+    end;
+  end;
+
+  // Case where no edit field have been placed yet.
+  if not Assigned(YCtrl) then
+  begin
+    Result.X := 25;
+    Result.Y := 25;
+    Exit;
+  end;
+
+  if XCtrl <> YCtrl then
+    Result.X := YCtrl.Left;
+end;
+
+function TDesignFrame.FindNewAutoControlPostion: TPoint;
+var
+  XCtrl, YCtrl: TControl;
+begin
+  Result := GetLowestControlPosition(XCtrl, YCtrl, nil);
+  Result.Y += (YCtrl.Height + BuilderSettings.SpaceBetweenFields);
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent);
@@ -181,6 +240,21 @@ begin
   if Assigned(ActiveDatafile) then
    FreeAndNil(ActiveDatafile);
   inherited Destroy;
+end;
+
+procedure TDesignFrame.UpdateAllFields;
+var
+  i: Integer;
+begin
+  for i := DesignPanel.ControlCount -1 downto  0 do
+  begin
+    if not (DesignPanel.Controls[i] is TFieldEdit) then continue;
+
+    if BuilderSettings.ShowFieldNamesInLabel then
+      TFieldEdit(DesignPanel.Controls[i]).FieldNameLabel.Parent := DesignPanel
+    else
+      TFieldEdit(DesignPanel.Controls[i]).FieldNameLabel.Parent := nil;
+  end;
 end;
 
 
@@ -208,9 +282,33 @@ procedure TDesignFrame.FrameDockDrop(Sender: TObject; Source: TDragDockObject;
   X, Y: Integer);
 var
  s: string;
+ Pt: TPoint;
+ Dx, Nx: Integer;
+ Dy, Ny: Integer;
+ Ctrl: TControl;
 begin
-  Source.Control.Left := X - Source.DockOffset.X;
-  Source.Control.Top := Y - Source.DockOffset.Y;
+  Pt := GetLowestControlPosition(Ctrl, Ctrl, Source.Control);
+
+  Nx := X - Source.DockOffset.X;
+  Ny := Y - Source.DockOffset.Y;
+  Dx := Nx - Pt.X;
+  Dy := Ny - Pt.Y;
+
+  if Abs(Dx) <= BuilderSettings.SnappingThresHold then
+    Nx := Pt.X;
+  if Abs(Dy) <= BuilderSettings.SnappingThresHold then
+    Ny := Pt.Y;
+
+  // If the component was placed (within threshold) on top of
+  // the lowest component - place it where it was marked.
+  if (Dx = Pt.X) and (Dy = Pt.Y) then
+  begin
+    Nx := X - Source.DockOffset.X;
+    Ny := Y - Source.DockOffset.Y;
+  end;
+
+  Source.Control.Left := Nx;
+  Source.Control.Top := Ny;
 end;
 
 procedure TDesignFrame.ClearToolBtnClick(Sender: TObject);
@@ -303,15 +401,21 @@ begin
 end;
 
 procedure TDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
+var
+  Pt: TPoint;
 begin
   ActiveButton := FloatFieldBtn;
-  FrameMouseDown(nil, mbLeft, [], 150, 40+(ActiveDatafile.DataFields.Count*30));
+  Pt := FindNewAutoControlPostion;
+  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
 end;
 
 procedure TDesignFrame.NewIntFieldActionExecute(Sender: TObject);
+var
+  Pt: TPoint;
 begin
   ActiveButton := IntFieldBtn;
-  FrameMouseDown(nil, mbLeft, [], 150,40+(ActiveDatafile.DataFields.Count*30));
+  Pt := FindNewAutoControlPostion;
+  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
 end;
 
 initialization

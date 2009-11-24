@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, main, LResources, design_frame, fieldedit, Design_Field_Frame,
-designutils;
+designutils, settings;
 
 {$IFDEF WINDOWS}{$R epidatabuilder.rc}{$ENDIF}
 

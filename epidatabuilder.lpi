@@ -5,6 +5,7 @@
     <General>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
+      <AutoCreateForms Value="False"/>
       <TargetFileExt Value=""/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
@@ -13,7 +14,6 @@
       <UseVersionInfo Value="True"/>
       <CurrentMajorRevNr Value="1"/>
       <ProjectVersion Value="0.1.0.0"/>
-      <Language Value="0809"/>
     </VersionInfo>
     <PublishOptions>
       <Version Value="2"/>
@@ -35,7 +35,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="6">
+    <Units Count="7">
       <Unit0>
         <Filename Value="epidatabuilder.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -72,6 +72,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="designutils"/>
       </Unit5>
+      <Unit6>
+        <Filename Value="settings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SettingsForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings"/>
+      </Unit6>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -91,7 +98,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <UseLineInfoUnit Value="False"/>
+        <GenerateDebugInfo Value="True"/>
       </Debugging>
       <LinkSmart Value="True"/>
       <Options>

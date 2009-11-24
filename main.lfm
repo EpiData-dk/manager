@@ -1,15 +1,15 @@
 object MainForm: TMainForm
   Cursor = crIBeam
-  Left = 239
+  Left = 459
   Height = 655
-  Top = 197
+  Top = 295
   Width = 975
   ActiveControl = ProgressPanel
   Caption = 'EpiData file builder'
-  ClientHeight = 633
+  ClientHeight = 630
   ClientWidth = 975
   Menu = MainFormMenu
-  Position = poDesktopCenter
+  Position = poScreenCenter
   LCLVersion = '0.9.29'
   object ProgressPanel: TPanel
     Left = 0
@@ -43,14 +43,13 @@ object MainForm: TMainForm
       Top = 8
       Width = 155
       Caption = 'Controls'
-      OnClick = ControlBtnClick
       TabOrder = 2
     end
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 593
+    Height = 21
+    Top = 588
     Width = 975
     Panels = <    
       item
@@ -68,8 +67,8 @@ object MainForm: TMainForm
   end
   object StatusBar2: TStatusBar
     Left = 0
-    Height = 20
-    Top = 613
+    Height = 21
+    Top = 609
     Width = 975
     Panels = <    
       item
@@ -82,7 +81,7 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 543
+    Height = 538
     Top = 50
     Width = 622
     Align = alClient
@@ -93,17 +92,17 @@ object MainForm: TMainForm
   end
   object Panel1: TPanel
     Left = 622
-    Height = 543
+    Height = 538
     Top = 50
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 543
+    ClientHeight = 538
     ClientWidth = 353
     TabOrder = 4
     object Label1: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 70
       Width = 308
       Caption = 'label1'
@@ -112,7 +111,7 @@ object MainForm: TMainForm
     end
     object Label2: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 136
       Width = 308
       Caption = 'Label2'
@@ -121,7 +120,7 @@ object MainForm: TMainForm
     end
     object Label3: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 200
       Width = 308
       Caption = 'Label2'
@@ -130,7 +129,7 @@ object MainForm: TMainForm
     end
     object Label4: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 280
       Width = 308
       Caption = 'Label2'
@@ -139,7 +138,7 @@ object MainForm: TMainForm
     end
     object Label5: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 368
       Width = 308
       Caption = 'Label2'
@@ -166,6 +165,12 @@ object MainForm: TMainForm
         Action = FileExit1
       end
     end
+    object EditMenu: TMenuItem
+      Caption = '&Edit'
+      object SettingsMenu: TMenuItem
+        Action = SettingsAction
+      end
+    end
   end
   object MainFormActionList: TActionList
     left = 544
@@ -175,6 +180,12 @@ object MainForm: TMainForm
       Caption = 'E&xit'
       Hint = 'Exit'
       ShortCut = 121
+    end
+    object SettingsAction: TAction
+      Category = 'Edit'
+      Caption = 'Settings'
+      OnExecute = SettingsActionExecute
+      ShortCut = 32851
     end
   end
 end

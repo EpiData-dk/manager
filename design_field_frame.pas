@@ -38,7 +38,7 @@ type
 implementation
 
 uses
-  Controls;
+  Controls, settings;
 
 var
   LastFieldNo: Integer = 1;
@@ -100,7 +100,7 @@ begin
   FDf := DataFile;
   FNewField := NewField;
 
-  FieldNameEdit.Text := 'V' + IntToStr(LastFieldNo);
+  FieldNameEdit.Text := BuilderSettings.FieldNamePrefix + IntToStr(LastFieldNo);
   FieldSizeEdit.Text := '5';
   Inc(LastFieldNo);
 

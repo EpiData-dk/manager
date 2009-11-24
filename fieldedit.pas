@@ -14,8 +14,11 @@ type
   TFieldEdit = class(TEdit)
   private
     FField: TEpiField;
-    FVarLabel: TLabel;
-    FLabelOffset: TPoint;
+    // Optional field name label.
+    FFieldNameLabel: TLabel;
+    FFieldNameOffset: TPoint;
+    FVariableLabel: TLabel;
+    FVariableLabelOffset: TPoint;
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure CalculateDockSizes;
@@ -25,7 +28,8 @@ type
     procedure DoStartDock(var DragObject: TDragObject); override;
     procedure DoEndDock(Target: TObject; X, Y: Integer); override;
     property Field: TEpiField read FField write FField;
-    property VariableLabel: TLabel read FVarLabel write FVarLabel;
+    property VariableLabel: TLabel read FVariableLabel;
+    property FieldNameLabel: TLabel read FFieldNameLabel;
   published
     property OnStartDock;
     property OnEndDock;
@@ -67,14 +71,16 @@ type
 implementation
 
 uses
-  InterfaceBase, LCLType, Math, LCLProc, main;
+  InterfaceBase, LCLType, Math, LCLProc, main, settings;
 
 { TFieldEdit }
 
 procedure TFieldEdit.SetParent(NewParent: TWinControl);
 begin
   inherited SetParent(NewParent);
-  FVarLabel.Parent := NewParent;
+  FVariableLabel.Parent := NewParent;
+  if (BuilderSettings.ShowFieldNamesInLabel) then
+    FFieldNameLabel.Parent := NewParent;
 end;
 
 procedure TFieldEdit.CalculateDockSizes;
@@ -86,7 +92,8 @@ constructor TFieldEdit.Create(AField: TEpiField; AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FField := AField;
-  FVarLabel := TLabel.Create(Self);
+  FVariableLabel := TLabel.Create(Self);
+  FFieldNameLabel := TLabel.Create(Self);
 end;
 
 destructor TFieldEdit.Destroy;
@@ -94,20 +101,26 @@ begin
   inherited Destroy;
   FField := nil;
   // Do not destroy - it's handled byt the visual destruction of the frame.
-  FVarLabel := nil;
+  FVariableLabel := nil;
+  FFieldNameLabel := nil;
 end;
 
 procedure TFieldEdit.DoStartDock(var DragObject: TDragObject);
 begin
   inherited DoStartDock(DragObject);
-  FLabelOffset := Point(Left - FVarLabel.Left, Top - FVarLabel.Top);
+  FVariableLabelOffset := Point(Left - FVariableLabel.Left, Top - FVariableLabel.Top);
+  FFieldNameOffset := Point(Left - FFieldNameLabel.Left, Top - FFieldNameLabel.Top);
 end;
 
 procedure TFieldEdit.DoEndDock(Target: TObject; X, Y: Integer);
 begin
   inherited DoEndDock(Target, X, Y);
-  FVarLabel.Left := Left - FLabelOffset.X;
-  FVarLabel.Top := Top - FLabelOffset.Y;
+
+  FVariableLabel.Left := Left - FVariableLabelOffset.X;
+  FVariableLabel.Top := Top - FVariableLabelOffset.Y;
+
+  FFieldNameLabel.Left := Left - FFieldNameOffset.X;
+  FFieldNameLabel.Top := Top - FFieldNameOffset.Y;
 end;
 
 { TFieldLabel }

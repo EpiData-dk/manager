@@ -13,6 +13,9 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    EditMenu: TMenuItem;
+    SettingsMenu: TMenuItem;
+    SettingsAction: TAction;
     Button1: TButton;
     ControlBtn: TBitBtn;
     Label1: TLabel;
@@ -33,8 +36,8 @@ type
     StatusBar1: TStatusBar;
     StatusBar2: TStatusBar;
     procedure Button1Click(Sender: TObject);
-    procedure ControlBtnClick(Sender: TObject);
     procedure DesignBtnClick(Sender: TObject);
+    procedure SettingsActionExecute(Sender: TObject);
   private
     { private declarations }
     TabNameCount: integer;
@@ -50,7 +53,7 @@ var
 implementation
 
 uses
-  design_frame;
+  design_frame, settings;
 
 
 { TMainForm }
@@ -79,6 +82,17 @@ begin
   Inc(TabNameCount);
 end;
 
+procedure TMainForm.SettingsActionExecute(Sender: TObject);
+var
+  SettingsForm: TSettingsForm;
+begin
+  SettingsForm := TSettingsForm.Create(self);
+  if SettingsForm.ShowModal = mrCancel then exit;
+
+  // TODO : Update design form if showing properties have changed.
+  TDesignFrame(PageControl1.ActivePage.Controls[0]).UpdateAllFields;
+end;
+
 procedure TMainForm.Button1Click(Sender: TObject);
 var
   i: Integer;
@@ -88,17 +102,15 @@ begin
       TLabel(Panel1.Controls[i]).Caption := Panel1.Controls[i].Name;
 end;
 
-procedure TMainForm.ControlBtnClick(Sender: TObject);
-begin
-
-end;
-
 procedure TMainForm.CloseTab(Sender: TObject);
 begin
   if not (Sender is TTabSheet) then exit;
 
   PageControl1.ActivePage := PageControl1.FindNextPage(TTabSheet(Sender), True, True);
   (Sender as TTabSheet).Free;
+
+  if PageControl1.PageCount <= 1 then
+    PageControl1.ShowTabs := false;;
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);

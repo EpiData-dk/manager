@@ -3,7 +3,7 @@ object FieldCreateForm: TFieldCreateForm
   Height = 124
   Top = 473
   Width = 248
-  ActiveControl = LabelEdit
+  ActiveControl = FieldNameEdit
   BorderIcons = []
   ClientHeight = 124
   ClientWidth = 248

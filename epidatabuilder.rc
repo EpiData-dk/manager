@@ -4,7 +4,7 @@ PRODUCTVERSION 0,1,0,0
 {
  BLOCK "StringFileInfo"
  {
-  BLOCK "080904E4"
+  BLOCK "040904E4"
   {
    VALUE "Comments", "\000"
    VALUE "CompanyName", "\000"
@@ -20,7 +20,7 @@ PRODUCTVERSION 0,1,0,0
  }
  BLOCK "VarFileInfo"
  {
-  VALUE "Translation", 0x0809, 0x04E4
+  VALUE "Translation", 0x0409, 0x04E4
  }
 }
 
