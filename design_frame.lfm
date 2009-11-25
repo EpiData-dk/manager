@@ -8,8 +8,8 @@ object DesignFrame: TDesignFrame
   ParentShowHint = False
   ShowHint = True
   TabOrder = 0
-  DesignLeft = 507
-  DesignTop = 295
+  DesignLeft = 242
+  DesignTop = 122
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -143,9 +143,9 @@ object DesignFrame: TDesignFrame
     OnMouseUp = FrameMouseDown
     object Label1: TLabel
       Left = 24
-      Height = 18
+      Height = 17
       Top = 7
-      Width = 616
+      Width = 536
       Caption = 'Experimental designer - do not use for real work - font size will give problems, try local fonts !'
       Font.Height = -13
       Font.Name = 'Sans'
