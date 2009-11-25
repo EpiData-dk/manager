@@ -14,6 +14,8 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    NewLabelFieldAction: TAction;
+    NewStringFieldAction: TAction;
     FontDialog1: TFontDialog;
     Label1: TLabel;
     NewFloatFieldAction: TAction;
@@ -26,15 +28,18 @@ type
     EditFieldMenuItem: TMenuItem;
     FieldPopUp: TPopupMenu;
     DeleteFieldMenuItem: TMenuItem;
+    OpenDialog1: TOpenDialog;
     SaveDialog1: TSaveDialog;
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
     ClearToolBtn: TToolButton;
     SaveToolBtn: TToolButton;
-    FontSelectButton: TToolButton;
+    FontSelectBtn: TToolButton;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
+    StringFieldBtn: TToolButton;
     LabelFieldBtn: TToolButton;
+    OpenToolBtn: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
     procedure ClearToolBtnClick(Sender: TObject);
@@ -43,13 +48,16 @@ type
       Y: Integer);
     procedure EditChange(Sender: TObject);
     procedure EditFieldMenuItemClick(Sender: TObject);
-    procedure FontSelectButtonClick(Sender: TObject);
+    procedure FontSelectBtnClick(Sender: TObject);
     procedure FrameDockDrop(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer);
     procedure FrameMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure NewFloatFieldActionExecute(Sender: TObject);
     procedure NewIntFieldActionExecute(Sender: TObject);
+    procedure NewLabelFieldActionExecute(Sender: TObject);
+    procedure NewStringFieldActionExecute(Sender: TObject);
+    procedure OpenToolBtnClick(Sender: TObject);
     procedure ToolBtnClick(Sender: TObject);
     procedure SaveToolBtnClick(Sender: TObject);
   private
@@ -57,14 +65,16 @@ type
     ActiveButton: TToolButton;
     ActiveDatafile: TEpiDataFile;
     ClickedField: TFieldEdit;
-    function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer;
-      CreateForm: boolean = true): TFieldEdit;
+    ClickedLabel: TFieldLabel;
+    function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer): TFieldEdit;
+    function NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer): TFieldLabel;
     procedure UpdateFieldEditFromForm(FieldEdit: TFieldEdit;
       FieldForm: TFieldCreateForm; ATop, ALeft: Integer);
     procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure EndLabelDock(Sender, Target: TObject; X,Y: Integer);
     function  GetLowestControlPosition(var XCtrl, YCtrl: TControl; IgnoreCtrl: TControl): TPoint;
     function  FindNewAutoControlPostion: TPoint;
   public
@@ -78,21 +88,20 @@ implementation
 
 uses
   main, graphics, UDataFileTypes, designutils,
-  types, math, settings;
+  types, math, settings, design_label_form;
 
 { TDesignFrame }
 
-function TDesignFrame.NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer;
-  CreateForm: boolean): TFieldEdit;
+function TDesignFrame.NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer
+  ): TFieldEdit;
 var
   FieldForm: TFieldCreateForm;
   Pt: TPoint;
 begin
   Result := nil;
 
-//  if CreateForm then begin;
   FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType = ftFloat);
-  Pt := ClientToScreen(Point(ATop, ALeft));
+  Pt := DesignPanel.ClientToScreen(Point(ALeft, ATop));
   FieldForm.Top := Pt.Y;
   FieldForm.Left := Pt.X;
   if FieldForm.ShowModal = mrCancel then exit;
@@ -104,7 +113,6 @@ begin
   Result.DragKind := dkDock;
   Result.OnStartDock := @StartFieldDock;
   Result.OnEndDock := @EndFieldDock;
-  Result.OnChange := @EditChange;
   Result.AutoSelect := false;
   Result.AutoSize := false;
   Result.PopupMenu := FieldPopUp;
@@ -113,6 +121,36 @@ begin
   UpdateFieldEditFromForm(Result, FieldForm, ATop, ALeft);
 
   FreeAndNil(FieldForm);
+end;
+
+function TDesignFrame.NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer
+  ): TFieldLabel;
+var
+  LabelForm: TCreateLabelForm;
+  Pt: TPoint;
+begin
+  LabelForm := TCreateLabelForm.Create(Self);
+  Pt := DesignPanel.ClientToScreen(Point(ALeft, ATop));
+  LabelForm.Top := Pt.Y;
+  LabelForm.Left := Pt.X;
+  if LabelForm.ShowModal = mrCancel then exit;
+
+  Result := TFieldLabel.Create(AField, DesignPanel);
+  Result.Parent := DesignPanel;
+  Result.Caption := LabelForm.LabelEdit.Text;
+  Result.Align := alNone;
+  Result.DragMode := dmAutomatic;
+  Result.DragKind := dkDock;
+  Result.OnEndDock := @EndLabelDock;
+  Result.PopupMenu := FieldPopUp;
+  Result.OnMouseDown := @FieldMouseDown;
+  Result.Left := ALeft;
+  Result.Top := ATop;
+  Result.Field.VariableLabel := Result.Caption;
+  Result.Field.LabelX := ALeft;
+  Result.Field.LabelY := ATop;
+
+  FreeAndNil(LabelForm);
 end;
 
 procedure TDesignFrame.UpdateFieldEditFromForm(FieldEdit: TFieldEdit;
@@ -175,8 +213,36 @@ procedure TDesignFrame.FieldMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   if Button <> mbRight then exit;
-  if not (Sender is TFieldEdit) then exit;
-  ClickedField := TFieldEdit(Sender);
+
+  if (Sender is TFieldEdit) then
+  begin
+    ClickedField := TFieldEdit(Sender);
+    ClickedLabel := nil;
+    EditFieldMenuItem.Caption := 'Edit Field';
+    DeleteFieldMenuItem.Caption := 'Delete Field';
+  end;
+  if (Sender is TFieldLabel) then
+  begin
+    ClickedLabel := TFieldLabel(Sender);
+    ClickedField := nil;
+    EditFieldMenuItem.Caption := 'Edit Label';
+    DeleteFieldMenuItem.Caption := 'Delete Label';
+  end;
+end;
+
+procedure TDesignFrame.EndLabelDock(Sender, Target: TObject; X, Y: Integer);
+begin
+  if not (Sender is TFieldLabel) then exit;
+
+  with TFieldLabel(Sender) do
+  begin
+    Align := alNone;
+
+    // Using to positional controls of the Edit since its position is updated correctly in the
+    // FrameDockDrop event
+    Field.LabelX := Left;
+    Field.LabelY := Top;
+  end;
 end;
 
 function TDesignFrame.GetLowestControlPosition(var XCtrl, YCtrl: TControl;
@@ -224,7 +290,8 @@ var
   XCtrl, YCtrl: TControl;
 begin
   Result := GetLowestControlPosition(XCtrl, YCtrl, nil);
-  Result.Y += (YCtrl.Height + BuilderSettings.SpaceBetweenFields);
+  if Assigned(YCtrl) then
+    Result.Y += (YCtrl.Height + BuilderSettings.SpaceBetweenFields);
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent);
@@ -287,24 +354,28 @@ var
  Dy, Ny: Integer;
  Ctrl: TControl;
 begin
-  Pt := GetLowestControlPosition(Ctrl, Ctrl, Source.Control);
 
   Nx := X - Source.DockOffset.X;
   Ny := Y - Source.DockOffset.Y;
-  Dx := Nx - Pt.X;
-  Dy := Ny - Pt.Y;
 
-  if Abs(Dx) <= BuilderSettings.SnappingThresHold then
-    Nx := Pt.X;
-  if Abs(Dy) <= BuilderSettings.SnappingThresHold then
-    Ny := Pt.Y;
-
-  // If the component was placed (within threshold) on top of
-  // the lowest component - place it where it was marked.
-  if (Dx = Pt.X) and (Dy = Pt.Y) then
+  if (Source.Control is TFieldEdit) then
   begin
-    Nx := X - Source.DockOffset.X;
-    Ny := Y - Source.DockOffset.Y;
+    Pt := GetLowestControlPosition(Ctrl, Ctrl, Source.Control);
+    Dx := Nx - Pt.X;
+    Dy := Ny - Pt.Y;
+
+    if Abs(Dx) <= BuilderSettings.SnappingThresHold then
+      Nx := Pt.X;
+    if Abs(Dy) <= BuilderSettings.SnappingThresHold then
+      Ny := Pt.Y;
+
+    // If the component was placed (within threshold) on top of
+    // the lowest component - place it where it was marked.
+    if (Dx = Pt.X) and (Dy = Pt.Y) then
+    begin
+      Nx := X - Source.DockOffset.X;
+      Ny := Y - Source.DockOffset.Y;
+    end;
   end;
 
   Source.Control.Left := Nx;
@@ -321,8 +392,14 @@ begin
   for i := DesignPanel.ControlCount - 1 downto  0 do
   begin
     Comp := DesignPanel.Controls[i];
-    if not (Comp is TFieldEdit) then continue;
-    Field :=TFieldEdit(Comp).Field;
+
+    if not ((Comp is TFieldEdit) or
+      (Comp is TFieldLabel)) then continue;
+
+    if (Comp is TFieldEdit) then
+      Field := TFieldEdit(Comp).Field
+    else
+      Field := TFieldLabel(Comp).Field;
     ActiveDatafile.RemoveField(Field, true);
     DesignPanel.RemoveControl(Comp);
     FreeAndNil(Comp);
@@ -352,14 +429,15 @@ end;
 
 procedure TDesignFrame.EditChange(Sender: TObject);
 begin
-  TFieldEdit(Sender).Text := TFieldEdit(Sender).Field.FieldName;
+//  TFieldEdit(Sender).Text := TFieldEdit(Sender).Field.FieldName;
 end;
 
 procedure TDesignFrame.EditFieldMenuItemClick(Sender: TObject);
 var
   FieldForm: TFieldCreateForm;
+  LabelForm: TCreateLabelForm;
 begin
-  if not Assigned(ClickedField) then exit;
+  if Assigned(ClickedField) then
   With ClickedField do
   begin
     FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType = ftFloat, false);
@@ -372,10 +450,24 @@ begin
     if FieldForm.ShowModal = mrCancel then exit;
 
     UpdateFieldEditFromForm(ClickedField, FieldForm, ClickedField.Top, ClickedField.Left);
+
+    FreeAndNil(FieldForm);
+  end;
+  if Assigned(ClickedLabel) then
+  With ClickedLabel do
+  begin
+    LabelForm := TCreateLabelForm.Create(Self);
+    LabelForm.LabelEdit.Text := Field.VariableLabel;
+    if LabelForm.ShowModal = mrCancel then exit;
+
+    Caption :=  LabelForm.LabelEdit.Text;
+    Field.VariableLabel := LabelForm.LabelEdit.Text;
+
+    FreeAndNil(LabelForm);
   end;
 end;
 
-procedure TDesignFrame.FontSelectButtonClick(Sender: TObject);
+procedure TDesignFrame.FontSelectBtnClick(Sender: TObject);
 begin
   if FontDialog1.Execute then
     begin
@@ -388,14 +480,21 @@ procedure TDesignFrame.FrameMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
   TmpField: TEpiField;
+  TmpFieldType: TFieldType;
 begin
   if Button <> mbLeft then exit;
   if ActiveButton.Tag = 0 then Exit;
   case ActiveButton.Tag of
-    1: TmpField := TEpiField.CreateField(ftInteger);
-    2: TmpField := TEpiField.CreateField(ftFloat);
+    1: TmpFieldType := ftInteger;
+    2: TmpFieldType := ftFloat;
+    3: TmpFieldType := ftString;
+    4: TmpFieldType := ftQuestion;
   end;
-  NewFieldEdit(TmpField, Y, X);
+  TmpField := TEpiField.CreateField(TmpFieldType);
+  if TmpFieldType = ftQuestion then
+    NewQuestionLabel(TmpField, Y, X)
+  else
+    NewFieldEdit(TmpField, Y, X);
   ActiveDatafile.AddField(TmpField);
   ToolBtnClick(SelectorButton);
 end;
@@ -416,6 +515,33 @@ begin
   ActiveButton := IntFieldBtn;
   Pt := FindNewAutoControlPostion;
   FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+end;
+
+procedure TDesignFrame.NewLabelFieldActionExecute(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  ActiveButton := LabelFieldBtn;
+  Pt := FindNewAutoControlPostion;
+  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+end;
+
+procedure TDesignFrame.NewStringFieldActionExecute(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  ActiveButton := StringFieldBtn;
+  Pt := FindNewAutoControlPostion;
+  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+end;
+
+procedure TDesignFrame.OpenToolBtnClick(Sender: TObject);
+begin
+{  if OpenDialog1.Execute then
+  begin
+
+
+  end;}
 end;
 
 initialization

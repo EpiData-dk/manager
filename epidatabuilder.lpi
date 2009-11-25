@@ -35,7 +35,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="7">
+    <Units Count="8">
       <Unit0>
         <Filename Value="epidatabuilder.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -79,6 +79,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="settings"/>
       </Unit6>
+      <Unit7>
+        <Filename Value="design_label_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CreateLabelForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_label_form"/>
+      </Unit7>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

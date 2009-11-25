@@ -4,7 +4,8 @@ object FieldCreateForm: TFieldCreateForm
   Top = 473
   Width = 248
   ActiveControl = FieldNameEdit
-  BorderIcons = []
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   ClientHeight = 124
   ClientWidth = 248
   OnCloseQuery = FormCloseQuery

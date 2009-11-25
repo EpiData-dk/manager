@@ -27,7 +27,7 @@ type
     destructor Destroy; override;
     procedure DoStartDock(var DragObject: TDragObject); override;
     procedure DoEndDock(Target: TObject; X, Y: Integer); override;
-    property Field: TEpiField read FField write FField;
+    property Field: TEpiField read FField;
     property VariableLabel: TLabel read FVariableLabel;
     property FieldNameLabel: TLabel read FFieldNameLabel;
   published

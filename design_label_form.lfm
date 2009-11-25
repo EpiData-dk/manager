@@ -1,0 +1,45 @@
+object CreateLabelForm: TCreateLabelForm
+  Left = 749
+  Height = 109
+  Top = 390
+  Width = 381
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  ClientHeight = 109
+  ClientWidth = 381
+  OnCloseQuery = FormCloseQuery
+  LCLVersion = '0.9.29'
+  object Label1: TLabel
+    Left = 8
+    Height = 18
+    Top = 8
+    Width = 70
+    Caption = 'Label text:'
+    ParentColor = False
+  end
+  object LabelEdit: TEdit
+    Left = 8
+    Height = 27
+    Top = 32
+    Width = 368
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 301
+    Height = 25
+    Top = 72
+    Width = 75
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 216
+    Height = 25
+    Top = 72
+    Width = 75
+    Caption = 'Ok'
+    ModalResult = 1
+    TabOrder = 2
+  end
+end
