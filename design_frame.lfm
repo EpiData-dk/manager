@@ -8,8 +8,8 @@ object DesignFrame: TDesignFrame
   ParentShowHint = False
   ShowHint = True
   TabOrder = 0
-  DesignLeft = 486
-  DesignTop = 286
+  DesignLeft = 507
+  DesignTop = 295
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -147,7 +147,10 @@ object DesignFrame: TDesignFrame
       Top = 7
       Width = 616
       Caption = 'Experimental designer - do not use for real work - font size will give problems, try local fonts !'
+      Font.Height = -13
+      Font.Name = 'Sans'
       ParentColor = False
+      ParentFont = False
     end
   end
   object ActionList1: TActionList
@@ -852,10 +855,6 @@ object DesignFrame: TDesignFrame
     MinFontSize = 0
     MaxFontSize = 0
     left = 568
-    top = 112
-  end
-  object OpenDialog1: TOpenDialog
-    left = 128
     top = 112
   end
 end

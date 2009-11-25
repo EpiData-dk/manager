@@ -32,6 +32,8 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; DataFile: TEpiDataFile; ShowDecimals: boolean = false; NewField: boolean = true);
+    procedure ReadField(AField: TEpiField);
+    procedure WriteField(AField: TEpiField);
     property OldFieldName: string Read FOldFieldName write FOldFieldName;
   end; 
 
@@ -111,6 +113,26 @@ begin
   FieldDecimalSizeEdit.Visible := true;
   FieldDecimalSizeEdit.Enabled := true;
   FieldDecimalSizeEdit.Text    := '2';
+end;
+
+procedure TFieldCreateForm.ReadField(AField: TEpiField);
+begin
+  FieldNameEdit.Text := AField.FieldName;
+  OldFieldName := FieldNameEdit.Text;
+  FieldSizeEdit.Text := IntToStr(AField.FieldLength);
+  LabelEdit.Text     := AField.VariableLabel;
+  if FieldDecimalSizeEdit.Visible then
+    FieldDecimalSizeEdit.Text := IntToStr(AField.FieldDecimals);
+end;
+
+procedure TFieldCreateForm.WriteField(AField: TEpiField);
+begin
+  AField.FieldName             := FieldNameEdit.Text;
+  FieldNameEdit.Text           := OldFieldName;
+  AField.FieldLength           := StrToInt(FieldSizeEdit.Text);
+  AField.VariableLabel         := LabelEdit.Text;
+  if FieldDecimalSizeEdit.Visible then
+    AField.FieldDecimals := StrToInt(FieldDecimalSizeEdit.Text);
 end;
 
 initialization

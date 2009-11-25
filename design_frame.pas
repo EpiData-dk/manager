@@ -28,7 +28,6 @@ type
     EditFieldMenuItem: TMenuItem;
     FieldPopUp: TPopupMenu;
     DeleteFieldMenuItem: TMenuItem;
-    OpenDialog1: TOpenDialog;
     SaveDialog1: TSaveDialog;
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
@@ -66,10 +65,9 @@ type
     ActiveDatafile: TEpiDataFile;
     ClickedField: TFieldEdit;
     ClickedLabel: TFieldLabel;
-    function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer): TFieldEdit;
+    function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldEdit;
     function NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer): TFieldLabel;
-    procedure UpdateFieldEditFromForm(FieldEdit: TFieldEdit;
-      FieldForm: TFieldCreateForm; ATop, ALeft: Integer);
+    procedure UpdateFieldEdit(FieldEdit: TFieldEdit; ATop, ALeft: Integer);
     procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
@@ -88,26 +86,18 @@ implementation
 
 uses
   main, graphics, UDataFileTypes, designutils,
-  types, math, settings, design_label_form;
+  types, math, settings, design_label_form,
+  UEpiDataGlobals, UImportExport;
 
 { TDesignFrame }
 
-function TDesignFrame.NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer
-  ): TFieldEdit;
+function TDesignFrame.NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer;
+  ShowForm: Boolean): TFieldEdit;
 var
   FieldForm: TFieldCreateForm;
   Pt: TPoint;
 begin
-  Result := nil;
-
-  FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType = ftFloat);
-  Pt := DesignPanel.ClientToScreen(Point(ALeft, ATop));
-  FieldForm.Top := Pt.Y;
-  FieldForm.Left := Pt.X;
-  if FieldForm.ShowModal = mrCancel then exit;
-
   Result := TFieldEdit.Create(AField, DesignPanel);
-  Result.Parent := DesignPanel;
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
@@ -118,9 +108,36 @@ begin
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
 
-  UpdateFieldEditFromForm(Result, FieldForm, ATop, ALeft);
+  FieldForm := nil;
+  if ShowForm then
+  begin
+    FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType = ftFloat);
+    Pt := DesignPanel.ClientToScreen(Point(ALeft, ATop));
+    FieldForm.Top := Pt.Y;
+    FieldForm.Left := Pt.X;
 
-  FreeAndNil(FieldForm);
+    if FieldForm.ShowModal = mrCancel then
+    begin
+      FreeAndNil(Result);
+      FreeAndNil(FieldForm);
+    end;
+
+    with Result do
+    begin
+      Field.FieldName       := FieldForm.FieldNameEdit.Text;
+      Field.VariableLabel   := FieldForm.LabelEdit.Text;
+      Field.FieldLength     := StrToInt(FieldForm.FieldSizeEdit.Text);
+      if Field.FieldType = ftFloat then
+        Field.FieldDecimals := StrToInt(FieldForm.FieldDecimalSizeEdit.Text);
+      Field.FieldX          := ALeft;
+      Field.FieldY          := ATop;
+    end;
+  end;
+
+  Result.Parent := DesignPanel;
+  UpdateFieldEdit(Result, ATop, ALeft);
+
+  if Assigned(FieldForm) then FreeAndNil(FieldForm);
 end;
 
 function TDesignFrame.NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer
@@ -153,26 +170,18 @@ begin
   FreeAndNil(LabelForm);
 end;
 
-procedure TDesignFrame.UpdateFieldEditFromForm(FieldEdit: TFieldEdit;
-  FieldForm: TFieldCreateForm; ATop, ALeft: Integer);
+procedure TDesignFrame.UpdateFieldEdit(FieldEdit: TFieldEdit; ATop,
+  ALeft: Integer);
 begin
-  FieldEdit.Text := FieldForm.FieldNameEdit.Text;
+  FieldEdit.Text := FieldEdit.Field.FieldName;
   FieldEdit.Left := ALeft;
   FieldEdit.Top  := ATop;
 
   With FieldEdit do
   begin
-    VariableLabel.Caption := FieldForm.LabelEdit.Text;
+    VariableLabel.Caption := FieldEdit.Field.VariableLabel;
     VariableLabel.Left    := Left - (VariableLabel.Width + 5);
     VariableLabel.Top     := Top + (Height - VariableLabel.Height);
-
-    Field.FieldName       := FieldForm.FieldNameEdit.Text;
-    Field.VariableLabel   := FieldForm.LabelEdit.Text;
-    Field.FieldLength     := StrToInt(FieldForm.FieldSizeEdit.Text);
-    if Field.FieldType = ftFloat then
-      Field.FieldDecimals := StrToInt(FieldForm.FieldDecimalSizeEdit.Text);
-    Field.FieldX          := ALeft;
-    Field.FieldY          := ATop;
 
     FieldNameLabel.Caption := Field.FieldName;
     FieldNameLabel.Left    := VariableLabel.Left - (FieldNameLabel.Width + 5);
@@ -441,15 +450,11 @@ begin
   With ClickedField do
   begin
     FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType = ftFloat, false);
-    FieldForm.FieldNameEdit.Text := Field.FieldName;
-    FieldForm.LabelEdit.Text     := Field.VariableLabel;
-    FieldForm.FieldSizeEdit.Text := IntToSTr(Field.FieldLength);
-    FieldForm.OldFieldName := Field.FieldName;
-    if Field.FieldType = ftFloat then
-      FieldForm.FieldDecimalSizeEdit.Text := IntToStr(Field.FieldDecimals);
+    FieldForm.ReadField(Field);
     if FieldForm.ShowModal = mrCancel then exit;
+    FieldForm.WriteField(Field);
 
-    UpdateFieldEditFromForm(ClickedField, FieldForm, ClickedField.Top, ClickedField.Left);
+    UpdateFieldEdit(ClickedField, ClickedField.Top, ClickedField.Left);
 
     FreeAndNil(FieldForm);
   end;
@@ -490,7 +495,7 @@ begin
     3: TmpFieldType := ftString;
     4: TmpFieldType := ftQuestion;
   end;
-  TmpField := TEpiField.CreateField(TmpFieldType);
+  TmpField := TEpiField.CreateField(TmpFieldType, ActiveDatafile.Size);
   if TmpFieldType = ftQuestion then
     NewQuestionLabel(TmpField, Y, X)
   else
@@ -536,12 +541,55 @@ begin
 end;
 
 procedure TDesignFrame.OpenToolBtnClick(Sender: TObject);
+var
+  Dlg: TOpenDialog;
+  Import: TEpiImportExport;
+  Fn: String;
+  Dummy: boolean;
+  i: Integer;
+  TmpField: TEpiField;
 begin
-{  if OpenDialog1.Execute then
+  Dlg := TOpenDialog.Create(nil);
+  Dlg.Filter := EpiOpenFileFilter;
+  if Dlg.Execute then
   begin
 
+    Fn := Dlg.FileName;
+    if (CompareFileExt(Fn, '.REC') <> 0) and
+       (CompareFileExt(Fn, '.RECXML') <> 0) then
+    begin
 
-  end;}
+      Import := TEpiImportExport.Create;
+      Import.OnProgress := @MainForm.ShowProgress;
+//      Importer.OnClipBoardRead := @MainForm.ReadClipboard;
+      if CompareFileExt(Fn, '.DTA') = 0 then
+        Dummy := Import.ImportStata(Fn, ActiveDatafile)
+      else if CompareFileExt(Fn, '.DBF') = 0 then
+        Dummy := Import.ImportDBase(Fn, ActiveDatafile)
+      else if CompareFileExt(Fn, '.ODS') = 0 then
+        Dummy := Import.ImportSpreadSheet(Fn, ActiveDatafile)
+      else if (CompareFileExt(Fn, '.TXT') = 0) or
+              (CompareFileExt(Fn, '.CSV') = 0) then
+        Dummy := Import.ImportTXT(Fn, ActiveDatafile, @ImportTxtGuess);
+
+      FreeAndNil(Import);
+    end else begin
+      ActiveDatafile := TEpiDataFile.Create();
+      ActiveDatafile.OnProgress := @MainForm.ShowProgress;
+  //    ActiveDatafile.OnPassword := GetPassword;
+      Dummy := ActiveDatafile.Open(Fn, []);
+    end;
+
+    for i := 0 to ActiveDatafile.NumFields - 1 do
+    begin
+      TmpField := ActiveDatafile[i];
+      if TmpField.FieldType = ftQuestion then
+        NewQuestionLabel(TmpField, TmpField.FieldY, TmpField.FieldX)
+      else
+        NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false);
+    end;
+  end;
+  FreeAndNil(Dlg);
 end;
 
 initialization

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls;
+  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls, UDataFileTypes;
 
 type
 
@@ -14,6 +14,7 @@ type
 
   TMainForm = class(TForm)
     EditMenu: TMenuItem;
+    ProgressBar1: TProgressBar;
     SettingsMenu: TMenuItem;
     SettingsAction: TAction;
     Button1: TButton;
@@ -45,6 +46,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    function ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string): TProgressResult;
   end; 
 
 var
@@ -117,6 +119,17 @@ constructor TMainForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   TabNameCount := 1;
+end;
+
+function TMainForm.ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string
+  ): TProgressResult;
+begin
+  if Percent <> ProgressBar1.Position then
+  begin
+    ProgressBar1.Position := Percent;
+    Application.ProcessMessages;
+  end;
+  result := prNormal;
 end;
 
 initialization

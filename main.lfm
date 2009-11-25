@@ -13,11 +13,11 @@ object MainForm: TMainForm
   LCLVersion = '0.9.29'
   object ProgressPanel: TPanel
     Left = 0
-    Height = 50
+    Height = 72
     Top = 0
     Width = 975
     Align = alTop
-    ClientHeight = 50
+    ClientHeight = 72
     ClientWidth = 975
     TabOrder = 0
     object DesignBtn: TBitBtn
@@ -44,6 +44,15 @@ object MainForm: TMainForm
       Width = 155
       Caption = 'Controls'
       TabOrder = 2
+    end
+    object ProgressBar1: TProgressBar
+      Left = 8
+      Height = 20
+      Top = 44
+      Width = 512
+      Smooth = True
+      Step = 1
+      TabOrder = 3
     end
   end
   object StatusBar1: TStatusBar
@@ -81,8 +90,8 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 538
-    Top = 50
+    Height = 516
+    Top = 72
     Width = 622
     Align = alClient
     ParentShowHint = False
@@ -92,12 +101,12 @@ object MainForm: TMainForm
   end
   object Panel1: TPanel
     Left = 622
-    Height = 538
-    Top = 50
+    Height = 516
+    Top = 72
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 538
+    ClientHeight = 516
     ClientWidth = 353
     TabOrder = 4
     object Label1: TLabel
@@ -169,6 +178,7 @@ object MainForm: TMainForm
       Caption = '&Edit'
       object SettingsMenu: TMenuItem
         Action = SettingsAction
+        OnClick = SettingsActionExecute
       end
     end
   end
