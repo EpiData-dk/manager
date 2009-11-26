@@ -1,5 +1,6 @@
 unit designutils;
 
+{$codepage UTF8}
 {$mode objfpc}{$H+}
 
 interface

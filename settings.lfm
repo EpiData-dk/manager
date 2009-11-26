@@ -1,13 +1,14 @@
 object SettingsForm: TSettingsForm
   Left = 698
-  Height = 152
+  Height = 180
   Top = 386
-  Width = 233
+  Width = 261
+  ActiveControl = PrefixEdit
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'SettingsForm'
-  ClientHeight = 152
-  ClientWidth = 233
+  ClientHeight = 180
+  ClientWidth = 261
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   Position = poOwnerFormCenter
@@ -15,50 +16,72 @@ object SettingsForm: TSettingsForm
   object Label1: TLabel
     Left = 16
     Height = 18
-    Top = 24
+    Top = 33
     Width = 73
     Caption = 'Field Prefix'
     ParentColor = False
   end
   object PrefixEdit: TEdit
-    Left = 144
+    Left = 176
     Height = 27
-    Top = 16
+    Top = 24
     Width = 80
     TabOrder = 0
   end
-  object Label2: TLabel
-    Left = 16
-    Height = 18
-    Top = 72
-    Width = 114
-    Caption = 'Show Field Name'
-    ParentColor = False
-  end
   object ShowFieldNameChkBox: TCheckBox
-    Left = 144
+    Left = 176
     Height = 22
-    Top = 68
-    Width = 18
-    AutoSize = False
+    Top = 112
+    Width = 24
+    ParentBidiMode = False
     TabOrder = 1
   end
   object Button1: TButton
-    Left = 16
-    Height = 25
-    Top = 112
+    Left = 80
+    Height = 28
+    Top = 145
     Width = 75
+    Anchors = [akLeft, akBottom]
     Caption = 'Ok'
     ModalResult = 1
     TabOrder = 2
   end
   object Button2: TButton
-    Left = 149
-    Height = 25
-    Top = 112
+    Left = 176
+    Height = 28
+    Top = 145
     Width = 75
+    Anchors = [akLeft, akBottom]
     Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 3
+  end
+  object Label3: TLabel
+    Left = 16
+    Height = 18
+    Top = 73
+    Width = 139
+    Caption = 'Default Right Postion'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 16
+    Height = 18
+    Top = 116
+    Width = 115
+    Caption = 'Show Fieldnames'
+    ParentColor = False
+  end
+  object DefaultRightPosEdit: TMaskEdit
+    Left = 176
+    Height = 27
+    Top = 64
+    Width = 80
+    CharCase = ecNormal
+    MaxLength = 3
+    TabOrder = 4
+    EditMask = '999;1;_'
+    Text = '   '
+    SpaceChar = '_'
   end
 end

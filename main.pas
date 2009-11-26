@@ -1,5 +1,6 @@
 unit main; 
 
+{$codepage UTF8}
 {$mode objfpc}{$H+}
 
 interface
@@ -68,9 +69,10 @@ begin
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
+  TabSheet.Caption := 'Untitled';
   PageControl1.ActivePage := TabSheet;
 
-  if PageControl1.PageCount > 1 then
+  if PageControl1.PageCount >= 1 then
   begin
     PageControl1.ShowTabs := true;
     PageControl1.Options := PageControl1.Options + [nboShowCloseButtons];
@@ -111,7 +113,7 @@ begin
   PageControl1.ActivePage := PageControl1.FindNextPage(TTabSheet(Sender), True, True);
   (Sender as TTabSheet).Free;
 
-  if PageControl1.PageCount <= 1 then
+  if PageControl1.PageCount < 1 then
     PageControl1.ShowTabs := false;;
 end;
 

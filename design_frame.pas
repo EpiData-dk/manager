@@ -1,5 +1,6 @@
 unit design_frame;
 
+{$codepage UTF8}
 {$mode objfpc}{$H+}
 
 interface
@@ -17,7 +18,6 @@ type
     NewLabelFieldAction: TAction;
     NewStringFieldAction: TAction;
     FontDialog1: TFontDialog;
-    Label1: TLabel;
     NewFloatFieldAction: TAction;
     NewIntFieldAction: TAction;
     ActionList1: TActionList;
@@ -66,8 +66,7 @@ type
     ClickedField: TFieldEdit;
     ClickedLabel: TFieldLabel;
     function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldEdit;
-    function NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer): TFieldLabel;
-    procedure UpdateFieldEdit(FieldEdit: TFieldEdit; ATop, ALeft: Integer);
+    function NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldLabel;
     procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
@@ -107,6 +106,9 @@ begin
   Result.AutoSize := false;
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
+  Result.Left := ALeft;
+  Result.Top := ATop;
+  Result.Parent := DesignPanel;
 
   FieldForm := nil;
   if ShowForm then
@@ -120,41 +122,34 @@ begin
     begin
       FreeAndNil(Result);
       FreeAndNil(FieldForm);
+      Exit;
     end;
 
     with Result do
     begin
       Field.FieldName       := FieldForm.FieldNameEdit.Text;
       Field.VariableLabel   := FieldForm.LabelEdit.Text;
-      Field.FieldLength     := StrToInt(FieldForm.FieldSizeEdit.Text);
+      Field.FieldLength     := StrToInt(FieldForm.FieldLengthEdit.Text);
       if Field.FieldType = ftFloat then
         Field.FieldDecimals := StrToInt(FieldForm.FieldDecimalSizeEdit.Text);
       Field.FieldX          := ALeft;
       Field.FieldY          := ATop;
+
+      Field.LabelX          := ALeft - (VariableLabel.Width + 5);
+      Field.LabelY          := ATop + (Height - VariableLabel.Height);
     end;
   end;
-
-  Result.Parent := DesignPanel;
-  UpdateFieldEdit(Result, ATop, ALeft);
 
   if Assigned(FieldForm) then FreeAndNil(FieldForm);
 end;
 
-function TDesignFrame.NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer
-  ): TFieldLabel;
+function TDesignFrame.NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer;
+  ShowForm: Boolean): TFieldLabel;
 var
   LabelForm: TCreateLabelForm;
   Pt: TPoint;
 begin
-  LabelForm := TCreateLabelForm.Create(Self);
-  Pt := DesignPanel.ClientToScreen(Point(ALeft, ATop));
-  LabelForm.Top := Pt.Y;
-  LabelForm.Left := Pt.X;
-  if LabelForm.ShowModal = mrCancel then exit;
-
   Result := TFieldLabel.Create(AField, DesignPanel);
-  Result.Parent := DesignPanel;
-  Result.Caption := LabelForm.LabelEdit.Text;
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
@@ -163,34 +158,31 @@ begin
   Result.OnMouseDown := @FieldMouseDown;
   Result.Left := ALeft;
   Result.Top := ATop;
-  Result.Field.VariableLabel := Result.Caption;
-  Result.Field.LabelX := ALeft;
-  Result.Field.LabelY := ATop;
+  Result.Parent := DesignPanel;
 
-  FreeAndNil(LabelForm);
-end;
-
-procedure TDesignFrame.UpdateFieldEdit(FieldEdit: TFieldEdit; ATop,
-  ALeft: Integer);
-begin
-  FieldEdit.Text := FieldEdit.Field.FieldName;
-  FieldEdit.Left := ALeft;
-  FieldEdit.Top  := ATop;
-
-  With FieldEdit do
+  LabelForm := nil;
+  if ShowForm then
   begin
-    VariableLabel.Caption := FieldEdit.Field.VariableLabel;
-    VariableLabel.Left    := Left - (VariableLabel.Width + 5);
-    VariableLabel.Top     := Top + (Height - VariableLabel.Height);
+    LabelForm := TCreateLabelForm.Create(Self, ActiveDatafile);
+    Pt := DesignPanel.ClientToScreen(Point(ALeft, ATop));
+    LabelForm.Top := Pt.Y;
+    LabelForm.Left := Pt.X;
 
-    FieldNameLabel.Caption := Field.FieldName;
-    FieldNameLabel.Left    := VariableLabel.Left - (FieldNameLabel.Width + 5);
-    FieldNameLabel.Top     := VariableLabel.Top;
-    if BuilderSettings.ShowFieldNamesInLabel then
-      FieldNameLabel.Parent := DesignPanel
-    else
-      FieldNameLabel.Parent := nil;
+    if LabelForm.ShowModal = mrCancel then
+    begin
+      FreeAndNil(Result);
+      exit;
+    end;
+
+    Result.Field.FieldName := LabelForm.GetFieldName;
+    Result.Field.VariableLabel := LabelForm.LabelEdit.Text;
+    Result.Field.FieldX := ALeft;
+    Result.Field.FieldY := ATop;
+    Result.Field.LabelX := ALeft;
+    Result.Field.LabelY := ATop;
   end;
+
+  if Assigned(Labelform) then FreeAndNil(LabelForm);
 end;
 
 procedure TDesignFrame.StartFieldDock(Sender: TObject;
@@ -249,6 +241,8 @@ begin
 
     // Using to positional controls of the Edit since its position is updated correctly in the
     // FrameDockDrop event
+    Field.FieldX := Left;
+    Field.FieldY := Top;
     Field.LabelX := Left;
     Field.LabelY := Top;
   end;
@@ -285,7 +279,7 @@ begin
   // Case where no edit field have been placed yet.
   if not Assigned(YCtrl) then
   begin
-    Result.X := 25;
+    Result.X := BuilderSettings.DefaultRightPostion;
     Result.Y := 25;
     Exit;
   end;
@@ -351,6 +345,9 @@ begin
     Fn := SaveDialog1.FileName;
     ActiveDatafile.Save(Fn, []);
   end;
+  MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
+  MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
+  MainForm.PageControl1.ShowHint := true;
   MainForm.StatusBar2.Panels[0].Text := 'Saving complete: ' + Fn;
 end;
 
@@ -445,23 +442,29 @@ procedure TDesignFrame.EditFieldMenuItemClick(Sender: TObject);
 var
   FieldForm: TFieldCreateForm;
   LabelForm: TCreateLabelForm;
+  Pt: TPoint;
 begin
   if Assigned(ClickedField) then
   With ClickedField do
   begin
+    Pt := DesignPanel.ClientToScreen(Point(ClickedField.Left + ClickedField.Width,
+      ClickedField.Top + ClickedField.Height));
     FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType = ftFloat, false);
+    FieldForm.Left := Pt.X;
+    FieldForm.Top  := Pt.Y;
     FieldForm.ReadField(Field);
     if FieldForm.ShowModal = mrCancel then exit;
     FieldForm.WriteField(Field);
-
-    UpdateFieldEdit(ClickedField, ClickedField.Top, ClickedField.Left);
-
     FreeAndNil(FieldForm);
   end;
   if Assigned(ClickedLabel) then
   With ClickedLabel do
   begin
-    LabelForm := TCreateLabelForm.Create(Self);
+    Pt := DesignPanel.ClientToScreen(Point(ClickedLabel.Left + ClickedLabel.Width,
+      ClickedLabel.Top + ClickedLabel.Height));
+    LabelForm := TCreateLabelForm.Create(Self, ActiveDatafile);
+    LabelForm.Left := Pt.X;
+    LabelForm.Top  := Pt.Y;
     LabelForm.LabelEdit.Text := Field.VariableLabel;
     if LabelForm.ShowModal = mrCancel then exit;
 
@@ -584,10 +587,14 @@ begin
     begin
       TmpField := ActiveDatafile[i];
       if TmpField.FieldType = ftQuestion then
-        NewQuestionLabel(TmpField, TmpField.FieldY, TmpField.FieldX)
+        NewQuestionLabel(TmpField, TmpField.FieldY, TmpField.FieldX, false)
       else
         NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false);
     end;
+
+    MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
+    MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
+    MainForm.PageControl1.ShowHint := true;
   end;
   FreeAndNil(Dlg);
 end;

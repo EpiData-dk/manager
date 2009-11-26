@@ -1,5 +1,6 @@
 program epidatabuilder;
 
+{$codepage UTF8}
 {$mode objfpc}{$H+}
 
 uses

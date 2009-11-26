@@ -1,30 +1,38 @@
 unit design_label_form;
 
+{$codepage UTF8}
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls;
+  Classes, SysUtils, LResources, Forms, StdCtrls, UEpiDataFile;
 
 type
 
   { TCreateLabelForm }
-
   TCreateLabelForm = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
+    CancelBtn: TButton;
+    OkBtn: TButton;
     LabelEdit: TEdit;
     Label1: TLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   private
     { private declarations }
+    FDf: TEpiDataFile;
   public
     { public declarations }
-  end; 
+    constructor Create(TheOwner: TComponent; DataFile: TEpiDataFile);
+    function GetFieldName: string;
+  end;
 
 implementation
+
+uses
+  Controls;
+
+var
+  LastFieldNo: Integer = 1;
 
 { TCreateLabelForm }
 
@@ -38,6 +46,21 @@ begin
   S := UTF8Encode(Trim(UTF8Decode(LabelEdit.Text)));
   if S = '' then
     CanClose := true;
+end;
+
+constructor TCreateLabelForm.Create(TheOwner: TComponent; DataFile: TEpiDataFile
+  );
+begin
+  inherited Create(TheOwner);
+  FDf := DataFile;
+end;
+
+function TCreateLabelForm.GetFieldName: string;
+begin
+  result := 'label_' + IntToStr(LastFieldNo);
+  inc(LastFieldNo);
+  if FDf.FieldExists(result) then
+    result := FDf.CreateUniqueFieldName('label_');
 end;
 
 initialization

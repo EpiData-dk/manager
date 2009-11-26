@@ -8,8 +8,8 @@ object DesignFrame: TDesignFrame
   ParentShowHint = False
   ShowHint = True
   TabOrder = 0
-  DesignLeft = 242
-  DesignTop = 122
+  DesignLeft = 507
+  DesignTop = 295
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -28,7 +28,7 @@ object DesignFrame: TDesignFrame
     object IntFieldBtn: TToolButton
       Tag = 1
       Left = 37
-      Hint = 'Add Integer (Alt+i)'
+      Hint = 'Add Integer (F2)'
       Top = 1
       Caption = 'Integer Field'
       ImageIndex = 1
@@ -36,6 +36,7 @@ object DesignFrame: TDesignFrame
     end
     object SelectorButton: TToolButton
       Left = 2
+      Hint = 'Select'
       Top = 1
       Caption = 'SelectorButton'
       Down = True
@@ -45,7 +46,7 @@ object DesignFrame: TDesignFrame
     object FloatFieldBtn: TToolButton
       Tag = 2
       Left = 65
-      Hint = 'add float (Alt+f)'
+      Hint = 'Add float (F3)'
       Top = 1
       Caption = 'FloatFieldBtn'
       ImageIndex = 2
@@ -61,7 +62,7 @@ object DesignFrame: TDesignFrame
     end
     object SaveToolBtn: TToolButton
       Left = 239
-      Hint = 'Save Form'
+      Hint = 'Save...'
       Top = 1
       Caption = 'SaveToolBtn'
       ImageIndex = 7
@@ -106,6 +107,7 @@ object DesignFrame: TDesignFrame
     object StringFieldBtn: TToolButton
       Tag = 3
       Left = 93
+      Hint = 'Add String (F4)'
       Top = 1
       Caption = 'StringFieldBtn'
       ImageIndex = 3
@@ -114,6 +116,7 @@ object DesignFrame: TDesignFrame
     object LabelFieldBtn: TToolButton
       Tag = 4
       Left = 121
+      Hint = 'Add Label (F5)'
       Top = 1
       Caption = 'LabelFieldBtn'
       ImageIndex = 4
@@ -121,6 +124,7 @@ object DesignFrame: TDesignFrame
     end
     object OpenToolBtn: TToolButton
       Left = 211
+      Hint = 'Open...'
       Top = 1
       Caption = 'OpenToolBtn'
       ImageIndex = 8
@@ -133,25 +137,12 @@ object DesignFrame: TDesignFrame
     Top = 26
     Width = 836
     Align = alClient
-    ClientHeight = 519
-    ClientWidth = 836
     DockSite = True
     TabOrder = 1
     UseDockManager = False
     OnDockDrop = FrameDockDrop
     OnMouseMove = DesignPanelMouseMove
     OnMouseUp = FrameMouseDown
-    object Label1: TLabel
-      Left = 24
-      Height = 17
-      Top = 7
-      Width = 536
-      Caption = 'Experimental designer - do not use for real work - font size will give problems, try local fonts !'
-      Font.Height = -13
-      Font.Name = 'Sans'
-      ParentColor = False
-      ParentFont = False
-    end
   end
   object ActionList1: TActionList
     left = 400

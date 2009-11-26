@@ -1,12 +1,12 @@
 object FieldCreateForm: TFieldCreateForm
-  Left = 663
-  Height = 124
-  Top = 473
+  Left = 538
+  Height = 125
+  Top = 505
   Width = 248
   ActiveControl = FieldNameEdit
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
-  ClientHeight = 124
+  ClientHeight = 125
   ClientWidth = 248
   OnCloseQuery = FormCloseQuery
   LCLVersion = '0.9.29'
@@ -30,8 +30,8 @@ object FieldCreateForm: TFieldCreateForm
     Left = 0
     Height = 18
     Top = 73
-    Width = 32
-    Caption = 'Size:'
+    Width = 49
+    Caption = 'Length:'
     ParentColor = False
   end
   object Label4: TLabel
@@ -60,7 +60,7 @@ object FieldCreateForm: TFieldCreateForm
   object Button1: TButton
     Left = 108
     Height = 25
-    Top = 96
+    Top = 97
     Width = 60
     Anchors = [akRight, akBottom]
     Caption = 'Ok'
@@ -70,14 +70,14 @@ object FieldCreateForm: TFieldCreateForm
   object Button2: TButton
     Left = 184
     Height = 25
-    Top = 96
+    Top = 97
     Width = 59
     Anchors = [akRight, akBottom]
     Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 5
   end
-  object FieldSizeEdit: TMaskEdit
+  object FieldLengthEdit: TMaskEdit
     Left = 108
     Height = 27
     Top = 64

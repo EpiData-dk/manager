@@ -1,11 +1,12 @@
 unit Design_Field_Frame;
 
+{$codepage utf8}
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, StdCtrls, MaskEdit,
+  Classes, SysUtils, LResources, Forms, StdCtrls, MaskEdit,
   UEpiDataFile;
 
 type
@@ -22,7 +23,7 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    FieldSizeEdit: TMaskEdit;
+    FieldLengthEdit: TMaskEdit;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   private
     { private declarations }
@@ -74,7 +75,7 @@ begin
   end;
 
   // - FieldLength (no need to ut8-handle this. It's always plain ASCII.
-  S := Trim(FieldSizeEdit.Text);
+  S := Trim(FieldLengthEdit.Text);
   if S = '' then
     CanClose := false;
   L := StrToInt(S);
@@ -103,11 +104,14 @@ begin
   FNewField := NewField;
 
   FieldNameEdit.Text := BuilderSettings.FieldNamePrefix + IntToStr(LastFieldNo);
-  FieldSizeEdit.Text := '5';
+  FieldLengthEdit.Text := '2';
   Inc(LastFieldNo);
+
+  ActiveControl := LabelEdit;
 
   if not ShowDecimals then exit;
 
+  FieldLengthEdit.Text := '5';
   Height := Height + FieldDecimalSizeEdit.Height + 5;
   Label4.Visible := true;
   FieldDecimalSizeEdit.Visible := true;
@@ -119,7 +123,7 @@ procedure TFieldCreateForm.ReadField(AField: TEpiField);
 begin
   FieldNameEdit.Text := AField.FieldName;
   OldFieldName := FieldNameEdit.Text;
-  FieldSizeEdit.Text := IntToStr(AField.FieldLength);
+  FieldLengthEdit.Text := IntToStr(AField.FieldLength);
   LabelEdit.Text     := AField.VariableLabel;
   if FieldDecimalSizeEdit.Visible then
     FieldDecimalSizeEdit.Text := IntToStr(AField.FieldDecimals);
@@ -128,8 +132,7 @@ end;
 procedure TFieldCreateForm.WriteField(AField: TEpiField);
 begin
   AField.FieldName             := FieldNameEdit.Text;
-  FieldNameEdit.Text           := OldFieldName;
-  AField.FieldLength           := StrToInt(FieldSizeEdit.Text);
+  AField.FieldLength           := StrToInt(FieldLengthEdit.Text);
   AField.VariableLabel         := LabelEdit.Text;
   if FieldDecimalSizeEdit.Visible then
     AField.FieldDecimals := StrToInt(FieldDecimalSizeEdit.Text);
