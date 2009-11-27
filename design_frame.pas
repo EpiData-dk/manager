@@ -15,6 +15,8 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    AutoAlignLeftAdjustMenuItem: TMenuItem;
+    AutoAlignEqualSpaceMenuItem: TMenuItem;
     NewLabelFieldAction: TAction;
     NewStringFieldAction: TAction;
     FontDialog1: TFontDialog;
@@ -39,8 +41,10 @@ type
     StringFieldBtn: TToolButton;
     LabelFieldBtn: TToolButton;
     OpenToolBtn: TToolButton;
+    AutoAlignBtn: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
+    procedure AutoAlignBtnClick(Sender: TObject);
     procedure ClearToolBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
     procedure DesignPanelMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -74,6 +78,7 @@ type
     procedure EndLabelDock(Sender, Target: TObject; X,Y: Integer);
     function  GetLowestControlPosition(var XCtrl, YCtrl: TControl; IgnoreCtrl: TControl): TPoint;
     function  FindNewAutoControlPostion: TPoint;
+    procedure AutoAlignFields(ActiveControl: TControl; AlignFields, AlignLabels, SpaceEqual: boolean);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -84,9 +89,9 @@ type
 implementation
 
 uses
-  main, graphics, UDataFileTypes, designutils,
+  main, graphics, UDataFileTypes,
   types, math, settings, design_label_form,
-  UEpiDataGlobals, UImportExport;
+  UEpiDataGlobals, UImportExport, design_autoalign_form;
 
 { TDesignFrame }
 
@@ -297,6 +302,66 @@ begin
     Result.Y += (YCtrl.Height + BuilderSettings.SpaceBetweenFields);
 end;
 
+procedure TDesignFrame.AutoAlignFields(ActiveControl: TControl; AlignFields,
+  AlignLabels, SpaceEqual: boolean);
+var
+  MaxVariableLabelWidth,
+  MaxFieldNameWidth: Integer;
+  MinY, MaxY, Spacing: Integer;
+  EditFieldCount: Integer;
+  i: Integer;
+  AdjustedFieldLeft: LongInt;
+begin
+  // Init vars.
+  MaxVariableLabelWidth := 0;
+  MaxFieldNameWidth := 0;
+  MinY := MaxInt;
+  MaxY := 0;
+  EditFieldCount := 0;
+
+  // Information collection pass.
+  for i := 0 to DesignPanel.ControlCount -1 do
+  begin
+    if not (DesignPanel.Controls[i] is TFieldEdit) then
+      continue
+    else with TFieldEdit(DesignPanel.Controls[i]) do
+    begin
+      MaxVariableLabelWidth := Max(MaxVariableLabelWidth, VariableLabel.Width);
+      MaxFieldNameWidth     := Max(MaxFieldNameWidth, FieldNameLabel.Width);
+      MinY := Min(MinY, Top);
+      MaxY := Max(MaxY, Top);
+      Inc(EditFieldCount);
+    end;
+  end;
+
+  // Spacing between "top" point of TEditFields, adjusted for overlapping components.
+  Spacing := Max((MaxY - MinY) div (EditFieldCount - 1), ActiveControl.Height + 5);
+  EditFieldCount := 0;
+
+  AdjustedFieldLeft := Max(ActiveControl.Left,
+    MaxFieldNameWidth + MaxVariableLabelWidth + 10);
+
+  for i := 0 to DesignPanel.ControlCount -1 do
+  begin
+    if not (DesignPanel.Controls[i] is TFieldEdit) then
+      continue
+    else with TFieldEdit(DesignPanel.Controls[i]) do
+    begin
+      // Field positioning.
+      if AlignFields then
+        Field.FieldX := AdjustedFieldLeft;
+      if SpaceEqual then
+      begin
+        Field.FieldY := MinY + EditFieldCount * Spacing;
+        Field.LabelY := Field.FieldY + (Height - VariableLabel.Height);
+      end;
+      if AlignLabels then
+        Field.LabelX := Field.FieldX - (MaxVariableLabelWidth + 5);
+      Inc(EditFieldCount);
+    end;
+  end;
+end;
+
 constructor TDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -410,6 +475,29 @@ begin
     DesignPanel.RemoveControl(Comp);
     FreeAndNil(Comp);
   end;
+end;
+
+procedure TDesignFrame.AutoAlignBtnClick(Sender: TObject);
+var
+  AutoAlignForm: TAutoAlignForm;
+  Pt: TPoint;
+begin
+  AutoAlignForm := TAutoAlignForm.Create(self);
+  With TToolButton(Sender) do
+    Pt := FieldToolBar.ClientToScreen(Point(Left, Top + Height + 1));
+  AutoAlignForm.Left := Pt.X;
+  AutoAlignForm.Top  := Pt.Y;
+  if AutoAlignForm.ShowModal = mrCancel then
+  begin
+    FreeAndNil(AutoAlignForm);
+    exit;
+  end;
+
+  if Assigned(ClickedField) then
+    AutoAlignFields(ClickedField, AutoAlignForm.AlignFieldsChk.Checked,
+      AutoAlignForm.AlignLabelsChk.Checked, AutoAlignForm.EqualSpaceChk.Checked);
+
+  FreeAndNil(AutoAlignForm);
 end;
 
 procedure TDesignFrame.DeleteFieldMenuItemClick(Sender: TObject);
@@ -551,6 +639,7 @@ var
   Dummy: boolean;
   i: Integer;
   TmpField: TEpiField;
+  TmpEdit: TFieldEdit;
 begin
   Dlg := TOpenDialog.Create(nil);
   Dlg.Filter := EpiOpenFileFilter;
@@ -589,12 +678,17 @@ begin
       if TmpField.FieldType = ftQuestion then
         NewQuestionLabel(TmpField, TmpField.FieldY, TmpField.FieldX, false)
       else
-        NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false);
+        if i = 0 then
+          TmpEdit := NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false)
+        else
+          NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false);
     end;
 
     MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
     MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
     MainForm.PageControl1.ShowHint := true;
+    if ActiveDatafile.DatafileType <> dftEpiDataXml then
+      AutoAlignFields(TmpEdit, True, True, True);
   end;
   FreeAndNil(Dlg);
 end;

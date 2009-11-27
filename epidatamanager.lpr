@@ -1,4 +1,4 @@
-program epidatabuilder;
+program epidatamanager;
 
 {$codepage UTF8}
 {$mode objfpc}{$H+}
@@ -9,16 +9,17 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, main, LResources, design_frame, fieldedit, Design_Field_Frame,
-designutils, settings, design_label_form;
+  settings, design_label_form, design_autoalign_form;
 
 {$IFDEF WINDOWS}
   {$IFDEF WIN32}
-    {$R epidatabuilder.rc}
+    {$R epidatamanager.rc}
   {$ENDIF}
 {$ENDIF}
 
 begin
-  {$I epidatabuilder.lrs}
+  Application.Title := 'EpiData Manager';
+  {$I epidatamanager.lrs}
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;

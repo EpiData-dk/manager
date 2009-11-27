@@ -1,0 +1,71 @@
+object AutoAlignForm: TAutoAlignForm
+  Left = 787
+  Height = 149
+  Top = 474
+  Width = 182
+  BorderIcons = []
+  BorderStyle = bsNone
+  Caption = 'Auto Align'
+  ClientHeight = 149
+  ClientWidth = 182
+  OnCreate = FormCreate
+  LCLVersion = '0.9.29'
+  object Panel1: TPanel
+    Left = 0
+    Height = 149
+    Top = 0
+    Width = 182
+    Align = alClient
+    BevelInner = bvLowered
+    BevelWidth = 2
+    ClientHeight = 149
+    ClientWidth = 182
+    Color = clSkyBlue
+    ParentColor = False
+    TabOrder = 0
+    object AlignFieldsChk: TCheckBox
+      Left = 8
+      Height = 22
+      Top = 8
+      Width = 99
+      Caption = 'Align Fields'
+      OnChange = AlignFieldsChkChange
+      TabOrder = 0
+    end
+    object AlignLabelsChk: TCheckBox
+      Left = 8
+      Height = 22
+      Top = 40
+      Width = 160
+      Caption = 'Align Variable Labels'
+      Enabled = False
+      TabOrder = 1
+    end
+    object EqualSpaceChk: TCheckBox
+      Left = 8
+      Height = 22
+      Top = 72
+      Width = 156
+      Caption = 'Equal Vertical Space'
+      TabOrder = 2
+    end
+    object Button1: TButton
+      Left = 8
+      Height = 28
+      Top = 104
+      Width = 75
+      Caption = 'Ok'
+      ModalResult = 1
+      TabOrder = 3
+    end
+    object Button2: TButton
+      Left = 93
+      Height = 28
+      Top = 104
+      Width = 75
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 4
+    end
+  end
+end
