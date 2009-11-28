@@ -8,7 +8,6 @@
       <AutoCreateForms Value="False"/>
       <TargetFileExt Value=""/>
       <Title Value="EpiData Manager"/>
-      <Icon Value="0"/>
       <UseXPManifest Value="True"/>
     </General>
     <VersionInfo>

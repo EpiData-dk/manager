@@ -1,55 +1,56 @@
 object MainForm: TMainForm
   Cursor = crIBeam
-  Left = 585
+  Left = 207
   Height = 655
-  Top = 249
+  Top = 101
   Width = 975
   ActiveControl = ProgressPanel
-  Caption = 'EpiData file builder'
-  ClientHeight = 630
+  Caption = 'EpiData Manager '
+  ClientHeight = 633
   ClientWidth = 975
   Menu = MainFormMenu
   Position = poScreenCenter
   LCLVersion = '0.9.29'
   object ProgressPanel: TPanel
     Left = 0
-    Height = 72
+    Height = 32
     Top = 0
     Width = 975
     Align = alTop
-    ClientHeight = 72
+    ClientHeight = 32
     ClientWidth = 975
     TabOrder = 0
     object DesignBtn: TBitBtn
       Left = 8
-      Height = 30
+      Height = 20
       Top = 8
-      Width = 144
+      Width = 120
       Caption = 'Design Dataform'
       OnClick = DesignBtnClick
       TabOrder = 0
     end
     object MetaDataBtn: TBitBtn
-      Left = 192
-      Height = 30
+      Left = 136
+      Height = 20
       Top = 8
       Width = 128
       Caption = 'Add Metadata'
       TabOrder = 1
     end
     object ControlBtn: TBitBtn
-      Left = 368
-      Height = 30
+      Left = 272
+      Height = 20
       Top = 8
-      Width = 155
+      Width = 99
       Caption = 'Controls'
       TabOrder = 2
     end
     object ProgressBar1: TProgressBar
-      Left = 8
+      AnchorSideLeft.Control = ControlBtn
+      Left = 272
       Height = 20
-      Top = 44
-      Width = 512
+      Top = 8
+      Width = 344
       Smooth = True
       Step = 1
       TabOrder = 3
@@ -57,8 +58,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 588
+    Height = 20
+    Top = 593
     Width = 975
     Panels = <    
       item
@@ -76,8 +77,8 @@ object MainForm: TMainForm
   end
   object StatusBar2: TStatusBar
     Left = 0
-    Height = 21
-    Top = 609
+    Height = 20
+    Top = 613
     Width = 975
     Panels = <    
       item
@@ -90,8 +91,8 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 516
-    Top = 72
+    Height = 561
+    Top = 32
     Width = 622
     Align = alClient
     ParentShowHint = False
@@ -101,18 +102,18 @@ object MainForm: TMainForm
   end
   object Panel1: TPanel
     Left = 622
-    Height = 516
-    Top = 72
+    Height = 561
+    Top = 32
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 516
+    ClientHeight = 561
     ClientWidth = 353
     TabOrder = 4
     Visible = False
     object Label1: TLabel
       Left = 18
-      Height = 18
+      Height = 14
       Top = 70
       Width = 308
       Caption = 'label1'
@@ -121,7 +122,7 @@ object MainForm: TMainForm
     end
     object Label2: TLabel
       Left = 18
-      Height = 18
+      Height = 14
       Top = 136
       Width = 308
       Caption = 'Label2'
@@ -130,7 +131,7 @@ object MainForm: TMainForm
     end
     object Label3: TLabel
       Left = 20
-      Height = 18
+      Height = 14
       Top = 200
       Width = 308
       Caption = 'Label2'
@@ -139,7 +140,7 @@ object MainForm: TMainForm
     end
     object Label4: TLabel
       Left = 20
-      Height = 18
+      Height = 14
       Top = 280
       Width = 308
       Caption = 'Label2'
@@ -148,7 +149,7 @@ object MainForm: TMainForm
     end
     object Label5: TLabel
       Left = 20
-      Height = 18
+      Height = 14
       Top = 368
       Width = 308
       Caption = 'Label2'
