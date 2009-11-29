@@ -5,7 +5,7 @@ object MainForm: TMainForm
   Top = 101
   Width = 975
   ActiveControl = ProgressPanel
-  Caption = 'EpiData Manager '
+  Caption = 'EpiData Project and Data Manager '
   ClientHeight = 633
   ClientWidth = 975
   Menu = MainFormMenu
@@ -21,39 +21,89 @@ object MainForm: TMainForm
     ClientWidth = 975
     TabOrder = 0
     object DesignBtn: TBitBtn
-      Left = 8
+      AnchorSideLeft.Control = FeatureInfoLabel
+      AnchorSideLeft.Side = asrBottom
+      Left = 128
       Height = 20
+      Hint = 'Define new data structures'#13#10'Modify existing data structures'#13#10'   rename fields'#13#10'   extend field types'#13#10'  add fields to files with data (no data loss)'#13#10'  edit field labels'#13#10'Add text to entry form'#13#10'Reorder and re-align fields'
       Top = 8
-      Width = 120
-      Caption = 'Design Dataform'
+      Width = 104
+      BorderSpacing.Left = 25
+      Caption = 'Define Data'
       OnClick = DesignBtnClick
       TabOrder = 0
     end
     object MetaDataBtn: TBitBtn
-      Left = 136
+      AnchorSideLeft.Control = DesignBtn
+      AnchorSideLeft.Side = asrBottom
+      Left = 237
       Height = 20
+      Hint = 'Add Metadata and Controls'#13#10'value labels, study label etc'#13#10'jumps, goto,  colour etc'#13#10'backup during entry etc'
       Top = 8
       Width = 128
-      Caption = 'Add Metadata'
+      BorderSpacing.Left = 5
+      Caption = 'Metadata and Controls'
+      OnClick = MetaDataBtnClick
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
     end
-    object ControlBtn: TBitBtn
-      Left = 272
+    object GCPbtn: TBitBtn
+      AnchorSideLeft.Control = MaintenanceBtn
+      AnchorSideLeft.Side = asrBottom
+      Left = 489
       Height = 20
+      Hint = 'Tools for Good Clinical Practice (GCP)'
       Top = 8
-      Width = 99
-      Caption = 'Controls'
-      TabOrder = 2
+      Width = 96
+      BorderSpacing.Left = 15
+      Caption = 'GCP Tools'
+      OnClick = GCPbtnClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
     end
     object ProgressBar1: TProgressBar
-      AnchorSideLeft.Control = ControlBtn
-      Left = 272
+      AnchorSideLeft.Control = GCPbtn
+      AnchorSideLeft.Side = asrBottom
+      Left = 595
       Height = 20
       Top = 8
       Width = 344
+      BorderSpacing.Left = 10
       Smooth = True
       Step = 1
-      TabOrder = 3
+      TabOrder = 4
+    end
+    object FeatureInfoLabel: TLabel
+      Left = 8
+      Height = 15
+      Top = 8
+      Width = 95
+      Caption = 'Click Button to Start'
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      ParentColor = False
+      ParentFont = False
+    end
+    object MaintenanceBtn: TBitBtn
+      AnchorSideLeft.Control = MetaDataBtn
+      AnchorSideLeft.Side = asrBottom
+      Left = 370
+      Height = 20
+      Hint = 'Remove records marked for deletion'#13#10'Adapt width of fields to actual data'#13#10'Backup or encrypt whole systems'#13#10'Export data'
+      Top = 8
+      Width = 104
+      BorderSpacing.Left = 5
+      Caption = 'Maintenance'
+      OnClick = MetaDataBtnClick
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
     end
   end
   object StatusBar1: TStatusBar
@@ -181,6 +231,13 @@ object MainForm: TMainForm
       object SettingsMenu: TMenuItem
         Action = SettingsAction
         OnClick = SettingsActionExecute
+      end
+    end
+    object MenuItem1: TMenuItem
+      Caption = '&Help'
+      object shortIntroItem: TMenuItem
+        Caption = 'Short introduction'
+        OnClick = shortIntroItemClick
       end
     end
   end

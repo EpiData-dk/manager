@@ -15,11 +15,15 @@ type
 
   TMainForm = class(TForm)
     EditMenu: TMenuItem;
+    FeatureInfoLabel: TLabel;
+    MenuItem1: TMenuItem;
+    shortIntroItem: TMenuItem;
+    MaintenanceBtn: TBitBtn;
     ProgressBar1: TProgressBar;
     SettingsMenu: TMenuItem;
     SettingsAction: TAction;
     Button1: TButton;
-    ControlBtn: TBitBtn;
+    GCPbtn: TBitBtn;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -39,6 +43,9 @@ type
     StatusBar2: TStatusBar;
     procedure Button1Click(Sender: TObject);
     procedure DesignBtnClick(Sender: TObject);
+    procedure GCPbtnClick(Sender: TObject);
+    procedure shortIntroItemClick(Sender: TObject);
+    procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
   private
     { private declarations }
@@ -66,6 +73,7 @@ var
   Frame: TFrame;
   TabSheet: TTabSheet;
 begin
+  FeatureInfoLabel.Visible:= False;
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -85,6 +93,25 @@ begin
 
   Inc(TabNameCount);
 end;
+
+procedure TMainForm.GCPbtnClick(Sender: TObject);
+begin
+  FeatureInfoLabel.Caption := 'GCP not ready yet';
+  FeatureInfoLabel.Visible:= True;
+end;
+
+procedure TMainForm.shortIntroItemClick(Sender: TObject);
+begin
+    FeatureInfoLabel.Caption := 'Help System Not Ready';
+  FeatureInfoLabel.Visible:= True;
+end;
+
+procedure TMainForm.MetaDataBtnClick(Sender: TObject);
+begin
+  FeatureInfoLabel.Caption := ' Not implementet yet';
+  FeatureInfoLabel.Visible:= True;
+end;
+
 
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
 var
