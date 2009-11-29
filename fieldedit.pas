@@ -7,9 +7,22 @@ interface
 
 uses
   Classes, SysUtils, UEpiDataFile, StdCtrls, Controls,
-  UDataFileTypes;
+  UDataFileTypes, LMessages, Graphics;
 
 type
+
+  { TSelectCorner }
+
+  TSelectCorner = class(TCustomControl)
+  private
+    procedure WMEraseBkgnd(var Message: TLMEraseBkgnd); message LM_ERASEBKGND;
+  protected
+    procedure Paint; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
 
   { TFieldEdit }
 
@@ -20,6 +33,9 @@ type
     FFieldNameLabel: TLabel;
     FVariableLabel: TLabel;
     FVariableLabelOffset: TPoint;
+
+    // Experimental grapper.
+    FSelectCorner: TSelectCorner;
     procedure OnFieldChange(Sender: TObject; EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
     procedure UpdateFieldNameLabel;
   protected
@@ -31,6 +47,8 @@ type
     destructor Destroy; override;
     procedure DoStartDock(var DragObject: TDragObject); override;
     procedure DoEndDock(Target: TObject; X, Y: Integer); override;
+    procedure DoEnter; override;
+    procedure DoExit; override;
     property Field: TEpiField read FField;
     property VariableLabel: TLabel read FVariableLabel;
     property FieldNameLabel: TLabel read FFieldNameLabel;
@@ -163,6 +181,9 @@ begin
   FVariableLabel := TLabel.Create(Self);
   FFieldNameLabel := TLabel.Create(Self);
 
+  // Experimental:
+  FSelectCorner := nil;
+
   Text                    := Field.FieldName;
   Left                    := Field.FieldX;
   Top                     := Field.FieldY;
@@ -199,6 +220,23 @@ begin
   Field.LabelY := Top - FVariableLabelOffset.Y;
 
   UpdateFieldNameLabel;
+end;
+
+procedure TFieldEdit.DoEnter;
+begin
+  inherited DoEnter;
+
+  FSelectCorner := TSelectCorner.Create(Self);
+  FSelectCorner.Top := Top - (FSelectCorner.Height div 2);
+  FSelectCorner.Left := Left - (FSelectCorner.Width div 2);
+  FSelectCorner.Parent := Parent;
+  FSelectCorner.DoubleBuffered := true;
+end;
+
+procedure TFieldEdit.DoExit;
+begin
+  inherited DoExit;
+  FSelectCorner.Free;
 end;
 
 { TFieldLabel }
@@ -333,6 +371,46 @@ begin
 end;
 
 destructor TFieldDockObject.Destroy;
+begin
+  inherited Destroy;
+end;
+
+{ TSelectCorner }
+
+procedure TSelectCorner.WMEraseBkgnd(var Message: TLMEraseBkgnd);
+begin
+  Message.Result := 1;
+end;
+
+procedure TSelectCorner.Paint;
+var
+  Bmp: TBitmap;
+begin
+  Bmp := TBitmap.Create;
+  try
+    Bmp.Height := Height;
+    Bmp.Width := Width;
+
+    Bmp.Canvas.Pen.Color := clBlack;
+    Bmp.Canvas.Brush.Color := clBlack;
+    Bmp.Canvas.Rectangle(0, 0, Width, Height);
+
+    Canvas.Draw(0, 0, Bmp);
+  finally
+    FreeAndNil(Bmp);
+  end;
+
+  inherited Paint;
+end;
+
+constructor TSelectCorner.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Width := 6;
+  Height := 6;
+end;
+
+destructor TSelectCorner.Destroy;
 begin
   inherited Destroy;
 end;

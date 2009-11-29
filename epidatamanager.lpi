@@ -35,7 +35,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="9">
+    <Units Count="8">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -68,31 +68,26 @@
         <UnitName Value="Design_Field_Frame"/>
       </Unit4>
       <Unit5>
-        <Filename Value="designutils.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="designutils"/>
-      </Unit5>
-      <Unit6>
         <Filename Value="settings.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SettingsForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="settings"/>
-      </Unit6>
-      <Unit7>
+      </Unit5>
+      <Unit6>
         <Filename Value="design_label_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CreateLabelForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_label_form"/>
-      </Unit7>
-      <Unit8>
+      </Unit6>
+      <Unit7>
         <Filename Value="design_autoalign_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AutoAlignForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_autoalign_form"/>
-      </Unit8>
+      </Unit7>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
