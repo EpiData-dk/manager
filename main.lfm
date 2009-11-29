@@ -31,6 +31,8 @@ object MainForm: TMainForm
       BorderSpacing.Left = 25
       Caption = 'Define Data'
       OnClick = DesignBtnClick
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
     end
     object MetaDataBtn: TBitBtn

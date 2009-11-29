@@ -73,7 +73,7 @@ var
   Frame: TFrame;
   TabSheet: TTabSheet;
 begin
-  FeatureInfoLabel.Visible:= False;
+  FeatureInfoLabel.Caption := 'Add fields: Click toolbar';
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -97,19 +97,16 @@ end;
 procedure TMainForm.GCPbtnClick(Sender: TObject);
 begin
   FeatureInfoLabel.Caption := 'GCP not ready yet';
-  FeatureInfoLabel.Visible:= True;
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
 begin
     FeatureInfoLabel.Caption := 'Help System Not Ready';
-  FeatureInfoLabel.Visible:= True;
 end;
 
 procedure TMainForm.MetaDataBtnClick(Sender: TObject);
 begin
   FeatureInfoLabel.Caption := ' Not implementet yet';
-  FeatureInfoLabel.Visible:= True;
 end;
 
 
