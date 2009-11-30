@@ -1,66 +1,72 @@
 object MainForm: TMainForm
   Cursor = crIBeam
-  Left = 207
+  Left = 535
   Height = 655
-  Top = 101
+  Top = 287
   Width = 975
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 633
+  ClientHeight = 630
   ClientWidth = 975
   Menu = MainFormMenu
   Position = poScreenCenter
   LCLVersion = '0.9.29'
   object ProgressPanel: TPanel
     Left = 0
-    Height = 32
+    Height = 40
     Top = 0
     Width = 975
     Align = alTop
-    ClientHeight = 32
+    ClientHeight = 40
     ClientWidth = 975
     TabOrder = 0
     object DesignBtn: TBitBtn
-      AnchorSideLeft.Control = FeatureInfoLabel
       AnchorSideLeft.Side = asrBottom
       Left = 128
-      Height = 20
+      Height = 28
       Hint = 'Define new data structures'#13#10'Modify existing data structures'#13#10'   rename fields'#13#10'   extend field types'#13#10'  add fields to files with data (no data loss)'#13#10'  edit field labels'#13#10'Add text to entry form'#13#10'Reorder and re-align fields'
       Top = 8
       Width = 104
-      BorderSpacing.Left = 25
       Caption = 'Define Data'
+      Font.CharSet = 4
+      Font.Height = -13
+      Font.Name = 'Sans'
       OnClick = DesignBtnClick
+      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
     end
     object MetaDataBtn: TBitBtn
-      AnchorSideLeft.Control = DesignBtn
       AnchorSideLeft.Side = asrBottom
       Left = 237
-      Height = 20
+      Height = 28
       Hint = 'Add Metadata and Controls'#13#10'value labels, study label etc'#13#10'jumps, goto,  colour etc'#13#10'backup during entry etc'
       Top = 8
       Width = 128
-      BorderSpacing.Left = 5
       Caption = 'Metadata and Controls'
+      Font.CharSet = 4
+      Font.Height = -13
+      Font.Name = 'Sans'
       OnClick = MetaDataBtnClick
+      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
     end
     object GCPbtn: TBitBtn
-      AnchorSideLeft.Control = MaintenanceBtn
       AnchorSideLeft.Side = asrBottom
       Left = 489
-      Height = 20
+      Height = 28
       Hint = 'Tools for Good Clinical Practice (GCP)'
       Top = 8
       Width = 96
-      BorderSpacing.Left = 15
       Caption = 'GCP Tools'
+      Font.CharSet = 4
+      Font.Height = -13
+      Font.Name = 'Sans'
       OnClick = GCPbtnClick
+      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 3
@@ -79,8 +85,8 @@ object MainForm: TMainForm
     end
     object FeatureInfoLabel: TLabel
       Left = 8
-      Height = 15
-      Top = 8
+      Height = 14
+      Top = 16
       Width = 95
       Caption = 'Click Button to Start'
       Font.CharSet = ANSI_CHARSET
@@ -93,16 +99,18 @@ object MainForm: TMainForm
       ParentFont = False
     end
     object MaintenanceBtn: TBitBtn
-      AnchorSideLeft.Control = MetaDataBtn
       AnchorSideLeft.Side = asrBottom
       Left = 370
-      Height = 20
+      Height = 28
       Hint = 'Remove records marked for deletion'#13#10'Adapt width of fields to actual data'#13#10'Backup or encrypt whole systems'#13#10'Export data'
       Top = 8
       Width = 104
-      BorderSpacing.Left = 5
-      Caption = 'Maintenance'
+      Caption = 'Tools'
+      Font.CharSet = 4
+      Font.Height = -13
+      Font.Name = 'Sans'
       OnClick = MetaDataBtnClick
+      ParentFont = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
@@ -110,8 +118,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 593
+    Height = 21
+    Top = 588
     Width = 975
     Panels = <    
       item
@@ -129,8 +137,8 @@ object MainForm: TMainForm
   end
   object StatusBar2: TStatusBar
     Left = 0
-    Height = 20
-    Top = 613
+    Height = 21
+    Top = 609
     Width = 975
     Panels = <    
       item
@@ -143,8 +151,8 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 561
-    Top = 32
+    Height = 548
+    Top = 40
     Width = 622
     Align = alClient
     ParentShowHint = False
@@ -154,18 +162,17 @@ object MainForm: TMainForm
   end
   object Panel1: TPanel
     Left = 622
-    Height = 561
-    Top = 32
+    Height = 548
+    Top = 40
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 561
+    ClientHeight = 548
     ClientWidth = 353
     TabOrder = 4
-    Visible = False
     object Label1: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 70
       Width = 308
       Caption = 'label1'
@@ -174,7 +181,7 @@ object MainForm: TMainForm
     end
     object Label2: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 136
       Width = 308
       Caption = 'Label2'
@@ -183,7 +190,7 @@ object MainForm: TMainForm
     end
     object Label3: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 200
       Width = 308
       Caption = 'Label2'
@@ -192,7 +199,7 @@ object MainForm: TMainForm
     end
     object Label4: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 280
       Width = 308
       Caption = 'Label2'
@@ -201,7 +208,7 @@ object MainForm: TMainForm
     end
     object Label5: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 368
       Width = 308
       Caption = 'Label2'
@@ -219,7 +226,7 @@ object MainForm: TMainForm
     end
   end
   object MainFormMenu: TMainMenu
-    left = 544
+    left = 528
     top = 288
     object FileMenu: TMenuItem
       Caption = 'File'
@@ -244,8 +251,8 @@ object MainForm: TMainForm
     end
   end
   object MainFormActionList: TActionList
-    left = 544
-    top = 352
+    left = 528
+    top = 376
     object FileExit1: TFileExit
       Category = 'File'
       Caption = 'E&xit'
@@ -257,6 +264,12 @@ object MainForm: TMainForm
       Caption = 'Settings'
       OnExecute = SettingsActionExecute
       ShortCut = 32851
+    end
+    object ClosePageAction: TAction
+      Category = 'NonMenuActions'
+      Caption = 'ClosePageAction'
+      OnExecute = ClosePageActionExecute
+      ShortCut = 16499
     end
   end
 end

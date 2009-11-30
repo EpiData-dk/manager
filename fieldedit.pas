@@ -226,17 +226,17 @@ procedure TFieldEdit.DoEnter;
 begin
   inherited DoEnter;
 
-  FSelectCorner := TSelectCorner.Create(Self);
+{  FSelectCorner := TSelectCorner.Create(Self);
   FSelectCorner.Top := Top - (FSelectCorner.Height div 2);
   FSelectCorner.Left := Left - (FSelectCorner.Width div 2);
   FSelectCorner.Parent := Parent;
-  FSelectCorner.DoubleBuffered := true;
+  FSelectCorner.DoubleBuffered := true;    }
 end;
 
 procedure TFieldEdit.DoExit;
 begin
   inherited DoExit;
-  FSelectCorner.Free;
+{  FSelectCorner.Free;}
 end;
 
 { TFieldLabel }

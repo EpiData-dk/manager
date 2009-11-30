@@ -7,13 +7,14 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls, UDataFileTypes;
+  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls, UDataFileTypes, LMessages;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    ClosePageAction: TAction;
     EditMenu: TMenuItem;
     FeatureInfoLabel: TLabel;
     MenuItem1: TMenuItem;
@@ -42,6 +43,7 @@ type
     StatusBar1: TStatusBar;
     StatusBar2: TStatusBar;
     procedure Button1Click(Sender: TObject);
+    procedure ClosePageActionExecute(Sender: TObject);
     procedure DesignBtnClick(Sender: TObject);
     procedure GCPbtnClick(Sender: TObject);
     procedure shortIntroItemClick(Sender: TObject);
@@ -78,6 +80,8 @@ begin
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
   TabSheet.Caption := 'Untitled';
+  if TabNameCount > 1 then
+    TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount) + ')';
   PageControl1.ActivePage := TabSheet;
 
   if PageControl1.PageCount >= 1 then
@@ -101,7 +105,7 @@ end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
 begin
-    FeatureInfoLabel.Caption := 'Help System Not Ready';
+  FeatureInfoLabel.Caption := 'Help System Not Ready';
 end;
 
 procedure TMainForm.MetaDataBtnClick(Sender: TObject);
@@ -128,6 +132,11 @@ begin
   for i := 0 to Panel1.ControlCount - 1 do
     if Panel1.Controls[i] is TLabel then
       TLabel(Panel1.Controls[i]).Caption := Panel1.Controls[i].Name;
+end;
+
+procedure TMainForm.ClosePageActionExecute(Sender: TObject);
+begin
+  CloseTab(PageControl1.ActivePage);
 end;
 
 procedure TMainForm.CloseTab(Sender: TObject);

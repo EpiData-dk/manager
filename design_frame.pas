@@ -22,11 +22,10 @@ type
     FontDialog1: TFontDialog;
     NewFloatFieldAction: TAction;
     NewIntFieldAction: TAction;
-    ActionList1: TActionList;
+    DesignFrameActionList: TActionList;
     FieldToolBar: TToolBar;
     FieldToolBarImageList: TImageList;
     IntFieldBtn: TToolButton;
-    DesignPanel: TPanel;
     EditFieldMenuItem: TMenuItem;
     FieldPopUp: TPopupMenu;
     DeleteFieldMenuItem: TMenuItem;
@@ -47,9 +46,8 @@ type
     procedure AutoAlignBtnClick(Sender: TObject);
     procedure ClearToolBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
-    procedure DesignPanelMouseMove(Sender: TObject; Shift: TShiftState; X,
+    procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
-    procedure EditChange(Sender: TObject);
     procedure EditFieldMenuItemClick(Sender: TObject);
     procedure FontSelectBtnClick(Sender: TObject);
     procedure FrameDockDrop(Sender: TObject; Source: TDragDockObject; X,
@@ -73,6 +71,7 @@ type
     function NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldLabel;
     procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
+    procedure FieldEditDone(Sender: TObject);
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure EndLabelDock(Sender, Target: TObject; X,Y: Integer);
@@ -101,7 +100,7 @@ var
   FieldForm: TFieldCreateForm;
   Pt: TPoint;
 begin
-  Result := TFieldEdit.Create(AField, DesignPanel);
+  Result := TFieldEdit.Create(AField, Self);
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
@@ -113,13 +112,15 @@ begin
   Result.OnMouseDown := @FieldMouseDown;
   Result.Left := ALeft;
   Result.Top := ATop;
-  Result.Parent := DesignPanel;
+  Result.Parent := Self;
+
+  Result.OnEditingDone := @FieldEditDone;
 
   FieldForm := nil;
   if ShowForm then
   begin
     FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType = ftFloat);
-    Pt := DesignPanel.ClientToScreen(Point(ALeft, ATop));
+    Pt := ClientToScreen(Point(ALeft, ATop));
     FieldForm.Top := Pt.Y;
     FieldForm.Left := Pt.X;
 
@@ -154,7 +155,7 @@ var
   LabelForm: TCreateLabelForm;
   Pt: TPoint;
 begin
-  Result := TFieldLabel.Create(AField, DesignPanel);
+  Result := TFieldLabel.Create(AField, Self);
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
@@ -163,13 +164,13 @@ begin
   Result.OnMouseDown := @FieldMouseDown;
   Result.Left := ALeft;
   Result.Top := ATop;
-  Result.Parent := DesignPanel;
+  Result.Parent := Self;
 
   LabelForm := nil;
   if ShowForm then
   begin
     LabelForm := TCreateLabelForm.Create(Self, ActiveDatafile);
-    Pt := DesignPanel.ClientToScreen(Point(ALeft, ATop));
+    Pt := ClientToScreen(Point(ALeft, ATop));
     LabelForm.Top := Pt.Y;
     LabelForm.Left := Pt.X;
 
@@ -213,6 +214,11 @@ begin
     Field.LabelX := VariableLabel.Left;
     Field.LabelY := VariableLabel.Top;
   end;
+end;
+
+procedure TDesignFrame.FieldEditDone(Sender: TObject);
+begin
+  MainForm.Label3.Caption := 'FieldEditDone - Sender: ' + TFieldEdit(Sender).Text;
 end;
 
 procedure TDesignFrame.FieldMouseDown(Sender: TObject; Button: TMouseButton;
@@ -261,8 +267,7 @@ begin
   result := Point(0,0);
   YCtrl := nil;
   XCtrl := nil;
-  for i := 0 to DesignPanel.ControlCount - 1 do
-  with DesignPanel do
+  for i := 0 to ControlCount - 1 do
   begin
     if not (Controls[i] is TFieldEdit) then continue;
     if Controls[i] = IgnoreCtrl then continue;
@@ -320,11 +325,11 @@ begin
   EditFieldCount := 0;
 
   // Information collection pass.
-  for i := 0 to DesignPanel.ControlCount -1 do
+  for i := 0 to ControlCount -1 do
   begin
-    if not (DesignPanel.Controls[i] is TFieldEdit) then
+    if not (Controls[i] is TFieldEdit) then
       continue
-    else with TFieldEdit(DesignPanel.Controls[i]) do
+    else with TFieldEdit(Controls[i]) do
     begin
       MaxVariableLabelWidth := Max(MaxVariableLabelWidth, VariableLabel.Width);
       MaxFieldNameWidth     := Max(MaxFieldNameWidth, FieldNameLabel.Width);
@@ -341,11 +346,11 @@ begin
   AdjustedFieldLeft := Max(ActiveControl.Left,
     MaxFieldNameWidth + MaxVariableLabelWidth + 10);
 
-  for i := 0 to DesignPanel.ControlCount -1 do
+  for i := 0 to ControlCount -1 do
   begin
-    if not (DesignPanel.Controls[i] is TFieldEdit) then
+    if not (Controls[i] is TFieldEdit) then
       continue
-    else with TFieldEdit(DesignPanel.Controls[i]) do
+    else with TFieldEdit(Controls[i]) do
     begin
       // Field positioning.
       if AlignFields then
@@ -381,14 +386,14 @@ procedure TDesignFrame.UpdateAllFields;
 var
   i: Integer;
 begin
-  for i := DesignPanel.ControlCount -1 downto  0 do
+  for i := ControlCount -1 downto  0 do
   begin
-    if not (DesignPanel.Controls[i] is TFieldEdit) then continue;
+    if not (Controls[i] is TFieldEdit) then continue;
 
     if BuilderSettings.ShowFieldNamesInLabel then
-      TFieldEdit(DesignPanel.Controls[i]).FieldNameLabel.Parent := DesignPanel
+      TFieldEdit(Controls[i]).FieldNameLabel.Parent := Self
     else
-      TFieldEdit(DesignPanel.Controls[i]).FieldNameLabel.Parent := nil;
+      TFieldEdit(Controls[i]).FieldNameLabel.Parent := nil;
   end;
 end;
 
@@ -460,9 +465,9 @@ var
   i: Integer;
 begin
   Field := nil;
-  for i := DesignPanel.ControlCount - 1 downto  0 do
+  for i := ControlCount - 1 downto  0 do
   begin
-    Comp := DesignPanel.Controls[i];
+    Comp := Controls[i];
 
     if not ((Comp is TFieldEdit) or
       (Comp is TFieldLabel)) then continue;
@@ -472,7 +477,7 @@ begin
     else
       Field := TFieldLabel(Comp).Field;
     ActiveDatafile.RemoveField(Field, true);
-    DesignPanel.RemoveControl(Comp);
+    RemoveControl(Comp);
     FreeAndNil(Comp);
   end;
 end;
@@ -509,21 +514,16 @@ begin
   TmpField := ClickedField.Field;
   ActiveDatafile.RemoveField(TmpField, true);
 
-  DesignPanel.RemoveControl(ClickedField);
+  RemoveControl(ClickedField);
   FreeAndNil(ClickedField);
 end;
 
-procedure TDesignFrame.DesignPanelMouseMove(Sender: TObject;
-  Shift: TShiftState; X, Y: Integer);
+procedure TDesignFrame.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
 begin
   MainForm.StatusBar2.Panels[1].Text := Format(
     'Mouse - X: %d Y: %d',
     [X, Y]);
-end;
-
-procedure TDesignFrame.EditChange(Sender: TObject);
-begin
-//  TFieldEdit(Sender).Text := TFieldEdit(Sender).Field.FieldName;
 end;
 
 procedure TDesignFrame.EditFieldMenuItemClick(Sender: TObject);
@@ -535,7 +535,7 @@ begin
   if Assigned(ClickedField) then
   With ClickedField do
   begin
-    Pt := DesignPanel.ClientToScreen(Point(ClickedField.Left + ClickedField.Width,
+    Pt := ClientToScreen(Point(ClickedField.Left + ClickedField.Width,
       ClickedField.Top + ClickedField.Height));
     FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType = ftFloat, false);
     FieldForm.Left := Pt.X;
@@ -548,7 +548,7 @@ begin
   if Assigned(ClickedLabel) then
   With ClickedLabel do
   begin
-    Pt := DesignPanel.ClientToScreen(Point(ClickedLabel.Left + ClickedLabel.Width,
+    Pt := ClientToScreen(Point(ClickedLabel.Left + ClickedLabel.Width,
       ClickedLabel.Top + ClickedLabel.Height));
     LabelForm := TCreateLabelForm.Create(Self, ActiveDatafile);
     LabelForm.Left := Pt.X;
@@ -566,10 +566,10 @@ end;
 procedure TDesignFrame.FontSelectBtnClick(Sender: TObject);
 begin
   if FontDialog1.Execute then
-    begin
-      DesignPanel.Font := FontDialog1.Font;
-      DesignPanel.Repaint;
-    end;
+  begin
+    Font := FontDialog1.Font;
+    Repaint;
+  end;
 end;
 
 procedure TDesignFrame.FrameMouseDown(Sender: TObject; Button: TMouseButton;

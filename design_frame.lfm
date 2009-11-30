@@ -1,15 +1,20 @@
 object DesignFrame: TDesignFrame
   Left = 0
-  Height = 545
+  Height = 564
   Top = 0
   Width = 836
-  ClientHeight = 545
+  AutoScroll = True
+  ClientHeight = 564
   ClientWidth = 836
+  DockSite = True
+  OnDockDrop = FrameDockDrop
+  OnMouseDown = FrameMouseDown
+  OnMouseMove = FormMouseMove
   ParentShowHint = False
   ShowHint = True
   TabOrder = 0
-  DesignLeft = 578
-  DesignTop = 315
+  DesignLeft = 718
+  DesignTop = 357
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -19,7 +24,7 @@ object DesignFrame: TDesignFrame
     ButtonWidth = 24
     Caption = 'FieldToolBar'
     Color = clBtnFace
-    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    EdgeBorders = [ebTop, ebBottom]
     EdgeInner = esNone
     EdgeOuter = esRaised
     Images = FieldToolBarImageList
@@ -139,20 +144,7 @@ object DesignFrame: TDesignFrame
       OnClick = AutoAlignBtnClick
     end
   end
-  object DesignPanel: TPanel
-    Left = 0
-    Height = 519
-    Top = 26
-    Width = 836
-    Align = alClient
-    DockSite = True
-    TabOrder = 1
-    UseDockManager = False
-    OnDockDrop = FrameDockDrop
-    OnMouseMove = DesignPanelMouseMove
-    OnMouseUp = FrameMouseDown
-  end
-  object ActionList1: TActionList
+  object DesignFrameActionList: TActionList
     left = 400
     top = 280
     object NewIntFieldAction: TAction
