@@ -15,6 +15,11 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    NewCryptField: TMenuItem;
+    NewAutoIDMenu: TMenuItem;
+    NewYMDFieldAction: TAction;
+    NewMDYFieldAction: TAction;
+    NewDMYFieldAction: TAction;
     AutoAlignLeftAdjustMenuItem: TMenuItem;
     AutoAlignEqualSpaceMenuItem: TMenuItem;
     NewLabelFieldAction: TAction;
@@ -29,6 +34,7 @@ type
     EditFieldMenuItem: TMenuItem;
     FieldPopUp: TPopupMenu;
     DeleteFieldMenuItem: TMenuItem;
+    OtherFieldsPopup: TPopupMenu;
     SaveDialog1: TSaveDialog;
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
@@ -41,8 +47,13 @@ type
     LabelFieldBtn: TToolButton;
     OpenToolBtn: TToolButton;
     AutoAlignBtn: TToolButton;
+    DMYFieldBtn: TToolButton;
+    OtherFieldBtn: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
+    MDYFieldBtn: TToolButton;
+    YMDFieldBtn: TToolButton;
+    procedure NewOtherFieldClick(Sender: TObject);
     procedure AutoAlignBtnClick(Sender: TObject);
     procedure ClearToolBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
@@ -54,10 +65,13 @@ type
       Y: Integer);
     procedure FrameMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure NewDMYFieldActionExecute(Sender: TObject);
     procedure NewFloatFieldActionExecute(Sender: TObject);
     procedure NewIntFieldActionExecute(Sender: TObject);
     procedure NewLabelFieldActionExecute(Sender: TObject);
+    procedure NewMDYFieldActionExecute(Sender: TObject);
     procedure NewStringFieldActionExecute(Sender: TObject);
+    procedure NewYMDFieldActionExecute(Sender: TObject);
     procedure OpenToolBtnClick(Sender: TObject);
     procedure ToolBtnClick(Sender: TObject);
     procedure SaveToolBtnClick(Sender: TObject);
@@ -119,7 +133,7 @@ begin
   FieldForm := nil;
   if ShowForm then
   begin
-    FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType = ftFloat);
+    FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType);
     Pt := ClientToScreen(Point(ALeft, ATop));
     FieldForm.Top := Pt.Y;
     FieldForm.Left := Pt.X;
@@ -537,7 +551,7 @@ begin
   begin
     Pt := ClientToScreen(Point(ClickedField.Left + ClickedField.Width,
       ClickedField.Top + ClickedField.Height));
-    FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType = ftFloat, false);
+    FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType, false);
     FieldForm.Left := Pt.X;
     FieldForm.Top  := Pt.Y;
     FieldForm.ReadField(Field);
@@ -576,23 +590,33 @@ procedure TDesignFrame.FrameMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
   TmpField: TEpiField;
-  TmpFieldType: TFieldType;
 begin
   if Button <> mbLeft then exit;
-  if ActiveButton.Tag = 0 then Exit;
-  case ActiveButton.Tag of
-    1: TmpFieldType := ftInteger;
-    2: TmpFieldType := ftFloat;
-    3: TmpFieldType := ftString;
-    4: TmpFieldType := ftQuestion;
-  end;
-  TmpField := TEpiField.CreateField(TmpFieldType, ActiveDatafile.Size);
-  if TmpFieldType = ftQuestion then
+  if ActiveButton = SelectorButton then Exit;
+
+  TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDatafile.Size);
+  if TmpField.FieldType = ftQuestion then
     NewQuestionLabel(TmpField, Y, X)
   else
     NewFieldEdit(TmpField, Y, X);
   ActiveDatafile.AddField(TmpField);
   ToolBtnClick(SelectorButton);
+end;
+
+procedure TDesignFrame.NewOtherFieldClick(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+  OtherFieldBtn.Tag := TMenuItem(Sender).Tag;
+  ToolBtnClick(OtherFieldBtn);
+end;
+
+procedure TDesignFrame.NewDMYFieldActionExecute(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  ActiveButton := DMYFieldBtn;
+  Pt := FindNewAutoControlPostion;
+  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
 end;
 
 procedure TDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
@@ -622,11 +646,29 @@ begin
   FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
 end;
 
+procedure TDesignFrame.NewMDYFieldActionExecute(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  ActiveButton := MDYFieldBtn;
+  Pt := FindNewAutoControlPostion;
+  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+end;
+
 procedure TDesignFrame.NewStringFieldActionExecute(Sender: TObject);
 var
   Pt: TPoint;
 begin
   ActiveButton := StringFieldBtn;
+  Pt := FindNewAutoControlPostion;
+  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+end;
+
+procedure TDesignFrame.NewYMDFieldActionExecute(Sender: TObject);
+var
+  Pt: TPoint;
+begin
+  ActiveButton := YMDFieldBtn;
   Pt := FindNewAutoControlPostion;
   FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
 end;

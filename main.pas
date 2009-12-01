@@ -140,6 +140,8 @@ begin
 end;
 
 procedure TMainForm.CloseTab(Sender: TObject);
+var
+  Al: TActionList;
 begin
   if not (Sender is TTabSheet) then exit;
 

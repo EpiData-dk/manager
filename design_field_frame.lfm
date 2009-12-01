@@ -9,6 +9,7 @@ object FieldCreateForm: TFieldCreateForm
   ClientHeight = 125
   ClientWidth = 248
   OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
   LCLVersion = '0.9.29'
   object Label1: TLabel
     Left = 0

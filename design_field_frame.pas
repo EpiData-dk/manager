@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, StdCtrls, MaskEdit,
-  UEpiDataFile;
+  UEpiDataFile, UDataFileTypes;
 
 type
 
@@ -25,6 +25,7 @@ type
     Label4: TLabel;
     FieldLengthEdit: TMaskEdit;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
   private
     { private declarations }
     FDf: TEpiDataFile;
@@ -32,7 +33,7 @@ type
     FOldFieldName: string;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; DataFile: TEpiDataFile; ShowDecimals: boolean = false; NewField: boolean = true);
+    constructor Create(TheOwner: TComponent; DataFile: TEpiDataFile; FieldType: TFieldType; NewField: boolean = true);
     procedure ReadField(AField: TEpiField);
     procedure WriteField(AField: TEpiField);
     property OldFieldName: string Read FOldFieldName write FOldFieldName;
@@ -94,8 +95,17 @@ begin
     CanClose := false;
 end;
 
+procedure TFieldCreateForm.FormShow(Sender: TObject);
+begin
+  FieldLengthEdit.SelLength := 0;
+  if FieldDecimalSizeEdit.Visible then
+    FieldDecimalSizeEdit.SelLength := 0;
+
+  FieldNameEdit.SelLength := 0;
+end;
+
 constructor TFieldCreateForm.Create(TheOwner: TComponent;
-  DataFile: TEpiDataFile; ShowDecimals: boolean; NewField: boolean);
+  DataFile: TEpiDataFile; FieldType: TFieldType; NewField: boolean);
 begin
   inherited Create(TheOwner);
   if DataFile = nil then Close;
@@ -104,14 +114,25 @@ begin
   FNewField := NewField;
 
   FieldNameEdit.Text := BuilderSettings.FieldNamePrefix + IntToStr(LastFieldNo);
-  FieldLengthEdit.Text := '2';
+  Case FieldType of
+    ftFloat:
+      FieldLengthEdit.Text := '5';
+    ftDate, ftToday, ftEuroDate, ftEuroToday,
+    ftYMDDate, ftYMDToday:
+      begin
+        FieldLengthEdit.Text := '10';
+        FieldLengthEdit.Enabled := false;
+      end
+  else
+    FieldLengthEdit.Text := '2';
+  end;
+
   Inc(LastFieldNo);
 
   ActiveControl := LabelEdit;
 
-  if not ShowDecimals then exit;
+  if not (FieldType = ftFloat) then exit;
 
-  FieldLengthEdit.Text := '5';
   Height := Height + FieldDecimalSizeEdit.Height + 5;
   Label4.Visible := true;
   FieldDecimalSizeEdit.Visible := true;
