@@ -15,7 +15,14 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
-    NewCryptField: TMenuItem;
+    NewYMDTodayFieldMenu: TMenuItem;
+    NewMDYTodayFieldMenu: TMenuItem;
+    NewDMYTodayFieldMenu: TMenuItem;
+    TodayDateSubMenu: TMenuItem;
+    NewSoundexFieldMenu: TMenuItem;
+    NewUpperFieldMenu: TMenuItem;
+    NewCryptFieldMenu: TMenuItem;
+    StringSubMenu: TMenuItem;
     NewAutoIDMenu: TMenuItem;
     NewYMDFieldAction: TAction;
     NewMDYFieldAction: TAction;
@@ -78,11 +85,14 @@ type
   private
     { private declarations }
     ActiveButton: TToolButton;
-    ActiveDatafile: TEpiDataFile;
+    FActiveDatafile: TEpiDataFile;
+    FModified: boolean;
+    FOldCaption: String;
     ClickedField: TFieldEdit;
     ClickedLabel: TFieldLabel;
     function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldEdit;
     function NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldLabel;
+    procedure SetModified(const AValue: Boolean);
     procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
     procedure FieldEditDone(Sender: TObject);
@@ -92,11 +102,14 @@ type
     function  GetLowestControlPosition(var XCtrl, YCtrl: TControl; IgnoreCtrl: TControl): TPoint;
     function  FindNewAutoControlPostion: TPoint;
     procedure AutoAlignFields(ActiveControl: TControl; AlignFields, AlignLabels, SpaceEqual: boolean);
+    function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
     procedure UpdateAllFields;
+    property  ActiveDataFile: TEpiDataFile read FActiveDataFile;
+    property  Modified: Boolean read FModified write SetModified;
   end;
 
 implementation
@@ -203,6 +216,20 @@ begin
   end;
 
   if Assigned(Labelform) then FreeAndNil(LabelForm);
+end;
+
+procedure TDesignFrame.SetModified(const AValue: Boolean);
+begin
+  if AValue = FModified then exit;
+
+  FModified := AValue;
+  if AValue then
+  begin
+    FOldCaption := TTabSheet(Parent).Caption;
+    TTabSheet(Parent).Caption := '*' + TTabSheet(Parent).Caption;
+  end
+  else
+    TTabSheet(Parent).Caption := FOldCaption;
 end;
 
 procedure TDesignFrame.StartFieldDock(Sender: TObject;
@@ -352,6 +379,7 @@ begin
       Inc(EditFieldCount);
     end;
   end;
+  MinY := Max(FieldToolBar.Height + 5, MinY);
 
   // Spacing between "top" point of TEditFields, adjusted for overlapping components.
   Spacing := Max((MaxY - MinY) div (EditFieldCount - 1), ActiveControl.Height + 5);
@@ -381,18 +409,29 @@ begin
   end;
 end;
 
+function TDesignFrame.BackupFile(FileName, BackupExt: string): boolean;
+begin
+  if FileExistsUTF8(FileName) then
+  begin
+    if FileExistsUTF8(FileName + BackupExt) then
+      DeleteFileUTF8(FileName + BackupExt);
+    CopyFile(FileName, FileName + BackupExt);
+  end;
+end;
+
 constructor TDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
-  ActiveDatafile := TEpiDataFile.Create();
+  FActiveDatafile := TEpiDataFile.Create();
   ClickedField := nil;
+  Modified := false;
 end;
 
 destructor TDesignFrame.Destroy;
 begin
-  if Assigned(ActiveDatafile) then
-   FreeAndNil(ActiveDatafile);
+  if Assigned(FActiveDatafile) then
+   FreeAndNil(FActiveDatafile);
   inherited Destroy;
 end;
 
@@ -427,12 +466,21 @@ begin
   if SaveDialog1.Execute then
   begin
     Fn := SaveDialog1.FileName;
+
+    if CompareFileExt(Fn, '.recxml') <> 0 then
+      Fn := Fn + '.recxml';
+
+    BackupFile(Fn);
+
     ActiveDatafile.Save(Fn, []);
+
+    Modified := false;
+
+    MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
+    MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
+    MainForm.PageControl1.ShowHint := true;
+    MainForm.StatusBar2.Panels[0].Text := 'Saving complete: ' + Fn;
   end;
-  MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
-  MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
-  MainForm.PageControl1.ShowHint := true;
-  MainForm.StatusBar2.Panels[0].Text := 'Saving complete: ' + Fn;
 end;
 
 procedure TDesignFrame.FrameDockDrop(Sender: TObject; Source: TDragDockObject;
@@ -444,7 +492,6 @@ var
  Dy, Ny: Integer;
  Ctrl: TControl;
 begin
-
   Nx := X - Source.DockOffset.X;
   Ny := Y - Source.DockOffset.Y;
 
@@ -470,6 +517,7 @@ begin
 
   Source.Control.Left := Nx;
   Source.Control.Top := Ny;
+  Modified := True;
 end;
 
 procedure TDesignFrame.ClearToolBtnClick(Sender: TObject);
@@ -493,6 +541,7 @@ begin
     ActiveDatafile.RemoveField(Field, true);
     RemoveControl(Comp);
     FreeAndNil(Comp);
+    Modified := true;
   end;
 end;
 
@@ -517,17 +566,33 @@ begin
       AutoAlignForm.AlignLabelsChk.Checked, AutoAlignForm.EqualSpaceChk.Checked);
 
   FreeAndNil(AutoAlignForm);
+  Modified := true;
 end;
 
 procedure TDesignFrame.DeleteFieldMenuItemClick(Sender: TObject);
 var
   TmpField: TEpiField;
+  TmpCtrl: TControl;
 begin
-  if not Assigned(ClickedField) then exit;
+  if Assigned(ClickedField) then
+  begin
+    TmpCtrl := ClickedField;
+    TmpField := ClickedField.Field;
+  end else
+  if Assigned(ClickedLabel) then
+  begin
+    TmpCtrl := ClickedLabel;
+    TmpField := ClickedLabel.Field;
+  end else
+    exit;
 
-  TmpField := ClickedField.Field;
+  if (TmpField.Size > 0) and
+     (MessageDlg('Field contains data.' + LineEnding +
+      'Are you sure you want to delete?', mtWarning, mbYesNo, 0) = mrNo) then
+    exit;
+
+  Modified := true;
   ActiveDatafile.RemoveField(TmpField, true);
-
   RemoveControl(ClickedField);
   FreeAndNil(ClickedField);
 end;
@@ -549,8 +614,7 @@ begin
   if Assigned(ClickedField) then
   With ClickedField do
   begin
-    Pt := ClientToScreen(Point(ClickedField.Left + ClickedField.Width,
-      ClickedField.Top + ClickedField.Height));
+    Pt := Self.ClientToScreen(Point(Left + Width, Top + Height));
     FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType, false);
     FieldForm.Left := Pt.X;
     FieldForm.Top  := Pt.Y;
@@ -558,22 +622,21 @@ begin
     if FieldForm.ShowModal = mrCancel then exit;
     FieldForm.WriteField(Field);
     FreeAndNil(FieldForm);
+    Self.Modified := true;
   end;
   if Assigned(ClickedLabel) then
   With ClickedLabel do
   begin
-    Pt := ClientToScreen(Point(ClickedLabel.Left + ClickedLabel.Width,
-      ClickedLabel.Top + ClickedLabel.Height));
+    Pt := Self.ClientToScreen(Point(Left + Width, Top + Height));
     LabelForm := TCreateLabelForm.Create(Self, ActiveDatafile);
     LabelForm.Left := Pt.X;
     LabelForm.Top  := Pt.Y;
     LabelForm.LabelEdit.Text := Field.VariableLabel;
     if LabelForm.ShowModal = mrCancel then exit;
-
     Caption :=  LabelForm.LabelEdit.Text;
     Field.VariableLabel := LabelForm.LabelEdit.Text;
-
     FreeAndNil(LabelForm);
+    Self.Modified := true;
   end;
 end;
 
@@ -599,6 +662,7 @@ begin
     NewQuestionLabel(TmpField, Y, X)
   else
     NewFieldEdit(TmpField, Y, X);
+  Modified := true;
   ActiveDatafile.AddField(TmpField);
   ToolBtnClick(SelectorButton);
 end;
@@ -683,44 +747,51 @@ var
   TmpField: TEpiField;
   TmpEdit: TFieldEdit;
 begin
+  if (ActiveDatafile.NumFields > 0) and
+     (MessageDlg('Dataform is not saved.' + LineEnding + 'Continue?', mtWarning, mbYesNo, 0) = mrNo) then
+    exit;
+
   Dlg := TOpenDialog.Create(nil);
   Dlg.Filter := EpiOpenFileFilter;
+
   if Dlg.Execute then
   begin
+    ClearToolBtn.Click;
+    FreeAndNil(FActiveDatafile);
 
     Fn := Dlg.FileName;
     if (CompareFileExt(Fn, '.REC') <> 0) and
        (CompareFileExt(Fn, '.RECXML') <> 0) then
     begin
-
       Import := TEpiImportExport.Create;
       Import.OnProgress := @MainForm.ShowProgress;
-//      Importer.OnClipBoardRead := @MainForm.ReadClipboard;
+      Import.OnClipBoardRead := @MainForm.ReadClipBoard;
       if CompareFileExt(Fn, '.DTA') = 0 then
-        Dummy := Import.ImportStata(Fn, ActiveDatafile)
+        Dummy := Import.ImportStata(Fn, FActiveDatafile)
       else if CompareFileExt(Fn, '.DBF') = 0 then
-        Dummy := Import.ImportDBase(Fn, ActiveDatafile)
+        Dummy := Import.ImportDBase(Fn, FActiveDatafile)
       else if CompareFileExt(Fn, '.ODS') = 0 then
-        Dummy := Import.ImportSpreadSheet(Fn, ActiveDatafile)
+        Dummy := Import.ImportSpreadSheet(Fn, FActiveDatafile)
       else if (CompareFileExt(Fn, '.TXT') = 0) or
               (CompareFileExt(Fn, '.CSV') = 0) then
-        Dummy := Import.ImportTXT(Fn, ActiveDatafile, @ImportTxtGuess);
+        Dummy := Import.ImportTXT(Fn, FActiveDatafile, @ImportTxtGuess);
 
       FreeAndNil(Import);
     end else begin
-      ActiveDatafile := TEpiDataFile.Create();
+      FActiveDatafile := TEpiDataFile.Create();
       ActiveDatafile.OnProgress := @MainForm.ShowProgress;
   //    ActiveDatafile.OnPassword := GetPassword;
       Dummy := ActiveDatafile.Open(Fn, []);
     end;
 
+    TmpEdit := nil;
     for i := 0 to ActiveDatafile.NumFields - 1 do
     begin
       TmpField := ActiveDatafile[i];
       if TmpField.FieldType = ftQuestion then
         NewQuestionLabel(TmpField, TmpField.FieldY, TmpField.FieldX, false)
       else
-        if i = 0 then
+        if not Assigned(TmpEdit) then
           TmpEdit := NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false)
         else
           NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false);
@@ -732,6 +803,7 @@ begin
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
       AutoAlignFields(TmpEdit, True, True, True);
   end;
+  Modified := false;
   FreeAndNil(Dlg);
 end;
 

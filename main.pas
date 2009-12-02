@@ -57,6 +57,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     function ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string): TProgressResult;
+    procedure ReadClipBoard(ClipBoardLine: TStrings);
   end; 
 
 var
@@ -65,7 +66,7 @@ var
 implementation
 
 uses
-  design_frame, settings;
+  design_frame, settings, Clipbrd;
 
 
 { TMainForm }
@@ -145,6 +146,11 @@ var
 begin
   if not (Sender is TTabSheet) then exit;
 
+  if (TDesignFrame(PageControl1.ActivePage.Controls[0]).Modified) and
+     (MessageDlg('Dataform is modified since last save.' +
+                 LineEnding + 'Continue?', mtWarning, mbYesNo, 0) = mrNo) then
+    Exit;
+
   PageControl1.ActivePage := PageControl1.FindNextPage(TTabSheet(Sender), True, True);
   (Sender as TTabSheet).Free;
 
@@ -167,6 +173,20 @@ begin
     Application.ProcessMessages;
   end;
   result := prNormal;
+end;
+
+procedure TMainForm.ReadClipBoard(ClipBoardLine: TStrings);
+var
+  TmpStr: String;
+begin
+  if Clipboard.HasFormat(CF_Text) then
+  begin
+    TmpStr := Clipboard.AsText;
+    TmpStr := StringReplace(TmpStr, LineEnding, #1, [rfReplaceAll]);
+    ClipBoardLine.Delimiter := #1;
+    ClipBoardLine.StrictDelimiter := true;
+    ClipBoardLine.DelimitedText := TmpStr;
+  end;
 end;
 
 initialization

@@ -1,14 +1,16 @@
 object AutoAlignForm: TAutoAlignForm
-  Left = 787
+  Left = 2044
   Height = 149
-  Top = 474
+  Top = 658
   Width = 182
+  ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Auto Align'
   ClientHeight = 149
   ClientWidth = 182
   OnCreate = FormCreate
+  ShowInTaskBar = stNever
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
@@ -66,6 +68,15 @@ object AutoAlignForm: TAutoAlignForm
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 4
+    end
+  end
+  object ActionList1: TActionList
+    left = 136
+    top = 8
+    object CancelAction: TAction
+      Caption = 'CancelAction'
+      OnExecute = CancelActionExecute
+      ShortCut = 27
     end
   end
 end

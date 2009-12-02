@@ -6,7 +6,7 @@ unit Design_Field_Frame;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, StdCtrls, MaskEdit,
+  Classes, SysUtils, LResources, Forms, StdCtrls, MaskEdit, ActnList, ExtCtrls,
   UEpiDataFile, UDataFileTypes;
 
 type
@@ -14,16 +14,20 @@ type
   { TFieldCreateForm }
 
   TFieldCreateForm = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
-    FieldNameEdit: TEdit;
+    ActionList1: TActionList;
+    CancelBtn: TButton;
+    CloseAction: TAction;
     FieldDecimalSizeEdit: TMaskEdit;
-    LabelEdit: TEdit;
+    FieldLengthEdit: TMaskEdit;
+    FieldNameEdit: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    FieldLengthEdit: TMaskEdit;
+    LabelEdit: TEdit;
+    OkBtn: TButton;
+    Panel1: TPanel;
+    procedure CloseActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
   private
@@ -42,7 +46,7 @@ type
 implementation
 
 uses
-  Controls, settings;
+  Controls, settings, UEpiDataGlobals, design_frame, Graphics;
 
 var
   LastFieldNo: Integer = 1;
@@ -93,6 +97,11 @@ begin
     CanClose := false;
   if D >= (L - 1) then
     CanClose := false;
+end;
+
+procedure TFieldCreateForm.CloseActionExecute(Sender: TObject);
+begin
+  CancelBtn.Click;
 end;
 
 procedure TFieldCreateForm.FormShow(Sender: TObject);

@@ -6,15 +6,17 @@ object DesignFrame: TDesignFrame
   AutoScroll = True
   ClientHeight = 564
   ClientWidth = 836
+  Color = clWhite
   DockSite = True
   OnDockDrop = FrameDockDrop
   OnMouseDown = FrameMouseDown
   OnMouseMove = FormMouseMove
+  ParentColor = False
   ParentShowHint = False
   ShowHint = True
   TabOrder = 0
-  DesignLeft = 451
-  DesignTop = 371
+  DesignLeft = 585
+  DesignTop = 359
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -145,6 +147,7 @@ object DesignFrame: TDesignFrame
     object DMYFieldBtn: TToolButton
       Tag = 11
       Left = 148
+      Hint = 'Add Date [dmy] (F6)'
       Top = 1
       Caption = 'DMYFieldBtn'
       ImageIndex = 10
@@ -153,6 +156,7 @@ object DesignFrame: TDesignFrame
     object MDYFieldBtn: TToolButton
       Tag = 2
       Left = 176
+      Hint = 'Add Date [mdy] (F7)'
       Top = 1
       Caption = 'MDYFieldBtn'
       ImageIndex = 11
@@ -161,6 +165,7 @@ object DesignFrame: TDesignFrame
     object YMDFieldBtn: TToolButton
       Tag = 19
       Left = 204
+      Hint = 'Add Date [ymd] (F8)'
       Top = 1
       Caption = 'YMDFieldBtn'
       ImageIndex = 12
@@ -175,7 +180,7 @@ object DesignFrame: TDesignFrame
     end
   end
   object DesignFrameActionList: TActionList
-    left = 120
+    left = 144
     top = 96
     object NewIntFieldAction: TAction
       Caption = 'NewIntFieldAction'
@@ -216,7 +221,7 @@ object DesignFrame: TDesignFrame
   object FieldToolBarImageList: TImageList
     Height = 24
     Width = 24
-    left = 56
+    left = 72
     top = 40
     Bitmap = {
       4C690E0000001800000018000000000000000000000000000000000000000000
@@ -1231,7 +1236,9 @@ object DesignFrame: TDesignFrame
     }
   end
   object SaveDialog1: TSaveDialog
+    DefaultExt = '.recxml'
     Filter = 'EpiData XML|*.recxml'
+    Options = [ofOverwritePrompt, ofEnableSizing, ofDontAddToRecent, ofViewDetail]
     left = 384
     top = 40
   end
@@ -1256,14 +1263,46 @@ object DesignFrame: TDesignFrame
   object OtherFieldsPopup: TPopupMenu
     left = 232
     top = 40
+    object StringSubMenu: TMenuItem
+      Tag = 18
+      Caption = 'Strings...'
+      object NewCryptFieldMenu: TMenuItem
+        Tag = 18
+        Caption = 'Crypt'
+        OnClick = NewOtherFieldClick
+      end
+      object NewUpperFieldMenu: TMenuItem
+        Tag = 3
+        Caption = 'Uppercase'
+        OnClick = NewOtherFieldClick
+      end
+      object NewSoundexFieldMenu: TMenuItem
+        Tag = 17
+        Caption = 'Soundex'
+        OnClick = NewOtherFieldClick
+      end
+    end
+    object TodayDateSubMenu: TMenuItem
+      Caption = 'Dates...'
+      object NewDMYTodayFieldMenu: TMenuItem
+        Tag = 16
+        Caption = 'Today (dmy)'
+        OnClick = NewOtherFieldClick
+      end
+      object NewMDYTodayFieldMenu: TMenuItem
+        Tag = 10
+        Caption = 'Today (mdy)'
+        OnClick = NewOtherFieldClick
+      end
+      object NewYMDTodayFieldMenu: TMenuItem
+        Tag = 20
+        Caption = 'Today (ymd)'
+        OnClick = NewOtherFieldClick
+      end
+    end
     object NewAutoIDMenu: TMenuItem
       Tag = 12
       Caption = 'Auto ID'
-      OnClick = NewOtherFieldClick
-    end
-    object NewCryptField: TMenuItem
-      Tag = 18
-      Caption = 'Crypt'
       OnClick = NewOtherFieldClick
     end
   end

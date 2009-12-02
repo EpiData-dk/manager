@@ -170,6 +170,7 @@ object MainForm: TMainForm
     ClientHeight = 548
     ClientWidth = 353
     TabOrder = 4
+    Visible = False
     object Label1: TLabel
       Left = 18
       Height = 18

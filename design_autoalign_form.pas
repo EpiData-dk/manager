@@ -6,13 +6,15 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ExtCtrls;
+  StdCtrls, ExtCtrls, ActnList;
 
 type
 
   { TAutoAlignForm }
 
   TAutoAlignForm = class(TForm)
+    CancelAction: TAction;
+    ActionList1: TActionList;
     AlignFieldsChk: TCheckBox;
     AlignLabelsChk: TCheckBox;
     Button1: TButton;
@@ -20,6 +22,7 @@ type
     EqualSpaceChk: TCheckBox;
     Panel1: TPanel;
     procedure AlignFieldsChkChange(Sender: TObject);
+    procedure CancelActionExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
     { private declarations }
@@ -34,6 +37,11 @@ implementation
 procedure TAutoAlignForm.AlignFieldsChkChange(Sender: TObject);
 begin
   AlignLabelsChk.Enabled := AlignFieldsChk.Checked;
+end;
+
+procedure TAutoAlignForm.CancelActionExecute(Sender: TObject);
+begin
+  Close;
 end;
 
 procedure TAutoAlignForm.FormCreate(Sender: TObject);
