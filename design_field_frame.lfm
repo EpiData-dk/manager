@@ -3,6 +3,7 @@ object FieldCreateForm: TFieldCreateForm
   Height = 137
   Top = 536
   Width = 264
+  ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
   ClientHeight = 137

@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls, UDataFileTypes, LMessages;
+  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls, UDataFileTypes;
 
 type
 
@@ -45,6 +45,8 @@ type
     procedure Button1Click(Sender: TObject);
     procedure ClosePageActionExecute(Sender: TObject);
     procedure DesignBtnClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormCreate(Sender: TObject);
     procedure GCPbtnClick(Sender: TObject);
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
@@ -99,6 +101,47 @@ begin
   Inc(TabNameCount);
 end;
 
+procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+{$IFNDEF EPI_DEBUG}
+var
+  TmpMod: boolean;
+  i, idx: integer;
+{$ENDIF}
+begin
+  {$IFNDEF EPI_DEBUG}
+  CanClose := false;
+  TmpMod := false;
+  for i := 0 to PageControl1.PageCount -1 do
+  begin
+    if TDesignFrame(PageControl1.Pages[i].Controls[0]).Modified then
+    begin
+      TmpMod := true;
+      Idx := i;
+    end;
+  end;
+
+  if TmpMod and (MessageDlg('A dataform is modified since last save.' +
+     LineEnding + 'Are you sure you want to quit?', mtWarning, mbYesNo, 0) = mrNo) then
+  begin
+    PageControl1.ActivePage := PageControl1.Pages[Idx];
+    Exit;
+  end;
+  {$ENDIF}
+  CanClose := true;
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  Caption := 'EpiData Project and Data Manager' +
+    ' (v' + GetManagerVersion + ')';
+
+  {$IFDEF EPI_DEBUG}
+  Panel1.Visible := true;
+  {$ELSE EPI_DEBUG}
+  Panel1.Visible := false;
+  {$ENDIF}
+end;
+
 procedure TMainForm.GCPbtnClick(Sender: TObject);
 begin
   FeatureInfoLabel.Caption := 'GCP not ready yet';
@@ -118,12 +161,14 @@ end;
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
 var
   SettingsForm: TSettingsForm;
+  i: Integer;
 begin
   SettingsForm := TSettingsForm.Create(self);
   if SettingsForm.ShowModal = mrCancel then exit;
 
   // TODO : Update design form if showing properties have changed.
-  TDesignFrame(PageControl1.ActivePage.Controls[0]).UpdateAllFields;
+  for i := 0 to PageControl1.PageCount -1 do
+    TDesignFrame(PageControl1.Pages[i].Controls[0]).UpdateAllFields;
 end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
@@ -141,15 +186,15 @@ begin
 end;
 
 procedure TMainForm.CloseTab(Sender: TObject);
-var
-  Al: TActionList;
 begin
   if not (Sender is TTabSheet) then exit;
 
+  {$IFNDEF EPI_DEBUG}
   if (TDesignFrame(PageControl1.ActivePage.Controls[0]).Modified) and
      (MessageDlg('Dataform is modified since last save.' +
                  LineEnding + 'Continue?', mtWarning, mbYesNo, 0) = mrNo) then
     Exit;
+  {$ENDIf}
 
   PageControl1.ActivePage := PageControl1.FindNextPage(TTabSheet(Sender), True, True);
   (Sender as TTabSheet).Free;

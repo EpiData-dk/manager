@@ -154,7 +154,7 @@ procedure TFieldEdit.SetParent(NewParent: TWinControl);
 begin
   inherited SetParent(NewParent);
   FVariableLabel.Parent := NewParent;
-  if (BuilderSettings.ShowFieldNamesInLabel) then
+  if (ManagerSettings.ShowFieldNamesInLabel) then
     FFieldNameLabel.Parent := NewParent;
 
   UpdateFieldNameLabel;
@@ -205,12 +205,16 @@ begin
 end;
 
 procedure TFieldEdit.DoStartDock(var DragObject: TDragObject);
+var
+  s: string;
 begin
   inherited DoStartDock(DragObject);
   FVariableLabelOffset := Point(Left - FVariableLabel.Left, Top - FVariableLabel.Top);
 end;
 
 procedure TFieldEdit.DoEndDock(Target: TObject; X, Y: Integer);
+var
+  s: string;
 begin
   inherited DoEndDock(Target, X, Y);
   Field.FieldX := Left;
@@ -282,11 +286,10 @@ end;
 procedure TFieldDockObject.AdjustDockRect(ARect: TRect);
 begin
   inherited AdjustDockRect(ARect);
-  with ARect do
+{  with ARect do
     MainForm.Label1.Caption := Format(
      'AdjustDockRect - Top: %d, Left: %d, Bottom: %d, Right: %d',
-     [Top, Left, Bottom, Right]);
-
+     [Top, Left, Bottom, Right]);       }
 {  with DockOffset do
     OffsetRect(FieldRec, -X, -Y);      }
 end;
@@ -301,9 +304,9 @@ begin
   // Since the undocked extent of the control doesn't change, we fix the hotspot offset.
   // Usage: OffsetRect(DockRect, FDockOffset);
 
-  MainForm.Label2.Caption := Format(
+  {MainForm.Label2.Caption := Format(
     'InitDock. Position - X: %d , Y: %d',
-    [APosition.X, APosition.Y]);
+    [APosition.X, APosition.Y]);   }
 
   // mouse click offset from control TopLeft in screen coordinates
   with DockRect do
@@ -328,10 +331,10 @@ end;
 procedure TFieldDockObject.ShowDockImage;
 begin
   Inherited ShowDockImage;
-  With FieldRec do
+{  With FieldRec do
     MainForm.Label3.Caption := Format(
       'ShowDockImage: FieldRect - Top: %d, Left: %d, Bottom: %d, Right: %d',
-      [Top, Left, Bottom, Right]);
+      [Top, Left, Bottom, Right]);      }
 
 {  WidgetSet.DrawDefaultDockImage(OldFieldRec, FieldRec, disShow);
   OldFieldRec := FieldRec;    }
@@ -340,10 +343,10 @@ end;
 procedure TFieldDockObject.MoveDockImage;
 begin
   inherited MoveDockImage;
-  With FieldRec do
+{  With FieldRec do
     MainForm.Label4.Caption := Format(
       'MoveDockImage: FieldRect - Top: %d, Left: %d, Bottom: %d, Right: %d',
-      [Top, Left, Bottom, Right]);
+      [Top, Left, Bottom, Right]);     }
 
 {  //Draw the form outlines when the position has changed
   if not CompareMem(@FieldRec, @OldFieldRec, SizeOf(TRect)) then
@@ -356,10 +359,10 @@ end;
 procedure TFieldDockObject.HideDockImage;
 begin
   inherited HideDockImage;
-  With FieldRec do
+ { With FieldRec do
     MainForm.Label5.Caption := Format(
       'HideDockImage: FieldRect - Top: %d, Left: %d, Bottom: %d, Right: %d',
-      [Top, Left, Bottom, Right]);
+      [Top, Left, Bottom, Right]);  }
 {
   WidgetSet.DrawDefaultDockImage(OldFieldRec, FieldRec, disHide);
   OldFieldRec := Rect(MaxInt, 0, MaxInt, 0);  }

@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, MaskEdit;
+  StdCtrls, MaskEdit, ExtCtrls, UDataFileTypes;
 
 type
 
@@ -19,6 +19,9 @@ type
     Label2: TLabel;
     Label3: TLabel;
     DefaultRightPosEdit: TMaskEdit;
+    FieldNamingGroup: TRadioGroup;
+    FieldNamingAutoRadio: TRadioButton;
+    FieldNamingFirstWordRadio: TRadioButton;
     ShowFieldNameChkBox: TCheckBox;
     PrefixEdit: TEdit;
     Label1: TLabel;
@@ -30,24 +33,53 @@ type
     { public declarations }
   end;
 
-  TBuilderSettings = record
-    FieldNamePrefix: string;
+  TManagerSettings = record
+    FieldNamePrefix:       string;
     ShowFieldNamesInLabel: boolean;
-    SpaceBetweenFields: Integer;
-    SnappingThresHold: Integer;
-    DefaultRightPostion: Integer;
+    FieldNamingStyle:      TFieldNaming;
+    SpaceBetweenFields:    Integer;
+    SnappingThresHold:     Integer;
+    DefaultRightPostion:   Integer;
+  end;
+
+  TManagerVersion = record
+    VersionNo: Integer;
+    MajorRev:  Integer;
+    MinorRev:  Integer;
+    BuildNo:   Integer;
   end;
 
 var
-  BuilderSettings: TBuilderSettings = (
-    FieldNamePrefix: 'V';
+  ManagerSettings: TManagerSettings = (
+    FieldNamePrefix:       'V';
     ShowFieldNamesInLabel: true;
-    SpaceBetweenFields: 10;
-    SnappingThresHold: 10;
-    DefaultRightPostion: 200;
+    FieldNamingStyle:      fnAuto;
+    SpaceBetweenFields:    10;
+    SnappingThresHold:     10;
+    DefaultRightPostion:   200;
   );
 
+const
+  ManagerVersion: TManagerVersion = (
+    VersionNo: 0;
+    MajorRev:  1;
+    MinorRev:  1;
+    BuildNo:   2;
+  );
+
+
+function GetManagerVersion: String;
+
 implementation
+
+function GetManagerVersion: String;
+begin
+  with ManagerVersion do
+    result := IntToStr(VersionNo) + '.' +
+              IntToStr(MajorRev) + '.' +
+              IntToStr(MinorRev) + '.' +
+              IntToStr(BuildNo);
+end;
 
 { TSettingsForm }
 
@@ -74,18 +106,24 @@ begin
     Exit;
   end;
 
-  BuilderSettings.FieldNamePrefix := PrefixEdit.Text;
-  BuilderSettings.ShowFieldNamesInLabel := ShowFieldNameChkBox.Checked;
-  BuilderSettings.DefaultRightPostion := StrToInt(Trim(DefaultRightPosEdit.Text));
+  ManagerSettings.FieldNamePrefix := PrefixEdit.Text;
+  ManagerSettings.ShowFieldNamesInLabel := ShowFieldNameChkBox.Checked;
+  ManagerSettings.DefaultRightPostion := StrToInt(Trim(DefaultRightPosEdit.Text));
+  if FieldNamingAutoRadio.Checked then
+    ManagerSettings.FieldNamingStyle := fnAuto
+  else
+    ManagerSettings.FieldNamingStyle := fnFirstWord;
 
   CanClose := true;
 end;
 
 procedure TSettingsForm.FormCreate(Sender: TObject);
 begin
-  PrefixEdit.Text := BuilderSettings.FieldNamePrefix;
-  ShowFieldNameChkBox.Checked := BuilderSettings.ShowFieldNamesInLabel;
-  DefaultRightPosEdit.Text := IntToStr(BuilderSettings.DefaultRightPostion);
+  PrefixEdit.Text := ManagerSettings.FieldNamePrefix;
+  ShowFieldNameChkBox.Checked := ManagerSettings.ShowFieldNamesInLabel;
+  DefaultRightPosEdit.Text := IntToStr(ManagerSettings.DefaultRightPostion);
+  FieldNamingAutoRadio.Checked := (ManagerSettings.FieldNamingStyle = fnAuto);
+  FieldNamingFirstWordRadio.Checked := (ManagerSettings.FieldNamingStyle = fnFirstWord);
 end;
 
 initialization

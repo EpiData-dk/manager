@@ -122,7 +122,7 @@ begin
   FDf := DataFile;
   FNewField := NewField;
 
-  FieldNameEdit.Text := BuilderSettings.FieldNamePrefix + IntToStr(LastFieldNo);
+  FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(LastFieldNo);
   Case FieldType of
     ftFloat:
       FieldLengthEdit.Text := '5';

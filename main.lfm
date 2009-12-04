@@ -9,6 +9,8 @@ object MainForm: TMainForm
   ClientHeight = 630
   ClientWidth = 975
   Menu = MainFormMenu
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
   Position = poScreenCenter
   LCLVersion = '0.9.29'
   object ProgressPanel: TPanel
