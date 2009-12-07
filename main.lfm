@@ -272,6 +272,9 @@ object MainForm: TMainForm
       Category = 'NonMenuActions'
       Caption = 'ClosePageAction'
       OnExecute = ClosePageActionExecute
+      SecondaryShortCuts.Strings = (
+        'CTRL+W'
+      )
       ShortCut = 16499
     end
   end

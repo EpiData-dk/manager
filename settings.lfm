@@ -1,13 +1,13 @@
 object SettingsForm: TSettingsForm
   Left = 925
-  Height = 233
+  Height = 265
   Top = 311
   Width = 248
   ActiveControl = PrefixEdit
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'SettingsForm'
-  ClientHeight = 233
+  ClientHeight = 265
   ClientWidth = 248
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -37,19 +37,19 @@ object SettingsForm: TSettingsForm
     ParentBidiMode = False
     TabOrder = 1
   end
-  object Button1: TButton
+  object OkBtn: TButton
     Left = 88
     Height = 28
-    Top = 200
+    Top = 232
     Width = 75
     Caption = 'Ok'
     ModalResult = 1
     TabOrder = 2
   end
-  object Button2: TButton
+  object CancelBtn: TButton
     Left = 168
     Height = 28
-    Top = 200
+    Top = 232
     Width = 75
     Caption = 'Cancel'
     ModalResult = 2
@@ -86,7 +86,7 @@ object SettingsForm: TSettingsForm
   object FieldNamingGroup: TRadioGroup
     Left = 8
     Height = 81
-    Top = 112
+    Top = 144
     Width = 235
     AutoFill = True
     Caption = 'Field Naming'
@@ -120,5 +120,21 @@ object SettingsForm: TSettingsForm
       TabOrder = 1
       TabStop = False
     end
+  end
+  object SnapFieldsChkBox: TCheckBox
+    Left = 168
+    Height = 22
+    Top = 109
+    Width = 18
+    AutoSize = False
+    TabOrder = 6
+  end
+  object Label4: TLabel
+    Left = 8
+    Height = 18
+    Top = 113
+    Width = 75
+    Caption = 'Snap Fields'
+    ParentColor = False
   end
 end

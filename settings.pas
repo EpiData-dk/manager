@@ -14,14 +14,16 @@ type
   { TSettingsForm }
 
   TSettingsForm = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
+    OkBtn: TButton;
+    CancelBtn: TButton;
+    SnapFieldsChkBox: TCheckBox;
     Label2: TLabel;
     Label3: TLabel;
     DefaultRightPosEdit: TMaskEdit;
     FieldNamingGroup: TRadioGroup;
     FieldNamingAutoRadio: TRadioButton;
     FieldNamingFirstWordRadio: TRadioButton;
+    Label4: TLabel;
     ShowFieldNameChkBox: TCheckBox;
     PrefixEdit: TEdit;
     Label1: TLabel;
@@ -35,11 +37,12 @@ type
 
   TManagerSettings = record
     FieldNamePrefix:       string;
-    ShowFieldNamesInLabel: boolean;
     FieldNamingStyle:      TFieldNaming;
     SpaceBetweenFields:    Integer;
     SnappingThresHold:     Integer;
     DefaultRightPostion:   Integer;
+    ShowFieldNamesInLabel: boolean;
+    SnapFields:            boolean;
   end;
 
   TManagerVersion = record
@@ -52,11 +55,12 @@ type
 var
   ManagerSettings: TManagerSettings = (
     FieldNamePrefix:       'V';
-    ShowFieldNamesInLabel: true;
     FieldNamingStyle:      fnAuto;
     SpaceBetweenFields:    10;
     SnappingThresHold:     10;
     DefaultRightPostion:   200;
+    ShowFieldNamesInLabel: true;
+    SnapFields:            true;
   );
 
 const
@@ -106,13 +110,14 @@ begin
     Exit;
   end;
 
-  ManagerSettings.FieldNamePrefix := PrefixEdit.Text;
+  ManagerSettings.FieldNamePrefix       := PrefixEdit.Text;
   ManagerSettings.ShowFieldNamesInLabel := ShowFieldNameChkBox.Checked;
-  ManagerSettings.DefaultRightPostion := StrToInt(Trim(DefaultRightPosEdit.Text));
+  ManagerSettings.SnapFields            := SnapFieldsChkBox.Checked;
+  ManagerSettings.DefaultRightPostion   := StrToInt(Trim(DefaultRightPosEdit.Text));
   if FieldNamingAutoRadio.Checked then
-    ManagerSettings.FieldNamingStyle := fnAuto
+    ManagerSettings.FieldNamingStyle    := fnAuto
   else
-    ManagerSettings.FieldNamingStyle := fnFirstWord;
+    ManagerSettings.FieldNamingStyle    := fnFirstWord;
 
   CanClose := true;
 end;
@@ -121,6 +126,7 @@ procedure TSettingsForm.FormCreate(Sender: TObject);
 begin
   PrefixEdit.Text := ManagerSettings.FieldNamePrefix;
   ShowFieldNameChkBox.Checked := ManagerSettings.ShowFieldNamesInLabel;
+  SnapFieldsChkBox.Checked := ManagerSettings.SnapFields;
   DefaultRightPosEdit.Text := IntToStr(ManagerSettings.DefaultRightPostion);
   FieldNamingAutoRadio.Checked := (ManagerSettings.FieldNamingStyle = fnAuto);
   FieldNamingFirstWordRadio.Checked := (ManagerSettings.FieldNamingStyle = fnFirstWord);

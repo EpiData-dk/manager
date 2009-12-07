@@ -8,13 +8,14 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList,
   Controls, Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, UEpiDataFile,
-  FieldEdit, Design_Field_Frame, AVL_Tree;
+  FieldEdit, Design_Field_Frame, AVL_Tree, LCLType;
 
 type
 
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    SaveFileAsAction: TAction;
     SaveFileAction: TAction;
     OpenFileAction: TAction;
     ImportStructureAction: TAction;
@@ -64,6 +65,7 @@ type
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
     MDYFieldBtn: TToolButton;
+    ToolButton6: TToolButton;
     YMDFieldBtn: TToolButton;
     procedure ImportStructureActionExecute(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
@@ -87,17 +89,19 @@ type
     procedure NewYMDFieldActionExecute(Sender: TObject);
     procedure OpenFileActionExecute(Sender: TObject);
     procedure SaveFileActionExecute(Sender: TObject);
+    procedure SaveFileAsActionExecute(Sender: TObject);
     procedure ToolBtnClick(Sender: TObject);
     procedure ToolButton3Click(Sender: TObject);
   private
     { private declarations }
     ActiveButton: TToolButton;
     FActiveDatafile: TEpiDataFile;
+    FComponentXTree: TAVLTree;
+    FComponentYTree: TAVLTree;
     FModified: boolean;
     FOldCaption: String;
     ClickedField: TFieldEdit;
     ClickedLabel: TFieldLabel;
-    FComponentTree: TAVLTree;
     function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldEdit;
     function NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldLabel;
     procedure SetModified(const AValue: Boolean);
@@ -107,12 +111,13 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure EndLabelDock(Sender, Target: TObject; X,Y: Integer);
     function  GetLowestControlPosition(Var LowestCtrl: TControl): TPoint;
-    function  GetNearestControlPosition(Const FindCtrl: TControl; var NearestCtrl: TControl): TPoint;
+    procedure GetNearestControls(Const FindCtrl: TControl; var NearestCtrlX, NearestCtrlY: TControl);
     function  FindNewAutoControlPostion: TPoint;
     procedure AutoAlignFields(ActiveControl: TControl; AlignFields, AlignLabels, SpaceEqual: boolean);
     function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
   protected
-    property  ComponentTree: TAVLTree read FComponentTree;
+    property  ComponentYTree: TAVLTree read FComponentYTree;
+    property  ComponentXTree: TAVLTree read FComponentXTree;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -129,6 +134,59 @@ uses
   types, math, settings, design_label_form,
   UEpiDataGlobals, UImportExport, design_autoalign_form,
   UQesHandler, UEpiUtils;
+
+function YCmp(Item1, Item2: Pointer): Integer;
+var
+  Ctrl1, Ctrl2: TControl;
+begin
+  // This is the same item and result should
+  // always be 0.
+  Result := Item1 - Item2;
+  if Result = 0 then
+    Exit;
+
+  Ctrl1 := TControl(Item1);
+  Ctrl2 := TControl(Item2);
+
+  if Ctrl1.Top > Ctrl2.Top then
+    result := 1
+  else if Ctrl1.Top < Ctrl2.Top then
+    result := -1
+  else
+    if Ctrl1.Left > Ctrl2.Left then
+      result := 1
+    else if Ctrl1.Left < Ctrl2.Left then
+      result := -1
+    else
+      result := 0;
+end;
+
+function XCmp(Item1, Item2: Pointer): Integer;
+var
+  Ctrl1, Ctrl2: TControl;
+  Field1, Field2: TEpiField;
+begin
+  // This is the same item and result should
+  // always be 0.
+  Result := Item1 - Item2;
+  if Result = 0 then
+    Exit;
+
+  Ctrl1 := TControl(Item1);
+  Ctrl2 := TControl(Item2);
+
+  if Ctrl1.Left > Ctrl2.Left then
+    result := 1
+  else if Ctrl1.Left < Ctrl2.Left then
+    result := -1
+  else
+    if Ctrl1.Top > Ctrl2.Top then
+      result := 1
+    else if Ctrl1.Top < Ctrl2.Top then
+      result := -1
+    else
+      result := 0;
+end;
 
 { TDesignFrame }
 
@@ -159,7 +217,7 @@ begin
   if ShowForm then
   begin
     FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType);
-    // The IFDEF is needed since scrollbar handling is (apparently) different on windows and linux.
+    // The IFDEF is needed since scrollbar handling (apparently) is different on windows and linux/mac.
     Pt := ClientToScreen(Point(ALeft, ATop{$IFNDEF WINDOWS} - VertScrollBar.Position{$ENDIF}));
     FieldForm.Top := Min(Pt.Y, Screen.Height - FieldForm.Height - 5);
     FieldForm.Left := Min(Pt.X, Screen.Width - FieldForm.Width - 5);
@@ -198,7 +256,8 @@ begin
     Repaint;
   end;
 
-  ComponentTree.Add(Result);
+  ComponentYTree.Add(Result);
+  ComponentXTree.Add(Result);
 
   if Assigned(FieldForm) then FreeAndNil(FieldForm);
 end;
@@ -242,7 +301,8 @@ begin
     Result.Field.LabelY := ATop;
   end;
 
-  ComponentTree.Add(Result);
+  ComponentYTree.Add(Result);
+  ComponentXTree.Add(Result);
   if Assigned(Labelform) then FreeAndNil(LabelForm);
 end;
 
@@ -266,7 +326,8 @@ var
   S: string;
 begin
   DragObject := TFieldDockObject.Create(TControl(Sender));
-  ComponentTree.Remove(Sender);
+  ComponentYTree.Remove(Sender);
+  ComponentXTree.Remove(Sender);
 end;
 
 procedure TDesignFrame.EndFieldDock(Sender, Target: TObject; X, Y: Integer);
@@ -286,13 +347,16 @@ begin
   // - it could be placed outside in a custom form.
   // - "nil" = dock was abort using eg. ESC.
   if (Target is TDesignFrame) or (not Assigned(Target)) then
-    ComponentTree.Add(Sender);
+  begin
+    ComponentYTree.Add(Sender);
+    ComponentXTree.Add(Sender);
+  end;
 end;
 
 procedure TDesignFrame.FieldMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  if Button <> mbRight then exit;
+//  if Button <> mbRight then exit;
 
   if (Sender is TFieldEdit) then
   begin
@@ -333,12 +397,12 @@ var
 begin
   Result := Point(ManagerSettings.DefaultRightPostion, FieldToolBar.Height + 5);
   LowestCtrl := nil;
-  if ComponentTree.Count = 0 then exit;
+  if ComponentYTree.Count = 0 then exit;
 
-  Hit := ComponentTree.FindHighest;
+  Hit := ComponentYTree.FindHighest;
   LowestCtrl := TControl(Hit.Data);
 
-  Prd := ComponentTree.FindPrecessor(Hit);
+  Prd := ComponentYTree.FindPrecessor(Hit);
   // If the pred. has same top value, then is by sorting ord it must have a
   // smaller left value.
   while Assigned(Prd) do
@@ -346,15 +410,15 @@ begin
     if (TControl(Prd.Data).Top = LowestCtrl.Top) then
     begin
       LowestCtrl := TControl(Prd.Data);
-      Prd := ComponentTree.FindPrecessor(Prd);
+      Prd := ComponentYTree.FindPrecessor(Prd);
     end else
       Prd := nil;
   end;
   Result := Point(LowestCtrl.Left, LowestCtrl.Top);
 end;
 
-function TDesignFrame.GetNearestControlPosition(const FindCtrl: TControl;
-  var NearestCtrl: TControl): TPoint;
+procedure TDesignFrame.GetNearestControls(const FindCtrl: TControl;
+  var NearestCtrlX, NearestCtrlY: TControl);
 var
   Hit, Prd, Scc: TAVLTreeNode;
   HDy, PDy, SDy: Integer;
@@ -363,9 +427,9 @@ begin
   // Finding the nearest it either an exact hit,
   // a little above or below - hence we need to look
   // both ways.
-  Hit := ComponentTree.FindNearest(FindCtrl);
-  Prd := ComponentTree.FindPrecessor(Hit);
-  Scc := ComponentTree.FindSuccessor(Hit);
+  Hit := ComponentYTree.FindNearest(FindCtrl);
+  Prd := ComponentYTree.FindPrecessor(Hit);
+  Scc := ComponentYTree.FindSuccessor(Hit);
   PDY := MaxInt;
   SDy := MaxInt;
 
@@ -382,9 +446,29 @@ begin
   end else
     if SDY < HDy then
       Hit := Scc;
+  NearestCtrlY := TControl(Hit.Data);
 
-  NearestCtrl := TControl(Hit.Data);
-  Result := Point(NearestCtrl.Left, NearestCtrl.Top);
+  // Same story for finding X component.
+  Hit := ComponentXTree.FindNearest(FindCtrl);
+  Prd := ComponentXTree.FindPrecessor(Hit);
+  Scc := ComponentXTree.FindSuccessor(Hit);
+  PDY := MaxInt;
+  SDy := MaxInt;
+
+  HDy := Abs(TControl(Hit.Data).Left - FindCtrl.Left);
+  if Assigned(Prd) then
+    PDy := Abs(TControl(Prd.Data).Left - FindCtrl.Left);
+  if Assigned(Scc) then
+    SDy := Abs(TControl(Scc.Data).Left - FindCtrl.Left);
+  if PDy < HDy then
+  begin
+    Hit := Prd;
+    if SDy < PDy then
+      Hit := Scc;
+  end else
+    if SDY < HDy then
+      Hit := Scc;
+  NearestCtrlX := TControl(Hit.Data);
 end;
 
 function TDesignFrame.FindNewAutoControlPostion: TPoint;
@@ -406,6 +490,7 @@ var
   i: Integer;
   AdjustedFieldLeft: LongInt;
   TreeNode: TAVLTreeNode;
+  NewTree: TAVLTree;
 begin
   // Init vars.
   MaxVariableLabelWidth := 0;
@@ -414,7 +499,7 @@ begin
   MaxY := 0;
 
   // Information collection pass.
-  TreeNode := ComponentTree.FindLowest;
+  TreeNode := ComponentYTree.FindLowest;
   while Assigned(TreeNode) do
   begin
     if (TControl(TreeNode.Data) is TFieldEdit) then
@@ -426,20 +511,22 @@ begin
     MinY := Min(MinY, TControl(TreeNode.Data).Top);
     MaxY := Max(MaxY, TControl(TreeNode.Data).Top);
 
-    TreeNode := ComponentTree.FindSuccessor(TreeNode);
+    TreeNode := ComponentYTree.FindSuccessor(TreeNode);
   end;
   MinY := Max(FieldToolBar.Height + 5, MinY);
 
   // Spacing between "top" point of TEditFields, adjusted for overlapping components.
-  Spacing := Max((MaxY - MinY) div (ComponentTree.Count - 1), ActiveControl.Height + ManagerSettings.SpaceBetweenFields);
+  Spacing := Max((MaxY - MinY) div (ComponentYTree.Count - 1), ActiveControl.Height + ManagerSettings.SpaceBetweenFields);
 
   AdjustedFieldLeft := Max(ActiveControl.Left,
     MaxFieldNameWidth + MaxVariableLabelWidth + 10);
 
   FieldCount := 0;
-  TreeNode := ComponentTree.FindLowest;
+  NewTree := TAVLTree.Create(@YCmp);
+  TreeNode := ComponentYTree.FindLowest;
   while Assigned(TreeNode) do
   begin
+    ComponentXTree.Remove(TreeNode.Data);
     if (TControl(TreeNode.Data) is TFieldEdit) then
     with TFieldEdit(TreeNode.Data) do
     begin
@@ -471,8 +558,13 @@ begin
     end;
 
     inc(FieldCount);
-    TreeNode := ComponentTree.FindSuccessor(TreeNode);
+    NewTree.Add(TreeNode.Data);
+    ComponentXTree.Add(TreeNode.Data);
+    TreeNode := ComponentYTree.FindSuccessor(TreeNode);
   end;
+
+  FreeAndNil(FComponentYTree);
+  FComponentYTree := NewTree;
 end;
 
 function TDesignFrame.BackupFile(FileName: string; BackupExt: string): boolean;
@@ -490,53 +582,6 @@ begin
   end;
 end;
 
-function DesignerComponentsCmp(Item1, Item2: Pointer): Integer;
-var
-  Ctrl1, Ctrl2: TControl;
-  Field1, Field2: TEpiField;
-begin
-  // This is the same item and result should
-  // always be 0.
-  Result := Item1 - Item2;
-  if Result = 0 then
-    Exit;
-
-  Ctrl1 := TControl(Item1);
-  if Ctrl1 is TFieldEdit then
-    Field1 := TFieldEdit(Ctrl1).Field
-  else
-    Field1 := TFieldLabel(Ctrl1).Field;
-  Ctrl2 := TControl(Item2);
-  if Ctrl2 is TFieldEdit then
-    Field2 := TFieldEdit(Ctrl2).Field
-  else
-    Field2 := TFieldLabel(Ctrl2).Field;
-
-{  if Field1.FieldY > Field2.FieldY then
-    result := 1
-  else if Field1.FieldY < Field2.FieldY then
-    result := -1
-  else
-    if Field1.FieldX > Field2.FieldX then
-      result := 1
-    else if Field1.FieldX < Field2.FieldX then
-      result := -1
-    else
-      result := 0; }
-
-  if Ctrl1.Top > Ctrl2.Top then
-    result := 1
-  else if Ctrl1.Top < Ctrl2.Top then
-    result := -1
-  else
-    if Ctrl1.Left > Ctrl2.Left then
-      result := 1
-    else if Ctrl1.Left < Ctrl2.Left then
-      result := -1
-    else
-      result := 0;
-end;
-
 constructor TDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -544,14 +589,16 @@ begin
   FActiveDatafile := TEpiDataFile.Create();
   ClickedField := nil;
   Modified := false;
-  FComponentTree := TAVLTree.Create(@DesignerComponentsCmp);
+  FComponentYTree := TAVLTree.Create(@YCmp);
+  FComponentXTree := TAVLTree.Create(@XCmp);
 end;
 
 destructor TDesignFrame.Destroy;
 begin
   if Assigned(FActiveDatafile) then
    FreeAndNil(FActiveDatafile);
-  FreeAndNil(FComponentTree);
+  FreeAndNil(FComponentYTree);
+  FreeAndNil(FComponentXTree);
   inherited Destroy;
 end;
 
@@ -584,7 +631,7 @@ var
   FS: TFileStream;
   ss: Int64;
 
-  procedure WriteReportToStream(s: TStream; var StreamSize: int64);
+  procedure WriteReportToStream(Tree: TAVLTree; s: TStream; var StreamSize: int64);
   var h: string;
 
     procedure WriteStr(const Txt: string);
@@ -601,15 +648,15 @@ var
       WriteTreeNode(ANode.Right,Prefix+'  ');
       b:=Prefix; //Prefix+HexStr(PtrInt(ANode.Data),SizeOf(PtrInt)*2)+'    ';
       if TControl(ANode.Data) is TFieldEdit then
-        b += Format('  Name="%8s"   FielsY="%3d"',
-               [TFieldEdit(ANode.Data).Field.FieldName, TFieldEdit(ANode.Data).Field.FieldY]);
+        b += Format('  Name="%8s"',
+               [TFieldEdit(ANode.Data).Field.FieldName]);
       if TControl(ANode.Data) is TFieldLabel then
-        b += Format('  Name="%10s"   FielsY="%3d"',
-               [TFieldLabel(ANode.Data).Field.FieldName, TFieldLabel(ANode.Data).Field.FieldY]);
+        b += Format('  Name="%10s"',
+               [TFieldLabel(ANode.Data).Field.FieldName]);
 //          +'  Self='+HexStr(PtrInt(ANode),SizeOf(PtrInt)*2)
 //          +'  Parent='+HexStr(PtrInt(ANode.Parent),SizeOf(PtrInt)*2)
 //          +'  Balance='+IntToStr(ANode.Balance)
-       b +=Format('  Top="%3d"', [TControl(ANode.Data).Top])
+       b +=Format('  Top="%3d"  Left="%3d"', [TControl(ANode.Data).Top, TControl(ANode.Data).Left])
          +LineEnding;
       WriteStr(b);
       WriteTreeNode(ANode.Left,Prefix+'  ');
@@ -617,46 +664,41 @@ var
 
   // TAVLTree.WriteReportToStream
   begin
-    h:='Consistency: '+IntToStr(ComponentTree.ConsistencyCheck)+' ---------------------'+LineEnding;
+    h:='Consistency: '+IntToStr(Tree.ConsistencyCheck)+' ---------------------'+LineEnding;
     WriteStr(h);
-    WriteTreeNode(ComponentTree.Root,'  ');
+    WriteTreeNode(Tree.Root,'  ');
     h:='-End-Of-AVL-Tree---------------------'+LineEnding;
     WriteStr(h);
   end;
 
 begin
   fs := TFileStream.Create('/tmp/componenttree.dump', fmCreate);
-  WriteReportToStream(fs, ss);
+  if not (Sender is TAVLTree) then
+    Sender := ComponentXTree;
+  WriteReportToStream(TAVLTree(Sender), fs, ss);
   fs.free;
 end;
 
 procedure TDesignFrame.FrameDockDrop(Sender: TObject; Source: TDragDockObject;
   X, Y: Integer);
 var
- Pt: TPoint;
- Dx, Nx: Integer;
- Dy, Ny: Integer;
- Ctrl: TControl;
- AvlNode: TAVLTreeNode;
+  Dx, Dy: Integer;
+  XCtrl, YCtrl: TControl;
+  AvlNode: TAVLTreeNode;
 begin
-  Nx := X - Source.DockOffset.X;
-  Ny := Y - Source.DockOffset.Y;
-  Source.Control.Left := Nx;
-  Source.Control.Top := Ny;
+  Source.Control.Left := X - Source.DockOffset.X;
+  Source.Control.Top := Y - Source.DockOffset.Y;
 
-  if (Source.Control is TFieldEdit) then
+  if ManagerSettings.SnapFields and (Source.Control is TFieldEdit) then
   begin
-    Pt := GetNearestControlPosition(Source.Control, Ctrl);
-    Dx := Nx - Pt.X;
-    Dy := Ny - Pt.Y;
+    GetNearestControls(Source.Control, XCtrl, YCtrl);
+    Dx := Source.Control.Left - XCtrl.Left;
+    Dy := Source.Control.Top - YCtrl.Top;
 
     if Abs(Dx) <= ManagerSettings.SnappingThresHold then
-      Nx := Pt.X;
+      Source.Control.Left := XCtrl.Left;
     if Abs(Dy) <= ManagerSettings.SnappingThresHold then
-      Ny := Pt.Y;
-
-    Source.Control.Left := Nx;
-    Source.Control.Top := Ny;
+      Source.Control.Top := YCtrl.Top;
   end;
 
   Modified := True;
@@ -682,7 +724,8 @@ begin
       Field := TFieldLabel(Comp).Field;
     ActiveDatafile.RemoveField(Field, true);
     RemoveControl(Comp);
-    ComponentTree.Remove(Comp);
+    ComponentYTree.Remove(Comp);
+    ComponentXTree.Remove(Comp);
     FreeAndNil(Comp);
     Modified := true;
   end;
@@ -739,7 +782,8 @@ begin
   Modified := true;
   ActiveDatafile.RemoveField(TmpField, true);
   RemoveControl(TmpCtrl);
-  ComponentTree.Remove(TmpCtrl);
+  ComponentYTree.Remove(TmpCtrl);
+  ComponentXTree.Remove(TmpCtrl);
   FreeAndNil(TmpCtrl);
 end;
 
@@ -751,8 +795,9 @@ begin
     [X, Y]);
 
   MainForm.Label5.Caption := Format(
-    'ComponentTree.Count = %d',
-    [ComponentTree.Count]
+    'Y Component Tree.Count = %d' + LineEnding +
+    'X Component Tree.Count = %d',
+    [ComponentYTree.Count, ComponentXTree.Count]
   );
 end;
 
@@ -955,7 +1000,7 @@ begin
   {$ENDIF}
 
   Dlg := TOpenDialog.Create(nil);
-  Dlg.Filter := GetEpiDialogFilter(True, TRue, True, True,
+  Dlg.Filter := GetEpiDialogFilter(True, True, True, True,
     False, True, True, False, True, True);
 
   if Dlg.Execute then
@@ -996,6 +1041,19 @@ begin
 end;
 
 procedure TDesignFrame.SaveFileActionExecute(Sender: TObject);
+begin
+  if ActiveDataFile.FileName = '' then
+  begin
+    SaveFileAsAction.Execute;
+    Exit;
+  end;
+
+  ActiveDataFile.Save(ActiveDataFile.FileName, []);
+  Modified := false;
+  MainForm.StatusBar2.Panels[0].Text := 'Saving complete: ' + ActiveDataFile.FileName;
+end;
+
+procedure TDesignFrame.SaveFileAsActionExecute(Sender: TObject);
 var
   Fn: String;
 begin

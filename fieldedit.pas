@@ -92,7 +92,8 @@ type
 implementation
 
 uses
-  InterfaceBase, LCLType, Math, LCLProc, main, settings, ExtCtrls;
+  InterfaceBase, LCLType, Math, LCLProc, main, settings, ExtCtrls,
+  design_frame;
 
 { TFieldEdit }
 
@@ -113,7 +114,7 @@ begin
       fceLength:
         begin
           if Assigned(Parent) then
-            Width := TPanel(Parent).Canvas.TextWidth('W') * FieldLength
+            Width := TDesignFrame(Parent).Canvas.TextWidth('W') * FieldLength
           else
             Width := 8 * FieldLength;
         end;

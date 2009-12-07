@@ -1,7 +1,7 @@
 object AutoAlignForm: TAutoAlignForm
-  Left = 2044
+  Left = 846
   Height = 149
-  Top = 658
+  Top = 516
   Width = 182
   ActiveControl = Panel1
   BorderIcons = []
