@@ -120,8 +120,8 @@ begin
     end;
   end;
 
-  if TmpMod and (MessageDlg('A dataform is modified since last save.' +
-     LineEnding + 'Are you sure you want to quit?', mtWarning, mbYesNo, 0) = mrNo) then
+  if TmpMod and (MessageDlg('Dataform modified since last save.' +
+     LineEnding + 'Close Form ?', mtWarning, mbYesNo, 0) = mrNo) then
   begin
     PageControl1.ActivePage := PageControl1.Pages[Idx];
     Exit;
@@ -154,7 +154,7 @@ end;
 
 procedure TMainForm.MetaDataBtnClick(Sender: TObject);
 begin
-  FeatureInfoLabel.Caption := ' Not implementet yet';
+  FeatureInfoLabel.Caption := 'Not implementet yet';
 end;
 
 

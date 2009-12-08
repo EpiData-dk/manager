@@ -66,6 +66,8 @@ type
     ToolButton5: TToolButton;
     MDYFieldBtn: TToolButton;
     ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
     YMDFieldBtn: TToolButton;
     procedure ImportStructureActionExecute(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);

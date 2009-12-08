@@ -1,14 +1,14 @@
 object AutoAlignForm: TAutoAlignForm
-  Left = 1108
+  Left = 532
   Height = 165
-  Top = 332
-  Width = 181
+  Top = 306
+  Width = 219
   ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Auto Align'
   ClientHeight = 165
-  ClientWidth = 181
+  ClientWidth = 219
   OnCreate = FormCreate
   ShowInTaskBar = stNever
   LCLVersion = '0.9.29'
@@ -16,56 +16,56 @@ object AutoAlignForm: TAutoAlignForm
     Left = 0
     Height = 165
     Top = 0
-    Width = 181
+    Width = 219
     Align = alClient
     BevelInner = bvLowered
     BevelWidth = 2
     ClientHeight = 165
-    ClientWidth = 181
+    ClientWidth = 219
     Color = clSkyBlue
     ParentColor = False
     TabOrder = 0
     object AlignFieldsChk: TCheckBox
       Left = 8
-      Height = 22
+      Height = 17
       Top = 8
-      Width = 99
-      Caption = 'Align Fields'
+      Width = 172
+      Caption = 'Default Alignment (One column)'
       OnChange = AlignFieldsChkChange
       TabOrder = 0
     end
     object AlignLabelsChk: TCheckBox
       Left = 8
-      Height = 22
-      Top = 40
-      Width = 160
-      Caption = 'Align Variable Labels'
+      Height = 17
+      Top = 56
+      Width = 182
+      Caption = 'Left Align Variable Labels (slettes)'
       Enabled = False
       TabOrder = 1
     end
     object EqualSpaceChk: TCheckBox
       Left = 8
-      Height = 22
-      Top = 72
-      Width = 156
+      Height = 17
+      Top = 80
+      Width = 116
       Caption = 'Equal Vertical Space'
       TabOrder = 2
     end
     object Button1: TButton
-      Left = 8
-      Height = 28
-      Top = 128
-      Width = 75
+      Left = 16
+      Height = 20
+      Top = 136
+      Width = 67
       Caption = 'Ok'
       Color = clWhite
       ModalResult = 1
       TabOrder = 3
     end
     object Button2: TButton
-      Left = 98
-      Height = 28
-      Top = 128
-      Width = 75
+      Left = 104
+      Height = 20
+      Top = 136
+      Width = 69
       Caption = 'Cancel'
       Color = clWhite
       ModalResult = 2
@@ -73,12 +73,36 @@ object AutoAlignForm: TAutoAlignForm
     end
     object EmptySpaceChkBtn: TCheckBox
       Left = 8
-      Height = 22
+      Height = 17
       Top = 104
-      Width = 165
-      Caption = 'Remove empty space'
+      Width = 155
+      Caption = 'Remove empty lines (space)'
       OnClick = EmptySpaceChkBtnClick
       TabOrder = 5
+    end
+    object RadioButton1: TRadioButton
+      Left = 88
+      Height = 17
+      Top = 32
+      Width = 45
+      Caption = 'Right'
+      TabOrder = 6
+    end
+    object RadioButton2: TRadioButton
+      Left = 152
+      Height = 17
+      Top = 32
+      Width = 39
+      Caption = 'Left'
+      TabOrder = 7
+    end
+    object Label1: TLabel
+      Left = 8
+      Height = 14
+      Top = 32
+      Width = 75
+      Caption = 'Labels aligned: '
+      ParentColor = False
     end
   end
   object ActionList1: TActionList

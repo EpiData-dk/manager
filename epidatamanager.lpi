@@ -11,7 +11,6 @@
       <AutoCreateForms Value="False"/>
       <TargetFileExt Value=""/>
       <Title Value="EpiData Manager"/>
-      <Icon Value="0"/>
       <UseXPManifest Value="True"/>
     </General>
     <VersionInfo>
@@ -123,7 +122,6 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

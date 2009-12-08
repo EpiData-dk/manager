@@ -21,7 +21,10 @@ type
     Button2: TButton;
     EmptySpaceChkBtn: TCheckBox;
     EqualSpaceChk: TCheckBox;
+    Label1: TLabel;
     Panel1: TPanel;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
     procedure AlignFieldsChkChange(Sender: TObject);
     procedure CancelActionExecute(Sender: TObject);
     procedure EmptySpaceChkBtnClick(Sender: TObject);
