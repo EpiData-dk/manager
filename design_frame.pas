@@ -115,6 +115,7 @@ type
     function  FindNewAutoControlPostion: TPoint;
     procedure AutoAlignFields(ActiveControl: TControl; AlignFields, AlignLabels, SpaceEqual: boolean);
     function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
+    procedure RemoveDeadSpace;
   protected
     property  ComponentYTree: TAVLTree read FComponentYTree;
     property  ComponentXTree: TAVLTree read FComponentXTree;
@@ -582,6 +583,89 @@ begin
   end;
 end;
 
+procedure TDesignFrame.RemoveDeadSpace;
+var
+  NewYTree, NewXTree: TAVLTree;
+  Curr, Old, Prev, Next: TAVLTreeNode;
+  CurField, NextField, PrevField, OldField: TEpiField;
+  Dy, Ly: Integer;
+begin
+  NewYTree := TAVLTree.Create(@YCmp);
+  NewXTree := TAVLTree.Create(@XCmp);
+  Curr := ComponentYTree.FindLowest;
+  Next := ComponentYTree.FindSuccessor(Curr);
+  while Assigned(Next) do
+  begin
+    if (TControl(Curr.Data) is TFieldEdit) then
+      CurField := TFieldEdit(Curr.Data).Field
+    else
+      CurField := TFieldLabel(Curr.Data).Field;
+
+    if (TControl(Next.Data) is TFieldEdit) then
+      NextField := TFieldEdit(Next.Data).Field
+    else
+      NextField := TFieldLabel(Next.Data).Field;
+    Dy := TControl(Curr.Data).Height + ManagerSettings.SpaceBetweenFields;
+
+    if (NextField.FieldY > (CurField.FieldY + Dy)) then
+    begin
+      NewYTree.Add(Curr.Data);
+      NewXTree.Add(Curr.Data);
+
+      Old := Next;
+      OldField := NextField;
+
+      Prev := Next;
+      Next := ComponentYTree.FindSuccessor(Next);
+      while Assigned(Next) do
+      begin
+        PrevField := NextField;
+        if (TControl(Next.Data) is TFieldEdit) then
+          NextField := TFieldEdit(Next.Data).Field
+        else
+          NextField := TFieldLabel(Next.Data).Field;
+        Dy := TControl(Next.Data).Height + ManagerSettings.SpaceBetweenFields;
+
+        if (NextField.FieldY > (OldField.FieldY + Dy)) or
+           (NextField.FieldX < PrevField.FieldX) then
+        begin
+          NewYTree.Remove(Prev.Data);
+          NewXTree.Remove(Prev.Data);
+          Curr := Prev;
+          Break;
+        end;
+        Ly := NextField.FieldY - (CurField.FieldY + Dy);
+        NextField.FieldY := CurField.FieldY + Dy;
+        NextField.LabelY := NextField.LabelY - Abs(Ly);
+
+        NewYTree.Add(Next.Data);
+        NewXTree.Add(Next.Data);
+        Prev := Next;
+        Next := ComponentYTree.FindSuccessor(Next);
+      end;
+
+      Ly := OldField.FieldY - (CurField.FieldY + Dy);
+      OldField.FieldY := CurField.FieldY + Dy;
+      OldField.LabelY := OldField.LabelY - Abs(Ly);
+      NewYTree.Add(Old.Data);
+      NewXTree.Add(Old.Data);
+      Continue;
+    end;
+
+    NewYTree.Add(Curr.Data);
+    NewXTree.Add(Curr.Data);
+
+    Curr := Next;
+    if Assigned(Next) then
+      Next := ComponentYTree.FindSuccessor(Next);
+  end;
+
+  FreeAndNil(FComponentYTree);
+  FComponentYTree := NewYTree;
+  FreeAndNil(FComponentXTree);
+  FComponentXTree := NewXTree;
+end;
+
 constructor TDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -689,7 +773,11 @@ begin
   Source.Control.Left := X - Source.DockOffset.X;
   Source.Control.Top := Y - Source.DockOffset.Y;
 
-  if ManagerSettings.SnapFields and (Source.Control is TFieldEdit) then
+
+
+  if (not (ssShift in GetKeyShiftState)) and
+     ManagerSettings.SnapFields and
+     (Source.Control is TFieldEdit) then
   begin
     GetNearestControls(Source.Control, XCtrl, YCtrl);
     Dx := Source.Control.Left - XCtrl.Left;
@@ -747,9 +835,14 @@ begin
     exit;
   end;
 
-  if Assigned(ClickedField) then
-    AutoAlignFields(ClickedField, AutoAlignForm.AlignFieldsChk.Checked,
-      AutoAlignForm.AlignLabelsChk.Checked, AutoAlignForm.EqualSpaceChk.Checked);
+  if AutoAlignForm.EmptySpaceChkBtn.Checked then
+  begin
+    RemoveDeadSpace;
+  end else begin
+    if Assigned(ClickedField) then
+      AutoAlignFields(ClickedField, AutoAlignForm.AlignFieldsChk.Checked,
+        AutoAlignForm.AlignLabelsChk.Checked, AutoAlignForm.EqualSpaceChk.Checked);
+  end;
 
   FreeAndNil(AutoAlignForm);
   Modified := true;
@@ -1013,6 +1106,7 @@ begin
     Import := TEpiImportExport.Create;
     Import.OnProgress := @MainForm.ShowProgress;
     Import.OnClipBoardRead := @MainForm.ReadClipBoard;
+    ImportTxtGuess.FieldNaming := fnAuto;
     Import.Import(Fn, FActiveDatafile, dftNone);
     FreeAndNil(Import);
 

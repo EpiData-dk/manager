@@ -35,6 +35,7 @@
     <RequiredPackages Count="2">
       <Item1>
         <PackageName Value="epidatacore"/>
+        <MinVersion Minor="2" Release="2" Build="100" Valid="True"/>
       </Item1>
       <Item2>
         <PackageName Value="LCL"/>
