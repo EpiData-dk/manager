@@ -46,7 +46,8 @@ type
 implementation
 
 uses
-  Controls, settings, UEpiDataGlobals, design_frame, Graphics;
+  Controls, settings, UEpiDataGlobals, design_frame, Graphics,
+  UStringUtils;
 
 var
   LastFieldNo: Integer = 1;
@@ -56,7 +57,7 @@ var
 procedure TFieldCreateForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
   );
 var
-  S: string;
+  S, T: string;
   L, D: LongInt;
 begin
   CanClose := true;
@@ -67,9 +68,30 @@ begin
 
   // Sanity checks.
   // - variable name
-  S := UTF8Encode(Trim(UTF8Decode(FieldNameEdit.Text)));
-  if S = '' then
+  S := Trim(UTF8Decode(FieldNameEdit.Text));
+  T := Trim(UTF8Decode(LabelEdit.Text));
+  if (S = '') and (T = '') then
+  begin
     CanClose := false;
+    if ManagerSettings.FieldNamePrefix <> '' then
+      FieldNameEdit.SetFocus
+    else
+      LabelEdit.SetFocus;
+    Exit;
+  end;
+
+  // If no field name is specified use FirstWord/Auto naming rules.
+  if (S = '') and (T <> '') then
+  begin
+    case ManagerSettings.FieldNamingStyle of
+      fnFirstWord: S := FirstWord(LabelEdit.Text);
+      fnAuto:      S := AutoFieldName(LabelEdit.Text);
+    end;
+    FieldNameEdit.Text := S;
+  end;
+
+  S := UTF8Encode(S);
+  T := UTF8Encode(T);
 
   if FNewField or (OldFieldName <> S) then
   begin
@@ -77,6 +99,11 @@ begin
       CanClose := false;
     if FDf.FileProperties.DefineExists(S) then
       CanClose := false;
+    if not CanClose then
+    begin
+      FieldNameEdit.SetFocus;
+      Exit;
+    end;
   end;
 
   // - FieldLength (no need to ut8-handle this. It's always plain ASCII.
@@ -122,7 +149,8 @@ begin
   FDf := DataFile;
   FNewField := NewField;
 
-  FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(LastFieldNo);
+  if ManagerSettings.FieldNamePrefix <> '' then
+    FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(LastFieldNo);
   Case FieldType of
     ftFloat:
       FieldLengthEdit.Text := '5';

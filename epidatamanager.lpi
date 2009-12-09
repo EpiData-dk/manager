@@ -34,7 +34,7 @@
     <RequiredPackages Count="2">
       <Item1>
         <PackageName Value="epidatacore"/>
-        <MinVersion Minor="2" Release="2" Build="100" Valid="True"/>
+        <MinVersion Minor="2" Release="2" Build="101" Valid="True"/>
       </Item1>
       <Item2>
         <PackageName Value="LCL"/>
@@ -122,6 +122,7 @@
       </Options>
     </Linking>
     <Other>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

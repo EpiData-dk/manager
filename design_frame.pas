@@ -8,7 +8,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList,
   Controls, Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, UEpiDataFile,
-  FieldEdit, Design_Field_Frame, AVL_Tree, LCLType;
+  FieldEdit, Design_Field_Frame, AVL_Tree, LCLType, design_autoalign_form;
 
 type
 
@@ -69,6 +69,8 @@ type
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
     YMDFieldBtn: TToolButton;
+    procedure FrameUnDock(Sender: TObject; Client: TControl;
+      NewTarget: TWinControl; var Allow: Boolean);
     procedure ImportStructureActionExecute(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
     procedure AutoAlignBtnClick(Sender: TObject);
@@ -115,7 +117,7 @@ type
     function  GetLowestControlPosition(Var LowestCtrl: TControl): TPoint;
     procedure GetNearestControls(Const FindCtrl: TControl; var NearestCtrlX, NearestCtrlY: TControl);
     function  FindNewAutoControlPostion: TPoint;
-    procedure AutoAlignFields(ActiveControl: TControl; AlignFields, AlignLabels, SpaceEqual: boolean);
+    procedure AutoAlignFields(ActiveControl: TControl; AlignProps: TAutoAlignRecord);
     function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
     procedure RemoveDeadSpace;
   protected
@@ -135,8 +137,7 @@ implementation
 uses
   main, graphics, UDataFileTypes,
   types, math, settings, design_label_form,
-  UEpiDataGlobals, UImportExport, design_autoalign_form,
-  UQesHandler, UEpiUtils;
+  UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils;
 
 function YCmp(Item1, Item2: Pointer): Integer;
 var
@@ -224,17 +225,6 @@ begin
     Pt := ClientToScreen(Point(ALeft, ATop{$IFNDEF WINDOWS} - VertScrollBar.Position{$ENDIF}));
     FieldForm.Top := Min(Pt.Y, Screen.Height - FieldForm.Height - 5);
     FieldForm.Left := Min(Pt.X, Screen.Width - FieldForm.Width - 5);
-
-    MainForm.Label1.Caption := Format(
-      'VertScroll.Pos: %d  - ALeft: %d  - ATop: %d' + LineEnding +
-      'Pt.X: %d   Pt.Y: %d'  + LineEnding +
-      'FieldForm.Top: %d  - FieldForm.Left: %d',
-      [VertScrollBar.Position, ALeft, ATop,
-       Pt.x, Pt.Y,
-       FieldForm.Top,  FieldForm.Left]
-    );
-
-
 
     if FieldForm.ShowModal = mrCancel then
     begin
@@ -483,23 +473,27 @@ begin
     Result.Y += (Ctrl.Height + ManagerSettings.SpaceBetweenFields);
 end;
 
-procedure TDesignFrame.AutoAlignFields(ActiveControl: TControl; AlignFields,
-  AlignLabels, SpaceEqual: boolean);
+procedure TDesignFrame.AutoAlignFields(ActiveControl: TControl;
+  AlignProps: TAutoAlignRecord);
 var
   MaxVariableLabelWidth,
   MaxFieldNameWidth: Integer;
   MinY, MaxY, Spacing: Integer;
-  FieldCount: Integer;
-  i: Integer;
+  FieldNo, FieldCount: Integer;
+  i, PrevTop: Integer;
   AdjustedFieldLeft: LongInt;
   TreeNode: TAVLTreeNode;
-  NewTree: TAVLTree;
+  NewYTree: TAVLTree;
+  NewXTree: TAVLTree;
+  Dx: Integer;
 begin
   // Init vars.
   MaxVariableLabelWidth := 0;
   MaxFieldNameWidth := 0;
   MinY := MaxInt;
   MaxY := 0;
+  FieldCount := 0;
+  PrevTop := -MaxInt;
 
   // Information collection pass.
   TreeNode := ComponentYTree.FindLowest;
@@ -511,63 +505,84 @@ begin
       MaxVariableLabelWidth := Max(MaxVariableLabelWidth, VariableLabel.Width);
       MaxFieldNameWidth     := Max(MaxFieldNameWidth, FieldNameLabel.Width);
     end;
+
+    if Abs(PrevTop - TControl(TreeNode.Data).Top) > (TControl(TreeNode.Data).Height + ManagerSettings.SpaceBetweenFields) then
+      Inc(FieldCount);
+    PrevTop := TControl(TreeNode.Data).Top;
+
     MinY := Min(MinY, TControl(TreeNode.Data).Top);
     MaxY := Max(MaxY, TControl(TreeNode.Data).Top);
 
     TreeNode := ComponentYTree.FindSuccessor(TreeNode);
   end;
   MinY := Max(FieldToolBar.Height + 5, MinY);
+  if FieldCount <= 2 then
+    FieldCount := ComponentYTree.Count;
 
   // Spacing between "top" point of TEditFields, adjusted for overlapping components.
-  Spacing := Max((MaxY - MinY) div (ComponentYTree.Count - 1), ActiveControl.Height + ManagerSettings.SpaceBetweenFields);
+  Spacing := Max((MaxY - MinY) div (FieldCount - 1), ActiveControl.Height + ManagerSettings.SpaceBetweenFields);
 
   AdjustedFieldLeft := Max(ActiveControl.Left,
     MaxFieldNameWidth + MaxVariableLabelWidth + 10);
 
-  FieldCount := 0;
-  NewTree := TAVLTree.Create(@YCmp);
+  FieldNo := 0;
+  PrevTop := -MaxInt;
+  NewYTree := TAVLTree.Create(@YCmp);
+  NewXTree := TAVLTree.Create(@XCmp);
   TreeNode := ComponentYTree.FindLowest;
   while Assigned(TreeNode) do
   begin
-    ComponentXTree.Remove(TreeNode.Data);
     if (TControl(TreeNode.Data) is TFieldEdit) then
     with TFieldEdit(TreeNode.Data) do
     begin
       // Field positioning.
-      if AlignFields then
-        Field.FieldX := AdjustedFieldLeft;
-      if SpaceEqual then
+      if AlignProps.DefaultAlign then
       begin
-        Field.FieldY := MinY + FieldCount * Spacing;
+        Dx := (Field.FieldX - AdjustedFieldLeft);
+        Field.FieldX := AdjustedFieldLeft;
+      end;
+      if AlignProps.EqualVertSpace then
+      begin
+        if Abs(PrevTop - Top) > (Height + ManagerSettings.SpaceBetweenFields) then
+          Dec(FieldNo);
+        PrevTop := Top;
+        Field.FieldY := MinY + FieldNo * Spacing;
         Field.LabelY := Field.FieldY + (Height - VariableLabel.Height);
       end;
-      if AlignLabels then
-        Field.LabelX := Field.FieldX - (MaxVariableLabelWidth + 5);
+      case AlignProps.LabelsAlign of
+        alLeft: Field.LabelX := Field.FieldX - (MaxVariableLabelWidth + 5);
+        alRight: Field.LabelX := Field.FieldX - (VariableLabel.Width + 5);
+        alNone: Field.LabelX := Field.LabelX - Dx;
+      end;
     end;
 
     if (TControl(TreeNode.Data) is TFieldLabel) then
     with TFieldLabel(TreeNode.Data) do
     begin
-      if SpaceEqual then
+      if AlignProps.EqualVertSpace then
       begin
-        Field.FieldY := MinY + FieldCount * Spacing;
+        Field.FieldY := MinY + FieldNo * Spacing;
         Field.LabelY := Field.FieldY;
       end;
-      if AlignLabels then
-      begin
-        Field.FieldX := AdjustedFieldLeft - (MaxVariableLabelWidth + 5);
-        Field.LabelX := AdjustedFieldLeft - (MaxVariableLabelWidth + 5);
+      case AlignProps.LabelsAlign of
+        alLeft:
+          begin
+            Field.FieldX := AdjustedFieldLeft - (MaxVariableLabelWidth + 5);
+            Field.LabelX := AdjustedFieldLeft - (MaxVariableLabelWidth + 5);
+          end;
       end;
     end;
 
-    inc(FieldCount);
-    NewTree.Add(TreeNode.Data);
-    ComponentXTree.Add(TreeNode.Data);
+    inc(FieldNo);
+    NewYTree.Add(TreeNode.Data);
+    NewXTree.Add(TreeNode.Data);
     TreeNode := ComponentYTree.FindSuccessor(TreeNode);
   end;
 
   FreeAndNil(FComponentYTree);
-  FComponentYTree := NewTree;
+  FComponentYTree := NewYTree;
+  FreeAndNil(FComponentXTree);
+  FComponentXTree := NewXTree;
 end;
 
 function TDesignFrame.BackupFile(FileName: string; BackupExt: string): boolean;
@@ -779,7 +794,8 @@ begin
 
   if (not (ssShift in GetKeyShiftState)) and
      ManagerSettings.SnapFields and
-     (Source.Control is TFieldEdit) then
+     (Source.Control is TFieldEdit) and
+     (ComponentYTree.Count > 0) then
   begin
     GetNearestControls(Source.Control, XCtrl, YCtrl);
     Dx := Source.Control.Left - XCtrl.Left;
@@ -824,6 +840,8 @@ end;
 procedure TDesignFrame.AutoAlignBtnClick(Sender: TObject);
 var
   AutoAlignForm: TAutoAlignForm;
+  AutoAlignRes: TAutoAlignRecord;
+  Res: TModalResult;
   Pt: TPoint;
 begin
   AutoAlignForm := TAutoAlignForm.Create(self);
@@ -831,22 +849,21 @@ begin
     Pt := FieldToolBar.ClientToScreen(Point(Left, Top + Height + 1));
   AutoAlignForm.Left := Pt.X;
   AutoAlignForm.Top  := Pt.Y;
-  if AutoAlignForm.ShowModal = mrCancel then
-  begin
-    FreeAndNil(AutoAlignForm);
-    exit;
-  end;
-
-  if AutoAlignForm.EmptySpaceChkBtn.Checked then
-  begin
-    RemoveDeadSpace;
-  end else begin
-    if Assigned(ClickedField) then
-      AutoAlignFields(ClickedField, AutoAlignForm.AlignFieldsChk.Checked,
-        AutoAlignForm.AlignLabelsChk.Checked, AutoAlignForm.EqualSpaceChk.Checked);
-  end;
-
+  Res := AutoAlignForm.ShowModal;
+  AutoAlignRes := AutoAlignForm.AlignProperties;
   FreeAndNil(AutoAlignForm);
+
+  if Res = mrCancel then Exit;
+
+  if AutoAlignRes.EqualVertSpace then
+    RemoveDeadSpace;
+
+  if AutoAlignRes.DefaultAlign and (not Assigned(ClickedField)) then
+    Exit;
+
+  if Assigned(ClickedField) then
+    AutoAlignFields(ClickedField, AutoAlignRes);
+
   Modified := true;
 end;
 
@@ -980,6 +997,7 @@ var
   TmpDF: TEpiDataFile;
   Importer: TEpiImportExport;
   Pt: TPoint;
+  AutoAlignProps: TAutoAlignRecord;
 begin
   Dlg := TOpenDialog.Create(nil);
   Dlg.Filter := GetEpiDialogFilter(True, True, True, True, False, True, True,
@@ -1009,10 +1027,23 @@ begin
         NewFieldEdit(TmpField, TmpField.FieldY + Pt.Y, TmpField.FieldX, false);
   end;
 
+  AutoAlignProps.DefaultAlign := true;
+  AutoAlignProps.LabelsAlign := alLeft;
+  AutoAlignProps.EqualVertSpace := true;
+  AutoAlignProps.RemoveEmptySpace := false;
   if ActiveDatafile.DatafileType <> dftEpiDataXml then
-    AutoAlignFields(TmpEdit, True, True, True);
+    AutoAlignFields(TmpEdit, AutoAlignProps);
 
   Modified := true;
+end;
+
+procedure TDesignFrame.FrameUnDock(Sender: TObject; Client: TControl;
+  NewTarget: TWinControl; var Allow: Boolean);
+begin
+  if (Sender = NewTarget) then
+    Allow := true
+  else
+    Allow := false;
 end;
 
 procedure TDesignFrame.NewDMYFieldActionExecute(Sender: TObject);
@@ -1087,6 +1118,9 @@ var
   i: Integer;
   TmpField: TEpiField;
   TmpEdit: TFieldEdit;
+  TmpLabel: TFieldLabel;
+  AutoAlignProps: TAutoAlignRecord;
+  Pt: TPoint;
 begin
   {$IFNDEF EPI_DEBUG}
   if (ActiveDatafile.NumFields > 0) and
@@ -1116,20 +1150,33 @@ begin
     for i := 0 to ActiveDatafile.NumFields - 1 do
     begin
       TmpField := ActiveDatafile[i];
+{      if ActiveDataFile.DatafileType <> dftEpiDataXml then
+        Pt := FindNewAutoControlPostion
+      else            }
+        Pt := Point(TmpField.FieldX, TmpField.FieldY);
       if TmpField.FieldType = ftQuestion then
-        NewQuestionLabel(TmpField, TmpField.FieldY, TmpField.FieldX, false)
-      else
+      begin
+        TmpLabel := NewQuestionLabel(TmpField, Pt.Y, Pt.X, false);
+//        TmpLabel.
+      end else begin
         if not Assigned(TmpEdit) then
-          TmpEdit := NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false)
+          TmpEdit := NewFieldEdit(TmpField, Pt.Y, Pt.X, false)
         else
-          NewFieldEdit(TmpField, TmpField.FieldY, TmpField.FieldX, false);
+          NewFieldEdit(TmpField, Pt.Y, Pt.X, false);
+//        TmpEdit.
+      end;
     end;
 
     MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
     MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
     MainForm.PageControl1.ShowHint := true;
+
+    AutoAlignProps.DefaultAlign := true;
+    AutoAlignProps.LabelsAlign := alLeft;
+    AutoAlignProps.EqualVertSpace := true;
+    AutoAlignProps.RemoveEmptySpace := false;
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
-      AutoAlignFields(TmpEdit, True, True, True);
+      AutoAlignFields(TmpEdit, AutoAlignProps);
 
     Modified := false;
   end;

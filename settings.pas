@@ -96,13 +96,6 @@ begin
     exit;
 
   CanClose := false;
-  S := UTF8Encode(Trim(UTF8Decode(PrefixEdit.Text)));
-  if S = '' then
-  begin
-    PrefixEdit.SetFocus;
-    Exit;
-  end;
-
   S := Trim(DefaultRightPosEdit.Text);
   if (S = '') or (StrToInt(S) <= 0) then
   begin

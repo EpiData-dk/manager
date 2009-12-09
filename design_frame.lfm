@@ -11,6 +11,7 @@ object DesignFrame: TDesignFrame
   OnDockDrop = FrameDockDrop
   OnMouseDown = FrameMouseDown
   OnMouseMove = FormMouseMove
+  OnUnDock = FrameUnDock
   ParentColor = False
   ParentShowHint = False
   ShowHint = True

@@ -36,8 +36,8 @@ type
 
     // Experimental grapper.
     FSelectCorner: TSelectCorner;
-    procedure OnFieldChange(Sender: TObject; EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
     procedure UpdateFieldNameLabel;
+    procedure OnFieldChange(Sender: TObject; EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure SetVisible(Value: Boolean); override;
