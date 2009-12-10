@@ -36,20 +36,23 @@ type
 
     // Experimental grapper.
     FSelectCorner: TSelectCorner;
+    procedure SetField(const AValue: TEpiField);
     procedure UpdateFieldNameLabel;
+    procedure UpdateHint(aShow: boolean = true);
     procedure OnFieldChange(Sender: TObject; EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure SetVisible(Value: Boolean); override;
     procedure CalculateDockSizes;
   public
-    constructor Create(AField: TEpiField; AOwner: TComponent);
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure  ForceVisualUpdate;
     procedure DoStartDock(var DragObject: TDragObject); override;
     procedure DoEndDock(Target: TObject; X, Y: Integer); override;
     procedure DoEnter; override;
     procedure DoExit; override;
-    property Field: TEpiField read FField;
+    property Field: TEpiField read FField write SetField;
     property VariableLabel: TLabel read FVariableLabel;
     property FieldNameLabel: TLabel read FFieldNameLabel;
   published
@@ -80,10 +83,11 @@ type
   private
     FField: TEpiField;
     procedure OnFieldChange(Sender: TObject; EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
+    procedure SetField(const AValue: TEpiField);
   public
-    constructor Create(AField: TEpiField; AOwner: TComponent);
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    property Field: TEpiField read FField write FField;
+    property Field: TEpiField read FField write SetField;
   published
     property OnStartDock;
     property OnEndDock;
@@ -93,7 +97,7 @@ implementation
 
 uses
   InterfaceBase, LCLType, Math, LCLProc, main, settings, ExtCtrls,
-  design_frame;
+  design_frame, UEpiUtils;
 
 { TFieldEdit }
 
@@ -111,13 +115,7 @@ begin
           FFieldNameLabel.Caption := FieldName;
           Text := FieldName;
         end;
-      fceLength:
-        begin
-          if Assigned(Parent) then
-            Width := TDesignFrame(Parent).Canvas.TextWidth('W') * FieldLength
-          else
-            Width := 8 * FieldLength;
-        end;
+      fceLength: Width := TDesignFrame(Parent).Canvas.TextWidth('W') * FieldLength;
       fceDecimals: ;
       fceFX: Left := FieldX;
       fceFY: Top  := FieldY;
@@ -128,6 +126,8 @@ begin
         begin
           OldWidth := Self.VariableLabel.Width;
           Self.FVariableLabel.Caption := VariableLabel;
+          if VariableLabel = '' then
+            Self.FVariableLabel.Caption := ' ';
           if (Self.FVariableLabel.Width + Self.FVariableLabel.Left) > Left then
           begin
             Dx := Self.FVariableLabel.Width - OldWidth;
@@ -142,6 +142,7 @@ begin
   end;
   if EventType in [fceName, fceVarLabel, fceVX, fceVY] then
     UpdateFieldNameLabel;
+  UpdateHint;
 end;
 
 procedure TFieldEdit.UpdateFieldNameLabel;
@@ -149,6 +150,51 @@ begin
   FieldNameLabel.Caption  := Text;
   FieldNameLabel.Left     := VariableLabel.Left - (FieldNameLabel.Width + 5);
   FieldNameLabel.Top      := VariableLabel.Top;
+end;
+
+procedure TFieldEdit.UpdateHint(aShow: boolean);
+begin
+  ShowHint := aShow;
+
+  Hint := Format(
+    'Name: %s' + LineEnding +
+    'Type: %s' + LineEnding +
+    'Length: %d' + LineEnding +
+    'Label: %s' + LineEnding +
+    'X: %d, Y: %d',
+    [Field.FieldName, FieldTypeToFieldTypeName(Field.FieldType, nil),
+     Field.FieldLength, Field.VariableLabel, Field.FieldX, Field.FieldY]
+  );
+end;
+
+procedure TFieldEdit.SetField(const AValue: TEpiField);
+begin
+  if not Assigned(Parent) then
+    Exit;
+
+  FField := AValue;
+  Field.OnChange := @OnFieldChange;
+
+  Text   := Field.FieldName;
+  Top    := Field.FieldY;
+  Left   := Field.FieldX;
+  Width  := TDesignFrame(Parent).Canvas.TextWidth('W') * Field.FieldLength;
+
+  VariableLabel.Caption := Field.VariableLabel;
+  // To avoid big empty space.
+  if Field.VariableLabel = '' then
+    VariableLabel.Caption := ' ';
+  if Field.LabelX = 0 then
+    Field.LabelX := Left - (VariableLabel.Width + 5)
+  else
+    VariableLabel.Left := Field.LabelX;
+  if Field.LabelY = 0 then
+    Field.LabelY := Top + (Height - VariableLabel.Height)
+  else
+    VariableLabel.Top := Field.LabelY;
+
+  UpdateFieldNameLabel;
+  UpdateHint;
 end;
 
 procedure TFieldEdit.SetParent(NewParent: TWinControl);
@@ -165,8 +211,6 @@ procedure TFieldEdit.SetVisible(Value: Boolean);
 begin
   inherited SetVisible(Value);
   UpdateFieldNameLabel;
-//  FVariableLabel.Visible := Value;
-//  FFieldNameLabel.Visible := Value;
 end;
 
 procedure TFieldEdit.CalculateDockSizes;
@@ -174,26 +218,14 @@ begin
   inherited CalculateDockSizes;
 end;
 
-constructor TFieldEdit.Create(AField: TEpiField; AOwner: TComponent);
+constructor TFieldEdit.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FField := AField;
-  FField.OnChange := @OnFieldChange;
   FVariableLabel := TLabel.Create(Self);
   FFieldNameLabel := TLabel.Create(Self);
 
   // Experimental:
   FSelectCorner := nil;
-
-  Text                    := Field.FieldName;
-  Left                    := Field.FieldX;
-  Top                     := Field.FieldY;
-
-  VariableLabel.Caption   := Field.VariableLabel;
-  VariableLabel.Left      := Field.LabelX;
-  VariableLabel.Top       := Field.LabelY;
-
-  UpdateFieldNameLabel;
 end;
 
 destructor TFieldEdit.Destroy;
@@ -203,6 +235,21 @@ begin
   // Do not destroy - it's handled byt the visual destruction of the frame.
   FVariableLabel := nil;
   FFieldNameLabel := nil;
+end;
+
+procedure TFieldEdit.ForceVisualUpdate;
+begin
+  Text := Field.FieldName;
+  Left := Field.FieldX;
+  Top  := Field.FieldY;
+  if Assigned(Parent) then
+    Width := TDesignFrame(Parent).Canvas.TextWidth('W') * Field.FieldLength
+  else
+    Width := 8 * Field.FieldLength;
+  VariableLabel.Caption := Field.VariableLabel;
+  VariableLabel.Left := Field.LabelX;
+  VariableLabel.Top  := Field.LabelY;
+  UpdateFieldNameLabel;
 end;
 
 procedure TFieldEdit.DoStartDock(var DragObject: TDragObject);
@@ -269,11 +316,20 @@ begin
   end
 end;
 
-constructor TFieldLabel.Create(AField: TEpiField; AOwner: TComponent);
+procedure TFieldLabel.SetField(const AValue: TEpiField);
+begin
+  FField := AValue;
+  Field.OnChange := @OnFieldChange;
+
+  Top := Field.FieldY;
+  Left := Field.FieldX;
+
+  Caption := Field.VariableLabel;
+end;
+
+constructor TFieldLabel.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FField := AField;
-  FField.OnChange := @OnFieldChange;
 end;
 
 destructor TFieldLabel.Destroy;

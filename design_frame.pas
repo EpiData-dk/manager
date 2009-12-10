@@ -8,7 +8,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList,
   Controls, Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, UEpiDataFile,
-  FieldEdit, Design_Field_Frame, AVL_Tree, LCLType, design_autoalign_form;
+  FieldEdit, Design_Field_Frame, AVL_Tree, LCLType, design_autoalign_form,
+  UDataFileTypes;
 
 type
 
@@ -106,8 +107,8 @@ type
     FOldCaption: String;
     ClickedField: TFieldEdit;
     ClickedLabel: TFieldLabel;
-    function NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldEdit;
-    function NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer; ShowForm: Boolean = true): TFieldLabel;
+    function NewFieldEdit(AField: TEpiField): TFieldEdit;
+    function NewQuestionLabel(AField: TEpiField): TFieldLabel;
     procedure SetModified(const AValue: Boolean);
     procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
@@ -135,7 +136,7 @@ type
 implementation
 
 uses
-  main, graphics, UDataFileTypes,
+  main, graphics,
   types, math, settings, design_label_form,
   UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils;
 
@@ -194,13 +195,12 @@ end;
 
 { TDesignFrame }
 
-function TDesignFrame.NewFieldEdit(AField: TEpiField; ATop, ALeft: Integer;
-  ShowForm: Boolean): TFieldEdit;
+function TDesignFrame.NewFieldEdit(AField: TEpiField): TFieldEdit;
 var
   FieldForm: TFieldCreateForm;
   Pt: TPoint;
 begin
-  Result := TFieldEdit.Create(AField, Self);
+  Result := TFieldEdit.Create(Self);
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
@@ -210,93 +210,33 @@ begin
   Result.AutoSize := false;
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
-  Result.Left := ALeft;
-  Result.Top := ATop;
   Result.Parent := Self;
+  Result.Field := AField;
 
   if VertScrollBar.Visible then
     VertScrollBar.Position := VertScrollBar.Range - VertScrollBar.Page;
 
-  FieldForm := nil;
-  if ShowForm then
-  begin
-    FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, AField.FieldType);
-    // The IFDEF is needed since scrollbar handling (apparently) is different on windows and linux/mac.
-    Pt := ClientToScreen(Point(ALeft, ATop{$IFNDEF WINDOWS} - VertScrollBar.Position{$ENDIF}));
-    FieldForm.Top := Min(Pt.Y, Screen.Height - FieldForm.Height - 5);
-    FieldForm.Left := Min(Pt.X, Screen.Width - FieldForm.Width - 5);
-
-    if FieldForm.ShowModal = mrCancel then
-    begin
-      FreeAndNil(Result);
-      FreeAndNil(FieldForm);
-      Exit;
-    end;
-
-    with Result do
-    begin
-      Field.FieldName       := FieldForm.FieldNameEdit.Text;
-      Field.VariableLabel   := FieldForm.LabelEdit.Text;
-      Field.FieldLength     := StrToInt(FieldForm.FieldLengthEdit.Text);
-      if Field.FieldType = ftFloat then
-        Field.FieldDecimals := StrToInt(FieldForm.FieldDecimalSizeEdit.Text);
-      Field.FieldX          := ALeft;
-      Field.FieldY          := ATop;
-
-      Field.LabelX          := ALeft - (VariableLabel.Width + 5);
-      Field.LabelY          := ATop + (Height - VariableLabel.Height);
-    end;
-    Repaint;
-  end;
-
   ComponentYTree.Add(Result);
   ComponentXTree.Add(Result);
-
-  if Assigned(FieldForm) then FreeAndNil(FieldForm);
 end;
 
-function TDesignFrame.NewQuestionLabel(AField: TEpiField; ATop, ALeft: Integer;
-  ShowForm: Boolean): TFieldLabel;
+function TDesignFrame.NewQuestionLabel(AField: TEpiField): TFieldLabel;
 var
   LabelForm: TCreateLabelForm;
   Pt: TPoint;
 begin
-  Result := TFieldLabel.Create(AField, Self);
+  Result := TFieldLabel.Create(Self);
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
   Result.OnEndDock := @EndLabelDock;
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
-  Result.Left := ALeft;
-  Result.Top := ATop;
   Result.Parent := Self;
-
-  LabelForm := nil;
-  if ShowForm then
-  begin
-    LabelForm := TCreateLabelForm.Create(Self, ActiveDatafile);
-    Pt := ClientToScreen(Point(ALeft, ATop));
-    LabelForm.Top := Min(Pt.Y, Screen.Height - LabelForm.Height - 5);
-    LabelForm.Left := Min(Pt.X, Screen.Width - LabelForm.Width - 5);
-
-    if LabelForm.ShowModal = mrCancel then
-    begin
-      FreeAndNil(Result);
-      exit;
-    end;
-
-    Result.Field.FieldName := LabelForm.GetFieldName;
-    Result.Field.VariableLabel := LabelForm.LabelEdit.Text;
-    Result.Field.FieldX := ALeft;
-    Result.Field.FieldY := ATop;
-    Result.Field.LabelX := ALeft;
-    Result.Field.LabelY := ATop;
-  end;
+  Result.Field := AField;
 
   ComponentYTree.Add(Result);
   ComponentXTree.Add(Result);
-  if Assigned(Labelform) then FreeAndNil(LabelForm);
 end;
 
 procedure TDesignFrame.SetModified(const AValue: Boolean);
@@ -506,7 +446,7 @@ begin
       MaxFieldNameWidth     := Max(MaxFieldNameWidth, FieldNameLabel.Width);
     end;
 
-    if Abs(PrevTop - TControl(TreeNode.Data).Top) > (TControl(TreeNode.Data).Height + ManagerSettings.SpaceBetweenFields) then
+    if PrevTop <> TControl(TreeNode.Data).Top then
       Inc(FieldCount);
     PrevTop := TControl(TreeNode.Data).Top;
 
@@ -516,8 +456,6 @@ begin
     TreeNode := ComponentYTree.FindSuccessor(TreeNode);
   end;
   MinY := Max(FieldToolBar.Height + 5, MinY);
-  if FieldCount <= 2 then
-    FieldCount := ComponentYTree.Count;
 
   // Spacing between "top" point of TEditFields, adjusted for overlapping components.
   Spacing := Max((MaxY - MinY) div (FieldCount - 1), ActiveControl.Height + ManagerSettings.SpaceBetweenFields);
@@ -530,6 +468,7 @@ begin
   NewYTree := TAVLTree.Create(@YCmp);
   NewXTree := TAVLTree.Create(@XCmp);
   TreeNode := ComponentYTree.FindLowest;
+  {TODO: Udtag TreeNode med det samme - den giver problemer når værdier opdateres "live".}
   while Assigned(TreeNode) do
   begin
     if (TControl(TreeNode.Data) is TFieldEdit) then
@@ -543,16 +482,16 @@ begin
       end;
       if AlignProps.EqualVertSpace then
       begin
-        if Abs(PrevTop - Top) > (Height + ManagerSettings.SpaceBetweenFields) then
+        if PrevTop = Top then
           Dec(FieldNo);
         PrevTop := Top;
         Field.FieldY := MinY + FieldNo * Spacing;
         Field.LabelY := Field.FieldY + (Height - VariableLabel.Height);
       end;
       case AlignProps.LabelsAlign of
-        alLeft: Field.LabelX := Field.FieldX - (MaxVariableLabelWidth + 5);
+        alLeft:  Field.LabelX := Field.FieldX - (MaxVariableLabelWidth + 5);
         alRight: Field.LabelX := Field.FieldX - (VariableLabel.Width + 5);
-        alNone: Field.LabelX := Field.LabelX - Dx;
+        alNone:  Field.LabelX := Field.LabelX - Dx;
       end;
     end;
 
@@ -780,6 +719,7 @@ begin
   fs.free;
 end;
 
+
 procedure TDesignFrame.FrameDockDrop(Sender: TObject; Source: TDragDockObject;
   X, Y: Integer);
 var
@@ -962,22 +902,64 @@ procedure TDesignFrame.FrameMouseDown(Sender: TObject; Button: TMouseButton;
 var
   TmpField: TEpiField;
   Ctrl: TControl;
+  CreateForm: TForm;
+  Pt: TPoint;
 begin
   if Button <> mbLeft then exit;
   if ActiveButton = SelectorButton then Exit;
 
-  TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDatafile.Size);
-  if TmpField.FieldType = ftQuestion then
-    Ctrl := NewQuestionLabel(TmpField, Y, X)
-  else
-    Ctrl := NewFieldEdit(TmpField, Y, X);
-  if Assigned(Ctrl) then
-  begin
+  CreateForm := nil;
+  try
+    // The IFDEF is needed since scrollbar handling (apparently) is different on windows and linux/mac.
+    Pt := ClientToScreen(Point(X, Y{$IFNDEF WINDOWS} - VertScrollBar.Position{$ENDIF}));
+
+    if ActiveButton = LabelFieldBtn then
+    begin
+      CreateForm := TCreateLabelForm.Create(Self, ActiveDataFile);
+      CreateForm.Top := Min(Pt.Y, Screen.Height - CreateForm.Height - 5);
+      CreateForm.Left := Min(Pt.X, Screen.Width - CreateForm.Width - 5);
+      if CreateForm.ShowModal = mrCancel then
+        exit;
+
+      TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDataFile.Size);
+      with TmpField do
+      begin
+        FieldName := TCreateLabelForm(CreateForm).GetFieldName;
+        VariableLabel := TCreateLabelForm(CreateForm).LabelEdit.Text;
+        FieldX := X;
+        FieldY := Y;
+        LabelX := X;
+        LabelY := Y;
+      end;
+      ActiveDatafile.AddField(TmpField);
+      NewQuestionLabel(TmpField);
+    end else begin
+      CreateForm := TFieldCreateForm.Create(Self, ActiveDatafile, TFieldType(ActiveButton.Tag));
+      CreateForm.Top := Min(Pt.Y, Screen.Height - CreateForm.Height - 5);
+      CreateForm.Left := Min(Pt.X, Screen.Width - CreateForm.Width - 5);
+      if CreateForm.ShowModal = mrCancel then
+        Exit;
+
+      TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDataFile.Size);
+      with TmpField do
+      begin
+        FieldName       := TFieldCreateForm(CreateForm).FieldNameEdit.Text;
+        VariableLabel   := TFieldCreateForm(CreateForm).LabelEdit.Text;
+        FieldLength     := StrToInt(TFieldCreateForm(CreateForm).FieldLengthEdit.Text);
+        if FieldType = ftFloat then
+          FieldDecimals := StrToInt(TFieldCreateForm(CreateForm).FieldDecimalSizeEdit.Text);
+        FieldX          := X;
+        FieldY          := Y;
+      end;
+      ActiveDatafile.AddField(TmpField);
+
+      NewFieldEdit(TmpField);
+    end;
     Modified := true;
-    ActiveDatafile.AddField(TmpField);
-  end else
-    FreeAndNil(TmpField);
-  ToolBtnClick(SelectorButton);
+    ToolBtnClick(SelectorButton);
+  finally
+    if Assigned(CreateForm) then FreeAndNil(CreateForm);
+  end;
 end;
 
 procedure TDesignFrame.NewOtherFieldClick(Sender: TObject);
@@ -999,7 +981,7 @@ var
   Pt: TPoint;
   AutoAlignProps: TAutoAlignRecord;
 begin
-  Dlg := TOpenDialog.Create(nil);
+{  Dlg := TOpenDialog.Create(nil);
   Dlg.Filter := GetEpiDialogFilter(True, True, True, True, False, True, True,
     True, True, False);
 
@@ -1034,7 +1016,7 @@ begin
   if ActiveDatafile.DatafileType <> dftEpiDataXml then
     AutoAlignFields(TmpEdit, AutoAlignProps);
 
-  Modified := true;
+  Modified := true;  }
 end;
 
 procedure TDesignFrame.FrameUnDock(Sender: TObject; Client: TControl;
@@ -1150,21 +1132,22 @@ begin
     for i := 0 to ActiveDatafile.NumFields - 1 do
     begin
       TmpField := ActiveDatafile[i];
-{      if ActiveDataFile.DatafileType <> dftEpiDataXml then
-        Pt := FindNewAutoControlPostion
-      else            }
-        Pt := Point(TmpField.FieldX, TmpField.FieldY);
-      if TmpField.FieldType = ftQuestion then
+      if ActiveDataFile.DatafileType <> dftEpiDataXml then
       begin
-        TmpLabel := NewQuestionLabel(TmpField, Pt.Y, Pt.X, false);
-//        TmpLabel.
-      end else begin
-        if not Assigned(TmpEdit) then
-          TmpEdit := NewFieldEdit(TmpField, Pt.Y, Pt.X, false)
-        else
-          NewFieldEdit(TmpField, Pt.Y, Pt.X, false);
-//        TmpEdit.
+        Pt := FindNewAutoControlPostion;
+        TmpField.FieldX := Pt.X;
+        TmpField.FieldY := Pt.Y;
+        TmpField.LabelX := 0;
+        TmpField.LabelY := 0;
       end;
+
+      if TmpField.FieldType = ftQuestion then
+        NewQuestionLabel(TmpField)
+      else
+        if not Assigned(TmpEdit) then
+          TmpEdit := NewFieldEdit(TmpField)
+        else
+          NewFieldEdit(TmpField);
     end;
 
     MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
