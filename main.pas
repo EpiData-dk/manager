@@ -14,6 +14,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    NewDesignFormAction: TAction;
     ClosePageAction: TAction;
     EditMenu: TMenuItem;
     FeatureInfoLabel: TLabel;
@@ -48,6 +49,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure GCPbtnClick(Sender: TObject);
+    procedure NewDesignFormActionExecute(Sender: TObject);
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
@@ -145,6 +147,34 @@ end;
 procedure TMainForm.GCPbtnClick(Sender: TObject);
 begin
   FeatureInfoLabel.Caption := 'GCP not ready yet';
+end;
+
+procedure TMainForm.NewDesignFormActionExecute(Sender: TObject);
+var
+  TabSheet: TTabSheet;
+  Frame: TDesignFrame;
+begin
+  FeatureInfoLabel.Caption := 'Add fields: Click toolbar';
+  TabSheet := TTabSheet.Create(PageControl1);
+  TabSheet.PageControl := PageControl1;
+  TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
+  TabSheet.Caption := 'Untitled';
+  if TabNameCount > 1 then
+    TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount) + ')';
+  PageControl1.ActivePage := TabSheet;
+
+  if PageControl1.PageCount >= 1 then
+  begin
+    PageControl1.ShowTabs := true;
+    PageControl1.Options := PageControl1.Options + [nboShowCloseButtons];
+    PageControl1.OnCloseTabClicked := @CloseTab;
+  end;
+  Frame := TDesignFrame.Create(TabSheet);
+  Frame.Name := 'Frame' + IntToStr(TabNameCount);
+  Frame.Align := alClient;
+  Frame.Parent := TabSheet;
+
+  Inc(TabNameCount);
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);

@@ -1,8 +1,8 @@
 object MainForm: TMainForm
   Cursor = crIBeam
-  Left = 327
+  Left = 257
   Height = 655
-  Top = 213
+  Top = 69
   Width = 975
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
@@ -87,7 +87,7 @@ object MainForm: TMainForm
     end
     object FeatureInfoLabel: TLabel
       Left = 8
-      Height = 14
+      Height = 16
       Top = 16
       Width = 95
       Caption = 'Click Button to Start'
@@ -276,6 +276,11 @@ object MainForm: TMainForm
         'CTRL+W'
       )
       ShortCut = 16499
+    end
+    object NewDesignFormAction: TAction
+      Caption = 'New Design Form'
+      OnExecute = NewDesignFormActionExecute
+      ShortCut = 16462
     end
   end
 end

@@ -930,9 +930,6 @@ begin
   if Button <> mbLeft then exit;
   if ActiveButton = SelectorButton then Exit;
 
-  if Assigned(Sender) and (ssShift in Shift) then
-    Exclude(Shift, ssShift);
-
   CreateForm := nil;
   try
     // The IFDEF is needed since scrollbar handling (apparently) is different on windows and linux/mac.
@@ -959,23 +956,29 @@ begin
       ActiveDatafile.AddField(TmpField);
       NewQuestionLabel(TmpField);
     end else begin
-      CreateForm := TFieldCreateForm.Create(Self, ActiveDatafile, TFieldType(ActiveButton.Tag));
-      CreateForm.Top := Min(Pt.Y, Screen.Height - CreateForm.Height - 5);
-      CreateForm.Left := Min(Pt.X, Screen.Width - CreateForm.Width - 5);
-      if CreateForm.ShowModal = mrCancel then
-        Exit;
+      if not (ssShift in Shift) then
+      begin
+        CreateForm := TFieldCreateForm.Create(Self, ActiveDatafile, TFieldType(ActiveButton.Tag));
+        CreateForm.Top := Min(Pt.Y, Screen.Height - CreateForm.Height - 5);
+        CreateForm.Left := Min(Pt.X, Screen.Width - CreateForm.Width - 5);
+        if CreateForm.ShowModal = mrCancel then
+          Exit;
+      end;
 
       TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDataFile.Size);
-      with TmpField do
+      if (ssShift in Shift) then
+        TFieldCreateForm.AutoCreateField(ActiveDataFile, TmpField)
+      else with TmpField do
       begin
         FieldName       := TFieldCreateForm(CreateForm).FieldNameEdit.Text;
         VariableLabel   := TFieldCreateForm(CreateForm).LabelEdit.Text;
         FieldLength     := StrToInt(TFieldCreateForm(CreateForm).FieldLengthEdit.Text);
         if FieldType = ftFloat then
           FieldDecimals := StrToInt(TFieldCreateForm(CreateForm).FieldDecimalSizeEdit.Text);
-        FieldX          := X;
-        FieldY          := Y;
       end;
+      TmpField.FieldX := X;
+      TmpField.FieldY := Y;
+
       ActiveDatafile.AddField(TmpField);
 
       NewFieldEdit(TmpField);

@@ -105,7 +105,9 @@
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
-      <SmartLinkUnit Value="True"/>
+      <Checks>
+        <IOChecks Value="True"/>
+      </Checks>
       <Optimizations>
         <OptimizationLevel Value="0"/>
       </Optimizations>
@@ -113,8 +115,8 @@
     <Linking>
       <Debugging>
         <GenerateDebugInfo Value="True"/>
+        <GenerateDwarf Value="True"/>
       </Debugging>
-      <LinkSmart Value="True"/>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>

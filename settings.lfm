@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 925
+  Left = 702
   Height = 265
-  Top = 311
+  Top = 250
   Width = 248
   ActiveControl = PrefixEdit
   BorderIcons = []

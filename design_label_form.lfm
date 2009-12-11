@@ -1,7 +1,7 @@
 object CreateLabelForm: TCreateLabelForm
-  Left = 651
+  Left = 564
   Height = 109
-  Top = 457
+  Top = 352
   Width = 381
   ActiveControl = LabelEdit
   BorderIcons = [biSystemMenu]

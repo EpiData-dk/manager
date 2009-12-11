@@ -38,6 +38,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; DataFile: TEpiDataFile; FieldType: TFieldType; NewField: boolean = true);
+    class procedure AutoCreateField(DataFile: TEpiDataFile; aField: TEpiField);
     procedure ReadField(AField: TEpiField);
     procedure WriteField(AField: TEpiField);
     property OldFieldName: string Read FOldFieldName write FOldFieldName;
@@ -51,6 +52,7 @@ uses
 
 var
   LastFieldNo: Integer = 1;
+  OldLength, OldDecimals: Integer;
 
 { TFieldCreateForm }
 
@@ -114,6 +116,8 @@ begin
   if L <= 0 then
     CanClose := false;
 
+  OldLength := L;
+
   // - FieldDecimals (no need to ut8-handle this. It's always plain ASCII.
   if not FieldDecimalSizeEdit.Enabled then exit;
   S := Trim(FieldDecimalSizeEdit.Text);
@@ -124,6 +128,9 @@ begin
     CanClose := false;
   if D >= (L - 1) then
     CanClose := false;
+
+  if not CanClose then exit;
+  OldDecimals := D;
 end;
 
 procedure TFieldCreateForm.CloseActionExecute(Sender: TObject);
@@ -175,6 +182,22 @@ begin
   FieldDecimalSizeEdit.Visible := true;
   FieldDecimalSizeEdit.Enabled := true;
   FieldDecimalSizeEdit.Text    := '2';
+end;
+
+class procedure TFieldCreateForm.AutoCreateField(DataFile: TEpiDataFile;
+  aField: TEpiField);
+begin
+  if not Assigned(aField) then exit;
+  if ManagerSettings.FieldNamePrefix = '' then exit;
+
+  aField.FieldLength := OldLength;
+  if aField.FieldType = ftFloat then
+    aField.FieldDecimals := OldDecimals;
+
+  repeat
+    aField.FieldName := ManagerSettings.FieldNamePrefix + IntToStr(LastFieldNo);
+    inc(LastFieldNo);
+  until not DataFile.FieldExists(aField.FieldName);
 end;
 
 procedure TFieldCreateForm.ReadField(AField: TEpiField);
