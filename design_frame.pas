@@ -121,6 +121,7 @@ type
     procedure AutoAlignFields(ActiveControl: TControl; AlignProps: TAutoAlignRecord);
     function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
     procedure RemoveDeadSpace;
+    procedure NewShortCutFieldAction(aBtn: TToolButton);
   protected
     property  ComponentYTree: TAVLTree read FComponentYTree;
     property  ComponentXTree: TAVLTree read FComponentXTree;
@@ -468,13 +469,13 @@ begin
   NewYTree := TAVLTree.Create(@YCmp);
   NewXTree := TAVLTree.Create(@XCmp);
   TreeNode := ComponentYTree.FindLowest;
-  {TODO: Udtag TreeNode med det samme - den giver problemer når værdier opdateres "live".}
   while Assigned(TreeNode) do
   begin
     if (TControl(TreeNode.Data) is TFieldEdit) then
     with TFieldEdit(TreeNode.Data) do
     begin
       // Field positioning.
+      Dx := 0;
       if AlignProps.DefaultAlign then
       begin
         Dx := (Field.FieldX - AdjustedFieldLeft);
@@ -544,7 +545,7 @@ var
   NewYTree, NewXTree: TAVLTree;
   Curr, Old, Prev, Next: TAVLTreeNode;
   CurField, NextField, PrevField, OldField: TEpiField;
-  Dy, Ly: Integer;
+  Dy, Zy, Ly: Integer;
 begin
   NewYTree := TAVLTree.Create(@YCmp);
   NewXTree := TAVLTree.Create(@XCmp);
@@ -580,18 +581,21 @@ begin
           NextField := TFieldEdit(Next.Data).Field
         else
           NextField := TFieldLabel(Next.Data).Field;
-        Dy := TControl(Next.Data).Height + ManagerSettings.SpaceBetweenFields;
+        Zy := TControl(Prev.Data).Height + ManagerSettings.SpaceBetweenFields;
 
-        if (NextField.FieldY > (OldField.FieldY + Dy)) or
+        if (NextField.FieldY >= (OldField.FieldY + Zy)) or
            (NextField.FieldX < PrevField.FieldX) then
         begin
-          NewYTree.Remove(Prev.Data);
-          NewXTree.Remove(Prev.Data);
+          if (Old <> Prev) then
+          begin
+            NewYTree.Remove(Prev.Data);
+            NewXTree.Remove(Prev.Data);
+          end;
           Curr := Prev;
           Break;
         end;
-        Ly := NextField.FieldY - (CurField.FieldY + Dy);
-        NextField.FieldY := CurField.FieldY + Dy;
+        Ly := NextField.FieldY - (CurField.FieldY + Zy);
+        NextField.FieldY := CurField.FieldY + Zy;
         NextField.LabelY := NextField.LabelY - Abs(Ly);
 
         NewYTree.Add(Next.Data);
@@ -603,8 +607,11 @@ begin
       Ly := OldField.FieldY - (CurField.FieldY + Dy);
       OldField.FieldY := CurField.FieldY + Dy;
       OldField.LabelY := OldField.LabelY - Abs(Ly);
-      NewYTree.Add(Old.Data);
-      NewXTree.Add(Old.Data);
+      if (Old <> Curr) then
+      begin
+        NewYTree.Add(Old.Data);
+        NewXTree.Add(Old.Data);
+      end;
       Continue;
     end;
 
@@ -616,10 +623,25 @@ begin
       Next := ComponentYTree.FindSuccessor(Next);
   end;
 
+  if not Assigned(NewYTree.Find(Curr.Data)) then
+  begin
+    NewYTree.Add(Curr.Data);
+    NewXTree.Add(Curr.Data);
+  end;
+
   FreeAndNil(FComponentYTree);
   FComponentYTree := NewYTree;
   FreeAndNil(FComponentXTree);
   FComponentXTree := NewXTree;
+end;
+
+procedure TDesignFrame.NewShortCutFieldAction(aBtn: TToolButton);
+var
+  Pt: TPoint;
+begin
+  ActiveButton := aBtn;
+  Pt := FindNewAutoControlPostion;
+  FrameMouseDown(nil, mbLeft, GetKeyShiftState, Pt.X, Pt.Y);
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent);
@@ -795,7 +817,7 @@ begin
 
   if Res = mrCancel then Exit;
 
-  if AutoAlignRes.EqualVertSpace then
+  if AutoAlignRes.RemoveEmptySpace then
     RemoveDeadSpace;
 
   if AutoAlignRes.DefaultAlign and (not Assigned(ClickedField)) then
@@ -908,6 +930,9 @@ begin
   if Button <> mbLeft then exit;
   if ActiveButton = SelectorButton then Exit;
 
+  if Assigned(Sender) and (ssShift in Shift) then
+    Exclude(Shift, ssShift);
+
   CreateForm := nil;
   try
     // The IFDEF is needed since scrollbar handling (apparently) is different on windows and linux/mac.
@@ -981,7 +1006,7 @@ var
   Pt: TPoint;
   AutoAlignProps: TAutoAlignRecord;
 begin
-{  Dlg := TOpenDialog.Create(nil);
+  Dlg := TOpenDialog.Create(nil);
   Dlg.Filter := GetEpiDialogFilter(True, True, True, True, False, True, True,
     True, True, False);
 
@@ -993,30 +1018,25 @@ begin
   Importer.OnClipBoardRead := @MainForm.ReadClipBoard;
   Importer.Import(Dlg.FileName, TmpDF, dftNone);
 
-  Pt := FindNewAutoControlPostion;
+  GetLowestControlPosition(TmpEdit);
 
-  TmpEdit := nil;
   for i := 0 to TmpDF.NumFields - 1 do
   begin
+    Pt := FindNewAutoControlPostion;
     TmpField := TmpDF[i].Clone(ActiveDataFile, false);
     ActiveDataFile.AddField(TmpField);
+    TmpField.FieldX := Pt.X;
+    TmpField.FieldY := Pt.Y;
+    TmpField.LabelX := 0;
+    TmpField.LabelY := 0;
+
     if TmpField.FieldType = ftQuestion then
-      NewQuestionLabel(TmpField, TmpField.FieldY + Pt.Y, TmpField.FieldX, false)
+      NewQuestionLabel(TmpField)
     else
-      if not Assigned(TmpEdit) then
-        TmpEdit := NewFieldEdit(TmpField, TmpField.FieldY + Pt.Y, TmpField.FieldX, false)
-      else
-        NewFieldEdit(TmpField, TmpField.FieldY + Pt.Y, TmpField.FieldX, false);
+      NewFieldEdit(TmpField);
   end;
 
-  AutoAlignProps.DefaultAlign := true;
-  AutoAlignProps.LabelsAlign := alLeft;
-  AutoAlignProps.EqualVertSpace := true;
-  AutoAlignProps.RemoveEmptySpace := false;
-  if ActiveDatafile.DatafileType <> dftEpiDataXml then
-    AutoAlignFields(TmpEdit, AutoAlignProps);
-
-  Modified := true;  }
+  Modified := true;
 end;
 
 procedure TDesignFrame.FrameUnDock(Sender: TObject; Client: TControl;
@@ -1029,66 +1049,38 @@ begin
 end;
 
 procedure TDesignFrame.NewDMYFieldActionExecute(Sender: TObject);
-var
-  Pt: TPoint;
 begin
-  ActiveButton := DMYFieldBtn;
-  Pt := FindNewAutoControlPostion;
-  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+  NewShortCutFieldAction(DMYFieldBtn);
 end;
 
 procedure TDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
-var
-  Pt: TPoint;
 begin
-  ActiveButton := FloatFieldBtn;
-  Pt := FindNewAutoControlPostion;
-  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+  NewShortCutFieldAction(FloatFieldBtn);
 end;
 
 procedure TDesignFrame.NewIntFieldActionExecute(Sender: TObject);
-var
-  Pt: TPoint;
 begin
-  ActiveButton := IntFieldBtn;
-  Pt := FindNewAutoControlPostion;
-  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+  NewShortCutFieldAction(IntFieldBtn);
 end;
 
 procedure TDesignFrame.NewLabelFieldActionExecute(Sender: TObject);
-var
-  Pt: TPoint;
 begin
-  ActiveButton := LabelFieldBtn;
-  Pt := FindNewAutoControlPostion;
-  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+  NewShortCutFieldAction(LabelFieldBtn);
 end;
 
 procedure TDesignFrame.NewMDYFieldActionExecute(Sender: TObject);
-var
-  Pt: TPoint;
 begin
-  ActiveButton := MDYFieldBtn;
-  Pt := FindNewAutoControlPostion;
-  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+  NewShortCutFieldAction(MDYFieldBtn);
 end;
 
 procedure TDesignFrame.NewStringFieldActionExecute(Sender: TObject);
-var
-  Pt: TPoint;
 begin
-  ActiveButton := StringFieldBtn;
-  Pt := FindNewAutoControlPostion;
-  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+  NewShortCutFieldAction(StringFieldBtn);
 end;
 
 procedure TDesignFrame.NewYMDFieldActionExecute(Sender: TObject);
-var
-  Pt: TPoint;
 begin
-  ActiveButton := YMDFieldBtn;
-  Pt := FindNewAutoControlPostion;
-  FrameMouseDown(nil, mbLeft, [], Pt.X, Pt.Y);
+  NewShortCutFieldAction(YMDFieldBtn);
 end;
 
 procedure TDesignFrame.OpenFileActionExecute(Sender: TObject);

@@ -103,12 +103,9 @@
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
-      <LCLWidgetType Value="win32"/>
     </SearchPaths>
     <CodeGeneration>
       <SmartLinkUnit Value="True"/>
-      <TargetCPU Value="i386"/>
-      <TargetOS Value="Win32"/>
       <Optimizations>
         <OptimizationLevel Value="0"/>
       </Optimizations>

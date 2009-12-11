@@ -215,42 +215,63 @@ object DesignFrame: TDesignFrame
       Category = 'New Fields'
       Caption = 'NewIntFieldAction'
       OnExecute = NewIntFieldActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+F2'
+      )
       ShortCut = 113
     end
     object NewFloatFieldAction: TAction
       Category = 'New Fields'
       Caption = 'NewFloatFieldAction'
       OnExecute = NewFloatFieldActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+F3'
+      )
       ShortCut = 114
     end
     object NewStringFieldAction: TAction
       Category = 'New Fields'
       Caption = 'NewStringFieldAction'
       OnExecute = NewStringFieldActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+F4'
+      )
       ShortCut = 115
     end
     object NewLabelFieldAction: TAction
       Category = 'New Fields'
       Caption = 'NewLabelFieldAction'
       OnExecute = NewLabelFieldActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+F5'
+      )
       ShortCut = 116
     end
     object NewDMYFieldAction: TAction
       Category = 'New Fields'
       Caption = 'NewDMYFieldAction'
       OnExecute = NewDMYFieldActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+F6'
+      )
       ShortCut = 117
     end
     object NewMDYFieldAction: TAction
       Category = 'New Fields'
       Caption = 'NewMDYFieldAction'
       OnExecute = NewMDYFieldActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+F7'
+      )
       ShortCut = 118
     end
     object NewYMDFieldAction: TAction
       Category = 'New Fields'
       Caption = 'NewYMDFieldAction'
       OnExecute = NewYMDFieldActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+F8'
+      )
       ShortCut = 119
     end
     object ImportStructureAction: TAction
