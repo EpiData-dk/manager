@@ -1,13 +1,13 @@
 object AutoAlignForm: TAutoAlignForm
   Left = 737
-  Height = 162
+  Height = 165
   Top = 416
   Width = 259
   ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Auto Align'
-  ClientHeight = 162
+  ClientHeight = 165
   ClientWidth = 259
   OnClose = FormClose
   OnCreate = FormCreate
@@ -15,36 +15,36 @@ object AutoAlignForm: TAutoAlignForm
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
-    Height = 162
+    Height = 165
     Top = 0
     Width = 259
     Align = alClient
     BevelInner = bvLowered
     BevelWidth = 2
-    ClientHeight = 162
+    ClientHeight = 165
     ClientWidth = 259
     Color = clSkyBlue
     ParentColor = False
     TabOrder = 0
     object AlignFieldsChk: TCheckBox
       Left = 8
-      Height = 22
+      Height = 17
       Top = 8
-      Width = 235
+      Width = 172
       Caption = 'Default Alignment (One column)'
       TabOrder = 0
     end
     object EqualSpaceChk: TCheckBox
       Left = 8
-      Height = 22
-      Top = 80
-      Width = 156
+      Height = 17
+      Top = 32
+      Width = 116
       Caption = 'Equal Vertical Space'
       OnClick = EqualSpaceChkClick
       TabOrder = 1
     end
     object Button1: TButton
-      Left = 112
+      Left = 8
       Height = 26
       Top = 128
       Width = 67
@@ -54,7 +54,7 @@ object AutoAlignForm: TAutoAlignForm
       TabOrder = 2
     end
     object Button2: TButton
-      Left = 184
+      Left = 112
       Height = 26
       Top = 128
       Width = 69
@@ -65,45 +65,45 @@ object AutoAlignForm: TAutoAlignForm
     end
     object EmptySpaceChkBtn: TCheckBox
       Left = 8
-      Height = 22
-      Top = 104
-      Width = 165
+      Height = 17
+      Top = 57
+      Width = 123
       Caption = 'Remove empty space'
       OnClick = EmptySpaceChkBtnClick
       TabOrder = 4
     end
     object RightAlignRadio: TRadioButton
-      Left = 184
-      Height = 22
-      Top = 56
-      Width = 58
+      Left = 168
+      Height = 17
+      Top = 96
+      Width = 45
       Caption = 'Right'
       TabOrder = 6
       TabStop = False
     end
     object LeftAlignRadio: TRadioButton
       Left = 112
-      Height = 22
-      Top = 56
-      Width = 49
+      Height = 17
+      Top = 96
+      Width = 39
       Caption = 'Left'
       TabOrder = 5
       TabStop = False
     end
     object Label1: TLabel
       Left = 8
-      Height = 18
-      Top = 32
-      Width = 103
+      Height = 14
+      Top = 80
+      Width = 75
       Caption = 'Labels aligned: '
       ParentColor = False
     end
     object KeepAlignRadio: TRadioButton
-      Left = 32
-      Height = 22
-      Top = 56
-      Width = 56
-      Caption = 'Keep'
+      Left = 24
+      Height = 17
+      Top = 96
+      Width = 71
+      Caption = 'No change'
       Checked = True
       State = cbChecked
       TabOrder = 7
