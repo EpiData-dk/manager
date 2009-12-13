@@ -11,7 +11,6 @@
       <AutoCreateForms Value="False"/>
       <TargetFileExt Value=""/>
       <Title Value="EpiData Manager"/>
-      <Icon Value="0"/>
       <UseXPManifest Value="True"/>
     </General>
     <VersionInfo>
@@ -33,14 +32,17 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Minor="2" Release="2" Build="101" Valid="True"/>
+        <PackageName Value="CodeTools"/>
       </Item1>
       <Item2>
-        <PackageName Value="LCL"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Minor="2" Release="2" Build="101" Valid="True"/>
       </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
     </RequiredPackages>
     <Units Count="8">
       <Unit0>
@@ -116,7 +118,8 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <UseLineInfoUnit Value="False"/>
+        <GenerateDebugInfo Value="True"/>
+        <GenerateDwarf Value="True"/>
       </Debugging>
       <Options>
         <Win32>
@@ -125,7 +128,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG1"/>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

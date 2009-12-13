@@ -70,7 +70,7 @@ var
 implementation
 
 uses
-  design_frame, settings, Clipbrd;
+  design_frame, UEpiLog, settings, Clipbrd{, memcheck};
 
 
 { TMainForm }
