@@ -68,7 +68,7 @@ const
     VersionNo: 0;
     MajorRev:  1;
     MinorRev:  1;
-    BuildNo:   2;
+    BuildNo:   3;
   );
 
 

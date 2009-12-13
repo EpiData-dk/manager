@@ -11,12 +11,14 @@
       <AutoCreateForms Value="False"/>
       <TargetFileExt Value=""/>
       <Title Value="EpiData Manager"/>
+      <Icon Value="0"/>
       <UseXPManifest Value="True"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <CurrentMajorRevNr Value="1"/>
-      <CurrentBuildNr Value="1"/>
+      <CurrentMinorRevNr Value="1"/>
+      <CurrentBuildNr Value="3"/>
       <ProjectVersion Value="0.1.0.1"/>
     </VersionInfo>
     <PublishOptions>
@@ -114,8 +116,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <GenerateDwarf Value="True"/>
+        <UseLineInfoUnit Value="False"/>
       </Debugging>
       <Options>
         <Win32>
@@ -124,7 +125,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG"/>
+      <CustomOptions Value="-dEPI_DEBUG1"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

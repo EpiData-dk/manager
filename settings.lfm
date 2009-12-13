@@ -6,7 +6,7 @@ object SettingsForm: TSettingsForm
   ActiveControl = PrefixEdit
   BorderIcons = []
   BorderStyle = bsDialog
-  Caption = 'SettingsForm'
+  Caption = 'Settings'
   ClientHeight = 265
   ClientWidth = 248
   OnCloseQuery = FormCloseQuery
@@ -15,15 +15,15 @@ object SettingsForm: TSettingsForm
   LCLVersion = '0.9.29'
   object Label1: TLabel
     Left = 8
-    Height = 18
+    Height = 14
     Top = 17
-    Width = 73
+    Width = 54
     Caption = 'Field Prefix'
     ParentColor = False
   end
   object PrefixEdit: TEdit
     Left = 168
-    Height = 27
+    Height = 21
     Top = 8
     Width = 75
     TabOrder = 0
@@ -31,11 +31,11 @@ object SettingsForm: TSettingsForm
   object ShowFieldNameChkBox: TCheckBox
     Left = 168
     Height = 22
-    Top = 80
+    Top = 72
     Width = 18
     AutoSize = False
     ParentBidiMode = False
-    TabOrder = 1
+    TabOrder = 3
   end
   object OkBtn: TButton
     Left = 88
@@ -44,7 +44,7 @@ object SettingsForm: TSettingsForm
     Width = 75
     Caption = 'Ok'
     ModalResult = 1
-    TabOrder = 2
+    TabOrder = 5
   end
   object CancelBtn: TButton
     Left = 168
@@ -53,40 +53,40 @@ object SettingsForm: TSettingsForm
     Width = 75
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 3
+    TabOrder = 6
   end
   object Label3: TLabel
     Left = 8
-    Height = 18
+    Height = 14
     Top = 49
-    Width = 139
+    Width = 102
     Caption = 'Default Right Postion'
     ParentColor = False
   end
   object Label2: TLabel
-    Left = 8
-    Height = 18
-    Top = 84
-    Width = 115
+    Left = 7
+    Height = 14
+    Top = 104
+    Width = 83
     Caption = 'Show Fieldnames'
     ParentColor = False
   end
   object DefaultRightPosEdit: TMaskEdit
     Left = 168
-    Height = 27
+    Height = 21
     Top = 40
     Width = 75
     CharCase = ecNormal
     MaxLength = 3
-    TabOrder = 4
+    TabOrder = 1
     EditMask = '999;1;_'
     Text = '   '
     SpaceChar = '_'
   end
   object FieldNamingGroup: TRadioGroup
     Left = 8
-    Height = 81
-    Top = 144
+    Height = 64
+    Top = 128
     Width = 235
     AutoFill = True
     Caption = 'Field Naming'
@@ -98,25 +98,26 @@ object SettingsForm: TSettingsForm
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 62
+    ClientHeight = 46
     ClientWidth = 231
-    TabOrder = 5
+    TabOrder = 4
     object FieldNamingAutoRadio: TRadioButton
       Left = 6
-      Height = 25
+      Height = 17
       Top = 6
       Width = 219
       Caption = 'Automatic'
-      Checked = True
-      State = cbChecked
       TabOrder = 0
+      TabStop = False
     end
     object FieldNamingFirstWordRadio: TRadioButton
       Left = 6
-      Height = 25
-      Top = 31
+      Height = 17
+      Top = 23
       Width = 219
       Caption = 'First word'
+      Checked = True
+      State = cbChecked
       TabOrder = 1
       TabStop = False
     end
@@ -124,16 +125,16 @@ object SettingsForm: TSettingsForm
   object SnapFieldsChkBox: TCheckBox
     Left = 168
     Height = 22
-    Top = 109
+    Top = 96
     Width = 18
     AutoSize = False
-    TabOrder = 6
+    TabOrder = 2
   end
   object Label4: TLabel
-    Left = 8
-    Height = 18
-    Top = 113
-    Width = 75
+    Left = 7
+    Height = 14
+    Top = 80
+    Width = 55
     Caption = 'Snap Fields'
     ParentColor = False
   end
