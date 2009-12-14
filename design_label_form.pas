@@ -6,16 +6,17 @@ unit design_label_form;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, StdCtrls, UEpiDataFile;
+  Classes, SysUtils, LResources, Forms, StdCtrls, ExtCtrls, UEpiDataFile;
 
 type
 
   { TCreateLabelForm }
   TCreateLabelForm = class(TForm)
     CancelBtn: TButton;
-    OkBtn: TButton;
-    LabelEdit: TEdit;
     Label1: TLabel;
+    LabelEdit: TEdit;
+    OkBtn: TButton;
+    Panel1: TPanel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   private
     { private declarations }

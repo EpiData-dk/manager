@@ -55,7 +55,7 @@ type
 var
   ManagerSettings: TManagerSettings = (
     FieldNamePrefix:       'V';
-    FieldNamingStyle:      fnAuto;
+    FieldNamingStyle:      fnFirstWord;
     SpaceBetweenFields:    10;
     SnappingThresHold:     10;
     DefaultRightPostion:   200;

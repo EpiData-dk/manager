@@ -6,7 +6,7 @@ object MainForm: TMainForm
   Width = 975
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 636
+  ClientHeight = 633
   ClientWidth = 975
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
@@ -24,7 +24,7 @@ object MainForm: TMainForm
     TabOrder = 0
     object DesignBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 128
+      Left = 8
       Height = 28
       Hint = 'Define new data structures'#13#10'Modify existing data structures'#13#10'   rename fields'#13#10'   extend field types'#13#10'  add fields to files with data (no data loss)'#13#10'  edit field labels'#13#10'Add text to entry form'#13#10'Reorder and re-align fields'
       Top = 8
@@ -41,7 +41,7 @@ object MainForm: TMainForm
     end
     object MetaDataBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 237
+      Left = 144
       Height = 28
       Hint = 'Add Metadata and Controls'#13#10'value labels, study label etc'#13#10'jumps, goto,  colour etc'#13#10'backup during entry etc'
       Top = 8
@@ -58,7 +58,7 @@ object MainForm: TMainForm
     end
     object GCPbtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 489
+      Left = 424
       Height = 28
       Hint = 'Tools for Good Clinical Practice (GCP)'#13#10'  Transaction log controls'#13#10'  Inspection reports'#13#10'    '
       Top = 8
@@ -76,7 +76,7 @@ object MainForm: TMainForm
     object ProgressBar1: TProgressBar
       AnchorSideLeft.Control = GCPbtn
       AnchorSideLeft.Side = asrBottom
-      Left = 595
+      Left = 530
       Height = 20
       Top = 10
       Width = 344
@@ -85,24 +85,9 @@ object MainForm: TMainForm
       Step = 1
       TabOrder = 4
     end
-    object FeatureInfoLabel: TLabel
-      Left = 8
-      Height = 15
-      Top = 16
-      Width = 95
-      Caption = 'Click Button to Start'
-      Font.CharSet = ANSI_CHARSET
-      Font.Color = clBlue
-      Font.Height = -11
-      Font.Name = 'Arial'
-      Font.Pitch = fpVariable
-      Font.Quality = fqDraft
-      ParentColor = False
-      ParentFont = False
-    end
     object MaintenanceBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 370
+      Left = 296
       Height = 28
       Hint = 'Remove records marked for deletion (Pack)'#13#10'Adapt width of fields to actual data'#13#10'Backup or encrypt whole systems'#13#10'Validation reports'#13#10'Export data'#13#10'Other tools'
       Top = 8
@@ -121,7 +106,7 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Height = 20
-    Top = 596
+    Top = 593
     Width = 975
     Panels = <    
       item
@@ -140,7 +125,7 @@ object MainForm: TMainForm
   object StatusBar2: TStatusBar
     Left = 0
     Height = 20
-    Top = 616
+    Top = 613
     Width = 975
     Panels = <    
       item
@@ -153,7 +138,7 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 556
+    Height = 553
     Top = 40
     Width = 622
     Align = alClient
@@ -164,12 +149,12 @@ object MainForm: TMainForm
   end
   object Panel1: TPanel
     Left = 622
-    Height = 556
+    Height = 553
     Top = 40
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 556
+    ClientHeight = 553
     ClientWidth = 353
     TabOrder = 4
     Visible = False

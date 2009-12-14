@@ -1,46 +1,61 @@
 object CreateLabelForm: TCreateLabelForm
   Left = 564
-  Height = 109
+  Height = 88
   Top = 352
   Width = 381
-  ActiveControl = LabelEdit
-  BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
-  ClientHeight = 109
+  ActiveControl = Panel1
+  BorderIcons = []
+  BorderStyle = bsNone
+  ClientHeight = 88
   ClientWidth = 381
   OnCloseQuery = FormCloseQuery
   LCLVersion = '0.9.29'
-  object Label1: TLabel
-    Left = 8
-    Height = 18
-    Top = 8
-    Width = 70
-    Caption = 'Label text:'
+  object Panel1: TPanel
+    Left = 0
+    Height = 88
+    Top = 0
+    Width = 381
+    Align = alClient
+    BevelInner = bvLowered
+    BevelWidth = 2
+    Caption = 'Panel1'
+    ClientHeight = 88
+    ClientWidth = 381
+    Color = clSkyBlue
     ParentColor = False
-  end
-  object LabelEdit: TEdit
-    Left = 8
-    Height = 27
-    Top = 32
-    Width = 368
     TabOrder = 0
-  end
-  object CancelBtn: TButton
-    Left = 301
-    Height = 25
-    Top = 72
-    Width = 75
-    Caption = 'Cancel'
-    ModalResult = 2
-    TabOrder = 2
-  end
-  object OkBtn: TButton
-    Left = 216
-    Height = 25
-    Top = 72
-    Width = 75
-    Caption = 'Ok'
-    ModalResult = 1
-    TabOrder = 1
+    object Label1: TLabel
+      Left = 5
+      Height = 14
+      Top = 10
+      Width = 53
+      Caption = 'Label text:'
+      ParentColor = False
+    end
+    object LabelEdit: TEdit
+      Left = 5
+      Height = 21
+      Top = 26
+      Width = 368
+      TabOrder = 1
+    end
+    object OkBtn: TButton
+      Left = 205
+      Height = 25
+      Top = 58
+      Width = 75
+      Caption = 'Ok'
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object CancelBtn: TButton
+      Left = 296
+      Height = 25
+      Top = 58
+      Width = 75
+      Caption = 'Cancel'
+      ModalResult = 2
+      TabOrder = 2
+    end
   end
 end

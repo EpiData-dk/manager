@@ -11,6 +11,7 @@
       <AutoCreateForms Value="False"/>
       <TargetFileExt Value=""/>
       <Title Value="EpiData Manager"/>
+      <Icon Value="0"/>
       <UseXPManifest Value="True"/>
     </General>
     <VersionInfo>
@@ -19,6 +20,10 @@
       <CurrentMinorRevNr Value="1"/>
       <CurrentBuildNr Value="3"/>
       <ProjectVersion Value="0.1.1.3"/>
+      <Language Value="0809"/>
+      <FileDescription Value="Get latest from Http://www.epidata.dk"/>
+      <LegalCopyright Value="EpiData Association, Denmark"/>
+      <ProductName Value="EpiData manager"/>
     </VersionInfo>
     <PublishOptions>
       <Version Value="2"/>
@@ -118,8 +123,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <GenerateDwarf Value="True"/>
+        <UseLineInfoUnit Value="False"/>
       </Debugging>
       <Options>
         <Win32>
@@ -128,7 +132,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG"/>
+      <CustomOptions Value="-dEPI_DEBUG1"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

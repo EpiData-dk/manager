@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, StdCtrls, MaskEdit, ActnList, ExtCtrls,
-  UEpiDataFile, UDataFileTypes;
+  UEpiDataFile, UDataFileTypes, UEpiUtils;
 
 type
 
@@ -24,6 +24,7 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
     LabelEdit: TEdit;
     OkBtn: TButton;
     Panel1: TPanel;
@@ -165,11 +166,16 @@ begin
     ftYMDDate, ftYMDToday:
       begin
         FieldLengthEdit.Text := '10';
-        FieldLengthEdit.Enabled := false;
+        FieldLengthEdit.Visible := false;
+        Label3.Visible:= false ;
+        Height := Height - FieldLengthEdit.Height - 5
       end
   else
     FieldLengthEdit.Text := '2';
   end;
+
+    // show fieldtype:
+    Label4.caption := 'Type: ' + FieldTypeToFieldTypeName(FieldType, nil);
 
   Inc(LastFieldNo);
 
@@ -178,7 +184,9 @@ begin
   if not (FieldType = ftFloat) then exit;
 
   Height := Height + FieldDecimalSizeEdit.Height + 5;
-  Label4.Visible := true;
+  Label4.Caption := 'Decimals';
+  Label5.Visible := true;
+  Label5.Caption := 'Type: Float';
   FieldDecimalSizeEdit.Visible := true;
   FieldDecimalSizeEdit.Enabled := true;
   FieldDecimalSizeEdit.Text    := '2';

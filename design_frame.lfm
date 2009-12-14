@@ -16,8 +16,8 @@ object DesignFrame: TDesignFrame
   ParentShowHint = False
   ShowHint = True
   TabOrder = 0
-  DesignLeft = 874
-  DesignTop = 336
+  DesignLeft = 508
+  DesignTop = 260
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -126,7 +126,7 @@ object DesignFrame: TDesignFrame
     end
     object AutoAlignBtn: TToolButton
       Left = 381
-      Hint = 'Automatically Align Fields'
+      Hint = 'Align Fields (F9)'
       Top = 1
       Caption = 'AutoAlignBtn'
       ImageIndex = 9
@@ -179,6 +179,7 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'ToolButton3'
       ImageIndex = 15
+      ParentShowHint = False
       OnClick = ToolButton3Click
     end
     object ToolButton6: TToolButton
@@ -305,6 +306,11 @@ object DesignFrame: TDesignFrame
       ImageIndex = 16
       OnExecute = SaveFileAsActionExecute
       ShortCut = 24659
+    end
+    object AlignAction: TAction
+      Caption = 'AlignAction'
+      OnExecute = AutoAlignBtnClick
+      ShortCut = 120
     end
   end
   object FieldToolBarImageList: TImageList

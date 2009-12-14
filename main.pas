@@ -7,7 +7,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls, UDataFileTypes;
+  Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls,
+  UDataFileTypes;
 
 type
 
@@ -17,7 +18,6 @@ type
     NewDesignFormAction: TAction;
     ClosePageAction: TAction;
     EditMenu: TMenuItem;
-    FeatureInfoLabel: TLabel;
     MenuItem1: TMenuItem;
     shortIntroItem: TMenuItem;
     MaintenanceBtn: TBitBtn;
@@ -62,6 +62,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     function ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string): TProgressResult;
     procedure ReadClipBoard(ClipBoardLine: TStrings);
+
   end; 
 
 var
@@ -80,7 +81,7 @@ var
   Frame: TFrame;
   TabSheet: TTabSheet;
 begin
-  FeatureInfoLabel.Caption := 'Add fields: Click toolbar';
+  MainForm.StatusBar1.Panels[0].Text := 'Click toolbar to add fields or read files';
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -122,7 +123,7 @@ begin
     end;
   end;
 
-  if TmpMod and (MessageDlg('Dataform modified since last save.' +
+  if TmpMod and (MessageDlg('Dataform was modified since last save.' +
      LineEnding + 'Close Form ?', mtWarning, mbYesNo, 0) = mrNo) then
   begin
     PageControl1.ActivePage := PageControl1.Pages[Idx];
@@ -144,17 +145,13 @@ begin
   {$ENDIF}
 end;
 
-procedure TMainForm.GCPbtnClick(Sender: TObject);
-begin
-  FeatureInfoLabel.Caption := 'GCP not ready yet';
-end;
 
 procedure TMainForm.NewDesignFormActionExecute(Sender: TObject);
 var
   TabSheet: TTabSheet;
   Frame: TDesignFrame;
 begin
-  FeatureInfoLabel.Caption := 'Add fields: Click toolbar';
+  MainForm.StatusBar1.Panels[0].Text := 'Add fields: Click toolbar or read files';
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -177,14 +174,19 @@ begin
   Inc(TabNameCount);
 end;
 
+procedure TMainForm.GCPbtnClick(Sender: TObject);
+begin
+  MainForm.StatusBar1.Panels[0].Text := 'GCP not ready yet';
+end;
+
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
 begin
-  FeatureInfoLabel.Caption := 'Help System Not Ready';
+  MainForm.StatusBar1.Panels[0].Text := 'Help System Not Ready';
 end;
 
 procedure TMainForm.MetaDataBtnClick(Sender: TObject);
 begin
-  FeatureInfoLabel.Caption := 'Not implementet yet';
+  MainForm.StatusBar1.Panels[0].Text := 'Not implementet yet';
 end;
 
 
@@ -263,6 +265,7 @@ begin
     ClipBoardLine.DelimitedText := TmpStr;
   end;
 end;
+
 
 initialization
   {$I main.lrs}

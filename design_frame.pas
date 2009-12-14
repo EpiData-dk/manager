@@ -16,6 +16,7 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    AlignAction: TAction;
     SaveFileAsAction: TAction;
     SaveFileAction: TAction;
     OpenFileAction: TAction;
