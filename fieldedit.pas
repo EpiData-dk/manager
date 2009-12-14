@@ -84,6 +84,7 @@ type
     FField: TEpiField;
     procedure OnFieldChange(Sender: TObject; EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
     procedure SetField(const AValue: TEpiField);
+    procedure UpdateHint(aShow: boolean = true);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -313,7 +314,8 @@ begin
       fceVColTxt:;
       fceVColBg:;
     end;
-  end
+  end;
+  UpdateHint;
 end;
 
 procedure TFieldLabel.SetField(const AValue: TEpiField);
@@ -325,6 +327,22 @@ begin
   Left := Field.FieldX;
 
   Caption := Field.VariableLabel;
+  UpdateHint;
+end;
+
+procedure TFieldLabel.UpdateHint(aShow: boolean);
+begin
+  ShowHint := aShow;
+
+  Hint := Format(
+    'Name: %s' + LineEnding +
+    'Type: %s' + LineEnding +
+    'Length: %d' + LineEnding +
+    'Label: %s' + LineEnding +
+    'X: %d, Y: %d',
+    [Field.FieldName, FieldTypeToFieldTypeName(Field.FieldType, nil),
+     Field.FieldLength, Field.VariableLabel, Field.FieldX, Field.FieldY]
+  );
 end;
 
 constructor TFieldLabel.Create(AOwner: TComponent);

@@ -18,7 +18,7 @@
       <CurrentMajorRevNr Value="1"/>
       <CurrentMinorRevNr Value="1"/>
       <CurrentBuildNr Value="3"/>
-      <ProjectVersion Value="0.1.0.1"/>
+      <ProjectVersion Value="0.1.1.3"/>
     </VersionInfo>
     <PublishOptions>
       <Version Value="2"/>

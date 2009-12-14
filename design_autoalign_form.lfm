@@ -1,117 +1,106 @@
 object AutoAlignForm: TAutoAlignForm
   Left = 737
-  Height = 165
+  Height = 217
   Top = 416
-  Width = 259
+  Width = 251
   ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Auto Align'
-  ClientHeight = 165
-  ClientWidth = 259
+  ClientHeight = 217
+  ClientWidth = 251
   OnClose = FormClose
   OnCreate = FormCreate
   ShowInTaskBar = stNever
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
-    Height = 165
+    Height = 217
     Top = 0
-    Width = 259
+    Width = 251
     Align = alClient
     BevelInner = bvLowered
     BevelWidth = 2
-    ClientHeight = 165
-    ClientWidth = 259
+    ClientHeight = 217
+    ClientWidth = 251
     Color = clSkyBlue
     ParentColor = False
     TabOrder = 0
-    object AlignFieldsChk: TCheckBox
-      Left = 8
-      Height = 17
-      Top = 8
-      Width = 172
-      Caption = 'Default Alignment (One column)'
-      TabOrder = 0
-    end
-    object EqualSpaceChk: TCheckBox
-      Left = 8
-      Height = 17
-      Top = 32
-      Width = 116
-      Caption = 'Equal Vertical Space'
-      OnClick = EqualSpaceChkClick
-      TabOrder = 1
-    end
     object Button1: TButton
-      Left = 8
+      Left = 96
       Height = 26
-      Top = 128
+      Top = 184
       Width = 67
       Caption = 'Ok'
       Color = clWhite
       ModalResult = 1
-      TabOrder = 2
+      TabOrder = 0
     end
     object Button2: TButton
-      Left = 112
+      Left = 176
       Height = 26
-      Top = 128
+      Top = 184
       Width = 69
       Caption = 'Cancel'
       Color = clWhite
       ModalResult = 2
-      TabOrder = 3
+      TabOrder = 1
     end
-    object EmptySpaceChkBtn: TCheckBox
+    object LabelsGroupBox: TRadioGroup
       Left = 8
-      Height = 17
-      Top = 57
-      Width = 123
-      Caption = 'Remove empty space'
-      OnClick = EmptySpaceChkBtnClick
-      TabOrder = 4
-    end
-    object RightAlignRadio: TRadioButton
-      Left = 168
-      Height = 17
-      Top = 96
-      Width = 45
-      Caption = 'Right'
-      TabOrder = 6
-      TabStop = False
-    end
-    object LeftAlignRadio: TRadioButton
-      Left = 112
-      Height = 17
-      Top = 96
-      Width = 39
-      Caption = 'Left'
-      TabOrder = 5
-      TabStop = False
-    end
-    object Label1: TLabel
-      Left = 8
-      Height = 14
+      Height = 96
       Top = 80
-      Width = 75
-      Caption = 'Labels aligned: '
-      ParentColor = False
+      Width = 237
+      AutoFill = True
+      Caption = 'Labels aligned:'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.TopBottomSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 77
+      ClientWidth = 233
+      ItemIndex = 0
+      Items.Strings = (
+        'No Changes'
+        'Left'
+        'Right'
+      )
+      TabOrder = 2
     end
-    object KeepAlignRadio: TRadioButton
-      Left = 24
-      Height = 17
-      Top = 96
-      Width = 71
-      Caption = 'No change'
+    object DefaultAlignRadio: TRadioButton
+      Left = 8
+      Height = 22
+      Top = 8
+      Width = 237
+      Caption = 'Default Alignment (One Column)'
       Checked = True
       State = cbChecked
-      TabOrder = 7
+      TabOrder = 3
+    end
+    object EqualVerticalSpaceRadio: TRadioButton
+      Left = 8
+      Height = 22
+      Top = 32
+      Width = 156
+      Caption = 'Equal Vertical Space'
+      TabOrder = 4
+    end
+    object RemoveEmptySpaceRadio: TRadioButton
+      Left = 8
+      Height = 22
+      Top = 56
+      Width = 166
+      Caption = 'Remove Empty Space'
+      TabOrder = 5
     end
   end
   object ActionList1: TActionList
-    left = 184
-    top = 8
+    left = 176
+    top = 128
     object CancelAction: TAction
       Caption = 'CancelAction'
       OnExecute = CancelActionExecute

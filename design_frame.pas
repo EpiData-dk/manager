@@ -105,8 +105,7 @@ type
     FComponentYTree: TAVLTree;
     FModified: boolean;
     FOldCaption: String;
-    ClickedField: TFieldEdit;
-    ClickedLabel: TFieldLabel;
+    ClickedControl: TControl;
     function NewFieldEdit(AField: TEpiField): TFieldEdit;
     function NewQuestionLabel(AField: TEpiField): TFieldLabel;
     procedure SetModified(const AValue: Boolean);
@@ -115,13 +114,21 @@ type
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure EndLabelDock(Sender, Target: TObject; X,Y: Integer);
+    function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
+    procedure NewShortCutFieldAction(aBtn: TToolButton);
+  private
+    // Align functions.
+    // - helper functions.
+    function  GetHighestFieldPosition(Var HighestField: TControl): TPoint;
     function  GetLowestControlPosition(Var LowestCtrl: TControl): TPoint;
     procedure GetNearestControls(Const FindCtrl: TControl; var NearestCtrlX, NearestCtrlY: TControl);
     function  FindNewAutoControlPostion: TPoint;
-    procedure AutoAlignFields(ActiveControl: TControl; AlignProps: TAutoAlignRecord);
-    function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
+    // - Auto align functions.
     procedure RemoveDeadSpace;
-    procedure NewShortCutFieldAction(aBtn: TToolButton);
+    procedure DefaultAlignFields(ActiveControl: TControl; Const ColumnCount: Integer = 1);
+    procedure EqualSpace(StartCtrl, EndCtrl: TControl);
+    procedure LabelsAlignment(StartCtrl, EndCtrl: TControl; aAlign: TAlign);
+    procedure AutoAlignFields(ActiveControl: TControl; AlignProps: TAutoAlignRecord);
   protected
     property  ComponentYTree: TAVLTree read FComponentYTree;
     property  ComponentXTree: TAVLTree read FComponentXTree;
@@ -290,19 +297,15 @@ end;
 procedure TDesignFrame.FieldMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-//  if Button <> mbRight then exit;
+  ClickedControl := TControl(Sender);
 
   if (Sender is TFieldEdit) then
   begin
-    ClickedField := TFieldEdit(Sender);
-    ClickedLabel := nil;
     EditFieldMenuItem.Caption := 'Edit Field';
     DeleteFieldMenuItem.Caption := 'Delete Field';
   end;
   if (Sender is TFieldLabel) then
   begin
-    ClickedLabel := TFieldLabel(Sender);
-    ClickedField := nil;
     EditFieldMenuItem.Caption := 'Edit Label';
     DeleteFieldMenuItem.Caption := 'Delete Label';
   end;
@@ -428,7 +431,7 @@ var
   NewXTree: TAVLTree;
   Dx: Integer;
 begin
-  // Init vars.
+{  // Init vars.
   MaxVariableLabelWidth := 0;
   MaxFieldNameWidth := 0;
   MinY := MaxInt;
@@ -522,7 +525,7 @@ begin
   FreeAndNil(FComponentYTree);
   FComponentYTree := NewYTree;
   FreeAndNil(FComponentXTree);
-  FComponentXTree := NewXTree;
+  FComponentXTree := NewXTree;     }
 end;
 
 function TDesignFrame.BackupFile(FileName: string; BackupExt: string): boolean;
@@ -635,6 +638,231 @@ begin
   FComponentXTree := NewXTree;
 end;
 
+procedure TDesignFrame.DefaultAlignFields(ActiveControl: TControl;
+  const ColumnCount: Integer);
+var
+  NewXTree, NewYTree: TAVLTree;
+  TheLeft, TheTop: Integer;
+  Dx: Integer;
+  Dy: Integer;
+  Curr: TAVLTreeNode;
+begin
+  if ActiveControl = nil then
+    GetHighestFieldPosition(ActiveControl);
+  if not Assigned(ActiveControl) then exit;
+
+  TheLeft := ActiveControl.Left;
+  TheTop  := FieldToolBar.Height + 5;
+
+  NewXTree := TAVLTree.Create(@XCmp);
+  NewYTree := TAVLTree.Create(@YCmp);
+
+  Curr := ComponentYTree.FindLowest;
+  Self.LockRealizeBounds;
+  while Assigned(Curr) do
+  begin
+    if (TControl(Curr.Data) is TFieldEdit) then
+    begin
+      Dx := TFieldEdit(Curr.Data).Field.FieldX -
+        TFieldEdit(Curr.Data).Field.LabelX;
+      Dy := TFieldEdit(Curr.Data).Field.FieldY -
+        TFieldEdit(Curr.Data).Field.LabelY;
+      TFieldEdit(Curr.Data).Field.FieldX := TheLeft;
+      TFieldEdit(Curr.Data).Field.FieldY := TheTop;
+      TFieldEdit(Curr.Data).Field.LabelX := TheLeft - Dx;
+      TFieldEdit(Curr.Data).Field.LabelY := TheTop - Dy;
+    end else begin
+      TFieldLabel(Curr.Data).Field.FieldY := TheTop;
+      TFieldLabel(Curr.Data).Field.LabelY := TheTop;
+    end;
+    TheTop += TControl(Curr.Data).Height + ManagerSettings.SpaceBetweenFields;
+
+    NewXTree.Add(Curr.Data);
+    NewYTree.Add(Curr.Data);
+    Curr := ComponentYTree.FindSuccessor(Curr);
+  end;
+  Self.UnlockRealizeBounds;
+
+  FreeAndNil(FComponentXTree);
+  FComponentXTree := NewXTree;
+  FreeAndNil(FComponentYTree);
+  FComponentYTree := NewYTree;
+end;
+
+procedure TDesignFrame.EqualSpace(StartCtrl, EndCtrl: TControl);
+var
+  NewYTree, NewXTree: TAVLTree;
+  Curr: TAVLTreeNode;
+  CmpCount: Integer;
+  PrevTop: LongInt;
+  Spacing: Integer;
+  Dy: Integer;
+begin
+  if not Assigned(StartCtrl) then
+    GetHighestFieldPosition(StartCtrl);
+  if not Assigned(StartCtrl) then
+    Exit;
+
+  if not Assigned(EndCtrl) then
+    EndCtrl := TControl(ComponentYTree.FindHighest.Data);
+
+  CmpCount := 1;
+  PrevTop := StartCtrl.Top;
+  Curr := ComponentYTree.Find(StartCtrl);
+  while Assigned(Curr) do
+  begin
+    if TControl(Curr.Data).Top > PrevTop then
+      Inc(CmpCount);
+    PrevTop := TControl(Curr.Data).Top;
+    if TControl(Curr.Data) = EndCtrl then break;
+    Curr := ComponentYTree.FindSuccessor(Curr);
+  end;
+
+  // Spacing between "top" point of TEditFields, adjusted for overlapping components.
+  Spacing := Max((EndCtrl.Top - StartCtrl.Top) div (CmpCount - 1),
+                  StartCtrl.Height + ManagerSettings.SpaceBetweenFields);
+
+  NewXTree := TAVLTree.Create(@XCmp);
+  NewYTree := TAVLTree.Create(@YCmp);
+
+  CmpCount := 0;
+  PrevTop := -1;
+  Curr := ComponentYTree.Find(StartCtrl);
+
+  Self.LockRealizeBounds;
+  while Assigned(Curr) do
+  begin
+    if PrevTop = TControl(Curr.Data).Top then
+      Dec(CmpCount);
+    PrevTop := TControl(Curr.Data).Top;
+
+    if TControl(Curr.Data) is TFieldEdit then
+    with TFieldEdit(Curr.Data) do
+    begin
+      Dy := Field.FieldY - Field.LabelY;
+      Field.FieldY := StartCtrl.Top + CmpCount * Spacing;
+      Field.LabelY := Field.FieldY - Dy;
+    end else with TFieldLabel(Curr.Data) do
+    begin
+      Field.FieldY := StartCtrl.Top + CmpCount * Spacing;
+      Field.LabelY := Field.FieldY;
+    end;
+
+    NewXTree.Add(Curr.Data);
+    NewYTree.Add(Curr.Data);
+
+    if (TControl(Curr.Data) = EndCtrl) then
+      Exit;
+    Inc(CmpCount);
+    Curr := ComponentYTree.FindSuccessor(Curr);
+  end;
+  Self.UnLockRealizeBounds;
+
+  FreeAndNil(FComponentXTree);
+  FComponentXTree := NewXTree;
+  FreeAndNil(FComponentYTree);
+  FComponentYTree := NewYTree;
+end;
+
+procedure TDesignFrame.LabelsAlignment(StartCtrl, EndCtrl: TControl;
+  aAlign: TAlign);
+var
+  NewYTree, NewXTree: TAVLTree;
+  Curr: TAVLTreeNode;
+  MaxVariableLabelWidth: Integer;
+  MaxFieldNameWidth: Integer;
+  MinLeft: Integer;
+  NewLabelLeft: Integer;
+begin
+  if not (aAlign in [alLeft, alRight]) then exit;
+
+  if not Assigned(StartCtrl) then
+    GetHighestFieldPosition(StartCtrl);
+  if not Assigned(StartCtrl) then
+    Exit;
+
+  if not Assigned(EndCtrl) then
+    EndCtrl := TControl(ComponentYTree.FindHighest.Data);
+
+  // Information collection pass.
+  MaxVariableLabelWidth := 0;
+  MaxFieldNameWidth     := 0;
+  MinLeft               := MaxInt;
+  Curr := ComponentYTree.Find(StartCtrl);
+  while Assigned(Curr) do
+  begin
+    if (TControl(Curr.Data) is TFieldEdit) then
+    with TFieldEdit(Curr.Data) do
+    begin
+      MaxVariableLabelWidth := Max(MaxVariableLabelWidth, VariableLabel.Width);
+      MaxFieldNameWidth     := Max(MaxFieldNameWidth, FieldNameLabel.Width);
+      MinLeft               := Min(MinLeft, Field.FieldX);
+    end;
+
+    if (TControl(Curr.Data) = EndCtrl) then
+      Break;
+    Curr := ComponentYTree.FindSuccessor(Curr);
+  end;
+
+  NewLabelLeft := MinLeft - (MaxVariableLabelWidth + 5) -
+                            (MaxFieldNameWidth + 5);
+
+  if NewLabelLeft < (MaxFieldNameWidth + 5) then
+  begin
+   NewLabelLeft := MaxFieldNameWidth + 5;
+   MinLeft := MaxVariableLabelWidth + 5 + MaxFieldNameWidth + 5;
+  end;
+
+  NewXTree := TAVLTree.Create(@XCmp);
+  NewYTree := TAVLTree.Create(@YCmp);
+
+  Curr := ComponentYTree.Find(StartCtrl);
+  Self.LockRealizeBounds;
+  while Assigned(Curr) do
+  begin
+    if TControl(Curr.Data) is TFieldEdit then
+    with TFieldEdit(Curr.Data) do
+    begin
+      case aAlign of
+        alLeft:
+          begin
+            Field.FieldX := Max(Field.FieldX, MinLeft);
+            Field.LabelX := NewLabelLeft;
+          end;
+        alRight:
+          Field.LabelX := Field.FieldX - (VariableLabel.Width + 5);
+      end;
+    end else
+    with TFieldLabel(Curr.Data) do
+    begin
+      case aAlign of
+        alLeft:
+          begin
+            Field.FieldX := NewLabelLeft;
+            Field.LabelX := NewLabelLeft;
+          end;
+        alRight:
+          begin
+            Field.FieldX := Max(Field.FieldX, MinLeft);
+            Field.LabelX := Max(Field.FieldX, MinLeft);
+          end;
+      end;
+    end;
+
+    NewXTree.Add(Curr.Data);
+    NewYTree.Add(Curr.Data);
+
+    if (TControl(Curr.Data) = EndCtrl) then
+      Exit;
+    Curr := ComponentYTree.FindSuccessor(Curr);
+  end;
+
+  FreeAndNil(FComponentXTree);
+  FComponentXTree := NewXTree;
+  FreeAndNil(FComponentYTree);
+  FComponentYTree := NewYTree;
+end;
+
 procedure TDesignFrame.NewShortCutFieldAction(aBtn: TToolButton);
 var
   Pt: TPoint;
@@ -644,12 +872,32 @@ begin
   FrameMouseDown(nil, mbLeft, GetKeyShiftState, Pt.X, Pt.Y);
 end;
 
+function TDesignFrame.GetHighestFieldPosition(var HighestField: TControl): TPoint;
+var
+  Curr: TAVLTreeNode;
+begin
+  HighestField := nil;
+  Result := Point(0,0);
+
+  Curr := ComponentYTree.FindLowest;
+  while Assigned(Curr) do
+  begin
+    if (TControl(Curr.Data) is TFieldEdit) then
+    begin
+      HighestField := TControl(Curr.Data);
+      Result := Point(HighestField.Left, HighestField.Top);
+      Break;
+    end;
+    Curr := ComponentYTree.FindSuccessor(Curr);
+  end;
+end;
+
 constructor TDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
   FActiveDatafile := TEpiDataFile.Create();
-  ClickedField := nil;
+  ClickedControl := nil;
   Modified := false;
   FComponentYTree := TAVLTree.Create(@YCmp);
   FComponentXTree := TAVLTree.Create(@XCmp);
@@ -817,14 +1065,14 @@ begin
 
   if Res = mrCancel then Exit;
 
-  if AutoAlignRes.RemoveEmptySpace then
-    RemoveDeadSpace;
+  case AutoAlignRes.AlignMethod of
+    aamRemoveSpace: RemoveDeadSpace;
+    aamEqualSpace:  EqualSpace(ClickedControl, nil);
+    aamDefault:     DefaultAlignFields(ClickedControl);
+  end;
 
-  if AutoAlignRes.DefaultAlign and (not Assigned(ClickedField)) then
-    Exit;
-
-  if Assigned(ClickedField) then
-    AutoAlignFields(ClickedField, AutoAlignRes);
+  if AutoAlignRes.LabelsAlign <> alNone then
+    LabelsAlignment(ClickedControl, nil, AutoAlignRes.LabelsAlign);
 
   Modified := true;
 end;
@@ -832,22 +1080,16 @@ end;
 procedure TDesignFrame.DeleteFieldMenuItemClick(Sender: TObject);
 var
   TmpField: TEpiField;
-  TmpCtrl: TControl;
 begin
-  if Assigned(ClickedField) then
-  begin
-    TmpCtrl := ClickedField;
-    TmpField := ClickedField.Field;
-  end else
-  if Assigned(ClickedLabel) then
-  begin
-    TmpCtrl := ClickedLabel;
-    TmpField := ClickedLabel.Field;
-  end else
-    exit;
+  if not Assigned(ClickedControl) then exit;
+
+  if (ClickedControl is TFieldEdit) then
+    TmpField := TFieldEdit(ClickedControl).Field
+  else
+    TmpField := TFieldLabel(ClickedControl).Field;
 
   {$IFNDEF EPI_DEBUG}
-  if (TmpField.Size > 0) and
+  if (TmpField.FieldType <> ftQuestion) and (TmpField.Size > 0) and
      (MessageDlg('Field contains data.' + LineEnding +
       'Are you sure you want to delete?', mtWarning, mbYesNo, 0) = mrNo) then
     exit;
@@ -855,10 +1097,10 @@ begin
 
   Modified := true;
   ActiveDatafile.RemoveField(TmpField, true);
-  RemoveControl(TmpCtrl);
-  ComponentYTree.Remove(TmpCtrl);
-  ComponentXTree.Remove(TmpCtrl);
-  FreeAndNil(TmpCtrl);
+  RemoveControl(ClickedControl);
+  ComponentYTree.Remove(ClickedControl);
+  ComponentXTree.Remove(ClickedControl);
+  FreeAndNil(ClickedControl);
 end;
 
 procedure TDesignFrame.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -881,8 +1123,10 @@ var
   LabelForm: TCreateLabelForm;
   Pt: TPoint;
 begin
-  if Assigned(ClickedField) then
-  With ClickedField do
+  if not Assigned(ClickedControl) then exit;
+
+  if (ClickedControl is TFieldEdit) then
+  With TFieldEdit(ClickedControl) do
   begin
     Pt := Self.ClientToScreen(Point(Left + Width, Top + Height));
     FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType, false);
@@ -893,9 +1137,8 @@ begin
     FieldForm.WriteField(Field);
     FreeAndNil(FieldForm);
     Self.Modified := true;
-  end;
-  if Assigned(ClickedLabel) then
-  With ClickedLabel do
+  end else
+  With TFieldLabel(ClickedControl) do
   begin
     Pt := Self.ClientToScreen(Point(Left + Width, Top + Height));
     LabelForm := TCreateLabelForm.Create(Self, ActiveDatafile);
@@ -1123,6 +1366,9 @@ begin
     Import.Import(Fn, FActiveDatafile, dftNone);
     FreeAndNil(Import);
 
+    Application.ProcessMessages;
+    Self.LockRealizeBounds;
+
     TmpEdit := nil;
     for i := 0 to ActiveDatafile.NumFields - 1 do
     begin
@@ -1145,16 +1391,14 @@ begin
           NewFieldEdit(TmpField);
     end;
 
+    Self.UnLockRealizeBounds;
+
     MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
     MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
     MainForm.PageControl1.ShowHint := true;
 
-    AutoAlignProps.DefaultAlign := true;
-    AutoAlignProps.LabelsAlign := alLeft;
-    AutoAlignProps.EqualVertSpace := true;
-    AutoAlignProps.RemoveEmptySpace := false;
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
-      AutoAlignFields(TmpEdit, AutoAlignProps);
+      LabelsAlignment(TmpEdit, Nil, alLeft);
 
     Modified := false;
   end;

@@ -10,11 +10,11 @@ uses
 
 type
 
+  TAutoAlignMethod = (aamNone, aamDefault, aamEqualSpace, aamRemoveSpace);
+
   TAutoAlignRecord = record
-    LabelsAlign:      TAlign;
-    DefaultAlign:     boolean;
-    EqualVertSpace:   boolean;
-    RemoveEmptySpace: boolean;
+    LabelsAlign: TAlign;
+    AlignMethod: TAutoAlignMethod;
   end;
 
   { TAutoAlignForm }
@@ -22,19 +22,14 @@ type
   TAutoAlignForm = class(TForm)
     CancelAction: TAction;
     ActionList1: TActionList;
-    AlignFieldsChk: TCheckBox;
     Button1: TButton;
     Button2: TButton;
-    EmptySpaceChkBtn: TCheckBox;
-    EqualSpaceChk: TCheckBox;
-    Label1: TLabel;
     Panel1: TPanel;
-    RightAlignRadio: TRadioButton;
-    LeftAlignRadio: TRadioButton;
-    KeepAlignRadio: TRadioButton;
+    LabelsGroupBox: TRadioGroup;
+    DefaultAlignRadio: TRadioButton;
+    EqualVerticalSpaceRadio: TRadioButton;
+    RemoveEmptySpaceRadio: TRadioButton;
     procedure CancelActionExecute(Sender: TObject);
-    procedure EmptySpaceChkBtnClick(Sender: TObject);
-    procedure EqualSpaceChkClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
   private
@@ -54,28 +49,24 @@ begin
   Close;
 end;
 
-procedure TAutoAlignForm.EmptySpaceChkBtnClick(Sender: TObject);
-begin
-  EqualSpaceChk.Enabled := not EmptySpaceChkBtn.Checked;
-end;
-
-procedure TAutoAlignForm.EqualSpaceChkClick(Sender: TObject);
-begin
-  EmptySpaceChkBtn.Enabled := not EqualSpaceChk.Checked;
-end;
-
 procedure TAutoAlignForm.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
   with AlignProperties do
   begin
-    DefaultAlign := AlignFieldsChk.Checked;
-    EqualVertSpace := EqualSpaceChk.Checked;
-    RemoveEmptySpace := EmptySpaceChkBtn.Checked;
-    if RightAlignRadio.Checked then
-      LabelsAlign := alRight
-    else if LeftAlignRadio.Checked then
-      LabelsAlign := alLeft;
+    if DefaultAlignRadio.Checked then
+      AlignMethod := aamDefault
+    else if EqualVerticalSpaceRadio.Checked then
+      AlignMethod := aamEqualSpace
+    else if RemoveEmptySpaceRadio.Checked then
+      AlignMethod := aamRemoveSpace
+    else
+      AlignMethod := aamNone;
+    Case LabelsGroupBox.ItemIndex of
+      0: LabelsAlign := alNone;
+      1: LabelsAlign := alLeft;
+      2: LabelsAlign := alRight;
+    end;
   end;
 end;
 
@@ -83,10 +74,8 @@ procedure TAutoAlignForm.FormCreate(Sender: TObject);
 begin
   with AlignProperties do
   begin
-    DefaultAlign := false;
+    AlignMethod := aamNone;
     LabelsAlign := alNone;
-    EqualVertSpace := false;
-    RemoveEmptySpace := false;
   end;
 end;
 
