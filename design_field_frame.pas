@@ -161,7 +161,10 @@ begin
     FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(LastFieldNo);
   Case FieldType of
     ftFloat:
-      FieldLengthEdit.Text := '5';
+      begin
+        FieldLengthEdit.Text := '5';
+        Label4.Visible := true;
+      end;
     ftDate, ftToday, ftEuroDate, ftEuroToday,
     ftYMDDate, ftYMDToday:
       begin
@@ -174,8 +177,8 @@ begin
     FieldLengthEdit.Text := '2';
   end;
 
-    // show fieldtype:
-    Label4.caption := 'Type: ' + FieldTypeToFieldTypeName(FieldType, nil);
+  // show fieldtype:
+  Label5.Caption := 'Type: ' + FieldTypeToFieldTypeName(FieldType, nil);
 
   Inc(LastFieldNo);
 
@@ -184,9 +187,6 @@ begin
   if not (FieldType = ftFloat) then exit;
 
   Height := Height + FieldDecimalSizeEdit.Height + 5;
-  Label4.Caption := 'Decimals';
-  Label5.Visible := true;
-  Label5.Caption := 'Type: Float';
   FieldDecimalSizeEdit.Visible := true;
   FieldDecimalSizeEdit.Enabled := true;
   FieldDecimalSizeEdit.Text    := '2';

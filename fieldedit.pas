@@ -43,7 +43,6 @@ type
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure SetVisible(Value: Boolean); override;
-    procedure CalculateDockSizes;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -62,7 +61,7 @@ type
 
   { TFieldDockObject }
 
-  TFieldDockObject = class(TDragDockObject)
+{  TFieldDockObject = class(TDragDockObject)
   private
      OldFieldRec: TRect;
      FieldRec: TRect;
@@ -75,7 +74,7 @@ type
   public
     constructor Create(AControl: TControl); override;
     destructor Destroy; override;
-  end;
+  end;                     }
 
   { TFieldLabel }
 
@@ -212,11 +211,6 @@ procedure TFieldEdit.SetVisible(Value: Boolean);
 begin
   inherited SetVisible(Value);
   UpdateFieldNameLabel;
-end;
-
-procedure TFieldEdit.CalculateDockSizes;
-begin
-  inherited CalculateDockSizes;
 end;
 
 constructor TFieldEdit.Create(AOwner: TComponent);
@@ -356,6 +350,7 @@ begin
   FField := nil;
 end;
 
+(*
 { TFieldDockObject }
 
 procedure TFieldDockObject.AdjustDockRect(ARect: TRect);
@@ -452,6 +447,8 @@ destructor TFieldDockObject.Destroy;
 begin
   inherited Destroy;
 end;
+
+*)
 
 { TSelectCorner }
 

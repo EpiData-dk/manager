@@ -39,11 +39,11 @@
     </RunParams>
     <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="CodeTools"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Minor="2" Release="3" Build="102" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Minor="2" Release="2" Build="101" Valid="True"/>
+        <PackageName Value="CodeTools"/>
       </Item2>
       <Item3>
         <PackageName Value="LCL"/>
@@ -123,7 +123,8 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <UseLineInfoUnit Value="False"/>
+        <GenerateDebugInfo Value="True"/>
+        <GenerateDwarf Value="True"/>
       </Debugging>
       <Options>
         <Win32>
@@ -132,7 +133,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG1"/>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

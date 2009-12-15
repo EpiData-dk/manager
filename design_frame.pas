@@ -109,16 +109,19 @@ type
     ClickedControl: TControl;
     function NewFieldEdit(AField: TEpiField): TFieldEdit;
     function NewQuestionLabel(AField: TEpiField): TFieldLabel;
-    procedure SetModified(const AValue: Boolean);
-    procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
-    procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
-    procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure EndLabelDock(Sender, Target: TObject; X,Y: Integer);
     function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
     procedure NewShortCutFieldAction(aBtn: TToolButton);
+    procedure SetModified(const AValue: Boolean);
+    procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
-    // Align functions.
+    // Docking.
+    // - Field:
+    procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
+    procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
+    procedure EndLabelDock(Sender, Target: TObject; X,Y: Integer);
+  private
+    // Aligning.
     // - helper functions.
     function  GetHighestFieldPosition(Var HighestField: TControl): TPoint;
     function  GetLowestControlPosition(Var LowestCtrl: TControl): TPoint;
@@ -222,9 +225,6 @@ begin
   Result.Parent := Self;
   Result.Field := AField;
 
-  if VertScrollBar.Visible then
-    VertScrollBar.Position := VertScrollBar.Range - VertScrollBar.Page;
-
   ComponentYTree.Add(Result);
   ComponentXTree.Add(Result);
 end;
@@ -238,6 +238,7 @@ begin
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
+  Result.OnStartDock := @StartFieldDock;
   Result.OnEndDock := @EndLabelDock;
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
@@ -267,7 +268,7 @@ procedure TDesignFrame.StartFieldDock(Sender: TObject;
 var
   S: string;
 begin
-  DragObject := TFieldDockObject.Create(TControl(Sender));
+  DragObject := TDragDockObject.Create(TControl(Sender));
   ComponentYTree.Remove(Sender);
   ComponentXTree.Remove(Sender);
 end;
@@ -314,8 +315,6 @@ end;
 
 procedure TDesignFrame.EndLabelDock(Sender, Target: TObject; X, Y: Integer);
 begin
-  if not (Sender is TFieldLabel) then exit;
-
   with TFieldLabel(Sender) do
   begin
     Align := alNone;
@@ -326,6 +325,14 @@ begin
     Field.FieldY := Top;
     Field.LabelX := Left;
     Field.LabelY := Top;
+  end;
+  // Only add to component tree if it is being placed on the actual form.
+  // - it could be placed outside in a custom form.
+  // - "nil" = dock was abort using eg. ESC.
+  if (Target is TDesignFrame) or (not Assigned(Target)) then
+  begin
+    ComponentYTree.Add(Sender);
+    ComponentXTree.Add(Sender);
   end;
 end;
 
@@ -1001,8 +1008,6 @@ begin
   Source.Control.Left := X - Source.DockOffset.X;
   Source.Control.Top := Y - Source.DockOffset.Y;
 
-
-
   if (not (ssShift in GetKeyShiftState)) and
      ManagerSettings.SnapFields and
      (Source.Control is TFieldEdit) and
@@ -1056,7 +1061,7 @@ var
   Pt: TPoint;
 begin
   AutoAlignForm := TAutoAlignForm.Create(self);
-  With TToolButton(Sender) do
+  with AutoAlignBtn do
     Pt := FieldToolBar.ClientToScreen(Point(Left, Top + Height + 1));
   AutoAlignForm.Left := Pt.X;
   AutoAlignForm.Top  := Pt.Y;
@@ -1227,6 +1232,10 @@ begin
 
       NewFieldEdit(TmpField);
     end;
+
+    if (VertScrollBar.Visible) and (true) then
+      VertScrollBar.Position := VertScrollBar.Range - VertScrollBar.Page;
+
     Modified := true;
     ToolBtnClick(SelectorButton);
   finally
@@ -1351,7 +1360,7 @@ begin
 
   Dlg := TOpenDialog.Create(nil);
   Dlg.Filter := GetEpiDialogFilter(True, True, True, True,
-    False, True, True, False, True, True);
+    False, True, True, True, True, True);
 
   if Dlg.Execute then
   begin
@@ -1359,11 +1368,10 @@ begin
     FreeAndNil(FActiveDatafile);
 
     Fn := Dlg.FileName;
-
     Import := TEpiImportExport.Create;
     Import.OnProgress := @MainForm.ShowProgress;
     Import.OnClipBoardRead := @MainForm.ReadClipBoard;
-    ImportTxtGuess.FieldNaming := fnAuto;
+    Import.FieldNaming := ManagerSettings.FieldNamingStyle;
     Import.Import(Fn, FActiveDatafile, dftNone);
     FreeAndNil(Import);
 

@@ -1,7 +1,7 @@
 object AutoAlignForm: TAutoAlignForm
-  Left = 500
+  Left = 661
   Height = 217
-  Top = 212
+  Top = 296
   Width = 251
   ActiveControl = Panel1
   BorderIcons = []
@@ -26,6 +26,7 @@ object AutoAlignForm: TAutoAlignForm
     Color = clSkyBlue
     ParentColor = False
     TabOrder = 0
+    TabStop = True
     object Button1: TButton
       Left = 96
       Height = 26
@@ -61,7 +62,7 @@ object AutoAlignForm: TAutoAlignForm
       ChildSizing.ShrinkVertical = crsScaleChilds
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 78
+      ClientHeight = 77
       ClientWidth = 233
       ItemIndex = 0
       Items.Strings = (
@@ -74,17 +75,17 @@ object AutoAlignForm: TAutoAlignForm
     end
     object DefaultAlignRadio: TRadioButton
       Left = 8
-      Height = 17
+      Height = 22
       Top = 8
-      Width = 174
+      Width = 237
       Caption = 'Default Alignment (One Column)'
       TabOrder = 0
     end
     object EqualVerticalSpaceRadio: TRadioButton
       Left = 8
-      Height = 17
+      Height = 22
       Top = 32
-      Width = 116
+      Width = 156
       Caption = 'Equal Vertical Space'
       Checked = True
       State = cbChecked
@@ -92,9 +93,9 @@ object AutoAlignForm: TAutoAlignForm
     end
     object RemoveEmptySpaceRadio: TRadioButton
       Left = 8
-      Height = 17
+      Height = 22
       Top = 56
-      Width = 124
+      Width = 166
       Caption = 'Remove Empty Space'
       TabOrder = 2
     end

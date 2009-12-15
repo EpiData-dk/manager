@@ -54,6 +54,7 @@ constructor TCreateLabelForm.Create(TheOwner: TComponent; DataFile: TEpiDataFile
 begin
   inherited Create(TheOwner);
   FDf := DataFile;
+  ActiveControl := LabelEdit;
 end;
 
 function TCreateLabelForm.GetFieldName: string;

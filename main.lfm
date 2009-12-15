@@ -1,13 +1,13 @@
 object MainForm: TMainForm
   Cursor = crIBeam
-  Left = 336
-  Height = 655
-  Top = 198
-  Width = 975
+  Left = 538
+  Height = 673
+  Top = 272
+  Width = 1039
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 633
-  ClientWidth = 975
+  ClientHeight = 648
+  ClientWidth = 1039
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -15,12 +15,12 @@ object MainForm: TMainForm
   LCLVersion = '0.9.29'
   object ProgressPanel: TPanel
     Left = 0
-    Height = 40
+    Height = 44
     Top = 0
-    Width = 975
+    Width = 1039
     Align = alTop
-    ClientHeight = 40
-    ClientWidth = 975
+    ClientHeight = 44
+    ClientWidth = 1039
     TabOrder = 0
     object DesignBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
@@ -58,11 +58,11 @@ object MainForm: TMainForm
     end
     object GCPbtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 424
+      Left = 448
       Height = 28
       Hint = 'Tools for Good Clinical Practice (GCP)'#13#10'  Transaction log controls'#13#10'  Inspection reports'#13#10'    '
       Top = 8
-      Width = 96
+      Width = 104
       Caption = 'GCP Tools'
       Font.CharSet = 4
       Font.Height = -13
@@ -73,21 +73,9 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 3
     end
-    object ProgressBar1: TProgressBar
-      AnchorSideLeft.Control = GCPbtn
-      AnchorSideLeft.Side = asrBottom
-      Left = 530
-      Height = 20
-      Top = 10
-      Width = 344
-      BorderSpacing.Left = 10
-      Smooth = True
-      Step = 1
-      TabOrder = 4
-    end
     object MaintenanceBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 296
+      Left = 304
       Height = 28
       Hint = 'Remove records marked for deletion (Pack)'#13#10'Adapt width of fields to actual data'#13#10'Backup or encrypt whole systems'#13#10'Validation reports'#13#10'Export data'#13#10'Other tools'
       Top = 8
@@ -102,12 +90,23 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 2
     end
+    object ProgressBar1: TProgressBar
+      AnchorSideLeft.Side = asrBottom
+      Left = 584
+      Height = 28
+      Top = 8
+      Width = 440
+      Anchors = [akLeft, akRight]
+      Smooth = True
+      Step = 1
+      TabOrder = 4
+    end
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 593
-    Width = 975
+    Height = 21
+    Top = 606
+    Width = 1039
     Panels = <    
       item
         Width = 700
@@ -124,9 +123,9 @@ object MainForm: TMainForm
   end
   object StatusBar2: TStatusBar
     Left = 0
-    Height = 20
-    Top = 613
-    Width = 975
+    Height = 21
+    Top = 627
+    Width = 1039
     Panels = <    
       item
         Width = 400
@@ -138,29 +137,31 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 553
-    Top = 40
-    Width = 622
+    Height = 562
+    Top = 44
+    Width = 686
     Align = alClient
     ParentShowHint = False
     ShowHint = True
     ShowTabs = False
     TabOrder = 3
+    OnChanging = PageControl1Changing
+    OnPageChanged = PageControl1PageChanged
   end
   object Panel1: TPanel
-    Left = 622
-    Height = 553
-    Top = 40
+    Left = 686
+    Height = 562
+    Top = 44
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 553
+    ClientHeight = 562
     ClientWidth = 353
     TabOrder = 4
     Visible = False
     object Label1: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 70
       Width = 308
       Caption = 'label1'
@@ -169,7 +170,7 @@ object MainForm: TMainForm
     end
     object Label2: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 136
       Width = 308
       Caption = 'Label2'
@@ -178,7 +179,7 @@ object MainForm: TMainForm
     end
     object Label3: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 200
       Width = 308
       Caption = 'Label2'
@@ -187,7 +188,7 @@ object MainForm: TMainForm
     end
     object Label4: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 280
       Width = 308
       Caption = 'Label2'
@@ -196,7 +197,7 @@ object MainForm: TMainForm
     end
     object Label5: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 368
       Width = 308
       Caption = 'Label2'
