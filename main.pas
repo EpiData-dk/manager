@@ -15,6 +15,8 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    Image6: TImage;
+    Image7: TImage;
     NewDesignFormAction: TAction;
     ClosePageAction: TAction;
     EditMenu: TMenuItem;

@@ -123,8 +123,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <GenerateDwarf Value="True"/>
+        <UseLineInfoUnit Value="False"/>
       </Debugging>
       <Options>
         <Win32>
@@ -133,7 +132,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG"/>
+      <CustomOptions Value="-dEPI_DEBUG1"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
