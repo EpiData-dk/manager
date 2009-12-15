@@ -248,8 +248,8 @@ begin
 
   {$IFNDEF EPI_DEBUG}
   if (TDesignFrame(PageControl1.ActivePage.Controls[0]).Modified) and
-     (MessageDlg('Dataform is modified since last save.' +
-                 LineEnding + 'Continue?', mtWarning, mbYesNo, 0) = mrNo) then
+     (MessageDlg('Dataform was modified since last save.' +
+                 LineEnding + 'Close Form?', mtWarning, mbYesNo, 0) = mrNo) then
     Exit;
   {$ENDIf}
 

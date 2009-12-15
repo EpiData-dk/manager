@@ -311,6 +311,8 @@ begin
     EditFieldMenuItem.Caption := 'Edit Label';
     DeleteFieldMenuItem.Caption := 'Delete Label';
   end;
+        MainForm.StatusBar1.Panels[1].Text := Format(
+        'Fields: %d - %d',[ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]);
 end;
 
 procedure TDesignFrame.EndLabelDock(Sender, Target: TObject; X, Y: Integer);
@@ -1107,12 +1109,14 @@ begin
   ComponentYTree.Remove(ClickedControl);
   ComponentXTree.Remove(ClickedControl);
   FreeAndNil(ClickedControl);
+  MainForm.StatusBar1.Panels[1].Text := Format(
+    'Fields: %d - %d',[ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]);
 end;
 
 procedure TDesignFrame.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-  MainForm.StatusBar2.Panels[1].Text := Format(
+  MainForm.StatusBar1.Panels[2].Text := Format(
     'Mouse - X: %d Y: %d',
     [X, Y]);
 
@@ -1304,6 +1308,7 @@ begin
     Allow := false;
 end;
 
+
 procedure TDesignFrame.NewDMYFieldActionExecute(Sender: TObject);
 begin
   NewShortCutFieldAction(DMYFieldBtn);
@@ -1354,7 +1359,7 @@ var
 begin
   {$IFNDEF EPI_DEBUG}
   if (ActiveDatafile.NumFields > 0) and
-     (MessageDlg('Dataform is not saved.' + LineEnding + 'Continue?', mtWarning, mbYesNo, 0) = mrNo) then
+     (MessageDlg('Dataform was not saved.' + LineEnding + 'Close Form?', mtWarning, mbYesNo, 0) = mrNo) then
     exit;
   {$ENDIF}
 
@@ -1405,6 +1410,8 @@ begin
     MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
     MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
     MainForm.PageControl1.ShowHint := true;
+    MainForm.StatusBar1.Panels[1].Text := Format(
+        'Fields: %d - %d',[ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]);
 
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
       LabelsAlignment(TmpEdit, Nil, alLeft);
@@ -1424,7 +1431,7 @@ begin
 
   ActiveDataFile.Save(ActiveDataFile.FileName, []);
   Modified := false;
-  MainForm.StatusBar2.Panels[0].Text := 'Saving complete: ' + ActiveDataFile.FileName;
+  MainForm.StatusBar1.Panels[0].Text := 'Saving complete: ' + ActiveDataFile.FileName;
 end;
 
 procedure TDesignFrame.SaveFileAsActionExecute(Sender: TObject);
@@ -1447,7 +1454,7 @@ begin
     MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
     MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
     MainForm.PageControl1.ShowHint := true;
-    MainForm.StatusBar2.Panels[0].Text := 'Saving complete: ' + Fn;
+    MainForm.StatusBar1.Panels[0].Text := 'Saving complete: ' + Fn;
   end;
 end;
 
