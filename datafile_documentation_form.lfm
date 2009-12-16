@@ -1,0 +1,45 @@
+object DatafileDocumentationForm: TDatafileDocumentationForm
+  Left = 1053
+  Height = 478
+  Top = 286
+  Width = 559
+  ClientHeight = 478
+  ClientWidth = 559
+  OnActivate = FormActivate
+  OnShow = FormShow
+  LCLVersion = '0.9.29'
+  object Panel1: TPanel
+    Left = 0
+    Height = 40
+    Top = 0
+    Width = 559
+    Align = alTop
+    ClientHeight = 40
+    ClientWidth = 559
+    TabOrder = 0
+    object Button1: TButton
+      Left = 16
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = '&Close'
+      OnClick = Button1Click
+      TabOrder = 0
+    end
+  end
+  object Memo1: TMemo
+    Left = 0
+    Height = 438
+    Top = 40
+    Width = 559
+    Align = alClient
+    Font.CharSet = 4
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssAutoBoth
+    TabOrder = 1
+    WordWrap = False
+  end
+end

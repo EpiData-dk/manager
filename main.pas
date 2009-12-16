@@ -66,7 +66,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     function ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string): TProgressResult;
     procedure ReadClipBoard(ClipBoardLine: TStrings);
-
+    procedure ShowOnStatusBar(Msg: string; Idx: integer);
   end; 
 
 var
@@ -289,6 +289,11 @@ begin
     ClipBoardLine.StrictDelimiter := true;
     ClipBoardLine.DelimitedText := TmpStr;
   end;
+end;
+
+procedure TMainForm.ShowOnStatusBar(Msg: string; Idx: integer);
+begin
+  //
 end;
 
 

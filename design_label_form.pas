@@ -32,9 +32,6 @@ implementation
 uses
   Controls;
 
-var
-  LastFieldNo: Integer = 1;
-
 { TCreateLabelForm }
 
 procedure TCreateLabelForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -58,8 +55,10 @@ begin
 end;
 
 function TCreateLabelForm.GetFieldName: string;
+var
+  LastFieldNo: Integer;
 begin
-  result := 'label_' + IntToStr(LastFieldNo);
+  result := 'label_' + IntToStr(1 + FDf.NumFields - FDf.NumDataFields);
   inc(LastFieldNo);
   if FDf.FieldExists(result) then
     result := FDf.CreateUniqueFieldName('label_');

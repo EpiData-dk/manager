@@ -52,7 +52,6 @@ uses
   UStringUtils;
 
 var
-  LastFieldNo: Integer = 1;
   OldLength, OldDecimals: Integer;
 
 { TFieldCreateForm }
@@ -158,7 +157,7 @@ begin
   FNewField := NewField;
 
   if ManagerSettings.FieldNamePrefix <> '' then
-    FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(LastFieldNo);
+    FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(FDf.NumDataFields+1);
   Case FieldType of
     ftFloat:
       begin
@@ -180,8 +179,6 @@ begin
   // show fieldtype:
   Label5.Caption := 'Type: ' + FieldTypeToFieldTypeName(FieldType, nil);
 
-  Inc(LastFieldNo);
-
   ActiveControl := LabelEdit;
 
   if not (FieldType = ftFloat) then exit;
@@ -194,6 +191,8 @@ end;
 
 class procedure TFieldCreateForm.AutoCreateField(DataFile: TEpiDataFile;
   aField: TEpiField);
+var
+  LastFieldNo: Integer;
 begin
   if not Assigned(aField) then exit;
   if ManagerSettings.FieldNamePrefix = '' then exit;
@@ -202,6 +201,7 @@ begin
   if aField.FieldType = ftFloat then
     aField.FieldDecimals := OldDecimals;
 
+  LastFieldNo := DataFile.NumDataFields + 1;
   repeat
     aField.FieldName := ManagerSettings.FieldNamePrefix + IntToStr(LastFieldNo);
     inc(LastFieldNo);

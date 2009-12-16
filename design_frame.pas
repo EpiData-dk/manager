@@ -16,6 +16,7 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    DocumentFileAction: TAction;
     AlignAction: TAction;
     SaveFileAsAction: TAction;
     SaveFileAction: TAction;
@@ -65,27 +66,20 @@ type
     ImportStructureBtn: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
     MDYFieldBtn: TToolButton;
+    ToolButton5: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
     YMDFieldBtn: TToolButton;
-    procedure FrameUnDock(Sender: TObject; Client: TControl;
-      NewTarget: TWinControl; var Allow: Boolean);
+    procedure DocumentFileActionExecute(Sender: TObject);
     procedure ImportStructureActionExecute(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
     procedure AutoAlignBtnClick(Sender: TObject);
     procedure ClearToolBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
-    procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
     procedure EditFieldMenuItemClick(Sender: TObject);
     procedure FontSelectBtnClick(Sender: TObject);
-    procedure FrameDockDrop(Sender: TObject; Source: TDragDockObject; X,
-      Y: Integer);
-    procedure FrameMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
     procedure NewDMYFieldActionExecute(Sender: TObject);
     procedure NewFloatFieldActionExecute(Sender: TObject);
     procedure NewIntFieldActionExecute(Sender: TObject);
@@ -97,7 +91,15 @@ type
     procedure SaveFileActionExecute(Sender: TObject);
     procedure SaveFileAsActionExecute(Sender: TObject);
     procedure ToolBtnClick(Sender: TObject);
-    procedure ToolButton3Click(Sender: TObject);
+    // Designer events:
+    procedure DesignerUnDock(Sender: TObject; Client: TControl;
+      NewTarget: TWinControl; var Allow: Boolean);
+    procedure DesignerDockDrop(Sender: TObject; Source: TDragDockObject; X,
+      Y: Integer);
+    procedure DesignerMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure DesignerMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
   private
     { private declarations }
     ActiveButton: TToolButton;
@@ -107,6 +109,7 @@ type
     FModified: boolean;
     FOldCaption: String;
     ClickedControl: TControl;
+    FDesignerBox: TScrollBox;
     function NewFieldEdit(AField: TEpiField): TFieldEdit;
     function NewQuestionLabel(AField: TEpiField): TFieldLabel;
     function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
@@ -114,6 +117,7 @@ type
     procedure SetModified(const AValue: Boolean);
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure ShowOnMainStatusBar(Msg: string; Const Index: integer);
   private
     // Docking.
     // - Field:
@@ -132,7 +136,6 @@ type
     procedure DefaultAlignFields(ActiveControl: TControl; Const ColumnCount: Integer = 1);
     procedure EqualSpace(StartCtrl, EndCtrl: TControl);
     procedure LabelsAlignment(StartCtrl, EndCtrl: TControl; aAlign: TAlign);
-    procedure AutoAlignFields(ActiveControl: TControl; AlignProps: TAutoAlignRecord);
   protected
     property  ComponentYTree: TAVLTree read FComponentYTree;
     property  ComponentXTree: TAVLTree read FComponentXTree;
@@ -143,6 +146,7 @@ type
     procedure UpdateAllFields;
     property  ActiveDataFile: TEpiDataFile read FActiveDataFile;
     property  Modified: Boolean read FModified write SetModified;
+    property  DesignerBox: TScrollBox read FDesignerBox;
   end;
 
 implementation
@@ -150,20 +154,39 @@ implementation
 uses
   main, graphics,
   types, math, settings, design_label_form,
-  UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils;
+  UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils,
+  datafile_documentation_form;
+
+function SortFields(Item1, Item2: Pointer): integer;
+var
+  Field1: TEpiField absolute Item1;
+  Field2: TEpiField absolute Item2;
+begin
+  result := 0;
+  if Field1 = Field2 then
+    exit;
+
+  if Field1.FieldY < Field2.FieldY then
+    result := -1
+  else if Field1.FieldY > Field2.FieldY then
+    result := 1
+  else
+    if Field1.FieldX < Field2.FieldX then
+      result := -1
+    else if Field1.FieldX > Field2.FieldX then
+      result := 1
+end;
 
 function YCmp(Item1, Item2: Pointer): Integer;
 var
-  Ctrl1, Ctrl2: TControl;
+  Ctrl1: TControl absolute Item1;
+  Ctrl2: TControl absolute Item2;
 begin
   // This is the same item and result should
   // always be 0.
   Result := Item1 - Item2;
   if Result = 0 then
     Exit;
-
-  Ctrl1 := TControl(Item1);
-  Ctrl2 := TControl(Item2);
 
   if Ctrl1.Top > Ctrl2.Top then
     result := 1
@@ -180,17 +203,14 @@ end;
 
 function XCmp(Item1, Item2: Pointer): Integer;
 var
-  Ctrl1, Ctrl2: TControl;
-  Field1, Field2: TEpiField;
+  Ctrl1: TControl absolute Item1;
+  Ctrl2: TControl absolute Item2;
 begin
   // This is the same item and result should
   // always be 0.
   Result := Item1 - Item2;
   if Result = 0 then
     Exit;
-
-  Ctrl1 := TControl(Item1);
-  Ctrl2 := TControl(Item2);
 
   if Ctrl1.Left > Ctrl2.Left then
     result := 1
@@ -212,7 +232,7 @@ var
   FieldForm: TFieldCreateForm;
   Pt: TPoint;
 begin
-  Result := TFieldEdit.Create(Self);
+  Result := TFieldEdit.Create(DesignerBox);
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
@@ -222,8 +242,9 @@ begin
   Result.AutoSize := false;
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
-  Result.Parent := Self;
+  Result.Parent := DesignerBox;
   Result.Field := AField;
+  Result.ReadOnly := true;
 
   ComponentYTree.Add(Result);
   ComponentXTree.Add(Result);
@@ -234,7 +255,7 @@ var
   LabelForm: TCreateLabelForm;
   Pt: TPoint;
 begin
-  Result := TFieldLabel.Create(Self);
+  Result := TFieldLabel.Create(DesignerBox);
   Result.Align := alNone;
   Result.DragMode := dmAutomatic;
   Result.DragKind := dkDock;
@@ -242,7 +263,7 @@ begin
   Result.OnEndDock := @EndLabelDock;
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
-  Result.Parent := Self;
+  Result.Parent := DesignerBox;
   Result.Field := AField;
 
   ComponentYTree.Add(Result);
@@ -280,7 +301,7 @@ begin
     Align := alNone;
 
     // Using to positional controls of the Edit since its position is updated correctly in the
-    // FrameDockDrop event.
+    // DesignerDockDrop event.
     Field.FieldX := Left;
     Field.FieldY := Top;
     Field.LabelX := VariableLabel.Left;
@@ -289,7 +310,7 @@ begin
   // Only add to component tree if it is being placed on the actual form.
   // - it could be placed outside in a custom form.
   // - "nil" = dock was abort using eg. ESC.
-  if (Target is TDesignFrame) or (not Assigned(Target)) then
+  if (Target = DesignerBox) or (not Assigned(Target)) then
   begin
     ComponentYTree.Add(Sender);
     ComponentXTree.Add(Sender);
@@ -315,6 +336,11 @@ begin
         'Fields: %d - %d',[ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]);
 end;
 
+procedure TDesignFrame.ShowOnMainStatusBar(Msg: string; const Index: integer);
+begin
+  Mainform.ShowOnStatusBar(Msg, Index);
+end;
+
 procedure TDesignFrame.EndLabelDock(Sender, Target: TObject; X, Y: Integer);
 begin
   with TFieldLabel(Sender) do
@@ -322,7 +348,7 @@ begin
     Align := alNone;
 
     // Using to positional controls of the Edit since its position is updated correctly in the
-    // FrameDockDrop event
+    // DesignerDockDrop event
     Field.FieldX := Left;
     Field.FieldY := Top;
     Field.LabelX := Left;
@@ -331,7 +357,7 @@ begin
   // Only add to component tree if it is being placed on the actual form.
   // - it could be placed outside in a custom form.
   // - "nil" = dock was abort using eg. ESC.
-  if (Target is TDesignFrame) or (not Assigned(Target)) then
+  if (Target = DesignerBox) or (not Assigned(Target)) then
   begin
     ComponentYTree.Add(Sender);
     ComponentXTree.Add(Sender);
@@ -369,7 +395,6 @@ procedure TDesignFrame.GetNearestControls(const FindCtrl: TControl;
 var
   Hit, Prd, Scc: TAVLTreeNode;
   HDy, PDy, SDy: Integer;
-
 begin
   // Finding the nearest it either an exact hit,
   // a little above or below - hence we need to look
@@ -425,117 +450,6 @@ begin
   Result := GetLowestControlPosition(Ctrl);
   if Assigned(Ctrl) then
     Result.Y += (Ctrl.Height + ManagerSettings.SpaceBetweenFields);
-end;
-
-procedure TDesignFrame.AutoAlignFields(ActiveControl: TControl;
-  AlignProps: TAutoAlignRecord);
-var
-  MaxVariableLabelWidth,
-  MaxFieldNameWidth: Integer;
-  MinY, MaxY, Spacing: Integer;
-  FieldNo, FieldCount: Integer;
-  i, PrevTop: Integer;
-  AdjustedFieldLeft: LongInt;
-  TreeNode: TAVLTreeNode;
-  NewYTree: TAVLTree;
-  NewXTree: TAVLTree;
-  Dx: Integer;
-begin
-{  // Init vars.
-  MaxVariableLabelWidth := 0;
-  MaxFieldNameWidth := 0;
-  MinY := MaxInt;
-  MaxY := 0;
-  FieldCount := 0;
-  PrevTop := -MaxInt;
-
-  // Information collection pass.
-  TreeNode := ComponentYTree.FindLowest;
-  while Assigned(TreeNode) do
-  begin
-    if (TControl(TreeNode.Data) is TFieldEdit) then
-    with TFieldEdit(TreeNode.Data) do
-    begin
-      MaxVariableLabelWidth := Max(MaxVariableLabelWidth, VariableLabel.Width);
-      MaxFieldNameWidth     := Max(MaxFieldNameWidth, FieldNameLabel.Width);
-    end;
-
-    if PrevTop <> TControl(TreeNode.Data).Top then
-      Inc(FieldCount);
-    PrevTop := TControl(TreeNode.Data).Top;
-
-    MinY := Min(MinY, TControl(TreeNode.Data).Top);
-    MaxY := Max(MaxY, TControl(TreeNode.Data).Top);
-
-    TreeNode := ComponentYTree.FindSuccessor(TreeNode);
-  end;
-  MinY := Max(FieldToolBar.Height + 5, MinY);
-
-  // Spacing between "top" point of TEditFields, adjusted for overlapping components.
-  Spacing := Max((MaxY - MinY) div (FieldCount - 1), ActiveControl.Height + ManagerSettings.SpaceBetweenFields);
-
-  AdjustedFieldLeft := Max(ActiveControl.Left,
-    MaxFieldNameWidth + MaxVariableLabelWidth + 10);
-
-  FieldNo := 0;
-  PrevTop := -MaxInt;
-  NewYTree := TAVLTree.Create(@YCmp);
-  NewXTree := TAVLTree.Create(@XCmp);
-  TreeNode := ComponentYTree.FindLowest;
-  while Assigned(TreeNode) do
-  begin
-    if (TControl(TreeNode.Data) is TFieldEdit) then
-    with TFieldEdit(TreeNode.Data) do
-    begin
-      // Field positioning.
-      Dx := 0;
-      if AlignProps.DefaultAlign then
-      begin
-        Dx := (Field.FieldX - AdjustedFieldLeft);
-        Field.FieldX := AdjustedFieldLeft;
-      end;
-      if AlignProps.EqualVertSpace then
-      begin
-        if PrevTop = Top then
-          Dec(FieldNo);
-        PrevTop := Top;
-        Field.FieldY := MinY + FieldNo * Spacing;
-        Field.LabelY := Field.FieldY + (Height - VariableLabel.Height);
-      end;
-      case AlignProps.LabelsAlign of
-        alLeft:  Field.LabelX := Field.FieldX - (MaxVariableLabelWidth + 5);
-        alRight: Field.LabelX := Field.FieldX - (VariableLabel.Width + 5);
-        alNone:  Field.LabelX := Field.LabelX - Dx;
-      end;
-    end;
-
-    if (TControl(TreeNode.Data) is TFieldLabel) then
-    with TFieldLabel(TreeNode.Data) do
-    begin
-      if AlignProps.EqualVertSpace then
-      begin
-        Field.FieldY := MinY + FieldNo * Spacing;
-        Field.LabelY := Field.FieldY;
-      end;
-      case AlignProps.LabelsAlign of
-        alLeft:
-          begin
-            Field.FieldX := AdjustedFieldLeft - (MaxVariableLabelWidth + 5);
-            Field.LabelX := AdjustedFieldLeft - (MaxVariableLabelWidth + 5);
-          end;
-      end;
-    end;
-
-    inc(FieldNo);
-    NewYTree.Add(TreeNode.Data);
-    NewXTree.Add(TreeNode.Data);
-    TreeNode := ComponentYTree.FindSuccessor(TreeNode);
-  end;
-
-  FreeAndNil(FComponentYTree);
-  FComponentYTree := NewYTree;
-  FreeAndNil(FComponentXTree);
-  FComponentXTree := NewXTree;     }
 end;
 
 function TDesignFrame.BackupFile(FileName: string; BackupExt: string): boolean;
@@ -879,7 +793,7 @@ var
 begin
   ActiveButton := aBtn;
   Pt := FindNewAutoControlPostion;
-  FrameMouseDown(nil, mbLeft, GetKeyShiftState, Pt.X, Pt.Y);
+  DesignerMouseDown(nil, mbLeft, GetKeyShiftState, Pt.X, Pt.Y);
 end;
 
 function TDesignFrame.GetHighestFieldPosition(var HighestField: TControl): TPoint;
@@ -911,6 +825,21 @@ begin
   Modified := false;
   FComponentYTree := TAVLTree.Create(@YCmp);
   FComponentXTree := TAVLTree.Create(@XCmp);
+
+  // Designer box creation and setup.
+  // - (This is subject to change if we find a better component than
+  //    the form or a scrollbox).
+  FDesignerBox             := TScrollBox.Create(Self);
+  FDesignerBox.Name        := 'DesingerBox';
+  FDesignerBox.Parent      := Self;
+  FDesignerBox.Align       := alClient;
+  FDesignerBox.DockSite    := true;
+  FDesignerBox.OnDockDrop  := @DesignerDockDrop;
+  FDesignerBox.OnUnDock    := @DesignerUnDock;
+  FDesignerBox.OnMouseDown := @DesignerMouseDown;
+  FDesignerBox.OnMouseMove := @DesignerMouseMove;
+  FDesignerBox.Color       := clWhite;
+  FDesignerBox.AutoScroll  := true;
 end;
 
 destructor TDesignFrame.Destroy;
@@ -926,7 +855,8 @@ procedure TDesignFrame.UpdateAllFields;
 var
   i: Integer;
 begin
-  for i := ControlCount -1 downto  0 do
+  for i := DesignerBox.ControlCount -1 downto  0 do
+  with DesignerBox do
   begin
     if not (Controls[i] is TFieldEdit) then continue;
 
@@ -946,61 +876,7 @@ begin
   ActiveButton := TToolButton(Sender);
 end;
 
-procedure TDesignFrame.ToolButton3Click(Sender: TObject);
-var
-  FS: TFileStream;
-  ss: Int64;
-
-  procedure WriteReportToStream(Tree: TAVLTree; s: TStream; var StreamSize: int64);
-  var h: string;
-
-    procedure WriteStr(const Txt: string);
-    begin
-      if s<>nil then
-        s.Write(Txt[1],length(Txt));
-      inc(StreamSize,length(Txt));
-    end;
-
-    procedure WriteTreeNode(ANode: TAVLTreeNode; const Prefix: string);
-    var b: string;
-    begin
-      if ANode=nil then exit;
-      WriteTreeNode(ANode.Right,Prefix+'  ');
-      b:=Prefix; //Prefix+HexStr(PtrInt(ANode.Data),SizeOf(PtrInt)*2)+'    ';
-      if TControl(ANode.Data) is TFieldEdit then
-        b += Format('  Name="%8s"',
-               [TFieldEdit(ANode.Data).Field.FieldName]);
-      if TControl(ANode.Data) is TFieldLabel then
-        b += Format('  Name="%10s"',
-               [TFieldLabel(ANode.Data).Field.FieldName]);
-//          +'  Self='+HexStr(PtrInt(ANode),SizeOf(PtrInt)*2)
-//          +'  Parent='+HexStr(PtrInt(ANode.Parent),SizeOf(PtrInt)*2)
-//          +'  Balance='+IntToStr(ANode.Balance)
-       b +=Format('  Top="%3d"  Left="%3d"', [TControl(ANode.Data).Top, TControl(ANode.Data).Left])
-         +LineEnding;
-      WriteStr(b);
-      WriteTreeNode(ANode.Left,Prefix+'  ');
-    end;
-
-  // TAVLTree.WriteReportToStream
-  begin
-    h:='Consistency: '+IntToStr(Tree.ConsistencyCheck)+' ---------------------'+LineEnding;
-    WriteStr(h);
-    WriteTreeNode(Tree.Root,'  ');
-    h:='-End-Of-AVL-Tree---------------------'+LineEnding;
-    WriteStr(h);
-  end;
-
-begin
-  fs := TFileStream.Create('/tmp/componenttree.dump', fmCreate);
-  if not (Sender is TAVLTree) then
-    Sender := ComponentXTree;
-  WriteReportToStream(TAVLTree(Sender), fs, ss);
-  fs.free;
-end;
-
-
-procedure TDesignFrame.FrameDockDrop(Sender: TObject; Source: TDragDockObject;
+procedure TDesignFrame.DesignerDockDrop(Sender: TObject; Source: TDragDockObject;
   X, Y: Integer);
 var
   Dx, Dy: Integer;
@@ -1035,23 +911,26 @@ var
   i: Integer;
 begin
   Field := nil;
-  for i := ControlCount - 1 downto  0 do
+  with DesignerBox do
   begin
-    Comp := Controls[i];
+    for i := ControlCount - 1 downto  0 do
+    begin
+      Comp := Controls[i];
 
-    if not ((Comp is TFieldEdit) or
-      (Comp is TFieldLabel)) then continue;
+      if not ((Comp is TFieldEdit) or
+        (Comp is TFieldLabel)) then continue;
 
-    if (Comp is TFieldEdit) then
-      Field := TFieldEdit(Comp).Field
-    else
-      Field := TFieldLabel(Comp).Field;
-    ActiveDatafile.RemoveField(Field, true);
-    RemoveControl(Comp);
-    ComponentYTree.Remove(Comp);
-    ComponentXTree.Remove(Comp);
-    FreeAndNil(Comp);
-    Modified := true;
+      if (Comp is TFieldEdit) then
+        Field := TFieldEdit(Comp).Field
+      else
+        Field := TFieldLabel(Comp).Field;
+      ActiveDatafile.RemoveField(Field, true);
+      RemoveControl(Comp);
+      ComponentYTree.Remove(Comp);
+      ComponentXTree.Remove(Comp);
+      FreeAndNil(Comp);
+      Modified := true;
+    end;
   end;
 end;
 
@@ -1062,9 +941,9 @@ var
   Res: TModalResult;
   Pt: TPoint;
 begin
-  AutoAlignForm := TAutoAlignForm.Create(self);
   with AutoAlignBtn do
     Pt := FieldToolBar.ClientToScreen(Point(Left, Top + Height + 1));
+  AutoAlignForm := TAutoAlignForm.Create(self);
   AutoAlignForm.Left := Pt.X;
   AutoAlignForm.Top  := Pt.Y;
   Res := AutoAlignForm.ShowModal;
@@ -1105,7 +984,7 @@ begin
 
   Modified := true;
   ActiveDatafile.RemoveField(TmpField, true);
-  RemoveControl(ClickedControl);
+  DesignerBox.RemoveControl(ClickedControl);
   ComponentYTree.Remove(ClickedControl);
   ComponentXTree.Remove(ClickedControl);
   FreeAndNil(ClickedControl);
@@ -1113,7 +992,7 @@ begin
     'Fields: %d - %d',[ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]);
 end;
 
-procedure TDesignFrame.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
+procedure TDesignFrame.DesignerMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
   MainForm.StatusBar1.Panels[2].Text := Format(
@@ -1135,11 +1014,13 @@ var
 begin
   if not Assigned(ClickedControl) then exit;
 
+  with ClickedControl do
+    Pt := DesignerBox.ClientToScreen(Point(Left + Width, Top + Height));
+
   if (ClickedControl is TFieldEdit) then
   With TFieldEdit(ClickedControl) do
   begin
-    Pt := Self.ClientToScreen(Point(Left + Width, Top + Height));
-    FieldForm := TFieldCreateForm.Create(Self, ActiveDatafile, Field.FieldType, false);
+    FieldForm := TFieldCreateForm.Create(DesignerBox, ActiveDatafile, Field.FieldType, false);
     FieldForm.Left := Pt.X;
     FieldForm.Top  := Pt.Y;
     FieldForm.ReadField(Field);
@@ -1150,8 +1031,7 @@ begin
   end else
   With TFieldLabel(ClickedControl) do
   begin
-    Pt := Self.ClientToScreen(Point(Left + Width, Top + Height));
-    LabelForm := TCreateLabelForm.Create(Self, ActiveDatafile);
+    LabelForm := TCreateLabelForm.Create(DesignerBox, ActiveDatafile);
     LabelForm.Left := Pt.X;
     LabelForm.Top  := Pt.Y;
     LabelForm.LabelEdit.Text := Field.VariableLabel;
@@ -1172,7 +1052,7 @@ begin
   end;
 end;
 
-procedure TDesignFrame.FrameMouseDown(Sender: TObject; Button: TMouseButton;
+procedure TDesignFrame.DesignerMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
   TmpField: TEpiField;
@@ -1186,16 +1066,18 @@ begin
   CreateForm := nil;
   try
     // The IFDEF is needed since scrollbar handling (apparently) is different on windows and linux/mac.
-    Pt := ClientToScreen(Point(X, Y{$IFNDEF WINDOWS} - VertScrollBar.Position{$ENDIF}));
+    Pt := DesignerBox.ClientToScreen(Point(X, Y{$IFNDEF WINDOWS} - DesignerBox.VertScrollBar.Position{$ENDIF}));
 
     if ActiveButton = LabelFieldBtn then
     begin
-      CreateForm := TCreateLabelForm.Create(Self, ActiveDataFile);
+      CreateForm := TCreateLabelForm.Create(DesignerBox, ActiveDataFile);
       CreateForm.Top := Min(Pt.Y, Screen.Height - CreateForm.Height - 5);
       CreateForm.Left := Min(Pt.X, Screen.Width - CreateForm.Width - 5);
       if CreateForm.ShowModal = mrCancel then
+      begin
+        ToolBtnClick(SelectorButton);
         exit;
-
+      end;
       TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDataFile.Size);
       with TmpField do
       begin
@@ -1211,11 +1093,14 @@ begin
     end else begin
       if not (ssShift in Shift) then
       begin
-        CreateForm := TFieldCreateForm.Create(Self, ActiveDatafile, TFieldType(ActiveButton.Tag));
+        CreateForm := TFieldCreateForm.Create(DesignerBox, ActiveDatafile, TFieldType(ActiveButton.Tag));
         CreateForm.Top := Min(Pt.Y, Screen.Height - CreateForm.Height - 5);
         CreateForm.Left := Min(Pt.X, Screen.Width - CreateForm.Width - 5);
         if CreateForm.ShowModal = mrCancel then
-          Exit;
+        begin
+          ToolBtnClick(SelectorButton);
+          exit;
+        end;
       end;
 
       TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDataFile.Size);
@@ -1237,8 +1122,8 @@ begin
       NewFieldEdit(TmpField);
     end;
 
-    if (VertScrollBar.Visible) and (true) then
-      VertScrollBar.Position := VertScrollBar.Range - VertScrollBar.Page;
+    if (DesignerBox.VertScrollBar.Visible) and (true) then
+      DesignerBox.VertScrollBar.Position := DesignerBox.VertScrollBar.Range - DesignerBox.VertScrollBar.Page;
 
     Modified := true;
     ToolBtnClick(SelectorButton);
@@ -1299,15 +1184,23 @@ begin
   Modified := true;
 end;
 
-procedure TDesignFrame.FrameUnDock(Sender: TObject; Client: TControl;
+procedure TDesignFrame.DocumentFileActionExecute(Sender: TObject);
+var
+  DocumentForm: TDatafileDocumentationForm;
+begin
+  ActiveDataFile.SortFields(@SortFields);
+  DocumentForm := TDatafileDocumentationForm.Create(Self, ActiveDataFile);
+  DocumentForm.Show;
+end;
+
+procedure TDesignFrame.DesignerUnDock(Sender: TObject; Client: TControl;
   NewTarget: TWinControl; var Allow: Boolean);
 begin
-  if (Sender = NewTarget) then
+  if (NewTarget = DesignerBox) then
     Allow := true
   else
     Allow := false;
 end;
-
 
 procedure TDesignFrame.NewDMYFieldActionExecute(Sender: TObject);
 begin
@@ -1429,6 +1322,7 @@ begin
     Exit;
   end;
 
+  ActiveDataFile.SortFields(@SortFields);
   ActiveDataFile.Save(ActiveDataFile.FileName, []);
   Modified := false;
   MainForm.StatusBar1.Panels[0].Text := 'Saving complete: ' + ActiveDataFile.FileName;
@@ -1447,6 +1341,7 @@ begin
 
     BackupFile(Fn);
 
+    ActiveDataFile.SortFields(@SortFields);
     ActiveDatafile.Save(Fn, []);
 
     Modified := false;
