@@ -23,7 +23,6 @@ type
     MenuItem1: TMenuItem;
     shortIntroItem: TMenuItem;
     MaintenanceBtn: TBitBtn;
-    ProgressBar1: TProgressBar;
     SettingsMenu: TMenuItem;
     SettingsAction: TAction;
     Button1: TButton;
@@ -44,7 +43,6 @@ type
     Panel1: TPanel;
     ProgressPanel: TPanel;
     StatusBar1: TStatusBar;
-    StatusBar2: TStatusBar;
     procedure Button1Click(Sender: TObject);
     procedure ClosePageActionExecute(Sender: TObject);
     procedure DesignBtnClick(Sender: TObject);
@@ -57,9 +55,12 @@ type
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
+    procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
+      const Rect: TRect);
   private
     { private declarations }
     TabNameCount: integer;
+    ProgressBar1: TProgressBar;
     procedure CloseTab(Sender: TObject);
   public
     { public declarations }
@@ -75,7 +76,8 @@ var
 implementation
 
 uses
-  design_frame, UEpiLog, settings, Clipbrd{, memcheck};
+  design_frame, UEpiLog, settings, Clipbrd,
+  InterfaceBase, LCLType;
 
 
 { TMainForm }
@@ -85,7 +87,7 @@ var
   Frame: TFrame;
   TabSheet: TTabSheet;
 begin
-  MainForm.StatusBar1.Panels[0].Text := 'Click toolbar to add fields or read files';
+  ShowOnStatusBar('Click toolbar to add fields or read files', 0);
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -138,9 +140,29 @@ begin
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
+var
+  PbStyle: LongInt;
 begin
   Caption := 'EpiData Project and Data Manager' +
     ' (v' + GetManagerVersion + ')';
+
+  ProgressBar1 := TProgressBar.Create(Self);
+  {$IFDEF MSWINDOWS}
+    StatusBar1.Panels[3].Style := psOwnerDraw;
+    ProgressBar1.Parent := StatusBar1;
+    ProgressBar1.Align := alCustom;
+    PbStyle := WidgetSet.GetWindowLong(ProgressBar1.Handle, GWL_EXSTYLE);
+    PbStyle := PbStyle - WS_EX_STATICEDGE;
+    WidgetSet.SetWindowLong(ProgressBar1.Handle, GWL_EXSTYLE, PbStyle);
+  {$ENDIF}
+  {$IFDEF UNIX}
+    ProgressBar1.Parent := ProgressPanel;
+    ProgressBar1.Align := alNone;
+    ProgressBar1.Left := GCPbtn.Left + GCPbtn.Width + 10;
+    ProgressBar1.Width := (ProgressPanel.Width - 10) - ProgressBar1.Left;
+    ProgressBar1.Anchors := [akLeft, akRight];
+  {$ENDIF}
+  ProgressBar1.Visible := false;
 
   {$IFDEF EPI_DEBUG}
   Panel1.Visible := true;
@@ -155,7 +177,7 @@ var
   TabSheet: TTabSheet;
   Frame: TDesignFrame;
 begin
-  MainForm.StatusBar1.Panels[0].Text := 'Add fields: Click toolbar or read files';
+  ShowOnStatusBar('Add fields: Click toolbar or read files', 0);
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -201,17 +223,17 @@ end;
 
 procedure TMainForm.GCPbtnClick(Sender: TObject);
 begin
-  MainForm.StatusBar1.Panels[0].Text := 'GCP not ready yet';
+  ShowOnStatusBar('GCP not ready yet', 0);
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
 begin
-  MainForm.StatusBar1.Panels[0].Text := 'Help System Not Ready';
+  ShowOnStatusBar('Help System Not Ready', 0);
 end;
 
 procedure TMainForm.MetaDataBtnClick(Sender: TObject);
 begin
-  MainForm.StatusBar1.Panels[0].Text := 'Not implementet yet';
+  ShowOnStatusBar('Not implementet yet', 0);
 end;
 
 
@@ -226,6 +248,18 @@ begin
   // TODO : Update design form if showing properties have changed.
   for i := 0 to PageControl1.PageCount -1 do
     TDesignFrame(PageControl1.Pages[i].Controls[0]).UpdateAllFields;
+end;
+
+procedure TMainForm.StatusBar1DrawPanel(StatusBar: TStatusBar;
+  Panel: TStatusPanel; const Rect: TRect);
+begin
+  if Panel = StatusBar.Panels[3] then
+  with ProgressBar1 do begin
+    ProgressBar1.Top := Rect.Top;
+    ProgressBar1.Left := Rect.Left;
+    ProgressBar1.Width := Rect.Right - Rect.Left;
+    ProgressBar1.Height := Rect.Bottom - Rect.Top;
+  end;
 end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
@@ -271,9 +305,12 @@ function TMainForm.ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string
 begin
   if Percent <> ProgressBar1.Position then
   begin
+    ProgressBar1.Visible := true;
     ProgressBar1.Position := Percent;
     Application.ProcessMessages;
   end;
+  if Percent = 100 then
+    ProgressBar1.Visible := false;;
   result := prNormal;
 end;
 
@@ -293,7 +330,8 @@ end;
 
 procedure TMainForm.ShowOnStatusBar(Msg: string; Idx: integer);
 begin
-  //
+  if (Idx < 0) or (Idx > StatusBar1.Panels.Count -1) then exit;
+  StatusBar1.Panels[Idx].Text := Msg;
 end;
 
 

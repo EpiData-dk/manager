@@ -17,6 +17,7 @@ type
     ActionList1: TActionList;
     CancelBtn: TButton;
     CloseAction: TAction;
+    DefaultValueEdit: TEdit;
     FieldDecimalSizeEdit: TMaskEdit;
     FieldLengthEdit: TMaskEdit;
     FieldNameEdit: TEdit;
@@ -25,6 +26,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    Label6: TLabel;
     LabelEdit: TEdit;
     OkBtn: TButton;
     Panel1: TPanel;
@@ -49,7 +51,7 @@ implementation
 
 uses
   Controls, settings, UEpiDataGlobals, design_frame, Graphics,
-  UStringUtils;
+  UStringUtils, strutils;
 
 var
   OldLength, OldDecimals: Integer;
@@ -155,6 +157,15 @@ begin
 
   FDf := DataFile;
   FNewField := NewField;
+
+{  if (FDf.Size > 0) and (NewField) then
+  begin
+    Label6.Enabled := true;
+    Label6.Visible := true;
+    DefaultValueEdit.Enabled := true;
+    DefaultValueEdit.Visible := true;
+    Height := Height + DefaultValueEdit.Height + 5;
+  end;           }
 
   if ManagerSettings.FieldNamePrefix <> '' then
     FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(FDf.NumDataFields+1);

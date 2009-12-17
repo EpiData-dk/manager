@@ -1,13 +1,13 @@
 object FieldCreateForm: TFieldCreateForm
-  Left = 849
-  Height = 138
-  Top = 298
-  Width = 264
+  Left = 468
+  Height = 140
+  Top = 276
+  Width = 270
   ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
-  ClientHeight = 138
-  ClientWidth = 264
+  ClientHeight = 140
+  ClientWidth = 270
   Color = clSkyBlue
   Icon.Data = {
     9E09000000000100010018180000010020008809000016000000280000001800
@@ -95,14 +95,14 @@ object FieldCreateForm: TFieldCreateForm
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
-    Height = 138
+    Height = 140
     Top = 0
-    Width = 264
+    Width = 270
     Align = alClient
     BevelInner = bvLowered
     BevelWidth = 2
-    ClientHeight = 138
-    ClientWidth = 264
+    ClientHeight = 140
+    ClientWidth = 270
     TabOrder = 0
     object Label1: TLabel
       Left = 8
@@ -123,7 +123,7 @@ object FieldCreateForm: TFieldCreateForm
     object Label3: TLabel
       Left = 8
       Height = 18
-      Top = 80
+      Top = 81
       Width = 49
       Caption = 'Length:'
       ParentColor = False
@@ -131,7 +131,7 @@ object FieldCreateForm: TFieldCreateForm
     object Label5: TLabel
       Left = 8
       Height = 18
-      Top = 110
+      Top = 112
       Width = 35
       Anchors = [akLeft, akBottom]
       Caption = 'Type:'
@@ -198,10 +198,29 @@ object FieldCreateForm: TFieldCreateForm
     object Label4: TLabel
       Left = 8
       Height = 18
-      Top = 110
+      Top = 113
       Width = 66
       Caption = 'Decimals:'
       ParentColor = False
+      Visible = False
+    end
+    object Label6: TLabel
+      Left = 8
+      Height = 18
+      Top = 145
+      Width = 93
+      Caption = 'Default value:'
+      Enabled = False
+      ParentColor = False
+      Visible = False
+    end
+    object DefaultValueEdit: TEdit
+      Left = 116
+      Height = 27
+      Top = 136
+      Width = 140
+      Enabled = False
+      TabOrder = 6
       Visible = False
     end
   end

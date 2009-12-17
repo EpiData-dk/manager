@@ -143,6 +143,9 @@ begin
   if EventType in [fceName, fceVarLabel, fceVX, fceVY] then
     UpdateFieldNameLabel;
   UpdateHint;
+
+  if Assigned(TEpiField(Sender).DataFile.OnChange) then
+    TEpiField(Sender).DataFile.OnChange(Self, dceName, 0);
 end;
 
 procedure TFieldEdit.UpdateFieldNameLabel;

@@ -9,7 +9,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList,
   Controls, Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, UEpiDataFile,
   FieldEdit, Design_Field_Frame, AVL_Tree, LCLType, design_autoalign_form,
-  UDataFileTypes;
+  UDataFileTypes, datafile_documentation_form;
 
 type
 
@@ -104,6 +104,7 @@ type
     { private declarations }
     ActiveButton: TToolButton;
     FActiveDatafile: TEpiDataFile;
+    FActiveDocumentationForm: TDatafileDocumentationForm;
     FComponentXTree: TAVLTree;
     FComponentYTree: TAVLTree;
     FModified: boolean;
@@ -118,6 +119,8 @@ type
     procedure FieldMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure ShowOnMainStatusBar(Msg: string; Const Index: integer);
+    procedure DataFileChange(Sender: TObject;
+      EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
   private
     // Docking.
     // - Field:
@@ -139,6 +142,8 @@ type
   protected
     property  ComponentYTree: TAVLTree read FComponentYTree;
     property  ComponentXTree: TAVLTree read FComponentXTree;
+    property  ActiveDocumentationForm: TDatafileDocumentationForm
+      read FActiveDocumentationForm write FActiveDocumentationForm;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -154,8 +159,7 @@ implementation
 uses
   main, graphics,
   types, math, settings, design_label_form,
-  UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils,
-  datafile_documentation_form;
+  UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils;
 
 function SortFields(Item1, Item2: Pointer): integer;
 var
@@ -332,13 +336,32 @@ begin
     EditFieldMenuItem.Caption := 'Edit Label';
     DeleteFieldMenuItem.Caption := 'Delete Label';
   end;
-        MainForm.StatusBar1.Panels[1].Text := Format(
-        'Fields: %d - %d',[ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]);
 end;
 
 procedure TDesignFrame.ShowOnMainStatusBar(Msg: string; const Index: integer);
 begin
   Mainform.ShowOnStatusBar(Msg, Index);
+end;
+
+procedure TDesignFrame.DataFileChange(Sender: TObject;
+  EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+begin
+  if Assigned(ActiveDocumentationForm) and
+     ActiveDocumentationForm.Showing then
+    ActiveDocumentationForm.ForceUpdate;
+
+  ShowOnMainStatusBar(
+    Format(
+      'Fields: %d - %d',
+      [ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]
+    ), 1
+  );
+  ShowOnMainStatusBar(
+    Format(
+      'Records: %d',
+      [ActiveDatafile.Size]
+    ), 2
+  );
 end;
 
 procedure TDesignFrame.EndLabelDock(Sender, Target: TObject; X, Y: Integer);
@@ -821,6 +844,8 @@ begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
   FActiveDatafile := TEpiDataFile.Create();
+  FActiveDatafile.OnChange := @DataFileChange;
+  FActiveDocumentationForm := nil;
   ClickedControl := nil;
   Modified := false;
   FComponentYTree := TAVLTree.Create(@YCmp);
@@ -845,7 +870,9 @@ end;
 destructor TDesignFrame.Destroy;
 begin
   if Assigned(FActiveDatafile) then
-   FreeAndNil(FActiveDatafile);
+    FreeAndNil(FActiveDatafile);
+  if Assigned(FActiveDocumentationForm) then
+    FreeAndNil(FActiveDocumentationForm);
   FreeAndNil(FComponentYTree);
   FreeAndNil(FComponentXTree);
   inherited Destroy;
@@ -988,16 +1015,12 @@ begin
   ComponentYTree.Remove(ClickedControl);
   ComponentXTree.Remove(ClickedControl);
   FreeAndNil(ClickedControl);
-  MainForm.StatusBar1.Panels[1].Text := Format(
-    'Fields: %d - %d',[ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]);
 end;
 
 procedure TDesignFrame.DesignerMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-  MainForm.StatusBar1.Panels[2].Text := Format(
-    'Mouse - X: %d Y: %d',
-    [X, Y]);
+  ShowOnMainStatusBar(Format('Mouse - X: %d Y: %d',[X, Y]), 4);
 
   MainForm.Label5.Caption := Format(
     'Y Component Tree.Count = %d' + LineEnding +
@@ -1185,12 +1208,10 @@ begin
 end;
 
 procedure TDesignFrame.DocumentFileActionExecute(Sender: TObject);
-var
-  DocumentForm: TDatafileDocumentationForm;
 begin
   ActiveDataFile.SortFields(@SortFields);
-  DocumentForm := TDatafileDocumentationForm.Create(Self, ActiveDataFile);
-  DocumentForm.Show;
+  FActiveDocumentationForm := TDatafileDocumentationForm.Create(Self, ActiveDataFile);
+  ActiveDocumentationForm.Show;
 end;
 
 procedure TDesignFrame.DesignerUnDock(Sender: TObject; Client: TControl;
@@ -1271,6 +1292,7 @@ begin
     Import.OnClipBoardRead := @MainForm.ReadClipBoard;
     Import.FieldNaming := ManagerSettings.FieldNamingStyle;
     Import.Import(Fn, FActiveDatafile, dftNone);
+    FActiveDatafile.OnChange := @DataFileChange;
     FreeAndNil(Import);
 
     Application.ProcessMessages;
@@ -1279,6 +1301,7 @@ begin
     TmpEdit := nil;
     for i := 0 to ActiveDatafile.NumFields - 1 do
     begin
+      MainForm.ShowProgress(Self, ((i+1)*100) div ActiveDataFile.NumFields, '');
       TmpField := ActiveDatafile[i];
       if ActiveDataFile.DatafileType <> dftEpiDataXml then
       begin
@@ -1297,14 +1320,12 @@ begin
         else
           NewFieldEdit(TmpField);
     end;
-
+    DataFileChange(nil, dceAddField, 0);
     Self.UnLockRealizeBounds;
 
     MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
     MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
     MainForm.PageControl1.ShowHint := true;
-    MainForm.StatusBar1.Panels[1].Text := Format(
-        'Fields: %d - %d',[ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]);
 
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
       LabelsAlignment(TmpEdit, Nil, alLeft);
@@ -1325,7 +1346,7 @@ begin
   ActiveDataFile.SortFields(@SortFields);
   ActiveDataFile.Save(ActiveDataFile.FileName, []);
   Modified := false;
-  MainForm.StatusBar1.Panels[0].Text := 'Saving complete: ' + ActiveDataFile.FileName;
+  ShowOnMainStatusBar('Saving complete: ' + ActiveDataFile.FileName, 0);
 end;
 
 procedure TDesignFrame.SaveFileAsActionExecute(Sender: TObject);
@@ -1349,7 +1370,7 @@ begin
     MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
     MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
     MainForm.PageControl1.ShowHint := true;
-    MainForm.StatusBar1.Panels[0].Text := 'Saving complete: ' + Fn;
+    ShowOnMainStatusBar('Saving complete: ' + Fn, 0);
   end;
 end;
 

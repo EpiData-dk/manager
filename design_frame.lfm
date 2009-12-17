@@ -1,19 +1,19 @@
 object DesignFrame: TDesignFrame
   Left = 0
-  Height = 564
+  Height = 566
   Top = 0
   Width = 836
   HorzScrollBar.Page = 835
   VertScrollBar.Page = 563
   VertScrollBar.Range = 26
-  ClientHeight = 564
+  ClientHeight = 566
   ClientWidth = 836
   Color = clBtnFace
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 703
-  DesignTop = 298
+  DesignLeft = 335
+  DesignTop = 230
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -28,6 +28,8 @@ object DesignFrame: TDesignFrame
     EdgeOuter = esRaised
     Images = FieldToolBarImageList
     ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 0
     object IntFieldBtn: TToolButton
       Left = 126
@@ -307,6 +309,7 @@ object DesignFrame: TDesignFrame
     end
     object DocumentFileAction: TAction
       Caption = 'Document Datafile'
+      Hint = 'Document Datafile'
       ImageIndex = 17
       OnExecute = DocumentFileActionExecute
     end

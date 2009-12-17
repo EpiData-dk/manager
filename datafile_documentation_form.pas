@@ -22,9 +22,11 @@ type
   private
     { private declarations }
     FDatafile: TEpiDatafile;
+    LocalUpdating: Boolean;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; aDatafile: TEpiDataFile);
+    procedure ForceUpdate;
     property Datafile: TEpiDatafile read FDatafile;
   end; 
 
@@ -57,8 +59,7 @@ end;
 
 procedure TDatafileDocumentationForm.FormShow(Sender: TObject);
 begin
-  Datafile.SortFields(@SortFields);
-  Memo1.Lines.Assign(Datafile.DocumentDatafile);
+  ForceUpdate;
 end;
 
 procedure TDatafileDocumentationForm.Button1Click(Sender: TObject);
@@ -68,8 +69,7 @@ end;
 
 procedure TDatafileDocumentationForm.FormActivate(Sender: TObject);
 begin
-  Datafile.SortFields(@SortFields);
-  Memo1.Lines.Assign(Datafile.DocumentDatafile);
+  ForceUpdate;
 end;
 
 constructor TDatafileDocumentationForm.Create(TheOwner: TComponent; aDatafile: TEpiDataFile);
@@ -78,6 +78,15 @@ begin
   FDatafile := aDatafile;
   Caption := 'Documenting: ' +
     Datafile.FileName;
+end;
+
+procedure TDatafileDocumentationForm.ForceUpdate;
+begin
+  if LocalUpdating then exit;
+  LocalUpdating := true;
+  Datafile.SortFields(@SortFields);
+  Memo1.Lines.Assign(Datafile.DocumentDatafile);
+  LocalUpdating := false;
 end;
 
 initialization
