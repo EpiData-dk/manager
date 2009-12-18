@@ -160,8 +160,10 @@ begin
     ProgressBar1.Align := alNone;
     ProgressBar1.Left := GCPbtn.Left + GCPbtn.Width + 10;
     ProgressBar1.Width := (ProgressPanel.Width - 10) - ProgressBar1.Left;
+    ProgressBar1.Top := (ProgressPanel.Height - ProgressBar1.Height) div 2;
     ProgressBar1.Anchors := [akLeft, akRight];
   {$ENDIF}
+  ProgressBar1.Smooth := true;
   ProgressBar1.Visible := false;
 
   {$IFDEF EPI_DEBUG}
