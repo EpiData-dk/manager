@@ -1,8 +1,8 @@
 object MainForm: TMainForm
   Cursor = crIBeam
-  Left = 314
+  Left = 703
   Height = 527
-  Top = 244
+  Top = 308
   Width = 779
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
@@ -47,6 +47,7 @@ object MainForm: TMainForm
       Top = 8
       Width = 128
       Caption = 'Labels + Check'
+      Enabled = False
       Font.CharSet = 4
       Font.Height = -13
       Font.Name = 'Sans'
@@ -64,6 +65,7 @@ object MainForm: TMainForm
       Top = 8
       Width = 104
       Caption = 'GCP Tools'
+      Enabled = False
       Font.CharSet = 4
       Font.Height = -13
       Font.Name = 'Sans'
@@ -81,6 +83,7 @@ object MainForm: TMainForm
       Top = 8
       Width = 104
       Caption = 'Tools'
+      Enabled = False
       Font.CharSet = 4
       Font.Height = -13
       Font.Name = 'Sans'

@@ -1,26 +1,26 @@
 1 VERSIONINFO
-FILEVERSION 0,1,1,3
-PRODUCTVERSION 0,1,1,3
+FILEVERSION 0,2,0,4
+PRODUCTVERSION 0,2,0,4
 {
  BLOCK "StringFileInfo"
  {
-  BLOCK "080904E4"
+  BLOCK "080904B0"
   {
    VALUE "Comments", "\000"
    VALUE "CompanyName", "\000"
    VALUE "FileDescription", "Get latest from Http://www.epidata.dk\000"
-   VALUE "FileVersion", "0.1.1.3\000"
+   VALUE "FileVersion", "0.2.0.4\000"
    VALUE "InternalName", "\000"
    VALUE "LegalCopyright", "EpiData Association, Denmark\000"
    VALUE "LegalTrademarks", "\000"
    VALUE "OriginalFilename", "\000"
    VALUE "ProductName", "EpiData manager\000"
-   VALUE "ProductVersion", "0.1.1.3\000"
+   VALUE "ProductVersion", "0.2.0.4\000"
   }
  }
  BLOCK "VarFileInfo"
  {
-  VALUE "Translation", 0x0809, 0x04E4
+  VALUE "Translation", 0x0809, 0x04B0
  }
 }
 

@@ -1337,7 +1337,7 @@ end;
 
 procedure TDesignFrame.SaveFileActionExecute(Sender: TObject);
 begin
-  if ActiveDataFile.FileName = '' then
+  if ActiveDataFile.DatafileType <> dftEpiDataXml then
   begin
     SaveFileAsAction.Execute;
     Exit;

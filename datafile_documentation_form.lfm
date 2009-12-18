@@ -1,7 +1,7 @@
 object DatafileDocumentationForm: TDatafileDocumentationForm
-  Left = 595
+  Left = 867
   Height = 478
-  Top = 282
+  Top = 448
   Width = 559
   ActiveControl = Panel1
   ClientHeight = 478
@@ -23,8 +23,7 @@ object DatafileDocumentationForm: TDatafileDocumentationForm
       Height = 25
       Top = 8
       Width = 75
-      Caption = '&Close'
-      OnClick = Button1Click
+      Action = CloseAction
       TabOrder = 0
     end
   end
@@ -42,5 +41,15 @@ object DatafileDocumentationForm: TDatafileDocumentationForm
     ScrollBars = ssAutoBoth
     TabOrder = 1
     WordWrap = False
+  end
+  object ActionList1: TActionList
+    left = 353
+    top = 104
+    object CloseAction: TAction
+      Caption = '&Close'
+      Hint = 'Close Form'
+      OnExecute = CloseActionExecute
+      ShortCut = 27
+    end
   end
 end

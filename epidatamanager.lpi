@@ -16,11 +16,11 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <CurrentMajorRevNr Value="1"/>
-      <CurrentMinorRevNr Value="1"/>
-      <CurrentBuildNr Value="3"/>
-      <ProjectVersion Value="0.1.1.3"/>
+      <CurrentMajorRevNr Value="2"/>
+      <CurrentBuildNr Value="4"/>
+      <ProjectVersion Value="0.2.0.4"/>
       <Language Value="0809"/>
+      <CharSet Value="04B0"/>
       <FileDescription Value="Get latest from Http://www.epidata.dk"/>
       <LegalCopyright Value="EpiData Association, Denmark"/>
       <ProductName Value="EpiData manager"/>
@@ -37,19 +37,16 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="3">
+    <RequiredPackages Count="2">
       <Item1>
         <PackageName Value="epidatacore"/>
         <MinVersion Minor="2" Release="3" Build="102" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="CodeTools"/>
-      </Item2>
-      <Item3>
         <PackageName Value="LCL"/>
-      </Item3>
+      </Item2>
     </RequiredPackages>
-    <Units Count="9">
+    <Units Count="10">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -109,6 +106,14 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="datafile_documentation_form"/>
       </Unit8>
+      <Unit9>
+        <Filename Value="warning.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="WarningForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Warning"/>
+      </Unit9>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -120,18 +125,23 @@
       <IncludeFiles Value="$(ProjOutDir)/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <AllowLabel Value="False"/>
+      </SyntaxOptions>
+    </Parsing>
     <CodeGeneration>
+      <SmartLinkUnit Value="True"/>
       <Checks>
         <IOChecks Value="True"/>
       </Checks>
       <Optimizations>
-        <OptimizationLevel Value="0"/>
+        <OptimizationLevel Value="2"/>
       </Optimizations>
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <GenerateDwarf Value="True"/>
+        <UseLineInfoUnit Value="False"/>
       </Debugging>
       <Options>
         <Win32>
@@ -140,7 +150,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG"/>
+      <CustomOptions Value="-dEPI_DEBUG1"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

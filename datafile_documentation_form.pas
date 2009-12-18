@@ -6,17 +6,19 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, UEpiDataFile;
+  ExtCtrls, StdCtrls, ActnList, UEpiDataFile;
 
 type
 
   { TDatafileDocumentationForm }
 
   TDatafileDocumentationForm = class(TForm)
+    CloseAction: TAction;
+    ActionList1: TActionList;
     Button1: TButton;
     Memo1: TMemo;
     Panel1: TPanel;
-    procedure Button1Click(Sender: TObject);
+    procedure CloseActionExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
@@ -62,7 +64,7 @@ begin
   ForceUpdate;
 end;
 
-procedure TDatafileDocumentationForm.Button1Click(Sender: TObject);
+procedure TDatafileDocumentationForm.CloseActionExecute(Sender: TObject);
 begin
   Close;
 end;
