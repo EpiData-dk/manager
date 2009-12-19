@@ -229,6 +229,8 @@ begin
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
+var
+  mr : integer;
 begin
   ShowOnStatusBar('Help System Not Ready', 0);
 end;
