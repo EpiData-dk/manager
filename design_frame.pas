@@ -18,6 +18,7 @@ type
   TDesignFrame = class(TFrame)
     DocumentFileAction: TAction;
     AlignAction: TAction;
+    NewDataFormBtn: TToolButton;
     SaveFileAsAction: TAction;
     SaveFileAction: TAction;
     OpenFileAction: TAction;
@@ -25,6 +26,7 @@ type
     NewYMDTodayFieldMenu: TMenuItem;
     NewMDYTodayFieldMenu: TMenuItem;
     NewDMYTodayFieldMenu: TMenuItem;
+    ShowStructureBtn: TToolButton;
     TodayDateSubMenu: TMenuItem;
     NewSoundexFieldMenu: TMenuItem;
     NewUpperFieldMenu: TMenuItem;
@@ -67,13 +69,13 @@ type
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
     MDYFieldBtn: TToolButton;
-    ToolButton5: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
     YMDFieldBtn: TToolButton;
     procedure DocumentFileActionExecute(Sender: TObject);
     procedure ImportStructureActionExecute(Sender: TObject);
+    procedure NewDataFormBtnClick(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
     procedure AutoAlignBtnClick(Sender: TObject);
     procedure ClearToolBtnClick(Sender: TObject);
@@ -1205,6 +1207,11 @@ begin
   end;
 
   Modified := true;
+end;
+
+procedure TDesignFrame.NewDataFormBtnClick(Sender: TObject);
+begin
+   MainForm.NewDesignFormActionExecute(Self);
 end;
 
 procedure TDesignFrame.DocumentFileActionExecute(Sender: TObject);
