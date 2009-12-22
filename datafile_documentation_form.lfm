@@ -1,13 +1,12 @@
 object DatafileDocumentationForm: TDatafileDocumentationForm
-  Left = 867
+  Left = 735
   Height = 478
-  Top = 448
+  Top = 384
   Width = 559
   ActiveControl = Panel1
   ClientHeight = 478
   ClientWidth = 559
   OnActivate = FormActivate
-  OnShow = FormShow
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0

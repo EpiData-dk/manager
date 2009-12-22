@@ -110,6 +110,19 @@ begin
   with TEpiField(Sender) do
   begin
     case EventType of
+      fceUpdate:
+        begin
+          // Edit:
+          FFieldNameLabel.Caption := FieldName;
+          Text := FieldName;
+          Top  := FieldY;
+          Left := FieldX;
+          Width := TDesignFrame(Parent).Canvas.TextWidth('W') * FieldLength;
+          // Label:
+          Self.FVariableLabel.Left := LabelX;
+          Self.FVariableLabel.Top  := LabelY;
+          Self.FVariableLabel.Caption := VariableLabel;
+        end;
       fceName:
         begin
           FFieldNameLabel.Caption := FieldName;
@@ -140,12 +153,9 @@ begin
       fceVColBg:;
     end;
   end;
-  if EventType in [fceName, fceVarLabel, fceVX, fceVY] then
+  if EventType in [fceUpdate, fceName, fceVarLabel, fceVX, fceVY] then
     UpdateFieldNameLabel;
   UpdateHint;
-
-  if Assigned(TEpiField(Sender).DataFile.OnChange) then
-    TEpiField(Sender).DataFile.OnChange(Self, dceName, 0);
 end;
 
 procedure TFieldEdit.UpdateFieldNameLabel;
@@ -176,7 +186,7 @@ begin
     Exit;
 
   FField := AValue;
-  Field.OnChange := @OnFieldChange;
+  Field.RegisterOnChangeHook(@OnFieldChange);
 
   Text   := Field.FieldName;
   Top    := Field.FieldY;
@@ -229,6 +239,8 @@ end;
 destructor TFieldEdit.Destroy;
 begin
   inherited Destroy;
+  if Assigned(FField) then
+    FField.UnRegisterOnChangeHook(@OnFieldChange);
   FField := nil;
   // Do not destroy - it's handled byt the visual destruction of the frame.
   FVariableLabel := nil;
@@ -318,7 +330,7 @@ end;
 procedure TFieldLabel.SetField(const AValue: TEpiField);
 begin
   FField := AValue;
-  Field.OnChange := @OnFieldChange;
+  Field.RegisterOnChangeHook(@OnFieldChange);
 
   Top := Field.FieldY;
   Left := Field.FieldX;

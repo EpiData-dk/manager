@@ -208,6 +208,8 @@ begin
   // Event happens before activepage is changed to new sheet.
   // - hence we can disable shortcut events here.
   AllowChange := true;
+  if not Assigned(PageControl1.ActivePage.Components[0]) then
+    Exit;
   TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asSuspended;
 end;
 
@@ -221,6 +223,7 @@ begin
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
   TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asNormal;
+  TDesignFrame(PageControl1.ActivePage.Components[0]).UpdateNonInteractiveVisuals;
 end;
 
 procedure TMainForm.GCPbtnClick(Sender: TObject);
@@ -311,7 +314,7 @@ begin
   begin
     ProgressBar1.Visible := true;
     ProgressBar1.Position := Percent;
-    Application.ProcessMessages;
+    ProgressBar1.Repaint;
   end;
   if Percent = 100 then
     ProgressBar1.Visible := false;;

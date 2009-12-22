@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 335
-  DesignTop = 230
+  DesignLeft = 508
+  DesignTop = 292
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -206,11 +206,8 @@ object DesignFrame: TDesignFrame
     end
     object NewDataFormBtn: TToolButton
       Left = 29
-      Hint = 'New File (Ctrl+N)'
       Top = 1
-      Caption = 'Newfile'
-      ImageIndex = 20
-      OnClick = NewDataFormBtnClick
+      Action = MainForm.NewDesignFormAction
     end
   end
   object DesignFrameActionList: TActionList

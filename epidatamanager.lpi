@@ -5,6 +5,7 @@
     <General>
       <Flags>
         <MainUnitHasTitleStatement Value="False"/>
+        <LRSInOutputDirectory Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
@@ -17,8 +18,9 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <CurrentMajorRevNr Value="2"/>
-      <CurrentBuildNr Value="4"/>
-      <ProjectVersion Value="0.2.0.4"/>
+      <CurrentMinorRevNr Value="1"/>
+      <CurrentBuildNr Value="5"/>
+      <ProjectVersion Value="0.2.1.5"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <FileDescription Value="Get latest from Http://www.epidata.dk"/>
@@ -119,7 +121,7 @@
   <CompilerOptions>
     <Version Value="8"/>
     <Target>
-      <Filename Value="epidatamanager"/>
+      <Filename Value="epidatamanager.$(TargetCPU)-$(TargetOS)"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)/"/>
@@ -136,12 +138,13 @@
         <IOChecks Value="True"/>
       </Checks>
       <Optimizations>
-        <OptimizationLevel Value="2"/>
+        <OptimizationLevel Value="0"/>
       </Optimizations>
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <UseLineInfoUnit Value="False"/>
+        <GenerateDebugInfo Value="True"/>
+        <GenerateDwarf Value="True"/>
       </Debugging>
       <Options>
         <Win32>
@@ -150,7 +153,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG1"/>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

@@ -1,12 +1,12 @@
 object MainForm: TMainForm
   Cursor = crIBeam
-  Left = 427
+  Left = 533
   Height = 527
-  Top = 206
+  Top = 314
   Width = 779
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 505
+  ClientHeight = 502
   ClientWidth = 779
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
@@ -149,8 +149,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 485
+    Height = 21
+    Top = 481
     Width = 779
     Panels = <    
       item
@@ -173,7 +173,7 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 441
+    Height = 437
     Top = 44
     Width = 426
     Align = alClient
@@ -186,18 +186,18 @@ object MainForm: TMainForm
   end
   object Panel1: TPanel
     Left = 426
-    Height = 441
+    Height = 437
     Top = 44
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 441
+    ClientHeight = 437
     ClientWidth = 353
     TabOrder = 3
     Visible = False
     object Label1: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 70
       Width = 308
       Caption = 'label1'
@@ -206,7 +206,7 @@ object MainForm: TMainForm
     end
     object Label2: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 136
       Width = 308
       Caption = 'Label2'
@@ -215,7 +215,7 @@ object MainForm: TMainForm
     end
     object Label3: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 200
       Width = 308
       Caption = 'Label2'
@@ -224,7 +224,7 @@ object MainForm: TMainForm
     end
     object Label4: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 280
       Width = 308
       Caption = 'Label2'
@@ -233,7 +233,7 @@ object MainForm: TMainForm
     end
     object Label5: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 368
       Width = 308
       Caption = 'Label2'
@@ -276,6 +276,7 @@ object MainForm: TMainForm
     end
   end
   object MainFormActionList: TActionList
+    Images = DesignFrame.FieldToolBarImageList
     left = 528
     top = 376
     object FileExit1: TFileExit
@@ -301,6 +302,8 @@ object MainForm: TMainForm
     end
     object NewDesignFormAction: TAction
       Caption = 'New Design Form'
+      Hint = 'New Design Form'
+      ImageIndex = 20
       OnExecute = NewDesignFormActionExecute
       ShortCut = 16462
     end

@@ -67,8 +67,8 @@ const
   ManagerVersion: TManagerVersion = (
     VersionNo: 0;
     MajorRev:  2;
-    MinorRev:  0;
-    BuildNo:   4;
+    MinorRev:  1;
+    BuildNo:   5;
   );
 
 

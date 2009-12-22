@@ -151,6 +151,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
     procedure UpdateAllFields;
+    procedure UpdateNonInteractiveVisuals;
     property  ActiveDataFile: TEpiDataFile read FActiveDataFile;
     property  Modified: Boolean read FModified write SetModified;
     property  DesignerBox: TScrollBox read FDesignerBox;
@@ -345,12 +346,27 @@ begin
   Mainform.ShowOnStatusBar(Msg, Index);
 end;
 
-procedure TDesignFrame.DataFileChange(Sender: TObject;
-  EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+procedure TDesignFrame.UpdateNonInteractiveVisuals;
+var
+  s: string;
 begin
-  if Assigned(ActiveDocumentationForm) and
-     ActiveDocumentationForm.Showing then
-    ActiveDocumentationForm.ForceUpdate;
+  S := '';
+  if Modified then
+    s := '*';
+  if ActiveDatafile.DatafileType <> dftNone then
+  begin
+    MainForm.PageControl1.ActivePage.Caption := S +
+      ExtractFileName(ActiveDataFile.FileName);
+    MainForm.PageControl1.Hint :=
+      ExpandFileNameUTF8(ActiveDataFile.FileName);
+    MainForm.PageControl1.ShowHint := true;
+  end else begin
+    MainForm.PageControl1.ActivePage.Caption := S +
+      'Untitled';
+    if MainForm.PageControl1.PageCount > 1 then
+      MainForm.PageControl1.ActivePage.Caption := S +
+        'Untitled ' + IntToStr(MainForm.PageControl1.PageCount);
+  end;
 
   ShowOnMainStatusBar(
     Format(
@@ -364,6 +380,12 @@ begin
       [ActiveDatafile.Size]
     ), 2
   );
+end;
+
+procedure TDesignFrame.DataFileChange(Sender: TObject;
+  EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+begin
+  UpdateNonInteractiveVisuals;
 end;
 
 procedure TDesignFrame.EndLabelDock(Sender, Target: TObject; X, Y: Integer);
@@ -598,10 +620,11 @@ var
 begin
   if ActiveControl = nil then
     GetHighestFieldPosition(ActiveControl);
-  if not Assigned(ActiveControl) then exit;
+  if not
+    Assigned(ActiveControl) then exit;
 
   TheLeft := ActiveControl.Left;
-  TheTop  := FieldToolBar.Height + 5;
+  TheTop  := 5;
 
   NewXTree := TAVLTree.Create(@XCmp);
   NewYTree := TAVLTree.Create(@YCmp);
@@ -846,7 +869,7 @@ begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
   FActiveDatafile := TEpiDataFile.Create();
-  FActiveDatafile.OnChange := @DataFileChange;
+  FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
   FActiveDocumentationForm := nil;
   ClickedControl := nil;
   Modified := false;
@@ -871,13 +894,14 @@ end;
 
 destructor TDesignFrame.Destroy;
 begin
+  inherited Destroy;
+
   if Assigned(FActiveDatafile) then
     FreeAndNil(FActiveDatafile);
   if Assigned(FActiveDocumentationForm) then
     FreeAndNil(FActiveDocumentationForm);
   FreeAndNil(FComponentYTree);
   FreeAndNil(FComponentXTree);
-  inherited Destroy;
 end;
 
 procedure TDesignFrame.UpdateAllFields;
@@ -940,6 +964,7 @@ var
   i: Integer;
 begin
   Field := nil;
+  ActiveDataFile.BeginUpdate;
   with DesignerBox do
   begin
     for i := ControlCount - 1 downto  0 do
@@ -949,18 +974,17 @@ begin
       if not ((Comp is TFieldEdit) or
         (Comp is TFieldLabel)) then continue;
 
-      if (Comp is TFieldEdit) then
-        Field := TFieldEdit(Comp).Field
-      else
-        Field := TFieldLabel(Comp).Field;
-      ActiveDatafile.RemoveField(Field, true);
       RemoveControl(Comp);
       ComponentYTree.Remove(Comp);
       ComponentXTree.Remove(Comp);
       FreeAndNil(Comp);
-      Modified := true;
     end;
   end;
+  ActiveDataFile.Reset;
+  ActiveDataFile.EndUpdate;
+
+  UpdateNonInteractiveVisuals;
+  Modified := false;
 end;
 
 procedure TDesignFrame.AutoAlignBtnClick(Sender: TObject);
@@ -1190,6 +1214,7 @@ begin
 
   GetLowestControlPosition(TmpEdit);
 
+  ActiveDataFile.BeginUpdate;
   for i := 0 to TmpDF.NumFields - 1 do
   begin
     Pt := FindNewAutoControlPostion;
@@ -1205,6 +1230,7 @@ begin
     else
       NewFieldEdit(TmpField);
   end;
+  ActiveDataFile.EndUpdate;
 
   Modified := true;
 end;
@@ -1299,13 +1325,14 @@ begin
     Import.OnClipBoardRead := @MainForm.ReadClipBoard;
     Import.FieldNaming := ManagerSettings.FieldNamingStyle;
     Import.Import(Fn, FActiveDatafile, dftNone);
-    FActiveDatafile.OnChange := @DataFileChange;
+    FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
     FreeAndNil(Import);
 
     Application.ProcessMessages;
     Self.LockRealizeBounds;
 
     TmpEdit := nil;
+    ActiveDataFile.BeginUpdate;
     for i := 0 to ActiveDatafile.NumFields - 1 do
     begin
       MainForm.ShowProgress(Self, ((i+1)*100) div ActiveDataFile.NumFields, '');
@@ -1327,12 +1354,10 @@ begin
         else
           NewFieldEdit(TmpField);
     end;
-    DataFileChange(nil, dceAddField, 0);
+    ActiveDataFile.EndUpdate;
     Self.UnLockRealizeBounds;
 
-    MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
-    MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
-    MainForm.PageControl1.ShowHint := true;
+    UpdateNonInteractiveVisuals;
 
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
       LabelsAlignment(TmpEdit, Nil, alLeft);

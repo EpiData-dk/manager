@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, ActnList, UEpiDataFile;
+  ExtCtrls, StdCtrls, ActnList, UEpiDataFile, UDataFileTypes;
 
 type
 
@@ -20,14 +20,18 @@ type
     Panel1: TPanel;
     procedure CloseActionExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
   private
     { private declarations }
     FDatafile: TEpiDatafile;
     LocalUpdating: Boolean;
+    procedure DataFileChange(Sender: TObject;
+      EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+    procedure DataFileFieldChange(Sender: TObject;
+      EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; aDatafile: TEpiDataFile);
+    destructor Destroy; override;
     procedure ForceUpdate;
     property Datafile: TEpiDatafile read FDatafile;
   end; 
@@ -59,7 +63,14 @@ end;
 
 { TDatafileDocumentationForm }
 
-procedure TDatafileDocumentationForm.FormShow(Sender: TObject);
+procedure TDatafileDocumentationForm.DataFileChange(Sender: TObject;
+  EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+begin
+  ForceUpdate;
+end;
+
+procedure TDatafileDocumentationForm.DataFileFieldChange(Sender: TObject;
+  EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
 begin
   ForceUpdate;
 end;
@@ -75,11 +86,24 @@ begin
 end;
 
 constructor TDatafileDocumentationForm.Create(TheOwner: TComponent; aDatafile: TEpiDataFile);
+var
+  i: Integer;
 begin
   inherited Create(TheOwner);
   FDatafile := aDatafile;
+  FDatafile.RegisterOnChangeHook(@DataFileChange);
+
+  for i := 0 to FDatafile.NumFields - 1 do
+    FDatafile[i].RegisterOnChangeHook(@DataFileFieldChange);
+
   Caption := 'Documenting: ' +
     Datafile.FileName;
+end;
+
+destructor TDatafileDocumentationForm.Destroy;
+begin
+  FDatafile.UnRegisterOnChangeHook(@DataFileChange);
+  inherited Destroy;
 end;
 
 procedure TDatafileDocumentationForm.ForceUpdate;

@@ -1,9 +1,9 @@
 object WarningForm: TWarningForm
-  Left = 588
+  Left = 637
   Height = 382
-  Top = 331
+  Top = 356
   Width = 422
-  ActiveControl = Button2
+  ActiveControl = Memo1
   Caption = 'WARNING - EpiData Core module test application - WARNING'
   ClientHeight = 382
   ClientWidth = 422

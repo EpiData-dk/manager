@@ -1,7 +1,7 @@
 object CreateLabelForm: TCreateLabelForm
-  Left = 608
+  Left = 668
   Height = 88
-  Top = 354
+  Top = 374
   Width = 381
   ActiveControl = Panel1
   BorderIcons = []
