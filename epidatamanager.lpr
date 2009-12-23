@@ -8,18 +8,17 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, LResources, main, design_frame, fieldedit, Design_Field_Frame,
-  settings, design_label_form, design_autoalign_form,
+  Forms, LResources, main,
+  settings,
   {$IFNDEF EPI_DEBUG}
   warning,
   Controls,
   {$ENDIF EPI_DEBUG}
-  datafile_documentation_form;
+  datafile_documentation_form, design_autoalign_form, design_field_frame,
+  design_frame, design_label_form, fieldedit;
 
 {$IFDEF WINDOWS}
-  {$IFDEF WIN32}
-    {$R epidatamanager.rc}
-  {$ENDIF}
+  {$R epidatamanager.rc}
 {$ENDIF}
 
 {$IFNDEF EPI_DEBUG}

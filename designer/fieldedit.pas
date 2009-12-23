@@ -188,6 +188,7 @@ begin
   FField := AValue;
   Field.RegisterOnChangeHook(@OnFieldChange);
 
+  Name   := Field.FieldName;
   Text   := Field.FieldName;
   Top    := Field.FieldY;
   Left   := Field.FieldX;

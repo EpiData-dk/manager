@@ -1,13 +1,13 @@
 object MainForm: TMainForm
   Cursor = crIBeam
-  Left = 533
-  Height = 527
-  Top = 314
-  Width = 779
+  Left = 579
+  Height = 668
+  Top = 242
+  Width = 997
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 502
-  ClientWidth = 779
+  ClientHeight = 643
+  ClientWidth = 997
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -17,10 +17,10 @@ object MainForm: TMainForm
     Left = 0
     Height = 44
     Top = 0
-    Width = 779
+    Width = 997
     Align = alTop
     ClientHeight = 44
-    ClientWidth = 779
+    ClientWidth = 997
     TabOrder = 0
     object DesignBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
@@ -150,8 +150,8 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 481
-    Width = 779
+    Top = 622
+    Width = 997
     Panels = <    
       item
         Width = 300
@@ -169,13 +169,14 @@ object MainForm: TMainForm
         Width = 100
       end>
     SimplePanel = False
+    OnDblClick = StatusBar1DblClick
     OnDrawPanel = StatusBar1DrawPanel
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 437
+    Height = 578
     Top = 44
-    Width = 426
+    Width = 644
     Align = alClient
     ParentShowHint = False
     ShowHint = True
@@ -185,13 +186,13 @@ object MainForm: TMainForm
     OnPageChanged = PageControl1PageChanged
   end
   object Panel1: TPanel
-    Left = 426
-    Height = 437
+    Left = 644
+    Height = 578
     Top = 44
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 437
+    ClientHeight = 578
     ClientWidth = 353
     TabOrder = 3
     Visible = False

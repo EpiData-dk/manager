@@ -55,12 +55,13 @@ type
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
+    procedure StatusBar1DblClick(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
       const Rect: TRect);
   private
     { private declarations }
     TabNameCount: integer;
-    ProgressBar1: TProgressBar;
+    ProgressBarMain: TProgressBar;
     procedure CloseTab(Sender: TObject);
   public
     { public declarations }
@@ -145,26 +146,28 @@ var
 begin
   Caption := 'EpiData Project and Data Manager' +
     ' (v' + GetManagerVersion + ')';
+  StatusBar1.Hint := ManagerSettings.WorkingDirUTF8;
+  StatusBar1.ShowHint := true;
 
-  ProgressBar1 := TProgressBar.Create(Self);
+  ProgressBarMain := TProgressBar.Create(Self);
   {$IFDEF MSWINDOWS}
     StatusBar1.Panels[3].Style := psOwnerDraw;
-    ProgressBar1.Parent := StatusBar1;
-    ProgressBar1.Align := alCustom;
-    PbStyle := WidgetSet.GetWindowLong(ProgressBar1.Handle, GWL_EXSTYLE);
+    ProgressBarMain.Parent := StatusBar1;
+    ProgressBarMain.Align := alCustom;
+    PbStyle := WidgetSet.GetWindowLong(ProgressBarMain.Handle, GWL_EXSTYLE);
     PbStyle := PbStyle - WS_EX_STATICEDGE;
-    WidgetSet.SetWindowLong(ProgressBar1.Handle, GWL_EXSTYLE, PbStyle);
+    WidgetSet.SetWindowLong(ProgressBarMain.Handle, GWL_EXSTYLE, PbStyle);
   {$ENDIF}
   {$IFDEF UNIX}
-    ProgressBar1.Parent := ProgressPanel;
-    ProgressBar1.Align := alNone;
-    ProgressBar1.Left := GCPbtn.Left + GCPbtn.Width + 10;
-    ProgressBar1.Width := (ProgressPanel.Width - 10) - ProgressBar1.Left;
-    ProgressBar1.Top := (ProgressPanel.Height - ProgressBar1.Height) div 2;
-    ProgressBar1.Anchors := [akLeft, akRight];
+    ProgressBarMain.Parent := ProgressPanel;
+    ProgressBarMain.Align := alNone;
+    ProgressBarMain.Left := GCPbtn.Left + GCPbtn.Width + 10;
+    ProgressBarMain.Width := (ProgressPanel.Width - 10) - ProgressBarMain.Left;
+    ProgressBarMain.Top := (ProgressPanel.Height - ProgressBarMain.Height) div 2;
+    ProgressBarMain.Anchors := [akLeft, akRight];
   {$ENDIF}
-  ProgressBar1.Smooth := true;
-  ProgressBar1.Visible := false;
+  ProgressBarMain.Smooth := true;
+  ProgressBarMain.Visible := false;
 
   {$IFDEF EPI_DEBUG}
   Panel1.Visible := true;
@@ -257,15 +260,30 @@ begin
     TDesignFrame(PageControl1.Pages[i].Controls[0]).UpdateAllFields;
 end;
 
+procedure TMainForm.StatusBar1DblClick(Sender: TObject);
+var
+  Dlg: TSelectDirectoryDialog;
+begin
+  Dlg := TSelectDirectoryDialog.Create(Self);
+  try
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    if not Dlg.Execute then exit;
+    ManagerSettings.WorkingDirUTF8 := Dlg.FileName;
+    StatusBar1.Hint := ManagerSettings.WorkingDirUTF8;
+  finally
+    Dlg.Free;
+  end;
+end;
+
 procedure TMainForm.StatusBar1DrawPanel(StatusBar: TStatusBar;
   Panel: TStatusPanel; const Rect: TRect);
 begin
   if Panel = StatusBar.Panels[3] then
-  with ProgressBar1 do begin
-    ProgressBar1.Top := Rect.Top;
-    ProgressBar1.Left := Rect.Left;
-    ProgressBar1.Width := Rect.Right - Rect.Left;
-    ProgressBar1.Height := Rect.Bottom - Rect.Top;
+  with ProgressBarMain do begin
+    ProgressBarMain.Top := Rect.Top;
+    ProgressBarMain.Left := Rect.Left;
+    ProgressBarMain.Width := Rect.Right - Rect.Left;
+    ProgressBarMain.Height := Rect.Bottom - Rect.Top;
   end;
 end;
 
@@ -298,7 +316,11 @@ begin
   (Sender as TTabSheet).Free;
 
   if PageControl1.PageCount < 1 then
+  begin
     PageControl1.ShowTabs := false;;
+    ShowOnStatusBar('', 1);
+    ShowOnStatusBar('', 2);
+  end;
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);
@@ -310,14 +332,14 @@ end;
 function TMainForm.ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string
   ): TProgressResult;
 begin
-  if Percent <> ProgressBar1.Position then
+  if Percent <> ProgressBarMain.Position then
   begin
-    ProgressBar1.Visible := true;
-    ProgressBar1.Position := Percent;
-    ProgressBar1.Repaint;
+    ProgressBarMain.Visible := true;
+    ProgressBarMain.Position := Percent;
+    ProgressBarMain.Repaint;
   end;
   if Percent = 100 then
-    ProgressBar1.Visible := false;;
+    ProgressBarMain.Visible := false;;
   result := prNormal;
 end;
 

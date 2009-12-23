@@ -16,6 +16,7 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    EditCompAction: TAction;
     DocumentFileAction: TAction;
     AlignAction: TAction;
     NewDataFormBtn: TToolButton;
@@ -51,7 +52,6 @@ type
     FieldPopUp: TPopupMenu;
     DeleteFieldMenuItem: TMenuItem;
     OtherFieldsPopup: TPopupMenu;
-    SaveDialog1: TSaveDialog;
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
     ClearToolBtn: TToolButton;
@@ -74,8 +74,8 @@ type
     ToolButton8: TToolButton;
     YMDFieldBtn: TToolButton;
     procedure DocumentFileActionExecute(Sender: TObject);
+    procedure EditCompActionExecute(Sender: TObject);
     procedure ImportStructureActionExecute(Sender: TObject);
-    procedure NewDataFormBtnClick(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
     procedure AutoAlignBtnClick(Sender: TObject);
     procedure ClearToolBtnClick(Sender: TObject);
@@ -111,7 +111,7 @@ type
     FComponentYTree: TAVLTree;
     FModified: boolean;
     FOldCaption: String;
-    ClickedControl: TControl;
+    SelectedControl: TControl;
     FDesignerBox: TScrollBox;
     function NewFieldEdit(AField: TEpiField): TFieldEdit;
     function NewQuestionLabel(AField: TEpiField): TFieldLabel;
@@ -123,6 +123,8 @@ type
     procedure ShowOnMainStatusBar(Msg: string; Const Index: integer);
     procedure DataFileChange(Sender: TObject;
       EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+    procedure EnterSelectControl(Sender: TObject);
+    procedure ExitSelectControl(Sender: TObject);
   private
     // Docking.
     // - Field:
@@ -135,7 +137,7 @@ type
     function  GetHighestFieldPosition(Var HighestField: TControl): TPoint;
     function  GetLowestControlPosition(Var LowestCtrl: TControl): TPoint;
     procedure GetNearestControls(Const FindCtrl: TControl; var NearestCtrlX, NearestCtrlY: TControl);
-    function  FindNewAutoControlPostion: TPoint;
+    function  FindNewAutoControlPostion(NewCtrlClass: TClass): TPoint;
     // - Auto align functions.
     procedure RemoveDeadSpace;
     procedure DefaultAlignFields(ActiveControl: TControl; Const ColumnCount: Integer = 1);
@@ -252,6 +254,8 @@ begin
   Result.Parent := DesignerBox;
   Result.Field := AField;
   Result.ReadOnly := true;
+  Result.OnEnter := @EnterSelectControl;
+  Result.OnExit := @ExitSelectControl;
 
   ComponentYTree.Add(Result);
   ComponentXTree.Add(Result);
@@ -327,7 +331,7 @@ end;
 procedure TDesignFrame.FieldMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  ClickedControl := TControl(Sender);
+  SelectedControl := TControl(Sender);
 
   if (Sender is TFieldEdit) then
   begin
@@ -386,6 +390,17 @@ procedure TDesignFrame.DataFileChange(Sender: TObject;
   EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
 begin
   UpdateNonInteractiveVisuals;
+end;
+
+procedure TDesignFrame.EnterSelectControl(Sender: TObject);
+begin
+  SelectedControl := TControl(Sender);
+  MainForm.Label2.Caption := 'Selected Control: ' + SelectedControl.Name;
+end;
+
+procedure TDesignFrame.ExitSelectControl(Sender: TObject);
+begin
+  SelectedControl := nil;
 end;
 
 procedure TDesignFrame.EndLabelDock(Sender, Target: TObject; X, Y: Integer);
@@ -490,13 +505,21 @@ begin
   NearestCtrlX := TControl(Hit.Data);
 end;
 
-function TDesignFrame.FindNewAutoControlPostion: TPoint;
+function TDesignFrame.FindNewAutoControlPostion(NewCtrlClass: TClass): TPoint;
 var
   Ctrl: TControl;
+  Dist: Integer;
 begin
   Result := GetLowestControlPosition(Ctrl);
   if Assigned(Ctrl) then
-    Result.Y += (Ctrl.Height + ManagerSettings.SpaceBetweenFields);
+  begin
+    Dist := ManagerSettings.SpaceBtwFieldLabel;
+    if (NewCtrlClass = TFieldEdit) and (Ctrl is TFieldEdit) then
+      Dist := ManagerSettings.SpaceBtwFieldField;
+    if (NewCtrlClass = TFieldLabel) and (Ctrl is TFieldLabel) then
+      Dist := ManagerSettings.SpaceBtwLabelLabel;
+    Result.Y += (Ctrl.Height + Dist);
+  end;
 end;
 
 function TDesignFrame.BackupFile(FileName: string; BackupExt: string): boolean;
@@ -521,7 +544,7 @@ var
   CurField, NextField, PrevField, OldField: TEpiField;
   Dy, Zy, Ly: Integer;
 begin
-  NewYTree := TAVLTree.Create(@YCmp);
+{  NewYTree := TAVLTree.Create(@YCmp);
   NewXTree := TAVLTree.Create(@XCmp);
   Curr := ComponentYTree.FindLowest;
   Next := ComponentYTree.FindSuccessor(Curr);
@@ -606,7 +629,7 @@ begin
   FreeAndNil(FComponentYTree);
   FComponentYTree := NewYTree;
   FreeAndNil(FComponentXTree);
-  FComponentXTree := NewXTree;
+  FComponentXTree := NewXTree;          }
 end;
 
 procedure TDesignFrame.DefaultAlignFields(ActiveControl: TControl;
@@ -616,7 +639,8 @@ var
   TheLeft, TheTop: Integer;
   Dx: Integer;
   Dy: Integer;
-  Curr: TAVLTreeNode;
+  Curr,Prev: TAVLTreeNode;
+  Dist: Integer;
 begin
   if ActiveControl = nil then
     GetHighestFieldPosition(ActiveControl);
@@ -630,9 +654,11 @@ begin
   NewYTree := TAVLTree.Create(@YCmp);
 
   Curr := ComponentYTree.FindLowest;
+  Prev := Curr;
   Self.LockRealizeBounds;
   while Assigned(Curr) do
   begin
+    Dist := ManagerSettings.SpaceBtwFieldLabel;
     if (TControl(Curr.Data) is TFieldEdit) then
     begin
       Dx := TFieldEdit(Curr.Data).Field.FieldX -
@@ -643,14 +669,19 @@ begin
       TFieldEdit(Curr.Data).Field.FieldY := TheTop;
       TFieldEdit(Curr.Data).Field.LabelX := TheLeft - Dx;
       TFieldEdit(Curr.Data).Field.LabelY := TheTop - Dy;
+      if (TControl(Curr.Data) is TFieldEdit) then
+        Dist := ManagerSettings.SpaceBtwFieldField;
     end else begin
       TFieldLabel(Curr.Data).Field.FieldY := TheTop;
       TFieldLabel(Curr.Data).Field.LabelY := TheTop;
+      if (TControl(Curr.Data) is TFieldLabel) then
+        Dist := ManagerSettings.SpaceBtwLabelLabel;
     end;
-    TheTop += TControl(Curr.Data).Height + ManagerSettings.SpaceBetweenFields;
+    TheTop += TControl(Curr.Data).Height + Dist;
 
     NewXTree.Add(Curr.Data);
     NewYTree.Add(Curr.Data);
+    Prev := Curr;
     Curr := ComponentYTree.FindSuccessor(Curr);
   end;
   Self.UnlockRealizeBounds;
@@ -692,7 +723,7 @@ begin
 
   // Spacing between "top" point of TEditFields, adjusted for overlapping components.
   Spacing := Max((EndCtrl.Top - StartCtrl.Top) div (CmpCount - 1),
-                  StartCtrl.Height + ManagerSettings.SpaceBetweenFields);
+                  StartCtrl.Height + ManagerSettings.SpaceBtwFieldField);
 
   NewXTree := TAVLTree.Create(@XCmp);
   NewYTree := TAVLTree.Create(@YCmp);
@@ -840,7 +871,10 @@ var
   Pt: TPoint;
 begin
   ActiveButton := aBtn;
-  Pt := FindNewAutoControlPostion;
+  if ActiveButton = LabelFieldBtn then
+    Pt := FindNewAutoControlPostion(TFieldLabel)
+  else
+    Pt := FindNewAutoControlPostion(TFieldEdit);
   DesignerMouseDown(nil, mbLeft, GetKeyShiftState, Pt.X, Pt.Y);
 end;
 
@@ -871,7 +905,7 @@ begin
   FActiveDatafile := TEpiDataFile.Create();
   FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
   FActiveDocumentationForm := nil;
-  ClickedControl := nil;
+  SelectedControl := nil;
   Modified := false;
   FComponentYTree := TAVLTree.Create(@YCmp);
   FComponentXTree := TAVLTree.Create(@XCmp);
@@ -898,8 +932,6 @@ begin
 
   if Assigned(FActiveDatafile) then
     FreeAndNil(FActiveDatafile);
-  if Assigned(FActiveDocumentationForm) then
-    FreeAndNil(FActiveDocumentationForm);
   FreeAndNil(FComponentYTree);
   FreeAndNil(FComponentXTree);
 end;
@@ -1007,12 +1039,12 @@ begin
 
   case AutoAlignRes.AlignMethod of
     aamRemoveSpace: RemoveDeadSpace;
-    aamEqualSpace:  EqualSpace(ClickedControl, nil);
-    aamDefault:     DefaultAlignFields(ClickedControl);
+    aamEqualSpace:  EqualSpace(SelectedControl, nil);
+    aamDefault:     DefaultAlignFields(SelectedControl);
   end;
 
   if AutoAlignRes.LabelsAlign <> alNone then
-    LabelsAlignment(ClickedControl, nil, AutoAlignRes.LabelsAlign);
+    LabelsAlignment(SelectedControl, nil, AutoAlignRes.LabelsAlign);
 
   Modified := true;
 end;
@@ -1021,12 +1053,12 @@ procedure TDesignFrame.DeleteFieldMenuItemClick(Sender: TObject);
 var
   TmpField: TEpiField;
 begin
-  if not Assigned(ClickedControl) then exit;
+  if not Assigned(SelectedControl) then exit;
 
-  if (ClickedControl is TFieldEdit) then
-    TmpField := TFieldEdit(ClickedControl).Field
+  if (SelectedControl is TFieldEdit) then
+    TmpField := TFieldEdit(SelectedControl).Field
   else
-    TmpField := TFieldLabel(ClickedControl).Field;
+    TmpField := TFieldLabel(SelectedControl).Field;
 
   {$IFNDEF EPI_DEBUG}
   if (TmpField.FieldType <> ftQuestion) and (TmpField.Size > 0) and
@@ -1035,12 +1067,12 @@ begin
     exit;
   {$ENDIF}
 
-  Modified := true;
+  DesignerBox.RemoveControl(SelectedControl);
+  ComponentYTree.Remove(SelectedControl);
+  ComponentXTree.Remove(SelectedControl);
+  FreeAndNil(SelectedControl);
   ActiveDatafile.RemoveField(TmpField, true);
-  DesignerBox.RemoveControl(ClickedControl);
-  ComponentYTree.Remove(ClickedControl);
-  ComponentXTree.Remove(ClickedControl);
-  FreeAndNil(ClickedControl);
+  Modified := true;
 end;
 
 procedure TDesignFrame.DesignerMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -1061,13 +1093,13 @@ var
   LabelForm: TCreateLabelForm;
   Pt: TPoint;
 begin
-  if not Assigned(ClickedControl) then exit;
+  if not Assigned(SelectedControl) then exit;
 
-  with ClickedControl do
+  with SelectedControl do
     Pt := DesignerBox.ClientToScreen(Point(Left + Width, Top + Height));
 
-  if (ClickedControl is TFieldEdit) then
-  With TFieldEdit(ClickedControl) do
+  if (SelectedControl is TFieldEdit) then
+  With TFieldEdit(SelectedControl) do
   begin
     FieldForm := TFieldCreateForm.Create(DesignerBox, ActiveDatafile, Field.FieldType, false);
     FieldForm.Left := Pt.X;
@@ -1078,7 +1110,7 @@ begin
     FreeAndNil(FieldForm);
     Self.Modified := true;
   end else
-  With TFieldLabel(ClickedControl) do
+  With TFieldLabel(SelectedControl) do
   begin
     LabelForm := TCreateLabelForm.Create(DesignerBox, ActiveDatafile);
     LabelForm.Left := Pt.X;
@@ -1201,6 +1233,7 @@ var
   AutoAlignProps: TAutoAlignRecord;
 begin
   Dlg := TOpenDialog.Create(nil);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.Filter := GetEpiDialogFilter(True, True, True, True, False, True, True,
     True, True, False);
 
@@ -1217,9 +1250,14 @@ begin
   ActiveDataFile.BeginUpdate;
   for i := 0 to TmpDF.NumFields - 1 do
   begin
-    Pt := FindNewAutoControlPostion;
     TmpField := TmpDF[i].Clone(ActiveDataFile, false);
     ActiveDataFile.AddField(TmpField);
+
+    if TmpField.FieldType = ftQuestion then
+      Pt := FindNewAutoControlPostion(TFieldLabel)
+    else
+      Pt := FindNewAutoControlPostion(TFieldEdit);
+
     TmpField.FieldX := Pt.X;
     TmpField.FieldY := Pt.Y;
     TmpField.LabelX := 0;
@@ -1235,16 +1273,18 @@ begin
   Modified := true;
 end;
 
-procedure TDesignFrame.NewDataFormBtnClick(Sender: TObject);
-begin
-   MainForm.NewDesignFormActionExecute(Self);
-end;
-
 procedure TDesignFrame.DocumentFileActionExecute(Sender: TObject);
 begin
   ActiveDataFile.SortFields(@SortFields);
-  FActiveDocumentationForm := TDatafileDocumentationForm.Create(Self, ActiveDataFile);
+  if not Assigned(FActiveDocumentationForm) then
+    FActiveDocumentationForm := TDatafileDocumentationForm.Create(Self, ActiveDataFile);
   ActiveDocumentationForm.Show;
+end;
+
+procedure TDesignFrame.EditCompActionExecute(Sender: TObject);
+begin
+  if not Assigned(SelectedControl) then exit;
+  EditFieldMenuItem.Click;
 end;
 
 procedure TDesignFrame.DesignerUnDock(Sender: TObject; Client: TControl;
@@ -1311,6 +1351,7 @@ begin
   {$ENDIF}
 
   Dlg := TOpenDialog.Create(nil);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.Filter := GetEpiDialogFilter(True, True, True, True,
     False, True, True, True, True, True);
 
@@ -1339,7 +1380,10 @@ begin
       TmpField := ActiveDatafile[i];
       if ActiveDataFile.DatafileType <> dftEpiDataXml then
       begin
-        Pt := FindNewAutoControlPostion;
+        if TmpField.FieldType = ftQuestion then
+          Pt := FindNewAutoControlPostion(TFieldLabel)
+        else
+          Pt := FindNewAutoControlPostion(TFieldEdit);
         TmpField.FieldX := Pt.X;
         TmpField.FieldY := Pt.Y;
         TmpField.LabelX := 0;
@@ -1384,25 +1428,35 @@ end;
 procedure TDesignFrame.SaveFileAsActionExecute(Sender: TObject);
 var
   Fn: String;
+  Dlg: TSaveDialog;
 begin
-  if SaveDialog1.Execute then
-  begin
-    Fn := SaveDialog1.FileName;
+  Dlg := TSaveDialog.Create(Self);
+  try
+    Dlg.Filter := GetEpiDialogFilter(true, false, false,
+      false, false, false, false, false, false, false);
+    Dlg.Options := [ofDontAddToRecent, ofOverwritePrompt];
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    if Dlg.Execute then
+    begin
+      Fn := Dlg.FileName;
 
-    if CompareFileExt(Fn, '.recxml') <> 0 then
-      Fn := Fn + '.recxml';
+      if CompareFileExt(Fn, '.recxml') <> 0 then
+        Fn := Fn + '.recxml';
 
-    BackupFile(Fn);
+      BackupFile(Fn);
 
-    ActiveDataFile.SortFields(@SortFields);
-    ActiveDatafile.Save(Fn, []);
+      ActiveDataFile.SortFields(@SortFields);
+      ActiveDatafile.Save(Fn, []);
 
-    Modified := false;
+      Modified := false;
 
-    MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
-    MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
-    MainForm.PageControl1.ShowHint := true;
-    ShowOnMainStatusBar('Saving complete: ' + Fn, 0);
+      MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
+      MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
+      MainForm.PageControl1.ShowHint := true;
+      ShowOnMainStatusBar('Saving complete: ' + Fn, 0);
+    end;
+  finally
+    Dlg.Free;
   end;
 end;
 

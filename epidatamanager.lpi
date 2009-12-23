@@ -18,14 +18,14 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <CurrentMajorRevNr Value="2"/>
-      <CurrentMinorRevNr Value="1"/>
-      <CurrentBuildNr Value="5"/>
-      <ProjectVersion Value="0.2.1.5"/>
+      <CurrentMinorRevNr Value="2"/>
+      <CurrentBuildNr Value="6"/>
+      <ProjectVersion Value="0.2.2.6"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <FileDescription Value="Get latest from Http://www.epidata.dk"/>
       <LegalCopyright Value="EpiData Association, Denmark"/>
-      <ProductName Value="EpiData manager"/>
+      <ProductName Value="EpiData Manager"/>
     </VersionInfo>
     <PublishOptions>
       <Version Value="2"/>
@@ -62,70 +62,76 @@
         <UnitName Value="main"/>
       </Unit1>
       <Unit2>
-        <Filename Value="design_frame.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="DesignFrame"/>
-        <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_frame"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="fieldedit.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="FieldEdit"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="design_field_frame.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FieldCreateForm"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="Design_Field_Frame"/>
-      </Unit4>
-      <Unit5>
         <Filename Value="settings.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SettingsForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="settings"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="design_label_form.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="CreateLabelForm"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_label_form"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="design_autoalign_form.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="AutoAlignForm"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_autoalign_form"/>
-      </Unit7>
-      <Unit8>
+      </Unit2>
+      <Unit3>
         <Filename Value="datafile_documentation_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DatafileDocumentationForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="datafile_documentation_form"/>
-      </Unit8>
-      <Unit9>
+      </Unit3>
+      <Unit4>
         <Filename Value="warning.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="WarningForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Warning"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="designer/design_autoalign_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AutoAlignForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_autoalign_form"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="designer/design_field_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FieldCreateForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Design_Field_Frame"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="designer/design_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DesignFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_frame"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="designer/design_label_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CreateLabelForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_label_form"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="designer/fieldedit.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="fieldedit"/>
       </Unit9>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="8"/>
     <Target>
-      <Filename Value="epidatamanager.$(TargetCPU)-$(TargetOS)"/>
+      <Filename Value="epidatamanager"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)/"/>
+      <OtherUnitFiles Value="designer/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      <LCLWidgetType Value="win32"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
@@ -137,6 +143,8 @@
       <Checks>
         <IOChecks Value="True"/>
       </Checks>
+      <TargetCPU Value="x86_64"/>
+      <TargetOS Value="Win64"/>
       <Optimizations>
         <OptimizationLevel Value="0"/>
       </Optimizations>
@@ -155,6 +163,9 @@
     <Other>
       <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
+      <ExecuteBefore>
+        <Command Value="/home/torsten/bin/svn2revisioninc $(ProjPath)"/>
+      </ExecuteBefore>
     </Other>
   </CompilerOptions>
 </CONFIG>

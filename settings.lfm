@@ -1,142 +1,287 @@
 object SettingsForm: TSettingsForm
-  Left = 738
-  Height = 240
-  Top = 322
-  Width = 250
-  ActiveControl = PrefixEdit
+  Left = 813
+  Height = 279
+  Top = 339
+  Width = 204
+  ActiveControl = PageControl1
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Settings'
-  ClientHeight = 240
-  ClientWidth = 250
+  ClientHeight = 279
+  ClientWidth = 204
   Color = clSkyBlue
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   Position = poOwnerFormCenter
   LCLVersion = '0.9.29'
-  object Label1: TLabel
-    Left = 8
-    Height = 18
-    Top = 17
-    Width = 73
-    Caption = 'Field Prefix'
-    ParentColor = False
-  end
-  object PrefixEdit: TEdit
-    Left = 168
-    Height = 27
-    Top = 8
-    Width = 75
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 243
+    Top = 0
+    Width = 204
+    ActivePage = AdvSheet
+    Align = alClient
+    TabIndex = 1
     TabOrder = 0
+    object BasicSheet: TTabSheet
+      Caption = 'Basic'
+      ClientHeight = 208
+      ClientWidth = 198
+      object Label1: TLabel
+        Left = 5
+        Height = 18
+        Top = 17
+        Width = 73
+        Caption = 'Field Prefix'
+        ParentColor = False
+      end
+      object PrefixEdit: TEdit
+        Left = 119
+        Height = 27
+        Top = 8
+        Width = 75
+        TabOrder = 0
+      end
+      object ShowFieldNameChkBox: TCheckBox
+        Left = 154
+        Height = 22
+        Top = 71
+        Width = 18
+        AutoSize = False
+        ParentBidiMode = False
+        TabOrder = 1
+      end
+      object Label3: TLabel
+        Left = 5
+        Height = 18
+        Top = 46
+        Width = 140
+        Caption = 'Default Field Position'
+        ParentColor = False
+      end
+      object Label2: TLabel
+        Left = 5
+        Height = 18
+        Top = 75
+        Width = 115
+        Caption = 'Show Fieldnames'
+        ParentColor = False
+      end
+      object DefaultRightPosEdit: TMaskEdit
+        Left = 154
+        Height = 27
+        Top = 40
+        Width = 40
+        CharCase = ecNormal
+        MaxLength = 3
+        TabOrder = 2
+        EditMask = '999;1;_'
+        Text = '   '
+        SpaceChar = '_'
+      end
+      object FieldNamingGroup: TRadioGroup
+        Left = 5
+        Height = 72
+        Top = 128
+        Width = 189
+        AutoFill = True
+        Caption = 'Field Naming'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        ClientHeight = 68
+        ClientWidth = 185
+        TabOrder = 3
+        object FieldNamingAutoRadio: TRadioButton
+          Left = 6
+          Height = 28
+          Top = 6
+          Width = 173
+          Caption = 'Automatic'
+          TabOrder = 0
+          TabStop = False
+        end
+        object FieldNamingFirstWordRadio: TRadioButton
+          Left = 6
+          Height = 28
+          Top = 34
+          Width = 173
+          Caption = 'First word'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+          TabStop = False
+        end
+      end
+      object Label8: TLabel
+        Left = 5
+        Height = 18
+        Top = 104
+        Width = 118
+        Caption = 'Show field border:'
+        ParentColor = False
+      end
+      object ShowFieldBorderChkBox: TCheckBox
+        Left = 154
+        Height = 22
+        Top = 100
+        Width = 18
+        AutoSize = False
+        TabOrder = 4
+      end
+    end
+    object AdvSheet: TTabSheet
+      Caption = 'Advanced'
+      ClientHeight = 208
+      ClientWidth = 198
+      object GroupBox1: TGroupBox
+        Left = 5
+        Height = 82
+        Top = 0
+        Width = 190
+        Caption = 'Snapping:'
+        ClientHeight = 63
+        ClientWidth = 186
+        TabOrder = 0
+        object SnapFieldsChkBox: TCheckBox
+          Left = 12
+          Height = 22
+          Top = 8
+          Width = 127
+          Caption = 'Autosnap Fields'
+          OnChange = SnapFieldsChkBoxChange
+          TabOrder = 0
+        end
+        object Label4: TLabel
+          Left = 12
+          Height = 18
+          Top = 40
+          Width = 130
+          Caption = 'Snapping threshold:'
+          ParentColor = False
+        end
+        object SnapThresholdEdit: TMaskEdit
+          Left = 150
+          Height = 27
+          Top = 31
+          Width = 32
+          AutoSelect = False
+          CharCase = ecNormal
+          MaxLength = 3
+          TabOrder = 1
+          EditMask = '999;1;_'
+          Text = '   '
+          SpaceChar = '_'
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 5
+        Height = 115
+        Top = 88
+        Width = 190
+        Caption = 'Layout distances:'
+        ClientHeight = 96
+        ClientWidth = 186
+        TabOrder = 1
+        object Label5: TLabel
+          Left = 12
+          Height = 18
+          Top = 7
+          Width = 80
+          Caption = 'Field - Field:'
+          ParentColor = False
+        end
+        object Label6: TLabel
+          Left = 12
+          Height = 18
+          Top = 71
+          Width = 88
+          Caption = 'Label - Label:'
+          ParentColor = False
+        end
+        object Label7: TLabel
+          Left = 12
+          Height = 18
+          Top = 39
+          Width = 84
+          Caption = 'Field - Label:'
+          ParentColor = False
+        end
+        object FieldFieldEdit: TMaskEdit
+          Left = 150
+          Height = 27
+          Top = -1
+          Width = 32
+          AutoSelect = False
+          CharCase = ecNormal
+          MaxLength = 3
+          TabOrder = 0
+          EditMask = '999;1;_'
+          Text = '   '
+          SpaceChar = '_'
+        end
+        object FieldLabelEdit: TMaskEdit
+          Left = 150
+          Height = 27
+          Top = 30
+          Width = 32
+          AutoSelect = False
+          CharCase = ecNormal
+          MaxLength = 3
+          TabOrder = 1
+          EditMask = '999;1;_'
+          Text = '   '
+          SpaceChar = '_'
+        end
+        object LabelLabelEdit: TMaskEdit
+          Left = 150
+          Height = 27
+          Top = 62
+          Width = 32
+          AutoSelect = False
+          CharCase = ecNormal
+          MaxLength = 3
+          TabOrder = 2
+          EditMask = '999;1;_'
+          Text = '   '
+          SpaceChar = '_'
+        end
+      end
+    end
   end
-  object ShowFieldNameChkBox: TCheckBox
-    Left = 168
-    Height = 22
-    Top = 96
-    Width = 18
-    AutoSize = False
-    ParentBidiMode = False
-    TabOrder = 3
-  end
-  object OkBtn: TButton
-    Left = 88
-    Height = 28
-    Top = 208
-    Width = 75
-    Caption = 'Ok'
-    ModalResult = 1
-    TabOrder = 5
-  end
-  object CancelBtn: TButton
-    Left = 168
-    Height = 28
-    Top = 208
-    Width = 75
-    Caption = 'Cancel'
-    ModalResult = 2
-    TabOrder = 6
-  end
-  object Label3: TLabel
-    Left = 8
-    Height = 18
-    Top = 49
-    Width = 140
-    Caption = 'Default Field Position'
-    ParentColor = False
-  end
-  object Label2: TLabel
-    Left = 8
-    Height = 18
-    Top = 100
-    Width = 115
-    Caption = 'Show Fieldnames'
-    ParentColor = False
-  end
-  object DefaultRightPosEdit: TMaskEdit
-    Left = 168
-    Height = 27
-    Top = 40
-    Width = 75
-    CharCase = ecNormal
-    MaxLength = 3
+  object Panel1: TPanel
+    Left = 0
+    Height = 36
+    Top = 243
+    Width = 204
+    Align = alBottom
+    BevelInner = bvSpace
+    BevelOuter = bvSpace
+    ClientHeight = 36
+    ClientWidth = 204
     TabOrder = 1
-    EditMask = '999;1;_'
-    Text = '   '
-    SpaceChar = '_'
-  end
-  object FieldNamingGroup: TRadioGroup
-    Left = 8
-    Height = 72
-    Top = 128
-    Width = 235
-    AutoFill = True
-    Caption = 'Field Naming'
-    ChildSizing.LeftRightSpacing = 6
-    ChildSizing.TopBottomSpacing = 6
-    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-    ChildSizing.EnlargeVertical = crsHomogenousChildResize
-    ChildSizing.ShrinkHorizontal = crsScaleChilds
-    ChildSizing.ShrinkVertical = crsScaleChilds
-    ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 1
-    ClientHeight = 53
-    ClientWidth = 231
-    TabOrder = 4
-    object FieldNamingAutoRadio: TRadioButton
-      Left = 6
-      Height = 20
-      Top = 6
-      Width = 219
-      Caption = 'Automatic'
+    object OkBtn: TButton
+      Left = 32
+      Height = 28
+      Top = 4
+      Width = 75
+      Caption = 'Ok'
+      ModalResult = 1
       TabOrder = 0
-      TabStop = False
     end
-    object FieldNamingFirstWordRadio: TRadioButton
-      Left = 6
-      Height = 21
-      Top = 26
-      Width = 219
-      Caption = 'First word'
-      Checked = True
-      State = cbChecked
+    object CancelBtn: TButton
+      Left = 120
+      Height = 28
+      Top = 4
+      Width = 75
+      Caption = 'Cancel'
+      ModalResult = 2
       TabOrder = 1
-      TabStop = False
     end
-  end
-  object SnapFieldsChkBox: TCheckBox
-    Left = 168
-    Height = 22
-    Top = 72
-    Width = 18
-    AutoSize = False
-    TabOrder = 2
-  end
-  object Label4: TLabel
-    Left = 8
-    Height = 18
-    Top = 76
-    Width = 75
-    Caption = 'Snap Fields'
-    ParentColor = False
   end
 end

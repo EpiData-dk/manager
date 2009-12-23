@@ -311,13 +311,19 @@ object DesignFrame: TDesignFrame
     object AlignAction: TAction
       Caption = 'AlignAction'
       OnExecute = AutoAlignBtnClick
-      ShortCut = 120
+      ShortCut = 122
     end
     object DocumentFileAction: TAction
       Caption = 'Document Datafile'
       Hint = 'Document Datafile'
       ImageIndex = 17
       OnExecute = DocumentFileActionExecute
+      ShortCut = 123
+    end
+    object EditCompAction: TAction
+      Caption = 'EditCompAction'
+      OnExecute = EditCompActionExecute
+      ShortCut = 120
     end
   end
   object FieldToolBarImageList: TImageList
@@ -1912,15 +1918,6 @@ object DesignFrame: TDesignFrame
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000
     }
-  end
-  object SaveDialog1: TSaveDialog
-    Width = 857
-    Height = 759
-    DefaultExt = '.recxml'
-    Filter = 'EpiData XML|*.recxml'
-    Options = [ofOverwritePrompt, ofEnableSizing, ofDontAddToRecent, ofViewDetail]
-    left = 384
-    top = 40
   end
   object FieldPopUp: TPopupMenu
     left = 384
