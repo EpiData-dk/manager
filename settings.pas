@@ -14,7 +14,17 @@ type
   { TSettingsForm }
 
   TSettingsForm = class(TForm)
+    Bevel1: TBevel;
     CancelBtn: TButton;
+    FloatLengthEdit: TMaskEdit;
+    DecimalLengthEdit: TMaskEdit;
+    Label13: TLabel;
+    StringLengthEdit: TMaskEdit;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label9: TLabel;
+    IntLengthEdit: TMaskEdit;
     ShowFieldBorderChkBox: TCheckBox;
     DefaultRightPosEdit: TMaskEdit;
     FieldNamingAutoRadio: TRadioButton;
@@ -42,6 +52,7 @@ type
     BasicSheet: TTabSheet;
     AdvSheet: TTabSheet;
     SnapFieldsChkBox: TCheckBox;
+    LengthSheet: TTabSheet;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure SnapFieldsChkBoxChange(Sender: TObject);
@@ -58,6 +69,13 @@ type
     ShowFieldNamesInLabel: boolean;
     ShowFieldBorder:       boolean;
     FieldNamingStyle:      TFieldNaming;
+
+    // Lengths:
+    IntFieldLength:        Integer;
+    FloatFieldLength:      Integer;
+    FloatDecimalLength:    Integer;
+    StringFieldLength:     Integer;
+
 
     // Advanced:
     SnapFields:            boolean;
@@ -86,6 +104,12 @@ var
     ShowFieldBorder:       true;
     FieldNamingStyle:      fnFirstWord;
 
+    // Lengths:
+    IntFieldLength:        2;
+    FloatFieldLength:      5;
+    FloatDecimalLength:    2;
+    StringFieldLength:     20;
+
     // Advanced:
     SnapFields:            true;
     SnappingThresHold:     10;
@@ -100,9 +124,9 @@ var
 const
   ManagerVersion: TManagerVersion = (
     VersionNo: 0;
-    MajorRev:  2;
-    MinorRev:  2;
-    BuildNo:   6;
+    MajorRev:  3;
+    MinorRev:  0;
+    BuildNo:   7;
   );
 
 
@@ -143,6 +167,20 @@ begin
   else
     ManagerSettings.FieldNamingStyle    := fnFirstWord;
 
+  // Lengths:
+  S := Trim(IntLengthEdit.Text);
+  if not((S = '') or (StrToInt(S) <= 0)) then
+    ManagerSettings.IntFieldLength := StrToInt(S);
+  S := Trim(FloatLengthEdit.Text);
+  if not((S = '') or (StrToInt(S) <= 0)) then
+    ManagerSettings.FloatFieldLength := StrToInt(S);
+  S := Trim(DecimalLengthEdit.Text);
+  if not((S = '') or (StrToInt(S) <= 0)) then
+    ManagerSettings.FloatDecimalLength := StrToInt(S);
+  S := Trim(StringLengthEdit.Text);
+  if not((S = '') or (StrToInt(S) <= 0)) then
+    ManagerSettings.StringFieldLength := StrToInt(S);
+
   // Advanced:
   ManagerSettings.SnapFields            := SnapFieldsChkBox.Checked;
   S := Trim(SnapThresholdEdit.Text);
@@ -161,20 +199,29 @@ end;
 
 procedure TSettingsForm.FormCreate(Sender: TObject);
 begin
-  // Basic:
-  PrefixEdit.Text                   := ManagerSettings.FieldNamePrefix;
-  DefaultRightPosEdit.Text          := IntToStr(ManagerSettings.DefaultRightPostion);
-  ShowFieldNameChkBox.Checked       := ManagerSettings.ShowFieldNamesInLabel;
-  ShowFieldBorderChkBox.Checked     := ManagerSettings.ShowFieldBorder;
-  FieldNamingAutoRadio.Checked      := (ManagerSettings.FieldNamingStyle = fnAuto);
-  FieldNamingFirstWordRadio.Checked := (ManagerSettings.FieldNamingStyle = fnFirstWord);
+  with ManagerSettings do
+  begin
+    // Basic:
+    PrefixEdit.Text                   := FieldNamePrefix;
+    DefaultRightPosEdit.Text          := IntToStr(DefaultRightPostion);
+    ShowFieldNameChkBox.Checked       := ShowFieldNamesInLabel;
+    ShowFieldBorderChkBox.Checked     := ShowFieldBorder;
+    FieldNamingAutoRadio.Checked      := (FieldNamingStyle = fnAuto);
+    FieldNamingFirstWordRadio.Checked := (FieldNamingStyle = fnFirstWord);
 
-  // Advanced:
-  SnapFieldsChkBox.Checked          := ManagerSettings.SnapFields;
-  SnapThresholdEdit.Text            := IntToStr(ManagerSettings.SnappingThresHold);
-  FieldFieldEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldField);
-  FieldLabelEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldLabel);
-  LabelLabelEdit.Text               := IntToStr(ManagerSettings.SpaceBtwLabelLabel);
+    // Lengths:
+    IntLengthEdit.Text                := IntToStr(IntFieldLength);
+    FloatLengthEdit.Text              := IntToStr(FloatFieldLength);
+    DecimalLengthEdit.Text            := IntToSTr(FloatDecimalLength);
+    StringLengthEdit.Text             := IntToStr(StringFieldLength);
+
+    // Advanced:
+    SnapFieldsChkBox.Checked          := ManagerSettings.SnapFields;
+    SnapThresholdEdit.Text            := IntToStr(ManagerSettings.SnappingThresHold);
+    FieldFieldEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldField);
+    FieldLabelEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldLabel);
+    LabelLabelEdit.Text               := IntToStr(ManagerSettings.SpaceBtwLabelLabel);
+  end;
 end;
 
 procedure TSettingsForm.SnapFieldsChkBoxChange(Sender: TObject);

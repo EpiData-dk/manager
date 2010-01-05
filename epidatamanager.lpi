@@ -17,10 +17,9 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <CurrentMajorRevNr Value="2"/>
-      <CurrentMinorRevNr Value="2"/>
-      <CurrentBuildNr Value="6"/>
-      <ProjectVersion Value="0.2.2.6"/>
+      <CurrentMajorRevNr Value="3"/>
+      <CurrentBuildNr Value="7"/>
+      <ProjectVersion Value="0.3.0.7"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <FileDescription Value="Get latest from Http://www.epidata.dk"/>
@@ -39,16 +38,20 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Minor="2" Release="3" Build="102" Valid="True"/>
+        <PackageName Value="SynEdit"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="LCL"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Minor="2" Release="3" Build="102" Valid="True"/>
       </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
     </RequiredPackages>
-    <Units Count="10">
+    <Units Count="11">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -120,6 +123,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="fieldedit"/>
       </Unit9>
+      <Unit10>
+        <Filename Value="editor/editormain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="EditorForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="editormain"/>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -129,7 +139,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)/"/>
-      <OtherUnitFiles Value="designer/"/>
+      <OtherUnitFiles Value="designer/;editor/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>
@@ -143,12 +153,13 @@
         <IOChecks Value="True"/>
       </Checks>
       <Optimizations>
-        <OptimizationLevel Value="3"/>
+        <OptimizationLevel Value="0"/>
       </Optimizations>
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <UseLineInfoUnit Value="False"/>
+        <GenerateDebugInfo Value="True"/>
+        <GenerateDwarf Value="True"/>
       </Debugging>
       <Options>
         <Win32>
@@ -157,7 +168,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG1"/>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <Command Value="/home/torsten/bin/svn2revisioninc $(ProjPath)"/>

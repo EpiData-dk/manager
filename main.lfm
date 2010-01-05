@@ -255,10 +255,10 @@ object MainForm: TMainForm
     left = 528
     top = 288
     object FileMenu: TMenuItem
-      Caption = 'File'
+      Caption = '&File'
       Hint = 'Exit'
       object ExitMenuItem: TMenuItem
-        Action = FileExit1
+        Action = ExitAction
       end
     end
     object EditMenu: TMenuItem
@@ -268,7 +268,14 @@ object MainForm: TMainForm
         OnClick = SettingsActionExecute
       end
     end
-    object MenuItem1: TMenuItem
+    object ToolsMenu: TMenuItem
+      Caption = '&Tools'
+      object MenuItem1: TMenuItem
+        Action = StartEditorAction
+        OnClick = StartEditorActionExecute
+      end
+    end
+    object HelpMenu: TMenuItem
       Caption = '&Help'
       object shortIntroItem: TMenuItem
         Caption = 'Short introduction'
@@ -280,7 +287,7 @@ object MainForm: TMainForm
     Images = DesignFrame.FieldToolBarImageList
     left = 528
     top = 376
-    object FileExit1: TFileExit
+    object ExitAction: TFileExit
       Category = 'File'
       Caption = 'E&xit'
       Hint = 'Exit'
@@ -288,7 +295,7 @@ object MainForm: TMainForm
     end
     object SettingsAction: TAction
       Category = 'Edit'
-      Caption = 'Settings'
+      Caption = '&Settings'
       OnExecute = SettingsActionExecute
       ShortCut = 32851
     end
@@ -307,6 +314,11 @@ object MainForm: TMainForm
       ImageIndex = 20
       OnExecute = NewDesignFormActionExecute
       ShortCut = 16462
+    end
+    object StartEditorAction: TAction
+      Category = 'Tools'
+      Caption = 'E&ditor'
+      OnExecute = StartEditorActionExecute
     end
   end
 end

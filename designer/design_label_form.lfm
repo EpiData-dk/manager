@@ -58,4 +58,13 @@ object CreateLabelForm: TCreateLabelForm
       TabOrder = 2
     end
   end
+  object ActionList1: TActionList
+    left = 120
+    top = 16
+    object CloseAction: TAction
+      Caption = 'CloseAction'
+      OnExecute = CloseActionExecute
+      ShortCut = 27
+    end
+  end
 end

@@ -2,8 +2,6 @@
 # Compile all versions of manager!
 
 ## Changeable options.
-## Dont forget to update version no.!
-MANAGER_VERSION="0.2.2.6"
 SIMPLEOPTS="-MObjFPC -Sci -Xs -CX -Ci -WG -O3 -l"
 #SIMPLEOPTS="$SIMPLEOPTS -gl -g"
 MANAGERFILENAME="epidatamanager"
@@ -63,7 +61,7 @@ compile_core() {
 
 compile() {
   echo "Compiling for: $MY_CPU_TARGET-$MY_OS_TARGET"
-
+  echo "------------------------------"
   clean
   compile_core
 
@@ -72,22 +70,52 @@ compile() {
 
   mkdir -p "$MANAGER_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET"
   MANAGER_OUTPUT="-FU$MANAGER_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET/"
-  MANAGER_UNITS="-Fu$MANAGER_LOCATION/designer -Fu$MANAGER_LOCATION -Fu."
+  MANAGER_UNITS="-Fu$MANAGER_LOCATION/editor -Fu$MANAGER_LOCATION/designer -Fu$MANAGER_LOCATION -Fu."
   MANAGER_INCLUDES="-Fi$MANAGER_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET"
   CORE_UNITS="-Fu$CORE_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET/"
   FPSPREAD_UNITS="-Fu$FPSPREASHEET_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET/"
   MANAGER_OPTS="$MANAGER_OUTPUT $MANAGER_UNITS $MANAGER_INCLUDES $CORE_UNITS $FPSPREAD_UNITS"
 
   LCL_UNITS="-Fu$LAZARUS_LOCATION/lcl/units/$MY_CPU_TARGET-$MY_OS_TARGET/ -Fu$LAZARUS_LOCATION/lcl/units/$MY_CPU_TARGET-$MY_OS_TARGET/$MY_LCL_TARGET/"
-  LAZPACK_UNITS="-Fu$LAZARUS_LOCATION/packager/units/$MY_CPU_TARGET-$MY_OS_TARGET/"
-  LAZARUS_UNITS="$LCL_UNITS $LAZPACK_UNITS"
+  FCL_UNITS="-Fu$LAZARUS_LOCATION/packager/units/$MY_CPU_TARGET-$MY_OS_TARGET/"
+  SYNEDIT_UNITS="-Fu$LAZARUS_LOCATION/components/synedit/units/$MY_CPU_TARGET-$MY_OS_TARGET/"
+  LAZARUS_UNITS="$LCL_UNITS $FCL_UNITS $SYNEDIT_UNITS"
   
   get_filename
   OUTPUTNAME="-o$FILENAME"
   DEFINEOPTS="-dLCL -d$MY_LCL_TARGET"
 
 #  echo "fpc $CPU $TARGET $SIMPLEOPTS $OWN_UNITS $LAZARUS_UNITS $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr"
-  fpc $CPU $TARGET $SIMPLEOPTS $MANAGER_OPTS $LAZARUS_UNITS $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr > /dev/null
+  fpc $CPU $TARGET $SIMPLEOPTS $MANAGER_OPTS $LAZARUS_UNITS $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr 
+  echo ""
+}
+
+get_version_info() {
+  V1=`cat epidatamanager.lpi | grep CurrentVersionNr | cut -c 32-32`
+  if [ -z $V1 ]
+  then
+    V1="0"
+  fi
+
+  V2=`cat epidatamanager.lpi | grep CurrentMajorRevNr | cut -c 33-33`
+  if [ -z $V2 ]
+  then
+    V2="0"
+  fi
+
+  V3=`cat epidatamanager.lpi | grep CurrentMinorRevNr | cut -c 33-33`
+  if [ -z $V3 ]
+  then
+    V3="0"
+  fi
+
+  V4=`cat epidatamanager.lpi | grep CurrentBuildNr | cut -c 30-30`
+  if [ -z $V4 ]
+  then
+    V4="0"
+  fi
+
+  MANAGER_VERSION="$V1.$V2.$V3.$V4" 
 }
 
 # Easy paths:
@@ -101,8 +129,11 @@ check_svn_status
 SVN2REV_CMD="$SVN2REV_CMD $MANAGER_LOCATION"
 $SVN2REV_CMD
 
+get_version_info
+
 echo "**********************"
 echo " Start compiling..."
+echo " Manager version: $MANAGER_VERSION"
 echo "**********************"
 
 MY_LCL_TARGET="win32"

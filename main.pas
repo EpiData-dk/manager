@@ -15,12 +15,15 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    StartEditorAction: TAction;
     Image6: TImage;
     Image7: TImage;
+    MenuItem1: TMenuItem;
+    ToolsMenu: TMenuItem;
     NewDesignFormAction: TAction;
     ClosePageAction: TAction;
     EditMenu: TMenuItem;
-    MenuItem1: TMenuItem;
+    HelpMenu: TMenuItem;
     shortIntroItem: TMenuItem;
     MaintenanceBtn: TBitBtn;
     SettingsMenu: TMenuItem;
@@ -35,7 +38,7 @@ type
     MetaDataBtn: TBitBtn;
     DesignBtn: TBitBtn;
     MainFormActionList: TActionList;
-    FileExit1: TFileExit;
+    ExitAction: TFileExit;
     MainFormMenu: TMainMenu;
     FileMenu: TMenuItem;
     ExitMenuItem: TMenuItem;
@@ -55,6 +58,7 @@ type
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
+    procedure StartEditorActionExecute(Sender: TObject);
     procedure StatusBar1DblClick(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
       const Rect: TRect);
@@ -78,7 +82,7 @@ implementation
 
 uses
   design_frame, UEpiLog, settings, Clipbrd,
-  InterfaceBase, LCLType;
+  InterfaceBase, LCLType, editormain;
 
 
 { TMainForm }
@@ -258,6 +262,13 @@ begin
   // TODO : Update design form if showing properties have changed.
   for i := 0 to PageControl1.PageCount -1 do
     TDesignFrame(PageControl1.Pages[i].Controls[0]).UpdateAllFields;
+end;
+
+procedure TMainForm.StartEditorActionExecute(Sender: TObject);
+begin
+  if not Assigned(EditorForm) then
+    EditorForm := TEditorForm.Create(Self);
+  EditorForm.Show;
 end;
 
 procedure TMainForm.StatusBar1DblClick(Sender: TObject);

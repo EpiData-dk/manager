@@ -172,32 +172,32 @@ begin
   Case FieldType of
     ftFloat:
       begin
-        FieldLengthEdit.Text := '5';
+        Height := Height + FieldDecimalSizeEdit.Height + 5;
+        FieldLengthEdit.Text := IntToStr(ManagerSettings.FloatFieldLength);
         Label4.Visible := true;
+        FieldDecimalSizeEdit.Visible := true;
+        FieldDecimalSizeEdit.Enabled := true;
+        FieldDecimalSizeEdit.Text := IntToStr(ManagerSettings.FloatDecimalLength);
       end;
-    ftDate, ftToday, ftEuroDate, ftEuroToday,
+    ftDate, ftToday,
+    ftEuroDate, ftEuroToday,
     ftYMDDate, ftYMDToday:
       begin
         FieldLengthEdit.Text := '10';
         FieldLengthEdit.Visible := false;
         Label3.Visible:= false ;
         Height := Height - FieldLengthEdit.Height - 5
-      end
-  else
-    FieldLengthEdit.Text := '2';
+      end;
+    ftString, ftCrypt,ftSoundex, ftUpperAlfa:
+      FieldLengthEdit.Text := IntToStr(ManagerSettings.StringFieldLength);
+    ftInteger, ftIDNUM:
+      FieldLengthEdit.Text := IntToStr(ManagerSettings.IntFieldLength);
   end;
 
   // show fieldtype:
   Label5.Caption := 'Type: ' + FieldTypeToFieldTypeName(FieldType, nil);
 
   ActiveControl := LabelEdit;
-
-  if not (FieldType = ftFloat) then exit;
-
-  Height := Height + FieldDecimalSizeEdit.Height + 5;
-  FieldDecimalSizeEdit.Visible := true;
-  FieldDecimalSizeEdit.Enabled := true;
-  FieldDecimalSizeEdit.Text    := '2';
 end;
 
 class procedure TFieldCreateForm.AutoCreateField(DataFile: TEpiDataFile;

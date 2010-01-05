@@ -17,9 +17,10 @@ object SettingsForm: TSettingsForm
   object PageControl1: TPageControl
     Left = 0
     Height = 243
+    Hint = 'Default decimal length for:'#10'Float'
     Top = 0
     Width = 204
-    ActivePage = AdvSheet
+    ActivePage = LengthSheet
     Align = alClient
     TabIndex = 1
     TabOrder = 0
@@ -49,7 +50,7 @@ object SettingsForm: TSettingsForm
         Width = 18
         AutoSize = False
         ParentBidiMode = False
-        TabOrder = 1
+        TabOrder = 2
       end
       object Label3: TLabel
         Left = 5
@@ -74,7 +75,7 @@ object SettingsForm: TSettingsForm
         Width = 40
         CharCase = ecNormal
         MaxLength = 3
-        TabOrder = 2
+        TabOrder = 1
         EditMask = '999;1;_'
         Text = '   '
         SpaceChar = '_'
@@ -94,12 +95,12 @@ object SettingsForm: TSettingsForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 68
+        ClientHeight = 53
         ClientWidth = 185
-        TabOrder = 3
+        TabOrder = 4
         object FieldNamingAutoRadio: TRadioButton
           Left = 6
-          Height = 28
+          Height = 20
           Top = 6
           Width = 173
           Caption = 'Automatic'
@@ -108,8 +109,8 @@ object SettingsForm: TSettingsForm
         end
         object FieldNamingFirstWordRadio: TRadioButton
           Left = 6
-          Height = 28
-          Top = 34
+          Height = 21
+          Top = 26
           Width = 173
           Caption = 'First word'
           Checked = True
@@ -132,7 +133,126 @@ object SettingsForm: TSettingsForm
         Top = 100
         Width = 18
         AutoSize = False
-        TabOrder = 4
+        TabOrder = 3
+      end
+    end
+    object LengthSheet: TTabSheet
+      Caption = 'Lengths'
+      ClientHeight = 208
+      ClientWidth = 198
+      object Label9: TLabel
+        Left = 5
+        Height = 18
+        Top = 8
+        Width = 137
+        Caption = 'Default field lengths:'
+        ParentColor = False
+      end
+      object Label10: TLabel
+        Left = 5
+        Height = 18
+        Hint = 'Default field length for:'#10'Integer and IdNum'
+        Top = 49
+        Width = 51
+        Caption = 'Integer:'
+        ParentColor = False
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Bevel1: TBevel
+        Left = 5
+        Height = 2
+        Top = 32
+        Width = 186
+      end
+      object Label11: TLabel
+        Left = 5
+        Height = 18
+        Hint = 'Default field length for:'#10'Float'
+        Top = 81
+        Width = 38
+        Caption = 'Float:'
+        ParentColor = False
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Label12: TLabel
+        Left = 5
+        Height = 18
+        Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
+        Top = 144
+        Width = 43
+        Caption = 'String:'
+        ParentColor = False
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object IntLengthEdit: TMaskEdit
+        Left = 135
+        Height = 27
+        Hint = 'Default field length for:'#10'Integer and IdNum'
+        Top = 40
+        Width = 56
+        CharCase = ecNormal
+        MaxLength = 3
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        EditMask = '999;0;_'
+        SpaceChar = '_'
+      end
+      object FloatLengthEdit: TMaskEdit
+        Left = 135
+        Height = 27
+        Hint = 'Default field length for:'#10'Float'
+        Top = 72
+        Width = 56
+        CharCase = ecNormal
+        MaxLength = 3
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+        EditMask = '999;0;_'
+        SpaceChar = '_'
+      end
+      object StringLengthEdit: TMaskEdit
+        Left = 135
+        Height = 27
+        Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
+        Top = 135
+        Width = 56
+        CharCase = ecNormal
+        MaxLength = 3
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 3
+        EditMask = '999;0;_'
+        SpaceChar = '_'
+      end
+      object Label13: TLabel
+        Left = 13
+        Height = 18
+        Hint = 'Default decimal length for:'#10'Float'
+        Top = 112
+        Width = 66
+        Caption = 'Decimals:'
+        ParentColor = False
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object DecimalLengthEdit: TMaskEdit
+        Left = 135
+        Height = 27
+        Hint = 'Default decimal length for:'#10'Float'
+        Top = 103
+        Width = 56
+        CharCase = ecNormal
+        MaxLength = 3
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 2
+        EditMask = '999;0;_'
+        SpaceChar = '_'
       end
     end
     object AdvSheet: TTabSheet

@@ -6,17 +6,21 @@ unit design_label_form;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, StdCtrls, ExtCtrls, UEpiDataFile;
+  Classes, SysUtils, LResources, Forms, StdCtrls, ExtCtrls, ActnList,
+  UEpiDataFile;
 
 type
 
   { TCreateLabelForm }
   TCreateLabelForm = class(TForm)
+    CloseAction: TAction;
+    ActionList1: TActionList;
     CancelBtn: TButton;
     Label1: TLabel;
     LabelEdit: TEdit;
     OkBtn: TButton;
     Panel1: TPanel;
+    procedure CloseActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   private
     { private declarations }
@@ -44,6 +48,11 @@ begin
   S := UTF8Encode(Trim(UTF8Decode(LabelEdit.Text)));
   if S = '' then
     CanClose := true;
+end;
+
+procedure TCreateLabelForm.CloseActionExecute(Sender: TObject);
+begin
+  CancelBtn.Click;
 end;
 
 constructor TCreateLabelForm.Create(TheOwner: TComponent; DataFile: TEpiDataFile
