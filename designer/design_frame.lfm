@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 508
-  DesignTop = 292
+  DesignLeft = 637
+  DesignTop = 331
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -58,7 +58,7 @@ object DesignFrame: TDesignFrame
       OnClick = ToolBtnClick
     end
     object ClearToolBtn: TToolButton
-      Left = 468
+      Left = 412
       Hint = 'Erase all'
       Top = 1
       Caption = 'ClearToolBtn'
@@ -71,7 +71,7 @@ object DesignFrame: TDesignFrame
       Action = SaveFileAction
     end
     object FontSelectBtn: TToolButton
-      Left = 440
+      Left = 384
       Hint = 'Select Screen Font'
       Top = 1
       Caption = 'FontSelectBtn'
@@ -86,7 +86,7 @@ object DesignFrame: TDesignFrame
       Style = tbsDivider
     end
     object ToolButton1: TToolButton
-      Left = 406
+      Left = 350
       Top = 1
       Width = 3
       Caption = 'ToolButton1'
@@ -103,8 +103,8 @@ object DesignFrame: TDesignFrame
     end
     object LabelFieldBtn: TToolButton
       Tag = 15
-      Left = 238
-      Hint = 'Add Label (F5)'
+      Left = 266
+      Hint = 'Add Label (F6)'
       Top = 1
       Caption = 'LabelFieldBtn'
       ImageIndex = 18
@@ -116,42 +116,25 @@ object DesignFrame: TDesignFrame
       Action = OpenFileAction
     end
     object AutoAlignBtn: TToolButton
-      Left = 409
+      Left = 353
       Hint = 'Align Fields (F9)'
       Top = 1
       Caption = 'AutoAlignBtn'
       ImageIndex = 9
       OnClick = AutoAlignBtnClick
     end
-    object DMYFieldBtn: TToolButton
+    object DateFieldBtn: TToolButton
       Tag = 11
-      Left = 266
-      Hint = 'Add Date [dmy] (F6)'
+      Left = 238
+      Hint = 'Add Date (F5)'
       Top = 1
-      Caption = 'DMYFieldBtn'
+      Caption = 'DateFieldBtn'
       ImageIndex = 10
-      OnClick = ToolBtnClick
-    end
-    object MDYFieldBtn: TToolButton
-      Tag = 2
-      Left = 294
-      Hint = 'Add Date [mdy] (F7)'
-      Top = 1
-      Caption = 'MDYFieldBtn'
-      ImageIndex = 11
-      OnClick = ToolBtnClick
-    end
-    object YMDFieldBtn: TToolButton
-      Tag = 19
-      Left = 322
-      Hint = 'Add Date [ymd] (F8)'
-      Top = 1
-      Caption = 'YMDFieldBtn'
-      ImageIndex = 12
+      PopupMenu = DateFieldPopupMenu
       OnClick = ToolBtnClick
     end
     object OtherFieldBtn: TToolButton
-      Left = 350
+      Left = 294
       Hint = 'Other Fields'
       Top = 1
       Caption = 'OtherFieldBtn'
@@ -159,7 +142,7 @@ object DesignFrame: TDesignFrame
       ImageIndex = 13
     end
     object ImportStructureBtn: TToolButton
-      Left = 378
+      Left = 322
       Hint = 'Add Structure from existing file'
       Top = 1
       Action = ImportStructureAction
@@ -185,21 +168,21 @@ object DesignFrame: TDesignFrame
       Style = tbsDivider
     end
     object ToolButton8: TToolButton
-      Left = 437
+      Left = 381
       Top = 1
       Width = 3
       Caption = 'ToolButton8'
       Style = tbsDivider
     end
     object ToolButton3: TToolButton
-      Left = 496
+      Left = 440
       Top = 1
       Width = 3
       Caption = 'ToolButton3'
       Style = tbsDivider
     end
     object ShowStructureBtn: TToolButton
-      Left = 499
+      Left = 443
       Top = 1
       Action = DocumentFileAction
       ImageIndex = 19
@@ -247,34 +230,7 @@ object DesignFrame: TDesignFrame
       SecondaryShortCuts.Strings = (
         'Shift+F5'
       )
-      ShortCut = 116
-    end
-    object NewDMYFieldAction: TAction
-      Category = 'New Fields'
-      Caption = 'NewDMYFieldAction'
-      OnExecute = NewDMYFieldActionExecute
-      SecondaryShortCuts.Strings = (
-        'Shift+F6'
-      )
       ShortCut = 117
-    end
-    object NewMDYFieldAction: TAction
-      Category = 'New Fields'
-      Caption = 'NewMDYFieldAction'
-      OnExecute = NewMDYFieldActionExecute
-      SecondaryShortCuts.Strings = (
-        'Shift+F7'
-      )
-      ShortCut = 118
-    end
-    object NewYMDFieldAction: TAction
-      Category = 'New Fields'
-      Caption = 'NewYMDFieldAction'
-      OnExecute = NewYMDFieldActionExecute
-      SecondaryShortCuts.Strings = (
-        'Shift+F8'
-      )
-      ShortCut = 119
     end
     object ImportStructureAction: TAction
       Category = 'File'
@@ -325,12 +281,22 @@ object DesignFrame: TDesignFrame
       OnExecute = EditCompActionExecute
       ShortCut = 120
     end
+    object NewOtherFieldAction: TAction
+      Caption = 'NewOtherFieldAction'
+    end
+    object NewDateFieldAction: TAction
+      Category = 'New Fields'
+      Caption = 'NewDateFieldAction'
+      OnExecute = NewDateFieldActionExecute
+      ShortCut = 116
+    end
   end
   object FieldToolBarImageList: TImageList
     Height = 24
+    ShareImages = True
     Width = 24
     left = 72
-    top = 40
+    top = 32
     Bitmap = {
       4C69160000001800000018000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1934,12 +1900,12 @@ object DesignFrame: TDesignFrame
   object FontDialog1: TFontDialog
     MinFontSize = 0
     MaxFontSize = 0
-    left = 320
-    top = 96
+    left = 384
+    top = 32
   end
   object OtherFieldsPopup: TPopupMenu
-    left = 232
-    top = 40
+    left = 296
+    top = 88
     object StringSubMenu: TMenuItem
       Tag = 18
       Caption = 'String...'
@@ -1981,8 +1947,30 @@ object DesignFrame: TDesignFrame
     object NewAutoIDMenu: TMenuItem
       Tag = 12
       Caption = 'Auto ID'
-      Hint = 'Idnum'
       OnClick = NewOtherFieldClick
+    end
+  end
+  object DateFieldPopupMenu: TPopupMenu
+    Images = FieldToolBarImageList
+    left = 240
+    top = 32
+    object NewDMYFieldMenu: TMenuItem
+      Tag = 11
+      Caption = 'DMY Date'
+      ImageIndex = 10
+      OnClick = NewDateFieldMenuClick
+    end
+    object NewMDYFieldMenu: TMenuItem
+      Tag = 2
+      Caption = 'MDY Date'
+      ImageIndex = 11
+      OnClick = NewDateFieldMenuClick
+    end
+    object NewYMDFieldMenu: TMenuItem
+      Tag = 19
+      Caption = 'YMD Date'
+      ImageIndex = 12
+      OnClick = NewDateFieldMenuClick
     end
   end
 end

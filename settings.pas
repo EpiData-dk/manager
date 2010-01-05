@@ -16,9 +16,11 @@ type
   TSettingsForm = class(TForm)
     Bevel1: TBevel;
     CancelBtn: TButton;
+    DefaultDateCombo: TComboBox;
     FloatLengthEdit: TMaskEdit;
     DecimalLengthEdit: TMaskEdit;
     Label13: TLabel;
+    Label14: TLabel;
     StringLengthEdit: TMaskEdit;
     Label10: TLabel;
     Label11: TLabel;
@@ -60,6 +62,8 @@ type
     { private declarations }
   public
     { public declarations }
+  published
+//    property OnChange;
   end;
 
   TManagerSettings = record
@@ -68,6 +72,7 @@ type
     DefaultRightPostion:   Integer;
     ShowFieldNamesInLabel: boolean;
     ShowFieldBorder:       boolean;
+    DefaultDateType:       TFieldType;
     FieldNamingStyle:      TFieldNaming;
 
     // Lengths:
@@ -102,6 +107,7 @@ var
     DefaultRightPostion:   200;
     ShowFieldNamesInLabel: true;
     ShowFieldBorder:       true;
+    DefaultDateType:       ftEuroDate;
     FieldNamingStyle:      fnFirstWord;
 
     // Lengths:
@@ -162,6 +168,11 @@ begin
     ManagerSettings.DefaultRightPostion := StrToInt(S);
   ManagerSettings.ShowFieldNamesInLabel := ShowFieldNameChkBox.Checked;
   ManagerSettings.ShowFieldBorder       := ShowFieldBorderChkBox.Checked;
+  case DefaultDateCombo.ItemIndex of
+    0: ManagerSettings.DefaultDateType := ftEuroDate;
+    1: ManagerSettings.DefaultDateType := ftDate;
+    2: ManagerSettings.DefaultDateType := ftYMDDate;
+  end;
   if FieldNamingAutoRadio.Checked then
     ManagerSettings.FieldNamingStyle    := fnAuto
   else
@@ -195,6 +206,7 @@ begin
   S := Trim(LabelLabelEdit.Text);
   if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.SpaceBtwLabelLabel := StrToInt(S);
+
 end;
 
 procedure TSettingsForm.FormCreate(Sender: TObject);
@@ -206,6 +218,11 @@ begin
     DefaultRightPosEdit.Text          := IntToStr(DefaultRightPostion);
     ShowFieldNameChkBox.Checked       := ShowFieldNamesInLabel;
     ShowFieldBorderChkBox.Checked     := ShowFieldBorder;
+    case DefaultDateType of
+      ftEuroDate: DefaultDateCombo.ItemIndex := 0;
+      ftDate:     DefaultDateCombo.ItemIndex := 1;
+      ftYMDDate:  DefaultDateCombo.ItemIndex := 2;
+    end;
     FieldNamingAutoRadio.Checked      := (FieldNamingStyle = fnAuto);
     FieldNamingFirstWordRadio.Checked := (FieldNamingStyle = fnFirstWord);
 

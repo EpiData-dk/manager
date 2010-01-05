@@ -1,33 +1,32 @@
 object SettingsForm: TSettingsForm
   Left = 813
-  Height = 279
+  Height = 305
   Top = 339
-  Width = 204
+  Width = 206
   ActiveControl = PageControl1
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Settings'
-  ClientHeight = 279
-  ClientWidth = 204
-  Color = clSkyBlue
+  ClientHeight = 305
+  ClientWidth = 206
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   Position = poOwnerFormCenter
   LCLVersion = '0.9.29'
   object PageControl1: TPageControl
     Left = 0
-    Height = 243
+    Height = 269
     Hint = 'Default decimal length for:'#10'Float'
     Top = 0
-    Width = 204
-    ActivePage = LengthSheet
+    Width = 206
+    ActivePage = BasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 208
-      ClientWidth = 198
+      ClientHeight = 234
+      ClientWidth = 200
       object Label1: TLabel
         Left = 5
         Height = 18
@@ -83,7 +82,7 @@ object SettingsForm: TSettingsForm
       object FieldNamingGroup: TRadioGroup
         Left = 5
         Height = 72
-        Top = 128
+        Top = 160
         Width = 189
         AutoFill = True
         Caption = 'Field Naming'
@@ -135,11 +134,35 @@ object SettingsForm: TSettingsForm
         AutoSize = False
         TabOrder = 3
       end
+      object Label14: TLabel
+        Left = 5
+        Height = 18
+        Top = 136
+        Width = 119
+        Caption = 'Default date type:'
+        ParentColor = False
+      end
+      object DefaultDateCombo: TComboBox
+        Left = 125
+        Height = 29
+        Top = 128
+        Width = 69
+        ItemHeight = 0
+        ItemIndex = 0
+        Items.Strings = (
+          'dmy'
+          'mdy'
+          'ymd'
+        )
+        Style = csDropDownList
+        TabOrder = 5
+        Text = 'dmy'
+      end
     end
     object LengthSheet: TTabSheet
       Caption = 'Lengths'
-      ClientHeight = 208
-      ClientWidth = 198
+      ClientHeight = 234
+      ClientWidth = 200
       object Label9: TLabel
         Left = 5
         Height = 18
@@ -257,8 +280,8 @@ object SettingsForm: TSettingsForm
     end
     object AdvSheet: TTabSheet
       Caption = 'Advanced'
-      ClientHeight = 208
-      ClientWidth = 198
+      ClientHeight = 234
+      ClientWidth = 200
       object GroupBox1: TGroupBox
         Left = 5
         Height = 82
@@ -377,13 +400,13 @@ object SettingsForm: TSettingsForm
   object Panel1: TPanel
     Left = 0
     Height = 36
-    Top = 243
-    Width = 204
+    Top = 269
+    Width = 206
     Align = alBottom
     BevelInner = bvSpace
     BevelOuter = bvSpace
     ClientHeight = 36
-    ClientWidth = 204
+    ClientWidth = 206
     TabOrder = 1
     object OkBtn: TButton
       Left = 32

@@ -259,7 +259,6 @@ begin
   SettingsForm := TSettingsForm.Create(self);
   if SettingsForm.ShowModal = mrCancel then exit;
 
-  // TODO : Update design form if showing properties have changed.
   for i := 0 to PageControl1.PageCount -1 do
     TDesignFrame(PageControl1.Pages[i].Controls[0]).UpdateAllFields;
 end;

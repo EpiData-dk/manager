@@ -16,10 +16,16 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    NewDateFieldAction: TAction;
+    NewYMDFieldMenu: TMenuItem;
+    NewMDYFieldMenu: TMenuItem;
+    NewOtherFieldAction: TAction;
     EditCompAction: TAction;
     DocumentFileAction: TAction;
     AlignAction: TAction;
+    NewDMYFieldMenu: TMenuItem;
     NewDataFormBtn: TToolButton;
+    DateFieldPopupMenu: TPopupMenu;
     SaveFileAsAction: TAction;
     SaveFileAction: TAction;
     OpenFileAction: TAction;
@@ -34,9 +40,6 @@ type
     NewCryptFieldMenu: TMenuItem;
     StringSubMenu: TMenuItem;
     NewAutoIDMenu: TMenuItem;
-    NewYMDFieldAction: TAction;
-    NewMDYFieldAction: TAction;
-    NewDMYFieldAction: TAction;
     AutoAlignLeftAdjustMenuItem: TMenuItem;
     AutoAlignEqualSpaceMenuItem: TMenuItem;
     NewLabelFieldAction: TAction;
@@ -63,32 +66,29 @@ type
     LabelFieldBtn: TToolButton;
     OpenToolBtn: TToolButton;
     AutoAlignBtn: TToolButton;
-    DMYFieldBtn: TToolButton;
+    DateFieldBtn: TToolButton;
     OtherFieldBtn: TToolButton;
     ImportStructureBtn: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
-    MDYFieldBtn: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
-    YMDFieldBtn: TToolButton;
     procedure DocumentFileActionExecute(Sender: TObject);
     procedure EditCompActionExecute(Sender: TObject);
     procedure ImportStructureActionExecute(Sender: TObject);
+    procedure NewDateFieldMenuClick(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
+    procedure NewDateFieldActionExecute(Sender: TObject);
     procedure AutoAlignBtnClick(Sender: TObject);
     procedure ClearToolBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
     procedure EditFieldMenuItemClick(Sender: TObject);
     procedure FontSelectBtnClick(Sender: TObject);
-    procedure NewDMYFieldActionExecute(Sender: TObject);
     procedure NewFloatFieldActionExecute(Sender: TObject);
     procedure NewIntFieldActionExecute(Sender: TObject);
     procedure NewLabelFieldActionExecute(Sender: TObject);
-    procedure NewMDYFieldActionExecute(Sender: TObject);
     procedure NewStringFieldActionExecute(Sender: TObject);
-    procedure NewYMDFieldActionExecute(Sender: TObject);
     procedure OpenFileActionExecute(Sender: TObject);
     procedure SaveFileActionExecute(Sender: TObject);
     procedure SaveFileAsActionExecute(Sender: TObject);
@@ -375,7 +375,7 @@ begin
   ShowOnMainStatusBar(
     Format(
       'Fields: %d - %d',
-      [ActiveDatafile.NumFields,ActiveDatafile.DataFields.Count]
+      [ActiveDatafile.NumFields, ActiveDatafile.DataFields.Count]
     ), 1
   );
   ShowOnMainStatusBar(
@@ -910,6 +910,14 @@ begin
   FComponentYTree := TAVLTree.Create(@YCmp);
   FComponentXTree := TAVLTree.Create(@XCmp);
 
+  // Manager settings specifics.
+  DateFieldBtn.Tag := Ord(ManagerSettings.DefaultDateType);
+  case ManagerSettings.DefaultDateType of
+    ftEuroDate: DateFieldBtn.ImageIndex := 10;
+    ftDate:     DateFieldBtn.ImageIndex := 11;
+    ftYMDDate:  DateFieldBtn.ImageIndex := 12;
+  end;
+
   // Designer box creation and setup.
   // - (This is subject to change if we find a better component than
   //    the form or a scrollbox).
@@ -940,6 +948,13 @@ procedure TDesignFrame.UpdateAllFields;
 var
   i: Integer;
 begin
+  DateFieldBtn.Tag := Ord(ManagerSettings.DefaultDateType);
+  case ManagerSettings.DefaultDateType of
+    ftEuroDate: DateFieldBtn.ImageIndex := 10;
+    ftDate:     DateFieldBtn.ImageIndex := 11;
+    ftYMDDate:  DateFieldBtn.ImageIndex := 12;
+  end;
+
   for i := DesignerBox.ControlCount -1 downto  0 do
   with DesignerBox do
   begin
@@ -949,6 +964,11 @@ begin
       TFieldEdit(Controls[i]).FieldNameLabel.Parent := Self
     else
       TFieldEdit(Controls[i]).FieldNameLabel.Parent := nil;
+
+    if ManagerSettings.ShowFieldBorder then
+      TFieldEdit(Controls[i]).BorderStyle := bsNone
+    else
+      TFieldEdit(Controls[i]).BorderStyle := bsSingle;
   end;
 end;
 
@@ -1013,9 +1033,10 @@ begin
     end;
   end;
   ActiveDataFile.Reset;
-  ActiveDataFile.EndUpdate;
+  ActiveDataFile.RegisterOnChangeHook(@DataFileChange);
+  // TODO : Handle in case there is an open documentation form.
+  ActiveDataFile.EndUpdate;  // Forced updatenonvisual due to registered hook.
 
-  UpdateNonInteractiveVisuals;
   Modified := false;
 end;
 
@@ -1213,13 +1234,6 @@ begin
   end;
 end;
 
-procedure TDesignFrame.NewOtherFieldClick(Sender: TObject);
-begin
-  if not (Sender is TMenuItem) then exit;
-  OtherFieldBtn.Tag := TMenuItem(Sender).Tag;
-  ToolBtnClick(OtherFieldBtn);
-end;
-
 procedure TDesignFrame.ImportStructureActionExecute(Sender: TObject);
 var
   QES: TQesHandler;
@@ -1273,6 +1287,27 @@ begin
   Modified := true;
 end;
 
+procedure TDesignFrame.NewDateFieldMenuClick(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+  DateFieldBtn.Tag := TMenuItem(Sender).Tag;
+  ManagerSettings.DefaultDateType := TFieldType(DateFieldBtn.Tag);
+  DateFieldBtn.ImageIndex := TMenuItem(Sender).ImageIndex;
+  ToolBtnClick(DateFieldBtn);
+end;
+
+procedure TDesignFrame.NewOtherFieldClick(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+  OtherFieldBtn.Tag := TMenuItem(Sender).Tag;
+  ToolBtnClick(OtherFieldBtn);
+end;
+
+procedure TDesignFrame.NewDateFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldAction(DateFieldBtn);
+end;
+
 procedure TDesignFrame.DocumentFileActionExecute(Sender: TObject);
 begin
   ActiveDataFile.SortFields(@SortFields);
@@ -1296,11 +1331,6 @@ begin
     Allow := false;
 end;
 
-procedure TDesignFrame.NewDMYFieldActionExecute(Sender: TObject);
-begin
-  NewShortCutFieldAction(DMYFieldBtn);
-end;
-
 procedure TDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
 begin
   NewShortCutFieldAction(FloatFieldBtn);
@@ -1316,19 +1346,9 @@ begin
   NewShortCutFieldAction(LabelFieldBtn);
 end;
 
-procedure TDesignFrame.NewMDYFieldActionExecute(Sender: TObject);
-begin
-  NewShortCutFieldAction(MDYFieldBtn);
-end;
-
 procedure TDesignFrame.NewStringFieldActionExecute(Sender: TObject);
 begin
   NewShortCutFieldAction(StringFieldBtn);
-end;
-
-procedure TDesignFrame.NewYMDFieldActionExecute(Sender: TObject);
-begin
-  NewShortCutFieldAction(YMDFieldBtn);
 end;
 
 procedure TDesignFrame.OpenFileActionExecute(Sender: TObject);
