@@ -28,12 +28,13 @@ type
       EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
     procedure DataFileFieldChange(Sender: TObject;
       EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
+    procedure SetDatafile(const AValue: TEpiDatafile);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; aDatafile: TEpiDataFile);
     destructor Destroy; override;
     procedure ForceUpdate;
-    property Datafile: TEpiDatafile read FDatafile;
+    property Datafile: TEpiDatafile read FDatafile write SetDatafile;
   end; 
 
 var
@@ -66,6 +67,12 @@ end;
 procedure TDatafileDocumentationForm.DataFileChange(Sender: TObject;
   EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
 begin
+  // If a new field is added, we need to register a hook to it.
+  // - otherwise changes made to the field will not be updated on the form.
+  if EventType = dceAddField then
+  with TEpiDataFile(Sender) do
+    Field[NumFields-1].RegisterOnChangeHook(@DataFileFieldChange);
+
   ForceUpdate;
 end;
 
@@ -73,6 +80,20 @@ procedure TDatafileDocumentationForm.DataFileFieldChange(Sender: TObject;
   EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
 begin
   ForceUpdate;
+end;
+
+procedure TDatafileDocumentationForm.SetDatafile(const AValue: TEpiDatafile);
+var
+  i: Integer;
+begin
+  FDatafile := AValue;
+  Datafile.RegisterOnChangeHook(@DataFileChange);
+
+  for i := 0 to FDatafile.NumFields - 1 do
+    Datafile[i].RegisterOnChangeHook(@DataFileFieldChange);
+
+  Caption := 'Documenting: ' +
+    Datafile.FileName;
 end;
 
 procedure TDatafileDocumentationForm.CloseActionExecute(Sender: TObject);
@@ -86,18 +107,9 @@ begin
 end;
 
 constructor TDatafileDocumentationForm.Create(TheOwner: TComponent; aDatafile: TEpiDataFile);
-var
-  i: Integer;
 begin
   inherited Create(TheOwner);
-  FDatafile := aDatafile;
-  FDatafile.RegisterOnChangeHook(@DataFileChange);
-
-  for i := 0 to FDatafile.NumFields - 1 do
-    FDatafile[i].RegisterOnChangeHook(@DataFileFieldChange);
-
-  Caption := 'Documenting: ' +
-    Datafile.FileName;
+  Datafile := aDatafile;
 end;
 
 destructor TDatafileDocumentationForm.Destroy;

@@ -138,7 +138,7 @@ object DesignFrame: TDesignFrame
       Hint = 'Other Fields'
       Top = 1
       Caption = 'OtherFieldBtn'
-      DropdownMenu = OtherFieldsPopup
+      DropdownMenu = OtherFieldsToolBtnPopup
       ImageIndex = 13
     end
     object ImportStructureBtn: TToolButton
@@ -289,6 +289,16 @@ object DesignFrame: TDesignFrame
       Caption = 'NewDateFieldAction'
       OnExecute = NewDateFieldActionExecute
       ShortCut = 116
+    end
+    object PasteAsLabel: TEditPaste
+      Category = 'DesignPaste'
+      Caption = '&Paste As Labels'
+      Hint = 'Paste'
+      OnExecute = PasteAsLabelExecute
+      SecondaryShortCuts.Strings = (
+        'F8'
+      )
+      ShortCut = 16470
     end
   end
   object FieldToolBarImageList: TImageList
@@ -1886,8 +1896,8 @@ object DesignFrame: TDesignFrame
     }
   end
   object FieldPopUp: TPopupMenu
-    left = 384
-    top = 224
+    left = 552
+    top = 280
     object EditFieldMenuItem: TMenuItem
       Caption = 'Edit'
       OnClick = EditFieldMenuItemClick
@@ -1903,7 +1913,7 @@ object DesignFrame: TDesignFrame
     left = 384
     top = 32
   end
-  object OtherFieldsPopup: TPopupMenu
+  object OtherFieldsToolBtnPopup: TPopupMenu
     left = 296
     top = 88
     object StringSubMenu: TMenuItem
@@ -1971,6 +1981,14 @@ object DesignFrame: TDesignFrame
       Caption = 'YMD Date'
       ImageIndex = 12
       OnClick = NewDateFieldMenuClick
+    end
+  end
+  object DesignerPopup: TPopupMenu
+    left = 552
+    top = 344
+    object MenuItem1: TMenuItem
+      Action = PasteAsLabel
+      OnClick = PasteAsLabelExecute
     end
   end
 end

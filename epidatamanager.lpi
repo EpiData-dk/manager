@@ -121,7 +121,7 @@
       <Unit9>
         <Filename Value="designer/fieldedit.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="fieldedit"/>
+        <UnitName Value="FieldEdit"/>
       </Unit9>
       <Unit10>
         <Filename Value="editor/editormain.pas"/>

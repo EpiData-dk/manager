@@ -6,9 +6,9 @@ unit design_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList,
-  Controls, Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, UEpiDataFile,
-  FieldEdit, Design_Field_Frame, AVL_Tree, LCLType, design_autoalign_form,
+  Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList, Controls,
+  Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, UEpiDataFile, FieldEdit,
+  Design_Field_Frame, AVL_Tree, LCLType, StdActns, design_autoalign_form,
   UDataFileTypes, datafile_documentation_form;
 
 type
@@ -16,6 +16,8 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    PasteAsLabel: TEditPaste;
+    MenuItem1: TMenuItem;
     NewDateFieldAction: TAction;
     NewYMDFieldMenu: TMenuItem;
     NewMDYFieldMenu: TMenuItem;
@@ -26,6 +28,7 @@ type
     NewDMYFieldMenu: TMenuItem;
     NewDataFormBtn: TToolButton;
     DateFieldPopupMenu: TPopupMenu;
+    DesignerPopup: TPopupMenu;
     SaveFileAsAction: TAction;
     SaveFileAction: TAction;
     OpenFileAction: TAction;
@@ -54,7 +57,7 @@ type
     EditFieldMenuItem: TMenuItem;
     FieldPopUp: TPopupMenu;
     DeleteFieldMenuItem: TMenuItem;
-    OtherFieldsPopup: TPopupMenu;
+    OtherFieldsToolBtnPopup: TPopupMenu;
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
     ClearToolBtn: TToolButton;
@@ -90,6 +93,7 @@ type
     procedure NewLabelFieldActionExecute(Sender: TObject);
     procedure NewStringFieldActionExecute(Sender: TObject);
     procedure OpenFileActionExecute(Sender: TObject);
+    procedure PasteAsLabelExecute(Sender: TObject);
     procedure SaveFileActionExecute(Sender: TObject);
     procedure SaveFileAsActionExecute(Sender: TObject);
     procedure ToolBtnClick(Sender: TObject);
@@ -164,7 +168,8 @@ implementation
 uses
   main, graphics,
   types, math, settings, design_label_form,
-  UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils;
+  UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils,
+  Clipbrd, UStringUtils;
 
 function SortFields(Item1, Item2: Pointer): integer;
 var
@@ -932,6 +937,7 @@ begin
   FDesignerBox.OnMouseMove := @DesignerMouseMove;
   FDesignerBox.Color       := clWhite;
   FDesignerBox.AutoScroll  := true;
+  FDesignerBox.PopupMenu   := DesignerPopup;
 end;
 
 destructor TDesignFrame.Destroy;
@@ -1034,7 +1040,9 @@ begin
   end;
   ActiveDataFile.Reset;
   ActiveDataFile.RegisterOnChangeHook(@DataFileChange);
-  // TODO : Handle in case there is an open documentation form.
+  // Handle in case there is an open documentation form.
+  if Assigned(ActiveDocumentationForm) then
+    ActiveDocumentationForm.Datafile := ActiveDataFile;
   ActiveDataFile.EndUpdate;  // Forced updatenonvisual due to registered hook.
 
   Modified := false;
@@ -1183,7 +1191,7 @@ begin
       TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDataFile.Size);
       with TmpField do
       begin
-        FieldName := TCreateLabelForm(CreateForm).GetFieldName;
+        FieldName := TCreateLabelForm.GetFieldName(ActiveDataFile);
         VariableLabel := TCreateLabelForm(CreateForm).LabelEdit.Text;
         FieldX := X;
         FieldY := Y;
@@ -1429,6 +1437,40 @@ begin
     Modified := false;
   end;
   FreeAndNil(Dlg);
+end;
+
+procedure TDesignFrame.PasteAsLabelExecute(Sender: TObject);
+var
+  Cbl: TStringList;
+  Pt: TPoint;
+  i: Integer;
+  TmpField: TEpiField;
+begin
+  Cbl := TStringList.Create;
+  try
+    MainForm.ReadClipBoard(Cbl);
+
+    for i := 0 to Cbl.Count - 1 do
+    begin
+      if Trim(Cbl[i]) = '' then continue;
+
+      Pt := FindNewAutoControlPostion(TFieldLabel);
+      TmpField := TEpiField.CreateField(ftQuestion, ActiveDataFile.Size);
+      with TmpField do
+      begin
+        FieldName := TCreateLabelForm.GetFieldName(ActiveDataFile);
+        VariableLabel := Trim(Cbl[i]);
+        FieldX := Pt.X;
+        FieldY := Pt.Y;
+        LabelX := Pt.X;
+        LabelY := Pt.Y;
+      end;
+      ActiveDatafile.AddField(TmpField);
+      NewQuestionLabel(TmpField);
+    end;
+  finally
+    Cbl.Free;
+  end;
 end;
 
 procedure TDesignFrame.SaveFileActionExecute(Sender: TObject);

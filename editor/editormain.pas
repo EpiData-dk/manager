@@ -137,12 +137,31 @@ end;
 
 procedure TEditorForm.SaveActionExecute(Sender: TObject);
 begin
-  // TODO : Save File.
+  if StatusBar1.Panels[3].Text = '' then
+  begin
+    SaveAsAction.Execute;
+    Exit;
+  end;
+
+  SynEditor.Lines.SaveToFile(StatusBar1.Panels[3].Text);
 end;
 
 procedure TEditorForm.SaveAsActionExecute(Sender: TObject);
+var
+  Dlg: TSaveDialog;
 begin
-  // TODO : Save As File.
+  Dlg := TSaveDialog.Create(self);
+  try
+    Dlg.Filter := GetEpiDialogFilter(True, true, true, false, false, false, false, true, true, true);
+    Dlg.Options := Dlg.Options + [ofOverwritePrompt];
+    if not Dlg.Execute then exit;
+
+    SynEditor.Lines.SaveToFile(Dlg.FileName);
+    SynEditor.Modified := false;
+    StatusBar1.Panels[3].Text := Dlg.FileName;
+  finally
+    Dlg.Free;
+  end;
 end;
 
 procedure TEditorForm.SynEditorStatusChange(Sender: TObject;

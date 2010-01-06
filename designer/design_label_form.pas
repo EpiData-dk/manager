@@ -28,7 +28,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; DataFile: TEpiDataFile);
-    function GetFieldName: string;
+    class function GetFieldName(TmpDf: TEpiDataFile): string;
   end;
 
 implementation
@@ -63,14 +63,13 @@ begin
   ActiveControl := LabelEdit;
 end;
 
-function TCreateLabelForm.GetFieldName: string;
-var
-  LastFieldNo: Integer;
+class function TCreateLabelForm.GetFieldName(TmpDf: TEpiDataFile): string;
 begin
-  result := 'label_' + IntToStr(1 + FDf.NumFields - FDf.NumDataFields);
-  inc(LastFieldNo);
-  if FDf.FieldExists(result) then
-    result := FDf.CreateUniqueFieldName('label_');
+  if not Assigned(TmpDf) then
+    exit;
+  result := 'label_' + IntToStr(1 + TmpDf.NumFields - TmpDf.NumDataFields);
+  if TmpDf.FieldExists(result) then
+    result := TmpDf.CreateUniqueFieldName('label_');
 end;
 
 initialization

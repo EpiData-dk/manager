@@ -35,28 +35,49 @@ get_filename() {
   fi
 }
 
-clean() {
+clean_filename() {
   get_filename
   if [ -a "$MANAGER_LOCATION/$FILENAME" ] 
   then
     rm -f "$MANAGER_LOCATION/$FILENAME"
   fi
+}
 
+clean_lib() {
   if [ -d "$MANAGER_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET" ]
   then
     rm -fr "$MANAGER_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET"
   fi
 }
 
-compile_core() {
+clean() {
+  clean_filename
+  clean_lib
+}
+
+clean_core() {
   HERE=`pwd`
   cd "$CORE_LOCATION"
-  make clean all CPU_TARGET="$MY_CPU_TARGET" OS_TARGET="$MY_OS_TARGET" OPT="$SIMPLEOPTS" > /dev/null
+  make clean CPU_TARGET="$MY_CPU_TARGET" OS_TARGET="$MY_OS_TARGET" OPT="$SIMPLEOPTS" > /dev/null
+  cd "$HERE"
+}
+
+compile_core() {
+  clean_core
+
+  HERE=`pwd`
+  cd "$CORE_LOCATION"
+  make all CPU_TARGET="$MY_CPU_TARGET" OS_TARGET="$MY_OS_TARGET" OPT="$SIMPLEOPTS" > /dev/null
   if [ $MY_OS_TARGET = "win32" ]
   then
     make all CPU_TARGET="$MY_CPU_TARGET" OS_TARGET="$MY_OS_TARGET" OPT="$SIMPLEOPTS" > /dev/null
   fi
   cd "$HERE"
+}
+
+clean_up() {
+  clean_lib
+  clean_core
 }
 
 compile() {
@@ -85,8 +106,10 @@ compile() {
   OUTPUTNAME="-o$FILENAME"
   DEFINEOPTS="-dLCL -d$MY_LCL_TARGET"
 
-#  echo "fpc $CPU $TARGET $SIMPLEOPTS $OWN_UNITS $LAZARUS_UNITS $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr"
+#  echo "fpc $CPU $TARGET $SIMPLEOPTS $MANAGER_OPTS $LAZARUS_UNITS $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr"
   fpc $CPU $TARGET $SIMPLEOPTS $MANAGER_OPTS $LAZARUS_UNITS $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr 
+
+  clean_up
   echo ""
 }
 
