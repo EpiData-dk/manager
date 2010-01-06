@@ -1,28 +1,28 @@
 object AutoAlignForm: TAutoAlignForm
   Left = 661
-  Height = 217
+  Height = 242
   Top = 296
-  Width = 251
+  Width = 253
   ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Auto Align'
-  ClientHeight = 217
-  ClientWidth = 251
+  ClientHeight = 242
+  ClientWidth = 253
   OnClose = FormClose
   OnCreate = FormCreate
   ShowInTaskBar = stNever
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
-    Height = 217
+    Height = 242
     Top = 0
-    Width = 251
+    Width = 253
     Align = alClient
     BevelInner = bvLowered
     BevelWidth = 2
-    ClientHeight = 217
-    ClientWidth = 251
+    ClientHeight = 242
+    ClientWidth = 253
     Color = clSkyBlue
     ParentColor = False
     TabOrder = 0
@@ -30,27 +30,27 @@ object AutoAlignForm: TAutoAlignForm
     object Button1: TButton
       Left = 96
       Height = 26
-      Top = 184
+      Top = 208
       Width = 67
       Caption = 'Ok'
       Color = clWhite
       ModalResult = 1
-      TabOrder = 4
+      TabOrder = 0
     end
     object Button2: TButton
       Left = 176
       Height = 26
-      Top = 184
+      Top = 208
       Width = 69
       Caption = 'Cancel'
       Color = clWhite
       ModalResult = 2
-      TabOrder = 5
+      TabOrder = 2
     end
     object LabelsGroupBox: TRadioGroup
-      Left = 8
-      Height = 96
-      Top = 80
+      Left = 9
+      Height = 88
+      Top = 112
       Width = 237
       AutoFill = True
       Caption = 'Labels aligned:'
@@ -62,7 +62,7 @@ object AutoAlignForm: TAutoAlignForm
       ChildSizing.ShrinkVertical = crsScaleChilds
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 77
+      ClientHeight = 70
       ClientWidth = 233
       ItemIndex = 0
       Items.Strings = (
@@ -70,34 +70,46 @@ object AutoAlignForm: TAutoAlignForm
         'Left'
         'Right'
       )
-      TabOrder = 3
+      TabOrder = 1
       TabStop = True
     end
-    object DefaultAlignRadio: TRadioButton
-      Left = 8
-      Height = 22
+    object GroupBox1: TGroupBox
+      Left = 9
+      Height = 97
       Top = 8
-      Width = 237
-      Caption = 'Default Alignment (One Column)'
-      TabOrder = 0
-    end
-    object EqualVerticalSpaceRadio: TRadioButton
-      Left = 8
-      Height = 22
-      Top = 32
-      Width = 156
-      Caption = 'Equal Vertical Space'
-      Checked = True
-      State = cbChecked
-      TabOrder = 1
-    end
-    object RemoveEmptySpaceRadio: TRadioButton
-      Left = 8
-      Height = 22
-      Top = 56
-      Width = 166
-      Caption = 'Remove Empty Space'
-      TabOrder = 2
+      Width = 238
+      Caption = 'Vertical Field Alignment'
+      ClientHeight = 79
+      ClientWidth = 234
+      TabOrder = 3
+      object EqualVerticalSpaceRadio: TRadioButton
+        Left = 5
+        Height = 17
+        Top = 32
+        Width = 116
+        Caption = 'Equal Vertical Space'
+        Checked = True
+        State = cbChecked
+        TabOrder = 1
+      end
+      object DefaultAlignRadio: TRadioButton
+        Left = 5
+        Height = 17
+        Top = 8
+        Width = 174
+        Caption = 'Default Alignment (One Column)'
+        TabOrder = 0
+        TabStop = False
+      end
+      object RemoveEmptySpaceRadio: TRadioButton
+        Left = 5
+        Height = 17
+        Top = 56
+        Width = 156
+        Caption = 'Remove Empty Space (lines)'
+        TabOrder = 2
+        TabStop = False
+      end
     end
   end
   object ActionList1: TActionList

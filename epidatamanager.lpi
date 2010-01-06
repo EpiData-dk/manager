@@ -168,7 +168,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG"/>
+      <CustomOptions Value="-dEPI_DEBUG1"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <Command Value="/home/torsten/bin/svn2revisioninc $(ProjPath)"/>

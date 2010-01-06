@@ -24,10 +24,11 @@ type
     ActionList1: TActionList;
     Button1: TButton;
     Button2: TButton;
-    Panel1: TPanel;
-    LabelsGroupBox: TRadioGroup;
     DefaultAlignRadio: TRadioButton;
     EqualVerticalSpaceRadio: TRadioButton;
+    GroupBox1: TGroupBox;
+    Panel1: TPanel;
+    LabelsGroupBox: TRadioGroup;
     RemoveEmptySpaceRadio: TRadioButton;
     procedure CancelActionExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);

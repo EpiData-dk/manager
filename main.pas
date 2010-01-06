@@ -53,6 +53,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure GCPbtnClick(Sender: TObject);
     procedure NewDesignFormActionExecute(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PageControl1PageChanged(Sender: TObject);
     procedure shortIntroItemClick(Sender: TObject);
@@ -207,6 +208,11 @@ begin
   Frame.Parent := TabSheet;
 
   Inc(TabNameCount);
+end;
+
+procedure TMainForm.PageControl1Change(Sender: TObject);
+begin
+
 end;
 
 procedure TMainForm.PageControl1Changing(Sender: TObject;

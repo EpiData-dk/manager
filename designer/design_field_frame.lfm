@@ -106,54 +106,54 @@ object FieldCreateForm: TFieldCreateForm
     TabOrder = 0
     object Label1: TLabel
       Left = 8
-      Height = 18
+      Height = 14
       Top = 17
-      Width = 79
+      Width = 57
       Caption = 'Field Name:'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 8
-      Height = 18
+      Height = 14
       Top = 49
-      Width = 94
+      Width = 68
       Caption = 'Variable label:'
       ParentColor = False
     end
     object Label3: TLabel
       Left = 8
-      Height = 18
+      Height = 14
       Top = 81
-      Width = 49
+      Width = 38
       Caption = 'Length:'
       ParentColor = False
     end
     object Label5: TLabel
       Left = 8
-      Height = 18
-      Top = 112
-      Width = 35
+      Height = 14
+      Top = 116
+      Width = 29
       Anchors = [akLeft, akBottom]
       Caption = 'Type:'
       ParentColor = False
     end
     object FieldNameEdit: TEdit
       Left = 116
-      Height = 27
+      Height = 21
       Top = 8
       Width = 140
       TabOrder = 0
     end
     object LabelEdit: TEdit
       Left = 116
-      Height = 27
+      Height = 21
       Top = 40
       Width = 140
       TabOrder = 1
     end
     object FieldLengthEdit: TMaskEdit
       Left = 116
-      Height = 27
+      Height = 21
       Top = 72
       Width = 140
       CharCase = ecNormal
@@ -164,7 +164,7 @@ object FieldCreateForm: TFieldCreateForm
     end
     object FieldDecimalSizeEdit: TMaskEdit
       Left = 116
-      Height = 27
+      Height = 21
       Top = 104
       Width = 140
       CharCase = ecNormal
@@ -197,18 +197,18 @@ object FieldCreateForm: TFieldCreateForm
     end
     object Label4: TLabel
       Left = 8
-      Height = 18
+      Height = 14
       Top = 113
-      Width = 66
+      Width = 46
       Caption = 'Decimals:'
       ParentColor = False
       Visible = False
     end
     object Label6: TLabel
       Left = 8
-      Height = 18
+      Height = 14
       Top = 145
-      Width = 93
+      Width = 69
       Caption = 'Default value:'
       Enabled = False
       ParentColor = False
@@ -216,7 +216,7 @@ object FieldCreateForm: TFieldCreateForm
     end
     object DefaultValueEdit: TEdit
       Left = 116
-      Height = 27
+      Height = 21
       Top = 136
       Width = 140
       Enabled = False

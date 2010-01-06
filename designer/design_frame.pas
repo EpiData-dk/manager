@@ -16,6 +16,7 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    NewDataMenu: TMenuItem;
     PasteAsLabel: TEditPaste;
     MenuItem1: TMenuItem;
     NewDateFieldAction: TAction;
@@ -80,6 +81,7 @@ type
     procedure DocumentFileActionExecute(Sender: TObject);
     procedure EditCompActionExecute(Sender: TObject);
     procedure ImportStructureActionExecute(Sender: TObject);
+    procedure NewDataMenuClick(Sender: TObject);
     procedure NewDateFieldMenuClick(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
     procedure NewDateFieldActionExecute(Sender: TObject);
@@ -261,6 +263,9 @@ begin
   Result.ReadOnly := true;
   Result.OnEnter := @EnterSelectControl;
   Result.OnExit := @ExitSelectControl;
+
+  // simple color setting : (until final)
+  Result.Color:= clMenuBar;
 
   ComponentYTree.Add(Result);
   ComponentXTree.Add(Result);
@@ -1293,6 +1298,11 @@ begin
   ActiveDataFile.EndUpdate;
 
   Modified := true;
+end;
+
+procedure TDesignFrame.NewDataMenuClick(Sender: TObject);
+begin
+   DatefieldPopupMenu.popup();
 end;
 
 procedure TDesignFrame.NewDateFieldMenuClick(Sender: TObject);
