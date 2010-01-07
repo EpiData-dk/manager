@@ -91,6 +91,7 @@ type
 
     // Not shown in dialog.
     WorkingDirUTF8:         string;
+    LabelNamePrefix:        string;
   end;
 
   TManagerVersion = record
@@ -125,6 +126,7 @@ var
 
     // Not shown in dialog.
     WorkingDirUTF8:        '';
+    LabelNamePrefix:       'label_';
   );
 
 const

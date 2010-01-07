@@ -53,7 +53,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure GCPbtnClick(Sender: TObject);
     procedure NewDesignFormActionExecute(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PageControl1PageChanged(Sender: TObject);
     procedure shortIntroItemClick(Sender: TObject);
@@ -210,16 +209,11 @@ begin
   Inc(TabNameCount);
 end;
 
-procedure TMainForm.PageControl1Change(Sender: TObject);
-begin
-
-end;
-
 procedure TMainForm.PageControl1Changing(Sender: TObject;
   var AllowChange: Boolean);
 begin
   // Event happens before activepage is changed to new sheet.
-  // - hence we can disable shortcut events here.
+  // - hence we disable shortcut events here.
   AllowChange := true;
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
@@ -229,10 +223,10 @@ end;
 procedure TMainForm.PageControl1PageChanged(Sender: TObject);
 begin
   // Event happens after activepage is changed to new sheet.
-  // - hence we can enable shortcut events here.
+  // - hence we enable shortcut events here.
   // On creating a new page this event is called before components are created,
   // - hence component[0] does not yet exists. This does not matter since the
-  // - actionlist is created with state asNormal by default.
+  //   actionlist is created with state asNormal by default.
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
   TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asNormal;

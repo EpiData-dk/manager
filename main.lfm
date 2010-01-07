@@ -1,12 +1,11 @@
 object MainForm: TMainForm
-  Cursor = crIBeam
-  Left = 336
+  Left = 492
   Height = 668
-  Top = 66
+  Top = 266
   Width = 997
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 646
+  ClientHeight = 643
   ClientWidth = 997
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
@@ -149,8 +148,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 626
+    Height = 21
+    Top = 622
     Width = 997
     Panels = <    
       item
@@ -174,7 +173,7 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 582
+    Height = 578
     Top = 44
     Width = 644
     Align = alClient
@@ -182,24 +181,23 @@ object MainForm: TMainForm
     ShowHint = True
     ShowTabs = False
     TabOrder = 2
-    OnChange = PageControl1Change
     OnChanging = PageControl1Changing
     OnPageChanged = PageControl1PageChanged
   end
   object Panel1: TPanel
     Left = 644
-    Height = 582
+    Height = 578
     Top = 44
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 582
+    ClientHeight = 578
     ClientWidth = 353
     TabOrder = 3
     Visible = False
     object Label1: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 70
       Width = 308
       Caption = 'label1'
@@ -208,7 +206,7 @@ object MainForm: TMainForm
     end
     object Label2: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 136
       Width = 308
       Caption = 'Label2'
@@ -217,7 +215,7 @@ object MainForm: TMainForm
     end
     object Label3: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 200
       Width = 308
       Caption = 'Label2'
@@ -226,7 +224,7 @@ object MainForm: TMainForm
     end
     object Label4: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 280
       Width = 308
       Caption = 'Label2'
@@ -235,7 +233,7 @@ object MainForm: TMainForm
     end
     object Label5: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 368
       Width = 308
       Caption = 'Label2'

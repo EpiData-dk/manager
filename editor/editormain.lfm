@@ -8,6 +8,7 @@ object EditorForm: TEditorForm
   ClientHeight = 545
   ClientWidth = 826
   Menu = EditorMenu
+  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   ShowInTaskBar = stAlways
   LCLVersion = '0.9.29'

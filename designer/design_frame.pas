@@ -171,7 +171,7 @@ uses
   main, graphics,
   types, math, settings, design_label_form,
   UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils,
-  Clipbrd, UStringUtils;
+  Clipbrd, UStringUtils, ManagerProcs;
 
 function SortFields(Item1, Item2: Pointer): integer;
 var
@@ -971,15 +971,11 @@ begin
   begin
     if not (Controls[i] is TFieldEdit) then continue;
 
+    TFieldEdit(Controls[i]).ForceVisualUpdate;
     if ManagerSettings.ShowFieldNamesInLabel then
-      TFieldEdit(Controls[i]).FieldNameLabel.Parent := Self
+      TFieldEdit(Controls[i]).FieldNameLabel.Parent := DesignerBox
     else
       TFieldEdit(Controls[i]).FieldNameLabel.Parent := nil;
-
-    if ManagerSettings.ShowFieldBorder then
-      TFieldEdit(Controls[i]).BorderStyle := bsNone
-    else
-      TFieldEdit(Controls[i]).BorderStyle := bsSingle;
   end;
 end;
 
@@ -1258,6 +1254,7 @@ var
   Importer: TEpiImportExport;
   Pt: TPoint;
   AutoAlignProps: TAutoAlignRecord;
+  FieldNo: Integer;
 begin
   Dlg := TOpenDialog.Create(nil);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
@@ -1278,6 +1275,11 @@ begin
   for i := 0 to TmpDF.NumFields - 1 do
   begin
     TmpField := TmpDF[i].Clone(ActiveDataFile, false);
+    if ActiveDataFile.FieldExists(TmpField.FieldName) then
+      if TmpField.FieldType = ftQuestion then
+        TmpField.FieldName := NextLabelName(ActiveDataFile)
+      else
+        TmpField.FieldName := NextFieldName(ActiveDataFile);
     ActiveDataFile.AddField(TmpField);
 
     if TmpField.FieldType = ftQuestion then

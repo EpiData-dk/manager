@@ -188,7 +188,6 @@ begin
   FField := AValue;
   Field.RegisterOnChangeHook(@OnFieldChange);
 
-  Name   := Field.FieldName;
   Text   := Field.FieldName;
   Top    := Field.FieldY;
   Left   := Field.FieldX;
@@ -232,6 +231,11 @@ begin
   inherited Create(AOwner);
   FVariableLabel := TLabel.Create(Self);
   FFieldNameLabel := TLabel.Create(Self);
+  if ManagerSettings.ShowFieldBorder then
+    BorderStyle := bsSingle
+  else
+    BorderStyle := bsNone;
+
 
   // Experimental:
   FSelectCorner := nil;
@@ -260,6 +264,10 @@ begin
   VariableLabel.Caption := Field.VariableLabel;
   VariableLabel.Left := Field.LabelX;
   VariableLabel.Top  := Field.LabelY;
+  if ManagerSettings.ShowFieldBorder then
+    BorderStyle := bsSingle
+  else
+    BorderStyle := bsNone;
   UpdateFieldNameLabel;
 end;
 

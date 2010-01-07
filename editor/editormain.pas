@@ -47,6 +47,7 @@ type
     procedure CloseActionExecute(Sender: TObject);
     procedure CopyActionExecute(Sender: TObject);
     procedure CutActionExecute(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure OpenFileActionExecute(Sender: TObject);
     procedure PasteActionExecute(Sender: TObject);
@@ -70,7 +71,7 @@ var
 implementation
 
 uses
-  UEpiUtils, settings;
+  UEpiUtils, settings, UStringUtils;
 
 { TEditorForm }
 
@@ -87,6 +88,18 @@ end;
 procedure TEditorForm.CutActionExecute(Sender: TObject);
 begin
   SynEditor.CutToClipboard;
+end;
+
+procedure TEditorForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  {$IFNDEF EPI_DEBUG}
+  CanClose := false;
+  if (SynEditor.Modified) and
+     (MessageDlg('Editor was modified since last save.' +
+                 LineEnding + 'Close Editor?', mtWarning, mbYesNo, 0) = mrNo) then
+    Exit;
+  {$ENDIf}
+  CanClose := true;
 end;
 
 procedure TEditorForm.FormShow(Sender: TObject);
@@ -106,6 +119,7 @@ end;
 procedure TEditorForm.OpenFileActionExecute(Sender: TObject);
 var
   Dlg: TOpenDialog;
+  Lst: TStringList;
 begin
   try
     Dlg := TOpenDialog.Create(Self);
@@ -117,7 +131,10 @@ begin
     if UpperCase(ExtractFileExt(Dlg.FileName)) = '.RECXML' then
       SetXMLFileState;
 
-    SynEditor.Lines.LoadFromFile(Dlg.FileName);
+    Lst := TStringList.Create;
+    Lst.LoadFromFile(Dlg.FileName);
+    EpiUnknownStringsToUTF8(Lst);
+    SynEditor.Lines.AddStrings(Lst);
 
     StatusBar1.Panels[3].Text := Dlg.FileName;
   finally
@@ -144,6 +161,7 @@ begin
   end;
 
   SynEditor.Lines.SaveToFile(StatusBar1.Panels[3].Text);
+  SynEditor.Modified := false;
 end;
 
 procedure TEditorForm.SaveAsActionExecute(Sender: TObject);

@@ -1,9 +1,9 @@
 #!/bin/bash
 # Compile all versions of manager!
 
-## Changeable options.
+## Changeable options. 
 SIMPLEOPTS="-MObjFPC -Sci -Xs -CX -Ci -WG -O3 -l"
-#SIMPLEOPTS="$SIMPLEOPTS -gl -g"
+#SIMPLEOPTS="$SIMPLEOPTS -gl -g -dEPI_DEBUG"
 MANAGERFILENAME="epidatamanager"
 
 # Paths - change to your location

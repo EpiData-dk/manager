@@ -40,18 +40,19 @@
     </RunParams>
     <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="SynEdit"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="epidatacore"/>
+        <MaxVersion Minor="2" Release="4" Build="103" Valid="True"/>
+        <MinVersion Minor="2" Release="4" Build="103" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Minor="2" Release="3" Build="102" Valid="True"/>
+        <PackageName Value="SynEdit"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item2>
       <Item3>
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="11">
+    <Units Count="12">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -130,6 +131,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="editormain"/>
       </Unit10>
+      <Unit11>
+        <Filename Value="managerprocs.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="ManagerProcs"/>
+      </Unit11>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -168,7 +174,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG1"/>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <Command Value="/home/torsten/bin/svn2revisioninc $(ProjPath)"/>
