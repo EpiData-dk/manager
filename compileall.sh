@@ -10,7 +10,6 @@ MANAGERFILENAME="epidatamanager"
 CORE_LOCATION="/home/torsten/EpiData/Core/trunk"
 FPSPREASHEET_LOCATION="/home/torsten/FreePascal/fpspreadsheet"
 LAZARUS_LOCATION="/home/torsten/FreePascal/lazarus"
-SVN2REV_CMD="$HOME/bin/svn2revisioninc"
 
 ###########################################
 #  DO NOT EDIT				  #
@@ -149,7 +148,7 @@ check_svn_status
 SVN_LOC=$MANAGER_LOCATION
 check_svn_status
 
-SVN2REV_CMD="$SVN2REV_CMD $MANAGER_LOCATION"
+SVN2REV_CMD="./update_revision.sh"
 $SVN2REV_CMD
 
 get_version_info

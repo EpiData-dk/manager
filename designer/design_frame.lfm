@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 520
-  DesignTop = 290
+  DesignLeft = 893
+  DesignTop = 344
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -194,8 +194,8 @@ object DesignFrame: TDesignFrame
     end
   end
   object DesignFrameActionList: TActionList
-    left = 136
-    top = 96
+    left = 112
+    top = 360
     object NewIntFieldAction: TAction
       Category = 'New Fields'
       Caption = 'NewIntFieldAction'

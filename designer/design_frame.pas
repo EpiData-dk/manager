@@ -131,6 +131,7 @@ type
       EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
     procedure EnterSelectControl(Sender: TObject);
     procedure ExitSelectControl(Sender: TObject);
+    procedure EditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     // Docking.
     // - Field:
@@ -263,9 +264,9 @@ begin
   Result.ReadOnly := true;
   Result.OnEnter := @EnterSelectControl;
   Result.OnExit := @ExitSelectControl;
-
-  // simple color setting : (until final)
   Result.Color:= clMenuBar;
+  Result.OnKeyDown := @EditKeyDown;
+  EnterSelectControl(Result);
 
   ComponentYTree.Add(Result);
   ComponentXTree.Add(Result);
@@ -286,6 +287,7 @@ begin
   Result.OnMouseDown := @FieldMouseDown;
   Result.Parent := DesignerBox;
   Result.Field := AField;
+  EnterSelectControl(Result);
 
   ComponentYTree.Add(Result);
   ComponentXTree.Add(Result);
@@ -341,7 +343,7 @@ end;
 procedure TDesignFrame.FieldMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-  SelectedControl := TControl(Sender);
+  EnterSelectControl(Sender);
 
   if (Sender is TFieldEdit) then
   begin
@@ -404,12 +406,19 @@ end;
 
 procedure TDesignFrame.EnterSelectControl(Sender: TObject);
 begin
+  if Assigned(SelectedControl) then
+    SelectedControl.Color:= clMenuBar;
+
   SelectedControl := TControl(Sender);
+  TFieldEdit(SelectedControl).Color := $00B06750; //$00330088;
+  if SelectedControl is TFieldEdit then
+    TFieldEdit(SelectedControl).SetFocus;
   MainForm.Label2.Caption := 'Selected Control: ' + SelectedControl.Name;
 end;
 
 procedure TDesignFrame.ExitSelectControl(Sender: TObject);
 begin
+  SelectedControl.Color:= clMenuBar;
   SelectedControl := nil;
 end;
 
@@ -1336,6 +1345,26 @@ begin
   ActiveDocumentationForm.Show;
 end;
 
+procedure TDesignFrame.EditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    EditFieldMenuItem.Click;
+
+
+  // Ugly dirty way of capturing shortcuts involving keys.
+  if (ssAlt in Shift) and (Key = VK_S) then
+  begin
+    MainForm.SettingsAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+  if (ssCtrl in Shift) and (Key = VK_N) then
+  begin
+    MainForm.NewDesignFormAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+end;
+
 procedure TDesignFrame.EditCompActionExecute(Sender: TObject);
 begin
   if not Assigned(SelectedControl) then exit;
@@ -1438,13 +1467,15 @@ begin
         else
           NewFieldEdit(TmpField);
     end;
+    EnterSelectControl(TmpEdit);
+    TmpEdit.SetFocus;
     ActiveDataFile.EndUpdate;
     Self.UnLockRealizeBounds;
 
     UpdateNonInteractiveVisuals;
 
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
-      LabelsAlignment(TmpEdit, Nil, alLeft);
+      LabelsAlignment(SelectedControl, Nil, alLeft);
 
     Modified := false;
   end;

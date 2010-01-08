@@ -15,6 +15,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    Edit1: TEdit;
     StartEditorAction: TAction;
     Image6: TImage;
     Image7: TImage;

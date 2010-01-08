@@ -177,8 +177,7 @@
       <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
-        <Command Value="/home/torsten/bin/svn2revisioninc $(ProjPath)"/>
-        <CompileReasons Compile="False" Build="False" Run="False"/>
+        <Command Value="./update_revision.sh"/>
       </ExecuteBefore>
     </Other>
   </CompilerOptions>

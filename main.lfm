@@ -241,13 +241,21 @@ object MainForm: TMainForm
       WordWrap = True
     end
     object Button1: TButton
-      Left = 20
+      Left = 18
       Height = 25
       Top = 14
       Width = 75
       Caption = 'Clear'
       OnClick = Button1Click
       TabOrder = 0
+    end
+    object Edit1: TEdit
+      Left = 217
+      Height = 27
+      Top = 473
+      Width = 80
+      TabOrder = 1
+      Text = 'Edit1'
     end
   end
   object MainFormMenu: TMainMenu

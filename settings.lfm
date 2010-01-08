@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 813
+  Left = 702
   Height = 305
-  Top = 339
+  Top = 343
   Width = 206
   ActiveControl = PageControl1
   BorderIcons = []
@@ -165,18 +165,18 @@ object SettingsForm: TSettingsForm
       ClientWidth = 200
       object Label9: TLabel
         Left = 5
-        Height = 14
+        Height = 18
         Top = 8
-        Width = 96
+        Width = 130
         Caption = 'Default field length:'
         ParentColor = False
       end
       object Label10: TLabel
         Left = 5
-        Height = 14
+        Height = 18
         Hint = 'Default field length for:'#10'Integer and IdNum'
         Top = 49
-        Width = 41
+        Width = 51
         Caption = 'Integer:'
         ParentColor = False
         ParentShowHint = False
@@ -190,10 +190,10 @@ object SettingsForm: TSettingsForm
       end
       object Label11: TLabel
         Left = 5
-        Height = 14
+        Height = 18
         Hint = 'Default field length for:'#10'Float'
         Top = 81
-        Width = 29
+        Width = 38
         Caption = 'Float:'
         ParentColor = False
         ParentShowHint = False
@@ -201,20 +201,20 @@ object SettingsForm: TSettingsForm
       end
       object Label12: TLabel
         Left = 5
-        Height = 14
+        Height = 18
         Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
-        Top = 122
-        Width = 33
+        Top = 145
+        Width = 43
         Caption = 'String:'
         ParentColor = False
         ParentShowHint = False
         ShowHint = True
       end
       object IntLengthEdit: TMaskEdit
-        Left = 60
-        Height = 21
+        Left = 141
+        Height = 27
         Hint = 'Default field length for:'#10'Integer and IdNum'
-        Top = 42
+        Top = 40
         Width = 35
         CharCase = ecNormal
         MaxLength = 3
@@ -225,10 +225,10 @@ object SettingsForm: TSettingsForm
         SpaceChar = '_'
       end
       object FloatLengthEdit: TMaskEdit
-        Left = 60
-        Height = 21
+        Left = 141
+        Height = 27
         Hint = 'Default field length for:'#10'Float'
-        Top = 81
+        Top = 72
         Width = 35
         CharCase = ecNormal
         MaxLength = 3
@@ -239,10 +239,10 @@ object SettingsForm: TSettingsForm
         SpaceChar = '_'
       end
       object StringLengthEdit: TMaskEdit
-        Left = 60
-        Height = 21
+        Left = 141
+        Height = 27
         Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
-        Top = 115
+        Top = 136
         Width = 35
         CharCase = ecNormal
         MaxLength = 3
@@ -253,22 +253,22 @@ object SettingsForm: TSettingsForm
         SpaceChar = '_'
       end
       object Label13: TLabel
-        Left = 100
-        Height = 14
+        Left = 13
+        Height = 18
         Hint = 'Default decimal length for:'#10'Float'
-        Top = 81
-        Width = 46
+        Top = 112
+        Width = 66
         Caption = 'Decimals:'
         ParentColor = False
         ParentShowHint = False
         ShowHint = True
       end
       object DecimalLengthEdit: TMaskEdit
-        Left = 156
-        Height = 21
+        Left = 141
+        Height = 27
         Hint = 'Default decimal length for:'#10'Float'
-        Top = 81
-        Width = 27
+        Top = 104
+        Width = 35
         CharCase = ecNormal
         MaxLength = 3
         ParentShowHint = False
@@ -288,29 +288,29 @@ object SettingsForm: TSettingsForm
         Top = 0
         Width = 190
         Caption = 'Snapping:'
-        ClientHeight = 78
+        ClientHeight = 63
         ClientWidth = 186
         TabOrder = 0
         object SnapFieldsChkBox: TCheckBox
           Left = 12
-          Height = 17
+          Height = 22
           Top = 8
-          Width = 96
+          Width = 127
           Caption = 'Autosnap Fields'
           OnChange = SnapFieldsChkBoxChange
           TabOrder = 0
         end
         object Label4: TLabel
           Left = 21
-          Height = 14
+          Height = 18
           Top = 31
-          Width = 97
+          Width = 130
           Caption = 'Snapping threshold:'
           ParentColor = False
         end
         object SnapThresholdEdit: TMaskEdit
           Left = 150
-          Height = 21
+          Height = 27
           Top = 31
           Width = 32
           AutoSelect = False
@@ -327,37 +327,37 @@ object SettingsForm: TSettingsForm
         Height = 115
         Top = 88
         Width = 190
-        Caption = 'Vertical distance btw. fields:'
-        ClientHeight = 111
+        Caption = 'Vertical distances:'
+        ClientHeight = 96
         ClientWidth = 186
         TabOrder = 1
         object Label5: TLabel
           Left = 12
-          Height = 14
+          Height = 18
           Top = 7
-          Width = 59
+          Width = 80
           Caption = 'Field - Field:'
           ParentColor = False
         end
         object Label6: TLabel
           Left = 12
-          Height = 14
+          Height = 18
           Top = 71
-          Width = 65
+          Width = 88
           Caption = 'Label - Label:'
           ParentColor = False
         end
         object Label7: TLabel
           Left = 12
-          Height = 14
+          Height = 18
           Top = 39
-          Width = 62
+          Width = 84
           Caption = 'Field - Label:'
           ParentColor = False
         end
         object FieldFieldEdit: TMaskEdit
           Left = 150
-          Height = 21
+          Height = 27
           Top = -1
           Width = 32
           AutoSelect = False
@@ -370,7 +370,7 @@ object SettingsForm: TSettingsForm
         end
         object FieldLabelEdit: TMaskEdit
           Left = 150
-          Height = 21
+          Height = 27
           Top = 30
           Width = 32
           AutoSelect = False
@@ -383,7 +383,7 @@ object SettingsForm: TSettingsForm
         end
         object LabelLabelEdit: TMaskEdit
           Left = 150
-          Height = 21
+          Height = 27
           Top = 62
           Width = 32
           AutoSelect = False
@@ -425,6 +425,15 @@ object SettingsForm: TSettingsForm
       Caption = 'Cancel'
       ModalResult = 2
       TabOrder = 1
+    end
+  end
+  object ActionList1: TActionList
+    left = 89
+    top = 40
+    object CloseAction: TAction
+      Caption = 'CloseAction'
+      OnExecute = CloseActionExecute
+      ShortCut = 27
     end
   end
 end

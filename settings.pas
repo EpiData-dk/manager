@@ -7,13 +7,15 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, MaskEdit, ExtCtrls, ComCtrls, UDataFileTypes;
+  StdCtrls, MaskEdit, ExtCtrls, ComCtrls, ActnList, UDataFileTypes;
 
 type
 
   { TSettingsForm }
 
   TSettingsForm = class(TForm)
+    CloseAction: TAction;
+    ActionList1: TActionList;
     Bevel1: TBevel;
     CancelBtn: TButton;
     DefaultDateCombo: TComboBox;
@@ -55,6 +57,7 @@ type
     AdvSheet: TTabSheet;
     SnapFieldsChkBox: TCheckBox;
     LengthSheet: TTabSheet;
+    procedure CloseActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure SnapFieldsChkBoxChange(Sender: TObject);
@@ -209,6 +212,11 @@ begin
   if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.SpaceBtwLabelLabel := StrToInt(S);
 
+end;
+
+procedure TSettingsForm.CloseActionExecute(Sender: TObject);
+begin
+  CancelBtn.Click;
 end;
 
 procedure TSettingsForm.FormCreate(Sender: TObject);
