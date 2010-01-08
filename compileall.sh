@@ -6,15 +6,13 @@ SIMPLEOPTS="-MObjFPC -Sci -Xs -CX -Ci -WG -O3 -l"
 #SIMPLEOPTS="$SIMPLEOPTS -gl -g -dEPI_DEBUG"
 MANAGERFILENAME="epidatamanager"
 
-# Paths - change to your location
-CORE_LOCATION="/home/torsten/EpiData/Core/trunk"
-FPSPREASHEET_LOCATION="/home/torsten/FreePascal/fpspreadsheet"
-LAZARUS_LOCATION="/home/torsten/FreePascal/lazarus"
-
 ###########################################
 #  DO NOT EDIT				  #
 ###########################################
 SVN_LOC=""
+LOCALIZATIONS_FILE="compiler_locations"
+. "$LOCALIZATIONS_FILE"
+
 check_svn_status() {
   RES=`svnversion $SVN_LOC | grep [MSP:] | wc -l`
   if [ $RES != "0" ]
@@ -80,7 +78,7 @@ clean_up() {
 }
 
 compile() {
-  echo "Compiling for: $MY_CPU_TARGET-$MY_OS_TARGET"
+  echo "Compiling for: $MY_CPU_TARGET-$MY_OS_TARGET ($MY_LCL_TARGET)"
   echo "------------------------------"
   clean
   compile_core
@@ -158,30 +156,14 @@ echo " Start compiling..."
 echo " Manager version: $MANAGER_VERSION"
 echo "**********************"
 
-MY_LCL_TARGET="win32"
-MY_OS_TARGET="win32"
-MY_CPU_TARGET="i386"
-compile
-
-MY_LCL_TARGET="gtk2"
-MY_OS_TARGET="linux"
-MY_CPU_TARGET="i386"
-compile
-
-MY_LCL_TARGET="win32"
-MY_OS_TARGET="win64"
-MY_CPU_TARGET="x86_64"
-compile
-
-
-MY_LCL_TARGET="gtk2"
-MY_OS_TARGET="linux"
-MY_CPU_TARGET="x86_64"
-compile
+for TARGET in $ALL_TARGETS ; do {
+  MY_CPU_TARGET=`echo "$TARGET" | cut -f 1-1 -d '-'`
+  MY_OS_TARGET=`echo $TARGET | cut -f 2-2 -d '-'`
+  MY_LCL_TARGET=`echo $TARGET | cut -f 3-3 -d '-'`
+  compile
+} ; done
 
 echo "**********************"
 echo "        DONE!"
 echo "**********************"
-
-
 
