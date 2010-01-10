@@ -15,7 +15,15 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    DesignBtn1: TBitBtn;
     Edit1: TEdit;
+    Alignmenu: TMenuItem;
+    Image8: TImage;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
+    NewDataFormBtn: TToolButton;
+    OpenToolBtn: TToolButton;
     StartEditorAction: TAction;
     Image6: TImage;
     Image7: TImage;
@@ -30,7 +38,7 @@ type
     SettingsMenu: TMenuItem;
     SettingsAction: TAction;
     Button1: TButton;
-    GCPbtn: TBitBtn;
+    EditorBtn: TBitBtn;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -52,7 +60,7 @@ type
     procedure DesignBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
-    procedure GCPbtnClick(Sender: TObject);
+    procedure EditorBtnClick(Sender: TObject);
     procedure NewDesignFormActionExecute(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PageControl1PageChanged(Sender: TObject);
@@ -166,7 +174,7 @@ begin
   {$IFDEF UNIX}
     ProgressBarMain.Parent := ProgressPanel;
     ProgressBarMain.Align := alNone;
-    ProgressBarMain.Left := GCPbtn.Left + GCPbtn.Width + 10;
+    ProgressBarMain.Left := EditorBtn.Left + EditorBtn.Width + 10;
     ProgressBarMain.Width := (ProgressPanel.Width - 10) - ProgressBarMain.Left;
     ProgressBarMain.Top := (ProgressPanel.Height - ProgressBarMain.Height) div 2;
     ProgressBarMain.Anchors := [akLeft, akRight];
@@ -234,7 +242,7 @@ begin
   TDesignFrame(PageControl1.ActivePage.Components[0]).UpdateNonInteractiveVisuals;
 end;
 
-procedure TMainForm.GCPbtnClick(Sender: TObject);
+procedure TMainForm.EditorBtnClick(Sender: TObject);
 begin
   ShowOnStatusBar('GCP not ready yet', 0);
 end;
