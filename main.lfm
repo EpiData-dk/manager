@@ -1,11 +1,11 @@
 object MainForm: TMainForm
-  Left = 171
+  Left = 392
   Height = 668
-  Top = 187
+  Top = 257
   Width = 1066
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 646
+  ClientHeight = 643
   ClientWidth = 1066
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
@@ -23,7 +23,7 @@ object MainForm: TMainForm
     TabOrder = 0
     object DesignBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 127
+      Left = 144
       Height = 28
       Hint = 'Define new data structures'#13#10'Modify existing data structures'#13#10'   rename fields'#13#10'   extend field types'#13#10'  add fields to files with data (no data loss)'#13#10'  edit field labels'#13#10'Add text to entry form'#13#10'Reorder and re-align fields'
       Top = 8
@@ -40,11 +40,11 @@ object MainForm: TMainForm
     end
     object MetaDataBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 248
+      Left = 272
       Height = 28
       Hint = 'Add Metadata and Controls'#13#10'value labels, study label etc'#13#10'jumps, goto,  colour etc'#13#10'backup during entry etc'
       Top = 8
-      Width = 120
+      Width = 128
       Caption = '&3 Labels + Check'
       Font.CharSet = 4
       Font.Height = -13
@@ -57,7 +57,7 @@ object MainForm: TMainForm
     end
     object EditorBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 560
+      Left = 608
       Height = 28
       Hint = 'Tools for Good Clinical Practice (GCP)'#13#10'  Transaction log controls'#13#10'  Inspection reports'#13#10'    '
       Top = 8
@@ -74,11 +74,11 @@ object MainForm: TMainForm
     end
     object MaintenanceBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 400
+      Left = 432
       Height = 28
       Hint = 'Remove records marked for deletion (Pack)'#13#10'Adapt width of fields to actual data'#13#10'Backup or encrypt whole systems'#13#10'Validation reports'#13#10'Export data'#13#10'Other tools'
       Top = 8
-      Width = 112
+      Width = 128
       Caption = '&4 Documentation'
       Font.CharSet = 4
       Font.Height = -13
@@ -90,10 +90,9 @@ object MainForm: TMainForm
       TabOrder = 2
     end
     object Image6: TImage
-      AnchorSideLeft.Control = DesignBtn
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Side = asrBottom
-      Left = 227
+      Left = 248
       Height = 15
       Top = 16
       Width = 15
@@ -118,10 +117,9 @@ object MainForm: TMainForm
       Transparent = True
     end
     object Image7: TImage
-      AnchorSideLeft.Control = MetaDataBtn
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Side = asrBottom
-      Left = 371
+      Left = 408
       Height = 15
       Top = 16
       Width = 15
@@ -155,10 +153,9 @@ object MainForm: TMainForm
       Action = NewDesignFormAction
     end
     object Image8: TImage
-      AnchorSideLeft.Control = DesignBtn1
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Side = asrBottom
-      Left = 99
+      Left = 120
       Height = 15
       Top = 16
       Width = 15
@@ -184,11 +181,11 @@ object MainForm: TMainForm
     end
     object DesignBtn1: TBitBtn
       AnchorSideLeft.Side = asrBottom
-      Left = 14
+      Left = 8
       Height = 28
       Hint = 'Define new data structures'#13#10'Modify existing data structures'#13#10'   rename fields'#13#10'   extend field types'#13#10'  add fields to files with data (no data loss)'#13#10'  edit field labels'#13#10'Add text to entry form'#13#10'Reorder and re-align fields'
       Top = 8
-      Width = 82
+      Width = 104
       Caption = '&1 New Data'
       Font.CharSet = 4
       Font.Height = -13
@@ -202,8 +199,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 626
+    Height = 21
+    Top = 622
     Width = 1066
     Panels = <    
       item
@@ -227,7 +224,7 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 582
+    Height = 578
     Top = 44
     Width = 713
     Align = alClient
@@ -240,18 +237,18 @@ object MainForm: TMainForm
   end
   object Panel1: TPanel
     Left = 713
-    Height = 582
+    Height = 578
     Top = 44
     Width = 353
     Align = alRight
     BevelInner = bvRaised
-    ClientHeight = 582
+    ClientHeight = 578
     ClientWidth = 353
     TabOrder = 3
     Visible = False
     object Label1: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 70
       Width = 308
       Caption = 'label1'
@@ -260,7 +257,7 @@ object MainForm: TMainForm
     end
     object Label2: TLabel
       Left = 18
-      Height = 14
+      Height = 18
       Top = 136
       Width = 308
       Caption = 'Label2'
@@ -269,7 +266,7 @@ object MainForm: TMainForm
     end
     object Label3: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 200
       Width = 308
       Caption = 'Label2'
@@ -278,7 +275,7 @@ object MainForm: TMainForm
     end
     object Label4: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 280
       Width = 308
       Caption = 'Label2'
@@ -287,7 +284,7 @@ object MainForm: TMainForm
     end
     object Label5: TLabel
       Left = 20
-      Height = 14
+      Height = 18
       Top = 368
       Width = 308
       Caption = 'Label2'
@@ -305,7 +302,7 @@ object MainForm: TMainForm
     end
     object Edit1: TEdit
       Left = 217
-      Height = 21
+      Height = 27
       Top = 473
       Width = 80
       TabOrder = 1

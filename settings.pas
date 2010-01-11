@@ -145,7 +145,11 @@ function GetManagerVersion: String;
 
 implementation
 
-{$I revision.inc}
+{$IFDEF EPI_RELEASE}
+  {$I revision.inc}
+{$ELSE}
+  const RevisionStr = '0';
+{$ENDIF}
 
 function GetManagerVersion: String;
 begin

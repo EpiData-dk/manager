@@ -177,7 +177,7 @@
       <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
-        <Command Value="./update_revision.sh"/>
+        <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteBefore>
     </Other>
   </CompilerOptions>
