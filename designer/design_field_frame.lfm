@@ -1,12 +1,12 @@
 object FieldCreateForm: TFieldCreateForm
   Left = 859
-  Height = 140
+  Height = 161
   Top = 242
   Width = 270
   ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
-  ClientHeight = 140
+  ClientHeight = 161
   ClientWidth = 270
   Color = clSkyBlue
   Icon.Data = {
@@ -197,9 +197,9 @@ object FieldCreateForm: TFieldCreateForm
       TabOrder = 5
     end
     object Label4: TLabel
-      Left = 8
+      Left = 20
       Height = 18
-      Top = 113
+      Top = 112
       Width = 66
       Caption = 'Decimals:'
       ParentColor = False
@@ -224,6 +224,16 @@ object FieldCreateForm: TFieldCreateForm
       TabOrder = 6
       Visible = False
     end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 21
+    Top = 140
+    Width = 270
+    Enabled = False
+    Panels = <>
+    SizeGrip = False
+    Visible = False
   end
   object ActionList1: TActionList
     left = 216

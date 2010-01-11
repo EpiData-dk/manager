@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, StdCtrls, MaskEdit, ActnList, ExtCtrls,
-  UEpiDataFile, UDataFileTypes, UEpiUtils;
+  ComCtrls, UEpiDataFile, UDataFileTypes, UEpiUtils;
 
 type
 
@@ -30,6 +30,7 @@ type
     LabelEdit: TEdit;
     OkBtn: TButton;
     Panel1: TPanel;
+    StatusBar1: TStatusBar;
     procedure CloseActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
@@ -53,9 +54,6 @@ uses
   Controls, settings, UEpiDataGlobals, design_frame, Graphics,
   UStringUtils, strutils;
 
-var
-  OldLength, OldDecimals: Integer;
-
 { TFieldCreateForm }
 
 procedure TFieldCreateForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
@@ -63,6 +61,20 @@ procedure TFieldCreateForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
 var
   S, T: string;
   L, D: LongInt;
+
+  procedure NoExit(FocusCtrl: TWinControl; Msg: string);
+  begin
+    FocusCtrl.SetFocus;
+    if (not StatusBar1.Visible) then
+    begin
+      StatusBar1.Visible := true;
+      StatusBar1.Enabled := true;
+      Height := Height + StatusBar1.Height;
+    end;
+    StatusBar1.SimpleText := Msg;
+    CanClose := false;
+  end;
+
 begin
   CanClose := true;
 
@@ -76,11 +88,10 @@ begin
   T := Trim(UTF8Decode(LabelEdit.Text));
   if (S = '') and (T = '') then
   begin
-    CanClose := false;
     if ManagerSettings.FieldNamePrefix <> '' then
-      FieldNameEdit.SetFocus
+      NoExit(FieldNameEdit, 'No field name specified!')
     else
-      LabelEdit.SetFocus;
+      NoExit(LabelEdit, 'No label specified!');
     Exit;
   end;
 
@@ -99,13 +110,9 @@ begin
 
   if FNewField or (OldFieldName <> S) then
   begin
-    if FDf.FieldExists(S) then
-      CanClose := false;
-    if FDf.FileProperties.DefineExists(S) then
-      CanClose := false;
-    if not CanClose then
+    if FDf.FieldExists(S) or FDf.FileProperties.DefineExists(S) then
     begin
-      FieldNameEdit.SetFocus;
+      NoExit(FieldNameEdit, 'Fieldname already exits!');
       Exit;
     end;
   end;
@@ -113,26 +120,36 @@ begin
   // - FieldLength (no need to ut8-handle this. It's always plain ASCII.
   S := Trim(FieldLengthEdit.Text);
   if S = '' then
-    CanClose := false;
+  begin
+    NoExit(FieldLengthEdit, 'Empty field length not allowed!');
+    Exit;
+  end;
   L := StrToInt(S);
   if L <= 0 then
-    CanClose := false;
-
-  OldLength := L;
+  begin
+    NoExit(FieldLengthEdit, 'Field length must be >= 1!');
+    Exit;
+  end;
 
   // - FieldDecimals (no need to ut8-handle this. It's always plain ASCII.
   if not FieldDecimalSizeEdit.Enabled then exit;
   S := Trim(FieldDecimalSizeEdit.Text);
   if S = '' then
-    CanClose := false;
+  begin
+    NoExit(FieldLengthEdit, 'Empty decimal length not allowed!');
+    Exit;
+  end;
   D := StrToInt(S);
   if D <= 0 then
-    CanClose := false;
+  begin
+    NoExit(FieldLengthEdit, 'Decimal length must be >= 1!');
+    Exit;
+  end;
   if D >= (L - 1) then
-    CanClose := false;
-
-  if not CanClose then exit;
-  OldDecimals := D;
+  begin
+    NoExit(FieldLengthEdit, 'Decimal length longer than field length!');
+    Exit;
+  end;
 end;
 
 procedure TFieldCreateForm.CloseActionExecute(Sender: TObject);
@@ -154,6 +171,7 @@ constructor TFieldCreateForm.Create(TheOwner: TComponent;
 begin
   inherited Create(TheOwner);
   if DataFile = nil then Close;
+  Height := Height - StatusBar1.Height;
 
   FDf := DataFile;
   FNewField := NewField;
@@ -208,9 +226,18 @@ begin
   if not Assigned(aField) then exit;
   if ManagerSettings.FieldNamePrefix = '' then exit;
 
-  aField.FieldLength := OldLength;
-  if aField.FieldType = ftFloat then
-    aField.FieldDecimals := OldDecimals;
+
+  case aField.FieldType of
+    ftInteger: aField.FieldLength := ManagerSettings.IntFieldLength;
+    ftFloat:
+      begin
+         aField.FieldLength := ManagerSettings.FloatFieldLength;
+         aField.FieldDecimals := ManagerSettings.FloatDecimalLength;
+      end;
+    ftString: aField.FieldLength := ManagerSettings.StringFieldLength;
+    ftDate, ftEuroDate, ftYMDDate:
+      aField.FieldLength := 10;
+  end;
 
   LastFieldNo := DataFile.NumDataFields + 1;
   repeat

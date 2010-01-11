@@ -223,15 +223,6 @@ object DesignFrame: TDesignFrame
       )
       ShortCut = 115
     end
-    object NewLabelFieldAction: TAction
-      Category = 'New Fields'
-      Caption = 'NewLabelFieldAction'
-      OnExecute = NewLabelFieldActionExecute
-      SecondaryShortCuts.Strings = (
-        'Shift+F5'
-      )
-      ShortCut = 117
-    end
     object ImportStructureAction: TAction
       Category = 'File'
       Caption = 'Import Structure'
@@ -288,7 +279,16 @@ object DesignFrame: TDesignFrame
       Category = 'New Fields'
       Caption = 'NewDateFieldAction'
       OnExecute = NewDateFieldActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+F5'
+      )
       ShortCut = 116
+    end
+    object NewLabelFieldAction: TAction
+      Category = 'New Fields'
+      Caption = 'NewLabelFieldAction'
+      OnExecute = NewLabelFieldActionExecute
+      ShortCut = 117
     end
     object PasteAsLabel: TEditPaste
       Category = 'DesignPaste'
@@ -299,6 +299,20 @@ object DesignFrame: TDesignFrame
         'F8'
       )
       ShortCut = 16470
+    end
+    object MoveFirstAction: TAction
+      Category = 'Move'
+      Caption = 'First'
+      Hint = 'Move to first field'
+      OnExecute = MoveFirstActionExecute
+      ShortCut = 16420
+    end
+    object MoveLastAction: TAction
+      Category = 'Move'
+      Caption = 'Last'
+      Hint = 'Move to last field'
+      OnExecute = MoveLastActionExecute
+      ShortCut = 16419
     end
   end
   object FieldToolBarImageList: TImageList

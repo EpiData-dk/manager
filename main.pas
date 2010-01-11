@@ -15,10 +15,8 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    DesignBtn1: TBitBtn;
     Edit1: TEdit;
     Alignmenu: TMenuItem;
-    Image8: TImage;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
@@ -357,6 +355,8 @@ begin
     ProgressBarMain.Position := Percent;
     ProgressBarMain.Repaint;
   end;
+  if Percent = 0 then
+    Application.ProcessMessages;
   if Percent = 100 then
     ProgressBarMain.Visible := false;;
   result := prNormal;

@@ -16,6 +16,8 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    MoveFirstAction: TAction;
+    MoveLastAction: TAction;
     NewDataMenu: TMenuItem;
     PasteAsLabel: TEditPaste;
     MenuItem1: TMenuItem;
@@ -81,6 +83,8 @@ type
     procedure DocumentFileActionExecute(Sender: TObject);
     procedure EditCompActionExecute(Sender: TObject);
     procedure ImportStructureActionExecute(Sender: TObject);
+    procedure MoveFirstActionExecute(Sender: TObject);
+    procedure MoveLastActionExecute(Sender: TObject);
     procedure NewDataMenuClick(Sender: TObject);
     procedure NewDateFieldMenuClick(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
@@ -99,22 +103,13 @@ type
     procedure SaveFileActionExecute(Sender: TObject);
     procedure SaveFileAsActionExecute(Sender: TObject);
     procedure ToolBtnClick(Sender: TObject);
-    // Designer events:
-    procedure DesignerUnDock(Sender: TObject; Client: TControl;
-      NewTarget: TWinControl; var Allow: Boolean);
-    procedure DesignerDockDrop(Sender: TObject; Source: TDragDockObject; X,
-      Y: Integer);
-    procedure DesignerMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure DesignerMouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
   private
     { private declarations }
     ActiveButton: TToolButton;
     FActiveDatafile: TEpiDataFile;
     FActiveDocumentationForm: TDatafileDocumentationForm;
-    FComponentXTree: TAVLTree;
-    FComponentYTree: TAVLTree;
+    FComponentXTree: TFieldAVLTree;
+    FComponentYTree: TFieldAVLTree;
     FModified: boolean;
     FOldCaption: String;
     SelectedControl: TControl;
@@ -132,12 +127,22 @@ type
     procedure EnterSelectControl(Sender: TObject);
     procedure ExitSelectControl(Sender: TObject);
     procedure EditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    function  NewCompTree(TreeType: TFieldAVLTreeType; CmpMethod: TListSortCompare): TFieldAVLTree;
   private
     // Docking.
     // - Field:
     procedure StartFieldDock(Sender: TObject; var DragObject: TDragDockObject);
     procedure EndFieldDock(Sender, Target: TObject; X,Y: Integer);
     procedure EndLabelDock(Sender, Target: TObject; X,Y: Integer);
+    // - Designer events:
+    procedure DesignerUnDock(Sender: TObject; Client: TControl;
+      NewTarget: TWinControl; var Allow: Boolean);
+    procedure DesignerDockDrop(Sender: TObject; Source: TDragDockObject; X,
+      Y: Integer);
+    procedure DesignerMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure DesignerMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
   private
     // Aligning.
     // - helper functions.
@@ -151,8 +156,8 @@ type
     procedure EqualSpace(StartCtrl, EndCtrl: TControl);
     procedure LabelsAlignment(StartCtrl, EndCtrl: TControl; aAlign: TAlign);
   protected
-    property  ComponentYTree: TAVLTree read FComponentYTree;
-    property  ComponentXTree: TAVLTree read FComponentXTree;
+    property  ComponentYTree: TFieldAVLTree read FComponentYTree;
+    property  ComponentXTree: TFieldAVLTree read FComponentXTree;
     property  ActiveDocumentationForm: TDatafileDocumentationForm
       read FActiveDocumentationForm write FActiveDocumentationForm;
   public
@@ -266,6 +271,7 @@ begin
   Result.OnExit := @ExitSelectControl;
   Result.Color:= clMenuBar;
   Result.OnKeyDown := @EditKeyDown;
+  Result.TabStop := false;
   EnterSelectControl(Result);
 
   ComponentYTree.Add(Result);
@@ -285,6 +291,7 @@ begin
   Result.OnEndDock := @EndLabelDock;
   Result.PopupMenu := FieldPopUp;
   Result.OnMouseDown := @FieldMouseDown;
+  Result.Font.Style := [fsBold];
   Result.Parent := DesignerBox;
   Result.Field := AField;
   EnterSelectControl(Result);
@@ -335,8 +342,8 @@ begin
   // - "nil" = dock was abort using eg. ESC.
   if (Target = DesignerBox) or (not Assigned(Target)) then
   begin
-    ComponentYTree.Add(Sender);
-    ComponentXTree.Add(Sender);
+    ComponentYTree.Add(TFieldEdit(Sender));
+    ComponentXTree.Add(TFieldEdit(Sender));
   end;
 end;
 
@@ -407,13 +414,16 @@ end;
 procedure TDesignFrame.EnterSelectControl(Sender: TObject);
 begin
   if Assigned(SelectedControl) then
-    SelectedControl.Color:= clMenuBar;
+    if SelectedControl is TFieldEdit then
+      SelectedControl.Color:= clMenuBar
+    else
+      SelectedControl.Color := DesignerBox.Color;
 
   SelectedControl := TControl(Sender);
-  TFieldEdit(SelectedControl).Color := $00B06750; //$00330088;
+  TFieldEdit(SelectedControl).Color := ManagerSettings.SelectedControlColour;
   if SelectedControl is TFieldEdit then
     TFieldEdit(SelectedControl).SetFocus;
-  MainForm.Label2.Caption := 'Selected Control: ' + SelectedControl.Name;
+//  MainForm.Label2.Caption := 'Selected Control: ' + SelectedControl.Name;
 end;
 
 procedure TDesignFrame.ExitSelectControl(Sender: TObject);
@@ -440,8 +450,8 @@ begin
   // - "nil" = dock was abort using eg. ESC.
   if (Target = DesignerBox) or (not Assigned(Target)) then
   begin
-    ComponentYTree.Add(Sender);
-    ComponentXTree.Add(Sender);
+    ComponentYTree.Add(TFieldLabel(Sender));
+    ComponentXTree.Add(TFieldLabel(Sender));
   end;
 end;
 
@@ -449,7 +459,7 @@ function TDesignFrame.GetLowestControlPosition(var LowestCtrl: TControl): TPoint
 var
   Hit, Prd: TAVLTreeNode;
 begin
-  Result := Point(ManagerSettings.DefaultRightPostion, FieldToolBar.Height + 5);
+  Result := Point(ManagerSettings.DefaultRightPostion, 5);
   LowestCtrl := nil;
   if ComponentYTree.Count = 0 then exit;
 
@@ -654,7 +664,7 @@ end;
 procedure TDesignFrame.DefaultAlignFields(ActiveControl: TControl;
   const ColumnCount: Integer);
 var
-  NewXTree, NewYTree: TAVLTree;
+  NewXTree, NewYTree: TFieldAVLTree;
   TheLeft, TheTop: Integer;
   Dx: Integer;
   Dy: Integer;
@@ -669,8 +679,8 @@ begin
   TheLeft := ActiveControl.Left;
   TheTop  := 5;
 
-  NewXTree := TAVLTree.Create(@XCmp);
-  NewYTree := TAVLTree.Create(@YCmp);
+  NewYTree := NewCompTree(attY, @YCmp);
+  NewXTree := NewCompTree(attX, @XCmp);
 
   Curr := ComponentYTree.FindLowest;
   Prev := Curr;
@@ -698,8 +708,8 @@ begin
     end;
     TheTop += TControl(Curr.Data).Height + Dist;
 
-    NewXTree.Add(Curr.Data);
-    NewYTree.Add(Curr.Data);
+    NewXTree.Add(IFieldControl(Curr.Data));
+    NewYTree.Add(IFieldControl(Curr.Data));
     Prev := Curr;
     Curr := ComponentYTree.FindSuccessor(Curr);
   end;
@@ -713,7 +723,7 @@ end;
 
 procedure TDesignFrame.EqualSpace(StartCtrl, EndCtrl: TControl);
 var
-  NewYTree, NewXTree: TAVLTree;
+  NewYTree, NewXTree: TFieldAVLTree;
   Curr: TAVLTreeNode;
   CmpCount: Integer;
   PrevTop: LongInt;
@@ -744,8 +754,8 @@ begin
   Spacing := Max((EndCtrl.Top - StartCtrl.Top) div (CmpCount - 1),
                   StartCtrl.Height + ManagerSettings.SpaceBtwFieldField);
 
-  NewXTree := TAVLTree.Create(@XCmp);
-  NewYTree := TAVLTree.Create(@YCmp);
+  NewYTree := NewCompTree(attY, @YCmp);
+  NewXTree := NewCompTree(attX, @XCmp);
 
   CmpCount := 0;
   PrevTop := -1;
@@ -770,8 +780,8 @@ begin
       Field.LabelY := Field.FieldY;
     end;
 
-    NewXTree.Add(Curr.Data);
-    NewYTree.Add(Curr.Data);
+    NewXTree.Add(IFieldControl(Curr.Data));
+    NewYTree.Add(IFieldControl(Curr.Data));
 
     if (TControl(Curr.Data) = EndCtrl) then
       Exit;
@@ -789,7 +799,7 @@ end;
 procedure TDesignFrame.LabelsAlignment(StartCtrl, EndCtrl: TControl;
   aAlign: TAlign);
 var
-  NewYTree, NewXTree: TAVLTree;
+  NewYTree, NewXTree: TFieldAVLTree;
   Curr: TAVLTreeNode;
   MaxVariableLabelWidth: Integer;
   MaxFieldNameWidth: Integer;
@@ -835,8 +845,8 @@ begin
    MinLeft := MaxVariableLabelWidth + 5 + MaxFieldNameWidth + 5;
   end;
 
-  NewXTree := TAVLTree.Create(@XCmp);
-  NewYTree := TAVLTree.Create(@YCmp);
+  NewYTree := NewCompTree(attY, @YCmp);
+  NewXTree := NewCompTree(attX, @XCmp);
 
   Curr := ComponentYTree.Find(StartCtrl);
   Self.LockRealizeBounds;
@@ -871,8 +881,8 @@ begin
       end;
     end;
 
-    NewXTree.Add(Curr.Data);
-    NewYTree.Add(Curr.Data);
+    NewXTree.Add(IFieldControl(Curr.Data));
+    NewYTree.Add(IFieldControl(Curr.Data));
 
     if (TControl(Curr.Data) = EndCtrl) then
       Exit;
@@ -926,8 +936,8 @@ begin
   FActiveDocumentationForm := nil;
   SelectedControl := nil;
   Modified := false;
-  FComponentYTree := TAVLTree.Create(@YCmp);
-  FComponentXTree := TAVLTree.Create(@XCmp);
+  FComponentYTree := NewCompTree(attY, @YCmp);
+  FComponentXTree := NewCompTree(attX, @XCmp);
 
   // Manager settings specifics.
   DateFieldBtn.Tag := Ord(ManagerSettings.DefaultDateType);
@@ -1054,6 +1064,8 @@ begin
   if Assigned(ActiveDocumentationForm) then
     ActiveDocumentationForm.Datafile := ActiveDataFile;
   ActiveDataFile.EndUpdate;  // Forced updatenonvisual due to registered hook.
+
+  SelectedControl := nil;
 
   Modified := false;
 end;
@@ -1311,6 +1323,32 @@ begin
   Modified := true;
 end;
 
+procedure TDesignFrame.MoveFirstActionExecute(Sender: TObject);
+var
+  Node: TAVLTreeNode;
+begin
+  Node := ComponentYTree.FindLowest;
+
+  while Assigned(Node) and (not (TControl(Node.Data) is TFieldEdit)) do
+    Node := ComponentYTree.FindSuccessor(Node);
+
+  if Assigned(Node) then
+    EnterSelectControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MoveLastActionExecute(Sender: TObject);
+var
+  Node: TAVLTreeNode;
+begin
+  Node := ComponentYTree.FindHighest;
+
+  while Assigned(Node) and (not (TControl(Node.Data) is TFieldEdit)) do
+    Node := ComponentYTree.FindPrecessor(Node);
+
+  if Assigned(Node) then
+    EnterSelectControl(TControl(Node.Data));
+end;
+
 procedure TDesignFrame.NewDataMenuClick(Sender: TObject);
 begin
    DatefieldPopupMenu.popup();
@@ -1347,10 +1385,34 @@ end;
 
 procedure TDesignFrame.EditKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
+var
+  Node: TAVLTreeNode;
 begin
   if Key = VK_RETURN then
+  begin
     EditFieldMenuItem.Click;
+    Key := VK_UNKNOWN;
+  end;
 
+  if (Key = VK_UP) or ((Key = VK_TAB) and (ssShift in Shift)) then
+  begin
+    Node := (SelectedControl as IFieldControl).YTreeNode;
+    Node := ComponentYTree.FindPrecessor(Node);
+    if not Assigned(Node) then
+      Node := ComponentYTree.FindHighest;
+    EnterSelectControl(TControl(Node.Data));
+    Key := VK_UNKNOWN
+  end;
+
+  if (Key = VK_DOWN) or (Key = VK_TAB) then
+  begin
+    Node := (SelectedControl as IFieldControl).YTreeNode;
+    Node := ComponentYTree.FindSuccessor(Node);
+    if not Assigned(Node) then
+      Node := ComponentYTree.FindLowest;
+    EnterSelectControl(TControl(Node.Data));
+    Key := VK_UNKNOWN
+  end;
 
   // Ugly dirty way of capturing shortcuts involving keys.
   if (ssAlt in Shift) and (Key = VK_S) then
@@ -1363,6 +1425,28 @@ begin
     MainForm.NewDesignFormAction.Execute;
     Key := VK_UNKNOWN;
   end;
+  if (ssCtrl in Shift) and (Key = VK_V) then
+  begin
+    PasteAsLabel.Execute;
+    Key := VK_UNKNOWN;
+  end;
+  if (ssCtrl in Shift) and (Key = VK_HOME) then
+  begin
+    MoveFirstAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+  if (ssCtrl in Shift) and (Key = VK_END) then
+  begin
+    MoveLastAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+end;
+
+function TDesignFrame.NewCompTree(TreeType: TFieldAVLTreeType;
+  CmpMethod: TListSortCompare): TFieldAVLTree;
+begin
+  Result := TFieldAVLTree.Create(CmpMethod);
+  Result.AVLTreeType := TreeType;
 end;
 
 procedure TDesignFrame.EditCompActionExecute(Sender: TObject);
@@ -1511,6 +1595,10 @@ begin
       ActiveDatafile.AddField(TmpField);
       NewQuestionLabel(TmpField);
     end;
+
+    if (DesignerBox.VertScrollBar.Visible) and (true) then
+      DesignerBox.VertScrollBar.Position := DesignerBox.VertScrollBar.Range - DesignerBox.VertScrollBar.Page;
+
   finally
     Cbl.Free;
   end;

@@ -77,7 +77,7 @@ LazarusResources.Add('TSettingsForm','FORMDATA',[
   +#6#7'999;0;_'#9'SpaceChar'#6#1'_'#0#0#0#9'TTabSheet'#8'AdvSheet'#7'Caption'#6
   +#8'Advanced'#12'ClientHeight'#3#234#0#11'ClientWidth'#3#200#0#0#9'TGroupBox'
   +#9'GroupBox1'#4'Left'#2#5#6'Height'#2'R'#3'Top'#2#0#5'Width'#3#190#0#7'Capti'
-  +'on'#6#9'Snapping:'#12'ClientHeight'#2'?'#11'ClientWidth'#3#186#0#8'TabOrder'
+  +'on'#6#9'Snapping:'#12'ClientHeight'#2'N'#11'ClientWidth'#3#186#0#8'TabOrder'
   +#2#0#0#9'TCheckBox'#16'SnapFieldsChkBox'#4'Left'#2#12#6'Height'#2#22#3'Top'#2
   +#8#5'Width'#2#127#7'Caption'#6#15'Autosnap Fields'#8'OnChange'#7#22'SnapFiel'
   +'dsChkBoxChange'#8'TabOrder'#2#0#0#0#6'TLabel'#6'Label4'#4'Left'#2#21#6'Heig'
@@ -87,7 +87,7 @@ LazarusResources.Add('TSettingsForm','FORMDATA',[
   +'ormal'#9'MaxLength'#2#3#8'TabOrder'#2#1#8'EditMask'#6#7'999;1;_'#4'Text'#6#3
   +'   '#9'SpaceChar'#6#1'_'#0#0#0#9'TGroupBox'#9'GroupBox2'#4'Left'#2#5#6'Heig'
   +'ht'#2's'#3'Top'#2'X'#5'Width'#3#190#0#7'Caption'#6#19'Vertical distances:'
-  +#12'ClientHeight'#2'`'#11'ClientWidth'#3#186#0#8'TabOrder'#2#1#0#6'TLabel'#6
+  +#12'ClientHeight'#2'o'#11'ClientWidth'#3#186#0#8'TabOrder'#2#1#0#6'TLabel'#6
   +'Label5'#4'Left'#2#12#6'Height'#2#18#3'Top'#2#7#5'Width'#2'P'#7'Caption'#6#14
   +'Field - Field:'#11'ParentColor'#8#0#0#6'TLabel'#6'Label6'#4'Left'#2#12#6'He'
   +'ight'#2#18#3'Top'#2'G'#5'Width'#2'X'#7'Caption'#6#14'Label - Label:'#11'Par'

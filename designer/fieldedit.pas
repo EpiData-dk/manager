@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, UEpiDataFile, StdCtrls, Controls,
-  UDataFileTypes, LMessages, Graphics;
+  UDataFileTypes, LMessages, Graphics, AVL_Tree;
 
 type
 
@@ -23,10 +23,23 @@ type
     destructor Destroy; override;
   end;
 
+  { IFieldControl }
+
+  IFieldControl = interface ['{8F9E1A89-AA09-473E-A1DD-9BD7356F96A0}']
+    function GetXTreeNode: TAVLTreeNode;
+    function GetYTreeNode: TAVLTreeNode;
+    procedure SetXTreeNode(const AValue: TAVLTreeNode);
+    procedure SetYTreeNode(const AValue: TAVLTreeNode);
+    procedure SetField(const AValue: TEpiField);
+    function  GetField: TEpiField;
+    property  Field: TEpiField read GetField write SetField;
+    property  YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
+    property  XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
+  end;
 
   { TFieldEdit }
 
-  TFieldEdit = class(TEdit)
+  TFieldEdit = class(TEdit, IFieldControl)
   private
     FField: TEpiField;
     // Optional field name label.
@@ -36,10 +49,17 @@ type
 
     // Experimental grapper.
     FSelectCorner: TSelectCorner;
+    FXTreeNode: TAVLTreeNode;
+    FYTreeNode: TAVLTreeNode;
+    function GetField: TEpiField;
     procedure SetField(const AValue: TEpiField);
     procedure UpdateFieldNameLabel;
     procedure UpdateHint(aShow: boolean = true);
     procedure OnFieldChange(Sender: TObject; EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
+    function GetXTreeNode: TAVLTreeNode;
+    function GetYTreeNode: TAVLTreeNode;
+    procedure SetXTreeNode(const AValue: TAVLTreeNode);
+    procedure SetYTreeNode(const AValue: TAVLTreeNode);
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure SetVisible(Value: Boolean); override;
@@ -51,13 +71,27 @@ type
     procedure DoEndDock(Target: TObject; X, Y: Integer); override;
     procedure DoEnter; override;
     procedure DoExit; override;
-    property Field: TEpiField read FField write SetField;
+    property Field: TEpiField read GetField write SetField;
     property VariableLabel: TLabel read FVariableLabel;
     property FieldNameLabel: TLabel read FFieldNameLabel;
+    property YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
+    property XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
   published
     property OnStartDock;
     property OnEndDock;
   end;
+
+  { TFieldAVLTree }
+
+  TFieldAVLTreeType = (attY, attX);
+  TFieldAVLTree = class(TAVLTree)
+  private
+    FAVLTreeType: TFieldAVLTreeType;
+  public
+    function Add(Data: Pointer): TAVLTreeNode;
+    property AVLTreeType: TFieldAVLTreeType read FAVLTreeType write FAVLTreeType;
+  end;
+
 
   { TFieldDockObject }
 
@@ -78,16 +112,25 @@ type
 
   { TFieldLabel }
 
-  TFieldLabel = class(TLabel)
+  TFieldLabel = class(TLabel, IFieldControl)
   private
     FField: TEpiField;
+    FXTreeNode: TAVLTreeNode;
+    FYTreeNode: TAVLTreeNode;
+    function GetField: TEpiField;
+    function GetXTreeNode: TAVLTreeNode;
+    function GetYTreeNode: TAVLTreeNode;
     procedure OnFieldChange(Sender: TObject; EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
     procedure SetField(const AValue: TEpiField);
+    procedure SetXTreeNode(const AValue: TAVLTreeNode);
+    procedure SetYTreeNode(const AValue: TAVLTreeNode);
     procedure UpdateHint(aShow: boolean = true);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    property Field: TEpiField read FField write SetField;
+    property Field: TEpiField read GetField write SetField;
+    property YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
+    property XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
   published
     property OnStartDock;
     property OnEndDock;
@@ -114,7 +157,7 @@ begin
         begin
           // Edit:
           FFieldNameLabel.Caption := FieldName;
-          Text := FieldName;
+//          Text := FieldName;
           Top  := FieldY;
           Left := FieldX;
           Width := TDesignFrame(Parent).Canvas.TextWidth('W') * FieldLength;
@@ -126,7 +169,7 @@ begin
       fceName:
         begin
           FFieldNameLabel.Caption := FieldName;
-          Text := FieldName;
+//          Text := FieldName;
         end;
       fceLength: Width := TDesignFrame(Parent).Canvas.TextWidth('W') * FieldLength;
       fceDecimals: ;
@@ -160,7 +203,8 @@ end;
 
 procedure TFieldEdit.UpdateFieldNameLabel;
 begin
-  FieldNameLabel.Caption  := Text;
+  if Assigned(Field) then
+    FieldNameLabel.Caption  := Field.FieldName;
   FieldNameLabel.Left     := VariableLabel.Left - (FieldNameLabel.Width + 5);
   FieldNameLabel.Top      := VariableLabel.Top;
 end;
@@ -188,7 +232,7 @@ begin
   FField := AValue;
   Field.RegisterOnChangeHook(@OnFieldChange);
 
-  Text   := Field.FieldName;
+//  Text   := Field.FieldName;
   Top    := Field.FieldY;
   Left   := Field.FieldX;
   Width  := TDesignFrame(Parent).Canvas.TextWidth('W') * Field.FieldLength;
@@ -208,6 +252,31 @@ begin
 
   UpdateFieldNameLabel;
   UpdateHint;
+end;
+
+procedure TFieldEdit.SetXTreeNode(const AValue: TAVLTreeNode);
+begin
+  FXTreeNode := AValue;
+end;
+
+procedure TFieldEdit.SetYTreeNode(const AValue: TAVLTreeNode);
+begin
+  FYTreeNode := AValue;
+end;
+
+function TFieldEdit.GetField: TEpiField;
+begin
+  Result := FField;
+end;
+
+function TFieldEdit.GetXTreeNode: TAVLTreeNode;
+begin
+  Result := FXTreeNode;
+end;
+
+function TFieldEdit.GetYTreeNode: TAVLTreeNode;
+begin
+  Result := FYTreeNode;
 end;
 
 procedure TFieldEdit.SetParent(NewParent: TWinControl);
@@ -336,6 +405,21 @@ begin
   UpdateHint;
 end;
 
+function TFieldLabel.GetField: TEpiField;
+begin
+  Result := FField;
+end;
+
+function TFieldLabel.GetXTreeNode: TAVLTreeNode;
+begin
+  Result := FXTreeNode;
+end;
+
+function TFieldLabel.GetYTreeNode: TAVLTreeNode;
+begin
+  Result := FYTreeNode;
+end;
+
 procedure TFieldLabel.SetField(const AValue: TEpiField);
 begin
   FField := AValue;
@@ -346,6 +430,16 @@ begin
 
   Caption := Field.VariableLabel;
   UpdateHint;
+end;
+
+procedure TFieldLabel.SetXTreeNode(const AValue: TAVLTreeNode);
+begin
+  FXTreeNode := AValue;
+end;
+
+procedure TFieldLabel.SetYTreeNode(const AValue: TAVLTreeNode);
+begin
+  FYTreeNode := AValue;
 end;
 
 procedure TFieldLabel.UpdateHint(aShow: boolean);
@@ -512,6 +606,17 @@ end;
 destructor TSelectCorner.Destroy;
 begin
   inherited Destroy;
+end;
+
+{ TFieldAVLTree }
+
+function TFieldAVLTree.Add(Data: Pointer): TAVLTreeNode;
+begin
+  Result := inherited Add(TControl(Data));
+  case AVLTreeType of
+    attX: (TControl(Data) as IFieldControl).XTreeNode := Result;
+    attY: (TControl(Data) as IFieldControl).YTreeNode := result;
+  end;
 end;
 
 end.

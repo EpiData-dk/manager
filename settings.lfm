@@ -288,7 +288,7 @@ object SettingsForm: TSettingsForm
         Top = 0
         Width = 190
         Caption = 'Snapping:'
-        ClientHeight = 63
+        ClientHeight = 78
         ClientWidth = 186
         TabOrder = 0
         object SnapFieldsChkBox: TCheckBox
@@ -328,7 +328,7 @@ object SettingsForm: TSettingsForm
         Top = 88
         Width = 190
         Caption = 'Vertical distances:'
-        ClientHeight = 96
+        ClientHeight = 111
         ClientWidth = 186
         TabOrder = 1
         object Label5: TLabel

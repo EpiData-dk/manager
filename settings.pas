@@ -93,6 +93,7 @@ type
     SpaceBtwLabelLabel:    Integer;
 
     // Not shown in dialog.
+    SelectedControlColour: Integer;
     WorkingDirUTF8:         string;
     LabelNamePrefix:        string;
   end;
@@ -128,6 +129,7 @@ var
     SpaceBtwLabelLabel:    10;
 
     // Not shown in dialog.
+    SelectedControlColour: $00B6F5F5;
     WorkingDirUTF8:        '';
     LabelNamePrefix:       'label_';
   );

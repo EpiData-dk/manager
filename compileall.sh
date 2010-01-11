@@ -83,6 +83,7 @@ compile() {
   clean
   compile_core
 
+  SIMPLEOPTS="$SIMPLEOPTS -dEPI_RELEASE"
   CPU="-P$MY_CPU_TARGET"
   TARGET="-T$MY_OS_TARGET"
 

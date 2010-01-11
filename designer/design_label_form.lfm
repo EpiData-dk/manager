@@ -45,6 +45,7 @@ object CreateLabelForm: TCreateLabelForm
       Top = 58
       Width = 75
       Caption = 'Ok'
+      Default = True
       ModalResult = 1
       TabOrder = 1
     end
