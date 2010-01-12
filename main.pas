@@ -16,15 +16,25 @@ type
 
   TMainForm = class(TForm)
     Alignmenu: TMenuItem;
+    Image1: TImage;
+    Image2: TImage;
+    Image3: TImage;
+    Image4: TImage;
+    Image5: TImage;
+    Image8: TImage;
+    Image9: TImage;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     NewDataFormBtn: TToolButton;
     OpenToolBtn: TToolButton;
+    PageControl2: TPageControl;
     StartEditorAction: TAction;
     Image6: TImage;
     Image7: TImage;
     MenuItem1: TMenuItem;
+    WorkFlow: TTabSheet;
+    TabSheet2: TTabSheet;
     ToolsMenu: TMenuItem;
     NewDesignFormAction: TAction;
     ClosePageAction: TAction;
@@ -50,9 +60,18 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure EditorBtnClick(Sender: TObject);
+    procedure Image1Click(Sender: TObject);
+    procedure Image3Click(Sender: TObject);
+    procedure Image4Click(Sender: TObject);
+    procedure Image5Click(Sender: TObject);
+    procedure Image8Click(Sender: TObject);
+    procedure Image9Click(Sender: TObject);
     procedure NewDesignFormActionExecute(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PageControl1PageChanged(Sender: TObject);
+    procedure Shape1ChangeBounds(Sender: TObject);
+    procedure Shape1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
@@ -133,7 +152,7 @@ begin
   end;
 
   if TmpMod and (MessageDlg('Dataform was modified since last save.' +
-     LineEnding + 'Close Form ?', mtWarning, mbYesNo, 0) = mrNo) then
+     LineEnding + 'Close Form and loose changes ?', mtWarning, mbYesNo, 0) = mrNo) then
   begin
     PageControl1.ActivePage := PageControl1.Pages[Idx];
     Exit;
@@ -225,9 +244,53 @@ begin
   TDesignFrame(PageControl1.ActivePage.Components[0]).UpdateNonInteractiveVisuals;
 end;
 
+procedure TMainForm.Shape1ChangeBounds(Sender: TObject);
+begin
+         ShowOnStatusBar('button 1 clicked', 0);
+end;
+
+procedure TMainForm.Shape1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+        ShowOnStatusBar('button 1 clicked', 0);
+end;
+
 procedure TMainForm.EditorBtnClick(Sender: TObject);
 begin
   ShowOnStatusBar('GCP not ready yet', 0);
+end;
+
+procedure TMainForm.Image1Click(Sender: TObject);
+begin
+      ShowOnStatusBar('button 1 clicked', 0);
+end;
+
+procedure TMainForm.Image3Click(Sender: TObject);
+begin
+     ShowOnStatusBar('button 4 extend definitions clicked', 0);
+end;
+
+procedure TMainForm.Image4Click(Sender: TObject);
+begin
+          ShowOnStatusBar('button 3 - modify clicked', 0);
+end;
+
+procedure TMainForm.Image5Click(Sender: TObject);
+begin
+    ShowOnStatusBar('button 5 documentation clicked', 0);
+end;
+
+procedure TMainForm.Image8Click(Sender: TObject);
+begin
+   ShowOnStatusBar('button 6 editor clicked', 0);
+  if not Assigned(EditorForm) then
+    EditorForm := TEditorForm.Create(Self);
+  EditorForm.Show;
+end;
+
+procedure TMainForm.Image9Click(Sender: TObject);
+begin
+  ShowOnStatusBar('button 1 - do this before defining forms and entry', 0);
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
@@ -301,7 +364,7 @@ begin
   {$IFNDEF EPI_DEBUG}
   if (TDesignFrame(PageControl1.ActivePage.Controls[0]).Modified) and
      (MessageDlg('Dataform was modified since last save.' +
-                 LineEnding + 'Close Form?', mtWarning, mbYesNo, 0) = mrNo) then
+                 LineEnding + 'Close Form - and loose changes ?', mtWarning, mbYesNo, 0) = mrNo) then
     Exit;
   {$ENDIf}
 
