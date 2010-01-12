@@ -15,7 +15,6 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    Edit1: TEdit;
     Alignmenu: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
@@ -35,13 +34,7 @@ type
     MaintenanceBtn: TBitBtn;
     SettingsMenu: TMenuItem;
     SettingsAction: TAction;
-    Button1: TButton;
     EditorBtn: TBitBtn;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
     MetaDataBtn: TBitBtn;
     DesignBtn: TBitBtn;
     MainFormActionList: TActionList;
@@ -50,10 +43,8 @@ type
     FileMenu: TMenuItem;
     ExitMenuItem: TMenuItem;
     PageControl1: TPageControl;
-    Panel1: TPanel;
     ProgressPanel: TPanel;
     StatusBar1: TStatusBar;
-    procedure Button1Click(Sender: TObject);
     procedure ClosePageActionExecute(Sender: TObject);
     procedure DesignBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -179,12 +170,6 @@ begin
   {$ENDIF}
   ProgressBarMain.Smooth := true;
   ProgressBarMain.Visible := false;
-
-  {$IFDEF EPI_DEBUG}
-  Panel1.Visible := true;
-  {$ELSE EPI_DEBUG}
-  Panel1.Visible := false;
-  {$ENDIF}
 end;
 
 
@@ -302,15 +287,6 @@ begin
     ProgressBarMain.Width := Rect.Right - Rect.Left;
     ProgressBarMain.Height := Rect.Bottom - Rect.Top;
   end;
-end;
-
-procedure TMainForm.Button1Click(Sender: TObject);
-var
-  i: Integer;
-begin
-  for i := 0 to Panel1.ControlCount - 1 do
-    if Panel1.Controls[i] is TLabel then
-      TLabel(Panel1.Controls[i]).Caption := Panel1.Controls[i].Name;
 end;
 
 procedure TMainForm.ClosePageActionExecute(Sender: TObject);

@@ -16,9 +16,19 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    MovePageDownAction: TAction;
+    MoveDownAction: TAction;
+    MoveUpAction: TAction;
+    MovePageUpAction: TAction;
     MoveFirstAction: TAction;
     MoveLastAction: TAction;
     NewDataMenu: TMenuItem;
+    Panel1: TPanel;
     PasteAsLabel: TEditPaste;
     MenuItem1: TMenuItem;
     NewDateFieldAction: TAction;
@@ -83,8 +93,12 @@ type
     procedure DocumentFileActionExecute(Sender: TObject);
     procedure EditCompActionExecute(Sender: TObject);
     procedure ImportStructureActionExecute(Sender: TObject);
+    procedure MoveDownActionExecute(Sender: TObject);
     procedure MoveFirstActionExecute(Sender: TObject);
     procedure MoveLastActionExecute(Sender: TObject);
+    procedure MovePageDownActionExecute(Sender: TObject);
+    procedure MovePageUpActionExecute(Sender: TObject);
+    procedure MoveUpActionExecute(Sender: TObject);
     procedure NewDataMenuClick(Sender: TObject);
     procedure NewDateFieldMenuClick(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
@@ -423,6 +437,12 @@ begin
   TFieldEdit(SelectedControl).Color := ManagerSettings.SelectedControlColour;
   if SelectedControl is TFieldEdit then
     TFieldEdit(SelectedControl).SetFocus;
+
+  if (DesignerBox.VertScrollBar.Position > SelectedControl.Top) then
+    DesignerBox.VertScrollBar.Position := SelectedControl.Top - 5;
+  if (SelectedControl.Top + SelectedControl.Height) > (DesignerBox.VertScrollBar.Position + DesignerBox.ClientHeight) then
+    DesignerBox.VertScrollBar.Position := SelectedControl.Top + SelectedControl.Height - DesignerBox.ClientHeight + 5;
+
 //  MainForm.Label2.Caption := 'Selected Control: ' + SelectedControl.Name;
 end;
 
@@ -947,6 +967,12 @@ begin
     ftYMDDate:  DateFieldBtn.ImageIndex := 12;
   end;
 
+  {$IFDEF EPI_DEBUG}
+  Panel1.Visible := true;
+  {$ELSE EPI_DEBUG}
+  Panel1.Visible := false;
+  {$ENDIF}
+
   // Designer box creation and setup.
   // - (This is subject to change if we find a better component than
   //    the form or a scrollbox).
@@ -1131,7 +1157,7 @@ procedure TDesignFrame.DesignerMouseMove(Sender: TObject; Shift: TShiftState; X,
 begin
   ShowOnMainStatusBar(Format('Mouse - X: %d Y: %d',[X, Y]), 4);
 
-  MainForm.Label5.Caption := Format(
+  Label5.Caption := Format(
     'Y Component Tree.Count = %d' + LineEnding +
     'X Component Tree.Count = %d',
     [ComponentYTree.Count, ComponentXTree.Count]
@@ -1254,7 +1280,7 @@ begin
       NewFieldEdit(TmpField);
     end;
 
-    if (DesignerBox.VertScrollBar.Visible) and (true) then
+    if (DesignerBox.VertScrollBar.Visible) then
       DesignerBox.VertScrollBar.Position := DesignerBox.VertScrollBar.Range - DesignerBox.VertScrollBar.Page;
 
     Modified := true;
@@ -1323,6 +1349,17 @@ begin
   Modified := true;
 end;
 
+procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);
+var
+  Node: TAVLTreeNode;
+begin
+  Node := (SelectedControl as IFieldControl).YTreeNode;
+  Node := ComponentYTree.FindSuccessor(Node);
+  if not Assigned(Node) then
+    Node := ComponentYTree.FindLowest;
+  EnterSelectControl(TControl(Node.Data));
+end;
+
 procedure TDesignFrame.MoveFirstActionExecute(Sender: TObject);
 var
   Node: TAVLTreeNode;
@@ -1347,6 +1384,64 @@ begin
 
   if Assigned(Node) then
     EnterSelectControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MovePageDownActionExecute(Sender: TObject);
+var
+  Node: TAVLTreeNode;
+  Dx: Integer;
+  NextNode: TAVLTreeNode;
+begin
+  if ComponentYTree.Count <= 2 then exit;
+
+  Node := (SelectedControl as IFieldControl).YTreeNode;
+  if Node = ComponentYTree.FindHighest then exit;
+
+  Dx := 0;
+  NextNode := ComponentYTree.FindSuccessor(Node);
+  if (TControl(NextNode.Data).Top + TControl(NextNode.Data).Height) > (DesignerBox.VertScrollBar.Position + DesignerBox.ClientHeight) then
+    Dx := DesignerBox.ClientHeight;
+  while (Assigned(Node)) and
+    ((TControl(Node.Data).Top + TControl(Node.Data).Height) < (DesignerBox.VertScrollBar.Position + DesignerBox.ClientHeight + Dx)) do
+    Node := ComponentYTree.FindSuccessor(Node);
+  if Assigned(Node) then
+    Node := ComponentYTree.FindPrecessor(Node)
+  else
+    Node := ComponentYTree.FindHighest;
+  EnterSelectControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MovePageUpActionExecute(Sender: TObject);
+var
+  Node: TAVLTreeNode;
+  Dx: Integer;
+begin
+  if ComponentYTree.Count <= 2 then exit;
+
+  Node := (SelectedControl as IFieldControl).YTreeNode;
+  if Node = ComponentYTree.FindLowest then exit;
+
+  Dx := 0;
+  if TControl(ComponentYTree.FindPrecessor(Node).Data).Top < (DesignerBox.VertScrollBar.Position) then
+    Dx := DesignerBox.ClientHeight;
+  while (Assigned(Node)) and (TControl(Node.Data).Top > (DesignerBox.VertScrollBar.Position  - Dx)) do
+    Node := ComponentYTree.FindPrecessor(Node);
+  if Assigned(Node) then
+    Node := ComponentYTree.FindSuccessor(Node)
+  else
+    Node := ComponentYTree.FindLowest;
+  EnterSelectControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MoveUpActionExecute(Sender: TObject);
+var
+  Node: TAVLTreeNode;
+begin
+  Node := (SelectedControl as IFieldControl).YTreeNode;
+  Node := ComponentYTree.FindPrecessor(Node);
+  if not Assigned(Node) then
+    Node := ComponentYTree.FindHighest;
+  EnterSelectControl(TControl(Node.Data));
 end;
 
 procedure TDesignFrame.NewDataMenuClick(Sender: TObject);
@@ -1387,6 +1482,9 @@ procedure TDesignFrame.EditKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
   Node: TAVLTreeNode;
+  rct: TRect;
+  pt: TPoint;
+  Dx: Integer;
 begin
   if Key = VK_RETURN then
   begin
@@ -1394,24 +1492,44 @@ begin
     Key := VK_UNKNOWN;
   end;
 
+  // Movement actions.
+  // ..going up: (Up, Shift+Tab, PgUp, Ctrl+Home)
+  // - Single step = Up, shift + Tab
   if (Key = VK_UP) or ((Key = VK_TAB) and (ssShift in Shift)) then
   begin
-    Node := (SelectedControl as IFieldControl).YTreeNode;
-    Node := ComponentYTree.FindPrecessor(Node);
-    if not Assigned(Node) then
-      Node := ComponentYTree.FindHighest;
-    EnterSelectControl(TControl(Node.Data));
+    MoveUpAction.Execute;
     Key := VK_UNKNOWN
   end;
-
+  // - Page step = PageUp (VK_PRIOR)
+  if (Key = VK_PRIOR) then
+  begin
+    MovePageUpAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+  // - Top step = Ctrl + Home
+  if (Key = VK_HOME) and (ssCtrl in Shift) then
+  begin
+    MoveFirstAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+  // ..going down: (Down, Tab, PgDown, Ctrl+End)
+  // - Single step = Down, Tab
   if (Key = VK_DOWN) or (Key = VK_TAB) then
   begin
-    Node := (SelectedControl as IFieldControl).YTreeNode;
-    Node := ComponentYTree.FindSuccessor(Node);
-    if not Assigned(Node) then
-      Node := ComponentYTree.FindLowest;
-    EnterSelectControl(TControl(Node.Data));
+    MoveDownAction.Execute;
     Key := VK_UNKNOWN
+  end;
+  // - Page step = PageDown (VK_NEXT)
+  if (Key = VK_NEXT) then
+  begin
+    MovePageDownAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+  // - Bottom step = Ctrl + End
+  if (Key = VK_END) and (ssCtrl in Shift) then
+  begin
+    MoveLastAction.Execute;
+    Key := VK_UNKNOWN;
   end;
 
   // Ugly dirty way of capturing shortcuts involving keys.
@@ -1428,16 +1546,6 @@ begin
   if (ssCtrl in Shift) and (Key = VK_V) then
   begin
     PasteAsLabel.Execute;
-    Key := VK_UNKNOWN;
-  end;
-  if (ssCtrl in Shift) and (Key = VK_HOME) then
-  begin
-    MoveFirstAction.Execute;
-    Key := VK_UNKNOWN;
-  end;
-  if (ssCtrl in Shift) and (Key = VK_END) then
-  begin
-    MoveLastAction.Execute;
     Key := VK_UNKNOWN;
   end;
 end;

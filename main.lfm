@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 392
-  Height = 668
-  Top = 257
-  Width = 1066
+  Left = 434
+  Height = 675
+  Top = 237
+  Width = 1028
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 643
-  ClientWidth = 1066
+  ClientHeight = 650
+  ClientWidth = 1028
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -16,10 +16,10 @@ object MainForm: TMainForm
     Left = 0
     Height = 44
     Top = 0
-    Width = 1066
+    Width = 1028
     Align = alTop
     ClientHeight = 44
-    ClientWidth = 1066
+    ClientWidth = 1028
     TabOrder = 0
     object DesignBtn: TBitBtn
       AnchorSideLeft.Side = asrBottom
@@ -153,8 +153,8 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
-    Top = 622
-    Width = 1066
+    Top = 629
+    Width = 1028
     Panels = <    
       item
         Width = 300
@@ -177,9 +177,9 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 578
+    Height = 585
     Top = 44
-    Width = 713
+    Width = 1028
     Align = alClient
     ParentShowHint = False
     ShowHint = True
@@ -188,86 +188,9 @@ object MainForm: TMainForm
     OnChanging = PageControl1Changing
     OnPageChanged = PageControl1PageChanged
   end
-  object Panel1: TPanel
-    Left = 713
-    Height = 578
-    Top = 44
-    Width = 353
-    Align = alRight
-    BevelInner = bvRaised
-    ClientHeight = 578
-    ClientWidth = 353
-    TabOrder = 3
-    Visible = False
-    object Label1: TLabel
-      Left = 18
-      Height = 18
-      Top = 70
-      Width = 308
-      Caption = 'label1'
-      Font.Height = -13
-      Font.Name = 'Sans'
-      ParentColor = False
-      ParentFont = False
-      WordWrap = True
-    end
-    object Label2: TLabel
-      Left = 18
-      Height = 18
-      Top = 136
-      Width = 308
-      Caption = 'Label2'
-      ParentColor = False
-      WordWrap = True
-    end
-    object Label3: TLabel
-      Left = 20
-      Height = 18
-      Top = 200
-      Width = 308
-      Caption = 'Label2'
-      ParentColor = False
-      WordWrap = True
-    end
-    object Label4: TLabel
-      Left = 20
-      Height = 18
-      Top = 280
-      Width = 308
-      Caption = 'Label2'
-      ParentColor = False
-      WordWrap = True
-    end
-    object Label5: TLabel
-      Left = 20
-      Height = 18
-      Top = 368
-      Width = 308
-      Caption = 'Label2'
-      ParentColor = False
-      WordWrap = True
-    end
-    object Button1: TButton
-      Left = 18
-      Height = 25
-      Top = 14
-      Width = 75
-      Caption = 'Clear'
-      OnClick = Button1Click
-      TabOrder = 0
-    end
-    object Edit1: TEdit
-      Left = 217
-      Height = 27
-      Top = 473
-      Width = 80
-      TabOrder = 1
-      Text = 'Edit1'
-    end
-  end
   object MainFormMenu: TMainMenu
-    left = 528
-    top = 288
+    left = 448
+    top = 376
     object FileMenu: TMenuItem
       Caption = '&File'
       Hint = 'Exit'
@@ -312,8 +235,8 @@ object MainForm: TMainForm
   end
   object MainFormActionList: TActionList
     Images = DesignFrame.FieldToolBarImageList
-    left = 528
-    top = 376
+    left = 448
+    top = 448
     object ExitAction: TFileExit
       Category = 'File'
       Caption = 'E&xit'

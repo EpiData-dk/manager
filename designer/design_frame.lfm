@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 435
-  DesignTop = 306
+  DesignLeft = 686
+  DesignTop = 350
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -193,6 +193,57 @@ object DesignFrame: TDesignFrame
       Action = MainForm.NewDesignFormAction
     end
   end
+  object Panel1: TPanel
+    Left = 538
+    Height = 540
+    Top = 26
+    Width = 298
+    Align = alRight
+    BevelWidth = 2
+    ClientHeight = 540
+    ClientWidth = 298
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 22
+      Height = 18
+      Top = 30
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 22
+      Height = 18
+      Top = 108
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 22
+      Height = 18
+      Top = 186
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 22
+      Height = 18
+      Top = 264
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 22
+      Height = 18
+      Top = 342
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+  end
   object DesignFrameActionList: TActionList
     left = 112
     top = 360
@@ -306,6 +357,36 @@ object DesignFrame: TDesignFrame
       Hint = 'Move to first field'
       OnExecute = MoveFirstActionExecute
       ShortCut = 16420
+    end
+    object MovePageUpAction: TAction
+      Category = 'Move'
+      Caption = 'MovePageUpAction'
+      OnExecute = MovePageUpActionExecute
+      ShortCut = 33
+    end
+    object MoveUpAction: TAction
+      Category = 'Move'
+      Caption = 'MoveUpAction'
+      OnExecute = MoveUpActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+TAB'
+      )
+      ShortCut = 38
+    end
+    object MoveDownAction: TAction
+      Category = 'Move'
+      Caption = 'MoveDownAction'
+      OnExecute = MoveDownActionExecute
+      SecondaryShortCuts.Strings = (
+        'TAB'
+      )
+      ShortCut = 40
+    end
+    object MovePageDownAction: TAction
+      Category = 'Move'
+      Caption = 'MovePageDownAction'
+      OnExecute = MovePageDownActionExecute
+      ShortCut = 34
     end
     object MoveLastAction: TAction
       Category = 'Move'
@@ -1910,7 +1991,7 @@ object DesignFrame: TDesignFrame
     }
   end
   object FieldPopUp: TPopupMenu
-    left = 552
+    left = 280
     top = 280
     object EditFieldMenuItem: TMenuItem
       Caption = 'Edit'
@@ -2230,8 +2311,8 @@ object DesignFrame: TDesignFrame
     end
   end
   object DesignerPopup: TPopupMenu
-    left = 552
-    top = 344
+    left = 288
+    top = 360
     object MenuItem1: TMenuItem
       Action = PasteAsLabel
       OnClick = PasteAsLabelExecute
