@@ -42,6 +42,9 @@ var
 
 implementation
 
+uses
+  Main;
+
 function SortFields(Item1, Item2: Pointer): integer;
 var
   Field1: TEpiField absolute Item1;
@@ -73,6 +76,10 @@ begin
   with TEpiDataFile(Sender) do
     Field[NumFields-1].RegisterOnChangeHook(@DataFileFieldChange);
 
+  if EventType = dceName then
+    Caption := 'Documenting: ' + TEpiDataFile(Sender).FileName;
+
+
   ForceUpdate;
 end;
 
@@ -91,9 +98,6 @@ begin
 
   for i := 0 to FDatafile.NumFields - 1 do
     Datafile[i].RegisterOnChangeHook(@DataFileFieldChange);
-
-  Caption := 'Documenting: ' +
-    Datafile.FileName;
 end;
 
 procedure TDatafileDocumentationForm.CloseActionExecute(Sender: TObject);
@@ -110,6 +114,8 @@ constructor TDatafileDocumentationForm.Create(TheOwner: TComponent; aDatafile: T
 begin
   inherited Create(TheOwner);
   Datafile := aDatafile;
+
+  Caption := 'Documenting: ' + MainForm.PageControl1.ActivePage.Caption;
 end;
 
 destructor TDatafileDocumentationForm.Destroy;

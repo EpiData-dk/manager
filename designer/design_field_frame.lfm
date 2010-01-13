@@ -159,6 +159,7 @@ object FieldCreateForm: TFieldCreateForm
       CharCase = ecNormal
       MaxLength = 3
       TabOrder = 2
+      OnEnter = FieldLengthEditEnter
       EditMask = '999;0;_'
       SpaceChar = '_'
     end
@@ -172,6 +173,7 @@ object FieldCreateForm: TFieldCreateForm
       MaxLength = 3
       TabOrder = 3
       Visible = False
+      OnEnter = FieldLengthEditEnter
       EditMask = '999;0;_'
       SpaceChar = '_'
     end

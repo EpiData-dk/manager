@@ -191,7 +191,7 @@ uses
   main, graphics,
   types, math, settings, design_label_form,
   UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils,
-  Clipbrd, UStringUtils, ManagerProcs;
+  Clipbrd, UStringUtils, ManagerProcs, LMessages;
 
 function SortFields(Item1, Item2: Pointer): integer;
 var
@@ -769,6 +769,9 @@ begin
     if TControl(Curr.Data) = EndCtrl then break;
     Curr := ComponentYTree.FindSuccessor(Curr);
   end;
+
+  // This occurs if the last field is selected.
+  if CmpCount = 1 then exit;
 
   // Spacing between "top" point of TEditFields, adjusted for overlapping components.
   Spacing := Max((EndCtrl.Top - StartCtrl.Top) div (CmpCount - 1),
@@ -1485,6 +1488,7 @@ var
   rct: TRect;
   pt: TPoint;
   Dx: Integer;
+  KeyMsg: TLMKey;
 begin
   if Key = VK_RETURN then
   begin
@@ -1533,20 +1537,17 @@ begin
   end;
 
   // Ugly dirty way of capturing shortcuts involving keys.
-  if (ssAlt in Shift) and (Key = VK_S) then
+  // -- send to mainform, it automatically propagetes down through action lists..
+  if Key <> VK_UNKNOWN then
   begin
-    MainForm.SettingsAction.Execute;
-    Key := VK_UNKNOWN;
-  end;
-  if (ssCtrl in Shift) and (Key = VK_N) then
-  begin
-    MainForm.NewDesignFormAction.Execute;
-    Key := VK_UNKNOWN;
-  end;
-  if (ssCtrl in Shift) and (Key = VK_V) then
-  begin
-    PasteAsLabel.Execute;
-    Key := VK_UNKNOWN;
+    KeyMsg.Msg := LM_KEYDOWN;
+    KeyMsg.KeyData := ShortCut(0, Shift);
+    if (ssAlt in Shift) then
+      KeyMsg.KeyData := KeyMsg.KeyData or $20000000;
+    KeyMsg.CharCode := Key;
+    KeyMsg.Result := 0;
+    if MainForm.IsShortcut(KeyMsg) then
+      Key := VK_UNKNOWN;
   end;
 end;
 

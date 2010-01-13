@@ -32,6 +32,7 @@ type
     Panel1: TPanel;
     StatusBar1: TStatusBar;
     procedure CloseActionExecute(Sender: TObject);
+    procedure FieldLengthEditEnter(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
   private
@@ -155,6 +156,15 @@ end;
 procedure TFieldCreateForm.CloseActionExecute(Sender: TObject);
 begin
   CancelBtn.Click;
+end;
+
+procedure TFieldCreateForm.FieldLengthEditEnter(Sender: TObject);
+begin
+  with (Sender as TMaskEdit) do
+  begin
+    // DOES NOT WORK BECAUSE TMASKEDIT IS F*CKED UP!!!
+    SelectAll;
+  end;
 end;
 
 procedure TFieldCreateForm.FormShow(Sender: TObject);

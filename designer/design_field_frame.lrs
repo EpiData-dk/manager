@@ -88,24 +88,25 @@ LazarusResources.Add('TFieldCreateForm','FORMDATA',[
   +#140#0#8'TabOrder'#2#0#0#0#5'TEdit'#9'LabelEdit'#4'Left'#2't'#6'Height'#2#27
   +#3'Top'#2'('#5'Width'#3#140#0#8'TabOrder'#2#1#0#0#9'TMaskEdit'#15'FieldLengt'
   +'hEdit'#4'Left'#2't'#6'Height'#2#27#3'Top'#2'H'#5'Width'#3#140#0#8'CharCase'
-  +#7#8'ecNormal'#9'MaxLength'#2#3#8'TabOrder'#2#2#8'EditMask'#6#7'999;0;_'#9'S'
-  +'paceChar'#6#1'_'#0#0#9'TMaskEdit'#20'FieldDecimalSizeEdit'#4'Left'#2't'#6'H'
-  +'eight'#2#27#3'Top'#2'h'#5'Width'#3#140#0#8'CharCase'#7#8'ecNormal'#7'Enable'
-  +'d'#8#9'MaxLength'#2#3#8'TabOrder'#2#3#7'Visible'#8#8'EditMask'#6#7'999;0;_'
-  +#9'SpaceChar'#6#1'_'#0#0#7'TButton'#5'OkBtn'#4'Left'#2't'#6'Height'#2#25#3'T'
-  +'op'#2'i'#5'Width'#2'<'#7'Anchors'#11#7'akRight'#8'akBottom'#0#7'Caption'#6#2
-  +'Ok'#7'Default'#9#11'ModalResult'#2#1#8'TabOrder'#2#4#0#0#7'TButton'#9'Cance'
-  +'lBtn'#4'Left'#3#197#0#6'Height'#2#25#3'Top'#2'i'#5'Width'#2';'#7'Anchors'#11
-  +#7'akRight'#8'akBottom'#0#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOr'
-  +'der'#2#5#0#0#6'TLabel'#6'Label4'#4'Left'#2#20#6'Height'#2#18#3'Top'#2'p'#5
-  +'Width'#2'B'#7'Caption'#6#9'Decimals:'#11'ParentColor'#8#7'Visible'#8#0#0#6
-  +'TLabel'#6'Label6'#4'Left'#2#8#6'Height'#2#18#3'Top'#3#145#0#5'Width'#2']'#7
-  +'Caption'#6#14'Default value:'#7'Enabled'#8#11'ParentColor'#8#7'Visible'#8#0
-  +#0#5'TEdit'#16'DefaultValueEdit'#4'Left'#2't'#6'Height'#2#27#3'Top'#3#136#0#5
-  +'Width'#3#140#0#7'Enabled'#8#8'TabOrder'#2#6#7'Visible'#8#0#0#0#10'TStatusBa'
-  +'r'#10'StatusBar1'#4'Left'#2#0#6'Height'#2#21#3'Top'#3#140#0#5'Width'#3#14#1
-  +#7'Enabled'#8#6'Panels'#14#0#8'SizeGrip'#8#7'Visible'#8#0#0#11'TActionList'
-  +#11'ActionList1'#4'left'#3#216#0#3'top'#2#16#0#7'TAction'#11'CloseAction'#7
-  +'Caption'#6#11'CloseAction'#9'OnExecute'#7#18'CloseActionExecute'#8'ShortCut'
-  +#2#27#0#0#0#0
+  +#7#8'ecNormal'#9'MaxLength'#2#3#8'TabOrder'#2#2#7'OnEnter'#7#20'FieldLengthE'
+  +'ditEnter'#8'EditMask'#6#7'999;0;_'#9'SpaceChar'#6#1'_'#0#0#9'TMaskEdit'#20
+  +'FieldDecimalSizeEdit'#4'Left'#2't'#6'Height'#2#27#3'Top'#2'h'#5'Width'#3#140
+  +#0#8'CharCase'#7#8'ecNormal'#7'Enabled'#8#9'MaxLength'#2#3#8'TabOrder'#2#3#7
+  +'Visible'#8#7'OnEnter'#7#20'FieldLengthEditEnter'#8'EditMask'#6#7'999;0;_'#9
+  +'SpaceChar'#6#1'_'#0#0#7'TButton'#5'OkBtn'#4'Left'#2't'#6'Height'#2#25#3'Top'
+  +#2'i'#5'Width'#2'<'#7'Anchors'#11#7'akRight'#8'akBottom'#0#7'Caption'#6#2'Ok'
+  +#7'Default'#9#11'ModalResult'#2#1#8'TabOrder'#2#4#0#0#7'TButton'#9'CancelBtn'
+  +#4'Left'#3#197#0#6'Height'#2#25#3'Top'#2'i'#5'Width'#2';'#7'Anchors'#11#7'ak'
+  +'Right'#8'akBottom'#0#7'Caption'#6#6'Cancel'#11'ModalResult'#2#2#8'TabOrder'
+  +#2#5#0#0#6'TLabel'#6'Label4'#4'Left'#2#20#6'Height'#2#18#3'Top'#2'p'#5'Width'
+  +#2'B'#7'Caption'#6#9'Decimals:'#11'ParentColor'#8#7'Visible'#8#0#0#6'TLabel'
+  +#6'Label6'#4'Left'#2#8#6'Height'#2#18#3'Top'#3#145#0#5'Width'#2']'#7'Caption'
+  +#6#14'Default value:'#7'Enabled'#8#11'ParentColor'#8#7'Visible'#8#0#0#5'TEdi'
+  +'t'#16'DefaultValueEdit'#4'Left'#2't'#6'Height'#2#27#3'Top'#3#136#0#5'Width'
+  +#3#140#0#7'Enabled'#8#8'TabOrder'#2#6#7'Visible'#8#0#0#0#10'TStatusBar'#10'S'
+  +'tatusBar1'#4'Left'#2#0#6'Height'#2#21#3'Top'#3#140#0#5'Width'#3#14#1#7'Enab'
+  +'led'#8#6'Panels'#14#0#8'SizeGrip'#8#7'Visible'#8#0#0#11'TActionList'#11'Act'
+  +'ionList1'#4'left'#3#216#0#3'top'#2#16#0#7'TAction'#11'CloseAction'#7'Captio'
+  +'n'#6#11'CloseAction'#9'OnExecute'#7#18'CloseActionExecute'#8'ShortCut'#2#27
+  +#0#0#0#0
 ]);

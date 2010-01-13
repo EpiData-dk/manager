@@ -16,13 +16,6 @@ type
 
   TMainForm = class(TForm)
     Alignmenu: TMenuItem;
-    Image1: TImage;
-    Image2: TImage;
-    Image3: TImage;
-    Image4: TImage;
-    Image5: TImage;
-    Image8: TImage;
-    Image9: TImage;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
@@ -33,7 +26,7 @@ type
     Image6: TImage;
     Image7: TImage;
     MenuItem1: TMenuItem;
-    WorkFlow: TTabSheet;
+    WorkFlowSheet: TTabSheet;
     TabSheet2: TTabSheet;
     ToolsMenu: TMenuItem;
     NewDesignFormAction: TAction;
@@ -59,19 +52,9 @@ type
     procedure DesignBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
-    procedure EditorBtnClick(Sender: TObject);
-    procedure Image1Click(Sender: TObject);
-    procedure Image3Click(Sender: TObject);
-    procedure Image4Click(Sender: TObject);
-    procedure Image5Click(Sender: TObject);
-    procedure Image8Click(Sender: TObject);
-    procedure Image9Click(Sender: TObject);
     procedure NewDesignFormActionExecute(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PageControl1PageChanged(Sender: TObject);
-    procedure Shape1ChangeBounds(Sender: TObject);
-    procedure Shape1MouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
@@ -98,8 +81,9 @@ var
 implementation
 
 uses
-  design_frame, UEpiLog, settings, Clipbrd,
-  InterfaceBase, LCLType, editormain;
+  UEpiLog, settings, Clipbrd,
+  InterfaceBase, LCLType, editormain,
+  workflow_frame, design_frame;
 
 
 { TMainForm }
@@ -170,6 +154,7 @@ begin
   StatusBar1.Hint := ManagerSettings.WorkingDirUTF8;
   StatusBar1.ShowHint := true;
 
+  // Progress bar.
   ProgressBarMain := TProgressBar.Create(Self);
   {$IFDEF MSWINDOWS}
     StatusBar1.Panels[3].Style := psOwnerDraw;
@@ -178,8 +163,7 @@ begin
     PbStyle := WidgetSet.GetWindowLong(ProgressBarMain.Handle, GWL_EXSTYLE);
     PbStyle := PbStyle - WS_EX_STATICEDGE;
     WidgetSet.SetWindowLong(ProgressBarMain.Handle, GWL_EXSTYLE, PbStyle);
-  {$ENDIF}
-  {$IFDEF UNIX}
+  {$ELSE}
     ProgressBarMain.Parent := ProgressPanel;
     ProgressBarMain.Align := alNone;
     ProgressBarMain.Left := EditorBtn.Left + EditorBtn.Width + 10;
@@ -189,6 +173,15 @@ begin
   {$ENDIF}
   ProgressBarMain.Smooth := true;
   ProgressBarMain.Visible := false;
+
+  // WorkFlowSheet sheet.
+  PageControl1.Options := PageControl1.Options + [nboShowCloseButtons];
+  PageControl1.OnCloseTabClicked := @CloseTab;
+  with TWorkFlowFrame.Create(WorkFlowSheet) do
+  begin
+    Parent := WorkFlowSheet;
+    Align := alClient;
+  end;
 end;
 
 
@@ -204,18 +197,16 @@ begin
   TabSheet.Caption := 'Untitled';
   if TabNameCount > 1 then
     TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount) + ')';
-  PageControl1.ActivePage := TabSheet;
 
   if PageControl1.PageCount >= 1 then
-  begin
     PageControl1.ShowTabs := true;
-    PageControl1.Options := PageControl1.Options + [nboShowCloseButtons];
-    PageControl1.OnCloseTabClicked := @CloseTab;
-  end;
+
   Frame := TDesignFrame.Create(TabSheet);
   Frame.Name := 'Frame' + IntToStr(TabNameCount);
   Frame.Align := alClient;
   Frame.Parent := TabSheet;
+
+  PageControl1.ActivePage := TabSheet;
 
   Inc(TabNameCount);
 end;
@@ -228,7 +219,8 @@ begin
   AllowChange := true;
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
-  TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asSuspended;
+  if PageControl1.ActivePage.Components[0] is TDesignFrame then
+    TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asSuspended;
 end;
 
 procedure TMainForm.PageControl1PageChanged(Sender: TObject);
@@ -240,62 +232,15 @@ begin
   //   actionlist is created with state asNormal by default.
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
-  TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asNormal;
-  TDesignFrame(PageControl1.ActivePage.Components[0]).UpdateNonInteractiveVisuals;
-end;
-
-procedure TMainForm.Shape1ChangeBounds(Sender: TObject);
-begin
-         ShowOnStatusBar('button 1 clicked', 0);
-end;
-
-procedure TMainForm.Shape1MouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-begin
-        ShowOnStatusBar('button 1 clicked', 0);
-end;
-
-procedure TMainForm.EditorBtnClick(Sender: TObject);
-begin
-  ShowOnStatusBar('GCP not ready yet', 0);
-end;
-
-procedure TMainForm.Image1Click(Sender: TObject);
-begin
-      ShowOnStatusBar('button 1 clicked', 0);
-end;
-
-procedure TMainForm.Image3Click(Sender: TObject);
-begin
-     ShowOnStatusBar('button 4 extend definitions clicked', 0);
-end;
-
-procedure TMainForm.Image4Click(Sender: TObject);
-begin
-          ShowOnStatusBar('button 3 - modify clicked', 0);
-end;
-
-procedure TMainForm.Image5Click(Sender: TObject);
-begin
-    ShowOnStatusBar('button 5 documentation clicked', 0);
-end;
-
-procedure TMainForm.Image8Click(Sender: TObject);
-begin
-   ShowOnStatusBar('button 6 editor clicked', 0);
-  if not Assigned(EditorForm) then
-    EditorForm := TEditorForm.Create(Self);
-  EditorForm.Show;
-end;
-
-procedure TMainForm.Image9Click(Sender: TObject);
-begin
-  ShowOnStatusBar('button 1 - do this before defining forms and entry', 0);
+  if PageControl1.ActivePage.Components[0] is TDesignFrame then
+  begin
+    TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asNormal;
+    TDesignFrame(PageControl1.ActivePage.Components[0]).UpdateNonInteractiveVisuals;
+  end else
+    ;
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
-var
-  mr : integer;
 begin
   ShowOnStatusBar('Help System Not Ready', 0);
 end;
@@ -315,6 +260,7 @@ begin
   if SettingsForm.ShowModal = mrCancel then exit;
 
   for i := 0 to PageControl1.PageCount -1 do
+  if PageControl1.Pages[i].Controls[0] is TDesignFrame then
     TDesignFrame(PageControl1.Pages[i].Controls[0]).UpdateAllFields;
 end;
 
@@ -361,17 +307,19 @@ procedure TMainForm.CloseTab(Sender: TObject);
 begin
   if not (Sender is TTabSheet) then exit;
 
+
   {$IFNDEF EPI_DEBUG}
-  if (TDesignFrame(PageControl1.ActivePage.Controls[0]).Modified) and
+  if (PageControl1.ActivePage.Components[0] is TDesignFrame) and
+     (TDesignFrame(PageControl1.ActivePage.Controls[0]).Modified) and
      (MessageDlg('Dataform was modified since last save.' +
                  LineEnding + 'Close Form - and loose changes ?', mtWarning, mbYesNo, 0) = mrNo) then
     Exit;
   {$ENDIf}
 
-  PageControl1.ActivePage := PageControl1.FindNextPage(TTabSheet(Sender), True, True);
+  PageControl1.ActivePage := PageControl1.FindNextPage(TTabSheet(Sender), False, True);
   (Sender as TTabSheet).Free;
 
-  if PageControl1.PageCount < 1 then
+  if (PageControl1.PageCount < 1) or ((PageControl1.PageCount = 1) and (PageControl1.ActivePage = WorkFlowSheet)) then
   begin
     PageControl1.ShowTabs := false;;
     ShowOnStatusBar('', 1);

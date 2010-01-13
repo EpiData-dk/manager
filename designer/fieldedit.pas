@@ -157,7 +157,6 @@ begin
         begin
           // Edit:
           FFieldNameLabel.Caption := FieldName;
-//          Text := FieldName;
           Top  := FieldY;
           Left := FieldX;
           Width := TDesignFrame(Parent).Canvas.TextWidth('W') * FieldLength;
@@ -166,11 +165,7 @@ begin
           Self.FVariableLabel.Top  := LabelY;
           Self.FVariableLabel.Caption := VariableLabel;
         end;
-      fceName:
-        begin
-          FFieldNameLabel.Caption := FieldName;
-//          Text := FieldName;
-        end;
+      fceName:   FFieldNameLabel.Caption := FieldName;
       fceLength: Width := TDesignFrame(Parent).Canvas.TextWidth('W') * FieldLength;
       fceDecimals: ;
       fceFX: Left := FieldX;
@@ -232,7 +227,6 @@ begin
   FField := AValue;
   Field.RegisterOnChangeHook(@OnFieldChange);
 
-//  Text   := Field.FieldName;
   Top    := Field.FieldY;
   Left   := Field.FieldX;
   Width  := TDesignFrame(Parent).Canvas.TextWidth('W') * Field.FieldLength;
@@ -305,7 +299,6 @@ begin
   else
     BorderStyle := bsNone;
 
-
   // Experimental:
   FSelectCorner := nil;
 end;
@@ -323,7 +316,6 @@ end;
 
 procedure TFieldEdit.ForceVisualUpdate;
 begin
-  Text := Field.FieldName;
   Left := Field.FieldX;
   Top  := Field.FieldY;
   if Assigned(Parent) then

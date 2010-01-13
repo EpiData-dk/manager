@@ -15,7 +15,8 @@ uses
   Controls,
   {$ENDIF EPI_DEBUG}
   datafile_documentation_form, design_autoalign_form, design_field_frame,
-  design_frame, design_label_form, fieldedit, editormain, managerprocs;
+  design_frame, design_label_form, fieldedit, editormain, managerprocs, 
+workflow_frame;
 
 {$IFDEF WINDOWS}
   {$R epidatamanager.rc}
