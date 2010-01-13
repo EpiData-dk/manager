@@ -25,19 +25,19 @@ object SettingsForm: TSettingsForm
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 234
-      ClientWidth = 200
+      ClientHeight = 243
+      ClientWidth = 198
       object Label1: TLabel
         Left = 5
-        Height = 18
+        Height = 14
         Top = 17
-        Width = 73
+        Width = 54
         Caption = 'Field Prefix'
         ParentColor = False
       end
       object PrefixEdit: TEdit
         Left = 119
-        Height = 27
+        Height = 21
         Top = 8
         Width = 75
         TabOrder = 0
@@ -53,23 +53,23 @@ object SettingsForm: TSettingsForm
       end
       object Label3: TLabel
         Left = 5
-        Height = 18
+        Height = 14
         Top = 46
-        Width = 140
+        Width = 101
         Caption = 'Default Field Position'
         ParentColor = False
       end
       object Label2: TLabel
         Left = 5
-        Height = 18
+        Height = 14
         Top = 75
-        Width = 115
+        Width = 83
         Caption = 'Show Fieldnames'
         ParentColor = False
       end
       object DefaultRightPosEdit: TMaskEdit
         Left = 154
-        Height = 27
+        Height = 21
         Top = 40
         Width = 40
         CharCase = ecNormal
@@ -94,12 +94,12 @@ object SettingsForm: TSettingsForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 53
+        ClientHeight = 54
         ClientWidth = 185
         TabOrder = 5
         object FieldNamingAutoRadio: TRadioButton
           Left = 6
-          Height = 20
+          Height = 21
           Top = 6
           Width = 173
           Caption = 'Automatic'
@@ -109,7 +109,7 @@ object SettingsForm: TSettingsForm
         object FieldNamingFirstWordRadio: TRadioButton
           Left = 6
           Height = 21
-          Top = 26
+          Top = 27
           Width = 173
           Caption = 'First word'
           Checked = True
@@ -120,9 +120,9 @@ object SettingsForm: TSettingsForm
       end
       object Label8: TLabel
         Left = 5
-        Height = 18
+        Height = 14
         Top = 104
-        Width = 118
+        Width = 89
         Caption = 'Show field border:'
         ParentColor = False
       end
@@ -136,18 +136,18 @@ object SettingsForm: TSettingsForm
       end
       object Label14: TLabel
         Left = 5
-        Height = 18
+        Height = 14
         Top = 136
-        Width = 119
+        Width = 90
         Caption = 'Default date type:'
         ParentColor = False
       end
       object DefaultDateCombo: TComboBox
         Left = 125
-        Height = 31
+        Height = 21
         Top = 128
         Width = 69
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 0
         Items.Strings = (
           'dmy'
@@ -161,8 +161,8 @@ object SettingsForm: TSettingsForm
     end
     object LengthSheet: TTabSheet
       Caption = 'Field Length'
-      ClientHeight = 234
-      ClientWidth = 200
+      ClientHeight = 243
+      ClientWidth = 198
       object Label9: TLabel
         Left = 5
         Height = 18
@@ -280,15 +280,15 @@ object SettingsForm: TSettingsForm
     end
     object AdvSheet: TTabSheet
       Caption = 'Advanced'
-      ClientHeight = 234
-      ClientWidth = 200
+      ClientHeight = 243
+      ClientWidth = 198
       object GroupBox1: TGroupBox
         Left = 5
         Height = 82
         Top = 0
         Width = 190
         Caption = 'Snapping:'
-        ClientHeight = 78
+        ClientHeight = 64
         ClientWidth = 186
         TabOrder = 0
         object SnapFieldsChkBox: TCheckBox
@@ -328,7 +328,7 @@ object SettingsForm: TSettingsForm
         Top = 88
         Width = 190
         Caption = 'Vertical distances:'
-        ClientHeight = 111
+        ClientHeight = 97
         ClientWidth = 186
         TabOrder = 1
         object Label5: TLabel

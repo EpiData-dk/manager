@@ -125,12 +125,12 @@ var
     SnapFields:            true;
     SnappingThresHold:     10;
     SpaceBtwFieldField:    10;
-    SpaceBtwFieldLabel:    10;
-    SpaceBtwLabelLabel:    10;
+    SpaceBtwFieldLabel:    25;
+    SpaceBtwLabelLabel:    5;
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;
-    WorkingDirUTF8:        '';
+    WorkingDirUTF8:        '\data';
     LabelNamePrefix:       'label_';
   );
 

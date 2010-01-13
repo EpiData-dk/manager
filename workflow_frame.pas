@@ -13,7 +13,6 @@ type
 
   TWorkFlowFrame = class(TFrame)
     BackgroundImage: TImage;
-    PrepareBtnImage: TImage;
     DesignBtnImage: TImage;
     ModifyBtnImage: TImage;
     ExtendBtnImage: TImage;

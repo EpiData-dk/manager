@@ -93,13 +93,13 @@ var
   Frame: TFrame;
   TabSheet: TTabSheet;
 begin
-  ShowOnStatusBar('Click toolbar to add fields or read files', 0);
+  ShowOnStatusBar('Click buttons or use menu', 0);
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
   TabSheet.Caption := 'Untitled';
   if TabNameCount > 1 then
-    TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount) + ')';
+    TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount-1) + ')';
   PageControl1.ActivePage := TabSheet;
 
   if PageControl1.PageCount >= 1 then
@@ -196,7 +196,7 @@ begin
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
   TabSheet.Caption := 'Untitled';
   if TabNameCount > 1 then
-    TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount) + ')';
+    TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount-1) + ')';
 
   if PageControl1.PageCount >= 1 then
     PageControl1.ShowTabs := true;

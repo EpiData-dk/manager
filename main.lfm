@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 515
-  Height = 784
-  Top = 239
-  Width = 1082
+  Left = 488
+  Height = 600
+  Top = 143
+  Width = 800
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 759
-  ClientWidth = 1082
+  ClientHeight = 578
+  ClientWidth = 800
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -16,10 +16,10 @@ object MainForm: TMainForm
     Left = 0
     Height = 44
     Top = 0
-    Width = 1082
+    Width = 800
     Align = alTop
     ClientHeight = 44
-    ClientWidth = 1082
+    ClientWidth = 800
     TabOrder = 0
     Visible = False
     object DesignBtn: TBitBtn
@@ -153,9 +153,9 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 738
-    Width = 1082
+    Height = 20
+    Top = 558
+    Width = 800
     Panels = <    
       item
         Width = 300
@@ -178,9 +178,9 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 694
+    Height = 514
     Top = 44
-    Width = 1082
+    Width = 800
     ActivePage = WorkFlowSheet
     Align = alClient
     ParentShowHint = False
