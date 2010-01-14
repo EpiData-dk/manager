@@ -22,6 +22,18 @@
   <defs
      id="defs3701">
     <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3208">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3210" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3212" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient700">
       <stop
          style="stop-color:#0063c3;stop-opacity:1.0000000;"
@@ -49,6 +61,24 @@
        inkscape:vp_z="744.09448 : 526.18109 : 1"
        inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
        id="perspective3707" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient700"
+       id="linearGradient3206"
+       x1="78.750183"
+       y1="261.5625"
+       x2="96.25"
+       y2="261.5625"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3208"
+       id="linearGradient3214"
+       x1="78.75018"
+       y1="261.5625"
+       x2="96.25"
+       y2="261.5625"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -60,16 +90,16 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="594.85267"
-     inkscape:cy="268.07355"
+     inkscape:zoom="4"
+     inkscape:cx="487.32472"
+     inkscape:cy="223.50368"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="640"
-     inkscape:window-height="675"
-     inkscape:window-x="88"
-     inkscape:window-y="91" />
+     inkscape:window-width="1280"
+     inkscape:window-height="774"
+     inkscape:window-x="0"
+     inkscape:window-y="0" />
   <metadata
      id="metadata3704">
     <rdf:RDF>
@@ -86,29 +116,29 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       transform="matrix(2.0564493,0,0,2.4519122,474.71222,190.96399)"
+       transform="matrix(2.0564493,0,0,2.4519122,474.96222,190.83899)"
        sodipodi:ry="8.125"
        sodipodi:rx="9.6875"
        sodipodi:cy="260.625"
        sodipodi:cx="64.0625"
        d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
        id="path215"
-       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1.18292999"
+       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ececec;stroke-width:1.18292999000000010;stroke-opacity:1"
        sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkel1.png"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       transform="matrix(2.0564493,0,0,2.4519122,474.71222,190.96399)"
+       transform="matrix(2.0564493,0,0,2.4519122,474.83722,190.83899)"
        sodipodi:ry="8.125"
        sodipodi:rx="9.6875"
        sodipodi:cy="260.625"
        sodipodi:cx="64.0625"
        d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
        id="path1491"
-       style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#000000;stroke-width:1.18292999"
+       style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:0.66800511;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkel1.png"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -124,7 +154,7 @@
        id="path953"
        style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ffffff;stroke-width:1pt;stroke-opacity:0.5"
        sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkel1.png"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
@@ -140,23 +170,137 @@
        id="path954"
        style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-dasharray:none;stroke-opacity:0.5"
        sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkel1.png"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(2.0564493,0,0,2.4519122,411.31673,190.59393)"
+       sodipodi:ry="8.125"
+       sodipodi:rx="9.6875"
+       sodipodi:cy="260.625"
+       sodipodi:cx="64.0625"
+       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+       id="path3246"
+       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ececec;stroke-width:1.18292999;stroke-opacity:1"
+       sodipodi:type="arc"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(2.0564493,0,0,2.4519122,411.19173,190.59393)"
+       sodipodi:ry="8.125"
+       sodipodi:rx="9.6875"
+       sodipodi:cy="260.625"
+       sodipodi:cx="64.0625"
+       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+       id="path3248"
+       style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:0.66800511;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:type="arc"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.19846668pt;stroke-opacity:0.5"
+       d="M 542.95502,811.80351 C 538.41665,811.8187 533.8911,813.59615 530.43087,817.07854 C 523.51341,824.04027 523.48099,835.31893 530.33378,842.32101 L 530.30142,842.35338 C 537.30139,849.25193 548.56654,849.21017 555.51153,842.25629 C 562.47521,835.2837 562.46241,823.95863 555.51153,816.98145 C 555.50584,816.97579 555.48488,816.98711 555.47917,816.98145 C 551.99821,813.53366 547.48596,811.78832 542.95502,811.80351 z"
+       id="path3250"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(2.0564493,0,0,2.4519122,352.25872,190.83257)"
+       sodipodi:ry="8.125"
+       sodipodi:rx="9.6875"
+       sodipodi:cy="260.625"
+       sodipodi:cx="64.0625"
+       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+       id="path2390"
+       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ececec;stroke-width:1.18292999;stroke-opacity:1"
+       sodipodi:type="arc"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(2.0564493,0,0,2.4519122,352.13372,190.83257)"
+       sodipodi:ry="8.125"
+       sodipodi:rx="9.6875"
+       sodipodi:cy="260.625"
+       sodipodi:cx="64.0625"
+       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+       id="path2392"
+       style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:0.66800511;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:type="arc"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(-1.5026037,1.5026037,-1.5026037,-1.5026037,1002.1888,1085.4627)"
+       sodipodi:open="true"
+       sodipodi:end="3.134937"
+       sodipodi:start="0"
+       sodipodi:ry="8.125"
+       sodipodi:rx="8.125"
+       sodipodi:cy="257.5"
+       sodipodi:cx="87.5"
+       d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
+       id="path2394"
+       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:url(#linearGradient3206);stroke-width:1pt;stroke-opacity:0.50000000000000000;fill-opacity:1"
+       sodipodi:type="arc"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(1.5026037,-1.5026037,1.5026037,1.5026037,-34.506177,574.75884)"
+       sodipodi:open="true"
+       sodipodi:end="3.134937"
+       sodipodi:start="0"
+       sodipodi:ry="8.125"
+       sodipodi:rx="8.125"
+       sodipodi:cy="257.5"
+       sodipodi:cx="87.5"
+       d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
+       id="path2396"
+       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:url(#linearGradient3214);stroke-width:1.25000000000000000;stroke-dasharray:none;stroke-opacity:0.50000000000000000"
+       sodipodi:type="arc"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <flowRoot
        xml:space="preserve"
-       id="flowRoot3754"
-       style="font-size:25px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       transform="translate(33.941126,22.273864)"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkel1.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"><flowRegion
-         id="flowRegion3756"><rect
-           id="rect3758"
-           width="102.53049"
-           height="84.145706"
-           x="565.33185"
-           y="796.7431"
-           style="font-size:25px;fill:#ffffff" /></flowRegion><flowPara
-         id="flowPara3760">1</flowPara></flowRoot>  </g>
+       id="flowRoot2398"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
+       transform="matrix(0.917839,0,0,0.917839,64.778029,66.865491)"><flowRegion
+         id="flowRegion2400"><rect
+           id="rect2402"
+           width="52"
+           height="27"
+           x="439"
+           y="773.36218"
+           style="font-size:10px" /></flowRegion><flowPara
+         id="flowPara2404">mouse </flowPara><flowPara
+         id="flowPara2406">over </flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2408"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
+       transform="matrix(0.917839,0,0,0.917839,126.55879,65.52806)"><flowRegion
+         id="flowRegion2410"><rect
+           id="rect2412"
+           width="52"
+           height="27"
+           x="439"
+           y="773.36218"
+           style="font-size:10px" /></flowRegion><flowPara
+         id="flowPara2414"> </flowPara><flowPara
+         id="flowPara2416">down</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2418"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
+       transform="matrix(0.917839,0,0,0.917839,189.05879,67.52806)"><flowRegion
+         id="flowRegion2420"><rect
+           id="rect2422"
+           width="52"
+           height="27"
+           x="439"
+           y="773.36218"
+           style="font-size:10px" /></flowRegion><flowPara
+         id="flowPara2426">u </flowPara></flowRoot>  </g>
 </svg>
