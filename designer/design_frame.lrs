@@ -5,8 +5,8 @@ LazarusResources.Add('TDesignFrame','FORMDATA',[
   +#0#5'Width'#3'D'#3#18'HorzScrollBar.Page'#3'C'#3#18'VertScrollBar.Page'#3'3'
   +#2#19'VertScrollBar.Range'#2#26#12'ClientHeight'#3'6'#2#11'ClientWidth'#3'D'
   +#3#5'Color'#7#9'clBtnFace'#11'ParentColor'#8#14'ParentShowHint'#8#8'TabOrder'
-  +#2#0#10'DesignLeft'#3#174#2#9'DesignTop'#3'^'#1#0#8'TToolBar'#12'FieldToolBa'
-  +'r'#4'Left'#2#0#6'Height'#2#26#3'Top'#2#0#5'Width'#3'D'#3#12'ButtonHeight'#2
+  +#2#0#10'DesignLeft'#3#159#2#9'DesignTop'#3#130#1#0#8'TToolBar'#12'FieldToolB'
+  +'ar'#4'Left'#2#0#6'Height'#2#26#3'Top'#2#0#5'Width'#3'D'#3#12'ButtonHeight'#2
   +#24#11'ButtonWidth'#2#24#7'Caption'#6#12'FieldToolBar'#5'Color'#7#9'clBtnFac'
   +'e'#11'EdgeBorders'#11#5'ebTop'#8'ebBottom'#0#9'EdgeInner'#7#6'esNone'#9'Edg'
   +'eOuter'#7#8'esRaised'#6'Images'#7#21'FieldToolBarImageList'#11'ParentColor'

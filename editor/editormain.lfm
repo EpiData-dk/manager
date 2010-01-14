@@ -1,7 +1,7 @@
 object EditorForm: TEditorForm
-  Left = 631
+  Left = 633
   Height = 570
-  Top = 342
+  Top = 341
   Width = 826
   ActiveControl = SynEditor
   Caption = 'Editor'
@@ -10,6 +10,7 @@ object EditorForm: TEditorForm
   Menu = EditorMenu
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
+  Position = poMainFormCenter
   ShowInTaskBar = stAlways
   LCLVersion = '0.9.29'
   inline SynEditor: TSynEdit

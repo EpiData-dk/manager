@@ -220,10 +220,6 @@ var
 begin
   // This is the same item and result should
   // always be 0.
-  WriteLn(Format('Items: %p - %p', [Item1, Item2]));
-  Writeln(Format('Compare: %s - %s',
-    [(Ctrl1 as IFieldControl).Field.FieldName, (Ctrl2 as IFieldControl).Field.FieldName])
-  );
   Result := Item1 - Item2;
   if Result = 0 then
     Exit;
@@ -1136,17 +1132,13 @@ end;
 procedure TDesignFrame.DeleteFieldMenuItemClick(Sender: TObject);
 var
   TmpField: TEpiField;
+  TmpCtrl: TControl;
 begin
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: A');
   if not Assigned(SelectedControl) then exit;
+  TmpCtrl := SelectedControl;
 
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: B');
-  if (SelectedControl is TFieldEdit) then
-    TmpField := TFieldEdit(SelectedControl).Field
-  else
-    TmpField := TFieldLabel(SelectedControl).Field;
+  TmpField := (TmpCtrl as IFieldControl).Field;
 
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: C');
   {$IFNDEF EPI_DEBUG}
   if (TmpField.FieldType <> ftQuestion) and (TmpField.Size > 0) and
      (MessageDlg('Field contains data.' + LineEnding +
@@ -1154,17 +1146,11 @@ begin
     exit;
   {$ENDIF}
 
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: D');
-  DesignerBox.RemoveControl(SelectedControl);
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: E');
-  ComponentYTree.Remove(SelectedControl);
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: F');
-  ComponentXTree.Remove(SelectedControl);
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: G');
-  FreeAndNil(SelectedControl);
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: H');
+  DesignerBox.RemoveControl(TmpCtrl);
+  ComponentYTree.Remove(TmpCtrl);
+  ComponentXTree.Remove(TmpCtrl);
+  FreeAndNil(TmpCtrl);
   ActiveDatafile.RemoveField(TmpField, true);
-  Writeln('TDesignFrame.DeleteFieldMenuItemClick: I');
   Modified := true;
 end;
 
