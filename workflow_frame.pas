@@ -20,9 +20,11 @@ type
     AdvBtnImage: TImage;
     BgPanel: TPanel;
     procedure FrameResize(Sender: TObject);
-    procedure PrepareBtnImageClick(Sender: TObject);
   private
     { private declarations }
+    CircleIdleStream: TMemoryStream;
+    CircleOverStrean: TMemoryStream;
+    CircleDownStream: TMemoryStream;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -41,14 +43,16 @@ begin
   BgPanel.Top := (Height div 2) - (BgPanel.Height div 2);
 end;
 
-procedure TWorkFlowFrame.PrepareBtnImageClick(Sender: TObject);
-begin
-  // shellexecute
-end;
-
 constructor TWorkFlowFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+
+{  CircleIdleStream := TMemoryStream.Create;
+  CircleIdleStream.LoadFromFile('images/circleidle.png');
+  CircleOverStrean := TMemoryStream.Create;
+  CircleOverStrean.LoadFromFile('images/circleover.png');
+  CircleDownStream := TMemoryStream.Create;
+  CircleDownStream.LoadFromFile('images/circledown.png');     }
   DesignBtnImage.OnClick := MainForm.NewDataFormBtn.OnClick;
   AdvBtnImage.OnClick := MainForm.EditorBtn.OnClick;
 end;

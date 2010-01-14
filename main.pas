@@ -128,11 +128,12 @@ begin
   TmpMod := false;
   for i := 0 to PageControl1.PageCount -1 do
   begin
-    if TDesignFrame(PageControl1.Pages[i].Controls[0]).Modified then
-    begin
-      TmpMod := true;
-      Idx := i;
-    end;
+    if PageControl1.Pages[i].Controls[0] is TDesignFrame then
+      if TDesignFrame(PageControl1.Pages[i].Controls[0]).Modified then
+      begin
+        TmpMod := true;
+        Idx := i;
+      end;
   end;
 
   if TmpMod and (MessageDlg('Dataform was modified since last save.' +
@@ -173,6 +174,11 @@ begin
   {$ENDIF}
   ProgressBarMain.Smooth := true;
   ProgressBarMain.Visible := false;
+
+  {$IFNDEF EPI_DEBUG}
+  Self.Width := 800;
+  Self.Height := 600;
+  {$ENDIF}
 
   // WorkFlowSheet sheet.
   PageControl1.Options := PageControl1.Options + [nboShowCloseButtons];

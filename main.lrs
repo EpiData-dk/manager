@@ -1,13 +1,13 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TMainForm','FORMDATA',[
-  'TPF0'#9'TMainForm'#8'MainForm'#4'Left'#3#232#1#6'Height'#3'X'#2#3'Top'#3#143
-  +#0#5'Width'#3' '#3#13'ActiveControl'#7#13'ProgressPanel'#7'Caption'#6'!EpiDa'
-  +'ta Project and Data Manager '#12'ClientHeight'#3'B'#2#11'ClientWidth'#3' '#3
+  'TPF0'#9'TMainForm'#8'MainForm'#4'Left'#3#187#1#6'Height'#3#242#2#3'Top'#3#0#1
+  +#5'Width'#3'.'#4#13'ActiveControl'#7#13'ProgressPanel'#7'Caption'#6'!EpiData'
+  +' Project and Data Manager '#12'ClientHeight'#3#217#2#11'ClientWidth'#3'.'#4
   +#4'Menu'#7#12'MainFormMenu'#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'
   +#7#10'FormCreate'#8'Position'#7#14'poScreenCenter'#10'LCLVersion'#6#6'0.9.29'
   +#0#6'TPanel'#13'ProgressPanel'#4'Left'#2#0#6'Height'#2','#3'Top'#2#0#5'Width'
-  +#3' '#3#5'Align'#7#5'alTop'#12'ClientHeight'#2','#11'ClientWidth'#3' '#3#8'T'
+  +#3'.'#4#5'Align'#7#5'alTop'#12'ClientHeight'#2','#11'ClientWidth'#3'.'#4#8'T'
   +'abOrder'#2#0#7'Visible'#8#0#7'TBitBtn'#9'DesignBtn'#19'AnchorSideLeft.Side'
   +#7#9'asrBottom'#4'Left'#2#8#6'Height'#2#28#4'Hint'#6#222'Define new data str'
   +'uctures'#13#10'Modify existing data structures'#13#10'   rename fields'#13
@@ -62,16 +62,16 @@ LazarusResources.Add('TMainForm','FORMDATA',[
   +'parent'#9#0#0#11'TToolButton'#11'OpenToolBtn'#4'Left'#2'<'#3'Top'#2#1#0#0#11
   +'TToolButton'#14'NewDataFormBtn'#4'Left'#2#29#3'Top'#2#1#6'Action'#7#19'NewD'
   +'esignFormAction'#0#0#0#10'TStatusBar'#10'StatusBar1'#4'Left'#2#0#6'Height'#2
-  +#20#3'Top'#3'.'#2#5'Width'#3' '#3#6'Panels'#14#1#5'Width'#3','#1#0#1#5'Width'
-  +#2'd'#0#1#5'Width'#3#150#0#0#1#5'Width'#2'd'#0#1#5'Width'#2'd'#0#0#11'Simple'
-  +'Panel'#8#10'OnDblClick'#7#18'StatusBar1DblClick'#11'OnDrawPanel'#7#19'Statu'
-  ,'sBar1DrawPanel'#0#0#12'TPageControl'#12'PageControl1'#4'Left'#2#0#6'Height'
-  +#3#2#2#3'Top'#2','#5'Width'#3' '#3#10'ActivePage'#7#13'WorkFlowSheet'#5'Alig'
-  +'n'#7#8'alClient'#14'ParentShowHint'#8#8'ShowHint'#9#8'ShowTabs'#8#8'TabInde'
-  +'x'#2#0#8'TabOrder'#2#2#10'OnChanging'#7#20'PageControl1Changing'#13'OnPageC'
-  +'hanged'#7#23'PageControl1PageChanged'#0#9'TTabSheet'#13'WorkFlowSheet'#7'Ca'
-  +'ption'#6#9'Work Flow'#10'Font.Color'#7#9'clSkyBlue'#10'ParentFont'#8#0#0#0#9
-  +'TMainMenu'#12'MainFormMenu'#4'left'#3#192#1#3'top'#3'x'#1#0#9'TMenuItem'#8
+  +#21#3'Top'#3#196#2#5'Width'#3'.'#4#6'Panels'#14#1#5'Width'#3','#1#0#1#5'Widt'
+  +'h'#2'd'#0#1#5'Width'#3#150#0#0#1#5'Width'#2'd'#0#1#5'Width'#2'd'#0#0#11'Sim'
+  +'plePanel'#8#10'OnDblClick'#7#18'StatusBar1DblClick'#11'OnDrawPanel'#7#19'St'
+  ,'atusBar1DrawPanel'#0#0#12'TPageControl'#12'PageControl1'#4'Left'#2#0#6'Heig'
+  +'ht'#3#152#2#3'Top'#2','#5'Width'#3'.'#4#10'ActivePage'#7#13'WorkFlowSheet'#5
+  +'Align'#7#8'alClient'#14'ParentShowHint'#8#8'ShowHint'#9#8'ShowTabs'#8#8'Tab'
+  +'Index'#2#0#8'TabOrder'#2#2#10'OnChanging'#7#20'PageControl1Changing'#13'OnP'
+  +'ageChanged'#7#23'PageControl1PageChanged'#0#9'TTabSheet'#13'WorkFlowSheet'#7
+  +'Caption'#6#9'Work Flow'#10'Font.Color'#7#9'clSkyBlue'#10'ParentFont'#8#0#0#0
+  +#9'TMainMenu'#12'MainFormMenu'#4'left'#3#192#1#3'top'#3'x'#1#0#9'TMenuItem'#8
   +'FileMenu'#7'Caption'#6#5'&File'#4'Hint'#6#4'Exit'#0#9'TMenuItem'#9'MenuItem'
   +'2'#7'Caption'#6#9'File Open'#7'OnClick'#7#26'NewDesignFormActionExecute'#0#0
   +#9'TMenuItem'#9'MenuItem3'#7'Caption'#6#13'New Data file'#7'OnClick'#7#26'Ne'

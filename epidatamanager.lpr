@@ -4,11 +4,14 @@ program epidatamanager;
 {$mode objfpc}{$H+}
 
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads,
-  {$ENDIF}{$ENDIF}
+  {$IFDEF UNIX}
+    {$IFDEF UseCThreads}
+    cthreads,
+    {$ENDIF}
+    cwstring,
+  {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, LResources, main,
+  Forms, main,
   settings,
   {$IFNDEF EPI_DEBUG}
   warning,
@@ -16,18 +19,17 @@ uses
   {$ENDIF EPI_DEBUG}
   datafile_documentation_form, design_autoalign_form, design_field_frame,
   design_frame, design_label_form, fieldedit, editormain, managerprocs, 
-workflow_frame;
+  workflow_frame;
 
-{$IFDEF WINDOWS}
-  {$R epidatamanager.rc}
-{$ENDIF}
 
 {$IFNDEF EPI_DEBUG}
 var
   mr: integer;
 {$ENDIF}
+
+{$R epidatamanager.res}
+
 begin
-  {$I epidatamanager.lrs}
   Application.Initialize;
   {$IFNDEF EPI_DEBUG}
   Application.CreateForm(TWarningForm, WarningForm);
@@ -39,4 +41,3 @@ begin
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.
-
