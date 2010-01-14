@@ -79,6 +79,24 @@
        x2="96.25"
        y2="261.5625"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient700"
+       id="linearGradient3211"
+       gradientUnits="userSpaceOnUse"
+       x1="78.750183"
+       y1="261.5625"
+       x2="96.25"
+       y2="261.5625" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3208"
+       id="linearGradient3213"
+       gradientUnits="userSpaceOnUse"
+       x1="78.75018"
+       y1="261.5625"
+       x2="96.25"
+       y2="261.5625" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -90,9 +108,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="487.32472"
-     inkscape:cy="223.50368"
+     inkscape:zoom="4.6669231"
+     inkscape:cx="554.07623"
+     inkscape:cy="230.13725"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -115,79 +133,80 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <path
-       transform="matrix(2.0564493,0,0,2.4519122,474.96222,190.83899)"
-       sodipodi:ry="8.125"
-       sodipodi:rx="9.6875"
-       sodipodi:cy="260.625"
-       sodipodi:cx="64.0625"
-       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
-       id="path215"
-       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ececec;stroke-width:1.18292999000000010;stroke-opacity:1"
-       sodipodi:type="arc"
+    <g
+       id="g3233"
        inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+       inkscape:export-ydpi="90">
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+         sodipodi:type="arc"
+         style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#7a7a7a;stroke-width:1.18292999;stroke-opacity:1"
+         id="path3205"
+         d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+         sodipodi:cx="64.0625"
+         sodipodi:cy="260.625"
+         sodipodi:rx="9.6875"
+         sodipodi:ry="8.125"
+         transform="matrix(2.0564493,0,0,2.4519122,476.39983,192.24393)" />
+      <g
+         transform="translate(-0.3030291,0.1515146)"
+         id="g3215">
+        <path
+           transform="matrix(2.0564493,0,0,2.4519122,476.60593,192.31291)"
+           sodipodi:ry="8.125"
+           sodipodi:rx="9.6875"
+           sodipodi:cy="260.625"
+           sodipodi:cx="64.0625"
+           d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+           id="path1491"
+           style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:0.66800511;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           sodipodi:type="arc"
+           inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+        <g
+           id="g3201"
+           transform="translate(1.9202235,1.2976769)">
+          <path
+             inkscape:export-ydpi="90"
+             inkscape:export-xdpi="90"
+             inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
+             sodipodi:type="arc"
+             style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ffffff;stroke-width:1pt;stroke-opacity:0.5"
+             id="path953"
+             d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
+             sodipodi:cx="87.5"
+             sodipodi:cy="257.5"
+             sodipodi:rx="8.125"
+             sodipodi:ry="8.125"
+             sodipodi:start="0"
+             sodipodi:end="3.134937"
+             sodipodi:open="true"
+             transform="matrix(-1.5026037,1.5026037,-1.5026037,-1.5026037,1124.8923,1085.4691)" />
+          <path
+             inkscape:export-ydpi="90"
+             inkscape:export-xdpi="90"
+             inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
+             sodipodi:type="arc"
+             style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-dasharray:none;stroke-opacity:0.5"
+             id="path954"
+             d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
+             sodipodi:cx="87.5"
+             sodipodi:cy="257.5"
+             sodipodi:rx="8.125"
+             sodipodi:ry="8.125"
+             sodipodi:start="0"
+             sodipodi:end="3.134937"
+             sodipodi:open="true"
+             transform="matrix(1.5026037,-1.5026037,1.5026037,1.5026037,88.197326,574.76526)" />
+        </g>
+      </g>
+    </g>
     <path
-       transform="matrix(2.0564493,0,0,2.4519122,474.83722,190.83899)"
-       sodipodi:ry="8.125"
-       sodipodi:rx="9.6875"
-       sodipodi:cy="260.625"
-       sodipodi:cx="64.0625"
-       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
-       id="path1491"
-       style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:0.66800511;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       transform="matrix(-1.5026037,1.5026037,-1.5026037,-1.5026037,1124.8923,1085.4691)"
-       sodipodi:open="true"
-       sodipodi:end="3.134937"
-       sodipodi:start="0"
-       sodipodi:ry="8.125"
-       sodipodi:rx="8.125"
-       sodipodi:cy="257.5"
-       sodipodi:cx="87.5"
-       d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
-       id="path953"
-       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ffffff;stroke-width:1pt;stroke-opacity:0.5"
-       sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       transform="matrix(1.5026037,-1.5026037,1.5026037,1.5026037,88.197326,574.76526)"
-       sodipodi:open="true"
-       sodipodi:end="3.134937"
-       sodipodi:start="0"
-       sodipodi:ry="8.125"
-       sodipodi:rx="8.125"
-       sodipodi:cy="257.5"
-       sodipodi:cx="87.5"
-       d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
-       id="path954"
-       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-dasharray:none;stroke-opacity:0.5"
-       sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       transform="matrix(2.0564493,0,0,2.4519122,411.31673,190.59393)"
-       sodipodi:ry="8.125"
-       sodipodi:rx="9.6875"
-       sodipodi:cy="260.625"
-       sodipodi:cx="64.0625"
-       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
-       id="path3246"
-       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ececec;stroke-width:1.18292999;stroke-opacity:1"
-       sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       transform="matrix(2.0564493,0,0,2.4519122,411.19173,190.59393)"
+       transform="matrix(2.0564493,0,0,2.4519122,274.94173,208.09393)"
        sodipodi:ry="8.125"
        sodipodi:rx="9.6875"
        sodipodi:cy="260.625"
@@ -201,67 +220,9 @@
        inkscape:export-ydpi="90" />
     <path
        style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.19846668pt;stroke-opacity:0.5"
-       d="M 542.95502,811.80351 C 538.41665,811.8187 533.8911,813.59615 530.43087,817.07854 C 523.51341,824.04027 523.48099,835.31893 530.33378,842.32101 L 530.30142,842.35338 C 537.30139,849.25193 548.56654,849.21017 555.51153,842.25629 C 562.47521,835.2837 562.46241,823.95863 555.51153,816.98145 C 555.50584,816.97579 555.48488,816.98711 555.47917,816.98145 C 551.99821,813.53366 547.48596,811.78832 542.95502,811.80351 z"
+       d="M 406.45502,872.55351 C 401.91665,872.5687 397.3911,874.34615 393.93087,877.82854 C 387.01341,884.79027 386.98099,896.06893 393.83378,903.07101 L 393.80142,903.10338 C 400.80139,910.00193 412.06654,909.96017 419.01153,903.00629 C 425.97521,896.0337 425.96241,884.70863 419.01153,877.73145 C 419.00584,877.72579 418.98488,877.73711 418.97917,877.73145 C 415.49821,874.28366 410.98596,872.53832 406.45502,872.55351 z"
        id="path3250"
        inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       transform="matrix(2.0564493,0,0,2.4519122,352.25872,190.83257)"
-       sodipodi:ry="8.125"
-       sodipodi:rx="9.6875"
-       sodipodi:cy="260.625"
-       sodipodi:cx="64.0625"
-       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
-       id="path2390"
-       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ececec;stroke-width:1.18292999;stroke-opacity:1"
-       sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       transform="matrix(2.0564493,0,0,2.4519122,352.13372,190.83257)"
-       sodipodi:ry="8.125"
-       sodipodi:rx="9.6875"
-       sodipodi:cy="260.625"
-       sodipodi:cx="64.0625"
-       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
-       id="path2392"
-       style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:0.66800511;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       transform="matrix(-1.5026037,1.5026037,-1.5026037,-1.5026037,1002.1888,1085.4627)"
-       sodipodi:open="true"
-       sodipodi:end="3.134937"
-       sodipodi:start="0"
-       sodipodi:ry="8.125"
-       sodipodi:rx="8.125"
-       sodipodi:cy="257.5"
-       sodipodi:cx="87.5"
-       d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
-       id="path2394"
-       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:url(#linearGradient3206);stroke-width:1pt;stroke-opacity:0.50000000000000000;fill-opacity:1"
-       sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       transform="matrix(1.5026037,-1.5026037,1.5026037,1.5026037,-34.506177,574.75884)"
-       sodipodi:open="true"
-       sodipodi:end="3.134937"
-       sodipodi:start="0"
-       sodipodi:ry="8.125"
-       sodipodi:rx="8.125"
-       sodipodi:cy="257.5"
-       sodipodi:cx="87.5"
-       d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
-       id="path2396"
-       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:url(#linearGradient3214);stroke-width:1.25000000000000000;stroke-dasharray:none;stroke-opacity:0.50000000000000000"
-       sodipodi:type="arc"
-       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelop.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <flowRoot
@@ -302,5 +263,125 @@
            x="439"
            y="773.36218"
            style="font-size:10px" /></flowRegion><flowPara
-         id="flowPara2426">u </flowPara></flowRoot>  </g>
+         id="flowPara2426">u </flowPara></flowRoot>    <path
+       transform="matrix(2.0564493,0,0,2.4519122,276.00872,162.83257)"
+       sodipodi:ry="8.125"
+       sodipodi:rx="9.6875"
+       sodipodi:cy="260.625"
+       sodipodi:cx="64.0625"
+       d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+       id="path3193"
+       style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#7a7a7a;stroke-width:1.18292999;stroke-opacity:1"
+       sodipodi:type="arc"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g3228"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+         sodipodi:type="arc"
+         style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#7a7a7a;stroke-width:1.18292999000000010;stroke-opacity:1"
+         id="path3246"
+         d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+         sodipodi:cx="64.0625"
+         sodipodi:cy="260.625"
+         sodipodi:rx="9.6875"
+         sodipodi:ry="8.125"
+         transform="matrix(2.0564493,0,0,2.4519122,411.31673,190.59393)" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+         sodipodi:type="arc"
+         style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:0.66800511;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path3195"
+         d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+         sodipodi:cx="64.0625"
+         sodipodi:cy="260.625"
+         sodipodi:rx="9.6875"
+         sodipodi:ry="8.125"
+         transform="matrix(2.0564493,0,0,2.4519122,411.34829,190.47996)" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+         id="path3197"
+         d="M 542.96651,811.66508 C 538.42814,811.68027 533.90259,813.45772 530.44236,816.94011 C 523.5249,823.90184 523.49248,835.1805 530.34527,842.18258 L 530.31291,842.21495 C 537.31288,849.1135 548.57803,849.07174 555.52302,842.11786 C 562.4867,835.14527 562.4739,823.8202 555.52302,816.84302 C 555.51733,816.83736 555.49637,816.84868 555.49066,816.84302 C 552.0097,813.39523 547.49745,811.64989 542.96651,811.66508 z"
+         style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#ffffff;stroke-width:2.19846668pt;stroke-opacity:0.5" />
+    </g>
+    <g
+       id="g3221"
+       inkscape:export-filename="E:\epidatamanager\trunk\images\circleover.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelned.png"
+         sodipodi:type="arc"
+         style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:#7a7a7a;stroke-width:1.18292999;stroke-opacity:1"
+         id="path3199"
+         d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+         sodipodi:cx="64.0625"
+         sodipodi:cy="260.625"
+         sodipodi:rx="9.6875"
+         sodipodi:ry="8.125"
+         transform="matrix(2.0564493,0,0,2.4519122,347.87364,188.41174)" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelover.png"
+         sodipodi:type="arc"
+         style="font-size:12px;fill:#0000ff;fill-opacity:0.67222218;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:0.66800511;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path2392"
+         d="M 73.75,260.625 A 9.6875,8.125 0 1 1 54.375,260.625 A 9.6875,8.125 0 1 1 73.75,260.625 z"
+         sodipodi:cx="64.0625"
+         sodipodi:cy="260.625"
+         sodipodi:rx="9.6875"
+         sodipodi:ry="8.125"
+         transform="matrix(2.0564493,0,0,2.4519122,348.08042,188.40059)" />
+      <g
+         transform="translate(0.2210887,-0.2210886)"
+         id="g3207">
+        <path
+           transform="matrix(-1.5026037,1.5026037,-1.5026037,-1.5026037,998.13554,1082.8834)"
+           sodipodi:open="true"
+           sodipodi:end="3.134937"
+           sodipodi:start="0"
+           sodipodi:ry="8.125"
+           sodipodi:rx="8.125"
+           sodipodi:cy="257.5"
+           sodipodi:cx="87.5"
+           d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
+           id="path2394"
+           style="font-size:12px;fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient3211);stroke-width:1pt;stroke-opacity:0.5"
+           sodipodi:type="arc"
+           inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelover.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+        <path
+           transform="matrix(1.5026037,-1.5026037,1.5026037,1.5026037,-38.92795,571.81099)"
+           sodipodi:open="true"
+           sodipodi:end="3.134937"
+           sodipodi:start="0"
+           sodipodi:ry="8.125"
+           sodipodi:rx="8.125"
+           sodipodi:cy="257.5"
+           sodipodi:cx="87.5"
+           d="M 95.625,257.5 A 8.125,8.125 0 0 1 79.37518,257.55408"
+           id="path2396"
+           style="font-size:12px;fill:#0000ff;fill-rule:evenodd;stroke:url(#linearGradient3213);stroke-width:1.25;stroke-dasharray:none;stroke-opacity:0.5"
+           sodipodi:type="arc"
+           inkscape:export-filename="E:\epidatamanager\trunk\images\cirkelover.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+      </g>
+    </g>
+  </g>
 </svg>
