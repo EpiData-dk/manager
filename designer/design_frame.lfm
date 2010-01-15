@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 671
-  DesignTop = 386
+  DesignLeft = 878
+  DesignTop = 327
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -59,11 +59,8 @@ object DesignFrame: TDesignFrame
     end
     object ClearToolBtn: TToolButton
       Left = 412
-      Hint = 'Erase all'
       Top = 1
-      Caption = 'ClearToolBtn'
-      ImageIndex = 5
-      OnClick = ClearToolBtnClick
+      Action = ClearAllAction
     end
     object SaveToolBtn: TToolButton
       Left = 91
@@ -307,7 +304,7 @@ object DesignFrame: TDesignFrame
       ShortCut = 24659
     end
     object AlignAction: TAction
-      Caption = 'AlignAction'
+      Caption = 'Align Fields'
       OnExecute = AutoAlignBtnClick
       ShortCut = 122
     end
@@ -342,7 +339,7 @@ object DesignFrame: TDesignFrame
       ShortCut = 117
     end
     object PasteAsLabel: TEditPaste
-      Category = 'DesignPaste'
+      Category = 'Edit'
       Caption = '&Paste As Labels'
       Hint = 'Paste'
       OnExecute = PasteAsLabelExecute
@@ -394,6 +391,13 @@ object DesignFrame: TDesignFrame
       Hint = 'Move to last field'
       OnExecute = MoveLastActionExecute
       ShortCut = 16419
+    end
+    object ClearAllAction: TAction
+      Category = 'Tools'
+      Caption = 'Clear All'
+      Hint = 'Clear Dataform'
+      ImageIndex = 5
+      OnExecute = ClearAllActionExecute
     end
   end
   object FieldToolBarImageList: TImageList

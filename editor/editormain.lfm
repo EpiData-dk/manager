@@ -865,5 +865,11 @@ object EditorForm: TEditorForm
       Action = PasteAction
       OnClick = PasteActionExecute
     end
+    object PopupDivider1: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem4: TMenuItem
+      Caption = 'New Item5'
+    end
   end
 end

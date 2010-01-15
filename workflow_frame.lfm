@@ -9,8 +9,8 @@ object WorkFlowFrame: TWorkFlowFrame
   OnResize = FrameResize
   ParentColor = False
   TabOrder = 0
-  DesignLeft = 854
-  DesignTop = 266
+  DesignLeft = 728
+  DesignTop = 258
   object BgPanel: TPanel
     Left = 48
     Height = 523
@@ -2218,15 +2218,15 @@ object WorkFlowFrame: TWorkFlowFrame
       Transparent = True
     end
     object DesignBtnImage: TImage
-      Left = 94
+      Left = 96
       Height = 42
       Hint = 'Click to Activate'
-      Top = 114
+      Top = 112
       Width = 42
       Center = True
-      OnMouseDown = DesignBtnImageMouseDown
-      OnMouseEnter = DesignBtnImageMouseEnter
-      OnMouseLeave = DesignBtnImageMouseLeave
+      OnMouseDown = ImageBtnMouseDown
+      OnMouseEnter = ImageBtnMouseEnter
+      OnMouseLeave = ImageBtnMouseLeave
     end
     object ModifyBtnImage: TImage
       Left = 94
@@ -2235,9 +2235,9 @@ object WorkFlowFrame: TWorkFlowFrame
       Top = 196
       Width = 42
       Center = True
-      OnMouseDown = DesignBtnImageMouseDown
-      OnMouseEnter = DesignBtnImageMouseEnter
-      OnMouseLeave = DesignBtnImageMouseLeave
+      OnMouseDown = ImageBtnMouseDown
+      OnMouseEnter = ImageBtnMouseEnter
+      OnMouseLeave = ImageBtnMouseLeave
     end
     object ExtendBtnImage: TImage
       Left = 94
@@ -2246,9 +2246,9 @@ object WorkFlowFrame: TWorkFlowFrame
       Top = 275
       Width = 42
       Center = True
-      OnMouseDown = DesignBtnImageMouseDown
-      OnMouseEnter = DesignBtnImageMouseEnter
-      OnMouseLeave = DesignBtnImageMouseLeave
+      OnMouseDown = ImageBtnMouseDown
+      OnMouseEnter = ImageBtnMouseEnter
+      OnMouseLeave = ImageBtnMouseLeave
     end
     object DocumentBtnImage: TImage
       Left = 94
@@ -2257,9 +2257,9 @@ object WorkFlowFrame: TWorkFlowFrame
       Top = 362
       Width = 42
       Center = True
-      OnMouseDown = DesignBtnImageMouseDown
-      OnMouseEnter = DesignBtnImageMouseEnter
-      OnMouseLeave = DesignBtnImageMouseLeave
+      OnMouseDown = ImageBtnMouseDown
+      OnMouseEnter = ImageBtnMouseEnter
+      OnMouseLeave = ImageBtnMouseLeave
     end
     object AdvBtnImage: TImage
       Left = 94
@@ -2268,9 +2268,9 @@ object WorkFlowFrame: TWorkFlowFrame
       Top = 450
       Width = 42
       Center = True
-      OnMouseDown = DesignBtnImageMouseDown
-      OnMouseEnter = DesignBtnImageMouseEnter
-      OnMouseLeave = DesignBtnImageMouseLeave
+      OnMouseDown = ImageBtnMouseDown
+      OnMouseEnter = ImageBtnMouseEnter
+      OnMouseLeave = ImageBtnMouseLeave
     end
   end
   object WorkFlowImageList: TImageList

@@ -15,10 +15,16 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    Alignmenu: TMenuItem;
-    MenuItem2: TMenuItem;
+    ChangeWorkDirAction: TAction;
+    filedivider2: TMenuItem;
+    filedivider3: TMenuItem;
+    editdivider1: TMenuItem;
+    ChangeWorkDirMenuItem: TMenuItem;
+    filedivider1: TMenuItem;
+    ToolsDivider1: TMenuItem;
+    ShowWorkFlowMenuItem: TMenuItem;
+    ShowWorkFlowAction: TAction;
     MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
     NewDataFormBtn: TToolButton;
     OpenToolBtn: TToolButton;
     PageControl2: TPageControl;
@@ -26,7 +32,6 @@ type
     Image6: TImage;
     Image7: TImage;
     MenuItem1: TMenuItem;
-    WorkFlowSheet: TTabSheet;
     TabSheet2: TTabSheet;
     ToolsMenu: TMenuItem;
     NewDesignFormAction: TAction;
@@ -48,16 +53,19 @@ type
     PageControl1: TPageControl;
     ProgressPanel: TPanel;
     StatusBar1: TStatusBar;
+    procedure ChangeWorkDirActionExecute(Sender: TObject);
     procedure ClosePageActionExecute(Sender: TObject);
-    procedure DesignBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure MainFormMenuChange(Sender: TObject; Source: TMenuItem;
+      Rebuild: Boolean);
     procedure NewDesignFormActionExecute(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PageControl1PageChanged(Sender: TObject);
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
+    procedure ShowWorkFlowActionExecute(Sender: TObject);
     procedure StartEditorActionExecute(Sender: TObject);
     procedure StatusBar1DblClick(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
@@ -66,6 +74,7 @@ type
     { private declarations }
     TabNameCount: integer;
     ProgressBarMain: TProgressBar;
+    WorkFlowSheet: TTabSheet;
     procedure CloseTab(Sender: TObject);
   public
     { public declarations }
@@ -73,7 +82,19 @@ type
     function ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string): TProgressResult;
     procedure ReadClipBoard(ClipBoardLine: TStrings);
     procedure ShowOnStatusBar(Msg: string; Idx: integer);
-  end; 
+    procedure AddToMenu(MenuItem: TMenuItem; Section: Cardinal); overload;
+    procedure AddToMenu(aAction: TBasicAction; Section: Cardinal); overload;
+    procedure RemoveFromMenu(Section: Cardinal);
+  end;
+
+const
+  // Menu sections.
+  MMFile    = $000000;
+   MMFileRW   = $0200;
+  MMEdit    = $010000;
+  MMTools   = $020000;
+   MMToolsTop = $0000;
+  MMHelp    = $030000;
 
 var
   MainForm: TMainForm;
@@ -83,38 +104,10 @@ implementation
 uses
   UEpiLog, settings, Clipbrd,
   InterfaceBase, LCLType, editormain,
-  workflow_frame, design_frame;
+  workflow_frame, design_frame, managertypes;
 
 
 { TMainForm }
-
-procedure TMainForm.DesignBtnClick(Sender: TObject);
-var
-  Frame: TFrame;
-  TabSheet: TTabSheet;
-begin
-  ShowOnStatusBar('Click buttons or use menu', 0);
-  TabSheet := TTabSheet.Create(PageControl1);
-  TabSheet.PageControl := PageControl1;
-  TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
-  TabSheet.Caption := 'Untitled';
-  if TabNameCount > 1 then
-    TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount-1) + ')';
-  PageControl1.ActivePage := TabSheet;
-
-  if PageControl1.PageCount >= 1 then
-  begin
-    PageControl1.ShowTabs := true;
-    PageControl1.Options := PageControl1.Options + [nboShowCloseButtons];
-    PageControl1.OnCloseTabClicked := @CloseTab;
-  end;
-  Frame := TDesignFrame.Create(TabSheet);
-  Frame.Name := 'Frame' + IntToStr(TabNameCount);
-  Frame.Align := alClient;
-  Frame.Parent := TabSheet;
-
-  Inc(TabNameCount);
-end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 {$IFNDEF EPI_DEBUG}
@@ -183,10 +176,27 @@ begin
   // WorkFlowSheet sheet.
   PageControl1.Options := PageControl1.Options + [nboShowCloseButtons];
   PageControl1.OnCloseTabClicked := @CloseTab;
-  with TWorkFlowFrame.Create(WorkFlowSheet) do
+  ShowWorkFlowAction.Execute;
+  MainFormMenuChange(nil, nil, true);
+end;
+
+procedure TMainForm.MainFormMenuChange(Sender: TObject; Source: TMenuItem;
+  Rebuild: Boolean);
+var
+  i: Integer;
+  j: Integer;
+begin
+  for i := 0 to MainFormMenu.Items.Count - 1 do
+  with MainFormMenu.Items[i] do
   begin
-    Parent := WorkFlowSheet;
-    Align := alClient;
+    for j := Count -1 downto 0 do
+    begin
+      Items[j].Visible := true;
+      if (j = 0) and (Items[j].Caption = '-') then
+        Items[j].Visible := false;
+      if (j > 0) and (Items[j].Caption = Items[j-1].Caption) then
+        Items[j].Visible := false;
+    end;
   end;
 end;
 
@@ -221,29 +231,27 @@ procedure TMainForm.PageControl1Changing(Sender: TObject;
   var AllowChange: Boolean);
 begin
   // Event happens before activepage is changed to new sheet.
-  // - hence we disable shortcut events here.
+  // - hence we call deactive here.
   AllowChange := true;
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
-  if PageControl1.ActivePage.Components[0] is TDesignFrame then
-    TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asSuspended;
+
+  // On all tabsheets component [0] is a TFrame that implements IManagerFrame.
+  (PageControl1.ActivePage.Components[0] as IManagerFrame).DeActivateFrame;
 end;
 
 procedure TMainForm.PageControl1PageChanged(Sender: TObject);
 begin
   // Event happens after activepage is changed to new sheet.
-  // - hence we enable shortcut events here.
+  // - hence we call activate here
   // On creating a new page this event is called before components are created,
   // - hence component[0] does not yet exists. This does not matter since the
   //   actionlist is created with state asNormal by default.
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
-  if PageControl1.ActivePage.Components[0] is TDesignFrame then
-  begin
-    TDesignFrame(PageControl1.ActivePage.Components[0]).DesignFrameActionList.State := asNormal;
-    TDesignFrame(PageControl1.ActivePage.Components[0]).UpdateNonInteractiveVisuals;
-  end else
-    ;
+
+  // On all tabsheets component [0] is a TFrame that implements IManagerFrame.
+  (PageControl1.ActivePage.Components[0] as IManagerFrame).ActivateFrame;
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
@@ -270,6 +278,23 @@ begin
     TDesignFrame(PageControl1.Pages[i].Controls[0]).UpdateAllFields;
 end;
 
+procedure TMainForm.ShowWorkFlowActionExecute(Sender: TObject);
+begin
+  if not Assigned(WorkFlowSheet) then
+  begin
+    WorkFlowSheet := TTabSheet.Create(PageControl1);
+    with TWorkFlowFrame.Create(WorkFlowSheet) do
+    begin
+      Parent := WorkFlowSheet;
+      Align := alClient;
+    end;
+    WorkFlowSheet.Parent := PageControl1;
+    WorkFlowSheet.TabIndex := 0;
+    WorkFlowSheet.Caption := 'WorkFlow';
+  end;
+  PageControl1.ActivePage := WorkFlowSheet;
+end;
+
 procedure TMainForm.StartEditorActionExecute(Sender: TObject);
 begin
   if not Assigned(EditorForm) then
@@ -278,18 +303,8 @@ begin
 end;
 
 procedure TMainForm.StatusBar1DblClick(Sender: TObject);
-var
-  Dlg: TSelectDirectoryDialog;
 begin
-  Dlg := TSelectDirectoryDialog.Create(Self);
-  try
-    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-    if not Dlg.Execute then exit;
-    ManagerSettings.WorkingDirUTF8 := Dlg.FileName;
-    StatusBar1.Hint := ManagerSettings.WorkingDirUTF8;
-  finally
-    Dlg.Free;
-  end;
+  ChangeWorkDirAction.Execute;
 end;
 
 procedure TMainForm.StatusBar1DrawPanel(StatusBar: TStatusBar;
@@ -309,6 +324,21 @@ begin
   CloseTab(PageControl1.ActivePage);
 end;
 
+procedure TMainForm.ChangeWorkDirActionExecute(Sender: TObject);
+var
+  Dlg: TSelectDirectoryDialog;
+begin
+  Dlg := TSelectDirectoryDialog.Create(Self);
+  try
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    if not Dlg.Execute then exit;
+    ManagerSettings.WorkingDirUTF8 := Dlg.FileName;
+    StatusBar1.Hint := ManagerSettings.WorkingDirUTF8;
+  finally
+    Dlg.Free;
+  end;
+end;
+
 procedure TMainForm.CloseTab(Sender: TObject);
 begin
   if not (Sender is TTabSheet) then exit;
@@ -323,6 +353,8 @@ begin
   {$ENDIf}
 
   PageControl1.ActivePage := PageControl1.FindNextPage(TTabSheet(Sender), False, True);
+  if Sender = WorkFlowSheet then
+    WorkFlowSheet := nil;
   (Sender as TTabSheet).Free;
 
   if (PageControl1.PageCount < 1) or ((PageControl1.PageCount = 1) and (PageControl1.ActivePage = WorkFlowSheet)) then
@@ -373,6 +405,70 @@ procedure TMainForm.ShowOnStatusBar(Msg: string; Idx: integer);
 begin
   if (Idx < 0) or (Idx > StatusBar1.Panels.Count -1) then exit;
   StatusBar1.Panels[Idx].Text := Msg;
+end;
+
+procedure TMainForm.AddToMenu(MenuItem: TMenuItem; Section: Cardinal);
+var
+  M, S, Idx: Byte;
+  MenuSection: TMenuItem;
+  i: Integer;
+  j: Integer;
+begin
+  // Section is read this way (byte wise - high to low):
+  // Byte   |   Content
+  // --------------------------------------------------------
+  //   1    |    (not used)
+  //   2    |    Main section, ie. File -> Help
+  //   3    |    Sub section in main section (devided by line).
+  //   4    |    Index in subsection.
+  M := Section shr 16;
+  S := Section shr 8;
+  Idx := Section;
+
+  MenuSection := MainFormMenu.Items[M];
+  i := 0;
+  j := 0;
+  while (i < MenuSection.Count) and (j < S) do
+  begin
+    if MenuSection.Items[i].Caption = '-' then
+      inc(j);
+    inc(i);
+  end;
+
+  MenuSection.Insert(I + Idx, MenuItem);
+end;
+
+procedure TMainForm.AddToMenu(aAction: TBasicAction; Section: Cardinal);
+var
+  MenuItem: TMenuItem;
+begin
+  MenuItem := TMenuItem.Create(aAction.Owner);
+  MenuItem.Action := aAction;
+  AddToMenu(MenuItem, Section);
+end;
+
+procedure TMainForm.RemoveFromMenu(Section: Cardinal);
+var
+  M, S, Idx: Byte;
+  MenuSection: TMenuItem;
+  i: Integer;
+  j: Integer;
+begin
+  // See AddToMenu...
+  M := Section shr 16;
+  S := Section shr 8;
+  Idx := Section;
+
+  MenuSection := MainFormMenu.Items[M];
+  i := 0;
+  j := 0;
+  while (i < MenuSection.Count) and (j < S) do
+  begin
+    if MenuSection.Items[i].Caption = '-' then
+      inc(j);
+    inc(i);
+  end;
+  MenuSection.Delete(I + Idx);
 end;
 
 

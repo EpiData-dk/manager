@@ -9,18 +9,20 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList, Controls,
   Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, UEpiDataFile, FieldEdit,
   Design_Field_Frame, AVL_Tree, LCLType, StdActns, design_autoalign_form,
-  UDataFileTypes, datafile_documentation_form;
+  UDataFileTypes, datafile_documentation_form, managertypes;
 
 type
 
   { TDesignFrame }
 
-  TDesignFrame = class(TFrame)
+  TDesignFrame = class(TFrame, IManagerFrame)
+    ClearAllAction: TAction;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    OpenFileMenuItem: TMenuItem;
     MovePageDownAction: TAction;
     MoveDownAction: TAction;
     MoveUpAction: TAction;
@@ -90,6 +92,7 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
+    procedure ClearAllActionExecute(Sender: TObject);
     procedure DocumentFileActionExecute(Sender: TObject);
     procedure EditCompActionExecute(Sender: TObject);
     procedure ImportStructureActionExecute(Sender: TObject);
@@ -104,7 +107,6 @@ type
     procedure NewOtherFieldClick(Sender: TObject);
     procedure NewDateFieldActionExecute(Sender: TObject);
     procedure AutoAlignBtnClick(Sender: TObject);
-    procedure ClearToolBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
     procedure EditFieldMenuItemClick(Sender: TObject);
     procedure FontSelectBtnClick(Sender: TObject);
@@ -178,6 +180,8 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+    procedure ActivateFrame;
+    procedure DeActivateFrame;
     procedure UpdateAllFields;
     procedure UpdateNonInteractiveVisuals;
     property  ActiveDataFile: TEpiDataFile read FActiveDataFile;
@@ -442,8 +446,6 @@ begin
     DesignerBox.VertScrollBar.Position := SelectedControl.Top - 5;
   if (SelectedControl.Top + SelectedControl.Height) > (DesignerBox.VertScrollBar.Position + DesignerBox.ClientHeight) then
     DesignerBox.VertScrollBar.Position := SelectedControl.Top + SelectedControl.Height - DesignerBox.ClientHeight + 5;
-
-//  MainForm.Label2.Caption := 'Selected Control: ' + SelectedControl.Name;
 end;
 
 procedure TDesignFrame.ExitSelectControl(Sender: TObject);
@@ -1003,6 +1005,42 @@ begin
   FreeAndNil(FComponentXTree);
 end;
 
+procedure TDesignFrame.ActivateFrame;
+var
+  Section: Integer;
+begin
+  DesignFrameActionList.State := asNormal;
+  UpdateNonInteractiveVisuals;
+
+  // Update Main Menu on MainForm.
+  Section := MMFile + MMFileRW;
+  MainForm.AddToMenu(OpenFileAction,   Section + 0);
+  MainForm.AddToMenu(SaveFileAction,   Section + 1);
+  MainForm.AddToMenu(SaveFileAsAction, Section + 2);
+  MainForm.AddToMenu(ImportStructureAction, Section + 3);
+
+  Section := MMTools + MMToolsTop;
+  MainForm.AddToMenu(AlignAction,      Section + 0);
+  MainForm.AddToMenu(ClearAllAction,   Section + 1);
+end;
+
+procedure TDesignFrame.DeActivateFrame;
+var
+  Section: Integer;
+begin
+  DesignFrameActionList.State := asSuspended;
+
+  Section := MMFile + MMFileRW;
+  MainForm.RemoveFromMenu(Section + 3);
+  MainForm.RemoveFromMenu(Section + 2);
+  MainForm.RemoveFromMenu(Section + 1);
+  MainForm.RemoveFromMenu(Section + 0);
+
+  Section := MMTools + MMToolsTop;
+  MainForm.RemoveFromMenu(Section + 1);
+  MainForm.RemoveFromMenu(Section + 0);
+end;
+
 procedure TDesignFrame.UpdateAllFields;
 var
   i: Integer;
@@ -1062,41 +1100,6 @@ begin
   end;
 
   Modified := True;
-end;
-
-procedure TDesignFrame.ClearToolBtnClick(Sender: TObject);
-var
-  Comp: TControl;
-  Field: TEpiField;
-  i: Integer;
-begin
-  Field := nil;
-  ActiveDataFile.BeginUpdate;
-  with DesignerBox do
-  begin
-    for i := ControlCount - 1 downto  0 do
-    begin
-      Comp := Controls[i];
-
-      if not ((Comp is TFieldEdit) or
-        (Comp is TFieldLabel)) then continue;
-
-      RemoveControl(Comp);
-      ComponentYTree.Remove(Comp);
-      ComponentXTree.Remove(Comp);
-      FreeAndNil(Comp);
-    end;
-  end;
-  ActiveDataFile.Reset;
-  ActiveDataFile.RegisterOnChangeHook(@DataFileChange);
-  // Handle in case there is an open documentation form.
-  if Assigned(ActiveDocumentationForm) then
-    ActiveDocumentationForm.Datafile := ActiveDataFile;
-  ActiveDataFile.EndUpdate;  // Forced updatenonvisual due to registered hook.
-
-  SelectedControl := nil;
-
-  Modified := false;
 end;
 
 procedure TDesignFrame.AutoAlignBtnClick(Sender: TObject);
@@ -1309,6 +1312,7 @@ begin
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.Filter := GetEpiDialogFilter(True, True, True, True, False, True, True,
     True, True, False);
+  Dlg.Title := 'Import structure from file...';
 
   if not Dlg.Execute then exit;
 
@@ -1480,6 +1484,41 @@ begin
   ActiveDocumentationForm.Show;
 end;
 
+procedure TDesignFrame.ClearAllActionExecute(Sender: TObject);
+var
+  Comp: TControl;
+  Field: TEpiField;
+  i: Integer;
+begin
+  Field := nil;
+  ActiveDataFile.BeginUpdate;
+  with DesignerBox do
+  begin
+    for i := ControlCount - 1 downto  0 do
+    begin
+      Comp := Controls[i];
+
+      if not ((Comp is TFieldEdit) or
+        (Comp is TFieldLabel)) then continue;
+
+      RemoveControl(Comp);
+      ComponentYTree.Remove(Comp);
+      ComponentXTree.Remove(Comp);
+      FreeAndNil(Comp);
+    end;
+  end;
+  ActiveDataFile.Reset;
+  ActiveDataFile.RegisterOnChangeHook(@DataFileChange);
+  // Handle in case there is an open documentation form.
+  if Assigned(ActiveDocumentationForm) then
+    ActiveDocumentationForm.Datafile := ActiveDataFile;
+  ActiveDataFile.EndUpdate;  // Forced updatenonvisual due to registered hook.
+
+  SelectedControl := nil;
+
+  Modified := false;
+end;
+
 procedure TDesignFrame.EditKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
@@ -1615,6 +1654,7 @@ begin
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.Filter := GetEpiDialogFilter(True, True, True, True,
     False, True, True, True, True, True);
+  Dlg.Title := 'Open data file...';
 
   if Dlg.Execute then
   begin

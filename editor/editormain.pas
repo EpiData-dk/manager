@@ -17,6 +17,8 @@ type
     CopyMenuItem: TMenuItem;
     CutPopMenuItem: TMenuItem;
     CopyPopMenuItem: TMenuItem;
+    MenuItem4: TMenuItem;
+    PopupDivider1: TMenuItem;
     PastePopMenuItem: TMenuItem;
     PasteMenuItem: TMenuItem;
     PasteAction: TAction;

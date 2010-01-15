@@ -188,5 +188,7 @@ LazarusResources.Add('TEditorForm','FORMDATA',[
   +#0#0#9'TMenuItem'#14'CutPopMenuItem'#6'Action'#7#9'CutAction'#7'OnClick'#7#16
   +'CutActionExecute'#0#0#9'TMenuItem'#15'CopyPopMenuItem'#6'Action'#7#10'CopyA'
   +'ction'#7'OnClick'#7#17'CopyActionExecute'#0#0#9'TMenuItem'#16'PastePopMenuI'
-  +'tem'#6'Action'#7#11'PasteAction'#7'OnClick'#7#18'PasteActionExecute'#0#0#0#0
+  +'tem'#6'Action'#7#11'PasteAction'#7'OnClick'#7#18'PasteActionExecute'#0#0#9
+  +'TMenuItem'#13'PopupDivider1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem4'
+  +#7'Caption'#6#9'New Item5'#0#0#0#0
 ]);

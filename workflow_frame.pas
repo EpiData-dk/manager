@@ -5,13 +5,14 @@ unit workflow_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, Controls;
+  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, Controls,
+  managertypes;
 
 type
 
   { TWorkFlowFrame }
 
-  TWorkFlowFrame = class(TFrame)
+  TWorkFlowFrame = class(TFrame, IManagerFrame)
     BackgroundImage: TImage;
     DesignBtnImage: TImage;
     WorkFlowImageList: TImageList;
@@ -20,10 +21,10 @@ type
     DocumentBtnImage: TImage;
     AdvBtnImage: TImage;
     BgPanel: TPanel;
-    procedure DesignBtnImageMouseDown(Sender: TObject; Button: TMouseButton;
+    procedure ImageBtnMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure DesignBtnImageMouseEnter(Sender: TObject);
-    procedure DesignBtnImageMouseLeave(Sender: TObject);
+    procedure ImageBtnMouseEnter(Sender: TObject);
+    procedure ImageBtnMouseLeave(Sender: TObject);
     procedure FrameResize(Sender: TObject);
   private
     { private declarations }
@@ -35,6 +36,8 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+    procedure ActivateFrame;
+    procedure DeActivateFrame;
   end; 
 
 implementation
@@ -64,25 +67,25 @@ begin
   Bmp.Free;
 end;
 
-procedure TWorkFlowFrame.DesignBtnImageMouseEnter(Sender: TObject);
+procedure TWorkFlowFrame.ImageBtnMouseEnter(Sender: TObject);
 begin
   LoadImage(TImage(Sender), 2);
 end;
 
-procedure TWorkFlowFrame.DesignBtnImageMouseDown(Sender: TObject;
+procedure TWorkFlowFrame.ImageBtnMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   LoadImage(TImage(Sender), 0);
 end;
 
-procedure TWorkFlowFrame.DesignBtnImageMouseLeave(Sender: TObject);
+procedure TWorkFlowFrame.ImageBtnMouseLeave(Sender: TObject);
 begin
   LoadImage(TImage(Sender), 1);
 end;
 
 constructor TWorkFlowFrame.Create(TheOwner: TComponent);
 begin
-  inherited Create(TheOwner) ;
+  inherited Create(TheOwner);
 
   LoadImage(DesignBtnImage, 1);
   LoadImage(ModifyBtnImage, 1);
@@ -100,6 +103,16 @@ begin
   CircleIdleStream.Free;
   CircleOverStrean.Free;
   inherited Destroy;
+end;
+
+procedure TWorkFlowFrame.ActivateFrame;
+begin
+  // do nothing for now...
+end;
+
+procedure TWorkFlowFrame.DeActivateFrame;
+begin
+  // do nothing for now...
 end;
 
 initialization

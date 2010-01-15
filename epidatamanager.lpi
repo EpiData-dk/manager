@@ -52,7 +52,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="13">
+    <Units Count="14">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -143,6 +143,11 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="workflow_frame"/>
       </Unit12>
+      <Unit13>
+        <Filename Value="managertypes.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="managertypes"/>
+      </Unit13>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
