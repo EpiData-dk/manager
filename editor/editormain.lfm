@@ -1,7 +1,7 @@
 object EditorForm: TEditorForm
-  Left = 633
+  Left = 316
   Height = 570
-  Top = 341
+  Top = 241
   Width = 826
   ActiveControl = SynEditor
   Caption = 'Editor'
@@ -784,6 +784,16 @@ object EditorForm: TEditorForm
         Action = PasteAction
         OnClick = PasteActionExecute
       end
+      object MenuItem4: TMenuItem
+        Caption = '-'
+      end
+      object SendToDesignerMenuItem: TMenuItem
+        Caption = 'Send to Designer'
+        object PasteAsLabelMenuItem: TMenuItem
+          Action = PasteAsLabelAction
+          OnClick = PasteAsLabelActionExecute
+        end
+      end
     end
   end
   object EditorActionList: TActionList
@@ -842,6 +852,12 @@ object EditorForm: TEditorForm
       OnExecute = PasteActionExecute
       ShortCut = 16470
     end
+    object PasteAsLabelAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Labels'
+      OnExecute = PasteAsLabelActionExecute
+      ShortCut = 119
+    end
   end
   object XMLHighlighter: TSynXMLSyn
     DefaultFilter = 'XML Document (*.xml,*.xsd,*.xsl,*.xslt,*.dtd)|*.xml;*.xsd;*.xsl;*.xslt;*.dtd'
@@ -868,8 +884,12 @@ object EditorForm: TEditorForm
     object PopupDivider1: TMenuItem
       Caption = '-'
     end
-    object MenuItem4: TMenuItem
-      Caption = 'New Item5'
+    object SendToDesignerPopMenuItem: TMenuItem
+      Caption = 'Send to Designer...'
+      object PasteAsLabelPopMenuItem: TMenuItem
+        Action = PasteAsLabelAction
+        OnClick = PasteAsLabelActionExecute
+      end
     end
   end
 end

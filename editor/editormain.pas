@@ -13,11 +13,16 @@ type
   { TEditorForm }
 
   TEditorForm = class(TForm)
+    MenuItem4: TMenuItem;
+    PasteAsLabelMenuItem: TMenuItem;
+    SendToDesignerMenuItem: TMenuItem;
+    PasteAsLabelAction: TAction;
     CutMenuItem: TMenuItem;
     CopyMenuItem: TMenuItem;
     CutPopMenuItem: TMenuItem;
     CopyPopMenuItem: TMenuItem;
-    MenuItem4: TMenuItem;
+    PasteAsLabelPopMenuItem: TMenuItem;
+    SendToDesignerPopMenuItem: TMenuItem;
     PopupDivider1: TMenuItem;
     PastePopMenuItem: TMenuItem;
     PasteMenuItem: TMenuItem;
@@ -53,6 +58,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure OpenFileActionExecute(Sender: TObject);
     procedure PasteActionExecute(Sender: TObject);
+    procedure PasteAsLabelActionExecute(Sender: TObject);
     procedure RedoActionExecute(Sender: TObject);
     procedure SaveActionExecute(Sender: TObject);
     procedure SaveAsActionExecute(Sender: TObject);
@@ -73,7 +79,7 @@ var
 implementation
 
 uses
-  UEpiUtils, settings, UStringUtils;
+  UEpiUtils, settings, UStringUtils, main, design_frame;
 
 { TEditorForm }
 
@@ -147,6 +153,16 @@ end;
 procedure TEditorForm.PasteActionExecute(Sender: TObject);
 begin
   SynEditor.PasteFromClipboard;
+end;
+
+procedure TEditorForm.PasteAsLabelActionExecute(Sender: TObject);
+begin
+  if MainForm.ActiveFrame is TDesignFrame then
+  with TDesignFrame(MainForm.ActiveFrame) do
+  begin
+    CopyAction.Execute;
+    PasteAsLabel.Execute;
+  end;
 end;
 
 procedure TEditorForm.RedoActionExecute(Sender: TObject);

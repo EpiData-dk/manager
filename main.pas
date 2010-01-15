@@ -72,6 +72,7 @@ type
       const Rect: TRect);
   private
     { private declarations }
+    FActiveFrame: TFrame;
     TabNameCount: integer;
     ProgressBarMain: TProgressBar;
     WorkFlowSheet: TTabSheet;
@@ -85,6 +86,7 @@ type
     procedure AddToMenu(MenuItem: TMenuItem; Section: Cardinal); overload;
     procedure AddToMenu(aAction: TBasicAction; Section: Cardinal); overload;
     procedure RemoveFromMenu(Section: Cardinal);
+    property ActiveFrame: TFrame read FActiveFrame;
   end;
 
 const
@@ -221,6 +223,7 @@ begin
   Frame.Name := 'Frame' + IntToStr(TabNameCount);
   Frame.Align := alClient;
   Frame.Parent := TabSheet;
+  FActiveFrame := Frame;
 
   PageControl1.ActivePage := TabSheet;
 
@@ -249,6 +252,8 @@ begin
   //   actionlist is created with state asNormal by default.
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
+
+  FActiveFrame := TFrame(PageControl1.ActivePage.Components[0]);
 
   // On all tabsheets component [0] is a TFrame that implements IManagerFrame.
   (PageControl1.ActivePage.Components[0] as IManagerFrame).ActivateFrame;
@@ -288,6 +293,7 @@ begin
       Parent := WorkFlowSheet;
       Align := alClient;
     end;
+    FActiveFrame := TFrame(WorkFlowSheet.Components[0]);
     WorkFlowSheet.Parent := PageControl1;
     WorkFlowSheet.TabIndex := 0;
     WorkFlowSheet.Caption := 'WorkFlow';

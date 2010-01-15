@@ -1,27 +1,27 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TEditorForm','FORMDATA',[
-  'TPF0'#11'TEditorForm'#10'EditorForm'#4'Left'#3'y'#2#6'Height'#3':'#2#3'Top'#3
-  +'U'#1#5'Width'#3':'#3#13'ActiveControl'#7#9'SynEditor'#7'Caption'#6#6'Editor'
-  +#12'ClientHeight'#3'!'#2#11'ClientWidth'#3':'#3#4'Menu'#7#10'EditorMenu'#12
-  +'OnCloseQuery'#7#14'FormCloseQuery'#6'OnShow'#7#8'FormShow'#8'Position'#7#16
-  +'poMainFormCenter'#13'ShowInTaskBar'#7#8'stAlways'#10'LCLVersion'#6#6'0.9.29'
-  +#0#244#8'TSynEdit'#9'SynEditor'#4'Left'#2#0#6'Height'#3#12#2#3'Top'#2#0#5'Wi'
-  +'dth'#3':'#3#5'Align'#7#8'alClient'#11'Font.Height'#2#243#9'Font.Name'#6#11
-  +'Courier New'#10'Font.Pitch'#7#7'fpFixed'#12'Font.Quality'#7#16'fqNonAntiali'
-  +'ased'#11'ParentColor'#8#10'ParentFont'#8#9'PopupMenu'#7#15'EditorPopupMenu'
-  +#8'TabOrder'#2#0#12'Gutter.Width'#2#23#19'Gutter.MouseActions'#14#1#5'Shift'
-  +#11#0#9'ShiftMask'#11#0#6'Button'#7#6'mbLeft'#10'ClickCount'#7#5'ccAny'#8'Cl'
-  +'ickDir'#7#6'cdDown'#7'Command'#2#13#9'MoveCaret'#8#6'Option'#2#0#8'Priority'
-  +#2#0#0#1#5'Shift'#11#0#9'ShiftMask'#11#0#6'Button'#7#7'mbRight'#10'ClickCoun'
-  +'t'#7#8'ccSingle'#8'ClickDir'#7#4'cdUp'#7'Command'#2#12#9'MoveCaret'#8#6'Opt'
-  +'ion'#2#0#8'Priority'#2#0#0#0#10'Keystrokes'#14#1#7'Command'#7#4'ecUp'#8'Sho'
-  +'rtCut'#2'&'#0#1#7'Command'#7#7'ecSelUp'#8'ShortCut'#3'& '#0#1#7'Command'#7
-  +#10'ecScrollUp'#8'ShortCut'#3'&@'#0#1#7'Command'#7#6'ecDown'#8'ShortCut'#2'('
-  +#0#1#7'Command'#7#9'ecSelDown'#8'ShortCut'#3'( '#0#1#7'Command'#7#12'ecScrol'
-  +'lDown'#8'ShortCut'#3'(@'#0#1#7'Command'#7#6'ecLeft'#8'ShortCut'#2'%'#0#1#7
-  +'Command'#7#9'ecSelLeft'#8'ShortCut'#3'% '#0#1#7'Command'#7#10'ecWordLeft'#8
-  +'ShortCut'#3'%@'#0#1#7'Command'#7#13'ecSelWordLeft'#8'ShortCut'#3'%`'#0#1#7
+  'TPF0'#11'TEditorForm'#10'EditorForm'#4'Left'#3'<'#1#6'Height'#3':'#2#3'Top'#3
+  +#241#0#5'Width'#3':'#3#13'ActiveControl'#7#9'SynEditor'#7'Caption'#6#6'Edito'
+  +'r'#12'ClientHeight'#3'!'#2#11'ClientWidth'#3':'#3#4'Menu'#7#10'EditorMenu'
+  +#12'OnCloseQuery'#7#14'FormCloseQuery'#6'OnShow'#7#8'FormShow'#8'Position'#7
+  +#16'poMainFormCenter'#13'ShowInTaskBar'#7#8'stAlways'#10'LCLVersion'#6#6'0.9'
+  +'.29'#0#244#8'TSynEdit'#9'SynEditor'#4'Left'#2#0#6'Height'#3#12#2#3'Top'#2#0
+  +#5'Width'#3':'#3#5'Align'#7#8'alClient'#11'Font.Height'#2#243#9'Font.Name'#6
+  +#11'Courier New'#10'Font.Pitch'#7#7'fpFixed'#12'Font.Quality'#7#16'fqNonAnti'
+  +'aliased'#11'ParentColor'#8#10'ParentFont'#8#9'PopupMenu'#7#15'EditorPopupMe'
+  +'nu'#8'TabOrder'#2#0#12'Gutter.Width'#2#23#19'Gutter.MouseActions'#14#1#5'Sh'
+  +'ift'#11#0#9'ShiftMask'#11#0#6'Button'#7#6'mbLeft'#10'ClickCount'#7#5'ccAny'
+  +#8'ClickDir'#7#6'cdDown'#7'Command'#2#13#9'MoveCaret'#8#6'Option'#2#0#8'Prio'
+  +'rity'#2#0#0#1#5'Shift'#11#0#9'ShiftMask'#11#0#6'Button'#7#7'mbRight'#10'Cli'
+  +'ckCount'#7#8'ccSingle'#8'ClickDir'#7#4'cdUp'#7'Command'#2#12#9'MoveCaret'#8
+  +#6'Option'#2#0#8'Priority'#2#0#0#0#10'Keystrokes'#14#1#7'Command'#7#4'ecUp'#8
+  +'ShortCut'#2'&'#0#1#7'Command'#7#7'ecSelUp'#8'ShortCut'#3'& '#0#1#7'Command'
+  +#7#10'ecScrollUp'#8'ShortCut'#3'&@'#0#1#7'Command'#7#6'ecDown'#8'ShortCut'#2
+  +'('#0#1#7'Command'#7#9'ecSelDown'#8'ShortCut'#3'( '#0#1#7'Command'#7#12'ecSc'
+  +'rollDown'#8'ShortCut'#3'(@'#0#1#7'Command'#7#6'ecLeft'#8'ShortCut'#2'%'#0#1
+  +#7'Command'#7#9'ecSelLeft'#8'ShortCut'#3'% '#0#1#7'Command'#7#10'ecWordLeft'
+  +#8'ShortCut'#3'%@'#0#1#7'Command'#7#13'ecSelWordLeft'#8'ShortCut'#3'%`'#0#1#7
   +'Command'#7#7'ecRight'#8'ShortCut'#2''''#0#1#7'Command'#7#10'ecSelRight'#8'S'
   +'hortCut'#3''' '#0#1#7'Command'#7#11'ecWordRight'#8'ShortCut'#3'''@'#0#1#7'C'
   +'ommand'#7#14'ecSelWordRight'#8'ShortCut'#3'''`'#0#1#7'Command'#7#10'ecPageD'
@@ -165,30 +165,37 @@ LazarusResources.Add('TEditorForm','FORMDATA',[
   +'Action'#7'OnClick'#7#16'CutActionExecute'#0#0#9'TMenuItem'#12'CopyMenuItem'
   +#6'Action'#7#10'CopyAction'#7'OnClick'#7#17'CopyActionExecute'#0#0#9'TMenuIt'
   +'em'#13'PasteMenuItem'#6'Action'#7#11'PasteAction'#7'OnClick'#7#18'PasteActi'
-  +'onExecute'#0#0#0#0#11'TActionList'#16'EditorActionList'#4'left'#3#192#1#3't'
-  +'op'#3#192#0#0#7'TAction'#11'CloseAction'#8'Category'#6#4'File'#7'Caption'#6
-  +#6'&Close'#9'OnExecute'#7#18'CloseActionExecute'#0#0#7'TAction'#14'OpenFileA'
-  +'ction'#8'Category'#6#4'File'#7'Caption'#6#8'Open ...'#9'OnExecute'#7#21'Ope'
-  +'nFileActionExecute'#8'ShortCut'#3'O@'#0#0#7'TAction'#10'SaveAction'#8'Categ'
-  +'ory'#6#4'File'#7'Caption'#6#4'Save'#9'OnExecute'#7#17'SaveActionExecute'#8
-  +'ShortCut'#3'S@'#0#0#7'TAction'#12'SaveAsAction'#8'Category'#6#4'File'#7'Cap'
-  +'tion'#6#11'Save As ...'#9'OnExecute'#7#19'SaveAsActionExecute'#8'ShortCut'#3
-  +'S`'#0#0#7'TAction'#10'UndoAction'#8'Category'#6#4'Edit'#7'Caption'#6#4'Undo'
-  +#9'OnExecute'#7#17'UndoActionExecute'#8'ShortCut'#3'Z@'#0#0#7'TAction'#10'Re'
-  +'doAction'#8'Category'#6#4'Edit'#7'Caption'#6#4'Redo'#9'OnExecute'#7#17'Redo'
-  +'ActionExecute'#8'ShortCut'#3'Z`'#0#0#7'TAction'#9'CutAction'#8'Category'#6#4
-  +'Edit'#7'Caption'#6#3'Cut'#9'OnExecute'#7#16'CutActionExecute'#8'ShortCut'#3
-  +'X@'#0#0#7'TAction'#10'CopyAction'#8'Category'#6#4'Edit'#7'Caption'#6#4'Copy'
-  +#9'OnExecute'#7#17'CopyActionExecute'#8'ShortCut'#3'C@'#0#0#7'TAction'#11'Pa'
-  +'steAction'#8'Category'#6#4'Edit'#7'Caption'#6#5'Paste'#9'OnExecute'#7#18'Pa'
-  +'steActionExecute'#8'ShortCut'#3'V@'#0#0#0#10'TSynXMLSyn'#14'XMLHighlighter'
-  +#13'DefaultFilter'#6'LXML Document (*.xml,*.xsd,*.xsl,*.xslt,*.dtd)|*.xml;*.'
-  +'xsd;*.xsl;*.xslt;*.dtd'#7'Enabled'#8#16'WantBracesParsed'#8#4'left'#2'p'#3
-  +'top'#2'('#0#0#10'TPopupMenu'#15'EditorPopupMenu'#4'left'#3'('#2#3'top'#3#128
-  +#0#0#9'TMenuItem'#14'CutPopMenuItem'#6'Action'#7#9'CutAction'#7'OnClick'#7#16
-  +'CutActionExecute'#0#0#9'TMenuItem'#15'CopyPopMenuItem'#6'Action'#7#10'CopyA'
-  +'ction'#7'OnClick'#7#17'CopyActionExecute'#0#0#9'TMenuItem'#16'PastePopMenuI'
-  +'tem'#6'Action'#7#11'PasteAction'#7'OnClick'#7#18'PasteActionExecute'#0#0#9
-  +'TMenuItem'#13'PopupDivider1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem4'
-  +#7'Caption'#6#9'New Item5'#0#0#0#0
+  +'onExecute'#0#0#9'TMenuItem'#9'MenuItem4'#7'Caption'#6#1'-'#0#0#9'TMenuItem'
+  +#22'SendToDesignerMenuItem'#7'Caption'#6#16'Send to Designer'#0#9'TMenuItem'
+  +#20'PasteAsLabelMenuItem'#6'Action'#7#18'PasteAsLabelAction'#7'OnClick'#7#25
+  +'PasteAsLabelActionExecute'#0#0#0#0#0#11'TActionList'#16'EditorActionList'#4
+  +'left'#3#192#1#3'top'#3#192#0#0#7'TAction'#11'CloseAction'#8'Category'#6#4'F'
+  +'ile'#7'Caption'#6#6'&Close'#9'OnExecute'#7#18'CloseActionExecute'#0#0#7'TAc'
+  +'tion'#14'OpenFileAction'#8'Category'#6#4'File'#7'Caption'#6#8'Open ...'#9'O'
+  +'nExecute'#7#21'OpenFileActionExecute'#8'ShortCut'#3'O@'#0#0#7'TAction'#10'S'
+  +'aveAction'#8'Category'#6#4'File'#7'Caption'#6#4'Save'#9'OnExecute'#7#17'Sav'
+  +'eActionExecute'#8'ShortCut'#3'S@'#0#0#7'TAction'#12'SaveAsAction'#8'Categor'
+  +'y'#6#4'File'#7'Caption'#6#11'Save As ...'#9'OnExecute'#7#19'SaveAsActionExe'
+  +'cute'#8'ShortCut'#3'S`'#0#0#7'TAction'#10'UndoAction'#8'Category'#6#4'Edit'
+  +#7'Caption'#6#4'Undo'#9'OnExecute'#7#17'UndoActionExecute'#8'ShortCut'#3'Z@'
+  +#0#0#7'TAction'#10'RedoAction'#8'Category'#6#4'Edit'#7'Caption'#6#4'Redo'#9
+  +'OnExecute'#7#17'RedoActionExecute'#8'ShortCut'#3'Z`'#0#0#7'TAction'#9'CutAc'
+  +'tion'#8'Category'#6#4'Edit'#7'Caption'#6#3'Cut'#9'OnExecute'#7#16'CutAction'
+  +'Execute'#8'ShortCut'#3'X@'#0#0#7'TAction'#10'CopyAction'#8'Category'#6#4'Ed'
+  +'it'#7'Caption'#6#4'Copy'#9'OnExecute'#7#17'CopyActionExecute'#8'ShortCut'#3
+  +'C@'#0#0#7'TAction'#11'PasteAction'#8'Category'#6#4'Edit'#7'Caption'#6#5'Pas'
+  +'te'#9'OnExecute'#7#18'PasteActionExecute'#8'ShortCut'#3'V@'#0#0#7'TAction'
+  +#18'PasteAsLabelAction'#8'Category'#6#4'Edit'#7'Caption'#6#15'Paste As Label'
+  +'s'#9'OnExecute'#7#25'PasteAsLabelActionExecute'#8'ShortCut'#2'w'#0#0#0#10'T'
+  +'SynXMLSyn'#14'XMLHighlighter'#13'DefaultFilter'#6'LXML Document (*.xml,*.xs'
+  +'d,*.xsl,*.xslt,*.dtd)|*.xml;*.xsd;*.xsl;*.xslt;*.dtd'#7'Enabled'#8#16'WantB'
+  +'racesParsed'#8#4'left'#2'p'#3'top'#2'('#0#0#10'TPopupMenu'#15'EditorPopupMe'
+  +'nu'#4'left'#3'('#2#3'top'#3#128#0#0#9'TMenuItem'#14'CutPopMenuItem'#6'Actio'
+  +'n'#7#9'CutAction'#7'OnClick'#7#16'CutActionExecute'#0#0#9'TMenuItem'#15'Cop'
+  +'yPopMenuItem'#6'Action'#7#10'CopyAction'#7'OnClick'#7#17'CopyActionExecute'
+  ,#0#0#9'TMenuItem'#16'PastePopMenuItem'#6'Action'#7#11'PasteAction'#7'OnClick'
+  +#7#18'PasteActionExecute'#0#0#9'TMenuItem'#13'PopupDivider1'#7'Caption'#6#1
+  +'-'#0#0#9'TMenuItem'#25'SendToDesignerPopMenuItem'#7'Caption'#6#19'Send to D'
+  +'esigner...'#0#9'TMenuItem'#23'PasteAsLabelPopMenuItem'#6'Action'#7#18'Paste'
+  +'AsLabelAction'#7'OnClick'#7#25'PasteAsLabelActionExecute'#0#0#0#0#0
 ]);

@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 878
-  DesignTop = 327
+  DesignLeft = 281
+  DesignTop = 242
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
