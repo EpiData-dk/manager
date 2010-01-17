@@ -261,10 +261,10 @@
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
         <g
-           id="g2472"
+           id="g5321"
            inkscape:export-filename="E:\epidatamanager\trunk\images\managermap.png"
-           inkscape:export-xdpi="122.25"
-           inkscape:export-ydpi="122.25">
+           inkscape:export-xdpi="122.73"
+           inkscape:export-ydpi="122.73">
           <rect
              inkscape:export-ydpi="300"
              inkscape:export-xdpi="300"
@@ -307,7 +307,7 @@
              xml:space="preserve"
              id="flowRoot2487"
              style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#f9f9f9;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
-             transform="translate(113.09375,-9.4462093)"><flowRegion
+             transform="translate(110.02015,-9.4462093)"><flowRegion
                id="flowRegion2489"><rect
                  id="rect2491"
                  width="262.34955"
@@ -318,60 +318,62 @@
                id="flowPara2495">Design Data Form</flowPara></flowRoot>          <text
              xml:space="preserve"
              style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
-             x="320"
+             x="319.31683"
              y="332.36218"
              id="text2503"
              sodipodi:linespacing="125%"><tspan
                sodipodi:role="line"
                id="tspan2505"
-               x="320"
+               x="319.31683"
                y="332.36218">Extended definition</tspan></text>
           <text
              xml:space="preserve"
              style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
-             x="320"
+             x="319.12164"
              y="408.36218"
              id="text2507"
              sodipodi:linespacing="125%"><tspan
                sodipodi:role="line"
                id="tspan2509"
-               x="320"
+               x="319.12164"
                y="408.36218">Document, Validate &amp; Export</tspan></text>
           <text
              xml:space="preserve"
              style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
-             x="322"
+             x="319.31683"
              y="177.36218"
              id="text2511"
              sodipodi:linespacing="125%"><tspan
                sodipodi:role="line"
                id="tspan2513"
-               x="322"
+               x="319.31683"
                y="177.36218">Prepare Project</tspan></text>
           <text
              xml:space="preserve"
              style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
-             x="319"
+             x="320.60962"
              y="491.36218"
              id="text2515"
              sodipodi:linespacing="125%"><tspan
                sodipodi:role="line"
                id="tspan2517"
-               x="319"
+               x="320.60962"
                y="491.36218">Text Editor</tspan></text>
           <flowRoot
+             transform="translate(-1.952006,0)"
              xml:space="preserve"
              id="flowRoot2559"
-             style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"><flowRegion
+             style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"><flowRegion
                id="flowRegion2561"><rect
                  id="rect2564"
                  width="231.13181"
                  height="39.032913"
                  x="338.86819"
                  y="183.32927"
-                 style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr;text-anchor:start;font-family:Tahoma;-inkscape-font-specification:Tahoma;fill:#ffffff" /></flowRegion><flowPara
+                 style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;font-family:Tahoma;-inkscape-font-specification:Tahoma" /></flowRegion><flowPara
                id="flowPara2566">Define aim, forms, questions and</flowPara><flowPara
                id="flowPara2568">data collection methods </flowPara></flowRoot>          <flowRoot
+             transform="translate(-1.5616048,0)"
              xml:space="preserve"
              id="flowRoot2570"
              style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"><flowRegion
@@ -385,39 +387,57 @@
                id="flowPara2576">Add questions, labels, jumps and basic controls or modify structure</flowPara></flowRoot>          <text
              xml:space="preserve"
              style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
-             x="340"
+             x="336.77936"
              y="346.36218"
              id="text2636"
              sodipodi:linespacing="100%"><tspan
-               style="font-size:13"
+               style="font-size:13px"
                sodipodi:role="line"
                id="tspan2638"
-               x="340"
+               x="336.77936"
                y="346.36218">Double entry, GCP, extended controls</tspan><tspan
-               style="font-size:13"
+               style="font-size:13px"
                sodipodi:role="line"
-               x="340"
+               x="336.77936"
                y="359.36218"
                id="tspan2640">and related entry structures</tspan></text>
           <text
              xml:space="preserve"
              style="font-size:13px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Tahoma;-inkscape-font-specification:Tahoma"
-             x="340"
+             x="337.36493"
              y="422.36218"
              id="text2636-1"
              sodipodi:linespacing="100%"><tspan
                style="font-size:13px"
                sodipodi:role="line"
                id="tspan2638-7"
-               x="340"
+               x="337.36493"
                y="422.36218">View definitions, validate, GCP tools,</tspan><tspan
                style="font-size:13px"
                sodipodi:role="line"
-               x="340"
+               x="337.36493"
                y="435.36218"
                id="tspan2640-4">export data to analysis</tspan></text>
         </g>
-      </g>
+        <rect
+           style="opacity:0.92000002;fill:#3985ff;fill-opacity:1;fill-rule:nonzero;stroke:#7a7a7a;stroke-width:0.54361492;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect2524"
+           width="19.656385"
+           height="420.95639"
+           x="70.343613"
+           y="131.40579" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot5313"
+           style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Tahoma;-inkscape-font-specification:Tahoma"
+           transform="translate(1.7782406,25.007812)"><flowRegion
+             id="flowRegion5315"><rect
+               id="rect5317"
+               width="97.600281"
+               height="52.313751"
+               x="39.040112"
+               y="70.893745" /></flowRegion><flowPara
+             id="flowPara5319">align guide</flowPara></flowRoot>      </g>
     </g>
   </g>
 </svg>

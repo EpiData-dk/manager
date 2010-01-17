@@ -22,7 +22,7 @@ type
     CancelBtn: TButton;
     DefaultPasteCombo: TComboBox;
     DefaultDateCombo: TComboBox;
-    Edit1: TEdit;
+    DefaultDataEdit: TEdit;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
     FieldNamingAutoRadio: TRadioButton;
@@ -61,9 +61,9 @@ type
     PageControl1: TPageControl;
     Panel1: TPanel;
     ShowFieldNameChkBox: TCheckBox;
-    BasicSheet: TTabSheet;
+    VisualDesignSheet: TTabSheet;
     AdvSheet: TTabSheet;
-    LengthSheet: TTabSheet;
+    FieldDefSheet: TTabSheet;
     procedure CloseActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
