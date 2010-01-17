@@ -20,8 +20,8 @@
       <CurrentMajorRevNr Value="3"/>
       <CurrentBuildNr Value="7"/>
       <ProjectVersion Value="0.3.0.7"/>
-      <Language Value="0810"/>
-      <CharSet Value="04E7"/>
+      <Language Value="0410"/>
+      <CharSet Value="04E6"/>
       <FileDescription Value="Get latest from Http://www.epidata.dk"/>
       <LegalCopyright Value="EpiData Association, Denmark"/>
       <ProductName Value="EpiData Manager"/>
@@ -176,8 +176,7 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <GenerateDwarf Value="True"/>
+        <UseLineInfoUnit Value="False"/>
       </Debugging>
       <Options>
         <Win32>
@@ -186,7 +185,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG"/>
+      <CustomOptions Value="-dEPI_DEBUG1"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

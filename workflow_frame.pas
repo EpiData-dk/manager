@@ -5,7 +5,7 @@ unit workflow_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, Controls,
+  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, Controls, StdCtrls,
   managertypes;
 
 type
@@ -15,8 +15,10 @@ type
   TWorkFlowFrame = class(TFrame, IManagerFrame)
     BackgroundImage: TImage;
     DesignBtnImage: TImage;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     WorkFlowImageList: TImageList;
-    ModifyBtnImage: TImage;
     ExtendBtnImage: TImage;
     DocumentBtnImage: TImage;
     AdvBtnImage: TImage;
@@ -88,7 +90,7 @@ begin
   inherited Create(TheOwner);
 
   LoadImage(DesignBtnImage, 1);
-  LoadImage(ModifyBtnImage, 1);
+  //LoadImage(ModifyBtnImage, 1);
   LoadImage(ExtendBtnImage, 1);
   LoadImage(DocumentBtnImage, 1);
   LoadImage(AdvBtnImage, 1);
