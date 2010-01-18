@@ -65,6 +65,7 @@ type
     AdvSheet: TTabSheet;
     FieldDefSheet: TTabSheet;
     procedure CloseActionExecute(Sender: TObject);
+    procedure DefaultPasteComboChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure SnapFieldsChkBoxChange(Sender: TObject);
@@ -227,17 +228,22 @@ begin
   // Advanced:
   ManagerSettings.WorkingDirUTF8        := WorkingDirEdit.Text;
   case DefaultPasteCombo.ItemIndex of
-    0: ManagerSettings.PasteSpecialType := ftRes4;
+    0: ManagerSettings.PasteSpecialType := ftQuestion;
     1: ManagerSettings.PasteSpecialType := ftFloat;
     2: ManagerSettings.PasteSpecialType := ftInteger;
     3: ManagerSettings.PasteSpecialType := ftDate;
-    4: ManagerSettings.PasteSpecialType := ftQuestion;
+    4: ManagerSettings.PasteSpecialType := ftRes4;
   end;
 end;
 
 procedure TSettingsForm.CloseActionExecute(Sender: TObject);
 begin
   CancelBtn.Click;
+end;
+
+procedure TSettingsForm.DefaultPasteComboChange(Sender: TObject);
+begin
+
 end;
 
 procedure TSettingsForm.FormCreate(Sender: TObject);

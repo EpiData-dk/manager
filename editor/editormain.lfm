@@ -1,11 +1,11 @@
 object EditorForm: TEditorForm
-  Left = 630
+  Left = 359
   Height = 570
-  Top = 294
+  Top = 355
   Width = 826
   ActiveControl = SynEditor
   Caption = 'Editor'
-  ClientHeight = 545
+  ClientHeight = 548
   ClientWidth = 826
   Menu = EditorMenu
   OnCloseQuery = FormCloseQuery
@@ -15,7 +15,7 @@ object EditorForm: TEditorForm
   LCLVersion = '0.9.29'
   inline SynEditor: TSynEdit
     Left = 0
-    Height = 524
+    Height = 528
     Top = 0
     Width = 826
     Align = alClient
@@ -711,8 +711,8 @@ object EditorForm: TEditorForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 524
+    Height = 20
+    Top = 528
     Width = 826
     Panels = <    
       item
@@ -788,17 +788,13 @@ object EditorForm: TEditorForm
         Caption = '-'
       end
       object SendToDesignerMenuItem: TMenuItem
-        Caption = 'Send to Designer'
-        object PasteAsDefaultMenuItem: TMenuItem
-          Action = PasteAsDefaultAction
-          OnClick = PasteAsDefaultActionExecute
-        end
-        object Divider1: TMenuItem
-          Caption = '-'
-        end
+        Caption = 'Paste on Dataform..'
         object PasteAsLabelMenuItem: TMenuItem
           Action = PasteAsLabelAction
           OnClick = PasteAsLabelActionExecute
+        end
+        object Divider1: TMenuItem
+          Caption = '-'
         end
         object PasteAsIntMenuItem: TMenuItem
           Action = PasteAsIntAction
@@ -815,6 +811,10 @@ object EditorForm: TEditorForm
         object PasteAsQESMenuItem: TMenuItem
           Action = PasteAsQESAction
           OnClick = PasteAsQESActionExecute
+        end
+        object PasteAsDefaultMenuItem: TMenuItem
+          Action = PasteAsDefaultAction
+          OnClick = PasteAsDefaultActionExecute
         end
       end
     end
@@ -934,17 +934,14 @@ object EditorForm: TEditorForm
       Caption = '-'
     end
     object SendToDesignerPopMenuItem: TMenuItem
-      Caption = 'Send to Designer...'
-      object PasteAsDefPopMenuItem: TMenuItem
-        Action = PasteAsDefaultAction
-        OnClick = PasteAsDefaultActionExecute
-      end
-      object SendToDesignDivider1: TMenuItem
-        Caption = '-'
-      end
+      Caption = 'Paste on Dataform ..'
+      OnClick = SendToDesignerPopMenuItemClick
       object PasteAsLabelPopMenuItem: TMenuItem
         Action = PasteAsLabelAction
         OnClick = PasteAsLabelActionExecute
+      end
+      object SendToDesignDivider1: TMenuItem
+        Caption = '-'
       end
       object PasteAsIntPopMenuItem: TMenuItem
         Action = PasteAsIntAction
@@ -957,6 +954,10 @@ object EditorForm: TEditorForm
       object PasteAsStringPopMenuItem: TMenuItem
         Action = PasteAsStringAction
         OnClick = PasteAsStringActionExecute
+      end
+      object PasteAsDefPopMenuItem: TMenuItem
+        Action = PasteAsDefaultAction
+        OnClick = PasteAsDefaultActionExecute
       end
       object PasteAsQESPopMenuItem: TMenuItem
         Action = PasteAsQESAction
