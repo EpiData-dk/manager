@@ -1,16 +1,16 @@
 object WorkFlowFrame: TWorkFlowFrame
   Left = 0
-  Height = 600
+  Height = 619
   Top = 0
-  Width = 600
-  ClientHeight = 600
-  ClientWidth = 600
+  Width = 735
+  ClientHeight = 619
+  ClientWidth = 735
   Color = 16278796
   OnResize = FrameResize
   ParentColor = False
   TabOrder = 0
-  DesignLeft = 306
-  DesignTop = 95
+  DesignLeft = 618
+  DesignTop = 261
   object BgPanel: TPanel
     Left = 48
     Height = 529
@@ -2054,6 +2054,7 @@ object WorkFlowFrame: TWorkFlowFrame
       OnMouseDown = ImageBtnMouseDown
       OnMouseEnter = ImageBtnMouseEnter
       OnMouseLeave = ImageBtnMouseLeave
+      OnMouseUp = ImageBtnImageMouseUp
     end
     object ExtendBtnImage: TImage
       Left = 96
@@ -2065,6 +2066,7 @@ object WorkFlowFrame: TWorkFlowFrame
       OnMouseDown = ImageBtnMouseDown
       OnMouseEnter = ImageBtnMouseEnter
       OnMouseLeave = ImageBtnMouseLeave
+      OnMouseUp = ImageBtnImageMouseUp
     end
     object DocumentBtnImage: TImage
       Left = 96
@@ -2076,6 +2078,7 @@ object WorkFlowFrame: TWorkFlowFrame
       OnMouseDown = ImageBtnMouseDown
       OnMouseEnter = ImageBtnMouseEnter
       OnMouseLeave = ImageBtnMouseLeave
+      OnMouseUp = ImageBtnImageMouseUp
     end
     object AdvBtnImage: TImage
       Left = 96
@@ -2087,12 +2090,13 @@ object WorkFlowFrame: TWorkFlowFrame
       OnMouseDown = ImageBtnMouseDown
       OnMouseEnter = ImageBtnMouseEnter
       OnMouseLeave = ImageBtnMouseLeave
+      OnMouseUp = ImageBtnImageMouseUp
     end
     object Label1: TLabel
-      Left = 65
-      Height = 23
+      Left = 64
+      Height = 22
       Top = 141
-      Width = 12
+      Width = 11
       Caption = '1'
       FocusControl = BgPanel
       Font.CharSet = ANSI_CHARSET
@@ -2106,10 +2110,10 @@ object WorkFlowFrame: TWorkFlowFrame
       ShowAccelChar = False
     end
     object Label2: TLabel
-      Left = 65
-      Height = 23
-      Top = 243
-      Width = 12
+      Left = 64
+      Height = 22
+      Top = 242
+      Width = 11
       Caption = '2'
       Font.CharSet = ANSI_CHARSET
       Font.Color = clWhite
@@ -2119,15 +2123,12 @@ object WorkFlowFrame: TWorkFlowFrame
       Font.Quality = fqDraft
       ParentColor = False
       ParentFont = False
-      OnMouseDown = ImageBtnMouseDown
-      OnMouseEnter = ImageBtnMouseEnter
-      OnMouseLeave = ImageBtnMouseLeave
     end
     object Label3: TLabel
-      Left = 65
-      Height = 23
-      Top = 347
-      Width = 12
+      Left = 64
+      Height = 22
+      Top = 346
+      Width = 11
       Caption = '3'
       Font.CharSet = ANSI_CHARSET
       Font.Color = clWhite
@@ -2137,16 +2138,13 @@ object WorkFlowFrame: TWorkFlowFrame
       Font.Quality = fqDraft
       ParentColor = False
       ParentFont = False
-      OnMouseDown = ImageBtnMouseDown
-      OnMouseEnter = ImageBtnMouseEnter
-      OnMouseLeave = ImageBtnMouseLeave
     end
   end
   object WorkFlowImageList: TImageList
     Height = 42
     Width = 42
-    left = 64
-    top = 32
+    left = 88
+    top = 72
     Bitmap = {
       4C69040000002A0000002A000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF

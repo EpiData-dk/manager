@@ -77,6 +77,7 @@ type
     ProgressBarMain: TProgressBar;
     WorkFlowSheet: TTabSheet;
     procedure CloseTab(Sender: TObject);
+    function GetWorkFlowShown: boolean;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -87,6 +88,7 @@ type
     procedure AddToMenu(aAction: TBasicAction; Section: Cardinal); overload;
     procedure RemoveFromMenu(Section: Cardinal);
     property ActiveFrame: TFrame read FActiveFrame;
+    property WorkFlowShown: boolean read GetWorkFlowShown;
   end;
 
 const
@@ -94,6 +96,7 @@ const
   MMFile    = $000000;
    MMFileRW   = $0200;
   MMEdit    = $010000;
+   MMEditTop =  $0000;
   MMTools   = $020000;
    MMToolsTop = $0000;
   MMHelp    = $030000;
@@ -213,6 +216,7 @@ begin
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
   TabSheet.Caption := 'Untitled';
+
   if TabNameCount > 1 then
     TabSheet.Caption := TabSheet.Caption + ' (' + IntToStr(TabNameCount-1) + ')';
 
@@ -369,6 +373,11 @@ begin
     ShowOnStatusBar('', 1);
     ShowOnStatusBar('', 2);
   end;
+end;
+
+function TMainForm.GetWorkFlowShown: boolean;
+begin
+  result := Assigned(WorkFlowSheet);
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);

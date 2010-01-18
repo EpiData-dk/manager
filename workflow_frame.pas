@@ -23,6 +23,8 @@ type
     DocumentBtnImage: TImage;
     AdvBtnImage: TImage;
     BgPanel: TPanel;
+    procedure ImageBtnImageMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure ImageBtnMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure ImageBtnMouseEnter(Sender: TObject);
@@ -30,9 +32,6 @@ type
     procedure FrameResize(Sender: TObject);
   private
     { private declarations }
-    CircleIdleStream: TMemoryStream;
-    CircleOverStrean: TMemoryStream;
-    CircleDownStream: TMemoryStream;
     procedure LoadImage(Img: TImage; Idx: Integer);
   public
     { public declarations }
@@ -80,6 +79,12 @@ begin
   LoadImage(TImage(Sender), 0);
 end;
 
+procedure TWorkFlowFrame.ImageBtnImageMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  LoadImage(TImage(Sender), 2);
+end;
+
 procedure TWorkFlowFrame.ImageBtnMouseLeave(Sender: TObject);
 begin
   LoadImage(TImage(Sender), 1);
@@ -90,7 +95,6 @@ begin
   inherited Create(TheOwner);
 
   LoadImage(DesignBtnImage, 1);
-  //LoadImage(ModifyBtnImage, 1);
   LoadImage(ExtendBtnImage, 1);
   LoadImage(DocumentBtnImage, 1);
   LoadImage(AdvBtnImage, 1);
@@ -101,9 +105,6 @@ end;
 
 destructor TWorkFlowFrame.Destroy;
 begin
-  CircleDownStream.Free;
-  CircleIdleStream.Free;
-  CircleOverStrean.Free;
   inherited Destroy;
 end;
 

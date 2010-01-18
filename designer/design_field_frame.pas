@@ -186,15 +186,6 @@ begin
   FDf := DataFile;
   FNewField := NewField;
 
-{  if (FDf.Size > 0) and (NewField) then
-  begin
-    Label6.Enabled := true;
-    Label6.Visible := true;
-    DefaultValueEdit.Enabled := true;
-    DefaultValueEdit.Visible := true;
-    Height := Height + DefaultValueEdit.Height + 5;
-  end;           }
-
   if ManagerSettings.FieldNamePrefix <> '' then
     FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(FDf.NumDataFields+1);
   Case FieldType of

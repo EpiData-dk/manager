@@ -13,6 +13,23 @@ type
   { TEditorForm }
 
   TEditorForm = class(TForm)
+    Divider1: TMenuItem;
+    PasteAsQESMenuItem: TMenuItem;
+    PasteAsDefaultMenuItem: TMenuItem;
+    SendToDesignDivider1: TMenuItem;
+    PasteAsDefPopMenuItem: TMenuItem;
+    PasteAsQESPopMenuItem: TMenuItem;
+    PasteAsDefaultAction: TAction;
+    PasteAsQESAction: TAction;
+    PasteAsStringMenuItem: TMenuItem;
+    PasteAsFloatMenuItem: TMenuItem;
+    PasteAsIntMenuItem: TMenuItem;
+    PasteAsStringPopMenuItem: TMenuItem;
+    PasteAsFloatPopMenuItem: TMenuItem;
+    PasteAsStringAction: TAction;
+    PasteAsFloatAction: TAction;
+    PasteAsIntPopMenuItem: TMenuItem;
+    PasteAsIntAction: TAction;
     MenuItem4: TMenuItem;
     PasteAsLabelMenuItem: TMenuItem;
     SendToDesignerMenuItem: TMenuItem;
@@ -58,7 +75,12 @@ type
     procedure FormShow(Sender: TObject);
     procedure OpenFileActionExecute(Sender: TObject);
     procedure PasteActionExecute(Sender: TObject);
+    procedure PasteAsDefaultActionExecute(Sender: TObject);
+    procedure PasteAsFloatActionExecute(Sender: TObject);
+    procedure PasteAsIntActionExecute(Sender: TObject);
     procedure PasteAsLabelActionExecute(Sender: TObject);
+    procedure PasteAsQESActionExecute(Sender: TObject);
+    procedure PasteAsStringActionExecute(Sender: TObject);
     procedure RedoActionExecute(Sender: TObject);
     procedure SaveActionExecute(Sender: TObject);
     procedure SaveAsActionExecute(Sender: TObject);
@@ -155,6 +177,36 @@ begin
   SynEditor.PasteFromClipboard;
 end;
 
+procedure TEditorForm.PasteAsDefaultActionExecute(Sender: TObject);
+begin
+  if MainForm.ActiveFrame is TDesignFrame then
+  with TDesignFrame(MainForm.ActiveFrame) do
+  begin
+    CopyAction.Execute;
+    PasteAsDefault.Execute;
+  end;
+end;
+
+procedure TEditorForm.PasteAsFloatActionExecute(Sender: TObject);
+begin
+  if MainForm.ActiveFrame is TDesignFrame then
+  with TDesignFrame(MainForm.ActiveFrame) do
+  begin
+    CopyAction.Execute;
+    PasteAsFloatAction.Execute;
+  end;
+end;
+
+procedure TEditorForm.PasteAsIntActionExecute(Sender: TObject);
+begin
+  if MainForm.ActiveFrame is TDesignFrame then
+  with TDesignFrame(MainForm.ActiveFrame) do
+  begin
+    CopyAction.Execute;
+    PasteAsIntAction.Execute;
+  end;
+end;
+
 procedure TEditorForm.PasteAsLabelActionExecute(Sender: TObject);
 begin
   if MainForm.ActiveFrame is TDesignFrame then
@@ -162,6 +214,26 @@ begin
   begin
     CopyAction.Execute;
     PasteAsLabel.Execute;
+  end;
+end;
+
+procedure TEditorForm.PasteAsQESActionExecute(Sender: TObject);
+begin
+  if MainForm.ActiveFrame is TDesignFrame then
+  with TDesignFrame(MainForm.ActiveFrame) do
+  begin
+    CopyAction.Execute;
+    PasteAsQesAction.Execute;
+  end;
+end;
+
+procedure TEditorForm.PasteAsStringActionExecute(Sender: TObject);
+begin
+  if MainForm.ActiveFrame is TDesignFrame then
+  with TDesignFrame(MainForm.ActiveFrame) do
+  begin
+    CopyAction.Execute;
+    PasteAsStringAction.Execute;
   end;
 end;
 

@@ -1,40 +1,38 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TAutoAlignForm','FORMDATA',[
-  'TPF0'#14'TAutoAlignForm'#13'AutoAlignForm'#4'Left'#3#149#2#6'Height'#3#242#0
+  'TPF0'#14'TAutoAlignForm'#13'AutoAlignForm'#4'Left'#3#149#2#6'Height'#3#227#0
   +#3'Top'#3'('#1#5'Width'#3#9#1#13'ActiveControl'#7#6'Panel1'#11'BorderIcons'
   +#11#0#11'BorderStyle'#7#6'bsNone'#7'Caption'#6#10'Auto Align'#12'ClientHeigh'
-  +'t'#3#242#0#11'ClientWidth'#3#9#1#7'OnClose'#7#9'FormClose'#8'OnCreate'#7#10
+  +'t'#3#227#0#11'ClientWidth'#3#9#1#7'OnClose'#7#9'FormClose'#8'OnCreate'#7#10
   +'FormCreate'#13'ShowInTaskBar'#7#7'stNever'#10'LCLVersion'#6#6'0.9.29'#0#6'T'
-  +'Panel'#6'Panel1'#4'Left'#2#0#6'Height'#3#242#0#3'Top'#2#0#5'Width'#3#9#1#5
+  +'Panel'#6'Panel1'#4'Left'#2#0#6'Height'#3#227#0#3'Top'#2#0#5'Width'#3#9#1#5
   +'Align'#7#8'alClient'#10'BevelInner'#7#9'bvLowered'#10'BevelWidth'#2#2#12'Cl'
-  +'ientHeight'#3#242#0#11'ClientWidth'#3#9#1#5'Color'#7#9'clSkyBlue'#11'Parent'
+  +'ientHeight'#3#227#0#11'ClientWidth'#3#9#1#5'Color'#7#9'clSkyBlue'#11'Parent'
   +'Color'#8#8'TabOrder'#2#0#7'TabStop'#9#0#7'TButton'#7'Button1'#4'Left'#2'h'#6
-  +'Height'#2#26#3'Top'#3#208#0#5'Width'#2'C'#7'Caption'#6#2'Ok'#5'Color'#7#7'c'
+  +'Height'#2#26#3'Top'#3#192#0#5'Width'#2'C'#7'Caption'#6#2'Ok'#5'Color'#7#7'c'
   +'lWhite'#11'ModalResult'#2#1#8'TabOrder'#2#0#0#0#7'TButton'#7'Button2'#4'Lef'
-  +'t'#3#184#0#6'Height'#2#26#3'Top'#3#208#0#5'Width'#2'E'#7'Caption'#6#6'Cance'
+  +'t'#3#184#0#6'Height'#2#26#3'Top'#3#192#0#5'Width'#2'E'#7'Caption'#6#6'Cance'
   +'l'#5'Color'#7#7'clWhite'#11'ModalResult'#2#2#8'TabOrder'#2#2#0#0#11'TRadioG'
-  +'roup'#14'LabelsGroupBox'#4'Left'#2#9#6'Height'#2'X'#3'Top'#2'p'#5'Width'#3
-  +#249#0#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#0#8'AutoFill'#9#7'Caption'
+  +'roup'#14'LabelsGroupBox'#4'Left'#2#18#6'Height'#2'X'#3'Top'#2'`'#5'Width'#3
+  +#241#0#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#0#8'AutoFill'#9#7'Caption'
   +#6#15'Labels aligned:'#28'ChildSizing.LeftRightSpacing'#2#6#28'ChildSizing.T'
   +'opBottomSpacing'#2#6#29'ChildSizing.EnlargeHorizontal'#7#24'crsHomogenousCh'
   +'ildResize'#27'ChildSizing.EnlargeVertical'#7#24'crsHomogenousChildResize'#28
   +'ChildSizing.ShrinkHorizontal'#7#14'crsScaleChilds'#26'ChildSizing.ShrinkVer'
   +'tical'#7#14'crsScaleChilds'#18'ChildSizing.Layout'#7#29'cclLeftToRightThenT'
   +'opToBottom'#27'ChildSizing.ControlsPerLine'#2#1#12'ClientHeight'#2'E'#11'Cl'
-  +'ientWidth'#3#245#0#9'ItemIndex'#2#0#13'Items.Strings'#1#6#10'No Changes'#6#4
+  +'ientWidth'#3#237#0#9'ItemIndex'#2#0#13'Items.Strings'#1#6#10'No Changes'#6#4
   +'Left'#6#5'Right'#0#8'TabOrder'#2#1#7'TabStop'#9#0#0#9'TGroupBox'#9'GroupBox'
-  +'1'#4'Left'#2#9#6'Height'#2'a'#3'Top'#2#8#5'Width'#3#250#0#7'Anchors'#11#5'a'
+  +'1'#4'Left'#2#9#6'Height'#2'Q'#3'Top'#2#8#5'Width'#3#250#0#7'Anchors'#11#5'a'
   +'kTop'#6'akLeft'#7'akRight'#0#7'Caption'#6#24'Vertical Field Alignment'#12'C'
-  +'lientHeight'#2'N'#11'ClientWidth'#3#246#0#8'TabOrder'#2#3#0#12'TRadioButton'
+  +'lientHeight'#2'>'#11'ClientWidth'#3#246#0#8'TabOrder'#2#3#0#12'TRadioButton'
   +#23'EqualVerticalSpaceRadio'#4'Left'#2#5#6'Height'#2#22#3'Top'#2' '#5'Width'
   +#3#156#0#7'Caption'#6#20'Equal Vertical Space'#7'Checked'#9#5'State'#7#9'cbC'
   +'hecked'#8'TabOrder'#2#1#0#0#12'TRadioButton'#17'DefaultAlignRadio'#4'Left'#2
   +#5#6'Height'#2#22#3'Top'#2#8#5'Width'#3#237#0#7'Caption'#6#30'Default Alignm'
-  +'ent (One Column)'#8'TabOrder'#2#0#7'TabStop'#8#0#0#12'TRadioButton'#21'Remo'
-  +'veEmptySpaceRadio'#4'Left'#2#5#6'Height'#2#22#3'Top'#2'8'#5'Width'#3#211#0#7
-  +'Caption'#6#26'Remove Empty Space (lines)'#7'Enabled'#8#8'TabOrder'#2#2#7'Ta'
-  +'bStop'#8#0#0#0#0#11'TActionList'#11'ActionList1'#4'left'#3#176#0#3'top'#3
-  +#128#0#0#7'TAction'#12'CancelAction'#7'Caption'#6#12'CancelAction'#9'OnExecu'
-  +'te'#7#19'CancelActionExecute'#8'ShortCut'#2#27#0#0#0#0
+  +'ent (One Column)'#8'TabOrder'#2#0#7'TabStop'#8#0#0#0#0#11'TActionList'#11'A'
+  +'ctionList1'#4'left'#3#176#0#3'top'#3#128#0#0#7'TAction'#12'CancelAction'#7
+  +'Caption'#6#12'CancelAction'#9'OnExecute'#7#19'CancelActionExecute'#8'ShortC'
+  +'ut'#2#27#0#0#0#0
 ]);

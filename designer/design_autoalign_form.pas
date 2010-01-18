@@ -10,7 +10,7 @@ uses
 
 type
 
-  TAutoAlignMethod = (aamNone, aamDefault, aamEqualSpace, aamRemoveSpace);
+  TAutoAlignMethod = (aamNone, aamDefault, aamEqualSpace);
 
   TAutoAlignRecord = record
     LabelsAlign: TAlign;
@@ -29,7 +29,6 @@ type
     GroupBox1: TGroupBox;
     Panel1: TPanel;
     LabelsGroupBox: TRadioGroup;
-    RemoveEmptySpaceRadio: TRadioButton;
     procedure CancelActionExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -59,8 +58,6 @@ begin
       AlignMethod := aamDefault
     else if EqualVerticalSpaceRadio.Checked then
       AlignMethod := aamEqualSpace
-    else if RemoveEmptySpaceRadio.Checked then
-      AlignMethod := aamRemoveSpace
     else
       AlignMethod := aamNone;
     Case LabelsGroupBox.ItemIndex of

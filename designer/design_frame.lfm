@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 281
-  DesignTop = 242
+  DesignLeft = 2082
+  DesignTop = 496
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -114,11 +114,8 @@ object DesignFrame: TDesignFrame
     end
     object AutoAlignBtn: TToolButton
       Left = 353
-      Hint = 'Align Fields (F9)'
       Top = 1
-      Caption = 'AutoAlignBtn'
-      ImageIndex = 9
-      OnClick = AutoAlignBtnClick
+      Action = AlignAction
     end
     object DateFieldBtn: TToolButton
       Tag = 11
@@ -305,7 +302,9 @@ object DesignFrame: TDesignFrame
     end
     object AlignAction: TAction
       Caption = 'Align Fields'
-      OnExecute = AutoAlignBtnClick
+      Hint = 'Align Fields'
+      ImageIndex = 9
+      OnExecute = AlignActionExecute
       ShortCut = 122
     end
     object DocumentFileAction: TAction
@@ -313,7 +312,6 @@ object DesignFrame: TDesignFrame
       Hint = 'Document Datafile'
       ImageIndex = 17
       OnExecute = DocumentFileActionExecute
-      ShortCut = 123
     end
     object EditCompAction: TAction
       Caption = 'EditCompAction'
@@ -346,7 +344,6 @@ object DesignFrame: TDesignFrame
       SecondaryShortCuts.Strings = (
         'F8'
       )
-      ShortCut = 16470
     end
     object MoveFirstAction: TAction
       Category = 'Move'
@@ -398,6 +395,32 @@ object DesignFrame: TDesignFrame
       Hint = 'Clear Dataform'
       ImageIndex = 5
       OnExecute = ClearAllActionExecute
+    end
+    object PasteAsIntAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Integer'
+      OnExecute = PasteAsIntActionExecute
+    end
+    object PasteAsFloatAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Float'
+      OnExecute = PasteAsFloatActionExecute
+    end
+    object PasteAsStringAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As String'
+      OnExecute = PasteAsStringActionExecute
+    end
+    object PasteAsDefault: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Default'
+      OnExecute = PasteAsDefaultExecute
+      ShortCut = 16470
+    end
+    object PasteAsQesAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As QES'
+      OnExecute = PasteAsQesActionExecute
     end
   end
   object FieldToolBarImageList: TImageList
@@ -2317,9 +2340,25 @@ object DesignFrame: TDesignFrame
   object DesignerPopup: TPopupMenu
     left = 288
     top = 360
-    object MenuItem1: TMenuItem
+    object PasteAsLabelMenuItem: TMenuItem
       Action = PasteAsLabel
       OnClick = PasteAsLabelExecute
+    end
+    object PasteAsIntMenuItem: TMenuItem
+      Action = PasteAsIntAction
+      OnClick = PasteAsIntActionExecute
+    end
+    object PasteAsFloatMenuItem: TMenuItem
+      Action = PasteAsFloatAction
+      OnClick = PasteAsFloatActionExecute
+    end
+    object PasteAsStringMenuItem: TMenuItem
+      Action = PasteAsStringAction
+      OnClick = PasteAsStringActionExecute
+    end
+    object PasteAsQESMenuItem: TMenuItem
+      Action = PasteAsQesAction
+      OnClick = PasteAsQesActionExecute
     end
   end
 end

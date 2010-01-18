@@ -1,13 +1,13 @@
 object AutoAlignForm: TAutoAlignForm
   Left = 661
-  Height = 242
+  Height = 227
   Top = 296
   Width = 265
   ActiveControl = Panel1
   BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Auto Align'
-  ClientHeight = 242
+  ClientHeight = 227
   ClientWidth = 265
   OnClose = FormClose
   OnCreate = FormCreate
@@ -15,13 +15,13 @@ object AutoAlignForm: TAutoAlignForm
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
-    Height = 242
+    Height = 227
     Top = 0
     Width = 265
     Align = alClient
     BevelInner = bvLowered
     BevelWidth = 2
-    ClientHeight = 242
+    ClientHeight = 227
     ClientWidth = 265
     Color = clSkyBlue
     ParentColor = False
@@ -30,7 +30,7 @@ object AutoAlignForm: TAutoAlignForm
     object Button1: TButton
       Left = 104
       Height = 26
-      Top = 208
+      Top = 192
       Width = 67
       Caption = 'Ok'
       Color = clWhite
@@ -40,7 +40,7 @@ object AutoAlignForm: TAutoAlignForm
     object Button2: TButton
       Left = 184
       Height = 26
-      Top = 208
+      Top = 192
       Width = 69
       Caption = 'Cancel'
       Color = clWhite
@@ -48,10 +48,10 @@ object AutoAlignForm: TAutoAlignForm
       TabOrder = 2
     end
     object LabelsGroupBox: TRadioGroup
-      Left = 9
+      Left = 18
       Height = 88
-      Top = 112
-      Width = 249
+      Top = 96
+      Width = 241
       Anchors = [akTop, akLeft, akRight]
       AutoFill = True
       Caption = 'Labels aligned:'
@@ -64,7 +64,7 @@ object AutoAlignForm: TAutoAlignForm
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 69
-      ClientWidth = 245
+      ClientWidth = 237
       ItemIndex = 0
       Items.Strings = (
         'No Changes'
@@ -76,12 +76,12 @@ object AutoAlignForm: TAutoAlignForm
     end
     object GroupBox1: TGroupBox
       Left = 9
-      Height = 97
+      Height = 81
       Top = 8
       Width = 250
       Anchors = [akTop, akLeft, akRight]
       Caption = 'Vertical Field Alignment'
-      ClientHeight = 78
+      ClientHeight = 62
       ClientWidth = 246
       TabOrder = 3
       object EqualVerticalSpaceRadio: TRadioButton
@@ -101,16 +101,6 @@ object AutoAlignForm: TAutoAlignForm
         Width = 237
         Caption = 'Default Alignment (One Column)'
         TabOrder = 0
-        TabStop = False
-      end
-      object RemoveEmptySpaceRadio: TRadioButton
-        Left = 5
-        Height = 22
-        Top = 56
-        Width = 211
-        Caption = 'Remove Empty Space (lines)'
-        Enabled = False
-        TabOrder = 2
         TabStop = False
       end
     end

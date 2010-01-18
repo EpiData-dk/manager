@@ -1,7 +1,7 @@
 object EditorForm: TEditorForm
-  Left = 316
+  Left = 630
   Height = 570
-  Top = 241
+  Top = 294
   Width = 826
   ActiveControl = SynEditor
   Caption = 'Editor'
@@ -789,9 +789,32 @@ object EditorForm: TEditorForm
       end
       object SendToDesignerMenuItem: TMenuItem
         Caption = 'Send to Designer'
+        object PasteAsDefaultMenuItem: TMenuItem
+          Action = PasteAsDefaultAction
+          OnClick = PasteAsDefaultActionExecute
+        end
+        object Divider1: TMenuItem
+          Caption = '-'
+        end
         object PasteAsLabelMenuItem: TMenuItem
           Action = PasteAsLabelAction
           OnClick = PasteAsLabelActionExecute
+        end
+        object PasteAsIntMenuItem: TMenuItem
+          Action = PasteAsIntAction
+          OnClick = PasteAsIntActionExecute
+        end
+        object PasteAsFloatMenuItem: TMenuItem
+          Action = PasteAsFloatAction
+          OnClick = PasteAsFloatActionExecute
+        end
+        object PasteAsStringMenuItem: TMenuItem
+          Action = PasteAsStringAction
+          OnClick = PasteAsStringActionExecute
+        end
+        object PasteAsQESMenuItem: TMenuItem
+          Action = PasteAsQESAction
+          OnClick = PasteAsQESActionExecute
         end
       end
     end
@@ -856,6 +879,32 @@ object EditorForm: TEditorForm
       Category = 'Edit'
       Caption = 'Paste As Labels'
       OnExecute = PasteAsLabelActionExecute
+      ShortCut = 120
+    end
+    object PasteAsIntAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Integer'
+      OnExecute = PasteAsIntActionExecute
+    end
+    object PasteAsFloatAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Float'
+      OnExecute = PasteAsFloatActionExecute
+    end
+    object PasteAsStringAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As String'
+      OnExecute = PasteAsStringActionExecute
+    end
+    object PasteAsQESAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As QES'
+      OnExecute = PasteAsQESActionExecute
+    end
+    object PasteAsDefaultAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Default'
+      OnExecute = PasteAsDefaultActionExecute
       ShortCut = 119
     end
   end
@@ -886,9 +935,32 @@ object EditorForm: TEditorForm
     end
     object SendToDesignerPopMenuItem: TMenuItem
       Caption = 'Send to Designer...'
+      object PasteAsDefPopMenuItem: TMenuItem
+        Action = PasteAsDefaultAction
+        OnClick = PasteAsDefaultActionExecute
+      end
+      object SendToDesignDivider1: TMenuItem
+        Caption = '-'
+      end
       object PasteAsLabelPopMenuItem: TMenuItem
         Action = PasteAsLabelAction
         OnClick = PasteAsLabelActionExecute
+      end
+      object PasteAsIntPopMenuItem: TMenuItem
+        Action = PasteAsIntAction
+        OnClick = PasteAsIntActionExecute
+      end
+      object PasteAsFloatPopMenuItem: TMenuItem
+        Action = PasteAsFloatAction
+        OnClick = PasteAsFloatActionExecute
+      end
+      object PasteAsStringPopMenuItem: TMenuItem
+        Action = PasteAsStringAction
+        OnClick = PasteAsStringActionExecute
+      end
+      object PasteAsQESPopMenuItem: TMenuItem
+        Action = PasteAsQESAction
+        OnClick = PasteAsQESActionExecute
       end
     end
   end

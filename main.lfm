@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 74
+  Left = 2046
   Height = 753
-  Top = 109
+  Top = 439
   Width = 1070
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
@@ -369,7 +369,7 @@ object MainForm: TMainForm
     end
     object ChangeWorkDirAction: TAction
       Category = 'File'
-      Caption = 'C&hange Directory'
+      Caption = 'C&hange Working Directory'
       OnExecute = ChangeWorkDirActionExecute
     end
   end

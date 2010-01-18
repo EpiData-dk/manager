@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, MaskEdit, ExtCtrls, ComCtrls, ActnList, UDataFileTypes;
+  StdCtrls, MaskEdit, ExtCtrls, ComCtrls, ActnList, EditBtn, UDataFileTypes;
 
 type
 
@@ -22,7 +22,7 @@ type
     CancelBtn: TButton;
     DefaultPasteCombo: TComboBox;
     DefaultDateCombo: TComboBox;
-    DefaultDataEdit: TEdit;
+    WorkingDirEdit: TDirectoryEdit;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
     FieldNamingAutoRadio: TRadioButton;
@@ -77,31 +77,31 @@ type
   end;
 
   TManagerSettings = record
-    // Basic:
-    FieldNamePrefix:       string;
+    // Visual design:
     DefaultRightPostion:   Integer;
     ShowFieldNamesInLabel: boolean;
     ShowFieldBorder:       boolean;
-    DefaultDateType:       TFieldType;
-    FieldNamingStyle:      TFieldNaming;
-
-    // Lengths:
-    IntFieldLength:        Integer;
-    FloatFieldLength:      Integer;
-    FloatDecimalLength:    Integer;
-    StringFieldLength:     Integer;
-
-
-    // Advanced:
     SnapFields:            boolean;
     SnappingThresHold:     Integer;
     SpaceBtwFieldField:    Integer;
     SpaceBtwFieldLabel:    Integer;
     SpaceBtwLabelLabel:    Integer;
 
+    // Field definitions:
+    IntFieldLength:        Integer;
+    FloatFieldLength:      Integer;
+    FloatDecimalLength:    Integer;
+    StringFieldLength:     Integer;
+    DefaultDateType:       TFieldType;
+    FieldNamePrefix:       string;
+    FieldNamingStyle:      TFieldNaming;
+
+    // Advanced:
+    WorkingDirUTF8:         string;
+    PasteSpecialType:       TFieldType;
+
     // Not shown in dialog.
     SelectedControlColour: Integer;
-    WorkingDirUTF8:         string;
     LabelNamePrefix:        string;
   end;
 
@@ -114,30 +114,31 @@ type
 
 var
   ManagerSettings: TManagerSettings = (
-    // Basic:
-    FieldNamePrefix:       'V';
+    // Visual design:
     DefaultRightPostion:   200;
     ShowFieldNamesInLabel: true;
     ShowFieldBorder:       true;
-    DefaultDateType:       ftEuroDate;
-    FieldNamingStyle:      fnFirstWord;
-
-    // Lengths:
-    IntFieldLength:        2;
-    FloatFieldLength:      5;
-    FloatDecimalLength:    2;
-    StringFieldLength:     20;
-
-    // Advanced:
     SnapFields:            true;
     SnappingThresHold:     10;
     SpaceBtwFieldField:    10;
     SpaceBtwFieldLabel:    25;
     SpaceBtwLabelLabel:    5;
 
+    // Field definitions:
+    IntFieldLength:        2;
+    FloatFieldLength:      5;
+    FloatDecimalLength:    2;
+    StringFieldLength:     20;
+    DefaultDateType:       ftEuroDate;
+    FieldNamePrefix:       'V';
+    FieldNamingStyle:      fnFirstWord;
+
+    // Advanced:
+    WorkingDirUTF8:        '';
+    PasteSpecialType:      ftQuestion;
+
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;
-    WorkingDirUTF8:        '\data';
     LabelNamePrefix:       'label_';
   );
 
@@ -179,38 +180,12 @@ begin
   if ModalResult = mrCancel then
     exit;
 
-  // Basic:
-  ManagerSettings.FieldNamePrefix       := PrefixEdit.Text;
+  // Visual desing:
   S := Trim(DefaultRightPosEdit.Text);
   if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.DefaultRightPostion := StrToInt(S);
   ManagerSettings.ShowFieldNamesInLabel := ShowFieldNameChkBox.Checked;
   ManagerSettings.ShowFieldBorder       := ShowFieldBorderChkBox.Checked;
-  case DefaultDateCombo.ItemIndex of
-    0: ManagerSettings.DefaultDateType := ftEuroDate;
-    1: ManagerSettings.DefaultDateType := ftDate;
-    2: ManagerSettings.DefaultDateType := ftYMDDate;
-  end;
-  if FieldNamingAutoRadio.Checked then
-    ManagerSettings.FieldNamingStyle    := fnAuto
-  else
-    ManagerSettings.FieldNamingStyle    := fnFirstWord;
-
-  // Lengths:
-  S := Trim(IntLengthEdit.Text);
-  if not((S = '') or (StrToInt(S) <= 0)) then
-    ManagerSettings.IntFieldLength := StrToInt(S);
-  S := Trim(FloatLengthEdit.Text);
-  if not((S = '') or (StrToInt(S) <= 0)) then
-    ManagerSettings.FloatFieldLength := StrToInt(S);
-  S := Trim(DecimalLengthEdit.Text);
-  if not((S = '') or (StrToInt(S) <= 0)) then
-    ManagerSettings.FloatDecimalLength := StrToInt(S);
-  S := Trim(StringLengthEdit.Text);
-  if not((S = '') or (StrToInt(S) <= 0)) then
-    ManagerSettings.StringFieldLength := StrToInt(S);
-
-  // Advanced:
   ManagerSettings.SnapFields            := SnapFieldsChkBox.Checked;
   S := Trim(SnapThresholdEdit.Text);
   if not((S = '') or (StrToInt(S) <= 0)) then
@@ -225,6 +200,39 @@ begin
   if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.SpaceBtwLabelLabel := StrToInt(S);
 
+  // Field definitions:
+  S := Trim(IntLengthEdit.Text);
+  if not((S = '') or (StrToInt(S) <= 0)) then
+    ManagerSettings.IntFieldLength := StrToInt(S);
+  S := Trim(FloatLengthEdit.Text);
+  if not((S = '') or (StrToInt(S) <= 0)) then
+    ManagerSettings.FloatFieldLength := StrToInt(S);
+  S := Trim(DecimalLengthEdit.Text);
+  if not((S = '') or (StrToInt(S) <= 0)) then
+    ManagerSettings.FloatDecimalLength := StrToInt(S);
+  S := Trim(StringLengthEdit.Text);
+  if not((S = '') or (StrToInt(S) <= 0)) then
+    ManagerSettings.StringFieldLength := StrToInt(S);
+  case DefaultDateCombo.ItemIndex of
+    0: ManagerSettings.DefaultDateType := ftEuroDate;
+    1: ManagerSettings.DefaultDateType := ftDate;
+    2: ManagerSettings.DefaultDateType := ftYMDDate;
+  end;
+  ManagerSettings.FieldNamePrefix       := PrefixEdit.Text;
+  if FieldNamingAutoRadio.Checked then
+    ManagerSettings.FieldNamingStyle    := fnAuto
+  else
+    ManagerSettings.FieldNamingStyle    := fnFirstWord;
+
+  // Advanced:
+  ManagerSettings.WorkingDirUTF8        := WorkingDirEdit.Text;
+  case DefaultPasteCombo.ItemIndex of
+    0: ManagerSettings.PasteSpecialType := ftRes4;
+    1: ManagerSettings.PasteSpecialType := ftFloat;
+    2: ManagerSettings.PasteSpecialType := ftInteger;
+    3: ManagerSettings.PasteSpecialType := ftDate;
+    4: ManagerSettings.PasteSpecialType := ftQuestion;
+  end;
 end;
 
 procedure TSettingsForm.CloseActionExecute(Sender: TObject);
@@ -236,31 +244,39 @@ procedure TSettingsForm.FormCreate(Sender: TObject);
 begin
   with ManagerSettings do
   begin
-    // Basic:
-    PrefixEdit.Text                   := FieldNamePrefix;
+    // Visual desing:
     DefaultRightPosEdit.Text          := IntToStr(DefaultRightPostion);
     ShowFieldNameChkBox.Checked       := ShowFieldNamesInLabel;
     ShowFieldBorderChkBox.Checked     := ShowFieldBorder;
-    case DefaultDateType of
-      ftEuroDate: DefaultDateCombo.ItemIndex := 0;
-      ftDate:     DefaultDateCombo.ItemIndex := 1;
-      ftYMDDate:  DefaultDateCombo.ItemIndex := 2;
-    end;
-    FieldNamingAutoRadio.Checked      := (FieldNamingStyle = fnAuto);
-    FieldNamingFirstWordRadio.Checked := (FieldNamingStyle = fnFirstWord);
-
-    // Lengths:
-    IntLengthEdit.Text                := IntToStr(IntFieldLength);
-    FloatLengthEdit.Text              := IntToStr(FloatFieldLength);
-    DecimalLengthEdit.Text            := IntToSTr(FloatDecimalLength);
-    StringLengthEdit.Text             := IntToStr(StringFieldLength);
-
-    // Advanced:
     SnapFieldsChkBox.Checked          := ManagerSettings.SnapFields;
     SnapThresholdEdit.Text            := IntToStr(ManagerSettings.SnappingThresHold);
     FieldFieldEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldField);
     FieldLabelEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldLabel);
     LabelLabelEdit.Text               := IntToStr(ManagerSettings.SpaceBtwLabelLabel);
+
+    // Field definitions
+    IntLengthEdit.Text                := IntToStr(IntFieldLength);
+    FloatLengthEdit.Text              := IntToStr(FloatFieldLength);
+    DecimalLengthEdit.Text            := IntToSTr(FloatDecimalLength);
+    StringLengthEdit.Text             := IntToStr(StringFieldLength);
+    case DefaultDateType of
+      ftEuroDate: DefaultDateCombo.ItemIndex := 0;
+      ftDate:     DefaultDateCombo.ItemIndex := 1;
+      ftYMDDate:  DefaultDateCombo.ItemIndex := 2;
+    end;
+    PrefixEdit.Text                   := FieldNamePrefix;
+    FieldNamingAutoRadio.Checked      := (FieldNamingStyle = fnAuto);
+    FieldNamingFirstWordRadio.Checked := (FieldNamingStyle = fnFirstWord);
+
+    // Advanced:
+    WorkingDirEdit.Text               := WorkingDirUTF8;
+    case PasteSpecialType of
+      ftRes4:     DefaultPasteCombo.ItemIndex := 0;
+      ftFloat:    DefaultPasteCombo.ItemIndex := 1;
+      ftInteger:  DefaultPasteCombo.ItemIndex := 2;
+      ftDate:     DefaultPasteCombo.ItemIndex := 3;
+      ftQuestion: DefaultPasteCombo.ItemIndex := 4;
+    end;
   end;
 end;
 
@@ -273,7 +289,7 @@ initialization
   {$I settings.lrs}
 
 begin
-  ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8;
+  ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + {$IFDEF UNIX}'/data'{$ELSE}'\data'{$ENDIF};
 end;
 
 end.

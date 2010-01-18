@@ -16,6 +16,15 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame, IManagerFrame)
+    PasteAsQESMenuItem: TMenuItem;
+    PasteAsQesAction: TAction;
+    PasteAsDefault: TAction;
+    PasteAsStringMenuItem: TMenuItem;
+    PasteAsFloatMenuItem: TMenuItem;
+    PasteAsStringAction: TAction;
+    PasteAsFloatAction: TAction;
+    PasteAsIntMenuItem: TMenuItem;
+    PasteAsIntAction: TAction;
     ClearAllAction: TAction;
     Label1: TLabel;
     Label2: TLabel;
@@ -32,7 +41,7 @@ type
     NewDataMenu: TMenuItem;
     Panel1: TPanel;
     PasteAsLabel: TEditPaste;
-    MenuItem1: TMenuItem;
+    PasteAsLabelMenuItem: TMenuItem;
     NewDateFieldAction: TAction;
     NewYMDFieldMenu: TMenuItem;
     NewMDYFieldMenu: TMenuItem;
@@ -92,6 +101,8 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
+    procedure AlignActionExecute(Sender: TObject);
+    procedure PasteAsQesActionExecute(Sender: TObject);
     procedure ClearAllActionExecute(Sender: TObject);
     procedure DocumentFileActionExecute(Sender: TObject);
     procedure EditCompActionExecute(Sender: TObject);
@@ -106,7 +117,6 @@ type
     procedure NewDateFieldMenuClick(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
     procedure NewDateFieldActionExecute(Sender: TObject);
-    procedure AutoAlignBtnClick(Sender: TObject);
     procedure DeleteFieldMenuItemClick(Sender: TObject);
     procedure EditFieldMenuItemClick(Sender: TObject);
     procedure FontSelectBtnClick(Sender: TObject);
@@ -115,12 +125,17 @@ type
     procedure NewLabelFieldActionExecute(Sender: TObject);
     procedure NewStringFieldActionExecute(Sender: TObject);
     procedure OpenFileActionExecute(Sender: TObject);
+    procedure PasteAsDefaultExecute(Sender: TObject);
+    procedure PasteAsFloatActionExecute(Sender: TObject);
+    procedure PasteAsIntActionExecute(Sender: TObject);
     procedure PasteAsLabelExecute(Sender: TObject);
+    procedure PasteAsStringActionExecute(Sender: TObject);
     procedure SaveFileActionExecute(Sender: TObject);
     procedure SaveFileAsActionExecute(Sender: TObject);
     procedure ToolBtnClick(Sender: TObject);
   private
     { private declarations }
+    UntitledName: string;
     ActiveButton: TToolButton;
     FActiveDatafile: TEpiDataFile;
     FActiveDocumentationForm: TDatafileDocumentationForm;
@@ -144,6 +159,7 @@ type
     procedure ExitSelectControl(Sender: TObject);
     procedure EditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     function  NewCompTree(TreeType: TFieldAVLTreeType; CmpMethod: TListSortCompare): TFieldAVLTree;
+    function  ImportStructure(TmpDF: TEpiDataFile): boolean;
   private
     // Docking.
     // - Field:
@@ -167,7 +183,6 @@ type
     procedure GetNearestControls(Const FindCtrl: TControl; var NearestCtrlX, NearestCtrlY: TControl);
     function  FindNewAutoControlPostion(NewCtrlClass: TClass): TPoint;
     // - Auto align functions.
-    procedure RemoveDeadSpace;
     procedure DefaultAlignFields(ActiveControl: TControl; Const ColumnCount: Integer = 1);
     procedure EqualSpace(StartCtrl, EndCtrl: TControl);
     procedure LabelsAlignment(StartCtrl, EndCtrl: TControl; aAlign: TAlign);
@@ -184,6 +199,7 @@ type
     procedure DeActivateFrame;
     procedure UpdateAllFields;
     procedure UpdateNonInteractiveVisuals;
+    procedure PasteAsField(FieldType: TFieldType);
     property  ActiveDataFile: TEpiDataFile read FActiveDataFile;
     property  Modified: Boolean read FModified write SetModified;
     property  DesignerBox: TScrollBox read FDesignerBox;
@@ -394,20 +410,15 @@ begin
   S := '';
   if Modified then
     s := '*';
+
+  MainForm.PageControl1.ActivePage.Caption := S +
+    ExtractFileName(ActiveDataFile.FileName);
+
   if ActiveDatafile.DatafileType <> dftNone then
-  begin
-    MainForm.PageControl1.ActivePage.Caption := S +
-      ExtractFileName(ActiveDataFile.FileName);
     MainForm.PageControl1.Hint :=
       ExpandFileNameUTF8(ActiveDataFile.FileName);
-    MainForm.PageControl1.ShowHint := true;
-  end else begin
-    MainForm.PageControl1.ActivePage.Caption := S +
-      'Untitled';
-    if MainForm.PageControl1.PageCount > 1 then
-      MainForm.PageControl1.ActivePage.Caption := S +
-        'Untitled ' + IntToStr(MainForm.PageControl1.PageCount);
-  end;
+
+  MainForm.PageControl1.ShowHint := true;
 
   ShowOnMainStatusBar(
     Format(
@@ -421,6 +432,54 @@ begin
       [ActiveDatafile.Size]
     ), 2
   );
+end;
+
+procedure TDesignFrame.PasteAsField(FieldType: TFieldType);
+var
+  Cbl: TStringList;
+  i: Integer;
+  Pt: TPoint;
+  TmpField: TEpiField;
+begin
+  Cbl := TStringList.Create;
+  try
+    MainForm.ReadClipBoard(Cbl);
+
+    for i := 0 to Cbl.Count - 1 do
+    begin
+      if Trim(Cbl[i]) = '' then continue;
+
+      Pt := FindNewAutoControlPostion(TFieldEdit);
+      TmpField := TEpiField.CreateField(FieldType, ActiveDataFile.Size);
+      with TmpField do
+      begin
+        case ManagerSettings.FieldNamingStyle of
+          fnFirstWord: FieldName := FirstWord(Cbl[i]);
+          fnAuto:      FieldName := AutoFieldName(Cbl[i]);
+        end;
+        FieldName := ActiveDataFile.CreateUniqueFieldName(FieldName);
+        VariableLabel := Trim(Cbl[i]);
+        FieldX := Pt.X;
+        FieldY := Pt.Y;
+        Case FieldType of
+          ftInteger: FieldLength := ManagerSettings.IntFieldLength;
+          ftFloat:
+            begin
+              FieldLength        := ManagerSettings.FloatFieldLength;
+              FieldDecimals      := ManagerSettings.FloatDecimalLength;
+            end;
+          ftString:  FieldLength := ManagerSettings.StringFieldLength;
+        end;
+      end;
+      ActiveDatafile.AddField(TmpField);
+      NewFieldEdit(TmpField);
+    end;
+
+    if (DesignerBox.VertScrollBar.Visible) and (true) then
+      DesignerBox.VertScrollBar.Position := DesignerBox.VertScrollBar.Range - DesignerBox.VertScrollBar.Page;
+  finally
+    Cbl.Free;
+  end;
 end;
 
 procedure TDesignFrame.DataFileChange(Sender: TObject;
@@ -588,101 +647,6 @@ begin
   end;
 end;
 
-procedure TDesignFrame.RemoveDeadSpace;
-var
-  NewYTree, NewXTree: TAVLTree;
-  Curr, Old, Prev, Next: TAVLTreeNode;
-  CurField, NextField, PrevField, OldField: TEpiField;
-  Dy, Zy, Ly: Integer;
-begin
-{  NewYTree := TAVLTree.Create(@YCmp);
-  NewXTree := TAVLTree.Create(@XCmp);
-  Curr := ComponentYTree.FindLowest;
-  Next := ComponentYTree.FindSuccessor(Curr);
-  while Assigned(Next) do
-  begin
-    if (TControl(Curr.Data) is TFieldEdit) then
-      CurField := TFieldEdit(Curr.Data).Field
-    else
-      CurField := TFieldLabel(Curr.Data).Field;
-
-    if (TControl(Next.Data) is TFieldEdit) then
-      NextField := TFieldEdit(Next.Data).Field
-    else
-      NextField := TFieldLabel(Next.Data).Field;
-    Dy := TControl(Curr.Data).Height + ManagerSettings.SpaceBetweenFields;
-
-    if (NextField.FieldY > (CurField.FieldY + Dy)) then
-    begin
-      NewYTree.Add(Curr.Data);
-      NewXTree.Add(Curr.Data);
-
-      Old := Next;
-      OldField := NextField;
-
-      Prev := Next;
-      Next := ComponentYTree.FindSuccessor(Next);
-      while Assigned(Next) do
-      begin
-        PrevField := NextField;
-        if (TControl(Next.Data) is TFieldEdit) then
-          NextField := TFieldEdit(Next.Data).Field
-        else
-          NextField := TFieldLabel(Next.Data).Field;
-        Zy := TControl(Prev.Data).Height + ManagerSettings.SpaceBetweenFields;
-
-        if (NextField.FieldY >= (OldField.FieldY + Zy)) or
-           (NextField.FieldX < PrevField.FieldX) then
-        begin
-          if (Old <> Prev) then
-          begin
-            NewYTree.Remove(Prev.Data);
-            NewXTree.Remove(Prev.Data);
-          end;
-          Curr := Prev;
-          Break;
-        end;
-        Ly := NextField.FieldY - (CurField.FieldY + Zy);
-        NextField.FieldY := CurField.FieldY + Zy;
-        NextField.LabelY := NextField.LabelY - Abs(Ly);
-
-        NewYTree.Add(Next.Data);
-        NewXTree.Add(Next.Data);
-        Prev := Next;
-        Next := ComponentYTree.FindSuccessor(Next);
-      end;
-
-      Ly := OldField.FieldY - (CurField.FieldY + Dy);
-      OldField.FieldY := CurField.FieldY + Dy;
-      OldField.LabelY := OldField.LabelY - Abs(Ly);
-      if (Old <> Curr) then
-      begin
-        NewYTree.Add(Old.Data);
-        NewXTree.Add(Old.Data);
-      end;
-      Continue;
-    end;
-
-    NewYTree.Add(Curr.Data);
-    NewXTree.Add(Curr.Data);
-
-    Curr := Next;
-    if Assigned(Next) then
-      Next := ComponentYTree.FindSuccessor(Next);
-  end;
-
-  if not Assigned(NewYTree.Find(Curr.Data)) then
-  begin
-    NewYTree.Add(Curr.Data);
-    NewXTree.Add(Curr.Data);
-  end;
-
-  FreeAndNil(FComponentYTree);
-  FComponentYTree := NewYTree;
-  FreeAndNil(FComponentXTree);
-  FComponentXTree := NewXTree;          }
-end;
-
 procedure TDesignFrame.DefaultAlignFields(ActiveControl: TControl;
   const ColumnCount: Integer);
 var
@@ -730,8 +694,8 @@ begin
     end;
     TheTop += TControl(Curr.Data).Height + Dist;
 
-    NewXTree.Add(IFieldControl(Curr.Data));
-    NewYTree.Add(IFieldControl(Curr.Data));
+    NewXTree.Add(Curr.Data);
+    NewYTree.Add(Curr.Data);
     Prev := Curr;
     Curr := ComponentYTree.FindSuccessor(Curr);
   end;
@@ -805,8 +769,8 @@ begin
       Field.LabelY := Field.FieldY;
     end;
 
-    NewXTree.Add(IFieldControl(Curr.Data));
-    NewYTree.Add(IFieldControl(Curr.Data));
+    NewXTree.Add(Curr.Data);
+    NewYTree.Add(Curr.Data);
 
     if (TControl(Curr.Data) = EndCtrl) then
       Exit;
@@ -853,8 +817,9 @@ begin
     begin
       MaxVariableLabelWidth := Max(MaxVariableLabelWidth, VariableLabel.Width);
       MaxFieldNameWidth     := Max(MaxFieldNameWidth, FieldNameLabel.Width);
-      MinLeft               := Min(MinLeft, Field.FieldX);
     end;
+
+    MinLeft := Min(MinLeft, (TControl(Curr.Data) as IFieldControl).Field.FieldX);
 
     if (TControl(Curr.Data) = EndCtrl) then
       Break;
@@ -906,8 +871,8 @@ begin
       end;
     end;
 
-    NewXTree.Add(IFieldControl(Curr.Data));
-    NewYTree.Add(IFieldControl(Curr.Data));
+    NewXTree.Add(Curr.Data);
+    NewYTree.Add(Curr.Data);
 
     if (TControl(Curr.Data) = EndCtrl) then
       Exit;
@@ -957,6 +922,8 @@ begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
   FActiveDatafile := TEpiDataFile.Create();
+  UntitledName := TTabSheet(TheOwner).Caption;
+  FActiveDatafile.FileName := UntitledName;
   FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
   FActiveDocumentationForm := nil;
   SelectedControl := nil;
@@ -1019,6 +986,14 @@ begin
   MainForm.AddToMenu(SaveFileAsAction, Section + 2);
   MainForm.AddToMenu(ImportStructureAction, Section + 3);
 
+  Section := MMEdit  + MMEditTop;
+  MainForm.AddToMenu(PasteAsDefault,      Section + 0);
+  MainForm.AddToMenu(PasteAsLabel,        Section + 1);
+  MainForm.AddToMenu(PasteAsIntAction,    Section + 2);
+  MainForm.AddToMenu(PasteAsFloatAction,  Section + 3);
+  MainForm.AddToMenu(PasteAsStringAction, Section + 4);
+  MainForm.AddToMenu(PasteAsQesAction,    Section + 5);
+
   Section := MMTools + MMToolsTop;
   MainForm.AddToMenu(AlignAction,      Section + 0);
   MainForm.AddToMenu(ClearAllAction,   Section + 1);
@@ -1031,6 +1006,14 @@ begin
   DesignFrameActionList.State := asSuspended;
 
   Section := MMFile + MMFileRW;
+  MainForm.RemoveFromMenu(Section + 3);
+  MainForm.RemoveFromMenu(Section + 2);
+  MainForm.RemoveFromMenu(Section + 1);
+  MainForm.RemoveFromMenu(Section + 0);
+
+  Section := MMEdit  + MMEditTop;
+  MainForm.RemoveFromMenu(Section + 5);
+  MainForm.RemoveFromMenu(Section + 4);
   MainForm.RemoveFromMenu(Section + 3);
   MainForm.RemoveFromMenu(Section + 2);
   MainForm.RemoveFromMenu(Section + 1);
@@ -1100,36 +1083,6 @@ begin
   end;
 
   Modified := True;
-end;
-
-procedure TDesignFrame.AutoAlignBtnClick(Sender: TObject);
-var
-  AutoAlignForm: TAutoAlignForm;
-  AutoAlignRes: TAutoAlignRecord;
-  Res: TModalResult;
-  Pt: TPoint;
-begin
-  with AutoAlignBtn do
-    Pt := FieldToolBar.ClientToScreen(Point(Left, Top + Height + 1));
-  AutoAlignForm := TAutoAlignForm.Create(self);
-  AutoAlignForm.Left := Pt.X;
-  AutoAlignForm.Top  := Pt.Y;
-  Res := AutoAlignForm.ShowModal;
-  AutoAlignRes := AutoAlignForm.AlignProperties;
-  FreeAndNil(AutoAlignForm);
-
-  if Res = mrCancel then Exit;
-
-  case AutoAlignRes.AlignMethod of
-    aamRemoveSpace: RemoveDeadSpace;
-    aamEqualSpace:  EqualSpace(SelectedControl, nil);
-    aamDefault:     DefaultAlignFields(SelectedControl);
-  end;
-
-  if AutoAlignRes.LabelsAlign <> alNone then
-    LabelsAlignment(SelectedControl, nil, AutoAlignRes.LabelsAlign);
-
-  Modified := true;
 end;
 
 procedure TDesignFrame.DeleteFieldMenuItemClick(Sender: TObject);
@@ -1297,16 +1250,9 @@ end;
 
 procedure TDesignFrame.ImportStructureActionExecute(Sender: TObject);
 var
-  QES: TQesHandler;
   Dlg: TOpenDialog;
-  TmpEdit: TFieldEdit;
-  i: Integer;
-  TmpField: TEpiField;
   TmpDF: TEpiDataFile;
   Importer: TEpiImportExport;
-  Pt: TPoint;
-  AutoAlignProps: TAutoAlignRecord;
-  FieldNo: Integer;
 begin
   Dlg := TOpenDialog.Create(nil);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
@@ -1314,51 +1260,28 @@ begin
     True, True, False);
   Dlg.Title := 'Import structure from file...';
 
-  if not Dlg.Execute then exit;
+  Importer := nil;
+  try
+    if not Dlg.Execute then exit;
 
-  TmpDf := nil;
-  Importer := TEpiImportExport.Create;
-  Importer.OnProgress := @MainForm.ShowProgress;
-  Importer.OnClipBoardRead := @MainForm.ReadClipBoard;
-  Importer.Import(Dlg.FileName, TmpDF, dftNone);
+    TmpDf := nil;
+    Importer := TEpiImportExport.Create;
+    Importer.OnProgress := @MainForm.ShowProgress;
+    Importer.OnClipBoardRead := @MainForm.ReadClipBoard;
+    Importer.Import(Dlg.FileName, TmpDF, dftNone);
 
-  GetLowestControlPosition(TmpEdit);
-
-  ActiveDataFile.BeginUpdate;
-  for i := 0 to TmpDF.NumFields - 1 do
-  begin
-    TmpField := TmpDF[i].Clone(ActiveDataFile, false);
-    if ActiveDataFile.FieldExists(TmpField.FieldName) then
-      if TmpField.FieldType = ftQuestion then
-        TmpField.FieldName := NextLabelName(ActiveDataFile)
-      else
-        TmpField.FieldName := NextFieldName(ActiveDataFile);
-    ActiveDataFile.AddField(TmpField);
-
-    if TmpField.FieldType = ftQuestion then
-      Pt := FindNewAutoControlPostion(TFieldLabel)
-    else
-      Pt := FindNewAutoControlPostion(TFieldEdit);
-
-    TmpField.FieldX := Pt.X;
-    TmpField.FieldY := Pt.Y;
-    TmpField.LabelX := 0;
-    TmpField.LabelY := 0;
-
-    if TmpField.FieldType = ftQuestion then
-      NewQuestionLabel(TmpField)
-    else
-      NewFieldEdit(TmpField);
+    ImportStructure(TmpDf);
+  finally
+    if Assigned(Dlg) then FreeAndNil(Dlg);
+    if Assigned(Importer) then FreeAndNil(Importer);
   end;
-  ActiveDataFile.EndUpdate;
-
-  Modified := true;
 end;
 
 procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);
 var
   Node: TAVLTreeNode;
 begin
+  if not Assigned(SelectedControl) then exit;
   Node := (SelectedControl as IFieldControl).YTreeNode;
   Node := ComponentYTree.FindSuccessor(Node);
   if not Assigned(Node) then
@@ -1443,6 +1366,7 @@ procedure TDesignFrame.MoveUpActionExecute(Sender: TObject);
 var
   Node: TAVLTreeNode;
 begin
+  if not Assigned(SelectedControl) then exit;
   Node := (SelectedControl as IFieldControl).YTreeNode;
   Node := ComponentYTree.FindPrecessor(Node);
   if not Assigned(Node) then
@@ -1512,11 +1436,65 @@ begin
   // Handle in case there is an open documentation form.
   if Assigned(ActiveDocumentationForm) then
     ActiveDocumentationForm.Datafile := ActiveDataFile;
+  ActiveDataFile.FileName := UntitledName;
   ActiveDataFile.EndUpdate;  // Forced updatenonvisual due to registered hook.
 
   SelectedControl := nil;
 
   Modified := false;
+end;
+
+procedure TDesignFrame.PasteAsQesActionExecute(Sender: TObject);
+var
+  QES: TQesHandler;
+  Cbl: TStringList;
+  TmpDf: TEpiDataFile;
+begin
+  Cbl := TStringList.Create;
+  TmpDf := nil;
+  try
+    MainForm.ReadClipBoard(Cbl);
+
+    QES := TQesHandler.Create;
+//    QES.OnTranslate := OnTranslate;
+    QES.OnProgress := @MainForm.ShowProgress;
+    QES.FieldNaming := ManagerSettings.FieldNamingStyle;
+    QES.QesToDatafile(Cbl, TmpDf);
+
+    ImportStructure(TmpDf);
+  finally
+    FreeAndNil(QES);
+    FreeAndNil(Cbl);
+  end;
+end;
+
+procedure TDesignFrame.AlignActionExecute(Sender: TObject);
+var
+  AutoAlignForm: TAutoAlignForm;
+  AutoAlignRes: TAutoAlignRecord;
+  Res: TModalResult;
+  Pt: TPoint;
+begin
+  with AutoAlignBtn do
+    Pt := FieldToolBar.ClientToScreen(Point(Left, Top + Height + 1));
+  AutoAlignForm := TAutoAlignForm.Create(self);
+  AutoAlignForm.Left := Pt.X;
+  AutoAlignForm.Top  := Pt.Y;
+  Res := AutoAlignForm.ShowModal;
+  AutoAlignRes := AutoAlignForm.AlignProperties;
+  FreeAndNil(AutoAlignForm);
+
+  if Res = mrCancel then Exit;
+
+  case AutoAlignRes.AlignMethod of
+    aamEqualSpace:  EqualSpace(SelectedControl, nil);
+    aamDefault:     DefaultAlignFields(SelectedControl);
+  end;
+
+  if AutoAlignRes.LabelsAlign <> alNone then
+    LabelsAlignment(SelectedControl, nil, AutoAlignRes.LabelsAlign);
+
+  Modified := true;
 end;
 
 procedure TDesignFrame.EditKeyDown(Sender: TObject; var Key: Word;
@@ -1594,6 +1572,44 @@ function TDesignFrame.NewCompTree(TreeType: TFieldAVLTreeType;
 begin
   Result := TFieldAVLTree.Create(CmpMethod);
   Result.AVLTreeType := TreeType;
+end;
+
+function TDesignFrame.ImportStructure(TmpDf: TEpiDataFile): boolean;
+var
+  i: Integer;
+  TmpField: TEpiField;
+  Pt: TPoint;
+begin
+//  GetLowestControlPosition(TmpEdit);
+
+  ActiveDataFile.BeginUpdate;
+  for i := 0 to TmpDF.NumFields - 1 do
+  begin
+    TmpField := TmpDF[i].Clone(ActiveDataFile, false);
+    if ActiveDataFile.FieldExists(TmpField.FieldName) then
+      if TmpField.FieldType = ftQuestion then
+        TmpField.FieldName := NextLabelName(ActiveDataFile)
+      else
+        TmpField.FieldName := NextFieldName(ActiveDataFile);
+    ActiveDataFile.AddField(TmpField);
+
+    if TmpField.FieldType = ftQuestion then
+      Pt := FindNewAutoControlPostion(TFieldLabel)
+    else
+      Pt := FindNewAutoControlPostion(TFieldEdit);
+
+    TmpField.FieldX := Pt.X;
+    TmpField.FieldY := Pt.Y;
+    TmpField.LabelX := 0;
+    TmpField.LabelY := 0;
+
+    if TmpField.FieldType = ftQuestion then
+      NewQuestionLabel(TmpField)
+    else
+      NewFieldEdit(TmpField);
+  end;
+  ActiveDataFile.EndUpdate;
+  Modified := true;
 end;
 
 procedure TDesignFrame.EditCompActionExecute(Sender: TObject);
@@ -1707,11 +1723,31 @@ begin
     UpdateNonInteractiveVisuals;
 
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
-      LabelsAlignment(SelectedControl, Nil, alLeft);
+      LabelsAlignment(TControl(ComponentYTree.FindLowest.Data), Nil, alLeft);
 
     Modified := false;
   end;
   FreeAndNil(Dlg);
+end;
+
+procedure TDesignFrame.PasteAsDefaultExecute(Sender: TObject);
+begin
+  if ManagerSettings.PasteSpecialType = ftRes4 then
+    PasteAsQesAction.Execute
+  else if ManagerSettings.PasteSpecialType = ftQuestion then
+    PasteAsLabel.Execute
+  else
+    PasteAsField(ManagerSettings.PasteSpecialType);
+end;
+
+procedure TDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftFloat);
+end;
+
+procedure TDesignFrame.PasteAsIntActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftInteger);
 end;
 
 procedure TDesignFrame.PasteAsLabelExecute(Sender: TObject);
@@ -1750,6 +1786,11 @@ begin
   finally
     Cbl.Free;
   end;
+end;
+
+procedure TDesignFrame.PasteAsStringActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftString);
 end;
 
 procedure TDesignFrame.SaveFileActionExecute(Sender: TObject);
