@@ -1,21 +1,21 @@
 object WarningForm: TWarningForm
-  Left = 637
-  Height = 382
-  Top = 356
-  Width = 422
+  Left = 478
+  Height = 549
+  Top = 81
+  Width = 613
   ActiveControl = Memo1
   Caption = 'WARNING - EpiData Core module test application - WARNING'
-  ClientHeight = 382
-  ClientWidth = 422
+  ClientHeight = 549
+  ClientWidth = 613
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Position = poScreenCenter
   LCLVersion = '0.9.29'
   object Label1: TLabel
     Left = 123
-    Height = 39
+    Height = 38
     Top = 8
-    Width = 177
+    Width = 165
     Caption = 'WARNING'
     Font.Color = clRed
     Font.Height = -32
@@ -25,10 +25,10 @@ object WarningForm: TWarningForm
     ParentFont = False
   end
   object Label3: TLabel
-    Left = 35
-    Height = 18
-    Top = 320
-    Width = 352
+    Left = 88
+    Height = 17
+    Top = 480
+    Width = 312
     Caption = 'Press OK to accept that this is only for testing'
     Font.Color = clRed
     Font.Height = -13
@@ -38,21 +38,21 @@ object WarningForm: TWarningForm
     ParentFont = False
   end
   object Label4: TLabel
-    Left = 45
-    Height = 18
-    Top = 56
-    Width = 333
+    Left = 56
+    Height = 17
+    Top = 48
+    Width = 299
     Caption = 'Data quality problems can Occur. Use only for test.'
     Font.Color = clRed
-    Font.Height = -13
+    Font.Height = -15
     Font.Name = 'MS Sans Serif'
     ParentColor = False
     ParentFont = False
   end
   object Button1: TButton
-    Left = 211
+    Left = 208
     Height = 25
-    Top = 352
+    Top = 512
     Width = 128
     Caption = 'OK - start test'
     Font.Color = clGreen
@@ -64,9 +64,9 @@ object WarningForm: TWarningForm
     TabOrder = 0
   end
   object Button2: TButton
-    Left = 83
+    Left = 88
     Height = 25
-    Top = 352
+    Top = 512
     Width = 75
     Caption = 'E&xit'
     ModalResult = 2
@@ -74,38 +74,46 @@ object WarningForm: TWarningForm
   end
   object Memo1: TMemo
     Left = 16
-    Height = 232
-    Top = 80
-    Width = 391
+    Height = 392
+    Top = 72
+    Width = 568
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
     Lines.Strings = (
-      'EpiData Manager'
+      'This "EpiData Manager" will replace: EpiData Entry '
       ''
-      'The manager serves the same purposes as main parts of EpiData Entry.'
+      'The current test version can be used to:'
+      'Define new dataforms, '
+      'read existing Data in supported formats and convert these to a dataform'
+      'Save data in the new RecXML format '
       ''
-      'However all functions from Entry will not be implemented, since some are better suited to be part of Analysis and others part of Data Entry as such.'
+      'Please try out: Adding fields on a new data form by:'
+      '-- using keys - adding qes files - using the editor and pasting text'
       ''
-      'For the current release of the Manager we need feedback on:'
-      '* Reading existing files'
-      '* Extending existing files'
-      '* Creating new data structures'
-      '* General appeal of design and function.'
+      'The Dataform as you see it will replace -    (for most data systems)'
+      '   qes, chk and rec files and combine in one file.'
       ''
-      'Please give general feedback to the EpiData-list (see frontpage of Epidata.dk)'
+      'A specific Data Entry client will be developed next.'
       ''
-      'Specific bugs should be reported to the bug-reporting database. See reference on: www.epidata.dk\testing.php'
-      ''
-      'A short description of the function of the EpiData Manager can be found on the page: www.epidata.dk\testing.php'
+      'Please give general feedback to the EpiData-list (see frontpage of '
+      'Epidata.dk)'
+      'Specific bugs should be reported to the bug-reporting database. See '
+      'reference on: www.epidata.dk\testing.php'
       ''
       'Regards'
-      'Torsten Christiansen'
-      'Jens Lauritsen'
-      ''
+      'Torsten Christiansen and Jens Lauritsen'
       'EpiData Association'
       'Odense, Denmark'
       ''
       'EpiData Manager is complete programmed in Free-pascal and Lazarus.'
-      'Source code will be released at end of development under appropriate CC license'
+      'Source code will be released at end of development under appropriate CC '
+      'license'
     )
+    ParentFont = False
     ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 2
