@@ -1,18 +1,19 @@
 object WarningForm: TWarningForm
   Left = 478
-  Height = 549
+  Height = 550
   Top = 81
-  Width = 613
+  Width = 549
   ActiveControl = Memo1
   Caption = 'WARNING - EpiData Core module test application - WARNING'
-  ClientHeight = 549
-  ClientWidth = 613
+  ClientHeight = 550
+  ClientWidth = 549
+  Color = clGradientActiveCaption
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Position = poScreenCenter
   LCLVersion = '0.9.29'
   object Label1: TLabel
-    Left = 123
+    Left = 184
     Height = 38
     Top = 8
     Width = 165
@@ -38,14 +39,15 @@ object WarningForm: TWarningForm
     ParentFont = False
   end
   object Label4: TLabel
-    Left = 56
+    Left = 88
     Height = 17
-    Top = 48
-    Width = 299
-    Caption = 'Data quality problems can Occur. Use only for test.'
+    Top = 456
+    Width = 361
+    Caption = 'Errors could occur  - work  on copies of data only !! '
     Font.Color = clRed
     Font.Height = -15
     Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold, fsItalic]
     ParentColor = False
     ParentFont = False
   end
@@ -73,13 +75,13 @@ object WarningForm: TWarningForm
     TabOrder = 1
   end
   object Memo1: TMemo
-    Left = 16
+    Left = 56
     Height = 392
-    Top = 72
-    Width = 568
+    Top = 48
+    Width = 448
     Font.CharSet = ANSI_CHARSET
     Font.Color = clBlack
-    Font.Height = -16
+    Font.Height = -13
     Font.Name = 'MS Sans Serif'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
@@ -109,8 +111,10 @@ object WarningForm: TWarningForm
       'EpiData Association'
       'Odense, Denmark'
       ''
-      'EpiData Manager is complete programmed in Free-pascal and Lazarus.'
-      'Source code will be released at end of development under appropriate CC '
+      'EpiData Manager is complete programmed in Free-pascal and '
+      'Lazarus.'
+      'Source code will be released at end of development under appropriate '
+      'CC '
       'license'
     )
     ParentFont = False

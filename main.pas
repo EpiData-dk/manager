@@ -21,8 +21,11 @@ type
     editdivider1: TMenuItem;
     ChangeWorkDirMenuItem: TMenuItem;
     filedivider1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem4: TMenuItem;
+    CloseFormItem: TMenuItem;
+    WindowsMenu: TMenuItem;
     ToolsDivider1: TMenuItem;
-    ShowWorkFlowMenuItem: TMenuItem;
     ShowWorkFlowAction: TAction;
     MenuItem3: TMenuItem;
     NewDataFormBtn: TToolButton;
@@ -134,7 +137,7 @@ begin
             'Dataform (%s) was modified since last save.' + LineEnding +
             'Close Form and loose changes?',
             [PageControl1.Pages[i].Caption]),
-          mtWarning, mbYesNo + [mbYesToAll], 0
+          mtWarning, mbYesNo + [mbYesToAll], 1
         );
 
         case Res of
@@ -370,7 +373,7 @@ begin
   if (PageControl1.ActivePage.Components[0] is TDesignFrame) and
      (TDesignFrame(PageControl1.ActivePage.Controls[0]).Modified) and
      (MessageDlg('Dataform was modified since last save.' +
-                 LineEnding + 'Close Form - and loose changes ?', mtWarning, mbYesNo, 0) = mrNo) then
+                 LineEnding + 'Close Form - and loose changes ?', mtWarning, mbYesNo, 1) = mrNo) then
     Exit;
   {$ENDIf}
 

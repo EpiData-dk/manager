@@ -18,6 +18,8 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    Label4: TLabel;
+    Label6: TLabel;
     WorkFlowImageList: TImageList;
     ExtendBtnImage: TImage;
     DocumentBtnImage: TImage;

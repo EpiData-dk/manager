@@ -1,11 +1,11 @@
 object MainForm: TMainForm
-  Left = 426
+  Left = 125
   Height = 753
-  Top = 234
+  Top = -2
   Width = 1070
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 728
+  ClientHeight = 731
   ClientWidth = 1070
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
@@ -228,8 +228,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 21
-    Top = 707
+    Height = 20
+    Top = 711
     Width = 1070
     Panels = <    
       item
@@ -255,7 +255,7 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 663
+    Height = 667
     Top = 44
     Width = 1070
     Align = alClient
@@ -287,6 +287,10 @@ object MainForm: TMainForm
       object filedivider2: TMenuItem
         Caption = '-'
       end
+      object CloseFormItem: TMenuItem
+        Action = ClosePageAction
+        OnClick = ClosePageActionExecute
+      end
       object filedivider3: TMenuItem
         Caption = '-'
       end
@@ -309,13 +313,19 @@ object MainForm: TMainForm
       object ToolsDivider1: TMenuItem
         Caption = '-'
       end
-      object ShowWorkFlowMenuItem: TMenuItem
-        Action = ShowWorkFlowAction
-        OnClick = ShowWorkFlowActionExecute
-      end
       object MenuItem1: TMenuItem
         Action = StartEditorAction
         OnClick = StartEditorActionExecute
+      end
+    end
+    object WindowsMenu: TMenuItem
+      Caption = '&Windows'
+      object MenuItem4: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem2: TMenuItem
+        Action = ShowWorkFlowAction
+        OnClick = ShowWorkFlowActionExecute
       end
     end
     object HelpMenu: TMenuItem
@@ -344,7 +354,7 @@ object MainForm: TMainForm
     end
     object ClosePageAction: TAction
       Category = 'NonMenuActions'
-      Caption = 'ClosePageAction'
+      Caption = 'Close Form'
       OnExecute = ClosePageActionExecute
       SecondaryShortCuts.Strings = (
         'CTRL+W'

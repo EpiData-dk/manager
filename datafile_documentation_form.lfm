@@ -1,7 +1,7 @@
 object DatafileDocumentationForm: TDatafileDocumentationForm
-  Left = 914
+  Left = 409
   Height = 478
-  Top = 351
+  Top = 324
   Width = 559
   ActiveControl = Panel1
   ClientHeight = 478

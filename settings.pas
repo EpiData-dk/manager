@@ -135,7 +135,7 @@ var
 
     // Advanced:
     WorkingDirUTF8:        '';
-    PasteSpecialType:      ftQuestion;
+    PasteSpecialType:      ftRes4  ; // ftQuestion;
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;
@@ -290,7 +290,7 @@ initialization
   {$I settings.lrs}
 
 begin
-  ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + {$IFDEF UNIX}'/data'{$ELSE}'\data'{$ENDIF};
+  ManagerSettings.WorkingDirUTF8 := {GetCurrentDirUTF8 +} {$IFDEF UNIX}'/data'{$ELSE}'\data'{$ENDIF};
 end;
 
 end.
