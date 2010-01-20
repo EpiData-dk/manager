@@ -1,7 +1,7 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TMainForm','FORMDATA',[
-  'TPF0'#9'TMainForm'#8'MainForm'#4'Left'#2'}'#6'Height'#3#241#2#3'Top'#2#254#5
+  'TPF0'#9'TMainForm'#8'MainForm'#4'Left'#3'~'#1#6'Height'#3#241#2#3'Top'#2'Y'#5
   +'Width'#3'.'#4#13'ActiveControl'#7#13'ProgressPanel'#7'Caption'#6'!EpiData P'
   +'roject and Data Manager '#12'ClientHeight'#3#219#2#11'ClientWidth'#3'.'#4#4
   +'Menu'#7#12'MainFormMenu'#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'#7

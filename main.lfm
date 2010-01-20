@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 125
+  Left = 382
   Height = 753
-  Top = -2
+  Top = 89
   Width = 1070
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '

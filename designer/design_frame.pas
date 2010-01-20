@@ -88,6 +88,7 @@ type
     SaveToolBtn: TToolButton;
     FontSelectBtn: TToolButton;
     ToolButton1: TToolButton;
+    ToolButton11: TToolButton;
     ToolButton2: TToolButton;
     StringFieldBtn: TToolButton;
     LabelFieldBtn: TToolButton;
@@ -100,7 +101,6 @@ type
     ToolButton4: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
-    ToolButton8: TToolButton;
     procedure AlignActionExecute(Sender: TObject);
     procedure PasteAsQesActionExecute(Sender: TObject);
     procedure ClearAllActionExecute(Sender: TObject);

@@ -32,7 +32,7 @@ object DesignFrame: TDesignFrame
     ShowHint = True
     TabOrder = 0
     object IntFieldBtn: TToolButton
-      Left = 154
+      Left = 229
       Hint = 'Add Integer (F2)'
       Top = 1
       Caption = 'Integer Field'
@@ -50,7 +50,7 @@ object DesignFrame: TDesignFrame
     end
     object FloatFieldBtn: TToolButton
       Tag = 6
-      Left = 182
+      Left = 257
       Hint = 'Add float (F3)'
       Top = 1
       Caption = 'FloatFieldBtn'
@@ -58,17 +58,17 @@ object DesignFrame: TDesignFrame
       OnClick = ToolBtnClick
     end
     object ClearToolBtn: TToolButton
-      Left = 412
+      Left = 473
       Top = 1
       Action = ClearAllAction
     end
     object SaveToolBtn: TToolButton
-      Left = 91
+      Left = 77
       Top = 1
       Action = SaveFileAction
     end
     object FontSelectBtn: TToolButton
-      Left = 384
+      Left = 445
       Hint = 'Select Screen Font'
       Top = 1
       Caption = 'FontSelectBtn'
@@ -76,22 +76,22 @@ object DesignFrame: TDesignFrame
       OnClick = FontSelectBtnClick
     end
     object ToolButton2: TToolButton
-      Left = 147
+      Left = 209
       Top = 1
-      Width = 7
+      Width = 20
       Caption = 'ToolButton2'
       Style = tbsDivider
     end
     object ToolButton1: TToolButton
-      Left = 350
+      Left = 397
       Top = 1
-      Width = 3
+      Width = 20
       Caption = 'ToolButton1'
       Style = tbsDivider
     end
     object StringFieldBtn: TToolButton
       Tag = 1
-      Left = 210
+      Left = 285
       Hint = 'Add String (F4)'
       Top = 1
       Caption = 'StringFieldBtn'
@@ -100,7 +100,7 @@ object DesignFrame: TDesignFrame
     end
     object LabelFieldBtn: TToolButton
       Tag = 15
-      Left = 266
+      Left = 341
       Hint = 'Add Label (F6)'
       Top = 1
       Caption = 'LabelFieldBtn'
@@ -108,18 +108,18 @@ object DesignFrame: TDesignFrame
       OnClick = ToolBtnClick
     end
     object OpenToolBtn: TToolButton
-      Left = 60
+      Left = 153
       Top = 1
       Action = OpenFileAction
     end
     object AutoAlignBtn: TToolButton
-      Left = 353
+      Left = 417
       Top = 1
       Action = AlignAction
     end
     object DateFieldBtn: TToolButton
       Tag = 11
-      Left = 238
+      Left = 313
       Hint = 'Add Date (F5)'
       Top = 1
       Caption = 'DateFieldBtn'
@@ -128,7 +128,7 @@ object DesignFrame: TDesignFrame
       OnClick = ToolBtnClick
     end
     object OtherFieldBtn: TToolButton
-      Left = 294
+      Left = 369
       Hint = 'Other Fields'
       Top = 1
       Caption = 'OtherFieldBtn'
@@ -136,47 +136,33 @@ object DesignFrame: TDesignFrame
       ImageIndex = 13
     end
     object ImportStructureBtn: TToolButton
-      Left = 322
+      Left = 181
       Hint = 'Add Structure from existing file'
       Top = 1
       Action = ImportStructureAction
       Caption = 'Add Structure'
     end
     object ToolButton6: TToolButton
-      Left = 119
+      Left = 105
       Top = 1
       Action = SaveFileAsAction
-    end
-    object ToolButton4: TToolButton
-      Left = 88
-      Top = 1
-      Width = 3
-      Caption = 'ToolButton4'
-      Style = tbsDivider
     end
     object ToolButton7: TToolButton
       Left = 57
       Top = 1
-      Width = 3
+      Width = 20
       Caption = 'ToolButton7'
       Style = tbsDivider
     end
-    object ToolButton8: TToolButton
-      Left = 381
-      Top = 1
-      Width = 3
-      Caption = 'ToolButton8'
-      Style = tbsDivider
-    end
     object ToolButton3: TToolButton
-      Left = 440
+      Left = 501
       Top = 1
-      Width = 3
+      Width = 20
       Caption = 'ToolButton3'
       Style = tbsDivider
     end
     object ShowStructureBtn: TToolButton
-      Left = 443
+      Left = 521
       Top = 1
       Action = DocumentFileAction
       ImageIndex = 19
@@ -185,6 +171,20 @@ object DesignFrame: TDesignFrame
       Left = 29
       Top = 1
       Action = MainForm.NewDesignFormAction
+    end
+    object ToolButton11: TToolButton
+      Left = 133
+      Top = 1
+      Width = 20
+      Caption = 'ToolButton11'
+      Style = tbsDivider
+    end
+    object ToolButton4: TToolButton
+      Left = 549
+      Top = 1
+      Width = 20
+      Caption = 'ToolButton4'
+      Style = tbsDivider
     end
   end
   object Panel1: TPanel
