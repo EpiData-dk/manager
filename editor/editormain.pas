@@ -84,7 +84,6 @@ type
     procedure RedoActionExecute(Sender: TObject);
     procedure SaveActionExecute(Sender: TObject);
     procedure SaveAsActionExecute(Sender: TObject);
-    procedure SendToDesignerPopMenuItemClick(Sender: TObject);
     procedure SynEditorStatusChange(Sender: TObject; Changes: TSynStatusChanges
       );
     procedure UndoActionExecute(Sender: TObject);
@@ -271,11 +270,6 @@ begin
   finally
     Dlg.Free;
   end;
-end;
-
-procedure TEditorForm.SendToDesignerPopMenuItemClick(Sender: TObject);
-begin
-
 end;
 
 procedure TEditorForm.SynEditorStatusChange(Sender: TObject;

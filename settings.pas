@@ -65,7 +65,6 @@ type
     AdvSheet: TTabSheet;
     FieldDefSheet: TTabSheet;
     procedure CloseActionExecute(Sender: TObject);
-    procedure DefaultPasteComboChange(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure SnapFieldsChkBoxChange(Sender: TObject);
@@ -209,8 +208,9 @@ begin
   if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.FloatFieldLength := StrToInt(S);
   S := Trim(DecimalLengthEdit.Text);
-  if not((S = '') or (StrToInt(S) <= 0)) then
+  if not((S = '') or ((StrToInt(S) <= 0) and (StrToInt(S) < (ManagerSettings.FloatFieldLength - 1)))) then
     ManagerSettings.FloatDecimalLength := StrToInt(S);
+
   S := Trim(StringLengthEdit.Text);
   if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.StringFieldLength := StrToInt(S);
@@ -239,11 +239,6 @@ end;
 procedure TSettingsForm.CloseActionExecute(Sender: TObject);
 begin
   CancelBtn.Click;
-end;
-
-procedure TSettingsForm.DefaultPasteComboChange(Sender: TObject);
-begin
-
 end;
 
 procedure TSettingsForm.FormCreate(Sender: TObject);

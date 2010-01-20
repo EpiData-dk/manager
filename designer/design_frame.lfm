@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 2082
-  DesignTop = 496
+  DesignLeft = 723
+  DesignTop = 269
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -316,7 +316,6 @@ object DesignFrame: TDesignFrame
     object EditCompAction: TAction
       Caption = 'EditCompAction'
       OnExecute = EditCompActionExecute
-      ShortCut = 120
     end
     object NewOtherFieldAction: TAction
       Caption = 'NewOtherFieldAction'
@@ -421,6 +420,7 @@ object DesignFrame: TDesignFrame
       Category = 'Edit'
       Caption = 'Paste As QES'
       OnExecute = PasteAsQesActionExecute
+      ShortCut = 119
     end
   end
   object FieldToolBarImageList: TImageList

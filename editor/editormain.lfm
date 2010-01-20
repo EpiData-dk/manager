@@ -1,11 +1,11 @@
 object EditorForm: TEditorForm
-  Left = 359
-  Height = 570
-  Top = 355
+  Left = 620
+  Height = 560
+  Top = 306
   Width = 826
   ActiveControl = SynEditor
   Caption = 'Editor'
-  ClientHeight = 548
+  ClientHeight = 535
   ClientWidth = 826
   Menu = EditorMenu
   OnCloseQuery = FormCloseQuery
@@ -15,7 +15,7 @@ object EditorForm: TEditorForm
   LCLVersion = '0.9.29'
   inline SynEditor: TSynEdit
     Left = 0
-    Height = 528
+    Height = 514
     Top = 0
     Width = 826
     Align = alClient
@@ -711,8 +711,8 @@ object EditorForm: TEditorForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 528
+    Height = 21
+    Top = 514
     Width = 826
     Panels = <    
       item
@@ -900,12 +900,12 @@ object EditorForm: TEditorForm
       Category = 'Edit'
       Caption = 'Paste As QES'
       OnExecute = PasteAsQESActionExecute
+      ShortCut = 119
     end
     object PasteAsDefaultAction: TAction
       Category = 'Edit'
       Caption = 'Paste As Default'
       OnExecute = PasteAsDefaultActionExecute
-      ShortCut = 119
     end
   end
   object XMLHighlighter: TSynXMLSyn
@@ -935,7 +935,6 @@ object EditorForm: TEditorForm
     end
     object SendToDesignerPopMenuItem: TMenuItem
       Caption = 'Paste on Dataform ..'
-      OnClick = SendToDesignerPopMenuItemClick
       object PasteAsLabelPopMenuItem: TMenuItem
         Action = PasteAsLabelAction
         OnClick = PasteAsLabelActionExecute

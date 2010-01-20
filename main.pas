@@ -117,29 +117,40 @@ uses
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 {$IFNDEF EPI_DEBUG}
 var
-  TmpMod: boolean;
-  i, idx: integer;
+  i: integer;
+  Res: word;
 {$ENDIF}
 begin
   {$IFNDEF EPI_DEBUG}
   CanClose := false;
-  TmpMod := false;
-  for i := 0 to PageControl1.PageCount -1 do
+  for i := PageControl1.PageCount -1 downto 0 do
   begin
     if PageControl1.Pages[i].Controls[0] is TDesignFrame then
+    begin
       if TDesignFrame(PageControl1.Pages[i].Controls[0]).Modified then
       begin
-        TmpMod := true;
-        Idx := i;
+        Res := MessageDlg(
+          Format(
+            'Dataform (%s) was modified since last save.' + LineEnding +
+            'Close Form and loose changes?',
+            [PageControl1.Pages[i].Caption]),
+          mtWarning, mbYesNo + [mbYesToAll], 0
+        );
+
+        case Res of
+          mrYes: begin
+            TDesignFrame(PageControl1.Pages[i].Controls[0]).Modified := false;
+            CloseTab(PageControl1.Pages[i]);
+            continue;
+          end;
+          mrYesToAll: break;
+        end;
+        PageControl1.ActivePage := PageControl1.Pages[i];
+        Exit;
       end;
+    end;
   end;
 
-  if TmpMod and (MessageDlg('Dataform was modified since last save.' +
-     LineEnding + 'Close Form and loose changes ?', mtWarning, mbYesNo, 0) = mrNo) then
-  begin
-    PageControl1.ActivePage := PageControl1.Pages[Idx];
-    Exit;
-  end;
   {$ENDIF}
   CanClose := true;
 end;
@@ -150,13 +161,12 @@ var
 begin
   Caption := 'EpiData Project and Data Manager' +
     ' (v' + GetManagerVersion + ')';
-  StatusBar1.Hint := ManagerSettings.WorkingDirUTF8;
-  StatusBar1.ShowHint := true;
+  ShowOnStatusBar(ManagerSettings.WorkingDirUTF8, 0);
 
   // Progress bar.
   ProgressBarMain := TProgressBar.Create(Self);
   {$IFDEF MSWINDOWS}
-    StatusBar1.Panels[3].Style := psOwnerDraw;
+//    StatusBar1.Panels[3].Style := psOwnerDraw;
     ProgressBarMain.Parent := StatusBar1;
     ProgressBarMain.Align := alCustom;
     PbStyle := WidgetSet.GetWindowLong(ProgressBarMain.Handle, GWL_EXSTYLE);
@@ -211,7 +221,7 @@ var
   TabSheet: TTabSheet;
   Frame: TDesignFrame;
 begin
-  ShowOnStatusBar('Add fields: Click toolbar or read files', 0);
+//  ShowOnStatusBar('Add fields: Click toolbar or read files', 0);
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -265,12 +275,12 @@ end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
 begin
-  ShowOnStatusBar('Help System Not Ready', 0);
+//  ShowOnStatusBar('Help System Not Ready', 0);
 end;
 
 procedure TMainForm.MetaDataBtnClick(Sender: TObject);
 begin
-  ShowOnStatusBar('Not implementet yet', 0);
+//  ShowOnStatusBar('Not implementet yet', 0);
 end;
 
 
@@ -281,6 +291,8 @@ var
 begin
   SettingsForm := TSettingsForm.Create(self);
   if SettingsForm.ShowModal = mrCancel then exit;
+
+  ShowOnStatusBar(ManagerSettings.WorkingDirUTF8, 0);
 
   for i := 0 to PageControl1.PageCount -1 do
   if PageControl1.Pages[i].Controls[0] is TDesignFrame then
@@ -343,7 +355,7 @@ begin
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     if not Dlg.Execute then exit;
     ManagerSettings.WorkingDirUTF8 := Dlg.FileName;
-    StatusBar1.Hint := ManagerSettings.WorkingDirUTF8;
+    ShowOnStatusBar(ManagerSettings.WorkingDirUTF8, 0);
   finally
     Dlg.Free;
   end;
@@ -391,14 +403,24 @@ function TMainForm.ShowProgress(Sender: TObject; Percent: Cardinal; Msg: string
 begin
   if Percent <> ProgressBarMain.Position then
   begin
-    ProgressBarMain.Visible := true;
     ProgressBarMain.Position := Percent;
     ProgressBarMain.Repaint;
   end;
   if Percent = 0 then
+  begin
+    {$IFDEF MSWINDOWS}
+    StatusBar1.Panels[3].Style := psOwnerDraw;
+    {$ENDIF}
+    ProgressBarMain.Visible := true;
     Application.ProcessMessages;
+  end;
   if Percent = 100 then
-    ProgressBarMain.Visible := false;;
+  begin
+    ProgressBarMain.Visible := false;
+    {$IFDEF MSWINDOWS}
+    StatusBar1.Panels[3].Style := psText;
+    {$ENDIF}
+  end;
   result := prNormal;
 end;
 
@@ -420,6 +442,8 @@ procedure TMainForm.ShowOnStatusBar(Msg: string; Idx: integer);
 begin
   if (Idx < 0) or (Idx > StatusBar1.Panels.Count -1) then exit;
   StatusBar1.Panels[Idx].Text := Msg;
+  if Idx = 0 then
+    StatusBar1.Hint := Msg;
 end;
 
 procedure TMainForm.AddToMenu(MenuItem: TMenuItem; Section: Cardinal);

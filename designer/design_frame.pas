@@ -501,6 +501,8 @@ begin
   if SelectedControl is TFieldEdit then
     TFieldEdit(SelectedControl).SetFocus;
 
+  ShowOnMainStatusBar((SelectedControl as IFieldControl).Field.FieldName, 3);
+
   if (DesignerBox.VertScrollBar.Position > SelectedControl.Top) then
     DesignerBox.VertScrollBar.Position := SelectedControl.Top - 5;
   if (SelectedControl.Top + SelectedControl.Height) > (DesignerBox.VertScrollBar.Position + DesignerBox.ClientHeight) then
@@ -1137,8 +1139,8 @@ begin
   With TFieldEdit(SelectedControl) do
   begin
     FieldForm := TFieldCreateForm.Create(DesignerBox, ActiveDatafile, Field.FieldType, false);
-    FieldForm.Left := Pt.X;
-    FieldForm.Top  := Pt.Y;
+    FieldForm.Left := Min(Pt.X, Screen.Width - FieldForm.Width - 5);
+    FieldForm.Top  := Min(Pt.Y, Screen.Height - FieldForm.Height - 5);
     FieldForm.ReadField(Field);
     if FieldForm.ShowModal = mrCancel then exit;
     FieldForm.WriteField(Field);
@@ -1148,8 +1150,8 @@ begin
   With TFieldLabel(SelectedControl) do
   begin
     LabelForm := TCreateLabelForm.Create(DesignerBox, ActiveDatafile);
-    LabelForm.Left := Pt.X;
-    LabelForm.Top  := Pt.Y;
+    LabelForm.Left := Min(Pt.X, Screen.Width - LabelForm.Width - 5);
+    LabelForm.Top  := Min(Pt.Y, Screen.Height - LabelForm.Height - 5);
     LabelForm.LabelEdit.Text := Field.VariableLabel;
     if LabelForm.ShowModal = mrCancel then exit;
     Caption :=  LabelForm.LabelEdit.Text;
@@ -1804,7 +1806,7 @@ begin
   ActiveDataFile.SortFields(@SortFields);
   ActiveDataFile.Save(ActiveDataFile.FileName, []);
   Modified := false;
-  ShowOnMainStatusBar('Saving complete: ' + ActiveDataFile.FileName, 0);
+//  ShowOnMainStatusBar('Saving complete: ' + ActiveDataFile.FileName, 0);
 end;
 
 procedure TDesignFrame.SaveFileAsActionExecute(Sender: TObject);
@@ -1835,7 +1837,7 @@ begin
       MainForm.PageControl1.ActivePage.Caption := ExtractFileName(Fn);
       MainForm.PageControl1.Hint := ExpandFileNameUTF8(Fn);
       MainForm.PageControl1.ShowHint := true;
-      ShowOnMainStatusBar('Saving complete: ' + Fn, 0);
+//      ShowOnMainStatusBar('Saving complete: ' + Fn, 0);
     end;
   finally
     Dlg.Free;

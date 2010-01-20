@@ -1,8 +1,8 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TMainForm','FORMDATA',[
-  'TPF0'#9'TMainForm'#8'MainForm'#4'Left'#3#254#7#6'Height'#3#241#2#3'Top'#3#183
-  +#1#5'Width'#3'.'#4#13'ActiveControl'#7#13'ProgressPanel'#7'Caption'#6'!EpiDa'
+  'TPF0'#9'TMainForm'#8'MainForm'#4'Left'#3#170#1#6'Height'#3#241#2#3'Top'#3#234
+  +#0#5'Width'#3'.'#4#13'ActiveControl'#7#13'ProgressPanel'#7'Caption'#6'!EpiDa'
   +'ta Project and Data Manager '#12'ClientHeight'#3#216#2#11'ClientWidth'#3'.'
   +#4#4'Menu'#7#12'MainFormMenu'#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCrea'
   +'te'#7#10'FormCreate'#8'Position'#7#14'poScreenCenter'#10'LCLVersion'#6#6'0.'
@@ -173,43 +173,44 @@ LazarusResources.Add('TMainForm','FORMDATA',[
   +'Left'#2#29#3'Top'#2#1#6'Action'#7#19'NewDesignFormAction'#0#0#0#10'TStatusB'
   +'ar'#10'StatusBar1'#4'Left'#2#0#6'Height'#2#21#3'Top'#3#195#2#5'Width'#3'.'#4
   +#6'Panels'#14#1#5'Width'#3','#1#0#1#5'Width'#2'd'#0#1#5'Width'#3#150#0#0#1#5
-  +'Width'#2'd'#0#1#5'Width'#2'd'#0#0#11'SimplePanel'#8#10'OnDblClick'#7#18'Sta'
-  +'tusBar1DblClick'#11'OnDrawPanel'#7#19'StatusBar1DrawPanel'#0#0#12'TPageCont'
-  +'rol'#12'PageControl1'#4'Left'#2#0#6'Height'#3#151#2#3'Top'#2','#5'Width'#3
-  +'.'#4#5'Align'#7#8'alClient'#14'ParentShowHint'#8#8'ShowHint'#9#8'ShowTabs'#8
-  +#8'TabOrder'#2#2#10'OnChanging'#7#20'PageControl1Changing'#13'OnPageChanged'
-  +#7#23'PageControl1PageChanged'#0#0#9'TMainMenu'#12'MainFormMenu'#8'OnChange'
-  +#7#18'MainFormMenuChange'#4'left'#3#192#1#3'top'#3'x'#1#0#9'TMenuItem'#8'Fil'
-  +'eMenu'#7'Caption'#6#5'&File'#4'Hint'#6#4'Exit'#0#9'TMenuItem'#21'ChangeWork'
-  +'DirMenuItem'#6'Action'#7#19'ChangeWorkDirAction'#7'OnClick'#7#26'ChangeWork'
-  +'DirActionExecute'#0#0#9'TMenuItem'#12'filedivider1'#7'Caption'#6#1'-'#0#0#9
-  +'TMenuItem'#9'MenuItem3'#6'Action'#7#19'NewDesignFormAction'#7'OnClick'#7#26
-  +'NewDesignFormActionExecute'#0#0#9'TMenuItem'#12'filedivider2'#7'Caption'#6#1
-  +'-'#0#0#9'TMenuItem'#12'filedivider3'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#12
-  +'ExitMenuItem'#6'Action'#7#10'ExitAction'#0#0#0#9'TMenuItem'#8'EditMenu'#7'C'
-  +'aption'#6#5'&Edit'#0#9'TMenuItem'#12'editdivider1'#7'Caption'#6#1'-'#0#0#9
-  +'TMenuItem'#12'SettingsMenu'#6'Action'#7#14'SettingsAction'#7'OnClick'#7#21
-  +'SettingsActionExecute'#0#0#0#9'TMenuItem'#9'ToolsMenu'#7'Caption'#6#6'&Tool'
-  +'s'#0#9'TMenuItem'#13'ToolsDivider1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#20'S'
-  +'howWorkFlowMenuItem'#6'Action'#7#18'ShowWorkFlowAction'#7'OnClick'#7#25'Sho'
-  +'wWorkFlowActionExecute'#0#0#9'TMenuItem'#9'MenuItem1'#6'Action'#7#17'StartE'
-  ,'ditorAction'#7'OnClick'#7#24'StartEditorActionExecute'#0#0#0#9'TMenuItem'#8
-  +'HelpMenu'#7'Caption'#6#5'&Help'#0#9'TMenuItem'#14'shortIntroItem'#7'Caption'
-  +#6#18'Short introduction'#7'OnClick'#7#19'shortIntroItemClick'#0#0#0#0#11'TA'
-  +'ctionList'#18'MainFormActionList'#6'Images'#7'!DesignFrame.FieldToolBarImag'
-  +'eList'#4'left'#3'`'#2#3'top'#3'x'#1#0#9'TFileExit'#10'ExitAction'#8'Categor'
-  +'y'#6#4'File'#7'Caption'#6#5'E&xit'#4'Hint'#6#4'Exit'#8'ShortCut'#2'{'#0#0#7
-  +'TAction'#14'SettingsAction'#8'Category'#6#4'Edit'#7'Caption'#6#9'&Settings'
-  +#9'OnExecute'#7#21'SettingsActionExecute'#8'ShortCut'#4'S'#128#0#0#0#0#7'TAc'
-  +'tion'#15'ClosePageAction'#8'Category'#6#14'NonMenuActions'#7'Caption'#6#15
-  +'ClosePageAction'#9'OnExecute'#7#22'ClosePageActionExecute'#26'SecondaryShor'
-  +'tCuts.Strings'#1#6#6'CTRL+W'#0#8'ShortCut'#3's@'#0#0#7'TAction'#19'NewDesig'
-  +'nFormAction'#7'Caption'#6#15'New Design Form'#4'Hint'#6#15'New Design Form'
-  +#10'ImageIndex'#2#20#9'OnExecute'#7#26'NewDesignFormActionExecute'#8'ShortCu'
-  +'t'#3'N@'#0#0#7'TAction'#17'StartEditorAction'#8'Category'#6#5'Tools'#7'Capt'
-  +'ion'#6#7'E&ditor'#9'OnExecute'#7#24'StartEditorActionExecute'#8'ShortCut'#2
-  +'y'#0#0#7'TAction'#18'ShowWorkFlowAction'#8'Category'#6#5'Tools'#7'Caption'#6
-  +#14'Show Work Flow'#9'OnExecute'#7#25'ShowWorkFlowActionExecute'#0#0#7'TActi'
-  +'on'#19'ChangeWorkDirAction'#8'Category'#6#4'File'#7'Caption'#6#25'C&hange W'
-  +'orking Directory'#9'OnExecute'#7#26'ChangeWorkDirActionExecute'#0#0#0#0
+  +'Width'#2'd'#0#1#5'Width'#2'd'#0#0#14'ParentShowHint'#8#11'SimplePanel'#8#8
+  +'ShowHint'#9#10'OnDblClick'#7#18'StatusBar1DblClick'#11'OnDrawPanel'#7#19'St'
+  +'atusBar1DrawPanel'#0#0#12'TPageControl'#12'PageControl1'#4'Left'#2#0#6'Heig'
+  +'ht'#3#151#2#3'Top'#2','#5'Width'#3'.'#4#5'Align'#7#8'alClient'#14'ParentSho'
+  +'wHint'#8#8'ShowHint'#9#8'ShowTabs'#8#8'TabOrder'#2#2#10'OnChanging'#7#20'Pa'
+  +'geControl1Changing'#13'OnPageChanged'#7#23'PageControl1PageChanged'#0#0#9'T'
+  +'MainMenu'#12'MainFormMenu'#8'OnChange'#7#18'MainFormMenuChange'#4'left'#3
+  +#192#1#3'top'#3'x'#1#0#9'TMenuItem'#8'FileMenu'#7'Caption'#6#5'&File'#4'Hint'
+  +#6#4'Exit'#0#9'TMenuItem'#21'ChangeWorkDirMenuItem'#6'Action'#7#19'ChangeWor'
+  +'kDirAction'#7'OnClick'#7#26'ChangeWorkDirActionExecute'#0#0#9'TMenuItem'#12
+  +'filedivider1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem3'#6'Action'#7#19
+  +'NewDesignFormAction'#7'OnClick'#7#26'NewDesignFormActionExecute'#0#0#9'TMen'
+  +'uItem'#12'filedivider2'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#12'filedivider3'
+  +#7'Caption'#6#1'-'#0#0#9'TMenuItem'#12'ExitMenuItem'#6'Action'#7#10'ExitActi'
+  +'on'#0#0#0#9'TMenuItem'#8'EditMenu'#7'Caption'#6#5'&Edit'#0#9'TMenuItem'#12
+  +'editdivider1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#12'SettingsMenu'#6'Action'
+  +#7#14'SettingsAction'#7'OnClick'#7#21'SettingsActionExecute'#0#0#0#9'TMenuIt'
+  +'em'#9'ToolsMenu'#7'Caption'#6#6'&Tools'#0#9'TMenuItem'#13'ToolsDivider1'#7
+  +'Caption'#6#1'-'#0#0#9'TMenuItem'#20'ShowWorkFlowMenuItem'#6'Action'#7#18'Sh'
+  +'owWorkFlowAction'#7'OnClick'#7#25'ShowWorkFlowActionExecute'#0#0#9'TMenuIte'
+  ,'m'#9'MenuItem1'#6'Action'#7#17'StartEditorAction'#7'OnClick'#7#24'StartEdit'
+  +'orActionExecute'#0#0#0#9'TMenuItem'#8'HelpMenu'#7'Caption'#6#5'&Help'#0#9'T'
+  +'MenuItem'#14'shortIntroItem'#7'Caption'#6#18'Short introduction'#7'OnClick'
+  +#7#19'shortIntroItemClick'#0#0#0#0#11'TActionList'#18'MainFormActionList'#6
+  +'Images'#7'!DesignFrame.FieldToolBarImageList'#4'left'#3'`'#2#3'top'#3'x'#1#0
+  +#9'TFileExit'#10'ExitAction'#8'Category'#6#4'File'#7'Caption'#6#5'E&xit'#4'H'
+  +'int'#6#4'Exit'#8'ShortCut'#2'{'#0#0#7'TAction'#14'SettingsAction'#8'Categor'
+  +'y'#6#4'Edit'#7'Caption'#6#9'&Settings'#9'OnExecute'#7#21'SettingsActionExec'
+  +'ute'#8'ShortCut'#4'S'#128#0#0#0#0#7'TAction'#15'ClosePageAction'#8'Category'
+  +#6#14'NonMenuActions'#7'Caption'#6#15'ClosePageAction'#9'OnExecute'#7#22'Clo'
+  +'sePageActionExecute'#26'SecondaryShortCuts.Strings'#1#6#6'CTRL+W'#0#8'Short'
+  +'Cut'#3's@'#0#0#7'TAction'#19'NewDesignFormAction'#7'Caption'#6#15'New Desig'
+  +'n Form'#4'Hint'#6#15'New Design Form'#10'ImageIndex'#2#20#9'OnExecute'#7#26
+  +'NewDesignFormActionExecute'#8'ShortCut'#3'N@'#0#0#7'TAction'#17'StartEditor'
+  +'Action'#8'Category'#6#5'Tools'#7'Caption'#6#7'E&ditor'#9'OnExecute'#7#24'St'
+  +'artEditorActionExecute'#8'ShortCut'#2'y'#0#0#7'TAction'#18'ShowWorkFlowActi'
+  +'on'#8'Category'#6#5'Tools'#7'Caption'#6#14'Show Work Flow'#9'OnExecute'#7#25
+  +'ShowWorkFlowActionExecute'#0#0#7'TAction'#19'ChangeWorkDirAction'#8'Categor'
+  +'y'#6#4'File'#7'Caption'#6#25'C&hange Working Directory'#9'OnExecute'#7#26'C'
+  +'hangeWorkDirActionExecute'#0#0#0#0
 ]);

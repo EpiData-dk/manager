@@ -5,7 +5,7 @@ LazarusResources.Add('TDesignFrame','FORMDATA',[
   +#0#5'Width'#3'D'#3#18'HorzScrollBar.Page'#3'C'#3#18'VertScrollBar.Page'#3'3'
   +#2#19'VertScrollBar.Range'#2#26#12'ClientHeight'#3'6'#2#11'ClientWidth'#3'D'
   +#3#5'Color'#7#9'clBtnFace'#11'ParentColor'#8#14'ParentShowHint'#8#8'TabOrder'
-  +#2#0#10'DesignLeft'#3'"'#8#9'DesignTop'#3#240#1#0#8'TToolBar'#12'FieldToolBa'
+  +#2#0#10'DesignLeft'#3#211#2#9'DesignTop'#3#13#1#0#8'TToolBar'#12'FieldToolBa'
   +'r'#4'Left'#2#0#6'Height'#2#26#3'Top'#2#0#5'Width'#3'D'#3#12'ButtonHeight'#2
   +#24#11'ButtonWidth'#2#24#7'Caption'#6#12'FieldToolBar'#5'Color'#7#9'clBtnFac'
   +'e'#11'EdgeBorders'#11#5'ebTop'#8'ebBottom'#0#9'EdgeInner'#7#6'esNone'#9'Edg'
@@ -88,43 +88,43 @@ LazarusResources.Add('TDesignFrame','FORMDATA',[
   +'n'#7'Caption'#6#17'Document Datafile'#4'Hint'#6#17'Document Datafile'#10'Im'
   +'ageIndex'#2#17#9'OnExecute'#7#25'DocumentFileActionExecute'#0#0#7'TAction'
   +#14'EditCompAction'#7'Caption'#6#14'EditCompAction'#9'OnExecute'#7#21'EditCo'
-  +'mpActionExecute'#8'ShortCut'#2'x'#0#0#7'TAction'#19'NewOtherFieldAction'#7
-  +'Caption'#6#19'NewOtherFieldAction'#0#0#7'TAction'#18'NewDateFieldAction'#8
-  +'Category'#6#10'New Fields'#7'Caption'#6#18'NewDateFieldAction'#9'OnExecute'
-  +#7#25'NewDateFieldActionExecute'#26'SecondaryShortCuts.Strings'#1#6#8'Shift+'
-  +'F5'#0#8'ShortCut'#2't'#0#0#7'TAction'#19'NewLabelFieldAction'#8'Category'#6
-  +#10'New Fields'#7'Caption'#6#19'NewLabelFieldAction'#9'OnExecute'#7#26'NewLa'
-  +'belFieldActionExecute'#8'ShortCut'#2'u'#0#0#10'TEditPaste'#12'PasteAsLabel'
-  +#8'Category'#6#4'Edit'#7'Caption'#6#16'&Paste As Labels'#4'Hint'#6#5'Paste'#9
-  +'OnExecute'#7#19'PasteAsLabelExecute'#26'SecondaryShortCuts.Strings'#1#6#2'F'
-  +'8'#0#0#0#7'TAction'#15'MoveFirstAction'#8'Category'#6#4'Move'#7'Caption'#6#5
-  +'First'#4'Hint'#6#19'Move to first field'#9'OnExecute'#7#22'MoveFirstActionE'
-  +'xecute'#8'ShortCut'#3'$@'#0#0#7'TAction'#16'MovePageUpAction'#8'Category'#6
-  +#4'Move'#7'Caption'#6#16'MovePageUpAction'#9'OnExecute'#7#23'MovePageUpActio'
-  +'nExecute'#8'ShortCut'#2'!'#0#0#7'TAction'#12'MoveUpAction'#8'Category'#6#4
-  +'Move'#7'Caption'#6#12'MoveUpAction'#9'OnExecute'#7#19'MoveUpActionExecute'
-  +#26'SecondaryShortCuts.Strings'#1#6#9'Shift+TAB'#0#8'ShortCut'#2'&'#0#0#7'TA'
-  +'ction'#14'MoveDownAction'#8'Category'#6#4'Move'#7'Caption'#6#14'MoveDownAct'
-  +'ion'#9'OnExecute'#7#21'MoveDownActionExecute'#26'SecondaryShortCuts.Strings'
-  +#1#6#3'TAB'#0#8'ShortCut'#2'('#0#0#7'TAction'#18'MovePageDownAction'#8'Categ'
-  +'ory'#6#4'Move'#7'Caption'#6#18'MovePageDownAction'#9'OnExecute'#7#25'MovePa'
-  +'geDownActionExecute'#8'ShortCut'#2'"'#0#0#7'TAction'#14'MoveLastAction'#8'C'
-  +'ategory'#6#4'Move'#7'Caption'#6#4'Last'#4'Hint'#6#18'Move to last field'#9
-  +'OnExecute'#7#21'MoveLastActionExecute'#8'ShortCut'#3'#@'#0#0#7'TAction'#14
-  +'ClearAllAction'#8'Category'#6#5'Tools'#7'Caption'#6#9'Clear All'#4'Hint'#6
-  +#14'Clear Dataform'#10'ImageIndex'#2#5#9'OnExecute'#7#21'ClearAllActionExecu'
-  +'te'#0#0#7'TAction'#16'PasteAsIntAction'#8'Category'#6#4'Edit'#7'Caption'#6
-  +#16'Paste As Integer'#9'OnExecute'#7#23'PasteAsIntActionExecute'#0#0#7'TActi'
-  +'on'#18'PasteAsFloatAction'#8'Category'#6#4'Edit'#7'Caption'#6#14'Paste As F'
-  +'loat'#9'OnExecute'#7#25'PasteAsFloatActionExecute'#0#0#7'TAction'#19'PasteA'
-  +'sStringAction'#8'Category'#6#4'Edit'#7'Caption'#6#15'Paste As String'#9'OnE'
-  +'xecute'#7#26'PasteAsStringActionExecute'#0#0#7'TAction'#14'PasteAsDefault'#8
-  +'Category'#6#4'Edit'#7'Caption'#6#16'Paste As Default'#9'OnExecute'#7#21'Pas'
-  +'teAsDefaultExecute'#8'ShortCut'#3'V@'#0#0#7'TAction'#16'PasteAsQesAction'#8
-  +'Category'#6#4'Edit'#7'Caption'#6#12'Paste As QES'#9'OnExecute'#7#23'PasteAs'
-  +'QesActionExecute'#0#0#0#10'TImageList'#21'FieldToolBarImageList'#6'Height'#2
-  +#24#11'ShareImages'#9#5'Width'#2#24#4'left'#2'H'#3'top'#2' '#6'Bitmap'#10#14
-  +#198#0#0'Li'#22#0#0#0#24#0#0#0#24#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +'mpActionExecute'#0#0#7'TAction'#19'NewOtherFieldAction'#7'Caption'#6#19'New'
+  +'OtherFieldAction'#0#0#7'TAction'#18'NewDateFieldAction'#8'Category'#6#10'Ne'
+  +'w Fields'#7'Caption'#6#18'NewDateFieldAction'#9'OnExecute'#7#25'NewDateFiel'
+  +'dActionExecute'#26'SecondaryShortCuts.Strings'#1#6#8'Shift+F5'#0#8'ShortCut'
+  +#2't'#0#0#7'TAction'#19'NewLabelFieldAction'#8'Category'#6#10'New Fields'#7
+  +'Caption'#6#19'NewLabelFieldAction'#9'OnExecute'#7#26'NewLabelFieldActionExe'
+  +'cute'#8'ShortCut'#2'u'#0#0#10'TEditPaste'#12'PasteAsLabel'#8'Category'#6#4
+  +'Edit'#7'Caption'#6#16'&Paste As Labels'#4'Hint'#6#5'Paste'#9'OnExecute'#7#19
+  +'PasteAsLabelExecute'#26'SecondaryShortCuts.Strings'#1#6#2'F8'#0#0#0#7'TActi'
+  +'on'#15'MoveFirstAction'#8'Category'#6#4'Move'#7'Caption'#6#5'First'#4'Hint'
+  +#6#19'Move to first field'#9'OnExecute'#7#22'MoveFirstActionExecute'#8'Short'
+  +'Cut'#3'$@'#0#0#7'TAction'#16'MovePageUpAction'#8'Category'#6#4'Move'#7'Capt'
+  +'ion'#6#16'MovePageUpAction'#9'OnExecute'#7#23'MovePageUpActionExecute'#8'Sh'
+  +'ortCut'#2'!'#0#0#7'TAction'#12'MoveUpAction'#8'Category'#6#4'Move'#7'Captio'
+  +'n'#6#12'MoveUpAction'#9'OnExecute'#7#19'MoveUpActionExecute'#26'SecondarySh'
+  +'ortCuts.Strings'#1#6#9'Shift+TAB'#0#8'ShortCut'#2'&'#0#0#7'TAction'#14'Move'
+  +'DownAction'#8'Category'#6#4'Move'#7'Caption'#6#14'MoveDownAction'#9'OnExecu'
+  +'te'#7#21'MoveDownActionExecute'#26'SecondaryShortCuts.Strings'#1#6#3'TAB'#0
+  +#8'ShortCut'#2'('#0#0#7'TAction'#18'MovePageDownAction'#8'Category'#6#4'Move'
+  +#7'Caption'#6#18'MovePageDownAction'#9'OnExecute'#7#25'MovePageDownActionExe'
+  +'cute'#8'ShortCut'#2'"'#0#0#7'TAction'#14'MoveLastAction'#8'Category'#6#4'Mo'
+  +'ve'#7'Caption'#6#4'Last'#4'Hint'#6#18'Move to last field'#9'OnExecute'#7#21
+  +'MoveLastActionExecute'#8'ShortCut'#3'#@'#0#0#7'TAction'#14'ClearAllAction'#8
+  +'Category'#6#5'Tools'#7'Caption'#6#9'Clear All'#4'Hint'#6#14'Clear Dataform'
+  +#10'ImageIndex'#2#5#9'OnExecute'#7#21'ClearAllActionExecute'#0#0#7'TAction'
+  +#16'PasteAsIntAction'#8'Category'#6#4'Edit'#7'Caption'#6#16'Paste As Integer'
+  +#9'OnExecute'#7#23'PasteAsIntActionExecute'#0#0#7'TAction'#18'PasteAsFloatAc'
+  +'tion'#8'Category'#6#4'Edit'#7'Caption'#6#14'Paste As Float'#9'OnExecute'#7
+  +#25'PasteAsFloatActionExecute'#0#0#7'TAction'#19'PasteAsStringAction'#8'Cate'
+  +'gory'#6#4'Edit'#7'Caption'#6#15'Paste As String'#9'OnExecute'#7#26'PasteAsS'
+  +'tringActionExecute'#0#0#7'TAction'#14'PasteAsDefault'#8'Category'#6#4'Edit'
+  +#7'Caption'#6#16'Paste As Default'#9'OnExecute'#7#21'PasteAsDefaultExecute'#8
+  +'ShortCut'#3'V@'#0#0#7'TAction'#16'PasteAsQesAction'#8'Category'#6#4'Edit'#7
+  +'Caption'#6#12'Paste As QES'#9'OnExecute'#7#23'PasteAsQesActionExecute'#8'Sh'
+  +'ortCut'#2'w'#0#0#0#10'TImageList'#21'FieldToolBarImageList'#6'Height'#2#24
+  +#11'ShareImages'#9#5'Width'#2#24#4'left'#2'H'#3'top'#2' '#6'Bitmap'#10#14#198
+  +#0#0'Li'#22#0#0#0#24#0#0#0#24#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
@@ -137,18 +137,18 @@ LazarusResources.Add('TDesignFrame','FORMDATA',[
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'D'#2#7#255
-  +'0'#0#0#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0'D'#2#7#255'0'
+  +#0#0#255#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0','#0#0#255#255#250#251#255#30#0#0#255#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0','#0#0#255#255#250#251#255#30#0#0#255#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0'.'#12#12#255#255#248#247#255#255#251#248#255#9#0#0#255#0#0#0#0#0
+  +#0#0#0#0#0'.'#12#12#255#255#248#247#255#255#251#248#255#9#0#0#255#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#16
-  +#0#0#255#255#253#251#255#255#255#252#255#254#252#251#255#0#2#0#255#0#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#16#0
+  +#0#255#255#253#251#255#255#255#252#255#254#252#251#255#0#2#0#255#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#10#5#2#255
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#10#5#2#255
   +#249#246#242#255#255#255#252#255#248#253#251#255#250#255#254#255#0#2#0#255#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#8#9#7#255

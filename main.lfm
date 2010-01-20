@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 2046
+  Left = 426
   Height = 753
-  Top = 439
+  Top = 234
   Width = 1070
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
@@ -247,7 +247,9 @@ object MainForm: TMainForm
       item
         Width = 100
       end>
+    ParentShowHint = False
     SimplePanel = False
+    ShowHint = True
     OnDblClick = StatusBar1DblClick
     OnDrawPanel = StatusBar1DrawPanel
   end
