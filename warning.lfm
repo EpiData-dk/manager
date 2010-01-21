@@ -1,10 +1,10 @@
 object WarningForm: TWarningForm
-  Left = 478
+  Left = 956
   Height = 550
-  Top = 81
+  Top = 381
   Width = 549
   ActiveControl = Memo1
-  Caption = 'WARNING - EpiData Core module test application - WARNING'
+  Caption = 'EpiData Manager'
   ClientHeight = 550
   ClientWidth = 549
   Color = clGradientActiveCaption
@@ -14,9 +14,9 @@ object WarningForm: TWarningForm
   LCLVersion = '0.9.29'
   object Label1: TLabel
     Left = 184
-    Height = 38
+    Height = 39
     Top = 8
-    Width = 165
+    Width = 177
     Caption = 'WARNING'
     Font.Color = clRed
     Font.Height = -32
@@ -26,10 +26,10 @@ object WarningForm: TWarningForm
     ParentFont = False
   end
   object Label3: TLabel
-    Left = 88
-    Height = 17
+    Left = 98
+    Height = 18
     Top = 480
-    Width = 312
+    Width = 352
     Caption = 'Press OK to accept that this is only for testing'
     Font.Color = clRed
     Font.Height = -13
@@ -39,10 +39,10 @@ object WarningForm: TWarningForm
     ParentFont = False
   end
   object Label4: TLabel
-    Left = 88
-    Height = 17
+    Left = 59
+    Height = 19
     Top = 456
-    Width = 361
+    Width = 430
     Caption = 'Errors could occur  - work  on copies of data only !! '
     Font.Color = clRed
     Font.Height = -15
@@ -52,7 +52,7 @@ object WarningForm: TWarningForm
     ParentFont = False
   end
   object Button1: TButton
-    Left = 208
+    Left = 270
     Height = 25
     Top = 512
     Width = 128
@@ -66,7 +66,7 @@ object WarningForm: TWarningForm
     TabOrder = 0
   end
   object Button2: TButton
-    Left = 88
+    Left = 150
     Height = 25
     Top = 512
     Width = 75
@@ -89,33 +89,31 @@ object WarningForm: TWarningForm
       'This "EpiData Manager" will replace: EpiData Entry '
       ''
       'The current test version can be used to:'
-      'Define new dataforms, '
-      'read existing Data in supported formats and convert these to a dataform'
-      'Save data in the new RecXML format '
+      '* Define new dataforms'
+      '* Read existing Data in supported formats and convert these to a dataform'
+      '* Save data in the new RecXML format '
       ''
-      'Please try out: Adding fields on a new data form by:'
-      '-- using keys - adding qes files - using the editor and pasting text'
+      'Please try out:'
+      '* Adding fields on a new data form by:'
+      '  - using keys'
+      '  - adding qes files'
+      '  - using the editor and pasting text'
       ''
-      'The Dataform as you see it will replace -    (for most data systems)'
+      'The Dataform as you see it will replace (for most data systems)'
       '   qes, chk and rec files and combine in one file.'
       ''
       'A specific Data Entry client will be developed next.'
       ''
-      'Please give general feedback to the EpiData-list (see frontpage of '
-      'Epidata.dk)'
-      'Specific bugs should be reported to the bug-reporting database. See '
-      'reference on: www.epidata.dk\testing.php'
+      'Please give general feedback to the EpiData-list (see frontpage of Epidata.dk). Specific bugs should be reported to the bug-reporting database. See reference on:'
+      'http://www.epidata.dk/testing.php'
       ''
       'Regards'
       'Torsten Christiansen and Jens Lauritsen'
       'EpiData Association'
       'Odense, Denmark'
       ''
-      'EpiData Manager is complete programmed in Free-pascal and '
-      'Lazarus.'
-      'Source code will be released at end of development under appropriate '
-      'CC '
-      'license'
+      'EpiData Manager is complete programmed in Free-pascal and Lazarus.'
+      'Source code will be released at end of development under appropriate CC license'
     )
     ParentFont = False
     ReadOnly = True

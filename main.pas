@@ -133,11 +133,15 @@ begin
       if TDesignFrame(PageControl1.Pages[i].Controls[0]).Modified then
       begin
         Res := MessageDlg(
+          'Warning',
           Format(
             'Dataform (%s) was modified since last save.' + LineEnding +
             'Close Form and loose changes?',
             [PageControl1.Pages[i].Caption]),
-          mtWarning, mbYesNo + [mbYesToAll], 1
+          mtWarning,
+          mbYesNo + [mbYesToAll],
+          0,
+          mbNo
         );
 
         case Res of
@@ -372,8 +376,13 @@ begin
   {$IFNDEF EPI_DEBUG}
   if (PageControl1.ActivePage.Components[0] is TDesignFrame) and
      (TDesignFrame(PageControl1.ActivePage.Controls[0]).Modified) and
-     (MessageDlg('Dataform was modified since last save.' +
-                 LineEnding + 'Close Form - and loose changes ?', mtWarning, mbYesNo, 1) = mrNo) then
+     (MessageDlg( 'Warning',
+                  'Dataform was modified since last save.' + LineEnding +
+                  'Close Form - and loose changes ?',
+                  mtWarning,
+                  mbYesNo,
+                  0,
+                  mbNo) = mrNo) then
     Exit;
   {$ENDIf}
 

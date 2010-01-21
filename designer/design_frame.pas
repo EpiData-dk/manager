@@ -38,7 +38,6 @@ type
     MovePageUpAction: TAction;
     MoveFirstAction: TAction;
     MoveLastAction: TAction;
-    NewDataMenu: TMenuItem;
     Panel1: TPanel;
     PasteAsLabel: TEditPaste;
     PasteAsLabelMenuItem: TMenuItem;
@@ -432,6 +431,7 @@ begin
       [ActiveDatafile.Size]
     ), 2
   );
+  ShowOnMainStatusBar('', 3);
 end;
 
 procedure TDesignFrame.PasteAsField(FieldType: TFieldType);
@@ -966,12 +966,12 @@ end;
 
 destructor TDesignFrame.Destroy;
 begin
-  inherited Destroy;
-
   if Assigned(FActiveDatafile) then
     FreeAndNil(FActiveDatafile);
   FreeAndNil(FComponentYTree);
   FreeAndNil(FComponentXTree);
+
+  inherited Destroy;
 end;
 
 procedure TDesignFrame.ActivateFrame;
@@ -1324,6 +1324,7 @@ var
   NextNode: TAVLTreeNode;
 begin
   if ComponentYTree.Count <= 2 then exit;
+  if not Assigned(SelectedControl) then exit;
 
   Node := (SelectedControl as IFieldControl).YTreeNode;
   if Node = ComponentYTree.FindHighest then exit;
@@ -1348,6 +1349,7 @@ var
   Dx: Integer;
 begin
   if ComponentYTree.Count <= 2 then exit;
+  if not Assigned(SelectedControl) then exit;
 
   Node := (SelectedControl as IFieldControl).YTreeNode;
   if Node = ComponentYTree.FindLowest then exit;

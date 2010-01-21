@@ -290,7 +290,7 @@ initialization
   {$I settings.lrs}
 
 begin
-  ManagerSettings.WorkingDirUTF8 := {GetCurrentDirUTF8 +} {$IFDEF UNIX}'/data'{$ELSE}'\data'{$ENDIF};
+  ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + {$IFDEF UNIX}'/data'{$ELSE}'\data'{$ENDIF};
 end;
 
 end.

@@ -25,8 +25,8 @@ object SettingsForm: TSettingsForm
     TabOrder = 0
     object VisualDesignSheet: TTabSheet
       Caption = 'Visual design'
-      ClientHeight = 198
-      ClientWidth = 444
+      ClientHeight = 189
+      ClientWidth = 446
       object ShowFieldNameChkBox: TCheckBox
         Left = 154
         Height = 22
@@ -86,7 +86,7 @@ object SettingsForm: TSettingsForm
         Top = 106
         Width = 190
         Caption = 'Snapping:'
-        ClientHeight = 64
+        ClientHeight = 63
         ClientWidth = 186
         TabOrder = 3
         object SnapFieldsChkBox: TCheckBox
@@ -126,7 +126,7 @@ object SettingsForm: TSettingsForm
         Top = 73
         Width = 190
         Caption = 'Vertical distances:'
-        ClientHeight = 97
+        ClientHeight = 96
         ClientWidth = 186
         TabOrder = 4
         object Label5: TLabel
@@ -196,14 +196,14 @@ object SettingsForm: TSettingsForm
     end
     object FieldDefSheet: TTabSheet
       Caption = 'Field definitions'
-      ClientHeight = 198
-      ClientWidth = 444
+      ClientHeight = 189
+      ClientWidth = 446
       object Label10: TLabel
         Left = 22
-        Height = 14
+        Height = 18
         Hint = 'Default field length for:'#10'Integer and IdNum'
         Top = 51
-        Width = 41
+        Width = 51
         Caption = 'Integer:'
         ParentColor = False
         ParentShowHint = False
@@ -217,10 +217,10 @@ object SettingsForm: TSettingsForm
       end
       object Label11: TLabel
         Left = 141
-        Height = 14
+        Height = 18
         Hint = 'Default field length for:'#10'Float'
         Top = 51
-        Width = 41
+        Width = 60
         Caption = 'decimals'
         ParentColor = False
         ParentShowHint = False
@@ -228,10 +228,10 @@ object SettingsForm: TSettingsForm
       end
       object Label12: TLabel
         Left = 22
-        Height = 14
+        Height = 18
         Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
         Top = 128
-        Width = 33
+        Width = 43
         Caption = 'String:'
         ParentColor = False
         ParentShowHint = False
@@ -239,7 +239,7 @@ object SettingsForm: TSettingsForm
       end
       object IntLengthEdit: TMaskEdit
         Left = 92
-        Height = 21
+        Height = 27
         Hint = 'Default field length for:'#10'Integer and IdNum'
         Top = 42
         Width = 35
@@ -253,7 +253,7 @@ object SettingsForm: TSettingsForm
       end
       object FloatLengthEdit: TMaskEdit
         Left = 92
-        Height = 21
+        Height = 27
         Hint = 'Default field length for:'#10'Float'
         Top = 79
         Width = 35
@@ -267,7 +267,7 @@ object SettingsForm: TSettingsForm
       end
       object StringLengthEdit: TMaskEdit
         Left = 92
-        Height = 21
+        Height = 27
         Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
         Top = 119
         Width = 35
@@ -281,7 +281,7 @@ object SettingsForm: TSettingsForm
       end
       object DecimalLengthEdit: TMaskEdit
         Left = 141
-        Height = 21
+        Height = 27
         Hint = 'Default decimal length for:'#10'Float'
         Top = 79
         Width = 35
@@ -295,18 +295,18 @@ object SettingsForm: TSettingsForm
       end
       object Label14: TLabel
         Left = 21
-        Height = 14
+        Height = 18
         Top = 162
-        Width = 61
+        Width = 82
         Caption = 'Default date'
         ParentColor = False
       end
       object DefaultDateCombo: TComboBox
         Left = 122
-        Height = 21
+        Height = 31
         Top = 149
         Width = 69
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         Items.Strings = (
           'dmy'
@@ -332,12 +332,12 @@ object SettingsForm: TSettingsForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 54
+        ClientHeight = 53
         ClientWidth = 199
         TabOrder = 6
         object FieldNamingAutoRadio: TRadioButton
           Left = 6
-          Height = 21
+          Height = 20
           Top = 6
           Width = 187
           Caption = 'Automatic'
@@ -347,7 +347,7 @@ object SettingsForm: TSettingsForm
         object FieldNamingFirstWordRadio: TRadioButton
           Left = 6
           Height = 21
-          Top = 27
+          Top = 26
           Width = 187
           Caption = 'First word'
           Checked = True
@@ -358,15 +358,15 @@ object SettingsForm: TSettingsForm
       end
       object Label1: TLabel
         Left = 236
-        Height = 14
+        Height = 18
         Top = 64
-        Width = 54
+        Width = 73
         Caption = 'Field Prefix'
         ParentColor = False
       end
       object PrefixEdit: TEdit
         Left = 364
-        Height = 21
+        Height = 27
         Top = 55
         Width = 75
         TabOrder = 5
@@ -379,26 +379,26 @@ object SettingsForm: TSettingsForm
       end
       object Label15: TLabel
         Left = 22
-        Height = 14
+        Height = 18
         Top = 13
-        Width = 105
+        Width = 143
         Caption = 'Default Field Lengths '
         ParentColor = False
       end
       object Label16: TLabel
         Left = 236
-        Height = 14
+        Height = 18
         Top = 10
-        Width = 63
+        Width = 89
         Caption = 'Field naming '
         ParentColor = False
       end
       object Label13: TLabel
         Left = 22
-        Height = 14
+        Height = 18
         Hint = 'Default field length for:'#10'Float'
         Top = 88
-        Width = 25
+        Width = 34
         Caption = 'Float'
         ParentColor = False
         ParentShowHint = False
@@ -413,8 +413,8 @@ object SettingsForm: TSettingsForm
     end
     object AdvSheet: TTabSheet
       Caption = 'Advanced'
-      ClientHeight = 198
-      ClientWidth = 444
+      ClientHeight = 189
+      ClientWidth = 446
       object Label17: TLabel
         Left = 8
         Height = 18
@@ -428,7 +428,7 @@ object SettingsForm: TSettingsForm
         Height = 21
         Top = 57
         Width = 194
-        ItemHeight = 13
+        ItemHeight = 0
         Items.Strings = (
           'qes'
           'float'

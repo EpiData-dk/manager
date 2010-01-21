@@ -164,7 +164,12 @@ begin
     Lst := TStringList.Create;
     Lst.LoadFromFile(Dlg.FileName);
     EpiUnknownStringsToUTF8(Lst);
-    SynEditor.Lines.AddStrings(Lst);
+    with SynEditor.Lines do
+    begin
+      BeginUpdate;
+      Clear;
+      AddStrings(Lst);
+    end;
 
     StatusBar1.Panels[3].Text := Dlg.FileName;
   finally

@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 316
-  DesignTop = 106
+  DesignLeft = 728
+  DesignTop = 329
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -199,41 +199,41 @@ object DesignFrame: TDesignFrame
     TabOrder = 1
     object Label1: TLabel
       Left = 22
-      Height = 14
+      Height = 18
       Top = 30
-      Width = 32
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 22
-      Height = 14
+      Height = 18
       Top = 108
-      Width = 32
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
     object Label3: TLabel
       Left = 22
-      Height = 14
+      Height = 18
       Top = 186
-      Width = 32
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
     object Label4: TLabel
       Left = 22
-      Height = 14
+      Height = 18
       Top = 264
-      Width = 32
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
     object Label5: TLabel
       Left = 22
-      Height = 14
+      Height = 18
       Top = 342
-      Width = 32
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -390,7 +390,7 @@ object DesignFrame: TDesignFrame
     end
     object ClearAllAction: TAction
       Category = 'Tools'
-      Caption = 'Clear All'
+      Caption = 'Clear Dataform'
       Hint = 'Clear Dataform'
       ImageIndex = 5
       OnExecute = ClearAllActionExecute
@@ -2080,10 +2080,6 @@ object DesignFrame: TDesignFrame
       Tag = 12
       Caption = 'Auto ID'
       OnClick = NewOtherFieldClick
-    end
-    object NewDataMenu: TMenuItem
-      Caption = 'Date ..'
-      OnClick = NewDataMenuClick
     end
   end
   object DateFieldPopupMenu: TPopupMenu

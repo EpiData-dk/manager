@@ -1,11 +1,11 @@
 object MainForm: TMainForm
-  Left = 382
+  Left = 412
   Height = 753
-  Top = 89
+  Top = 208
   Width = 1070
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
-  ClientHeight = 731
+  ClientHeight = 728
   ClientWidth = 1070
   Menu = MainFormMenu
   OnCloseQuery = FormCloseQuery
@@ -228,8 +228,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 20
-    Top = 711
+    Height = 21
+    Top = 707
     Width = 1070
     Panels = <    
       item
@@ -255,7 +255,7 @@ object MainForm: TMainForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 667
+    Height = 663
     Top = 44
     Width = 1070
     Align = alClient
@@ -353,7 +353,7 @@ object MainForm: TMainForm
       ShortCut = 32851
     end
     object ClosePageAction: TAction
-      Category = 'NonMenuActions'
+      Category = 'File'
       Caption = 'Close Form'
       OnExecute = ClosePageActionExecute
       SecondaryShortCuts.Strings = (
