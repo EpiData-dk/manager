@@ -175,6 +175,7 @@ begin
       BeginUpdate;
       Clear;
       AddStrings(Lst);
+      EndUpdate;
     end;
 
     StatusBar1.Panels[3].Text := Dlg.FileName;
