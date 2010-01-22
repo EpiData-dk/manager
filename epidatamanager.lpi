@@ -18,8 +18,9 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <CurrentMajorRevNr Value="3"/>
-      <CurrentBuildNr Value="7"/>
-      <ProjectVersion Value="0.3.0.7"/>
+      <CurrentMinorRevNr Value="1"/>
+      <CurrentBuildNr Value="8"/>
+      <ProjectVersion Value="0.3.1.8"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <FileDescription Value="Get latest from Http://www.epidata.dk"/>
