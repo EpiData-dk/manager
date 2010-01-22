@@ -86,7 +86,7 @@ object SettingsForm: TSettingsForm
         Top = 106
         Width = 190
         Caption = 'Snapping:'
-        ClientHeight = 63
+        ClientHeight = 78
         ClientWidth = 186
         TabOrder = 3
         object SnapFieldsChkBox: TCheckBox
@@ -126,7 +126,7 @@ object SettingsForm: TSettingsForm
         Top = 73
         Width = 190
         Caption = 'Vertical distances:'
-        ClientHeight = 96
+        ClientHeight = 111
         ClientWidth = 186
         TabOrder = 4
         object Label5: TLabel
@@ -251,7 +251,7 @@ object SettingsForm: TSettingsForm
         EditMask = '999;0;_'
         SpaceChar = '_'
       end
-      object FloatLengthEdit: TMaskEdit
+      object FloatIntEdit: TMaskEdit
         Left = 92
         Height = 27
         Hint = 'Default field length for:'#10'Float'
@@ -409,6 +409,14 @@ object SettingsForm: TSettingsForm
         Height = 177
         Top = 10
         Width = 1
+      end
+      object Label9: TLabel
+        Left = 132
+        Height = 18
+        Top = 88
+        Width = 5
+        Caption = '.'
+        ParentColor = False
       end
     end
     object AdvSheet: TTabSheet

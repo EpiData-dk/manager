@@ -125,8 +125,14 @@ begin
   {$IFNDEF EPI_DEBUG}
   CanClose := false;
   if (SynEditor.Modified) and
-     (MessageDlg('Editor was modified since last save.' +
-                 LineEnding + 'Close Editor?', mtWarning, mbYesNo, 0) = mrNo) then
+     (MessageDlg(
+       'Warning',
+       'Editor was modified since last save.' + LineEnding +
+       'Close Editor?',
+       mtWarning,
+       mbYesNo,
+       0,
+       mbNo) = mrNo) then
     Exit;
   {$ENDIf}
   CanClose := true;

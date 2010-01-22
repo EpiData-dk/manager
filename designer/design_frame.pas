@@ -465,8 +465,8 @@ begin
           ftInteger: FieldLength := ManagerSettings.IntFieldLength;
           ftFloat:
             begin
-              FieldLength        := ManagerSettings.FloatFieldLength;
               FieldDecimals      := ManagerSettings.FloatDecimalLength;
+              FieldLength        := ManagerSettings.FloatIntLength + FieldDecimals + 1;
             end;
           ftString:  FieldLength := ManagerSettings.StringFieldLength;
         end;
@@ -966,12 +966,13 @@ end;
 
 destructor TDesignFrame.Destroy;
 begin
+  // THIS INHERITIED MUST NOT!!! BE PLACED BELOW DESTROYING DATAFRAME.
+  // IT WILL MESS WITH TFIELDEDIT/TFIELDLABEL COMPONENTS.
+  inherited Destroy;
   if Assigned(FActiveDatafile) then
     FreeAndNil(FActiveDatafile);
   FreeAndNil(FComponentYTree);
   FreeAndNil(FComponentXTree);
-
-  inherited Destroy;
 end;
 
 procedure TDesignFrame.ActivateFrame;
@@ -1230,7 +1231,10 @@ begin
         VariableLabel   := TFieldCreateForm(CreateForm).LabelEdit.Text;
         FieldLength     := StrToInt(TFieldCreateForm(CreateForm).FieldLengthEdit.Text);
         if FieldType = ftFloat then
+        begin
           FieldDecimals := StrToInt(TFieldCreateForm(CreateForm).FieldDecimalSizeEdit.Text);
+          FieldLength   := FieldLength + FieldDecimals + 1;
+        end;
       end;
       TmpField.FieldX := X;
       TmpField.FieldY := Y;

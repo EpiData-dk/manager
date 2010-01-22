@@ -1,7 +1,7 @@
 object FieldCreateForm: TFieldCreateForm
-  Left = 859
+  Left = 743
   Height = 161
-  Top = 242
+  Top = 363
   Width = 270
   ActiveControl = Panel1
   BorderIcons = []

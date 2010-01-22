@@ -208,15 +208,29 @@ procedure TFieldEdit.UpdateHint(aShow: boolean);
 begin
   ShowHint := aShow;
 
-  Hint := Format(
-    'Name: %s' + LineEnding +
-    'Type: %s' + LineEnding +
-    'Length: %d' + LineEnding +
-    'Label: %s' + LineEnding +
-    'X: %d, Y: %d',
-    [Field.FieldName, FieldTypeToFieldTypeName(Field.FieldType, nil),
-     Field.FieldLength, Field.VariableLabel, Field.FieldX, Field.FieldY]
-  );
+  with Field do
+  begin
+    if FieldType = ftFloat then
+      Hint := WideFormat(
+        'Name: %s' + LineEnding +
+        'Type: %s' + LineEnding +
+        'Length: %d.%d' + LineEnding +
+        'Label: %s' + LineEnding +
+        'X: %d, Y: %d',
+        [UTF8Decode(FieldName), FieldTypeToFieldTypeName(FieldType, nil),
+         FieldLength-FieldDecimals-1, FieldDecimals, UTF8Decode(VariableLabel), FieldX, FieldY]
+      )
+    else
+      Hint := WideFormat(
+        'Name: %s' + LineEnding +
+        'Type: %s' + LineEnding +
+        'Length: %d' + LineEnding +
+        'Label: %s' + LineEnding +
+        'X: %d, Y: %d',
+        [UTF8Decode(FieldName), FieldTypeToFieldTypeName(FieldType, nil),
+         FieldLength, UTF8Decode(VariableLabel), FieldX, FieldY]
+      );
+  end;
 end;
 
 procedure TFieldEdit.SetField(const AValue: TEpiField);
@@ -276,9 +290,10 @@ end;
 procedure TFieldEdit.SetParent(NewParent: TWinControl);
 begin
   inherited SetParent(NewParent);
+  if csDestroying in ComponentState then exit;
+
   FVariableLabel.Parent := NewParent;
-  if (ManagerSettings.ShowFieldNamesInLabel) then
-    FFieldNameLabel.Parent := NewParent;
+  FFieldNameLabel.Parent := NewParent;
 
   UpdateFieldNameLabel;
 end;
@@ -305,13 +320,13 @@ end;
 
 destructor TFieldEdit.Destroy;
 begin
-  inherited Destroy;
   if Assigned(FField) then
     FField.UnRegisterOnChangeHook(@OnFieldChange);
   FField := nil;
   // Do not destroy - it's handled byt the visual destruction of the frame.
   FVariableLabel := nil;
   FFieldNameLabel := nil;
+  inherited Destroy;
 end;
 
 procedure TFieldEdit.ForceVisualUpdate;

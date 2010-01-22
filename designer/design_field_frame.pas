@@ -122,13 +122,19 @@ begin
   S := Trim(FieldLengthEdit.Text);
   if S = '' then
   begin
-    NoExit(FieldLengthEdit, 'Empty field length not allowed!');
+    if Label4.Visible then
+      NoExit(FieldLengthEdit, 'Empty Integer length not allowed!')
+    else
+      NoExit(FieldLengthEdit, 'Empty field length not allowed!');
     Exit;
   end;
   L := StrToInt(S);
   if L <= 0 then
   begin
-    NoExit(FieldLengthEdit, 'Field length must be >= 1!');
+    if Label4.Visible then
+      NoExit(FieldLengthEdit, 'Integer length must be >= 1!')
+    else
+      NoExit(FieldLengthEdit, 'Field length must be >= 1!');
     Exit;
   end;
 
@@ -146,11 +152,11 @@ begin
     NoExit(FieldLengthEdit, 'Decimal length must be >= 1!');
     Exit;
   end;
-  if D >= (L - 1) then
+{  if D >= (L - 1) then
   begin
     NoExit(FieldLengthEdit, 'Decimal length longer than field length!');
     Exit;
-  end;
+  end;  }
 end;
 
 procedure TFieldCreateForm.CloseActionExecute(Sender: TObject);
@@ -192,7 +198,8 @@ begin
     ftFloat:
       begin
         Height := Height + FieldDecimalSizeEdit.Height + 5;
-        FieldLengthEdit.Text := IntToStr(ManagerSettings.FloatFieldLength);
+        FieldLengthEdit.Text := IntToStr(ManagerSettings.FloatIntLength);
+        Label3.Caption := 'Integers';
         Label4.Visible := true;
         FieldDecimalSizeEdit.Visible := true;
         FieldDecimalSizeEdit.Enabled := true;
@@ -232,8 +239,8 @@ begin
     ftInteger: aField.FieldLength := ManagerSettings.IntFieldLength;
     ftFloat:
       begin
-         aField.FieldLength := ManagerSettings.FloatFieldLength;
          aField.FieldDecimals := ManagerSettings.FloatDecimalLength;
+         aField.FieldLength := ManagerSettings.FloatIntLength + aField.FieldDecimals + 1;
       end;
     ftString: aField.FieldLength := ManagerSettings.StringFieldLength;
     ftDate, ftEuroDate, ftYMDDate:
@@ -251,7 +258,10 @@ procedure TFieldCreateForm.ReadField(AField: TEpiField);
 begin
   FieldNameEdit.Text := AField.FieldName;
   OldFieldName := FieldNameEdit.Text;
-  FieldLengthEdit.Text := IntToStr(AField.FieldLength);
+  if AField.FieldType = ftFloat then
+    FieldLengthEdit.Text := IntToStr(AField.FieldLength - (AField.FieldDecimals + 1))
+  else
+    FieldLengthEdit.Text := IntToStr(AField.FieldLength);
   LabelEdit.Text     := AField.VariableLabel;
   if FieldDecimalSizeEdit.Visible then
     FieldDecimalSizeEdit.Text := IntToStr(AField.FieldDecimals);
@@ -259,11 +269,16 @@ end;
 
 procedure TFieldCreateForm.WriteField(AField: TEpiField);
 begin
+  AField.BeginUpdate;
   AField.FieldName             := FieldNameEdit.Text;
   AField.FieldLength           := StrToInt(FieldLengthEdit.Text);
   AField.VariableLabel         := LabelEdit.Text;
   if FieldDecimalSizeEdit.Visible then
+  begin
     AField.FieldDecimals := StrToInt(FieldDecimalSizeEdit.Text);
+    AField.FieldLength   := Afield.FieldLength + AField.FieldDecimals + 1;
+  end;
+  AField.EndUpdate;
 end;
 
 initialization

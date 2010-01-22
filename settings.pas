@@ -22,13 +22,14 @@ type
     CancelBtn: TButton;
     DefaultPasteCombo: TComboBox;
     DefaultDateCombo: TComboBox;
+    Label9: TLabel;
     WorkingDirEdit: TDirectoryEdit;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
     FieldNamingAutoRadio: TRadioButton;
     FieldNamingFirstWordRadio: TRadioButton;
     FieldNamingGroup: TRadioGroup;
-    FloatLengthEdit: TMaskEdit;
+    FloatIntEdit: TMaskEdit;
     DecimalLengthEdit: TMaskEdit;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
@@ -89,7 +90,7 @@ type
 
     // Field definitions:
     IntFieldLength:        Integer;
-    FloatFieldLength:      Integer;
+    FloatIntLength:        Integer;
     FloatDecimalLength:    Integer;
     StringFieldLength:     Integer;
     DefaultDateType:       TFieldType;
@@ -126,7 +127,7 @@ var
 
     // Field definitions:
     IntFieldLength:        2;
-    FloatFieldLength:      5;
+    FloatIntLength:        2;
     FloatDecimalLength:    2;
     StringFieldLength:     20;
     DefaultDateType:       ftEuroDate;
@@ -204,11 +205,11 @@ begin
   S := Trim(IntLengthEdit.Text);
   if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.IntFieldLength := StrToInt(S);
-  S := Trim(FloatLengthEdit.Text);
+  S := Trim(FloatIntEdit.Text);
   if not((S = '') or (StrToInt(S) <= 0)) then
-    ManagerSettings.FloatFieldLength := StrToInt(S);
+    ManagerSettings.FloatIntLength := StrToInt(S);
   S := Trim(DecimalLengthEdit.Text);
-  if not((S = '') or ((StrToInt(S) <= 0) and (StrToInt(S) < (ManagerSettings.FloatFieldLength - 1)))) then
+  if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.FloatDecimalLength := StrToInt(S);
 
   S := Trim(StringLengthEdit.Text);
@@ -257,7 +258,7 @@ begin
 
     // Field definitions
     IntLengthEdit.Text                := IntToStr(IntFieldLength);
-    FloatLengthEdit.Text              := IntToStr(FloatFieldLength);
+    FloatIntEdit.Text                 := IntToStr(FloatIntLength);
     DecimalLengthEdit.Text            := IntToSTr(FloatDecimalLength);
     StringLengthEdit.Text             := IntToStr(StringFieldLength);
     case DefaultDateType of

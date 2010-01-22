@@ -1,11 +1,11 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TFieldCreateForm','FORMDATA',[
-  'TPF0'#16'TFieldCreateForm'#15'FieldCreateForm'#4'Left'#3'['#3#6'Height'#3#161
-  +#0#3'Top'#3#242#0#5'Width'#3#14#1#13'ActiveControl'#7#6'Panel1'#11'BorderIco'
-  +'ns'#11#0#11'BorderStyle'#7#6'bsNone'#12'ClientHeight'#3#161#0#11'ClientWidt'
-  +'h'#3#14#1#5'Color'#7#9'clSkyBlue'#9'Icon.Data'#10#162#9#0#0#158#9#0#0#0#0#1
-  +#0#1#0#24#24#0#0#1#0' '#0#136#9#0#0#22#0#0#0'('#0#0#0#24#0#0#0'0'#0#0#0#1#0
+  'TPF0'#16'TFieldCreateForm'#15'FieldCreateForm'#4'Left'#3#231#2#6'Height'#3
+  +#161#0#3'Top'#3'k'#1#5'Width'#3#14#1#13'ActiveControl'#7#6'Panel1'#11'Border'
+  +'Icons'#11#0#11'BorderStyle'#7#6'bsNone'#12'ClientHeight'#3#161#0#11'ClientW'
+  +'idth'#3#14#1#5'Color'#7#9'clSkyBlue'#9'Icon.Data'#10#162#9#0#0#158#9#0#0#0#0
+  +#1#0#1#0#24#24#0#0#1#0' '#0#136#9#0#0#22#0#0#0'('#0#0#0#24#0#0#0'0'#0#0#0#1#0
   +' '#0#0#0#0#0#0#9#0#0'd'#0#0#0'd'#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
