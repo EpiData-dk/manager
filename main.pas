@@ -111,7 +111,7 @@ implementation
 
 uses
   UEpiLog, settings, Clipbrd,
-  InterfaceBase, LCLType, editormain,
+  InterfaceBase, LCLType, LCLIntf, editormain,
   workflow_frame, design_frame, managertypes;
 
 
@@ -282,6 +282,7 @@ end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
 begin
+  OpenURL(ManagerSettings.WorkingDirUTF8 + '/epidatamanagerintro.pdf');
 //  ShowOnStatusBar('Help System Not Ready', 0);
 end;
 

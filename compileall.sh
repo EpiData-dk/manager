@@ -30,6 +30,7 @@ get_filename() {
   if [ $MY_LCL_TARGET = "win32" ]
   then
     FILENAME="$FILENAME.exe"
+    ln -sf "$FILENAME" "$MANAGERFILENAME.$MY_OS_TARGET.exe"
   fi
 }
 

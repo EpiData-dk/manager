@@ -422,6 +422,12 @@ object DesignFrame: TDesignFrame
       OnExecute = PasteAsQesActionExecute
       ShortCut = 119
     end
+    object DeleteFieldAction: TAction
+      Category = 'Edit'
+      Caption = 'Delete'
+      OnExecute = DeleteFieldActionExecute
+      ShortCut = 46
+    end
   end
   object FieldToolBarImageList: TImageList
     Height = 24
@@ -2025,8 +2031,8 @@ object DesignFrame: TDesignFrame
       OnClick = EditFieldMenuItemClick
     end
     object DeleteFieldMenuItem: TMenuItem
-      Caption = 'Delete'
-      OnClick = DeleteFieldMenuItemClick
+      Action = DeleteFieldAction
+      OnClick = DeleteFieldActionExecute
     end
   end
   object FontDialog1: TFontDialog

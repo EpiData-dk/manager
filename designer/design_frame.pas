@@ -16,6 +16,7 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame, IManagerFrame)
+    DeleteFieldAction: TAction;
     PasteAsQESMenuItem: TMenuItem;
     PasteAsQesAction: TAction;
     PasteAsDefault: TAction;
@@ -101,6 +102,7 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     procedure AlignActionExecute(Sender: TObject);
+    procedure DeleteFieldActionExecute(Sender: TObject);
     procedure PasteAsQesActionExecute(Sender: TObject);
     procedure ClearAllActionExecute(Sender: TObject);
     procedure DocumentFileActionExecute(Sender: TObject);
@@ -116,7 +118,6 @@ type
     procedure NewDateFieldMenuClick(Sender: TObject);
     procedure NewOtherFieldClick(Sender: TObject);
     procedure NewDateFieldActionExecute(Sender: TObject);
-    procedure DeleteFieldMenuItemClick(Sender: TObject);
     procedure EditFieldMenuItemClick(Sender: TObject);
     procedure FontSelectBtnClick(Sender: TObject);
     procedure NewFloatFieldActionExecute(Sender: TObject);
@@ -159,6 +160,7 @@ type
     procedure EditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     function  NewCompTree(TreeType: TFieldAVLTreeType; CmpMethod: TListSortCompare): TFieldAVLTree;
     function  ImportStructure(TmpDF: TEpiDataFile): boolean;
+    procedure DoPassword(Sender: TObject; RequestType: TRequestPasswordType; var Password: string);
   private
     // Docking.
     // - Field:
@@ -497,7 +499,7 @@ begin
       SelectedControl.Color := DesignerBox.Color;
 
   SelectedControl := TControl(Sender);
-  TFieldEdit(SelectedControl).Color := ManagerSettings.SelectedControlColour;
+  SelectedControl.Color := ManagerSettings.SelectedControlColour;
   if SelectedControl is TFieldEdit then
     TFieldEdit(SelectedControl).SetFocus;
 
@@ -511,6 +513,7 @@ end;
 
 procedure TDesignFrame.ExitSelectControl(Sender: TObject);
 begin
+  if not Assigned(SelectedControl) then exit;
   SelectedControl.Color:= clMenuBar;
   SelectedControl := nil;
 end;
@@ -923,10 +926,11 @@ constructor TDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
-  FActiveDatafile := TEpiDataFile.Create();
   UntitledName := TTabSheet(TheOwner).Caption;
+  FActiveDatafile := TEpiDataFile.Create();
   FActiveDatafile.FileName := UntitledName;
   FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
+  FActiveDatafile.OnPassword := @DoPassword;
   FActiveDocumentationForm := nil;
   SelectedControl := nil;
   Modified := false;
@@ -1088,31 +1092,6 @@ begin
   Modified := True;
 end;
 
-procedure TDesignFrame.DeleteFieldMenuItemClick(Sender: TObject);
-var
-  TmpField: TEpiField;
-  TmpCtrl: TControl;
-begin
-  if not Assigned(SelectedControl) then exit;
-  TmpCtrl := SelectedControl;
-
-  TmpField := (TmpCtrl as IFieldControl).Field;
-
-  {$IFNDEF EPI_DEBUG}
-  if (TmpField.FieldType <> ftQuestion) and (TmpField.Size > 0) and
-     (MessageDlg('Field contains data.' + LineEnding +
-      'Are you sure you want to delete?', mtWarning, mbYesNo, 0) = mrNo) then
-    exit;
-  {$ENDIF}
-
-  DesignerBox.RemoveControl(TmpCtrl);
-  ComponentYTree.Remove(TmpCtrl);
-  ComponentXTree.Remove(TmpCtrl);
-  FreeAndNil(TmpCtrl);
-  ActiveDatafile.RemoveField(TmpField, true);
-  Modified := true;
-end;
-
 procedure TDesignFrame.DesignerMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
@@ -1272,6 +1251,7 @@ begin
 
     TmpDf := nil;
     Importer := TEpiImportExport.Create;
+    Importer.OnPassword := @DoPassword;
     Importer.OnProgress := @MainForm.ShowProgress;
     Importer.OnClipBoardRead := @MainForm.ReadClipBoard;
     Importer.Import(Dlg.FileName, TmpDF, dftNone);
@@ -1441,6 +1421,7 @@ begin
   end;
   ActiveDataFile.Reset;
   ActiveDataFile.RegisterOnChangeHook(@DataFileChange);
+  ActiveDatafile.OnPassword := @DoPassword;
   // Handle in case there is an open documentation form.
   if Assigned(ActiveDocumentationForm) then
     ActiveDocumentationForm.Datafile := ActiveDataFile;
@@ -1502,6 +1483,38 @@ begin
   if AutoAlignRes.LabelsAlign <> alNone then
     LabelsAlignment(SelectedControl, nil, AutoAlignRes.LabelsAlign);
 
+  Modified := true;
+end;
+
+procedure TDesignFrame.DeleteFieldActionExecute(Sender: TObject);
+var
+  TmpField: TEpiField;
+  TmpCtrl, NextCtrl: TControl;
+  Node: TAVLTreeNode;
+begin
+  if not Assigned(SelectedControl) then exit;
+  TmpCtrl := SelectedControl;
+  ExitSelectControl(nil);
+
+  TmpField := (TmpCtrl as IFieldControl).Field;
+
+  {$IFNDEF EPI_DEBUG}
+  if (TmpField.FieldType <> ftQuestion) and (TmpField.Size > 0) and
+     (MessageDlg('Warning', 'Field contains data.' + LineEnding +
+      'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
+    exit;
+  {$ENDIF}
+
+  Node := ComponentYTree.FindPrecessor((TmpCtrl as IFieldControl).YTreeNode);
+  DesignerBox.RemoveControl(TmpCtrl);
+  ComponentYTree.Remove(TmpCtrl);
+  ComponentXTree.Remove(TmpCtrl);
+  FreeAndNil(TmpCtrl);
+  ActiveDatafile.RemoveField(TmpField, true);
+  if not Assigned(Node) then
+    Node := ComponentYTree.FindLowest;
+  if Assigned(Node) then
+    EnterSelectControl(TControl(Node.Data));
   Modified := true;
 end;
 
@@ -1620,6 +1633,30 @@ begin
   Modified := true;
 end;
 
+procedure TDesignFrame.DoPassword(Sender: TObject;
+  RequestType: TRequestPasswordType; var Password: string);
+var
+ TmpStr: string;
+begin
+  if ActiveDataFile.Password <> '' then exit;
+
+  if RequestType = rpCreate then
+  begin
+    repeat
+    InputQuery('Enter Password', 'Password:', true, TmpStr);
+    InputQuery('Enter Password', 'Repeat password:', true, Password);
+
+    if CompareByte(TmpStr[1], Password[1], Max(Length(Tmpstr), Length(Password))) <> 0 then
+      ShowMessage('The repeated password does not match the original.' + LineEnding +
+                  'Please reenter.')
+    else
+      Break;
+    until false;
+  end else begin
+    InputQuery('Password required', 'Password', true, Password);
+  end;
+end;
+
 procedure TDesignFrame.EditCompActionExecute(Sender: TObject);
 begin
   if not Assigned(SelectedControl) then exit;
@@ -1689,6 +1726,7 @@ begin
     Import := TEpiImportExport.Create;
     Import.OnProgress := @MainForm.ShowProgress;
     Import.OnClipBoardRead := @MainForm.ReadClipBoard;
+    Import.OnPassword := @DoPassword;
     Import.FieldNaming := ManagerSettings.FieldNamingStyle;
     Import.Import(Fn, FActiveDatafile, dftNone);
     FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
@@ -1812,7 +1850,6 @@ begin
   ActiveDataFile.SortFields(@SortFields);
   ActiveDataFile.Save(ActiveDataFile.FileName, []);
   Modified := false;
-//  ShowOnMainStatusBar('Saving complete: ' + ActiveDataFile.FileName, 0);
 end;
 
 procedure TDesignFrame.SaveFileAsActionExecute(Sender: TObject);
