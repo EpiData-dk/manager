@@ -334,6 +334,10 @@ object MainForm: TMainForm
         Caption = 'Short introduction'
         OnClick = shortIntroItemClick
       end
+      object MenuItem5: TMenuItem
+        Action = ShortcutHelpAction
+        OnClick = ShortcutHelpActionExecute
+      end
     end
   end
   object MainFormActionList: TActionList
@@ -383,6 +387,11 @@ object MainForm: TMainForm
       Category = 'File'
       Caption = 'C&hange Working Directory'
       OnExecute = ChangeWorkDirActionExecute
+    end
+    object ShortcutHelpAction: TAction
+      Category = 'Help'
+      Caption = 'Show Shortcuts'
+      OnExecute = ShortcutHelpActionExecute
     end
   end
 end

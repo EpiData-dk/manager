@@ -198,21 +198,25 @@ LazarusResources.Add('TMainForm','FORMDATA',[
   +'MenuItem4'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem2'#6'Action'#7#18'S'
   +'howWorkFlowAction'#7'OnClick'#7#25'ShowWorkFlowActionExecute'#0#0#0#9'TMenu'
   +'Item'#8'HelpMenu'#7'Caption'#6#5'&Help'#0#9'TMenuItem'#14'shortIntroItem'#7
-  +'Caption'#6#18'Short introduction'#7'OnClick'#7#19'shortIntroItemClick'#0#0#0
-  +#0#11'TActionList'#18'MainFormActionList'#6'Images'#7'!DesignFrame.FieldTool'
-  +'BarImageList'#4'left'#3'`'#2#3'top'#3'x'#1#0#9'TFileExit'#10'ExitAction'#8
-  +'Category'#6#4'File'#7'Caption'#6#5'E&xit'#4'Hint'#6#4'Exit'#8'ShortCut'#2'{'
-  +#0#0#7'TAction'#14'SettingsAction'#8'Category'#6#4'Edit'#7'Caption'#6#9'&Set'
-  +'tings'#9'OnExecute'#7#21'SettingsActionExecute'#8'ShortCut'#4'S'#128#0#0#0#0
-  +#7'TAction'#15'ClosePageAction'#8'Category'#6#4'File'#7'Caption'#6#10'Close '
-  +'Form'#9'OnExecute'#7#22'ClosePageActionExecute'#26'SecondaryShortCuts.Strin'
-  +'gs'#1#6#6'CTRL+W'#0#8'ShortCut'#3's@'#0#0#7'TAction'#19'NewDesignFormAction'
-  +#7'Caption'#6#15'New Design Form'#4'Hint'#6#15'New Design Form'#10'ImageInde'
-  +'x'#2#20#9'OnExecute'#7#26'NewDesignFormActionExecute'#8'ShortCut'#3'N@'#0#0
-  +#7'TAction'#17'StartEditorAction'#8'Category'#6#5'Tools'#7'Caption'#6#7'E&di'
-  +'tor'#9'OnExecute'#7#24'StartEditorActionExecute'#8'ShortCut'#2'z'#0#0#7'TAc'
-  +'tion'#18'ShowWorkFlowAction'#8'Category'#6#5'Tools'#7'Caption'#6#14'Show Wo'
-  +'rk Flow'#9'OnExecute'#7#25'ShowWorkFlowActionExecute'#0#0#7'TAction'#19'Cha'
-  +'ngeWorkDirAction'#8'Category'#6#4'File'#7'Caption'#6#25'C&hange Working Dir'
-  +'ectory'#9'OnExecute'#7#26'ChangeWorkDirActionExecute'#0#0#0#0
+  +'Caption'#6#18'Short introduction'#7'OnClick'#7#19'shortIntroItemClick'#0#0#9
+  +'TMenuItem'#9'MenuItem5'#6'Action'#7#18'ShortcutHelpAction'#7'OnClick'#7#25
+  +'ShortcutHelpActionExecute'#0#0#0#0#11'TActionList'#18'MainFormActionList'#6
+  +'Images'#7'!DesignFrame.FieldToolBarImageList'#4'left'#3'`'#2#3'top'#3'x'#1#0
+  +#9'TFileExit'#10'ExitAction'#8'Category'#6#4'File'#7'Caption'#6#5'E&xit'#4'H'
+  +'int'#6#4'Exit'#8'ShortCut'#2'{'#0#0#7'TAction'#14'SettingsAction'#8'Categor'
+  +'y'#6#4'Edit'#7'Caption'#6#9'&Settings'#9'OnExecute'#7#21'SettingsActionExec'
+  +'ute'#8'ShortCut'#4'S'#128#0#0#0#0#7'TAction'#15'ClosePageAction'#8'Category'
+  +#6#4'File'#7'Caption'#6#10'Close Form'#9'OnExecute'#7#22'ClosePageActionExec'
+  +'ute'#26'SecondaryShortCuts.Strings'#1#6#6'CTRL+W'#0#8'ShortCut'#3's@'#0#0#7
+  +'TAction'#19'NewDesignFormAction'#7'Caption'#6#15'New Design Form'#4'Hint'#6
+  +#15'New Design Form'#10'ImageIndex'#2#20#9'OnExecute'#7#26'NewDesignFormActi'
+  +'onExecute'#8'ShortCut'#3'N@'#0#0#7'TAction'#17'StartEditorAction'#8'Categor'
+  +'y'#6#5'Tools'#7'Caption'#6#7'E&ditor'#9'OnExecute'#7#24'StartEditorActionEx'
+  +'ecute'#8'ShortCut'#2'z'#0#0#7'TAction'#18'ShowWorkFlowAction'#8'Category'#6
+  +#5'Tools'#7'Caption'#6#14'Show Work Flow'#9'OnExecute'#7#25'ShowWorkFlowActi'
+  +'onExecute'#0#0#7'TAction'#19'ChangeWorkDirAction'#8'Category'#6#4'File'#7'C'
+  +'aption'#6#25'C&hange Working Directory'#9'OnExecute'#7#26'ChangeWorkDirActi'
+  +'onExecute'#0#0#7'TAction'#18'ShortcutHelpAction'#8'Category'#6#4'Help'#7'Ca'
+  +'ption'#6#14'Show Shortcuts'#9'OnExecute'#7#25'ShortcutHelpActionExecute'#0#0
+  +#0#0
 ]);

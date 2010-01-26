@@ -15,6 +15,8 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    MenuItem5: TMenuItem;
+    ShortcutHelpAction: TAction;
     ChangeWorkDirAction: TAction;
     filedivider2: TMenuItem;
     filedivider3: TMenuItem;
@@ -65,6 +67,7 @@ type
     procedure NewDesignFormActionExecute(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PageControl1PageChanged(Sender: TObject);
+    procedure ShortcutHelpActionExecute(Sender: TObject);
     procedure shortIntroItemClick(Sender: TObject);
     procedure MetaDataBtnClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
@@ -278,6 +281,11 @@ begin
 
   // On all tabsheets component [0] is a TFrame that implements IManagerFrame.
   (FActiveFrame as IManagerFrame).ActivateFrame;
+end;
+
+procedure TMainForm.ShortcutHelpActionExecute(Sender: TObject);
+begin
+  OpenURL('http://www.epidata.org/dokuwiki/doku.php/documentation:program_keys');
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
