@@ -367,10 +367,12 @@ begin
 
     // Using to positional controls of the Edit since its position is updated correctly in the
     // DesignerDockDrop event.
+    Field.BeginUpdate;
     Field.FieldX := Left;
     Field.FieldY := Top;
     Field.LabelX := VariableLabel.Left;
     Field.LabelY := VariableLabel.Top;
+    Field.EndUpdate;
   end;
   // Only add to component tree if it is being placed on the actual form.
   // - it could be placed outside in a custom form.
@@ -1076,17 +1078,19 @@ begin
 
   if (not (ssShift in GetKeyShiftState)) and
      ManagerSettings.SnapFields and
-     (Source.Control is TFieldEdit) and
      (ComponentYTree.Count > 0) then
+  with Source do
   begin
-    GetNearestControls(Source.Control, XCtrl, YCtrl);
-    Dx := Source.Control.Left - XCtrl.Left;
-    Dy := Source.Control.Top - YCtrl.Top;
+    GetNearestControls(Control, XCtrl, YCtrl);
+    Dx := Control.Left - XCtrl.Left;
+    // Snapping distance according to bottoms.
+    Dy := Abs(Control.Top - YCtrl.Top) - Abs(YCtrl.Height - Control.Height);
 
     if Abs(Dx) <= ManagerSettings.SnappingThresHold then
-      Source.Control.Left := XCtrl.Left;
+      Control.Left := XCtrl.Left;
+    // Align bottoms.
     if Abs(Dy) <= ManagerSettings.SnappingThresHold then
-      Source.Control.Top := YCtrl.Top;
+      Control.Top := YCtrl.Top + (YCtrl.Height - Control.Height);
   end;
 
   Modified := True;
@@ -1643,14 +1647,14 @@ begin
   if RequestType = rpCreate then
   begin
     repeat
-    InputQuery('Enter Password', 'Password:', true, TmpStr);
-    InputQuery('Enter Password', 'Repeat password:', true, Password);
+      InputQuery('Enter Password', 'Password:', true, TmpStr);
+      InputQuery('Enter Password', 'Repeat password:', true, Password);
 
-    if CompareByte(TmpStr[1], Password[1], Max(Length(Tmpstr), Length(Password))) <> 0 then
-      ShowMessage('The repeated password does not match the original.' + LineEnding +
-                  'Please reenter.')
-    else
-      Break;
+      if CompareByte(TmpStr[1], Password[1], Max(Length(Tmpstr), Length(Password))) <> 0 then
+        ShowMessage('The repeated password does not match the original.' + LineEnding +
+                    'Please reenter.')
+      else
+        Break;
     until false;
   end else begin
     InputQuery('Password required', 'Password', true, Password);

@@ -360,12 +360,13 @@ var
   s: string;
 begin
   inherited DoEndDock(Target, X, Y);
+  Field.BeginUpdate;
   Field.FieldX := Left;
   Field.FieldY := Top;
 
   Field.LabelX := Left - FVariableLabelOffset.X;
   Field.LabelY := Top - FVariableLabelOffset.Y;
-
+  Field.EndUpdate;
   UpdateFieldNameLabel;
 end;
 

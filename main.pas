@@ -282,8 +282,7 @@ end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
 begin
-  OpenURL(ManagerSettings.WorkingDirUTF8 + '/epidatamanagerintro.pdf');
-//  ShowOnStatusBar('Help System Not Ready', 0);
+  OpenURL(ExtractFilePath(UTF8Decode(Application.ExeName)) + 'epidatamanagerintro.pdf');
 end;
 
 procedure TMainForm.MetaDataBtnClick(Sender: TObject);
