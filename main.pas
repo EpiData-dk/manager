@@ -261,7 +261,7 @@ begin
     Exit;
 
   // On all tabsheets component [0] is a TFrame that implements IManagerFrame.
-  (FActiveFrame as IManagerFrame).DeActivateFrame;
+  (PageControl1.ActivePage.Components[0] as IManagerFrame).DeActivateFrame;
 end;
 
 procedure TMainForm.PageControl1PageChanged(Sender: TObject);
