@@ -282,7 +282,7 @@ end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);
 begin
-  OpenURL(ExtractFilePath(UTF8Decode(Application.ExeName)) + 'epidatamanagerintro.pdf');
+  OpenURL(ExtractFilePath(UTF8Decode(Application.ExeName)) + '/docs/epidatamanagerintro.pdf');
 end;
 
 procedure TMainForm.MetaDataBtnClick(Sender: TObject);
