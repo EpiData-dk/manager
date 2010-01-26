@@ -261,7 +261,7 @@ begin
     Exit;
 
   // On all tabsheets component [0] is a TFrame that implements IManagerFrame.
-  (PageControl1.ActivePage.Components[0] as IManagerFrame).DeActivateFrame;
+  (FActiveFrame as IManagerFrame).DeActivateFrame;
 end;
 
 procedure TMainForm.PageControl1PageChanged(Sender: TObject);
@@ -277,7 +277,7 @@ begin
   FActiveFrame := TFrame(PageControl1.ActivePage.Components[0]);
 
   // On all tabsheets component [0] is a TFrame that implements IManagerFrame.
-  (PageControl1.ActivePage.Components[0] as IManagerFrame).ActivateFrame;
+  (FActiveFrame as IManagerFrame).ActivateFrame;
 end;
 
 procedure TMainForm.shortIntroItemClick(Sender: TObject);

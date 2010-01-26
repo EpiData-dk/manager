@@ -210,7 +210,7 @@ LazarusResources.Add('TMainForm','FORMDATA',[
   +#7'Caption'#6#15'New Design Form'#4'Hint'#6#15'New Design Form'#10'ImageInde'
   +'x'#2#20#9'OnExecute'#7#26'NewDesignFormActionExecute'#8'ShortCut'#3'N@'#0#0
   +#7'TAction'#17'StartEditorAction'#8'Category'#6#5'Tools'#7'Caption'#6#7'E&di'
-  +'tor'#9'OnExecute'#7#24'StartEditorActionExecute'#8'ShortCut'#2'y'#0#0#7'TAc'
+  +'tor'#9'OnExecute'#7#24'StartEditorActionExecute'#8'ShortCut'#2'z'#0#0#7'TAc'
   +'tion'#18'ShowWorkFlowAction'#8'Category'#6#5'Tools'#7'Caption'#6#14'Show Wo'
   +'rk Flow'#9'OnExecute'#7#25'ShowWorkFlowActionExecute'#0#0#7'TAction'#19'Cha'
   +'ngeWorkDirAction'#8'Category'#6#4'File'#7'Caption'#6#25'C&hange Working Dir'

@@ -305,7 +305,7 @@ object DesignFrame: TDesignFrame
       Hint = 'Align Fields'
       ImageIndex = 9
       OnExecute = AlignActionExecute
-      ShortCut = 122
+      ShortCut = 121
     end
     object DocumentFileAction: TAction
       Caption = 'Document Datafile'

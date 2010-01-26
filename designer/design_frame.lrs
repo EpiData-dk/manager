@@ -84,7 +84,7 @@ LazarusResources.Add('TDesignFrame','FORMDATA',[
   +'n'#6#10'Save As...'#4'Hint'#6#10'Save As...'#10'ImageIndex'#2#16#9'OnExecut'
   +'e'#7#23'SaveFileAsActionExecute'#8'ShortCut'#3'S`'#0#0#7'TAction'#11'AlignA'
   +'ction'#7'Caption'#6#12'Align Fields'#4'Hint'#6#12'Align Fields'#10'ImageInd'
-  +'ex'#2#9#9'OnExecute'#7#18'AlignActionExecute'#8'ShortCut'#2'z'#0#0#7'TActio'
+  +'ex'#2#9#9'OnExecute'#7#18'AlignActionExecute'#8'ShortCut'#2'y'#0#0#7'TActio'
   +'n'#18'DocumentFileAction'#7'Caption'#6#17'Document Datafile'#4'Hint'#6#17'D'
   +'ocument Datafile'#10'ImageIndex'#2#17#9'OnExecute'#7#25'DocumentFileActionE'
   +'xecute'#0#0#7'TAction'#14'EditCompAction'#7'Caption'#6#14'EditCompAction'#9

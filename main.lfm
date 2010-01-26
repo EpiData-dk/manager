@@ -372,7 +372,7 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'E&ditor'
       OnExecute = StartEditorActionExecute
-      ShortCut = 121
+      ShortCut = 122
     end
     object ShowWorkFlowAction: TAction
       Category = 'Tools'
