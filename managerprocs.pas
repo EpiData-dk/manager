@@ -17,7 +17,7 @@ function NextFieldName(DF: TEpiDataFile): String;
 var
   FieldNo: Integer;
 begin
-  FieldNo := DF.NumDataFields + 1;
+  FieldNo := DF.FieldCount + 1;
   repeat
     Result := ManagerSettings.FieldNamePrefix + IntToStr(FieldNo);
     Inc(FieldNo);
@@ -28,7 +28,7 @@ function NextLabelName(DF: TEpiDataFile): String;
 var
   LabelNo: Integer;
 begin
-  LabelNo := DF.NumFields - DF.NumDataFields + 1;
+  LabelNo := DF.TextLabelCount + 1;
   repeat
     Result := ManagerSettings.LabelNamePrefix + IntToStr(LabelNo);
     Inc(LabelNo);

@@ -193,7 +193,7 @@ begin
   FNewField := NewField;
 
   if ManagerSettings.FieldNamePrefix <> '' then
-    FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(FDf.NumDataFields+1);
+    FieldNameEdit.Text := ManagerSettings.FieldNamePrefix + IntToStr(FDf.FieldCount+1);
   Case FieldType of
     ftFloat:
       begin
@@ -247,7 +247,7 @@ begin
       aField.FieldLength := 10;
   end;
 
-  LastFieldNo := DataFile.NumDataFields + 1;
+  LastFieldNo := DataFile.FieldCount + 1;
   repeat
     aField.FieldName := ManagerSettings.FieldNamePrefix + IntToStr(LastFieldNo);
     inc(LastFieldNo);

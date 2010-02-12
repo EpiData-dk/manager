@@ -25,9 +25,9 @@ type
     FDatafile: TEpiDatafile;
     LocalUpdating: Boolean;
     procedure DataFileChange(Sender: TObject;
-      EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+      EventType: TEpiDataFileChangeEventType; OldValue: Pointer);
     procedure DataFileFieldChange(Sender: TObject;
-      EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
+      EventType: TEpiFieldChangeEventType; OldValue: Pointer);
     procedure SetDatafile(const AValue: TEpiDatafile);
   public
     { public declarations }
@@ -54,37 +54,36 @@ begin
   if Field1 = Field2 then
     exit;
 
-  if Field1.FieldY < Field2.FieldY then
+  if Field1.FieldTop < Field2.FieldTop then
     result := -1
-  else if Field1.FieldY > Field2.FieldY then
+  else if Field1.FieldTop > Field2.FieldTop then
     result := 1
   else
-    if Field1.FieldX < Field2.FieldX then
+    if Field1.FieldLeft < Field2.FieldLeft then
       result := -1
-    else if Field1.FieldX > Field2.FieldX then
+    else if Field1.FieldLeft > Field2.FieldLeft then
       result := 1
 end;
 
 { TDatafileDocumentationForm }
 
 procedure TDatafileDocumentationForm.DataFileChange(Sender: TObject;
-  EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+  EventType: TEpiDataFileChangeEventType; OldValue: Pointer);
 begin
   // If a new field is added, we need to register a hook to it.
   // - otherwise changes made to the field will not be updated on the form.
   if EventType = dceAddField then
   with TEpiDataFile(Sender) do
-    Field[NumFields-1].RegisterOnChangeHook(@DataFileFieldChange);
+    Field[FieldCount-1].RegisterOnChangeHook(@DataFileFieldChange);
 
   if EventType = dceName then
     Caption := 'Documenting: ' + TEpiDataFile(Sender).FileName;
-
 
   ForceUpdate;
 end;
 
 procedure TDatafileDocumentationForm.DataFileFieldChange(Sender: TObject;
-  EventType: TEpiFieldChangeEventType; OldValue: EpiVariant);
+  EventType: TEpiFieldChangeEventType; OldValue: Pointer);
 begin
   ForceUpdate;
 end;
@@ -96,7 +95,7 @@ begin
   FDatafile := AValue;
   Datafile.RegisterOnChangeHook(@DataFileChange);
 
-  for i := 0 to FDatafile.NumFields - 1 do
+  for i := 0 to FDatafile.FieldCount - 1 do
     Datafile[i].RegisterOnChangeHook(@DataFileFieldChange);
 end;
 

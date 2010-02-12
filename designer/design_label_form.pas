@@ -67,7 +67,7 @@ class function TCreateLabelForm.GetFieldName(TmpDf: TEpiDataFile): string;
 begin
   if not Assigned(TmpDf) then
     exit;
-  result := 'label_' + IntToStr(1 + TmpDf.NumFields - TmpDf.NumDataFields);
+  result := 'label_' + IntToStr(TmpDf.TextLabelCount + 1);
   if TmpDf.FieldExists(result) then
     result := TmpDf.CreateUniqueFieldName('label_');
 end;

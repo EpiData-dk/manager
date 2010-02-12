@@ -16,6 +16,7 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame, IManagerFrame)
+    Button1: TButton;
     DeleteFieldAction: TAction;
     PasteAsQESMenuItem: TMenuItem;
     PasteAsQesAction: TAction;
@@ -102,6 +103,7 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     procedure AlignActionExecute(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure DeleteFieldActionExecute(Sender: TObject);
     procedure PasteAsQesActionExecute(Sender: TObject);
     procedure ClearAllActionExecute(Sender: TObject);
@@ -146,7 +148,7 @@ type
     SelectedControl: TControl;
     FDesignerBox: TScrollBox;
     function NewFieldEdit(AField: TEpiField): TFieldEdit;
-    function NewQuestionLabel(AField: TEpiField): TFieldLabel;
+    function NewQuestionLabel(ATextLabel: TEpiTextLabel): TFieldLabel;
     function  BackupFile(FileName: string; BackupExt: string = '.old'): boolean;
     procedure NewShortCutFieldAction(aBtn: TToolButton);
     procedure SetModified(const AValue: Boolean);
@@ -154,7 +156,9 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure ShowOnMainStatusBar(Msg: string; Const Index: integer);
     procedure DataFileChange(Sender: TObject;
-      EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+      EventType: TEpiDataFileChangeEventType; Data: Pointer);
+    procedure DataFileReadEvent(Sender: TObject;
+      EventType: TEpiDataFileChangeEventType; Data: Pointer);
     procedure EnterSelectControl(Sender: TObject);
     procedure ExitSelectControl(Sender: TObject);
     procedure EditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -223,14 +227,14 @@ begin
   if Field1 = Field2 then
     exit;
 
-  if Field1.FieldY < Field2.FieldY then
+  if Field1.FieldTop < Field2.FieldTop then
     result := -1
-  else if Field1.FieldY > Field2.FieldY then
+  else if Field1.FieldTop > Field2.FieldTop then
     result := 1
   else
-    if Field1.FieldX < Field2.FieldX then
+    if Field1.FieldLeft < Field2.FieldLeft then
       result := -1
-    else if Field1.FieldX > Field2.FieldX then
+    else if Field1.FieldLeft > Field2.FieldLeft then
       result := 1
 end;
 
@@ -313,7 +317,7 @@ begin
   ComponentXTree.Add(Result);
 end;
 
-function TDesignFrame.NewQuestionLabel(AField: TEpiField): TFieldLabel;
+function TDesignFrame.NewQuestionLabel(ATextLabel: TEpiTextLabel): TFieldLabel;
 var
   LabelForm: TCreateLabelForm;
   Pt: TPoint;
@@ -328,7 +332,7 @@ begin
   Result.OnMouseDown := @FieldMouseDown;
   Result.Font.Style := [fsBold];
   Result.Parent := DesignerBox;
-  Result.Field := AField;
+  Result.TextLabel := ATextLabel;
   EnterSelectControl(Result);
 
   ComponentYTree.Add(Result);
@@ -368,10 +372,10 @@ begin
     // Using to positional controls of the Edit since its position is updated correctly in the
     // DesignerDockDrop event.
     Field.BeginUpdate;
-    Field.FieldX := Left;
-    Field.FieldY := Top;
-    Field.LabelX := VariableLabel.Left;
-    Field.LabelY := VariableLabel.Top;
+    Field.FieldLeft := Left;
+    Field.FieldTop := Top;
+    Field.VarLabelLeft := VariableLabel.Left;
+    Field.VarLabelTop := VariableLabel.Top;
     Field.EndUpdate;
   end;
   // Only add to component tree if it is being placed on the actual form.
@@ -426,7 +430,7 @@ begin
   ShowOnMainStatusBar(
     Format(
       'Fields: %d - %d',
-      [ActiveDatafile.NumFields, ActiveDatafile.DataFields.Count]
+      [ActiveDatafile.FieldCount, ActiveDatafile.TextLabelCount]
     ), 1
   );
   ShowOnMainStatusBar(
@@ -463,8 +467,8 @@ begin
         end;
         FieldName := ActiveDataFile.CreateUniqueFieldName(FieldName);
         VariableLabel := Trim(Cbl[i]);
-        FieldX := Pt.X;
-        FieldY := Pt.Y;
+        FieldLeft := Pt.X;
+        FieldTop := Pt.Y;
         Case FieldType of
           ftInteger: FieldLength := ManagerSettings.IntFieldLength;
           ftFloat:
@@ -487,9 +491,50 @@ begin
 end;
 
 procedure TDesignFrame.DataFileChange(Sender: TObject;
-  EventType: TEpiDataFileChangeEventType; OldValue: EpiVariant);
+  EventType: TEpiDataFileChangeEventType; Data: Pointer);
 begin
   UpdateNonInteractiveVisuals;
+end;
+
+procedure TDesignFrame.DataFileReadEvent(Sender: TObject;
+  EventType: TEpiDataFileChangeEventType; Data: Pointer);
+var
+  TmpField: TEpiField;
+  TmpDf: TEpiDataFile absolute Sender;
+  Pt: TPoint;
+  TmpLabel: TEpiTextLabel;
+begin
+  // We use this event to place fields/textlabels on the form
+  // since we know nothing about their order/position after a read.
+  // This does not apply to the XML format.
+  if TmpDf.DatafileType = dftEpiDataXml then exit;
+
+  case EventType of
+    dceAddField:
+      begin
+        TmpField := TEpiField(Data);
+        if TmpDf.FieldExists(TmpField.FieldName) then
+          TmpField.FieldName := NextFieldName(TmpDf);
+        TmpField.Id := TmpField.FieldName;
+        Pt := FindNewAutoControlPostion(TFieldEdit);
+
+        TmpField.FieldLeft := Pt.X;
+        TmpField.FieldTop := Pt.Y;
+        TmpField.VarLabelLeft := 0;
+        TmpField.VarLabelTop := 0;
+
+        NewFieldEdit(TmpField);
+      end;
+    dceAddText:
+      begin
+        TmpLabel := TEpiTextLabel(Data);
+        TmpLabel.Id := NextLabelName(TmpDf);
+        Pt := FindNewAutoControlPostion(TFieldLabel);
+        TmpLabel.TextLeft := Pt.X;
+        TmpLabel.TextTop  := Pt.Y;
+        NewQuestionLabel(TmpLabel);
+      end;
+  end;
 end;
 
 procedure TDesignFrame.EnterSelectControl(Sender: TObject);
@@ -503,9 +548,10 @@ begin
   SelectedControl := TControl(Sender);
   SelectedControl.Color := ManagerSettings.SelectedControlColour;
   if SelectedControl is TFieldEdit then
+  begin
     TFieldEdit(SelectedControl).SetFocus;
-
-  ShowOnMainStatusBar((SelectedControl as IFieldControl).Field.FieldName, 3);
+    ShowOnMainStatusBar((SelectedControl as TFieldEdit).Field.FieldName, 3);
+  end;
 
   if (DesignerBox.VertScrollBar.Position > SelectedControl.Top) then
     DesignerBox.VertScrollBar.Position := SelectedControl.Top - 5;
@@ -528,10 +574,8 @@ begin
 
     // Using to positional controls of the Edit since its position is updated correctly in the
     // DesignerDockDrop event
-    Field.FieldX := Left;
-    Field.FieldY := Top;
-    Field.LabelX := Left;
-    Field.LabelY := Top;
+    TextLabel.TextLeft := Left;
+    TextLabel.TextTop := Top;
   end;
   // Only add to component tree if it is being placed on the actual form.
   // - it could be placed outside in a custom form.
@@ -683,19 +727,18 @@ begin
     Dist := ManagerSettings.SpaceBtwFieldLabel;
     if (TControl(Curr.Data) is TFieldEdit) then
     begin
-      Dx := TFieldEdit(Curr.Data).Field.FieldX -
-        TFieldEdit(Curr.Data).Field.LabelX;
-      Dy := TFieldEdit(Curr.Data).Field.FieldY -
-        TFieldEdit(Curr.Data).Field.LabelY;
-      TFieldEdit(Curr.Data).Field.FieldX := TheLeft;
-      TFieldEdit(Curr.Data).Field.FieldY := TheTop;
-      TFieldEdit(Curr.Data).Field.LabelX := TheLeft - Dx;
-      TFieldEdit(Curr.Data).Field.LabelY := TheTop - Dy;
+      Dx := TFieldEdit(Curr.Data).Field.FieldLeft -
+        TFieldEdit(Curr.Data).Field.VarLabelLeft;
+      Dy := TFieldEdit(Curr.Data).Field.FieldTop -
+        TFieldEdit(Curr.Data).Field.VarLabelTop;
+      TFieldEdit(Curr.Data).Field.FieldLeft := TheLeft;
+      TFieldEdit(Curr.Data).Field.FieldTop := TheTop;
+      TFieldEdit(Curr.Data).Field.VarLabelLeft := TheLeft - Dx;
+      TFieldEdit(Curr.Data).Field.VarLabelTop := TheTop - Dy;
       if (TControl(Curr.Data) is TFieldEdit) then
         Dist := ManagerSettings.SpaceBtwFieldField;
     end else begin
-      TFieldLabel(Curr.Data).Field.FieldY := TheTop;
-      TFieldLabel(Curr.Data).Field.LabelY := TheTop;
+      TFieldLabel(Curr.Data).TextLabel.TextTop := TheTop;
       if (TControl(Curr.Data) is TFieldLabel) then
         Dist := ManagerSettings.SpaceBtwLabelLabel;
     end;
@@ -767,14 +810,11 @@ begin
     if TControl(Curr.Data) is TFieldEdit then
     with TFieldEdit(Curr.Data) do
     begin
-      Dy := Field.FieldY - Field.LabelY;
-      Field.FieldY := StartCtrl.Top + CmpCount * Spacing;
-      Field.LabelY := Field.FieldY - Dy;
+      Dy := Field.FieldTop - Field.VarLabelTop;
+      Field.FieldTop := StartCtrl.Top + CmpCount * Spacing;
+      Field.VarLabelTop := Field.FieldTop - Dy;
     end else with TFieldLabel(Curr.Data) do
-    begin
-      Field.FieldY := StartCtrl.Top + CmpCount * Spacing;
-      Field.LabelY := Field.FieldY;
-    end;
+      TextLabel.TextTop := StartCtrl.Top + CmpCount * Spacing;
 
     NewXTree.Add(Curr.Data);
     NewYTree.Add(Curr.Data);
@@ -826,7 +866,7 @@ begin
       MaxFieldNameWidth     := Max(MaxFieldNameWidth, FieldNameLabel.Width);
     end;
 
-    MinLeft := Min(MinLeft, (TControl(Curr.Data) as IFieldControl).Field.FieldX);
+    MinLeft := Min(MinLeft, (TControl(Curr.Data) as IEpiControl).EpiLeft);
 
     if (TControl(Curr.Data) = EndCtrl) then
       Break;
@@ -855,26 +895,20 @@ begin
       case aAlign of
         alLeft:
           begin
-            Field.FieldX := Max(Field.FieldX, MinLeft);
-            Field.LabelX := NewLabelLeft;
+            Field.FieldLeft := Max(Field.FieldLeft, MinLeft);
+            Field.VarLabelLeft := NewLabelLeft;
           end;
         alRight:
-          Field.LabelX := Field.FieldX - (VariableLabel.Width + 5);
+          Field.VarLabelLeft := Field.FieldLeft - (VariableLabel.Width + 5);
       end;
     end else
     with TFieldLabel(Curr.Data) do
     begin
       case aAlign of
         alLeft:
-          begin
-            Field.FieldX := NewLabelLeft;
-            Field.LabelX := NewLabelLeft;
-          end;
+          TextLabel.TextLeft := NewLabelLeft;
         alRight:
-          begin
-            Field.FieldX := Max(Field.FieldX, MinLeft);
-            Field.LabelX := Max(Field.FieldX, MinLeft);
-          end;
+          TextLabel.TextLeft := Max(TextLabel.TextLeft, MinLeft);
       end;
     end;
 
@@ -882,7 +916,7 @@ begin
     NewYTree.Add(Curr.Data);
 
     if (TControl(Curr.Data) = EndCtrl) then
-      Exit;
+      Break;
     Curr := ComponentYTree.FindSuccessor(Curr);
   end;
 
@@ -1136,10 +1170,10 @@ begin
     LabelForm := TCreateLabelForm.Create(DesignerBox, ActiveDatafile);
     LabelForm.Left := Min(Pt.X, Screen.Width - LabelForm.Width - 5);
     LabelForm.Top  := Min(Pt.Y, Screen.Height - LabelForm.Height - 5);
-    LabelForm.LabelEdit.Text := Field.VariableLabel;
+    LabelForm.LabelEdit.Text := TextLabel.Text;
     if LabelForm.ShowModal = mrCancel then exit;
     Caption :=  LabelForm.LabelEdit.Text;
-    Field.VariableLabel := LabelForm.LabelEdit.Text;
+    TextLabel.Text := LabelForm.LabelEdit.Text;
     FreeAndNil(LabelForm);
     Self.Modified := true;
   end;
@@ -1161,6 +1195,7 @@ var
   Ctrl: TControl;
   CreateForm: TForm;
   Pt: TPoint;
+  TmpTextLabel: TEpiTextLabel;
 begin
   if Button <> mbLeft then exit;
   if ActiveButton = SelectorButton then Exit;
@@ -1180,18 +1215,16 @@ begin
         ToolBtnClick(SelectorButton);
         exit;
       end;
-      TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDataFile.Size);
-      with TmpField do
+      TmpTextLabel := TEpiTextLabel.Create(nil);
+      with TmpTextLabel do
       begin
-        FieldName := TCreateLabelForm.GetFieldName(ActiveDataFile);
-        VariableLabel := TCreateLabelForm(CreateForm).LabelEdit.Text;
-        FieldX := X;
-        FieldY := Y;
-        LabelX := X;
-        LabelY := Y;
+        Id := TCreateLabelForm.GetFieldName(ActiveDataFile);
+        Text := TCreateLabelForm(CreateForm).LabelEdit.Text;
+        TextLeft := X;
+        TextTop := Y;
       end;
-      ActiveDatafile.AddField(TmpField);
-      NewQuestionLabel(TmpField);
+      ActiveDatafile.AddTextLabel(TmpTextLabel);
+      NewQuestionLabel(TmpTextLabel);
     end else begin
       if not (ssShift in Shift) then
       begin
@@ -1219,8 +1252,8 @@ begin
           FieldLength   := FieldLength + FieldDecimals + 1;
         end;
       end;
-      TmpField.FieldX := X;
-      TmpField.FieldY := Y;
+      TmpField.FieldLeft := X;
+      TmpField.FieldTop := Y;
 
       ActiveDatafile.AddField(TmpField);
 
@@ -1272,7 +1305,7 @@ var
   Node: TAVLTreeNode;
 begin
   if not Assigned(SelectedControl) then exit;
-  Node := (SelectedControl as IFieldControl).YTreeNode;
+  Node := (SelectedControl as IEpiControl).YTreeNode;
   Node := ComponentYTree.FindSuccessor(Node);
   if not Assigned(Node) then
     Node := ComponentYTree.FindLowest;
@@ -1314,7 +1347,7 @@ begin
   if ComponentYTree.Count <= 2 then exit;
   if not Assigned(SelectedControl) then exit;
 
-  Node := (SelectedControl as IFieldControl).YTreeNode;
+  Node := (SelectedControl as IEpiControl).YTreeNode;
   if Node = ComponentYTree.FindHighest then exit;
 
   Dx := 0;
@@ -1339,7 +1372,7 @@ begin
   if ComponentYTree.Count <= 2 then exit;
   if not Assigned(SelectedControl) then exit;
 
-  Node := (SelectedControl as IFieldControl).YTreeNode;
+  Node := (SelectedControl as IEpiControl).YTreeNode;
   if Node = ComponentYTree.FindLowest then exit;
 
   Dx := 0;
@@ -1359,7 +1392,7 @@ var
   Node: TAVLTreeNode;
 begin
   if not Assigned(SelectedControl) then exit;
-  Node := (SelectedControl as IFieldControl).YTreeNode;
+  Node := (SelectedControl as IEpiControl).YTreeNode;
   Node := ComponentYTree.FindPrecessor(Node);
   if not Assigned(Node) then
     Node := ComponentYTree.FindHighest;
@@ -1490,6 +1523,17 @@ begin
   Modified := true;
 end;
 
+procedure TDesignFrame.Button1Click(Sender: TObject);
+var
+  ms: TMemoryStream;
+  sz: int64;
+begin
+  ms := TMemoryStream.Create;
+  ComponentXTree.WriteReportToStream(ms, sz);
+  ms.Position := 0;
+  Ms.SaveToFile('./compxtree.out');
+end;
+
 procedure TDesignFrame.DeleteFieldActionExecute(Sender: TObject);
 var
   TmpField: TEpiField;
@@ -1500,16 +1544,18 @@ begin
   TmpCtrl := SelectedControl;
   ExitSelectControl(nil);
 
-  TmpField := (TmpCtrl as IFieldControl).Field;
+  TmpField := nil;
+  if TmpCtrl is TFieldEdit then
+    TmpField := (TmpCtrl as TFieldEdit).Field;
 
   {$IFNDEF EPI_DEBUG}
-  if (TmpField.FieldType <> ftQuestion) and (TmpField.Size > 0) and
+  if (Assigned(TmpField) and (TmpField.Size > 0) and
      (MessageDlg('Warning', 'Field contains data.' + LineEnding +
       'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
     exit;
   {$ENDIF}
 
-  Node := ComponentYTree.FindPrecessor((TmpCtrl as IFieldControl).YTreeNode);
+  Node := ComponentYTree.FindPrecessor((TmpCtrl as IEpiControl).YTreeNode);
   DesignerBox.RemoveControl(TmpCtrl);
   ComponentYTree.Remove(TmpCtrl);
   ComponentXTree.Remove(TmpCtrl);
@@ -1600,41 +1646,7 @@ begin
 end;
 
 function TDesignFrame.ImportStructure(TmpDf: TEpiDataFile): boolean;
-var
-  i: Integer;
-  TmpField: TEpiField;
-  Pt: TPoint;
 begin
-//  GetLowestControlPosition(TmpEdit);
-
-  ActiveDataFile.BeginUpdate;
-  for i := 0 to TmpDF.NumFields - 1 do
-  begin
-    TmpField := TmpDF[i].Clone(ActiveDataFile, false);
-    if ActiveDataFile.FieldExists(TmpField.FieldName) then
-      if TmpField.FieldType = ftQuestion then
-        TmpField.FieldName := NextLabelName(ActiveDataFile)
-      else
-        TmpField.FieldName := NextFieldName(ActiveDataFile);
-    ActiveDataFile.AddField(TmpField);
-
-    if TmpField.FieldType = ftQuestion then
-      Pt := FindNewAutoControlPostion(TFieldLabel)
-    else
-      Pt := FindNewAutoControlPostion(TFieldEdit);
-
-    TmpField.FieldX := Pt.X;
-    TmpField.FieldY := Pt.Y;
-    TmpField.LabelX := 0;
-    TmpField.LabelY := 0;
-
-    if TmpField.FieldType = ftQuestion then
-      NewQuestionLabel(TmpField)
-    else
-      NewFieldEdit(TmpField);
-  end;
-  ActiveDataFile.EndUpdate;
-  Modified := true;
 end;
 
 procedure TDesignFrame.DoPassword(Sender: TObject;
@@ -1708,6 +1720,7 @@ var
   TmpLabel: TFieldLabel;
   AutoAlignProps: TAutoAlignRecord;
   Pt: TPoint;
+  TmpCtrl: TControl;
 begin
   {$IFNDEF EPI_DEBUG}
   if (ActiveDatafile.NumFields > 0) and
@@ -1724,57 +1737,30 @@ begin
   if Dlg.Execute then
   begin
     ClearToolBtn.Click;
-    FreeAndNil(FActiveDatafile);
 
-    Fn := Dlg.FileName;
-    Import := TEpiImportExport.Create;
-    Import.OnProgress := @MainForm.ShowProgress;
+    FActiveDatafile.RegisterOnChangeHook(@DataFileReadEvent);
+
+    Fn                     := Dlg.FileName;
+    Import                 := TEpiImportExport.Create;
+    Import.OnProgress      := @MainForm.ShowProgress;
     Import.OnClipBoardRead := @MainForm.ReadClipBoard;
-    Import.OnPassword := @DoPassword;
-    Import.FieldNaming := ManagerSettings.FieldNamingStyle;
+    Import.OnPassword      := @DoPassword;
+    Import.FieldNaming     := ManagerSettings.FieldNamingStyle;
     Import.Import(Fn, FActiveDatafile, dftNone);
-    FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
     FreeAndNil(Import);
 
-    Application.ProcessMessages;
-    Self.LockRealizeBounds;
+    FActiveDatafile.UnRegisterOnChangeHook(@DataFileReadEvent);
+    FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
 
-    TmpEdit := nil;
-    ActiveDataFile.BeginUpdate;
-    for i := 0 to ActiveDatafile.NumFields - 1 do
-    begin
-      MainForm.ShowProgress(Self, ((i+1)*100) div ActiveDataFile.NumFields, '');
-      TmpField := ActiveDatafile[i];
-      if ActiveDataFile.DatafileType <> dftEpiDataXml then
-      begin
-        if TmpField.FieldType = ftQuestion then
-          Pt := FindNewAutoControlPostion(TFieldLabel)
-        else
-          Pt := FindNewAutoControlPostion(TFieldEdit);
-        TmpField.FieldX := Pt.X;
-        TmpField.FieldY := Pt.Y;
-        TmpField.LabelX := 0;
-        TmpField.LabelY := 0;
-      end;
-
-      if TmpField.FieldType = ftQuestion then
-        NewQuestionLabel(TmpField)
-      else
-        if not Assigned(TmpEdit) then
-          TmpEdit := NewFieldEdit(TmpField)
-        else
-          NewFieldEdit(TmpField);
-    end;
-    EnterSelectControl(TmpEdit);
-    TmpEdit.SetFocus;
-    ActiveDataFile.EndUpdate;
-    Self.UnLockRealizeBounds;
+    TmpCtrl := TControl(ComponentYTree.FindLowest.Data);
+    EnterSelectControl(TmpCtrl);
 
     UpdateNonInteractiveVisuals;
 
     if ActiveDatafile.DatafileType <> dftEpiDataXml then
-      LabelsAlignment(TControl(ComponentYTree.FindLowest.Data), Nil, alLeft);
+      LabelsAlignment(TControl(TmpCtrl), Nil, alLeft);
 
+//    Button1Click(nil);
     Modified := false;
   end;
   FreeAndNil(Dlg);
@@ -1805,7 +1791,7 @@ var
   Cbl: TStringList;
   Pt: TPoint;
   i: Integer;
-  TmpField: TEpiField;
+  TmpLabel: TEpiTextLabel;
 begin
   Cbl := TStringList.Create;
   try
@@ -1816,18 +1802,16 @@ begin
       if Trim(Cbl[i]) = '' then continue;
 
       Pt := FindNewAutoControlPostion(TFieldLabel);
-      TmpField := TEpiField.CreateField(ftQuestion, ActiveDataFile.Size);
-      with TmpField do
+      TmpLabel := TEpiTextLabel.Create(nil);
+      with TmpLabel do
       begin
-        FieldName := TCreateLabelForm.GetFieldName(ActiveDataFile);
-        VariableLabel := Trim(Cbl[i]);
-        FieldX := Pt.X;
-        FieldY := Pt.Y;
-        LabelX := Pt.X;
-        LabelY := Pt.Y;
+        Id := TCreateLabelForm.GetFieldName(ActiveDataFile);
+        Text := Trim(Cbl[i]);
+        TextLeft := Pt.X;
+        TextTop := Pt.Y;
       end;
-      ActiveDatafile.AddField(TmpField);
-      NewQuestionLabel(TmpField);
+      ActiveDatafile.AddTextLabel(TmpLabel);
+      NewQuestionLabel(TmpLabel);
     end;
 
     if (DesignerBox.VertScrollBar.Visible) and (true) then
