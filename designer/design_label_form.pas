@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, StdCtrls, ExtCtrls, ActnList,
-  UEpiDataFile;
+  epidatafile;
 
 type
 

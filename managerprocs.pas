@@ -5,7 +5,7 @@ unit ManagerProcs;
 interface
 
 uses
-  Classes, SysUtils, settings, UEpiDataFile;
+  Classes, SysUtils, settings, epidatafile;
 
 
 function NextFieldName(DF: TEpiDataFile): String;

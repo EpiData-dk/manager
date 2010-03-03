@@ -8,7 +8,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ActnList, StdActns, ExtCtrls, Buttons, ComCtrls, StdCtrls,
-  UDataFileTypes;
+  epidatatypes;
 
 type
 
@@ -113,7 +113,7 @@ var
 implementation
 
 uses
-  UEpiLog, settings, Clipbrd,
+  epilog, settings, Clipbrd,
   InterfaceBase, LCLType, LCLIntf, editormain,
   workflow_frame, design_frame, managertypes;
 

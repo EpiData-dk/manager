@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, MaskEdit, ExtCtrls, ComCtrls, ActnList, EditBtn, UDataFileTypes;
+  StdCtrls, MaskEdit, ExtCtrls, ComCtrls, ActnList, EditBtn, epidatatypes;
 
 type
 

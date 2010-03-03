@@ -6,8 +6,8 @@ unit FieldEdit;
 interface
 
 uses
-  Classes, SysUtils, UEpiDataFile, StdCtrls, Controls,
-  UDataFileTypes, LMessages, Graphics, AVL_Tree;
+  Classes, SysUtils, epidatafile, StdCtrls, Controls,
+  epidatatypes, LMessages, Graphics, AVL_Tree;
 
 type
 
@@ -128,7 +128,7 @@ implementation
 
 uses
   InterfaceBase, LCLType, Math, LCLProc, main, settings, ExtCtrls,
-  design_frame, UEpiUtils;
+  design_frame, epiutils;
 
 { TFieldEdit }
 

@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, StdCtrls, MaskEdit, ActnList, ExtCtrls,
-  ComCtrls, UEpiDataFile, UDataFileTypes, UEpiUtils;
+  ComCtrls, epidatafile, epidatatypes, epiutils;
 
 type
 
@@ -52,8 +52,8 @@ type
 implementation
 
 uses
-  Controls, settings, UEpiDataGlobals, design_frame, Graphics,
-  UStringUtils, strutils;
+  Controls, settings, epidataglobals, design_frame, Graphics,
+  epistringutils, strutils;
 
 { TFieldCreateForm }
 

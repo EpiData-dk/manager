@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, ActnList, UEpiDataFile, UDataFileTypes;
+  ExtCtrls, StdCtrls, ActnList, epidatafile, epidatatypes;
 
 type
 

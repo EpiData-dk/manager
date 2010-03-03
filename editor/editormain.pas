@@ -101,7 +101,7 @@ var
 implementation
 
 uses
-  UEpiUtils, settings, UStringUtils, main, design_frame;
+  epiutils, settings, epistringutils, main, design_frame;
 
 { TEditorForm }
 

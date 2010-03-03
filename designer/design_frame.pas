@@ -7,9 +7,9 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ComCtrls, ActnList, Controls,
-  Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, UEpiDataFile, FieldEdit,
+  Buttons, ExtCtrls, Dialogs, Menus, StdCtrls, epidatafile, FieldEdit,
   Design_Field_Frame, AVL_Tree, LCLType, StdActns, design_autoalign_form,
-  UDataFileTypes, datafile_documentation_form, managertypes;
+  epidatatypes, datafile_documentation_form, managertypes;
 
 type
 
@@ -215,8 +215,8 @@ implementation
 uses
   main, graphics,
   types, math, settings, design_label_form,
-  UEpiDataGlobals, UImportExport, UQesHandler, UEpiUtils,
-  Clipbrd, UStringUtils, ManagerProcs, LMessages;
+  epidataglobals, epiimportexport, epiqeshandler, epiutils,
+  Clipbrd, epistringutils, ManagerProcs, LMessages;
 
 function SortFields(Item1, Item2: Pointer): integer;
 var
