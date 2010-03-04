@@ -9,8 +9,8 @@ object WorkFlowFrame: TWorkFlowFrame
   OnResize = FrameResize
   ParentColor = False
   TabOrder = 0
-  DesignLeft = 466
-  DesignTop = 78
+  DesignLeft = 598
+  DesignTop = 282
   object BgPanel: TPanel
     Left = 48
     Height = 529

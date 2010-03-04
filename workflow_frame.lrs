@@ -4,7 +4,7 @@ LazarusResources.Add('TWorkFlowFrame','FORMDATA',[
   'TPF0'#14'TWorkFlowFrame'#13'WorkFlowFrame'#4'Left'#2#0#6'Height'#3'k'#2#3'To'
   +'p'#2#0#5'Width'#3#223#2#12'ClientHeight'#3'k'#2#11'ClientWidth'#3#223#2#5'C'
   +'olor'#4#12'e'#248#0#8'OnResize'#7#11'FrameResize'#11'ParentColor'#8#8'TabOr'
-  +'der'#2#0#10'DesignLeft'#3#210#1#9'DesignTop'#2'N'#0#6'TPanel'#7'BgPanel'#4
+  +'der'#2#0#10'DesignLeft'#3'V'#2#9'DesignTop'#3#26#1#0#6'TPanel'#7'BgPanel'#4
   +'Left'#2'0'#6'Height'#3#17#2#3'Top'#2#30#5'Width'#3'X'#2#8'AutoSize'#9#10'Be'
   +'velOuter'#7#6'bvNone'#12'ClientHeight'#3#17#2#11'ClientWidth'#3'X'#2#8'TabO'
   +'rder'#2#0#0#6'TImage'#15'BackgroundImage'#4'Left'#2#0#6'Height'#3#31#2#3'To'
