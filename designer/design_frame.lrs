@@ -5,7 +5,7 @@ LazarusResources.Add('TDesignFrame','FORMDATA',[
   +#0#5'Width'#3'D'#3#18'HorzScrollBar.Page'#3'C'#3#18'VertScrollBar.Page'#3'3'
   +#2#19'VertScrollBar.Range'#2#26#12'ClientHeight'#3'6'#2#11'ClientWidth'#3'D'
   +#3#5'Color'#7#9'clBtnFace'#11'ParentColor'#8#14'ParentShowHint'#8#8'TabOrder'
-  +#2#0#10'DesignLeft'#3#247#2#9'DesignTop'#3'\'#1#0#8'TToolBar'#12'FieldToolBa'
+  +#2#0#10'DesignLeft'#3'o'#1#9'DesignTop'#3#136#0#0#8'TToolBar'#12'FieldToolBa'
   +'r'#4'Left'#2#0#6'Height'#2#26#3'Top'#2#0#5'Width'#3'D'#3#12'ButtonHeight'#2
   +#24#11'ButtonWidth'#2#24#7'Caption'#6#12'FieldToolBar'#5'Color'#7#9'clBtnFac'
   +'e'#11'EdgeBorders'#11#5'ebTop'#8'ebBottom'#0#9'EdgeInner'#7#6'esNone'#9'Edg'
@@ -55,14 +55,14 @@ LazarusResources.Add('TDesignFrame','FORMDATA',[
   +'tton4'#5'Style'#7#10'tbsDivider'#0#0#0#6'TPanel'#6'Panel1'#4'Left'#3#26#2#6
   +'Height'#3#28#2#3'Top'#2#26#5'Width'#3'*'#1#5'Align'#7#7'alRight'#10'BevelWi'
   +'dth'#2#2#12'ClientHeight'#3#28#2#11'ClientWidth'#3'*'#1#8'TabOrder'#2#1#0#6
-  +'TLabel'#6'Label1'#4'Left'#2#22#6'Height'#2#18#3'Top'#2#30#5'Width'#2','#7'C'
+  +'TLabel'#6'Label1'#4'Left'#2#22#6'Height'#2#18#3'Top'#2#30#5'Width'#2'+'#7'C'
   +'aption'#6#6'Label1'#11'ParentColor'#8#0#0#6'TLabel'#6'Label2'#4'Left'#2#22#6
-  +'Height'#2#18#3'Top'#2'l'#5'Width'#2','#7'Caption'#6#6'Label1'#11'ParentColo'
+  +'Height'#2#18#3'Top'#2'l'#5'Width'#2'+'#7'Caption'#6#6'Label1'#11'ParentColo'
   +'r'#8#0#0#6'TLabel'#6'Label3'#4'Left'#2#22#6'Height'#2#18#3'Top'#3#186#0#5'W'
-  +'idth'#2','#7'Caption'#6#6'Label1'#11'ParentColor'#8#0#0#6'TLabel'#6'Label4'
-  +#4'Left'#2#22#6'Height'#2#18#3'Top'#3#8#1#5'Width'#2','#7'Caption'#6#6'Label'
+  +'idth'#2'+'#7'Caption'#6#6'Label1'#11'ParentColor'#8#0#0#6'TLabel'#6'Label4'
+  +#4'Left'#2#22#6'Height'#2#18#3'Top'#3#8#1#5'Width'#2'+'#7'Caption'#6#6'Label'
   +'1'#11'ParentColor'#8#0#0#6'TLabel'#6'Label5'#4'Left'#2#22#6'Height'#2#18#3
-  +'Top'#3'V'#1#5'Width'#2','#7'Caption'#6#6'Label1'#11'ParentColor'#8#0#0#7'TB'
+  +'Top'#3'V'#1#5'Width'#2'+'#7'Caption'#6#6'Label1'#11'ParentColor'#8#0#0#7'TB'
   +'utton'#7'Button1'#4'Left'#2'~'#6'Height'#2#25#3'Top'#2'F'#5'Width'#2'K'#7'C'
   +'aption'#6#7'Button1'#7'OnClick'#7#12'Button1Click'#8'TabOrder'#2#0#0#0#0#11
   ,'TActionList'#21'DesignFrameActionList'#4'left'#2'p'#3'top'#3'h'#1#0#7'TActi'

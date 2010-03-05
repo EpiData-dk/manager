@@ -19,7 +19,7 @@ uses
   {$ENDIF EPI_DEBUG}
   datafile_documentation_form, design_autoalign_form, design_field_frame,
   design_frame, design_label_form, fieldedit, editormain, managerprocs, 
-  workflow_frame, managertypes;
+  workflow_frame, managertypes, study_frame;
 
 
 {$IFNDEF EPI_DEBUG}

@@ -115,7 +115,8 @@ implementation
 uses
   epilog, settings, Clipbrd,
   InterfaceBase, LCLType, LCLIntf, editormain,
-  workflow_frame, design_frame, managertypes;
+  workflow_frame, design_frame, managertypes,
+  study_frame;
 
 
 { TMainForm }
@@ -229,9 +230,9 @@ end;
 procedure TMainForm.NewDesignFormActionExecute(Sender: TObject);
 var
   TabSheet: TTabSheet;
-  Frame: TDesignFrame;
+  SFrame: TStudyFrame;
 begin
-//  ShowOnStatusBar('Add fields: Click toolbar or read files', 0);
+  //  ShowOnStatusBar('Add fields: Click toolbar or read files', 0);
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -243,7 +244,18 @@ begin
   if PageControl1.PageCount >= 1 then
     PageControl1.ShowTabs := true;
 
-  Frame := TDesignFrame.Create(TabSheet);
+
+  SFrame := TStudyFrame.Create(Self);
+  SFrame.Name := 'Frame' + IntToStr(TabNameCount);
+  SFrame.Align := alClient;
+  SFrame.Parent := TabSheet;
+  FActiveFrame := SFrame;
+
+  PageControl1.ActivePage := TabSheet;
+
+  Inc(TabNameCount);
+
+{  Frame := TDesignFrame.Create(TabSheet);
   Frame.Name := 'Frame' + IntToStr(TabNameCount);
   Frame.Align := alClient;
   Frame.Parent := TabSheet;
@@ -251,7 +263,7 @@ begin
 
   PageControl1.ActivePage := TabSheet;
 
-  Inc(TabNameCount);
+  Inc(TabNameCount);}
 end;
 
 procedure TMainForm.PageControl1Changing(Sender: TObject;
