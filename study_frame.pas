@@ -5,14 +5,18 @@ unit study_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls;
+  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, StdCtrls;
 
 type
 
   { TStudyFrame }
 
   TStudyFrame = class(TFrame)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     Panel1: TPanel;
+    Panel2: TPanel;
     Splitter1: TSplitter;
     RelateTreeView: TTreeView;
     procedure RelateTreeViewChange(Sender: TObject; Node: TTreeNode);
@@ -24,6 +28,7 @@ type
   public
     { public declarations }
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
   end; 
 
 implementation
@@ -36,12 +41,15 @@ uses
 procedure TStudyFrame.RelateTreeViewChanging(Sender: TObject; Node: TTreeNode;
   var AllowChange: Boolean);
 begin
+  if Assigned(node) then
+    Label1.Caption := TDesignFrame(Node.Data).Name;
   FActiveFrame.Parent := nil;
   FActiveFrame.Align := alNone;
 end;
 
 procedure TStudyFrame.RelateTreeViewChange(Sender: TObject; Node: TTreeNode);
 begin
+  Label2.Caption := TDesignFrame(Node.Data).Name;
   FActiveFrame := TStudyFrame(Node.Data);
   FActiveFrame.Parent := self;
   FActiveFrame.Align := alClient;
@@ -63,6 +71,11 @@ begin
   DFrame := TDesignFrame.Create(Self);
   DFrame.Name := 'b';
   RelateTreeView.Items.AddObject(nil, 'second', DFrame);
+end;
+
+destructor TStudyFrame.Destroy;
+begin
+  inherited Destroy;
 end;
 
 initialization

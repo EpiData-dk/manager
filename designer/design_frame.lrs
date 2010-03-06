@@ -2206,4 +2206,4 @@ LazarusResources.Add('TDesignFrame','FORMDATA',[
   +'OnClick'#7#26'PasteAsStringActionExecute'#0#0#9'TMenuItem'#18'PasteAsQESMen'
   +'uItem'#6'Action'#7#16'PasteAsQesAction'#7'OnClick'#7#23'PasteAsQesActionExe'
   +'cute'#0#0#0#0
-]);
+]);
