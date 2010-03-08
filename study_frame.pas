@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, StdCtrls,
-  managertypes;
+  managertypes, Controls;
 
 type
 
@@ -19,11 +19,14 @@ type
     Label3: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
+    Panel3: TPanel;
     Splitter1: TSplitter;
     RelateTreeView: TTreeView;
     Procedure Button1Click(Sender: TObject);
     procedure RelateTreeViewChanging(Sender: TObject; Node: TTreeNode;
       var AllowChange: Boolean);
+    procedure RelateTreeViewKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     Procedure RelateTreeViewSelectionChanged(Sender: TObject);
   private
     { private declarations }
@@ -43,7 +46,7 @@ type
 implementation
 
 uses
-  design_frame, Controls;
+  design_frame;
 
 { TStudyFrame }
 
@@ -57,8 +60,14 @@ begin
 
   if not Assigned(FActiveFrame) then exit;
   (FActiveFrame as IManagerFrame).DeActivateFrame;
-  FActiveFrame.Parent := nil;
+  FActiveFrame.Parent := panel3;
   FActiveFrame.Align := alNone;
+end;
+
+procedure TStudyFrame.RelateTreeViewKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  //
 end;
 
 Procedure TStudyFrame.RelateTreeViewSelectionChanged(Sender: TObject);
@@ -91,6 +100,12 @@ begin
   FrameCount := 0;
   FActiveFrame := nil;
   Activated := true;
+
+  {$IFDEF EPI_DEBUG}
+  Panel2.Visible := true;
+  {$ELSE EPI_DEBUG}
+  Panel2.Visible := false;
+  {$ENDIF}
 
   Button1.Click;
 end;

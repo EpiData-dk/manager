@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 774
-  DesignTop = 280
+  DesignLeft = 380
+  DesignTop = 236
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -169,8 +169,10 @@ object DesignFrame: TDesignFrame
     end
     object NewDataFormBtn: TToolButton
       Left = 29
+      Hint = 'New Design Form'
       Top = 1
-      Action = MainForm.NewDesignFormAction
+      Caption = 'New Design Form'
+      ImageIndex = 20
     end
     object ToolButton11: TToolButton
       Left = 133
@@ -244,7 +246,7 @@ object DesignFrame: TDesignFrame
       Width = 75
       Caption = 'Button1'
       Enabled = False
-      OnClick = Button1Click
+      OnClick = St
       TabOrder = 0
     end
   end

@@ -103,7 +103,7 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     procedure AlignActionExecute(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure St(Sender: TObject);
     procedure DeleteFieldActionExecute(Sender: TObject);
     procedure PasteAsQesActionExecute(Sender: TObject);
     procedure ClearAllActionExecute(Sender: TObject);
@@ -213,7 +213,7 @@ type
 implementation
 
 uses
-  main, graphics,
+  main, Graphics, study_frame,
   types, math, settings, design_label_form,
   epidataglobals, epiimportexport, epiqeshandler, epiutils,
   Clipbrd, epistringutils, ManagerProcs, LMessages;
@@ -970,6 +970,8 @@ begin
   FActiveDocumentationForm := nil;
   SelectedControl := nil;
   Modified := false;
+  NewDataFormBtn.OnClick := @TStudyFrame(TheOwner).Button1Click;
+
   FComponentYTree := NewCompTree(attY, @YCmp);
   FComponentXTree := NewCompTree(attX, @XCmp);
 
@@ -994,7 +996,7 @@ begin
   FDesignerBox.Name        := 'DesingerBox';
   FDesignerBox.Parent      := Self;
   FDesignerBox.Align       := alClient;
-//  FDesignerBox.DockSite    := true;
+  FDesignerBox.DockSite    := true;
   FDesignerBox.OnDockDrop  := @DesignerDockDrop;
   FDesignerBox.OnUnDock    := @DesignerUnDock;
   FDesignerBox.OnMouseDown := @DesignerMouseDown;
@@ -1021,7 +1023,8 @@ var
 begin
   DesignFrameActionList.State := asNormal;
 
-  DragManager.RegisterDockSite(DesignerBox, true);
+//  DesignerBox.DockSite := true;
+//  DragManager.RegisterDockSite(DesignerBox, true);
 
   UpdateNonInteractiveVisuals;
 
@@ -1051,7 +1054,7 @@ var
 begin
   DesignFrameActionList.State := asSuspended;
 
-  DragManager.RegisterDockSite(DesignerBox, false);
+//  DesignerBox.DockSite := false;
 
   Section := MMFile + MMFileRW;
   MainForm.RemoveFromMenu(Section + 3);
@@ -1528,7 +1531,7 @@ begin
   Modified := true;
 end;
 
-procedure TDesignFrame.Button1Click(Sender: TObject);
+procedure TDesignFrame.St(Sender: TObject);
 var
   ms: TMemoryStream;
   sz: int64;

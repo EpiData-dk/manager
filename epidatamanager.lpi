@@ -195,6 +195,9 @@
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteBefore>
+      <ExecuteAfter>
+        <CompileReasons Compile="False" Build="False" Run="False"/>
+      </ExecuteAfter>
     </Other>
   </CompilerOptions>
 </CONFIG>
