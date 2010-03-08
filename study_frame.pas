@@ -50,7 +50,7 @@ end;
 procedure TStudyFrame.RelateTreeViewChange(Sender: TObject; Node: TTreeNode);
 begin
   Label2.Caption := TDesignFrame(Node.Data).Name;
-  FActiveFrame := TStudyFrame(Node.Data);
+  FActiveFrame := TDesignFrame(Node.Data);
   FActiveFrame.Parent := self;
   FActiveFrame.Align := alClient;
 end;
