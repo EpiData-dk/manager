@@ -37,7 +37,6 @@ type
     Image6: TImage;
     Image7: TImage;
     MenuItem1: TMenuItem;
-    TabSheet2: TTabSheet;
     ToolsMenu: TMenuItem;
     NewDesignFormAction: TAction;
     ClosePageAction: TAction;
@@ -245,8 +244,8 @@ begin
     PageControl1.ShowTabs := true;
 
 
-  SFrame := TStudyFrame.Create(Self);
-  SFrame.Name := 'Frame' + IntToStr(TabNameCount);
+  SFrame := TStudyFrame.Create(TabSheet);
+  SFrame.Name := 'StudyFrame' + IntToStr(TabNameCount);
   SFrame.Align := alClient;
   SFrame.Parent := TabSheet;
   FActiveFrame := SFrame;

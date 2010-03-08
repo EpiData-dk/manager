@@ -12,8 +12,8 @@ object DesignFrame: TDesignFrame
   ParentColor = False
   ParentShowHint = False
   TabOrder = 0
-  DesignLeft = 369
-  DesignTop = 93
+  DesignLeft = 774
+  DesignTop = 280
   object FieldToolBar: TToolBar
     Left = 0
     Height = 26
@@ -201,7 +201,7 @@ object DesignFrame: TDesignFrame
       Left = 22
       Height = 18
       Top = 30
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -209,7 +209,7 @@ object DesignFrame: TDesignFrame
       Left = 22
       Height = 18
       Top = 108
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -217,7 +217,7 @@ object DesignFrame: TDesignFrame
       Left = 22
       Height = 18
       Top = 186
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -225,7 +225,7 @@ object DesignFrame: TDesignFrame
       Left = 22
       Height = 18
       Top = 264
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -233,7 +233,7 @@ object DesignFrame: TDesignFrame
       Left = 22
       Height = 18
       Top = 342
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -243,6 +243,7 @@ object DesignFrame: TDesignFrame
       Top = 70
       Width = 75
       Caption = 'Button1'
+      Enabled = False
       OnClick = Button1Click
       TabOrder = 0
     end

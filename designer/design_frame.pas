@@ -418,8 +418,8 @@ begin
   if Modified then
     s := '*';
 
-  MainForm.PageControl1.ActivePage.Caption := S +
-    ExtractFileName(ActiveDataFile.FileName);
+//  MainForm.PageControl1.ActivePage.Caption := S +
+//    ExtractFileName(ActiveDataFile.FileName);
 
   if ActiveDatafile.DatafileType <> dftNone then
     MainForm.PageControl1.Hint :=
@@ -994,7 +994,7 @@ begin
   FDesignerBox.Name        := 'DesingerBox';
   FDesignerBox.Parent      := Self;
   FDesignerBox.Align       := alClient;
-  FDesignerBox.DockSite    := true;
+//  FDesignerBox.DockSite    := true;
   FDesignerBox.OnDockDrop  := @DesignerDockDrop;
   FDesignerBox.OnUnDock    := @DesignerUnDock;
   FDesignerBox.OnMouseDown := @DesignerMouseDown;
@@ -1020,6 +1020,9 @@ var
   Section: Integer;
 begin
   DesignFrameActionList.State := asNormal;
+
+  DragManager.RegisterDockSite(DesignerBox, true);
+
   UpdateNonInteractiveVisuals;
 
   // Update Main Menu on MainForm.
@@ -1047,6 +1050,8 @@ var
   Section: Integer;
 begin
   DesignFrameActionList.State := asSuspended;
+
+  DragManager.RegisterDockSite(DesignerBox, false);
 
   Section := MMFile + MMFileRW;
   MainForm.RemoveFromMenu(Section + 3);

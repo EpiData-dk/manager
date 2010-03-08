@@ -1,24 +1,26 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TStudyFrame','FORMDATA',[
-  'TPF0'#11'TStudyFrame'#10'StudyFrame'#4'Left'#2#0#6'Height'#3#206#1#3'Top'#2#0
-  +#5'Width'#3#205#2#12'ClientHeight'#3#206#1#11'ClientWidth'#3#205#2#8'TabOrde'
-  +'r'#2#0#10'DesignLeft'#3'y'#1#9'DesignTop'#2'{'#0#6'TPanel'#6'Panel1'#4'Left'
-  +#2#0#6'Height'#3#206#1#3'Top'#2#0#5'Width'#3#170#0#5'Align'#7#6'alLeft'#12'C'
-  +'lientHeight'#3#206#1#11'ClientWidth'#3#170#0#8'TabOrder'#2#0#0#9'TTreeView'
-  +#14'RelateTreeView'#4'Left'#2#1#6'Height'#3#239#0#3'Top'#2#1#5'Width'#3#168#0
-  +#5'Align'#7#8'alClient'#17'DefaultItemHeight'#2#19#8'ReadOnly'#9#10'ScrollBa'
-  +'rs'#7#10'ssAutoBoth'#8'ShowRoot'#8#8'SortType'#7#6'stBoth'#8'TabOrder'#2#0#8
-  +'OnChange'#7#20'RelateTreeViewChange'#10'OnChanging'#7#22'RelateTreeViewChan'
-  +'ging'#7'Options'#11#17'tvoAutoItemHeight'#16'tvoHideSelection'#21'tvoKeepCo'
-  +'llapsedNodes'#11'tvoReadOnly'#14'tvoShowButtons'#12'tvoShowLines'#11'tvoToo'
-  +'lTips'#0#0#0#6'TPanel'#6'Panel2'#4'Left'#2#1#6'Height'#3#221#0#3'Top'#3#240
-  +#0#5'Width'#3#168#0#5'Align'#7#8'alBottom'#12'ClientHeight'#3#221#0#11'Clien'
-  +'tWidth'#3#168#0#8'TabOrder'#2#1#0#6'TLabel'#6'Label1'#4'Left'#2#15#6'Height'
-  +#2#18#3'Top'#2#16#5'Width'#2'+'#7'Caption'#6#6'Label1'#11'ParentColor'#8#0#0
-  +#6'TLabel'#6'Label2'#4'Left'#2#15#6'Height'#2#18#3'Top'#2'P'#5'Width'#2'+'#7
-  +'Caption'#6#6'Label2'#11'ParentColor'#8#0#0#6'TLabel'#6'Label3'#4'Left'#2#15
-  +#6'Height'#2#18#3'Top'#3#152#0#5'Width'#2'+'#7'Caption'#6#6'Label3'#11'Paren'
-  +'tColor'#8#0#0#0#0#9'TSplitter'#9'Splitter1'#4'Left'#3#170#0#6'Height'#3#206
-  +#1#3'Top'#2#0#5'Width'#2#5#0#0#0
+  'TPF0'#11'TStudyFrame'#10'StudyFrame'#4'Left'#2#0#6'Height'#3':'#2#3'Top'#2#0
+  +#5'Width'#3#139#3#12'ClientHeight'#3':'#2#11'ClientWidth'#3#139#3#8'TabOrder'
+  +#2#0#10'DesignLeft'#3#144#2#9'DesignTop'#3'K'#1#0#6'TPanel'#6'Panel1'#4'Left'
+  +#2#0#6'Height'#3':'#2#3'Top'#2#0#5'Width'#3#170#0#5'Align'#7#6'alLeft'#12'Cl'
+  +'ientHeight'#3':'#2#11'ClientWidth'#3#170#0#8'TabOrder'#2#0#0#9'TTreeView'#14
+  +'RelateTreeView'#4'Left'#2#1#6'Height'#3'['#1#3'Top'#2#1#5'Width'#3#168#0#5
+  +'Align'#7#8'alClient'#17'DefaultItemHeight'#2#19#8'ReadOnly'#9#10'ScrollBars'
+  +#7#10'ssAutoBoth'#8'ShowRoot'#8#8'SortType'#7#6'stBoth'#8'TabOrder'#2#0#10'O'
+  +'nChanging'#7#22'RelateTreeViewChanging'#18'OnSelectionChanged'#7#30'RelateT'
+  +'reeViewSelectionChanged'#7'Options'#11#17'tvoAutoItemHeight'#16'tvoHideSele'
+  +'ction'#21'tvoKeepCollapsedNodes'#11'tvoReadOnly'#14'tvoShowButtons'#12'tvoS'
+  +'howLines'#11'tvoToolTips'#0#0#0#6'TPanel'#6'Panel2'#4'Left'#2#1#6'Height'#3
+  +#221#0#3'Top'#3'\'#1#5'Width'#3#168#0#5'Align'#7#8'alBottom'#12'ClientHeight'
+  +#3#221#0#11'ClientWidth'#3#168#0#8'TabOrder'#2#1#0#6'TLabel'#6'Label1'#4'Lef'
+  +'t'#2#15#6'Height'#2#18#3'Top'#2#16#5'Width'#2','#7'Caption'#6#6'Label1'#11
+  +'ParentColor'#8#0#0#6'TLabel'#6'Label2'#4'Left'#2#15#6'Height'#2#18#3'Top'#2
+  +'P'#5'Width'#2','#7'Caption'#6#6'Label2'#11'ParentColor'#8#0#0#6'TLabel'#6'L'
+  +'abel3'#4'Left'#2#15#6'Height'#2#18#3'Top'#3#152#0#5'Width'#2','#7'Caption'#6
+  +#6'Label3'#11'ParentColor'#8#0#0#7'TButton'#7'Button1'#4'Left'#2'/'#6'Height'
+  +#2#25#3'Top'#2','#5'Width'#2'K'#7'Caption'#6#7'Button1'#7'OnClick'#7#12'Butt'
+  +'on1Click'#8'TabOrder'#2#0#0#0#0#0#9'TSplitter'#9'Splitter1'#4'Left'#3#170#0
+  +#6'Height'#3':'#2#3'Top'#2#0#5'Width'#2#5#0#0#0
 ]);

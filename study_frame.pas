@@ -5,13 +5,15 @@ unit study_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, StdCtrls;
+  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, StdCtrls,
+  managertypes;
 
 type
 
   { TStudyFrame }
 
-  TStudyFrame = class(TFrame)
+  TStudyFrame = class(TFrame, IManagerFrame)
+    Button1: TButton;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -19,16 +21,23 @@ type
     Panel2: TPanel;
     Splitter1: TSplitter;
     RelateTreeView: TTreeView;
-    procedure RelateTreeViewChange(Sender: TObject; Node: TTreeNode);
+    Procedure Button1Click(Sender: TObject);
     procedure RelateTreeViewChanging(Sender: TObject; Node: TTreeNode;
       var AllowChange: Boolean);
+    Procedure RelateTreeViewSelectionChanged(Sender: TObject);
   private
     { private declarations }
     FActiveFrame: TFrame;
+    FActivated: boolean;
+    FrameCount: integer;
+  protected
+    property Activated: boolean read FActivated write FActivated;
   public
     { public declarations }
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure  ActivateFrame;
+    procedure  DeActivateFrame;
   end; 
 
 implementation
@@ -41,42 +50,69 @@ uses
 procedure TStudyFrame.RelateTreeViewChanging(Sender: TObject; Node: TTreeNode;
   var AllowChange: Boolean);
 begin
+  if csDestroying in ComponentState then exit;
+
   if Assigned(node) then
     Label1.Caption := TDesignFrame(Node.Data).Name;
+
+  if not Assigned(FActiveFrame) then exit;
+  (FActiveFrame as IManagerFrame).DeActivateFrame;
   FActiveFrame.Parent := nil;
   FActiveFrame.Align := alNone;
 end;
 
-procedure TStudyFrame.RelateTreeViewChange(Sender: TObject; Node: TTreeNode);
-begin
-  Label2.Caption := TDesignFrame(Node.Data).Name;
-  FActiveFrame := TDesignFrame(Node.Data);
+Procedure TStudyFrame.RelateTreeViewSelectionChanged(Sender: TObject);
+Begin
+  if csDestroying in ComponentState then exit;
+
+  Label2.Caption := TDesignFrame(RelateTreeView.Selected.Data).Name;
+  FActiveFrame := TDesignFrame(RelateTreeView.Selected.Data);
   FActiveFrame.Parent := self;
   FActiveFrame.Align := alClient;
+  FActiveFrame.SetFocus;
+  (FActiveFrame as IManagerFrame).ActivateFrame;
+end;
+
+Procedure TStudyFrame.Button1Click(Sender: TObject);
+Var
+  DFrame: TDesignFrame;
+Begin
+  inc(FrameCount);
+
+  DFrame := TDesignFrame.Create(Self);
+  DFrame.Name := 'Frame' + IntToStr(FrameCount);
+  DFrame.Align := alClient;
+  RelateTreeView.Selected := RelateTreeView.Items.AddObject(nil, DFrame.Name, DFrame);
 end;
 
 constructor TStudyFrame.Create(AOwner: TComponent);
-var
-  DFrame: TDesignFrame;
 begin
   inherited Create(AOwner);
-  DFrame := TDesignFrame.Create(Self);
-  DFrame.Name := 'a';
-  DFrame.Align := alClient;
-  DFrame.Parent := Self;
-  FActiveFrame := DFrame;
+  FrameCount := 0;
+  FActiveFrame := nil;
+  Activated := true;
 
-  RelateTreeView.Items.AddObject(nil, 'main', DFrame);
-
-  DFrame := TDesignFrame.Create(Self);
-  DFrame.Name := 'b';
-  RelateTreeView.Items.AddObject(nil, 'second', DFrame);
+  Button1.Click;
 end;
 
 destructor TStudyFrame.Destroy;
 begin
   inherited Destroy;
 end;
+
+Procedure TStudyFrame.ActivateFrame;
+Begin
+  if Activated then exit;
+  (FActiveFrame as IManagerFrame).ActivateFrame;
+  Activated := true;
+End;
+
+Procedure TStudyFrame.DeActivateFrame;
+Begin
+  if not Activated then exit;
+  (FActiveFrame as IManagerFrame).DeActivateFrame;
+  Activated := false;
+End;
 
 initialization
   {$I study_frame.lrs}
