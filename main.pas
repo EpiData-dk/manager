@@ -15,7 +15,26 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    MenuItem5: TMenuItem;
+    ShowShortCutsMenuItem: TMenuItem;
+    ImportStructureMenuItem: TMenuItem;
+    DataFormMenuItem: TMenuItem;
+    DataFormPropertiesMenuItem: TMenuItem;
+    DataformDivider1: TMenuItem;
+    AlignMenuItem: TMenuItem;
+    ClearDataFormMenuItem: TMenuItem;
+    StudyDivider1: TMenuItem;
+    AdminMenuItem: TMenuItem;
+    StudyPropertiesMenuItem: TMenuItem;
+    StudyMenuItem: TMenuItem;
+    PasteQESMenuItem: TMenuItem;
+    PasteStringMenuItem: TMenuItem;
+    PasteFloatMenuItem: TMenuItem;
+    PasteIntegerMenuItem: TMenuItem;
+    PasteLabelMenuItem: TMenuItem;
+    PasteDefaultMenuItem: TMenuItem;
+    SaveFileAsMenuItem: TMenuItem;
+    SaveFileMenuItem: TMenuItem;
+    OpenFileMenuItem: TMenuItem;
     ShortcutHelpAction: TAction;
     ChangeWorkDirAction: TAction;
     filedivider2: TMenuItem;
@@ -23,28 +42,27 @@ type
     editdivider1: TMenuItem;
     ChangeWorkDirMenuItem: TMenuItem;
     filedivider1: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem4: TMenuItem;
+    ShowWorkFlowMenuItem: TMenuItem;
+    WindowsDivider1: TMenuItem;
     CloseFormItem: TMenuItem;
     WindowsMenu: TMenuItem;
-    ToolsDivider1: TMenuItem;
     ShowWorkFlowAction: TAction;
-    MenuItem3: TMenuItem;
+    NewProjectMenuItem: TMenuItem;
     NewDataFormBtn: TToolButton;
     OpenToolBtn: TToolButton;
     PageControl2: TPageControl;
     StartEditorAction: TAction;
     Image6: TImage;
     Image7: TImage;
-    MenuItem1: TMenuItem;
+    EditorMenuItem: TMenuItem;
     ToolsMenu: TMenuItem;
-    NewDesignFormAction: TAction;
+    NewStudyAction: TAction;
     ClosePageAction: TAction;
     EditMenu: TMenuItem;
     HelpMenu: TMenuItem;
     shortIntroItem: TMenuItem;
     MaintenanceBtn: TBitBtn;
-    SettingsMenu: TMenuItem;
+    SettingsMenuItem: TMenuItem;
     SettingsAction: TAction;
     EditorBtn: TBitBtn;
     MetaDataBtn: TBitBtn;
@@ -59,11 +77,12 @@ type
     StatusBar1: TStatusBar;
     procedure ChangeWorkDirActionExecute(Sender: TObject);
     procedure ClosePageActionExecute(Sender: TObject);
+    procedure DataFormPropertiesMenuItemClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure MainFormMenuChange(Sender: TObject; Source: TMenuItem;
       Rebuild: Boolean);
-    procedure NewDesignFormActionExecute(Sender: TObject);
+    procedure NewStudyActionExecute(Sender: TObject);
     procedure PageControl1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure PageControl1PageChanged(Sender: TObject);
     procedure ShortcutHelpActionExecute(Sender: TObject);
@@ -115,7 +134,7 @@ uses
   epilog, settings, Clipbrd,
   InterfaceBase, LCLType, LCLIntf, editormain,
   workflow_frame, design_frame, managertypes,
-  study_frame;
+  study_frame, df_properties_form;
 
 
 { TMainForm }
@@ -203,6 +222,9 @@ begin
   PageControl1.OnCloseTabClicked := @CloseTab;
   ShowWorkFlowAction.Execute;
   MainFormMenuChange(nil, nil, true);
+
+  DragManager.DragImmediate := false;
+  DragManager.DragThreshold := 4;
 end;
 
 procedure TMainForm.MainFormMenuChange(Sender: TObject; Source: TMenuItem;
@@ -226,10 +248,10 @@ begin
 end;
 
 
-procedure TMainForm.NewDesignFormActionExecute(Sender: TObject);
+procedure TMainForm.NewStudyActionExecute(Sender: TObject);
 var
   TabSheet: TTabSheet;
-  SFrame: TStudyFrame;
+  Frame: TProjectFrame;
 begin
   //  ShowOnStatusBar('Add fields: Click toolbar or read files', 0);
   TabSheet := TTabSheet.Create(PageControl1);
@@ -244,25 +266,15 @@ begin
     PageControl1.ShowTabs := true;
 
 
-  SFrame := TStudyFrame.Create(TabSheet);
-  SFrame.Name := 'StudyFrame' + IntToStr(TabNameCount);
-  SFrame.Align := alClient;
-  SFrame.Parent := TabSheet;
-  FActiveFrame := SFrame;
-
-  PageControl1.ActivePage := TabSheet;
-
-  Inc(TabNameCount);
-
-{  Frame := TDesignFrame.Create(TabSheet);
-  Frame.Name := 'Frame' + IntToStr(TabNameCount);
+  Frame := TProjectFrame.Create(TabSheet);
+  Frame.Name := 'StudyFrame' + IntToStr(TabNameCount);
   Frame.Align := alClient;
   Frame.Parent := TabSheet;
   FActiveFrame := Frame;
 
   PageControl1.ActivePage := TabSheet;
 
-  Inc(TabNameCount);}
+  Inc(TabNameCount);
 end;
 
 procedure TMainForm.PageControl1Changing(Sender: TObject;
@@ -282,15 +294,11 @@ procedure TMainForm.PageControl1PageChanged(Sender: TObject);
 begin
   // Event happens after activepage is changed to new sheet.
   // - hence we call activate here
-  // On creating a new page this event is called before components are created,
-  // - hence component[0] does not yet exists. This does not matter since the
-  //   actionlist is created with state asNormal by default.
   if not Assigned(PageControl1.ActivePage.Components[0]) then
     Exit;
 
-  FActiveFrame := TFrame(PageControl1.ActivePage.Components[0]);
-
   // On all tabsheets component [0] is a TFrame that implements IManagerFrame.
+  FActiveFrame := TFrame(PageControl1.ActivePage.Components[0]);
   (FActiveFrame as IManagerFrame).ActivateFrame;
 end;
 
@@ -370,6 +378,19 @@ end;
 procedure TMainForm.ClosePageActionExecute(Sender: TObject);
 begin
   CloseTab(PageControl1.ActivePage);
+end;
+
+procedure TMainForm.DataFormPropertiesMenuItemClick(Sender: TObject);
+var
+  Frm: TDataFilePropertiesForm;
+begin
+  Frm := TDataFilePropertiesForm.Create(self);
+  Frm.Edit1.Text := TDesignFrame(TProjectFrame(ActiveFrame).ActiveFrame).DataFile.FileName;
+  if Frm.ShowModal <> mrOK then
+    exit;
+
+  TDesignFrame(TProjectFrame(ActiveFrame).ActiveFrame).DataFile.FileName := Frm.Edit1.Text;
+  Frm.Free;
 end;
 
 procedure TMainForm.ChangeWorkDirActionExecute(Sender: TObject);

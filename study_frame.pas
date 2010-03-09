@@ -6,33 +6,50 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, StdCtrls,
-  managertypes, Controls;
+  managertypes, Controls, Menus, ActnList, StdActns, epidocument, epidatatypes;
 
 type
 
-  { TStudyFrame }
+  { TProjectFrame }
 
-  TStudyFrame = class(TFrame, IManagerFrame)
-    Button1: TButton;
+  TProjectFrame = class(TFrame, IManagerFrame)
+    NewDataFormAction: TAction;
+    Bevel1: TBevel;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    OpenStudyAction: TAction;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
-    Splitter1: TSplitter;
     RelateTreeView: TTreeView;
-    Procedure Button1Click(Sender: TObject);
+    SaveStudyAsAction: TAction;
+    SaveStudyAction: TAction;
+    StudyActionList: TActionList;
+    StudyImageList: TImageList;
+    MenuItem1: TMenuItem;
+    Splitter1: TSplitter;
+    ToolBar1: TToolBar;
+    OpenProjectBtn: TToolButton;
+    StudyDivider1: TToolButton;
+    SaveProjectBtn: TToolButton;
+    SaveProjectAsBtn: TToolButton;
+    StudyDivider3: TToolButton;
+    NewDataformBtn: TToolButton;
+    procedure NewDataFormActionExecute(Sender: TObject);
+    Procedure OpenStudyActionExecute(Sender: TObject);
     procedure RelateTreeViewChanging(Sender: TObject; Node: TTreeNode;
       var AllowChange: Boolean);
-    procedure RelateTreeViewKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
     Procedure RelateTreeViewSelectionChanged(Sender: TObject);
+    procedure SaveStudyActionExecute(Sender: TObject);
+    procedure SaveStudyAsActionExecute(Sender: TObject);
   private
     { private declarations }
     FActiveFrame: TFrame;
     FActivated: boolean;
     FrameCount: integer;
+    FEpiDocument: TEpiDocument;
+    procedure OnDatafileChange(Sender: TObject; EventType: TEpiDataFileChangeEventType; Data: Pointer);
   protected
     property Activated: boolean read FActivated write FActivated;
   public
@@ -41,16 +58,30 @@ type
     destructor Destroy; override;
     procedure  ActivateFrame;
     procedure  DeActivateFrame;
+    property   EpiDocument: TEpiDocument read FEpiDocument;
+    property   ActiveFrame: TFrame read FActiveFrame;
   end; 
 
 implementation
 
 uses
-  design_frame;
+  design_frame, epidatafile;
 
-{ TStudyFrame }
 
-procedure TStudyFrame.RelateTreeViewChanging(Sender: TObject; Node: TTreeNode;
+type
+
+  { TEpiDataFileEx }
+
+  TEpiDataFileEx = class(TEpiDataFile)
+  private
+    FTreeNode: TTreeNode;
+  public
+    property TreeNode: TTreeNode read FTreeNode write FTreeNode;
+  end;
+
+{ TProjectFrame }
+
+procedure TProjectFrame.RelateTreeViewChanging(Sender: TObject; Node: TTreeNode;
   var AllowChange: Boolean);
 begin
   if csDestroying in ComponentState then exit;
@@ -64,13 +95,7 @@ begin
   FActiveFrame.Align := alNone;
 end;
 
-procedure TStudyFrame.RelateTreeViewKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  //
-end;
-
-Procedure TStudyFrame.RelateTreeViewSelectionChanged(Sender: TObject);
+Procedure TProjectFrame.RelateTreeViewSelectionChanged(Sender: TObject);
 Begin
   if csDestroying in ComponentState then exit;
 
@@ -82,47 +107,79 @@ Begin
   (FActiveFrame as IManagerFrame).ActivateFrame;
 end;
 
-Procedure TStudyFrame.Button1Click(Sender: TObject);
-Var
-  DFrame: TDesignFrame;
-Begin
-  inc(FrameCount);
-
-  DFrame := TDesignFrame.Create(Self);
-  DFrame.Name := 'Frame' + IntToStr(FrameCount);
-  DFrame.Align := alClient;
-  RelateTreeView.Selected := RelateTreeView.Items.AddObject(nil, DFrame.Name, DFrame);
+procedure TProjectFrame.SaveStudyActionExecute(Sender: TObject);
+begin
+  //
 end;
 
-constructor TStudyFrame.Create(AOwner: TComponent);
+procedure TProjectFrame.SaveStudyAsActionExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TProjectFrame.OnDatafileChange(Sender: TObject;
+  EventType: TEpiDataFileChangeEventType; Data: Pointer);
+begin
+  case EventType of
+    dceName:
+      begin
+        TEpiDataFileEx(Sender).TreeNode.Text := TEpiDataFileEx(Sender).FileName;
+      end;
+  end;
+end;
+
+procedure TProjectFrame.NewDataFormActionExecute(Sender: TObject);
+Var
+  Frame: TDesignFrame;
+  Df: TEpiDataFileEx;
+begin
+  inc(FrameCount);
+
+  Df := TEpiDataFileEx.Create;
+  DF.RegisterOnChangeHook(@OnDatafileChange);
+  EpiDocument.DataFiles.Add(Df);
+
+  Frame := TDesignFrame.Create(Self, Df);
+  Frame.Name := 'Frame' + IntToStr(FrameCount);
+  Frame.Align := alClient;
+  RelateTreeView.Selected := RelateTreeView.Items.AddObject(nil, Frame.Name, Frame);
+  Df.TreeNode := RelateTreeView.Selected;
+end;
+
+Procedure TProjectFrame.OpenStudyActionExecute(Sender: TObject);
+Begin
+  //
+end;
+
+constructor TProjectFrame.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FrameCount := 0;
   FActiveFrame := nil;
   Activated := true;
 
+  FEpiDocument := TEpiDocument.Create;
+
   {$IFDEF EPI_DEBUG}
   Panel2.Visible := true;
   {$ELSE EPI_DEBUG}
   Panel2.Visible := false;
   {$ENDIF}
-
-  Button1.Click;
 end;
 
-destructor TStudyFrame.Destroy;
+destructor TProjectFrame.Destroy;
 begin
   inherited Destroy;
 end;
 
-Procedure TStudyFrame.ActivateFrame;
+Procedure TProjectFrame.ActivateFrame;
 Begin
   if Activated then exit;
   (FActiveFrame as IManagerFrame).ActivateFrame;
   Activated := true;
 End;
 
-Procedure TStudyFrame.DeActivateFrame;
+Procedure TProjectFrame.DeActivateFrame;
 Begin
   if not Activated then exit;
   (FActiveFrame as IManagerFrame).DeActivateFrame;

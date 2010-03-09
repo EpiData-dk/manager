@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 606
+  Left = 425
   Height = 753
-  Top = 292
+  Top = 269
   Width = 1070
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
@@ -28,7 +28,7 @@ object MainForm: TMainForm
       Height = 28
       Top = 8
       Width = 144
-      Action = NewDesignFormAction
+      Action = NewStudyAction
       Caption = '&1 Design Data'
       Font.CharSet = 4
       Font.Height = -13
@@ -223,7 +223,7 @@ object MainForm: TMainForm
     object NewDataFormBtn: TToolButton
       Left = 29
       Top = 1
-      Action = NewDesignFormAction
+      Action = NewStudyAction
     end
   end
   object StatusBar1: TStatusBar
@@ -280,12 +280,24 @@ object MainForm: TMainForm
       object filedivider1: TMenuItem
         Caption = '-'
       end
-      object MenuItem3: TMenuItem
-        Action = NewDesignFormAction
-        OnClick = NewDesignFormActionExecute
+      object NewProjectMenuItem: TMenuItem
+        Action = NewStudyAction
+        OnClick = NewStudyActionExecute
       end
       object filedivider2: TMenuItem
         Caption = '-'
+      end
+      object OpenFileMenuItem: TMenuItem
+        Caption = 'Open File'
+      end
+      object SaveFileMenuItem: TMenuItem
+        Caption = 'Save'
+      end
+      object SaveFileAsMenuItem: TMenuItem
+        Caption = 'Save As...'
+      end
+      object ImportStructureMenuItem: TMenuItem
+        Caption = 'Import Structure'
       end
       object CloseFormItem: TMenuItem
         Action = ClosePageAction
@@ -300,30 +312,73 @@ object MainForm: TMainForm
     end
     object EditMenu: TMenuItem
       Caption = '&Edit'
+      object PasteDefaultMenuItem: TMenuItem
+        Caption = 'Paste as Default'
+      end
+      object PasteLabelMenuItem: TMenuItem
+        Caption = 'Paste As Label'
+      end
+      object PasteIntegerMenuItem: TMenuItem
+        Caption = 'Paste As Integer'
+      end
+      object PasteFloatMenuItem: TMenuItem
+        Caption = 'Paste As Float'
+      end
+      object PasteStringMenuItem: TMenuItem
+        Caption = 'Paste As String'
+      end
+      object PasteQESMenuItem: TMenuItem
+        Caption = 'Paste As QES'
+      end
       object editdivider1: TMenuItem
         Caption = '-'
       end
-      object SettingsMenu: TMenuItem
+      object SettingsMenuItem: TMenuItem
         Action = SettingsAction
         OnClick = SettingsActionExecute
       end
     end
-    object ToolsMenu: TMenuItem
-      Caption = '&Tools'
-      object ToolsDivider1: TMenuItem
+    object StudyMenuItem: TMenuItem
+      Caption = 'Study'
+      object AdminMenuItem: TMenuItem
+        Caption = 'Admin'
+      end
+      object StudyDivider1: TMenuItem
         Caption = '-'
       end
-      object MenuItem1: TMenuItem
+      object StudyPropertiesMenuItem: TMenuItem
+        Caption = 'Properties'
+      end
+    end
+    object DataFormMenuItem: TMenuItem
+      Caption = 'Dataform'
+      object AlignMenuItem: TMenuItem
+        Caption = 'Align Fields'
+      end
+      object ClearDataFormMenuItem: TMenuItem
+        Caption = 'Clear Dataform'
+      end
+      object DataformDivider1: TMenuItem
+        Caption = '-'
+      end
+      object DataFormPropertiesMenuItem: TMenuItem
+        Caption = 'Properties'
+        OnClick = DataFormPropertiesMenuItemClick
+      end
+    end
+    object ToolsMenu: TMenuItem
+      Caption = '&Tools'
+      object EditorMenuItem: TMenuItem
         Action = StartEditorAction
         OnClick = StartEditorActionExecute
       end
     end
     object WindowsMenu: TMenuItem
       Caption = '&Windows'
-      object MenuItem4: TMenuItem
+      object WindowsDivider1: TMenuItem
         Caption = '-'
       end
-      object MenuItem2: TMenuItem
+      object ShowWorkFlowMenuItem: TMenuItem
         Action = ShowWorkFlowAction
         OnClick = ShowWorkFlowActionExecute
       end
@@ -334,7 +389,7 @@ object MainForm: TMainForm
         Caption = 'Short introduction'
         OnClick = shortIntroItemClick
       end
-      object MenuItem5: TMenuItem
+      object ShowShortCutsMenuItem: TMenuItem
         Action = ShortcutHelpAction
         OnClick = ShortcutHelpActionExecute
       end
@@ -365,11 +420,11 @@ object MainForm: TMainForm
       )
       ShortCut = 16499
     end
-    object NewDesignFormAction: TAction
-      Caption = 'New Design Form'
-      Hint = 'New Design Form'
+    object NewStudyAction: TAction
+      Caption = 'New Project'
+      Hint = 'Create New Study Project'
       ImageIndex = 20
-      OnExecute = NewDesignFormActionExecute
+      OnExecute = NewStudyActionExecute
       ShortCut = 16462
     end
     object StartEditorAction: TAction

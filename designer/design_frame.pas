@@ -51,7 +51,6 @@ type
     DocumentFileAction: TAction;
     AlignAction: TAction;
     NewDMYFieldMenu: TMenuItem;
-    NewDataFormBtn: TToolButton;
     DateFieldPopupMenu: TPopupMenu;
     DesignerPopup: TPopupMenu;
     SaveFileAsAction: TAction;
@@ -86,7 +85,6 @@ type
     SelectorButton: TToolButton;
     FloatFieldBtn: TToolButton;
     ClearToolBtn: TToolButton;
-    SaveToolBtn: TToolButton;
     FontSelectBtn: TToolButton;
     ToolButton1: TToolButton;
     ToolButton11: TToolButton;
@@ -101,7 +99,6 @@ type
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
     ToolButton6: TToolButton;
-    ToolButton7: TToolButton;
     procedure AlignActionExecute(Sender: TObject);
     procedure St(Sender: TObject);
     procedure DeleteFieldActionExecute(Sender: TObject);
@@ -137,9 +134,8 @@ type
     procedure ToolBtnClick(Sender: TObject);
   private
     { private declarations }
-    UntitledName: string;
     ActiveButton: TToolButton;
-    FActiveDatafile: TEpiDataFile;
+    FDatafile: TEpiDataFile;
     FActiveDocumentationForm: TDatafileDocumentationForm;
     FComponentXTree: TFieldAVLTree;
     FComponentYTree: TFieldAVLTree;
@@ -198,14 +194,14 @@ type
       read FActiveDocumentationForm write FActiveDocumentationForm;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent); override;
+    constructor Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
     destructor Destroy; override;
     procedure ActivateFrame;
     procedure DeActivateFrame;
     procedure UpdateAllFields;
     procedure UpdateNonInteractiveVisuals;
     procedure PasteAsField(FieldType: TFieldType);
-    property  ActiveDataFile: TEpiDataFile read FActiveDataFile;
+    property  DataFile: TEpiDataFile read FDatafile;
     property  Modified: Boolean read FModified write SetModified;
     property  DesignerBox: TScrollBox read FDesignerBox;
   end;
@@ -419,24 +415,24 @@ begin
     s := '*';
 
 //  MainForm.PageControl1.ActivePage.Caption := S +
-//    ExtractFileName(ActiveDataFile.FileName);
+//    ExtractFileName(DataFile.FileName);
 
-  if ActiveDatafile.DatafileType <> dftNone then
+  if DataFile.DatafileType <> dftNone then
     MainForm.PageControl1.Hint :=
-      ExpandFileNameUTF8(ActiveDataFile.FileName);
+      ExpandFileNameUTF8(DataFile.FileName);
 
   MainForm.PageControl1.ShowHint := true;
 
   ShowOnMainStatusBar(
     Format(
       'Fields: %d - %d',
-      [ActiveDatafile.FieldCount, ActiveDatafile.TextLabelCount]
+      [DataFile.FieldCount, DataFile.TextLabelCount]
     ), 1
   );
   ShowOnMainStatusBar(
     Format(
       'Records: %d',
-      [ActiveDatafile.Size]
+      [DataFile.Size]
     ), 2
   );
   ShowOnMainStatusBar('', 3);
@@ -458,14 +454,14 @@ begin
       if Trim(Cbl[i]) = '' then continue;
 
       Pt := FindNewAutoControlPostion(TFieldEdit);
-      TmpField := TEpiField.CreateField(FieldType, ActiveDataFile.Size);
+      TmpField := TEpiField.CreateField(FieldType, DataFile.Size);
       with TmpField do
       begin
         case ManagerSettings.FieldNamingStyle of
           fnFirstWord: FieldName := FirstWord(Cbl[i]);
           fnAuto:      FieldName := AutoFieldName(Cbl[i]);
         end;
-        FieldName := ActiveDataFile.CreateUniqueFieldName(FieldName);
+        FieldName := DataFile.CreateUniqueFieldName(FieldName);
         VariableLabel := Trim(Cbl[i]);
         FieldLeft := Pt.X;
         FieldTop := Pt.Y;
@@ -479,7 +475,7 @@ begin
           ftString:  FieldLength := ManagerSettings.StringFieldLength;
         end;
       end;
-      ActiveDatafile.AddField(TmpField);
+      DataFile.AddField(TmpField);
       NewFieldEdit(TmpField);
     end;
 
@@ -958,19 +954,16 @@ begin
   end;
 end;
 
-constructor TDesignFrame.Create(TheOwner: TComponent);
+constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
 begin
   inherited Create(TheOwner);
   ActiveButton := SelectorButton;
-  UntitledName := TTabSheet(TheOwner).Caption;
-  FActiveDatafile := TEpiDataFile.Create();
-  FActiveDatafile.FileName := UntitledName;
-  FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
-  FActiveDatafile.OnPassword := @DoPassword;
+  FDatafile := ADataFile;
+  FDatafile.RegisterOnChangeHook(@DataFileChange);
+  FDatafile.OnPassword := @DoPassword;
   FActiveDocumentationForm := nil;
   SelectedControl := nil;
   Modified := false;
-  NewDataFormBtn.OnClick := @TStudyFrame(TheOwner).Button1Click;
 
   FComponentYTree := NewCompTree(attY, @YCmp);
   FComponentXTree := NewCompTree(attX, @XCmp);
@@ -1011,8 +1004,8 @@ begin
   // THIS INHERITIED MUST NOT!!! BE PLACED BELOW DESTROYING DATAFRAME.
   // IT WILL MESS WITH TFIELDEDIT/TFIELDLABEL COMPONENTS.
   inherited Destroy;
-  if Assigned(FActiveDatafile) then
-    FreeAndNil(FActiveDatafile);
+  if Assigned(FDatafile) then
+    FreeAndNil(FDatafile);
   FreeAndNil(FComponentYTree);
   FreeAndNil(FComponentXTree);
 end;
@@ -1028,7 +1021,7 @@ begin
 
   UpdateNonInteractiveVisuals;
 
-  // Update Main Menu on MainForm.
+{  // Update Main Menu on MainForm.
   Section := MMFile + MMFileRW;
   MainForm.AddToMenu(OpenFileAction,   Section + 0);
   MainForm.AddToMenu(SaveFileAction,   Section + 1);
@@ -1045,7 +1038,7 @@ begin
 
   Section := MMTools + MMToolsTop;
   MainForm.AddToMenu(AlignAction,      Section + 0);
-  MainForm.AddToMenu(ClearAllAction,   Section + 1);
+  MainForm.AddToMenu(ClearAllAction,   Section + 1);      }
 end;
 
 procedure TDesignFrame.DeActivateFrame;
@@ -1056,7 +1049,7 @@ begin
 
 //  DesignerBox.DockSite := false;
 
-  Section := MMFile + MMFileRW;
+{  Section := MMFile + MMFileRW;
   MainForm.RemoveFromMenu(Section + 3);
   MainForm.RemoveFromMenu(Section + 2);
   MainForm.RemoveFromMenu(Section + 1);
@@ -1072,7 +1065,7 @@ begin
 
   Section := MMTools + MMToolsTop;
   MainForm.RemoveFromMenu(Section + 1);
-  MainForm.RemoveFromMenu(Section + 0);
+  MainForm.RemoveFromMenu(Section + 0);    }
 end;
 
 procedure TDesignFrame.UpdateAllFields;
@@ -1164,7 +1157,7 @@ begin
   if (SelectedControl is TFieldEdit) then
   With TFieldEdit(SelectedControl) do
   begin
-    FieldForm := TFieldCreateForm.Create(DesignerBox, ActiveDatafile, Field.FieldType, false);
+    FieldForm := TFieldCreateForm.Create(DesignerBox, DataFile, Field.FieldType, false);
     FieldForm.Left := Min(Pt.X, Screen.Width - FieldForm.Width - 5);
     FieldForm.Top  := Min(Pt.Y, Screen.Height - FieldForm.Height - 5);
     FieldForm.ReadField(Field);
@@ -1175,7 +1168,7 @@ begin
   end else
   With TFieldLabel(SelectedControl) do
   begin
-    LabelForm := TCreateLabelForm.Create(DesignerBox, ActiveDatafile);
+    LabelForm := TCreateLabelForm.Create(DesignerBox, DataFile);
     LabelForm.Left := Min(Pt.X, Screen.Width - LabelForm.Width - 5);
     LabelForm.Top  := Min(Pt.Y, Screen.Height - LabelForm.Height - 5);
     LabelForm.LabelEdit.Text := TextLabel.Text;
@@ -1215,7 +1208,7 @@ begin
 
     if ActiveButton = LabelFieldBtn then
     begin
-      CreateForm := TCreateLabelForm.Create(DesignerBox, ActiveDataFile);
+      CreateForm := TCreateLabelForm.Create(DesignerBox, DataFile);
       CreateForm.Top := Min(Pt.Y, Screen.Height - CreateForm.Height - 5);
       CreateForm.Left := Min(Pt.X, Screen.Width - CreateForm.Width - 5);
       if CreateForm.ShowModal = mrCancel then
@@ -1226,17 +1219,17 @@ begin
       TmpTextLabel := TEpiTextLabel.Create(nil);
       with TmpTextLabel do
       begin
-        Id := TCreateLabelForm.GetFieldName(ActiveDataFile);
+        Id := TCreateLabelForm.GetFieldName(DataFile);
         Text := TCreateLabelForm(CreateForm).LabelEdit.Text;
         TextLeft := X;
         TextTop := Y;
       end;
-      ActiveDatafile.AddTextLabel(TmpTextLabel);
+      DataFile.AddTextLabel(TmpTextLabel);
       NewQuestionLabel(TmpTextLabel);
     end else begin
       if not (ssShift in Shift) then
       begin
-        CreateForm := TFieldCreateForm.Create(DesignerBox, ActiveDatafile, TFieldType(ActiveButton.Tag));
+        CreateForm := TFieldCreateForm.Create(DesignerBox, DataFile, TFieldType(ActiveButton.Tag));
         CreateForm.Top := Min(Pt.Y, Screen.Height - CreateForm.Height - 5);
         CreateForm.Left := Min(Pt.X, Screen.Width - CreateForm.Width - 5);
         if CreateForm.ShowModal = mrCancel then
@@ -1246,9 +1239,9 @@ begin
         end;
       end;
 
-      TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), ActiveDataFile.Size);
+      TmpField := TEpiField.CreateField(TFieldType(ActiveButton.Tag), DataFile.Size);
       if (ssShift in Shift) then
-        TFieldCreateForm.AutoCreateField(ActiveDataFile, TmpField)
+        TFieldCreateForm.AutoCreateField(DataFile, TmpField)
       else with TmpField do
       begin
         FieldName       := TFieldCreateForm(CreateForm).FieldNameEdit.Text;
@@ -1263,7 +1256,7 @@ begin
       TmpField.FieldLeft := X;
       TmpField.FieldTop := Y;
 
-      ActiveDatafile.AddField(TmpField);
+      DataFile.AddField(TmpField);
 
       NewFieldEdit(TmpField);
     end;
@@ -1435,9 +1428,9 @@ end;
 
 procedure TDesignFrame.DocumentFileActionExecute(Sender: TObject);
 begin
-  ActiveDataFile.SortFields(@SortFields);
+  DataFile.SortFields(@SortFields);
   if not Assigned(FActiveDocumentationForm) then
-    FActiveDocumentationForm := TDatafileDocumentationForm.Create(Self, ActiveDataFile);
+    FActiveDocumentationForm := TDatafileDocumentationForm.Create(Self, DataFile);
   ActiveDocumentationForm.Show;
 end;
 
@@ -1448,7 +1441,7 @@ var
   i: Integer;
 begin
   Field := nil;
-  ActiveDataFile.BeginUpdate;
+  DataFile.BeginUpdate;
   with DesignerBox do
   begin
     for i := ControlCount - 1 downto  0 do
@@ -1464,14 +1457,13 @@ begin
       FreeAndNil(Comp);
     end;
   end;
-  ActiveDataFile.Reset;
-  ActiveDataFile.RegisterOnChangeHook(@DataFileChange);
-  ActiveDatafile.OnPassword := @DoPassword;
+  DataFile.Reset;
+  DataFile.RegisterOnChangeHook(@DataFileChange);
+  DataFile.OnPassword := @DoPassword;
   // Handle in case there is an open documentation form.
   if Assigned(ActiveDocumentationForm) then
-    ActiveDocumentationForm.Datafile := ActiveDataFile;
-  ActiveDataFile.FileName := UntitledName;
-  ActiveDataFile.EndUpdate;  // Forced updatenonvisual due to registered hook.
+    ActiveDocumentationForm.Datafile := DataFile;
+  DataFile.EndUpdate;  // Forced updatenonvisual due to registered hook.
 
   SelectedControl := nil;
 
@@ -1557,7 +1549,7 @@ begin
     TmpField := (TmpCtrl as TFieldEdit).Field;
 
   {$IFNDEF EPI_DEBUG}
-  if (Assigned(TmpField) and (TmpField.Size > 0) and
+  if (Assigned(TmpField)) and (TmpField.Size > 0) and
      (MessageDlg('Warning', 'Field contains data.' + LineEnding +
       'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
     exit;
@@ -1568,7 +1560,7 @@ begin
   ComponentYTree.Remove(TmpCtrl);
   ComponentXTree.Remove(TmpCtrl);
   FreeAndNil(TmpCtrl);
-  ActiveDatafile.RemoveField(TmpField, true);
+  DataFile.RemoveField(TmpField, true);
   if not Assigned(Node) then
     Node := ComponentYTree.FindLowest;
   if Assigned(Node) then
@@ -1662,7 +1654,7 @@ procedure TDesignFrame.DoPassword(Sender: TObject;
 var
  TmpStr: string;
 begin
-  if ActiveDataFile.Password <> '' then exit;
+  if DataFile.Password <> '' then exit;
 
   if RequestType = rpCreate then
   begin
@@ -1731,7 +1723,7 @@ var
   TmpCtrl: TControl;
 begin
   {$IFNDEF EPI_DEBUG}
-  if (ActiveDatafile.NumFields > 0) and
+  if (DataFile.FieldCount > 0) and
      (MessageDlg('Dataform was not saved.' + LineEnding + 'Close Form?', mtWarning, mbYesNo, 0) = mrNo) then
     exit;
   {$ENDIF}
@@ -1746,7 +1738,7 @@ begin
   begin
     ClearToolBtn.Click;
 
-    FActiveDatafile.RegisterOnChangeHook(@DataFileReadEvent);
+    FDatafile.RegisterOnChangeHook(@DataFileReadEvent);
 
     Fn                     := Dlg.FileName;
     Import                 := TEpiImportExport.Create;
@@ -1754,18 +1746,18 @@ begin
     Import.OnClipBoardRead := @MainForm.ReadClipBoard;
     Import.OnPassword      := @DoPassword;
     Import.FieldNaming     := ManagerSettings.FieldNamingStyle;
-    Import.Import(Fn, FActiveDatafile, dftNone);
+    Import.Import(Fn, FDatafile, dftNone);
     FreeAndNil(Import);
 
-    FActiveDatafile.UnRegisterOnChangeHook(@DataFileReadEvent);
-    FActiveDatafile.RegisterOnChangeHook(@DataFileChange);
+    FDatafile.UnRegisterOnChangeHook(@DataFileReadEvent);
+    FDatafile.RegisterOnChangeHook(@DataFileChange);
 
     TmpCtrl := TControl(ComponentYTree.FindLowest.Data);
     EnterSelectControl(TmpCtrl);
 
     UpdateNonInteractiveVisuals;
 
-    if ActiveDatafile.DatafileType <> dftEpiDataXml then
+    if DataFile.DatafileType <> dftEpiDataXml then
       LabelsAlignment(TControl(TmpCtrl), Nil, alLeft);
 
 //    Button1Click(nil);
@@ -1813,12 +1805,12 @@ begin
       TmpLabel := TEpiTextLabel.Create(nil);
       with TmpLabel do
       begin
-        Id := TCreateLabelForm.GetFieldName(ActiveDataFile);
+        Id := TCreateLabelForm.GetFieldName(DataFile);
         Text := Trim(Cbl[i]);
         TextLeft := Pt.X;
         TextTop := Pt.Y;
       end;
-      ActiveDatafile.AddTextLabel(TmpLabel);
+      DataFile.AddTextLabel(TmpLabel);
       NewQuestionLabel(TmpLabel);
     end;
 
@@ -1837,14 +1829,14 @@ end;
 
 procedure TDesignFrame.SaveFileActionExecute(Sender: TObject);
 begin
-  if ActiveDataFile.DatafileType <> dftEpiDataXml then
+  if DataFile.DatafileType <> dftEpiDataXml then
   begin
     SaveFileAsAction.Execute;
     Exit;
   end;
 
-  ActiveDataFile.SortFields(@SortFields);
-  ActiveDataFile.Save(ActiveDataFile.FileName, []);
+  DataFile.SortFields(@SortFields);
+  DataFile.Save(DataFile.FileName, []);
   Modified := false;
 end;
 
@@ -1868,8 +1860,8 @@ begin
 
       BackupFile(Fn);
 
-      ActiveDataFile.SortFields(@SortFields);
-      ActiveDatafile.Save(Fn, []);
+      DataFile.SortFields(@SortFields);
+      DataFile.Save(Fn, []);
 
       Modified := false;
 

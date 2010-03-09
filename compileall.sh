@@ -114,25 +114,25 @@ compile() {
 }
 
 get_version_info() {
-  V1=`cat epidatamanager.lpi | grep CurrentVersionNr | cut -c 32-32`
+  V1=`cat epidatamanager.lpi | grep MajorVersionNr | cut -c 30-30`
   if [ -z $V1 ]
   then
     V1="0"
   fi
 
-  V2=`cat epidatamanager.lpi | grep CurrentMajorRevNr | cut -c 33-33`
+  V2=`cat epidatamanager.lpi | grep MinorVersionNr | cut -c 30-30`
   if [ -z $V2 ]
   then
     V2="0"
   fi
 
-  V3=`cat epidatamanager.lpi | grep CurrentMinorRevNr | cut -c 33-33`
+  V3=`cat epidatamanager.lpi | grep RevisionNr | cut -c 26-26`
   if [ -z $V3 ]
   then
     V3="0"
   fi
 
-  V4=`cat epidatamanager.lpi | grep CurrentBuildNr | cut -c 30-30`
+  V4=`cat epidatamanager.lpi | grep BuildNr | cut -c 23-23`
   if [ -z $V4 ]
   then
     V4="0"
