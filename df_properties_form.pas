@@ -23,9 +23,6 @@ type
     { public declarations }
   end; 
 
-var
-  DataFilePropertiesForm: TDataFilePropertiesForm;
-
 implementation
 
 initialization

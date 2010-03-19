@@ -49,7 +49,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="16">
+    <Units Count="17">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -159,6 +159,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="df_properties_form"/>
       </Unit15>
+      <Unit16>
+        <Filename Value="study_properties_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="StudyPropertiesForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="study_properties_form"/>
+      </Unit16>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -197,7 +204,7 @@
       </Options>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG1"/>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

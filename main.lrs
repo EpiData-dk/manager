@@ -1,7 +1,7 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TMainForm','FORMDATA',[
-  'TPF0'#9'TMainForm'#8'MainForm'#4'Left'#3#169#1#6'Height'#3#241#2#3'Top'#3#13
+  'TPF0'#9'TMainForm'#8'MainForm'#4'Left'#3#203#1#6'Height'#3#241#2#3'Top'#3#21
   +#1#5'Width'#3'.'#4#13'ActiveControl'#7#13'ProgressPanel'#7'Caption'#6'!EpiDa'
   +'ta Project and Data Manager '#12'ClientHeight'#3#216#2#11'ClientWidth'#3'.'
   +#4#4'Menu'#7#12'MainFormMenu'#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCrea'
@@ -203,37 +203,37 @@ LazarusResources.Add('TMainForm','FORMDATA',[
   +'nClick'#7#21'SettingsActionExecute'#0#0#0#9'TMenuItem'#13'StudyMenuItem'#7
   +'Caption'#6#5'Study'#0#9'TMenuItem'#13'AdminMenuItem'#7'Caption'#6#5'Admin'#0
   +#0#9'TMenuItem'#13'StudyDivider1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#23'Stud'
-  +'yPropertiesMenuItem'#7'Caption'#6#10'Properties'#0#0#0#9'TMenuItem'#16'Data'
-  +'FormMenuItem'#7'Caption'#6#8'Dataform'#0#9'TMenuItem'#13'AlignMenuItem'#7'C'
-  +'aption'#6#12'Align Fields'#0#0#9'TMenuItem'#21'ClearDataFormMenuItem'#7'Cap'
-  +'tion'#6#14'Clear Dataform'#0#0#9'TMenuItem'#16'DataformDivider1'#7'Caption'
-  +#6#1'-'#0#0#9'TMenuItem'#26'DataFormPropertiesMenuItem'#7'Caption'#6#10'Prop'
-  +'erties'#7'OnClick'#7#31'DataFormPropertiesMenuItemClick'#0#0#0#9'TMenuItem'
-  +#9'ToolsMenu'#7'Caption'#6#6'&Tools'#0#9'TMenuItem'#14'EditorMenuItem'#6'Act'
-  +'ion'#7#17'StartEditorAction'#7'OnClick'#7#24'StartEditorActionExecute'#0#0#0
-  +#9'TMenuItem'#11'WindowsMenu'#7'Caption'#6#8'&Windows'#0#9'TMenuItem'#15'Win'
-  +'dowsDivider1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#20'ShowWorkFlowMenuItem'#6
-  +'Action'#7#18'ShowWorkFlowAction'#7'OnClick'#7#25'ShowWorkFlowActionExecute'
-  +#0#0#0#9'TMenuItem'#8'HelpMenu'#7'Caption'#6#5'&Help'#0#9'TMenuItem'#14'shor'
-  +'tIntroItem'#7'Caption'#6#18'Short introduction'#7'OnClick'#7#19'shortIntroI'
-  +'temClick'#0#0#9'TMenuItem'#21'ShowShortCutsMenuItem'#6'Action'#7#18'Shortcu'
-  +'tHelpAction'#7'OnClick'#7#25'ShortcutHelpActionExecute'#0#0#0#0#11'TActionL'
-  +'ist'#18'MainFormActionList'#6'Images'#7'!DesignFrame.FieldToolBarImageList'
-  +#4'left'#3'`'#2#3'top'#3'x'#1#0#9'TFileExit'#10'ExitAction'#8'Category'#6#4
-  +'File'#7'Caption'#6#5'E&xit'#4'Hint'#6#4'Exit'#8'ShortCut'#2'{'#0#0#7'TActio'
-  +'n'#14'SettingsAction'#8'Category'#6#4'Edit'#7'Caption'#6#9'&Settings'#9'OnE'
-  +'xecute'#7#21'SettingsActionExecute'#8'ShortCut'#4'S'#128#0#0#0#0#7'TAction'
-  +#15'ClosePageAction'#8'Category'#6#4'File'#7'Caption'#6#10'Close Form'#9'OnE'
-  +'xecute'#7#22'ClosePageActionExecute'#26'SecondaryShortCuts.Strings'#1#6#6'C'
-  +'TRL+W'#0#8'ShortCut'#3's@'#0#0#7'TAction'#14'NewStudyAction'#7'Caption'#6#11
-  +'New Project'#4'Hint'#6#24'Create New Study Project'#10'ImageIndex'#2#20#9'O'
-  +'nExecute'#7#21'NewStudyActionExecute'#8'ShortCut'#3'N@'#0#0#7'TAction'#17'S'
-  +'tartEditorAction'#8'Category'#6#5'Tools'#7'Caption'#6#7'E&ditor'#9'OnExecut'
-  +'e'#7#24'StartEditorActionExecute'#8'ShortCut'#2'z'#0#0#7'TAction'#18'ShowWo'
-  +'rkFlowAction'#8'Category'#6#5'Tools'#7'Caption'#6#14'Show Work Flow'#9'OnEx'
-  +'ecute'#7#25'ShowWorkFlowActionExecute'#0#0#7'TAction'#19'ChangeWorkDirActio'
-  +'n'#8'Category'#6#4'File'#7'Caption'#6#25'C&hange Working Directory'#9'OnExe'
-  +'cute'#7#26'ChangeWorkDirActionExecute'#0#0#7'TAction'#18'ShortcutHelpAction'
-  +#8'Category'#6#4'Help'#7'Caption'#6#14'Show Shortcuts'#9'OnExecute'#7#25'Sho'
-  +'rtcutHelpActionExecute'#0#0#0#0
+  +'yPropertiesMenuItem'#7'Caption'#6#10'Properties'#7'OnClick'#7#28'StudyPrope'
+  +'rtiesMenuItemClick'#0#0#0#9'TMenuItem'#16'DataFormMenuItem'#7'Caption'#6#8
+  +'Dataform'#0#9'TMenuItem'#13'AlignMenuItem'#7'Caption'#6#12'Align Fields'#0#0
+  +#9'TMenuItem'#21'ClearDataFormMenuItem'#7'Caption'#6#14'Clear Dataform'#0#0#9
+  +'TMenuItem'#16'DataformDivider1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#26'DataF'
+  +'ormPropertiesMenuItem'#7'Caption'#6#10'Properties'#7'OnClick'#7#31'DataForm'
+  +'PropertiesMenuItemClick'#0#0#0#9'TMenuItem'#9'ToolsMenu'#7'Caption'#6#6'&To'
+  +'ols'#0#9'TMenuItem'#14'EditorMenuItem'#6'Action'#7#17'StartEditorAction'#7
+  +'OnClick'#7#24'StartEditorActionExecute'#0#0#0#9'TMenuItem'#11'WindowsMenu'#7
+  +'Caption'#6#8'&Windows'#0#9'TMenuItem'#15'WindowsDivider1'#7'Caption'#6#1'-'
+  +#0#0#9'TMenuItem'#20'ShowWorkFlowMenuItem'#6'Action'#7#18'ShowWorkFlowAction'
+  +#7'OnClick'#7#25'ShowWorkFlowActionExecute'#0#0#0#9'TMenuItem'#8'HelpMenu'#7
+  +'Caption'#6#5'&Help'#0#9'TMenuItem'#14'shortIntroItem'#7'Caption'#6#18'Short'
+  +' introduction'#7'OnClick'#7#19'shortIntroItemClick'#0#0#9'TMenuItem'#21'Sho'
+  +'wShortCutsMenuItem'#6'Action'#7#18'ShortcutHelpAction'#7'OnClick'#7#25'Shor'
+  +'tcutHelpActionExecute'#0#0#0#0#11'TActionList'#18'MainFormActionList'#6'Ima'
+  +'ges'#7'!DesignFrame.FieldToolBarImageList'#4'left'#3'`'#2#3'top'#3'x'#1#0#9
+  +'TFileExit'#10'ExitAction'#8'Category'#6#4'File'#7'Caption'#6#5'E&xit'#4'Hin'
+  +'t'#6#4'Exit'#8'ShortCut'#2'{'#0#0#7'TAction'#14'SettingsAction'#8'Category'
+  +#6#4'Edit'#7'Caption'#6#9'&Settings'#9'OnExecute'#7#21'SettingsActionExecute'
+  +#8'ShortCut'#4'S'#128#0#0#0#0#7'TAction'#15'ClosePageAction'#8'Category'#6#4
+  +'File'#7'Caption'#6#10'Close Form'#9'OnExecute'#7#22'ClosePageActionExecute'
+  +#26'SecondaryShortCuts.Strings'#1#6#6'CTRL+W'#0#8'ShortCut'#3's@'#0#0#7'TAct'
+  +'ion'#14'NewStudyAction'#7'Caption'#6#11'New Project'#4'Hint'#6#24'Create Ne'
+  +'w Study Project'#10'ImageIndex'#2#20#9'OnExecute'#7#21'NewStudyActionExecut'
+  +'e'#8'ShortCut'#3'N@'#0#0#7'TAction'#17'StartEditorAction'#8'Category'#6#5'T'
+  +'ools'#7'Caption'#6#7'E&ditor'#9'OnExecute'#7#24'StartEditorActionExecute'#8
+  +'ShortCut'#2'z'#0#0#7'TAction'#18'ShowWorkFlowAction'#8'Category'#6#5'Tools'
+  +#7'Caption'#6#14'Show Work Flow'#9'OnExecute'#7#25'ShowWorkFlowActionExecute'
+  +#0#0#7'TAction'#19'ChangeWorkDirAction'#8'Category'#6#4'File'#7'Caption'#6#25
+  +'C&hange Working Directory'#9'OnExecute'#7#26'ChangeWorkDirActionExecute'#0#0
+  +#7'TAction'#18'ShortcutHelpAction'#8'Category'#6#4'Help'#7'Caption'#6#14'Sho'
+  +'w Shortcuts'#9'OnExecute'#7#25'ShortcutHelpActionExecute'#0#0#0#0
 ]);

@@ -37,9 +37,6 @@ type
     property Datafile: TEpiDatafile read FDatafile write SetDatafile;
   end; 
 
-var
-  DatafileDocumentationForm: TDatafileDocumentationForm;
-
 implementation
 
 uses

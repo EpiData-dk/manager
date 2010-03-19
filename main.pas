@@ -94,6 +94,7 @@ type
     procedure StatusBar1DblClick(Sender: TObject);
     procedure StatusBar1DrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
       const Rect: TRect);
+    procedure StudyPropertiesMenuItemClick(Sender: TObject);
   private
     { private declarations }
     FActiveFrame: TFrame;
@@ -134,7 +135,7 @@ uses
   epilog, settings, Clipbrd,
   InterfaceBase, LCLType, LCLIntf, editormain,
   workflow_frame, design_frame, managertypes,
-  study_frame, df_properties_form;
+  study_frame, df_properties_form, study_properties_form;
 
 
 { TMainForm }
@@ -375,6 +376,18 @@ begin
   end;
 end;
 
+procedure TMainForm.StudyPropertiesMenuItemClick(Sender: TObject);
+var
+  Frm: TStudyPropertiesForm;
+begin
+  Frm := TStudyPropertiesForm.Create(Self);
+  Frm.Study := TProjectFrame(ActiveFrame).EpiDocument.Study;
+  if Frm.ShowModal = mrOk then
+    Frm.SaveToStudy;
+
+  Frm.Free;
+end;
+
 procedure TMainForm.ClosePageActionExecute(Sender: TObject);
 begin
   CloseTab(PageControl1.ActivePage);
@@ -386,10 +399,8 @@ var
 begin
   Frm := TDataFilePropertiesForm.Create(self);
   Frm.Edit1.Text := TDesignFrame(TProjectFrame(ActiveFrame).ActiveFrame).DataFile.FileName;
-  if Frm.ShowModal <> mrOK then
-    exit;
-
-  TDesignFrame(TProjectFrame(ActiveFrame).ActiveFrame).DataFile.FileName := Frm.Edit1.Text;
+  if Frm.ShowModal = mrOK then
+    TDesignFrame(TProjectFrame(ActiveFrame).ActiveFrame).DataFile.FileName := Frm.Edit1.Text;
   Frm.Free;
 end;
 

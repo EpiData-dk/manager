@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 425
+  Left = 459
   Height = 753
-  Top = 269
+  Top = 277
   Width = 1070
   ActiveControl = ProgressPanel
   Caption = 'EpiData Project and Data Manager '
@@ -348,6 +348,7 @@ object MainForm: TMainForm
       end
       object StudyPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
+        OnClick = StudyPropertiesMenuItemClick
       end
     end
     object DataFormMenuItem: TMenuItem

@@ -46,12 +46,9 @@ type
   private
     { private declarations }
     FActiveFrame: TFrame;
-    FActivated: boolean;
     FrameCount: integer;
     FEpiDocument: TEpiDocument;
     procedure OnDatafileChange(Sender: TObject; EventType: TEpiDataFileChangeEventType; Data: Pointer);
-  protected
-    property Activated: boolean read FActivated write FActivated;
   public
     { public declarations }
     constructor Create(AOwner: TComponent); override;
@@ -65,7 +62,7 @@ type
 implementation
 
 uses
-  design_frame, epidatafile;
+  design_frame, epidatafile, main;
 
 
 type
@@ -122,9 +119,7 @@ procedure TProjectFrame.OnDatafileChange(Sender: TObject;
 begin
   case EventType of
     dceName:
-      begin
         TEpiDataFileEx(Sender).TreeNode.Text := TEpiDataFileEx(Sender).FileName;
-      end;
   end;
 end;
 
@@ -174,16 +169,16 @@ end;
 
 Procedure TProjectFrame.ActivateFrame;
 Begin
-  if Activated then exit;
-  (FActiveFrame as IManagerFrame).ActivateFrame;
-  Activated := true;
+  MainForm
+
+  if Assigned(FActiveFrame) then
+    (FActiveFrame as IManagerFrame).ActivateFrame;
 End;
 
 Procedure TProjectFrame.DeActivateFrame;
 Begin
-  if not Activated then exit;
-  (FActiveFrame as IManagerFrame).DeActivateFrame;
-  Activated := false;
+  if Assigned(FActiveFrame) then
+    (FActiveFrame as IManagerFrame).DeActivateFrame;
 End;
 
 initialization

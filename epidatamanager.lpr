@@ -19,7 +19,8 @@ uses
   {$ENDIF EPI_DEBUG}
   datafile_documentation_form, design_autoalign_form, design_field_frame,
   design_frame, design_label_form, fieldedit, editormain, managerprocs, 
-  workflow_frame, managertypes, study_frame, df_properties_form;
+  workflow_frame, managertypes, study_frame, df_properties_form, 
+study_properties_form;
 
 
 {$IFNDEF EPI_DEBUG}
