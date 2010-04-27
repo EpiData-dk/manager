@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="7"/>
+    <General>
+      <Flags>
+        <UseDefaultCompilerOptions Value="True"/>
+      </Flags>
+      <MainUnit Value="0"/>
+      <TargetFileExt Value=""/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <VersionInfo>
+      <Language Value=""/>
+      <CharSet Value=""/>
+      <StringTable Comments="" CompanyName="" FileDescription="" FileVersion="" InternalName="" LegalCopyright="" LegalTrademarks="" OriginalFilename="" ProductName="" ProductVersion=""/>
+    </VersionInfo>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IgnoreBinaries Value="False"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|ppw|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="2">
+      <Item1>
+        <PackageName Value="epidatacore"/>
+        <MaxVersion Minor="5" Valid="True"/>
+        <MinVersion Minor="5" Valid="True"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LCL"/>
+      </Item2>
+    </RequiredPackages>
+    <Units Count="23">
+      <Unit0>
+        <Filename Value="epidatamanager.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="epidatamanager"/>
+        <UsageCount Value="20"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="main"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="52"/>
+        <CursorPos X="3" Y="57"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="project_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="63"/>
+        <CursorPos X="96" Y="78"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="designer/design_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DesignFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_frame"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="15"/>
+        <CursorPos X="21" Y="31"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="../../../FreePascal/lazarus/lcl/comctrls.pp"/>
+        <UnitName Value="ComCtrls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1733"/>
+        <CursorPos X="26" Y="1755"/>
+        <UsageCount Value="10"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="workflow_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="WorkFlowFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="workflow_frame"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="61"/>
+        <CursorPos X="42" Y="83"/>
+        <UsageCount Value="20"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.pas"/>
+        <UnitName Value="epidatafiles"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="1"/>
+        <CursorPos X="12" Y="34"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <UnitName Value="epicustombase"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="23"/>
+        <CursorPos X="82" Y="50"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="../../Core/trunk/Core/epidatafilesh.inc"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="1"/>
+        <CursorPos X="17" Y="18"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="230"/>
+        <CursorPos X="1" Y="279"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="../../Core/trunk/Core/episectionsh.inc"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="1"/>
+        <CursorPos X="22" Y="15"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="../../Core/trunk/Core/episections.inc"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="46"/>
+        <CursorPos X="1" Y="49"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="../../Core/trunk/Core/epifieldsh.inc"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="82"/>
+        <CursorPos X="20" Y="109"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="../../Core/trunk/Core/epifields.inc"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="60"/>
+        <CursorPos X="32" Y="62"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="../../Core/trunk/Core/epiheadingsh.inc"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="1"/>
+        <CursorPos X="22" Y="15"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="../../Core/trunk/Core/epiheadings.inc"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="24"/>
+        <CursorPos X="1" Y="43"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="../../../FreePascal/fpc/rtl/inc/astrings.inc"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="71"/>
+        <CursorPos X="1" Y="108"/>
+        <UsageCount Value="10"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="../../../FreePascal/fpc/rtl/objpas/sysutils/sysstr.inc"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="708"/>
+        <CursorPos X="1" Y="757"/>
+        <UsageCount Value="10"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/customframe.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="138"/>
+        <CursorPos X="1" Y="179"/>
+        <UsageCount Value="10"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="../../../FreePascal/fpc/rtl/inc/objpas.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="551"/>
+        <CursorPos X="1" Y="591"/>
+        <UsageCount Value="10"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="../../../FreePascal/fpc/rtl/objpas/classes/action.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="85"/>
+        <CursorPos X="1" Y="125"/>
+        <UsageCount Value="10"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="../../Core/trunk/Utils/epistringutils.pas"/>
+        <UnitName Value="epistringutils"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="73"/>
+        <CursorPos X="21" Y="113"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="../../../FreePascal/lazarus/lcl/fileutil.pas"/>
+        <UnitName Value="FileUtil"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="165"/>
+        <CursorPos X="10" Y="187"/>
+        <UsageCount Value="10"/>
+      </Unit22>
+    </Units>
+    <JumpHistory Count="30" HistoryIndex="28">
+      <Position1>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="20" Column="68" TopLine="1"/>
+      </Position1>
+      <Position2>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="22" Column="31" TopLine="1"/>
+      </Position2>
+      <Position3>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="50" Column="3" TopLine="1"/>
+      </Position3>
+      <Position4>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="19" Column="30" TopLine="11"/>
+      </Position4>
+      <Position5>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="35" Column="26" TopLine="12"/>
+      </Position5>
+      <Position6>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="31" Column="12" TopLine="12"/>
+      </Position6>
+      <Position7>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="69" Column="1" TopLine="42"/>
+      </Position7>
+      <Position8>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="63" Column="40" TopLine="41"/>
+      </Position8>
+      <Position9>
+        <Filename Value="../../Core/trunk/Utils/epistringutils.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position9>
+      <Position10>
+        <Filename Value="../../Core/trunk/Utils/epistringutils.pas"/>
+        <Caret Line="113" Column="21" TopLine="73"/>
+      </Position10>
+      <Position11>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="81" Column="126" TopLine="42"/>
+      </Position11>
+      <Position12>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="82" Column="126" TopLine="43"/>
+      </Position12>
+      <Position13>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="83" Column="126" TopLine="44"/>
+      </Position13>
+      <Position14>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="84" Column="126" TopLine="45"/>
+      </Position14>
+      <Position15>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="85" Column="126" TopLine="46"/>
+      </Position15>
+      <Position16>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="86" Column="126" TopLine="47"/>
+      </Position16>
+      <Position17>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="87" Column="126" TopLine="48"/>
+      </Position17>
+      <Position18>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="88" Column="126" TopLine="49"/>
+      </Position18>
+      <Position19>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="89" Column="126" TopLine="50"/>
+      </Position19>
+      <Position20>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="90" Column="126" TopLine="51"/>
+      </Position20>
+      <Position21>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="91" Column="126" TopLine="52"/>
+      </Position21>
+      <Position22>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="92" Column="126" TopLine="53"/>
+      </Position22>
+      <Position23>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="93" Column="126" TopLine="54"/>
+      </Position23>
+      <Position24>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="71" Column="3" TopLine="54"/>
+      </Position24>
+      <Position25>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="42" Column="66" TopLine="29"/>
+      </Position25>
+      <Position26>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="75" Column="23" TopLine="45"/>
+      </Position26>
+      <Position27>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="112" Column="49" TopLine="90"/>
+      </Position27>
+      <Position28>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="40" Column="109" TopLine="12"/>
+      </Position28>
+      <Position29>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="89" Column="3" TopLine="63"/>
+      </Position29>
+      <Position30>
+        <Filename Value="project_frame.pas"/>
+        <Caret Line="9" Column="53" TopLine="1"/>
+      </Position30>
+    </JumpHistory>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="8"/>
+    <Target>
+      <Filename Value="epidatamanager"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)/"/>
+      <OtherUnitFiles Value="designer/"/>
+      <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Parsing>
+      <SyntaxOptions>
+        <UseAnsiStrings Value="True"/>
+      </SyntaxOptions>
+    </Parsing>
+    <Linking>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>
