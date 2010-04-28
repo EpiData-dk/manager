@@ -1,0 +1,17 @@
+inherited DesignHeadingForm: TDesignHeadingForm
+  Left = 723
+  Top = 473
+  ActiveControl = BitBtn1
+  Caption = 'DesignHeadingForm'
+  object BitBtn1: TBitBtn[0]
+    Left = 232
+    Height = 30
+    Top = 192
+    Width = 75
+    Caption = '&OK'
+    Default = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 0
+  end
+end

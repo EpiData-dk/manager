@@ -1,0 +1,21 @@
+object DesignFieldForm: TDesignFieldForm
+  Left = 809
+  Height = 240
+  Top = 400
+  Width = 320
+  Caption = 'DesignFieldForm'
+  ClientHeight = 240
+  ClientWidth = 320
+  LCLVersion = '0.9.29'
+  object BitBtn1: TBitBtn
+    Left = 240
+    Height = 30
+    Top = 200
+    Width = 75
+    Caption = '&OK'
+    Default = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 0
+  end
+end

@@ -1,0 +1,17 @@
+inherited DesignSectionForm: TDesignSectionForm
+  Left = 742
+  Top = 366
+  ActiveControl = BitBtn1
+  Caption = 'DesignSectionForm'
+  object BitBtn1: TBitBtn[0]
+    Left = 232
+    Height = 30
+    Top = 200
+    Width = 75
+    Caption = '&OK'
+    Default = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 0
+  end
+end
