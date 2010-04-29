@@ -314,7 +314,7 @@ begin
   // - (This is subject to change if we find a better component than
   //    the form or a scrollbox).
   FDesignerBox             := TScrollBox.Create(Self);
-  FDesignerBox.Name        := 'DesingerBox';
+  FDesignerBox.Name        := 'DesignerBox';
   FDesignerBox.Parent      := Self;
   FDesignerBox.Align       := alClient;
   FDesignerBox.DockSite    := true;

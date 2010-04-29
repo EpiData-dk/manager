@@ -50,7 +50,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="66" Y="11"/>
+        <CursorPos X="38" Y="16"/>
         <UsageCount Value="83"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -60,10 +60,13 @@
         <ComponentName Value="MainForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="main"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="50"/>
-        <CursorPos X="29" Y="65"/>
+        <CursorPos X="73" Y="74"/>
         <UsageCount Value="83"/>
+        <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="project_frame.pas"/>
@@ -82,16 +85,15 @@
         <ComponentName Value="DesignFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_frame"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="250"/>
-        <CursorPos X="58" Y="268"/>
+        <TopLine Value="89"/>
+        <CursorPos X="20" Y="118"/>
         <UsageCount Value="83"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
-        <Filename Value="../../../FreePascal/lazarus/lcl/comctrls.pp"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/comctrls.pp"/>
         <UnitName Value="ComCtrls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1733"/>
@@ -110,7 +112,7 @@
         <UsageCount Value="83"/>
       </Unit5>
       <Unit6>
-        <Filename Value="../../Core/trunk/Core/epidatafiles.pas"/>
+        <Filename Value="E:/Core/trunk/Core/epidatafiles.pas"/>
         <UnitName Value="epidatafiles"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
@@ -118,124 +120,106 @@
         <UsageCount Value="36"/>
       </Unit6>
       <Unit7>
-        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Filename Value="E:/Core/trunk/Core/epicustombase.pas"/>
         <UnitName Value="epicustombase"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="1"/>
         <TopLine Value="780"/>
         <CursorPos X="1" Y="829"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit7>
       <Unit8>
-        <Filename Value="../../Core/trunk/Core/epidatafilesh.inc"/>
-        <EditorIndex Value="7"/>
+        <Filename Value="E:/Core/trunk/Core/epidatafilesh.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="22"/>
         <CursorPos X="58" Y="50"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit8>
       <Unit9>
-        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
-        <EditorIndex Value="8"/>
+        <Filename Value="E:/Core/trunk/Core/epidatafiles.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="277"/>
         <CursorPos X="1" Y="287"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit9>
       <Unit10>
-        <Filename Value="../../Core/trunk/Core/episectionsh.inc"/>
-        <EditorIndex Value="5"/>
+        <Filename Value="E:/Core/trunk/Core/episectionsh.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="15"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit10>
       <Unit11>
-        <Filename Value="../../Core/trunk/Core/episections.inc"/>
-        <EditorIndex Value="6"/>
+        <Filename Value="E:/Core/trunk/Core/episections.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="85"/>
         <CursorPos X="1" Y="134"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit11>
       <Unit12>
-        <Filename Value="../../Core/trunk/Core/epifieldsh.inc"/>
-        <EditorIndex Value="3"/>
+        <Filename Value="E:/Core/trunk/Core/epifieldsh.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="82"/>
         <CursorPos X="20" Y="109"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit12>
       <Unit13>
-        <Filename Value="../../Core/trunk/Core/epifields.inc"/>
-        <EditorIndex Value="4"/>
+        <Filename Value="E:/Core/trunk/Core/epifields.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="36"/>
         <CursorPos X="1" Y="65"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit13>
       <Unit14>
-        <Filename Value="../../Core/trunk/Core/epiheadingsh.inc"/>
-        <EditorIndex Value="1"/>
+        <Filename Value="E:/Core/trunk/Core/epiheadingsh.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="15"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit14>
       <Unit15>
-        <Filename Value="../../Core/trunk/Core/epiheadings.inc"/>
-        <EditorIndex Value="2"/>
+        <Filename Value="E:/Core/trunk/Core/epiheadings.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="24"/>
         <CursorPos X="1" Y="43"/>
         <UsageCount Value="41"/>
-        <Loaded Value="True"/>
       </Unit15>
       <Unit16>
-        <Filename Value="../../../FreePascal/fpc/rtl/inc/astrings.inc"/>
+        <Filename Value="E:/FreePascal/fpc/rtl/inc/astrings.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="258"/>
         <CursorPos X="1" Y="304"/>
         <UsageCount Value="31"/>
       </Unit16>
       <Unit17>
-        <Filename Value="../../../FreePascal/fpc/rtl/objpas/sysutils/sysstr.inc"/>
+        <Filename Value="E:/FreePascal/fpc/rtl/objpas/sysutils/sysstr.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="708"/>
         <CursorPos X="1" Y="757"/>
         <UsageCount Value="4"/>
       </Unit17>
       <Unit18>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/customframe.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/customframe.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="138"/>
         <CursorPos X="1" Y="179"/>
         <UsageCount Value="4"/>
       </Unit18>
       <Unit19>
-        <Filename Value="../../../FreePascal/fpc/rtl/inc/objpas.inc"/>
+        <Filename Value="E:/FreePascal/fpc/rtl/inc/objpas.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="433"/>
         <CursorPos X="1" Y="472"/>
         <UsageCount Value="31"/>
       </Unit19>
       <Unit20>
-        <Filename Value="../../../FreePascal/fpc/rtl/objpas/classes/action.inc"/>
+        <Filename Value="E:/FreePascal/fpc/rtl/objpas/classes/action.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="85"/>
         <CursorPos X="1" Y="124"/>
         <UsageCount Value="5"/>
       </Unit20>
       <Unit21>
-        <Filename Value="../../Core/trunk/Utils/epistringutils.pas"/>
+        <Filename Value="E:/Core/trunk/Utils/epistringutils.pas"/>
         <UnitName Value="epistringutils"/>
         <WindowIndex Value="1"/>
         <TopLine Value="79"/>
@@ -243,7 +227,7 @@
         <UsageCount Value="36"/>
       </Unit21>
       <Unit22>
-        <Filename Value="../../../FreePascal/lazarus/lcl/fileutil.pas"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/fileutil.pas"/>
         <UnitName Value="FileUtil"/>
         <WindowIndex Value="0"/>
         <TopLine Value="165"/>
@@ -263,7 +247,7 @@
         <UsageCount Value="82"/>
       </Unit23>
       <Unit24>
-        <Filename Value="../../../FreePascal/lazarus/lcl/stdctrls.pp"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/stdctrls.pp"/>
         <UnitName Value="StdCtrls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="163"/>
@@ -295,14 +279,14 @@
         <UsageCount Value="81"/>
       </Unit26>
       <Unit27>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/toolbutton.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/toolbutton.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="457"/>
         <CursorPos X="54" Y="489"/>
         <UsageCount Value="4"/>
       </Unit27>
       <Unit28>
-        <Filename Value="../../../FreePascal/lazarus/lcl/controls.pp"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/controls.pp"/>
         <UnitName Value="Controls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2009"/>
@@ -310,14 +294,14 @@
         <UsageCount Value="15"/>
       </Unit28>
       <Unit29>
-        <Filename Value="../../../FreePascal/fpc/rtl/objpas/classes/classes.inc"/>
+        <Filename Value="E:/FreePascal/fpc/rtl/objpas/classes/classes.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="255"/>
         <CursorPos X="1" Y="294"/>
         <UsageCount Value="4"/>
       </Unit29>
       <Unit30>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/wincontrol.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/wincontrol.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="5239"/>
         <CursorPos X="1" Y="5278"/>
@@ -345,7 +329,7 @@
         <UsageCount Value="5"/>
       </Unit33>
       <Unit34>
-        <Filename Value="../../../FreePascal/lazarus/lcl/forms.pp"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/forms.pp"/>
         <UnitName Value="Forms"/>
         <WindowIndex Value="0"/>
         <TopLine Value="171"/>
@@ -365,46 +349,42 @@
         <UsageCount Value="73"/>
       </Unit35>
       <Unit36>
-        <Filename Value="../../Core/trunk/Core/epidocument.pas"/>
+        <Filename Value="E:/Core/trunk/Core/epidocument.pas"/>
         <UnitName Value="epidocument"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="0"/>
-        <WindowIndex Value="1"/>
         <TopLine Value="37"/>
         <CursorPos X="1" Y="70"/>
         <UsageCount Value="36"/>
-        <Loaded Value="True"/>
       </Unit36>
       <Unit37>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/customaction.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/customaction.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="213"/>
         <CursorPos X="1" Y="252"/>
         <UsageCount Value="5"/>
       </Unit37>
       <Unit38>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/containedaction.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/containedaction.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="65"/>
         <CursorPos X="1" Y="104"/>
         <UsageCount Value="5"/>
       </Unit38>
       <Unit39>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/application.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/application.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2183"/>
         <CursorPos X="1" Y="2222"/>
         <UsageCount Value="5"/>
       </Unit39>
       <Unit40>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/control.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/control.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1673"/>
         <CursorPos X="1" Y="1695"/>
         <UsageCount Value="15"/>
       </Unit40>
       <Unit41>
-        <Filename Value="../../../FreePascal/lazarus/lcl/lclclasses.pp"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/lclclasses.pp"/>
         <UnitName Value="LCLClasses"/>
         <WindowIndex Value="0"/>
         <TopLine Value="16"/>
@@ -412,7 +392,7 @@
         <UsageCount Value="9"/>
       </Unit41>
       <Unit42>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/dragmanager.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/dragmanager.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="699"/>
         <CursorPos X="1" Y="738"/>
@@ -421,7 +401,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit42>
       <Unit43>
-        <Filename Value="../../../FreePascal/fpc/rtl/objpas/types.pp"/>
+        <Filename Value="E:/FreePascal/fpc/rtl/objpas/types.pp"/>
         <UnitName Value="types"/>
         <WindowIndex Value="0"/>
         <TopLine Value="289"/>
@@ -431,7 +411,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit43>
       <Unit44>
-        <Filename Value="../../../FreePascal/lazarus/lcl/lclproc.pas"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/lclproc.pas"/>
         <UnitName Value="LCLProc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1330"/>
@@ -441,7 +421,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit44>
       <Unit45>
-        <Filename Value="../../../FreePascal/fpc/rtl/inc/except.inc"/>
+        <Filename Value="E:/FreePascal/fpc/rtl/inc/except.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="186"/>
         <CursorPos X="71" Y="210"/>
@@ -450,7 +430,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit45>
       <Unit46>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/dragobject.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/dragobject.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="75"/>
         <CursorPos X="1" Y="114"/>
@@ -459,7 +439,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit46>
       <Unit47>
-        <Filename Value="../../../FreePascal/fpc/rtl/linux/x86_64/sighnd.inc"/>
+        <Filename Value="E:/FreePascal/fpc/rtl/linux/x86_64/sighnd.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="38"/>
@@ -477,7 +457,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit48>
       <Unit49>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/scrollingwincontrol.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/scrollingwincontrol.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="18"/>
         <CursorPos X="11" Y="27"/>
@@ -486,7 +466,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit49>
       <Unit50>
-        <Filename Value="../../../FreePascal/lazarus/lcl/include/controlscrollbar.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/include/controlscrollbar.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="351"/>
         <CursorPos X="3" Y="355"/>
@@ -495,7 +475,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit50>
       <Unit51>
-        <Filename Value="../../../FreePascal/lazarus/lcl/lmessages.pp"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/lmessages.pp"/>
         <UnitName Value="LMessages"/>
         <WindowIndex Value="0"/>
         <TopLine Value="778"/>
@@ -505,7 +485,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit51>
       <Unit52>
-        <Filename Value="../../../FreePascal/lazarus/lcl/lclmessageglue.pas"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/lclmessageglue.pas"/>
         <UnitName Value="LCLMessageGlue"/>
         <WindowIndex Value="0"/>
         <TopLine Value="82"/>
@@ -515,7 +495,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit52>
       <Unit53>
-        <Filename Value="../../../FreePascal/lazarus/lcl/interfaces/gtk/gtkproc.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/interfaces/gtk/gtkproc.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3738"/>
         <CursorPos X="1" Y="3777"/>
@@ -524,7 +504,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit53>
       <Unit54>
-        <Filename Value="../../../FreePascal/lazarus/lcl/interfaces/gtk/gtkcallback.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/interfaces/gtk/gtkcallback.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1826"/>
         <CursorPos X="1" Y="1865"/>
@@ -533,7 +513,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit54>
       <Unit55>
-        <Filename Value="../../../FreePascal/lazarus/lcl/interfaces/gtk/gtkwidgetset.inc"/>
+        <Filename Value="E:/FreePascal/lazarus/lcl/interfaces/gtk/gtkwidgetset.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1248"/>
         <CursorPos X="1" Y="1288"/>

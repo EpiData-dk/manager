@@ -1,17 +1,17 @@
 object MainForm: TMainForm
-  Left = 687
+  Left = 28
   Height = 590
-  Top = 278
+  Top = 163
   Width = 811
   Caption = 'MainForm'
-  ClientHeight = 565
+  ClientHeight = 570
   ClientWidth = 811
   Menu = MainMenu1
   OnCreate = FormCreate
   LCLVersion = '0.9.29'
   object PageControl1: TPageControl
     Left = 0
-    Height = 565
+    Height = 570
     Top = 0
     Width = 811
     Align = alClient
