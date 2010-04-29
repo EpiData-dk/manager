@@ -12,7 +12,7 @@ type
 
   { TDesignHeading }
 
-  TDesignHeading = Class(TCustomLabel, IDesignEpiControl)
+  TDesignHeading = Class(TLabel, IDesignEpiControl)
   private
     FHeading: TEpiHeading;
     function GetEpiControl: TEpiCustomControlItem;

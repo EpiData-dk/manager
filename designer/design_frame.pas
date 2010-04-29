@@ -14,6 +14,11 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     NewSectionAction: TAction;
     NewHeadingAction: TAction;
     NewYMDFieldAction: TAction;
@@ -26,6 +31,7 @@ type
     DesignerImageList: TImageList;
     DesignerToolBar: TToolBar;
     IntToolButton: TToolButton;
+    Panel1: TPanel;
     SelectorToolButton: TToolButton;
     ToolButton10: TToolButton;
     FloatToolButton: TToolButton;
@@ -37,22 +43,30 @@ type
     HeadingToolButton: TToolButton;
     SectionToolButton: TToolButton;
     ToolButton9: TToolButton;
-    procedure DesignBoxMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure DesignBoxMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
     procedure   ToggleToolBtn(Sender: TObject);
   private
     { common private }
     FDataFile: TEpiDataFile;
     FDesignerBox: TScrollBox;
     FActiveButton: TToolButton;
+    procedure DockSiteGetSiteInfo(Sender: TObject; DockClient: TControl;
+      var InfluenceRect: TRect; MousePos: TPoint; var CanDock: Boolean);
     function    ShowForm(EpiControl: TEpiCustomControlItem;
       Pos: TPoint): TModalResult;
     function    NewDesignControl(AClass: TControlClass;
       AParent: TWinControl; Pos: TPoint;
       EpiControl: TEpiCustomControlItem): TControl;
+    procedure DesignControlStartDock(Sender: TObject; var DragObject: TDragDockObject);
 
+    { Docksite controls - methods }
+    procedure DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure DockSiteDockDrop(Sender: TObject; Source: TDragDockObject; X,
+      Y: Integer);
+    procedure DockSiteUnDock(Sender: TObject; Client: TControl;
+      NewTarget: TWinControl; var Allow: Boolean);
   private
     { Position handling }
     function    FindNewPosition(ParentControl: TWinControl;
@@ -60,20 +74,14 @@ type
   private
     { Field Handling }
     function    NewField(FieldType: TEpiFieldType): TEpiField;
-    function    NewDesignField(AParent: TWinControl; Pos: TPoint;
-      Field: TEpiField): TDesignField;
   private
     { Heading Handling }
     function    NewHeading: TEpiHeading;
-    function    NewDesignHeading(AParent: TWinControl; Pos: TPoint;
-      Heading: TEpiHeading): TDesignHeading;
   private
     { Section handling }
     FActiveSection: TEpiSection;
     FMouseDownPos: TPoint;
     function    NewSection: TEpiSection;
-    function    NewDesignSection(AParent: TWinControl; Pos: TPoint;
-      Section: TEpiSection): TDesignSection;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
@@ -97,6 +105,37 @@ begin
   FActiveButton := TToolButton(Sender);
 end;
 
+procedure TDesignFrame.DockSiteGetSiteInfo(Sender: TObject; DockClient: TControl;
+  var InfluenceRect: TRect; MousePos: TPoint; var CanDock: Boolean);
+var
+  Sdr: TWinControl absolute Sender;
+  S: String;
+  Tl, Br: TPOint;
+
+  function PointInRect(APoint: TPoint; ARect: TRect): boolean;
+  begin
+    result :=
+      (ARect.Left < APoint.X) and (APoint.X < ARect.Right) and
+      (ARect.Top < APoint.Y) and (APoint.Y < ARect.Bottom);
+  end;
+
+begin
+
+  Label1.Caption := 'Sender: ' + Sdr.Name;
+  Label2.Caption := 'DockClient: ' + DockClient.Name;
+
+  With InfluenceRect do
+    Label3.Caption := Format('Infl: (%d,%d)-(%d,%d)', [Left, Top, right, Bottom]);
+  With MousePos do
+    Label4.Caption := Format('Mouse: (%d,%d)', [X, Y]);
+
+  if not PointInRect(MousePos, InfluenceRect) then
+    CanDock := false;
+
+  WriteStr(s, CanDock);
+  Label5.Caption := s;
+end;
+
 function TDesignFrame.ShowForm(EpiControl: TEpiCustomControlItem; Pos: TPoint
   ): TModalResult;
 var
@@ -117,23 +156,54 @@ end;
 function TDesignFrame.NewDesignControl(AClass: TControlClass;
   AParent: TWinControl; Pos: TPoint; EpiControl: TEpiCustomControlItem
   ): TControl;
+var
+  L: TDesignHeading;
 begin
   Result := AClass.Create(AParent);
   (Result as IDesignEpiControl).EpiControl := EpiControl;
   if Result is TDesignSection then
   with TDesignSection(Result) do
   begin
+    Name := 'DesignSection' + IntToStr(AParent.ControlCount);
     EpiControl.Left := FMouseDownPos.X;
     EpiControl.Top := FMouseDownPos.Y;
     Width := Abs(Pos.X - FMouseDownPos.X);
     Height := Abs(Pos.Y - FMouseDownPos.Y);
-    OnMouseDown := @DesignBoxMouseDown;
-    OnMouseUp := @DesignBoxMouseUp;
+    DockSite := true;
+    DragKind := dkDock;
+    DragMode := dmAutomatic;
+    OnMouseDown := @DockSiteMouseDown;
+    OnMouseUp := @DockSiteMouseUp;
+    OnStartDock := @DesignControlStartDock;
+    OnDockDrop := @DockSiteDockDrop;
+    OnUnDock   := @DockSiteUnDock;
+    OnGetSiteInfo := @DockSiteGetSiteInfo;
   end else begin
     EpiControl.Left := Pos.X;
     EpiControl.Top  := Pos.Y;
+    if Result is TDesignHeading then
+    with TDesignHeading(Result) do
+    begin
+      Name := 'DesignHeading' + IntToStr(AParent.ControlCount);
+      DragKind := dkDock;
+      DragMode := dmAutomatic;
+      OnGetSiteInfo := @DockSiteGetSiteInfo;
+    end else
+    with TDesignField(Result) do
+    begin
+      Name := 'DesignField' + IntToStr(AParent.ControlCount);
+      DragKind := dkDock;
+      DragMode := dmAutomatic;
+      OnGetSiteInfo := @DockSiteGetSiteInfo;
+    end;
   end;
   Result.Parent   := AParent;
+end;
+
+procedure TDesignFrame.DesignControlStartDock(Sender: TObject;
+  var DragObject: TDragDockObject);
+begin
+  DragObject := TDragDockObject.Create(TControl(Sender));
 end;
 
 function TDesignFrame.FindNewPosition(ParentControl: TWinControl;
@@ -147,27 +217,9 @@ begin
   result := FActiveSection.NewField(FieldType);
 end;
 
-function TDesignFrame.NewDesignField(AParent: TWinControl; Pos: TPoint;
-  Field: TEpiField): TDesignField;
-begin
-  result := TDesignField.Create(AParent);
-  Result.EpiControl := Field;
-  Field.Left := Pos.X;
-  Field.Top := Pos.Y;
-  result.Parent := AParent;
-end;
-
 function TDesignFrame.NewHeading: TEpiHeading;
 begin
   result := FActiveSection.NewHeading;
-end;
-
-function TDesignFrame.NewDesignHeading(AParent: TWinControl; Pos: TPoint;
-  Heading: TEpiHeading): TDesignHeading;
-begin
-  result := TDesignHeading.Create(AParent);
-  Result.EpiControl := Heading;
-  result.Parent := AParent;
 end;
 
 function TDesignFrame.NewSection: TEpiSection;
@@ -175,15 +227,7 @@ begin
   result := DataFile.NewSection;
 end;
 
-function TDesignFrame.NewDesignSection(AParent: TWinControl; Pos: TPoint;
-  Section: TEpiSection): TDesignSection;
-begin
-  result := TDesignSection.Create(AParent);
-  Result.EpiControl := Section;
-  result.Parent := AParent;
-end;
-
-procedure TDesignFrame.DesignBoxMouseDown(Sender: TObject;
+procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   // If this is not Section tool, then no need to record anything.
@@ -192,7 +236,7 @@ begin
   FMouseDownPos := Point(X, Y);
 end;
 
-procedure TDesignFrame.DesignBoxMouseUp(Sender: TObject; Button: TMouseButton;
+procedure TDesignFrame.DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
   SenderWin: TWinControl absolute Sender;
@@ -234,6 +278,28 @@ begin
           NewDesignControl(TDesignSection, SenderWin, ParentPt, EpiControl);
       end;
   end;
+  ToggleToolBtn(SelectorToolButton);
+end;
+
+procedure TDesignFrame.DockSiteDockDrop(Sender: TObject;
+  Source: TDragDockObject; X, Y: Integer);
+var
+  WinSender: TWinControl absolute Sender;
+begin
+  (Source.Control as IDesignEpiControl).EpiControl.Left := X - Source.DockOffset.X;
+  (Source.Control as IDesignEpiControl).EpiControl.Top  := Y - Source.DockOffset.Y;
+end;
+
+procedure TDesignFrame.DockSiteUnDock(Sender: TObject; Client: TControl;
+  NewTarget: TWinControl; var Allow: Boolean);
+begin
+  Allow := false;
+  // NewTarget = false: trying to release the client outside of program window.
+  if not Assigned(NewTarget) then exit;
+  // This effectively prevents dragging section onto section.
+  if (NewTarget.ClassType = Client.ClassType) then exit;
+  if (NewTarget = FDesignerBox) or
+    (NewTarget is TDesignSection) then Allow := true;
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
@@ -242,7 +308,8 @@ begin
   FDataFile := ADataFile;
   FActiveButton := SelectorToolButton;
   FActiveSection := ADataFile.MainSection;
-
+  DragManager.DragThreshold := 5;
+  DragManager.DragImmediate := False;
   // Designer box creation and setup.
   // - (This is subject to change if we find a better component than
   //    the form or a scrollbox).
@@ -253,8 +320,11 @@ begin
   FDesignerBox.DockSite    := true;
   FDesignerBox.Color       := clWhite;
   FDesignerBox.AutoScroll  := true;
-  FDesignerBox.OnMouseUp   := @DesignBoxMouseUp;
-  FDesignerBox.OnMouseDown := @DesignBoxMouseDown;
+  FDesignerBox.OnMouseUp   := @DockSiteMouseUp;
+  FDesignerBox.OnMouseDown := @DockSiteMouseDown;
+  FDesignerBox.OnDockDrop  := @DockSiteDockDrop;
+  FDesignerBox.OnUnDock    := @DockSiteUnDock;
+  FDesignerBox.OnGetSiteInfo := @DockSiteGetSiteInfo;
 end;
 
 end.

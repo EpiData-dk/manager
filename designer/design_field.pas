@@ -11,7 +11,7 @@ uses
 type
   { TDesignField }
 
-  TDesignField = class(TCustomEdit, IDesignEpiControl)
+  TDesignField = class(TEdit, IDesignEpiControl)
   private
     FField: TEpiField;
     FHeading: TEpiHeading;
@@ -22,9 +22,6 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
     property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
-  published
-    property    DragKind;
-    property    DragMode;
   end;
 
   { TDesignFieldForm }

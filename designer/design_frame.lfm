@@ -2,9 +2,9 @@ object DesignFrame: TDesignFrame
   Left = 0
   Height = 565
   Top = 0
-  Width = 679
+  Width = 769
   ClientHeight = 565
-  ClientWidth = 679
+  ClientWidth = 769
   TabOrder = 0
   DesignLeft = 818
   DesignTop = 360
@@ -12,7 +12,7 @@ object DesignFrame: TDesignFrame
     Left = 0
     Height = 26
     Top = 0
-    Width = 679
+    Width = 769
     ButtonHeight = 24
     ButtonWidth = 24
     Caption = 'DesignerToolBar'
@@ -117,11 +117,62 @@ object DesignFrame: TDesignFrame
       Style = tbsDivider
     end
   end
+  object Panel1: TPanel
+    Left = 504
+    Height = 539
+    Top = 26
+    Width = 265
+    Align = alRight
+    BevelInner = bvLowered
+    ClientHeight = 539
+    ClientWidth = 265
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 11
+      Height = 18
+      Top = 38
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 11
+      Height = 18
+      Top = 118
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 11
+      Height = 18
+      Top = 198
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 11
+      Height = 18
+      Top = 294
+      Width = 44
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 11
+      Height = 18
+      Top = 378
+      Width = 44
+      Caption = 'Label5'
+      ParentColor = False
+    end
+  end
   object DesignerImageList: TImageList
     Height = 24
     Width = 24
-    left = 528
-    top = 272
+    left = 248
+    top = 472
     Bitmap = {
       4C690A0000001800000018000000000000010000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -848,8 +899,8 @@ object DesignFrame: TDesignFrame
   end
   object DesignerActionList: TActionList
     Images = DesignerImageList
-    left = 528
-    top = 344
+    left = 248
+    top = 384
     object NewIntFieldAction: TAction
       Caption = 'New Integer Field'
       Hint = 'New Integer Field'

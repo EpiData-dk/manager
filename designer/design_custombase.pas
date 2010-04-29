@@ -5,7 +5,7 @@ unit design_custombase;
 interface
 
 uses
-  Classes, SysUtils, forms, epicustombase;
+  Classes, SysUtils, forms, epicustombase, controls;
 
 type
 

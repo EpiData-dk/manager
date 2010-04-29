@@ -12,7 +12,7 @@ type
 
   { TDesignSection }
 
-  TDesignSection = Class(TCustomGroupBox, IDesignEpiControl)
+  TDesignSection = Class(TGroupBox, IDesignEpiControl)
   private
     FSection: TEpiSection;
     function GetEpiControl: TEpiCustomControlItem;
