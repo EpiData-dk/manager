@@ -6,8 +6,8 @@ object DesignFrame: TDesignFrame
   ClientHeight = 565
   ClientWidth = 769
   TabOrder = 0
-  DesignLeft = 95
-  DesignTop = 52
+  DesignLeft = 331
+  DesignTop = 178
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -166,6 +166,15 @@ object DesignFrame: TDesignFrame
       Width = 32
       Caption = 'Label5'
       ParentColor = False
+    end
+    object Button1: TButton
+      Left = 120
+      Height = 25
+      Top = 494
+      Width = 115
+      Caption = 'Save DF As XML'
+      OnClick = Button1Click
+      TabOrder = 0
     end
   end
   object DesignerImageList: TImageList

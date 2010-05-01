@@ -1,7 +1,6 @@
 inherited DesignSectionForm: TDesignSectionForm
   Left = 742
   Top = 366
-  ActiveControl = BitBtn1
   Caption = 'DesignSectionForm'
   object BitBtn1: TBitBtn[0]
     Left = 232

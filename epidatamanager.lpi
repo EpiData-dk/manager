@@ -11,7 +11,7 @@
       <TargetFileExt Value=""/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
-      <ActiveWindowIndexAtStart Value="0"/>
+      <ActiveWindowIndexAtStart Value="1"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="56">
+    <Units Count="67">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -50,8 +50,8 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="38" Y="16"/>
-        <UsageCount Value="83"/>
+        <CursorPos X="50" Y="21"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -60,13 +60,10 @@
         <ComponentName Value="MainForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="main"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="50"/>
-        <CursorPos X="73" Y="74"/>
-        <UsageCount Value="83"/>
-        <Loaded Value="True"/>
+        <CursorPos X="29" Y="65"/>
+        <UsageCount Value="89"/>
       </Unit1>
       <Unit2>
         <Filename Value="project_frame.pas"/>
@@ -77,7 +74,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="61"/>
         <CursorPos X="1" Y="75"/>
-        <UsageCount Value="83"/>
+        <UsageCount Value="89"/>
       </Unit2>
       <Unit3>
         <Filename Value="designer/design_frame.pas"/>
@@ -85,15 +82,16 @@
         <ComponentName Value="DesignFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_frame"/>
-        <EditorIndex Value="2"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="89"/>
-        <CursorPos X="20" Y="118"/>
-        <UsageCount Value="83"/>
+        <TopLine Value="174"/>
+        <CursorPos X="1" Y="212"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
-        <Filename Value="E:/FreePascal/lazarus/lcl/comctrls.pp"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/comctrls.pp"/>
         <UnitName Value="ComCtrls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1733"/>
@@ -109,10 +107,10 @@
         <WindowIndex Value="0"/>
         <TopLine Value="61"/>
         <CursorPos X="42" Y="83"/>
-        <UsageCount Value="83"/>
+        <UsageCount Value="89"/>
       </Unit5>
       <Unit6>
-        <Filename Value="E:/Core/trunk/Core/epidatafiles.pas"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.pas"/>
         <UnitName Value="epidatafiles"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
@@ -120,106 +118,125 @@
         <UsageCount Value="36"/>
       </Unit6>
       <Unit7>
-        <Filename Value="E:/Core/trunk/Core/epicustombase.pas"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
         <UnitName Value="epicustombase"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="780"/>
-        <CursorPos X="1" Y="829"/>
-        <UsageCount Value="41"/>
+        <TopLine Value="162"/>
+        <CursorPos X="1" Y="174"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit7>
       <Unit8>
-        <Filename Value="E:/Core/trunk/Core/epidatafilesh.inc"/>
+        <Filename Value="../../Core/trunk/Core/epidatafilesh.inc"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="1"/>
         <TopLine Value="22"/>
         <CursorPos X="58" Y="50"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit8>
       <Unit9>
-        <Filename Value="E:/Core/trunk/Core/epidatafiles.inc"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="1"/>
         <TopLine Value="277"/>
         <CursorPos X="1" Y="287"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit9>
       <Unit10>
-        <Filename Value="E:/Core/trunk/Core/episectionsh.inc"/>
+        <Filename Value="../../Core/trunk/Core/episectionsh.inc"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="15"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit10>
       <Unit11>
-        <Filename Value="E:/Core/trunk/Core/episections.inc"/>
+        <Filename Value="../../Core/trunk/Core/episections.inc"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="1"/>
         <TopLine Value="85"/>
         <CursorPos X="1" Y="134"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit11>
       <Unit12>
-        <Filename Value="E:/Core/trunk/Core/epifieldsh.inc"/>
+        <Filename Value="../../Core/trunk/Core/epifieldsh.inc"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="1"/>
         <TopLine Value="82"/>
         <CursorPos X="20" Y="109"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit12>
       <Unit13>
-        <Filename Value="E:/Core/trunk/Core/epifields.inc"/>
+        <Filename Value="../../Core/trunk/Core/epifields.inc"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="1"/>
         <TopLine Value="36"/>
         <CursorPos X="1" Y="65"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit13>
       <Unit14>
-        <Filename Value="E:/Core/trunk/Core/epiheadingsh.inc"/>
+        <Filename Value="../../Core/trunk/Core/epiheadingsh.inc"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="15"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit14>
       <Unit15>
-        <Filename Value="E:/Core/trunk/Core/epiheadings.inc"/>
+        <Filename Value="../../Core/trunk/Core/epiheadings.inc"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="1"/>
         <TopLine Value="24"/>
         <CursorPos X="1" Y="43"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="44"/>
+        <Loaded Value="True"/>
       </Unit15>
       <Unit16>
-        <Filename Value="E:/FreePascal/fpc/rtl/inc/astrings.inc"/>
+        <Filename Value="../../../FreePascal/fpc/rtl/inc/astrings.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="258"/>
         <CursorPos X="1" Y="304"/>
         <UsageCount Value="31"/>
       </Unit16>
       <Unit17>
-        <Filename Value="E:/FreePascal/fpc/rtl/objpas/sysutils/sysstr.inc"/>
+        <Filename Value="../../../FreePascal/fpc/rtl/objpas/sysutils/sysstr.inc"/>
         <WindowIndex Value="1"/>
         <TopLine Value="708"/>
         <CursorPos X="1" Y="757"/>
         <UsageCount Value="4"/>
       </Unit17>
       <Unit18>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/customframe.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/customframe.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="138"/>
         <CursorPos X="1" Y="179"/>
         <UsageCount Value="4"/>
       </Unit18>
       <Unit19>
-        <Filename Value="E:/FreePascal/fpc/rtl/inc/objpas.inc"/>
+        <Filename Value="../../../FreePascal/fpc/rtl/inc/objpas.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="433"/>
         <CursorPos X="1" Y="472"/>
         <UsageCount Value="31"/>
       </Unit19>
       <Unit20>
-        <Filename Value="E:/FreePascal/fpc/rtl/objpas/classes/action.inc"/>
+        <Filename Value="../../../FreePascal/fpc/rtl/objpas/classes/action.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="85"/>
         <CursorPos X="1" Y="124"/>
         <UsageCount Value="5"/>
       </Unit20>
       <Unit21>
-        <Filename Value="E:/Core/trunk/Utils/epistringutils.pas"/>
+        <Filename Value="../../Core/trunk/Utils/epistringutils.pas"/>
         <UnitName Value="epistringutils"/>
         <WindowIndex Value="1"/>
         <TopLine Value="79"/>
@@ -227,7 +244,7 @@
         <UsageCount Value="36"/>
       </Unit21>
       <Unit22>
-        <Filename Value="E:/FreePascal/lazarus/lcl/fileutil.pas"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/fileutil.pas"/>
         <UnitName Value="FileUtil"/>
         <WindowIndex Value="0"/>
         <TopLine Value="165"/>
@@ -241,13 +258,15 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_field"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="38"/>
-        <CursorPos X="1" Y="62"/>
-        <UsageCount Value="82"/>
+        <TopLine Value="47"/>
+        <CursorPos X="3" Y="73"/>
+        <UsageCount Value="88"/>
+        <Loaded Value="True"/>
       </Unit23>
       <Unit24>
-        <Filename Value="E:/FreePascal/lazarus/lcl/stdctrls.pp"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/stdctrls.pp"/>
         <UnitName Value="StdCtrls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="163"/>
@@ -261,10 +280,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_heading"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="11"/>
-        <CursorPos X="27" Y="15"/>
-        <UsageCount Value="81"/>
+        <TopLine Value="63"/>
+        <CursorPos X="1" Y="72"/>
+        <UsageCount Value="87"/>
+        <Loaded Value="True"/>
       </Unit25>
       <Unit26>
         <Filename Value="designer/design_section.pas"/>
@@ -273,20 +294,22 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_section"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="30" Y="15"/>
-        <UsageCount Value="81"/>
+        <TopLine Value="55"/>
+        <CursorPos X="31" Y="71"/>
+        <UsageCount Value="87"/>
+        <Loaded Value="True"/>
       </Unit26>
       <Unit27>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/toolbutton.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/toolbutton.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="457"/>
         <CursorPos X="54" Y="489"/>
         <UsageCount Value="4"/>
       </Unit27>
       <Unit28>
-        <Filename Value="E:/FreePascal/lazarus/lcl/controls.pp"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/controls.pp"/>
         <UnitName Value="Controls"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2009"/>
@@ -294,14 +317,14 @@
         <UsageCount Value="15"/>
       </Unit28>
       <Unit29>
-        <Filename Value="E:/FreePascal/fpc/rtl/objpas/classes/classes.inc"/>
+        <Filename Value="../../../FreePascal/fpc/rtl/objpas/classes/classes.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="255"/>
         <CursorPos X="1" Y="294"/>
         <UsageCount Value="4"/>
       </Unit29>
       <Unit30>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/wincontrol.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/wincontrol.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="5239"/>
         <CursorPos X="1" Y="5278"/>
@@ -329,7 +352,7 @@
         <UsageCount Value="5"/>
       </Unit33>
       <Unit34>
-        <Filename Value="E:/FreePascal/lazarus/lcl/forms.pp"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/forms.pp"/>
         <UnitName Value="Forms"/>
         <WindowIndex Value="0"/>
         <TopLine Value="171"/>
@@ -343,48 +366,53 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_custombase"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="48" Y="22"/>
-        <UsageCount Value="73"/>
+        <CursorPos X="3" Y="14"/>
+        <UsageCount Value="79"/>
+        <Loaded Value="True"/>
       </Unit35>
       <Unit36>
-        <Filename Value="E:/Core/trunk/Core/epidocument.pas"/>
+        <Filename Value="../../Core/trunk/Core/epidocument.pas"/>
         <UnitName Value="epidocument"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="1"/>
         <TopLine Value="37"/>
         <CursorPos X="1" Y="70"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="39"/>
+        <Loaded Value="True"/>
       </Unit36>
       <Unit37>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/customaction.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/customaction.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="213"/>
         <CursorPos X="1" Y="252"/>
         <UsageCount Value="5"/>
       </Unit37>
       <Unit38>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/containedaction.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/containedaction.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="65"/>
         <CursorPos X="1" Y="104"/>
         <UsageCount Value="5"/>
       </Unit38>
       <Unit39>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/application.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/application.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2183"/>
         <CursorPos X="1" Y="2222"/>
         <UsageCount Value="5"/>
       </Unit39>
       <Unit40>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/control.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/control.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1673"/>
         <CursorPos X="1" Y="1695"/>
         <UsageCount Value="15"/>
       </Unit40>
       <Unit41>
-        <Filename Value="E:/FreePascal/lazarus/lcl/lclclasses.pp"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/lclclasses.pp"/>
         <UnitName Value="LCLClasses"/>
         <WindowIndex Value="0"/>
         <TopLine Value="16"/>
@@ -392,7 +420,7 @@
         <UsageCount Value="9"/>
       </Unit41>
       <Unit42>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/dragmanager.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/dragmanager.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="699"/>
         <CursorPos X="1" Y="738"/>
@@ -401,7 +429,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit42>
       <Unit43>
-        <Filename Value="E:/FreePascal/fpc/rtl/objpas/types.pp"/>
+        <Filename Value="../../../FreePascal/fpc/rtl/objpas/types.pp"/>
         <UnitName Value="types"/>
         <WindowIndex Value="0"/>
         <TopLine Value="289"/>
@@ -411,7 +439,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit43>
       <Unit44>
-        <Filename Value="E:/FreePascal/lazarus/lcl/lclproc.pas"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/lclproc.pas"/>
         <UnitName Value="LCLProc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1330"/>
@@ -421,7 +449,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit44>
       <Unit45>
-        <Filename Value="E:/FreePascal/fpc/rtl/inc/except.inc"/>
+        <Filename Value="../../../FreePascal/fpc/rtl/inc/except.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="186"/>
         <CursorPos X="71" Y="210"/>
@@ -430,7 +458,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit45>
       <Unit46>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/dragobject.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/dragobject.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="75"/>
         <CursorPos X="1" Y="114"/>
@@ -439,7 +467,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit46>
       <Unit47>
-        <Filename Value="E:/FreePascal/fpc/rtl/linux/x86_64/sighnd.inc"/>
+        <Filename Value="../../../FreePascal/fpc/rtl/linux/x86_64/sighnd.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="38"/>
@@ -457,7 +485,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit48>
       <Unit49>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/scrollingwincontrol.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/scrollingwincontrol.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="18"/>
         <CursorPos X="11" Y="27"/>
@@ -466,7 +494,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit49>
       <Unit50>
-        <Filename Value="E:/FreePascal/lazarus/lcl/include/controlscrollbar.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/include/controlscrollbar.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="351"/>
         <CursorPos X="3" Y="355"/>
@@ -475,7 +503,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit50>
       <Unit51>
-        <Filename Value="E:/FreePascal/lazarus/lcl/lmessages.pp"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/lmessages.pp"/>
         <UnitName Value="LMessages"/>
         <WindowIndex Value="0"/>
         <TopLine Value="778"/>
@@ -485,7 +513,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit51>
       <Unit52>
-        <Filename Value="E:/FreePascal/lazarus/lcl/lclmessageglue.pas"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/lclmessageglue.pas"/>
         <UnitName Value="LCLMessageGlue"/>
         <WindowIndex Value="0"/>
         <TopLine Value="82"/>
@@ -495,7 +523,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit52>
       <Unit53>
-        <Filename Value="E:/FreePascal/lazarus/lcl/interfaces/gtk/gtkproc.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/interfaces/gtk/gtkproc.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3738"/>
         <CursorPos X="1" Y="3777"/>
@@ -504,7 +532,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit53>
       <Unit54>
-        <Filename Value="E:/FreePascal/lazarus/lcl/interfaces/gtk/gtkcallback.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/interfaces/gtk/gtkcallback.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1826"/>
         <CursorPos X="1" Y="1865"/>
@@ -513,7 +541,7 @@
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit54>
       <Unit55>
-        <Filename Value="E:/FreePascal/lazarus/lcl/interfaces/gtk/gtkwidgetset.inc"/>
+        <Filename Value="../../../FreePascal/lazarus/lcl/interfaces/gtk/gtkwidgetset.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1248"/>
         <CursorPos X="1" Y="1288"/>
@@ -521,68 +549,230 @@
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit55>
+      <Unit56>
+        <Filename Value="C:/FreePascal/lazarus/lcl/include/wincontrol.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="5358"/>
+        <CursorPos X="1" Y="5396"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit56>
+      <Unit57>
+        <Filename Value="C:/FreePascal/lazarus/lcl/include/dragmanager.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="355"/>
+        <CursorPos X="1" Y="393"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit57>
+      <Unit58>
+        <Filename Value="C:/FreePascal/lazarus/lcl/include/winapih.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="310"/>
+        <CursorPos X="10" Y="331"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit58>
+      <Unit59>
+        <Filename Value="C:/FreePascal/lazarus/lcl/include/winapi.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1483"/>
+        <CursorPos X="3" Y="1485"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit59>
+      <Unit60>
+        <Filename Value="C:/FreePascal/lazarus/lcl/stdctrls.pp"/>
+        <UnitName Value="StdCtrls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="164"/>
+        <CursorPos X="22" Y="185"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit60>
+      <Unit61>
+        <Filename Value="C:/FreePascal/lazarus/lcl/controls.pp"/>
+        <UnitName Value="Controls"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="3746"/>
+        <CursorPos X="25" Y="3781"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit61>
+      <Unit62>
+        <Filename Value="C:/FPC/2.4.0/fpc-2.4.0/rtl/objpas/classes/classesh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1545"/>
+        <CursorPos X="15" Y="1561"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit62>
+      <Unit63>
+        <Filename Value="C:/FPC/2.4.0/fpc-2.4.0/rtl/objpas/classes/lists.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="100"/>
+        <CursorPos X="3" Y="102"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit63>
+      <Unit64>
+        <Filename Value="C:/FPC/2.4.0/fpc-2.4.0/rtl/objpas/classes/compon.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="417"/>
+        <CursorPos X="3" Y="424"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit64>
+      <Unit65>
+        <Filename Value="C:/FreePascal/lazarus/lcl/forms.pp"/>
+        <UnitName Value="Forms"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="656"/>
+        <CursorPos X="26" Y="677"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit65>
+      <Unit66>
+        <Filename Value="C:/FreePascal/lazarus/lcl/include/customform.inc"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2672"/>
+        <CursorPos X="3" Y="2674"/>
+        <SyntaxHighlighter Value="FreePascal"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit66>
     </Units>
-    <JumpHistory Count="15" HistoryIndex="14">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="124" Column="20" TopLine="102"/>
+        <Caret Line="172" Column="29" TopLine="155"/>
       </Position1>
       <Position2>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="119" Column="57" TopLine="102"/>
+        <Caret Line="179" Column="39" TopLine="155"/>
       </Position2>
       <Position3>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="122" Column="107" TopLine="102"/>
+        <Caret Line="296" Column="42" TopLine="258"/>
       </Position3>
       <Position4>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="123" Column="61" TopLine="102"/>
+        <Caret Line="70" Column="17" TopLine="53"/>
       </Position4>
       <Position5>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="124" Column="1" TopLine="102"/>
+        <Caret Line="230" Column="21" TopLine="214"/>
       </Position5>
       <Position6>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="125" Column="1" TopLine="102"/>
+        <Caret Line="165" Column="28" TopLine="129"/>
       </Position6>
       <Position7>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="128" Column="1" TopLine="102"/>
+        <Caret Line="124" Column="56" TopLine="103"/>
       </Position7>
       <Position8>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="127" Column="1" TopLine="102"/>
+        <Caret Line="132" Column="20" TopLine="123"/>
       </Position8>
       <Position9>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="128" Column="1" TopLine="102"/>
+        <Filename Value="designer/design_section.pas"/>
+        <Caret Line="76" Column="37" TopLine="63"/>
       </Position9>
       <Position10>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="127" Column="1" TopLine="102"/>
+        <Caret Line="154" Column="18" TopLine="123"/>
       </Position10>
       <Position11>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="128" Column="1" TopLine="102"/>
+        <Caret Line="159" Column="19" TopLine="123"/>
       </Position11>
       <Position12>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="127" Column="1" TopLine="102"/>
+        <Caret Line="229" Column="18" TopLine="210"/>
       </Position12>
       <Position13>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="128" Column="1" TopLine="102"/>
+        <Caret Line="109" Column="23" TopLine="106"/>
       </Position13>
       <Position14>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="132" Column="1" TopLine="102"/>
+        <Filename Value="designer/design_field.pas"/>
+        <Caret Line="57" Column="42" TopLine="54"/>
       </Position14>
       <Position15>
         <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="119" Column="58" TopLine="102"/>
+        <Caret Line="256" Column="22" TopLine="235"/>
       </Position15>
+      <Position16>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="257" Column="37" TopLine="235"/>
+      </Position16>
+      <Position17>
+        <Filename Value="epidatamanager.lpr"/>
+        <Caret Line="11" Column="66" TopLine="1"/>
+      </Position17>
+      <Position18>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="210" Column="1" TopLine="198"/>
+      </Position18>
+      <Position19>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="202" Column="1" TopLine="197"/>
+      </Position19>
+      <Position20>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="208" Column="1" TopLine="197"/>
+      </Position20>
+      <Position21>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="202" Column="1" TopLine="197"/>
+      </Position21>
+      <Position22>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="205" Column="1" TopLine="197"/>
+      </Position22>
+      <Position23>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="207" Column="1" TopLine="197"/>
+      </Position23>
+      <Position24>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="208" Column="1" TopLine="197"/>
+      </Position24>
+      <Position25>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="205" Column="1" TopLine="197"/>
+      </Position25>
+      <Position26>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="207" Column="40" TopLine="197"/>
+      </Position26>
+      <Position27>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="214" Column="40" TopLine="204"/>
+      </Position27>
+      <Position28>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="111" Column="3" TopLine="96"/>
+      </Position28>
+      <Position29>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="110" Column="49" TopLine="96"/>
+      </Position29>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -621,6 +811,12 @@
     </Other>
   </CompilerOptions>
   <Debugging>
+    <Watches Count="1">
+      <Item1>
+        <Expression Value="SetDockSite"/>
+        <Enabled Value="False"/>
+      </Item1>
+    </Watches>
     <Exceptions Count="3">
       <Item1>
         <Name Value="EAbort"/>

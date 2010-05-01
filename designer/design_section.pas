@@ -68,10 +68,12 @@ begin
       case TEpiCustomChangeEventType(EventType) of
         ecceSetLeft: Left := FSection.Left;
         ecceSetTop:  Top  := FSection.Top;
+        ecceName:    Caption := FSection.Name.Text;
         ecceUpdate:
           begin
             Left := FSection.Left;
             Top  := FSection.Top;
+            Caption := FSection.Name.Text;
           end;
       end;
   end;

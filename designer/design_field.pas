@@ -65,10 +65,12 @@ begin
       case TEpiCustomChangeEventType(EventType) of
         ecceSetLeft: Left := FField.Left;
         ecceSetTop:  Top  := FField.Top;
+//        ecceName:    n := FField.Caption.Text;
         ecceUpdate:
           begin
             Left := FField.Left;
             Top  := FField.Top;
+//            Caption := FField.Caption.Text;
           end;
       end;
   end;
