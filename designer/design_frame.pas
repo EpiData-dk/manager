@@ -270,7 +270,14 @@ end;
 
 procedure TDesignFrame.DockSiteUnDock(Sender: TObject; Client: TControl;
   NewTarget: TWinControl; var Allow: Boolean);
+var
+  LocalSection: TEpiSection;
 begin
+  // Sender = the site that is being undocked from.
+  // Client = the control that was dragged to another position.
+  // NewTarget = the target we try dock the client onto (can be the same the sender)
+  // Allow = our feedback to the dragmanager if we want this undock to happen.
+
   Allow := false;
   // NewTarget = false: trying to release the client outside of program window.
   if not Assigned(NewTarget) then exit;
@@ -282,6 +289,24 @@ begin
   // anything from docking into other controls that a section and the scrollbox.
   if (NewTarget = FDesignerBox) or
     (NewTarget is TDesignSection) then Allow := true;
+
+  // Now we are sure we wish to drop the client.
+  // but if Sender = NewTarget do nothing.
+  if (sender = NewTarget) then exit;
+  // Else we need to update the EpiData Core Structure.
+
+  if Sender = FDesignerBox then
+    LocalSection := DataFile.MainSection
+  else
+    LocalSection := TEpiSection(TDesignSection(Sender).EpiControl);
+
+  LocalSection.Fields.RemoveItem((Client as IDesignEpiControl).EpiControl);
+
+  if NewTarget = FDesignerBox then
+    LocalSection := DataFile.MainSection
+  else
+    LocalSection := TEpiSection(TDesignSection(NewTarget).EpiControl);
+  LocalSection.Fields.AddItem((Client as IDesignEpiControl).EpiControl);
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);

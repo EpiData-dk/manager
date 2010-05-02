@@ -11,7 +11,7 @@
       <TargetFileExt Value=""/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
-      <ActiveWindowIndexAtStart Value="1"/>
+      <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
@@ -51,7 +51,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="50" Y="21"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="90"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -63,7 +63,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="50"/>
         <CursorPos X="29" Y="65"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="90"/>
       </Unit1>
       <Unit2>
         <Filename Value="project_frame.pas"/>
@@ -74,7 +74,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="61"/>
         <CursorPos X="1" Y="75"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="90"/>
       </Unit2>
       <Unit3>
         <Filename Value="designer/design_frame.pas"/>
@@ -85,9 +85,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="174"/>
-        <CursorPos X="1" Y="212"/>
-        <UsageCount Value="89"/>
+        <TopLine Value="272"/>
+        <CursorPos X="85" Y="272"/>
+        <UsageCount Value="90"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
@@ -107,7 +107,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="61"/>
         <CursorPos X="42" Y="83"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="90"/>
       </Unit5>
       <Unit6>
         <Filename Value="../../Core/trunk/Core/epidatafiles.pas"/>
@@ -120,85 +120,70 @@
       <Unit7>
         <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
         <UnitName Value="epicustombase"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="9"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="162"/>
-        <CursorPos X="1" Y="174"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="885"/>
+        <CursorPos X="1" Y="923"/>
         <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
         <Filename Value="../../Core/trunk/Core/epidatafilesh.inc"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="1"/>
         <TopLine Value="22"/>
         <CursorPos X="58" Y="50"/>
         <UsageCount Value="44"/>
-        <Loaded Value="True"/>
       </Unit8>
       <Unit9>
         <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
-        <EditorIndex Value="8"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="277"/>
-        <CursorPos X="1" Y="287"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="141"/>
+        <CursorPos X="1" Y="179"/>
         <UsageCount Value="44"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>
         <Filename Value="../../Core/trunk/Core/episectionsh.inc"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="15"/>
         <UsageCount Value="44"/>
-        <Loaded Value="True"/>
       </Unit10>
       <Unit11>
         <Filename Value="../../Core/trunk/Core/episections.inc"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="1"/>
         <TopLine Value="85"/>
         <CursorPos X="1" Y="134"/>
         <UsageCount Value="44"/>
-        <Loaded Value="True"/>
       </Unit11>
       <Unit12>
         <Filename Value="../../Core/trunk/Core/epifieldsh.inc"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="1"/>
         <TopLine Value="82"/>
         <CursorPos X="20" Y="109"/>
         <UsageCount Value="44"/>
-        <Loaded Value="True"/>
       </Unit12>
       <Unit13>
         <Filename Value="../../Core/trunk/Core/epifields.inc"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="1"/>
         <TopLine Value="36"/>
         <CursorPos X="1" Y="65"/>
         <UsageCount Value="44"/>
-        <Loaded Value="True"/>
       </Unit13>
       <Unit14>
         <Filename Value="../../Core/trunk/Core/epiheadingsh.inc"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1"/>
         <CursorPos X="22" Y="15"/>
         <UsageCount Value="44"/>
-        <Loaded Value="True"/>
       </Unit14>
       <Unit15>
         <Filename Value="../../Core/trunk/Core/epiheadings.inc"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="1"/>
         <TopLine Value="24"/>
         <CursorPos X="1" Y="43"/>
         <UsageCount Value="44"/>
-        <Loaded Value="True"/>
       </Unit15>
       <Unit16>
         <Filename Value="../../../FreePascal/fpc/rtl/inc/astrings.inc"/>
@@ -258,11 +243,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_field"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="47"/>
         <CursorPos X="3" Y="73"/>
-        <UsageCount Value="88"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit23>
       <Unit24>
@@ -280,11 +265,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_heading"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="63"/>
         <CursorPos X="1" Y="72"/>
-        <UsageCount Value="87"/>
+        <UsageCount Value="88"/>
         <Loaded Value="True"/>
       </Unit25>
       <Unit26>
@@ -294,11 +279,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_section"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="55"/>
         <CursorPos X="31" Y="71"/>
-        <UsageCount Value="87"/>
+        <UsageCount Value="88"/>
         <Loaded Value="True"/>
       </Unit26>
       <Unit27>
@@ -366,22 +351,18 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_custombase"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="3" Y="14"/>
-        <UsageCount Value="79"/>
-        <Loaded Value="True"/>
+        <CursorPos X="14" Y="17"/>
+        <UsageCount Value="80"/>
       </Unit35>
       <Unit36>
         <Filename Value="../../Core/trunk/Core/epidocument.pas"/>
         <UnitName Value="epidocument"/>
-        <EditorIndex Value="0"/>
         <WindowIndex Value="1"/>
         <TopLine Value="37"/>
         <CursorPos X="1" Y="70"/>
         <UsageCount Value="39"/>
-        <Loaded Value="True"/>
       </Unit36>
       <Unit37>
         <Filename Value="../../../FreePascal/lazarus/lcl/include/customaction.inc"/>
@@ -635,144 +616,144 @@
       <Unit65>
         <Filename Value="C:/FreePascal/lazarus/lcl/forms.pp"/>
         <UnitName Value="Forms"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="656"/>
         <CursorPos X="26" Y="677"/>
         <SyntaxHighlighter Value="FreePascal"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit65>
       <Unit66>
         <Filename Value="C:/FreePascal/lazarus/lcl/include/customform.inc"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2672"/>
         <CursorPos X="3" Y="2674"/>
         <SyntaxHighlighter Value="FreePascal"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Text"/>
       </Unit66>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="172" Column="29" TopLine="155"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="508" Column="1" TopLine="487"/>
       </Position1>
       <Position2>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="179" Column="39" TopLine="155"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="509" Column="1" TopLine="487"/>
       </Position2>
       <Position3>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="296" Column="42" TopLine="258"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="119" Column="1" TopLine="98"/>
       </Position3>
       <Position4>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="70" Column="17" TopLine="53"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="120" Column="1" TopLine="98"/>
       </Position4>
       <Position5>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="230" Column="21" TopLine="214"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="123" Column="1" TopLine="98"/>
       </Position5>
       <Position6>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="165" Column="28" TopLine="129"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="129" Column="1" TopLine="98"/>
       </Position6>
       <Position7>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="124" Column="56" TopLine="103"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="131" Column="1" TopLine="98"/>
       </Position7>
       <Position8>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="132" Column="20" TopLine="123"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="133" Column="1" TopLine="98"/>
       </Position8>
       <Position9>
-        <Filename Value="designer/design_section.pas"/>
-        <Caret Line="76" Column="37" TopLine="63"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="135" Column="1" TopLine="98"/>
       </Position9>
       <Position10>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="154" Column="18" TopLine="123"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="921" Column="1" TopLine="883"/>
       </Position10>
       <Position11>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="159" Column="19" TopLine="123"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="922" Column="1" TopLine="884"/>
       </Position11>
       <Position12>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="229" Column="18" TopLine="210"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="508" Column="1" TopLine="487"/>
       </Position12>
       <Position13>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="109" Column="23" TopLine="106"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="511" Column="1" TopLine="487"/>
       </Position13>
       <Position14>
-        <Filename Value="designer/design_field.pas"/>
-        <Caret Line="57" Column="42" TopLine="54"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="513" Column="1" TopLine="487"/>
       </Position14>
       <Position15>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="256" Column="22" TopLine="235"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="515" Column="1" TopLine="487"/>
       </Position15>
       <Position16>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="257" Column="37" TopLine="235"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="923" Column="1" TopLine="885"/>
       </Position16>
       <Position17>
-        <Filename Value="epidatamanager.lpr"/>
-        <Caret Line="11" Column="66" TopLine="1"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="136" Column="1" TopLine="98"/>
       </Position17>
       <Position18>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="210" Column="1" TopLine="198"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="137" Column="1" TopLine="99"/>
       </Position18>
       <Position19>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="202" Column="1" TopLine="197"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="140" Column="1" TopLine="102"/>
       </Position19>
       <Position20>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="208" Column="1" TopLine="197"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="150" Column="1" TopLine="112"/>
       </Position20>
       <Position21>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="202" Column="1" TopLine="197"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="171" Column="1" TopLine="129"/>
       </Position21>
       <Position22>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="205" Column="1" TopLine="197"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="179" Column="1" TopLine="141"/>
       </Position22>
       <Position23>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="207" Column="1" TopLine="197"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="119" Column="1" TopLine="98"/>
       </Position23>
       <Position24>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="208" Column="1" TopLine="197"/>
+        <Filename Value="../../Core/trunk/Core/epidatafiles.inc"/>
+        <Caret Line="179" Column="1" TopLine="141"/>
       </Position24>
       <Position25>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="205" Column="1" TopLine="197"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="508" Column="1" TopLine="487"/>
       </Position25>
       <Position26>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="207" Column="40" TopLine="197"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="511" Column="1" TopLine="487"/>
       </Position26>
       <Position27>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="214" Column="40" TopLine="204"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="513" Column="1" TopLine="487"/>
       </Position27>
       <Position28>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="111" Column="3" TopLine="96"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="515" Column="1" TopLine="487"/>
       </Position28>
       <Position29>
-        <Filename Value="designer/design_frame.pas"/>
-        <Caret Line="110" Column="49" TopLine="96"/>
+        <Filename Value="../../Core/trunk/Core/epicustombase.pas"/>
+        <Caret Line="923" Column="1" TopLine="885"/>
       </Position29>
+      <Position30>
+        <Filename Value="designer/design_frame.pas"/>
+        <Caret Line="275" Column="1" TopLine="270"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
