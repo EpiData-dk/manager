@@ -44,7 +44,7 @@ type
     HeadingToolButton: TToolButton;
     SectionToolButton: TToolButton;
     ToolButton9: TToolButton;
-    procedure Button1Click(Sender: TObject);
+    procedure   Button1Click(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
     { common private }
@@ -56,16 +56,17 @@ type
     function    NewDesignControl(AClass: TControlClass;
       AParent: TWinControl; Pos: TPoint;
       EpiControl: TEpiCustomControlItem): TControl;
-    procedure DesignControlStartDock(Sender: TObject; var DragObject: TDragDockObject);
 
     { Docksite controls - methods }
-    procedure DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
+    procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
+    procedure   DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
-    procedure DockSiteDockDrop(Sender: TObject; Source: TDragDockObject; X,
+    procedure   DockSiteDockOver(Sender: TObject; Source: TDragDockObject; X,
+      Y: Integer; State: TDragState; var Accept: Boolean);
+    procedure   DockSiteDockDrop(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer);
-    procedure DockSiteUnDock(Sender: TObject; Client: TControl;
+    procedure   DockSiteUnDock(Sender: TObject; Client: TControl;
       NewTarget: TWinControl; var Allow: Boolean);
   private
     { Position handling }
@@ -93,7 +94,34 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Clipbrd;
+  Graphics, Clipbrd, epidocument, epiadmin;
+
+type
+
+  { TScrollBoxEx }
+
+  TScrollBoxEx = class(TScrollBox, IDesignEpiControl)
+  private
+    FEpiControl: TEpiCustomControlItem;
+    function GetEpiControl: TEpiCustomControlItem;
+    procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+  public
+    property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+  end;
+
+{ TScrollBoxEx }
+
+function TScrollBoxEx.GetEpiControl: TEpiCustomControlItem;
+begin
+  result := FEpiControl;
+end;
+
+procedure TScrollBoxEx.SetEpiControl(const AValue: TEpiCustomControlItem);
+begin
+  if FEpiControl = AValue then exit;
+  FEpiControl := AValue;
+end;
+
 
 { TDesignFrame }
 
@@ -141,16 +169,14 @@ begin
   begin
     EpiControl.Left := FMouseDownPos.X;
     EpiControl.Top := FMouseDownPos.Y;
-    Width := Abs(Pos.X - FMouseDownPos.X);
-    Height := Abs(Pos.Y - FMouseDownPos.Y);
-    DockSite := true;
-    DragMode := dmAutomatic;
-    DragKind := dkDock;
+    TEpiSection(EpiControl).Width := Abs(Pos.X - FMouseDownPos.X);
+    TEpiSection(EpiControl).Height := Abs(Pos.Y - FMouseDownPos.Y);
     OnMouseDown := @DockSiteMouseDown;
-    OnMouseUp := @DockSiteMouseUp;
-    OnStartDock := @DesignControlStartDock;
-    OnDockDrop := @DockSiteDockDrop;
-    OnUnDock   := @DockSiteUnDock;
+    OnMouseUp   := @DockSiteMouseUp;
+    OnDockDrop  := @DockSiteDockDrop;
+    OnUnDock    := @DockSiteUnDock;
+    OnDockOver  := @DockSiteDockOver;
+
     // Forces designer box last in docksite list, because retrieving docksite
     // is not implemented fully.
     FDesignerBox.DockSite := false;
@@ -158,27 +184,10 @@ begin
   end else begin
     EpiControl.Left := Pos.X;
     EpiControl.Top  := Pos.Y;
-    if Result is TDesignHeading then
-    with TDesignHeading(Result) do
-    begin
-      DragKind := dkDock;
-      DragMode := dmAutomatic;
-    end else
-    with TDesignField(Result) do
-    begin
-      DragKind := dkDock;
-      DragMode := dmAutomatic;
-    end;
   end;
   Result.Name     := EpiControl.Id;
   Result.Parent   := AParent;
   EpiControl.EndUpdate;
-end;
-
-procedure TDesignFrame.DesignControlStartDock(Sender: TObject;
-  var DragObject: TDragDockObject);
-begin
-  DragObject := TDragDockObject.Create(TControl(Sender));
 end;
 
 function TDesignFrame.FindNewPosition(ParentControl: TWinControl;
@@ -205,12 +214,7 @@ end;
 procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-  If (Sender = FDesignerBox) then
-    FActiveSection := FDataFile.MainSection;
-
-  if (Sender is TDesignSection) then
-    FActiveSection := TEpiSection((Sender as TDesignSection).EpiControl);
-
+  FActiveSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
   FMouseDownPos := Point(X, Y);
 end;
 
@@ -237,14 +241,22 @@ begin
       begin
         EpiControl := NewField(TagToFieldType[FActiveButton.Tag]);
         if ShowForm(EpiControl, ScreenPt) = mrOK then
-          NewDesignControl(TDesignField, SenderWin, ParentPt, EpiControl);
+          NewDesignControl(TDesignField, SenderWin, ParentPt, EpiControl)
+        else begin
+          FActiveSection.Fields.RemoveItem(EpiControl);
+          EpiControl.Free;
+        end;
       end;
     // Heading
     5:
       begin
         EpiControl := NewHeading;
         if ShowForm(EpiControl, ScreenPt) = mrOK then
-          NewDesignControl(TDesignHeading, SenderWin, ParentPt, EpiControl);
+          NewDesignControl(TDesignHeading, SenderWin, ParentPt, EpiControl)
+        else begin
+          FActiveSection.Headings.RemoveItem(EpiControl);
+          EpiControl.Free;
+        end;
       end;
     // Section
     6:
@@ -252,20 +264,65 @@ begin
         // Sections can only be created on the designer.
         if not (Sender = FDesignerBox) then exit;
         EpiControl := NewSection;
+        ScreenPt := ClientToScreen(FMouseDownPos);
         if ShowForm(EpiControl, ScreenPt) = mrOK then
-          NewDesignControl(TDesignSection, SenderWin, ParentPt, EpiControl);
+          NewDesignControl(TDesignSection, SenderWin, ParentPt, EpiControl)
+        else begin
+          FDataFile.Sections.RemoveItem(EpiControl);
+          EpiControl.Free;
+        end;
       end;
   end;
   ToggleToolBtn(SelectorToolButton);
 end;
 
+procedure TDesignFrame.DockSiteDockOver(Sender: TObject;
+  Source: TDragDockObject; X, Y: Integer; State: TDragState; var Accept: Boolean
+  );
+var
+  S: String;
+begin
+  // Sender = the site that is moved over.
+  // Source.control = the control that was dragged to sende.
+  // State = indicator of what's going on.
+  // Accept = our feedback to the dragmanager if we accept this site to dock onto.
+  Label1.Caption := Format('Sender: %s', [TControl(Sender).Name]);
+  Label2.Caption := Format('Control: %s', [Source.Control.Name]);
+  Label3.Caption := Format('X:%d  Y:%d', [X, Y]);
+  WriteStr(S, State);
+  Label4.Caption := S;
+end;
+
 procedure TDesignFrame.DockSiteDockDrop(Sender: TObject;
   Source: TDragDockObject; X, Y: Integer);
 var
-  WinSender: TWinControl absolute Sender;
+  NSection, OSection: TEpiSection;
+  EpiControl: TEpiCustomControlItem;
 begin
-  (Source.Control as IDesignEpiControl).EpiControl.Left := X - Source.DockOffset.X;
-  (Source.Control as IDesignEpiControl).EpiControl.Top  := Y - Source.DockOffset.Y;
+  // Sender = the site being dragged onto.
+  // Source.control = the control being dragged.
+
+  EpiControl := (Source.Control as IDesignEpiControl).EpiControl;
+  EpiControl.Left := X - Source.DockOffset.X;
+  EpiControl.Top  := Y - Source.DockOffset.Y;
+
+  // Sanity checks:
+  // - sections do not need to be relocated in the Core structure.
+  if EpiControl is TEpiSection then exit;
+  // - since bugs exists in the LCL this is needed.
+//  if not Supports(Sender, IDesignEpiControl) then exit;
+  // - if old and new section is the same do nothing.
+  NSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
+  OSection := TEpiSection(EpiControl.Owner.Owner);
+  if NSection = OSection then exit;
+
+  // Remove from old parent
+  TEpiCustomList(EpiControl.Owner).RemoveItem(EpiControl);
+  // Insert into new
+  if EpiControl is TEpiField then
+    NSection.Fields.AddItem(EpiControl)
+  else
+    NSection.Headings.AddItem(EpiControl);
 end;
 
 procedure TDesignFrame.DockSiteUnDock(Sender: TObject; Client: TControl;
@@ -289,27 +346,12 @@ begin
   // anything from docking into other controls that a section and the scrollbox.
   if (NewTarget = FDesignerBox) or
     (NewTarget is TDesignSection) then Allow := true;
-
-  // Now we are sure we wish to drop the client.
-  // but if Sender = NewTarget do nothing.
-  if (sender = NewTarget) then exit;
-  // Else we need to update the EpiData Core Structure.
-
-  if Sender = FDesignerBox then
-    LocalSection := DataFile.MainSection
-  else
-    LocalSection := TEpiSection(TDesignSection(Sender).EpiControl);
-
-  LocalSection.Fields.RemoveItem((Client as IDesignEpiControl).EpiControl);
-
-  if NewTarget = FDesignerBox then
-    LocalSection := DataFile.MainSection
-  else
-    LocalSection := TEpiSection(TDesignSection(NewTarget).EpiControl);
-  LocalSection.Fields.AddItem((Client as IDesignEpiControl).EpiControl);
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
+var
+  LocalAdm: TEpiAdmin;
+  Grp: TEpiGroup;
 begin
   inherited Create(TheOwner);
   FDataFile := ADataFile;
@@ -321,7 +363,7 @@ begin
   // Designer box creation and setup.
   // - (This is subject to change if we find a better component than
   //    the form or a scrollbox).
-  FDesignerBox             := TScrollBox.Create(Self);
+  FDesignerBox             := TScrollBoxEx.Create(Self);
   FDesignerBox.Name        := 'DesignerBox';
   FDesignerBox.Parent      := Self;
   FDesignerBox.Align       := alClient;
@@ -332,6 +374,25 @@ begin
   FDesignerBox.OnMouseDown := @DockSiteMouseDown;
   FDesignerBox.OnDockDrop  := @DockSiteDockDrop;
   FDesignerBox.OnUnDock    := @DockSiteUnDock;
+  FDesignerBox.OnDockOver  := @DockSiteDockOver;
+  (FDesignerBox as IDesignEpiControl).EpiControl := ADataFile.MainSection;
+
+
+
+  // DEBUGGING!!!!
+  LocalAdm := TEpiDocument(FDataFile.RootOwner).Admin;
+  Grp := LocalAdm.NewGroup;
+  Grp.Name.Text := 'Group 1';
+  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
+    earStructure, earTranslate, earUsers, earPassword];
+  Grp := LocalAdm.NewGroup;
+  Grp.Name.Text := 'Group 2';
+  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
+    earStructure, earTranslate, earUsers, earPassword];
+  Grp := LocalAdm.NewGroup;
+  Grp.Name.Text := 'Group 3';
+  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
+    earStructure, earTranslate, earUsers, earPassword];
 end;
 
 end.

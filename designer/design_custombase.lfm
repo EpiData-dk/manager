@@ -1,7 +1,7 @@
 object DesignCustomForm: TDesignCustomForm
-  Left = 0
+  Left = -4
   Height = 240
-  Top = 0
+  Top = 1
   Width = 320
   LCLVersion = '0.9.29'
 end

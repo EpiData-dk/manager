@@ -27,7 +27,21 @@ type
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
 
+  function EpiTextToControlText(Const Str: string): string;
+  function ControlTextToEpiText(Const Str: string): string;
+
+
 implementation
+
+function EpiTextToControlText(const Str: string): string;
+begin
+  result := StringReplace(Str, '&', '&&', [rfReplaceAll]);
+end;
+
+function ControlTextToEpiText(const Str: string): string;
+begin
+  result := StringReplace(Str, '&&', '&', [rfReplaceAll]);
+end;
 
 end.
 

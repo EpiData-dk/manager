@@ -68,12 +68,12 @@ begin
       case TEpiCustomChangeEventType(EventType) of
         ecceSetLeft: Left := FHeading.Left;
         ecceSetTop:  Top  := FHeading.Top;
-        ecceName:    Caption := FHeading.Caption.Text;
+        ecceName:    Caption := FHeading.Id; // FHeading.Caption.Text;
         ecceUpdate:
           begin
             Left := FHeading.Left;
             Top  := FHeading.Top;
-            Caption := FHeading.Caption.Text;
+            Caption := FHeading.Id; //FHeading.Caption.Text;
           end;
       end;
   end;
@@ -82,6 +82,12 @@ end;
 constructor TDesignHeading.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+
+  // Standard properties being set for the component.
+  DragKind := dkDock;
+  DragMode := dmAutomatic;
+  Font.Style := [fsBold];
+  Align := alNone;
 end;
 
 destructor TDesignHeading.Destroy;

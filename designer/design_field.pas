@@ -79,6 +79,16 @@ end;
 constructor TDesignField.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+
+  // Standard properties being set for the component.
+  DragKind := dkDock;
+  DragMode := dmAutomatic;
+  AutoSelect := false;
+  AutoSize := false;
+  ReadOnly := true;
+  TabStop := false;
+  Color:= clMenuBar;
+  Align := alNone;
 end;
 
 destructor TDesignField.Destroy;

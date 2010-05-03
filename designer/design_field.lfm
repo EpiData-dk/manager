@@ -1,6 +1,7 @@
 inherited DesignFieldForm: TDesignFieldForm
-  Left = 809
-  Top = 400
+  Left = 647
+  Top = 367
+  ActiveControl = BitBtn1
   Caption = 'DesignFieldForm'
   object BitBtn1: TBitBtn[0]
     Left = 240
