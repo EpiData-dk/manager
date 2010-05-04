@@ -6,18 +6,25 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, epidatafiles, epicustombase, design_custombase;
+  StdCtrls, Buttons, ExtCtrls, MaskEdit, ComCtrls, epidatafiles, epicustombase,
+  design_custombase;
 
 type
   { TDesignField }
 
   TDesignField = class(TEdit, IDesignEpiControl)
   private
+    FNameLabel: TLabel;
+    FQuestionLabel: TLabel;
     FField: TEpiField;
     FHeading: TEpiHeading;
-    function GetEpiControl: TEpiCustomControlItem;
-    procedure SetEpiControl(const AValue: TEpiCustomControlItem);
-    procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    function    GetEpiControl: TEpiCustomControlItem;
+    procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure   OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure   OnQuestionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure   UpdateNameLabel;
+  protected
+    procedure   SetParent(NewParent: TWinControl); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -27,10 +34,25 @@ type
   { TDesignFieldForm }
 
   TDesignFieldForm = class(TDesignCustomForm)
-    BitBtn1: TBitBtn;
+    CancelBtn: TBitBtn;
+    Label5: TLabel;
+    NameEdit: TEdit;
+    IdEdit: TEdit;
+    PageControl1: TPageControl;
+    QuestionEdit: TEdit;
+    LengthEdit: TEdit;
+    DecimalsEdit: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    OkBtn: TBitBtn;
+    Panel1: TPanel;
+    BasicSheet: TTabSheet;
   private
     { private declarations }
     FField: TEpiField;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   protected
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
     function GetEpiControl: TEpiCustomControlItem; override;
@@ -54,31 +76,90 @@ end;
 procedure TDesignField.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FField := TEpiField(AValue);
-  FField.RegisterOnChangeHook(@OnChange);
+  FField.RegisterOnChangeHook(@OnFieldChange);
+  FField.Question.RegisterOnChangeHook(@OnQuestionChange);
+  Name := FField.Id;
+  Caption := '';
 end;
 
-procedure TDesignField.OnChange(Sender: TObject; EventGroup: TEpiEventGroup;
+procedure TDesignField.OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup;
   EventType: Word; Data: Pointer);
 begin
   case EventGroup of
     eegCustomBase:
       case TEpiCustomChangeEventType(EventType) of
-        ecceSetLeft: Left := FField.Left;
-        ecceSetTop:  Top  := FField.Top;
-//        ecceName:    n := FField.Caption.Text;
+        // General update - set everything.
         ecceUpdate:
           begin
-            Left := FField.Left;
-            Top  := FField.Top;
-//            Caption := FField.Caption.Text;
+            // Set label first - else width of Question is not calculated.
+            FNameLabel.Caption        := FField.Name.Text;
+
+            Left                      := FField.Left;
+            FField.Question.Left      := FField.Left - (FQuestionLabel.Width + 5);
+            Top                       := FField.Top;
+            FField.Question.Top       := FField.Top;
           end;
+        ecceSetLeft:
+          begin
+            Left                      := FField.Left;
+            FField.Question.Left      := FField.Left - (FQuestionLabel.Width + 5);
+          end;
+        ecceSetTop:
+          begin
+            Top                       := FField.Top;
+            FField.Question.Top       := FField.Top;
+          end;
+        ecceName: FNameLabel.Caption  := FField.Name.Text;
       end;
   end;
+  UpdateNameLabel;
+end;
+
+procedure TDesignField.OnQuestionChange(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+var
+  Question: TEpiHeading absolute Sender;
+begin
+  with FQuestionLabel do
+  case EventGroup of
+    eegCustomBase:
+      case TEpiCustomChangeEventType(EventType) of
+        ecceUpdate:
+          begin
+            Caption := Question.Caption.Text;
+            Left    := Question.Left;
+            Top     := Question.Top;
+          end;
+        ecceSetTop:
+            Top     := Question.Top;
+        ecceSetLeft:
+            Left    := Question.Left;
+        ecceText:
+            Caption := Question.Caption.Text;
+      end;
+  end;
+end;
+
+procedure TDesignField.UpdateNameLabel;
+begin
+  FNameLabel.Left := FQuestionLabel.Left - (FNameLabel.Width + 5);
+  FNameLabel.Top := FQuestionLabel.Top;
+end;
+
+procedure TDesignField.SetParent(NewParent: TWinControl);
+begin
+  inherited SetParent(NewParent);
+  if csDestroying in ComponentState then exit;
+
+  FNameLabel.Parent := NewParent;
+  FQuestionLabel.Parent := NewParent;
 end;
 
 constructor TDesignField.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FNameLabel := TLabel.Create(Self);
+  FQuestionLabel := TLabel.Create(Self);
 
   // Standard properties being set for the component.
   DragKind := dkDock;
@@ -98,9 +179,28 @@ end;
 
 { TDesignFieldForm }
 
+procedure TDesignFieldForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
+  );
+begin
+  FField.BeginUpdate;
+
+  FField.Id := IdEdit.Text;
+  FField.Name.Text := NameEdit.Text;
+  FField.Question.Caption.Text := QuestionEdit.Text;
+  FField.Length := StrToInt(LengthEdit.Text);
+  FField.Decimals := StrToInt(DecimalsEdit.Text);
+
+  FField.EndUpdate;
+end;
+
 procedure TDesignFieldForm.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FField := TEpiField(AValue);
+  IdEdit.Text := FField.Id;
+  NameEdit.Text := FField.Name.Text;
+  QuestionEdit.Text := FField.Question.Caption.Text;
+  LengthEdit.Text := IntToStr(FField.Length);
+  DecimalsEdit.Text := IntToStr(FField.Decimals);
 end;
 
 function TDesignFieldForm.GetEpiControl: TEpiCustomControlItem;
@@ -111,6 +211,7 @@ end;
 constructor TDesignFieldForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  OnCloseQuery := @FormCloseQuery;
 end;
 
 destructor TDesignFieldForm.Destroy;

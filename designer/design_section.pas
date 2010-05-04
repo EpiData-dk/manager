@@ -77,6 +77,8 @@ procedure TDesignSection.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FSection := TEpiSection(AValue);
   FSection.RegisterOnChangeHook(@OnChange);
+  Name := FSection.Id;
+  Caption := '';
 end;
 
 procedure TDesignSection.OnChange(Sender: TObject; EventGroup: TEpiEventGroup;

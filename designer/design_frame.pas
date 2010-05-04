@@ -6,8 +6,9 @@ interface
 
 uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
-  ActnList, ExtCtrls, StdCtrls, epidatafiles, epidatafilestypes, design_field,
-  design_heading, design_section, epicustombase, design_custombase;
+  ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
+  design_field, design_heading, design_section, epicustombase,
+  design_custombase;
 
 type
 
@@ -20,6 +21,8 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    EditPopupMenuItem: TMenuItem;
+    DeletePopupMenuItem: TMenuItem;
     NewSectionAction: TAction;
     NewHeadingAction: TAction;
     NewYMDFieldAction: TAction;
@@ -33,6 +36,7 @@ type
     DesignerToolBar: TToolBar;
     IntToolButton: TToolButton;
     Panel1: TPanel;
+    EpiControlPopUpMenu: TPopupMenu;
     SelectorToolButton: TToolButton;
     ToolButton10: TToolButton;
     FloatToolButton: TToolButton;
@@ -56,6 +60,7 @@ type
     function    NewDesignControl(AClass: TControlClass;
       AParent: TWinControl; Pos: TPoint;
       EpiControl: TEpiCustomControlItem): TControl;
+    procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
 
     { Docksite controls - methods }
     procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
@@ -68,6 +73,10 @@ type
       Y: Integer);
     procedure   DockSiteUnDock(Sender: TObject; Client: TControl;
       NewTarget: TWinControl; var Allow: Boolean);
+
+    { Design controls - methods }
+    procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Position handling }
     function    FindNewPosition(ParentControl: TWinControl;
@@ -108,6 +117,8 @@ type
   public
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
+
+  TControlEx = class(TControl);
 
 { TScrollBoxEx }
 
@@ -160,6 +171,7 @@ function TDesignFrame.NewDesignControl(AClass: TControlClass;
   ): TControl;
 var
   L: TDesignHeading;
+  Ctrl: TControlEx;
 begin
   Result := AClass.Create(AParent);
   EpiControl.BeginUpdate;
@@ -178,16 +190,23 @@ begin
     OnDockOver  := @DockSiteDockOver;
 
     // Forces designer box last in docksite list, because retrieving docksite
-    // is not implemented fully.
+    // is not implemented fully in the LCL.
     FDesignerBox.DockSite := false;
     FDesignerBox.DockSite := true;
   end else begin
     EpiControl.Left := Pos.X;
     EpiControl.Top  := Pos.Y;
+    Ctrl := TControlEx(Result);
+    Ctrl.OnMouseDown := @DesignControlMouseUp;
   end;
-  Result.Name     := EpiControl.Id;
   Result.Parent   := AParent;
   EpiControl.EndUpdate;
+end;
+
+procedure TDesignFrame.ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
+begin
+  DeletePopupMenuItem.Enabled := (Sender <> FDesignerBox);
+  EpiControlPopUpMenu.PopUp(Pos.X, Pos.Y);
 end;
 
 function TDesignFrame.FindNewPosition(ParentControl: TWinControl;
@@ -232,6 +251,14 @@ const
 begin
   ParentPt := Point(X, Y);
   ScreenPt := SenderWin.ClientToScreen(Point(X, Y));
+
+  // Right button activates popup-menu
+  if Button = mbRight then
+  begin
+    ShowEpiControlPopup(SenderWin, ScreenPt);
+    Exit;
+  end;
+
   case FActiveButton.Tag of
     // Selector
     0: Exit;
@@ -309,8 +336,7 @@ begin
   // Sanity checks:
   // - sections do not need to be relocated in the Core structure.
   if EpiControl is TEpiSection then exit;
-  // - since bugs exists in the LCL this is needed.
-//  if not Supports(Sender, IDesignEpiControl) then exit;
+
   // - if old and new section is the same do nothing.
   NSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
   OSection := TEpiSection(EpiControl.Owner.Owner);
@@ -346,6 +372,22 @@ begin
   // anything from docking into other controls that a section and the scrollbox.
   if (NewTarget = FDesignerBox) or
     (NewTarget is TDesignSection) then Allow := true;
+end;
+
+procedure TDesignFrame.DesignControlMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  SenderCtrl: TControl absolute Sender;
+  Pt: TPoint;
+begin
+  Pt := SenderCtrl.ClientToScreen(Point(x, Y));
+
+  // Right button activates popup-menu
+  if Button = mbRight then
+  begin
+    ShowEpiControlPopup(SenderCtrl, Pt);
+    Exit;
+  end;
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);

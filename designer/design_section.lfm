@@ -1,8 +1,9 @@
 inherited DesignSectionForm: TDesignSectionForm
-  Left = 718
+  Left = 577
   Height = 346
-  Top = 366
+  Top = 350
   Width = 384
+  ActiveControl = Panel1
   Caption = 'Section Properties'
   ClientHeight = 346
   ClientWidth = 384
@@ -36,10 +37,10 @@ inherited DesignSectionForm: TDesignSectionForm
       TabOrder = 1
     end
     object OkBtn: TBitBtn
-      Left = 208
-      Height = 32
+      Left = 224
+      Height = 34
       Top = 304
-      Width = 75
+      Width = 62
       Caption = '&OK'
       Default = True
       Kind = bkOK
@@ -47,10 +48,11 @@ inherited DesignSectionForm: TDesignSectionForm
       TabOrder = 3
     end
     object CancelBtn: TBitBtn
-      Left = 296
-      Height = 32
+      Left = 295
+      Height = 34
       Top = 304
-      Width = 80
+      Width = 81
+      AutoSize = True
       Cancel = True
       Caption = 'Cancel'
       Kind = bkCancel

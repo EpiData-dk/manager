@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, epidatafiles, epicustombase, design_custombase;
+  StdCtrls, Buttons, ExtCtrls, epidatafiles, epicustombase, design_custombase;
 
 type
 
@@ -17,7 +17,8 @@ type
     FHeading: TEpiHeading;
     function GetEpiControl: TEpiCustomControlItem;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
-    procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnHeadingChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnCaptionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
@@ -27,13 +28,20 @@ type
   { TDesignHeadingForm }
 
   TDesignHeadingForm = class(TDesignCustomForm)
-    BitBtn1: TBitBtn;
+    CancelBtn: TBitBtn;
+    IdEdit: TEdit;
+    Label1: TLabel;
+    Label5: TLabel;
+    CaptionEdit: TEdit;
+    OkBtn: TBitBtn;
+    Panel1: TPanel;
   private
     { private declarations }
     FHeading: TEpiHeading;
   protected
     function GetEpiControl: TEpiCustomControlItem; override;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -57,26 +65,33 @@ end;
 procedure TDesignHeading.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FHeading := TEpiHeading(AValue);
-  FHeading.RegisterOnChangeHook(@OnChange);
+  FHeading.RegisterOnChangeHook(@OnHeadingChange);
+  FHeading.Caption.RegisterOnChangeHook(@OnCaptionChange);
+  Name := FHeading.Id;
+  Caption := '';
 end;
 
-procedure TDesignHeading.OnChange(Sender: TObject; EventGroup: TEpiEventGroup;
-  EventType: Word; Data: Pointer);
+procedure TDesignHeading.OnHeadingChange(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   case EventGroup of
     eegCustomBase:
       case TEpiCustomChangeEventType(EventType) of
         ecceSetLeft: Left := FHeading.Left;
         ecceSetTop:  Top  := FHeading.Top;
-        ecceName:    Caption := FHeading.Id; // FHeading.Caption.Text;
         ecceUpdate:
           begin
             Left := FHeading.Left;
             Top  := FHeading.Top;
-            Caption := FHeading.Id; //FHeading.Caption.Text;
           end;
       end;
   end;
+end;
+
+procedure TDesignHeading.OnCaptionChange(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  Caption := TEpiTranslatedText(Sender).Text;
 end;
 
 constructor TDesignHeading.Create(AOwner: TComponent);
@@ -97,6 +112,17 @@ end;
 
 { TDesignHeadingForm }
 
+procedure TDesignHeadingForm.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  FHeading.BeginUpdate;
+
+  FHeading.Id := IdEdit.Text;
+  FHeading.Caption.Text := CaptionEdit.Text;
+
+  FHeading.EndUpdate;
+end;
+
 function TDesignHeadingForm.GetEpiControl: TEpiCustomControlItem;
 begin
   Result := FHeading;
@@ -106,11 +132,14 @@ procedure TDesignHeadingForm.SetEpiControl(const AValue: TEpiCustomControlItem
   );
 begin
   FHeading := TEpiHeading(AValue);
+  IdEdit.Text := FHeading.Id;
+  CaptionEdit.Text := FHeading.Caption.Text;
 end;
 
 constructor TDesignHeadingForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  OnCloseQuery := @FormCloseQuery;
 end;
 
 destructor TDesignHeadingForm.Destroy;

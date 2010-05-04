@@ -32,6 +32,7 @@ type
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     procedure NewDataFormActionExecute(Sender: TObject);
+    procedure OpenProjectActionExecute(Sender: TObject);
   private
     { private declarations }
     FActiveFrame: TFrame;
@@ -81,6 +82,11 @@ begin
   Frame.Parent := Self;
   DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Frame.Name, Frame);
   Df.TreeNode := DataFilesTreeView.Selected;
+end;
+
+procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;

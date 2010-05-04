@@ -98,6 +98,7 @@ object ProjectFrame: TProjectFrame
       Caption = 'Open Project'
       Hint = 'Open Project'
       ImageIndex = 0
+      OnExecute = OpenProjectActionExecute
     end
     object SaveProjectAction: TAction
       Caption = 'Save Project'

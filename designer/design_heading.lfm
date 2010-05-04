@@ -1,17 +1,76 @@
 inherited DesignHeadingForm: TDesignHeadingForm
-  Left = 723
-  Top = 473
-  ActiveControl = BitBtn1
-  Caption = 'DesignHeadingForm'
-  object BitBtn1: TBitBtn[0]
-    Left = 232
-    Height = 30
-    Top = 192
-    Width = 75
-    Caption = '&OK'
-    Default = True
-    Kind = bkOK
-    ModalResult = 1
+  Left = 610
+  Height = 163
+  Top = 438
+  Width = 323
+  Caption = 'Heading Properties'
+  ClientHeight = 163
+  ClientWidth = 323
+  object Panel1: TPanel[0]
+    Left = 0
+    Height = 163
+    Top = 0
+    Width = 323
+    Align = alClient
+    BevelInner = bvLowered
+    BevelWidth = 2
+    ClientHeight = 163
+    ClientWidth = 323
+    Color = clSkyBlue
+    ParentColor = False
     TabOrder = 0
+    object OkBtn: TBitBtn
+      Left = 162
+      Height = 34
+      Top = 120
+      Width = 62
+      Caption = '&OK'
+      Default = True
+      Kind = bkOK
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object CancelBtn: TBitBtn
+      Left = 231
+      Height = 34
+      Top = 120
+      Width = 81
+      AutoSize = True
+      Cancel = True
+      Caption = 'Cancel'
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object Label1: TLabel
+      Left = 8
+      Height = 18
+      Top = 61
+      Width = 55
+      Caption = 'Caption:'
+      ParentColor = False
+    end
+    object CaptionEdit: TEdit
+      Left = 8
+      Height = 27
+      Top = 85
+      Width = 304
+      TabOrder = 2
+    end
+    object Label5: TLabel
+      Left = 8
+      Height = 18
+      Top = 5
+      Width = 17
+      Caption = 'Id:'
+      ParentColor = False
+    end
+    object IdEdit: TEdit
+      Left = 8
+      Height = 27
+      Top = 29
+      Width = 304
+      TabOrder = 3
+    end
   end
 end
