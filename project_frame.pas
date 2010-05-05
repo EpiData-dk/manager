@@ -77,7 +77,7 @@ begin
   Df.RegisterOnChangeHook(@OnDataFileChange);
 
   Frame := TDesignFrame.Create(Self, Df);
-  Frame.Name := 'Frame' + IntToStr(FrameCount);
+  Frame.Name := 'Dataform' + IntToStr(FrameCount);
   Frame.Align := alClient;
   Frame.Parent := Self;
   DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Frame.Name, Frame);

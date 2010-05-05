@@ -19,6 +19,7 @@ type
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure OnHeadingChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnCaptionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure UpdateHint;
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
@@ -86,12 +87,30 @@ begin
           end;
       end;
   end;
+  UpdateHint;
 end;
 
 procedure TDesignHeading.OnCaptionChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   Caption := TEpiTranslatedText(Sender).Text;
+  UpdateHint;
+end;
+
+procedure TDesignHeading.UpdateHint;
+begin
+  with FHeading do
+    Hint := WideFormat(
+      'Id: %s' + LineEnding +
+//      'Name: %s' + LineEnding +
+      'Caption: %s' + LineEnding +
+      'X: %d, Y: %d',
+      [UTF8Decode(Id),
+//       UTF8Decode(Name.Text),
+       UTF8Decode(Caption.Text),
+       Left,
+       Top]
+    );
 end;
 
 constructor TDesignHeading.Create(AOwner: TComponent);
@@ -103,6 +122,7 @@ begin
   DragMode := dmAutomatic;
   Font.Style := [fsBold];
   Align := alNone;
+  ShowHint := true;
 end;
 
 destructor TDesignHeading.Destroy;
@@ -115,6 +135,8 @@ end;
 procedure TDesignHeadingForm.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
 begin
+  if ModalResult <> mrOK then exit;
+
   FHeading.BeginUpdate;
 
   FHeading.Id := IdEdit.Text;

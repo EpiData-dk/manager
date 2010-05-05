@@ -15,6 +15,8 @@ type
   { TDesignFrame }
 
   TDesignFrame = class(TFrame)
+    DeleteControlAction: TAction;
+    EditControlAction: TAction;
     Button1: TButton;
     Label1: TLabel;
     Label2: TLabel;
@@ -38,30 +40,38 @@ type
     Panel1: TPanel;
     EpiControlPopUpMenu: TPopupMenu;
     SelectorToolButton: TToolButton;
+    ToolButton1: TToolButton;
     ToolButton10: TToolButton;
     FloatToolButton: TToolButton;
     StringToolButton: TToolButton;
     DateToolButton: TToolButton;
     OtherToolButton: TToolButton;
     ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
     ToolButton6: TToolButton;
     HeadingToolButton: TToolButton;
     SectionToolButton: TToolButton;
     ToolButton9: TToolButton;
     procedure   Button1Click(Sender: TObject);
+    procedure   DeleteControlActionExecute(Sender: TObject);
+    procedure   EditControlActionExecute(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
     { common private }
     FDataFile: TEpiDataFile;
     FDesignerBox: TScrollBox;
     FActiveButton: TToolButton;
+    FLeftMouseDown:  TPoint;
+    FLeftMouseUp:  TPoint;
+    FRightMouseDown: TPoint;
+    FRightMouseUp: TPoint;
+    procedure   ResetMousePos;
     function    ShowForm(EpiControl: TEpiCustomControlItem;
       Pos: TPoint): TModalResult;
-    function    NewDesignControl(AClass: TControlClass;
-      AParent: TWinControl; Pos: TPoint;
-      EpiControl: TEpiCustomControlItem): TControl;
     procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
 
+  private
     { Docksite controls - methods }
     procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -74,9 +84,19 @@ type
     procedure   DockSiteUnDock(Sender: TObject; Client: TControl;
       NewTarget: TWinControl; var Allow: Boolean);
 
+  private
     { Design controls - methods }
+    FActiveControl: TControl;
+    function    NewDesignControl(AClass: TControlClass;
+      AParent: TWinControl; Pos: TPoint;
+      EpiControl: TEpiCustomControlItem): TControl;
+    function    NewSectionControl(StartPos, EndPos: TPoint;
+      EpiControl: TEpiCustomControlItem): TControl;
+    procedure   DesignControlMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure   EnterControl(Sender: TObject);
   private
     { Position handling }
     function    FindNewPosition(ParentControl: TWinControl;
@@ -90,7 +110,6 @@ type
   private
     { Section handling }
     FActiveSection: TEpiSection;
-    FMouseDownPos: TPoint;
     function    NewSection: TEpiSection;
   public
     { public declarations }
@@ -103,7 +122,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Clipbrd, epidocument, epiadmin;
+  Graphics, Clipbrd, epidocument, epiadmin, math;
 
 type
 
@@ -144,9 +163,50 @@ begin
   FActiveButton := TToolButton(Sender);
 end;
 
+procedure TDesignFrame.ResetMousePos;
+var
+  Pt: TPoint;
+begin
+  Pt := Point(-1, -1);
+  FLeftMouseDown := Pt;
+  FLeftMouseUp := Pt;
+  FRightMouseDown := Pt;
+  FRightMouseUp := Pt;
+end;
+
 procedure TDesignFrame.Button1Click(Sender: TObject);
 begin
   Clipboard.AsText := DataFile.SaveToXml('', 0);
+end;
+
+procedure TDesignFrame.DeleteControlActionExecute(Sender: TObject);
+var
+  EpiCtrl: TEpiCustomControlItem;
+  LocalCtrl: TControl;
+begin
+  EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
+
+  // TODO : Find next control in line.
+  LocalCtrl := FActiveControl;
+  EnterControl(FDesignerBox);
+
+  // TODO : Show warning when containing data.
+  TEpiCustomList(EpiCtrl.Owner).RemoveItem(EpiCtrl);
+  EpiCtrl.Free;
+  LocalCtrl.Free;
+end;
+
+procedure TDesignFrame.EditControlActionExecute(Sender: TObject);
+var
+  EpiCtrl: TEpiCustomControlItem;
+  Pt: TPoint;
+begin
+  EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
+  if (FRightMouseUp.X = -1) then
+    Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left, EpiCtrl.Top))
+  else
+    Pt := FRightMouseUp;
+  ShowForm(EpiCtrl, Pt);
 end;
 
 function TDesignFrame.ShowForm(EpiControl: TEpiCustomControlItem; Pos: TPoint
@@ -170,42 +230,70 @@ function TDesignFrame.NewDesignControl(AClass: TControlClass;
   AParent: TWinControl; Pos: TPoint; EpiControl: TEpiCustomControlItem
   ): TControl;
 var
-  L: TDesignHeading;
   Ctrl: TControlEx;
 begin
   Result := AClass.Create(AParent);
-  EpiControl.BeginUpdate;
-  (Result as IDesignEpiControl).EpiControl := EpiControl;
-  if Result is TDesignSection then
-  with TDesignSection(Result) do
+  Ctrl := TControlEx(Result);
+
+  (Ctrl as IDesignEpiControl).EpiControl := EpiControl;
+  with Ctrl do
   begin
-    EpiControl.Left := FMouseDownPos.X;
-    EpiControl.Top := FMouseDownPos.Y;
-    TEpiSection(EpiControl).Width := Abs(Pos.X - FMouseDownPos.X);
-    TEpiSection(EpiControl).Height := Abs(Pos.Y - FMouseDownPos.Y);
+    OnMouseDown := @DesignControlMouseDown;
+    OnMouseUp   := @DesignControlMouseUp;
+  end;
+
+  with EpiControl do
+  begin
+    BeginUpdate;
+    Left := Pos.X;
+    Top  := Pos.Y;
+    EndUpdate;
+  end;
+
+  Result.Parent  := AParent;
+end;
+
+function TDesignFrame.NewSectionControl(StartPos, EndPos: TPoint;
+  EpiControl: TEpiCustomControlItem): TControl;
+var
+  Ctrl: TDesignSection;
+  EpiSection: TEpiSection absolute EpiControl;
+const
+  MinSectionWidth = 200;
+  MinSectionHeight = 100;
+begin
+  Ctrl := TDesignSection.Create(FDesignerBox);
+  Result := Ctrl;
+
+  Ctrl.EpiControl := EpiSection;
+  with Ctrl do
+  begin
     OnMouseDown := @DockSiteMouseDown;
     OnMouseUp   := @DockSiteMouseUp;
     OnDockDrop  := @DockSiteDockDrop;
     OnUnDock    := @DockSiteUnDock;
     OnDockOver  := @DockSiteDockOver;
-
-    // Forces designer box last in docksite list, because retrieving docksite
-    // is not implemented fully in the LCL.
-    FDesignerBox.DockSite := false;
-    FDesignerBox.DockSite := true;
-  end else begin
-    EpiControl.Left := Pos.X;
-    EpiControl.Top  := Pos.Y;
-    Ctrl := TControlEx(Result);
-    Ctrl.OnMouseDown := @DesignControlMouseUp;
   end;
-  Result.Parent   := AParent;
-  EpiControl.EndUpdate;
+
+  with EpiSection do
+  begin
+    BeginUpdate;
+    Left := StartPos.X;
+    Top  := StartPos.Y;
+    Width := Max(Abs(StartPos.X - EndPos.X), MinSectionWidth);
+    Height := Max(Abs(StartPos.Y - EndPos.Y), MinSectionHeight);
+    EndUpdate;
+  end;
+  Ctrl.Parent := FDesignerBox;
+
+  // Forces designer box last in docksite list, because retrieving docksite
+  // is not implemented fully in the LCL.
+  FDesignerBox.DockSite := false;
+  FDesignerBox.DockSite := true;
 end;
 
 procedure TDesignFrame.ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
 begin
-  DeletePopupMenuItem.Enabled := (Sender <> FDesignerBox);
   EpiControlPopUpMenu.PopUp(Pos.X, Pos.Y);
 end;
 
@@ -232,16 +320,22 @@ end;
 
 procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  WinSender: TWinControl absolute Sender;
 begin
   FActiveSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
-  FMouseDownPos := Point(X, Y);
+  case Button of
+    mbLeft: FLeftMouseDown := WinSender.ClientToScreen(Point(X, Y));
+    mbRight: FRightMouseDown := WinSender.ClientToScreen(Point(X, Y));
+  end;
+
+  EnterControl(Sender);
 end;
 
 procedure TDesignFrame.DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
-  SenderWin: TWinControl absolute Sender;
-  ScreenPt: TPoint;
+  WinSender: TWinControl absolute Sender;
   ParentPt: TPoint;
   EpiControl: TEpiCustomControlItem;
 const
@@ -249,15 +343,19 @@ const
     ftInteger, ftFloat, ftString, ftDMYDate
   );
 begin
-  ParentPt := Point(X, Y);
-  ScreenPt := SenderWin.ClientToScreen(Point(X, Y));
+  case Button of
+    mbLeft: FLeftMouseUp := WinSender.ClientToScreen(Point(X, Y));
+    mbRight: FRightMouseUp := WinSender.ClientToScreen(Point(X, Y));
+  end;
 
   // Right button activates popup-menu
   if Button = mbRight then
   begin
-    ShowEpiControlPopup(SenderWin, ScreenPt);
+    ShowEpiControlPopup(WinSender, FRightMouseUp);
     Exit;
   end;
+
+  ParentPt := WinSender.ScreenToClient(FLeftMouseUp);
 
   case FActiveButton.Tag of
     // Selector
@@ -267,8 +365,8 @@ begin
     1, 2, 3, 4:
       begin
         EpiControl := NewField(TagToFieldType[FActiveButton.Tag]);
-        if ShowForm(EpiControl, ScreenPt) = mrOK then
-          NewDesignControl(TDesignField, SenderWin, ParentPt, EpiControl)
+        if ShowForm(EpiControl, FLeftMouseUp) = mrOK then
+          NewDesignControl(TDesignField, WinSender, ParentPt, EpiControl)
         else begin
           FActiveSection.Fields.RemoveItem(EpiControl);
           EpiControl.Free;
@@ -278,8 +376,8 @@ begin
     5:
       begin
         EpiControl := NewHeading;
-        if ShowForm(EpiControl, ScreenPt) = mrOK then
-          NewDesignControl(TDesignHeading, SenderWin, ParentPt, EpiControl)
+        if ShowForm(EpiControl, FLeftMouseUp) = mrOK then
+          NewDesignControl(TDesignHeading, WinSender, ParentPt, EpiControl)
         else begin
           FActiveSection.Headings.RemoveItem(EpiControl);
           EpiControl.Free;
@@ -291,9 +389,9 @@ begin
         // Sections can only be created on the designer.
         if not (Sender = FDesignerBox) then exit;
         EpiControl := NewSection;
-        ScreenPt := ClientToScreen(FMouseDownPos);
-        if ShowForm(EpiControl, ScreenPt) = mrOK then
-          NewDesignControl(TDesignSection, SenderWin, ParentPt, EpiControl)
+        if ShowForm(EpiControl, FLeftMouseDown) = mrOK then
+          NewSectionControl(WinSender.ScreenToClient(FLeftMouseDown),
+            WinSender.ScreenToClient(FLeftMouseUp), EpiControl)
         else begin
           FDataFile.Sections.RemoveItem(EpiControl);
           EpiControl.Free;
@@ -313,6 +411,7 @@ begin
   // Source.control = the control that was dragged to sende.
   // State = indicator of what's going on.
   // Accept = our feedback to the dragmanager if we accept this site to dock onto.
+  Accept := true;
   Label1.Caption := Format('Sender: %s', [TControl(Sender).Name]);
   Label2.Caption := Format('Control: %s', [Source.Control.Name]);
   Label3.Caption := Format('X:%d  Y:%d', [X, Y]);
@@ -374,20 +473,41 @@ begin
     (NewTarget is TDesignSection) then Allow := true;
 end;
 
+procedure TDesignFrame.DesignControlMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  CtrlSender: TControl absolute Sender;
+begin
+  case Button of
+    mbLeft: FLeftMouseDown := CtrlSender.ClientToScreen(Point(X, Y));
+    mbRight: FRightMouseDown := CtrlSender.ClientToScreen(Point(X, Y));
+  end;
+
+  EnterControl(Sender);
+end;
+
 procedure TDesignFrame.DesignControlMouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
-  SenderCtrl: TControl absolute Sender;
-  Pt: TPoint;
+  CtrlSender: TControl absolute Sender;
 begin
-  Pt := SenderCtrl.ClientToScreen(Point(x, Y));
+  case Button of
+    mbLeft: FLeftMouseUp := CtrlSender.ClientToScreen(Point(X, Y));
+    mbRight: FRightMouseUp := CtrlSender.ClientToScreen(Point(X, Y));
+  end;
 
   // Right button activates popup-menu
   if Button = mbRight then
   begin
-    ShowEpiControlPopup(SenderCtrl, Pt);
+    ShowEpiControlPopup(CtrlSender, FRightMouseUp);
     Exit;
   end;
+end;
+
+procedure TDesignFrame.EnterControl(Sender: TObject);
+begin
+  FActiveControl := TControl(Sender);
+  DeleteControlAction.Enabled := (Sender <> FDesignerBox);
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
@@ -419,7 +539,7 @@ begin
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
   (FDesignerBox as IDesignEpiControl).EpiControl := ADataFile.MainSection;
 
-
+  EnterControl(FDesignerBox);
 
   // DEBUGGING!!!!
   LocalAdm := TEpiDocument(FDataFile.RootOwner).Admin;

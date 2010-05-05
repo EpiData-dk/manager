@@ -18,6 +18,7 @@ type
     function GetEpiControl: TEpiCustomControlItem;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure UpdateHint;
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
@@ -107,6 +108,29 @@ begin
         end;
       end;
   end;
+  UpdateHint;
+end;
+
+procedure TDesignSection.UpdateHint;
+var
+  S: String;
+  i: Integer;
+begin
+  S := '';
+  for i := 0 to FSection.Groups.Count - 1 do
+    S += FSection.Groups[i].Name.Text + ',';
+  Delete(S, Length(S), 1);
+
+  With FSection do
+    Hint := WideFormat(
+      'Id: %s' + LineEnding +
+      'Name: %s' + LineEnding +
+      'Groups: %s' + LineEnding +
+      'X: %d, Y: %d' + LineEnding +
+      'W: %d, H: %d',
+      [UTF8Decode(Id), UTF8Decode(Name.Text), UTF8Decode(S),
+       Left, Top, Width, Height]
+    );
 end;
 
 constructor TDesignSection.Create(AOwner: TComponent);
@@ -115,6 +139,7 @@ begin
   DragKind := dkDock;
   DragMode := dmAutomatic;
   DockSite := true;
+  ShowHint := true;
 end;
 
 destructor TDesignSection.Destroy;
@@ -129,6 +154,8 @@ procedure TDesignSectionForm.FormCloseQuery(Sender: TObject;
 var
   i: Integer;
 begin
+  if ModalResult <> mrOK then exit;
+
   FSection.BeginUpdate;
 
   FSection.Id := IdEdit.Text;
@@ -181,7 +208,9 @@ begin
 
   IdEdit.Text := FSection.Id;
   if FSection.DataFile.MainSection = FSection then
-    IdEdit.ReadOnly := true;
+    IdEdit.Enabled := false
+  else
+    IdEdit.Enabled := true;
   NameEdit.Text := FSection.Name.Text;
 
   LocalGroups := TEpiDocument(FSection.RootOwner).Admin.Groups;

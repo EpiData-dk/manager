@@ -3,6 +3,7 @@ inherited DesignFieldForm: TDesignFieldForm
   Height = 302
   Top = 339
   Width = 326
+  ActiveControl = Panel1
   Caption = 'Field Properties'
   ClientHeight = 302
   ClientWidth = 326

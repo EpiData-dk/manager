@@ -17,12 +17,12 @@ type
     FNameLabel: TLabel;
     FQuestionLabel: TLabel;
     FField: TEpiField;
-    FHeading: TEpiHeading;
     function    GetEpiControl: TEpiCustomControlItem;
     procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure   OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   OnQuestionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   UpdateNameLabel;
+    procedure   UpdateHint;
   protected
     procedure   SetParent(NewParent: TWinControl); override;
   public
@@ -113,6 +113,7 @@ begin
       end;
   end;
   UpdateNameLabel;
+  UpdateHint;
 end;
 
 procedure TDesignField.OnQuestionChange(Sender: TObject;
@@ -138,12 +139,28 @@ begin
             Caption := Question.Caption.Text;
       end;
   end;
+  UpdateHint;
 end;
 
 procedure TDesignField.UpdateNameLabel;
 begin
   FNameLabel.Left := FQuestionLabel.Left - (FNameLabel.Width + 5);
   FNameLabel.Top := FQuestionLabel.Top;
+end;
+
+procedure TDesignField.UpdateHint;
+begin
+  With FField do
+    Hint := WideFormat(
+      'Id: %s' + LineEnding +
+      'Name: %s' + LineEnding +
+      'Type: %s' + LineEnding +
+      'Length: %d' + LineEnding +
+      'Question: %s' + LineEnding +
+      'X: %d, Y: %d',
+      [UTF8Decode(Id), UTF8Decode(Name.Text), '',
+       Length, UTF8Decode(Question.Caption.Text), Left, Top]
+    );
 end;
 
 procedure TDesignField.SetParent(NewParent: TWinControl);
@@ -170,6 +187,7 @@ begin
   TabStop := false;
   Color:= clMenuBar;
   Align := alNone;
+  ShowHint := true;
 end;
 
 destructor TDesignField.Destroy;
@@ -182,6 +200,8 @@ end;
 procedure TDesignFieldForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
   );
 begin
+  if ModalResult <> mrOK then exit;
+
   FField.BeginUpdate;
 
   FField.Id := IdEdit.Text;
