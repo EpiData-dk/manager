@@ -547,14 +547,17 @@ begin
   Grp.Name.Text := 'Group 1';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
+  WriteLn('Groupcount: ', LocalAdm.Groups.Count);
   Grp := LocalAdm.NewGroup;
   Grp.Name.Text := 'Group 2';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
+  WriteLn('Groupcount: ', LocalAdm.Groups.Count);
   Grp := LocalAdm.NewGroup;
   Grp.Name.Text := 'Group 3';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
+  WriteLn('Groupcount: ', LocalAdm.Groups.Count);
 end;
 
 end.

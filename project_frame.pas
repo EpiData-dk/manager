@@ -33,6 +33,7 @@ type
     ToolButton7: TToolButton;
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
+    procedure SaveProjectActionExecute(Sender: TObject);
   private
     { private declarations }
     FActiveFrame: TFrame;
@@ -51,7 +52,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame;
+  design_frame, Clipbrd;
 
 type
 
@@ -87,6 +88,11 @@ end;
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
   //
+end;
+
+procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
+begin
+  Clipboard.AsText := UTF8ToSys(FEpiDocument.SaveToXml());
 end;
 
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;

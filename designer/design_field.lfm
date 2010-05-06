@@ -44,7 +44,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Default = True
           Kind = bkOK
           ModalResult = 1
-          TabOrder = 0
+          TabOrder = 5
         end
         object CancelBtn: TBitBtn
           Left = 231
@@ -56,7 +56,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Caption = 'Cancel'
           Kind = bkCancel
           ModalResult = 2
-          TabOrder = 1
+          TabOrder = 6
         end
         object Label1: TLabel
           Left = 8
@@ -71,7 +71,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 85
           Width = 304
-          TabOrder = 2
+          TabOrder = 1
         end
         object Label2: TLabel
           Left = 8
@@ -86,7 +86,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 149
           Width = 304
-          TabOrder = 3
+          TabOrder = 2
         end
         object Label3: TLabel
           Left = 8
@@ -101,7 +101,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 213
           Width = 150
-          TabOrder = 4
+          TabOrder = 3
         end
         object Label4: TLabel
           Left = 162
@@ -116,7 +116,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 213
           Width = 150
-          TabOrder = 5
+          TabOrder = 4
         end
         object Label5: TLabel
           Left = 8
@@ -131,7 +131,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 29
           Width = 304
-          TabOrder = 6
+          TabOrder = 0
         end
       end
     end
