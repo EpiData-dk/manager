@@ -123,6 +123,7 @@ begin
   Font.Style := [fsBold];
   Align := alNone;
   ShowHint := true;
+  ParentColor := false;
 end;
 
 destructor TDesignHeading.Destroy;

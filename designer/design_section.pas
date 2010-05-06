@@ -140,6 +140,7 @@ begin
   DragMode := dmAutomatic;
   DockSite := true;
   ShowHint := true;
+  ParentColor := false;
 end;
 
 destructor TDesignSection.Destroy;

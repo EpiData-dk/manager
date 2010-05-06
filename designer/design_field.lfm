@@ -3,7 +3,6 @@ inherited DesignFieldForm: TDesignFieldForm
   Height = 302
   Top = 339
   Width = 326
-  ActiveControl = Panel1
   Caption = 'Field Properties'
   ClientHeight = 302
   ClientWidth = 326
@@ -20,18 +19,18 @@ inherited DesignFieldForm: TDesignFieldForm
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 296
-      ClientWidth = 320
+      ClientHeight = 294
+      ClientWidth = 318
       object Panel1: TPanel
         Left = 0
-        Height = 296
+        Height = 294
         Top = 0
-        Width = 320
+        Width = 318
         Align = alClient
         BevelInner = bvLowered
         BevelWidth = 2
-        ClientHeight = 296
-        ClientWidth = 320
+        ClientHeight = 294
+        ClientWidth = 318
         Color = clSkyBlue
         ParentColor = False
         TabOrder = 0
@@ -48,9 +47,9 @@ inherited DesignFieldForm: TDesignFieldForm
         end
         object CancelBtn: TBitBtn
           Left = 231
-          Height = 34
+          Height = 26
           Top = 253
-          Width = 81
+          Width = 77
           AutoSize = True
           Cancel = True
           Caption = 'Cancel'
@@ -60,75 +59,75 @@ inherited DesignFieldForm: TDesignFieldForm
         end
         object Label1: TLabel
           Left = 8
-          Height = 18
+          Height = 14
           Top = 61
-          Width = 44
+          Width = 32
           Caption = 'Name:'
           ParentColor = False
         end
         object NameEdit: TEdit
           Left = 8
-          Height = 27
+          Height = 21
           Top = 85
           Width = 304
           TabOrder = 1
         end
         object Label2: TLabel
           Left = 8
-          Height = 18
+          Height = 14
           Top = 125
-          Width = 63
+          Width = 48
           Caption = 'Question:'
           ParentColor = False
         end
         object QuestionEdit: TEdit
           Left = 8
-          Height = 27
+          Height = 21
           Top = 149
           Width = 304
           TabOrder = 2
         end
         object Label3: TLabel
           Left = 8
-          Height = 18
+          Height = 14
           Top = 189
-          Width = 49
+          Width = 38
           Caption = 'Length:'
           ParentColor = False
         end
         object LengthEdit: TEdit
           Left = 8
-          Height = 27
+          Height = 21
           Top = 213
           Width = 150
           TabOrder = 3
         end
         object Label4: TLabel
           Left = 162
-          Height = 18
+          Height = 14
           Top = 189
-          Width = 66
+          Width = 46
           Caption = 'Decimals:'
           ParentColor = False
         end
         object DecimalsEdit: TEdit
           Left = 162
-          Height = 27
+          Height = 21
           Top = 213
           Width = 150
           TabOrder = 4
         end
         object Label5: TLabel
           Left = 8
-          Height = 18
+          Height = 14
           Top = 5
-          Width = 17
+          Width = 15
           Caption = 'Id:'
           ParentColor = False
         end
         object IdEdit: TEdit
           Left = 8
-          Height = 27
+          Height = 21
           Top = 29
           Width = 304
           TabOrder = 0

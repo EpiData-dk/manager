@@ -73,10 +73,12 @@ type
 
   private
     { Docksite controls - methods }
+    // - mouse
     procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure   DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    // - docking
     procedure   DockSiteDockOver(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer; State: TDragState; var Accept: Boolean);
     procedure   DockSiteDockDrop(Sender: TObject; Source: TDragDockObject; X,
@@ -92,24 +94,23 @@ type
       EpiControl: TEpiCustomControlItem): TControl;
     function    NewSectionControl(StartPos, EndPos: TPoint;
       EpiControl: TEpiCustomControlItem): TControl;
+    // - Mouse events.
     procedure   DesignControlMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    // - Key controls.
     procedure   EnterControl(Sender: TObject);
+    procedure   ExitControl(Sender: TObject);
   private
     { Position handling }
     function    FindNewPosition(ParentControl: TWinControl;
       AClass: TControlClass): TPoint;
   private
-    { Field Handling }
-    function    NewField(FieldType: TEpiFieldType): TEpiField;
-  private
-    { Heading Handling }
-    function    NewHeading: TEpiHeading;
-  private
-    { Section handling }
+    { Epidata Core Objects }
     FActiveSection: TEpiSection;
+    function    NewField(FieldType: TEpiFieldType): TEpiField;
+    function    NewHeading: TEpiHeading;
     function    NewSection: TEpiSection;
   public
     { public declarations }
@@ -138,6 +139,7 @@ type
   end;
 
   TControlEx = class(TControl);
+  TWinControlEx = class(TWinControl);
 
 { TScrollBoxEx }
 
@@ -240,6 +242,7 @@ begin
   begin
     OnMouseDown := @DesignControlMouseDown;
     OnMouseUp   := @DesignControlMouseUp;
+    Parent      := AParent;
   end;
 
   with EpiControl do
@@ -249,8 +252,6 @@ begin
     Top  := Pos.Y;
     EndUpdate;
   end;
-
-  Result.Parent  := AParent;
 end;
 
 function TDesignFrame.NewSectionControl(StartPos, EndPos: TPoint;
@@ -508,6 +509,12 @@ procedure TDesignFrame.EnterControl(Sender: TObject);
 begin
   FActiveControl := TControl(Sender);
   DeleteControlAction.Enabled := (Sender <> FDesignerBox);
+//  FActiveControl.Color := $00B6F5F5;
+end;
+
+procedure TDesignFrame.ExitControl(Sender: TObject);
+begin
+  FActiveControl.Color := clBtnFace;
 end;
 
 constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
@@ -547,17 +554,14 @@ begin
   Grp.Name.Text := 'Group 1';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
-  WriteLn('Groupcount: ', LocalAdm.Groups.Count);
   Grp := LocalAdm.NewGroup;
   Grp.Name.Text := 'Group 2';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
-  WriteLn('Groupcount: ', LocalAdm.Groups.Count);
   Grp := LocalAdm.NewGroup;
   Grp.Name.Text := 'Group 3';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
-  WriteLn('Groupcount: ', LocalAdm.Groups.Count);
 end;
 
 end.

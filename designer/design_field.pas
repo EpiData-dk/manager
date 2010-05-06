@@ -185,9 +185,9 @@ begin
   AutoSize := false;
   ReadOnly := true;
   TabStop := false;
-  Color:= clMenuBar;
   Align := alNone;
   ShowHint := true;
+  ParentColor := false;
 end;
 
 destructor TDesignField.Destroy;
