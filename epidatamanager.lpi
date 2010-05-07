@@ -43,7 +43,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="9">
+    <Units Count="10">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -109,6 +109,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_custombase"/>
       </Unit8>
+      <Unit9>
+        <Filename Value="designer/import_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ImportForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="import_form"/>
+      </Unit9>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -14,7 +14,16 @@ type
 
   { TDesignFrame }
 
+  TMouseState = record
+    Down: boolean;
+    Button: TMouseButton;
+    Shift: TShiftState;
+  end;
+
   TDesignFrame = class(TFrame)
+    ImportDataFileAction: TAction;
+    LoadDataFileAction: TAction;
+    ExportDataformAction: TAction;
     DeleteControlAction: TAction;
     EditControlAction: TAction;
     Button1: TButton;
@@ -40,22 +49,28 @@ type
     Panel1: TPanel;
     EpiControlPopUpMenu: TPopupMenu;
     SelectorToolButton: TToolButton;
+    Splitter1: TSplitter;
     ToolButton1: TToolButton;
     ToolButton10: TToolButton;
     FloatToolButton: TToolButton;
     StringToolButton: TToolButton;
     DateToolButton: TToolButton;
     OtherToolButton: TToolButton;
+    ToolButton11: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
     ToolButton6: TToolButton;
     HeadingToolButton: TToolButton;
     SectionToolButton: TToolButton;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
     ToolButton9: TToolButton;
     procedure   Button1Click(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
+    procedure LoadDataFileActionExecute(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
     { common private }
@@ -74,10 +89,13 @@ type
   private
     { Docksite controls - methods }
     // - mouse
+    FMouseState: TMouseState;
     procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure   DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure   DockSiteMouseMove(Sender: TObject; Shift: TShiftState;
+      X, Y: Integer);
     // - docking
     procedure   DockSiteDockOver(Sender: TObject; Source: TDragDockObject; X,
       Y: Integer; State: TDragState; var Accept: Boolean);
@@ -123,7 +141,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Clipbrd, epidocument, epiadmin, math;
+  Graphics, Clipbrd, epidocument, epiadmin, math, import_form;
 
 type
 
@@ -211,6 +229,14 @@ begin
   ShowForm(EpiCtrl, Pt);
 end;
 
+procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
+var
+  Frm: TImportForm;
+begin
+  Frm := TImportForm.Create(Self);
+  Frm.ShowModal;
+end;
+
 function TDesignFrame.ShowForm(EpiControl: TEpiCustomControlItem; Pos: TPoint
   ): TModalResult;
 var
@@ -270,6 +296,7 @@ begin
   with Ctrl do
   begin
     OnMouseDown := @DockSiteMouseDown;
+    OnMouseMove := @DockSiteMouseMove;
     OnMouseUp   := @DockSiteMouseUp;
     OnDockDrop  := @DockSiteDockDrop;
     OnUnDock    := @DockSiteUnDock;
@@ -330,6 +357,10 @@ begin
     mbRight: FRightMouseDown := WinSender.ClientToScreen(Point(X, Y));
   end;
 
+  FMouseState.Down := true;
+  FMouseState.Button := Button;
+  FMouseState.Shift := Shift;
+
   EnterControl(Sender);
 end;
 
@@ -348,6 +379,8 @@ begin
     mbLeft: FLeftMouseUp := WinSender.ClientToScreen(Point(X, Y));
     mbRight: FRightMouseUp := WinSender.ClientToScreen(Point(X, Y));
   end;
+
+  FMouseState.Down := false;
 
   // Right button activates popup-menu
   if Button = mbRight then
@@ -400,6 +433,29 @@ begin
       end;
   end;
   ToggleToolBtn(SelectorToolButton);
+end;
+
+procedure TDesignFrame.DockSiteMouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+var
+  TopLeft: TPoint;
+begin
+  // Used to paint box when creating the section.
+
+  if not (
+    (FActiveButton = SectionToolButton) and
+    (FMouseState.Down) and
+    (FMouseState.Button = mbLeft)) then exit;
+
+  TopLeft := FDesignerBox.ScreenToClient(FLeftMouseDown);
+  Label4.Caption := Format(
+    'Top:    %d, Left:  %d' + LineEnding +
+    'Bottom: %d, Right: %d',
+    [TopLeft.X, TopLeft.Y, X, Y]);
+  Label5.Caption := Format(
+    'Moving mouse over (%s:%s)', [TControl(Sender).Name, Sender.ClassName]);
+
+  FDesignerBox.Canvas.Rectangle(TopLeft.X, TopLeft.Y, X, Y);
 end;
 
 procedure TDesignFrame.DockSiteDockOver(Sender: TObject;
@@ -524,6 +580,7 @@ var
 begin
   inherited Create(TheOwner);
   FDataFile := ADataFile;
+  Name := FDataFile.Id;
   FActiveButton := SelectorToolButton;
   FActiveSection := ADataFile.MainSection;
   DragManager.DragThreshold := 5;
@@ -540,6 +597,7 @@ begin
   FDesignerBox.Color       := clWhite;
   FDesignerBox.AutoScroll  := true;
   FDesignerBox.OnMouseUp   := @DockSiteMouseUp;
+  FDesignerBox.OnMouseMove := @DockSiteMouseMove;
   FDesignerBox.OnMouseDown := @DockSiteMouseDown;
   FDesignerBox.OnDockDrop  := @DockSiteDockDrop;
   FDesignerBox.OnUnDock    := @DockSiteUnDock;

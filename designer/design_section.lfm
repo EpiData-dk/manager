@@ -3,10 +3,10 @@ inherited DesignSectionForm: TDesignSectionForm
   Height = 346
   Top = 350
   Width = 384
+  ActiveControl = Panel1
   Caption = 'Section Properties'
   ClientHeight = 346
   ClientWidth = 384
-  OnCloseQuery = FormCloseQuery
   object Panel1: TPanel[0]
     Left = 0
     Height = 346
@@ -22,15 +22,15 @@ inherited DesignSectionForm: TDesignSectionForm
     TabOrder = 0
     object Label1: TLabel
       Left = 8
-      Height = 14
+      Height = 18
       Top = 64
-      Width = 28
+      Width = 40
       Caption = 'Name'
       ParentColor = False
     end
     object NameEdit: TEdit
       Left = 8
-      Height = 21
+      Height = 27
       Top = 88
       Width = 368
       TabOrder = 1
@@ -48,9 +48,9 @@ inherited DesignSectionForm: TDesignSectionForm
     end
     object CancelBtn: TBitBtn
       Left = 295
-      Height = 26
+      Height = 32
       Top = 304
-      Width = 77
+      Width = 78
       AutoSize = True
       Cancel = True
       Caption = 'Cancel'
@@ -60,15 +60,15 @@ inherited DesignSectionForm: TDesignSectionForm
     end
     object Label2: TLabel
       Left = 8
-      Height = 14
+      Height = 18
       Top = 8
-      Width = 15
+      Width = 16
       Caption = 'Id:'
       ParentColor = False
     end
     object IdEdit: TEdit
       Left = 8
-      Height = 21
+      Height = 27
       Top = 32
       Width = 368
       TabOrder = 0
@@ -79,7 +79,7 @@ inherited DesignSectionForm: TDesignSectionForm
       Top = 128
       Width = 368
       Caption = 'Groups access:'
-      ClientHeight = 150
+      ClientHeight = 149
       ClientWidth = 364
       TabOrder = 2
       object GroupAvailableListBox: TListBox
@@ -90,6 +90,7 @@ inherited DesignSectionForm: TDesignSectionForm
         ItemHeight = 0
         Sorted = True
         TabOrder = 0
+        TopIndex = -1
       end
       object GroupAssignedListBox: TListBox
         Left = 205
@@ -99,12 +100,13 @@ inherited DesignSectionForm: TDesignSectionForm
         ItemHeight = 0
         Sorted = True
         TabOrder = 1
+        TopIndex = -1
       end
       object Label3: TLabel
         Left = 6
-        Height = 14
+        Height = 18
         Top = 7
-        Width = 48
+        Width = 61
         Caption = 'Available:'
         ParentColor = False
       end
@@ -151,13 +153,12 @@ inherited DesignSectionForm: TDesignSectionForm
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
         NumGlyphs = 0
-        OnClick = GrpRightsMoveLeftClick
       end
       object Label4: TLabel
         Left = 206
-        Height = 14
+        Height = 18
         Top = 7
-        Width = 48
+        Width = 63
         Caption = 'Assigned:'
         ParentColor = False
       end
@@ -204,7 +205,6 @@ inherited DesignSectionForm: TDesignSectionForm
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
         NumGlyphs = 0
-        OnClick = GrpRightsMoveRightClick
       end
     end
   end

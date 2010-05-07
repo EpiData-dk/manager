@@ -1,0 +1,90 @@
+object ImportForm: TImportForm
+  Left = 508
+  Height = 313
+  Top = 383
+  Width = 426
+  ActiveControl = ImportFileEdit
+  Caption = 'Import...'
+  ClientHeight = 313
+  ClientWidth = 426
+  OnCloseQuery = FormCloseQuery
+  LCLVersion = '0.9.29'
+  object ImportFileEdit: TFileNameEdit
+    Left = 8
+    Height = 27
+    Top = 24
+    Width = 392
+    OnAcceptFileName = ImportFileEditAcceptFileName
+    DialogOptions = []
+    FilterIndex = 0
+    HideDirectories = False
+    ButtonWidth = 23
+    NumGlyphs = 0
+    MaxLength = 0
+    TabOrder = 0
+    OnEditingDone = ImportFileEditEditingDone
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 18
+    Top = 8
+    Width = 81
+    Caption = 'Import from:'
+    ParentColor = False
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Height = 193
+    Top = 80
+    Width = 414
+    Caption = 'Import Options'
+    ClientHeight = 174
+    ClientWidth = 410
+    TabOrder = 1
+    object ImportDataChkBox: TCheckBox
+      Left = 6
+      Height = 22
+      Top = 7
+      Width = 55
+      Caption = 'Data'
+      TabOrder = 0
+    end
+    object ImportValueLabelsChkBox: TCheckBox
+      Left = 6
+      Height = 22
+      Top = 31
+      Width = 100
+      Caption = 'Value labels'
+      TabOrder = 1
+    end
+  end
+  object ClearDataFormChkBox: TCheckBox
+    Left = 8
+    Height = 22
+    Top = 56
+    Width = 175
+    Caption = 'Clean current Dataform'
+    TabOrder = 2
+  end
+  object BitBtn1: TBitBtn
+    Left = 264
+    Height = 30
+    Top = 280
+    Width = 75
+    Caption = '&OK'
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 3
+  end
+  object BitBtn2: TBitBtn
+    Left = 347
+    Height = 30
+    Top = 280
+    Width = 75
+    Cancel = True
+    Caption = 'Cancel'
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 4
+  end
+end

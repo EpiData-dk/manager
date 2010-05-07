@@ -109,7 +109,7 @@ begin
             Top                       := FField.Top;
             FField.Question.Top       := FField.Top;
           end;
-        ecceName: FNameLabel.Caption  := FField.Name.Text;
+        ecceText: FNameLabel.Caption  := FField.Name.Text;
       end;
   end;
   UpdateNameLabel;

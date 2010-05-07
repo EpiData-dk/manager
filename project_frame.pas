@@ -76,12 +76,12 @@ begin
 
   Df := TEpiDataFileEx(EpiDocument.DataFiles.NewItem(TEpiDataFileEx));
   Df.RegisterOnChangeHook(@OnDataFileChange);
+  Df.Name.Text := 'Dataform ' + IntToStr(FrameCount);
 
   Frame := TDesignFrame.Create(Self, Df);
-  Frame.Name := 'Dataform' + IntToStr(FrameCount);
   Frame.Align := alClient;
   Frame.Parent := Self;
-  DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Frame.Name, Frame);
+  DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Name.Text, Frame);
   Df.TreeNode := DataFilesTreeView.Selected;
 end;
 
@@ -98,7 +98,8 @@ end;
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
-  TEpiDataFileEx(Sender).TreeNode.Text := TEpiDataFileEx(Sender).Name.Text;
+  if (EventGroup = eegCustomBase) and (EventType = Word(ecceText)) then
+    TEpiDataFileEx(Sender).TreeNode.Text := TEpiDataFileEx(Sender).Name.Text;
 end;
 
 constructor TProjectFrame.Create(TheOwner: TComponent);

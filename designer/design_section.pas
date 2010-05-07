@@ -42,12 +42,12 @@ type
     GroupAvailableListBox: TListBox;
     GroupAssignedListBox: TListBox;
     Panel1: TPanel;
-    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
-    procedure GrpRightsMoveLeftClick(Sender: TObject);
-    procedure GrpRightsMoveRightClick(Sender: TObject);
   private
     { private declarations }
     FSection: TEpiSection;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure GrpRightsMoveLeftClick(Sender: TObject);
+    procedure GrpRightsMoveRightClick(Sender: TObject);
   protected
     function GetEpiControl: TEpiCustomControlItem; override;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
@@ -90,7 +90,7 @@ begin
       case TEpiCustomChangeEventType(EventType) of
         ecceSetLeft: Left := FSection.Left;
         ecceSetTop:  Top  := FSection.Top;
-        ecceName:    Caption := EpiTextToControlText(FSection.Name.Text);
+        ecceText:    Caption := EpiTextToControlText(FSection.Name.Text);
         ecceUpdate:
           begin
             Left := FSection.Left;
@@ -227,6 +227,9 @@ end;
 constructor TDesignSectionForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  OnCloseQuery := @FormCloseQuery;
+  GrpRightsMoveLeft.OnClick := @GrpRightsMoveLeftClick;
+  GrpRightsMoveRight.OnClick := @GrpRightsMoveRightClick;
 end;
 
 destructor TDesignSectionForm.Destroy;
