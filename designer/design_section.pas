@@ -88,6 +88,7 @@ begin
   case EventGroup of
     eegCustomBase:
       case TEpiCustomChangeEventType(EventType) of
+        ecceDestroy: exit;
         ecceSetLeft: Left := FSection.Left;
         ecceSetTop:  Top  := FSection.Top;
         ecceText:    Caption := EpiTextToControlText(FSection.Name.Text);

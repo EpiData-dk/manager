@@ -78,6 +78,7 @@ begin
   case EventGroup of
     eegCustomBase:
       case TEpiCustomChangeEventType(EventType) of
+        ecceDestroy: exit;
         ecceSetLeft: Left := FHeading.Left;
         ecceSetTop:  Top  := FHeading.Top;
         ecceUpdate:
@@ -93,6 +94,9 @@ end;
 procedure TDesignHeading.OnCaptionChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
+  if (EventGroup = eegCustomBase) and
+     (EventType = Word(ecceDestroy)) then exit;
+
   Caption := TEpiTranslatedText(Sender).Text;
   UpdateHint;
 end;

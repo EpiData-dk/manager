@@ -3,6 +3,7 @@ inherited DesignHeadingForm: TDesignHeadingForm
   Height = 163
   Top = 438
   Width = 323
+  ActiveControl = Panel1
   Caption = 'Heading Properties'
   ClientHeight = 163
   ClientWidth = 323
@@ -32,9 +33,9 @@ inherited DesignHeadingForm: TDesignHeadingForm
     end
     object CancelBtn: TBitBtn
       Left = 231
-      Height = 26
+      Height = 34
       Top = 120
-      Width = 77
+      Width = 81
       AutoSize = True
       Cancel = True
       Caption = 'Cancel'
@@ -44,30 +45,30 @@ inherited DesignHeadingForm: TDesignHeadingForm
     end
     object Label1: TLabel
       Left = 8
-      Height = 14
+      Height = 18
       Top = 61
-      Width = 42
+      Width = 55
       Caption = 'Caption:'
       ParentColor = False
     end
     object CaptionEdit: TEdit
       Left = 8
-      Height = 21
+      Height = 27
       Top = 85
       Width = 304
       TabOrder = 1
     end
     object Label5: TLabel
       Left = 8
-      Height = 14
+      Height = 18
       Top = 5
-      Width = 15
+      Width = 17
       Caption = 'Id:'
       ParentColor = False
     end
     object IdEdit: TEdit
       Left = 8
-      Height = 21
+      Height = 27
       Top = 29
       Width = 304
       TabOrder = 0

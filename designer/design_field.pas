@@ -88,6 +88,11 @@ begin
   case EventGroup of
     eegCustomBase:
       case TEpiCustomChangeEventType(EventType) of
+        ecceDestroy:
+          begin
+            FField := nil;
+            Exit;
+          end;
         // General update - set everything.
         ecceUpdate:
           begin
@@ -125,6 +130,7 @@ begin
   case EventGroup of
     eegCustomBase:
       case TEpiCustomChangeEventType(EventType) of
+        ecceDestroy: exit;
         ecceUpdate:
           begin
             Caption := Question.Caption.Text;
@@ -192,6 +198,13 @@ end;
 
 destructor TDesignField.Destroy;
 begin
+  FNameLabel.Free;
+  FQuestionLabel.Free;
+  if Assigned(FField) then
+  begin
+   FField.UnRegisterOnChangeHook(@OnFieldChange);
+   FField.Question.UnRegisterOnChangeHook(@OnQuestionChange);
+  end;
   inherited Destroy;
 end;
 
@@ -216,6 +229,8 @@ end;
 procedure TDesignFieldForm.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FField := TEpiField(AValue);
+  if not Assigned(FField) then exit;
+
   IdEdit.Text := FField.Id;
   NameEdit.Text := FField.Name.Text;
   QuestionEdit.Text := FField.Question.Caption.Text;

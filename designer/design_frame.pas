@@ -50,27 +50,28 @@ type
     EpiControlPopUpMenu: TPopupMenu;
     SelectorToolButton: TToolButton;
     Splitter1: TSplitter;
-    ToolButton1: TToolButton;
-    ToolButton10: TToolButton;
+    EditToolButton: TToolButton;
+    Divider7: TToolButton;
     FloatToolButton: TToolButton;
     StringToolButton: TToolButton;
     DateToolButton: TToolButton;
     OtherToolButton: TToolButton;
-    ToolButton11: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
-    ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
-    ToolButton6: TToolButton;
+    Divider3: TToolButton;
+    Divider4: TToolButton;
+    Divider1: TToolButton;
+    DeleteToolButton: TToolButton;
+    Divider2: TToolButton;
+    LoadToolButton: TToolButton;
+    Divider5: TToolButton;
     HeadingToolButton: TToolButton;
     SectionToolButton: TToolButton;
-    ToolButton7: TToolButton;
-    ToolButton8: TToolButton;
-    ToolButton9: TToolButton;
+    ImportToolButton: TToolButton;
+    ExportToolButton: TToolButton;
+    Divider6: TToolButton;
     procedure   Button1Click(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
-    procedure LoadDataFileActionExecute(Sender: TObject);
+    procedure   LoadDataFileActionExecute(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
     { common private }
@@ -157,7 +158,6 @@ type
   end;
 
   TControlEx = class(TControl);
-  TWinControlEx = class(TWinControl);
 
 { TScrollBoxEx }
 
@@ -208,12 +208,12 @@ begin
 
   // TODO : Find next control in line.
   LocalCtrl := FActiveControl;
-  EnterControl(FDesignerBox);
 
   // TODO : Show warning when containing data.
-  TEpiCustomList(EpiCtrl.Owner).RemoveItem(EpiCtrl);
-  EpiCtrl.Free;
+  EpiCtrl.Free;  // This also removes the epicontrol from it's parent/list.
   LocalCtrl.Free;
+
+  EnterControl(FDesignerBox);
 end;
 
 procedure TDesignFrame.EditControlActionExecute(Sender: TObject);

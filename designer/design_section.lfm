@@ -48,9 +48,9 @@ inherited DesignSectionForm: TDesignSectionForm
     end
     object CancelBtn: TBitBtn
       Left = 295
-      Height = 32
+      Height = 34
       Top = 304
-      Width = 78
+      Width = 81
       AutoSize = True
       Cancel = True
       Caption = 'Cancel'
@@ -62,7 +62,7 @@ inherited DesignSectionForm: TDesignSectionForm
       Left = 8
       Height = 18
       Top = 8
-      Width = 16
+      Width = 17
       Caption = 'Id:'
       ParentColor = False
     end
@@ -106,7 +106,7 @@ inherited DesignSectionForm: TDesignSectionForm
         Left = 6
         Height = 18
         Top = 7
-        Width = 61
+        Width = 65
         Caption = 'Available:'
         ParentColor = False
       end
@@ -158,7 +158,7 @@ inherited DesignSectionForm: TDesignSectionForm
         Left = 206
         Height = 18
         Top = 7
-        Width = 63
+        Width = 64
         Caption = 'Assigned:'
         ParentColor = False
       end

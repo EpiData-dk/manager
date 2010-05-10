@@ -6,8 +6,8 @@ object DesignFrame: TDesignFrame
   ClientHeight = 565
   ClientWidth = 769
   TabOrder = 0
-  DesignLeft = 363
-  DesignTop = 220
+  DesignLeft = 640
+  DesignTop = 313
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -62,11 +62,11 @@ object DesignFrame: TDesignFrame
       Caption = 'OtherToolButton'
       ImageIndex = 7
     end
-    object ToolButton6: TToolButton
+    object Divider5: TToolButton
       Left = 178
       Top = 1
       Width = 4
-      Caption = 'ToolButton6'
+      Caption = 'Divider5'
       Style = tbsDivider
     end
     object HeadingToolButton: TToolButton
@@ -80,25 +80,25 @@ object DesignFrame: TDesignFrame
     end
     object SectionToolButton: TToolButton
       Tag = 6
-      Left = 210
+      Left = 214
       Hint = 'New Section'
       Top = 1
       Caption = 'New Section'
       ImageIndex = 9
       OnClick = ToggleToolBtn
     end
-    object ToolButton9: TToolButton
-      Left = 238
+    object Divider6: TToolButton
+      Left = 242
       Top = 1
       Width = 4
-      Caption = 'ToolButton9'
+      Caption = 'Divider6'
       Style = tbsDivider
     end
-    object ToolButton10: TToolButton
+    object Divider7: TToolButton
       Left = 34
       Top = 1
       Width = 4
-      Caption = 'ToolButton10'
+      Caption = 'Divider7'
       Style = tbsDivider
     end
     object SelectorToolButton: TToolButton
@@ -109,50 +109,57 @@ object DesignFrame: TDesignFrame
       ImageIndex = 0
       OnClick = ToggleToolBtn
     end
-    object ToolButton2: TToolButton
+    object Divider1: TToolButton
       Left = 2
       Top = 1
       Width = 4
-      Caption = 'ToolButton2'
+      Caption = 'Divider1'
       Style = tbsDivider
     end
-    object ToolButton1: TToolButton
-      Left = 242
+    object EditToolButton: TToolButton
+      Left = 246
       Top = 1
       Action = EditControlAction
     end
-    object ToolButton3: TToolButton
-      Left = 270
+    object DeleteToolButton: TToolButton
+      Left = 274
       Top = 1
       Action = DeleteControlAction
     end
-    object ToolButton4: TToolButton
-      Left = 298
+    object Divider2: TToolButton
+      Left = 302
       Top = 1
       Width = 4
-      Caption = 'ToolButton4'
+      Caption = 'Divider2'
       Style = tbsDivider
     end
-    object ToolButton5: TToolButton
-      Left = 302
+    object LoadToolButton: TToolButton
+      Left = 306
       Top = 1
       Action = LoadDataFileAction
     end
-    object ToolButton7: TToolButton
-      Left = 330
+    object ImportToolButton: TToolButton
+      Left = 334
       Top = 1
       Action = ImportDataFileAction
     end
-    object ToolButton8: TToolButton
-      Left = 358
+    object ExportToolButton: TToolButton
+      Left = 362
       Top = 1
       Action = ExportDataformAction
     end
-    object ToolButton11: TToolButton
-      Left = 386
+    object Divider3: TToolButton
+      Left = 390
       Top = 1
       Width = 4
-      Caption = 'ToolButton11'
+      Caption = 'Divider3'
+      Style = tbsDivider
+    end
+    object Divider4: TToolButton
+      Left = 210
+      Top = 1
+      Width = 4
+      Caption = 'Divider4'
       Style = tbsDivider
     end
   end
@@ -170,7 +177,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 38
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -178,7 +185,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 118
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -186,7 +193,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 198
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -194,7 +201,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 294
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
@@ -202,7 +209,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 378
-      Width = 43
+      Width = 44
       Caption = 'Label5'
       ParentColor = False
     end
@@ -222,6 +229,7 @@ object DesignFrame: TDesignFrame
     Top = 26
     Width = 5
     Align = alRight
+    Beveled = True
     ResizeAnchor = akRight
   end
   object DesignerImageList: TImageList
