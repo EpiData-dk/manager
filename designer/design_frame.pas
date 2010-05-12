@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
   design_field, design_heading, design_section, epicustombase,
-  design_custombase;
+  design_custombase, AVL_Tree ;
 
 type
 
@@ -21,7 +21,11 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    Button2: TButton;
+    Button3: TButton;
+    DateFieldPopupMenu: TPopupMenu;
     ImportDataFileAction: TAction;
+    Label6: TLabel;
     LoadDataFileAction: TAction;
     ExportDataformAction: TAction;
     DeleteControlAction: TAction;
@@ -34,8 +38,19 @@ type
     Label5: TLabel;
     EditPopupMenuItem: TMenuItem;
     DeletePopupMenuItem: TMenuItem;
+    NewTimeNowFieldMenu: TMenuItem;
+    NewTimeFieldMenu: TMenuItem;
+    TimeSubMenu: TMenuItem;
+    NewAutoIncMenu: TMenuItem;
+    NewCryptFieldMenu: TMenuItem;
+    NewDMYFieldMenu: TMenuItem;
+    NewDMYTodayFieldMenu: TMenuItem;
+    NewMDYFieldMenu: TMenuItem;
+    NewMDYTodayFieldMenu: TMenuItem;
     NewSectionAction: TAction;
     NewHeadingAction: TAction;
+    NewSoundexFieldMenu: TMenuItem;
+    NewUpperFieldMenu: TMenuItem;
     NewYMDFieldAction: TAction;
     NewMDYFieldAction: TAction;
     NewDMYFieldAction: TAction;
@@ -46,32 +61,41 @@ type
     DesignerImageList: TImageList;
     DesignerToolBar: TToolBar;
     IntToolButton: TToolButton;
+    NewYMDFieldMenu: TMenuItem;
+    NewYMDTodayFieldMenu: TMenuItem;
+    OtherFieldsPopup: TPopupMenu;
     Panel1: TPanel;
     EpiControlPopUpMenu: TPopupMenu;
     SelectorToolButton: TToolButton;
     Splitter1: TSplitter;
     EditToolButton: TToolButton;
-    Divider7: TToolButton;
+    Divider1: TToolButton;
     FloatToolButton: TToolButton;
+    StringSubMenu: TMenuItem;
     StringToolButton: TToolButton;
     DateToolButton: TToolButton;
     OtherToolButton: TToolButton;
+    Divider6: TToolButton;
     Divider3: TToolButton;
-    Divider4: TToolButton;
-    Divider1: TToolButton;
+    Divider0: TToolButton;
     DeleteToolButton: TToolButton;
-    Divider2: TToolButton;
-    LoadToolButton: TToolButton;
     Divider5: TToolButton;
+    LoadToolButton: TToolButton;
+    Divider2: TToolButton;
     HeadingToolButton: TToolButton;
     SectionToolButton: TToolButton;
     ImportToolButton: TToolButton;
     ExportToolButton: TToolButton;
-    Divider6: TToolButton;
+    Divider4: TToolButton;
+    TodayDateSubMenu: TMenuItem;
     procedure   Button1Click(Sender: TObject);
+    procedure   Button2Click(Sender: TObject);
+    procedure   Button3Click(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   LoadDataFileActionExecute(Sender: TObject);
+    procedure   NewDateFieldMenuClick(Sender: TObject);
+    procedure   NewOtherFieldMenuClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
     { common private }
@@ -91,6 +115,7 @@ type
     { Docksite controls - methods }
     // - mouse
     FMouseState: TMouseState;
+    FActiveDockSite: TWinControl;       // For debugging
     procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure   DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
@@ -113,12 +138,20 @@ type
       EpiControl: TEpiCustomControlItem): TControl;
     function    NewSectionControl(StartPos, EndPos: TPoint;
       EpiControl: TEpiCustomControlItem): TControl;
+    // - Dock Events.
+    procedure   DesignControlStartDock(Sender: TObject; var DragObject: TDragDockObject);
     // - Mouse events.
-    procedure   DesignControlMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+    procedure   DesignControlMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     // - Key controls.
+    procedure   DesingControlKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure   MoveHome(Sender: TControl; PositionHandler: IPositionHandler);
+    procedure   MovePrior(Sender: TControl; PositionHandler: IPositionHandler);
+    procedure   MoveUp(Sender: TControl; PositionHandler: IPositionHandler);
+    procedure   MoveDown(Sender: TControl; PositionHandler: IPositionHandler);
+    procedure   MoveNext(Sender: TControl; PositionHandler: IPositionHandler);
+    procedure   MoveEnd(Sender: TControl; PositionHandler: IPositionHandler);
     procedure   EnterControl(Sender: TObject);
     procedure   ExitControl(Sender: TObject);
   private
@@ -142,20 +175,41 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Clipbrd, epidocument, epiadmin, math, import_form;
+  Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
+  LCLType, main;
 
 type
 
   { TScrollBoxEx }
 
-  TScrollBoxEx = class(TScrollBox, IDesignEpiControl)
+  TScrollBoxEx = class(TScrollBox, IDesignEpiControl, IPositionHandler)
   private
     FEpiControl: TEpiCustomControlItem;
-    function GetEpiControl: TEpiCustomControlItem;
-    procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+    FXTree:     TAVLTree;
+    FYTree:     TAVLTree;
+  protected
+    function    GetEpiControl: TEpiCustomControlItem;
+    function    GetXTreeNode: TAVLTreeNode;
+    function    GetYTreeNode: TAVLTreeNode;
+    procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure   SetXTreeNode(const AValue: TAVLTreeNode);
+    procedure   SetYTreeNode(const AValue: TAVLTreeNode);
+    function    GetXTree: TAVLTree;
+    function    GetYTree: TAVLTree;
   public
-    property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    constructor Create(AOwner: TComponent); override;
+    property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    property    XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
+    property    YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
+    property    XTree: TAVLTree read GetXTree;
+    property    YTree: TAVLTree read GetYTree;
   end;
+
+  TDesignDockObject = class(TDragDockObject)
+  private
+    FOldDockSite: TWinControl;
+  end;
+
 
   TControlEx = class(TControl);
 
@@ -166,10 +220,47 @@ begin
   result := FEpiControl;
 end;
 
+function TScrollBoxEx.GetXTreeNode: TAVLTreeNode;
+begin
+  // Not used
+end;
+
+function TScrollBoxEx.GetYTreeNode: TAVLTreeNode;
+begin
+  // Not used
+end;
+
 procedure TScrollBoxEx.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   if FEpiControl = AValue then exit;
   FEpiControl := AValue;
+end;
+
+procedure TScrollBoxEx.SetXTreeNode(const AValue: TAVLTreeNode);
+begin
+  // Not used
+end;
+
+procedure TScrollBoxEx.SetYTreeNode(const AValue: TAVLTreeNode);
+begin
+  // Not used
+end;
+
+function TScrollBoxEx.GetXTree: TAVLTree;
+begin
+  result := FXTree;
+end;
+
+function TScrollBoxEx.GetYTree: TAVLTree;
+begin
+  result := FYTree;
+end;
+
+constructor TScrollBoxEx.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FXTree := TAVLTree.Create(@XTreeSort);
+  FYTree := TAVLTree.Create(@YTreeSort);
 end;
 
 
@@ -179,6 +270,10 @@ procedure TDesignFrame.ToggleToolBtn(Sender: TObject);
 begin
   if not (Sender is TToolButton) then exit;
   FActiveButton.Down := false;
+
+  if FActiveButton = OtherToolButton then
+    OtherToolButton.ImageIndex := 7;
+
   TToolButton(Sender).Down := true;
   FActiveButton := TToolButton(Sender);
 end;
@@ -199,6 +294,85 @@ begin
   Clipboard.AsText := DataFile.SaveToXml('', 0);
 end;
 
+procedure TDesignFrame.DesingControlKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  KeyMsg: TLMKey;
+  Ctrl: TControl absolute Sender;
+  Handler: IPositionHandler;
+begin
+  if Key = VK_RETURN then
+  begin
+    EditToolButton.Click;
+    Key := VK_UNKNOWN;
+  end;
+
+  Handler := (Ctrl.Parent as IPositionHandler);
+  // Movement actions.
+  // ..going up: (Up, Shift+Tab, PgUp, Ctrl+Home)
+  // - Single step = Up, shift + Tab
+  if (Key = VK_UP) or ((Key = VK_TAB) and (ssShift in Shift)) then
+  begin
+    MoveUp(Ctrl, Handler);
+    Key := VK_UNKNOWN
+  end;
+{  // - Page step = PageUp (VK_PRIOR)
+  if (Key = VK_PRIOR) then
+  begin
+    MovePageUpAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+  // - Top step = Ctrl + Home
+  if (Key = VK_HOME) and (ssCtrl in Shift) then
+  begin
+    MoveFirstAction.Execute;
+    Key := VK_UNKNOWN;
+  end;}
+  // ..going down: (Down, Tab, PgDown, Ctrl+End)
+  // - Single step = Down, Tab
+  if (Key = VK_DOWN) or (Key = VK_TAB) then
+  begin
+    MoveDown(Ctrl, Handler);
+    Key := VK_UNKNOWN
+  end;
+{  // - Page step = PageDown (VK_NEXT)
+  if (Key = VK_NEXT) then
+  begin
+    MovePageDownAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+  // - Bottom step = Ctrl + End
+  if (Key = VK_END) and (ssCtrl in Shift) then
+  begin
+    MoveLastAction.Execute;
+    Key := VK_UNKNOWN;
+  end;
+                    }
+  // Ugly dirty way of capturing shortcuts involving keys.
+  // -- send to mainform, it automatically propagetes down through action lists..
+  if Key <> VK_UNKNOWN then
+  begin
+    KeyMsg.Msg := LM_KEYDOWN;
+    KeyMsg.KeyData := ShortCut(0, Shift);
+    if (ssAlt in Shift) then
+      KeyMsg.KeyData := KeyMsg.KeyData or $20000000;
+    KeyMsg.CharCode := Key;
+    KeyMsg.Result := 0;
+    if MainForm.IsShortcut(KeyMsg) then
+      Key := VK_UNKNOWN;
+  end;
+end;
+
+procedure TDesignFrame.Button2Click(Sender: TObject);
+begin
+  Clipboard.AsText :=  WriteTree((FActiveDockSite as IPositionHandler).XTree);
+end;
+
+procedure TDesignFrame.Button3Click(Sender: TObject);
+begin
+  Clipboard.AsText :=  WriteTree((FActiveDockSite as IPositionHandler).YTree);
+end;
+
 procedure TDesignFrame.DeleteControlActionExecute(Sender: TObject);
 var
   EpiCtrl: TEpiCustomControlItem;
@@ -216,6 +390,7 @@ begin
   EnterControl(FDesignerBox);
 end;
 
+
 procedure TDesignFrame.EditControlActionExecute(Sender: TObject);
 var
   EpiCtrl: TEpiCustomControlItem;
@@ -229,6 +404,7 @@ begin
   ShowForm(EpiCtrl, Pt);
 end;
 
+
 procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
 var
   Frm: TImportForm;
@@ -236,6 +412,25 @@ begin
   Frm := TImportForm.Create(Self);
   Frm.ShowModal;
 end;
+
+procedure TDesignFrame.NewDateFieldMenuClick(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  DateToolButton.Tag := TMenuItem(Sender).Tag;
+  DateToolButton.ImageIndex := TMenuItem(Sender).ImageIndex;
+  ToggleToolBtn(DateToolButton);
+end;
+
+procedure TDesignFrame.NewOtherFieldMenuClick(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  OtherToolButton.Tag := TMenuItem(Sender).Tag;
+  OtherToolButton.ImageIndex := TMenuItem(Sender).ImageIndex;
+  ToggleToolBtn(OtherToolButton);
+end;
+
 
 function TDesignFrame.ShowForm(EpiControl: TEpiCustomControlItem; Pos: TPoint
   ): TModalResult;
@@ -268,6 +463,9 @@ begin
   begin
     OnMouseDown := @DesignControlMouseDown;
     OnMouseUp   := @DesignControlMouseUp;
+    OnStartDock := @DesignControlStartDock;
+    if Result is TWinControl then
+      TWinControl(Result).OnKeyDown   := @DesingControlKeyDown;
     Parent      := AParent;
   end;
 
@@ -278,6 +476,7 @@ begin
     Top  := Pos.Y;
     EndUpdate;
   end;
+  AddToPositionHandler((AParent as IPositionHandler), Result);
 end;
 
 function TDesignFrame.NewSectionControl(StartPos, EndPos: TPoint;
@@ -301,6 +500,9 @@ begin
     OnDockDrop  := @DockSiteDockDrop;
     OnUnDock    := @DockSiteUnDock;
     OnDockOver  := @DockSiteDockOver;
+    OnStartDock := @DesignControlStartDock;
+    if Result is TWinControl then
+      TWinControl(Result).OnKeyDown   := @DesingControlKeyDown;
   end;
 
   with EpiSection do
@@ -318,6 +520,17 @@ begin
   // is not implemented fully in the LCL.
   FDesignerBox.DockSite := false;
   FDesignerBox.DockSite := true;
+
+  AddToPositionHandler((FDesignerBox as IPositionHandler), Result);
+end;
+
+procedure TDesignFrame.DesignControlStartDock(Sender: TObject;
+  var DragObject: TDragDockObject);
+var
+  Ctrl: TControl absolute Sender;
+begin
+  DragObject := TDesignDockObject.Create(Ctrl);
+  TDesignDockObject(DragObject).FOldDockSite := Ctrl.Parent;
 end;
 
 procedure TDesignFrame.ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
@@ -352,6 +565,8 @@ var
   WinSender: TWinControl absolute Sender;
 begin
   FActiveSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
+  FActiveDockSite := WinSender;
+
   case Button of
     mbLeft: FLeftMouseDown := WinSender.ClientToScreen(Point(X, Y));
     mbRight: FRightMouseDown := WinSender.ClientToScreen(Point(X, Y));
@@ -370,10 +585,6 @@ var
   WinSender: TWinControl absolute Sender;
   ParentPt: TPoint;
   EpiControl: TEpiCustomControlItem;
-const
-  TagToFieldType: array[1..4] of TEpiFieldType = (
-    ftInteger, ftFloat, ftString, ftDMYDate
-  );
 begin
   case Button of
     mbLeft: FLeftMouseUp := WinSender.ClientToScreen(Point(X, Y));
@@ -391,34 +602,34 @@ begin
 
   ParentPt := WinSender.ScreenToClient(FLeftMouseUp);
 
-  case FActiveButton.Tag of
-    // Selector
-    0: Exit;
+  case FActiveButton.Index of
+    // Dividers... should never get here:
+    0, 2, 8, 10, 12, 15, 19:
+      Exit;
 
-    // Integer, Float, String, Date
-    1, 2, 3, 4:
+    // Selector
+    1: Exit;
+
+    // Integer, Float, String, Date (all dates), Others.
+    3,4,5,6,7:
       begin
-        EpiControl := NewField(TagToFieldType[FActiveButton.Tag]);
+        EpiControl := NewField(TEpiFieldType(FActiveButton.Tag));
         if ShowForm(EpiControl, FLeftMouseUp) = mrOK then
           NewDesignControl(TDesignField, WinSender, ParentPt, EpiControl)
-        else begin
-          FActiveSection.Fields.RemoveItem(EpiControl);
+        else
           EpiControl.Free;
-        end;
       end;
     // Heading
-    5:
+    9:
       begin
         EpiControl := NewHeading;
         if ShowForm(EpiControl, FLeftMouseUp) = mrOK then
           NewDesignControl(TDesignHeading, WinSender, ParentPt, EpiControl)
-        else begin
-          FActiveSection.Headings.RemoveItem(EpiControl);
+        else
           EpiControl.Free;
-        end;
       end;
     // Section
-    6:
+    11:
       begin
         // Sections can only be created on the designer.
         if not (Sender = FDesignerBox) then exit;
@@ -426,10 +637,8 @@ begin
         if ShowForm(EpiControl, FLeftMouseDown) = mrOK then
           NewSectionControl(WinSender.ScreenToClient(FLeftMouseDown),
             WinSender.ScreenToClient(FLeftMouseUp), EpiControl)
-        else begin
-          FDataFile.Sections.RemoveItem(EpiControl);
+        else
           EpiControl.Free;
-        end;
       end;
   end;
   ToggleToolBtn(SelectorToolButton);
@@ -440,8 +649,15 @@ procedure TDesignFrame.DockSiteMouseMove(Sender: TObject; Shift: TShiftState;
 var
   TopLeft: TPoint;
 begin
-  // Used to paint box when creating the section.
+  Label6.Caption := Format(
+    'XTree: %d' + LineEnding +
+    'YTree: %d',
+    [(Sender as IPositionHandler).XTree.Count,
+     (Sender as IPositionHandler).YTree.Count]
+  );
 
+
+  // Used to paint box when creating the section.
   if not (
     (FActiveButton = SectionToolButton) and
     (FMouseState.Down) and
@@ -485,9 +701,18 @@ begin
   // Sender = the site being dragged onto.
   // Source.control = the control being dragged.
 
+  RemoveFromPositionHandler(
+    (TDesignDockObject(Source).FOldDockSite as IPositionHandler),
+    Source.Control);
+
   EpiControl := (Source.Control as IDesignEpiControl).EpiControl;
+  EpiControl.BeginUpdate;
   EpiControl.Left := X - Source.DockOffset.X;
   EpiControl.Top  := Y - Source.DockOffset.Y;
+  EpiControl.EndUpdate;
+
+  AddToPositionHandler((Sender as IPositionHandler),
+    Source.Control);
 
   // Sanity checks:
   // - sections do not need to be relocated in the Core structure.
@@ -509,8 +734,6 @@ end;
 
 procedure TDesignFrame.DockSiteUnDock(Sender: TObject; Client: TControl;
   NewTarget: TWinControl; var Allow: Boolean);
-var
-  LocalSection: TEpiSection;
 begin
   // Sender = the site that is being undocked from.
   // Client = the control that was dragged to another position.
@@ -561,15 +784,127 @@ begin
   end;
 end;
 
+procedure TDesignFrame.MoveHome(Sender: TControl;
+  PositionHandler: IPositionHandler);
+begin
+
+end;
+
+procedure TDesignFrame.MovePrior(Sender: TControl;
+  PositionHandler: IPositionHandler);
+begin
+
+end;
+
+procedure TDesignFrame.MoveUp(Sender: TControl;
+  PositionHandler: IPositionHandler);
+
+  function DoMoveUp: TAVLTreeNode;
+  begin
+    Result := (Sender as IDesignEpiControl).YTreeNode;
+    Result := PositionHandler.YTree.FindPrecessor(Result);
+  end;
+
+var
+  Node: TAVLTreeNode;
+begin
+  if not Assigned(Sender) then exit;
+
+  if (Sender is TDesignSection) then
+    Node := (Sender as IPositionHandler).YTree.FindHighest
+  else
+    Node := DoMoveUp;
+
+  if Assigned(Node) then
+  begin
+    EnterControl(TControl(Node.Data));
+    Exit;
+  end;
+
+  // Node is nil, find parent.
+  if (Sender.Parent is TDesignSection) then
+  begin
+    Sender := Sender.Parent;
+    PositionHandler := (Sender.Parent as IPositionHandler);
+    Node := DoMoveUp;
+    if Assigned(Node) then
+    begin
+      EnterControl(TControl(Node.Data));
+      Exit;
+    end;
+  end;
+  // We are at the top - select bottom most (highedt in AVL tree) component.
+  Node := PositionHandler.YTree.FindHighest;
+  EnterControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MoveDown(Sender: TControl;
+  PositionHandler: IPositionHandler);
+
+  function DoMoveDown: TAVLTreeNode;
+  begin
+    Result := (Sender as IDesignEpiControl).YTreeNode;
+    Result := PositionHandler.YTree.FindSuccessor(Result);
+  end;
+
+var
+  Node: TAVLTreeNode;
+begin
+  if not Assigned(Sender) then exit;
+
+  if (Sender is TDesignSection) then
+    Node := (Sender as IPositionHandler).YTree.FindLowest
+  else
+    Node := DoMoveDown;
+
+  if Assigned(Node) then
+  begin
+    EnterControl(TControl(Node.Data));
+    Exit;
+  end;
+
+  // Node is nil, find parent.
+  if (Sender.Parent is TDesignSection) then
+  begin
+    Sender := Sender.Parent;
+    PositionHandler := (Sender.Parent as IPositionHandler);
+    Node := DoMoveDown;
+    if Assigned(Node) then
+    begin
+      EnterControl(TControl(Node.Data));
+      Exit;
+    end;
+  end;
+  // We are at the bottom - select top most (lowest in AVL tree) component.
+  Node := PositionHandler.YTree.FindLowest;
+  EnterControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MoveNext(Sender: TControl;
+  PositionHandler: IPositionHandler);
+begin
+
+end;
+
+procedure TDesignFrame.MoveEnd(Sender: TControl;
+  PositionHandler: IPositionHandler);
+begin
+
+end;
+
 procedure TDesignFrame.EnterControl(Sender: TObject);
 begin
+  ExitControl(nil);
   FActiveControl := TControl(Sender);
   DeleteControlAction.Enabled := (Sender <> FDesignerBox);
-//  FActiveControl.Color := $00B6F5F5;
+  if (Sender is TWinControl) then
+    TWinControl(Sender).SetFocus;
+  FActiveControl.Color := $00B6F5F5;
 end;
 
 procedure TDesignFrame.ExitControl(Sender: TObject);
 begin
+  if not Assigned(FActiveControl) then exit;
   FActiveControl.Color := clBtnFace;
 end;
 
@@ -603,6 +938,8 @@ begin
   FDesignerBox.OnUnDock    := @DockSiteUnDock;
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
   (FDesignerBox as IDesignEpiControl).EpiControl := ADataFile.MainSection;
+
+  FActiveDockSite := FDesignerBox;
 
   EnterControl(FDesignerBox);
 

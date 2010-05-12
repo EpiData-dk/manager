@@ -7,18 +7,26 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Buttons, ExtCtrls, MaskEdit, ComCtrls, epidatafiles, epicustombase,
-  design_custombase;
+  design_custombase, AVL_Tree;
 
 type
   { TDesignField }
 
   TDesignField = class(TEdit, IDesignEpiControl)
   private
+    // IDesignEpiControl
+    FField: TEpiField;
+    FXTreeNode: TAVLTreeNode;
+    FYTreeNode: TAVLTreeNode;
+    function GetEpiControl: TEpiCustomControlItem;
+    function GetXTreeNode: TAVLTreeNode;
+    function GetYTreeNode: TAVLTreeNode;
+    procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure SetXTreeNode(const AValue: TAVLTreeNode);
+    procedure SetYTreeNode(const AValue: TAVLTreeNode);
+  private
     FNameLabel: TLabel;
     FQuestionLabel: TLabel;
-    FField: TEpiField;
-    function    GetEpiControl: TEpiCustomControlItem;
-    procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure   OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   OnQuestionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   UpdateNameLabel;
@@ -29,6 +37,8 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
     property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    property    XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
+    property    YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
   end;
 
   { TDesignFieldForm }
@@ -73,6 +83,16 @@ begin
   result := FField;
 end;
 
+function TDesignField.GetXTreeNode: TAVLTreeNode;
+begin
+  result := FXTreeNode;
+end;
+
+function TDesignField.GetYTreeNode: TAVLTreeNode;
+begin
+  result := FYTreeNode;
+end;
+
 procedure TDesignField.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FField := TEpiField(AValue);
@@ -80,6 +100,16 @@ begin
   FField.Question.RegisterOnChangeHook(@OnQuestionChange);
   Name := FField.Id;
   Caption := '';
+end;
+
+procedure TDesignField.SetXTreeNode(const AValue: TAVLTreeNode);
+begin
+  FXTreeNode := AValue;
+end;
+
+procedure TDesignField.SetYTreeNode(const AValue: TAVLTreeNode);
+begin
+  FYTreeNode := AValue;
 end;
 
 procedure TDesignField.OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup;

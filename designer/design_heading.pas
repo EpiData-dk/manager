@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ExtCtrls, epidatafiles, epicustombase, design_custombase;
+  StdCtrls, Buttons, ExtCtrls, epidatafiles, epicustombase, design_custombase,
+  AVL_Tree;
 
 type
 
@@ -15,15 +16,27 @@ type
   TDesignHeading = Class(TLabel, IDesignEpiControl)
   private
     FHeading: TEpiHeading;
-    function GetEpiControl: TEpiCustomControlItem;
-    procedure SetEpiControl(const AValue: TEpiCustomControlItem);
-    procedure OnHeadingChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure OnCaptionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure UpdateHint;
+    FXTreeNode: TAVLTreeNode;
+    FYTreeNode: TAVLTreeNode;
+    function    GetEpiControl: TEpiCustomControlItem;
+    function    GetXTreeNode: TAVLTreeNode;
+    function    GetYTreeNode: TAVLTreeNode;
+    procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure   SetXTreeNode(const AValue: TAVLTreeNode);
+    procedure   SetYTreeNode(const AValue: TAVLTreeNode);
+  private
+    procedure   OnHeadingChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure   OnCaptionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure   UpdateHint;
   public
     constructor Create(AOwner: TComponent); Override;
-    destructor Destroy; override;
-    property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    destructor  Destroy; override;
+    property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    property    XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
+    property    YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
+  published
+    property    OnStartDock;
+    property    OnEndDock;
   end;
 
   { TDesignHeadingForm }
@@ -63,6 +76,16 @@ begin
   result := FHeading;
 end;
 
+function TDesignHeading.GetXTreeNode: TAVLTreeNode;
+begin
+  result := FXTreeNode;
+end;
+
+function TDesignHeading.GetYTreeNode: TAVLTreeNode;
+begin
+  result := FYTreeNode;
+end;
+
 procedure TDesignHeading.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FHeading := TEpiHeading(AValue);
@@ -70,6 +93,16 @@ begin
   FHeading.Caption.RegisterOnChangeHook(@OnCaptionChange);
   Name := FHeading.Id;
   Caption := '';
+end;
+
+procedure TDesignHeading.SetXTreeNode(const AValue: TAVLTreeNode);
+begin
+  FXTreeNode := AValue;
+end;
+
+procedure TDesignHeading.SetYTreeNode(const AValue: TAVLTreeNode);
+begin
+  FYTreeNode := AValue;
 end;
 
 procedure TDesignHeading.OnHeadingChange(Sender: TObject;

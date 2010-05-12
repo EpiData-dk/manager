@@ -143,8 +143,16 @@
         <GenerateDebugInfo Value="True"/>
         <GenerateDwarf Value="True"/>
       </Debugging>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
     </Linking>
     <Other>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

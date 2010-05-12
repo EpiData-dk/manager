@@ -6,23 +6,44 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ExtCtrls, epidatafiles, epicustombase, design_custombase;
+  StdCtrls, Buttons, ExtCtrls, epidatafiles, epicustombase, design_custombase,
+  AVL_Tree;
 
 type
 
   { TDesignSection }
 
-  TDesignSection = Class(TGroupBox, IDesignEpiControl)
+  TDesignSection = Class(TGroupBox, IDesignEpiControl, IPositionHandler)
   private
+    // IDesignEpiControl
     FSection: TEpiSection;
+    FXTreeNode: TAVLTreeNode;
+    FYTreeNode: TAVLTreeNode;
     function GetEpiControl: TEpiCustomControlItem;
+    function GetXTreeNode: TAVLTreeNode;
+    function GetYTreeNode: TAVLTreeNode;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure SetXTreeNode(const AValue: TAVLTreeNode);
+    procedure SetYTreeNode(const AValue: TAVLTreeNode);
+  private
+    // IPositionHandler
+    FXTree: TAVLTree;
+    FYTree: TAVLTree;
+    function GetXTree: TAVLTree;
+    function GetYTree: TAVLTree;
+  private
     procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure UpdateHint;
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
+    // IDesignEpiControl
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    property XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
+    property YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
+    // IPositionHandler
+    property XTree: TAVLTree read GetXTree;
+    property YTree: TAVLTree read GetYTree;
   end;
 
   { TDesignSectionForm }
@@ -74,12 +95,42 @@ begin
   result := FSection;
 end;
 
+function TDesignSection.GetXTreeNode: TAVLTreeNode;
+begin
+  result := FXTreeNode;
+end;
+
+function TDesignSection.GetYTreeNode: TAVLTreeNode;
+begin
+  result := FYTreeNode;
+end;
+
 procedure TDesignSection.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FSection := TEpiSection(AValue);
   FSection.RegisterOnChangeHook(@OnChange);
   Name := FSection.Id;
   Caption := '';
+end;
+
+procedure TDesignSection.SetXTreeNode(const AValue: TAVLTreeNode);
+begin
+  FXTreeNode := AValue;
+end;
+
+procedure TDesignSection.SetYTreeNode(const AValue: TAVLTreeNode);
+begin
+  FYTreeNode := AValue;
+end;
+
+function TDesignSection.GetXTree: TAVLTree;
+begin
+  result := FXTree;
+end;
+
+function TDesignSection.GetYTree: TAVLTree;
+begin
+  result := FYTree;
 end;
 
 procedure TDesignSection.OnChange(Sender: TObject; EventGroup: TEpiEventGroup;
@@ -137,6 +188,10 @@ end;
 constructor TDesignSection.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+
+  FXTree := TAVLTree.Create(@XTreeSort);
+  FYTree := TAVLTree.Create(@YTreeSort);
+
   DragKind := dkDock;
   DragMode := dmAutomatic;
   DockSite := true;
