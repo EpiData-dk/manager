@@ -88,6 +88,7 @@ type
     ExportToolButton: TToolButton;
     Divider4: TToolButton;
     TodayDateSubMenu: TMenuItem;
+    TestToolButton: TToolButton;
     procedure   Button1Click(Sender: TObject);
     procedure   Button2Click(Sender: TObject);
     procedure   Button3Click(Sender: TObject);
@@ -476,6 +477,7 @@ begin
     Top  := Pos.Y;
     EndUpdate;
   end;
+  EnterControl(Result);
   AddToPositionHandler((AParent as IPositionHandler), Result);
 end;
 
@@ -501,8 +503,7 @@ begin
     OnUnDock    := @DockSiteUnDock;
     OnDockOver  := @DockSiteDockOver;
     OnStartDock := @DesignControlStartDock;
-    if Result is TWinControl then
-      TWinControl(Result).OnKeyDown   := @DesingControlKeyDown;
+    OnKeyDown   := @DesingControlKeyDown;
   end;
 
   with EpiSection do
@@ -521,6 +522,7 @@ begin
   FDesignerBox.DockSite := false;
   FDesignerBox.DockSite := true;
 
+  EnterControl(Result);
   AddToPositionHandler((FDesignerBox as IPositionHandler), Result);
 end;
 
@@ -564,7 +566,7 @@ procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;
 var
   WinSender: TWinControl absolute Sender;
 begin
-  FActiveSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
+//  FActiveSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
   FActiveDockSite := WinSender;
 
   case Button of
@@ -585,6 +587,7 @@ var
   WinSender: TWinControl absolute Sender;
   ParentPt: TPoint;
   EpiControl: TEpiCustomControlItem;
+  panel: TPanel;
 begin
   case Button of
     mbLeft: FLeftMouseUp := WinSender.ClientToScreen(Point(X, Y));
@@ -640,6 +643,19 @@ begin
         else
           EpiControl.Free;
       end;
+
+    // TEST BUTTON!
+    20:
+      begin
+        panel := TPanel.Create(FDesignerBox);
+        panel.Top := FLeftMouseUp.Y;
+        Panel.Left := FLeftMouseUp.X;
+        panel.Width := abs(FLeftMouseDown.X - panel.left);
+        panel.Height := abs(FLeftMouseDown.Y - panel.Top);
+        panel.Parent := FDesignerBox;
+        panel.OnMouseDown := @DockSiteMouseDown;
+        panel.OnMouseMove := @DockSiteMouseMove;
+      end;
   end;
   ToggleToolBtn(SelectorToolButton);
 end;
@@ -648,12 +664,19 @@ procedure TDesignFrame.DockSiteMouseMove(Sender: TObject; Shift: TShiftState;
   X, Y: Integer);
 var
   TopLeft: TPoint;
+  S: String;
 begin
+  S := '';
+  WriteStr(S, TWinControl(Sender).Focused);
   Label6.Caption := Format(
+    'Focused: %s' + LineEnding +
     'XTree: %d' + LineEnding +
     'YTree: %d',
-    [(Sender as IPositionHandler).XTree.Count,
-     (Sender as IPositionHandler).YTree.Count]
+    [S,
+     0, 0
+//     (Sender as IPositionHandler).XTree.Count,
+//     (Sender as IPositionHandler).YTree.Count
+    ]
   );
 
 
