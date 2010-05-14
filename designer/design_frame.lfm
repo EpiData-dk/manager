@@ -1513,6 +1513,38 @@ object DesignFrame: TDesignFrame
       Caption = 'ExportDataformAction'
       ImageIndex = 14
     end
+    object MoveHomeAction: TAction
+      Category = 'Move'
+      Caption = 'MoveHomeAction'
+      ShortCut = 36
+    end
+    object MovePgUpAction: TAction
+      Category = 'Move'
+      Caption = 'MovePgUpAction'
+      ShortCut = 33
+    end
+    object MoveUpAction: TAction
+      Category = 'Move'
+      Caption = 'MoveUpAction'
+      OnExecute = MoveUpActionExecute
+      ShortCut = 38
+    end
+    object MoveDownAction: TAction
+      Category = 'Move'
+      Caption = 'MoveDownAction'
+      OnExecute = MoveDownActionExecute
+      ShortCut = 40
+    end
+    object MovePgDnAction: TAction
+      Category = 'Move'
+      Caption = 'MovePgDnAction'
+      ShortCut = 34
+    end
+    object MoveEndAction: TAction
+      Category = 'Move'
+      Caption = 'MoveEndAction'
+      ShortCut = 35
+    end
   end
   object EpiControlPopUpMenu: TPopupMenu
     Images = DesignerImageList

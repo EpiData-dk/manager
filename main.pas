@@ -85,7 +85,7 @@ begin
       Align := alClient;
     end;
     WorkFlowSheet.Parent := PageControl1;
-    WorkFlowSheet.TabIndex := 0;
+    WorkFlowSheet.PageIndex := 0;
     WorkFlowSheet.Caption := 'WorkFlow';
   end;
   PageControl1.ActivePage := WorkFlowSheet;
