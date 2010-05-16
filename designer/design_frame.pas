@@ -125,6 +125,8 @@ type
     // - mouse
     FMouseState: TMouseState;
     FActiveDockSite: TWinControl;       // For debugging
+    FShowPanel: TPanel; // For showing the area for a new section.
+    procedure   DrawShowPanel(X, Y: Integer);
     procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure   DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
@@ -438,7 +440,7 @@ begin
 
   Ctrl := TControl(Node.Data);
 
-  if (Ctrl is TDesignSection) then
+  if (Ctrl is TDesignSection) and ((Ctrl as IPositionHandler).YTree.Count > 0) then
     Node := (Ctrl as IPositionHandler).YTree.FindLowest
   else
     Node := (Ctrl.Parent as IPositionHandler).YTree.FindSuccessor(Node);
@@ -482,7 +484,7 @@ begin
     Node := (FActiveControl as IDesignEpiControl).YTreeNode;
 
   Ctrl := TControl(Node.Data);
-  if (Ctrl is TDesignSection) then
+  if (Ctrl is TDesignSection) and ((Ctrl as IPositionHandler).YTree.Count > 0) then
     Node := (Ctrl as IPositionHandler).YTree.FindHighest
   else
     Node := (Ctrl.Parent as IPositionHandler).YTree.FindPrecessor(Node);
@@ -635,6 +637,19 @@ begin
   EpiControlPopUpMenu.PopUp(Pos.X, Pos.Y);
 end;
 
+procedure TDesignFrame.DrawShowPanel(X, Y: Integer);
+var
+  Pt1: TPoint;
+  Pt2: TPoint;
+begin
+  Pt1 := FDesignerBox.ScreenToClient(FLeftMouseDown);
+  Pt2 := Point(X, Y);
+  FShowPanel.Left := Min(Pt1.X, Pt2.X);
+  FShowPanel.Top := Min(Pt1.Y, Pt2.Y);
+  FShowPanel.Width := Abs(Pt1.X - Pt2.X);
+  FShowPanel.Height := Abs(Pt1.Y - Pt2.Y);
+end;
+
 function TDesignFrame.FindNewPosition(ParentControl: TWinControl;
   AClass: TControlClass): TPoint;
 begin
@@ -661,7 +676,7 @@ procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;
 var
   WinSender: TWinControl absolute Sender;
 begin
-//  FActiveSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
+  FActiveSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
   FActiveDockSite := WinSender;
 
   case Button of
@@ -674,6 +689,16 @@ begin
   FMouseState.Shift := Shift;
 
   EnterControl(Sender);
+
+  if FActiveButton.Index <> 11 then exit;
+  FShowPanel := TPanel.Create(FDesignerBox);
+  FShowPanel.Color := clWhite;
+  FShowPanel.BorderStyle := bsSingle;
+  FShowPanel.BorderWidth := 1;
+  FShowPanel.BevelOuter := bvNone;
+  FShowPanel.BevelInner := bvNone;
+  DrawShowPanel(X+1, Y+1);
+  FShowPanel.Parent := FDesignerBox;
 end;
 
 procedure TDesignFrame.DockSiteMouseUp(Sender: TObject; Button: TMouseButton;
@@ -737,6 +762,7 @@ begin
             WinSender.ScreenToClient(FLeftMouseUp), EpiControl)
         else
           EpiControl.Free;
+        FShowPanel.Free;
       end;
 
     // TEST BUTTON!
@@ -768,12 +794,10 @@ begin
     'XTree: %d' + LineEnding +
     'YTree: %d',
     [S,
-     0, 0
-//     (Sender as IPositionHandler).XTree.Count,
-//     (Sender as IPositionHandler).YTree.Count
+     (Sender as IPositionHandler).XTree.Count,
+     (Sender as IPositionHandler).YTree.Count
     ]
   );
-
 
   // Used to paint box when creating the section.
   if not (
@@ -789,7 +813,8 @@ begin
   Label5.Caption := Format(
     'Moving mouse over (%s:%s)', [TControl(Sender).Name, Sender.ClassName]);
 
-  FDesignerBox.Canvas.Rectangle(TopLeft.X, TopLeft.Y, X, Y);
+  DrawShowPanel(X, Y);
+//  FDesignerBox.Canvas.Rectangle(TopLeft.X, TopLeft.Y, X, Y);
 end;
 
 procedure TDesignFrame.DockSiteDockOver(Sender: TObject;

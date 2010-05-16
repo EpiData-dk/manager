@@ -180,8 +180,10 @@ object DesignFrame: TDesignFrame
     Width = 265
     Align = alRight
     BevelInner = bvLowered
-    ClientHeight = 557
-    ClientWidth = 265
+    BorderWidth = 3
+    BorderStyle = bsSingle
+    ClientHeight = 555
+    ClientWidth = 263
     ParentColor = False
     TabOrder = 1
     object Label1: TLabel
