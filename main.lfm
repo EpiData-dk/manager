@@ -24,6 +24,15 @@ object MainForm: TMainForm
     top = 280
     object FileMenuItem: TMenuItem
       Caption = 'File'
+      object FileExitMenuItem: TMenuItem
+        Action = FileExitAction
+      end
+    end
+    object EditMenuItem: TMenuItem
+      Caption = 'Edit'
+      object SettingsMenuItem: TMenuItem
+        Action = SettingsAction
+      end
     end
   end
   object ActionList1: TActionList
@@ -36,6 +45,19 @@ object MainForm: TMainForm
     object NewProjectAction: TAction
       Caption = 'NewProjectAction'
       OnExecute = NewProjectActionExecute
+    end
+    object SettingsAction: TAction
+      Category = 'Edit'
+      Caption = 'Settings'
+      Hint = 'Settings'
+      OnExecute = SettingsActionExecute
+      ShortCut = 32851
+    end
+    object FileExitAction: TFileExit
+      Category = 'File'
+      Caption = 'E&xit'
+      Hint = 'Exit'
+      ShortCut = 32849
     end
   end
 end

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
   design_field, design_heading, design_section, epicustombase,
-  design_custombase, AVL_Tree ;
+  design_custombase, AVL_Tree , LCLType;
 
 type
 
@@ -102,8 +102,13 @@ type
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   LoadDataFileActionExecute(Sender: TObject);
     procedure   MoveDownActionExecute(Sender: TObject);
+    procedure   MoveEndActionExecute(Sender: TObject);
+    procedure   MoveHomeActionExecute(Sender: TObject);
+    procedure   MovePgDnActionExecute(Sender: TObject);
+    procedure   MovePgUpActionExecute(Sender: TObject);
     procedure   MoveUpActionExecute(Sender: TObject);
     procedure   NewDateFieldMenuClick(Sender: TObject);
+    procedure NewIntFieldActionExecute(Sender: TObject);
     procedure   NewOtherFieldMenuClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
@@ -116,6 +121,7 @@ type
     FRightMouseDown: TPoint;
     FRightMouseUp: TPoint;
     procedure   ResetMousePos;
+    function    DesignControlTop(LocalCtrl: TControl): Integer;
     function    ShowForm(EpiControl: TEpiCustomControlItem;
       Pos: TPoint): TModalResult;
     procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
@@ -182,7 +188,7 @@ implementation
 
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
-  LCLType, main;
+  main;
 
 type
 
@@ -269,7 +275,6 @@ begin
   FYTree := TAVLTree.Create(@YTreeSort);
 end;
 
-
 { TDesignFrame }
 
 procedure TDesignFrame.ToggleToolBtn(Sender: TObject);
@@ -293,6 +298,14 @@ begin
   FLeftMouseUp := Pt;
   FRightMouseDown := Pt;
   FRightMouseUp := Pt;
+end;
+
+function TDesignFrame.DesignControlTop(LocalCtrl: TControl): Integer;
+begin
+  if LocalCtrl.Parent = FDesignerBox then
+    exit(LocalCtrl.Top);
+
+  result := LocalCtrl.Top + LocalCtrl.Parent.Top;
 end;
 
 procedure TDesignFrame.Button1Click(Sender: TObject);
@@ -325,18 +338,18 @@ begin
     MoveUpAction.Execute;
     Key := VK_UNKNOWN
   end;
-{  // - Page step = PageUp (VK_PRIOR)
+  // - Page step = PageUp (VK_PRIOR)
   if (Key = VK_PRIOR) then
   begin
-    MovePageUpAction.Execute;
+    MovePgUpAction.Execute;
     Key := VK_UNKNOWN;
   end;
   // - Top step = Ctrl + Home
   if (Key = VK_HOME) and (ssCtrl in Shift) then
   begin
-    MoveFirstAction.Execute;
+    MoveHomeAction.Execute;
     Key := VK_UNKNOWN;
-  end;}
+  end;
   // ..going down: (Down, Tab, PgDown, Ctrl+End)
   // - Single step = Down, Tab
   if (Key = VK_DOWN) or (Key = VK_TAB) then
@@ -344,19 +357,19 @@ begin
     MoveDownAction.Execute;
     Key := VK_UNKNOWN
   end;
-{  // - Page step = PageDown (VK_NEXT)
+  // - Page step = PageDown (VK_NEXT)
   if (Key = VK_NEXT) then
   begin
-    MovePageDownAction.Execute;
+    MovePgDnAction.Execute;
     Key := VK_UNKNOWN;
   end;
   // - Bottom step = Ctrl + End
   if (Key = VK_END) and (ssCtrl in Shift) then
   begin
-    MoveLastAction.Execute;
+    MoveEndAction.Execute;
     Key := VK_UNKNOWN;
   end;
-                    }
+
   // Ugly dirty way of capturing shortcuts involving keys.
   // -- send to mainform, it automatically propagetes down through action lists..
   if Key <> VK_UNKNOWN then
@@ -468,6 +481,171 @@ begin
   EnterControl(TControl(Node.Data));
 end;
 
+procedure TDesignFrame.MoveEndActionExecute(Sender: TObject);
+var
+  TheComponent: TControl;
+  TheParent: TWinControl;
+  YTree: TAVLTree;
+  Node: TAVLTreeNode;
+begin
+  if not Assigned(FActiveControl) then exit;
+  if FActiveControl = FDesignerBox then
+  begin
+    if (FActiveControl as IPositionHandler).YTree.Count = 0 then exit;
+    Node := (FActiveControl as IPositionHandler).YTree.FindHighest;
+    TheComponent := TControl(Node.Data);
+  end else
+    TheComponent := FActiveControl;
+  TheParent := TheComponent.Parent;
+  YTree := (TheParent as IPositionHandler).YTree;
+  Node := (TheComponent as IDesignEpiControl).YTreeNode;
+
+  if Node = YTree.FindHighest then
+  begin
+    if TheParent = FDesignerBox then exit;
+
+    TheComponent := TheParent;
+    TheParent := TheComponent.Parent;
+    YTree := (TheParent as IPositionHandler).YTree;
+  end;
+
+  Node := YTree.FindHighest;
+  if Assigned(Node) then
+    EnterControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MoveHomeActionExecute(Sender: TObject);
+var
+  TheComponent: TControl;
+  TheParent: TWinControl;
+  YTree: TAVLTree;
+  Node: TAVLTreeNode;
+begin
+  if not Assigned(FActiveControl) then exit;
+  if FActiveControl = FDesignerBox then
+  begin
+    if (FActiveControl as IPositionHandler).YTree.Count = 0 then exit;
+    Node := (FActiveControl as IPositionHandler).YTree.FindLowest;
+    TheComponent := TControl(Node.Data);
+  end else
+    TheComponent := FActiveControl;
+  TheParent := TheComponent.Parent;
+  YTree := (TheParent as IPositionHandler).YTree;
+  Node := (TheComponent as IDesignEpiControl).YTreeNode;
+
+  if Node = YTree.FindLowest then
+  begin
+    if TheParent = FDesignerBox then exit;
+
+    TheComponent := TheParent;
+    TheParent := TheComponent.Parent;
+    YTree := (TheParent as IPositionHandler).YTree;
+  end;
+
+  Node := YTree.FindLowest;
+  if Assigned(Node) then
+    EnterControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MovePgDnActionExecute(Sender: TObject);
+var
+  Node: TAVLTreeNode;
+  Dx: Integer;
+  YTree: TAVLTree;
+  TheParent: TWinControl;
+  TheComponent: TControl;
+begin
+  if not Assigned(FActiveControl) then exit;
+  if FActiveControl = FDesignerBox then
+  begin
+    if (FActiveControl as IPositionHandler).YTree.Count = 0 then exit;
+    Node := (FActiveControl as IPositionHandler).YTree.FindLowest;
+    TheComponent := TControl(Node.Data);
+  end else
+    TheComponent := FActiveControl;
+  TheParent := TheComponent.Parent;
+  YTree := (TheParent as IPositionHandler).YTree;
+  Node := (TheComponent as IDesignEpiControl).YTreeNode;
+
+  if Node = YTree.FindHighest then
+  begin
+    // Lowest component in the wincontrol, move out if we are in a section, do nothing
+    // if we are at the bottom of the screen (on designer box).
+    if TheParent = FDesignerBox then exit;
+
+    TheComponent := TheParent;
+    TheParent := TheComponent.Parent;
+    YTree := (TheParent as IPositionHandler).YTree;
+    Node := (TheComponent as IDesignEpiControl).YTreeNode;
+  end;
+
+  Dx := 0;
+  Node := YTree.FindSuccessor(Node);
+  // This will only occur if we are at the very bottom of the designerbox.
+  if not Assigned(Node) then exit;
+
+  if (DesignControlTop(TControl(Node.Data)) + TControl(Node.Data).Height) > (FDesignerBox.VertScrollBar.Position + FDesignerBox.VertScrollBar.Page) then
+    Dx := FDesignerBox.ClientHeight;
+  while (Assigned(Node)) and
+    ((DesignControlTop(TControl(Node.Data)) + TControl(Node.Data).Height) < (FDesignerBox.VertScrollBar.Position + FDesignerBox.VertScrollBar.Page + Dx)) do
+    Node := YTree.FindSuccessor(Node);
+  if Assigned(Node) then
+    Node := YTree.FindPrecessor(Node)
+  else
+    Node := YTree.FindHighest;
+
+  EnterControl(TControl(Node.Data));
+end;
+
+procedure TDesignFrame.MovePgUpActionExecute(Sender: TObject);
+var
+  Node: TAVLTreeNode;
+  Dx: Integer;
+  YTree: TAVLTree;
+  TheParent: TWinControl;
+  TheComponent: TControl;
+begin
+  if not Assigned(FActiveControl) then exit;
+  if FActiveControl = FDesignerBox then
+  begin
+    if (FActiveControl as IPositionHandler).YTree.Count = 0 then exit;
+    Node := (FActiveControl as IPositionHandler).YTree.FindHighest;
+    TheComponent := TControl(Node.Data);
+  end else
+    TheComponent := FActiveControl;
+  TheParent := TheComponent.Parent;
+  YTree := (TheParent as IPositionHandler).YTree;
+  Node := (TheComponent as IDesignEpiControl).YTreeNode;
+
+  if Node = YTree.FindLowest then
+  begin
+    // Top most component the section, move out if we are in a section, do nothing
+    // if we are at the top of the screen (on designer box).
+    if TheParent = FDesignerBox then exit;
+
+    TheComponent := TheParent;
+    TheParent := TheComponent.Parent;
+    YTree := (TheParent as IPositionHandler).YTree;
+    Node := (TheComponent as IDesignEpiControl).YTreeNode;
+  end;
+
+  Dx := 0;
+  Node := YTree.FindPrecessor(Node);
+  // This will only occur if we are at the very top of the designerbox.
+  if not Assigned(Node) then exit;
+
+  if DesignControlTop(TControl(Node.Data)) < (FDesignerBox.VertScrollBar.Position) then
+    Dx := FDesignerBox.ClientHeight;
+  while (Assigned(Node)) and (DesignControlTop(TControl(Node.Data)) > (FDesignerBox.VertScrollBar.Position  - Dx)) do
+    Node := YTree.FindPrecessor(Node);
+  if Assigned(Node) then
+    Node := YTree.FindSuccessor(Node)
+  else
+    Node := YTree.FindLowest;
+
+  EnterControl(TControl(Node.Data));
+end;
+
 procedure TDesignFrame.MoveUpActionExecute(Sender: TObject);
 var
   YTree: TAVLTree;
@@ -518,6 +696,11 @@ begin
   DateToolButton.Tag := TMenuItem(Sender).Tag;
   DateToolButton.ImageIndex := TMenuItem(Sender).ImageIndex;
   ToggleToolBtn(DateToolButton);
+end;
+
+procedure TDesignFrame.NewIntFieldActionExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TDesignFrame.NewOtherFieldMenuClick(Sender: TObject);
@@ -768,14 +951,6 @@ begin
     // TEST BUTTON!
     20:
       begin
-        panel := TPanel.Create(FDesignerBox);
-        panel.Top := FLeftMouseUp.Y;
-        Panel.Left := FLeftMouseUp.X;
-        panel.Width := abs(FLeftMouseDown.X - panel.left);
-        panel.Height := abs(FLeftMouseDown.Y - panel.Top);
-        panel.Parent := FDesignerBox;
-        panel.OnMouseDown := @DockSiteMouseDown;
-        panel.OnMouseMove := @DockSiteMouseMove;
       end;
   end;
   ToggleToolBtn(SelectorToolButton);
@@ -927,48 +1102,6 @@ begin
   end;
 end;
 
-{procedure TDesignFrame.MoveDown(Sender: TControl;
-  PositionHandler: IPositionHandler);
-
-  function DoMoveDown: TAVLTreeNode;
-  begin
-    Result := (Sender as IDesignEpiControl).YTreeNode;
-    Result := PositionHandler.YTree.FindSuccessor(Result);
-  end;
-
-var
-  Node: TAVLTreeNode;
-begin
-  if not Assigned(Sender) then exit;
-
-  if (Sender is TDesignSection) then
-    Node := (Sender as IPositionHandler).YTree.FindLowest
-  else
-    Node := DoMoveDown;
-
-  if Assigned(Node) then
-  begin
-    EnterControl(TControl(Node.Data));
-    Exit;
-  end;
-
-  // Node is nil, find parent.
-  if (Sender.Parent is TDesignSection) then
-  begin
-    Sender := Sender.Parent;
-    PositionHandler := (Sender.Parent as IPositionHandler);
-    Node := DoMoveDown;
-    if Assigned(Node) then
-    begin
-      EnterControl(TControl(Node.Data));
-      Exit;
-    end;
-  end;
-  // We are at the bottom - select top most (lowest in AVL tree) component.
-  Node := PositionHandler.YTree.FindLowest;
-  EnterControl(TControl(Node.Data));
-end;         }
-
 procedure TDesignFrame.EnterControl(Sender: TObject);
 begin
   ExitControl(nil);
@@ -976,6 +1109,12 @@ begin
   DeleteControlAction.Enabled := (Sender <> FDesignerBox);
   if (Sender is TWinControl) then
     TWinControl(Sender).SetFocus;
+
+  if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
+    FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
+
+  if DesignControlTop(FActiveControl) > (FDesignerBox.VertScrollBar.Position + FDesignerBox.VertScrollBar.Page) then
+    FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - FDesignerBox.VertScrollBar.Page + FActiveControl.Height + 5;
   FActiveControl.Color := $00B6F5F5;
 end;
 

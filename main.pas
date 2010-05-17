@@ -6,13 +6,18 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList;
+  Menus, ComCtrls, ActnList, StdActns;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    FileExitAction: TFileExit;
+    FileExitMenuItem: TMenuItem;
+    SettingsAction: TAction;
+    EditMenuItem: TMenuItem;
+    SettingsMenuItem: TMenuItem;
     NewProjectAction: TAction;
     ShowWorkFlowAction: TAction;
     ActionList1: TActionList;
@@ -21,6 +26,7 @@ type
     PageControl1: TPageControl;
     procedure FormCreate(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
+    procedure SettingsActionExecute(Sender: TObject);
     procedure ShowWorkFlowActionExecute(Sender: TObject);
   private
     { private declarations }
@@ -39,7 +45,7 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, project_frame;
+  workflow_frame, project_frame, settings;
 
 { TMainForm }
 
@@ -72,6 +78,16 @@ begin
 
   Inc(TabNameCount);
 end;
+
+procedure TMainForm.SettingsActionExecute(Sender: TObject);
+var
+  SettingForm: TSettingsForm;
+begin
+  SettingForm := TSettingsForm.Create(Self);
+  if SettingForm.ShowModal = mrCancel then exit;
+  SettingForm.Free;
+end;
+
 
 procedure TMainForm.ShowWorkFlowActionExecute(Sender: TObject);
 begin

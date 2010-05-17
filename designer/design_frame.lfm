@@ -1441,6 +1441,7 @@ object DesignFrame: TDesignFrame
       Caption = 'New Integer Field'
       Hint = 'New Integer Field'
       ImageIndex = 1
+      OnExecute = NewIntFieldActionExecute
       ShortCut = 113
     end
     object NewFloatFieldAction: TAction
@@ -1518,11 +1519,13 @@ object DesignFrame: TDesignFrame
     object MoveHomeAction: TAction
       Category = 'Move'
       Caption = 'MoveHomeAction'
+      OnExecute = MoveHomeActionExecute
       ShortCut = 36
     end
     object MovePgUpAction: TAction
       Category = 'Move'
       Caption = 'MovePgUpAction'
+      OnExecute = MovePgUpActionExecute
       ShortCut = 33
     end
     object MoveUpAction: TAction
@@ -1540,11 +1543,13 @@ object DesignFrame: TDesignFrame
     object MovePgDnAction: TAction
       Category = 'Move'
       Caption = 'MovePgDnAction'
+      OnExecute = MovePgDnActionExecute
       ShortCut = 34
     end
     object MoveEndAction: TAction
       Category = 'Move'
       Caption = 'MoveEndAction'
+      OnExecute = MoveEndActionExecute
       ShortCut = 35
     end
   end
