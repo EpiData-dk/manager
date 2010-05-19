@@ -52,7 +52,8 @@ uses
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Caption := 'EpiData Project and Data Manager'; // + ' (v' + GetManagerVersion + ')';
-  ShowWorkFlowAction.Execute;
+//  ShowWorkFlowAction.Execute;
+  NewProjectAction.Execute;
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
@@ -72,6 +73,7 @@ begin
   Frame.Name := 'ProjectFrame' + IntToStr(TabNameCount);
   Frame.Align := alClient;
   Frame.Parent := TabSheet;
+  Frame.NewDataFormAction.Execute;
   FActiveFrame := Frame;
 
   PageControl1.ActivePage := TabSheet;

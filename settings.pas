@@ -128,7 +128,7 @@ var
 
     // Field definitions:
     IntFieldLength:        2;
-    FloatIntLength:        2;
+    FloatIntLength:        5;
     FloatDecimalLength:    2;
     StringFieldLength:     20;
     DefaultDateType:       ftDMYDate;

@@ -112,7 +112,13 @@ begin
   FActiveFrame := nil;
 
   FEpiDocument := TEpiDocument.Create('en');
-  NewDataFormAction.Execute;
+
+  {$IFDEF EPI_DEBUG}
+
+  {$ELSE}
+  ProjectPanel.Enabled := false;
+  ProjectPanel.Visible := false;
+  {$ENDIF}
 end;
 
 end.

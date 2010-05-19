@@ -49,6 +49,7 @@ type
     CaptionEdit: TEdit;
     OkBtn: TBitBtn;
     Panel1: TPanel;
+    procedure FormShow(Sender: TObject);
   private
     { private declarations }
     FHeading: TEpiHeading;
@@ -68,6 +69,9 @@ var
 implementation
 
 {$R *.lfm}
+
+uses
+  LCLProc;
 
 { TDesignHeading }
 
@@ -139,11 +143,9 @@ begin
   with FHeading do
     Hint := WideFormat(
       'Id: %s' + LineEnding +
-//      'Name: %s' + LineEnding +
       'Caption: %s' + LineEnding +
       'X: %d, Y: %d',
       [UTF8Decode(Id),
-//       UTF8Decode(Name.Text),
        UTF8Decode(Caption.Text),
        Left,
        Top]
@@ -175,12 +177,21 @@ procedure TDesignHeadingForm.FormCloseQuery(Sender: TObject;
 begin
   if ModalResult <> mrOK then exit;
 
+  CanClose := false;
+  if UTF8Length(CaptionEdit.Text) = 0 then exit;
+  CanClose := true;
+
   FHeading.BeginUpdate;
 
   FHeading.Id := IdEdit.Text;
   FHeading.Caption.Text := CaptionEdit.Text;
 
   FHeading.EndUpdate;
+end;
+
+procedure TDesignHeadingForm.FormShow(Sender: TObject);
+begin
+  CaptionEdit.SetFocus;
 end;
 
 function TDesignHeadingForm.GetEpiControl: TEpiCustomControlItem;

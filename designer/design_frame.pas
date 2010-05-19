@@ -100,7 +100,6 @@ type
     procedure   Button3Click(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
-    procedure   LoadDataFileActionExecute(Sender: TObject);
     procedure   MoveDownActionExecute(Sender: TObject);
     procedure   MoveEndActionExecute(Sender: TObject);
     procedure   MoveHomeActionExecute(Sender: TObject);
@@ -108,8 +107,14 @@ type
     procedure   MovePgUpActionExecute(Sender: TObject);
     procedure   MoveUpActionExecute(Sender: TObject);
     procedure   NewDateFieldMenuClick(Sender: TObject);
-    procedure NewIntFieldActionExecute(Sender: TObject);
+    procedure   NewDMYFieldActionExecute(Sender: TObject);
+    procedure   NewFloatFieldActionExecute(Sender: TObject);
+    procedure   NewHeadingActionExecute(Sender: TObject);
+    procedure   NewIntFieldActionExecute(Sender: TObject);
+    procedure   NewMDYFieldActionExecute(Sender: TObject);
     procedure   NewOtherFieldMenuClick(Sender: TObject);
+    procedure   NewStringFieldActionExecute(Sender: TObject);
+    procedure   NewYMDFieldActionExecute(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
     { common private }
@@ -127,10 +132,10 @@ type
     procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
 
   private
-    { Docksite controls - methods }
+    { Docksite methods }
     // - mouse
     FMouseState: TMouseState;
-    FActiveDockSite: TWinControl;       // For debugging
+    FActiveDockSite: TWinControl;
     FShowPanel: TPanel; // For showing the area for a new section.
     procedure   DrawShowPanel(X, Y: Integer);
     procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
@@ -150,6 +155,9 @@ type
   private
     { Design controls - methods }
     FActiveControl: TControl;
+    function    NewShortCutFieldControl(Ft: TEpiFieldType;
+      AParent: TWinControl): TControl;
+    function    NewShortCutHeadingControl(AParent: TWinControl): TControl;
     function    NewDesignControl(AClass: TControlClass;
       AParent: TWinControl; Pos: TPoint;
       EpiControl: TEpiCustomControlItem): TControl;
@@ -161,13 +169,16 @@ type
     procedure   DesignControlMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     // - Key controls.
-  private
     procedure   DesignKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure   EnterControl(Sender: TObject);
     procedure   ExitControl(Sender: TObject);
   private
     { Position handling }
+    procedure   FindNearestControls(ParentControl: TWinControl;
+      Control: TControl; var XCtrl: TControl; var YCtrl: TControl);
+    function    FindLowestDesignControl(ParentControl: TWinControl;
+      var Control: TControl): TPoint;
     function    FindNewPosition(ParentControl: TWinControl;
       AClass: TControlClass): TPoint;
   private
@@ -180,7 +191,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
     property    DataFile: TEpiDataFile read FDataFile;
-  end; 
+  end;
 
 implementation
 
@@ -188,7 +199,7 @@ implementation
 
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
-  main;
+  main, settings;
 
 type
 
@@ -399,18 +410,30 @@ procedure TDesignFrame.DeleteControlActionExecute(Sender: TObject);
 var
   EpiCtrl: TEpiCustomControlItem;
   LocalCtrl: TControl;
+  Node, NNode: TAVLTreeNode;
+  YTree: TAVLTree;
 begin
-  EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
-
-  // TODO : Find next control in line.
   LocalCtrl := FActiveControl;
-  ExitControl(FActiveControl);
+  ExitControl(nil);
+
+  EpiCtrl := (LocalCtrl as IDesignEpiControl).EpiControl;
+  Node    := (LocalCtrl as IDesignEpiControl).YTreeNode;
+  YTree   := (LocalCtrl.Parent as IPositionHandler).YTree;
+
+  NNode := YTree.FindSuccessor(Node);
+  if Assigned(NNode) then
+    EnterControl(TControl(NNode.Data))
+  else
+    NNode := YTree.FindPrecessor(Node);
+  if Assigned(NNode) then
+    EnterControl(TControl(NNode.Data))
+  else
+    EnterControl(nil);
 
   // TODO : Show warning when containing data.
+  RemoveFromPositionHandler(LocalCtrl.Parent as IPositionHandler, LocalCtrl);
   EpiCtrl.Free;  // This also removes the epicontrol from it's parent/list.
   LocalCtrl.Free;
-
-  EnterControl(FDesignerBox);
 end;
 
 
@@ -420,20 +443,8 @@ var
   Pt: TPoint;
 begin
   EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
-  if (FRightMouseUp.X = -1) then
-    Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left, EpiCtrl.Top))
-  else
-    Pt := FRightMouseUp;
+  Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left, EpiCtrl.Top));
   ShowForm(EpiCtrl, Pt);
-end;
-
-
-procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
-var
-  Frm: TImportForm;
-begin
-  Frm := TImportForm.Create(Self);
-  Frm.ShowModal;
 end;
 
 procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);
@@ -698,10 +709,31 @@ begin
   ToggleToolBtn(DateToolButton);
 end;
 
+procedure TDesignFrame.NewDMYFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftDMYDate, FActiveDockSite);
+end;
+
+procedure TDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftFloat, FActiveDockSite);
+end;
+
+procedure TDesignFrame.NewHeadingActionExecute(Sender: TObject);
+begin
+  NewShortCutHeadingControl(FActiveDockSite);
+end;
+
 procedure TDesignFrame.NewIntFieldActionExecute(Sender: TObject);
 begin
-  //
+  NewShortCutFieldControl(ftInteger, FActiveDockSite);
 end;
+
+procedure TDesignFrame.NewMDYFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftMDYDate, FActiveDockSite);
+end;
+
 
 procedure TDesignFrame.NewOtherFieldMenuClick(Sender: TObject);
 begin
@@ -710,6 +742,16 @@ begin
   OtherToolButton.Tag := TMenuItem(Sender).Tag;
   OtherToolButton.ImageIndex := TMenuItem(Sender).ImageIndex;
   ToggleToolBtn(OtherToolButton);
+end;
+
+procedure TDesignFrame.NewStringFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftString, FActiveDockSite);
+end;
+
+procedure TDesignFrame.NewYMDFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftYMDDate, FActiveDockSite);
 end;
 
 
@@ -835,18 +877,52 @@ end;
 
 function TDesignFrame.FindNewPosition(ParentControl: TWinControl;
   AClass: TControlClass): TPoint;
+var
+  Control: TControl;
+  Dist: LongInt;
 begin
-  result := Point(20,20);
+  result := FindLowestDesignControl(ParentControl, Control);
+  if not Assigned(Control) then exit;
+
+  Dist := ManagerSettings.SpaceBtwFieldLabel;
+  if (AClass = TDesignField) and (Control is TDesignField) then
+    Dist := ManagerSettings.SpaceBtwFieldField;
+  if (AClass = TDesignHeading) and (Control is TDesignHeading) then
+    Dist := ManagerSettings.SpaceBtwLabelLabel;
+  Result.Y += (Control.Height + Dist);
 end;
 
 function TDesignFrame.NewField(FieldType: TEpiFieldType): TEpiField;
 begin
   result := FActiveSection.NewField(FieldType);
+
+  with result do
+  begin
+    Name.Text := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count);
+    Case FieldType of
+      ftFloat:
+        begin
+          Length := ManagerSettings.FloatIntLength;
+          Decimals := ManagerSettings.FloatDecimalLength;
+        end;
+      ftDMYDate, ftDMYToday,
+      ftMDYDate, ftMDYToday,
+      ftYMDDate, ftYMDToday:
+        begin
+          Length := 10;
+        end;
+      ftString, ftUpperString:
+        Length := ManagerSettings.StringFieldLength;
+      ftInteger, ftAutoInc:
+        Length := ManagerSettings.IntFieldLength;
+    end;
+  end;
 end;
 
 function TDesignFrame.NewHeading: TEpiHeading;
 begin
   result := FActiveSection.NewHeading;
+  result.Caption.Text := '(Untitled)';
 end;
 
 function TDesignFrame.NewSection: TEpiSection;
@@ -874,6 +950,7 @@ begin
   EnterControl(Sender);
 
   if FActiveButton.Index <> 11 then exit;
+  // For drawing the area where the new section is going to be.
   FShowPanel := TPanel.Create(FDesignerBox);
   FShowPanel.Color := clWhite;
   FShowPanel.BorderStyle := bsSingle;
@@ -989,7 +1066,6 @@ begin
     'Moving mouse over (%s:%s)', [TControl(Sender).Name, Sender.ClassName]);
 
   DrawShowPanel(X, Y);
-//  FDesignerBox.Canvas.Rectangle(TopLeft.X, TopLeft.Y, X, Y);
 end;
 
 procedure TDesignFrame.DockSiteDockOver(Sender: TObject;
@@ -1008,6 +1084,9 @@ begin
   Label3.Caption := Format('X:%d  Y:%d', [X, Y]);
   WriteStr(S, State);
   Label4.Caption := S;
+
+
+  // TODO : Draw lines when close to a snapping component.
 end;
 
 procedure TDesignFrame.DockSiteDockDrop(Sender: TObject;
@@ -1015,6 +1094,9 @@ procedure TDesignFrame.DockSiteDockDrop(Sender: TObject;
 var
   NSection, OSection: TEpiSection;
   EpiControl: TEpiCustomControlItem;
+  XCtrl, YCtrl: TControl;
+  Dx: Integer;
+  Dy: Integer;
 begin
   // Sender = the site being dragged onto.
   // Source.control = the control being dragged.
@@ -1022,11 +1104,34 @@ begin
   RemoveFromPositionHandler(
     (TDesignDockObject(Source).FOldDockSite as IPositionHandler),
     Source.Control);
-
   EpiControl := (Source.Control as IDesignEpiControl).EpiControl;
+
+  // X,Y is the mouse position, not the control top/left - so use DockOffset to
+  // get the right coordinates.
+  // Insert new coordinates already now, they are needed in the FindNearestControls
+  // algorithm (lookup in AVL tree is based on the EpiControl values). But defer the
+  // update to we know the exact position!
   EpiControl.BeginUpdate;
   EpiControl.Left := X - Source.DockOffset.X;
   EpiControl.Top  := Y - Source.DockOffset.Y;
+
+  // Snapping:
+  if (not (ssShift in GetKeyShiftState)) and
+     (ManagerSettings.SnapFields)        and
+     ((Sender as IPositionHandler).YTree.Count > 0) then
+  with Source do
+  begin
+    FindNearestControls(TWinControl(Sender), Control, XCtrl, YCtrl);
+    Dx := EpiControl.Left - XCtrl.Left;
+    // Snapping distance according to bottoms.
+    Dy := Abs(EpiControl.Top - YCtrl.Top) - Abs(YCtrl.Height - Control.Height);
+
+    if Abs(Dx) <= ManagerSettings.SnappingThresHold then
+      EpiControl.Left := XCtrl.Left;
+    // Align bottoms.
+    if Abs(Dy) <= ManagerSettings.SnappingThresHold then
+      EpiControl.Top := YCtrl.Top + (YCtrl.Height - Control.Height);
+  end;
   EpiControl.EndUpdate;
 
   AddToPositionHandler((Sender as IPositionHandler),
@@ -1071,6 +1176,37 @@ begin
     (NewTarget is TDesignSection) then Allow := true;
 end;
 
+function TDesignFrame.NewShortCutFieldControl(Ft: TEpiFieldType;
+  AParent: TWinControl): TControl;
+var
+  Pt: TPoint;
+  Field: TEpiField;
+begin
+  Field := NewField(Ft);
+  Pt := FindNewPosition(AParent, TDesignField);
+  if (not (ssShift in GetKeyShiftState)) and (ShowForm(Field, AParent.ClientToScreen(Pt)) <> mrOk) then
+  begin
+    Field.Free;
+    Exit;
+  end;
+  NewDesignControl(TDesignField, AParent, Pt, Field);
+end;
+
+function TDesignFrame.NewShortCutHeadingControl(AParent: TWinControl): TControl;
+var
+  Pt: TPoint;
+  Heading: TEpiHeading;
+begin
+  Heading := NewHeading;
+  Pt := FindNewPosition(AParent, TDesignHeading);
+  if (not (ssShift in GetKeyShiftState)) and (ShowForm(Heading, AParent.ClientToScreen(Pt)) <> mrOk) then
+  begin
+    Heading.Free;
+    Exit;
+  end;
+  NewDesignControl(TDesignHeading, AParent, Pt, Heading);
+end;
+
 procedure TDesignFrame.DesignControlMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
@@ -1105,6 +1241,9 @@ end;
 procedure TDesignFrame.EnterControl(Sender: TObject);
 begin
   ExitControl(nil);
+  if Not Assigned(Sender) then
+    Sender := FDesignerBox;
+
   FActiveControl := TControl(Sender);
   DeleteControlAction.Enabled := (Sender <> FDesignerBox);
   if (Sender is TWinControl) then
@@ -1125,10 +1264,108 @@ begin
   FActiveControl := nil;
 end;
 
+procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;
+  Control: TControl; var XCtrl: TControl; var YCtrl: TControl);
+var
+  Hit, Prd, Scc: TAVLTreeNode;
+  HDy, PDy, SDy: Integer;
+  YTree, XTree: TAVLTree;
+  EpiCtrl: TEpiCustomControlItem;
+begin
+  YTree := (ParentControl as IPositionHandler).YTree;
+  XTree := (ParentControl as IPositionHandler).XTree;
+  EpiCtrl := (Control as IDesignEpiControl).EpiControl;
+
+  // Finding the nearest it either an exact hit,
+  // a little above or below - hence we need to look
+  // both ways.
+  Hit := YTree.FindNearest(Control);
+  Prd := YTree.FindPrecessor(Hit);
+  Scc := YTree.FindSuccessor(Hit);
+  PDY := MaxInt;
+  SDy := MaxInt;
+
+  HDy := Abs(TControl(Hit.Data).Top - EpiCtrl.Top);
+  if Assigned(Prd) then
+    PDy := Abs(TControl(Prd.Data).Top - EpiCtrl.Top);
+  if Assigned(Scc) then
+    SDy := Abs(TControl(Scc.Data).Top - EpiCtrl.Top);
+  if PDy < HDy then
+  begin
+    Hit := Prd;
+    if SDy < PDy then
+      Hit := Scc;
+  end else
+    if SDY < HDy then
+      Hit := Scc;
+  YCtrl := TControl(Hit.Data);
+
+  // Same story for finding X component.
+  Hit := XTree.FindNearest(Control);
+  Prd := XTree.FindPrecessor(Hit);
+  Scc := XTree.FindSuccessor(Hit);
+  PDY := MaxInt;
+  SDy := MaxInt;
+
+  HDy := Abs(TControl(Hit.Data).Left - EpiCtrl.Left);
+  if Assigned(Prd) then
+    PDy := Abs(TControl(Prd.Data).Left - EpiCtrl.Left);
+  if Assigned(Scc) then
+    SDy := Abs(TControl(Scc.Data).Left - EpiCtrl.Left);
+  if PDy < HDy then
+  begin
+    Hit := Prd;
+    if SDy < PDy then
+      Hit := Scc;
+  end else
+    if SDY < HDy then
+      Hit := Scc;
+  XCtrl := TControl(Hit.Data);
+end;
+
+function TDesignFrame.FindLowestDesignControl(ParentControl: TWinControl;
+  var Control: TControl): TPoint;
+var
+  YTree: TAVLTree;
+  Hit: TAVLTreeNode;
+  Prd: TAVLTreeNode;
+begin
+  // Initialization
+  Result := Point(ManagerSettings.DefaultRightPostion, 5);
+  Control := nil;
+
+  // Look in the tree for lowest component (highest value in tree).
+  YTree := (ParentControl as IPositionHandler).YTree;
+  if YTree.Count = 0 then exit;
+
+  Hit := YTree.FindHighest;
+  Control := TControl(Hit.Data);
+
+  Prd := YTree.FindPrecessor(Hit);
+  // If the pred. has same top value, then by sorting ord it must have a
+  // smaller left value.
+  while Assigned(Prd) do
+  begin
+    if (TControl(Prd.Data).Top = Control.Top) then
+    begin
+      Control := TControl(Prd.Data);
+      Prd := YTree.FindPrecessor(Prd);
+    end else
+      Prd := nil;
+  end;
+  Result := Point(Control.Left, Control.Top);
+end;
+
 constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
 var
   LocalAdm: TEpiAdmin;
   Grp: TEpiGroup;
+  TmpEpiSection: TEpiSection;
+  TmpCtrlSection: TWinControl;
+  TmpHeading: TEpiHeading;
+  Heading: TEpiHeading;
+  i: Integer;
+  Pt: TPoint;
 begin
   inherited Create(TheOwner);
   FDataFile := ADataFile;
@@ -1137,6 +1374,9 @@ begin
   FActiveSection := ADataFile.MainSection;
   DragManager.DragThreshold := 5;
   DragManager.DragImmediate := False;
+
+  DateToolButton.Tag := Ord(ManagerSettings.DefaultDateType);
+  DateToolButton.ImageIndex := Ord(ManagerSettings.DefaultDateType);
 
   // Designer box creation and setup.
   // - (This is subject to change if we find a better component than
@@ -1156,11 +1396,42 @@ begin
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
   FDesignerBox.OnKeyDown   := @DesignKeyDown;
   (FDesignerBox as IDesignEpiControl).EpiControl := ADataFile.MainSection;
-
   FActiveDockSite := FDesignerBox;
-
   EnterControl(FDesignerBox);
 
+  TmpEpiSection := NewSection;
+  {$IFDEF WINDOWS}
+  Pt := Point(600,300);
+  {$ELSE}
+  Pt := Point(800,300);
+  {$ENDIF}
+  TmpCtrlSection := TWinControl(NewSectionControl(Point(20,20), Pt, TmpEpiSection));
+
+  for i := 1 to 12 do
+  begin
+    Heading := NewHeading;
+    Pt.X    := 20;
+    if (i >= 4) and (i <= 10) then
+      Pt.X := 30;
+    Pt.Y    := 20 * (i - 1) + 5;
+    case i of
+      1: Heading.Caption.Text := 'This is a test module for EpiData Manager';
+      2: Heading.Caption.Text := 'This version: Test adding fields, headings and sections.';
+      3: Heading.Caption.Text := '========================================================';
+      4: Heading.Caption.Text := 'A: Test adding different field.';
+      5: Heading.Caption.Text := 'B: Test adding sections.';
+      6: Heading.Caption.Text := 'C: Test adding headings.';
+      7: Heading.Caption.Text := 'D: Test moving fields/headings into sections.';
+      8: Heading.Caption.Text := 'E: Test moving fields/headings out of sections.';
+      9: Heading.Caption.Text := 'F: Test deleting field, sections or headings (using red "X" button or "DEL" key).';
+      10: Heading.Caption.Text := 'G: Test editing fields, sections or headings (using "pencil" or "ENTER" key)';
+      11: Heading.Caption.Text := '========================================================';
+      12: Heading.Caption.Text := 'NOTE: Import/Export is NOT part of this test release.';
+    end;
+    NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
+  end;
+
+  {$IFDEF EPI_DEBUG}
   // DEBUGGING!!!!
   LocalAdm := TEpiDocument(FDataFile.RootOwner).Admin;
   Grp := LocalAdm.NewGroup;
@@ -1175,6 +1446,12 @@ begin
   Grp.Name.Text := 'Group 3';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
+  {$ELSE}
+  Splitter1.Enabled := false;
+  Splitter1.Visible := False;
+  Panel1.Enabled := false;
+  Panel1.Visible := false;
+  {$ENDIF}
 end;
 
 end.

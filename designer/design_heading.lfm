@@ -7,6 +7,7 @@ inherited DesignHeadingForm: TDesignHeadingForm
   Caption = 'Heading Properties'
   ClientHeight = 163
   ClientWidth = 323
+  OnShow = FormShow
   object Panel1: TPanel[0]
     Left = 0
     Height = 163

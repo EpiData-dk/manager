@@ -32,6 +32,7 @@ object MainForm: TMainForm
       Caption = 'Edit'
       object SettingsMenuItem: TMenuItem
         Action = SettingsAction
+        OnClick = SettingsActionExecute
       end
     end
   end

@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ExtCtrls, epidatafiles, epicustombase, design_custombase,
-  AVL_Tree;
+  StdCtrls, Buttons, ExtCtrls, ComCtrls, epidatafiles, epicustombase,
+  design_custombase, AVL_Tree;
 
 type
 
@@ -49,20 +49,29 @@ type
   { TDesignSectionForm }
 
   TDesignSectionForm = class(TDesignCustomForm)
-    OkBtn: TBitBtn;
     CancelBtn: TBitBtn;
     GroupBox1: TGroupBox;
     GrpRightsMoveLeft: TSpeedButton;
     GrpRightsMoveRight: TSpeedButton;
+    WidthEdit: TEdit;
+    HeightEdit: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     NameEdit: TEdit;
     IdEdit: TEdit;
     GroupAvailableListBox: TListBox;
     GroupAssignedListBox: TListBox;
+    OkBtn: TBitBtn;
+    PageControl1: TPageControl;
     Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
   private
     { private declarations }
     FSection: TEpiSection;
@@ -201,6 +210,8 @@ end;
 
 destructor TDesignSection.Destroy;
 begin
+  FXTree.Free;
+  FYTree.Free;
   inherited Destroy;
 end;
 
@@ -215,11 +226,16 @@ begin
 
   FSection.BeginUpdate;
 
+  // Basic Page
   FSection.Id := IdEdit.Text;
   FSection.Name.Text := NameEdit.Text;
   for i := 0 to GroupAssignedListBox.Count - 1 do
     if not FSection.Groups.ItemExistsById(TEpiGroup(GroupAssignedListBox.Items.Objects[i]).Id) then
       FSection.Groups.AddItem(TEpiGroup(GroupAssignedListBox.Items.Objects[i]));
+
+  // Advanced Page
+  FSection.Width := StrToInt(WidthEdit.Text);
+  FSection.Height := StrToInt(HeightEdit.Text);
 
   FSection.EndUpdate;
 end;
@@ -263,6 +279,7 @@ var
 begin
   FSection := TEpiSection(AValue);
 
+  // Basic Page
   IdEdit.Text := FSection.Id;
   if FSection.DataFile.MainSection = FSection then
     IdEdit.Enabled := false
@@ -278,6 +295,14 @@ begin
     else
       GroupAvailableListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i]);
   end;
+
+  // Advanced Page
+  // - use width = hieght = 0 to indicate a new section!
+  if (FSection.Width = 0) and (FSection.Height = 0) then
+  PageControl1.ShowTabs := false;
+  PageControl1.ActivePage := TabSheet1;
+  WidthEdit.Text := IntToStr(FSection.Width);
+  HeightEdit.Text := IntToStr(FSection.Height);
 end;
 
 constructor TDesignSectionForm.Create(TheOwner: TComponent);

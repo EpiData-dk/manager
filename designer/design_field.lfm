@@ -1,13 +1,14 @@
 inherited DesignFieldForm: TDesignFieldForm
-  Left = 624
+  Left = 995
   Height = 302
-  Top = 339
+  Top = 444
   Width = 326
   ActiveControl = Panel1
   Caption = 'Field Properties'
   ClientHeight = 302
   ClientWidth = 326
   Color = clSkyBlue
+  OnShow = FormShow
   object PageControl1: TPageControl[0]
     Left = 0
     Height = 302

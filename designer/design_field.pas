@@ -59,6 +59,7 @@ type
     OkBtn: TBitBtn;
     Panel1: TPanel;
     BasicSheet: TTabSheet;
+    procedure FormShow(Sender: TObject);
   private
     { private declarations }
     FField: TEpiField;
@@ -75,6 +76,9 @@ type
 implementation
 
 {$R *.lfm}
+
+uses
+  design_section, epidatafilestypes, settings;
 
 { TDesignField }
 
@@ -133,6 +137,10 @@ begin
             FField.Question.Left      := FField.Left - (FQuestionLabel.Width + 5);
             Top                       := FField.Top;
             FField.Question.Top       := FField.Top;
+            if Self.Parent is TScrollBox then
+              Width                   := TScrollBox(Self.Parent).Canvas.GetTextWidth('W') * FField.Length
+            else
+              Width                   := TScrollBox(Self.Parent.Parent).Canvas.GetTextWidth('W') * FField.Length;
           end;
         ecceSetLeft:
           begin
@@ -224,6 +232,11 @@ begin
   Align := alNone;
   ShowHint := true;
   ParentColor := false;
+
+  if not ManagerSettings.ShowFieldBorder then
+    BorderStyle := bsNone;
+  if not ManagerSettings.ShowFieldNamesInLabel then
+    FNameLabel.Visible := false;
 end;
 
 destructor TDesignField.Destroy;
@@ -240,6 +253,11 @@ end;
 
 { TDesignFieldForm }
 
+procedure TDesignFieldForm.FormShow(Sender: TObject);
+begin
+  QuestionEdit.SetFocus;
+end;
+
 procedure TDesignFieldForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
   );
 begin
@@ -252,6 +270,8 @@ begin
   FField.Question.Caption.Text := QuestionEdit.Text;
   FField.Length := StrToInt(LengthEdit.Text);
   FField.Decimals := StrToInt(DecimalsEdit.Text);
+  if FField.Decimals > 0 then
+    FField.Length := FField.Length + FField.Decimals + 1;
 
   FField.EndUpdate;
 end;
@@ -264,7 +284,10 @@ begin
   IdEdit.Text := FField.Id;
   NameEdit.Text := FField.Name.Text;
   QuestionEdit.Text := FField.Question.Caption.Text;
-  LengthEdit.Text := IntToStr(FField.Length);
+  if FField.FieldType = ftFloat then
+    LengthEdit.Text := IntToStr(FField.Length - (FField.Decimals + 1))
+  else
+    LengthEdit.Text := IntToStr(FField.Length);
   DecimalsEdit.Text := IntToStr(FField.Decimals);
 end;
 
