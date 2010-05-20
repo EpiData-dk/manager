@@ -767,8 +767,8 @@ begin
   if EpiControl is TEpiSection then
     Form := TDesignSectionForm.Create(Self);
   Form.EpiControl := EpiControl;
-  Form.Left := Pos.X;
-  Form.Top := Pos.Y;
+  Form.Left := Min(Pos.X, Screen.Width - Form.Width - 5);
+  Form.Top := Min(Pos.Y, Screen.Height - Form.Height - 5);
   result := Form.ShowModal;
 end;
 
@@ -900,6 +900,10 @@ begin
   begin
     Name.Text := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count);
     Case FieldType of
+      ftBoolean:
+        Length := 1;
+      ftInteger, ftAutoInc:
+        Length := ManagerSettings.IntFieldLength;
       ftFloat:
         begin
           Length := ManagerSettings.FloatIntLength;
@@ -908,13 +912,11 @@ begin
       ftDMYDate, ftDMYToday,
       ftMDYDate, ftMDYToday,
       ftYMDDate, ftYMDToday:
-        begin
-          Length := 10;
-        end;
+        Length := 10;
+      ftTime, ftTimeNow:
+        Length := 8;
       ftString, ftUpperString:
         Length := ManagerSettings.StringFieldLength;
-      ftInteger, ftAutoInc:
-        Length := ManagerSettings.IntFieldLength;
     end;
   end;
 end;
@@ -1403,7 +1405,7 @@ begin
   {$IFDEF WINDOWS}
   Pt := Point(600,300);
   {$ELSE}
-  Pt := Point(800,300);
+  Pt := Point(700,300);
   {$ENDIF}
   TmpCtrlSection := TWinControl(NewSectionControl(Point(20,20), Pt, TmpEpiSection));
 
@@ -1451,6 +1453,8 @@ begin
   Splitter1.Visible := False;
   Panel1.Enabled := false;
   Panel1.Visible := false;
+  TestToolButton.Enabled := false;
+  TestToolButton.Visible := false;
   {$ENDIF}
 end;
 

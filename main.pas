@@ -66,8 +66,8 @@ begin
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
   TabSheet.Caption := 'Untitled';
 
-  if PageControl1.PageCount >= 1 then
-    PageControl1.ShowTabs := true;
+//  if PageControl1.PageCount >= 1 then
+//    PageControl1.ShowTabs := true;
 
   Frame := TProjectFrame.Create(TabSheet);
   Frame.Name := 'ProjectFrame' + IntToStr(TabNameCount);

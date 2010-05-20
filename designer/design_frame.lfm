@@ -6,8 +6,8 @@ object DesignFrame: TDesignFrame
   ClientHeight = 583
   ClientWidth = 989
   TabOrder = 0
-  DesignLeft = 461
-  DesignTop = 247
+  DesignLeft = 385
+  DesignTop = 260
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -46,46 +46,57 @@ object DesignFrame: TDesignFrame
     object IntToolButton: TToolButton
       Tag = 1
       Left = 38
-      Hint = 'New Integer Field'
+      Hint = 'New Integer Field (F2)'
       Top = 1
       Caption = 'New Integer Field'
       ImageIndex = 1
+      ParentShowHint = False
+      ShowHint = True
       OnClick = ToggleToolBtn
     end
     object FloatToolButton: TToolButton
       Tag = 3
       Left = 66
-      Hint = 'New Float Field'
+      Hint = 'New Float Field (F3)'
       Top = 1
       Caption = 'New Float Field'
       ImageIndex = 2
+      ParentShowHint = False
+      ShowHint = True
       OnClick = ToggleToolBtn
     end
     object StringToolButton: TToolButton
       Tag = 12
       Left = 94
-      Hint = 'New String Field'
+      Hint = 'New String Field  (F4)'
       Top = 1
       Caption = 'New String Field'
       ImageIndex = 3
+      ParentShowHint = False
+      ShowHint = True
       OnClick = ToggleToolBtn
     end
     object DateToolButton: TToolButton
       Tag = 4
       Left = 122
-      Hint = 'New DMY Field'
+      Hint = 'New DMY Field (F5)'
       Top = 1
       Caption = 'New DMY Field'
       ImageIndex = 4
+      ParentShowHint = False
       PopupMenu = DateFieldPopupMenu
+      ShowHint = True
       OnClick = ToggleToolBtn
     end
     object OtherToolButton: TToolButton
       Left = 150
+      Hint = 'Other Field Types...'
       Top = 1
       Caption = 'OtherToolButton'
       DropdownMenu = OtherFieldsPopup
       ImageIndex = 7
+      ParentShowHint = False
+      ShowHint = True
     end
     object Divider2: TToolButton
       Left = 178
@@ -97,10 +108,12 @@ object DesignFrame: TDesignFrame
     object HeadingToolButton: TToolButton
       Tag = 5
       Left = 182
-      Hint = 'New Heading'
+      Hint = 'New Heading (F6)'
       Top = 1
       Caption = 'New Heading'
       ImageIndex = 8
+      ParentShowHint = False
+      ShowHint = True
       OnClick = ToggleToolBtn
     end
     object Divider3: TToolButton
@@ -117,6 +130,8 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'New Section'
       ImageIndex = 9
+      ParentShowHint = False
+      ShowHint = True
       OnClick = ToggleToolBtn
     end
     object Divider4: TToolButton
@@ -130,11 +145,15 @@ object DesignFrame: TDesignFrame
       Left = 246
       Top = 1
       Action = EditControlAction
+      ParentShowHint = False
+      ShowHint = True
     end
     object DeleteToolButton: TToolButton
       Left = 274
       Top = 1
       Action = DeleteControlAction
+      ParentShowHint = False
+      ShowHint = True
     end
     object Divider5: TToolButton
       Left = 302
@@ -1514,6 +1533,7 @@ object DesignFrame: TDesignFrame
     object EditControlAction: TAction
       Category = 'Edit'
       Caption = 'Edit'
+      Hint = 'Edit...'
       ImageIndex = 10
       OnExecute = EditControlActionExecute
       ShortCut = 13
@@ -1521,6 +1541,7 @@ object DesignFrame: TDesignFrame
     object DeleteControlAction: TAction
       Category = 'Edit'
       Caption = 'Delete'
+      Hint = 'Delete...'
       ImageIndex = 11
       OnExecute = DeleteControlActionExecute
       ShortCut = 46

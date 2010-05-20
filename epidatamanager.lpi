@@ -134,6 +134,7 @@
       <IncludeFiles Value="$(ProjOutDir)/"/>
       <OtherUnitFiles Value="designer/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      <LCLWidgetType Value="win32"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
@@ -141,6 +142,8 @@
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
+      <TargetCPU Value="i386"/>
+      <TargetOS Value="Win32"/>
       <Optimizations>
         <OptimizationLevel Value="0"/>
       </Optimizations>

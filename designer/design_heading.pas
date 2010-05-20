@@ -43,9 +43,7 @@ type
 
   TDesignHeadingForm = class(TDesignCustomForm)
     CancelBtn: TBitBtn;
-    IdEdit: TEdit;
     Label1: TLabel;
-    Label5: TLabel;
     CaptionEdit: TEdit;
     OkBtn: TBitBtn;
     Panel1: TPanel;
@@ -182,10 +180,7 @@ begin
   CanClose := true;
 
   FHeading.BeginUpdate;
-
-  FHeading.Id := IdEdit.Text;
   FHeading.Caption.Text := CaptionEdit.Text;
-
   FHeading.EndUpdate;
 end;
 
@@ -203,7 +198,6 @@ procedure TDesignHeadingForm.SetEpiControl(const AValue: TEpiCustomControlItem
   );
 begin
   FHeading := TEpiHeading(AValue);
-  IdEdit.Text := FHeading.Id;
   CaptionEdit.Text := FHeading.Caption.Text;
 end;
 

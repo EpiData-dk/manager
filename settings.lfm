@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 966
+  Left = 740
   Height = 270
-  Top = 407
+  Top = 386
   Width = 481
   ActiveControl = PageControl1
   BorderIcons = []
@@ -513,8 +513,8 @@ object SettingsForm: TSettingsForm
     end
   end
   object ActionList1: TActionList
-    left = 184
-    top = 168
+    left = 264
+    top = 232
     object CloseAction: TAction
       Caption = 'CloseAction'
       OnExecute = CloseActionExecute

@@ -56,13 +56,11 @@ type
     WidthEdit: TEdit;
     HeightEdit: TEdit;
     Label1: TLabel;
-    Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     NameEdit: TEdit;
-    IdEdit: TEdit;
     GroupAvailableListBox: TListBox;
     GroupAssignedListBox: TListBox;
     OkBtn: TBitBtn;
@@ -217,6 +215,7 @@ end;
 
 { TDesignSectionForm }
 
+
 procedure TDesignSectionForm.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
 var
@@ -227,7 +226,6 @@ begin
   FSection.BeginUpdate;
 
   // Basic Page
-  FSection.Id := IdEdit.Text;
   FSection.Name.Text := NameEdit.Text;
   for i := 0 to GroupAssignedListBox.Count - 1 do
     if not FSection.Groups.ItemExistsById(TEpiGroup(GroupAssignedListBox.Items.Objects[i]).Id) then
@@ -280,13 +278,7 @@ begin
   FSection := TEpiSection(AValue);
 
   // Basic Page
-  IdEdit.Text := FSection.Id;
-  if FSection.DataFile.MainSection = FSection then
-    IdEdit.Enabled := false
-  else
-    IdEdit.Enabled := true;
   NameEdit.Text := FSection.Name.Text;
-
   LocalGroups := TEpiDocument(FSection.RootOwner).Admin.Groups;
   for i := 0 to LocalGroups.Count - 1 do
   begin

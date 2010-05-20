@@ -45,17 +45,15 @@ type
 
   TDesignFieldForm = class(TDesignCustomForm)
     CancelBtn: TBitBtn;
-    Label5: TLabel;
     NameEdit: TEdit;
-    IdEdit: TEdit;
     PageControl1: TPageControl;
     QuestionEdit: TEdit;
     LengthEdit: TEdit;
     DecimalsEdit: TEdit;
     Label1: TLabel;
     Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
+    LengthLabel: TLabel;
+    DecimalsLabel: TLabel;
     OkBtn: TBitBtn;
     Panel1: TPanel;
     BasicSheet: TTabSheet;
@@ -255,6 +253,22 @@ end;
 
 procedure TDesignFieldForm.FormShow(Sender: TObject);
 begin
+  if not DecimalsEdit.Visible then
+    Height :=
+      (PageControl1.Height - Panel1.ClientHeight) +
+      LengthEdit.Top +
+      LengthEdit.Height +  // Bottom of length edit :)
+      (OkBtn.Height - LengthEdit.Height) +
+      8;                   // A little additional spacing below...
+  if not LengthEdit.Visible then
+    Height :=
+      (PageControl1.Height - Panel1.ClientHeight) +
+      QuestionEdit.Top +
+      QuestionEdit.Height +  // Bottom of question edit :)
+      8 +                    // A little additional spacing above...
+      OkBtn.Height +         // get to bottom of button.
+      8;                     // A little additional spacing below...
+
   QuestionEdit.SetFocus;
 end;
 
@@ -265,11 +279,12 @@ begin
 
   FField.BeginUpdate;
 
-  FField.Id := IdEdit.Text;
   FField.Name.Text := NameEdit.Text;
   FField.Question.Caption.Text := QuestionEdit.Text;
-  FField.Length := StrToInt(LengthEdit.Text);
-  FField.Decimals := StrToInt(DecimalsEdit.Text);
+  if LengthEdit.Visible then
+    FField.Length := StrToInt(LengthEdit.Text);
+  if DecimalsEdit.Visible then
+    FField.Decimals := StrToInt(DecimalsEdit.Text);
   if FField.Decimals > 0 then
     FField.Length := FField.Length + FField.Decimals + 1;
 
@@ -281,14 +296,28 @@ begin
   FField := TEpiField(AValue);
   if not Assigned(FField) then exit;
 
-  IdEdit.Text := FField.Id;
   NameEdit.Text := FField.Name.Text;
   QuestionEdit.Text := FField.Question.Caption.Text;
-  if FField.FieldType = ftFloat then
-    LengthEdit.Text := IntToStr(FField.Length - (FField.Decimals + 1))
-  else
-    LengthEdit.Text := IntToStr(FField.Length);
-  DecimalsEdit.Text := IntToStr(FField.Decimals);
+
+  LengthEdit.Text := IntToStr(FField.Length);
+  Case FField.FieldType of
+    ftFloat:
+      begin
+        DecimalsLabel.Visible := true;
+        DecimalsEdit.Visible := true;
+        LengthEdit.Text := IntToStr(FField.Length - (FField.Decimals + 1));
+        DecimalsEdit.Text := IntToStr(FField.Decimals);
+      end;
+    ftBoolean,
+    ftDMYDate, ftDMYToday,
+    ftMDYDate, ftMDYToday,
+    ftYMDDate, ftYMDToday,
+    ftTime, ftTimeNow:
+      begin
+        LengthLabel.Visible := false;
+        LengthEdit.Visible := false;
+      end;
+  end;
 end;
 
 function TDesignFieldForm.GetEpiControl: TEpiCustomControlItem;
