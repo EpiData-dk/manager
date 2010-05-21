@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 740
+  Left = 669
   Height = 270
-  Top = 386
+  Top = 378
   Width = 481
   ActiveControl = PageControl1
   BorderIcons = []
