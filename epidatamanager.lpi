@@ -142,8 +142,6 @@
       </SyntaxOptions>
     </Parsing>
     <CodeGeneration>
-      <TargetCPU Value="i386"/>
-      <TargetOS Value="Win32"/>
       <Optimizations>
         <OptimizationLevel Value="0"/>
       </Optimizations>

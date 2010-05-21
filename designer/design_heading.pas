@@ -160,7 +160,7 @@ begin
   Font.Style := [fsBold];
   Align := alNone;
   ShowHint := true;
-  ParentColor := false;
+  ParentColor := true;
 end;
 
 destructor TDesignHeading.Destroy;

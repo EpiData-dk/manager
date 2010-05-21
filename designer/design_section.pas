@@ -203,6 +203,7 @@ begin
   DragMode := dmAutomatic;
   DockSite := true;
   ShowHint := true;
+  Color := clWhite;
   ParentColor := false;
 end;
 

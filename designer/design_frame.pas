@@ -1262,7 +1262,9 @@ end;
 procedure TDesignFrame.ExitControl(Sender: TObject);
 begin
   if not Assigned(FActiveControl) then exit;
-  FActiveControl.Color := clBtnFace;
+  FActiveControl.Color := clWhite;
+  if FActiveControl is TDesignHeading then
+    TDesignHeading(FActiveControl).ParentColor := true;
   FActiveControl := nil;
 end;
 
@@ -1402,36 +1404,70 @@ begin
   EnterControl(FDesignerBox);
 
   TmpEpiSection := NewSection;
+  TmpEpiSection.Name.Text := 'Information on this test version:';
   {$IFDEF WINDOWS}
-  Pt := Point(600,300);
+  Pt := Point(600,355);
   {$ELSE}
-  Pt := Point(700,300);
+  Pt := Point(700,355);
   {$ENDIF}
-  TmpCtrlSection := TWinControl(NewSectionControl(Point(20,20), Pt, TmpEpiSection));
-
-  for i := 1 to 12 do
+  TmpCtrlSection := TWinControl(NewSectionControl(Point(20,5), Pt, TmpEpiSection));
+  for i := 1 to 16 do
   begin
     Heading := NewHeading;
     Pt.X    := 20;
-    if (i >= 4) and (i <= 10) then
+    if (i >= 5) and (i <= 11) then
       Pt.X := 30;
+    if (i >= 14) and (i <= 15) then
+      Pt.X := 70;
     Pt.Y    := 20 * (i - 1) + 5;
     case i of
       1: Heading.Caption.Text := 'This is a test module for EpiData Manager';
-      2: Heading.Caption.Text := 'This version: Test adding fields, headings and sections.';
-      3: Heading.Caption.Text := '========================================================';
-      4: Heading.Caption.Text := 'A: Test adding different field.';
-      5: Heading.Caption.Text := 'B: Test adding sections.';
-      6: Heading.Caption.Text := 'C: Test adding headings.';
-      7: Heading.Caption.Text := 'D: Test moving fields/headings into sections.';
-      8: Heading.Caption.Text := 'E: Test moving fields/headings out of sections.';
-      9: Heading.Caption.Text := 'F: Test deleting field, sections or headings (using red "X" button or "DEL" key).';
-      10: Heading.Caption.Text := 'G: Test editing fields, sections or headings (using "pencil" or "ENTER" key)';
-      11: Heading.Caption.Text := '========================================================';
-      12: Heading.Caption.Text := 'NOTE: Import/Export is NOT part of this test release.';
+      2: Heading.Caption.Text := 'See: www.epidata.dk comments on epidata-list.';
+      3: Heading.Caption.Text := 'This version: Test adding fields, headings and sections.';
+      4: Heading.Caption.Text := '========================================================';
+      5: Heading.Caption.Text := 'A: Test adding different field.';
+      6: Heading.Caption.Text := 'B: Test adding sections.';
+      7: Heading.Caption.Text := 'C: Test adding headings.';
+      8: Heading.Caption.Text := 'D: Test moving fields/headings into sections.';
+      9: Heading.Caption.Text := 'E: Test moving fields/headings out of sections.';
+      10: Heading.Caption.Text := 'F: Test deleting field, sections or headings (using red "X" button or "DEL" key).';
+      11: Heading.Caption.Text := 'G: Test editing fields, sections or headings (using "pencil" or "ENTER" key)';
+      12: Heading.Caption.Text := '========================================================';
+      13: Heading.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
+      14: Heading.Caption.Text := 'Later user access will be bound to sections. If you do not add';
+      15: Heading.Caption.Text := 'new section, then all fields are part of the "main" section.';
+      16: Heading.Caption.Text := 'NOTE 2): Import/Export is NOT part of this test release.';
     end;
     NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
   end;
+
+  TmpEpiSection := NewSection;
+  TmpEpiSection.Name.Text := 'Known bug and errors:';
+  {$IFDEF WINDOWS}
+  Pt := Point(600,500);
+  {$ELSE}
+  Pt := Point(700,500);
+  {$ENDIF}
+  TmpCtrlSection := TWinControl(NewSectionControl(Point(20,360), Pt, TmpEpiSection));
+  for i := 1 to 5 do
+  begin
+    Heading := NewHeading;
+    Pt.X    := 20;
+    if (i = 3) then
+      Pt.X := 30;
+    if (i = 4) then
+      Pt.X := 45;
+    Pt.Y    := 20 * (i - 1) + 5;
+    case i of
+      1: Heading.Caption.Text := 'List of known bugs in EpiData Manager:';
+      2: Heading.Caption.Text := '========================================================';
+      3: Heading.Caption.Text := 'A: On creating a new section dragging the cursor outside the program and';
+      4: Heading.Caption.Text := 'releasing the button, can cause the drawn area not to disapear. (Windows only)';
+      5: Heading.Caption.Text := '========================================================';
+    end;
+    NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
+  end;
+  ExitControl(nil);
 
   {$IFDEF EPI_DEBUG}
   // DEBUGGING!!!!

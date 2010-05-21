@@ -3,7 +3,6 @@ inherited DesignHeadingForm: TDesignHeadingForm
   Height = 110
   Top = 438
   Width = 323
-  ActiveControl = Panel1
   Caption = 'Heading Properties'
   ClientHeight = 110
   ClientWidth = 323
@@ -45,15 +44,15 @@ inherited DesignHeadingForm: TDesignHeadingForm
     end
     object Label1: TLabel
       Left = 8
-      Height = 18
+      Height = 14
       Top = 4
-      Width = 55
+      Width = 42
       Caption = 'Caption:'
       ParentColor = False
     end
     object CaptionEdit: TEdit
       Left = 8
-      Height = 27
+      Height = 21
       Top = 28
       Width = 304
       TabOrder = 0
