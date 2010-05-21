@@ -1,0 +1,18 @@
+# Paths - change to your location
+CORE_LOCATION="/home/torsten/EpiData/Core/trunk"
+DCPCRYPT_LOCATION="/home/torsten/FreePascal/dcpcrypt"
+FPSPREADSHEET_LOCATION="/home/torsten/FreePascal/fpspreadsheet"
+LAZARUS_LOCATION="/home/torsten/FreePascal/lazarus"
+
+# Structure of each line for compile targets is:
+# CPU-OS-LCL
+# - CPU: i386, x86_64, powerpc,...
+# - OS:  win32, win64, linux, darwin,...
+# - LCL: win32, gtk2, carbon
+
+ALL_TARGETS=""
+ALL_TARGETS="$ALL_TARGETS i386-win32-win32"
+ALL_TARGETS="$ALL_TARGETS i386-linux-gtk2"
+ALL_TARGETS="$ALL_TARGETS x86_64-win64-win32"
+ALL_TARGETS="$ALL_TARGETS x86_64-linux-gtk2"
+

@@ -157,6 +157,8 @@ function GetManagerVersion: String;
 
 implementation
 
+{$R *.lfm}
+
 {$IFDEF EPI_RELEASE}
   {$I revision.inc}
 {$ELSE}

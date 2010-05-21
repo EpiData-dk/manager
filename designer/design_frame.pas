@@ -1406,9 +1406,9 @@ begin
   TmpEpiSection := NewSection;
   TmpEpiSection.Name.Text := 'This is a test module for EpiData Manager';
   {$IFDEF WINDOWS}
-  Pt := Point(600,355);
+  Pt := Point(600,270);
   {$ELSE}
-  Pt := Point(700,355);
+  Pt := Point(700,270);
   {$ENDIF}
   TmpCtrlSection := TWinControl(NewSectionControl(Point(20,5), Pt, TmpEpiSection));
   for i := 1 to 11 do
@@ -1437,13 +1437,13 @@ begin
   end;
 
   TmpEpiSection := NewSection;
-  TmpEpiSection.Name.Text := 'known major bugs in EpiData Manager:';
+  TmpEpiSection.Name.Text := 'Known major bugs in EpiData Manager:';
   {$IFDEF WINDOWS}
-  Pt := Point(600,500);
+  Pt := Point(600,380);
   {$ELSE}
-  Pt := Point(700,500);
+  Pt := Point(700,380);
   {$ENDIF}
-  TmpCtrlSection := TWinControl(NewSectionControl(Point(20,360), Pt, TmpEpiSection));
+  TmpCtrlSection := TWinControl(NewSectionControl(Point(20,280), Pt, TmpEpiSection));
   for i := 1 to 2 do
   begin
     Heading := NewHeading;

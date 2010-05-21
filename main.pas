@@ -53,8 +53,8 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Caption := 'EpiData Project and Data Manager'; // + ' (v' + GetManagerVersion + ')';
 //  ShowWorkFlowAction.Execute;
-  Width := 1024;
-  Height := 768;
+  Width := 800;
+  Height := 600;
   NewProjectAction.Execute;
 end;
 
