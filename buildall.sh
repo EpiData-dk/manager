@@ -139,13 +139,14 @@ compile() {
         i386)
           POSTFIX="intel"
           ;;
-      FINALZIP_NAME="$ZIP_NAME.macosx.$POSTFIX.zip"
+      esac
+      FINALZIP_NAME=$ZIP_NAME.macosx.$POSTFIX.zip
       zip -r -9 $FINALZIP_NAME "epidatamanager.app"
       ;;
     *)
      ;;
   esac
-  mv $FINALZIP_NAME "/home/torsten/epiexec"		
+  mv $FINALZIP_NAME "$HOME/epiexec/"		
 
   echo ""
 }
