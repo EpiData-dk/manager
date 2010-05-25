@@ -15,6 +15,9 @@ type
   TMainForm = class(TForm)
     FileExitAction: TFileExit;
     FileExitMenuItem: TMenuItem;
+    HelpMenu: TMenuItem;
+    ShortCutKeysMenuItem: TMenuItem;
+    ShortIntroMenuItem: TMenuItem;
     SettingsAction: TAction;
     EditMenuItem: TMenuItem;
     SettingsMenuItem: TMenuItem;
@@ -27,6 +30,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
+    procedure ShortCutKeysMenuItemClick(Sender: TObject);
+    procedure ShortIntroMenuItemClick(Sender: TObject);
     procedure ShowWorkFlowActionExecute(Sender: TObject);
   private
     { private declarations }
@@ -45,7 +50,7 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, project_frame, settings;
+  workflow_frame, project_frame, settings, LCLProc, LCLIntf;
 
 { TMainForm }
 
@@ -90,6 +95,22 @@ begin
   SettingForm := TSettingsForm.Create(Self);
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
+end;
+
+procedure TMainForm.ShortCutKeysMenuItemClick(Sender: TObject);
+begin
+  OpenURL('http://www.epidata.org/dokuwiki/doku.php/documentation:program_keys');
+end;
+
+procedure TMainForm.ShortIntroMenuItemClick(Sender: TObject);
+var
+  Fn: String;
+begin
+  Fn := UTF8Encode(ExtractFilePath(Application.ExeName) + '/epidatamanagerintro.pdf');
+  if FileExistsUTF8(Fn) then
+    OpenURL(Fn)
+  else
+    OpenURL('http://epidata.dk/php/downloadc.php?file=epidatamanagerintro.pdf');
 end;
 
 

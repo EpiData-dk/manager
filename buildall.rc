@@ -1,7 +1,12 @@
 # Paths - change to your location
+COMMON_OPTIONS="-Xs -O3 -l -CX" 
+
 CORE_LOCATION="/home/torsten/EpiData/Core/trunk"
+CORE_OPT="-MObjFPC -XX $COMMON_OPTIONS"
 DCPCRYPT_LOCATION="/home/torsten/FreePascal/dcpcrypt"
+DCPCRYPT_OPT="$COMMON_OPTIONS"
 FPSPREADSHEET_LOCATION="/home/torsten/FreePascal/fpspreadsheet"
+FPSPREADSHEET_OPT="-MObjFPC $COMMON_OPTIONS"
 LAZARUS_LOCATION="/home/torsten/FreePascal/lazarus"
 
 # Structure of each line for compile targets is:

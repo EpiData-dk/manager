@@ -35,6 +35,17 @@ object MainForm: TMainForm
         OnClick = SettingsActionExecute
       end
     end
+    object HelpMenu: TMenuItem
+      Caption = 'Help'
+      object ShortIntroMenuItem: TMenuItem
+        Caption = 'Short Introduction'
+        OnClick = ShortIntroMenuItemClick
+      end
+      object ShortCutKeysMenuItem: TMenuItem
+        Caption = 'Show Shortcuts'
+        OnClick = ShortCutKeysMenuItemClick
+      end
+    end
   end
   object ActionList1: TActionList
     left = 480

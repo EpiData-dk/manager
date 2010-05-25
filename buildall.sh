@@ -1,8 +1,8 @@
 #!/bin/bash
 # Compile all versions of manager!
 
-## Changeable options. 
-SIMPLEOPTS="-MObjFPC -Sci -Xs -CX -Ci -WG -O3 -l"
+## Changeable options.
+MANAGER_OPTIONS="-Schi -WG"
 #SIMPLEOPTS="$SIMPLEOPTS -veiwd"
 #SIMPLEOPTS="$SIMPLEOPTS -gl -g -dEPI_DEBUG"
 MANAGERFILENAME="epidatamanager"
@@ -13,6 +13,27 @@ MANAGERFILENAME="epidatamanager"
 SVN_LOC=""
 LOCALIZATIONS_FILE="buildall.rc"
 . "$LOCALIZATIONS_FILE"
+
+MANAGER_OPTIONS="$MANAGER_OPTIONS $COMMON_OPTIONS"
+
+build_package() {
+  HERE=`pwd`
+  cd $PACKAGE_LOCATION
+  make all CPU_TARGET="$MY_CPU_TARGET" OS_TARGET="$MY_OS_TARGET" OPT="$PACKAGE_OPTIONS" > /dev/null
+  cd "$HERE"
+}
+
+build_all_packages() {
+  PACKAGE_LOCATION=$FPSPREADSHEET_LOCATION
+  PACKAGE_OPTIONS=$FPSPREADSHEET_OPTIONS
+  build_package
+  PACKAGE_LOCATION=$DCPCRYPT_LOCATION
+  PACKAGE_OPTIONS=$DCPCRYPT_OPTIONS
+  build_package
+  PACKAGE_LOCATION=$CORE_LOCATION
+  PACKAGE_OPTIONS=$CORE_OPTIONS
+  build_package
+}
 
 check_svn_status() {
   RES=`svnversion $SVN_LOC | grep [MSP:] | wc -l`
@@ -54,57 +75,41 @@ clean() {
   clean_lib
 }
 
-clean_core() {
-  HERE=`pwd`
-  cd "$CORE_LOCATION"
-  make clean CPU_TARGET="$MY_CPU_TARGET" OS_TARGET="$MY_OS_TARGET" OPT="$SIMPLEOPTS" > /dev/null
-  cd "$HERE"
-}
-
-compile_core() {
-  clean_core
-
-  HERE=`pwd`
-  cd "$CORE_LOCATION"
-  make all CPU_TARGET="$MY_CPU_TARGET" OS_TARGET="$MY_OS_TARGET" OPT="$SIMPLEOPTS" > /dev/null
-  cd "$HERE"
-}
-
-clean_up() {
-  clean_lib
-  clean_core
-}
-
 compile() {
   echo "Compiling for: $MY_CPU_TARGET-$MY_OS_TARGET ($MY_LCL_TARGET)"
   echo "------------------------------"
   clean
-  compile_core
+  build_all_packages
 
   SIMPLEOPTS="$SIMPLEOPTS -dEPI_RELEASE"
   CPU="-P$MY_CPU_TARGET"
   TARGET="-T$MY_OS_TARGET"
 
   mkdir -p "$MANAGER_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET"
+  # Manager dirs
   MANAGER_OUTPUT="-FU$MANAGER_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET/"
   MANAGER_UNITS="-Fu$MANAGER_LOCATION/editor -Fu$MANAGER_LOCATION/designer -Fu$MANAGER_LOCATION -Fu."
   MANAGER_INCLUDES="-Fi$MANAGER_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET"
+  MANAGER_DIRS="$MANAGER_OUTPUT $MANAGER_UNITS $MANAGER_INCLUDES"
+  
+  # Packages dirs
   CORE_UNITS="-Fu$CORE_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET/"
   FPSPREAD_UNITS="-Fu$FPSPREADSHEET_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET/"
   CRYPT_UNITS="-Fu$DCPCRYPT_LOCATION/lib/$MY_CPU_TARGET-$MY_OS_TARGET/"
-  MANAGER_OPTS="$MANAGER_OUTPUT $MANAGER_UNITS $MANAGER_INCLUDES $CORE_UNITS $FPSPREAD_UNITS $CRYPT_UNITS"
+  PACKAGES_DIRS="$CORE_UNITS $FPSPREAD_UNITS $CRYPT_UNITS"
 
+  # Lazarus dirs
   LCL_UNITS="-Fu$LAZARUS_LOCATION/lcl/units/$MY_CPU_TARGET-$MY_OS_TARGET/ -Fu$LAZARUS_LOCATION/lcl/units/$MY_CPU_TARGET-$MY_OS_TARGET/$MY_LCL_TARGET/"
   FCL_UNITS="-Fu$LAZARUS_LOCATION/packager/units/$MY_CPU_TARGET-$MY_OS_TARGET/"
   SYNEDIT_UNITS="-Fu$LAZARUS_LOCATION/components/synedit/units/$MY_CPU_TARGET-$MY_OS_TARGET/"
-  LAZARUS_UNITS="$LCL_UNITS $FCL_UNITS $SYNEDIT_UNITS"
+  LAZARUS_DIRS="$LCL_UNITS $FCL_UNITS $SYNEDIT_UNITS"
   
   get_filename
   OUTPUTNAME="-o$FILENAME"
   DEFINEOPTS="-dLCL -d$MY_LCL_TARGET"
 
 #  echo "fpc $CPU $TARGET $SIMPLEOPTS $MANAGER_OPTS $LAZARUS_UNITS $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr"
-  fpc $CPU $TARGET $SIMPLEOPTS $MANAGER_OPTS $LAZARUS_UNITS $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr 
+  fpc $CPU $TARGET $MANAGER_OPTIONS $MANAGER_DIRS $PACKAGES_DIRS $LAZARUS_DIRS  $OUTPUTNAME $DEFINEOPTS epidatamanager.lpr 
 
   ZIP_NAME=$MANAGERFILENAME.$MANAGER_VERSION
   echo "$ZIP_NAME"
@@ -130,7 +135,6 @@ compile() {
   esac
   mv $FINALZIP_NAME "/home/torsten/epiexec"		
 
-  clean_up
   echo ""
 }
 
