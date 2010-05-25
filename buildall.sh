@@ -131,6 +131,7 @@ compile() {
       tar -zcf $FINALZIP_NAME $FILENAME
          ;;
     carbon)
+      strip $FILENAME
       case $MY_CPU_TARGET in
         powerpc)
           POSTFIX="powerpc"
