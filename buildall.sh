@@ -130,6 +130,16 @@ compile() {
       FINALZIP_NAME=$ZIP_NAME.$POSTFIX.tgz
       tar -zcf $FINALZIP_NAME $FILENAME
          ;;
+    carbon)
+      case $MY_CPU_TARGET in
+        powerpc)
+          POSTFIX="powerpc"
+          ;;
+        i386)
+          POSTFIX="intel"
+          ;;
+      FINALZIP_NAME="$ZIP_NAME.macosx.$POSTFIX.zip"
+      zip -r -9 $FINALZIP_NAME "epidatamanager.app"
     *)
      ;;
   esac
