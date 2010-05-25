@@ -141,6 +141,7 @@ compile() {
           ;;
       FINALZIP_NAME="$ZIP_NAME.macosx.$POSTFIX.zip"
       zip -r -9 $FINALZIP_NAME "epidatamanager.app"
+      ;;
     *)
      ;;
   esac
