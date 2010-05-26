@@ -1403,64 +1403,66 @@ begin
   FActiveDockSite := FDesignerBox;
   EnterControl(FDesignerBox);
 
-  TmpEpiSection := NewSection;
-  TmpEpiSection.Name.Text := 'This is a test module for EpiData Manager';
-  {$IFDEF WINDOWS}
-  Pt := Point(600,270);
-  {$ELSE}
-  Pt := Point(700,270);
-  {$ENDIF}
-  TmpCtrlSection := TWinControl(NewSectionControl(Point(20,5), Pt, TmpEpiSection));
-  for i := 1 to 11 do
-  begin
-    Heading := NewHeading;
-    Pt.X    := 20;
-    if (i >= 3) and (i <= 7) then
-      Pt.X := 30;
-    if (i >= 10) and (i <= 10) then
-      Pt.X := 70;
-    Pt.Y    := 20 * (i - 1) + 5;
-    case i of
-      1: Heading.Caption.Text := 'Comment and discuss on the epidata-list.';
-      2: Heading.Caption.Text := 'Main test in this version: add fields, headings and sections.';
-      3: Heading.Caption.Text := '========================================================';
-      4: Heading.Caption.Text := 'A: Add fields and sections - click on buttons above and click in the form';
-      5: Heading.Caption.Text := 'B: Move fields/headings into and out of sections.';
-      6: Heading.Caption.Text := 'C: Change or delete fields, sections & headings (red "X"/"DEL" key/pencil).';
-       7: Heading.Caption.Text := 'D: Edit fields, sections or headings (using "pencil" or "ENTER" key)';
-       8: Heading.Caption.Text := '========================================================';
-       9: Heading.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
-      10: Heading.Caption.Text := 'Later restricted access (via password) can be tied to section level';
-      11: Heading.Caption.Text := 'NOTE 2): Import/Export is NOT part of this test release.';
+  {$IFDEF EPI_RELEASE}
+    TmpEpiSection := NewSection;
+    TmpEpiSection.Name.Text := 'This is a test module for EpiData Manager';
+    {$IFDEF WINDOWS}
+    Pt := Point(600,270);
+    {$ELSE}
+    Pt := Point(700,270);
+    {$ENDIF}
+    TmpCtrlSection := TWinControl(NewSectionControl(Point(20,5), Pt, TmpEpiSection));
+    for i := 1 to 11 do
+    begin
+      Heading := NewHeading;
+      Pt.X    := 20;
+      if (i >= 3) and (i <= 7) then
+        Pt.X := 30;
+      if (i >= 10) and (i <= 10) then
+        Pt.X := 70;
+      Pt.Y    := 20 * (i - 1) + 5;
+      case i of
+        1: Heading.Caption.Text := 'Comment and discuss on the epidata-list.';
+        2: Heading.Caption.Text := 'Main test in this version: add fields, headings and sections.';
+        3: Heading.Caption.Text := '========================================================';
+        4: Heading.Caption.Text := 'A: Add fields and sections - click on buttons above and click in the form';
+        5: Heading.Caption.Text := 'B: Move fields/headings into and out of sections.';
+        6: Heading.Caption.Text := 'C: Change or delete fields, sections & headings (red "X"/"DEL" key/pencil).';
+         7: Heading.Caption.Text := 'D: Edit fields, sections or headings (using "pencil" or "ENTER" key)';
+         8: Heading.Caption.Text := '========================================================';
+         9: Heading.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
+        10: Heading.Caption.Text := 'Later restricted access (via password) can be tied to section level';
+        11: Heading.Caption.Text := 'NOTE 2): Import/Export is NOT part of this test release.';
+      end;
+      NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
     end;
-    NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
-  end;
 
-  TmpEpiSection := NewSection;
-  TmpEpiSection.Name.Text := 'Known major bugs in EpiData Manager:';
-  {$IFDEF WINDOWS}
-  Pt := Point(600,380);
-  {$ELSE}
-  Pt := Point(700,380);
+    TmpEpiSection := NewSection;
+    TmpEpiSection.Name.Text := 'Known major bugs in EpiData Manager:';
+    {$IFDEF WINDOWS}
+    Pt := Point(600,380);
+    {$ELSE}
+    Pt := Point(700,380);
+    {$ENDIF}
+    TmpCtrlSection := TWinControl(NewSectionControl(Point(20,280), Pt, TmpEpiSection));
+    for i := 1 to 2 do
+    begin
+      Heading := NewHeading;
+      Pt.X    := 20;
+      if (i = 1) then
+        Pt.X := 30;
+      if (i = 2) then
+        Pt.X := 45;
+      Pt.Y    := 20 * (i - 1) + 5;
+      case i of
+        1: Heading.Caption.Text := 'A: On creating a new section dragging the cursor outside the program and';
+        2: Heading.Caption.Text := 'releasing the button, can cause the drawn area not to disapear. (Windows only)';
+
+           end;
+      NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
+    end;
+    ExitControl(nil);
   {$ENDIF}
-  TmpCtrlSection := TWinControl(NewSectionControl(Point(20,280), Pt, TmpEpiSection));
-  for i := 1 to 2 do
-  begin
-    Heading := NewHeading;
-    Pt.X    := 20;
-    if (i = 1) then
-      Pt.X := 30;
-    if (i = 2) then
-      Pt.X := 45;
-    Pt.Y    := 20 * (i - 1) + 5;
-    case i of
-      1: Heading.Caption.Text := 'A: On creating a new section dragging the cursor outside the program and';
-      2: Heading.Caption.Text := 'releasing the button, can cause the drawn area not to disapear. (Windows only)';
- 
-         end;
-    NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
-  end;
-  ExitControl(nil);
 
   {$IFDEF EPI_DEBUG}
   // DEBUGGING!!!!

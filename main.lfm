@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 477
+  Left = 281
   Height = 686
-  Top = 231
+  Top = 228
   Width = 946
   Caption = 'MainForm'
   ClientHeight = 661
@@ -24,6 +24,16 @@ object MainForm: TMainForm
     top = 280
     object FileMenuItem: TMenuItem
       Caption = 'File'
+      object OpenProjectMenuItem: TMenuItem
+        Caption = 'New Item12'
+      end
+      object SaveProjectMenuItem: TMenuItem
+        Hint = 'Save Project'
+        ImageIndex = 1
+      end
+      object SaveProjectAsMenuItem: TMenuItem
+        Caption = 'New Item11'
+      end
       object FileExitMenuItem: TMenuItem
         Action = FileExitAction
       end

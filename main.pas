@@ -16,6 +16,9 @@ type
     FileExitAction: TFileExit;
     FileExitMenuItem: TMenuItem;
     HelpMenu: TMenuItem;
+    OpenProjectMenuItem: TMenuItem;
+    SaveProjectAsMenuItem: TMenuItem;
+    SaveProjectMenuItem: TMenuItem;
     ShortCutKeysMenuItem: TMenuItem;
     ShortIntroMenuItem: TMenuItem;
     SettingsAction: TAction;
@@ -58,8 +61,10 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Caption := 'EpiData Project and Data Manager'; // + ' (v' + GetManagerVersion + ')';
 //  ShowWorkFlowAction.Execute;
+  {$IFDEF EPI_RELEASE}
   Width := 800;
   Height := 600;
+  {$ENDIF}
   NewProjectAction.Execute;
 end;
 
@@ -82,8 +87,14 @@ begin
   Frame.Parent := TabSheet;
   Frame.NewDataFormAction.Execute;
   FActiveFrame := Frame;
-
   PageControl1.ActivePage := TabSheet;
+
+
+  // Only as long as one project is created!
+  SaveProjectMenuItem.Action := Frame.SaveProjectAction;
+  SaveProjectAsMenuItem.Action := Frame.SaveProjectAsAction;
+  OpenProjectMenuItem.Action := Frame.OpenProjectAction;
+
 
   Inc(TabNameCount);
 end;

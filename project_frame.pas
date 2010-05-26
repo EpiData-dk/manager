@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
-  Controls, epidocument, epidatafiles, epicustombase;
+  Controls, Dialogs, epidocument, epidatafiles, epicustombase;
 
 type
 
@@ -14,6 +14,7 @@ type
 
   TProjectFrame = class(TFrame)
     DeleteDataFormAction: TAction;
+    SaveProjectDialog: TSaveDialog;
     SaveProjectAsAction: TAction;
     SaveProjectAction: TAction;
     OpenProjectAction: TAction;
@@ -34,17 +35,21 @@ type
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
+    procedure SaveProjectAsActionExecute(Sender: TObject);
   private
     { private declarations }
+    FFileName: string;
     FActiveFrame: TFrame;
     FrameCount: integer;
     FEpiDocument: TEpiDocument;
     procedure OnDataFileChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure DoSaveProject(AFileName: string);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     property   EpiDocument: TEpiDocument read FEpiDocument;
     property   ActiveFrame: TFrame read FActiveFrame;
+    property   ProjectFileName: string read FFileName;
   end;
 
 implementation
@@ -52,7 +57,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame, Clipbrd;
+  design_frame, Clipbrd, settings;
 
 type
 
@@ -75,7 +80,6 @@ begin
   inc(FrameCount);
 
   Df := TEpiDataFileEx(EpiDocument.DataFiles.NewItem(TEpiDataFileEx));
-  Df.RegisterOnChangeHook(@OnDataFileChange);
   Df.Name.Text := 'Dataform ' + IntToStr(FrameCount);
 
   Frame := TDesignFrame.Create(Self, Df);
@@ -83,6 +87,7 @@ begin
   Frame.Parent := Self;
   DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Name.Text, Frame);
   Df.TreeNode := DataFilesTreeView.Selected;
+  Df.Name.RegisterOnChangeHook(@OnDataFileChange);
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -92,7 +97,17 @@ end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
 begin
-  Clipboard.AsText := UTF8ToSys(FEpiDocument.SaveToXml());
+  if ProjectFileName = '' then
+    SaveProjectAsAction.Execute
+  else
+    DoSaveProject(ProjectFileName);
+end;
+
+procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
+begin
+  SaveProjectDialog.InitialDir := ManagerSettings.WorkingDirUTF8;
+  if not SaveProjectDialog.Execute then exit;
+  DoSaveProject(SaveProjectDialog.FileName);
 end;
 
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;
@@ -100,6 +115,20 @@ procedure TProjectFrame.OnDataFileChange(Sender: TObject;
 begin
   if (EventGroup = eegCustomBase) and (EventType = Word(ecceText)) then
     TEpiDataFileEx(Sender).TreeNode.Text := TEpiDataFileEx(Sender).Name.Text;
+end;
+
+procedure TProjectFrame.DoSaveProject(AFileName: string);
+var
+  Fs: TFileStream;
+  Ss: TStringStream;
+begin
+  if AFileName <> ProjectFileName then
+    FFileName := AFileName;
+  Fs := TFileStream.Create(AFileName, fmCreate);
+  Ss := TStringStream.Create(FEpiDocument.SaveToXml());
+  Fs.CopyFrom(Ss, Ss.Size);
+  Ss.Free;
+  Fs.Free;
 end;
 
 constructor TProjectFrame.Create(TheOwner: TComponent);
@@ -110,6 +139,7 @@ begin
 
   FrameCount := 0;
   FActiveFrame := nil;
+  FFileName := '';
 
   FEpiDocument := TEpiDocument.Create('en');
 

@@ -60,7 +60,8 @@ begin
   if ModalResult <> mrOK then exit;
 
   Importer := TEpiImport.Create;
-  ImpDf := Importer.ImportRec(ImportFileEdit.FileName);
+  ImpDf := nil;
+  Importer.ImportRec(ImportFileEdit.FileName, ImpDf);
 
   if not (ImportValueLabelsChkBox.Checked) then
     for i := ImpDf.ValueLabels.Count - 1 downto 0 do

@@ -6,7 +6,7 @@ object DesignFrame: TDesignFrame
   ClientHeight = 583
   ClientWidth = 989
   TabOrder = 0
-  DesignLeft = 385
+  DesignLeft = 283
   DesignTop = 260
   object DesignerToolBar: TToolBar
     Left = 0
@@ -209,7 +209,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 38
-      Width = 44
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
     end
@@ -217,7 +217,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 118
-      Width = 44
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
     end
@@ -225,7 +225,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 198
-      Width = 44
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
     end
@@ -233,7 +233,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 294
-      Width = 44
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
     end
@@ -241,7 +241,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 378
-      Width = 44
+      Width = 43
       Caption = 'Label5'
       ParentColor = False
     end
@@ -258,7 +258,7 @@ object DesignFrame: TDesignFrame
       Left = 11
       Height = 18
       Top = 454
-      Width = 44
+      Width = 43
       Caption = 'Label6'
       ParentColor = False
     end

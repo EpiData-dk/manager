@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 621
   ClientWidth = 842
   TabOrder = 0
-  DesignLeft = 600
-  DesignTop = 272
+  DesignLeft = 325
+  DesignTop = 261
   object ProjectPanel: TPanel
     Left = 0
     Height = 621
@@ -111,6 +111,7 @@ object ProjectFrame: TProjectFrame
       Caption = 'Save Project As'
       Hint = 'Save Project As'
       ImageIndex = 2
+      OnExecute = SaveProjectAsActionExecute
     end
     object NewDataFormAction: TAction
       Caption = 'New Data Form'
@@ -290,5 +291,13 @@ object ProjectFrame: TProjectFrame
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00
     }
+  end
+  object SaveProjectDialog: TSaveDialog
+    Title = 'Save Project As'
+    DefaultExt = '.epf'
+    Filter = 'EpiData Project File|*.epf|All Files|*.*'
+    FilterIndex = 0
+    left = 330
+    top = 109
   end
 end
