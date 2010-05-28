@@ -14,6 +14,7 @@ type
 
   TProjectFrame = class(TFrame)
     DeleteDataFormAction: TAction;
+    OpenProjectDialog: TOpenDialog;
     SaveProjectDialog: TSaveDialog;
     SaveProjectAsAction: TAction;
     SaveProjectAction: TAction;
@@ -26,11 +27,11 @@ type
     ToolBar1: TToolBar;
     OpenProjectToolBtn: TToolButton;
     ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
+    SaveProjectToolBtn: TToolButton;
+    SaveProjectAsToolBtn: TToolButton;
     ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
-    ToolButton6: TToolButton;
+    AddDataFormToolBtn: TToolButton;
+    DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -43,7 +44,11 @@ type
     FrameCount: integer;
     FEpiDocument: TEpiDocument;
     procedure OnDataFileChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    function  DoCreateNewDocument: TEpiDocument;
+    function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
     procedure DoSaveProject(AFileName: string);
+    procedure DoOpenProject(AFileName: string);
+    procedure DoNewDataForm(Df: TEpiDataFile);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -57,7 +62,8 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame, Clipbrd, settings;
+  design_frame, Clipbrd, settings, rttiutils, typinfo,
+  main;
 
 type
 
@@ -74,25 +80,22 @@ type
 
 procedure TProjectFrame.NewDataFormActionExecute(Sender: TObject);
 var
-  Df: TEpiDataFileEx;
+  Df: TEpiDataFile;
   Frame: TDesignFrame;
 begin
   inc(FrameCount);
 
-  Df := TEpiDataFileEx(EpiDocument.DataFiles.NewItem(TEpiDataFileEx));
+  Df := EpiDocument.DataFiles.NewDataFile;
   Df.Name.Text := 'Dataform ' + IntToStr(FrameCount);
 
-  Frame := TDesignFrame.Create(Self, Df);
-  Frame.Align := alClient;
-  Frame.Parent := Self;
-  DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Name.Text, Frame);
-  Df.TreeNode := DataFilesTreeView.Selected;
-  Df.Name.RegisterOnChangeHook(@OnDataFileChange);
+  DoNewDataForm(Df);
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
-  //
+  OpenProjectDialog.InitialDir := ManagerSettings.WorkingDirUTF8;
+  if not OpenProjectDialog.Execute then exit;
+  DoOpenProject(OpenProjectDialog.FileName);
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
@@ -117,6 +120,18 @@ begin
     TEpiDataFileEx(Sender).TreeNode.Text := TEpiDataFileEx(Sender).Name.Text;
 end;
 
+function TProjectFrame.DoCreateNewDocument: TEpiDocument;
+begin
+  Result := TEpiDocument.Create('en');
+  Result.DataFiles.OnNewItemClass := @NewDataFileItem;
+end;
+
+function TProjectFrame.NewDataFileItem(Sender: TEpiCustomList;
+  DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
+begin
+  result := TEpiDataFileEx;
+end;
+
 procedure TProjectFrame.DoSaveProject(AFileName: string);
 var
   Fs: TFileStream;
@@ -131,6 +146,35 @@ begin
   Fs.Free;
 end;
 
+procedure TProjectFrame.DoOpenProject(AFileName: string);
+var
+  Frame: TDesignFrame;
+begin
+  FEpiDocument.Free;
+
+  // TODO : Delete ALL dataforms!
+  FActiveFrame.Free;
+  DataFilesTreeView.Items.Clear;
+
+  FEpiDocument := DoCreateNewDocument;
+  FEpiDocument.LoadFromFile(AFileName);
+  DoNewDataForm(FEpiDocument.DataFiles[0]);
+end;
+
+procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);
+var
+  Frame: TDesignFrame;
+begin
+  Frame := TDesignFrame.Create(Self, Df);
+  Frame.Align := alClient;
+  Frame.Parent := Self;
+  FActiveFrame := Frame;
+
+  DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Name.Text, Frame);
+  TEpiDataFileEx(Df).TreeNode := DataFilesTreeView.Selected;
+  Df.Name.RegisterOnChangeHook(@OnDataFileChange);
+end;
+
 constructor TProjectFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -141,7 +185,7 @@ begin
   FActiveFrame := nil;
   FFileName := '';
 
-  FEpiDocument := TEpiDocument.Create('en');
+  FEpiDocument := DoCreateNewDocument;
 
   {$IFDEF EPI_DEBUG}
 

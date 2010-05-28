@@ -16,6 +16,7 @@ type
     FileExitAction: TFileExit;
     FileExitMenuItem: TMenuItem;
     HelpMenu: TMenuItem;
+    FileMenuDivider1: TMenuItem;
     OpenProjectMenuItem: TMenuItem;
     SaveProjectAsMenuItem: TMenuItem;
     SaveProjectMenuItem: TMenuItem;

@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 621
   ClientWidth = 842
   TabOrder = 0
-  DesignLeft = 325
-  DesignTop = 261
+  DesignLeft = 526
+  DesignTop = 303
   object ProjectPanel: TPanel
     Left = 0
     Height = 621
@@ -46,6 +46,8 @@ object ProjectFrame: TProjectFrame
         Left = 2
         Top = 1
         Action = OpenProjectAction
+        ParentShowHint = False
+        ShowHint = True
       end
       object ToolButton1: TToolButton
         Left = 25
@@ -54,15 +56,19 @@ object ProjectFrame: TProjectFrame
         Caption = 'ToolButton1'
         Style = tbsDivider
       end
-      object ToolButton2: TToolButton
+      object SaveProjectToolBtn: TToolButton
         Left = 29
         Top = 1
         Action = SaveProjectAction
+        ParentShowHint = False
+        ShowHint = True
       end
-      object ToolButton3: TToolButton
+      object SaveProjectAsToolBtn: TToolButton
         Left = 52
         Top = 1
         Action = SaveProjectAsAction
+        ParentShowHint = False
+        ShowHint = True
       end
       object ToolButton4: TToolButton
         Left = 75
@@ -71,16 +77,20 @@ object ProjectFrame: TProjectFrame
         Caption = 'ToolButton4'
         Style = tbsDivider
       end
-      object ToolButton5: TToolButton
+      object AddDataFormToolBtn: TToolButton
         Left = 79
         Top = 1
         Action = NewDataFormAction
         Enabled = False
+        ParentShowHint = False
+        ShowHint = True
       end
-      object ToolButton6: TToolButton
+      object DeleteDataFormToolBtn: TToolButton
         Left = 102
         Top = 1
         Action = DeleteDataFormAction
+        ParentShowHint = False
+        ShowHint = True
       end
       object ToolButton7: TToolButton
         Left = 125
@@ -100,18 +110,21 @@ object ProjectFrame: TProjectFrame
       Hint = 'Open Project'
       ImageIndex = 0
       OnExecute = OpenProjectActionExecute
+      ShortCut = 16463
     end
     object SaveProjectAction: TAction
       Caption = 'Save Project'
       Hint = 'Save Project'
       ImageIndex = 1
       OnExecute = SaveProjectActionExecute
+      ShortCut = 16467
     end
     object SaveProjectAsAction: TAction
       Caption = 'Save Project As'
       Hint = 'Save Project As'
       ImageIndex = 2
       OnExecute = SaveProjectAsActionExecute
+      ShortCut = 24659
     end
     object NewDataFormAction: TAction
       Caption = 'New Data Form'
@@ -296,8 +309,13 @@ object ProjectFrame: TProjectFrame
     Title = 'Save Project As'
     DefaultExt = '.epf'
     Filter = 'EpiData Project File|*.epf|All Files|*.*'
-    FilterIndex = 0
     left = 330
     top = 109
+  end
+  object OpenProjectDialog: TOpenDialog
+    DefaultExt = '.epf'
+    Filter = 'EpiData Project File|*.epf|All Files|*.*'
+    left = 330
+    top = 168
   end
 end

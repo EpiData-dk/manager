@@ -187,6 +187,9 @@ type
     function    NewField(FieldType: TEpiFieldType): TEpiField;
     function    NewHeading: TEpiHeading;
     function    NewSection: TEpiSection;
+  private
+    { Helper functions }
+    procedure   InitialiseFrame;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
@@ -932,6 +935,33 @@ begin
   result := DataFile.NewSection;
 end;
 
+procedure TDesignFrame.InitialiseFrame;
+var
+  i: Integer;
+  TheParent: TWinControl;
+  j: Integer;
+begin
+  with DataFile do
+  begin
+    for i := 0 to Sections.Count do
+    begin
+      if Section[i] <> MainSection then
+        TheParent := TWinControl(NewSectionControl(Point(Section[i].Left, Section[i].Top),
+          Point(Section[i].Left+Section[i].Width, Section[i].Top+Section[i].Height), Section[i]))
+      else
+        TheParent := FDesignerBox;
+
+      with Section[i] do
+      begin
+        for j := 0 to Fields.Count do
+          NewDesignControl(TDesignField, TheParent, Point(Field[j].Left, Field[j].Top), Field[j]);
+        for j := 0 to Headings.Count do
+          NewDesignControl(TDesignHeading, TheParent, Point(Heading[j].Left, Heading[j].Top), Heading[j]);
+      end;
+    end;
+  end;
+end;
+
 procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
@@ -1372,15 +1402,17 @@ var
   Pt: TPoint;
 begin
   inherited Create(TheOwner);
-  FDataFile := ADataFile;
-  Name := FDataFile.Id;
-  FActiveButton := SelectorToolButton;
-  FActiveSection := ADataFile.MainSection;
-  DragManager.DragThreshold := 5;
-  DragManager.DragImmediate := False;
-
+  // ==================================
+  // Essetial things are created first!
+  // ==================================
   DateToolButton.Tag := Ord(ManagerSettings.DefaultDateType);
   DateToolButton.ImageIndex := Ord(ManagerSettings.DefaultDateType);
+  FActiveButton := SelectorToolButton;
+
+  // TODO : Move to main - the DragManager is global to the whole program and
+  // should only be set once.
+  DragManager.DragThreshold := 5;
+  DragManager.DragImmediate := False;
 
   // Designer box creation and setup.
   // - (This is subject to change if we find a better component than
@@ -1399,6 +1431,16 @@ begin
   FDesignerBox.OnUnDock    := @DockSiteUnDock;
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
   FDesignerBox.OnKeyDown   := @DesignKeyDown;
+
+  // Now we are ready to initialise with the new Datafile.
+  FDataFile := ADataFile;
+  Name := DataFile.Id;
+  FActiveSection := ADataFile.MainSection;
+
+  if (DataFile.Fields.Count > 0) or (DataFile.Headings.Count > 0) then
+    InitialiseFrame;
+
+
   (FDesignerBox as IDesignEpiControl).EpiControl := ADataFile.MainSection;
   FActiveDockSite := FDesignerBox;
   EnterControl(FDesignerBox);
