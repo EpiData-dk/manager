@@ -2,7 +2,7 @@
 # Compile all versions of manager!
 
 ## Changeable options.
-MANAGER_OPTIONS="-Schi -WG"
+MANAGER_OPTIONS="-Schi -WG -dEPI_RELEASE"
 #SIMPLEOPTS="$SIMPLEOPTS -veiwd"
 #SIMPLEOPTS="$SIMPLEOPTS -gl -g -dEPI_DEBUG"
 MANAGERFILENAME="epidatamanager"
@@ -146,7 +146,7 @@ compile() {
     *)
      ;;
   esac
-  mv $FINALZIP_NAME "$HOME/epiexec/"		
+#  mv $FINALZIP_NAME "$HOME/epiexec/"		
 
   echo ""
 }

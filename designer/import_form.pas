@@ -60,15 +60,14 @@ begin
   if ModalResult <> mrOK then exit;
 
   Importer := TEpiImport.Create;
-  ImpDf := nil;
-  Importer.ImportRec(ImportFileEdit.FileName, ImpDf);
+  Importer.ImportRec(ImportFileEdit.FileName, FDataFile);
 
-  if not (ImportValueLabelsChkBox.Checked) then
+{  if not (ImportValueLabelsChkBox.Checked) then
     for i := ImpDf.ValueLabels.Count - 1 downto 0 do
       ImpDf.ValueLabels.DeleteItem(i).Free;
-
-  if not (ImportDataChkBox.Checked) then
-    ImpDf.Size := 0;
+ }
+{  if not (ImportDataChkBox.Checked) then
+    ImpDf.Size := 0;         }
 end;
 
 procedure TImportForm.ImportFileEditEditingDone(Sender: TObject);
@@ -87,6 +86,7 @@ end;
 constructor TImportForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  FDataFile := nil;
 end;
 
 end.

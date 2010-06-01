@@ -1,7 +1,7 @@
 inherited DesignFieldForm: TDesignFieldForm
-  Left = 2012
+  Left = 707
   Height = 247
-  Top = 168
+  Top = 332
   Width = 326
   ActiveControl = Panel1
   Caption = 'Field Properties'
@@ -67,7 +67,9 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 18
           Top = 5
           Width = 44
+          BidiMode = bdRightToLeft
           Caption = 'Name:'
+          ParentBidiMode = False
           ParentColor = False
         end
         object NameEdit: TEdit
@@ -75,6 +77,8 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 29
           Width = 304
+          BidiMode = bdRightToLeft
+          ParentBidiMode = False
           TabOrder = 0
         end
         object Label2: TLabel

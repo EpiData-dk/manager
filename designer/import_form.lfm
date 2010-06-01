@@ -28,7 +28,7 @@ object ImportForm: TImportForm
     Left = 8
     Height = 18
     Top = 8
-    Width = 81
+    Width = 83
     Caption = 'Import from:'
     ParentColor = False
   end
@@ -53,7 +53,7 @@ object ImportForm: TImportForm
       Left = 6
       Height = 22
       Top = 31
-      Width = 100
+      Width = 103
       Caption = 'Value labels'
       TabOrder = 1
     end
@@ -62,7 +62,7 @@ object ImportForm: TImportForm
     Left = 8
     Height = 22
     Top = 56
-    Width = 175
+    Width = 177
     Caption = 'Clean current Dataform'
     TabOrder = 2
   end

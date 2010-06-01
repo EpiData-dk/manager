@@ -189,7 +189,7 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'TestToolButton'
       ImageIndex = 0
-      OnClick = ToggleToolBtn
+      OnClick = TestToolButtonClick
     end
   end
   object Panel1: TPanel
@@ -1550,11 +1550,13 @@ object DesignFrame: TDesignFrame
       Category = 'File'
       Caption = 'LoadDataFileAction'
       ImageIndex = 12
+      OnExecute = LoadDataFileActionExecute
     end
     object ImportDataFileAction: TAction
       Category = 'File'
       Caption = 'ImportDataFileAction'
       ImageIndex = 13
+      OnExecute = ImportDataFileActionExecute
     end
     object ExportDataformAction: TAction
       Category = 'File'

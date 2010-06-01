@@ -7,7 +7,7 @@ object MainForm: TMainForm
   ClientHeight = 661
   ClientWidth = 946
   Menu = MainMenu1
-  OnCreate = FormCreate
+  OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '0.9.29'
   object PageControl1: TPageControl

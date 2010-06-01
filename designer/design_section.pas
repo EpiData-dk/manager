@@ -70,6 +70,7 @@ type
     Panel3: TPanel;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    procedure FormShow(Sender: TObject);
   private
     { private declarations }
     FSection: TEpiSection;
@@ -216,6 +217,10 @@ end;
 
 { TDesignSectionForm }
 
+procedure TDesignSectionForm.FormShow(Sender: TObject);
+begin
+  NameEdit.SetFocus;
+end;
 
 procedure TDesignSectionForm.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);

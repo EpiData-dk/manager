@@ -3,9 +3,11 @@ inherited DesignSectionForm: TDesignSectionForm
   Height = 210
   Top = 254
   Width = 391
+  ActiveControl = PageControl1
   Caption = 'Section Properties'
   ClientHeight = 210
   ClientWidth = 391
+  OnShow = FormShow
   object PageControl1: TPageControl[0]
     Left = 0
     Height = 160
@@ -17,32 +19,32 @@ inherited DesignSectionForm: TDesignSectionForm
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 134
-      ClientWidth = 383
+      ClientHeight = 125
+      ClientWidth = 385
       object Panel1: TPanel
         Left = 0
-        Height = 134
+        Height = 125
         Top = 0
-        Width = 383
+        Width = 385
         Align = alClient
         BevelInner = bvLowered
         BevelWidth = 2
-        ClientHeight = 134
-        ClientWidth = 383
+        ClientHeight = 125
+        ClientWidth = 385
         Color = clSkyBlue
         ParentColor = False
         TabOrder = 0
         object Label1: TLabel
           Left = 8
-          Height = 14
+          Height = 18
           Top = 8
-          Width = 28
+          Width = 40
           Caption = 'Name'
           ParentColor = False
         end
         object NameEdit: TEdit
           Left = 8
-          Height = 21
+          Height = 27
           Top = 32
           Width = 368
           TabOrder = 0
@@ -53,7 +55,7 @@ inherited DesignSectionForm: TDesignSectionForm
           Top = 72
           Width = 368
           Caption = 'Groups access:'
-          ClientHeight = 150
+          ClientHeight = 149
           ClientWidth = 364
           TabOrder = 1
           Visible = False
@@ -65,6 +67,7 @@ inherited DesignSectionForm: TDesignSectionForm
             ItemHeight = 0
             Sorted = True
             TabOrder = 0
+            TopIndex = -1
           end
           object GroupAssignedListBox: TListBox
             Left = 205
@@ -74,12 +77,13 @@ inherited DesignSectionForm: TDesignSectionForm
             ItemHeight = 0
             Sorted = True
             TabOrder = 1
+            TopIndex = -1
           end
           object Label3: TLabel
             Left = 6
-            Height = 14
+            Height = 18
             Top = 7
-            Width = 48
+            Width = 65
             Caption = 'Available:'
             ParentColor = False
           end
@@ -129,9 +133,9 @@ inherited DesignSectionForm: TDesignSectionForm
           end
           object Label4: TLabel
             Left = 206
-            Height = 14
+            Height = 18
             Top = 7
-            Width = 48
+            Width = 64
             Caption = 'Assigned:'
             ParentColor = False
           end
@@ -184,8 +188,8 @@ inherited DesignSectionForm: TDesignSectionForm
     end
     object TabSheet2: TTabSheet
       Caption = 'Advanced'
-      ClientHeight = 134
-      ClientWidth = 383
+      ClientHeight = 125
+      ClientWidth = 385
       object Panel2: TPanel
         Left = 0
         Height = 134
@@ -245,9 +249,9 @@ inherited DesignSectionForm: TDesignSectionForm
     TabOrder = 1
     object OkBtn: TBitBtn
       Left = 232
-      Height = 26
+      Height = 32
       Top = 13
-      Width = 59
+      Width = 54
       AutoSize = True
       Caption = '&OK'
       Kind = bkOK
@@ -256,9 +260,9 @@ inherited DesignSectionForm: TDesignSectionForm
     end
     object CancelBtn: TBitBtn
       Left = 304
-      Height = 26
+      Height = 34
       Top = 11
-      Width = 77
+      Width = 81
       AutoSize = True
       Caption = 'Cancel'
       Kind = bkCancel

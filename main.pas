@@ -31,7 +31,7 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
-    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
@@ -58,7 +58,7 @@ uses
 
 { TMainForm }
 
-procedure TMainForm.FormCreate(Sender: TObject);
+procedure TMainForm.FormShow(Sender: TObject);
 begin
   Caption := 'EpiData Project and Data Manager'; // + ' (v' + GetManagerVersion + ')';
 //  ShowWorkFlowAction.Execute;

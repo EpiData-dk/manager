@@ -100,6 +100,8 @@ type
     procedure   Button3Click(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
+    procedure   ImportDataFileActionExecute(Sender: TObject);
+    procedure   LoadDataFileActionExecute(Sender: TObject);
     procedure   MoveDownActionExecute(Sender: TObject);
     procedure   MoveEndActionExecute(Sender: TObject);
     procedure   MoveHomeActionExecute(Sender: TObject);
@@ -115,6 +117,7 @@ type
     procedure   NewOtherFieldMenuClick(Sender: TObject);
     procedure   NewStringFieldActionExecute(Sender: TObject);
     procedure   NewYMDFieldActionExecute(Sender: TObject);
+    procedure   TestToolButtonClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
     { common private }
@@ -131,6 +134,11 @@ type
       Pos: TPoint): TModalResult;
     procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
 
+  private
+    { Import/Export }
+    FImportUpdating: boolean;
+    procedure ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
   private
     { Docksite methods }
     // - mouse
@@ -188,12 +196,11 @@ type
     function    NewHeading: TEpiHeading;
     function    NewSection: TEpiSection;
   private
-    { Helper functions }
-    procedure   InitialiseFrame;
+    procedure   SetDataFile(const AValue: TEpiDataFile);
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
-    property    DataFile: TEpiDataFile read FDataFile;
+    constructor Create(TheOwner: TComponent);
+    property    DataFile: TEpiDataFile read FDataFile write SetDataFile;
   end;
 
 implementation
@@ -448,6 +455,35 @@ begin
   EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
   Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left, EpiCtrl.Top));
   ShowForm(EpiCtrl, Pt);
+end;
+
+procedure TDesignFrame.ImportDataFileActionExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
+var
+  ImportForm: TImportForm;
+begin
+  ImportForm := TImportForm.Create(Self);
+  ImportForm.DataFile := FDataFile;
+
+  ExitControl(nil);
+  if (FDesignerBox as IPositionHandler).YTree.Count > 0 then
+  begin
+    FActiveControl := TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data);
+    While (FActiveControl <> FDesignerBox) do
+      DeleteControlAction.Execute;
+  end;
+
+  FDataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, true);
+  FDataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, true);
+
+  ImportForm.ShowModal;
+
+  FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+  FDataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
 end;
 
 procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);
@@ -757,6 +793,11 @@ begin
   NewShortCutFieldControl(ftYMDDate, FActiveDockSite);
 end;
 
+procedure TDesignFrame.TestToolButtonClick(Sender: TObject);
+begin
+  MainForm.FlipChildren(true);
+end;
+
 
 function TDesignFrame.ShowForm(EpiControl: TEpiCustomControlItem; Pos: TPoint
   ): TModalResult;
@@ -865,6 +906,40 @@ begin
   EpiControlPopUpMenu.PopUp(Pos.X, Pos.Y);
 end;
 
+procedure TDesignFrame.ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
+  EventType: Word; Data: Pointer);
+var
+  Cls: TControlClass;
+  Pt: TPoint;
+begin
+  if (Sender is TEpiFields) then
+  begin
+    if (EventGroup = eegCustomBase) and (EventType = Ord(ecceAddItem)) then
+      TEpiField(Data).RegisterOnChangeHook(@ImportHook, false);
+    exit;
+  end;
+
+  if (Sender is TEpiHeadings) then
+  begin
+    if (EventGroup = eegCustomBase) and (EventType = Ord(ecceAddItem)) then
+      TEpiHeading(Data).RegisterOnChangeHook(@ImportHook, false);
+    exit;
+  end;
+
+  if (Sender is TEpiCustomControlItem) and (EventGroup = eegCustomBase) and (EventType = Ord(ecceUpdate)) then
+  begin
+    TEpiCustomControlItem(Sender).UnRegisterOnChangeHook(@ImportHook);
+
+    Cls := TDesignField;
+    if Sender is TEpiHeading then
+      Cls := TDesignHeading;
+    Pt := FindNewPosition(FDesignerBox, Cls);
+//    FImportUpdating := true;
+    NewDesignControl(Cls, FDesignerBox, Pt, TEpiCustomControlItem(Sender));
+//    FImportUpdating := false;
+  end;
+end;
+
 procedure TDesignFrame.DrawShowPanel(X, Y: Integer);
 var
   Pt1: TPoint;
@@ -935,15 +1010,25 @@ begin
   result := DataFile.NewSection;
 end;
 
-procedure TDesignFrame.InitialiseFrame;
+
+procedure TDesignFrame.SetDataFile(const AValue: TEpiDataFile);
 var
   i: Integer;
   TheParent: TWinControl;
   j: Integer;
 begin
+  if DataFile = AValue then exit;
+  FDataFile := AValue;
+
+  Name := DataFile.Id;
+  FActiveSection := DataFile.MainSection;
+  (FDesignerBox as IDesignEpiControl).EpiControl := DataFile.MainSection;
+
   with DataFile do
   begin
-    for i := 0 to Sections.Count do
+    if (Fields.Count = 0) and (Headings.Count = 0) then exit;
+
+    for i := 0 to Sections.Count - 1 do
     begin
       if Section[i] <> MainSection then
         TheParent := TWinControl(NewSectionControl(Point(Section[i].Left, Section[i].Top),
@@ -953,9 +1038,9 @@ begin
 
       with Section[i] do
       begin
-        for j := 0 to Fields.Count do
+        for j := 0 to Fields.Count - 1 do
           NewDesignControl(TDesignField, TheParent, Point(Field[j].Left, Field[j].Top), Field[j]);
-        for j := 0 to Headings.Count do
+        for j := 0 to Headings.Count - 1 do
           NewDesignControl(TDesignHeading, TheParent, Point(Heading[j].Left, Heading[j].Top), Heading[j]);
       end;
     end;
@@ -1171,7 +1256,7 @@ begin
 
   // Sanity checks:
   // - sections do not need to be relocated in the Core structure.
-  if EpiControl is TEpiSection then exit;
+  if EpiControl is TEpiSection then  exit;
 
   // - if old and new section is the same do nothing.
   NSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
@@ -1390,7 +1475,7 @@ begin
   Result := Point(Control.Left, Control.Top);
 end;
 
-constructor TDesignFrame.Create(TheOwner: TComponent; ADataFile: TEpiDataFile);
+constructor TDesignFrame.Create(TheOwner: TComponent);
 var
   LocalAdm: TEpiAdmin;
   Grp: TEpiGroup;
@@ -1402,6 +1487,7 @@ var
   Pt: TPoint;
 begin
   inherited Create(TheOwner);
+
   // ==================================
   // Essetial things are created first!
   // ==================================
@@ -1414,9 +1500,11 @@ begin
   DragManager.DragThreshold := 5;
   DragManager.DragImmediate := False;
 
+  // ==================================
   // Designer box creation and setup.
   // - (This is subject to change if we find a better component than
   //    the form or a scrollbox).
+  // ==================================
   FDesignerBox             := TScrollBoxEx.Create(Self);
   FDesignerBox.Name        := 'DesignerBox';
   FDesignerBox.Parent      := Self;
@@ -1431,97 +1519,14 @@ begin
   FDesignerBox.OnUnDock    := @DockSiteUnDock;
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
   FDesignerBox.OnKeyDown   := @DesignKeyDown;
-
-  // Now we are ready to initialise with the new Datafile.
-  FDataFile := ADataFile;
-  Name := DataFile.Id;
-  FActiveSection := ADataFile.MainSection;
-
-  if (DataFile.Fields.Count > 0) or (DataFile.Headings.Count > 0) then
-    InitialiseFrame;
-
-
-  (FDesignerBox as IDesignEpiControl).EpiControl := ADataFile.MainSection;
   FActiveDockSite := FDesignerBox;
-  EnterControl(FDesignerBox);
 
-  {$IFDEF EPI_RELEASE}
-    TmpEpiSection := NewSection;
-    TmpEpiSection.Name.Text := 'This is a test module for EpiData Manager';
-    {$IFDEF WINDOWS}
-    Pt := Point(600,270);
-    {$ELSE}
-    Pt := Point(700,270);
-    {$ENDIF}
-    TmpCtrlSection := TWinControl(NewSectionControl(Point(20,5), Pt, TmpEpiSection));
-    for i := 1 to 11 do
-    begin
-      Heading := NewHeading;
-      Pt.X    := 20;
-      if (i >= 3) and (i <= 7) then
-        Pt.X := 30;
-      if (i >= 10) and (i <= 10) then
-        Pt.X := 70;
-      Pt.Y    := 20 * (i - 1) + 5;
-      case i of
-        1: Heading.Caption.Text := 'Comment and discuss on the epidata-list.';
-        2: Heading.Caption.Text := 'Main test in this version: add fields, headings and sections.';
-        3: Heading.Caption.Text := '========================================================';
-        4: Heading.Caption.Text := 'A: Add fields and sections - click on buttons above and click in the form';
-        5: Heading.Caption.Text := 'B: Move fields/headings into and out of sections.';
-        6: Heading.Caption.Text := 'C: Change or delete fields, sections & headings (red "X"/"DEL" key/pencil).';
-         7: Heading.Caption.Text := 'D: Edit fields, sections or headings (using "pencil" or "ENTER" key)';
-         8: Heading.Caption.Text := '========================================================';
-         9: Heading.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
-        10: Heading.Caption.Text := 'Later restricted access (via password) can be tied to section level';
-        11: Heading.Caption.Text := 'NOTE 2): Import/Export is NOT part of this test release.';
-      end;
-      NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
-    end;
+  // ==================================
+  // Misc. things:
+  // ==================================
+  FImportUpdating := false;
 
-    TmpEpiSection := NewSection;
-    TmpEpiSection.Name.Text := 'Known major bugs in EpiData Manager:';
-    {$IFDEF WINDOWS}
-    Pt := Point(600,380);
-    {$ELSE}
-    Pt := Point(700,380);
-    {$ENDIF}
-    TmpCtrlSection := TWinControl(NewSectionControl(Point(20,280), Pt, TmpEpiSection));
-    for i := 1 to 2 do
-    begin
-      Heading := NewHeading;
-      Pt.X    := 20;
-      if (i = 1) then
-        Pt.X := 30;
-      if (i = 2) then
-        Pt.X := 45;
-      Pt.Y    := 20 * (i - 1) + 5;
-      case i of
-        1: Heading.Caption.Text := 'A: On creating a new section dragging the cursor outside the program and';
-        2: Heading.Caption.Text := 'releasing the button, can cause the drawn area not to disapear. (Windows only)';
-
-           end;
-      NewDesignControl(TDesignHeading, TmpCtrlSection, Pt, Heading);
-    end;
-    ExitControl(nil);
-  {$ENDIF}
-
-  {$IFDEF EPI_DEBUG}
-  // DEBUGGING!!!!
-  LocalAdm := TEpiDocument(FDataFile.RootOwner).Admin;
-  Grp := LocalAdm.NewGroup;
-  Grp.Name.Text := 'Group 1';
-  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
-    earStructure, earTranslate, earUsers, earPassword];
-  Grp := LocalAdm.NewGroup;
-  Grp.Name.Text := 'Group 2';
-  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
-    earStructure, earTranslate, earUsers, earPassword];
-  Grp := LocalAdm.NewGroup;
-  Grp.Name.Text := 'Group 3';
-  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
-    earStructure, earTranslate, earUsers, earPassword];
-  {$ELSE}
+  {$IFNDEF EPI_DEBUG}
   Splitter1.Enabled := false;
   Splitter1.Visible := False;
   Panel1.Enabled := false;
