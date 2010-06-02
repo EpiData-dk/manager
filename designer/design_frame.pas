@@ -136,8 +136,11 @@ type
 
   private
     { Import/Export }
-    FImportUpdating: boolean;
-    procedure ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
+    FLastRecYPos: Integer;
+    FLastRecCtrl: TControl;
+    procedure   DoPostImportAlignment(ParentControl: TWinControl;
+      StartControl, EndControl: TControl);
+    procedure   ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
   private
     { Docksite methods }
@@ -209,7 +212,7 @@ implementation
 
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
-  main, settings;
+  main, settings, epiimport;
 
 type
 
@@ -465,9 +468,12 @@ end;
 procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
 var
   ImportForm: TImportForm;
+  Importer: TEpiImport;
 begin
   ImportForm := TImportForm.Create(Self);
   ImportForm.DataFile := FDataFile;
+
+  if ImportForm.ShowModal <> mrOK then exit;
 
   ExitControl(nil);
   if (FDesignerBox as IPositionHandler).YTree.Count > 0 then
@@ -480,10 +486,16 @@ begin
   FDataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, true);
   FDataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, true);
 
-  ImportForm.ShowModal;
+  FLastRecYPos := -1;
+  FLastRecCtrl := nil;
+  Importer := TEpiImport.Create;
+  Importer.ImportRec(ImportForm.ImportFileEdit.FileName, FDataFile);
+  Importer.Free;
 
   FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
   FDataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+
+  ImportForm.Free;
 end;
 
 procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);
@@ -906,6 +918,75 @@ begin
   EpiControlPopUpMenu.PopUp(Pos.X, Pos.Y);
 end;
 
+procedure TDesignFrame.DoPostImportAlignment(ParentControl: TWinControl; StartControl,
+  EndControl: TControl);
+var
+  YTree: TAVLTree;
+  MinLeft: Integer;
+  MaxQuestionWidth: Integer;
+  MaxNameWidth: Integer;
+  NewLeft: Integer;
+  Curr: TAVLTreeNode;
+  LastTop: Integer;
+begin
+{  YTree := (ParentControl as IPositionHandler).YTree;
+
+  if not Assigned(StartControl) then
+    StartControl := TControl(YTree.FindLowest.Data);
+
+  if not Assigned(EndControl) then
+    EndControl := TControl(YTree.FindHighest.Data);
+
+  // Information collection pass.
+  MaxQuestionWidth := 0;
+  MaxNameWidth     := 0;
+  LastTop          := -1;
+  MinLeft          := MaxInt;
+
+  Curr := (StartControl as IDesignEpiControl).YTreeNode;
+  while Assigned(Curr) do
+  begin
+    if LastTop <> TControl(Curr.Data).Top then
+    begin
+      if (TControl(Curr.Data) is TDesignField) then
+      with TDesignField(Curr.Data) do
+      begin
+        MaxQuestionWidth := Max(MaxQuestionWidth, QuestionLabel.Width);
+        MaxNameWidth     := Max(MaxNameWidth,     NameLabel.Width);
+      end;
+
+      MinLeft := Min(MinLeft, (TControl(Curr.Data).Left));
+    end;
+    LastTop := TControl(Curr.Data).Top;
+    if (TControl(Curr.Data) = EndControl) then
+      Break;
+    Curr := YTree.FindSuccessor(Curr);
+  end;
+
+  NewLeft := MinLeft - (MaxQuestionWidth + 5) -
+                       (MaxNameWidth + 5);
+
+  if NewLeft < (MaxNameWidth + 5) then
+  begin
+    NewLeft := MaxNameWidth + 5;
+    MinLeft := MaxQuestionWidth + 5 + MaxNameWidth + 5;
+  end;
+
+  Curr := (StartControl as IDesignEpiControl).YTreeNode;
+  while Assigned(Curr) do
+  with (TControl(Curr.Data) as IDesignEpiControl) do
+  begin
+    if EpiControl is TEpiField then
+      EpiControl.Left := MinLeft
+    else
+      EpiControl.Left := NewLeft;
+
+    if (TControl(Curr.Data) = EndControl) then
+      Break;
+    Curr := YTree.FindSuccessor(Curr);
+  end;   }
+end;
+
 procedure TDesignFrame.ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
   EventType: Word; Data: Pointer);
 var
@@ -934,9 +1015,15 @@ begin
     if Sender is TEpiHeading then
       Cls := TDesignHeading;
     Pt := FindNewPosition(FDesignerBox, Cls);
-//    FImportUpdating := true;
-    NewDesignControl(Cls, FDesignerBox, Pt, TEpiCustomControlItem(Sender));
-//    FImportUpdating := false;
+
+    if FLastRecYPos = TEpiCustomControlItem(Sender).Top then
+    begin
+      Pt.Y := FLastRecCtrl.Top;
+      Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 10;
+    end;
+
+    FLastRecYPos := TEpiCustomControlItem(Sender).Top;
+    FLastRecCtrl := NewDesignControl(Cls, FDesignerBox, Pt, TEpiCustomControlItem(Sender));
   end;
 end;
 
@@ -1520,11 +1607,6 @@ begin
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
   FDesignerBox.OnKeyDown   := @DesignKeyDown;
   FActiveDockSite := FDesignerBox;
-
-  // ==================================
-  // Misc. things:
-  // ==================================
-  FImportUpdating := false;
 
   {$IFNDEF EPI_DEBUG}
   Splitter1.Enabled := false;

@@ -7,7 +7,6 @@ object ImportForm: TImportForm
   Caption = 'Import...'
   ClientHeight = 313
   ClientWidth = 426
-  OnCloseQuery = FormCloseQuery
   LCLVersion = '0.9.29'
   object ImportFileEdit: TFileNameEdit
     Left = 8

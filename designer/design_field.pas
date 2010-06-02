@@ -37,6 +37,8 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
     property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    property    NameLabel: TLabel read FNameLabel;
+    property    QuestionLabel: TLabel read FQuestionLabel;
     property    XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
     property    YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
   end;

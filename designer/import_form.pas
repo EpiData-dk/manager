@@ -21,7 +21,6 @@ type
     GroupBox1: TGroupBox;
     ClearDataFormChkBox: TCheckBox;
     Label1: TLabel;
-    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure ImportFileEditAcceptFileName(Sender: TObject; var Value: String);
     procedure ImportFileEditEditingDone(Sender: TObject);
   private
@@ -49,25 +48,6 @@ var
   Ext: String;
 begin
   Ext := ExtractFileExt(Value);
-end;
-
-procedure TImportForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-var
-  Importer: TEpiImport;
-  ImpDf: TEpiDataFile;
-  i: Integer;
-begin
-  if ModalResult <> mrOK then exit;
-
-  Importer := TEpiImport.Create;
-  Importer.ImportRec(ImportFileEdit.FileName, FDataFile);
-
-{  if not (ImportValueLabelsChkBox.Checked) then
-    for i := ImpDf.ValueLabels.Count - 1 downto 0 do
-      ImpDf.ValueLabels.DeleteItem(i).Free;
- }
-{  if not (ImportDataChkBox.Checked) then
-    ImpDf.Size := 0;         }
 end;
 
 procedure TImportForm.ImportFileEditEditingDone(Sender: TObject);
