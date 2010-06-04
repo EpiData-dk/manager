@@ -166,16 +166,22 @@ object DesignFrame: TDesignFrame
       Left = 306
       Top = 1
       Action = LoadDataFileAction
+      ParentShowHint = False
+      ShowHint = True
     end
     object ImportToolButton: TToolButton
       Left = 334
       Top = 1
       Action = ImportDataFileAction
+      ParentShowHint = False
+      ShowHint = True
     end
     object ExportToolButton: TToolButton
       Left = 362
       Top = 1
       Action = ExportDataformAction
+      ParentShowHint = False
+      ShowHint = True
     end
     object Divider6: TToolButton
       Left = 390
