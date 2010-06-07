@@ -46,6 +46,7 @@ type
     DeletePopupMenuItem: TMenuItem;
     NewTimeNowFieldMenu: TMenuItem;
     NewTimeFieldMenu: TMenuItem;
+    DesingerStatusBar: TStatusBar;
     TimeSubMenu: TMenuItem;
     NewAutoIncMenu: TMenuItem;
     NewCryptFieldMenu: TMenuItem;
@@ -199,6 +200,10 @@ type
     function    NewHeading: TEpiHeading;
     function    NewSection: TEpiSection;
   private
+    { Visual presentation }
+    procedure   VisualFeedbackHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+  private
+    { Property methods }
     procedure   SetDataFile(const AValue: TEpiDataFile);
   public
     { public declarations }
@@ -212,7 +217,7 @@ implementation
 
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
-  main, settings, epiimport;
+  main, settings, epiimport, LCLProc;
 
 type
 
@@ -469,6 +474,8 @@ procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
 var
   ImportForm: TImportForm;
   Importer: TEpiImport;
+  Fn: String;
+  Ext: String;
 begin
   ImportForm := TImportForm.Create(Self);
   ImportForm.DataFile := FDataFile;
@@ -489,7 +496,13 @@ begin
   FLastRecYPos := -1;
   FLastRecCtrl := nil;
   Importer := TEpiImport.Create;
-  Importer.ImportRec(ImportForm.ImportFileEdit.FileName, FDataFile);
+  Fn := ImportForm.ImportFileEdit.FileName;
+  Ext := ExtractFileExt(UTF8LowerCase(Fn));
+
+  if ext = '.rec' then
+    Importer.ImportRec(Fn, FDataFile, false)
+  else if ext = '.dta' then
+    Importer.ImportStata(Fn, FDataFile, false);
   Importer.Free;
 
   FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
@@ -1016,7 +1029,7 @@ begin
       Cls := TDesignHeading;
     Pt := FindNewPosition(FDesignerBox, Cls);
 
-    if FLastRecYPos = TEpiCustomControlItem(Sender).Top then
+    if (not (FLastRecYPos = -1)) and (FLastRecYPos = TEpiCustomControlItem(Sender).Top) then
     begin
       Pt.Y := FLastRecCtrl.Top;
       Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 10;
@@ -1097,6 +1110,24 @@ begin
   result := DataFile.NewSection;
 end;
 
+procedure TDesignFrame.VisualFeedbackHook(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+var
+  SdrList: TEpiCustomList absolute Sender;
+begin
+  if TEpiCustomChangeEventType(EventType) in [ecceAddItem, ecceDelItem, ecceDestroy, ecceUpdate] then
+  begin
+    if Sender is TEpiSections then
+      DesingerStatusBar.Panels.Items[0].Text := 'Sections: ' + IntToStr(SdrList.Count - 1);
+
+    if Sender is TEpiFields then
+      DesingerStatusBar.Panels.Items[1].Text := 'Fields: ' + IntToStr(SdrList.Count);
+
+    if Sender is TEpiHeadings then
+      DesingerStatusBar.Panels.Items[2].Text := 'Headings: ' + IntToStr(SdrList.Count);
+  end;
+end;
+
 
 procedure TDesignFrame.SetDataFile(const AValue: TEpiDataFile);
 var
@@ -1111,27 +1142,36 @@ begin
   FActiveSection := DataFile.MainSection;
   (FDesignerBox as IDesignEpiControl).EpiControl := DataFile.MainSection;
 
+  // Register the visual feedback hook.
+  DataFile.BeginUpdate;
+  DataFile.Sections.RegisterOnChangeHook(@VisualFeedbackHook);
+  DataFile.Fields.RegisterOnChangeHook(@VisualFeedbackHook);
+  DataFile.Headings.RegisterOnChangeHook(@VisualFeedbackHook);
+
   with DataFile do
   begin
-    if (Fields.Count = 0) and (Headings.Count = 0) then exit;
-
-    for i := 0 to Sections.Count - 1 do
+    if not ((Fields.Count = 0) and (Headings.Count = 0)) then
     begin
-      if Section[i] <> MainSection then
-        TheParent := TWinControl(NewSectionControl(Point(Section[i].Left, Section[i].Top),
-          Point(Section[i].Left+Section[i].Width, Section[i].Top+Section[i].Height), Section[i]))
-      else
-        TheParent := FDesignerBox;
-
-      with Section[i] do
+      for i := 0 to Sections.Count - 1 do
       begin
-        for j := 0 to Fields.Count - 1 do
-          NewDesignControl(TDesignField, TheParent, Point(Field[j].Left, Field[j].Top), Field[j]);
-        for j := 0 to Headings.Count - 1 do
-          NewDesignControl(TDesignHeading, TheParent, Point(Heading[j].Left, Heading[j].Top), Heading[j]);
+        if Section[i] <> MainSection then
+          TheParent := TWinControl(NewSectionControl(Point(Section[i].Left, Section[i].Top),
+            Point(Section[i].Left+Section[i].Width, Section[i].Top+Section[i].Height), Section[i]))
+        else
+          TheParent := FDesignerBox;
+
+        with Section[i] do
+        begin
+          for j := 0 to Fields.Count - 1 do
+            NewDesignControl(TDesignField, TheParent, Point(Field[j].Left, Field[j].Top), Field[j]);
+          for j := 0 to Headings.Count - 1 do
+            NewDesignControl(TDesignHeading, TheParent, Point(Heading[j].Left, Heading[j].Top), Heading[j]);
+        end;
       end;
     end;
   end;
+  DesingerStatusBar.Panels[3].Text := Format('Records: %d', [DataFile.Size]);
+  DataFile.EndUpdate;
 end;
 
 procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;
@@ -1254,6 +1294,8 @@ begin
      (Sender as IPositionHandler).YTree.Count
     ]
   );
+
+  DesingerStatusBar.Panels[5].Text := Format('Mouse - X: %d Y: %d',[X, Y]);
 
   // Used to paint box when creating the section.
   if not (
@@ -1453,6 +1495,8 @@ begin
   if (Sender is TWinControl) then
     TWinControl(Sender).SetFocus;
 
+  DesingerStatusBar.Panels[4].Text := (FActiveControl as IDesignEpiControl).EpiControl.Name.Text;
+
   if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
     FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
 
@@ -1468,6 +1512,8 @@ begin
   if FActiveControl is TDesignHeading then
     TDesignHeading(FActiveControl).ParentColor := true;
   FActiveControl := nil;
+
+  DesingerStatusBar.Panels[4].Text := '';
 end;
 
 procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;

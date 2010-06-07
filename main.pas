@@ -60,7 +60,7 @@ uses
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
-  Caption := 'EpiData Project and Data Manager'; // + ' (v' + GetManagerVersion + ')';
+  Caption := 'EpiData Project and Data Manager (v' + GetManagerVersion + ')';
 //  ShowWorkFlowAction.Execute;
   {$IFDEF EPI_RELEASE}
   Width := 800;

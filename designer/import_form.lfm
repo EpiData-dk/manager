@@ -15,6 +15,7 @@ object ImportForm: TImportForm
     Width = 392
     OnAcceptFileName = ImportFileEditAcceptFileName
     DialogOptions = []
+    Filter = 'EpiData/-Info files|*.rec|Stata|*.dta|All files|*.*'
     FilterIndex = 0
     HideDirectories = False
     ButtonWidth = 23

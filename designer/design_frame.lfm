@@ -200,14 +200,14 @@ object DesignFrame: TDesignFrame
   end
   object Panel1: TPanel
     Left = 724
-    Height = 557
+    Height = 536
     Top = 26
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 555
+    ClientHeight = 534
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
@@ -289,12 +289,45 @@ object DesignFrame: TDesignFrame
   end
   object Splitter1: TSplitter
     Left = 719
-    Height = 557
+    Height = 536
     Top = 26
     Width = 5
     Align = alRight
     Beveled = True
     ResizeAnchor = akRight
+  end
+  object DesingerStatusBar: TStatusBar
+    Left = 0
+    Height = 21
+    Top = 562
+    Width = 989
+    Panels = <    
+      item
+        Text = 'Sections'
+        Width = 125
+      end    
+      item
+        Text = 'Fields'
+        Width = 125
+      end    
+      item
+        Text = 'Headings'
+        Width = 125
+      end    
+      item
+        Text = 'Records'
+        Width = 125
+      end    
+      item
+        Text = 'Name'
+        Width = 125
+      end    
+      item
+        Text = 'Mouse'
+        Width = 125
+      end>
+    SimplePanel = False
+    SizeGrip = False
   end
   object DesignerImageList: TImageList
     Height = 24

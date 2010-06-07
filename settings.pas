@@ -148,7 +148,7 @@ const
   ManagerVersion: TManagerVersion = (
     VersionNo: 0;
     MajorRev:  5;
-    MinorRev:  0;
+    MinorRev:  1;
     BuildNo:   0;
   );
 
@@ -162,7 +162,7 @@ implementation
 {$IFDEF EPI_RELEASE}
   {$I revision.inc}
 {$ELSE}
-  const RevisionStr = '0 (DEBUG)';
+  const RevisionStr = '(DEBUG)';
 {$ENDIF}
 
 function GetManagerVersion: String;
@@ -170,8 +170,8 @@ begin
   with ManagerVersion do
     result := IntToStr(VersionNo) + '.' +
               IntToStr(MajorRev) + '.' +
-              IntToStr(MinorRev) + '.' +
-              IntToStr(BuildNo) + ' r' + RevisionStr;
+              IntToStr(MinorRev) + ' ' +
+              {$IFDEF EPI_RELEASE}'r' + {$ENDIF EPI_RELEASE} RevisionStr;
 end;
 
 { TSettingsForm }
