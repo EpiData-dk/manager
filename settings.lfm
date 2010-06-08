@@ -19,9 +19,9 @@ object SettingsForm: TSettingsForm
     Hint = 'Default decimal length for:'#10'Float'
     Top = 0
     Width = 481
-    ActivePage = VisualDesignSheet
+    ActivePage = AdvSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 0
     object VisualDesignSheet: TTabSheet
       Caption = 'Visual design'
@@ -433,7 +433,6 @@ object SettingsForm: TSettingsForm
         Top = 25
         Width = 124
         Caption = 'Default data folder'
-        Enabled = False
         ParentColor = False
       end
       object DefaultPasteCombo: TComboBox
@@ -472,7 +471,6 @@ object SettingsForm: TSettingsForm
         ShowHidden = False
         ButtonWidth = 23
         NumGlyphs = 0
-        Enabled = False
         MaxLength = 0
         TabOrder = 0
       end

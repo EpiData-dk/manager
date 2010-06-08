@@ -46,7 +46,7 @@ type
     DeletePopupMenuItem: TMenuItem;
     NewTimeNowFieldMenu: TMenuItem;
     NewTimeFieldMenu: TMenuItem;
-    DesingerStatusBar: TStatusBar;
+    DesignerStatusBar: TStatusBar;
     TimeSubMenu: TMenuItem;
     NewAutoIncMenu: TMenuItem;
     NewCryptFieldMenu: TMenuItem;
@@ -101,7 +101,7 @@ type
     procedure   Button3Click(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
-    procedure   ImportDataFileActionExecute(Sender: TObject);
+    procedure FrameResize(Sender: TObject);
     procedure   LoadDataFileActionExecute(Sender: TObject);
     procedure   MoveDownActionExecute(Sender: TObject);
     procedure   MoveEndActionExecute(Sender: TObject);
@@ -208,6 +208,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent);
+    procedure   UpdateFrame;
     property    DataFile: TEpiDataFile read FDataFile write SetDataFile;
   end;
 
@@ -465,9 +466,11 @@ begin
   ShowForm(EpiCtrl, Pt);
 end;
 
-procedure TDesignFrame.ImportDataFileActionExecute(Sender: TObject);
+procedure TDesignFrame.FrameResize(Sender: TObject);
 begin
-  //
+  With DesignerStatusBar do
+    Panels[4].Width := DesignerStatusBar.Width - (Panels[0].Width + Panels[1].Width + Panels[2].Width +
+      Panels[3].Width + Panels[5].Width);
 end;
 
 procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
@@ -1115,16 +1118,16 @@ procedure TDesignFrame.VisualFeedbackHook(Sender: TObject;
 var
   SdrList: TEpiCustomList absolute Sender;
 begin
-  if TEpiCustomChangeEventType(EventType) in [ecceAddItem, ecceDelItem, ecceDestroy, ecceUpdate] then
+  if TEpiCustomChangeEventType(EventType) in [ecceAddItem, ecceDelItem, ecceUpdate] then
   begin
     if Sender is TEpiSections then
-      DesingerStatusBar.Panels.Items[0].Text := 'Sections: ' + IntToStr(SdrList.Count - 1);
+      DesignerStatusBar.Panels.Items[0].Text := 'Sections: ' + IntToStr(SdrList.Count - 1);
 
     if Sender is TEpiFields then
-      DesingerStatusBar.Panels.Items[1].Text := 'Fields: ' + IntToStr(SdrList.Count);
+      DesignerStatusBar.Panels.Items[1].Text := 'Fields: ' + IntToStr(SdrList.Count);
 
     if Sender is TEpiHeadings then
-      DesingerStatusBar.Panels.Items[2].Text := 'Headings: ' + IntToStr(SdrList.Count);
+      DesignerStatusBar.Panels.Items[2].Text := 'Headings: ' + IntToStr(SdrList.Count);
   end;
 end;
 
@@ -1170,7 +1173,7 @@ begin
       end;
     end;
   end;
-  DesingerStatusBar.Panels[3].Text := Format('Records: %d', [DataFile.Size]);
+  DesignerStatusBar.Panels[3].Text := Format('Records: %d', [DataFile.Size]);
   DataFile.EndUpdate;
 end;
 
@@ -1295,7 +1298,7 @@ begin
     ]
   );
 
-  DesingerStatusBar.Panels[5].Text := Format('Mouse - X: %d Y: %d',[X, Y]);
+  DesignerStatusBar.Panels[5].Text := Format('Mouse - X: %d Y: %d',[X, Y]);
 
   // Used to paint box when creating the section.
   if not (
@@ -1485,6 +1488,9 @@ begin
 end;
 
 procedure TDesignFrame.EnterControl(Sender: TObject);
+var
+  S: String;
+  EpiControl: TEpiCustomControlItem;
 begin
   ExitControl(nil);
   if Not Assigned(Sender) then
@@ -1495,7 +1501,16 @@ begin
   if (Sender is TWinControl) then
     TWinControl(Sender).SetFocus;
 
-  DesingerStatusBar.Panels[4].Text := (FActiveControl as IDesignEpiControl).EpiControl.Name.Text;
+  EpiControl := (FActiveControl as IDesignEpiControl).EpiControl;
+
+  S := '';
+  if Sender is TDesignField then
+    S := 'F: ' + EpiControl.Name.Text + BoolToStr(TEpiField(EpiControl).Question.Caption.Text<>'', ' (' + TEpiField(EpiControl).Question.Caption.Text + ')', ' ');
+  if Sender is TDesignHeading then
+    S := 'H: ' + TEpiHeading(EpiControl).Caption.Text;
+  if Sender is TDesignSection then
+    S := 'S: ' + EpiControl.Name.Text;
+  DesignerStatusBar.Panels[4].Text := S;
 
   if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
     FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
@@ -1513,7 +1528,7 @@ begin
     TDesignHeading(FActiveControl).ParentColor := true;
   FActiveControl := nil;
 
-  DesingerStatusBar.Panels[4].Text := '';
+  DesignerStatusBar.Panels[4].Text := '';
 end;
 
 procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;
@@ -1654,6 +1669,21 @@ begin
   FDesignerBox.OnKeyDown   := @DesignKeyDown;
   FActiveDockSite := FDesignerBox;
 
+  // ========================
+  // Statusbar setup
+  // ========================
+  with DesignerStatusBar do
+  begin
+    BeginUpdate;
+    Panels[0].Width := {$IFDEF WINDOWS}  70 {$ELSE}  90 {$ENDIF};  // Sections
+    Panels[1].Width := {$IFDEF WINDOWS}  70 {$ELSE}  80 {$ENDIF};  // Fields
+    Panels[2].Width := {$IFDEF WINDOWS}  90 {$ELSE} 105 {$ENDIF};  // Headings
+    Panels[3].Width := {$IFDEF WINDOWS} 100 {$ELSE} 110 {$ENDIF};  // Records
+    // Width for name is set on resize.
+    Panels[5].Width := {$IFDEF WINDOWS} 130 {$ELSE} 150 {$ENDIF};  // Mouse
+    Panels[5].Alignment := taRightJustify;
+    EndUpdate;
+  end;
   {$IFNDEF EPI_DEBUG}
   Splitter1.Enabled := false;
   Splitter1.Visible := False;
@@ -1662,6 +1692,41 @@ begin
   TestToolButton.Enabled := false;
   TestToolButton.Visible := false;
   {$ENDIF}
+end;
+
+procedure TDesignFrame.UpdateFrame;
+
+  procedure Recurse(YTree: TAVLTree);
+  var
+    Ctrl: TControl;
+    Node: TAVLTreeNode;
+  begin
+    Node := YTree.FindLowest;
+    while Assigned(Node) do
+    begin
+      Ctrl := TControl(Node.Data);
+
+      if Ctrl is TDesignSection then
+        Recurse((Ctrl as IPositionHandler).YTree)
+      else if Ctrl is TDesignField then
+      with TDesignField(Ctrl) do
+      begin
+        if ManagerSettings.ShowFieldBorder then
+          BorderStyle := bsSingle
+        else
+          BorderStyle := bsNone;
+
+        if ManagerSettings.ShowFieldNamesInLabel then
+          NameLabel.Parent := QuestionLabel.Parent
+        else
+          NameLabel.Parent := nil;
+      end;
+      Node := YTree.FindSuccessor(Node);
+    end;
+  end;
+
+begin
+  Recurse((FDesignerBox as IPositionHandler).YTree);
 end;
 
 end.

@@ -5,6 +5,7 @@ object DesignFrame: TDesignFrame
   Width = 989
   ClientHeight = 583
   ClientWidth = 989
+  OnResize = FrameResize
   TabOrder = 0
   DesignLeft = 521
   DesignTop = 250
@@ -296,7 +297,7 @@ object DesignFrame: TDesignFrame
     Beveled = True
     ResizeAnchor = akRight
   end
-  object DesingerStatusBar: TStatusBar
+  object DesignerStatusBar: TStatusBar
     Left = 0
     Height = 21
     Top = 562
@@ -1595,7 +1596,6 @@ object DesignFrame: TDesignFrame
       Category = 'File'
       Caption = 'ImportDataFileAction'
       ImageIndex = 13
-      OnExecute = ImportDataFileActionExecute
     end
     object ExportDataformAction: TAction
       Category = 'File'

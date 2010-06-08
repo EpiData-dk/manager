@@ -54,7 +54,7 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, project_frame, settings, LCLProc, LCLIntf;
+  workflow_frame, project_frame, settings, LCLProc, LCLIntf, design_frame;
 
 { TMainForm }
 
@@ -107,6 +107,8 @@ begin
   SettingForm := TSettingsForm.Create(Self);
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
+
+  TDesignFrame(TProjectFrame(PageControl1.ActivePage.Controls[0]).ActiveFrame).UpdateFrame;
 end;
 
 procedure TMainForm.ShortCutKeysMenuItemClick(Sender: TObject);

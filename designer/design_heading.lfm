@@ -1,29 +1,30 @@
 inherited DesignHeadingForm: TDesignHeadingForm
   Left = 610
-  Height = 110
+  Height = 95
   Top = 438
   Width = 323
+  ActiveControl = Panel1
   Caption = 'Heading Properties'
-  ClientHeight = 110
+  ClientHeight = 95
   ClientWidth = 323
   OnShow = FormShow
   object Panel1: TPanel[0]
     Left = 0
-    Height = 110
+    Height = 95
     Top = 0
     Width = 323
     Align = alClient
     BevelInner = bvLowered
     BevelWidth = 2
-    ClientHeight = 110
+    ClientHeight = 95
     ClientWidth = 323
     Color = clSkyBlue
     ParentColor = False
     TabOrder = 0
     object OkBtn: TBitBtn
-      Left = 158
+      Left = 160
       Height = 32
-      Top = 65
+      Top = 48
       Width = 54
       Caption = '&OK'
       Default = True
@@ -34,7 +35,7 @@ inherited DesignHeadingForm: TDesignHeadingForm
     object CancelBtn: TBitBtn
       Left = 231
       Height = 34
-      Top = 63
+      Top = 48
       Width = 81
       Cancel = True
       Caption = 'Cancel'
@@ -42,18 +43,10 @@ inherited DesignHeadingForm: TDesignHeadingForm
       ModalResult = 2
       TabOrder = 2
     end
-    object Label1: TLabel
-      Left = 8
-      Height = 14
-      Top = 4
-      Width = 42
-      Caption = 'Caption:'
-      ParentColor = False
-    end
     object CaptionEdit: TEdit
       Left = 8
-      Height = 21
-      Top = 28
+      Height = 27
+      Top = 16
       Width = 304
       TabOrder = 0
     end

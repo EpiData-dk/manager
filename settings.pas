@@ -230,8 +230,8 @@ begin
     ManagerSettings.FieldNamingStyle    := fnFirstWord;    }
 
   // Advanced:
-{  ManagerSettings.WorkingDirUTF8        := WorkingDirEdit.Text;
-  case DefaultPasteCombo.ItemIndex of
+  ManagerSettings.WorkingDirUTF8        := WorkingDirEdit.Text;
+{  case DefaultPasteCombo.ItemIndex of
     0: ManagerSettings.PasteSpecialType := ftQuestion;
     1: ManagerSettings.PasteSpecialType := ftFloat;
     2: ManagerSettings.PasteSpecialType := ftInteger;
@@ -295,6 +295,8 @@ initialization
 
 begin
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + {$IFDEF UNIX}'/data'{$ELSE}'\data'{$ENDIF};
+  if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then
+    ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8;
 end;
 
 end.

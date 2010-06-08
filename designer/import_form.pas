@@ -15,11 +15,7 @@ type
   TImportForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    ImportValueLabelsChkBox: TCheckBox;
-    ImportDataChkBox: TCheckBox;
     ImportFileEdit: TFileNameEdit;
-    GroupBox1: TGroupBox;
-    ClearDataFormChkBox: TCheckBox;
     Label1: TLabel;
     procedure ImportFileEditAcceptFileName(Sender: TObject; var Value: String);
     procedure ImportFileEditEditingDone(Sender: TObject);
@@ -38,7 +34,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport;
+  epiimport, settings;
 
 { TImportForm }
 
@@ -67,6 +63,7 @@ constructor TImportForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FDataFile := nil;
+  ImportFileEdit.InitialDir := ManagerSettings.WorkingDirUTF8;
 end;
 
 end.

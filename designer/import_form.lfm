@@ -1,11 +1,11 @@
 object ImportForm: TImportForm
   Left = 508
-  Height = 313
+  Height = 103
   Top = 383
   Width = 426
   ActiveControl = ImportFileEdit
   Caption = 'Import...'
-  ClientHeight = 313
+  ClientHeight = 103
   ClientWidth = 426
   LCLVersion = '0.9.29'
   object ImportFileEdit: TFileNameEdit
@@ -32,59 +32,25 @@ object ImportForm: TImportForm
     Caption = 'Import from:'
     ParentColor = False
   end
-  object GroupBox1: TGroupBox
-    Left = 8
-    Height = 193
-    Top = 80
-    Width = 414
-    Caption = 'Import Options'
-    ClientHeight = 174
-    ClientWidth = 410
-    TabOrder = 1
-    object ImportDataChkBox: TCheckBox
-      Left = 6
-      Height = 22
-      Top = 7
-      Width = 55
-      Caption = 'Data'
-      TabOrder = 0
-    end
-    object ImportValueLabelsChkBox: TCheckBox
-      Left = 6
-      Height = 22
-      Top = 31
-      Width = 103
-      Caption = 'Value labels'
-      TabOrder = 1
-    end
-  end
-  object ClearDataFormChkBox: TCheckBox
-    Left = 8
-    Height = 22
-    Top = 56
-    Width = 177
-    Caption = 'Clean current Dataform'
-    TabOrder = 2
-  end
   object BitBtn1: TBitBtn
-    Left = 264
+    Left = 248
     Height = 30
-    Top = 280
+    Top = 64
     Width = 75
     Caption = '&OK'
     Kind = bkOK
     ModalResult = 1
-    TabOrder = 3
+    TabOrder = 1
   end
   object BitBtn2: TBitBtn
-    Left = 347
+    Left = 331
     Height = 30
-    Top = 280
-    Width = 75
+    Top = 64
+    Width = 91
     Cancel = True
     Caption = 'Cancel'
     Kind = bkCancel
     ModalResult = 2
-    TabOrder = 4
+    TabOrder = 2
   end
 end

@@ -254,6 +254,7 @@ inherited DesignSectionForm: TDesignSectionForm
       Width = 54
       AutoSize = True
       Caption = '&OK'
+      Default = True
       Kind = bkOK
       ModalResult = 1
       TabOrder = 0

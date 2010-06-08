@@ -67,7 +67,6 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 18
           Top = 5
           Width = 44
-          BidiMode = bdRightToLeft
           Caption = 'Name:'
           ParentBidiMode = False
           ParentColor = False
@@ -77,7 +76,6 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 29
           Width = 304
-          BidiMode = bdRightToLeft
           ParentBidiMode = False
           TabOrder = 0
         end

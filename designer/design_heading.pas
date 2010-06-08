@@ -43,7 +43,6 @@ type
 
   TDesignHeadingForm = class(TDesignCustomForm)
     CancelBtn: TBitBtn;
-    Label1: TLabel;
     CaptionEdit: TEdit;
     OkBtn: TBitBtn;
     Panel1: TPanel;
