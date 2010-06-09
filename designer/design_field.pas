@@ -212,7 +212,8 @@ begin
   inherited SetParent(NewParent);
   if csDestroying in ComponentState then exit;
 
-  FNameLabel.Parent := NewParent;
+  if ManagerSettings.ShowFieldNamesInLabel then
+    FNameLabel.Parent := NewParent;
   FQuestionLabel.Parent := NewParent;
 end;
 
