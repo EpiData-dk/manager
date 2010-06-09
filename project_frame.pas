@@ -221,9 +221,9 @@ begin
          5: H.Caption.Text := 'B: Move fields/headings into and out of sections.';
          6: H.Caption.Text := 'C: Change or delete fields, sections & headings (red "X"/"DEL" key/pencil).';
          7: H.Caption.Text := 'D: Edit fields, sections or headings (using "pencil" or "ENTER" key)';
-         8: H.Caption.Text := 'NEW in this version:';
-         9: H.Caption.Text := 'Import datafile structure, Statusbar, Default working directory in settings.';
-        10: H.Caption.Text := 'Save and Read Project files (see menu - file)';
+         8: H.Caption.Text := '   NEW in this version:';
+         9: H.Caption.Text := 'E: Statusbar, Default working directory in settings.';
+        10: H.Caption.Text := 'F: Import datafile structure, Save and Read Project files (see menu - file)';
         11: H.Caption.Text := '========================================================';
         12: H.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
         13: H.Caption.Text := 'Later restricted access (via password) can be tied to section level';
