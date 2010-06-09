@@ -222,7 +222,7 @@ begin
          6: H.Caption.Text := 'C: Change or delete fields, sections & headings (red "X"/"DEL" key/pencil).';
          7: H.Caption.Text := 'D: Edit fields, sections or headings (using "pencil" or "ENTER" key)';
          8: H.Caption.Text := ' -- NEW in this version --';
-         9: H.Caption.Text := 'E: Open/Save projects in new EpiData XML File format.';
+         9: H.Caption.Text := 'E: Open/Save projects in new EpiData XML File format. (See "File" menu)';
         10: H.Caption.Text := 'F: Import datafile structure using import function.';
         11: H.Caption.Text := 'G: Added statusbar with dataform information.';
         12: H.Caption.Text := '========================================================';
