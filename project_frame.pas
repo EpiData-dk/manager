@@ -215,7 +215,7 @@ begin
 
       case i of
          1: H.Caption.Text := 'Comment and discuss on the epidata-list.';
-         2: H.Caption.Text := 'Main test in this version: add fields, headings and sections.';
+         2: H.Caption.Text := 'Main test in this version: add fields, headings and sections. Import old datafiles.';
          3: H.Caption.Text := '========================================================';
          4: H.Caption.Text := 'A: Add fields and sections - click on buttons above and click in the form';
          5: H.Caption.Text := 'B: Move fields/headings into and out of sections.';
