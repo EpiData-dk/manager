@@ -176,19 +176,18 @@ var
   S: String;
   i: Integer;
 begin
-  S := '';
+{  S := '';
   for i := 0 to FSection.Groups.Count - 1 do
     S += FSection.Groups[i].Name.Text + ',';
-  Delete(S, Length(S), 1);
+  Delete(S, Length(S), 1);}
 
   With FSection do
     Hint := WideFormat(
-      'Id: %s' + LineEnding +
       'Name: %s' + LineEnding +
-      'Groups: %s' + LineEnding +
+//      'Groups: %s' + LineEnding +
       'X: %d, Y: %d' + LineEnding +
       'W: %d, H: %d',
-      [UTF8Decode(Id), UTF8Decode(Name.Text), UTF8Decode(S),
+      [UTF8Decode(Name.Text), {UTF8Decode(S),}
        Left, Top, Width, Height]
     );
 end;

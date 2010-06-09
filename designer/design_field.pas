@@ -196,14 +196,14 @@ procedure TDesignField.UpdateHint;
 begin
   With FField do
     Hint := WideFormat(
-      'Id: %s' + LineEnding +
       'Name: %s' + LineEnding +
-      'Type: %s' + LineEnding +
+//      'Type: %s' + LineEnding +
       'Length: %d' + LineEnding +
       'Question: %s' + LineEnding +
       'X: %d, Y: %d',
-      [UTF8Decode(Id), UTF8Decode(Name.Text), '',
-       Length, UTF8Decode(Question.Caption.Text), Left, Top]
+      [UTF8Decode(Name.Text), {'',}
+       Length, UTF8Decode(Question.Caption.Text),
+       Left, Top]
     );
 end;
 

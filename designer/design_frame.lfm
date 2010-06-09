@@ -1589,6 +1589,7 @@ object DesignFrame: TDesignFrame
     object LoadDataFileAction: TAction
       Category = 'File'
       Caption = 'LoadDataFileAction'
+      Hint = 'Load Datafile'
       ImageIndex = 12
       OnExecute = LoadDataFileActionExecute
     end

@@ -15,7 +15,7 @@ object ImportForm: TImportForm
     Width = 392
     OnAcceptFileName = ImportFileEditAcceptFileName
     DialogOptions = []
-    Filter = 'EpiData/-Info files|*.rec|Stata|*.dta|All files|*.*'
+    Filter = 'Datafiles|*.rec;*.REC;*.dta;*.DTA|All files|*.*'
     FilterIndex = 0
     HideDirectories = False
     ButtonWidth = 23
@@ -38,6 +38,7 @@ object ImportForm: TImportForm
     Top = 64
     Width = 75
     Caption = '&OK'
+    Default = True
     Kind = bkOK
     ModalResult = 1
     TabOrder = 1

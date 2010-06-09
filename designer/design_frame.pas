@@ -1505,7 +1505,23 @@ begin
 
   S := '';
   if Sender is TDesignField then
-    S := 'F: ' + EpiControl.Name.Text + BoolToStr(TEpiField(EpiControl).Question.Caption.Text<>'', ' (' + TEpiField(EpiControl).Question.Caption.Text + ')', ' ');
+  with TEpiField(EpiControl) do begin
+    if FieldType in BoolFieldTypes then
+      S := 'F(b): ';
+    if FieldType in IntFieldTypes then
+      S := 'F(i): ';
+    if FieldType in FloatFieldTypes then
+      S := 'F(f): ';
+    if FieldType in DateFieldTypes then
+      S := 'F(d): ';
+    if FieldType in TimeFieldTypes then
+      S := 'F(t): ';
+    if FieldType in StringFieldTypes then
+      S := 'F(s): ';
+    S += Name.Text;
+    if Question.Caption.Text <> '' then
+      S += '(' + Question.Caption.Text + ')';
+  end;
   if Sender is TDesignHeading then
     S := 'H: ' + TEpiHeading(EpiControl).Caption.Text;
   if Sender is TDesignSection then

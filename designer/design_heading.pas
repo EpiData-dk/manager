@@ -139,11 +139,9 @@ procedure TDesignHeading.UpdateHint;
 begin
   with FHeading do
     Hint := WideFormat(
-      'Id: %s' + LineEnding +
       'Caption: %s' + LineEnding +
       'X: %d, Y: %d',
-      [UTF8Decode(Id),
-       UTF8Decode(Caption.Text),
+      [UTF8Decode(Caption.Text),
        Left,
        Top]
     );
