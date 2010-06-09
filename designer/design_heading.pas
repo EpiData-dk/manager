@@ -131,7 +131,7 @@ begin
   if (EventGroup = eegCustomBase) and
      (EventType = Word(ecceDestroy)) then exit;
 
-  Caption := TEpiTranslatedText(Sender).Text;
+  Caption := EpiTextToControlText(TEpiTranslatedText(Sender).Text);
   UpdateHint;
 end;
 

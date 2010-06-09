@@ -307,14 +307,14 @@ object ProjectFrame: TProjectFrame
   end
   object SaveProjectDialog: TSaveDialog
     Title = 'Save Project As'
-    DefaultExt = '.epf'
-    Filter = 'EpiData Project File|*.epf|All Files|*.*'
+    DefaultExt = '.epx'
+    Filter = 'EpiData Project File|*.epx|All Files|*.*'
     left = 330
     top = 109
   end
   object OpenProjectDialog: TOpenDialog
-    DefaultExt = '.epf'
-    Filter = 'EpiData Project File|*.epf|All Files|*.*'
+    DefaultExt = '.epx'
+    Filter = 'EpiData Project File|*.epx|All Files|*.*'
     left = 330
     top = 168
   end
