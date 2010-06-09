@@ -200,42 +200,45 @@ begin
     TmpEpiSection.Top := 5;
     TmpEpiSection.Left := 20;
     TmpEpiSection.Width := {$IFDEF WINDOWS}600{$ELSE}700{$ENDIF};
-    TmpEpiSection.Height := 270;
+    TmpEpiSection.Height := 310;
 
-    for i := 1 to 11 do
+    for i := 1 to 14 do
     begin
       H := TmpEpiSection.NewHeading;
       H.Left := 20;
       H.Top  := 20 * (i - 1) + 5;
 
-      if (i >= 3) and (i <= 7) then
+      if (i >= 4) and (i <= 10) then
         H.Left := 30;
-      if (i >= 10) and (i <= 10) then
+      if (i = 13) then
         H.Left := 70;
 
       case i of
-        1: H.Caption.Text := 'Comment and discuss on the epidata-list.';
-        2: H.Caption.Text := 'Main test in this version: add fields, headings and sections.';
-        3: H.Caption.Text := '========================================================';
-        4: H.Caption.Text := 'A: Add fields and sections - click on buttons above and click in the form';
-        5: H.Caption.Text := 'B: Move fields/headings into and out of sections.';
-        6: H.Caption.Text := 'C: Change or delete fields, sections & headings (red "X"/"DEL" key/pencil).';
-        7: H.Caption.Text := 'D: Edit fields, sections or headings (using "pencil" or "ENTER" key)';
-        8: H.Caption.Text := '========================================================';
-        9: H.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
-        10: H.Caption.Text := 'Later restricted access (via password) can be tied to section level';
-        11: H.Caption.Text := 'NOTE 2): Import/Export is NOT part of this test release.';
+         1: H.Caption.Text := 'Comment and discuss on the epidata-list.';
+         2: H.Caption.Text := 'Main test in this version: add fields, headings and sections.';
+         3: H.Caption.Text := '========================================================';
+         4: H.Caption.Text := 'A: Add fields and sections - click on buttons above and click in the form';
+         5: H.Caption.Text := 'B: Move fields/headings into and out of sections.';
+         6: H.Caption.Text := 'C: Change or delete fields, sections & headings (red "X"/"DEL" key/pencil).';
+         7: H.Caption.Text := 'D: Edit fields, sections or headings (using "pencil" or "ENTER" key)';
+         8: H.Caption.Text := 'E: (NEW) Import datafile structure using import function.';
+         9: H.Caption.Text := 'F: (NEW) Added default working directory to settings.';
+        10: H.Caption.Text := 'G: (NEW) Added statusbar with dataform information.';
+        11: H.Caption.Text := '========================================================';
+        12: H.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
+        13: H.Caption.Text := 'Later restricted access (via password) can be tied to section level';
+        14: H.Caption.Text := 'NOTE 2): Export is NOT part of this test release.';
       end;
     end;
 
     TmpEpiSection := NewSection;
     TmpEpiSection.Name.Text := 'Known major bugs in EpiData Manager:';
-    TmpEpiSection.Top := 280;
+    TmpEpiSection.Top := 315;
     TmpEpiSection.Left := 20;
     TmpEpiSection.Width := {$IFDEF WINDOWS}600{$ELSE}700{$ENDIF};
     TmpEpiSection.Height := 100;
 
-    for i := 1 to 2 do
+    for i := 1 to 3 do
     begin
       H := TmpEpiSection.NewHeading;
       H.Left := 30;
@@ -245,6 +248,7 @@ begin
       case i of
         1: H.Caption.Text := 'A: On creating a new section dragging the cursor outside the program and';
         2: H.Caption.Text := 'releasing the button, can cause the drawn area not to disapear. (Windows only)';
+        3: H.Caption.Text := 'B: Dragging fields/headings/sections in Mac OS X may not always work.';
       end;
     end;
   end;
