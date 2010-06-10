@@ -161,7 +161,8 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dEPI_DEBUG1 -dEPI_RELEASE"/>
+      <CustomOptions Value="-dEPI_DEBUG1
+-dEPI_RELEASE"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

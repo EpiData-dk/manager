@@ -1584,6 +1584,9 @@ object DesignFrame: TDesignFrame
       Hint = 'Delete...'
       ImageIndex = 11
       OnExecute = DeleteControlActionExecute
+      SecondaryShortCuts.Strings = (
+        'Shift+Del'
+      )
       ShortCut = 46
     end
     object LoadDataFileAction: TAction

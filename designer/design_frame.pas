@@ -101,7 +101,7 @@ type
     procedure   Button3Click(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
-    procedure FrameResize(Sender: TObject);
+    procedure   FrameResize(Sender: TObject);
     procedure   LoadDataFileActionExecute(Sender: TObject);
     procedure   MoveDownActionExecute(Sender: TObject);
     procedure   MoveEndActionExecute(Sender: TObject);
@@ -218,7 +218,7 @@ implementation
 
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
-  main, settings, epiimport, LCLProc;
+  main, settings, epiimport, LCLProc, dialogs;
 
 type
 
@@ -432,12 +432,40 @@ var
   Node, NNode: TAVLTreeNode;
   YTree: TAVLTree;
 begin
-  LocalCtrl := FActiveControl;
-  ExitControl(nil);
+  EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
+  Node := nil;
 
-  EpiCtrl := (LocalCtrl as IDesignEpiControl).EpiControl;
+  {$IFNDEF EPI_DEBUG}
+  if not (ssShift in GetKeyShiftState) then
+  begin
+    if MessageDlg('Warning', 'Are you sure you want to delete?',
+      mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+
+
+    if FActiveControl is TDesignSection then
+    begin
+      YTree := (FActiveControl as IPositionHandler).YTree;
+      Node := Ytree.FindLowest;
+      while Assigned(Node) do
+      begin
+        if TControl(Node.Data) is TDesignField then break;
+        Node := YTree.FindSuccessor(Node);
+      end;
+    end else if FActiveControl is TDesignField then
+      Node := (FActiveControl as IDesignEpiControl).YTreeNode;
+
+    if (Assigned(Node)) and
+       (DataFile.Size > 0) and
+       (MessageDlg('Warning', 'Field(s) contains data.' + LineEnding +
+        'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
+      exit;
+  end;  // ssShift!
+  {$ENDIF}
+
+  LocalCtrl := FActiveControl;
   Node    := (LocalCtrl as IDesignEpiControl).YTreeNode;
   YTree   := (LocalCtrl.Parent as IPositionHandler).YTree;
+  ExitControl(nil);
 
   NNode := YTree.FindSuccessor(Node);
   if Assigned(NNode) then
@@ -449,7 +477,6 @@ begin
   else
     EnterControl(nil);
 
-  // TODO : Show warning when containing data.
   RemoveFromPositionHandler(LocalCtrl.Parent as IPositionHandler, LocalCtrl);
   EpiCtrl.Free;  // This also removes the epicontrol from it's parent/list.
   LocalCtrl.Free;
@@ -503,9 +530,9 @@ begin
   Ext := ExtractFileExt(UTF8LowerCase(Fn));
 
   if ext = '.rec' then
-    Importer.ImportRec(Fn, FDataFile, false)
+    Importer.ImportRec(Fn, FDataFile, true)
   else if ext = '.dta' then
-    Importer.ImportStata(Fn, FDataFile, false);
+    Importer.ImportStata(Fn, FDataFile, true);
   Importer.Free;
 
   FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
