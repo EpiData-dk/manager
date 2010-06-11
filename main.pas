@@ -31,6 +31,8 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
@@ -38,13 +40,18 @@ type
     procedure ShortIntroMenuItemClick(Sender: TObject);
     procedure ShowWorkFlowActionExecute(Sender: TObject);
   private
+    FModified: boolean;
     { private declarations }
     WorkFlowSheet: TTabSheet;
     FActiveFrame: TFrame;
     TabNameCount: integer;
+    procedure SetCaption;
+    procedure SetModified(const AValue: boolean);
+    procedure ProjectModified(Sender: TObject);
   public
     { public declarations }
-  end; 
+    property Modified: boolean read FModified write SetModified;
+  end;
 
 var
   MainForm: TMainForm; 
@@ -60,13 +67,28 @@ uses
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
-  Caption := 'EpiData Project and Data Manager (v' + GetManagerVersion + ')';
+  SetCaption;
 //  ShowWorkFlowAction.Execute;
   {$IFDEF EPI_RELEASE}
   Width := 800;
   Height := 600;
   {$ENDIF}
   NewProjectAction.Execute;
+end;
+
+procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  {$IFDEF EPI_RELEASE}
+  if Modified and
+     (MessageDlg('Warning', 'Content has been modified since last save.' + LineEnding +
+                'Are you sure you want to close?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
+    CanClose := false;
+  {$ENDIF}
+end;
+
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  Modified := false;
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
@@ -86,6 +108,7 @@ begin
   Frame.Name := 'ProjectFrame' + IntToStr(TabNameCount);
   Frame.Align := alClient;
   Frame.Parent := TabSheet;
+  Frame.OnModified := @ProjectModified;
   Frame.NewDataFormAction.Execute;
   FActiveFrame := Frame;
   PageControl1.ActivePage := TabSheet;
@@ -95,7 +118,6 @@ begin
   SaveProjectMenuItem.Action := Frame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := Frame.SaveProjectAsAction;
   OpenProjectMenuItem.Action := Frame.OpenProjectAction;
-
 
   Inc(TabNameCount);
 end;
@@ -144,6 +166,25 @@ begin
     WorkFlowSheet.Caption := 'WorkFlow';
   end;
   PageControl1.ActivePage := WorkFlowSheet;
+end;
+
+procedure TMainForm.SetCaption;
+begin
+  Caption := 'EpiData Project and Data Manager (v' + GetManagerVersion + ')';
+  if Modified then
+    Caption := Caption + ' (modified)';
+end;
+
+procedure TMainForm.SetModified(const AValue: boolean);
+begin
+  if FModified = AValue then exit;
+  FModified := AValue;
+  SetCaption;
+end;
+
+procedure TMainForm.ProjectModified(Sender: TObject);
+begin
+  Modified := TProjectFrame(Sender).Modified;
 end;
 
 end.

@@ -41,6 +41,8 @@ type
     { private declarations }
     FFileName: string;
     FActiveFrame: TFrame;
+    FModified: Boolean;
+    FOnModified: TNotifyEvent;
     FrameCount: integer;
     FEpiDocument: TEpiDocument;
     procedure OnDataFileChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
@@ -49,14 +51,18 @@ type
     procedure DoSaveProject(AFileName: string);
     procedure DoOpenProject(AFileName: string);
     procedure DoNewDataForm(Df: TEpiDataFile);
-
     procedure DoCreateReleaseSections;
+    procedure EpiDocumentModified(Sender: TObject);
+    procedure SetModified(const AValue: Boolean);
+    procedure SetOnModified(const AValue: TNotifyEvent);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     property   EpiDocument: TEpiDocument read FEpiDocument;
     property   ActiveFrame: TFrame read FActiveFrame;
     property   ProjectFileName: string read FFileName;
+    property   Modified: Boolean read FModified write SetModified;
+    property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
   end;
 
 implementation
@@ -90,6 +96,7 @@ begin
   Df := EpiDocument.DataFiles.NewDataFile;
   Df.Name.Text := 'Dataform ' + IntToStr(FrameCount);
   DoCreateReleaseSections;
+  EpiDocument.Modified := false;
 
   DoNewDataForm(Df);
 end;
@@ -132,6 +139,7 @@ function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
   Result := TEpiDocument.Create('en');
   Result.DataFiles.OnNewItemClass := @NewDataFileItem;
+  Result.OnModified := @EpiDocumentModified;
 end;
 
 function TProjectFrame.NewDataFileItem(Sender: TEpiCustomList;
@@ -148,10 +156,11 @@ begin
   if AFileName <> ProjectFileName then
     FFileName := AFileName;
   Fs := TFileStream.Create(AFileName, fmCreate);
-  Ss := TStringStream.Create(FEpiDocument.SaveToXml());
+  Ss := TStringStream.Create(EpiDocument.SaveToXml());
   Fs.CopyFrom(Ss, Ss.Size);
   Ss.Free;
   Fs.Free;
+  EpiDocument.Modified := false;
 end;
 
 procedure TProjectFrame.DoOpenProject(AFileName: string);
@@ -271,6 +280,25 @@ begin
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
   {$ENDIF}
+end;
+
+procedure TProjectFrame.EpiDocumentModified(Sender: TObject);
+begin
+  Modified := TEpiDocument(Sender).Modified;
+end;
+
+procedure TProjectFrame.SetModified(const AValue: Boolean);
+begin
+  if FModified = AValue then exit;
+  FModified := AValue;
+  if Assigned(FOnModified) then
+    FOnModified(Self);
+end;
+
+procedure TProjectFrame.SetOnModified(const AValue: TNotifyEvent);
+begin
+  if FOnModified = AValue then exit;
+  FOnModified := AValue;
 end;
 
 constructor TProjectFrame.Create(TheOwner: TComponent);

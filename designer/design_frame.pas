@@ -203,6 +203,8 @@ type
     { Visual presentation }
     procedure   VisualFeedbackHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   private
+    FModified: Boolean;
+    FOnModified: TNotifyEvent;
     { Property methods }
     procedure   SetDataFile(const AValue: TEpiDataFile);
   public
