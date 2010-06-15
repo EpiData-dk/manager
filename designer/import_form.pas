@@ -15,6 +15,7 @@ type
   TImportForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
+    ImportDataChkBox: TCheckBox;
     ImportFileEdit: TFileNameEdit;
     Label1: TLabel;
     procedure ImportFileEditAcceptFileName(Sender: TObject; var Value: String);
@@ -57,6 +58,11 @@ end;
 procedure TImportForm.SetDataFile(const AValue: TEpiDataFile);
 begin
   FDataFile := AValue;
+  if DataFile.Size > 0 then
+  begin
+    ImportDataChkBox.Checked := false;
+    ImportDataChkBox.Enabled := false;
+  end;
 end;
 
 constructor TImportForm.Create(TheOwner: TComponent);

@@ -456,6 +456,18 @@ begin
     end else if FActiveControl is TDesignField then
       Node := (FActiveControl as IDesignEpiControl).YTreeNode;
 
+    // Issue warning for last data-containing control will reset size to 0 (zero).
+    if (DataFile.Size > 0) and (
+         ((DataFile.Fields.Count = 1) and (FActiveControl is TDesignField)) or
+         ((FActiveControl is TDesignSection) and
+           (TEpiSection(TDesignSection(FActiveControl).EpiControl).Fields.Count = DataFile.Fields.Count))
+       ) then
+    begin
+      if MessageDlg('Warning', 'Last field/section containing data is being deleted.' + LineEnding +
+                    'This will reset datafile to 0 (zero) records. Are you sure you want to delete?',
+                    mtWarning, mbYesNo, 0, mbNo) = mrNo then
+        exit;
+    end else
     if (Assigned(Node)) and
        (DataFile.Size > 0) and
        (MessageDlg('Warning', 'Field(s) contains data.' + LineEnding +
@@ -463,6 +475,7 @@ begin
       exit;
   end;  // ssShift!
   {$ENDIF}
+
 
   LocalCtrl := FActiveControl;
   Node    := (LocalCtrl as IDesignEpiControl).YTreeNode;
@@ -482,6 +495,9 @@ begin
   RemoveFromPositionHandler(LocalCtrl.Parent as IPositionHandler, LocalCtrl);
   EpiCtrl.Free;  // This also removes the epicontrol from it's parent/list.
   LocalCtrl.Free;
+
+  if DataFile.Fields.Count = 0 then
+    DataFile.Size := 0;
 end;
 
 
@@ -532,13 +548,14 @@ begin
   Ext := ExtractFileExt(UTF8LowerCase(Fn));
 
   if ext = '.rec' then
-    Importer.ImportRec(Fn, FDataFile, true)
+    Importer.ImportRec(Fn, FDataFile, ImportForm.ImportDataChkBox.Checked)
   else if ext = '.dta' then
-    Importer.ImportStata(Fn, FDataFile, true);
+    Importer.ImportStata(Fn, FDataFile, ImportForm.ImportDataChkBox.Checked);
   Importer.Free;
 
   FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
   FDataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+
 
   ImportForm.Free;
 end;
@@ -1158,8 +1175,9 @@ begin
     if Sender is TEpiHeadings then
       DesignerStatusBar.Panels.Items[2].Text := 'Headings: ' + IntToStr(SdrList.Count);
   end;
+//  if (Sender is TEpiDataFile) and (EventType = Word(edceSize)) then
+    DesignerStatusBar.Panels[3].Text := Format('Records: %d', [DataFile.Size]);
 end;
-
 
 procedure TDesignFrame.SetDataFile(const AValue: TEpiDataFile);
 var
@@ -1176,6 +1194,7 @@ begin
 
   // Register the visual feedback hook.
   DataFile.BeginUpdate;
+  DataFile.RegisterOnChangeHook(@VisualFeedbackHook);
   DataFile.Sections.RegisterOnChangeHook(@VisualFeedbackHook);
   DataFile.Fields.RegisterOnChangeHook(@VisualFeedbackHook);
   DataFile.Headings.RegisterOnChangeHook(@VisualFeedbackHook);
@@ -1202,7 +1221,6 @@ begin
       end;
     end;
   end;
-  DesignerStatusBar.Panels[3].Text := Format('Records: %d', [DataFile.Size]);
   DataFile.EndUpdate;
 end;
 
