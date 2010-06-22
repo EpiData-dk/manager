@@ -30,7 +30,7 @@ type
     Button2: TButton;
     Button3: TButton;
     DateFieldPopupMenu: TPopupMenu;
-    ImportDataFileAction: TAction;
+    AddStructureAction: TAction;
     Label6: TLabel;
     LoadDataFileAction: TAction;
     ExportDataformAction: TAction;
@@ -96,6 +96,7 @@ type
     Divider4: TToolButton;
     TodayDateSubMenu: TMenuItem;
     TestToolButton: TToolButton;
+    procedure AddStructureActionExecute(Sender: TObject);
     procedure   Button1Click(Sender: TObject);
     procedure   Button2Click(Sender: TObject);
     procedure   Button3Click(Sender: TObject);
@@ -185,6 +186,7 @@ type
       Shift: TShiftState);
     procedure   EnterControl(Sender: TObject);
     procedure   ExitControl(Sender: TObject);
+    procedure   DeleteControl(Sender: TObject);
   private
     { Position handling }
     procedure   FindNearestControls(ParentControl: TWinControl;
@@ -220,7 +222,7 @@ implementation
 
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
-  main, settings, epiimport, LCLProc, dialogs;
+  main, settings, epiimport, LCLProc, dialogs, epimiscutils;
 
 type
 
@@ -434,7 +436,6 @@ var
   Node, NNode: TAVLTreeNode;
   YTree: TAVLTree;
 begin
-  EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
   Node := nil;
 
   {$IFNDEF EPI_DEBUG}
@@ -476,25 +477,7 @@ begin
   end;  // ssShift!
   {$ENDIF}
 
-
-  LocalCtrl := FActiveControl;
-  Node    := (LocalCtrl as IDesignEpiControl).YTreeNode;
-  YTree   := (LocalCtrl.Parent as IPositionHandler).YTree;
-  ExitControl(nil);
-
-  NNode := YTree.FindSuccessor(Node);
-  if Assigned(NNode) then
-    EnterControl(TControl(NNode.Data))
-  else
-    NNode := YTree.FindPrecessor(Node);
-  if Assigned(NNode) then
-    EnterControl(TControl(NNode.Data))
-  else
-    EnterControl(nil);
-
-  RemoveFromPositionHandler(LocalCtrl.Parent as IPositionHandler, LocalCtrl);
-  EpiCtrl.Free;  // This also removes the epicontrol from it's parent/list.
-  LocalCtrl.Free;
+  DeleteControl(nil);
 
   if DataFile.Fields.Count = 0 then
     DataFile.Size := 0;
@@ -518,24 +501,76 @@ begin
       Panels[3].Width + Panels[5].Width);
 end;
 
+procedure TDesignFrame.AddStructureActionExecute(Sender: TObject);
+var
+  Dlg: TOpenDialog;
+  Importer: TEpiImport;
+  Ext: String;
+  Fn: String;
+begin
+  Dlg := TOpenDialog.Create(Self);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+  Dlg.Filter := GetEpiDialogFilter(false, true, false, false, false,
+    true, false, false, true, false);
+  if not Dlg.Execute then exit;
+
+  DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
+  DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+
+  FLastRecYPos := -1;
+  FLastRecCtrl := nil;
+  Importer := TEpiImport.Create;
+  Fn := Dlg.FileName; //ImportForm.ImportFileEdit.FileName;
+  Ext := ExtractFileExt(UTF8LowerCase(Fn));
+
+  if ext = '.rec' then
+    Importer.ImportRec(Fn, FDataFile, false)
+  else if ext = '.dta' then
+    Importer.ImportStata(Fn, FDataFile, false);
+  Importer.Free;
+
+  DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+  DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+  Dlg.Free;
+end;
+
 procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
 var
   ImportForm: TImportForm;
   Importer: TEpiImport;
   Fn: String;
   Ext: String;
+  Dlg: TOpenDialog;
 begin
-  ImportForm := TImportForm.Create(Self);
+  {$IFNDEF EPI_DEBUG}
+  if (DataFile.Size > 0) or
+     (DataFile.Fields.Count > 0) or
+     (DataFile.Headings.Count > 0) or
+     (DataFile.Sections.Count > 1) then
+  begin
+    if MessageDlg('Warning',
+      'Dataform is not empty. Loading a data file will clear dataform.' + LineEnding +
+      'Are you sure you want to proceed?', mtWarning, mbYesNo, 0, mbNo) <> mrYes then exit;
+  end;
+  {$ENDIF}
+
+{  ImportForm := TImportForm.Create(Self);
   ImportForm.DataFile := FDataFile;
 
-  if ImportForm.ShowModal <> mrOK then exit;
+  if ImportForm.ShowModal <> mrOK then exit;  }
+
+  Dlg := TOpenDialog.Create(Self);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+  Dlg.Filter := GetEpiDialogFilter(false, true, false, false, false,
+    true, false, false, true, false);
+  if not Dlg.Execute then exit;
 
   ExitControl(nil);
   if (FDesignerBox as IPositionHandler).YTree.Count > 0 then
   begin
     FActiveControl := TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data);
     While (FActiveControl <> FDesignerBox) do
-      DeleteControlAction.Execute;
+      DeleteControl(nil);
   end;
 
   FDataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, true);
@@ -544,20 +579,20 @@ begin
   FLastRecYPos := -1;
   FLastRecCtrl := nil;
   Importer := TEpiImport.Create;
-  Fn := ImportForm.ImportFileEdit.FileName;
+  Fn := Dlg.FileName; //ImportForm.ImportFileEdit.FileName;
   Ext := ExtractFileExt(UTF8LowerCase(Fn));
 
   if ext = '.rec' then
-    Importer.ImportRec(Fn, FDataFile, ImportForm.ImportDataChkBox.Checked)
+    Importer.ImportRec(Fn, FDataFile, true)
   else if ext = '.dta' then
-    Importer.ImportStata(Fn, FDataFile, ImportForm.ImportDataChkBox.Checked);
+    Importer.ImportStata(Fn, FDataFile, true);
   Importer.Free;
 
   FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
   FDataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
 
-
-  ImportForm.Free;
+  Dlg.Free;
+//  ImportForm.Free;
 end;
 
 procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);
@@ -1592,6 +1627,34 @@ begin
   FActiveControl := nil;
 
   DesignerStatusBar.Panels[4].Text := '';
+end;
+
+procedure TDesignFrame.DeleteControl(Sender: TObject);
+var
+  EpiCtrl: TEpiCustomControlItem;
+  LocalCtrl: TControl;
+  Node, NNode: TAVLTreeNode;
+  YTree: TAVLTree;
+begin
+  LocalCtrl := FActiveControl;
+  EpiCtrl := (LocalCtrl as IDesignEpiControl).EpiControl;
+  Node    := (LocalCtrl as IDesignEpiControl).YTreeNode;
+  YTree   := (LocalCtrl.Parent as IPositionHandler).YTree;
+  ExitControl(nil);
+
+  NNode := YTree.FindSuccessor(Node);
+  if Assigned(NNode) then
+    EnterControl(TControl(NNode.Data))
+  else
+    NNode := YTree.FindPrecessor(Node);
+  if Assigned(NNode) then
+    EnterControl(TControl(NNode.Data))
+  else
+    EnterControl(nil);
+
+  RemoveFromPositionHandler(LocalCtrl.Parent as IPositionHandler, LocalCtrl);
+  EpiCtrl.Free;  // This also removes the epicontrol from it's parent/list.
+  LocalCtrl.Free;
 end;
 
 procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;

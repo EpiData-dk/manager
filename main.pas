@@ -73,6 +73,9 @@ begin
   Width := 800;
   Height := 600;
   {$ENDIF}
+
+  LoadSettingsFromIni(GetCurrentDirUTF8 + DirectorySeparator + 'epidatamanager.ini');
+
   NewProjectAction.Execute;
 end;
 

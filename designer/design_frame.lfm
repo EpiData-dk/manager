@@ -7,8 +7,8 @@ object DesignFrame: TDesignFrame
   ClientWidth = 989
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 521
-  DesignTop = 250
+  DesignLeft = 603
+  DesignTop = 234
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -173,7 +173,7 @@ object DesignFrame: TDesignFrame
     object ImportToolButton: TToolButton
       Left = 334
       Top = 1
-      Action = ImportDataFileAction
+      Action = AddStructureAction
       ParentShowHint = False
       ShowHint = True
     end
@@ -1596,10 +1596,12 @@ object DesignFrame: TDesignFrame
       ImageIndex = 12
       OnExecute = LoadDataFileActionExecute
     end
-    object ImportDataFileAction: TAction
+    object AddStructureAction: TAction
       Category = 'File'
-      Caption = 'ImportDataFileAction'
+      Caption = 'Add Structure'
+      Hint = 'Add structure from file...'
       ImageIndex = 13
+      OnExecute = AddStructureActionExecute
     end
     object ExportDataformAction: TAction
       Category = 'File'
