@@ -74,6 +74,7 @@ begin
   Height := 600;
   {$ENDIF}
 
+  // TODO : Settings can be loaded from commandline?
   LoadSettingsFromIni(GetCurrentDirUTF8 + DirectorySeparator + 'epidatamanager.ini');
 
   NewProjectAction.Execute;

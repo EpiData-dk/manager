@@ -44,7 +44,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="11">
+    <Units Count="12">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -124,6 +124,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="settings"/>
       </Unit10>
+      <Unit11>
+        <Filename Value="utils/managerprocs.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="managerprocs"/>
+      </Unit11>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -133,7 +138,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)/"/>
-      <OtherUnitFiles Value="designer/"/>
+      <OtherUnitFiles Value="designer/;utils/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
@@ -157,6 +162,7 @@
         <UseMsgFile Value="True"/>
       </CompilerMessages>
       <CustomOptions Value="-dEPI_DEBUG
+
 -dEPI_RELEASE1"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>

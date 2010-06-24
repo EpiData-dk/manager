@@ -21,6 +21,13 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    PasteAsHeadingMenuItem: TMenuItem;
+    PasteAsHeadingAction: TAction;
+    DockingSitePopUpMenuDeleteItem: TMenuItem;
+    DockingSitePopUpMenuEditItem: TMenuItem;
+    DockingSitePopUpMenuDivider1: TMenuItem;
+    PasteAsIntAction: TAction;
+    DockingSitePopUpMenu: TPopupMenu;
     MoveEndAction: TAction;
     MoveHomeAction: TAction;
     MovePgDnAction: TAction;
@@ -47,6 +54,7 @@ type
     NewTimeNowFieldMenu: TMenuItem;
     NewTimeFieldMenu: TMenuItem;
     DesignerStatusBar: TStatusBar;
+    PasteAsIntMenuItem: TMenuItem;
     TimeSubMenu: TMenuItem;
     NewAutoIncMenu: TMenuItem;
     NewCryptFieldMenu: TMenuItem;
@@ -72,7 +80,7 @@ type
     NewYMDTodayFieldMenu: TMenuItem;
     OtherFieldsPopup: TPopupMenu;
     Panel1: TPanel;
-    EpiControlPopUpMenu: TPopupMenu;
+    DesignControlPopUpMenu: TPopupMenu;
     SelectorToolButton: TToolButton;
     Splitter1: TSplitter;
     EditToolButton: TToolButton;
@@ -119,6 +127,8 @@ type
     procedure   NewOtherFieldMenuClick(Sender: TObject);
     procedure   NewStringFieldActionExecute(Sender: TObject);
     procedure   NewYMDFieldActionExecute(Sender: TObject);
+    procedure   PasteAsHeadingActionExecute(Sender: TObject);
+    procedure   PasteAsIntActionExecute(Sender: TObject);
     procedure   TestToolButtonClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
@@ -135,15 +145,15 @@ type
     function    ShowForm(EpiControl: TEpiCustomControlItem;
       Pos: TPoint): TModalResult;
     procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
-
   private
-    { Import/Export }
+    { Import/Export/Paste }
     FLastRecYPos: Integer;
     FLastRecCtrl: TControl;
     procedure   DoPostImportAlignment(ParentControl: TWinControl;
       StartControl, EndControl: TControl);
     procedure   ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
+    procedure   PasteAsField(FieldType: TEpiFieldType);
   private
     { Docksite methods }
     // - mouse
@@ -222,7 +232,8 @@ implementation
 
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
-  main, settings, epiimport, LCLProc, dialogs, epimiscutils;
+  main, settings, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
+  managerprocs;
 
 type
 
@@ -902,6 +913,36 @@ begin
   NewShortCutFieldControl(ftYMDDate, FActiveDockSite);
 end;
 
+procedure TDesignFrame.PasteAsHeadingActionExecute(Sender: TObject);
+var
+  Cbl: TStringList;
+  i: Integer;
+  Pt: TPoint;
+  H: TEpiHeading;
+begin
+  Cbl := TStringList.Create;
+  try
+    ReadClipBoard(Cbl);
+
+    for i := 0 to Cbl.Count - 1 do
+    begin
+      if Trim(Cbl[i]) = '' then continue;
+
+      Pt := FindNewPosition(FActiveDockSite, TDesignHeading);
+      H := NewHeading;
+      H.Caption.Text := Trim(Cbl[i]);
+      NewDesignControl(TDesignHeading, FActiveDockSite, Pt, H);
+    end;
+  finally
+    Cbl.Free;
+  end;
+end;
+
+procedure TDesignFrame.PasteAsIntActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftInteger);
+end;
+
 procedure TDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
   MainForm.FlipChildren(true);
@@ -1012,7 +1053,10 @@ end;
 
 procedure TDesignFrame.ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
 begin
-  EpiControlPopUpMenu.PopUp(Pos.X, Pos.Y);
+  if Supports(Sender, IPositionHandler) then
+    DockingSitePopUpMenu.PopUp(Pos.X, Pos.Y)
+  else
+    DesignControlPopUpMenu.PopUp(Pos.X, Pos.Y);
 end;
 
 procedure TDesignFrame.DoPostImportAlignment(ParentControl: TWinControl; StartControl,
@@ -1121,6 +1165,40 @@ begin
 
     FLastRecYPos := TEpiCustomControlItem(Sender).Top;
     FLastRecCtrl := NewDesignControl(Cls, FDesignerBox, Pt, TEpiCustomControlItem(Sender));
+  end;
+end;
+
+procedure TDesignFrame.PasteAsField(FieldType: TEpiFieldType);
+var
+  Cbl: TStringList;
+  i: Integer;
+  Pt: TPoint;
+  TmpField: TEpiField;
+begin
+  Cbl := TStringList.Create;
+  try
+    ReadClipBoard(Cbl);
+
+    for i := 0 to Cbl.Count - 1 do
+    begin
+      if Trim(Cbl[i]) = '' then continue;
+
+      Pt := FindNewPosition(FActiveDockSite, TDesignField);
+      TmpField := NewField(FieldType);
+      with TmpField do
+      begin
+        Name.Text := FirstWord(Cbl[i]);
+{        case ManagerSettings.FieldNamingStyle of
+          fnFirstWord: FieldName := FirstWord(Cbl[i]);
+          fnAuto:      FieldName := AutoFieldName(Cbl[i]);
+        end;                       }
+//        FieldName := DataFile.CreateUniqueFieldName(FieldName);
+        Question.Caption.Text := Trim(Cbl[i]);
+      end;
+      NewDesignControl(TDesignField, FActiveDockSite, Pt, TmpField);
+    end;
+  finally
+    Cbl.Free;
   end;
 end;
 
@@ -1264,9 +1342,6 @@ procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;
 var
   WinSender: TWinControl absolute Sender;
 begin
-  FActiveSection := TEpiSection((Sender as IDesignEpiControl).EpiControl);
-  FActiveDockSite := WinSender;
-
   case Button of
     mbLeft: FLeftMouseDown := WinSender.ClientToScreen(Point(X, Y));
     mbRight: FRightMouseDown := WinSender.ClientToScreen(Point(X, Y));
@@ -1584,6 +1659,16 @@ begin
     TWinControl(Sender).SetFocus;
 
   EpiControl := (FActiveControl as IDesignEpiControl).EpiControl;
+
+  if EpiControl is TEpiSection then
+    FActiveSection := TEpiSection(EpiControl)
+  else
+    FActiveSection := TEpiSection(EpiControl.Owner.Owner);
+
+  if Supports(Sender, IPositionHandler) then
+    FActiveDockSite := TWinControl(Sender)
+  else
+    FActiveDockSite := TControl(Sender).Parent;
 
   S := '';
   if Sender is TDesignField then

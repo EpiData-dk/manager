@@ -1644,8 +1644,22 @@ object DesignFrame: TDesignFrame
       OnExecute = MoveEndActionExecute
       ShortCut = 35
     end
+    object PasteAsHeadingAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Headings'
+      Hint = 'Paste As Headings...'
+      ImageIndex = 8
+      OnExecute = PasteAsHeadingActionExecute
+    end
+    object PasteAsIntAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Integer'
+      Hint = 'Paste As Integer...'
+      ImageIndex = 1
+      OnExecute = PasteAsIntActionExecute
+    end
   end
-  object EpiControlPopUpMenu: TPopupMenu
+  object DesignControlPopUpMenu: TPopupMenu
     Images = DesignerImageList
     left = 248
     top = 224
@@ -2565,6 +2579,30 @@ object DesignFrame: TDesignFrame
       }
       ImageIndex = 1
       OnClick = NewOtherFieldMenuClick
+    end
+  end
+  object DockingSitePopUpMenu: TPopupMenu
+    Images = DesignerImageList
+    left = 408
+    top = 296
+    object DockingSitePopUpMenuEditItem: TMenuItem
+      Action = EditControlAction
+      OnClick = EditControlActionExecute
+    end
+    object DockingSitePopUpMenuDeleteItem: TMenuItem
+      Action = DeleteControlAction
+      OnClick = DeleteControlActionExecute
+    end
+    object DockingSitePopUpMenuDivider1: TMenuItem
+      Caption = '-'
+    end
+    object PasteAsHeadingMenuItem: TMenuItem
+      Action = PasteAsHeadingAction
+      OnClick = PasteAsHeadingActionExecute
+    end
+    object PasteAsIntMenuItem: TMenuItem
+      Action = PasteAsIntAction
+      OnClick = PasteAsIntActionExecute
     end
   end
 end
