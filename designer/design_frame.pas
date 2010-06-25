@@ -21,6 +21,10 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    PasteAsFloatMenuItem: TMenuItem;
+    PasteAsStringMenuItem: TMenuItem;
+    PasteAsStringAction: TAction;
+    PasteAsFloatAction: TAction;
     PasteAsHeadingMenuItem: TMenuItem;
     PasteAsHeadingAction: TAction;
     DockingSitePopUpMenuDeleteItem: TMenuItem;
@@ -34,8 +38,6 @@ type
     MovePgUpAction: TAction;
     MoveDownAction: TAction;
     MoveUpAction: TAction;
-    Button2: TButton;
-    Button3: TButton;
     DateFieldPopupMenu: TPopupMenu;
     AddStructureAction: TAction;
     Label6: TLabel;
@@ -127,8 +129,10 @@ type
     procedure   NewOtherFieldMenuClick(Sender: TObject);
     procedure   NewStringFieldActionExecute(Sender: TObject);
     procedure   NewYMDFieldActionExecute(Sender: TObject);
+    procedure PasteAsFloatActionExecute(Sender: TObject);
     procedure   PasteAsHeadingActionExecute(Sender: TObject);
     procedure   PasteAsIntActionExecute(Sender: TObject);
+    procedure PasteAsStringActionExecute(Sender: TObject);
     procedure   TestToolButtonClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
@@ -174,7 +178,6 @@ type
       Y: Integer);
     procedure   DockSiteUnDock(Sender: TObject; Client: TControl;
       NewTarget: TWinControl; var Allow: Boolean);
-
   private
     { Design controls - methods }
     FActiveControl: TControl;
@@ -913,6 +916,11 @@ begin
   NewShortCutFieldControl(ftYMDDate, FActiveDockSite);
 end;
 
+procedure TDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftFloat);
+end;
+
 procedure TDesignFrame.PasteAsHeadingActionExecute(Sender: TObject);
 var
   Cbl: TStringList;
@@ -941,6 +949,11 @@ end;
 procedure TDesignFrame.PasteAsIntActionExecute(Sender: TObject);
 begin
   PasteAsField(ftInteger);
+end;
+
+procedure TDesignFrame.PasteAsStringActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftString);
 end;
 
 procedure TDesignFrame.TestToolButtonClick(Sender: TObject);
@@ -1033,10 +1046,10 @@ begin
   end;
   Ctrl.Parent := FDesignerBox;
 
-  // Forces designer box last in docksite list, because retrieving docksite
+{  // Forces designer box last in docksite list, because retrieving docksite
   // is not implemented fully in the LCL.
   FDesignerBox.DockSite := false;
-  FDesignerBox.DockSite := true;
+  FDesignerBox.DockSite := true;      }
 
   EnterControl(Result);
   AddToPositionHandler((FDesignerBox as IPositionHandler), Result);
