@@ -129,10 +129,10 @@ type
     procedure   NewOtherFieldMenuClick(Sender: TObject);
     procedure   NewStringFieldActionExecute(Sender: TObject);
     procedure   NewYMDFieldActionExecute(Sender: TObject);
-    procedure PasteAsFloatActionExecute(Sender: TObject);
+    procedure   PasteAsFloatActionExecute(Sender: TObject);
     procedure   PasteAsHeadingActionExecute(Sender: TObject);
     procedure   PasteAsIntActionExecute(Sender: TObject);
-    procedure PasteAsStringActionExecute(Sender: TObject);
+    procedure   PasteAsStringActionExecute(Sender: TObject);
     procedure   TestToolButtonClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private

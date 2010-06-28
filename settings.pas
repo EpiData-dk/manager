@@ -156,8 +156,8 @@ const
 
 
 function GetManagerVersion: String;
-procedure SaveSettingToIni(Const FileName: string);
-procedure LoadSettingsFromIni(Const FileName: string);
+function SaveSettingToIni(Const FileName: string): boolean;
+function LoadSettingsFromIni(Const FileName: string): boolean;
 
 implementation
 
@@ -181,63 +181,70 @@ begin
               {$IFDEF EPI_RELEASE}'r' + {$ENDIF EPI_RELEASE} RevisionStr;
 end;
 
-procedure SaveSettingToIni(Const FileName: string);
+function SaveSettingToIni(Const FileName: string): boolean;
 var
   Ini: TIniFile;
   Sec: string;
 begin
-  Ini := TIniFile.Create(FileName);
-  With Ini do
-  with ManagerSettings do
-  begin
-    {  // Visual design:
-      DefaultRightPostion:   Integer;
-      ShowFieldNamesInLabel: boolean;
-      ShowFieldBorder:       boolean;
-      SnapFields:            boolean;
-      SnappingThresHold:     Integer;
-      SpaceBtwFieldField:    Integer;
-      SpaceBtwFieldLabel:    Integer;
-      SpaceBtwLabelLabel:    Integer;}
-    Sec := 'visual';
-    WriteInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
-    WriteBool   (Sec, 'ShowFieldNamesInLabel', ShowFieldNamesInLabel);
-    WriteBool   (Sec, 'ShowFieldBorder',       ShowFieldBorder);
-    WriteBool   (Sec, 'SnapFields',            SnapFields);
-    WriteInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
-    WriteInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
-    WriteInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
-    WriteInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
+  Result := false;
 
-    {  // Field definitions:
-    IntFieldLength:        Integer;
-    FloatIntLength:        Integer;
-    FloatDecimalLength:    Integer;
-    StringFieldLength:     Integer;
-    DefaultDateType:       TEpiFieldType;
-    FieldNamePrefix:       string;
-  //    FieldNamingStyle:      TFieldNaming;}
-    Sec := 'fielddefs';
-    WriteInteger(Sec, 'IntFieldLength',     IntFieldLength);
-    WriteInteger(Sec, 'FloatIntLength',     FloatIntLength);
-    WriteInteger(Sec, 'FloatDecimalLength', FloatDecimalLength);
-    WriteInteger(Sec, 'StringFieldLength',  StringFieldLength);
-    WriteInteger(Sec, 'DefaultDateType',    Word(DefaultDateType));
+  try
+    Ini := TIniFile.Create(FileName);
+    With Ini do
+    with ManagerSettings do
+    begin
+      {  // Visual design:
+        DefaultRightPostion:   Integer;
+        ShowFieldNamesInLabel: boolean;
+        ShowFieldBorder:       boolean;
+        SnapFields:            boolean;
+        SnappingThresHold:     Integer;
+        SpaceBtwFieldField:    Integer;
+        SpaceBtwFieldLabel:    Integer;
+        SpaceBtwLabelLabel:    Integer;}
+      Sec := 'visual';
+      WriteInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
+      WriteBool   (Sec, 'ShowFieldNamesInLabel', ShowFieldNamesInLabel);
+      WriteBool   (Sec, 'ShowFieldBorder',       ShowFieldBorder);
+      WriteBool   (Sec, 'SnapFields',            SnapFields);
+      WriteInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
+      WriteInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
+      WriteInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
+      WriteInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
 
-{    // Advanced:
-    WorkingDirUTF8:        string;
-  //    PasteSpecialType:      TEpiFieldType;}
-    Sec := 'advanced';
-    WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+      {  // Field definitions:
+      IntFieldLength:        Integer;
+      FloatIntLength:        Integer;
+      FloatDecimalLength:    Integer;
+      StringFieldLength:     Integer;
+      DefaultDateType:       TEpiFieldType;
+      FieldNamePrefix:       string;
+    //    FieldNamingStyle:      TFieldNaming;}
+      Sec := 'fielddefs';
+      WriteInteger(Sec, 'IntFieldLength',     IntFieldLength);
+      WriteInteger(Sec, 'FloatIntLength',     FloatIntLength);
+      WriteInteger(Sec, 'FloatDecimalLength', FloatDecimalLength);
+      WriteInteger(Sec, 'StringFieldLength',  StringFieldLength);
+      WriteInteger(Sec, 'DefaultDateType',    Word(DefaultDateType));
+
+  {    // Advanced:
+      WorkingDirUTF8:        string;
+    //    PasteSpecialType:      TEpiFieldType;}
+      Sec := 'advanced';
+      WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+      Result := true;
+    end;
+  finally
+    Ini.Free;
   end;
-  Ini.Free;
 end;
 
-procedure LoadSettingsFromIni(Const FileName: string);
+function LoadSettingsFromIni(Const FileName: string): boolean;
 var
   Ini: TIniFile;
   Sec: String;
 begin
+  Result := false;
   ManagerSettings.IniFileName := FileName;
 
   if not FileExistsUTF8(FileName) then exit;

@@ -22,7 +22,7 @@ object MainForm: TMainForm
     TabOrder = 0
   end
   object MainMenu1: TMainMenu
-    left = 288
+    left = 392
     top = 280
     object FileMenuItem: TMenuItem
       Caption = 'File'

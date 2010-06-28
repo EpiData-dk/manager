@@ -48,6 +48,7 @@ type
     procedure SetCaption;
     procedure SetModified(const AValue: boolean);
     procedure ProjectModified(Sender: TObject);
+    procedure LoadIniFile;
   public
     { public declarations }
     property Modified: boolean read FModified write SetModified;
@@ -73,9 +74,6 @@ begin
   Width := 800;
   Height := 600;
   {$ENDIF}
-
-  // TODO : Settings can be loaded from commandline?
-  LoadSettingsFromIni(GetCurrentDirUTF8 + DirectorySeparator + 'epidatamanager.ini');
 
   NewProjectAction.Execute;
 end;
@@ -189,6 +187,18 @@ end;
 procedure TMainForm.ProjectModified(Sender: TObject);
 begin
   Modified := TProjectFrame(Sender).Modified;
+end;
+
+procedure TMainForm.LoadIniFile;
+const
+  IniName = 'epidatamanager.ini';
+begin
+  // TODO : Settings can be loaded from commandline?
+
+  if LoadSettingsFromIni(GetAppConfigDirUTF8(false) + IniName) then exit;
+
+  // Todo - this is not optimal on Non-windows OS's. Do some checks for writeability first.
+  if LoadSettingsFromIni(ExtractFilePath(Application.ExeName) + IniName) then exit;
 end;
 
 end.
