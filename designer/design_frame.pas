@@ -21,6 +21,8 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    DeleteAllControlsAction: TAction;
+    NewUpperCaseMenu: TMenuItem;
     PasteAsFloatMenuItem: TMenuItem;
     PasteAsStringMenuItem: TMenuItem;
     PasteAsStringAction: TAction;
@@ -106,10 +108,12 @@ type
     Divider4: TToolButton;
     TodayDateSubMenu: TMenuItem;
     TestToolButton: TToolButton;
+    DeleteAllToolButton: TToolButton;
     procedure AddStructureActionExecute(Sender: TObject);
     procedure   Button1Click(Sender: TObject);
     procedure   Button2Click(Sender: TObject);
     procedure   Button3Click(Sender: TObject);
+    procedure   DeleteAllControlsActionExecute(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
@@ -200,6 +204,7 @@ type
     procedure   EnterControl(Sender: TObject);
     procedure   ExitControl(Sender: TObject);
     procedure   DeleteControl(Sender: TObject);
+    procedure   DeleteAllControls;
   private
     { Position handling }
     procedure   FindNearestControls(ParentControl: TWinControl;
@@ -443,6 +448,12 @@ begin
   Clipboard.AsText :=  WriteTree((FActiveDockSite as IPositionHandler).YTree);
 end;
 
+procedure TDesignFrame.DeleteAllControlsActionExecute(Sender: TObject);
+begin
+  // TODO : Warning message.
+  DeleteAllControls;
+end;
+
 procedure TDesignFrame.DeleteControlActionExecute(Sender: TObject);
 var
   EpiCtrl: TEpiCustomControlItem;
@@ -579,13 +590,7 @@ begin
     true, false, false, true, false);
   if not Dlg.Execute then exit;
 
-  ExitControl(nil);
-  if (FDesignerBox as IPositionHandler).YTree.Count > 0 then
-  begin
-    FActiveControl := TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data);
-    While (FActiveControl <> FDesignerBox) do
-      DeleteControl(nil);
-  end;
+  DeleteAllControls;
 
   FDataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, true);
   FDataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, true);
@@ -1753,6 +1758,35 @@ begin
   RemoveFromPositionHandler(LocalCtrl.Parent as IPositionHandler, LocalCtrl);
   EpiCtrl.Free;  // This also removes the epicontrol from it's parent/list.
   LocalCtrl.Free;
+end;
+
+procedure TDesignFrame.DeleteAllControls;
+var
+  YTree: TAVLTree;
+  Node: TAVLTreeNode;
+  LocalCtrl: TControl;
+  EpiCtrl: TEpiCustomControlItem;
+begin
+  YTree := TScrollBoxEx(FDesignerBox).YTree;
+  Node  := YTree.FindLowest;
+
+  FDesignerBox.BeginUpdateBounds;
+  ExitControl(nil);
+  while Assigned(Node) do
+  begin
+    LocalCtrl := TControl(Node.Data);
+    EpiCtrl := (LocalCtrl as IDesignEpiControl).EpiControl;
+
+    EpiCtrl.Free;
+    LocalCtrl.Free;
+    Node := YTree.FindSuccessor(Node);
+  end;
+  YTree.Clear;
+  TScrollBoxEx(FDesignerBox).XTree.Clear;
+
+  EnterControl(FDesignerBox);
+
+  FDesignerBox.EndUpdateBounds;
 end;
 
 procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;

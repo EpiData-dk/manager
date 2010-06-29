@@ -25,17 +25,17 @@ object MainForm: TMainForm
     left = 392
     top = 280
     object FileMenuItem: TMenuItem
-      Caption = 'File'
+      Caption = '&File'
       object OpenProjectMenuItem: TMenuItem
-        Caption = 'Open'
+        Caption = '&Open'
       end
       object SaveProjectMenuItem: TMenuItem
-        Caption = 'Save'
+        Caption = '&Save'
         Hint = 'Save Project'
         ImageIndex = 1
       end
       object SaveProjectAsMenuItem: TMenuItem
-        Caption = 'SaveAs'
+        Caption = 'Save &As'
       end
       object FileMenuDivider1: TMenuItem
         Caption = '-'
@@ -45,20 +45,21 @@ object MainForm: TMainForm
       end
     end
     object EditMenuItem: TMenuItem
-      Caption = 'Edit'
+      Caption = '&Edit'
       object SettingsMenuItem: TMenuItem
         Action = SettingsAction
+        Caption = '&Settings'
         OnClick = SettingsActionExecute
       end
     end
     object HelpMenu: TMenuItem
-      Caption = 'Help'
+      Caption = '&Help'
       object ShortIntroMenuItem: TMenuItem
-        Caption = 'Short Introduction'
+        Caption = 'Short &Introduction'
         OnClick = ShortIntroMenuItemClick
       end
       object ShortCutKeysMenuItem: TMenuItem
-        Caption = 'Show Shortcuts'
+        Caption = 'Show &Shortcuts'
         OnClick = ShortCutKeysMenuItemClick
       end
     end

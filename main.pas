@@ -75,6 +75,8 @@ begin
   Height := 600;
   {$ENDIF}
 
+  LoadIniFile;
+
   NewProjectAction.Execute;
 end;
 
