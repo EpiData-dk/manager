@@ -17,6 +17,12 @@ type
     FileExitMenuItem: TMenuItem;
     HelpMenu: TMenuItem;
     FileMenuDivider1: TMenuItem;
+    EditMenuDivider1: TMenuItem;
+    PasteAsQESMenuItem: TMenuItem;
+    PasteAsFloatMenuItem: TMenuItem;
+    PasteAsStringMenuItem: TMenuItem;
+    PasteAsHeadingMenuItem: TMenuItem;
+    PasteAsIntMenuItem: TMenuItem;
     OpenProjectMenuItem: TMenuItem;
     SaveProjectAsMenuItem: TMenuItem;
     SaveProjectMenuItem: TMenuItem;
@@ -78,6 +84,7 @@ begin
   LoadIniFile;
 
   NewProjectAction.Execute;
+  TDesignFrame(TProjectFrame(PageControl1.ActivePage.Controls[0]).ActiveFrame).UpdateFrame;
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -117,11 +124,16 @@ begin
   FActiveFrame := Frame;
   PageControl1.ActivePage := TabSheet;
 
-
   // Only as long as one project is created!
   SaveProjectMenuItem.Action := Frame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := Frame.SaveProjectAsAction;
   OpenProjectMenuItem.Action := Frame.OpenProjectAction;
+
+  PasteAsQESMenuItem.Action     := TDesignFrame(Frame.ActiveFrame).PasteAsQESAction;
+  PasteAsHeadingMenuItem.Action := TDesignFrame(Frame.ActiveFrame).PasteAsHeadingAction;
+  PasteAsIntMenuItem.Action     := TDesignFrame(Frame.ActiveFrame).PasteAsIntAction;
+  PasteAsFloatMenuItem.Action   := TDesignFrame(Frame.ActiveFrame).PasteAsFloatAction;
+  PasteAsStringMenuItem.Action  := TDesignFrame(Frame.ActiveFrame).PasteAsStringAction;
 
   Inc(TabNameCount);
 end;
@@ -133,6 +145,7 @@ begin
   SettingForm := TSettingsForm.Create(Self);
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
+
 
   TDesignFrame(TProjectFrame(PageControl1.ActivePage.Controls[0]).ActiveFrame).UpdateFrame;
 end;

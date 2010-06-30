@@ -22,8 +22,8 @@ object MainForm: TMainForm
     TabOrder = 0
   end
   object MainMenu1: TMainMenu
-    left = 392
-    top = 280
+    left = 2112
+    top = 336
     object FileMenuItem: TMenuItem
       Caption = '&File'
       object OpenProjectMenuItem: TMenuItem
@@ -50,6 +50,24 @@ object MainForm: TMainForm
         Action = SettingsAction
         Caption = '&Settings'
         OnClick = SettingsActionExecute
+      end
+      object EditMenuDivider1: TMenuItem
+        Caption = '-'
+      end
+      object PasteAsQESMenuItem: TMenuItem
+        Caption = 'QESPaste'
+      end
+      object PasteAsHeadingMenuItem: TMenuItem
+        Caption = 'HeadingPaste'
+      end
+      object PasteAsIntMenuItem: TMenuItem
+        Caption = 'IntPaste'
+      end
+      object PasteAsFloatMenuItem: TMenuItem
+        Caption = 'FloatPaste'
+      end
+      object PasteAsStringMenuItem: TMenuItem
+        Caption = 'StringPaste'
       end
     end
     object HelpMenu: TMenuItem

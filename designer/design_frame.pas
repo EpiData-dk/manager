@@ -21,6 +21,8 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    PasteAsQesMenuItem: TMenuItem;
+    PasteAsQESAction: TAction;
     DeleteAllControlsAction: TAction;
     NewUpperCaseMenu: TMenuItem;
     PasteAsFloatMenuItem: TMenuItem;
@@ -136,6 +138,7 @@ type
     procedure   PasteAsFloatActionExecute(Sender: TObject);
     procedure   PasteAsHeadingActionExecute(Sender: TObject);
     procedure   PasteAsIntActionExecute(Sender: TObject);
+    procedure   PasteAsQESActionExecute(Sender: TObject);
     procedure   PasteAsStringActionExecute(Sender: TObject);
     procedure   TestToolButtonClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
@@ -241,7 +244,7 @@ implementation
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
   main, settings, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
-  managerprocs;
+  managerprocs, epiqeshandler;
 
 type
 
@@ -536,7 +539,7 @@ begin
   Dlg := TOpenDialog.Create(Self);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.Filter := GetEpiDialogFilter(false, true, false, false, false,
-    true, false, false, true, false);
+    true, false, true, true, false);
   if not Dlg.Execute then exit;
 
   DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
@@ -551,7 +554,10 @@ begin
   if ext = '.rec' then
     Importer.ImportRec(Fn, FDataFile, false)
   else if ext = '.dta' then
-    Importer.ImportStata(Fn, FDataFile, false);
+    Importer.ImportStata(Fn, FDataFile, false)
+  else if ext = '.qes' then
+    Importer.ImportQES(Fn, FDataFile, nil);
+
   Importer.Free;
 
   DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
@@ -587,10 +593,12 @@ begin
   Dlg := TOpenDialog.Create(Self);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.Filter := GetEpiDialogFilter(false, true, false, false, false,
-    true, false, false, true, false);
+    true, false, true, true, false);
   if not Dlg.Execute then exit;
 
   DeleteAllControls;
+
+  NewIntFieldAction.ShortCut := ShortCut(VK_V, [ssCtrl]);
 
   FDataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, true);
   FDataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, true);
@@ -604,7 +612,9 @@ begin
   if ext = '.rec' then
     Importer.ImportRec(Fn, FDataFile, true)
   else if ext = '.dta' then
-    Importer.ImportStata(Fn, FDataFile, true);
+    Importer.ImportStata(Fn, FDataFile, true)
+  else if ext = '.qes' then
+    Importer.ImportQES(Fn, FDataFile, nil);
   Importer.Free;
 
   FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
@@ -954,6 +964,32 @@ end;
 procedure TDesignFrame.PasteAsIntActionExecute(Sender: TObject);
 begin
   PasteAsField(ftInteger);
+end;
+
+procedure TDesignFrame.PasteAsQESActionExecute(Sender: TObject);
+var
+  QH: TQesHandler;
+  Cbl: TStringList;
+begin
+  Cbl := TStringList.Create;
+  try
+    ReadClipBoard(Cbl);
+
+    FLastRecYPos := -1;
+    FLastRecCtrl := nil;
+
+    FActiveSection.Headings.RegisterOnChangeHook(@ImportHook);
+    FActiveSection.Fields.RegisterOnChangeHook(@ImportHook);
+
+    QH := TQesHandler.Create;
+    QH.QesToDatafile(Cbl, FDataFile, FActiveSection);
+    QH.Free;
+
+    FActiveSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+    FActiveSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+  finally
+    Cbl.Free;
+  end;
 end;
 
 procedure TDesignFrame.PasteAsStringActionExecute(Sender: TObject);
@@ -1983,8 +2019,25 @@ procedure TDesignFrame.UpdateFrame;
     end;
   end;
 
+var
+  CtrlV: TShortCut;
 begin
   Recurse((FDesignerBox as IPositionHandler).YTree);
+
+  PasteAsQESAction.ShortCut     := 0;
+  PasteAsHeadingAction.ShortCut := 0;
+  PasteAsIntAction.ShortCut     := 0;
+  PasteAsFloatAction.ShortCut   := 0;
+  PasteAsStringAction.ShortCut  := 0;
+
+  CtrlV := ShortCut(VK_V, [ssCtrl]);
+  Case ManagerSettings.PasteSpecialType of
+    0: PasteAsQESAction.ShortCut     := CtrlV;
+    1: PasteAsHeadingAction.ShortCut := CtrlV;
+    2: PasteAsIntAction.ShortCut     := CtrlV;
+    3: PasteAsFloatAction.ShortCut   := CtrlV;
+    4: PasteAsStringAction.ShortCut  := CtrlV;
+  end;
 end;
 
 end.

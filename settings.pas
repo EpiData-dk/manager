@@ -100,7 +100,12 @@ type
 
     // Advanced:
     WorkingDirUTF8:        string;
-//    PasteSpecialType:      TEpiFieldType;
+    PasteSpecialType:      byte;     // Index into list:
+                                     //   0: QES
+                                     //   1: Heading
+                                     //   2: Int
+                                     //   3: Float
+                                     //   4: String
 
     // Not shown in dialog.
     SelectedControlColour: Integer;
@@ -138,7 +143,7 @@ var
 
     // Advanced:
     WorkingDirUTF8:        '';
-//    PasteSpecialType:      ftRes4  ; // ftQuestion;
+    PasteSpecialType:      1;  //Heading.
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;
@@ -229,9 +234,10 @@ begin
 
   {    // Advanced:
       WorkingDirUTF8:        string;
-    //    PasteSpecialType:      TEpiFieldType;}
+      PasteSpecialType:      byte}
       Sec := 'advanced';
       WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+      WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
       Result := true;
     end;
   finally
@@ -289,9 +295,10 @@ begin
 
 {    // Advanced:
     WorkingDirUTF8:        string;
-  //    PasteSpecialType:      TEpiFieldType;}
+    PasteSpecialType:      byte;}
     Sec := 'advanced';
-    WorkingDirUTF8 := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+    WorkingDirUTF8   := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+    PasteSpecialType := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
   end;
 end;
 
@@ -352,13 +359,7 @@ begin
 
   // Advanced:
   ManagerSettings.WorkingDirUTF8        := WorkingDirEdit.Text;
-{  case DefaultPasteCombo.ItemIndex of
-    0: ManagerSettings.PasteSpecialType := ftQuestion;
-    1: ManagerSettings.PasteSpecialType := ftFloat;
-    2: ManagerSettings.PasteSpecialType := ftInteger;
-    3: ManagerSettings.PasteSpecialType := ftDate;
-    4: ManagerSettings.PasteSpecialType := ftRes4;
-  end;       }
+  ManagerSettings.PasteSpecialType      := DefaultPasteCombo.ItemIndex;
 
   SaveSettingToIni(ManagerSettings.IniFileName);
 end;
@@ -398,13 +399,7 @@ begin
 
     // Advanced:
     WorkingDirEdit.Text               := WorkingDirUTF8;
-{    case PasteSpecialType of
-      ftRes4:     DefaultPasteCombo.ItemIndex := 0;
-      ftFloat:    DefaultPasteCombo.ItemIndex := 1;
-      ftInteger:  DefaultPasteCombo.ItemIndex := 2;
-      ftDate:     DefaultPasteCombo.ItemIndex := 3;
-      ftQuestion: DefaultPasteCombo.ItemIndex := 4;
-    end;     }
+    DefaultPasteCombo.ItemIndex       := PasteSpecialType;
   end;
 end;
 

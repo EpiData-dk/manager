@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 2051
+  Left = 965
   Height = 270
-  Top = 419
+  Top = 324
   Width = 481
   ActiveControl = PageControl1
   BorderIcons = []
@@ -19,9 +19,9 @@ object SettingsForm: TSettingsForm
     Hint = 'Default decimal length for:'#10'Float'
     Top = 0
     Width = 481
-    ActivePage = VisualDesignSheet
+    ActivePage = AdvSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 0
     object VisualDesignSheet: TTabSheet
       Caption = 'Visual design'
@@ -440,18 +440,19 @@ object SettingsForm: TSettingsForm
         Height = 31
         Top = 57
         Width = 194
-        Enabled = False
         ItemHeight = 0
+        ItemIndex = 1
         Items.Strings = (
-          'qes'
-          'float'
-          'integer'
-          'date'
-          'label'
+          'QES'
+          'Heading'
+          'Integer'
+          'Float'
+          'String'
+          ''
         )
         Style = csDropDownList
         TabOrder = 1
-        Visible = False
+        Text = 'Heading'
       end
       object Label18: TLabel
         Left = 8
@@ -459,9 +460,7 @@ object SettingsForm: TSettingsForm
         Top = 70
         Width = 172
         Caption = 'Default paste special type'
-        Enabled = False
         ParentColor = False
-        Visible = False
       end
       object WorkingDirEdit: TDirectoryEdit
         Left = 205

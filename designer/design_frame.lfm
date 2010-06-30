@@ -1712,6 +1712,12 @@ object DesignFrame: TDesignFrame
       ImageIndex = 16
       OnExecute = DeleteAllControlsActionExecute
     end
+    object PasteAsQESAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As QES'
+      Hint = 'Paste As QES'
+      OnExecute = PasteAsQESActionExecute
+    end
     object PasteAsHeadingAction: TAction
       Category = 'Edit'
       Caption = 'Paste As Headings'
@@ -2911,6 +2917,10 @@ object DesignFrame: TDesignFrame
     end
     object DockingSitePopUpMenuDivider1: TMenuItem
       Caption = '-'
+    end
+    object PasteAsQesMenuItem: TMenuItem
+      Action = PasteAsQESAction
+      OnClick = PasteAsQESActionExecute
     end
     object PasteAsHeadingMenuItem: TMenuItem
       Action = PasteAsHeadingAction
