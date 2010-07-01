@@ -453,7 +453,11 @@ end;
 
 procedure TDesignFrame.DeleteAllControlsActionExecute(Sender: TObject);
 begin
-  // TODO : Warning message.
+  {$IFNDEF EPI_DEBUG}
+  if MessageDlg('Warning', 'Are you sure you want to clear dataform?',
+    mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+  {$ENDIF}
+
   DeleteAllControls;
 end;
 
@@ -982,6 +986,7 @@ begin
     FActiveSection.Fields.RegisterOnChangeHook(@ImportHook);
 
     QH := TQesHandler.Create;
+    QH.FieldPrefix := ManagerSettings.FieldNamePrefix;
     QH.QesToDatafile(Cbl, FDataFile, FActiveSection);
     QH.Free;
 
@@ -1822,6 +1827,7 @@ begin
 
   EnterControl(FDesignerBox);
 
+  DataFile.Size := 0;
   FDesignerBox.EndUpdateBounds;
 end;
 

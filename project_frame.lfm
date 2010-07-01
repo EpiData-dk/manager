@@ -1,26 +1,26 @@
 object ProjectFrame: TProjectFrame
   Left = 0
-  Height = 741
+  Height = 658
   Top = 0
-  Width = 1337
-  ClientHeight = 741
-  ClientWidth = 1337
+  Width = 1181
+  ClientHeight = 658
+  ClientWidth = 1181
   TabOrder = 0
-  DesignLeft = 468
-  DesignTop = 299
+  DesignLeft = 375
+  DesignTop = 243
   object ProjectPanel: TPanel
     Left = 0
-    Height = 741
+    Height = 658
     Top = 0
     Width = 200
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 741
+    ClientHeight = 658
     ClientWidth = 200
     TabOrder = 0
     object DataFilesTreeView: TTreeView
       Left = 0
-      Height = 715
+      Height = 632
       Top = 26
       Width = 200
       Align = alClient

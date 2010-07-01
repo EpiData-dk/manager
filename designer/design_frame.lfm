@@ -7,8 +7,8 @@ object DesignFrame: TDesignFrame
   ClientWidth = 1069
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 603
-  DesignTop = 234
+  DesignLeft = 485
+  DesignTop = 232
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -1707,8 +1707,8 @@ object DesignFrame: TDesignFrame
     end
     object DeleteAllControlsAction: TAction
       Category = 'Edit'
-      Caption = 'Delete All'
-      Hint = 'Clears dataform'
+      Caption = 'Erase All'
+      Hint = 'Erase All'
       ImageIndex = 16
       OnExecute = DeleteAllControlsActionExecute
     end
