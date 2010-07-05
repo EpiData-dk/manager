@@ -1347,7 +1347,7 @@ begin
     if Sender is TEpiHeadings then
       DesignerStatusBar.Panels.Items[2].Text := 'Headings: ' + IntToStr(SdrList.Count);
   end;
-//  if (Sender is TEpiDataFile) and (EventType = Word(edceSize)) then
+  if (Sender is TEpiDataFile) and (not (ebsDestroying in TEpiDataFile(Sender).State)) then
     DesignerStatusBar.Panels[3].Text := Format('Records: %d', [DataFile.Size]);
 end;
 

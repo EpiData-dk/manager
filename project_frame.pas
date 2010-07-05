@@ -245,7 +245,7 @@ begin
     TmpEpiSection.Top := 335;
     TmpEpiSection.Left := 20;
     TmpEpiSection.Width := {$IFDEF WINDOWS}600{$ELSE}700{$ENDIF};
-    TmpEpiSection.Height := 100;
+    TmpEpiSection.Height := 150;
 
     for i := 1 to 6 do
     begin
