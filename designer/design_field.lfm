@@ -50,10 +50,10 @@ inherited DesignFieldForm: TDesignFieldForm
           TabOrder = 4
         end
         object CancelBtn: TBitBtn
-          Left = 231
-          Height = 34
-          Top = 197
-          Width = 81
+          Left = 233
+          Height = 32
+          Top = 199
+          Width = 79
           Anchors = [akRight, akBottom]
           AutoSize = True
           Cancel = True

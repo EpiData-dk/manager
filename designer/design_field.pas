@@ -131,7 +131,7 @@ begin
         ecceUpdate:
           begin
             // Set label first - else width of Question is not calculated.
-            FNameLabel.Caption        := FField.Name.Text;
+            FNameLabel.Caption        := FField.Name;
 
             Left                      := FField.Left;
             FField.Question.Left      := FField.Left - (FQuestionLabel.Width + 5);
@@ -152,7 +152,7 @@ begin
             Top                       := FField.Top;
             FField.Question.Top       := FField.Top;
           end;
-        ecceText: FNameLabel.Caption  := FField.Name.Text;
+        ecceText: FNameLabel.Caption  := FField.Name;
       end;
   end;
   UpdateNameLabel;
@@ -201,7 +201,7 @@ begin
       'Length: %d' + LineEnding +
       'Question: %s' + LineEnding +
       'X: %d, Y: %d',
-      [UTF8Decode(Name.Text), {'',}
+      [UTF8Decode(Name), {'',}
        Length, UTF8Decode(Question.Caption.Text),
        Left, Top]
     );
@@ -282,7 +282,7 @@ begin
 
   FField.BeginUpdate;
 
-  FField.Name.Text := NameEdit.Text;
+  FField.Name := NameEdit.Text;
   FField.Question.Caption.Text := QuestionEdit.Text;
   if LengthEdit.Visible then
     FField.Length := StrToInt(LengthEdit.Text);
@@ -299,7 +299,7 @@ begin
   FField := TEpiField(AValue);
   if not Assigned(FField) then exit;
 
-  NameEdit.Text := FField.Name.Text;
+  NameEdit.Text := FField.Name;
   QuestionEdit.Text := FField.Question.Caption.Text;
 
   LengthEdit.Text := IntToStr(FField.Length);

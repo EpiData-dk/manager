@@ -130,7 +130,7 @@ var
 begin
   if (EventGroup = eegCustomBase) and (EventType = Word(ecceText)) then
   begin
-    Df := TEpiDataFileEx(TEpiCustomNamedItem(Sender).Owner);
+    Df := TEpiDataFileEx(TEpiCustomItem(Sender).Owner);
     Df.TreeNode.Text := Df.Name.Text;
   end;
 end;

@@ -51,9 +51,9 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'New Integer Field'
       ImageIndex = 1
+      OnClick = ToggleToolBtn
       ParentShowHint = False
       ShowHint = True
-      OnClick = ToggleToolBtn
     end
     object FloatToolButton: TToolButton
       Tag = 3
@@ -62,9 +62,9 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'New Float Field'
       ImageIndex = 2
+      OnClick = ToggleToolBtn
       ParentShowHint = False
       ShowHint = True
-      OnClick = ToggleToolBtn
     end
     object StringToolButton: TToolButton
       Tag = 12
@@ -73,9 +73,9 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'New String Field'
       ImageIndex = 3
+      OnClick = ToggleToolBtn
       ParentShowHint = False
       ShowHint = True
-      OnClick = ToggleToolBtn
     end
     object DateToolButton: TToolButton
       Tag = 4
@@ -84,10 +84,10 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'New DMY Field'
       ImageIndex = 4
+      OnClick = ToggleToolBtn
       ParentShowHint = False
       PopupMenu = DateFieldPopupMenu
       ShowHint = True
-      OnClick = ToggleToolBtn
     end
     object OtherToolButton: TToolButton
       Left = 150
@@ -113,9 +113,9 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'New Heading'
       ImageIndex = 8
+      OnClick = ToggleToolBtn
       ParentShowHint = False
       ShowHint = True
-      OnClick = ToggleToolBtn
     end
     object Divider3: TToolButton
       Left = 210
@@ -131,9 +131,9 @@ object DesignFrame: TDesignFrame
       Top = 1
       Caption = 'New Section'
       ImageIndex = 9
+      OnClick = ToggleToolBtn
       ParentShowHint = False
       ShowHint = True
-      OnClick = ToggleToolBtn
     end
     object Divider4: TToolButton
       Left = 242

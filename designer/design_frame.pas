@@ -1211,6 +1211,13 @@ begin
   begin
     TEpiCustomControlItem(Sender).UnRegisterOnChangeHook(@ImportHook);
 
+    if (Sender is TEpiField) then
+    with TEpiField(Sender) do
+    begin
+      if Name = '' then
+        Name := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count);
+    end;
+
     Cls := TDesignField;
     if Sender is TEpiHeading then
       Cls := TDesignHeading;
@@ -1246,7 +1253,7 @@ begin
       TmpField := NewField(FieldType);
       with TmpField do
       begin
-        Name.Text := FirstWord(Cbl[i]);
+        Name := FirstWord(Cbl[i]);
 {        case ManagerSettings.FieldNamingStyle of
           fnFirstWord: FieldName := FirstWord(Cbl[i]);
           fnAuto:      FieldName := AutoFieldName(Cbl[i]);
@@ -1297,7 +1304,7 @@ begin
 
   with result do
   begin
-    Name.Text := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count);
+    Name := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count);
     Case FieldType of
       ftBoolean:
         Length := 1;
@@ -1744,14 +1751,14 @@ begin
       S := 'F(t): ';
     if FieldType in StringFieldTypes then
       S := 'F(s): ';
-    S += Name.Text;
+    S += Name;
     if Question.Caption.Text <> '' then
       S += '(' + Question.Caption.Text + ')';
   end;
   if Sender is TDesignHeading then
     S := 'H: ' + TEpiHeading(EpiControl).Caption.Text;
   if Sender is TDesignSection then
-    S := 'S: ' + EpiControl.Name.Text;
+    S := 'S: ' + TEpiSection(EpiControl).Name.Text;
   DesignerStatusBar.Panels[4].Text := S;
 
   if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
