@@ -585,7 +585,7 @@ begin
   begin
     if MessageDlg('Warning',
       'Dataform is not empty. Loading a data file will clear dataform.' + LineEnding +
-      'Are you sure you want to proceed?', mtWarning, mbYesNo, 0, mbNo) <> mrYes then exit;
+      'Proceed?', mtWarning, mbYesNo, 0, mbNo) <> mrYes then exit;
   end;
   {$ENDIF}
 

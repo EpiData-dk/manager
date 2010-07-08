@@ -107,7 +107,7 @@ begin
 
   {$IFNDEF EPI_DEBUG}
   if MessageDlg('Warning', 'Opening project will clear all.' + LineEnding +
-       'Are you sure you want to continue?',
+       'Continue?',
        mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
   {$ENDIF}
 
@@ -238,7 +238,7 @@ begin
          6: H.Caption.Text := 'C: Edit or delete fields, sections & headings (red "X"/"DEL"/"ENTER" key/pencil).';
          7: H.Caption.Text := 'D: Open/Save projects in new EpiData XML File format. (See "File" menu)';
          8: H.Caption.Text := ' -- NEW in this version --';
-         9: H.Caption.Text := 'E: Paste text as fields - (See "File" menu or right click with mouse)';
+         9: H.Caption.Text := 'E: Paste text as fields - (See "Edit" menu or right click with mouse)';
         10: H.Caption.Text := 'F: Only unique field names allowed.';
         11: H.Caption.Text := '========================================================';
         12: H.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
@@ -252,9 +252,9 @@ begin
     TmpEpiSection.Top := 335;
     TmpEpiSection.Left := 20;
     TmpEpiSection.Width := {$IFDEF WINDOWS}600{$ELSE}700{$ENDIF};
-    TmpEpiSection.Height := 130;
+    TmpEpiSection.Height := 110;
 
-    for i := 1 to 5 do
+    for i := 1 to 4 do
     begin
       H := TmpEpiSection.NewHeading;
       H.Left := 30;
@@ -265,8 +265,7 @@ begin
         1: H.Caption.Text := 'A: On creating a new section dragging the cursor outside the program and';
         2: H.Caption.Text := 'releasing the button, can cause the drawn area not to disapear. (Windows only)';
         3: H.Caption.Text := 'B: Dragging fields/headings/sections in Mac OS X may not always work.';
-        4: H.Caption.Text := 'C: Dragging field/heading within same section does strange things. Dragging into';
-        5: H.Caption.Text := 'sections again works!';
+        4: H.Caption.Text := 'C: Dragging field/heading within same section does strange things.';
       end;
     end;
   end;
