@@ -104,7 +104,10 @@ object MainForm: TMainForm
       Category = 'File'
       Caption = 'E&xit'
       Hint = 'Exit'
-      ShortCut = 32849
+      ShortCut = 123
+      SecondaryShortCuts.Strings = (
+        'Alt+Q'
+      )
     end
   end
 end

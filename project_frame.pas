@@ -104,6 +104,13 @@ end;
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
   OpenProjectDialog.InitialDir := ManagerSettings.WorkingDirUTF8;
+
+  {$IFNDEF EPI_DEBUG}
+  if MessageDlg('Warning', 'Opening project will clear all.' + LineEnding +
+       'Are you sure you want to continue?',
+       mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+  {$ENDIF}
+
   if not OpenProjectDialog.Execute then exit;
   DoOpenProject(OpenProjectDialog.FileName);
 end;
@@ -209,7 +216,7 @@ begin
     TmpEpiSection.Top := 5;
     TmpEpiSection.Left := 20;
     TmpEpiSection.Width := {$IFDEF WINDOWS}600{$ELSE}700{$ENDIF};
-    TmpEpiSection.Height := 325;
+    TmpEpiSection.Height := 315;
 
     for i := 1 to 14 do
     begin
@@ -232,7 +239,7 @@ begin
          7: H.Caption.Text := 'D: Open/Save projects in new EpiData XML File format. (See "File" menu)';
          8: H.Caption.Text := ' -- NEW in this version --';
          9: H.Caption.Text := 'E: Paste text as fields - (See "File" menu or right click with mouse)';
-        10: H.Caption.Text := 'F: Save Ini file - including definition of default data dir';
+        10: H.Caption.Text := 'F: Only unique field names allowed.';
         11: H.Caption.Text := '========================================================';
         12: H.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
         13: H.Caption.Text := 'Later restricted access (via password) can be tied to section level';
@@ -245,9 +252,9 @@ begin
     TmpEpiSection.Top := 335;
     TmpEpiSection.Left := 20;
     TmpEpiSection.Width := {$IFDEF WINDOWS}600{$ELSE}700{$ENDIF};
-    TmpEpiSection.Height := 150;
+    TmpEpiSection.Height := 130;
 
-    for i := 1 to 6 do
+    for i := 1 to 5 do
     begin
       H := TmpEpiSection.NewHeading;
       H.Left := 30;
@@ -260,7 +267,6 @@ begin
         3: H.Caption.Text := 'B: Dragging fields/headings/sections in Mac OS X may not always work.';
         4: H.Caption.Text := 'C: Dragging field/heading within same section does strange things. Dragging into';
         5: H.Caption.Text := 'sections again works!';
-        6: H.Caption.Text := 'D: No prevention of using same field name twice.';
       end;
     end;
   end;

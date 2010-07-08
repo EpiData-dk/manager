@@ -560,7 +560,7 @@ begin
   else if ext = '.dta' then
     Importer.ImportStata(Fn, FDataFile, false)
   else if ext = '.qes' then
-    Importer.ImportQES(Fn, FDataFile, nil);
+    Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
 
   Importer.Free;
 
@@ -618,7 +618,7 @@ begin
   else if ext = '.dta' then
     Importer.ImportStata(Fn, FDataFile, true)
   else if ext = '.qes' then
-    Importer.ImportQES(Fn, FDataFile, nil);
+    Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
   Importer.Free;
 
   FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
@@ -1226,7 +1226,12 @@ begin
     if (not (FLastRecYPos = -1)) and (FLastRecYPos = TEpiCustomControlItem(Sender).Top) then
     begin
       Pt.Y := FLastRecCtrl.Top;
-      Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 10;
+      if (FLastRecCtrl is TDesignField) and (Sender is TEpiField) then
+        Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 5 +                                   // This calculates right side of previous placed control (with 5px margin)
+                FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Question.Caption.Text) + 5 +// This gives a rough estimate of the width of the Question text (5px margin)
+                FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
+      else
+        Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 10;
     end;
 
     FLastRecYPos := TEpiCustomControlItem(Sender).Top;
