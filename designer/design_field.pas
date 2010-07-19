@@ -118,6 +118,10 @@ end;
 
 procedure TDesignField.OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup;
   EventType: Word; Data: Pointer);
+var
+  Cv: TCanvas;
+  S: Char;
+  SideBuf: Integer;
 begin
   case EventGroup of
     eegCustomBase:
@@ -137,10 +141,24 @@ begin
             FField.Question.Left      := FField.Left - (FQuestionLabel.Width + 5);
             Top                       := FField.Top;
             FField.Question.Top       := FField.Top;
+
             if Self.Parent is TScrollBox then
-              Width                   := TScrollBox(Self.Parent).Canvas.GetTextWidth('W') * FField.Length
+              Cv := TScrollBox(Self.Parent).Canvas
             else
-              Width                   := TScrollBox(Self.Parent.Parent).Canvas.GetTextWidth('W') * FField.Length;
+              Cv := TScrollBox(Self.Parent.Parent).Canvas;
+            case FField.FieldType of
+              ftString: S := 'W';
+            else
+              S := '4';
+            end;
+
+            case BorderStyle of
+              bsNone:   SideBuf := 0;
+              bsSingle: SideBuf := 6;
+            end;
+
+            //         Side buffer (pixel from controls left side to first character.
+            Width   := (SideBuf * 2) + Cv.GetTextWidth(S) * FField.Length;
           end;
         ecceSetLeft:
           begin
