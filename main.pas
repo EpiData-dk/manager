@@ -18,6 +18,8 @@ type
     HelpMenu: TMenuItem;
     FileMenuDivider1: TMenuItem;
     EditMenuDivider1: TMenuItem;
+    ProjectPropertiesMenuItem: TMenuItem;
+    ProjectMenu: TMenuItem;
     PasteAsQESMenuItem: TMenuItem;
     PasteAsFloatMenuItem: TMenuItem;
     PasteAsStringMenuItem: TMenuItem;
@@ -135,6 +137,8 @@ begin
   PasteAsFloatMenuItem.Action   := TDesignFrame(Frame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TDesignFrame(Frame.ActiveFrame).PasteAsStringAction;
 
+  ProjectPropertiesMenuItem.Action := Frame.ProjectSettingsAction;
+
   Inc(TabNameCount);
 end;
 
@@ -145,7 +149,6 @@ begin
   SettingForm := TSettingsForm.Create(Self);
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
-
 
   TDesignFrame(TProjectFrame(PageControl1.ActivePage.Controls[0]).ActiveFrame).UpdateFrame;
 end;

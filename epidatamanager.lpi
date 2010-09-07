@@ -1,15 +1,11 @@
 <?xml version="1.0"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="8"/>
+    <Version Value="9"/>
     <General>
-      <Flags>
-        <UseDefaultCompilerOptions Value="True"/>
-      </Flags>
       <SessionStorage Value="InProjectDir"/>
       <MainUnit Value="0"/>
       <AutoCreateForms Value="False"/>
-      <TargetFileExt Value=""/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
@@ -20,7 +16,7 @@
       <RevisionNr Value="3"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable Comments="" CompanyName="" FileDescription="" FileVersion="0.5.3.0" InternalName="" LegalCopyright="" LegalTrademarks="" OriginalFilename="" ProductName="" ProductVersion=""/>
+      <StringTable ProductVersion=""/>
     </VersionInfo>
     <PublishOptions>
       <Version Value="2"/>
@@ -44,7 +40,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="12">
+    <Units Count="15">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -58,7 +54,7 @@
         <UnitName Value="main"/>
       </Unit1>
       <Unit2>
-        <Filename Value="project_frame.pas"/>
+        <Filename Value="project/project_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectFrame"/>
         <ResourceBaseClass Value="Frame"/>
@@ -129,6 +125,25 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="managerprocs"/>
       </Unit11>
+      <Unit12>
+        <Filename Value="project/project_settings.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectSettingsForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="project_settings"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="project/project_settings_field_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FieldSettingsFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_field_frame"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="project/project_settings_interface.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="project_settings_interface"/>
+      </Unit14>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -138,7 +153,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)/"/>
-      <OtherUnitFiles Value="designer/;utils/"/>
+      <OtherUnitFiles Value="designer/;utils/;project/"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

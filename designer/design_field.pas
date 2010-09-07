@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Buttons, ExtCtrls, MaskEdit, ComCtrls, epidatafiles, epicustombase,
-  design_custombase, AVL_Tree;
+  design_custombase, AVL_Tree, episettings;
 
 type
   { TDesignField }
@@ -16,6 +16,7 @@ type
   private
     // IDesignEpiControl
     FField: TEpiField;
+    FProjectSettings: TEpiProjectSettings;
     FXTreeNode: TAVLTreeNode;
     FYTreeNode: TAVLTreeNode;
     function GetEpiControl: TEpiCustomControlItem;
@@ -33,6 +34,7 @@ type
     procedure   UpdateHint;
   protected
     procedure   SetParent(NewParent: TWinControl); override;
+    property    ProjectSettings: TEpiProjectSettings read FProjectSettings;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -78,7 +80,8 @@ implementation
 {$R *.lfm}
 
 uses
-  design_section, epidatafilestypes, settings;
+  design_section, epidatafilestypes, settings,
+  epidocument;
 
 { TDesignField }
 
@@ -102,8 +105,14 @@ begin
   FField := TEpiField(AValue);
   FField.RegisterOnChangeHook(@OnFieldChange);
   FField.Question.RegisterOnChangeHook(@OnQuestionChange);
+  FProjectSettings := TEpiDocument(FField.RootOwner).ProjectSettings;
   Name := FField.Id;
   Caption := '';
+
+  if not ProjectSettings.ShowFieldBorders then
+    BorderStyle := bsNone;
+  if not ProjectSettings.ShowFieldNames then
+    FNameLabel.Visible := false;
 end;
 
 procedure TDesignField.SetXTreeNode(const AValue: TAVLTreeNode);
@@ -230,7 +239,7 @@ begin
   inherited SetParent(NewParent);
   if csDestroying in ComponentState then exit;
 
-  if ManagerSettings.ShowFieldNamesInLabel then
+  if ProjectSettings.ShowFieldNames then
     FNameLabel.Parent := NewParent;
   FQuestionLabel.Parent := NewParent;
 end;
@@ -251,11 +260,12 @@ begin
   Align := alNone;
   ShowHint := true;
   ParentColor := false;
-
-  if not ManagerSettings.ShowFieldBorder then
-    BorderStyle := bsNone;
-  if not ManagerSettings.ShowFieldNamesInLabel then
-    FNameLabel.Visible := false;
+{
+if not ManagerSettings.ShowFieldBorder then
+  BorderStyle := bsNone;
+if not ManagerSettings.ShowFieldNamesInLabel then
+  FNameLabel.Visible := false;
+}
 end;
 
 destructor TDesignField.Destroy;

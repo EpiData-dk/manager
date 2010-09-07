@@ -9,7 +9,8 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, main, project_frame, design_frame, workflow_frame, epidatacore, 
   design_field, design_heading, design_section, design_custombase, import_form, 
-  settings, managerprocs, sysutils
+  settings, managerprocs, sysutils, project_settings, 
+project_settings_field_frame, project_settings_interface
   { you can add units after this };
 
 {$R *.res}

@@ -106,6 +106,7 @@ object ProjectFrame: TProjectFrame
     left = 624
     top = 256
     object OpenProjectAction: TAction
+      Category = 'File'
       Caption = '&Open Project'
       Hint = 'Open Project'
       ImageIndex = 0
@@ -113,6 +114,7 @@ object ProjectFrame: TProjectFrame
       ShortCut = 16463
     end
     object SaveProjectAction: TAction
+      Category = 'File'
       Caption = '&Save Project'
       Hint = 'Save Project'
       ImageIndex = 1
@@ -120,6 +122,7 @@ object ProjectFrame: TProjectFrame
       ShortCut = 16467
     end
     object SaveProjectAsAction: TAction
+      Category = 'File'
       Caption = 'Save Project &As'
       Hint = 'Save Project As'
       ImageIndex = 2
@@ -127,15 +130,23 @@ object ProjectFrame: TProjectFrame
       ShortCut = 24659
     end
     object NewDataFormAction: TAction
+      Category = 'DataForm'
       Caption = 'New Data Form'
       Hint = 'New Data Form'
       ImageIndex = 3
       OnExecute = NewDataFormActionExecute
     end
     object DeleteDataFormAction: TAction
+      Category = 'DataForm'
       Caption = 'Delete Data Form'
       Hint = 'Delete Data Form'
       ImageIndex = 4
+    end
+    object ProjectSettingsAction: TAction
+      Category = 'Settings'
+      Caption = 'Properties'
+      OnExecute = ProjectSettingsActionExecute
+      ShortCut = 32848
     end
   end
   object ProjectImageList: TImageList

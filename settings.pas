@@ -55,20 +55,17 @@ type
     Label11: TLabel;
     Label12: TLabel;
     IntLengthEdit: TMaskEdit;
-    ShowFieldBorderChkBox: TCheckBox;
     DefaultRightPosEdit: TMaskEdit;
-    Label2: TLabel;
     Label3: TLabel;
-    Label8: TLabel;
     PageControl1: TPageControl;
     Panel1: TPanel;
-    ShowFieldNameChkBox: TCheckBox;
     VisualDesignSheet: TTabSheet;
     AdvSheet: TTabSheet;
     FieldDefSheet: TTabSheet;
     procedure CloseActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure SnapFieldsChkBoxChange(Sender: TObject);
   private
     { private declarations }
@@ -81,8 +78,6 @@ type
   TManagerSettings = record
     // Visual design:
     DefaultRightPostion:   Integer;
-    ShowFieldNamesInLabel: boolean;
-    ShowFieldBorder:       boolean;
     SnapFields:            boolean;
     SnappingThresHold:     Integer;
     SpaceBtwFieldField:    Integer;
@@ -124,8 +119,6 @@ var
   ManagerSettings: TManagerSettings = (
     // Visual design:
     DefaultRightPostion:   200;
-    ShowFieldNamesInLabel: true;
-    ShowFieldBorder:       true;
     SnapFields:            true;
     SnappingThresHold:     10;
     SpaceBtwFieldField:    10;
@@ -200,8 +193,6 @@ begin
     begin
       {  // Visual design:
         DefaultRightPostion:   Integer;
-        ShowFieldNamesInLabel: boolean;
-        ShowFieldBorder:       boolean;
         SnapFields:            boolean;
         SnappingThresHold:     Integer;
         SpaceBtwFieldField:    Integer;
@@ -209,8 +200,6 @@ begin
         SpaceBtwLabelLabel:    Integer;}
       Sec := 'visual';
       WriteInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
-      WriteBool   (Sec, 'ShowFieldNamesInLabel', ShowFieldNamesInLabel);
-      WriteBool   (Sec, 'ShowFieldBorder',       ShowFieldBorder);
       WriteBool   (Sec, 'SnapFields',            SnapFields);
       WriteInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
       WriteInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
@@ -261,8 +250,6 @@ begin
   begin
     {  // Visual design:
       DefaultRightPostion:   Integer;
-      ShowFieldNamesInLabel: boolean;
-      ShowFieldBorder:       boolean;
       SnapFields:            boolean;
       SnappingThresHold:     Integer;
       SpaceBtwFieldField:    Integer;
@@ -270,8 +257,6 @@ begin
       SpaceBtwLabelLabel:    Integer;}
     Sec := 'visual';
     DefaultRightPostion   := ReadInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
-    ShowFieldNamesInLabel := ReadBool   (Sec, 'ShowFieldNamesInLabel', ShowFieldNamesInLabel);
-    ShowFieldBorder       := ReadBool   (Sec, 'ShowFieldBorder',       ShowFieldBorder);
     SnapFields            := ReadBool   (Sec, 'SnapFields',            SnapFields);
     SnappingThresHold     := ReadInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
     SpaceBtwFieldField    := ReadInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
@@ -316,8 +301,6 @@ begin
   S := Trim(DefaultRightPosEdit.Text);
   if not((S = '') or (StrToInt(S) <= 0)) then
     ManagerSettings.DefaultRightPostion := StrToInt(S);
-  ManagerSettings.ShowFieldNamesInLabel := ShowFieldNameChkBox.Checked;
-  ManagerSettings.ShowFieldBorder       := ShowFieldBorderChkBox.Checked;
   ManagerSettings.SnapFields            := SnapFieldsChkBox.Checked;
   S := Trim(SnapThresholdEdit.Text);
   if not((S = '') or (StrToInt(S) <= 0)) then
@@ -375,8 +358,6 @@ begin
   begin
     // Visual desing:
     DefaultRightPosEdit.Text          := IntToStr(DefaultRightPostion);
-    ShowFieldNameChkBox.Checked       := ShowFieldNamesInLabel;
-    ShowFieldBorderChkBox.Checked     := ShowFieldBorder;
     SnapFieldsChkBox.Checked          := ManagerSettings.SnapFields;
     SnapThresholdEdit.Text            := IntToStr(ManagerSettings.SnappingThresHold);
     FieldFieldEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldField);
@@ -401,6 +382,11 @@ begin
     WorkingDirEdit.Text               := WorkingDirUTF8;
     DefaultPasteCombo.ItemIndex       := PasteSpecialType;
   end;
+end;
+
+procedure TSettingsForm.FormShow(Sender: TObject);
+begin
+  PageControl1.ActivePage := VisualDesignSheet;
 end;
 
 

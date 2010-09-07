@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
-  design_field, design_heading, design_section, epicustombase,
+  design_field, design_heading, design_section, epicustombase, episettings,
   design_custombase, AVL_Tree , LCLType;
 
 type
@@ -2007,6 +2007,9 @@ begin
 end;
 
 procedure TDesignFrame.UpdateFrame;
+var
+  CtrlV: TShortCut;
+  ProjectSettings: TEpiProjectSettings;
 
   procedure Recurse(YTree: TAVLTree);
   var
@@ -2023,12 +2026,12 @@ procedure TDesignFrame.UpdateFrame;
       else if Ctrl is TDesignField then
       with TDesignField(Ctrl) do
       begin
-        if ManagerSettings.ShowFieldBorder then
+        if ProjectSettings.ShowFieldBorders then
           BorderStyle := bsSingle
         else
           BorderStyle := bsNone;
 
-        if ManagerSettings.ShowFieldNamesInLabel then
+        if ProjectSettings.ShowFieldNames then
           NameLabel.Parent := QuestionLabel.Parent
         else
           NameLabel.Parent := nil;
@@ -2037,9 +2040,9 @@ procedure TDesignFrame.UpdateFrame;
     end;
   end;
 
-var
-  CtrlV: TShortCut;
 begin
+  ProjectSettings := TEpiDocument(DataFile.RootOwner).ProjectSettings;
+
   Recurse((FDesignerBox as IPositionHandler).YTree);
 
   PasteAsQESAction.ShortCut     := 0;

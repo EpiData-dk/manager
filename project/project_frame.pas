@@ -13,6 +13,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
     OpenProjectDialog: TOpenDialog;
     SaveProjectDialog: TSaveDialog;
@@ -35,6 +36,7 @@ type
     ToolButton7: TToolButton;
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
+    procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
   private
@@ -71,7 +73,7 @@ implementation
 
 uses
   design_frame, Clipbrd, settings, rttiutils, typinfo,
-  main;
+  main, project_settings;
 
 type
 
@@ -113,6 +115,15 @@ begin
 
   if not OpenProjectDialog.Execute then exit;
   DoOpenProject(OpenProjectDialog.FileName);
+end;
+
+procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);
+var
+  ProjectSettings: TProjectSettingsForm;
+begin
+  ProjectSettings := TProjectSettingsForm.Create(self, EpiDocument.ProjectSettings);
+  ProjectSettings.ShowModal;
+  TDesignFrame(ActiveFrame).UpdateFrame;
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
