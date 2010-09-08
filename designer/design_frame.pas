@@ -2009,42 +2009,7 @@ end;
 procedure TDesignFrame.UpdateFrame;
 var
   CtrlV: TShortCut;
-  ProjectSettings: TEpiProjectSettings;
-
-  procedure Recurse(YTree: TAVLTree);
-  var
-    Ctrl: TControl;
-    Node: TAVLTreeNode;
-  begin
-    Node := YTree.FindLowest;
-    while Assigned(Node) do
-    begin
-      Ctrl := TControl(Node.Data);
-
-      if Ctrl is TDesignSection then
-        Recurse((Ctrl as IPositionHandler).YTree)
-      else if Ctrl is TDesignField then
-      with TDesignField(Ctrl) do
-      begin
-        if ProjectSettings.ShowFieldBorders then
-          BorderStyle := bsSingle
-        else
-          BorderStyle := bsNone;
-
-        if ProjectSettings.ShowFieldNames then
-          NameLabel.Parent := QuestionLabel.Parent
-        else
-          NameLabel.Parent := nil;
-      end;
-      Node := YTree.FindSuccessor(Node);
-    end;
-  end;
-
 begin
-  ProjectSettings := TEpiDocument(DataFile.RootOwner).ProjectSettings;
-
-//  Recurse((FDesignerBox as IPositionHandler).YTree);
-
   PasteAsQESAction.ShortCut     := 0;
   PasteAsHeadingAction.ShortCut := 0;
   PasteAsIntAction.ShortCut     := 0;

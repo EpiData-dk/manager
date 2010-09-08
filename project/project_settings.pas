@@ -51,6 +51,7 @@ begin
   (Frame as IProjectSettingsFrame).SetProjectSettings(ProjectSettings);
   Frame.Parent := Self;
   Frame.Align := alClient;
+  ProjectSettingsView.SetFocus;
 end;
 
 procedure TProjectSettingsForm.FormCloseQuery(Sender: TObject;
