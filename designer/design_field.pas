@@ -16,25 +16,24 @@ type
   private
     // IDesignEpiControl
     FField: TEpiField;
-    FProjectSettings: TEpiProjectSettings;
     FXTreeNode: TAVLTreeNode;
     FYTreeNode: TAVLTreeNode;
-    function GetEpiControl: TEpiCustomControlItem;
-    function GetXTreeNode: TAVLTreeNode;
-    function GetYTreeNode: TAVLTreeNode;
-    procedure SetEpiControl(const AValue: TEpiCustomControlItem);
-    procedure SetXTreeNode(const AValue: TAVLTreeNode);
-    procedure SetYTreeNode(const AValue: TAVLTreeNode);
+    function    GetEpiControl: TEpiCustomControlItem;
+    function    GetXTreeNode: TAVLTreeNode;
+    function    GetYTreeNode: TAVLTreeNode;
+    procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure   SetXTreeNode(const AValue: TAVLTreeNode);
+    procedure   SetYTreeNode(const AValue: TAVLTreeNode);
   private
     FNameLabel: TLabel;
     FQuestionLabel: TLabel;
     procedure   OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   OnQuestionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure   OnProjectSettingsChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   UpdateNameLabel;
     procedure   UpdateHint;
   protected
     procedure   SetParent(NewParent: TWinControl); override;
-    property    ProjectSettings: TEpiProjectSettings read FProjectSettings;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -101,11 +100,14 @@ begin
 end;
 
 procedure TDesignField.SetEpiControl(const AValue: TEpiCustomControlItem);
+var
+  ProjectSettings: TEpiProjectSettings;
 begin
   FField := TEpiField(AValue);
   FField.RegisterOnChangeHook(@OnFieldChange);
   FField.Question.RegisterOnChangeHook(@OnQuestionChange);
-  FProjectSettings := TEpiDocument(FField.RootOwner).ProjectSettings;
+  ProjectSettings := TEpiDocument(FField.RootOwner).ProjectSettings;
+  ProjectSettings.RegisterOnChangeHook(@OnProjectSettingsChange);
   Name := FField.Id;
   Caption := '';
 
@@ -213,6 +215,22 @@ begin
   UpdateHint;
 end;
 
+procedure TDesignField.OnProjectSettingsChange(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+var
+  ProjectSettings: TEpiProjectSettings absolute Sender;
+begin
+  if (EventGroup = eegCustomBase) and
+     (TEpiCustomChangeEventType(EventType) = ecceDestroy) then exit;
+
+  FNameLabel.Visible := ProjectSettings.ShowFieldNames;
+  UpdateNameLabel;
+  if ProjectSettings.ShowFieldBorders then
+    BorderStyle := bsSingle
+  else
+    BorderStyle := bsNone;
+end;
+
 procedure TDesignField.UpdateNameLabel;
 begin
   FNameLabel.Left := FQuestionLabel.Left - (FNameLabel.Width + 5);
@@ -239,8 +257,7 @@ begin
   inherited SetParent(NewParent);
   if csDestroying in ComponentState then exit;
 
-  if ProjectSettings.ShowFieldNames then
-    FNameLabel.Parent := NewParent;
+  FNameLabel.Parent := NewParent;
   FQuestionLabel.Parent := NewParent;
 end;
 
@@ -260,12 +277,6 @@ begin
   Align := alNone;
   ShowHint := true;
   ParentColor := false;
-{
-if not ManagerSettings.ShowFieldBorder then
-  BorderStyle := bsNone;
-if not ManagerSettings.ShowFieldNamesInLabel then
-  FNameLabel.Visible := false;
-}
 end;
 
 destructor TDesignField.Destroy;

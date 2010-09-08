@@ -2043,7 +2043,7 @@ var
 begin
   ProjectSettings := TEpiDocument(DataFile.RootOwner).ProjectSettings;
 
-  Recurse((FDesignerBox as IPositionHandler).YTree);
+//  Recurse((FDesignerBox as IPositionHandler).YTree);
 
   PasteAsQESAction.ShortCut     := 0;
   PasteAsHeadingAction.ShortCut := 0;

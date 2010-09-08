@@ -193,6 +193,7 @@ begin
 
   FEpiDocument := DoCreateNewDocument;
   FEpiDocument.LoadFromFile(AFileName);
+  FFileName := AFileName;
   DoNewDataForm(FEpiDocument.DataFiles[0]);
 end;
 

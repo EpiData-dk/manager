@@ -90,12 +90,22 @@ begin
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+var
+  res: LongInt;
 begin
+  CanClose := true;
+
   {$IFDEF EPI_RELEASE}
-  if Modified and
-     (MessageDlg('Warning', 'Content has been modified since last save.' + LineEnding +
-                'Are you sure you want to close?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
-    CanClose := false;
+  if Modified then
+  begin
+    res := MessageDlg('Warning', 'Content has been modified since last save.' + LineEnding +
+             'Save before close?', mtWarning, mbYesNoCancel, 0, mbCancel);
+    case res of
+      mrYes:    SaveProjectMenuItem.Action.Execute;
+      mrNo:     exit;
+      mrCancel: CanClose := false;
+    end;
+  end;
   {$ENDIF}
 end;
 
