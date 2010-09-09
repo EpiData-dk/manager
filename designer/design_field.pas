@@ -158,7 +158,8 @@ begin
             else
               Cv := TScrollBox(Self.Parent.Parent).Canvas;
             case FField.FieldType of
-              ftString: S := 'W';
+              ftString,
+              ftUpperString: S := 'W';
             else
               S := '4';
             end;
