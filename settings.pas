@@ -108,13 +108,6 @@ type
     IniFileName:           string;
   end;
 
-  TManagerVersion = record
-    VersionNo: Integer;
-    MajorRev:  Integer;
-    MinorRev:  Integer;
-    BuildNo:   Integer;
-  end;
-
 var
   ManagerSettings: TManagerSettings = (
     // Visual design:
@@ -144,14 +137,11 @@ var
     IniFileName:           '';
   );
 
-const
-  ManagerVersion: TManagerVersion = (
-    VersionNo: 0;
-    MajorRev:  5;
-    MinorRev:  3;
-    BuildNo:   0;
-  );
-
+{$IFDEF EPI_RELEASE}
+  {$I revision.inc}
+{$ELSE}
+  const RevisionStr = '(DEBUG)';
+{$ENDIF}
 
 function GetManagerVersion: String;
 function SaveSettingToIni(Const FileName: string): boolean;
@@ -162,21 +152,19 @@ implementation
 {$R *.lfm}
 
 uses
-  IniFiles;
+  IniFiles, epimiscutils;
 
-{$IFDEF EPI_RELEASE}
-  {$I revision.inc}
-{$ELSE}
-  const RevisionStr = '(DEBUG)';
-{$ENDIF}
+const
+  ManagerVersion: TEpiVersionInfo = (
+    VersionNo: 0;
+    MajorRev:  5;
+    MinorRev:  5;
+    BuildNo:   0;
+  );
 
 function GetManagerVersion: String;
 begin
-  with ManagerVersion do
-    result := IntToStr(VersionNo) + '.' +
-              IntToStr(MajorRev) + '.' +
-              IntToStr(MinorRev) + ' ' +
-              {$IFDEF EPI_RELEASE}'r' + {$ENDIF EPI_RELEASE} RevisionStr;
+  result := GetEpiVersionInfo(ManagerVersion);
 end;
 
 function SaveSettingToIni(Const FileName: string): boolean;

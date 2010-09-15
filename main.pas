@@ -13,6 +13,12 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    CopyProjectInfoAction: TAction;
+    HelpMenuDivider1: TMenuItem;
+    CopyVersionInfoMenuItem: TMenuItem;
+    HelpMenuDivider2: TMenuItem;
+    AboutMenuItem: TMenuItem;
+    ShowAboutAction: TAction;
     FileExitAction: TFileExit;
     FileExitMenuItem: TMenuItem;
     HelpMenu: TMenuItem;
@@ -39,6 +45,7 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
+    procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -46,6 +53,7 @@ type
     procedure SettingsActionExecute(Sender: TObject);
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
+    procedure ShowAboutActionExecute(Sender: TObject);
     procedure ShowWorkFlowActionExecute(Sender: TObject);
   private
     FModified: boolean;
@@ -70,7 +78,8 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, project_frame, settings, LCLProc, LCLIntf, design_frame;
+  workflow_frame, project_frame, settings, LCLProc, LCLIntf, design_frame,
+  about, Clipbrd;
 
 { TMainForm }
 
@@ -107,6 +116,23 @@ begin
     end;
   end;
   {$ENDIF}
+end;
+
+procedure TMainForm.CopyProjectInfoActionExecute(Sender: TObject);
+var
+  S: String;
+begin
+  S := GetProgramInfo;
+  if Assigned(TProjectFrame(FActiveFrame).EpiDocument) then
+  with TProjectFrame(FActiveFrame).EpiDocument do
+  begin
+    S := S + LineEnding +
+      'Filename: ' + TProjectFrame(FActiveFrame).ProjectFileName + LineEnding +
+      'XML Version: ' + IntToStr(XMLSettings.Version) + LineEnding +
+      'Field count: ' + IntToStr(DataFiles[0].Fields.Count) + LineEnding +
+      'Record count: ' + IntToStr(DataFiles[0].Size);
+  end;
+  Clipboard.AsText := S;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -179,6 +205,14 @@ begin
     OpenURL('http://epidata.dk/php/downloadc.php?file=epidatamanagerintro.pdf');
 end;
 
+procedure TMainForm.ShowAboutActionExecute(Sender: TObject);
+var
+  Frm: TAboutForm;
+begin
+  Frm := TAboutForm.Create(Self);
+  Frm.ShowModal;
+  Frm.Free;
+end;
 
 procedure TMainForm.ShowWorkFlowActionExecute(Sender: TObject);
 begin

@@ -1,0 +1,106 @@
+object AboutForm: TAboutForm
+  Left = 635
+  Height = 365
+  Top = 303
+  Width = 449
+  Caption = 'About EpiData Manager'
+  ClientHeight = 365
+  ClientWidth = 449
+  OnCreate = FormCreate
+  LCLVersion = '0.9.29'
+  object ButtonPanel: TPanel
+    Left = 0
+    Height = 50
+    Top = 315
+    Width = 449
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 449
+    TabOrder = 0
+    object CloseButton: TBitBtn
+      AnchorSideLeft.Control = ButtonPanel
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = ButtonPanel
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = Owner
+      AnchorSideBottom.Side = asrBottom
+      Left = 189
+      Height = 32
+      Top = 9
+      Width = 71
+      AutoSize = True
+      BorderSpacing.Around = 6
+      Cancel = True
+      Caption = '&Close'
+      Kind = bkClose
+      ModalResult = 1
+      NumGlyphs = 0
+      TabOrder = 0
+    end
+  end
+  object AboutPageControl: TPageControl
+    Left = 0
+    Height = 315
+    Top = 0
+    Width = 449
+    ActivePage = VersionPage
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 1
+    object VersionPage: TTabSheet
+      Caption = 'Version'
+      ClientHeight = 280
+      ClientWidth = 443
+      object Image1: TImage
+        Left = 0
+        Height = 280
+        Top = 0
+        Width = 443
+        Align = alClient
+      end
+      object VersionLabel: TLabel
+        Left = 13
+        Height = 18
+        Top = 168
+        Width = 84
+        Caption = 'VersionLabel'
+        ParentColor = False
+      end
+      object FPCVersionLabel: TLabel
+        Left = 13
+        Height = 18
+        Top = 231
+        Width = 109
+        Caption = 'FPCVersionLabel'
+        ParentColor = False
+      end
+      object RevisionLabel: TLabel
+        Left = 13
+        Height = 18
+        Top = 210
+        Width = 91
+        Caption = 'RevisionLabel'
+        ParentColor = False
+      end
+      object PlatformLabel: TLabel
+        Left = 13
+        Height = 18
+        Top = 252
+        Width = 92
+        Caption = 'PlatformLabel'
+        ParentColor = False
+      end
+      object CoreVersionLabel: TLabel
+        Left = 13
+        Height = 18
+        Top = 189
+        Width = 114
+        Caption = 'CoreVersionLabel'
+        ParentColor = False
+      end
+    end
+    object AboutPage: TTabSheet
+      Caption = 'About'
+    end
+  end
+end

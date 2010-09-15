@@ -86,6 +86,18 @@ object MainForm: TMainForm
         Caption = 'Show &Shortcuts'
         OnClick = ShortCutKeysMenuItemClick
       end
+      object HelpMenuDivider1: TMenuItem
+        Caption = '-'
+      end
+      object CopyVersionInfoMenuItem: TMenuItem
+        Action = CopyProjectInfoAction
+      end
+      object HelpMenuDivider2: TMenuItem
+        Caption = '-'
+      end
+      object AboutMenuItem: TMenuItem
+        Action = ShowAboutAction
+      end
     end
   end
   object ActionList1: TActionList
@@ -114,6 +126,17 @@ object MainForm: TMainForm
       SecondaryShortCuts.Strings = (
         'Alt+Q'
       )
+    end
+    object ShowAboutAction: TAction
+      Category = 'Help'
+      Caption = 'About'
+      Enabled = False
+      OnExecute = ShowAboutActionExecute
+    end
+    object CopyProjectInfoAction: TAction
+      Category = 'Help'
+      Caption = 'Copy Version Info'
+      OnExecute = CopyProjectInfoActionExecute
     end
   end
 end
