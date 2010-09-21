@@ -173,7 +173,7 @@ object DesignFrame: TDesignFrame
     object LoadToolButton: TToolButton
       Left = 334
       Top = 1
-      Action = LoadDataFileAction
+      Action = ImportDataFileAction
       ParentShowHint = False
       ShowHint = True
     end
@@ -323,7 +323,7 @@ object DesignFrame: TDesignFrame
     Height = 24
     Width = 24
     left = 248
-    top = 472
+    top = 464
     Bitmap = {
       4C69110000001800000018000000000000010000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1650,12 +1650,12 @@ object DesignFrame: TDesignFrame
       )
       ShortCut = 46
     end
-    object LoadDataFileAction: TAction
+    object ImportDataFileAction: TAction
       Category = 'File'
-      Caption = 'LoadDataFileAction'
-      Hint = 'Load Datafile'
+      Caption = 'Import Data'
+      Hint = 'Import Datafile'
       ImageIndex = 12
-      OnExecute = LoadDataFileActionExecute
+      OnExecute = ImportDataFileActionExecute
     end
     object AddStructureAction: TAction
       Category = 'File'

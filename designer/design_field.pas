@@ -239,15 +239,24 @@ begin
 end;
 
 procedure TDesignField.UpdateHint;
+{$IFDEF EPI_DEBUG}
+var
+  S: string;
+{$ENDIF}
 begin
+  {$IFDEF EPI_DEBUG}
+  WriteStr(S, FField.FieldType);
+  {$ENDIF}
   With FField do
     Hint := WideFormat(
       'Name: %s' + LineEnding +
-//      'Type: %s' + LineEnding +
+      {$IFDEF EPI_DEBUG}
+      'Type: %s' + LineEnding +
+      {$ENDIF}
       'Length: %d' + LineEnding +
       'Question: %s' + LineEnding +
       'X: %d, Y: %d',
-      [UTF8Decode(Name), {'',}
+      [UTF8Decode(Name), {$IFDEF EPI_DEBUG} S, {$ENDIF}
        Length, UTF8Decode(Question.Caption.Text),
        Left, Top]
     );

@@ -45,7 +45,7 @@ type
     DateFieldPopupMenu: TPopupMenu;
     AddStructureAction: TAction;
     Label6: TLabel;
-    LoadDataFileAction: TAction;
+    ImportDataFileAction: TAction;
     ExportDataformAction: TAction;
     DeleteControlAction: TAction;
     EditControlAction: TAction;
@@ -119,7 +119,7 @@ type
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
-    procedure   LoadDataFileActionExecute(Sender: TObject);
+    procedure   ImportDataFileActionExecute(Sender: TObject);
     procedure   MoveDownActionExecute(Sender: TObject);
     procedure   MoveEndActionExecute(Sender: TObject);
     procedure   MoveHomeActionExecute(Sender: TObject);
@@ -569,7 +569,7 @@ begin
   Dlg.Free;
 end;
 
-procedure TDesignFrame.LoadDataFileActionExecute(Sender: TObject);
+procedure TDesignFrame.ImportDataFileActionExecute(Sender: TObject);
 var
   ImportForm: TImportForm;
   Importer: TEpiImport;
