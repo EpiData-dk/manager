@@ -13,11 +13,13 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    CheckVersionAction: TAction;
     CopyProjectInfoAction: TAction;
     HelpMenuDivider1: TMenuItem;
     CopyVersionInfoMenuItem: TMenuItem;
     HelpMenuDivider2: TMenuItem;
     AboutMenuItem: TMenuItem;
+    CheckVersionMenuItem: TMenuItem;
     ShowAboutAction: TAction;
     FileExitAction: TFileExit;
     FileExitMenuItem: TMenuItem;
@@ -45,6 +47,7 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
+    procedure CheckVersionActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -79,7 +82,7 @@ implementation
 
 uses
   workflow_frame, project_frame, settings, LCLProc, LCLIntf, design_frame,
-  about, Clipbrd;
+  about, Clipbrd, epiversionutils;
 
 { TMainForm }
 
@@ -133,6 +136,51 @@ begin
       'Record count: ' + IntToStr(DataFiles[0].Size);
   end;
   Clipboard.AsText := S;
+end;
+
+procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
+var
+  Stable: TEpiVersionInfo;
+  Test: TEpiVersionInfo;
+  Response: string;
+  NewStable: Boolean;
+  NewTest: Boolean;
+  EntryScore: Integer;
+  StableScore: Integer;
+  TestScore: Integer;
+  S: String;
+begin
+  if not CheckVersionOnline('epidatamanager', Stable, Test, Response) then
+  begin
+    ShowMessage(
+      'ERROR: Could not find version information.' + LineEnding +
+      'Response: ' + Response);
+    exit;
+  end;
+
+  with ManagerVersion do
+    EntryScore  := (VersionNo * 10000) + (MajorRev * 100) + (MinorRev);
+  With Stable do
+    StableScore := (VersionNo * 10000) + (MajorRev * 100) + (MinorRev);
+  With Test do
+    TestScore   := (VersionNo * 10000) + (MajorRev * 100) + (MinorRev);
+
+  NewStable     := (StableScore - EntryScore) > 0;
+  NewTest       := (TestScore   - EntryScore) > 0;
+
+  with ManagerVersion do
+    S := Format('Current Version: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]) + LineEnding;
+  with Stable do
+    if NewStable then
+      S := S + Format('New public release available: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]) + LineEnding
+    else
+      S := S + Format('Latest public release: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]) + LineEnding;
+   with Test do
+     if NewTest then
+      S := S + Format('New test version available: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo])
+    else
+      S := S + Format('Latest test version: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
+  ShowMessage(S);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);

@@ -8,7 +8,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, MaskEdit, ExtCtrls, ComCtrls, ActnList, EditBtn, Buttons,
-  epidatafilestypes;
+  epidatafilestypes, epiversionutils;
 
 type
 
@@ -147,13 +147,6 @@ function GetManagerVersion: String;
 function SaveSettingToIni(Const FileName: string): boolean;
 function LoadSettingsFromIni(Const FileName: string): boolean;
 
-implementation
-
-{$R *.lfm}
-
-uses
-  IniFiles, epimiscutils;
-
 const
   ManagerVersion: TEpiVersionInfo = (
     VersionNo: 0;
@@ -161,6 +154,13 @@ const
     MinorRev:  5;
     BuildNo:   0;
   );
+
+implementation
+
+{$R *.lfm}
+
+uses
+  IniFiles;
 
 function GetManagerVersion: String;
 begin

@@ -36,7 +36,7 @@ function GetProgramInfo: string;
 implementation
 
 uses
-  settings, epimiscutils;
+  settings, epiversionutils;
 
 function ManagerVersionCaption: string;
 begin
