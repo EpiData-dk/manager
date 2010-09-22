@@ -546,6 +546,7 @@ begin
     true, false, true, true, false);
   if not Dlg.Execute then exit;
 
+  FActiveSection := DataFile.MainSection;
   DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
   DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
 
@@ -604,6 +605,7 @@ begin
 
   NewIntFieldAction.ShortCut := ShortCut(VK_V, [ssCtrl]);
 
+  FActiveSection := DataFile.MainSection;
   FDataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, true);
   FDataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, true);
 
@@ -1221,7 +1223,7 @@ begin
     Cls := TDesignField;
     if Sender is TEpiHeading then
       Cls := TDesignHeading;
-    Pt := FindNewPosition(FDesignerBox, Cls);
+    Pt := FindNewPosition(FActiveDockSite, Cls);
 
     if (not (FLastRecYPos = -1)) and (FLastRecYPos = TEpiCustomControlItem(Sender).Top) then
     begin
@@ -1235,7 +1237,7 @@ begin
     end;
 
     FLastRecYPos := TEpiCustomControlItem(Sender).Top;
-    FLastRecCtrl := NewDesignControl(Cls, FDesignerBox, Pt, TEpiCustomControlItem(Sender));
+    FLastRecCtrl := NewDesignControl(Cls, FActiveDockSite, Pt, TEpiCustomControlItem(Sender));
   end;
 end;
 
