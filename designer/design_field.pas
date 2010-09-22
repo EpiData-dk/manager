@@ -326,19 +326,54 @@ end;
 
 procedure TDesignFieldForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
   );
+var
+  NewLen: LongInt;
+  NewDecLen: LongInt;
 begin
   if ModalResult <> mrOK then exit;
 
-  FField.BeginUpdate;
-
-  FField.Name := NameEdit.Text;
-  FField.Question.Caption.Text := QuestionEdit.Text;
+  // Rules for field creation!
   if LengthEdit.Visible then
-    FField.Length := StrToInt(LengthEdit.Text);
+  begin
+    NewLen := StrToInt(LengthEdit.Text);
+    if ((FField.FieldType = ftInteger) and (NewLen >= 19)) or
+       (NewLen <= 0)
+    then
+    begin
+      LengthEdit.SetFocus;
+      CanClose := false;
+      exit;
+    end;
+  end;
   if DecimalsEdit.Visible then
-    FField.Decimals := StrToInt(DecimalsEdit.Text);
-  if FField.Decimals > 0 then
+  begin
+    NewDecLen := StrToInt(DecimalsEdit.Text);
+    if (NewDecLen <= 0) then
+    begin
+      DecimalsEdit.SetFocus;
+      CanClose := false;
+      exit;
+    end;
+  end;
+
+  FField.BeginUpdate;
+  if NameEdit.Text <> FField.Name then
+  begin
+    FField.Name := NameEdit.Text;
+    if FField.Name <> NameEdit.Text then
+    begin
+      // Could not rename Fieldname, possibly due to same name already exists or invalid identifier.
+      NameEdit.SetFocus;
+      CanClose := false;
+      FField.EndUpdate;
+      Exit;
+    end;
+  end;
+  FField.Length := NewLen;
+  FField.Decimals := NewDecLen;
+  if NewDecLen > 0 then
     FField.Length := FField.Length + FField.Decimals + 1;
+  FField.Question.Caption.Text := QuestionEdit.Text;
 
   FField.EndUpdate;
 end;
