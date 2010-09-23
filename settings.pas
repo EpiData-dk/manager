@@ -137,7 +137,7 @@ var
     IniFileName:           '';
   );
 
-{$IFDEF EPI_RELEASE}
+{$IFDEF EPI_SHOWREVISION}
   {$I revision.inc}
 {$ELSE}
   const RevisionStr = '(DEBUG)';

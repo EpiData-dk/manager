@@ -266,6 +266,8 @@ PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(F
 override PACKAGE_NAME=epidatamanager
 override PACKAGE_VERSION=0.5.5.0
 include Makefile.rc
+RELEASE_OPT=-dEPI_RELEASE -Xs -O2 -WG
+DEBUG_OPT=-dEPI_DEBUG -g -gl -gw
 ifndef LCL_PLATFORM
 ifeq ($(OS_TARGET),win32)
 LCL_PLATFORM=win32
@@ -632,178 +634,178 @@ override CLEAN_FILES+=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) $(wildcard 
 endif
 override INSTALL_FPCPACKAGE=n
 ifeq ($(FULL_TARGET),i386-linux)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-go32v2)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-win32)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-os2)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-freebsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-beos)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-haiku)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-netbsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-solaris)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-qnx)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-netware)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-openbsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-wdosx)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-darwin)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-emx)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-watcom)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-netwlibc)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-wince)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-symbian)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),m68k-linux)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),m68k-freebsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),m68k-netbsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),m68k-amiga)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),m68k-atari)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),m68k-openbsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),m68k-palmos)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),m68k-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc-linux)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc-netbsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc-amiga)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc-macos)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc-darwin)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc-morphos)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),sparc-linux)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),sparc-netbsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),sparc-solaris)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),sparc-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),x86_64-linux)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),x86_64-freebsd)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),x86_64-darwin)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),x86_64-win64)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),x86_64-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),arm-linux)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),arm-palmos)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),arm-darwin)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),arm-wince)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),arm-gba)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),arm-nds)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),arm-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),arm-symbian)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc64-linux)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc64-darwin)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),powerpc64-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),avr-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),armeb-linux)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),armeb-embedded)
-override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+override COMPILER_OPTIONS+=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 endif
 ifeq ($(FULL_TARGET),i386-linux)
 override COMPILER_UNITDIR+=designer project utils $(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET) $(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM) $(CORE_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) $(DCPCRYPT_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) $(LNET_PATH)/lazaruspackage/lib/$(CPU_TARGET)-$(OS_TARGET) .
@@ -2871,9 +2873,7 @@ endif
 fpc_makefile_sub2: $(addsuffix _makefile_dirs,$(TARGET_DIRS) $(TARGET_EXAMPLEDIRS))
 fpc_makefile_dirs: fpc_makefile_sub1 fpc_makefile_sub2
 fpc_makefiles: fpc_makefile fpc_makefile_dirs
-debug: fpc_debug
 smart: fpc_smart
-release: fpc_release
 units: fpc_units
 examples:
 shared: fpc_shared
@@ -2889,14 +2889,24 @@ distclean: fpc_distclean
 cleanall: fpc_cleanall
 info: fpc_info
 makefiles: fpc_makefiles
-.PHONY: debug smart release units examples shared install sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall distclean cleanall info makefiles
+.PHONY: smart units examples shared install sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall distclean cleanall info makefiles
 ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 .PHONY: all
 clean:	fpc_clean
 	$(MAKE) -C $(CORE_PATH) clean
+revisioninc:
+	./update_revision.sh
 core:
 	$(MAKE) -C $(CORE_PATH) all
-all:	$(COMPILER_UNITTARGETDIR) core
+core_debug:
+	$(MAKE) -C $(CORE_PATH) all OPT='$(DEBUG_OPT) $(OPT)'
+core_release:
+	$(MAKE) -C $(CORE_PATH) all OPT='$(RELEASE_OPT) $(OPT)'
+all:	$(COMPILER_UNITTARGETDIR) core revisioninc
 	$(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT)
+debug:   $(COMPILER_UNITTARGETDIR) core_debug revisioninc
+	 $(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT) OPT='$(DEBUG_OPT) $(OPT)'
+release: $(COMPILER_UNITTARGETDIR) core_release revisioninc
+	 $(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT) OPT='$(RELEASE_OPT) $(OPT)'

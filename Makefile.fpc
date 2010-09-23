@@ -10,7 +10,7 @@ version=0.5.5.0
 programs=epidatamanager
 
 [compiler]
-options=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+options=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 unittargetdir=./lib/$(CPU_TARGET)-$(OS_TARGET)
 unitdir=designer \
 	project \
@@ -40,8 +40,11 @@ files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
 
 
 [prerules]
-# Include to find paths to required packages.
+# EpiData defined.
 include Makefile.rc
+RELEASE_OPT=-dEPI_RELEASE -Xs -O2 -WG
+DEBUG_OPT=-dEPI_DEBUG -g -gl -gw
+
 # LCL Platform
 ifndef LCL_PLATFORM
 ifeq ($(OS_TARGET),win32)
@@ -66,8 +69,23 @@ export LCL_PLATFORM
 clean:	fpc_clean
 	$(MAKE) -C $(CORE_PATH) clean
 
+revisioninc:
+	./update_revision.sh
+
 core:
 	$(MAKE) -C $(CORE_PATH) all
 
-all:	$(COMPILER_UNITTARGETDIR) core
+core_debug:
+	$(MAKE) -C $(CORE_PATH) all OPT='$(DEBUG_OPT) $(OPT)'
+
+core_release:
+	$(MAKE) -C $(CORE_PATH) all OPT='$(RELEASE_OPT) $(OPT)'
+
+all:	$(COMPILER_UNITTARGETDIR) core revisioninc
 	$(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT)
+
+debug:   $(COMPILER_UNITTARGETDIR) core_debug revisioninc
+	 $(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT) OPT='$(DEBUG_OPT) $(OPT)'
+
+release: $(COMPILER_UNITTARGETDIR) core_release revisioninc
+	 $(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT) OPT='$(RELEASE_OPT) $(OPT)'
