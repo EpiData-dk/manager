@@ -1,0 +1,73 @@
+#
+#   Makefile.fpc for epidatamanager
+#
+
+[package]
+name=epidatamanager
+version=0.5.5.0
+
+[target]
+programs=epidatamanager
+
+[compiler]
+options=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi
+unittargetdir=./lib/$(CPU_TARGET)-$(OS_TARGET)
+unitdir=designer \
+	project \
+	utils \
+	$(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET) $(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM) \
+	$(CORE_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
+	$(DCPCRYPT_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
+	$(LNET_PATH)/lazaruspackage/lib/$(CPU_TARGET)-$(OS_TARGET) \
+	.
+targetdir=.
+
+[install]
+fpcpackage=n
+
+
+[clean]
+files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
+      $(wildcard $(COMPILER_UNITTARGETDIR)/*$(PPUEXT)) \
+      $(wildcard $(COMPILER_UNITTARGETDIR)/*$(RSTEXT)) \
+      $(wildcard $(COMPILER_UNITTARGETDIR)/*.lfm) \
+      $(wildcard $(COMPILER_UNITTARGETDIR)/*.res) \
+      $(wildcard $(COMPILER_UNITTARGETDIR)/*.or) \
+      $(wildcard ./designer/*$(OEXT)) $(wildcard ./designer/*$(PPUEXT)) \
+      $(wildcard ./project/*$(OEXT)) $(wildcard ./project/*$(PPUEXT)) \
+      $(wildcard ./utils/*$(OEXT)) $(wildcard ./utils/*$(PPUEXT)) \
+      $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *$(RSTEXT))
+
+
+[prerules]
+# Include to find paths to required packages.
+include Makefile.rc
+# LCL Platform
+ifndef LCL_PLATFORM
+ifeq ($(OS_TARGET),win32)
+LCL_PLATFORM=win32
+else
+ifeq ($(OS_TARGET),win64)
+LCL_PLATFORM=win32
+else
+ifeq ($(OS_TARGET),darwin)
+LCL_PLATFORM=carbon
+else
+LCL_PLATFORM=gtk2
+endif
+endif
+endif
+endif
+export LCL_PLATFORM
+
+[rules]
+.PHONY: all
+
+clean:	fpc_clean
+	$(MAKE) -C $(CORE_PATH) clean
+
+core:
+	$(MAKE) -C $(CORE_PATH) all
+
+all:	$(COMPILER_UNITTARGETDIR) core
+	$(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT)
