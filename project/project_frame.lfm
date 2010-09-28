@@ -2,12 +2,12 @@ object ProjectFrame: TProjectFrame
   Left = 0
   Height = 658
   Top = 0
-  Width = 1181
+  Width = 778
   ClientHeight = 658
-  ClientWidth = 1181
+  ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 375
-  DesignTop = 243
+  DesignLeft = 496
+  DesignTop = 248
   object ProjectPanel: TPanel
     Left = 0
     Height = 658
@@ -24,7 +24,7 @@ object ProjectFrame: TProjectFrame
       Top = 26
       Width = 200
       Align = alClient
-      DefaultItemHeight = 19
+      DefaultItemHeight = 15
       ReadOnly = True
       ScrollBars = ssAutoBoth
       ShowRoot = False

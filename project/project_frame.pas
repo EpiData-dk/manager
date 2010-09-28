@@ -124,6 +124,7 @@ begin
   ProjectSettings := TProjectSettingsForm.Create(self, EpiDocument.ProjectSettings);
   ProjectSettings.ShowModal;
   TDesignFrame(ActiveFrame).UpdateFrame;
+  ProjectSettings.Free;
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);

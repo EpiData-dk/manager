@@ -26,6 +26,7 @@ type
   private
     { private declarations }
     FProjectSettings: TEpiProjectSettings;
+    FActiveFrame: TFrame;
   protected
     constructor Create(TheOwner: TComponent); override;
     property    ProjectSettings: TEpiProjectSettings read FProjectSettings;
@@ -39,18 +40,16 @@ implementation
 {$R *.lfm}
 
 uses
-  project_settings_field_frame, project_settings_interface;
+  project_settings_field_frame, project_settings_interface, project_settings_general_frame;
 
 { TProjectSettingsForm }
 
 procedure TProjectSettingsForm.FormShow(Sender: TObject);
-var
-  Frame: TFrame;
 begin
-  Frame := TFrame(ProjectSettingsView.Items[0].Data);
-  (Frame as IProjectSettingsFrame).SetProjectSettings(ProjectSettings);
-  Frame.Parent := Self;
-  Frame.Align := alClient;
+  FActiveFrame := TFrame(ProjectSettingsView.Items[0].Data);
+  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(ProjectSettings);
+  FActiveFrame.Parent := Self;
+  FActiveFrame.Align := alClient;
   ProjectSettingsView.SetFocus;
 end;
 
@@ -61,21 +60,37 @@ var
 begin
   if ModalResult = mrCancel then exit;
 
-  // TODO : Implement ActiveFrame - to handling shutdown of current frame.
-  Frame := TFrame(ProjectSettingsView.Items[0].Data);
-  CanClose := (Frame as IProjectSettingsFrame).ApplySettings;
+  CanClose := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
 end;
 
 procedure TProjectSettingsForm.ProjectSettingsViewChange(Sender: TObject;
   Node: TTreeNode);
+var
+  Frame: TFrame;
 begin
-  // Happens after the change...  (not used at the moment)
+  // Happens after the change...
+  if csDestroying in ComponentState then exit;
+
+  Frame := TFrame(Node.Data);
+  (Frame as IProjectSettingsFrame).SetProjectSettings(FProjectSettings);
+  Frame.Parent := Self;
+  Frame.Align := alClient;
+  Frame.Show;
 end;
 
 procedure TProjectSettingsForm.ProjectSettingsViewChanging(Sender: TObject;
   Node: TTreeNode; var AllowChange: Boolean);
+var
+  Frame: TFrame;
 begin
-  // Happens before the change...  (not used at the moment)
+  // Happens before the change...
+  if csDestroying in ComponentState then exit;
+
+  Frame := TFrame(Node.Data);
+  AllowChange := (Frame as IProjectSettingsFrame).ApplySettings;
+  if not AllowChange then exit;
+
+  Frame.Hide;
 end;
 
 constructor TProjectSettingsForm.Create(TheOwner: TComponent);
@@ -89,6 +104,7 @@ begin
   Create(TheOwner);
   FProjectSettings := AProjectSettings;
 
+  ProjectSettingsView.Items.FindNodeWithText('General').Data := Pointer(TGeneralSettingsFrame.Create(Self));
   ProjectSettingsView.Items.FindNodeWithText('Fields').Data := Pointer(TFieldSettingsFrame.Create(Self));
 end;
 

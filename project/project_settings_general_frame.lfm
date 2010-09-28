@@ -1,0 +1,40 @@
+object GeneralSettingsFrame: TGeneralSettingsFrame
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 320
+  ClientHeight = 240
+  ClientWidth = 320
+  TabOrder = 0
+  DesignLeft = 612
+  DesignTop = 313
+  object Label1: TLabel
+    Left = 8
+    Height = 14
+    Top = 16
+    Width = 147
+    Caption = 'Backup Interval Time (minuts):'
+    ParentColor = False
+  end
+  object BackupIntervalEdit: TMaskEdit
+    Left = 224
+    Height = 21
+    Hint = 'Number of minuts between automatic backup'#13#10'Set to 0 for no backup (NOT recommended).'
+    Top = 9
+    Width = 80
+    CharCase = ecNormal
+    MaxLength = 2
+    TabOrder = 0
+    EditMask = '99;0;_'
+    SpaceChar = '_'
+  end
+  object BackupOnShutdownChkBox: TCheckBox
+    Left = 8
+    Height = 17
+    Hint = 'Automatically create a backup file of the'#13#10'entire project when program i closed.'
+    Top = 48
+    Width = 173
+    Caption = 'Backup project file on shutdown'
+    TabOrder = 1
+  end
+end

@@ -33,14 +33,13 @@
     <RequiredPackages Count="2">
       <Item1>
         <PackageName Value="epidatacore"/>
-        <MaxVersion Minor="5" Valid="True"/>
-        <MinVersion Minor="5" Valid="True"/>
+        <MinVersion Minor="5" Release="1" Valid="True"/>
       </Item1>
       <Item2>
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="16">
+    <Units Count="17">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -151,6 +150,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="about"/>
       </Unit15>
+      <Unit16>
+        <Filename Value="project/project_settings_general_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="GeneralSettingsFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_general_frame"/>
+      </Unit16>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
