@@ -90,10 +90,6 @@ procedure TMainForm.FormShow(Sender: TObject);
 begin
   SetCaption;
 //  ShowWorkFlowAction.Execute;
-  {$IFDEF EPI_RELEASE}
-  Width := 800;
-  Height := 600;
-  {$ENDIF}
 
   LoadIniFile;
 
@@ -186,6 +182,10 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Modified := false;
+  {$IFDEF EPI_RELEASE}
+  Width := 800;
+  Height := 600;
+  {$ENDIF}
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);

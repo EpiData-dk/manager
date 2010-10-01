@@ -333,6 +333,7 @@ begin
   if ModalResult <> mrOK then exit;
 
   // Rules for field creation!
+  NewLen := FField.Length;
   if LengthEdit.Visible then
   begin
     NewLen := StrToInt(LengthEdit.Text);
@@ -345,6 +346,8 @@ begin
       exit;
     end;
   end;
+
+  NewDecLen := FField.Decimals;
   if DecimalsEdit.Visible then
   begin
     NewDecLen := StrToInt(DecimalsEdit.Text);
