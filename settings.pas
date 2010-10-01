@@ -151,7 +151,7 @@ const
   ManagerVersion: TEpiVersionInfo = (
     VersionNo: 0;
     MajorRev:  5;
-    MinorRev:  5;
+    MinorRev:  6;
     BuildNo:   0;
   );
 
