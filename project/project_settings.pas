@@ -65,32 +65,28 @@ end;
 
 procedure TProjectSettingsForm.ProjectSettingsViewChange(Sender: TObject;
   Node: TTreeNode);
-var
-  Frame: TFrame;
 begin
   // Happens after the change...
   if csDestroying in ComponentState then exit;
 
-  Frame := TFrame(Node.Data);
-  (Frame as IProjectSettingsFrame).SetProjectSettings(FProjectSettings);
-  Frame.Parent := Self;
-  Frame.Align := alClient;
-  Frame.Show;
+  FActiveFrame := TFrame(Node.Data);
+  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(FProjectSettings);
+  FActiveFrame.Parent := Self;
+  FActiveFrame.Align := alClient;
+  FActiveFrame.Show;
 end;
 
 procedure TProjectSettingsForm.ProjectSettingsViewChanging(Sender: TObject;
   Node: TTreeNode; var AllowChange: Boolean);
-var
-  Frame: TFrame;
 begin
   // Happens before the change...
   if csDestroying in ComponentState then exit;
 
-  Frame := TFrame(Node.Data);
-  AllowChange := (Frame as IProjectSettingsFrame).ApplySettings;
+  FActiveFrame := TFrame(Node.Data);
+  AllowChange := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
   if not AllowChange then exit;
 
-  Frame.Hide;
+  FActiveFrame.Hide;
 end;
 
 constructor TProjectSettingsForm.Create(TheOwner: TComponent);
