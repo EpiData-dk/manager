@@ -24,7 +24,7 @@ object ProjectFrame: TProjectFrame
       Top = 26
       Width = 200
       Align = alClient
-      DefaultItemHeight = 15
+      DefaultItemHeight = 19
       ReadOnly = True
       ScrollBars = ssAutoBoth
       ShowRoot = False
@@ -147,6 +147,11 @@ object ProjectFrame: TProjectFrame
       Caption = 'Properties'
       OnExecute = ProjectSettingsActionExecute
       ShortCut = 32848
+    end
+    object ExportStataAction: TAction
+      Category = 'Export'
+      Caption = 'Export To Stata'
+      OnExecute = ExportStataActionExecute
     end
   end
   object ProjectImageList: TImageList
@@ -315,19 +320,5 @@ object ProjectFrame: TProjectFrame
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00
     }
-  end
-  object SaveProjectDialog: TSaveDialog
-    Title = 'Save Project As'
-    DefaultExt = '.epx'
-    Filter = 'EpiData Project File|*.epx|All Files|*.*'
-    Options = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
-    left = 330
-    top = 109
-  end
-  object OpenProjectDialog: TOpenDialog
-    DefaultExt = '.epx'
-    Filter = 'EpiData Project File|*.epx|All Files|*.*'
-    left = 330
-    top = 168
   end
 end

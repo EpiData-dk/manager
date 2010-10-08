@@ -542,7 +542,7 @@ var
 begin
   Dlg := TOpenDialog.Create(Self);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(false, true, false, false, false,
+  Dlg.Filter := GetEpiDialogFilter(false, false, true, false, false, false,
     true, false, true, true, false);
   if not Dlg.Execute then exit;
 
@@ -597,7 +597,7 @@ begin
 
   Dlg := TOpenDialog.Create(Self);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(false, true, false, false, false,
+  Dlg.Filter := GetEpiDialogFilter(false, false, true, false, false, false,
     true, false, true, true, false);
   if not Dlg.Execute then exit;
 

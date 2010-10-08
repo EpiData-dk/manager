@@ -20,6 +20,8 @@ type
     HelpMenuDivider2: TMenuItem;
     AboutMenuItem: TMenuItem;
     CheckVersionMenuItem: TMenuItem;
+    ExportStataMenuItem: TMenuItem;
+    ProjectMenuDivider1: TMenuItem;
     ShowAboutAction: TAction;
     FileExitAction: TFileExit;
     FileExitMenuItem: TMenuItem;
@@ -222,6 +224,7 @@ begin
   PasteAsStringMenuItem.Action  := TDesignFrame(Frame.ActiveFrame).PasteAsStringAction;
 
   ProjectPropertiesMenuItem.Action := Frame.ProjectSettingsAction;
+  ExportStataMenuItem.Action       := Frame.ExportStataAction;
 
   Inc(TabNameCount);
 end;

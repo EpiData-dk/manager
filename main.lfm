@@ -72,6 +72,12 @@ object MainForm: TMainForm
     end
     object ProjectMenu: TMenuItem
       Caption = '&Project'
+      object ExportStataMenuItem: TMenuItem
+        Caption = 'ExportStata'
+      end
+      object ProjectMenuDivider1: TMenuItem
+        Caption = '-'
+      end
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
       end

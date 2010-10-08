@@ -13,10 +13,9 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ExportStataAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
-    OpenProjectDialog: TOpenDialog;
-    SaveProjectDialog: TSaveDialog;
     SaveProjectAsAction: TAction;
     SaveProjectAction: TAction;
     OpenProjectAction: TAction;
@@ -34,6 +33,7 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure ExportStataActionExecute(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
@@ -72,8 +72,8 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame, Clipbrd, settings, rttiutils, typinfo,
-  main, project_settings;
+  design_frame, Clipbrd, settings, project_settings, epimiscutils,
+  epiexport;
 
 type
 
@@ -103,9 +103,36 @@ begin
   DoNewDataForm(Df);
 end;
 
-procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
+procedure TProjectFrame.ExportStataActionExecute(Sender: TObject);
+var
+  SaveDlg: TSaveDialog;
+  Exporter: TEpiExport;
 begin
-  OpenProjectDialog.InitialDir := ManagerSettings.WorkingDirUTF8;
+  SaveDlg := TSaveDialog.Create(Self);
+  try
+    SaveDlg.Title := 'Export current form to Stata file...';
+    SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    SaveDlg.Filter := GetEpiDialogFilter(false, false, false, false, false, false, true, false, false, false, false);
+    SaveDlg.Options := SaveDlg.Options + [ofOverwritePrompt];
+    if not SaveDlg.Execute then exit;
+
+    // TODO : Support different datafiles export.
+    Exporter := TEpiExport.Create;
+    Exporter.ExportStata(SaveDlg.FileName, EpiDocument.DataFiles[0]);
+  finally
+    SaveDlg.Free;
+    Exporter.Free;
+  end;
+end;
+
+procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
+var
+  Dlg: TOpenDialog;
+begin
+  Dlg := TOpenDialog.Create(self);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+  Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
+    false, false, false, true, false);
 
   {$IFNDEF EPI_DEBUG}
   if MessageDlg('Warning', 'Opening project will clear all.' + LineEnding +
@@ -113,8 +140,9 @@ begin
        mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
   {$ENDIF}
 
-  if not OpenProjectDialog.Execute then exit;
-  DoOpenProject(OpenProjectDialog.FileName);
+  if not Dlg.Execute then exit;
+  DoOpenProject(Dlg.FileName);
+  Dlg.Free;
 end;
 
 procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);
@@ -136,10 +164,16 @@ begin
 end;
 
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
+var
+  Dlg: TSaveDialog;
 begin
-  SaveProjectDialog.InitialDir := ManagerSettings.WorkingDirUTF8;
-  if not SaveProjectDialog.Execute then exit;
-  DoSaveProject(SaveProjectDialog.FileName);
+  Dlg := TSaveDialog.Create(Self);
+  Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
+    false, false, false, false, false);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+  if not Dlg.Execute then exit;
+  DoSaveProject(Dlg.FileName);
+  Dlg.Free;
 end;
 
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;
@@ -170,21 +204,28 @@ end;
 procedure TProjectFrame.DoSaveProject(AFileName: string);
 var
   Fs: TFileStream;
-  Ss: TStringStream;
+  Ms: TMemoryStream;
 begin
   if AFileName <> ProjectFileName then
     FFileName := AFileName;
-  Fs := TFileStream.Create(AFileName, fmCreate);
-  Ss := TStringStream.Create(EpiDocument.SaveToXml());
-  Fs.CopyFrom(Ss, Ss.Size);
-  Ss.Free;
-  Fs.Free;
+  Ms := TMemoryStream.Create;
+  EpiDocument.SaveToStream(Ms);
+  Ms.Position := 0;
+
+  if ExtractFileExt(UTF8ToSys(AFileName)) = '.epz' then
+    StreamToZipFile(Ms, AFileName)
+  else begin
+    Fs := TFileStream.Create(AFileName, fmCreate);
+    Fs.CopyFrom(Ms, Ms.Size);
+    Fs.Free;
+  end;
+  Ms.Free;
   EpiDocument.Modified := false;
 end;
 
 procedure TProjectFrame.DoOpenProject(AFileName: string);
 var
-  Frame: TDesignFrame;
+  St: TMemoryStream;
 begin
   FEpiDocument.Free;
 
@@ -192,10 +233,18 @@ begin
   FActiveFrame.Free;
   DataFilesTreeView.Items.Clear;
 
+  St := TMemoryStream.Create;
+  if ExtractFileExt(UTF8ToSys(AFileName)) = '.epz' then
+    ZipFileToStream(St, AFileName)
+  else
+    St.LoadFromFile(AFileName);
+
+  St.Position := 0;
   FEpiDocument := DoCreateNewDocument;
-  FEpiDocument.LoadFromFile(AFileName);
+  FEpiDocument.LoadFromStream(St);
   FFileName := AFileName;
   DoNewDataForm(FEpiDocument.DataFiles[0]);
+  St.Free;
 end;
 
 procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);
@@ -215,11 +264,15 @@ end;
 
 procedure TProjectFrame.DoCreateReleaseSections;
 var
+  {$IFDEF EPI_RELEASE}
   TmpEpiSection: TEpiSection;
   i: Integer;
   H: TEpiHeading;
+  {$ENDIF EPI_RELEASE}
+  {$IFDEF EPI_DEBUG}
   LocalAdm: TEpiAdmin;
   Grp: TEpiGroup;
+  {$ENDIF}
 begin
   {$IFDEF EPI_RELEASE}
   with FEpiDocument.DataFiles[0] do
