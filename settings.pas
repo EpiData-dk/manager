@@ -25,6 +25,7 @@ type
     DefaultPasteCombo: TComboBox;
     DefaultDateCombo: TComboBox;
     Label9: TLabel;
+    Splitter1: TSplitter;
     WorkingDirEdit: TDirectoryEdit;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
@@ -107,6 +108,7 @@ type
     LabelNamePrefix:       string;
     IniFileName:           string;
   end;
+  PManagerSettings = ^TManagerSettings;
 
 var
   ManagerSettings: TManagerSettings = (

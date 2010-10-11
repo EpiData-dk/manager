@@ -18,6 +18,9 @@
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
     </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="default" Default="True"/>
+    </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
       <IgnoreBinaries Value="False"/>
@@ -39,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="17">
+    <Units Count="23">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -157,6 +160,44 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_general_frame"/>
       </Unit16>
+      <Unit17>
+        <Filename Value="settings/settings2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SettingsForm2"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings2"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="settings/visualdesign_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="VisualDesign"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="visualdesign_frame"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="settings/fielddefinitions_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FieldDefinitionFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fielddefinitions_frame"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="settings/advanced_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AdvancedFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="advanced_frame"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="settings/settings2_interface.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="settings2_interface"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="settings/settings2_var.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="settings2_var"/>
+      </Unit22>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -166,7 +207,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="designer;utils;project"/>
+      <OtherUnitFiles Value="designer;utils;project;settings"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
@@ -189,8 +230,9 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dEPI_DEBUG
--dEPI_RELEASE1
+      <CustomOptions Value="-dEPI_DEBUG1
+-dEPI_RELEASE
+-dEPI_SETTINGSFORM2
 -dBLAH"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>

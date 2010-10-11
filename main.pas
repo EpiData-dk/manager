@@ -84,6 +84,7 @@ implementation
 
 uses
   workflow_frame, project_frame, settings, LCLProc, LCLIntf, design_frame,
+  {$IFDEF EPI_SETTINGSFORM2}settings2,{$ENDIF}
   about, Clipbrd, epiversionutils;
 
 { TMainForm }
@@ -231,9 +232,9 @@ end;
 
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
 var
-  SettingForm: TSettingsForm;
+  SettingForm: {$IFDEF EPI_SETTINGSFORM2}TSettingsForm2{$ELSE}TSettingsForm{$ENDIF};
 begin
-  SettingForm := TSettingsForm.Create(Self);
+  SettingForm := {$IFDEF EPI_SETTINGSFORM2}TSettingsForm2{$ELSE}TSettingsForm{$ENDIF}.Create(Self);
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
 
@@ -285,9 +286,9 @@ end;
 
 procedure TMainForm.SetCaption;
 begin
-  Caption := 'EpiData Project and Data Manager (v' + GetManagerVersion + ')';
-  if Modified then
-    Caption := Caption + ' (modified)';
+  Caption := 'EpiData Manager (v' + GetManagerVersion + ')';
+//  if Modified then
+//    Caption := Caption + ' (modified)';
 end;
 
 procedure TMainForm.SetModified(const AValue: boolean);

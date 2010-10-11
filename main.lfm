@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = 474
+  Left = 352
   Height = 627
   Top = 249
   Width = 1040
@@ -110,8 +110,8 @@ object MainForm: TMainForm
     end
   end
   object ActionList1: TActionList
-    left = 480
-    top = 280
+    left = 416
+    top = 208
     object ShowWorkFlowAction: TAction
       Caption = 'ShowWorkFlowAction'
       OnExecute = ShowWorkFlowActionExecute

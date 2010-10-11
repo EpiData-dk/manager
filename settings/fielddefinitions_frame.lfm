@@ -1,0 +1,219 @@
+object FieldDefinitionFrame: TFieldDefinitionFrame
+  Left = 0
+  Height = 498
+  Top = 0
+  Width = 761
+  ClientHeight = 498
+  ClientWidth = 761
+  TabOrder = 0
+  DesignLeft = 387
+  DesignTop = 242
+  object Label14: TLabel
+    Left = 8
+    Height = 18
+    Top = 160
+    Width = 82
+    Caption = 'Default date'
+    ParentColor = False
+  end
+  object DefaultDateCombo: TComboBox
+    Left = 127
+    Height = 31
+    Top = 155
+    Width = 131
+    ItemHeight = 0
+    ItemIndex = 0
+    Items.Strings = (
+      'DD/MM/YYYY'
+      'MM/DD/YYYY'
+      'YY/MM/DDDD'
+    )
+    Style = csDropDownList
+    TabOrder = 0
+    Text = 'DD/MM/YYYY'
+  end
+  object GroupBox1: TGroupBox
+    Left = 8
+    Height = 139
+    Top = 10
+    Width = 250
+    Caption = 'Default Field Lengths'
+    ClientHeight = 120
+    ClientWidth = 246
+    TabOrder = 1
+    object Label10: TLabel
+      Left = 8
+      Height = 18
+      Hint = 'Default field length for:'#10'Integer and IdNum'
+      Top = 11
+      Width = 51
+      Caption = 'Integer:'
+      ParentColor = False
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object Label11: TLabel
+      Left = 168
+      Height = 18
+      Hint = 'Default field length for:'#10'Float'
+      Top = 48
+      Width = 60
+      Caption = 'decimals'
+      ParentColor = False
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object Label12: TLabel
+      Left = 8
+      Height = 18
+      Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
+      Top = 88
+      Width = 43
+      Caption = 'String:'
+      ParentColor = False
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object IntLengthEdit: TMaskEdit
+      Left = 78
+      Height = 27
+      Hint = 'Default field length for:'#10'Integer and IdNum'
+      Top = 2
+      Width = 35
+      CharCase = ecNormal
+      MaxLength = 3
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+      EditMask = '999;0;_'
+      SpaceChar = '_'
+    end
+    object FloatIntEdit: TMaskEdit
+      Left = 78
+      Height = 27
+      Hint = 'Default field length for:'#10'Float'
+      Top = 39
+      Width = 35
+      CharCase = ecNormal
+      MaxLength = 3
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+      EditMask = '999;0;_'
+      SpaceChar = '_'
+    end
+    object StringLengthEdit: TMaskEdit
+      Left = 78
+      Height = 27
+      Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
+      Top = 79
+      Width = 35
+      CharCase = ecNormal
+      MaxLength = 3
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      EditMask = '999;0;_'
+      SpaceChar = '_'
+    end
+    object DecimalLengthEdit: TMaskEdit
+      Left = 127
+      Height = 27
+      Hint = 'Default decimal length for:'#10'Float'
+      Top = 39
+      Width = 35
+      CharCase = ecNormal
+      MaxLength = 3
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      EditMask = '999;0;_'
+      SpaceChar = '_'
+    end
+    object Label13: TLabel
+      Left = 8
+      Height = 18
+      Hint = 'Default field length for:'#10'Float'
+      Top = 48
+      Width = 34
+      Caption = 'Float'
+      ParentColor = False
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object Label9: TLabel
+      Left = 118
+      Height = 18
+      Top = 48
+      Width = 5
+      Caption = '.'
+      ParentColor = False
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 8
+    Height = 160
+    Top = 192
+    Width = 250
+    Caption = 'Field Naming'
+    ClientHeight = 141
+    ClientWidth = 246
+    TabOrder = 2
+    object FieldNamingGroup: TRadioGroup
+      Left = 14
+      Height = 79
+      Top = 47
+      Width = 216
+      AutoFill = True
+      Caption = 'Field Naming from QES files'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.TopBottomSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 60
+      ClientWidth = 212
+      Enabled = False
+      TabOrder = 0
+      Visible = False
+      object FieldNamingAutoRadio: TRadioButton
+        Left = 6
+        Height = 24
+        Top = 6
+        Width = 200
+        Caption = 'Automatic'
+        Enabled = False
+        TabOrder = 0
+      end
+      object FieldNamingFirstWordRadio: TRadioButton
+        Left = 6
+        Height = 24
+        Top = 30
+        Width = 200
+        Caption = 'First word'
+        Checked = True
+        Enabled = False
+        TabOrder = 1
+        TabStop = True
+      end
+    end
+    object Label1: TLabel
+      Left = 14
+      Height = 18
+      Top = 15
+      Width = 73
+      Caption = 'Field Prefix'
+      ParentColor = False
+    end
+    object PrefixEdit: TEdit
+      Left = 131
+      Height = 27
+      Top = 7
+      Width = 99
+      TabOrder = 1
+    end
+  end
+end

@@ -24,6 +24,7 @@ type
     ActionList1: TActionList;
     ProjectPanel: TPanel;
     DataFilesTreeView: TTreeView;
+    ProjectStatusBar: TStatusBar;
     ToolBar1: TToolBar;
     OpenProjectToolBtn: TToolButton;
     ToolButton1: TToolButton;
@@ -57,6 +58,7 @@ type
     procedure EpiDocumentModified(Sender: TObject);
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
+    procedure UpdateStatusBar;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -221,6 +223,7 @@ begin
   end;
   Ms.Free;
   EpiDocument.Modified := false;
+  UpdateStatusBar;
 end;
 
 procedure TProjectFrame.DoOpenProject(AFileName: string);
@@ -245,6 +248,8 @@ begin
   FFileName := AFileName;
   DoNewDataForm(FEpiDocument.DataFiles[0]);
   St.Free;
+
+  UpdateStatusBar;
 end;
 
 procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);
@@ -364,14 +369,27 @@ procedure TProjectFrame.SetModified(const AValue: Boolean);
 begin
   if FModified = AValue then exit;
   FModified := AValue;
+  UpdateStatusBar;
   if Assigned(FOnModified) then
     FOnModified(Self);
 end;
 
 procedure TProjectFrame.SetOnModified(const AValue: TNotifyEvent);
 begin
-  if FOnModified = AValue then exit;
   FOnModified := AValue;
+end;
+
+procedure TProjectFrame.UpdateStatusBar;
+var
+  S: String;
+begin
+  if ProjectFileName <> '' then
+    S := ProjectFileName
+  else
+    S := '(untitled)';
+  if Modified then
+    S := S + '*';
+  ProjectStatusBar.SimpleText := S;
 end;
 
 constructor TProjectFrame.Create(TheOwner: TComponent);
@@ -385,6 +403,7 @@ begin
   FFileName := '';
 
   FEpiDocument := DoCreateNewDocument;
+  UpdateStatusBar;
 
   {$IFDEF EPI_DEBUG}
 

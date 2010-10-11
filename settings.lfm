@@ -1,33 +1,33 @@
 object SettingsForm: TSettingsForm
-  Left = 644
-  Height = 274
-  Top = 354
-  Width = 486
-  ActiveControl = PageControl1
+  Left = 422
+  Height = 488
+  Top = 261
+  Width = 813
+  ActiveControl = Splitter1
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Settings'
-  ClientHeight = 274
-  ClientWidth = 486
+  ClientHeight = 488
+  ClientWidth = 813
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poOwnerFormCenter
   LCLVersion = '0.9.29'
   object PageControl1: TPageControl
-    Left = 0
-    Height = 228
+    Left = 5
+    Height = 442
     Hint = 'Default decimal length for:'#10'Float'
     Top = 0
-    Width = 486
-    ActivePage = VisualDesignSheet
+    Width = 808
+    ActivePage = AdvSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 0
     object VisualDesignSheet: TTabSheet
       Caption = 'Visual design'
-      ClientHeight = 193
-      ClientWidth = 480
+      ClientHeight = 407
+      ClientWidth = 802
       object Label3: TLabel
         Left = 13
         Height = 18
@@ -164,8 +164,8 @@ object SettingsForm: TSettingsForm
     end
     object FieldDefSheet: TTabSheet
       Caption = 'Field definitions'
-      ClientHeight = 193
-      ClientWidth = 480
+      ClientHeight = 407
+      ClientWidth = 802
       object Label10: TLabel
         Left = 22
         Height = 18
@@ -391,8 +391,8 @@ object SettingsForm: TSettingsForm
     end
     object AdvSheet: TTabSheet
       Caption = 'Advanced'
-      ClientHeight = 193
-      ClientWidth = 480
+      ClientHeight = 407
+      ClientWidth = 802
       object Label17: TLabel
         Left = 8
         Height = 18
@@ -444,16 +444,16 @@ object SettingsForm: TSettingsForm
   object Panel1: TPanel
     Left = 0
     Height = 46
-    Top = 228
-    Width = 486
+    Top = 442
+    Width = 813
     Align = alBottom
     BevelInner = bvSpace
     BevelOuter = bvSpace
     ClientHeight = 46
-    ClientWidth = 486
+    ClientWidth = 813
     TabOrder = 1
     object CancelBtn: TBitBtn
-      Left = 308
+      Left = 635
       Height = 32
       Top = 8
       Width = 79
@@ -466,7 +466,7 @@ object SettingsForm: TSettingsForm
       TabOrder = 0
     end
     object OkBtn: TBitBtn
-      Left = 396
+      Left = 723
       Height = 32
       Top = 8
       Width = 79
@@ -477,6 +477,12 @@ object SettingsForm: TSettingsForm
       ModalResult = 1
       TabOrder = 1
     end
+  end
+  object Splitter1: TSplitter
+    Left = 0
+    Height = 442
+    Top = 0
+    Width = 5
   end
   object ActionList1: TActionList
     left = 264

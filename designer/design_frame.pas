@@ -1637,10 +1637,10 @@ end;
 procedure TDesignFrame.DockSiteUnDock(Sender: TObject; Client: TControl;
   NewTarget: TWinControl; var Allow: Boolean);
 begin
-  // Sender = the site that is being undocked from.
-  // Client = the control that was dragged to another position.
-  // NewTarget = the target we try dock the client onto (can be the same the sender)
-  // Allow = our feedback to the dragmanager if we want this undock to happen.
+  // Sender     = the site that is being undocked from.
+  // Client     = the control that was dragged to another position.
+  // NewTarget  = the target we try dock the client onto (can be the same the sender)
+  // Allow      = our feedback to the dragmanager if we want this undock to happen.
 
   Allow := false;
   // NewTarget = false: trying to release the client outside of program window.
