@@ -8,7 +8,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, MaskEdit, ExtCtrls, ComCtrls, ActnList, EditBtn, Buttons,
-  epidatafilestypes, epiversionutils;
+  epidatafilestypes, epiversionutils, settings2_var;
 
 type
 
@@ -76,7 +76,7 @@ type
 //    property OnChange;
   end;
 
-  TManagerSettings = record
+{  TManagerSettings = record
     // Visual design:
     DefaultRightPostion:   Integer;
     SnapFields:            boolean;
@@ -137,7 +137,10 @@ var
     SelectedControlColour: $00B6F5F5;
     LabelNamePrefix:       'label_';
     IniFileName:           '';
-  );
+  ); }
+
+var
+  ManagerSettings: TManagerSettings absolute ManagerSettings2;
 
 {$IFDEF EPI_SHOWREVISION}
   {$I revision.inc}
@@ -148,6 +151,8 @@ var
 function GetManagerVersion: String;
 function SaveSettingToIni(Const FileName: string): boolean;
 function LoadSettingsFromIni(Const FileName: string): boolean;
+
+
 
 const
   ManagerVersion: TEpiVersionInfo = (

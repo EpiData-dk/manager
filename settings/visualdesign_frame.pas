@@ -52,11 +52,11 @@ begin
   with FData^ do
   begin
     DefaultRightPosEdit.Text          := IntToStr(DefaultRightPostion);
-    SnapFieldsChkBox.Checked          := ManagerSettings.SnapFields;
-    SnapThresholdEdit.Text            := IntToStr(ManagerSettings.SnappingThresHold);
-    FieldFieldEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldField);
-    FieldLabelEdit.Text               := IntToStr(ManagerSettings.SpaceBtwFieldLabel);
-    LabelLabelEdit.Text               := IntToStr(ManagerSettings.SpaceBtwLabelLabel);
+    SnapFieldsChkBox.Checked          := SnapFields;
+    SnapThresholdEdit.Text            := IntToStr(SnappingThresHold);
+    FieldFieldEdit.Text               := IntToStr(SpaceBtwFieldField);
+    FieldLabelEdit.Text               := IntToStr(SpaceBtwFieldLabel);
+    LabelLabelEdit.Text               := IntToStr(SpaceBtwLabelLabel);
   end;
 end;
 

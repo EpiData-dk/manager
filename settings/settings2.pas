@@ -37,7 +37,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_interface;
+  settings2_interface, settings2_var;
 
 var
   Frames: TStringList = nil;
@@ -51,7 +51,7 @@ begin
   if csDestroying in ComponentState then exit;
 
   FActiveFrame := TFrame(Node.Data);
-//  AllowChange := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
+  AllowChange := (FActiveFrame as ISettingsFrame).ApplySettings;
   if not AllowChange then exit;
 
   FActiveFrame.Hide;
@@ -63,18 +63,14 @@ begin
   if csDestroying in ComponentState then exit;
 
   FActiveFrame := TFrame(Node.Data);
-//  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(FProjectSettings);
-//  FActiveFrame.Parent := Self;
-//  FActiveFrame.Align := alClient;
   FActiveFrame.Show;
 end;
 
 procedure TSettingsForm2.FormShow(Sender: TObject);
 begin
   FActiveFrame := TFrame(SettingsView.Items[0].Data);
-//  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(ProjectSettings);
-//  FActiveFrame.Parent := Self;
-//  FActiveFrame.Align := alClient;
+  SettingsView.Selected := SettingsView.Items[0];
+
   if SettingsView.Items.Count > 0 then
     TFrame(SettingsView.Items[0].Data).Show;
   SettingsView.SetFocus;
@@ -92,6 +88,7 @@ begin
   begin
     FrameClass := TCustomFrameClass(Frames.Objects[i]);
     Frame := FrameClass.Create(Self);
+    (Frame as ISettingsFrame).SetSettings(@ManagerSettings2);
     Frame.Hide;
     Frame.Align := alClient;
     Frame.Parent := Self;

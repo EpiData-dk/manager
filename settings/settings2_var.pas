@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, epidatafilestypes;
 
 type
-  TManagerSettings2 = record
+  TManagerSettings = record
     // Visual design:
     DefaultRightPostion:   Integer;
     SnapFields:            boolean;
@@ -40,10 +40,10 @@ type
     LabelNamePrefix:       string;
     IniFileName:           string;
   end;
-  PManagerSettings = ^TManagerSettings2;
+  PManagerSettings = ^TManagerSettings;
 
 var
-  ManagerSettings: TManagerSettings2 = (
+  ManagerSettings2: TManagerSettings = (
     // Visual design:
     DefaultRightPostion:   200;
     SnapFields:            true;
