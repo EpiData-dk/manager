@@ -287,8 +287,6 @@ end;
 procedure TMainForm.SetCaption;
 begin
   Caption := 'EpiData Manager (v' + GetManagerVersion + ')';
-//  if Modified then
-//    Caption := Caption + ' (modified)';
 end;
 
 procedure TMainForm.SetModified(const AValue: boolean);
@@ -306,13 +304,19 @@ end;
 procedure TMainForm.LoadIniFile;
 const
   IniName = 'epidatamanager.ini';
+var
+  S: String;
 begin
   // TODO : Settings can be loaded from commandline?
 
-  if LoadSettingsFromIni(GetAppConfigDirUTF8(false) + IniName) then exit;
+  if LoadSettingsFromIni(GetAppConfigFileUTF8(false)) then exit;
 
   // Todo - this is not optimal on Non-windows OS's. Do some checks for writeability first.
   if LoadSettingsFromIni(ExtractFilePath(Application.ExeName) + IniName) then exit;
+
+//  S := GetAppConfigDirUTF8(false);
+//  if not DirectoryExistsUTF8(S) then CreateDirUTF8(S);
+  ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
 end;
 
 end.

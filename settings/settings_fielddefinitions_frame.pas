@@ -1,4 +1,4 @@
-unit fielddefinitions_frame;
+unit settings_fielddefinitions_frame;
 
 {$mode objfpc}{$H+}
 
@@ -10,9 +10,9 @@ uses
 
 type
 
-  { TFieldDefinitionFrame }
+  { TSettings_FieldDefinitionFrame }
 
-  TFieldDefinitionFrame = class(TFrame, ISettingsFrame)
+  TSettings_FieldDefinitionFrame = class(TFrame, ISettingsFrame)
     DecimalLengthEdit: TMaskEdit;
     DefaultDateCombo: TComboBox;
     FieldNamingAutoRadio: TRadioButton;
@@ -47,9 +47,9 @@ implementation
 uses
   settings2, epidatafilestypes;
 
-{ TFieldDefinitionFrame }
+{ TSettings_FieldDefinitionFrame }
 
-procedure TFieldDefinitionFrame.SetSettings(Data: PManagerSettings);
+procedure TSettings_FieldDefinitionFrame.SetSettings(Data: PManagerSettings);
 begin
   FData := Data;
   with FData^ do
@@ -70,7 +70,7 @@ begin
   end;
 end;
 
-function TFieldDefinitionFrame.ApplySettings: boolean;
+function TSettings_FieldDefinitionFrame.ApplySettings: boolean;
 var
   S: String;
 begin
@@ -107,7 +107,7 @@ end;
 initialization
 
 begin
-  RegisterSettingFrame(1, TFieldDefinitionFrame, 'Field Definitions');
+  RegisterSettingFrame(1, TSettings_FieldDefinitionFrame, 'Field Definitions');
 end;
 
 end.

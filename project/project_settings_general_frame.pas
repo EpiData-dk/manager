@@ -10,9 +10,9 @@ uses
 
 type
 
-  { TGeneralSettingsFrame }
+  { TProjectSettings_GeneralFrame }
 
-  TGeneralSettingsFrame = class(TFrame, IProjectSettingsFrame)
+  TProjectSettings_GeneralFrame = class(TFrame, IProjectSettingsFrame)
     BackupOnShutdownChkBox: TCheckBox;
     Label1: TLabel;
     BackupIntervalEdit: TMaskEdit;
@@ -32,16 +32,16 @@ implementation
 uses
   Dialogs;
 
-{ TGeneralSettingsFrame }
+{ TProjectSettings_GeneralFrame }
 
-procedure TGeneralSettingsFrame.SetProjectSettings(AValue: TEpiProjectSettings);
+procedure TProjectSettings_GeneralFrame.SetProjectSettings(AValue: TEpiProjectSettings);
 begin
   FProjectSettings := AValue;
   BackupIntervalEdit.Text := IntToStr(FProjectSettings.BackupInterval);
   BackupOnShutdownChkBox.Enabled := FProjectSettings.BackupOnShutdown;
 end;
 
-function TGeneralSettingsFrame.ApplySettings: boolean;
+function TProjectSettings_GeneralFrame.ApplySettings: boolean;
 var
   I: LongInt;
 begin

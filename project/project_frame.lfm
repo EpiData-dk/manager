@@ -6,21 +6,21 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 354
-  DesignTop = 234
+  DesignLeft = 624
+  DesignTop = 181
   object ProjectPanel: TPanel
     Left = 0
-    Height = 637
+    Height = 658
     Top = 0
     Width = 200
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 637
+    ClientHeight = 658
     ClientWidth = 200
     TabOrder = 0
     object DataFilesTreeView: TTreeView
       Left = 0
-      Height = 611
+      Height = 632
       Top = 26
       Width = 200
       Align = alClient
@@ -100,14 +100,6 @@ object ProjectFrame: TProjectFrame
         Style = tbsDivider
       end
     end
-  end
-  object ProjectStatusBar: TStatusBar
-    Left = 0
-    Height = 21
-    Top = 637
-    Width = 778
-    Panels = <>
-    SizeGrip = False
   end
   object ActionList1: TActionList
     Images = ProjectImageList

@@ -1,5 +1,6 @@
 unit settings2;
 
+{$codepage UTF8}
 {$mode objfpc}{$H+}
 
 interface
@@ -17,6 +18,7 @@ type
     BitBtn2: TBitBtn;
     Panel1: TPanel;
     SettingsView: TTreeView;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure SettingsViewChange(Sender: TObject; Node: TTreeNode);
     procedure SettingsViewChanging(Sender: TObject; Node: TTreeNode;
@@ -37,7 +39,8 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_interface, settings2_var;
+  settings2_interface, settings2_var,
+  settings;
 
 var
   Frames: TStringList = nil;
@@ -74,6 +77,14 @@ begin
   if SettingsView.Items.Count > 0 then
     TFrame(SettingsView.Items[0].Data).Show;
   SettingsView.SetFocus;
+end;
+
+procedure TSettingsForm2.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  CanClose := false;
+  if not (FActiveFrame as ISettingsFrame).ApplySettings then exit;
+  SaveSettingToIni(ManagerSettings2.IniFileName);
+  CanClose := true;
 end;
 
 constructor TSettingsForm2.Create(TheOwner: TComponent);

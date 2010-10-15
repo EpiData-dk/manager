@@ -100,8 +100,8 @@ begin
   Create(TheOwner);
   FProjectSettings := AProjectSettings;
 
-  ProjectSettingsView.Items.FindNodeWithText('General').Data := Pointer(TGeneralSettingsFrame.Create(Self));
-  ProjectSettingsView.Items.FindNodeWithText('Fields').Data := Pointer(TFieldSettingsFrame.Create(Self));
+  ProjectSettingsView.Items.FindNodeWithText('General').Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
+  ProjectSettingsView.Items.FindNodeWithText('Fields').Data := Pointer(TProjectSettings_FieldFrame.Create(Self));
 end;
 
 end.

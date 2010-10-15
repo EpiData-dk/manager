@@ -1,4 +1,4 @@
-object FieldDefinitionFrame: TFieldDefinitionFrame
+object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
   Left = 0
   Height = 498
   Top = 0

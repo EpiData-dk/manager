@@ -1,4 +1,4 @@
-object FieldSettingsFrame: TFieldSettingsFrame
+object ProjectSettings_FieldFrame: TProjectSettings_FieldFrame
   Left = 0
   Height = 356
   Top = 0

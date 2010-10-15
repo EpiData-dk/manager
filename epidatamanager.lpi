@@ -13,7 +13,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MinorVersionNr Value="5"/>
-      <RevisionNr Value="6"/>
+      <RevisionNr Value="7"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -137,7 +137,7 @@
       <Unit13>
         <Filename Value="project/project_settings_field_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="FieldSettingsFrame"/>
+        <ComponentName Value="ProjectSettings_FieldFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_field_frame"/>
       </Unit13>
@@ -156,7 +156,7 @@
       <Unit16>
         <Filename Value="project/project_settings_general_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="GeneralSettingsFrame"/>
+        <ComponentName Value="ProjectSettings_GeneralFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_general_frame"/>
       </Unit16>
@@ -168,25 +168,25 @@
         <UnitName Value="settings2"/>
       </Unit17>
       <Unit18>
-        <Filename Value="settings/visualdesign_frame.pas"/>
+        <Filename Value="settings/settings_visualdesign_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="VisualDesign"/>
+        <ComponentName Value="Settings_VisualDesign"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="visualdesign_frame"/>
+        <UnitName Value="settings_visualdesign_frame"/>
       </Unit18>
       <Unit19>
-        <Filename Value="settings/fielddefinitions_frame.pas"/>
+        <Filename Value="settings/settings_fielddefinitions_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="FieldDefinitionFrame"/>
+        <ComponentName Value="Settings_FieldDefinitionFrame"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="fielddefinitions_frame"/>
+        <UnitName Value="settings_fielddefinitions_frame"/>
       </Unit19>
       <Unit20>
-        <Filename Value="settings/advanced_frame.pas"/>
+        <Filename Value="settings/settings_advanced_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="AdvancedFrame"/>
+        <ComponentName Value="Settings_AdvancedFrame"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="advanced_frame"/>
+        <UnitName Value="settings_advanced_frame"/>
       </Unit20>
       <Unit21>
         <Filename Value="settings/settings2_interface.pas"/>
@@ -230,8 +230,8 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dEPI_DEBUG1
--dEPI_RELEASE
+      <CustomOptions Value="-dEPI_DEBUG
+-dEPI_RELEASE1
 -dEPI_SETTINGSFORM2
 -dBLAH"/>
       <CompilerPath Value="$(CompPath)"/>

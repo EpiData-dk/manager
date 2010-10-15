@@ -4,9 +4,10 @@ object SettingsForm2: TSettingsForm2
   Top = 270
   Width = 582
   ActiveControl = SettingsView
-  Caption = 'SettingsForm2'
+  Caption = 'Settings'
   ClientHeight = 440
   ClientWidth = 582
+  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   LCLVersion = '0.9.29'
   object Panel1: TPanel

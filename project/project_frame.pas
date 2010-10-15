@@ -24,7 +24,6 @@ type
     ActionList1: TActionList;
     ProjectPanel: TPanel;
     DataFilesTreeView: TTreeView;
-    ProjectStatusBar: TStatusBar;
     ToolBar1: TToolBar;
     OpenProjectToolBtn: TToolButton;
     ToolButton1: TToolButton;
@@ -54,11 +53,12 @@ type
     procedure DoSaveProject(AFileName: string);
     procedure DoOpenProject(AFileName: string);
     procedure DoNewDataForm(Df: TEpiDataFile);
+    procedure DoCloseProject;
     procedure DoCreateReleaseSections;
     procedure EpiDocumentModified(Sender: TObject);
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
-    procedure UpdateStatusBar;
+    procedure UpdateCaption;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -75,7 +75,7 @@ implementation
 
 uses
   design_frame, Clipbrd, settings, project_settings, epimiscutils,
-  epiexport;
+  epiexport, main;
 
 type
 
@@ -173,6 +173,8 @@ begin
   Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
     false, false, false, false, false);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+  Dlg.FilterIndex := ManagerSettings.SaveType+1;
+  Dlg.Options := Dlg.Options + [ofOverwritePrompt];
   if not Dlg.Execute then exit;
   DoSaveProject(Dlg.FileName);
   Dlg.Free;
@@ -223,18 +225,14 @@ begin
   end;
   Ms.Free;
   EpiDocument.Modified := false;
-  UpdateStatusBar;
+  UpdateCaption;
 end;
 
 procedure TProjectFrame.DoOpenProject(AFileName: string);
 var
   St: TMemoryStream;
 begin
-  FEpiDocument.Free;
-
-  // TODO : Delete ALL dataforms!
-  FActiveFrame.Free;
-  DataFilesTreeView.Items.Clear;
+  DoCloseProject;
 
   St := TMemoryStream.Create;
   if ExtractFileExt(UTF8ToSys(AFileName)) = '.epz' then
@@ -249,7 +247,7 @@ begin
   DoNewDataForm(FEpiDocument.DataFiles[0]);
   St.Free;
 
-  UpdateStatusBar;
+  UpdateCaption;
 end;
 
 procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);
@@ -265,6 +263,17 @@ begin
   DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Name.Text, Frame);
   TEpiDataFileEx(Df).TreeNode := DataFilesTreeView.Selected;
   Df.Name.RegisterOnChangeHook(@OnDataFileChange);
+end;
+
+procedure TProjectFrame.DoCloseProject;
+begin
+  if not Assigned(FEpiDocument) then exit;
+
+  FreeAndNil(FEpiDocument);
+
+  // TODO : Delete ALL dataforms!
+  FreeAndNil(FActiveFrame);
+  DataFilesTreeView.Items.Clear;
 end;
 
 procedure TProjectFrame.DoCreateReleaseSections;
@@ -369,7 +378,7 @@ procedure TProjectFrame.SetModified(const AValue: Boolean);
 begin
   if FModified = AValue then exit;
   FModified := AValue;
-  UpdateStatusBar;
+  UpdateCaption;
   if Assigned(FOnModified) then
     FOnModified(Self);
 end;
@@ -379,17 +388,22 @@ begin
   FOnModified := AValue;
 end;
 
-procedure TProjectFrame.UpdateStatusBar;
+procedure TProjectFrame.UpdateCaption;
 var
   S: String;
 begin
-  if ProjectFileName <> '' then
-    S := ProjectFileName
-  else
-    S := '(untitled)';
-  if Modified then
-    S := S + '*';
-  ProjectStatusBar.SimpleText := S;
+  S := 'EpiData Manager (v' + GetManagerVersion + ')';
+
+  if Assigned(EpiDocument) then
+  begin
+    S := S + ' - ' + ExtractFileName(FFileName);
+    if EpiDocument.Modified then
+      S := S + '*';
+
+    if Assigned(ActiveFrame) and (TDesignFrame(ActiveFrame).DataFile.Name.Text <> '') then
+      S := S + ' [' + Copy(TDesignFrame(ActiveFrame).DataFile.Name.Text, 1, 15) + ']';
+  end;
+  MainForm.Caption := S;
 end;
 
 constructor TProjectFrame.Create(TheOwner: TComponent);
@@ -403,7 +417,7 @@ begin
   FFileName := '';
 
   FEpiDocument := DoCreateNewDocument;
-  UpdateStatusBar;
+  UpdateCaption;
 
   {$IFDEF EPI_DEBUG}
 

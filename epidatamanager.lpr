@@ -11,8 +11,9 @@ uses
   design_field, design_heading, design_section, design_custombase, import_form, 
   settings, managerprocs, sysutils, project_settings, 
 project_settings_field_frame, project_settings_interface, about, epidatacore, 
-project_settings_general_frame, settings2, visualdesign_frame, 
-fielddefinitions_frame, advanced_frame, settings2_interface, settings2_var
+project_settings_general_frame, settings2, settings_visualdesign_frame, 
+settings_fielddefinitions_frame, 
+settings_advanced_frame, settings2_interface, settings2_var
   { you can add units after this };
 
 {$R *.res}

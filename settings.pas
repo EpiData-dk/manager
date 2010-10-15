@@ -158,7 +158,7 @@ const
   ManagerVersion: TEpiVersionInfo = (
     VersionNo: 0;
     MajorRev:  5;
-    MinorRev:  6;
+    MinorRev:  7;
     BuildNo:   0;
   );
 
@@ -222,6 +222,7 @@ begin
       Sec := 'advanced';
       WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
       WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
+      WriteInteger(Sec, 'SaveAsType', SaveType);
       Result := true;
     end;
   finally
@@ -279,6 +280,7 @@ begin
     Sec := 'advanced';
     WorkingDirUTF8   := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
     PasteSpecialType := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
+    SaveType         := ReadInteger(Sec, 'SaveAsType', SaveType);
   end;
 end;
 

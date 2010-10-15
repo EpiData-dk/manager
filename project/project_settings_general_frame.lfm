@@ -1,4 +1,4 @@
-object GeneralSettingsFrame: TGeneralSettingsFrame
+object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
   Left = 0
   Height = 240
   Top = 0

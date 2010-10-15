@@ -1,4 +1,4 @@
-unit visualdesign_frame;
+unit settings_visualdesign_frame;
 
 {$mode objfpc}{$H+}
 
@@ -10,9 +10,9 @@ uses
 
 type
 
-  { TVisualDesign }
+  { TSettings_VisualDesign }
 
-  TVisualDesign = class(TFrame, ISettingsFrame)
+  TSettings_VisualDesign = class(TFrame, ISettingsFrame)
     DefaultRightPosEdit: TMaskEdit;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
@@ -43,9 +43,9 @@ uses
   settings2;
 
 
-{ TVisualDesign }
+{ TSettings_VisualDesign }
 
-procedure TVisualDesign.SetSettings(Data: PManagerSettings);
+procedure TSettings_VisualDesign.SetSettings(Data: PManagerSettings);
 begin
   FData := Data;
 
@@ -60,7 +60,7 @@ begin
   end;
 end;
 
-function TVisualDesign.ApplySettings: boolean;
+function TSettings_VisualDesign.ApplySettings: boolean;
 var
   S: String;
 begin
@@ -90,7 +90,7 @@ end;
 initialization
 
 begin
-  RegisterSettingFrame(0, TVisualDesign, 'Visual Design');
+  RegisterSettingFrame(0, TSettings_VisualDesign, 'Visual Design');
 end;
 
 end.

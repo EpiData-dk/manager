@@ -10,9 +10,9 @@ uses
 
 type
 
-  { TFieldSettingsFrame }
+  { TProjectSettings_FieldFrame }
 
-  TFieldSettingsFrame = class(TFrame, IProjectSettingsFrame)
+  TProjectSettings_FieldFrame = class(TFrame, IProjectSettingsFrame)
     ShowFieldNamesChkBox: TCheckBox;
     ShowFieldBordersChkBox: TCheckBox;
   private
@@ -28,9 +28,9 @@ implementation
 
 {$R *.lfm}
 
-{ TFieldSettingsFrame }
+{ TProjectSettings_FieldFrame }
 
-procedure TFieldSettingsFrame.SetProjectSettings(AValue: TEpiProjectSettings);
+procedure TProjectSettings_FieldFrame.SetProjectSettings(AValue: TEpiProjectSettings);
 begin
   FProjectSettings := AValue;
 
@@ -38,7 +38,7 @@ begin
   ShowFieldBordersChkBox.Checked := FProjectSettings.ShowFieldBorders;
 end;
 
-function TFieldSettingsFrame.ApplySettings: boolean;
+function TProjectSettings_FieldFrame.ApplySettings: boolean;
 begin
   FProjectSettings.ShowFieldNames   := ShowFieldNamesChkBox.Checked;
   FProjectSettings.ShowFieldBorders := ShowFieldBordersChkBox.Checked;

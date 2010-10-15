@@ -34,6 +34,7 @@ type
                                      //   2: Int
                                      //   3: Float
                                      //   4: String
+    SaveType:              byte;
 
     // Not shown in dialog.
     SelectedControlColour: Integer;
@@ -63,7 +64,8 @@ var
 
     // Advanced:
     WorkingDirUTF8:        '';
-    PasteSpecialType:      1;  //Heading.
+    PasteSpecialType:      1;  // Heading.
+    SaveType:              0;  // epx format.
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;
