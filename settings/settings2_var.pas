@@ -34,7 +34,9 @@ type
                                      //   2: Int
                                      //   3: Float
                                      //   4: String
-    SaveType:              byte;
+    SaveType:              byte;     // Index into list:
+                                     //   0: .epx
+                                     //   1: .epz
 
     // Not shown in dialog.
     SelectedControlColour: Integer;
@@ -64,15 +66,14 @@ var
 
     // Advanced:
     WorkingDirUTF8:        '';
-    PasteSpecialType:      1;  // Heading.
-    SaveType:              0;  // epx format.
+    PasteSpecialType:      1;     // Heading.
+    SaveType:              0;     // epx format.
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;
     LabelNamePrefix:       'label_';
     IniFileName:           '';
   );
-
 
 implementation
 

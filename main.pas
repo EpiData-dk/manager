@@ -293,7 +293,7 @@ procedure TMainForm.SetModified(const AValue: boolean);
 begin
   if FModified = AValue then exit;
   FModified := AValue;
-  SetCaption;
+//  SetCaption;
 end;
 
 procedure TMainForm.ProjectModified(Sender: TObject);
@@ -314,8 +314,8 @@ begin
   // Todo - this is not optimal on Non-windows OS's. Do some checks for writeability first.
   if LoadSettingsFromIni(ExtractFilePath(Application.ExeName) + IniName) then exit;
 
-//  S := GetAppConfigDirUTF8(false);
-//  if not DirectoryExistsUTF8(S) then CreateDirUTF8(S);
+  if not DirectoryExistsUTF8(GetAppConfigDirUTF8(false)) then
+    CreateDirUTF8(GetAppConfigDirUTF8(false));
   ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
 end;
 

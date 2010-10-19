@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
-  project_settings_interface, episettings;
+  project_settings_interface, epicustombase, episettings;
 
 type
 
@@ -20,7 +20,7 @@ type
     FProjectSettings: TEpiProjectSettings;
   public
     { public declarations }
-    procedure SetProjectSettings(AValue: TEpiProjectSettings);
+    procedure SetProjectSettings(AValue: TEpiCustomBase);
     function  ApplySettings: boolean;
   end;
 
@@ -28,11 +28,15 @@ implementation
 
 {$R *.lfm}
 
+uses
+  epidocument;
+
+
 { TProjectSettings_FieldFrame }
 
-procedure TProjectSettings_FieldFrame.SetProjectSettings(AValue: TEpiProjectSettings);
+procedure TProjectSettings_FieldFrame.SetProjectSettings(AValue: TEpiCustomBase);
 begin
-  FProjectSettings := AValue;
+  FProjectSettings :=  TEpiDocument(AValue).ProjectSettings;
 
   ShowFieldNamesChkBox.Checked   := FProjectSettings.ShowFieldNames;
   ShowFieldBordersChkBox.Checked := FProjectSettings.ShowFieldBorders;

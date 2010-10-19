@@ -56,6 +56,7 @@ type
     procedure DoCloseProject;
     procedure DoCreateReleaseSections;
     procedure EpiDocumentModified(Sender: TObject);
+    procedure SaveDlgTypeChange(Sender: TObject);
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
     procedure UpdateCaption;
@@ -64,7 +65,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     property   EpiDocument: TEpiDocument read FEpiDocument;
     property   ActiveFrame: TFrame read FActiveFrame;
-    property   ProjectFileName: string read FFileName;
+    property   ProjectFileName: string read FFileName write FFileName;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
   end;
@@ -75,7 +76,7 @@ implementation
 
 uses
   design_frame, Clipbrd, settings, project_settings, epimiscutils,
-  epiexport, main;
+  epiexport, main, settings2_var, epistringutils;
 
 type
 
@@ -103,6 +104,7 @@ begin
   EpiDocument.Modified := false;
 
   DoNewDataForm(Df);
+  UpdateCaption;
 end;
 
 procedure TProjectFrame.ExportStataActionExecute(Sender: TObject);
@@ -115,7 +117,9 @@ begin
     SaveDlg.Title := 'Export current form to Stata file...';
     SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     SaveDlg.Filter := GetEpiDialogFilter(false, false, false, false, false, false, true, false, false, false, false);
-    SaveDlg.Options := SaveDlg.Options + [ofOverwritePrompt];
+    SaveDlg.Options := SaveDlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
+    SaveDlg.DefaultExt := 'dta';
+    SaveDlg.FileName   := ChangeFileExt(FFileName, '.dta');
     if not SaveDlg.Execute then exit;
 
     // TODO : Support different datafiles export.
@@ -151,7 +155,7 @@ procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);
 var
   ProjectSettings: TProjectSettingsForm;
 begin
-  ProjectSettings := TProjectSettingsForm.Create(self, EpiDocument.ProjectSettings);
+  ProjectSettings := TProjectSettingsForm.Create(self, EpiDocument);
   ProjectSettings.ShowModal;
   TDesignFrame(ActiveFrame).UpdateFrame;
   ProjectSettings.Free;
@@ -165,6 +169,23 @@ begin
     DoSaveProject(ProjectFileName);
 end;
 
+procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
+var
+  Dlg: TSaveDialog absolute Sender;
+  S: String;
+begin
+  case Dlg.FilterIndex of
+    1: Dlg.DefaultExt := 'epx';
+    2: Dlg.DefaultExt := 'epz';
+  end;
+
+  // TODO : Must be changed when supporting multiple desinger frames (take only the topmost/first datafile).
+  if (Dlg.FileName = '') and
+     (ProjectFileName = '') and
+     (TDesignFrame(ActiveFrame).ImportedFileName <> '') then
+    Dlg.FileName := ChangeFileExt(TDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);
+end;
+
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
 var
   Dlg: TSaveDialog;
@@ -173,8 +194,10 @@ begin
   Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
     false, false, false, false, false);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.FilterIndex := ManagerSettings.SaveType+1;
-  Dlg.Options := Dlg.Options + [ofOverwritePrompt];
+  Dlg.FilterIndex := ManagerSettings.SaveType + 1;
+  SaveDlgTypeChange(Dlg);
+  Dlg.OnTypeChange := @SaveDlgTypeChange;
+  Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
   if not Dlg.Execute then exit;
   DoSaveProject(Dlg.FileName);
   Dlg.Free;
@@ -189,6 +212,7 @@ begin
   begin
     Df := TEpiDataFileEx(TEpiCustomItem(Sender).Owner);
     Df.TreeNode.Text := Df.Name.Text;
+    UpdateCaption;
   end;
 end;
 
@@ -391,17 +415,23 @@ end;
 procedure TProjectFrame.UpdateCaption;
 var
   S: String;
+  T: String;
 begin
-  S := 'EpiData Manager (v' + GetManagerVersion + ')';
+  S := 'EpiData Manager (v' + GetManagerVersion + ') test version';
 
   if Assigned(EpiDocument) then
   begin
-    S := S + ' - ' + ExtractFileName(FFileName);
+    if FFileName <> '' then
+      S := S + ' - ' + ExtractFileName(FFileName);
     if EpiDocument.Modified then
       S := S + '*';
 
-    if Assigned(ActiveFrame) and (TDesignFrame(ActiveFrame).DataFile.Name.Text <> '') then
-      S := S + ' [' + Copy(TDesignFrame(ActiveFrame).DataFile.Name.Text, 1, 15) + ']';
+    if Assigned(ActiveFrame) then
+    begin
+      T := TDesignFrame(ActiveFrame).DataFile.Name.Text;
+      if (T <> '') then
+        S := S + ' [' + EpiCutString(T, 20) + ']';
+    end;
   end;
   MainForm.Caption := S;
 end;

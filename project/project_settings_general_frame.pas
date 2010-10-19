@@ -5,8 +5,8 @@ unit project_settings_general_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, MaskEdit,
-  project_settings_interface, episettings;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, MaskEdit, ExtCtrls,
+  project_settings_interface, epicustombase, episettings, epidatafiles;
 
 type
 
@@ -14,14 +14,18 @@ type
 
   TProjectSettings_GeneralFrame = class(TFrame, IProjectSettingsFrame)
     BackupOnShutdownChkBox: TCheckBox;
+    Bevel1: TBevel;
+    ProjectTitleEdit: TEdit;
     Label1: TLabel;
     BackupIntervalEdit: TMaskEdit;
+    Label2: TLabel;
   private
     { private declarations }
     FProjectSettings: TEpiProjectSettings;
+    FDataFiles: TEpiDataFiles;
   public
     { public declarations }
-    procedure SetProjectSettings(AValue: TEpiProjectSettings);
+    procedure SetProjectSettings(AValue: TEpiCustomBase);
     function  ApplySettings: boolean;
   end;
 
@@ -30,15 +34,18 @@ implementation
 {$R *.lfm}
 
 uses
-  Dialogs;
+  Dialogs, epidocument;
 
 { TProjectSettings_GeneralFrame }
 
-procedure TProjectSettings_GeneralFrame.SetProjectSettings(AValue: TEpiProjectSettings);
+procedure TProjectSettings_GeneralFrame.SetProjectSettings(AValue: TEpiCustomBase);
 begin
-  FProjectSettings := AValue;
-  BackupIntervalEdit.Text := IntToStr(FProjectSettings.BackupInterval);
-  BackupOnShutdownChkBox.Enabled := FProjectSettings.BackupOnShutdown;
+  FProjectSettings               := TEpiDocument(AValue).ProjectSettings;
+  FDataFiles                     := TEpiDocument(AValue).DataFiles;
+
+  BackupIntervalEdit.Text        := IntToStr(FProjectSettings.BackupInterval);
+  BackupOnShutdownChkBox.Checked := FProjectSettings.BackupOnShutdown;
+  ProjectTitleEdit.Text          := FDataFiles[0].Name.Text;
 end;
 
 function TProjectSettings_GeneralFrame.ApplySettings: boolean;
@@ -54,9 +61,10 @@ begin
          'Accept backup time ' + BackupIntervalEdit.Text + '?',
          mtWarning, mbYesNo, 0, mbNo) = mrNo then Exit(false);
   end;
-  FProjectSettings.BackupInterval := I;
-  FProjectSettings.BackupOnShutdown := BackupOnShutdownChkBox.Enabled;
+  FProjectSettings.BackupInterval   := I;
+  FProjectSettings.BackupOnShutdown := BackupOnShutdownChkBox.Checked;
+  FDataFiles[0].Name.Text           := ProjectTitleEdit.Text;
 end;
 
 end.
-
+

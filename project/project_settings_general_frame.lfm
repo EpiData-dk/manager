@@ -1,10 +1,10 @@
 object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
   Left = 0
-  Height = 240
+  Height = 315
   Top = 0
-  Width = 320
-  ClientHeight = 240
-  ClientWidth = 320
+  Width = 440
+  ClientHeight = 315
+  ClientWidth = 440
   TabOrder = 0
   DesignLeft = 612
   DesignTop = 313
@@ -12,16 +12,16 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
     Left = 8
     Height = 18
     Hint = 'Number of minuts between timed recovery backup.'#13#10'Set to 0 for no backup (NOT recommended).'
-    Top = 24
+    Top = 97
     Width = 216
     Caption = 'Timed Recovery Backup Interval:'
     ParentColor = False
   end
   object BackupIntervalEdit: TMaskEdit
-    Left = 264
+    Left = 320
     Height = 27
     Hint = 'Number of minuts between timed recovery backup.'#13#10'Set to 0 for no backup (NOT recommended).'
-    Top = 15
+    Top = 88
     Width = 40
     CharCase = ecNormal
     MaxLength = 2
@@ -33,9 +33,30 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
     Left = 8
     Height = 22
     Hint = 'Automatically create a backup file of the'#13#10'entire project when program i closed.'
-    Top = 56
+    Top = 129
     Width = 232
     Caption = 'Backup project file on shutdown'
     TabOrder = 1
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 18
+    Top = 16
+    Width = 80
+    Caption = 'Project title:'
+    ParentColor = False
+  end
+  object ProjectTitleEdit: TEdit
+    Left = 8
+    Height = 27
+    Top = 40
+    Width = 352
+    TabOrder = 2
+  end
+  object Bevel1: TBevel
+    Left = 8
+    Height = 2
+    Top = 80
+    Width = 352
   end
 end

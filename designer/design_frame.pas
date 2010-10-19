@@ -228,6 +228,7 @@ type
   private
     FModified: Boolean;
     FOnModified: TNotifyEvent;
+    FImportedFileName: string;
     { Property methods }
     procedure   SetDataFile(const AValue: TEpiDataFile);
   public
@@ -235,6 +236,7 @@ type
     constructor Create(TheOwner: TComponent);
     procedure   UpdateFrame;
     property    DataFile: TEpiDataFile read FDataFile write SetDataFile;
+    property    ImportedFileName: string read FImportedFileName;
   end;
 
 implementation
@@ -244,7 +246,7 @@ implementation
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
   main, settings, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
-  managerprocs, epiqeshandler;
+  managerprocs, epiqeshandler, project_frame;
 
 type
 
@@ -590,11 +592,6 @@ begin
   end;
   {$ENDIF}
 
-{  ImportForm := TImportForm.Create(Self);
-  ImportForm.DataFile := FDataFile;
-
-  if ImportForm.ShowModal <> mrOK then exit;  }
-
   Dlg := TOpenDialog.Create(Self);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.Filter := GetEpiDialogFilter(false, false, true, false, false, false,
@@ -605,9 +602,9 @@ begin
 
   NewIntFieldAction.ShortCut := ShortCut(VK_V, [ssCtrl]);
 
-  FActiveSection := DataFile.MainSection;
-  FDataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, true);
-  FDataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, true);
+  FActiveSection := FDataFile.MainSection;
+  FActiveSection.Fields.RegisterOnChangeHook(@ImportHook, true);
+  FActiveSection.Headings.RegisterOnChangeHook(@ImportHook, true);
 
   FLastRecYPos := -1;
   FLastRecCtrl := nil;
@@ -622,12 +619,12 @@ begin
   else if ext = '.qes' then
     Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
   Importer.Free;
+  FImportedFileName := fn;
 
-  FDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-  FDataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+  FActiveSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+  FActiveSection.Headings.UnRegisterOnChangeHook(@ImportHook);
 
   Dlg.Free;
-//  ImportForm.Free;
 end;
 
 procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);
@@ -1956,6 +1953,7 @@ begin
   DateToolButton.Tag := Ord(ManagerSettings.DefaultDateType);
   DateToolButton.ImageIndex := Ord(ManagerSettings.DefaultDateType);
   FActiveButton := SelectorToolButton;
+  FImportedFileName := '';
 
   // TODO : Move to main - the DragManager is global to the whole program and
   // should only be set once.

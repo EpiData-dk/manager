@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, Buttons, episettings;
+  ComCtrls, Buttons, episettings, epicustombase;
 
 type
 
@@ -25,14 +25,13 @@ type
       var AllowChange: Boolean);
   private
     { private declarations }
-    FProjectSettings: TEpiProjectSettings;
+    FEpiDocument: TEpiCustomBase;
     FActiveFrame: TFrame;
   protected
     constructor Create(TheOwner: TComponent); override;
-    property    ProjectSettings: TEpiProjectSettings read FProjectSettings;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; AProjectSettings: TEpiProjectSettings);
+    constructor Create(TheOwner: TComponent; AEpiDocument: TEpiCustomBase);
   end; 
 
 implementation
@@ -47,7 +46,7 @@ uses
 procedure TProjectSettingsForm.FormShow(Sender: TObject);
 begin
   FActiveFrame := TFrame(ProjectSettingsView.Items[0].Data);
-  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(ProjectSettings);
+  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(FEpiDocument);
   FActiveFrame.Parent := Self;
   FActiveFrame.Align := alClient;
   ProjectSettingsView.SetFocus;
@@ -70,7 +69,7 @@ begin
   if csDestroying in ComponentState then exit;
 
   FActiveFrame := TFrame(Node.Data);
-  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(FProjectSettings);
+  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(FEpiDocument);
   FActiveFrame.Parent := Self;
   FActiveFrame.Align := alClient;
   FActiveFrame.Show;
@@ -95,10 +94,10 @@ begin
 end;
 
 constructor TProjectSettingsForm.Create(TheOwner: TComponent;
-  AProjectSettings: TEpiProjectSettings);
+  AEpiDocument: TEpiCustomBase);
 begin
   Create(TheOwner);
-  FProjectSettings := AProjectSettings;
+  FEpiDocument := AEpiDocument;
 
   ProjectSettingsView.Items.FindNodeWithText('General').Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
   ProjectSettingsView.Items.FindNodeWithText('Fields').Data := Pointer(TProjectSettings_FieldFrame.Create(Self));

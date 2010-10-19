@@ -10,7 +10,7 @@ version=0.5.5.0
 programs=epidatamanager
 
 [compiler]
-options=-dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
+options=-l -dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 unittargetdir=./lib/$(CPU_TARGET)-$(OS_TARGET)
 unitdir=designer \
 	project \
