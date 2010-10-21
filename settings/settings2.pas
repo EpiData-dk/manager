@@ -7,13 +7,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls;
+  Buttons, ComCtrls, epiversionutils;
 
 type
 
-  { TSettingsForm2 }
+  { TSettingsForm }
 
-  TSettingsForm2 = class(TForm)
+  TSettingsForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     Panel1: TPanel;
@@ -31,23 +31,156 @@ type
     constructor Create(TheOwner: TComponent); override;
   end;
 
+  {$IFDEF EPI_SHOWREVISION}
+    {$I revision.inc}
+  {$ELSE}
+    const RevisionStr = '(DEBUG)';
+  {$ENDIF}
+
+function GetManagerVersion: String;
+function SaveSettingToIni(Const FileName: string): boolean;
+function LoadSettingsFromIni(Const FileName: string): boolean;
+
 procedure RegisterSettingFrame(const Order: byte;
   const AValue: TCustomFrameClass; const AName: string);
+
+const
+  ManagerVersion: TEpiVersionInfo = (
+    VersionNo: 0;
+    MajorRev:  5;
+    MinorRev:  7;
+    BuildNo:   0;
+  );
 
 implementation
 
 {$R *.lfm}
 
 uses
-  settings2_interface, settings2_var,
-  settings;
+  settings2_interface, settings2_var, epidatafilestypes,
+  IniFiles;
 
 var
   Frames: TStringList = nil;
 
-{ TSettingsForm2 }
+function GetManagerVersion: String;
+begin
+  result := GetEpiVersionInfo(ManagerVersion);
+end;
 
-procedure TSettingsForm2.SettingsViewChanging(Sender: TObject; Node: TTreeNode;
+function SaveSettingToIni(Const FileName: string): boolean;
+var
+  Ini: TIniFile;
+  Sec: string;
+begin
+  Result := false;
+
+  try
+    Ini := TIniFile.Create(FileName);
+    With Ini do
+    with ManagerSettings do
+    begin
+      {  // Visual design:
+        DefaultRightPostion:   Integer;
+        SnapFields:            boolean;
+        SnappingThresHold:     Integer;
+        SpaceBtwFieldField:    Integer;
+        SpaceBtwFieldLabel:    Integer;
+        SpaceBtwLabelLabel:    Integer;}
+      Sec := 'visual';
+      WriteInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
+      WriteBool   (Sec, 'SnapFields',            SnapFields);
+      WriteInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
+      WriteInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
+      WriteInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
+      WriteInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
+
+      {  // Field definitions:
+      IntFieldLength:        Integer;
+      FloatIntLength:        Integer;
+      FloatDecimalLength:    Integer;
+      StringFieldLength:     Integer;
+      DefaultDateType:       TEpiFieldType;
+      FieldNamePrefix:       string;
+    //    FieldNamingStyle:      TFieldNaming;}
+      Sec := 'fielddefs';
+      WriteInteger(Sec, 'IntFieldLength',     IntFieldLength);
+      WriteInteger(Sec, 'FloatIntLength',     FloatIntLength);
+      WriteInteger(Sec, 'FloatDecimalLength', FloatDecimalLength);
+      WriteInteger(Sec, 'StringFieldLength',  StringFieldLength);
+      WriteInteger(Sec, 'DefaultDateType',    Word(DefaultDateType));
+
+  {    // Advanced:
+      WorkingDirUTF8:        string;
+      PasteSpecialType:      byte}
+      Sec := 'advanced';
+      WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+      WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
+      WriteInteger(Sec, 'SaveAsType', SaveType);
+      Result := true;
+    end;
+  finally
+    Ini.Free;
+  end;
+end;
+
+function LoadSettingsFromIni(Const FileName: string): boolean;
+var
+  Ini: TIniFile;
+  Sec: String;
+begin
+  Result := false;
+  ManagerSettings.IniFileName := FileName;
+
+  if not FileExistsUTF8(FileName) then exit;
+
+  Ini := TIniFile.Create(FileName);
+  With Ini do
+  with ManagerSettings do
+  begin
+    {  // Visual design:
+      DefaultRightPostion:   Integer;
+      SnapFields:            boolean;
+      SnappingThresHold:     Integer;
+      SpaceBtwFieldField:    Integer;
+      SpaceBtwFieldLabel:    Integer;
+      SpaceBtwLabelLabel:    Integer;}
+    Sec := 'visual';
+    DefaultRightPostion   := ReadInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
+    SnapFields            := ReadBool   (Sec, 'SnapFields',            SnapFields);
+    SnappingThresHold     := ReadInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
+    SpaceBtwFieldField    := ReadInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
+    SpaceBtwFieldLabel    := ReadInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
+    SpaceBtwLabelLabel    := ReadInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
+
+    {  // Field definitions:
+    IntFieldLength:        Integer;
+    FloatIntLength:        Integer;
+    FloatDecimalLength:    Integer;
+    StringFieldLength:     Integer;
+    DefaultDateType:       TEpiFieldType;
+    FieldNamePrefix:       string;
+  //    FieldNamingStyle:      TFieldNaming;}
+    Sec := 'fielddefs';
+    IntFieldLength     := ReadInteger(Sec, 'IntFieldLength',     IntFieldLength);
+    FloatIntLength     := ReadInteger(Sec, 'FloatIntLength',     FloatIntLength);
+    FloatDecimalLength := ReadInteger(Sec, 'FloatDecimalLength', FloatDecimalLength);
+    StringFieldLength  := ReadInteger(Sec, 'StringFieldLength',  StringFieldLength);
+    DefaultDateType    := TEpiFieldType(ReadInteger(Sec, 'DefaultDateType', Word(DefaultDateType)));
+
+{    // Advanced:
+    WorkingDirUTF8:        string;
+    PasteSpecialType:      byte;}
+    Sec := 'advanced';
+    WorkingDirUTF8   := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+    PasteSpecialType := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
+    SaveType         := ReadInteger(Sec, 'SaveAsType', SaveType);
+  end;
+end;
+
+{ TSettingsForm }
+
+procedure TSettingsForm.SettingsViewChanging(Sender: TObject; Node: TTreeNode;
   var AllowChange: Boolean);
 begin
   // Happens before the change...
@@ -60,7 +193,7 @@ begin
   FActiveFrame.Hide;
 end;
 
-procedure TSettingsForm2.SettingsViewChange(Sender: TObject; Node: TTreeNode);
+procedure TSettingsForm.SettingsViewChange(Sender: TObject; Node: TTreeNode);
 begin
   // Happens after the change...
   if csDestroying in ComponentState then exit;
@@ -69,7 +202,7 @@ begin
   FActiveFrame.Show;
 end;
 
-procedure TSettingsForm2.FormShow(Sender: TObject);
+procedure TSettingsForm.FormShow(Sender: TObject);
 begin
   FActiveFrame := TFrame(SettingsView.Items[0].Data);
   SettingsView.Selected := SettingsView.Items[0];
@@ -79,15 +212,15 @@ begin
   SettingsView.SetFocus;
 end;
 
-procedure TSettingsForm2.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+procedure TSettingsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   CanClose := false;
   if not (FActiveFrame as ISettingsFrame).ApplySettings then exit;
-  SaveSettingToIni(ManagerSettings2.IniFileName);
+  SaveSettingToIni(ManagerSettings.IniFileName);
   CanClose := true;
 end;
 
-constructor TSettingsForm2.Create(TheOwner: TComponent);
+constructor TSettingsForm.Create(TheOwner: TComponent);
 var
   i: Integer;
   Frame: TCustomFrame;
@@ -99,7 +232,7 @@ begin
   begin
     FrameClass := TCustomFrameClass(Frames.Objects[i]);
     Frame := FrameClass.Create(Self);
-    (Frame as ISettingsFrame).SetSettings(@ManagerSettings2);
+    (Frame as ISettingsFrame).SetSettings(@ManagerSettings);
     Frame.Hide;
     Frame.Align := alClient;
     Frame.Parent := Self;
@@ -129,6 +262,14 @@ begin
   for i := 0 to Frames.Count - 1 do
     Frames.Strings[i] := '';
   Frames.Free;
+end;
+
+initialization
+
+begin
+  ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + {$IFDEF UNIX}'/data'{$ELSE}'\data'{$ENDIF};
+  if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then
+    ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8;
 end;
 
 finalization

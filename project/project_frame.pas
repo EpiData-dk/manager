@@ -75,8 +75,8 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame, Clipbrd, settings, project_settings, epimiscutils,
-  epiexport, main, settings2_var, epistringutils;
+  design_frame, Clipbrd, project_settings, epimiscutils,
+  epiexport, main, settings2, settings2_var, epistringutils;
 
 type
 

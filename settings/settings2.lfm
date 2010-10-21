@@ -1,4 +1,4 @@
-object SettingsForm2: TSettingsForm2
+object SettingsForm: TSettingsForm
   Left = 391
   Height = 440
   Top = 270

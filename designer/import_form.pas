@@ -35,7 +35,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, settings;
+  epiimport, settings2_var;
 
 { TImportForm }
 

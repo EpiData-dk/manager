@@ -45,11 +45,12 @@ uses
 
 procedure TProjectSettingsForm.FormShow(Sender: TObject);
 begin
-  FActiveFrame := TFrame(ProjectSettingsView.Items[0].Data);
+{  FActiveFrame := TFrame(ProjectSettingsView.Items[0].Data);
   (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(FEpiDocument);
   FActiveFrame.Parent := Self;
-  FActiveFrame.Align := alClient;
-  ProjectSettingsView.SetFocus;
+  FActiveFrame.Align := alClient;}
+  ProjectSettingsView.Selected := ProjectSettingsView.Items[0];
+//  ProjectSettingsView.SetFocus;
 end;
 
 procedure TProjectSettingsForm.FormCloseQuery(Sender: TObject;

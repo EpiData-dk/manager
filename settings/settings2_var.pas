@@ -46,7 +46,7 @@ type
   PManagerSettings = ^TManagerSettings;
 
 var
-  ManagerSettings2: TManagerSettings = (
+  ManagerSettings: TManagerSettings = (
     // Visual design:
     DefaultRightPostion:   200;
     SnapFields:            true;

@@ -79,7 +79,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_section, epidatafilestypes, settings,
+  design_section, epidatafilestypes, settings2_var,
   epidocument;
 
 { TDesignField }

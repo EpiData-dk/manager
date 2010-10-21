@@ -245,7 +245,7 @@ implementation
 
 uses
   Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
-  main, settings, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
+  main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
   managerprocs, epiqeshandler, project_frame;
 
 type

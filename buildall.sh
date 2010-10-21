@@ -28,7 +28,7 @@ compile() {
   echo "------------------------------"
 
 #  echo "make clean release CPU_TARGET=$MY_CPU_TARGET OS_TARGET=$MY_OS_TARGET > /dev/null"
-  make clean release CPU_TARGET=$MY_CPU_TARGET OS_TARGET=$MY_OS_TARGET OPT="-dEPI_SETTINGSFORM2" > /dev/null
+  make clean release CPU_TARGET=$MY_CPU_TARGET OS_TARGET=$MY_OS_TARGET > /dev/null
   if [ $MY_LCL_TARGET = "win32" ]
   then
     OUTPUTFN=$PROGRAMNAME.exe

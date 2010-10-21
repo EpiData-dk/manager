@@ -83,9 +83,8 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, project_frame, settings, LCLProc, LCLIntf, design_frame,
-  {$IFDEF EPI_SETTINGSFORM2}settings2,{$ENDIF}
-  about, Clipbrd, epiversionutils;
+  workflow_frame, project_frame, LCLProc, LCLIntf, design_frame,
+  settings2, settings2_var, about, Clipbrd, epiversionutils;
 
 { TMainForm }
 
@@ -232,9 +231,9 @@ end;
 
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
 var
-  SettingForm: {$IFDEF EPI_SETTINGSFORM2}TSettingsForm2{$ELSE}TSettingsForm{$ENDIF};
+  SettingForm: TSettingsForm;
 begin
-  SettingForm := {$IFDEF EPI_SETTINGSFORM2}TSettingsForm2{$ELSE}TSettingsForm{$ENDIF}.Create(Self);
+  SettingForm := TSettingsForm.Create(Self);
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
 
