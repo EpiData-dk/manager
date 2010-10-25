@@ -13,6 +13,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ShowStructureAction: TAction;
     ExportStataAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
@@ -39,6 +40,7 @@ type
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
+    procedure ShowStructureActionExecute(Sender: TObject);
   private
     { private declarations }
     FFileName: string;
@@ -76,7 +78,8 @@ implementation
 
 uses
   design_frame, Clipbrd, project_settings, epimiscutils,
-  epiexport, main, settings2, settings2_var, epistringutils;
+  epiexport, main, settings2, settings2_var, epistringutils,
+  structure_form;
 
 type
 
@@ -201,6 +204,15 @@ begin
   if not Dlg.Execute then exit;
   DoSaveProject(Dlg.FileName);
   Dlg.Free;
+end;
+
+procedure TProjectFrame.ShowStructureActionExecute(Sender: TObject);
+var
+  StructureForm: TProject_Structure_Form;
+begin
+  StructureForm := TProject_Structure_Form.Create(Self, EpiDocument);
+  StructureForm.ShowModal;
+  StructureForm.Free;
 end;
 
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;
@@ -390,6 +402,7 @@ begin
   Grp.Name.Text := 'Group 3';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
+  FEpiDocument.DataFiles[0].MainSection.Groups.AddItem(Grp);
   {$ENDIF}
 end;
 

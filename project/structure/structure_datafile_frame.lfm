@@ -1,0 +1,139 @@
+object Project_Structure_Datafile_Frame: TProject_Structure_Datafile_Frame
+  Left = 0
+  Height = 594
+  Top = 0
+  Width = 885
+  ClientHeight = 594
+  ClientWidth = 885
+  TabOrder = 0
+  DesignLeft = 359
+  DesignTop = 219
+  object Panel1: TPanel
+    Left = 0
+    Height = 144
+    Top = 0
+    Width = 885
+    Align = alTop
+    ClientHeight = 144
+    ClientWidth = 885
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 16
+      Height = 18
+      Top = 48
+      Width = 126
+      Caption = 'Number of records:'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 16
+      Height = 18
+      Top = 80
+      Width = 113
+      Caption = 'Number of fields:'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 16
+      Height = 18
+      Top = 16
+      Width = 97
+      Caption = 'Dataset name:'
+      ParentColor = False
+    end
+    object DataSetNameLabel: TLabel
+      Left = 184
+      Height = 18
+      Top = 16
+      Width = 127
+      Caption = 'DataSetNameLabel'
+      ParentColor = False
+    end
+    object NumberOfRecordsLabel: TLabel
+      Left = 184
+      Height = 18
+      Top = 48
+      Width = 119
+      Caption = 'NumberOfRecords'
+      ParentColor = False
+    end
+    object NumberOfFieldsLabel: TLabel
+      Left = 184
+      Height = 18
+      Top = 80
+      Width = 141
+      Caption = 'NumberOfFieldsLabel'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 16
+      Height = 18
+      Top = 112
+      Width = 132
+      Caption = 'Number of sections:'
+      ParentColor = False
+    end
+    object NumberOfSectionsLabel: TLabel
+      Left = 184
+      Height = 18
+      Top = 112
+      Width = 158
+      Caption = 'NumberOfSectionsLabel'
+      ParentColor = False
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 450
+    Top = 144
+    Width = 885
+    ActivePage = FieldsSheet
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 1
+    TabPosition = tpBottom
+    object FieldsSheet: TTabSheet
+      Caption = 'Fields'
+      ClientHeight = 415
+      ClientWidth = 879
+      object FieldGrid: TStringGrid
+        Left = 0
+        Height = 415
+        Top = 0
+        Width = 879
+        Align = alClient
+        AutoEdit = False
+        ColCount = 6
+        DefaultColWidth = 2
+        Font.Height = -12
+        Font.Name = 'Courier New'
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Height = -12
+        TitleFont.Name = 'Courier New'
+      end
+    end
+    object SectionsSheet: TTabSheet
+      Caption = 'Sections'
+      ClientHeight = 415
+      ClientWidth = 879
+      object SectionsGrid: TStringGrid
+        Left = 0
+        Height = 415
+        Top = 0
+        Width = 879
+        Align = alClient
+        AutoEdit = False
+        DefaultColWidth = 2
+        Font.Height = -12
+        Font.Name = 'Courier New'
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Height = -12
+        TitleFont.Name = 'Courier New'
+      end
+    end
+  end
+end

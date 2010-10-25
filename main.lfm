@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 2071
+  Left = 268
   Height = 627
-  Top = 192
+  Top = 200
   Width = 1040
   Caption = 'MainForm'
   ClientHeight = 602
@@ -72,14 +72,20 @@ object MainForm: TMainForm
     end
     object ProjectMenu: TMenuItem
       Caption = '&Project'
-      object ExportStataMenuItem: TMenuItem
-        Caption = 'ExportStata'
+      object ProjectStructureMenuItem: TMenuItem
+        Caption = 'Structure'
       end
       object ProjectMenuDivider1: TMenuItem
         Caption = '-'
       end
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
+      end
+    end
+    object ToolsMenu: TMenuItem
+      Caption = 'Tools'
+      object ExportStataMenuItem: TMenuItem
+        Caption = 'ExportStata'
       end
     end
     object HelpMenu: TMenuItem

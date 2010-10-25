@@ -1,0 +1,99 @@
+object Project_Structure_Form: TProject_Structure_Form
+  Left = 457
+  Height = 522
+  Top = 273
+  Width = 684
+  ActiveControl = PageCtrl
+  Caption = 'Project Structure'
+  ClientHeight = 522
+  ClientWidth = 684
+  OnShow = FormShow
+  LCLVersion = '0.9.29'
+  object PageCtrl: TPageControl
+    Left = 0
+    Height = 522
+    Top = 0
+    Width = 684
+    ActivePage = ProjectOverviewTab
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 0
+    object ProjectOverviewTab: TTabSheet
+      Caption = 'Overview'
+      ClientHeight = 487
+      ClientWidth = 678
+      object DataFilesGrid: TStringGrid
+        Left = 0
+        Height = 407
+        Top = 80
+        Width = 678
+        Align = alClient
+        ColCount = 6
+        Font.Height = -12
+        Font.Name = 'Courier New'
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Height = -12
+        TitleFont.Name = 'Courier New'
+      end
+      object Panel1: TPanel
+        Left = 0
+        Height = 80
+        Top = 0
+        Width = 678
+        Align = alTop
+        ClientHeight = 80
+        ClientWidth = 678
+        TabOrder = 1
+        object Label1: TLabel
+          Left = 13
+          Height = 18
+          Top = 8
+          Width = 134
+          Caption = 'Number of datasets:'
+          ParentColor = False
+        end
+        object Label2: TLabel
+          Left = 13
+          Height = 18
+          Top = 32
+          Width = 56
+          Caption = 'Created:'
+          ParentColor = False
+        end
+        object Label3: TLabel
+          Left = 13
+          Height = 18
+          Top = 56
+          Width = 93
+          Caption = 'Last modified:'
+          ParentColor = False
+        end
+        object NumberOfDataSetsLabel: TLabel
+          Left = 157
+          Height = 18
+          Top = 8
+          Width = 162
+          Caption = 'NumberOfDataSetsLabel'
+          ParentColor = False
+        end
+        object CreatedLabel: TLabel
+          Left = 157
+          Height = 18
+          Top = 32
+          Width = 87
+          Caption = 'CreatedLabel'
+          ParentColor = False
+        end
+        object LastModifiedLabel: TLabel
+          Left = 157
+          Height = 18
+          Top = 56
+          Width = 119
+          Caption = 'LastModifiedLabel'
+          ParentColor = False
+        end
+      end
+    end
+  end
+end

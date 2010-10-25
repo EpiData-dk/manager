@@ -22,6 +22,8 @@ type
     CheckVersionMenuItem: TMenuItem;
     ExportStataMenuItem: TMenuItem;
     ProjectMenuDivider1: TMenuItem;
+    ProjectStructureMenuItem: TMenuItem;
+    ToolsMenu: TMenuItem;
     ShowAboutAction: TAction;
     FileExitAction: TFileExit;
     FileExitMenuItem: TMenuItem;
@@ -225,6 +227,7 @@ begin
 
   ProjectPropertiesMenuItem.Action := Frame.ProjectSettingsAction;
   ExportStataMenuItem.Action       := Frame.ExportStataAction;
+  ProjectStructureMenuItem.Action  := Frame.ShowStructureAction;
 
   Inc(TabNameCount);
 end;

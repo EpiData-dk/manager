@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="21">
+    <Units Count="23">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -184,6 +184,20 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="settings2_var"/>
       </Unit20>
+      <Unit21>
+        <Filename Value="project/structure/structure_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Project_Structure_Form"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="structure_form"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="project/structure/structure_datafile_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Project_Structure_Datafile_Frame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="structure_datafile_frame"/>
+      </Unit22>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -193,7 +207,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;project/structure"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
@@ -217,9 +231,7 @@
         <UseMsgFile Value="True"/>
       </CompilerMessages>
       <CustomOptions Value="-dEPI_DEBUG
--dEPI_RELEASE1
--dEPI_SETTINGSFORM2
--dBLAH"/>
+-dEPI_RELEASE1"/>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>
