@@ -14,6 +14,7 @@ options=-l -dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 unittargetdir=./lib/$(CPU_TARGET)-$(OS_TARGET)
 unitdir=designer \
 	project \
+	project/structure \
 	utils \
 	settings \
 	$(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET) $(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM) \
@@ -36,6 +37,8 @@ files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
       $(wildcard $(COMPILER_UNITTARGETDIR)/*.or) \
       $(wildcard ./designer/*$(OEXT)) $(wildcard ./designer/*$(PPUEXT)) \
       $(wildcard ./project/*$(OEXT)) $(wildcard ./project/*$(PPUEXT)) \
+      $(wildcard ./project/structure/*$(OEXT)) $(wildcard ./project/structure/*$(PPUEXT)) \
+      $(wildcard ./settings/*$(OEXT)) $(wildcard ./settings/*$(PPUEXT)) \
       $(wildcard ./utils/*$(OEXT)) $(wildcard ./utils/*$(PPUEXT)) \
       $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *$(RSTEXT))
 

@@ -13,7 +13,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MinorVersionNr Value="5"/>
-      <RevisionNr Value="7"/>
+      <RevisionNr Value="8"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="23">
+    <Units Count="24">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -198,6 +198,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="structure_datafile_frame"/>
       </Unit22>
+      <Unit23>
+        <Filename Value="project/valuelabelseditor_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ValueLabelEditor"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabelseditor_form"/>
+      </Unit23>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

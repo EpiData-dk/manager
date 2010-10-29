@@ -22,20 +22,6 @@ object Project_Structure_Form: TProject_Structure_Form
       Caption = 'Overview'
       ClientHeight = 487
       ClientWidth = 678
-      object DataFilesGrid: TStringGrid
-        Left = 0
-        Height = 407
-        Top = 80
-        Width = 678
-        Align = alClient
-        ColCount = 6
-        Font.Height = -12
-        Font.Name = 'Courier New'
-        ParentFont = False
-        TabOrder = 0
-        TitleFont.Height = -12
-        TitleFont.Name = 'Courier New'
-      end
       object Panel1: TPanel
         Left = 0
         Height = 80
@@ -44,7 +30,7 @@ object Project_Structure_Form: TProject_Structure_Form
         Align = alTop
         ClientHeight = 80
         ClientWidth = 678
-        TabOrder = 1
+        TabOrder = 0
         object Label1: TLabel
           Left = 13
           Height = 18
@@ -93,6 +79,23 @@ object Project_Structure_Form: TProject_Structure_Form
           Caption = 'LastModifiedLabel'
           ParentColor = False
         end
+      end
+      object DataFilesGrid: TStringGrid
+        Left = 0
+        Height = 407
+        Top = 80
+        Width = 678
+        Align = alClient
+        AutoEdit = False
+        ColCount = 6
+        DefaultColWidth = 2
+        Font.Height = -12
+        Font.Name = 'Courier New'
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
+        ParentFont = False
+        TabOrder = 1
+        TitleFont.Height = -12
+        TitleFont.Name = 'Courier New'
       end
     end
   end

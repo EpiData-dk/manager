@@ -21,6 +21,7 @@ type
     AboutMenuItem: TMenuItem;
     CheckVersionMenuItem: TMenuItem;
     ExportStataMenuItem: TMenuItem;
+    ValueLabelsMenuItem: TMenuItem;
     ProjectMenuDivider1: TMenuItem;
     ProjectStructureMenuItem: TMenuItem;
     ToolsMenu: TMenuItem;
@@ -228,6 +229,7 @@ begin
   ProjectPropertiesMenuItem.Action := Frame.ProjectSettingsAction;
   ExportStataMenuItem.Action       := Frame.ExportStataAction;
   ProjectStructureMenuItem.Action  := Frame.ShowStructureAction;
+  ValueLabelsMenuItem.Action       := Frame.ValueLabelEditorAction;
 
   Inc(TabNameCount);
 end;

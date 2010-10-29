@@ -13,6 +13,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ValueLabelEditorAction: TAction;
     ShowStructureAction: TAction;
     ExportStataAction: TAction;
     ProjectSettingsAction: TAction;
@@ -41,6 +42,7 @@ type
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
     procedure ShowStructureActionExecute(Sender: TObject);
+    procedure ValueLabelEditorActionExecute(Sender: TObject);
   private
     { private declarations }
     FFileName: string;
@@ -79,7 +81,7 @@ implementation
 uses
   design_frame, Clipbrd, project_settings, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
-  structure_form;
+  structure_form, valuelabelseditor_form;
 
 type
 
@@ -215,6 +217,15 @@ begin
   StructureForm.Free;
 end;
 
+procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
+var
+  ValueLabelEdit: TValueLabelEditor;
+begin
+  ValueLabelEdit := TValueLabelEditor.Create(self);
+  ValueLabelEdit.ShowModal;
+  ValueLabelEdit.Free;
+end;
+
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 var
@@ -315,13 +326,18 @@ end;
 procedure TProjectFrame.DoCreateReleaseSections;
 var
   {$IFDEF EPI_RELEASE}
+  {$DEFINE EPI_NO_DUMMY}
   TmpEpiSection: TEpiSection;
   i: Integer;
   H: TEpiHeading;
   {$ENDIF EPI_RELEASE}
   {$IFDEF EPI_DEBUG}
+  {$DEFINE EPI_NO_DUMMY}
   LocalAdm: TEpiAdmin;
   Grp: TEpiGroup;
+  {$ENDIF}
+  {$IFNDEF EPI_NO_DUMMY}
+  Dummy: boolean;
   {$ENDIF}
 begin
   {$IFDEF EPI_RELEASE}

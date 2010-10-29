@@ -19,6 +19,7 @@ type
   { TProject_Structure_Form }
 
   TProject_Structure_Form = class(TForm)
+    DataFilesGrid: TStringGrid;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -28,7 +29,6 @@ type
     PageCtrl: TPageControl;
     Panel1: TPanel;
     ProjectOverviewTab: TTabSheet;
-    DataFilesGrid: TStringGrid;
     procedure FormShow(Sender: TObject);
   private
     FDocument: TEpiDocument;

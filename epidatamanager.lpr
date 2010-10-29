@@ -13,7 +13,7 @@ uses
   about, epidatacore, project_settings_general_frame, settings2,
   settings_visualdesign_frame, settings_fielddefinitions_frame,
   settings_advanced_frame, settings2_interface, settings2_var, structure_form,
-  structure_datafile_frame
+  structure_datafile_frame, valuelabelseditor_form
   { you can add units after this };
 
 {$R *.res}
