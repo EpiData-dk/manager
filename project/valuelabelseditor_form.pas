@@ -25,7 +25,6 @@ type
     TreeView1: TTreeView;
     procedure DeleteValueLabelSetsExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure ListBox1SelectionChange(Sender: TObject; User: boolean);
     procedure NewValueLabelSetExecute(Sender: TObject);
   private
     { private declarations }
@@ -65,12 +64,6 @@ begin
   ActionList1.Images := ToolBar1.Images;
   NewValueLabelSet.ImageIndex := 3;
   DeleteValueLabelSets.ImageIndex := 4;
-end;
-
-procedure TValueLabelEditor.ListBox1SelectionChange(Sender: TObject;
-  User: boolean);
-begin
-  ShowMessage(IntToStr(ListBox1.ItemIndex));
 end;
 
 end.
