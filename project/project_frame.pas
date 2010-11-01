@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
-  Controls, Dialogs, epidocument, epidatafiles, epicustombase, epiadmin;
+  Controls, Dialogs, epidocument, epidatafiles, epicustombase, epiadmin,
+  epivaluelabels;
 
 type
 
@@ -81,7 +82,8 @@ implementation
 uses
   design_frame, Clipbrd, project_settings, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
-  structure_form, valuelabelseditor_form;
+  structure_form, valuelabelseditor_form, epidatafilestypes,
+  strutils;
 
 type
 
@@ -221,9 +223,8 @@ procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
 var
   ValueLabelEdit: TValueLabelEditor;
 begin
-  ValueLabelEdit := TValueLabelEditor.Create(self);
-  ValueLabelEdit.ShowModal;
-  ValueLabelEdit.Free;
+  ValueLabelEdit := TValueLabelEditor.Create(self, EpiDocument);
+  ValueLabelEdit.Show;
 end;
 
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;
@@ -325,19 +326,16 @@ end;
 
 procedure TProjectFrame.DoCreateReleaseSections;
 var
-  {$IFDEF EPI_RELEASE}
-  {$DEFINE EPI_NO_DUMMY}
-  TmpEpiSection: TEpiSection;
   i: Integer;
+  {$IFDEF EPI_RELEASE}
+  TmpEpiSection: TEpiSection;
   H: TEpiHeading;
   {$ENDIF EPI_RELEASE}
   {$IFDEF EPI_DEBUG}
-  {$DEFINE EPI_NO_DUMMY}
   LocalAdm: TEpiAdmin;
   Grp: TEpiGroup;
-  {$ENDIF}
-  {$IFNDEF EPI_NO_DUMMY}
-  Dummy: boolean;
+  LocalVLSets: TEpiValueLabelSets;
+  VLSet: TEpiValueLabelSet;
   {$ENDIF}
 begin
   {$IFDEF EPI_RELEASE}
@@ -419,6 +417,40 @@ begin
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
   FEpiDocument.DataFiles[0].MainSection.Groups.AddItem(Grp);
+
+  LocalVLSets := FEpiDocument.DataFiles.ValueLabelSets;
+  VLSet := LocalVLSets.NewValueLabelSet(ftInteger);
+  VLSet.Name := 'The Set';
+  for i := 1 to 10 do
+    with TEpiIntValueLabel(VLSet.NewValueLabel) do
+    begin
+      Value := i;
+      TheLabel.Text := DupeString(IntToStr(i), 4);
+      if (i mod 2) = 0 then
+        IsMissingValue := true;
+    end;
+
+  VLSet := LocalVLSets.NewValueLabelSet(ftInteger);
+  VLSet.Name := 'Whatever';
+  for i := 1 to 10 do
+    with TEpiIntValueLabel(VLSet.NewValueLabel) do
+    begin
+      Value := i;
+      TheLabel.Text := DupeString(IntToStr(i), 4);
+      if (i mod 2) = 0 then
+        IsMissingValue := true;
+    end;
+
+  VLSet := LocalVLSets.NewValueLabelSet(ftFloat);
+  VLSet.Name := 'I''m good';
+  for i := 1 to 10 do
+    with TEpiFloatValueLabel(VLSet.NewValueLabel) do
+    begin
+      Value := i / 10;
+      TheLabel.Text := DupeString(IntToStr(i), 4);
+      if (i mod 2) = 0 then
+        IsMissingValue := true;
+    end;
   {$ENDIF}
 end;
 

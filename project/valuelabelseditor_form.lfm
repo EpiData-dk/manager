@@ -1,7 +1,7 @@
 object ValueLabelEditor: TValueLabelEditor
-  Left = 627
+  Left = 649
   Height = 474
-  Top = 361
+  Top = 256
   Width = 595
   ActiveControl = Panel1
   Caption = 'Value Labels'
@@ -37,7 +37,7 @@ object ValueLabelEditor: TValueLabelEditor
         Action = DeleteValueLabelSets
       end
     end
-    object TreeView1: TTreeView
+    object ValueLabelSetTreeView: TTreeView
       Left = 1
       Height = 446
       Top = 27
@@ -48,63 +48,32 @@ object ValueLabelEditor: TValueLabelEditor
       ParentFont = False
       ScrollBars = ssAutoBoth
       ShowRoot = False
+      SortType = stText
       TabOrder = 1
+      OnChange = ValueLabelSetTreeViewChange
+      OnChanging = ValueLabelSetTreeViewChanging
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoToolTips, tvoThemedDraw]
-      Items.Data = {
-        F9FFFFFF020004000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
-        000000050000004974656D30FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
-        0000000000050000004974656D31FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
-        00000000000000050000004974656D32FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-        000000000000000000050000004974656D33
-      }
     end
   end
-  object StringGrid1: TStringGrid
+  object ValueLabelsGrid: TStringGrid
     Left = 188
     Height = 474
     Top = 0
     Width = 407
     Align = alClient
     AutoFillColumns = True
-    ColCount = 3
+    ColCount = 4
     ExtendedSelect = False
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
     RowCount = 3
     TabOrder = 1
+    OnDrawCell = ValueLabelsGridDrawCell
+    OnValidateEntry = ValueLabelsGridValidateEntry
     ColWidths = (
       64
-      170
-      171
-    )
-    Cells = (
-      9
-      0
-      0
-      'Order'
-      0
-      1
-      '1'
-      0
-      2
-      '2'
-      1
-      0
-      'Value'
-      1
-      1
-      '0'
-      1
-      2
-      '1'
-      2
-      0
-      'Label'
-      2
-      1
-      'Kvinde'
-      2
-      2
-      'Mand'
+      113
+      113
+      115
     )
   end
   object Splitter1: TSplitter
