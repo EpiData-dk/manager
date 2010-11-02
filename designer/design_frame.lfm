@@ -7,8 +7,8 @@ object DesignFrame: TDesignFrame
   ClientWidth = 1069
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 323
-  DesignTop = 232
+  DesignLeft = 374
+  DesignTop = 228
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -2753,8 +2753,8 @@ object DesignFrame: TDesignFrame
   end
   object DockingSitePopUpMenu: TPopupMenu
     Images = DesignerImageList
-    left = 408
-    top = 296
+    left = 440
+    top = 304
     object DockingSitePopUpMenuEditItem: TMenuItem
       Action = EditControlAction
       Bitmap.Data = {

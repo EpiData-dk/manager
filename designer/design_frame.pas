@@ -523,6 +523,8 @@ var
   EpiCtrl: TEpiCustomControlItem;
   Pt: TPoint;
 begin
+  // This action can be triggered from eg. ValueLabelsEditor...
+  if not MainForm.Active then exit;
   EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
   Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left, EpiCtrl.Top));
   ShowForm(EpiCtrl, Pt);

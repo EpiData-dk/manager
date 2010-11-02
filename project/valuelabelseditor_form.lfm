@@ -1,21 +1,22 @@
 object ValueLabelEditor: TValueLabelEditor
-  Left = 649
-  Height = 474
-  Top = 256
-  Width = 595
+  Left = 902
+  Height = 555
+  Top = 253
+  Width = 728
   ActiveControl = Panel1
   Caption = 'Value Labels'
-  ClientHeight = 474
-  ClientWidth = 595
+  ClientHeight = 555
+  ClientWidth = 728
   OnShow = FormShow
+  Position = poDesktopCenter
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
-    Height = 474
+    Height = 555
     Top = 0
     Width = 183
     Align = alLeft
-    ClientHeight = 474
+    ClientHeight = 555
     ClientWidth = 183
     TabOrder = 0
     object ToolBar1: TToolBar
@@ -26,20 +27,22 @@ object ValueLabelEditor: TValueLabelEditor
       Caption = 'ToolBar1'
       EdgeBorders = [ebTop, ebBottom]
       TabOrder = 0
-      object ToolButton1: TToolButton
+      object NewValueLabelSetToolBtl: TToolButton
         Left = 1
         Top = 2
         Action = NewValueLabelSet
+        DropdownMenu = NewValueLabelSetTypeDropDown
+        Style = tbsDropDown
       end
-      object ToolButton2: TToolButton
-        Left = 24
+      object DeleteValueLabelSetsToolBtn: TToolButton
+        Left = 36
         Top = 2
         Action = DeleteValueLabelSets
       end
     end
     object ValueLabelSetTreeView: TTreeView
       Left = 1
-      Height = 446
+      Height = 527
       Top = 27
       Width = 181
       Align = alClient
@@ -52,33 +55,45 @@ object ValueLabelEditor: TValueLabelEditor
       TabOrder = 1
       OnChange = ValueLabelSetTreeViewChange
       OnChanging = ValueLabelSetTreeViewChanging
+      OnEdited = ValueLabelSetTreeViewEdited
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoToolTips, tvoThemedDraw]
     end
   end
   object ValueLabelsGrid: TStringGrid
     Left = 188
-    Height = 474
+    Height = 555
     Top = 0
-    Width = 407
+    Width = 540
     Align = alClient
-    AutoFillColumns = True
-    ColCount = 4
+    AutoAdvance = aaRightDown
+    Columns = <    
+      item
+        Title.Caption = 'Value'
+      end    
+      item
+        Title.Caption = 'Label'
+      end    
+      item
+        Title.Caption = 'Label'
+      end    
+      item
+        ButtonStyle = cbsCheckboxColumn
+        Title.Caption = 'Missing Value'
+        Width = 100
+      end>
     ExtendedSelect = False
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
-    RowCount = 3
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goDblClickAutoSize, goSmoothScroll, goHeaderHotTracking]
+    RowCount = 1
     TabOrder = 1
-    OnDrawCell = ValueLabelsGridDrawCell
+    TitleStyle = tsStandard
+    UseXORFeatures = True
+    OnColRowMoved = ValueLabelsGridColRowMoved
+    OnHeaderClick = ValueLabelsGridHeaderClick
     OnValidateEntry = ValueLabelsGridValidateEntry
-    ColWidths = (
-      64
-      113
-      113
-      115
-    )
   end
   object Splitter1: TSplitter
     Left = 183
-    Height = 474
+    Height = 555
     Top = 0
     Width = 5
   end
@@ -94,6 +109,22 @@ object ValueLabelEditor: TValueLabelEditor
       Caption = 'DeleteValueLabelSets'
       ImageIndex = 1
       OnExecute = DeleteValueLabelSetsExecute
+    end
+  end
+  object NewValueLabelSetTypeDropDown: TPopupMenu
+    left = 104
+    top = 56
+    object NewIntValueLabelSetMenuItem: TMenuItem
+      Caption = 'Integer Valuelabels'
+      OnClick = NewIntValueLabelSetMenuItemClick
+    end
+    object NewFloatValueLabelSetMenuItem: TMenuItem
+      Caption = 'Float Valuelabels'
+      OnClick = NewFloatValueLabelSetMenuItemClick
+    end
+    object NewStringValueLabelSetMenuItem: TMenuItem
+      Caption = 'String Valuelabels'
+      OnClick = NewStringValueLabelSetMenuItemClick
     end
   end
 end
