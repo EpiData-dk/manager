@@ -7,8 +7,8 @@ object DesignFrame: TDesignFrame
   ClientWidth = 1069
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 374
-  DesignTop = 228
+  DesignLeft = 587
+  DesignTop = 219
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -1562,6 +1562,7 @@ object DesignFrame: TDesignFrame
       Hint = 'New Integer Field'
       ImageIndex = 1
       OnExecute = NewIntFieldActionExecute
+      OnUpdate = NoControlActionUpdate
       SecondaryShortCuts.Strings = (
         'Shift+F2'
       )
@@ -1573,6 +1574,7 @@ object DesignFrame: TDesignFrame
       Hint = 'New Float Field'
       ImageIndex = 2
       OnExecute = NewFloatFieldActionExecute
+      OnUpdate = NoControlActionUpdate
       SecondaryShortCuts.Strings = (
         'Shift+F3'
       )
@@ -1584,6 +1586,7 @@ object DesignFrame: TDesignFrame
       Hint = 'New String Field'
       ImageIndex = 3
       OnExecute = NewStringFieldActionExecute
+      OnUpdate = NoControlActionUpdate
       SecondaryShortCuts.Strings = (
         'Shift+F4'
       )
@@ -1595,6 +1598,7 @@ object DesignFrame: TDesignFrame
       Hint = 'New DMY Field'
       ImageIndex = 4
       OnExecute = NewDMYFieldActionExecute
+      OnUpdate = NoControlActionUpdate
       SecondaryShortCuts.Strings = (
         'Shift+F5'
       )
@@ -1606,6 +1610,7 @@ object DesignFrame: TDesignFrame
       Hint = 'New MDY Field'
       ImageIndex = 5
       OnExecute = NewMDYFieldActionExecute
+      OnUpdate = NoControlActionUpdate
     end
     object NewYMDFieldAction: TAction
       Category = 'Controls'
@@ -1613,6 +1618,7 @@ object DesignFrame: TDesignFrame
       Hint = 'New YMD Field'
       ImageIndex = 6
       OnExecute = NewYMDFieldActionExecute
+      OnUpdate = NoControlActionUpdate
     end
     object NewHeadingAction: TAction
       Category = 'Controls'
@@ -1620,6 +1626,7 @@ object DesignFrame: TDesignFrame
       Hint = 'New Heading'
       ImageIndex = 8
       OnExecute = NewHeadingActionExecute
+      OnUpdate = NoControlActionUpdate
       SecondaryShortCuts.Strings = (
         'Shift+F6'
       )
@@ -1630,6 +1637,7 @@ object DesignFrame: TDesignFrame
       Caption = 'New Section'
       Hint = 'New Section'
       ImageIndex = 9
+      OnUpdate = NoControlActionUpdate
     end
     object EditControlAction: TAction
       Category = 'Edit'
@@ -1637,6 +1645,7 @@ object DesignFrame: TDesignFrame
       Hint = 'Edit...'
       ImageIndex = 10
       OnExecute = EditControlActionExecute
+      OnUpdate = ControlActionUpdate
       ShortCut = 13
     end
     object DeleteControlAction: TAction
@@ -1645,6 +1654,7 @@ object DesignFrame: TDesignFrame
       Hint = 'Delete...'
       ImageIndex = 11
       OnExecute = DeleteControlActionExecute
+      OnUpdate = DeleteControlActionUpdate
       SecondaryShortCuts.Strings = (
         'Shift+Del'
       )
@@ -1673,36 +1683,42 @@ object DesignFrame: TDesignFrame
       Category = 'Move'
       Caption = 'MoveHomeAction'
       OnExecute = MoveHomeActionExecute
+      OnUpdate = ControlActionUpdate
       ShortCut = 36
     end
     object MovePgUpAction: TAction
       Category = 'Move'
       Caption = 'MovePgUpAction'
       OnExecute = MovePgUpActionExecute
+      OnUpdate = ControlActionUpdate
       ShortCut = 33
     end
     object MoveUpAction: TAction
       Category = 'Move'
       Caption = 'MoveUpAction'
       OnExecute = MoveUpActionExecute
+      OnUpdate = ControlActionUpdate
       ShortCut = 38
     end
     object MoveDownAction: TAction
       Category = 'Move'
       Caption = 'MoveDownAction'
       OnExecute = MoveDownActionExecute
+      OnUpdate = ControlActionUpdate
       ShortCut = 40
     end
     object MovePgDnAction: TAction
       Category = 'Move'
       Caption = 'MovePgDnAction'
       OnExecute = MovePgDnActionExecute
+      OnUpdate = ControlActionUpdate
       ShortCut = 34
     end
     object MoveEndAction: TAction
       Category = 'Move'
       Caption = 'MoveEndAction'
       OnExecute = MoveEndActionExecute
+      OnUpdate = ControlActionUpdate
       ShortCut = 35
     end
     object DeleteAllControlsAction: TAction
@@ -1711,12 +1727,14 @@ object DesignFrame: TDesignFrame
       Hint = 'Erase All'
       ImageIndex = 16
       OnExecute = DeleteAllControlsActionExecute
+      OnUpdate = NoControlActionUpdate
     end
     object PasteAsQESAction: TAction
       Category = 'Edit'
       Caption = 'Paste As QES'
       Hint = 'Paste As QES'
       OnExecute = PasteAsQESActionExecute
+      OnUpdate = NoControlActionUpdate
     end
     object PasteAsHeadingAction: TAction
       Category = 'Edit'
@@ -1724,6 +1742,7 @@ object DesignFrame: TDesignFrame
       Hint = 'Paste As Headings...'
       ImageIndex = 8
       OnExecute = PasteAsHeadingActionExecute
+      OnUpdate = NoControlActionUpdate
     end
     object PasteAsIntAction: TAction
       Category = 'Edit'
@@ -1731,6 +1750,7 @@ object DesignFrame: TDesignFrame
       Hint = 'Paste As Integer...'
       ImageIndex = 1
       OnExecute = PasteAsIntActionExecute
+      OnUpdate = NoControlActionUpdate
     end
     object PasteAsFloatAction: TAction
       Category = 'Edit'
@@ -1738,6 +1758,7 @@ object DesignFrame: TDesignFrame
       Hint = 'Paste As Float...'
       ImageIndex = 2
       OnExecute = PasteAsFloatActionExecute
+      OnUpdate = NoControlActionUpdate
     end
     object PasteAsStringAction: TAction
       Category = 'Edit'
@@ -1745,6 +1766,7 @@ object DesignFrame: TDesignFrame
       Hint = 'Paste As String...'
       ImageIndex = 3
       OnExecute = PasteAsStringActionExecute
+      OnUpdate = NoControlActionUpdate
     end
   end
   object DesignControlPopUpMenu: TPopupMenu

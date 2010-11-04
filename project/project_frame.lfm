@@ -161,6 +161,7 @@ object ProjectFrame: TProjectFrame
       Category = 'Project'
       Caption = 'Value labels...'
       OnExecute = ValueLabelEditorActionExecute
+      ShortCut = 32854
     end
   end
   object ProjectImageList: TImageList

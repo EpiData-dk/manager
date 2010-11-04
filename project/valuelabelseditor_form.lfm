@@ -1,14 +1,14 @@
 object ValueLabelEditor: TValueLabelEditor
-  Left = 902
+  Left = 877
   Height = 555
-  Top = 253
+  Top = 257
   Width = 728
   ActiveControl = Panel1
   Caption = 'Value Labels'
   ClientHeight = 555
   ClientWidth = 728
   OnShow = FormShow
-  Position = poDesktopCenter
+  Position = poScreenCenter
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
@@ -56,40 +56,9 @@ object ValueLabelEditor: TValueLabelEditor
       OnChange = ValueLabelSetTreeViewChange
       OnChanging = ValueLabelSetTreeViewChanging
       OnEdited = ValueLabelSetTreeViewEdited
+      OnKeyDown = ValueLabelSetTreeViewKeyDown
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoToolTips, tvoThemedDraw]
     end
-  end
-  object ValueLabelsGrid: TStringGrid
-    Left = 188
-    Height = 555
-    Top = 0
-    Width = 540
-    Align = alClient
-    AutoAdvance = aaRightDown
-    Columns = <    
-      item
-        Title.Caption = 'Value'
-      end    
-      item
-        Title.Caption = 'Label'
-      end    
-      item
-        Title.Caption = 'Label'
-      end    
-      item
-        ButtonStyle = cbsCheckboxColumn
-        Title.Caption = 'Missing Value'
-        Width = 100
-      end>
-    ExtendedSelect = False
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goDblClickAutoSize, goSmoothScroll, goHeaderHotTracking]
-    RowCount = 1
-    TabOrder = 1
-    TitleStyle = tsStandard
-    UseXORFeatures = True
-    OnColRowMoved = ValueLabelsGridColRowMoved
-    OnHeaderClick = ValueLabelsGridHeaderClick
-    OnValidateEntry = ValueLabelsGridValidateEntry
   end
   object Splitter1: TSplitter
     Left = 183
@@ -97,34 +66,76 @@ object ValueLabelEditor: TValueLabelEditor
     Top = 0
     Width = 5
   end
-  object ActionList1: TActionList
-    left = 272
+  object TreeViewActionList: TActionList
+    left = 96
     top = 272
     object NewValueLabelSet: TAction
+      Category = 'TreeView'
       Caption = 'New'
       ImageIndex = 0
       OnExecute = NewValueLabelSetExecute
+      left = 65360
+      top = 65512
     end
     object DeleteValueLabelSets: TAction
+      Category = 'TreeView'
       Caption = 'DeleteValueLabelSets'
       ImageIndex = 1
       OnExecute = DeleteValueLabelSetsExecute
+      OnUpdate = DeleteValueLabelSetsUpdate
+      SecondaryShortCuts.Strings = (
+        'Shift+Del'
+      )
+      ShortCut = 46
+    end
+    object NewIntValueLabelSetAction: TAction
+      Category = 'TreeView'
+      Caption = 'Integer Valuelabels'
+      OnExecute = NewIntValueLabelSetActionExecute
+      ShortCut = 113
+    end
+    object NewFloatValueLabelSetAction: TAction
+      Category = 'TreeView'
+      Caption = 'Float Valuelabels'
+      OnExecute = NewFloatValueLabelSetActionExecute
+      ShortCut = 114
+    end
+    object NewStringValueLabelSetAction: TAction
+      Category = 'TreeView'
+      Caption = 'String Valuelabels'
+      OnExecute = NewStringValueLabelSetActionExecute
+      ShortCut = 115
     end
   end
   object NewValueLabelSetTypeDropDown: TPopupMenu
-    left = 104
+    left = 96
     top = 56
     object NewIntValueLabelSetMenuItem: TMenuItem
-      Caption = 'Integer Valuelabels'
-      OnClick = NewIntValueLabelSetMenuItemClick
+      Action = NewIntValueLabelSetAction
     end
     object NewFloatValueLabelSetMenuItem: TMenuItem
-      Caption = 'Float Valuelabels'
-      OnClick = NewFloatValueLabelSetMenuItemClick
+      Action = NewFloatValueLabelSetAction
     end
     object NewStringValueLabelSetMenuItem: TMenuItem
-      Caption = 'String Valuelabels'
-      OnClick = NewStringValueLabelSetMenuItemClick
+      Action = NewStringValueLabelSetAction
+    end
+  end
+  object GridActionList: TActionList
+    left = 328
+    top = 272
+    object DeleteGridRowAction: TAction
+      Caption = 'Delete Valuelabel'
+      OnExecute = DeleteGridRowExecute
+      OnUpdate = DeleteGridRowUpdate
+      SecondaryShortCuts.Strings = (
+        'Shift+Del'
+      )
+      ShortCut = 46
+    end
+    object InsertGridRowAction: TAction
+      Caption = 'Insert Valuelabel'
+      OnExecute = InsertGridRowExecute
+      ShortCut = 45
     end
   end
 end

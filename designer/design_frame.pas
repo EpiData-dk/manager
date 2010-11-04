@@ -117,6 +117,9 @@ type
     procedure   Button3Click(Sender: TObject);
     procedure   DeleteAllControlsActionExecute(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
+    procedure   ControlActionUpdate(Sender: TObject);
+    procedure DeleteControlActionUpdate(Sender: TObject);
+    procedure   NoControlActionUpdate(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
     procedure   ImportDataFileActionExecute(Sender: TObject);
@@ -517,6 +520,25 @@ begin
     DataFile.Size := 0;
 end;
 
+procedure TDesignFrame.ControlActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled :=
+    (MainForm.Active) and
+    (Assigned(FActiveControl));
+end;
+
+procedure TDesignFrame.DeleteControlActionUpdate(Sender: TObject);
+begin
+  ControlActionUpdate(Sender);
+  if TAction(Sender).Enabled then
+    TAction(Sender).Enabled := (FActiveControl <> FDesignerBox);
+end;
+
+procedure TDesignFrame.NoControlActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled :=
+    (MainForm.Active);
+end;
 
 procedure TDesignFrame.EditControlActionExecute(Sender: TObject);
 var
@@ -524,7 +546,6 @@ var
   Pt: TPoint;
 begin
   // This action can be triggered from eg. ValueLabelsEditor...
-  if not MainForm.Active then exit;
   EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
   Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left, EpiCtrl.Top));
   ShowForm(EpiCtrl, Pt);
@@ -1726,7 +1747,6 @@ begin
     Sender := FDesignerBox;
 
   FActiveControl := TControl(Sender);
-  DeleteControlAction.Enabled := (Sender <> FDesignerBox);
   if (Sender is TWinControl) then
     TWinControl(Sender).SetFocus;
 

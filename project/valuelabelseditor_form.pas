@@ -5,58 +5,91 @@ unit valuelabelseditor_form;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, ComCtrls, ExtDlgs, Grids, ActnList, Menus, epivaluelabels,
+  Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
+  StdCtrls, ExtCtrls, ComCtrls, ExtDlgs, Grids, ActnList, Menus, epivaluelabels,
   epidocument, epidatafilestypes, epicustombase, LMessages;
 
 type
 
+  TValueLabelValidateEntryFunc =
+    function (sender: TObject; aCol, aRow: Integer; const OldValue: string;
+      var NewValue: String): boolean of object;
+
+  { TValueLabelGrid }
+
+  TValueLabelGrid = class(TStringGrid)
+  private
+    FOnValidateEntry: TValueLabelValidateEntryFunc;
+  protected
+    function ValidateEntry(const ACol, ARow: Integer; const OldValue: string;
+       var NewValue: string): boolean; override;
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+  public
+    property OnValidateEntry: TValueLabelValidateEntryFunc read FOnValidateEntry write FOnValidateEntry;
+  end;
+
   { TValueLabelEditor }
 
   TValueLabelEditor = class(TForm)
+    InsertGridRowAction: TAction;
+    DeleteGridRowAction: TAction;
+    GridActionList: TActionList;
+    NewStringValueLabelSetAction: TAction;
+    NewFloatValueLabelSetAction: TAction;
+    NewIntValueLabelSetAction: TAction;
     DeleteValueLabelSets: TAction;
     NewIntValueLabelSetMenuItem: TMenuItem;
     NewStringValueLabelSetMenuItem: TMenuItem;
     NewFloatValueLabelSetMenuItem: TMenuItem;
     NewValueLabelSet: TAction;
-    ActionList1: TActionList;
+    TreeViewActionList: TActionList;
     Panel1: TPanel;
     NewValueLabelSetTypeDropDown: TPopupMenu;
     Splitter1: TSplitter;
-    ValueLabelsGrid: TStringGrid;
     ToolBar1: TToolBar;
     NewValueLabelSetToolBtl: TToolButton;
     DeleteValueLabelSetsToolBtn: TToolButton;
     ValueLabelSetTreeView: TTreeView;
+    procedure DeleteGridRowExecute(Sender: TObject);
+    procedure DeleteGridRowUpdate(Sender: TObject);
     procedure DeleteValueLabelSetsExecute(Sender: TObject);
+    procedure DeleteValueLabelSetsUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure NewFloatValueLabelSetMenuItemClick(Sender: TObject);
-    procedure NewIntValueLabelSetMenuItemClick(Sender: TObject);
-    procedure NewStringValueLabelSetMenuItemClick(Sender: TObject);
+    procedure InsertGridRowExecute(Sender: TObject);
+    procedure NewFloatValueLabelSetActionExecute(Sender: TObject);
+    procedure NewIntValueLabelSetActionExecute(Sender: TObject);
+    procedure NewStringValueLabelSetActionExecute(Sender: TObject);
     procedure NewValueLabelSetExecute(Sender: TObject);
     procedure ValueLabelSetTreeViewEdited(Sender: TObject; Node: TTreeNode;
       var S: string);
-    procedure ValueLabelsGridColRowMoved(Sender: TObject; IsColumn: Boolean;
-      sIndex, tIndex: Integer);
     procedure ValueLabelSetTreeViewChange(Sender: TObject; Node: TTreeNode);
     procedure ValueLabelSetTreeViewChanging(Sender: TObject; Node: TTreeNode;
       var AllowChange: Boolean);
-    procedure ValueLabelsGridHeaderClick(Sender: TObject; IsColumn: Boolean;
-      Index: Integer);
-    procedure ValueLabelsGridValidateEntry(sender: TObject; aCol,
-      aRow: Integer; const OldValue: string; var NewValue: String);
+    procedure ValueLabelSetTreeViewEditing(Sender: TObject; Node: TTreeNode;
+      var AllowEdit: Boolean);
+    procedure ValueLabelSetTreeViewKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { private declarations }
-    FLanguageSelector: TComboBox;
+    FValueLabelsGrid: TValueLabelGrid;
     FValueLabelSets: TEpiValueLabelSets;
     FCurrentVLSet: TEpiValueLabelSet;
+    FHintWindow: THintWindow;
     constructor Create(TheOwner: TComponent); override;
     function    DoNewValueLabelSet(Ft: TEpiFieldType): TEpiValueLabelSet;
     procedure   UpdateGridCells;
+    procedure   ValueLabelsGridCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
+    procedure   ValueLabelsGridColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex, tIndex: Integer);
+    function    ValueLabelsGridValidateEntry(sender: TObject; aCol, aRow: Integer; const OldValue: string; var NewValue: String): boolean;
+    procedure   ValueLabelsGridEditingDone(Sender: TObject);
+    procedure   ValueLabelsGridKeyPress(Sender: TObject; var Key: Char);
+    procedure   ValueLabelsGridKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure   DisplayHint(Const S: string; Const Ctrl: TControl; Const Pos: TPoint);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; EpiDoc: TEpiDocument);
-  end; 
+    property    ValueLabelsGrid: TValueLabelGrid read FValueLabelsGrid;
+  end;
 
 
 implementation
@@ -64,7 +97,7 @@ implementation
 {$R *.lfm}
 
 uses
-  project_frame, LCLIntf, LCLType;
+  project_frame, math, LCLType;
 
 { TValueLabelEditor }
 
@@ -77,29 +110,30 @@ procedure TValueLabelEditor.ValueLabelSetTreeViewEdited(Sender: TObject;
   Node: TTreeNode; var S: string);
 var
   VLSet: TEpiValueLabelSet;
+  R: TRect;
 begin
   VLSet := TEpiValueLabelSet(Node.Data);
+
+  // Do not allow blanks.
+  if S = '' then
+  begin
+    R := Node.DisplayRect(false);
+    DisplayHint('Blank names not allowed', ValueLabelSetTreeView, Point(R.Left, R.Bottom + 3));
+    S := Node.Text;
+    exit;
+  end;
+
   VLSet.Name := S;
+  // Setting the name validates internally and if not possible, the old name
+  // is still used, hence update 'S'.
+  if VLSet.Name <> S then
+  begin
+    R := Node.DisplayRect(false);
+    DisplayHint('Name must be unique', ValueLabelSetTreeView, Point(R.Left, R.Bottom + 3));
+    S := VLSet.Name;
+  end;
   Node.Text := S;
   ValueLabelSetTreeView.CustomSort(nil);
-//  ValueLabelSetTreeView.Selected := node;
-end;
-
-procedure TValueLabelEditor.ValueLabelsGridColRowMoved(Sender: TObject;
-  IsColumn: Boolean; sIndex, tIndex: Integer);
-var
-  Tmp: TEpiCustomValueLabel;
-  TmpOrder: LongInt;
-begin
-  Dec(sIndex); Dec(tIndex);
-
-  Tmp := FCurrentVLSet[sIndex];
-  TmpOrder := FCurrentVLSet[tIndex].Order;
-  FCurrentVLSet.Items[sIndex] := FCurrentVLSet[tIndex];
-  FCurrentVLSet[sIndex].Order := Tmp.Order;
-  Tmp.Order := TmpOrder;
-  FCurrentVLSet.Items[tIndex] := Tmp;
-  UpdateGridCells;
 end;
 
 procedure TValueLabelEditor.ValueLabelSetTreeViewChange(Sender: TObject;
@@ -114,6 +148,7 @@ begin
   if not Assigned(Node) then
   begin
     ValueLabelsGrid.RowCount := 1;
+    FCurrentVLSet := nil;
     exit;
   end;
 
@@ -130,29 +165,80 @@ begin
   if csDestroying in TreeView.ComponentState then exit;
 end;
 
-procedure TValueLabelEditor.ValueLabelsGridHeaderClick(Sender: TObject;
-  IsColumn: Boolean; Index: Integer);
+procedure TValueLabelEditor.ValueLabelSetTreeViewEditing(Sender: TObject;
+  Node: TTreeNode; var AllowEdit: Boolean);
 begin
-  if not IsColumn then exit;
-  if not (Index = 3) then exit;
-
-  ShowMessage('Labels');
+  FHintWindow.Hide;
 end;
 
-procedure TValueLabelEditor.ValueLabelsGridValidateEntry(sender: TObject; aCol,
-  aRow: Integer; const OldValue: string; var NewValue: String);
+procedure TValueLabelEditor.ValueLabelSetTreeViewKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  FHintWindow.Hide;
+  if (Key = VK_INSERT) and (Shift = []) then
+  begin
+    ValueLabelSetTreeView.Selected.EditText;
+    Key := 0;
+  end;
+end;
+
+procedure TValueLabelEditor.ValueLabelsGridCheckboxToggled(sender: TObject;
+  aCol, aRow: Integer; aState: TCheckboxState);
+begin
+  // Missing Value.
+  if aCol = 4 then
+  begin
+    FCurrentVLSet[aRow - 1].IsMissingValue := (aState = cbChecked);
+    Exit;
+  end;
+end;
+
+procedure TValueLabelEditor.ValueLabelsGridColRowMoved(Sender: TObject;
+  IsColumn: Boolean; sIndex, tIndex: Integer);
+var
+  Item: TEpiCustomItem;
+  i: LongInt;
+begin
+  Dec(sIndex); Dec(tIndex);
+  Item := FCurrentVLSet.DeleteItem(sIndex);
+  FCurrentVLSet.InsertItem(tIndex, Item);
+  for i := Math.min(sIndex,tIndex) to Math.Max(sIndex,tIndex) do
+    FCurrentVLSet[i].Order := i;
+
+  UpdateGridCells;
+end;
+
+function TValueLabelEditor.ValueLabelsGridValidateEntry(sender: TObject; aCol,
+  aRow: Integer; const OldValue: string; var NewValue: String): boolean;
+var
+  R: TRect;
+  P: TPoint;
+  S: String;
 begin
   // Value change
+  result := true;
   if aCol = 1 then
   begin
     // NewValue must not exists!
-    if FCurrentVLSet.ValueLabel[NewValue] <> NewValue then
-      NewValue := OldValue;
+    try
+      S := 'Incorrect value.';
+      if (NewValue <> OldValue) and
+         (FCurrentVLSet.ValueLabelExists[NewValue])
+      then begin
+        S := 'Value already exists.';
+        abort;
+      end;
 
-    case FCurrentVLSet.LabelType of
-      ftInteger: TEpiIntValueLabel(FCurrentVLSet[aRow - 1]).Value := StrToInt(NewValue);
-      ftFloat:   TEpiFloatValueLabel(FCurrentVLSet[aRow - 1]).Value := StrToFloat(NewValue);
-      ftString:  TEpiStringValueLabel(FCurrentVLSet[aRow - 1]).Value := NewValue;
+      case FCurrentVLSet.LabelType of
+        ftInteger: TEpiIntValueLabel(FCurrentVLSet[aRow - 1]).Value := StrToInt(NewValue);
+        ftFloat:   TEpiFloatValueLabel(FCurrentVLSet[aRow - 1]).Value := StrToFloat(NewValue);
+        ftString:  TEpiStringValueLabel(FCurrentVLSet[aRow - 1]).Value := NewValue;
+      end;
+    except
+      R := ValueLabelsGrid.CellRect(aCol, aRow);
+      DisplayHint(S, ValueLabelsGrid, Point(R.Left, R.Bottom + 3));
+      NewValue := OldValue;
+      result := false;
     end;
     Exit;
   end;
@@ -171,13 +257,57 @@ begin
     FCurrentVLSet[aRow - 1].TheLabel.TextLang['fr'] := NewValue;
     Exit;
   end;
+end;
 
+procedure TValueLabelEditor.ValueLabelsGridEditingDone(Sender: TObject);
+begin
+  UpdateGridCells;
 end;
 
 constructor TValueLabelEditor.Create(TheOwner: TComponent);
+var
+  Cl: TGridColumn;
 begin
   inherited Create(TheOwner);
-  FLanguageSelector := TComboBox.Create(Self);
+
+  FValueLabelsGrid := TValueLabelGrid.Create(Self);
+  with ValueLabelsGrid do
+  begin
+    ColCount := 1;
+    RowCount := 1;
+
+    Cl := Columns.Add;
+    Cl.Title.Caption := 'Value';
+
+    Cl := Columns.Add;
+    Cl.Title.Caption := 'Label (catagory)';
+
+    Cl := Columns.Add;
+    Cl.Title.Caption := 'Label';
+    Cl.Visible := false;
+
+    Cl := Columns.Add;
+    Cl.Title.Caption := 'Missing Value';
+    Cl.ButtonStyle := cbsCheckboxColumn;
+
+    OnCheckboxToggled := @ValueLabelsGridCheckboxToggled;
+    OnColRowMoved     := @ValueLabelsGridColRowMoved;
+    OnValidateEntry   := @ValueLabelsGridValidateEntry;
+    OnEditingDone     := @ValueLabelsGridEditingDone;
+    OnKeyPress        := @ValueLabelsGridKeyPress;
+    OnKeyDown         := @ValueLabelsGridKeyDown;
+
+    UseXORFeatures := true;
+    TitleStyle     := tsStandard;
+    Options        := Options + [goEditing, goRowMoving, goColSizing];
+    AutoAdvance    := aaRightDown;
+    Align          := alClient;
+    Parent         := Self;
+  end;
+
+  FHintWindow := THintWindow.Create(Self);
+  FHintWindow.HideInterval := 10 * 1000; // TODO : Adjust hint-timeout in settings.
+  FHintWindow.AutoHide := true;
 end;
 
 function TValueLabelEditor.DoNewValueLabelSet(Ft: TEpiFieldType
@@ -187,12 +317,20 @@ begin
   result.Name := '(untitled)';
   ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.AddObject(nil, result.Name, Result);
   ValueLabelSetTreeView.CustomSort(nil);
+
+  // Set manually as the ValueLabelSetTreeViewChange has not been fired at this point!
+  FCurrentVLSet := result;
+
+  // Add at least on line.
+  InsertGridRowAction.Execute;
+  ValueLabelSetTreeView.Selected.EditText;
 end;
 
 procedure TValueLabelEditor.UpdateGridCells;
 var
   i: Integer;
 begin
+  if not Assigned(FCurrentVLSet) then exit;
   with ValueLabelsGrid do
   begin
     BeginUpdate;
@@ -202,7 +340,7 @@ begin
       Cells[0, i + 1] := IntToStr(FCurrentVLSet[i].Order);
       Cells[1, i + 1] := FCurrentVLSet[i].ValueAsString;
       Cells[2, i + 1] := FCurrentVLSet[i].TheLabel.Text;
-      Cells[3, i + 1] := FCurrentVLSet[i].TheLabel.TextLang['fr'];
+//      Cells[3, i + 1] := FCurrentVLSet[i].TheLabel.TextLang['fr'];
       Cells[4, i + 1] := BoolToStr(FCurrentVLSet[i].IsMissingValue, '1', '0');
     end;
     AutoSizeColumns;
@@ -224,11 +362,6 @@ begin
   ValueLabelSetTreeView.CustomSort(nil);
 
   ValueLabelsGrid.Cells[0,0] := 'Order';
-
-  // TODO : Extract languages correctly.
-  FLanguageSelector.Items.Add('Label (fr)');
-  FLanguageSelector.Items.Add('Label (da)');
-  FLanguageSelector.Items.Add('Label (de)');
 end;
 
 procedure TValueLabelEditor.DeleteValueLabelSetsExecute(Sender: TObject);
@@ -239,6 +372,16 @@ var
 begin
   Node := ValueLabelSetTreeView.Selected;
   VLSet := TEpiValueLabelSet(Node.Data);
+
+  {$IFNDEF EPI_DEBUG}
+  if not (ssShift in GetKeyShiftState) then
+  begin
+    if MessageDlg('Warning',
+      format('Are you sure you want to delete "%s"?', [VLSet.Name]),
+      mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+  end;
+  {$ENDIF}
+
   FValueLabelSets.RemoveItem(VLSet);
   VLSet.Free;
   NNode := Node.GetNext;
@@ -248,10 +391,54 @@ begin
   ValueLabelSetTreeView.Selected := NNode;
 end;
 
+procedure TValueLabelEditor.DeleteValueLabelSetsUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled :=
+    (ValueLabelSetTreeView.Focused) and
+    (ValueLabelSetTreeView.Items.Count > 0);
+end;
+
+procedure TValueLabelEditor.DeleteGridRowExecute(Sender: TObject);
+var
+  Idx: LongInt;
+  i: LongInt;
+begin
+  with ValueLabelsGrid do
+  begin
+    Idx := Row;
+
+    {$IFNDEF EPI_DEBUG}
+    if not (ssShift in GetKeyShiftState) then
+    begin
+      if MessageDlg('Warning',
+        Format('Are you sure you want to delete "%s = %s"?',[Cells[1, Idx], Cells[2, Idx]]),
+        mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+    end;
+    {$ENDIF}
+
+    BeginUpdate;
+    DeleteRow(Idx);
+    EndUpdate;
+  end;
+  Dec(Idx);
+  FCurrentVLSet.DeleteItem(Idx).Free;
+  for i := Idx to FCurrentVLSet.Count -1 do
+    FCurrentVLSet[i].Order := i;
+  UpdateGridCells;
+end;
+
+procedure TValueLabelEditor.DeleteGridRowUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled :=
+    (Assigned(FCurrentVLSet)) and
+    (ValueLabelsGrid.Focused) and
+    (ValueLabelsGrid.RowCount > 1);
+end;
+
 procedure TValueLabelEditor.FormShow(Sender: TObject);
 begin
   ToolBar1.Images := TProjectFrame(Owner).ActionList1.Images;
-  ActionList1.Images := ToolBar1.Images;
+  TreeViewActionList.Images := ToolBar1.Images;
   NewValueLabelSet.ImageIndex := 3;
   DeleteValueLabelSets.ImageIndex := 4;
 
@@ -259,20 +446,117 @@ begin
     ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items[0];
 end;
 
-procedure TValueLabelEditor.NewFloatValueLabelSetMenuItemClick(Sender: TObject);
+procedure TValueLabelEditor.ValueLabelsGridKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not Assigned(FCurrentVLSet) then exit;
+
+  if (FCurrentVLSet.LabelType = ftFloat) and (Key in ['.', ','])  then
+    Key := DecimalSeparator;
+end;
+
+procedure TValueLabelEditor.ValueLabelsGridKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  FHintWindow.Hide;
+end;
+
+procedure TValueLabelEditor.DisplayHint(const S: string; const Ctrl: TControl;
+  const Pos: TPoint);
+var
+  P: TPoint;
+  R: TRect;
+begin
+  P := Ctrl.ClientToScreen(Pos);
+  R := FHintWindow.CalcHintRect(0, S, nil);
+  OffsetRect(R, P.X, P.Y);
+  FHintWindow.ActivateHint(R, S);
+end;
+
+procedure TValueLabelEditor.InsertGridRowExecute(Sender: TObject);
+var
+  VL: TEpiCustomValueLabel;
+  F: Extended;
+  I: Integer;
+begin
+  if not Assigned(FCurrentVLSet) then exit;
+
+  // This helps the grid not to f*ck up when pressing "ins" during grid-entry.
+  if ValueLabelsGrid.EditorMode then
+    ValueLabelsGrid.EditorMode := false;
+
+  VL := FCurrentVLSet.NewValueLabel;
+  if FCurrentVLSet.Count > 1 then
+    case FCurrentVLSet.LabelType of
+      ftInteger:
+        begin
+          I := TEpiIntValueLabel(FCurrentVLSet[FCurrentVLSet.Count-2]).Value + 1;
+          while FCurrentVLSet.ValueLabelExists[I] do Inc(i);
+          TEpiIntValueLabel(VL).Value := I;
+        end;
+      ftFloat:
+        begin
+          F := TEpiFloatValueLabel(FCurrentVLSet[FCurrentVLSet.Count-2]).Value + 1;
+          while FCurrentVLSet.ValueLabelExists[F] do F := F + 1;
+          TEpiFloatValueLabel(VL).Value := F;
+        end;
+    end;
+
+  with ValueLabelsGrid do
+  begin
+    if not Focused then SetFocus;
+    BeginUpdate;
+    InsertColRow(false, RowCount);
+    Cells[0, RowCount-1] := IntToStr(VL.Order);
+    Cells[1, RowCount-1] := VL.ValueAsString;
+    Cells[4, RowCount-1] := '0';
+    EndUpdate;
+    Col := 1;
+    Row := RowCount - 1;
+  end;
+end;
+
+procedure TValueLabelEditor.NewFloatValueLabelSetActionExecute(Sender: TObject
+  );
 begin
   DoNewValueLabelSet(ftFloat);
 end;
 
-procedure TValueLabelEditor.NewIntValueLabelSetMenuItemClick(Sender: TObject);
+procedure TValueLabelEditor.NewIntValueLabelSetActionExecute(Sender: TObject);
 begin
   DoNewValueLabelSet(ftInteger);
 end;
 
-procedure TValueLabelEditor.NewStringValueLabelSetMenuItemClick(Sender: TObject
+procedure TValueLabelEditor.NewStringValueLabelSetActionExecute(Sender: TObject
   );
 begin
   DoNewValueLabelSet(ftString);
+end;
+
+{ TValueLabelGrid }
+
+function TValueLabelGrid.ValidateEntry(const ACol, ARow: Integer;
+  const OldValue: string; var NewValue: string): boolean;
+begin
+  if assigned(OnValidateEntry) then
+    result := OnValidateEntry(Self, ACol, ARow, OldValue, NewValue)
+  else
+    result := inherited ValidateEntry(ACol, ARow, OldValue, NewValue);
+end;
+
+procedure TValueLabelGrid.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  if (Key = VK_RETURN) and (Col = 4) then
+  begin
+    if (Row = (RowCount - 1)) then
+      TValueLabelEditor(Parent).InsertGridRowAction.Execute
+    else begin
+      Row := Row + 1;
+      Col := 0;
+    end;
+    Key := 0;
+  end;
+  inherited KeyDown(Key, Shift);
 end;
 
 end.

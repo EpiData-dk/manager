@@ -442,7 +442,7 @@ begin
     end;
 
   VLSet := LocalVLSets.NewValueLabelSet(ftFloat);
-  VLSet.Name := 'I''m good';
+  VLSet.Name := 'ZZ Top';
   for i := 1 to 10 do
     with TEpiFloatValueLabel(VLSet.NewValueLabel) do
     begin
