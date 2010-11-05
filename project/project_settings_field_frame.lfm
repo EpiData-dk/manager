@@ -6,8 +6,8 @@ object ProjectSettings_FieldFrame: TProjectSettings_FieldFrame
   ClientHeight = 356
   ClientWidth = 488
   TabOrder = 0
-  DesignLeft = 826
-  DesignTop = 346
+  DesignLeft = 2424
+  DesignTop = 173
   object ShowFieldNamesChkBox: TCheckBox
     Left = 16
     Height = 22

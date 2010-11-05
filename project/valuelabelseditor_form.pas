@@ -31,6 +31,7 @@ type
   { TValueLabelEditor }
 
   TValueLabelEditor = class(TForm)
+    ImageList1: TImageList;
     InsertGridRowAction: TAction;
     DeleteGridRowAction: TAction;
     GridActionList: TActionList;
@@ -41,14 +42,17 @@ type
     NewIntValueLabelSetMenuItem: TMenuItem;
     NewStringValueLabelSetMenuItem: TMenuItem;
     NewFloatValueLabelSetMenuItem: TMenuItem;
-    NewValueLabelSet: TAction;
+    ValueLabelEditorStatusBar: TStatusBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
     TreeViewActionList: TActionList;
     Panel1: TPanel;
     NewValueLabelSetTypeDropDown: TPopupMenu;
     Splitter1: TSplitter;
     ToolBar1: TToolBar;
-    NewValueLabelSetToolBtl: TToolButton;
-    DeleteValueLabelSetsToolBtn: TToolButton;
     ValueLabelSetTreeView: TTreeView;
     procedure DeleteGridRowExecute(Sender: TObject);
     procedure DeleteGridRowUpdate(Sender: TObject);
@@ -59,7 +63,7 @@ type
     procedure NewFloatValueLabelSetActionExecute(Sender: TObject);
     procedure NewIntValueLabelSetActionExecute(Sender: TObject);
     procedure NewStringValueLabelSetActionExecute(Sender: TObject);
-    procedure NewValueLabelSetExecute(Sender: TObject);
+    procedure ValueLabelEditorStatusBarResize(Sender: TObject);
     procedure ValueLabelSetTreeViewEdited(Sender: TObject; Node: TTreeNode;
       var S: string);
     procedure ValueLabelSetTreeViewChange(Sender: TObject; Node: TTreeNode);
@@ -85,6 +89,8 @@ type
     procedure   ValueLabelsGridKeyPress(Sender: TObject; var Key: Char);
     procedure   ValueLabelsGridKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure   DisplayHint(Const S: string; Const Ctrl: TControl; Const Pos: TPoint);
+    procedure   CalculateStatusbar;
+    procedure   UpdateStatusbar;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; EpiDoc: TEpiDocument);
@@ -100,11 +106,6 @@ uses
   project_frame, math, LCLType;
 
 { TValueLabelEditor }
-
-procedure TValueLabelEditor.NewValueLabelSetExecute(Sender: TObject);
-begin
-  DoNewValueLabelSet(ftInteger); // TODO : Default new valuelabelset???
-end;
 
 procedure TValueLabelEditor.ValueLabelSetTreeViewEdited(Sender: TObject;
   Node: TTreeNode; var S: string);
@@ -203,7 +204,7 @@ begin
   Item := FCurrentVLSet.DeleteItem(sIndex);
   FCurrentVLSet.InsertItem(tIndex, Item);
   for i := Math.min(sIndex,tIndex) to Math.Max(sIndex,tIndex) do
-    FCurrentVLSet[i].Order := i;
+    FCurrentVLSet[i].Order := i+1;
 
   UpdateGridCells;
 end;
@@ -312,9 +313,17 @@ end;
 
 function TValueLabelEditor.DoNewValueLabelSet(Ft: TEpiFieldType
   ): TEpiValueLabelSet;
+var
+  i: Integer;
 begin
   result := FValueLabelSets.NewValueLabelSet(Ft);
-  result.Name := '(untitled)';
+  result.name := '(untitled)';
+  i := 1;
+  while (result.name = '') do
+  begin
+    result.Name := format('(untitled%d)', [i]);
+    inc(i);
+  end;
   ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.AddObject(nil, result.Name, Result);
   ValueLabelSetTreeView.CustomSort(nil);
 
@@ -324,6 +333,7 @@ begin
   // Add at least on line.
   InsertGridRowAction.Execute;
   ValueLabelSetTreeView.Selected.EditText;
+  UpdateStatusbar;
 end;
 
 procedure TValueLabelEditor.UpdateGridCells;
@@ -437,13 +447,12 @@ end;
 
 procedure TValueLabelEditor.FormShow(Sender: TObject);
 begin
-  ToolBar1.Images := TProjectFrame(Owner).ActionList1.Images;
-  TreeViewActionList.Images := ToolBar1.Images;
-  NewValueLabelSet.ImageIndex := 3;
-  DeleteValueLabelSets.ImageIndex := 4;
-
   if ValueLabelSetTreeView.Items.Count > 0 then
     ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items[0];
+  Width := 600;
+  Height := 400;
+  UpdateStatusbar;
+  ValueLabelsGrid.AutoSizeColumns;
 end;
 
 procedure TValueLabelEditor.ValueLabelsGridKeyPress(Sender: TObject;
@@ -471,6 +480,41 @@ begin
   R := FHintWindow.CalcHintRect(0, S, nil);
   OffsetRect(R, P.X, P.Y);
   FHintWindow.ActivateHint(R, S);
+end;
+
+procedure TValueLabelEditor.CalculateStatusbar;
+var
+  i: Integer;
+  W: LongInt;
+begin
+  with ValueLabelEditorStatusBar do
+  begin
+    W := ClientWidth div Panels.Count;
+    for i := 0 to Panels.Count - 1 do
+      Panels[i].Width := W;
+  end;
+  UpdateStatusbar;
+end;
+
+procedure TValueLabelEditor.UpdateStatusbar;
+var
+  I, F, S: Integer;
+  j: Integer;
+begin
+  I := 0; F := 0; S := 0;
+  for j := 0 to FValueLabelSets.Count - 1 do
+  case FValueLabelSets[j].LabelType of
+    ftInteger: Inc(I);
+    ftFloat:   Inc(F);
+    ftString:  Inc(S);
+  end;
+
+  with ValueLabelEditorStatusBar do
+  begin
+    Panels[0].Text := Format('Integer: %d', [I]);
+    Panels[1].Text := Format('Float: %d', [F]);
+    Panels[2].Text := Format('String: %d', [S]);
+  end;
 end;
 
 procedure TValueLabelEditor.InsertGridRowExecute(Sender: TObject);
@@ -531,6 +575,11 @@ procedure TValueLabelEditor.NewStringValueLabelSetActionExecute(Sender: TObject
   );
 begin
   DoNewValueLabelSet(ftString);
+end;
+
+procedure TValueLabelEditor.ValueLabelEditorStatusBarResize(Sender: TObject);
+begin
+  CalculateStatusbar;
 end;
 
 { TValueLabelGrid }

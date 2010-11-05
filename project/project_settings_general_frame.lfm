@@ -6,8 +6,8 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
   ClientHeight = 315
   ClientWidth = 440
   TabOrder = 0
-  DesignLeft = 612
-  DesignTop = 313
+  DesignLeft = 2424
+  DesignTop = 574
   object Label1: TLabel
     Left = 8
     Height = 18
