@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, Buttons, ExtCtrls, MaskEdit, ComCtrls, epidatafiles, epicustombase,
-  design_custombase, AVL_Tree, episettings;
+  StdCtrls, Buttons, ExtCtrls, MaskEdit, ComCtrls, ActnList, epidatafiles,
+  epicustombase, design_custombase, AVL_Tree, episettings, epivaluelabels;
 
 type
   { TDesignField }
@@ -47,7 +47,14 @@ type
   { TDesignFieldForm }
 
   TDesignFieldForm = class(TDesignCustomForm)
+    ShiftToAdvanced: TAction;
+    ShiftToBasic: TAction;
+    ActionList1: TActionList;
+    Label3: TLabel;
+    ManageValueLabelsButton: TButton;
     CancelBtn: TBitBtn;
+    BtnPanel: TPanel;
+    ValueLabelComboBox: TComboBox;
     NameEdit: TEdit;
     PageControl1: TPageControl;
     QuestionEdit: TEdit;
@@ -60,11 +67,18 @@ type
     OkBtn: TBitBtn;
     Panel1: TPanel;
     BasicSheet: TTabSheet;
+    AdvancedSheet: TTabSheet;
     procedure FormShow(Sender: TObject);
+    procedure ManageValueLabelsButtonClick(Sender: TObject);
+    procedure QuestionEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ShiftToBasicExecute(Sender: TObject);
   private
     { private declarations }
     FField: TEpiField;
+    FValueLabelSets: TEpiValueLabelSets;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure UpdateValueLabels;
   protected
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
     function GetEpiControl: TEpiCustomControlItem; override;
@@ -80,7 +94,7 @@ implementation
 
 uses
   design_section, epidatafilestypes, settings2_var,
-  epidocument;
+  epidocument, valuelabelseditor_form, LCLType;
 
 { TDesignField }
 
@@ -305,23 +319,43 @@ end;
 
 procedure TDesignFieldForm.FormShow(Sender: TObject);
 begin
-  if not DecimalsEdit.Visible then
-    Height :=
-      (PageControl1.Height - Panel1.ClientHeight) +
-      LengthEdit.Top +
-      LengthEdit.Height +  // Bottom of length edit :)
-      (OkBtn.Height - LengthEdit.Height) +
-      8;                   // A little additional spacing below...
   if not LengthEdit.Visible then
     Height :=
       (PageControl1.Height - Panel1.ClientHeight) +
       QuestionEdit.Top +
       QuestionEdit.Height +  // Bottom of question edit :)
       8 +                    // A little additional spacing above...
-      OkBtn.Height +         // get to bottom of button.
+      BtnPanel.Height +         // get to bottom of button.
       8;                     // A little additional spacing below...
-
+  ValueLabelComboBox.Enabled := (FField.FieldType in [ftInteger, ftString,ftUpperString, ftFloat]);
+  PageControl1.ActivePage := BasicSheet;
   QuestionEdit.SetFocus;
+end;
+
+procedure TDesignFieldForm.ManageValueLabelsButtonClick(Sender: TObject);
+var
+  Editor: TValueLabelEditor;
+begin
+  Editor := GetValueLabelsEditor(TEpiDocument(FField.RootOwner));
+  if Editor.Showing then
+    Editor.Hide;
+  Editor.ShowModal;
+  UpdateValueLabels;
+end;
+
+procedure TDesignFieldForm.QuestionEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if not (ssAlt in Shift) then exit;
+  case Key of
+    VK_1: PageControl1.ActivePage := BasicSheet;
+    VK_2: PageControl1.ActivePage := AdvancedSheet;
+  end;
+end;
+
+procedure TDesignFieldForm.ShiftToBasicExecute(Sender: TObject);
+begin
+  PageControl1.ActivePage := BasicSheet;
 end;
 
 procedure TDesignFieldForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
@@ -332,6 +366,7 @@ var
 begin
   if ModalResult <> mrOK then exit;
 
+  // "Standard" page
   // Rules for field creation!
   NewLen := FField.Length;
   if LengthEdit.Visible then
@@ -378,14 +413,60 @@ begin
     FField.Length := FField.Length + FField.Decimals + 1;
   FField.Question.Caption.Text := QuestionEdit.Text;
 
+  // "Advanced" page
+  FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+
   FField.EndUpdate;
 end;
 
+function ListSort(List: TStringList; Index1, Index2: Integer): Integer;
+begin
+  if (Index1 = 0) then
+    result := -1
+  else if  (Index2 = 0) then
+    result := 1
+  else
+    result := CompareStr(List[Index1], List[Index2]);
+end;
+
+procedure TDesignFieldForm.UpdateValueLabels;
+var
+  i: Integer;
+  DoAdd: boolean;
+  FList: TStringList;
+begin
+  ValueLabelComboBox.Clear;
+  ValueLabelComboBox.Items.AddObject('(none)', nil);
+  ValueLabelComboBox.ItemIndex := 0;
+  ValueLabelComboBox.Sorted := true;
+  if FValueLabelSets.Count = 0 then
+  begin
+    ValueLabelComboBox.Enabled := false;
+  end else begin
+   for i := 0 to FValueLabelSets.Count - 1 do
+   begin
+     case FValueLabelSets[i].LabelType of
+       ftInteger: DoAdd := FField.FieldType in [ftInteger, ftFloat];
+       ftFloat:   DoAdd := FField.FieldType = ftFloat;
+       ftString:  DoAdd := FField.FieldType in [ftString, ftUpperString];
+     end;
+     if DoAdd then
+       ValueLabelComboBox.AddItem(FValueLabelSets[i].Name, FValueLabelSets[i]);
+   end;
+   if Assigned(FField.ValueLabelSet) then
+     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FField.ValueLabelSet);
+  end;
+end;
+
 procedure TDesignFieldForm.SetEpiControl(const AValue: TEpiCustomControlItem);
+var
+  i: Integer;
+  DoAdd: Boolean;
 begin
   FField := TEpiField(AValue);
   if not Assigned(FField) then exit;
 
+  // Setup Basic page
   NameEdit.Text := FField.Name;
   QuestionEdit.Text := FField.Question.Caption.Text;
 
@@ -408,6 +489,10 @@ begin
         LengthEdit.Visible := false;
       end;
   end;
+
+  // Setup "advanced" page.
+  FValueLabelSets := TEpiDataFiles(FField.DataFile.Owner).ValueLabelSets;
+  UpdateValueLabels;
 end;
 
 function TDesignFieldForm.GetEpiControl: TEpiCustomControlItem;

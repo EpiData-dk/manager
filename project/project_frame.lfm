@@ -42,6 +42,7 @@ object ProjectFrame: TProjectFrame
       EdgeOuter = esRaised
       Images = ProjectImageList
       TabOrder = 1
+      Transparent = True
       object OpenProjectToolBtn: TToolButton
         Left = 2
         Top = 1

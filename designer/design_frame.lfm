@@ -1,19 +1,19 @@
 object DesignFrame: TDesignFrame
   Left = 0
-  Height = 695
+  Height = 639
   Top = 0
-  Width = 1069
-  ClientHeight = 695
-  ClientWidth = 1069
+  Width = 982
+  ClientHeight = 639
+  ClientWidth = 982
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 587
-  DesignTop = 219
+  DesignLeft = 346
+  DesignTop = 189
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
     Top = 0
-    Width = 1069
+    Width = 982
     ButtonHeight = 24
     ButtonWidth = 24
     Caption = 'DesignerToolBar'
@@ -22,6 +22,7 @@ object DesignFrame: TDesignFrame
     EdgeOuter = esRaised
     Images = DesignerImageList
     TabOrder = 0
+    Transparent = True
     object Divider0: TToolButton
       Left = 2
       Top = 1
@@ -207,15 +208,15 @@ object DesignFrame: TDesignFrame
     end
   end
   object Panel1: TPanel
-    Left = 804
-    Height = 648
+    Left = 717
+    Height = 592
     Top = 26
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 646
+    ClientHeight = 590
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
@@ -278,8 +279,8 @@ object DesignFrame: TDesignFrame
     end
   end
   object Splitter1: TSplitter
-    Left = 799
-    Height = 648
+    Left = 712
+    Height = 592
     Top = 26
     Width = 5
     Align = alRight
@@ -289,8 +290,8 @@ object DesignFrame: TDesignFrame
   object DesignerStatusBar: TStatusBar
     Left = 0
     Height = 21
-    Top = 674
-    Width = 1069
+    Top = 618
+    Width = 982
     Panels = <    
       item
         Text = 'Sections'

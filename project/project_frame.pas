@@ -220,11 +220,8 @@ begin
 end;
 
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
-var
-  ValueLabelEdit: TValueLabelEditor;
 begin
-  ValueLabelEdit := TValueLabelEditor.Create(self, EpiDocument);
-  ValueLabelEdit.Show;
+  GetValueLabelsEditor(EpiDocument).Show;
 end;
 
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;

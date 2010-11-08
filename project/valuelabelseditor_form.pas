@@ -91,19 +91,31 @@ type
     procedure   DisplayHint(Const S: string; Const Ctrl: TControl; Const Pos: TPoint);
     procedure   CalculateStatusbar;
     procedure   UpdateStatusbar;
+    procedure   SetEpiDocument(EpiDoc: TEpiDocument);
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; EpiDoc: TEpiDocument);
     property    ValueLabelsGrid: TValueLabelGrid read FValueLabelsGrid;
   end;
 
+function GetValueLabelsEditor(EpiDoc: TEpiDocument): TValueLabelEditor;
 
 implementation
 
 {$R *.lfm}
 
 uses
-  project_frame, math, LCLType;
+  project_frame, math, LCLType, main;
+
+var
+  TheValueLabelEditor: TValueLabelEditor = nil;
+
+function GetValueLabelsEditor(EpiDoc: TEpiDocument): TValueLabelEditor;
+begin
+  if not Assigned(TheValueLabelEditor) then
+    TheValueLabelEditor := TValueLabelEditor.Create(MainForm);
+  TheValueLabelEditor.SetEpiDocument(EpiDoc);
+  result := TheValueLabelEditor;
+end;
 
 { TValueLabelEditor }
 
@@ -358,15 +370,14 @@ begin
   end;
 end;
 
-constructor TValueLabelEditor.Create(TheOwner: TComponent; EpiDoc: TEpiDocument
-  );
+procedure TValueLabelEditor.SetEpiDocument(EpiDoc: TEpiDocument);
 var
   i: Integer;
 begin
-  Create(TheOwner);
   FValueLabelSets := EpiDoc.DataFiles.ValueLabelSets;
 
   ValueLabelSetTreeView.SortType := stText;
+  ValueLabelSetTreeView.Items.Clear;
   for i := 0 to FValueLabelSets.Count - 1 do
     ValueLabelSetTreeView.Items.AddObject(nil, FValueLabelSets[i].Name, FValueLabelSets[i]);
   ValueLabelSetTreeView.CustomSort(nil);

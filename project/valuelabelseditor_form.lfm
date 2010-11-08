@@ -1,5 +1,5 @@
 object ValueLabelEditor: TValueLabelEditor
-  Left = 604
+  Left = 592
   Height = 600
   Top = 282
   Width = 800
@@ -30,6 +30,7 @@ object ValueLabelEditor: TValueLabelEditor
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
+      Transparent = True
       object ToolButton1: TToolButton
         Left = 1
         Top = 2
