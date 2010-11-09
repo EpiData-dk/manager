@@ -434,10 +434,9 @@ var
   i: Integer;
   DoAdd: boolean;
   FList: TStringList;
+  Idx: LongInt;
 begin
   ValueLabelComboBox.Clear;
-  ValueLabelComboBox.Items.AddObject('(none)', nil);
-  ValueLabelComboBox.ItemIndex := 0;
   ValueLabelComboBox.Sorted := true;
   if FValueLabelSets.Count = 0 then
   begin
@@ -453,8 +452,11 @@ begin
      if DoAdd then
        ValueLabelComboBox.AddItem(FValueLabelSets[i].Name, FValueLabelSets[i]);
    end;
+   Idx := ValueLabelComboBox.Items.AddObject('(none)', nil);
    if Assigned(FField.ValueLabelSet) then
-     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FField.ValueLabelSet);
+     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FField.ValueLabelSet)
+   else
+     ValueLabelComboBox.ItemIndex := Idx;
   end;
 end;
 
@@ -491,7 +493,7 @@ begin
   end;
 
   // Setup "advanced" page.
-  FValueLabelSets := TEpiDataFiles(FField.DataFile.Owner).ValueLabelSets;
+  FValueLabelSets := TEpiDocument(FField.RootOwner).ValueLabelSets;
   UpdateValueLabels;
 end;
 

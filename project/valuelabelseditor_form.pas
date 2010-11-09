@@ -373,14 +373,24 @@ end;
 procedure TValueLabelEditor.SetEpiDocument(EpiDoc: TEpiDocument);
 var
   i: Integer;
+  Node: TTreeNode;
 begin
-  FValueLabelSets := EpiDoc.DataFiles.ValueLabelSets;
+  FValueLabelSets := EpiDoc.ValueLabelSets;
 
+  ValueLabelSetTreeView.BeginUpdate;
   ValueLabelSetTreeView.SortType := stText;
   ValueLabelSetTreeView.Items.Clear;
   for i := 0 to FValueLabelSets.Count - 1 do
-    ValueLabelSetTreeView.Items.AddObject(nil, FValueLabelSets[i].Name, FValueLabelSets[i]);
+  begin
+    Node := ValueLabelSetTreeView.Items.AddObject(nil, FValueLabelSets[i].Name, FValueLabelSets[i]);
+    case FValueLabelSets[i].LabelType of
+      ftInteger: Node.ImageIndex := 0;
+      ftFloat:   Node.ImageIndex := 1;
+      ftString:  Node.ImageIndex := 2;
+    end;
+  end;
   ValueLabelSetTreeView.CustomSort(nil);
+  ValueLabelSetTreeView.EndUpdate;
 
   ValueLabelsGrid.Cells[0,0] := 'Order';
 end;
@@ -457,6 +467,8 @@ begin
 end;
 
 procedure TValueLabelEditor.FormShow(Sender: TObject);
+var
+  A: TCollectionItem;
 begin
   if ValueLabelSetTreeView.Items.Count > 0 then
     ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items[0];

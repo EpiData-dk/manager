@@ -1,22 +1,22 @@
 object ValueLabelEditor: TValueLabelEditor
-  Left = 592
-  Height = 600
-  Top = 282
-  Width = 800
+  Left = 467
+  Height = 627
+  Top = 259
+  Width = 1120
   ActiveControl = Panel1
   Caption = 'Value Labels'
-  ClientHeight = 600
-  ClientWidth = 800
+  ClientHeight = 627
+  ClientWidth = 1120
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0
-    Height = 579
+    Height = 606
     Top = 0
     Width = 183
     Align = alLeft
-    ClientHeight = 579
+    ClientHeight = 606
     ClientWidth = 183
     TabOrder = 0
     object ToolBar1: TToolBar
@@ -61,35 +61,40 @@ object ValueLabelEditor: TValueLabelEditor
     end
     object ValueLabelSetTreeView: TTreeView
       Left = 1
-      Height = 551
+      Height = 578
       Top = 27
       Width = 181
       Align = alClient
+      DefaultItemHeight = 24
       Font.Height = -15
       Font.Name = 'Sans'
+      Images = ImageList1
       ParentFont = False
       ScrollBars = ssAutoBoth
+      ShowButtons = False
+      ShowLines = False
       ShowRoot = False
       SortType = stText
+      StateImages = ImageList1
       TabOrder = 1
       OnChange = ValueLabelSetTreeViewChange
       OnChanging = ValueLabelSetTreeViewChanging
       OnEdited = ValueLabelSetTreeViewEdited
       OnKeyDown = ValueLabelSetTreeViewKeyDown
-      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoToolTips, tvoThemedDraw]
+      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoToolTips, tvoThemedDraw]
     end
   end
   object Splitter1: TSplitter
     Left = 183
-    Height = 579
+    Height = 606
     Top = 0
     Width = 5
   end
   object ValueLabelEditorStatusBar: TStatusBar
     Left = 0
     Height = 21
-    Top = 579
-    Width = 800
+    Top = 606
+    Width = 1120
     Panels = <    
       item
         Text = 'Integer'
@@ -165,6 +170,7 @@ object ValueLabelEditor: TValueLabelEditor
     top = 272
     object DeleteGridRowAction: TAction
       Caption = 'Delete Valuelabel'
+      Enabled = False
       OnExecute = DeleteGridRowExecute
       OnUpdate = DeleteGridRowUpdate
       SecondaryShortCuts.Strings = (

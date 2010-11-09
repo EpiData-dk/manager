@@ -415,7 +415,7 @@ begin
     earStructure, earTranslate, earUsers, earPassword];
   FEpiDocument.DataFiles[0].MainSection.Groups.AddItem(Grp);
 
-  LocalVLSets := FEpiDocument.DataFiles.ValueLabelSets;
+  LocalVLSets := FEpiDocument.ValueLabelSets;
   VLSet := LocalVLSets.NewValueLabelSet(ftInteger);
   VLSet.Name := 'The Set';
   for i := 1 to 10 do
