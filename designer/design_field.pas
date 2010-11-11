@@ -339,8 +339,11 @@ begin
   Editor := GetValueLabelsEditor(TEpiDocument(FField.RootOwner));
   if Editor.Showing then
     Editor.Hide;
-  Editor.ShowModal;
+  if Editor.ShowModal = mrOk then
+    FField.ValueLabelSet := Editor.DblClickedValueLabelSet;
   UpdateValueLabels;
+  if ValueLabelComboBox.ItemIndex = -1 then
+    ValueLabelComboBox.ItemIndex := 0;
 end;
 
 procedure TDesignFieldForm.QuestionEditKeyDown(Sender: TObject; var Key: Word;

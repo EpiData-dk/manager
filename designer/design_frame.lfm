@@ -7,8 +7,8 @@ object DesignFrame: TDesignFrame
   ClientWidth = 982
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 346
-  DesignTop = 189
+  DesignLeft = 531
+  DesignTop = 258
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26

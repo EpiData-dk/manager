@@ -79,6 +79,7 @@ object ValueLabelEditor: TValueLabelEditor
       TabOrder = 1
       OnChange = ValueLabelSetTreeViewChange
       OnChanging = ValueLabelSetTreeViewChanging
+      OnDblClick = ValueLabelSetTreeViewDblClick
       OnEdited = ValueLabelSetTreeViewEdited
       OnKeyDown = ValueLabelSetTreeViewKeyDown
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoToolTips, tvoThemedDraw]

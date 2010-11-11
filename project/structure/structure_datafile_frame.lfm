@@ -6,8 +6,8 @@ object Project_Structure_Datafile_Frame: TProject_Structure_Datafile_Frame
   ClientHeight = 594
   ClientWidth = 885
   TabOrder = 0
-  DesignLeft = 359
-  DesignTop = 219
+  DesignLeft = 2010
+  DesignTop = 217
   object Panel1: TPanel
     Left = 0
     Height = 144

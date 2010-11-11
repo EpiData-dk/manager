@@ -1,9 +1,9 @@
 object Project_Structure_Form: TProject_Structure_Form
-  Left = 457
+  Left = 827
   Height = 522
-  Top = 273
+  Top = 270
   Width = 684
-  ActiveControl = PageCtrl
+  ActiveControl = Panel1
   Caption = 'Project Structure'
   ClientHeight = 522
   ClientWidth = 684
@@ -96,6 +96,70 @@ object Project_Structure_Form: TProject_Structure_Form
         TabOrder = 1
         TitleFont.Height = -12
         TitleFont.Name = 'Courier New'
+      end
+    end
+    object ValueLabelsTabSheet: TTabSheet
+      Caption = 'Value Labels'
+      ClientHeight = 487
+      ClientWidth = 678
+      object ValueLabelsPageCtrl: TPageControl
+        Left = 0
+        Height = 487
+        Top = 0
+        Width = 678
+        ActivePage = ValueLabelsSummarySheet
+        Align = alClient
+        TabIndex = 0
+        TabOrder = 0
+        TabPosition = tpBottom
+        object ValueLabelsSummarySheet: TTabSheet
+          Caption = 'Summary'
+          ClientHeight = 452
+          ClientWidth = 672
+          object ValueLabelsGrid: TStringGrid
+            Left = 0
+            Height = 420
+            Top = 32
+            Width = 672
+            Align = alClient
+            AutoEdit = False
+            ColCount = 6
+            DefaultColWidth = 2
+            Font.Height = -12
+            Font.Name = 'Courier New'
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
+            ParentFont = False
+            TabOrder = 0
+            TitleFont.Height = -12
+            TitleFont.Name = 'Courier New'
+          end
+          object Panel2: TPanel
+            Left = 0
+            Height = 32
+            Top = 0
+            Width = 672
+            Align = alTop
+            ClientHeight = 32
+            ClientWidth = 672
+            TabOrder = 1
+            object Label4: TLabel
+              Left = 13
+              Height = 18
+              Top = 8
+              Width = 177
+              Caption = 'Number of valuelabel sets:'
+              ParentColor = False
+            end
+            object NumberOfValueLabelSetsLabel: TLabel
+              Left = 197
+              Height = 18
+              Top = 8
+              Width = 202
+              Caption = 'NumberOfValueLabelSetsLabel'
+              ParentColor = False
+            end
+          end
+        end
       end
     end
   end

@@ -64,6 +64,7 @@ type
     procedure NewIntValueLabelSetActionExecute(Sender: TObject);
     procedure NewStringValueLabelSetActionExecute(Sender: TObject);
     procedure ValueLabelEditorStatusBarResize(Sender: TObject);
+    procedure ValueLabelSetTreeViewDblClick(Sender: TObject);
     procedure ValueLabelSetTreeViewEdited(Sender: TObject; Node: TTreeNode;
       var S: string);
     procedure ValueLabelSetTreeViewChange(Sender: TObject; Node: TTreeNode);
@@ -74,6 +75,7 @@ type
     procedure ValueLabelSetTreeViewKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
   private
+    FDblClickedValueLabelSet: TEpiValueLabelSet;
     { private declarations }
     FValueLabelsGrid: TValueLabelGrid;
     FValueLabelSets: TEpiValueLabelSets;
@@ -95,6 +97,7 @@ type
   public
     { public declarations }
     property    ValueLabelsGrid: TValueLabelGrid read FValueLabelsGrid;
+    property    DblClickedValueLabelSet: TEpiValueLabelSet read FDblClickedValueLabelSet;
   end;
 
 function GetValueLabelsEditor(EpiDoc: TEpiDocument): TValueLabelEditor;
@@ -476,6 +479,7 @@ begin
   Height := 400;
   UpdateStatusbar;
   ValueLabelsGrid.AutoSizeColumns;
+  FDblClickedValueLabelSet := nil;
 end;
 
 procedure TValueLabelEditor.ValueLabelsGridKeyPress(Sender: TObject;
@@ -603,6 +607,21 @@ end;
 procedure TValueLabelEditor.ValueLabelEditorStatusBarResize(Sender: TObject);
 begin
   CalculateStatusbar;
+end;
+
+procedure TValueLabelEditor.ValueLabelSetTreeViewDblClick(Sender: TObject);
+var
+  P: TPoint;
+  N: TTreeNode;
+begin
+  if (fsModal in FormState) then
+  begin
+    P := ValueLabelSetTreeView.ScreenToClient(Mouse.CursorPos);
+    N := ValueLabelSetTreeView.GetNodeAt(P.X, P.Y);
+    if Assigned(N) then
+      FDblClickedValueLabelSet := TEpiValueLabelSet(N.Data);
+    ModalResult := mrOk;
+  end;
 end;
 
 { TValueLabelGrid }

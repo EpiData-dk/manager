@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="24">
+    <Units Count="25">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -205,6 +205,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="valuelabelseditor_form"/>
       </Unit23>
+      <Unit24>
+        <Filename Value="project/structure/structure_valuelabelset_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Project_Structure_ValueLabelSet_Frame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="structure_valuelabelset_frame"/>
+      </Unit24>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
