@@ -118,7 +118,7 @@ type
     procedure   DeleteAllControlsActionExecute(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   ControlActionUpdate(Sender: TObject);
-    procedure DeleteControlActionUpdate(Sender: TObject);
+    procedure   DeleteControlActionUpdate(Sender: TObject);
     procedure   NoControlActionUpdate(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
@@ -226,7 +226,20 @@ type
     function    NewHeading: TEpiHeading;
     function    NewSection: TEpiSection;
   private
-    { Visual presentation }
+    { Visual presentation / Statusbars}
+    FStatusbarSectionsPanel: TStatusPanel;
+    FStatusbarFieldsPanel: TStatusPanel;
+    FStatusbarHeadingsPanel: TStatusPanel;
+    FStatusbarRecordsPanel: TStatusPanel;
+    FStatusbarFieldTypePanel: TStatusPanel;
+    FStatusbarFieldRangePanel: TStatusPanel;
+    FStatusbarFieldVLSetPanel: TStatusPanel;
+    FStatusbarFieldMissingPanel: TStatusPanel;
+    FStatusbarFieldOtherPanel: TStatusPanel;
+    FStatusbarFieldNamePanel: TStatusPanel;
+    FStatusbarMousePanel: TStatusPanel;
+    procedure   UpdateStatusbarControl(EpiControl: TEpiCustomControlItem);
+    procedure   UpdateStatusbarSizes;
     procedure   VisualFeedbackHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   private
     FModified: Boolean;
@@ -549,13 +562,12 @@ begin
   EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
   Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left, EpiCtrl.Top));
   ShowForm(EpiCtrl, Pt);
+  UpdateStatusbarControl(EpiCtrl);
 end;
 
 procedure TDesignFrame.FrameResize(Sender: TObject);
 begin
-  With DesignerStatusBar do
-    Panels[4].Width := DesignerStatusBar.Width - (Panels[0].Width + Panels[1].Width + Panels[2].Width +
-      Panels[3].Width + Panels[5].Width);
+  UpdateStatusbarSizes;
 end;
 
 procedure TDesignFrame.AddStructureActionExecute(Sender: TObject);
@@ -1365,6 +1377,92 @@ begin
   result := DataFile.NewSection;
 end;
 
+procedure TDesignFrame.UpdateStatusbarControl(EpiControl: TEpiCustomControlItem
+  );
+var
+  S: String;
+begin
+  FStatusbarFieldTypePanel.Text    := ' ';
+  FStatusbarFieldRangePanel.Text   := ' ';
+  FStatusbarFieldVLSetPanel.Text   := ' ';
+  FStatusbarFieldMissingPanel.Text := ' ';
+  FStatusbarFieldOtherPanel.Text   := ' ';
+  FStatusbarFieldNamePanel.Text    := ' ';
+
+  S := '';
+  if EpiControl is TEpiField then
+  with TEpiField(EpiControl) do begin
+    FStatusbarFieldTypePanel.Text := EpiTypeNames[FieldType];
+
+    S := Name;
+    if Question.Caption.Text <> '' then
+      S += ': (' + Question.Caption.Text + ')';
+    FStatusbarFieldNamePanel.Text := S;
+
+    if Assigned(ValueLabelSet) then
+      FStatusbarFieldVLSetPanel.Text := EpiCutString(ValueLabelSet.Name, 10);
+
+  end;
+
+  if EpiControl is TEpiHeading then
+  begin
+    FStatusbarFieldTypePanel.Text := 'Heading';
+    FStatusbarFieldNamePanel.Text := TEpiHeading(EpiControl).Caption.Text;
+  end;
+
+  if EpiControl is TEpiSection then
+  begin
+    FStatusbarFieldTypePanel.Text := 'Section';
+    FStatusbarFieldNamePanel.Text := TEpiSection(EpiControl).Name.Text;
+  end;
+  UpdateStatusbarSizes;
+end;
+
+procedure TDesignFrame.UpdateStatusbarSizes;
+var
+  W: Integer;
+  i: Integer;
+const
+  PanelBorder = 5;
+begin
+  W := 0;
+  with DesignerStatusBar.Canvas do
+  begin
+    FStatusbarSectionsPanel.Width := TextWidth(FStatusbarSectionsPanel.Text) + PanelBorder;
+    Inc(W, FStatusbarSectionsPanel.Width);
+
+    FStatusbarFieldsPanel.Width := TextWidth(FStatusbarFieldsPanel.Text) + PanelBorder;
+    Inc(W, FStatusbarFieldsPanel.Width);
+
+    FStatusbarHeadingsPanel.Width := TextWidth(FStatusbarHeadingsPanel.Text) + PanelBorder;
+    Inc(W, FStatusbarHeadingsPanel.Width);
+
+    FStatusbarRecordsPanel.Width := TextWidth(FStatusbarRecordsPanel.Text) + PanelBorder;
+    Inc(W, FStatusbarRecordsPanel.Width);
+
+    FStatusbarFieldTypePanel.Width := TextWidth(FStatusbarFieldTypePanel.Text) + PanelBorder;
+    Inc(W, FStatusbarFieldTypePanel.Width);
+
+    FStatusbarFieldRangePanel.Width := TextWidth(FStatusbarFieldRangePanel.Text) + PanelBorder;
+    Inc(W, FStatusbarFieldRangePanel.Width);
+
+    FStatusbarFieldVLSetPanel.Width := TextWidth(FStatusbarFieldVLSetPanel.Text) + PanelBorder;
+    Inc(W, FStatusbarFieldVLSetPanel.Width);
+
+    FStatusbarFieldMissingPanel.Width := TextWidth(FStatusbarFieldMissingPanel.Text) + PanelBorder;
+    Inc(W, FStatusbarFieldMissingPanel.Width);
+
+    FStatusbarFieldOtherPanel.Width := TextWidth(FStatusbarFieldOtherPanel.Text) + PanelBorder;
+    Inc(W, FStatusbarFieldOtherPanel.Width);
+
+    FStatusbarMousePanel.Width := TextWidth(FStatusbarMousePanel.Text) + PanelBorder;
+    Inc(W, FStatusbarMousePanel.Width);
+  end;
+
+  With DesignerStatusBar do
+    FStatusbarFieldNamePanel.Width := DesignerStatusBar.Width - W;
+end;
+
 procedure TDesignFrame.VisualFeedbackHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 var
@@ -1373,16 +1471,18 @@ begin
   if TEpiCustomChangeEventType(EventType) in [ecceAddItem, ecceDelItem, ecceUpdate] then
   begin
     if Sender is TEpiSections then
-      DesignerStatusBar.Panels.Items[0].Text := 'Sections: ' + IntToStr(SdrList.Count - 1);
+      FStatusbarSectionsPanel.Text := 'Sections: ' + IntToStr(SdrList.Count - 1);
 
     if Sender is TEpiFields then
-      DesignerStatusBar.Panels.Items[1].Text := 'Fields: ' + IntToStr(SdrList.Count);
+      FStatusbarFieldsPanel.Text := 'Fields: ' + IntToStr(SdrList.Count);
 
     if Sender is TEpiHeadings then
-      DesignerStatusBar.Panels.Items[2].Text := 'Headings: ' + IntToStr(SdrList.Count);
+      FStatusbarHeadingsPanel.Text := 'Headings: ' + IntToStr(SdrList.Count);
   end;
   if (Sender is TEpiDataFile) and (not (ebsDestroying in TEpiDataFile(Sender).State)) then
-    DesignerStatusBar.Panels[3].Text := Format('Records: %d', [DataFile.Size]);
+    FStatusbarRecordsPanel.Text := Format('Records: %d', [DataFile.Size]);
+
+  FrameResize(nil);
 end;
 
 procedure TDesignFrame.SetDataFile(const AValue: TEpiDataFile);
@@ -1548,7 +1648,7 @@ begin
     ]
   );
 
-  DesignerStatusBar.Panels[5].Text := Format('Mouse - X: %d Y: %d',[X, Y]);
+  FStatusbarMousePanel.Text := Format('Mouse - X: %d Y: %d',[X, Y]);
 
   // Used to paint box when creating the section.
   if not (
@@ -1739,7 +1839,7 @@ end;
 
 procedure TDesignFrame.EnterControl(Sender: TObject);
 var
-  S: String;
+  S, T: String;
   EpiControl: TEpiCustomControlItem;
 begin
   ExitControl(nil);
@@ -1762,30 +1862,7 @@ begin
   else
     FActiveDockSite := TControl(Sender).Parent;
 
-  S := '';
-  if Sender is TDesignField then
-  with TEpiField(EpiControl) do begin
-    if FieldType in BoolFieldTypes then
-      S := 'F(b): ';
-    if FieldType in IntFieldTypes then
-      S := 'F(i): ';
-    if FieldType in FloatFieldTypes then
-      S := 'F(f): ';
-    if FieldType in DateFieldTypes then
-      S := 'F(d): ';
-    if FieldType in TimeFieldTypes then
-      S := 'F(t): ';
-    if FieldType in StringFieldTypes then
-      S := 'F(s): ';
-    S += Name;
-    if Question.Caption.Text <> '' then
-      S += '(' + Question.Caption.Text + ')';
-  end;
-  if Sender is TDesignHeading then
-    S := 'H: ' + TEpiHeading(EpiControl).Caption.Text;
-  if Sender is TDesignSection then
-    S := 'S: ' + TEpiSection(EpiControl).Name.Text;
-  DesignerStatusBar.Panels[4].Text := S;
+  UpdateStatusbarControl(EpiControl);
 
   if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
     FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
@@ -1803,7 +1880,7 @@ begin
     TDesignHeading(FActiveControl).ParentColor := true;
   FActiveControl := nil;
 
-  DesignerStatusBar.Panels[4].Text := '';
+  FStatusbarFieldNamePanel.Text := '';
 end;
 
 procedure TDesignFrame.DeleteControl(Sender: TObject);
@@ -2009,13 +2086,48 @@ begin
   with DesignerStatusBar do
   begin
     BeginUpdate;
-    Panels[0].Width := {$IFDEF WINDOWS}  70 {$ELSE}  90 {$ENDIF};  // Sections
-    Panels[1].Width := {$IFDEF WINDOWS}  70 {$ELSE}  80 {$ENDIF};  // Fields
-    Panels[2].Width := {$IFDEF WINDOWS}  90 {$ELSE} 105 {$ENDIF};  // Headings
-    Panels[3].Width := {$IFDEF WINDOWS} 100 {$ELSE} 110 {$ENDIF};  // Records
-    // Width for name is set on resize.
-    Panels[5].Width := {$IFDEF WINDOWS} 130 {$ELSE} 150 {$ENDIF};  // Mouse
-    Panels[5].Alignment := taRightJustify;
+
+    FStatusbarSectionsPanel           := Panels.Add;
+//    FStatusbarSectionsPanel.Width     := {$IFDEF WINDOWS}  70 {$ELSE}  90 {$ENDIF};
+
+    FStatusbarFieldsPanel             := Panels.Add;
+//    FStatusbarFieldsPanel.Width       := {$IFDEF WINDOWS}  70 {$ELSE}  90 {$ENDIF};
+
+    FStatusbarHeadingsPanel           := Panels.Add;
+//    FStatusbarHeadingsPanel.Width     := {$IFDEF WINDOWS}  90 {$ELSE} 105 {$ENDIF};
+
+    FStatusbarRecordsPanel            := Panels.Add;
+//    FStatusbarRecordsPanel.Width      := {$IFDEF WINDOWS} 100 {$ELSE} 110 {$ENDIF};
+
+    FStatusbarFieldTypePanel          := Panels.Add;
+//    FStatusbarFieldTypePanel.Width    := {$IFDEF WINDOWS}  30 {$ELSE}  35 {$ENDIF};
+
+    FStatusbarFieldRangePanel         := Panels.Add;
+//    FStatusbarFieldRangePanel.Width   := {$IFDEF WINDOWS}  20 {$ELSE}  25 {$ENDIF};
+FStatusbarFieldRangePanel.Alignment := taCenter;
+    FStatusbarFieldRangePanel.Text := 'R';
+
+    FStatusbarFieldVLSetPanel         := Panels.Add;
+//    FStatusbarFieldVLSetPanel.Width   := {$IFDEF WINDOWS}  70 {$ELSE}  90 {$ENDIF};
+    FStatusbarFieldVLSetPanel.Text := '(vlset)';
+
+    FStatusbarFieldMissingPanel       := Panels.Add;
+//    FStatusbarFieldMissingPanel.Width := {$IFDEF WINDOWS}  20 {$ELSE}  25 {$ENDIF};
+    FStatusbarFieldMissingPanel.Alignment := taCenter;
+    FStatusbarFieldMissingPanel.Text := 'M';
+
+    FStatusbarFieldOtherPanel         := Panels.Add;
+//    FStatusbarFieldOtherPanel.Width   := {$IFDEF WINDOWS}  20 {$ELSE}  25 {$ENDIF};
+    FStatusbarFieldOtherPanel.Alignment := taCenter;
+    FStatusbarFieldOtherPanel.Text := '*';
+
+    FStatusbarFieldNamePanel          := Panels.Add;
+//    FStatusbarFieldNamePanel.Width    := {$IFDEF WINDOWS}  70 {$ELSE}  90 {$ENDIF};
+
+    FStatusbarMousePanel              := Panels.Add;
+//    FStatusbarMousePanel.Width        := {$IFDEF WINDOWS} 130 {$ELSE} 150 {$ENDIF};
+    FStatusbarMousePanel.Alignment    := taRightJustify;
+
     EndUpdate;
   end;
   {$IFNDEF EPI_DEBUG}

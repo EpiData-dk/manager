@@ -292,31 +292,7 @@ object DesignFrame: TDesignFrame
     Height = 21
     Top = 618
     Width = 982
-    Panels = <    
-      item
-        Text = 'Sections'
-        Width = 125
-      end    
-      item
-        Text = 'Fields'
-        Width = 125
-      end    
-      item
-        Text = 'Headings'
-        Width = 125
-      end    
-      item
-        Text = 'Records'
-        Width = 125
-      end    
-      item
-        Text = 'Name'
-        Width = 125
-      end    
-      item
-        Text = 'Mouse'
-        Width = 125
-      end>
+    Panels = <>
     SimplePanel = False
     SizeGrip = False
   end
