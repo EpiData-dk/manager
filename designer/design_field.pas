@@ -69,6 +69,7 @@ type
     BasicSheet: TTabSheet;
     AdvancedSheet: TTabSheet;
     procedure FormShow(Sender: TObject);
+    procedure LengthEditEditingDone(Sender: TObject);
     procedure ManageValueLabelsButtonClick(Sender: TObject);
     procedure QuestionEditKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -77,6 +78,8 @@ type
     { private declarations }
     FField: TEpiField;
     FValueLabelSets: TEpiValueLabelSets;
+    FHintWindow: THintWindow;
+    procedure ShowHintMsg(Msg: string; Ctrl: TControl);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure UpdateValueLabels;
   protected
@@ -94,7 +97,7 @@ implementation
 
 uses
   design_section, epidatafilestypes, settings2_var,
-  epidocument, valuelabelseditor_form, LCLType;
+  epidocument, valuelabelseditor_form, LCLType, types, math;
 
 { TDesignField }
 
@@ -332,6 +335,23 @@ begin
   QuestionEdit.SetFocus;
 end;
 
+procedure TDesignFieldForm.LengthEditEditingDone(Sender: TObject);
+var
+  VLset: TEpiValueLabelSet;
+  VLSet2: TEpiValueLabelSet;
+begin
+  if ValueLabelComboBox.ItemIndex = -1 then exit;
+
+  VLset := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+  UpdateValueLabels;
+  VLSet2 := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+
+  if VLset <>  VLSet2 then
+    ShowHintMsg('Warning: Valuelabels have changed...', TControl(Sender))
+  else
+    FHintWindow.Hide;
+end;
+
 procedure TDesignFieldForm.ManageValueLabelsButtonClick(Sender: TObject);
 var
   Editor: TValueLabelEditor;
@@ -349,6 +369,7 @@ end;
 procedure TDesignFieldForm.QuestionEditKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
+  FHintWindow.Hide;
   if not (ssAlt in Shift) then exit;
   case Key of
     VK_1: PageControl1.ActivePage := BasicSheet;
@@ -359,6 +380,17 @@ end;
 procedure TDesignFieldForm.ShiftToBasicExecute(Sender: TObject);
 begin
   PageControl1.ActivePage := BasicSheet;
+end;
+
+procedure TDesignFieldForm.ShowHintMsg(Msg: string; Ctrl: TControl);
+var
+  R: TRect;
+  P: TPoint;
+begin
+  R := FHintWindow.CalcHintRect(0, Msg, nil);
+  P := Ctrl.ClientToScreen(Point(0,0));
+  OffsetRect(R, P.X, P.Y + Ctrl.Height + 2);
+  FHintWindow.ActivateHint(R, Msg);
 end;
 
 procedure TDesignFieldForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
@@ -374,12 +406,13 @@ begin
   NewLen := FField.Length;
   if LengthEdit.Visible then
   begin
-    NewLen := StrToInt(LengthEdit.Text);
-    if ((FField.FieldType = ftInteger) and (NewLen >= 19)) or
+    if (not TryStrToInt(LengthEdit.Text, NewLen)) or
+       ((FField.FieldType = ftInteger) and (NewLen >= 19)) or
        (NewLen <= 0)
     then
     begin
       LengthEdit.SetFocus;
+      ShowHintMsg('Invalid length', LengthEdit);
       CanClose := false;
       exit;
     end;
@@ -388,10 +421,11 @@ begin
   NewDecLen := FField.Decimals;
   if DecimalsEdit.Visible then
   begin
-    NewDecLen := StrToInt(DecimalsEdit.Text);
-    if (NewDecLen <= 0) then
+    if (not TryStrToInt(DecimalsEdit.Text, NewDecLen)) or
+       (NewDecLen <= 0) then
     begin
       DecimalsEdit.SetFocus;
+      ShowHintMsg('Invalid decimals', DecimalsEdit);
       CanClose := false;
       exit;
     end;
@@ -405,6 +439,7 @@ begin
     begin
       // Could not rename Fieldname, possibly due to same name already exists or invalid identifier.
       NameEdit.SetFocus;
+      ShowHintMsg('Name already exists or invalid identifier', NameEdit);
       CanClose := false;
       FField.EndUpdate;
       Exit;
@@ -417,19 +452,10 @@ begin
   FField.Question.Caption.Text := QuestionEdit.Text;
 
   // "Advanced" page
-  FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+  if ValueLabelComboBox.ItemIndex >= 0 then
+    FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
 
   FField.EndUpdate;
-end;
-
-function ListSort(List: TStringList; Index1, Index2: Integer): Integer;
-begin
-  if (Index1 = 0) then
-    result := -1
-  else if  (Index2 = 0) then
-    result := 1
-  else
-    result := CompareStr(List[Index1], List[Index2]);
 end;
 
 procedure TDesignFieldForm.UpdateValueLabels;
@@ -438,29 +464,73 @@ var
   DoAdd: boolean;
   FList: TStringList;
   Idx: LongInt;
+  l: Integer;
+  PreSelectedVLSet: TEpiValueLabelSet;
+  OIdx: LongInt;
+  CurrentVLSet: TEpiValueLabelSet;
+  IntL: Integer;
+  DecL: Integer;
+  j: Integer;
+  S: String;
 begin
+  PreSelectedVLSet := nil;
+  if ValueLabelComboBox.ItemIndex >= 0 then
+    PreSelectedVLSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+  Idx := -1;
+
   ValueLabelComboBox.Clear;
   ValueLabelComboBox.Sorted := true;
   if FValueLabelSets.Count = 0 then
   begin
     ValueLabelComboBox.Enabled := false;
+    OIdx := ValueLabelComboBox.Items.AddObject('(none)', nil);
   end else begin
    for i := 0 to FValueLabelSets.Count - 1 do
    begin
-     case FValueLabelSets[i].LabelType of
-       ftInteger: DoAdd := FField.FieldType in [ftInteger, ftFloat];
-       ftFloat:   DoAdd := FField.FieldType = ftFloat;
+     CurrentVLSet := FValueLabelSets[i];
+     case CurrentVLSet.LabelType of
+       ftInteger:
+         begin
+           DoAdd := FField.FieldType in [ftInteger, ftFloat];
+           if FField.FieldType = ftFloat then
+             DoAdd := DoAdd and (CurrentVLSet.MaxValueLength <= StrToIntDef(LengthEdit.Text, (FField.Length - FField.Decimals - 1)))
+           else
+             DoAdd := DoAdd and (CurrentVLSet.MaxValueLength <= StrToIntDef(LengthEdit.Text, FField.Length));
+         end;
+       ftFloat:
+         begin
+           DoAdd := FField.FieldType = ftFloat;
+
+           if DoAdd then
+           begin
+             IntL := 0;
+             DecL := 0;
+             for j := 0 to CurrentVLSet.Count - 1 do
+             begin
+               S := CurrentVLSet[j].ValueAsString;
+               IntL := Max(IntL, Pos(DecimalSeparator, S) - 1);
+               DecL := Max(DecL, Length(S) - (IntL+1));
+             end;
+           end;
+           DoAdd := DoAdd and
+             (IntL <= StrToIntDef(LengthEdit.Text, FField.Length - FField.Decimals - 1)) and
+             (DecL <= StrToIntDef(DecimalsEdit.Text, FField.Decimals));
+         end;
        ftString:  DoAdd := FField.FieldType in [ftString, ftUpperString];
      end;
+
      if DoAdd then
-       ValueLabelComboBox.AddItem(FValueLabelSets[i].Name, FValueLabelSets[i]);
+       ValueLabelComboBox.AddItem(CurrentVLSet.Name, CurrentVLSet);
    end;
-   Idx := ValueLabelComboBox.Items.AddObject('(none)', nil);
-   if Assigned(FField.ValueLabelSet) then
-     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FField.ValueLabelSet)
-   else
-     ValueLabelComboBox.ItemIndex := Idx;
+   OIdx := ValueLabelComboBox.Items.AddObject('(none)', nil);
+   if Assigned(PreSelectedVLSet) then
+     Idx := ValueLabelComboBox.Items.IndexOfObject(PreSelectedVLSet)
+   else if Assigned(FField.ValueLabelSet) then
+     Idx := ValueLabelComboBox.Items.IndexOfObject(FField.ValueLabelSet);
   end;
+  if Idx = -1 then
+    Idx := OIdx;
+  ValueLabelComboBox.ItemIndex := Idx;
 end;
 
 procedure TDesignFieldForm.SetEpiControl(const AValue: TEpiCustomControlItem);
@@ -509,6 +579,9 @@ constructor TDesignFieldForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   OnCloseQuery := @FormCloseQuery;
+  FHintWindow := THintWindow.Create(Self);
+  FHintWindow.AutoHide := true;
+  FHintWindow.HideInterval := {ManagerSettings.HintTimeout} 5 * 1000;
 end;
 
 destructor TDesignFieldForm.Destroy;

@@ -14,9 +14,9 @@ inherited DesignFieldForm: TDesignFieldForm
     Height = 230
     Top = 0
     Width = 328
-    ActivePage = AdvancedSheet
+    ActivePage = BasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
@@ -82,6 +82,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 157
           Width = 150
+          OnEditingDone = LengthEditEditingDone
           OnKeyDown = QuestionEditKeyDown
           TabOrder = 2
         end
@@ -99,6 +100,7 @@ inherited DesignFieldForm: TDesignFieldForm
           Height = 27
           Top = 157
           Width = 150
+          OnEditingDone = LengthEditEditingDone
           OnKeyDown = QuestionEditKeyDown
           TabOrder = 3
           Visible = False
@@ -115,13 +117,8 @@ inherited DesignFieldForm: TDesignFieldForm
         Top = 32
         Width = 192
         ItemHeight = 0
-        ItemIndex = 0
-        Items.Strings = (
-          '(none)'
-        )
         Style = csDropDownList
         TabOrder = 0
-        Text = '(none)'
       end
       object ManageValueLabelsButton: TButton
         Left = 221
