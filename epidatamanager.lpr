@@ -14,7 +14,7 @@ uses
   settings_visualdesign_frame, settings_fielddefinitions_frame,
   settings_advanced_frame, settings2_interface, settings2_var, structure_form,
   structure_datafile_frame, valuelabelseditor_form,
-structure_valuelabelset_frame;
+  structure_valuelabelset_frame;
 
 {$R *.res}
 

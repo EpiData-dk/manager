@@ -312,8 +312,8 @@ begin
   FQuestionLabel.Free;
   if Assigned(FField) then
   begin
-   FField.UnRegisterOnChangeHook(@OnFieldChange);
-   FField.Question.UnRegisterOnChangeHook(@OnQuestionChange);
+    FField.UnRegisterOnChangeHook(@OnFieldChange);
+    FField.Question.UnRegisterOnChangeHook(@OnQuestionChange);
   end;
   inherited Destroy;
 end;

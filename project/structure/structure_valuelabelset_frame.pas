@@ -51,13 +51,13 @@ constructor TProject_Structure_ValueLabelSet_Frame.Create(TheOwner: TComponent;
   const AValue: TEpiValueLabelSet);
 var
   i: Integer;
-  NoOfMissing: Integer;
 begin
   Create(TheOwner);
   FValueLabelSet := AValue;
 
   ValueLabelSetNameLabel.Caption := ValueLabelSet.Name;
   NumberOfValueLabelsLabel.Caption := IntToStr(ValueLabelSet.Count);
+  NumberOfMissingsLabel.Caption := IntToStr(ValueLabelSet.MissingCount);
 
   with ValueLabelsGrid do
   begin
@@ -70,7 +70,6 @@ begin
     Cells[3, 0] := 'Label';
     Cells[4, 0] := 'Missing';
 
-    NoOfMissing := 0;
     for i := 0 to ValueLabelSet.Count - 1 do
     with ValueLabelSet[i] do
     begin
@@ -79,11 +78,8 @@ begin
       Cells[2, i+1] := ValueAsString;
       Cells[3, i+1] := TheLabel.Text;
       Cells[4, i+1] := BoolToStr(IsMissingValue, '*', '');
-
-      if IsMissingValue then Inc(NoOfMissing);
     end;
   end;
-  NumberOfMissingsLabel.Caption := IntToStr(NoOfMissing);
 end;
 
 procedure TProject_Structure_ValueLabelSet_Frame.Refresh;

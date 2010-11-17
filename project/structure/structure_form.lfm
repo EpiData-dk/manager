@@ -3,7 +3,7 @@ object Project_Structure_Form: TProject_Structure_Form
   Height = 522
   Top = 270
   Width = 684
-  ActiveControl = Panel1
+  ActiveControl = PageCtrl
   Caption = 'Project Structure'
   ClientHeight = 522
   ClientWidth = 684
@@ -114,8 +114,8 @@ object Project_Structure_Form: TProject_Structure_Form
         TabPosition = tpBottom
         object ValueLabelsSummarySheet: TTabSheet
           Caption = 'Summary'
-          ClientHeight = 452
-          ClientWidth = 672
+          ClientHeight = 483
+          ClientWidth = 674
           object ValueLabelsGrid: TStringGrid
             Left = 0
             Height = 420
@@ -161,6 +161,18 @@ object Project_Structure_Form: TProject_Structure_Form
           end
         end
       end
+    end
+  end
+  object ActionList1: TActionList
+    left = 234
+    top = 316
+    object CloseFormAction: TAction
+      Caption = 'CloseFormAction'
+      OnExecute = CloseFormActionExecute
+      SecondaryShortCuts.Strings = (
+        'F10'
+      )
+      ShortCut = 27
     end
   end
 end

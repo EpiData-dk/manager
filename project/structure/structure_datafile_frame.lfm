@@ -6,8 +6,8 @@ object Project_Structure_Datafile_Frame: TProject_Structure_Datafile_Frame
   ClientHeight = 594
   ClientWidth = 885
   TabOrder = 0
-  DesignLeft = 2010
-  DesignTop = 217
+  DesignLeft = 670
+  DesignTop = 215
   object Panel1: TPanel
     Left = 0
     Height = 144
@@ -87,11 +87,32 @@ object Project_Structure_Datafile_Frame: TProject_Structure_Datafile_Frame
     Height = 450
     Top = 144
     Width = 885
-    ActivePage = FieldsSheet
+    ActivePage = SectionsSheet
     Align = alClient
     TabIndex = 0
     TabOrder = 1
     TabPosition = tpBottom
+    object SectionsSheet: TTabSheet
+      Caption = 'Sections'
+      ClientHeight = 415
+      ClientWidth = 879
+      object SectionsGrid: TStringGrid
+        Left = 0
+        Height = 415
+        Top = 0
+        Width = 879
+        Align = alClient
+        AutoEdit = False
+        DefaultColWidth = 2
+        Font.Height = -12
+        Font.Name = 'Courier New'
+        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
+        ParentFont = False
+        TabOrder = 0
+        TitleFont.Height = -12
+        TitleFont.Name = 'Courier New'
+      end
+    end
     object FieldsSheet: TTabSheet
       Caption = 'Fields'
       ClientHeight = 415
@@ -104,27 +125,6 @@ object Project_Structure_Datafile_Frame: TProject_Structure_Datafile_Frame
         Align = alClient
         AutoEdit = False
         ColCount = 6
-        DefaultColWidth = 2
-        Font.Height = -12
-        Font.Name = 'Courier New'
-        Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goSmoothScroll]
-        ParentFont = False
-        TabOrder = 0
-        TitleFont.Height = -12
-        TitleFont.Name = 'Courier New'
-      end
-    end
-    object SectionsSheet: TTabSheet
-      Caption = 'Sections'
-      ClientHeight = 415
-      ClientWidth = 879
-      object SectionsGrid: TStringGrid
-        Left = 0
-        Height = 415
-        Top = 0
-        Width = 879
-        Align = alClient
-        AutoEdit = False
         DefaultColWidth = 2
         Font.Height = -12
         Font.Name = 'Courier New'

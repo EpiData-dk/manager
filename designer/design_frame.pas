@@ -536,15 +536,16 @@ end;
 procedure TDesignFrame.ControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    (MainForm.Active) and
-    (Assigned(FActiveControl));
+  (MainForm.Active) and
+  (Assigned(FActiveControl));
 end;
 
 procedure TDesignFrame.DeleteControlActionUpdate(Sender: TObject);
 begin
-  ControlActionUpdate(Sender);
-  if TAction(Sender).Enabled then
-    TAction(Sender).Enabled := (FActiveControl <> FDesignerBox);
+   TAction(Sender).Enabled :=
+    (MainForm.Active) and
+    (Assigned(FActiveControl)) and
+    (FActiveControl <> FDesignerBox);
 end;
 
 procedure TDesignFrame.NoControlActionUpdate(Sender: TObject);

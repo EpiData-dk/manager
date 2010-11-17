@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  Grids, ExtCtrls, StdCtrls, epidocument, epivaluelabels;
+  Grids, ExtCtrls, StdCtrls, ActnList, epidocument, epivaluelabels;
 
 type
 
@@ -19,6 +19,8 @@ type
   { TProject_Structure_Form }
 
   TProject_Structure_Form = class(TForm)
+    CloseFormAction: TAction;
+    ActionList1: TActionList;
     DataFilesGrid: TStringGrid;
     ValueLabelsGrid: TStringGrid;
     Label1: TLabel;
@@ -36,6 +38,7 @@ type
     ProjectOverviewTab: TTabSheet;
     ValueLabelsSummarySheet: TTabSheet;
     ValueLabelsTabSheet: TTabSheet;
+    procedure CloseFormActionExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     FDocument: TEpiDocument;
@@ -80,6 +83,13 @@ begin
   for i := 0 to ValueLabelsPageCtrl.PageCount - 1 do
     if Supports(ValueLabelsPageCtrl.Pages[i].Controls[0], IProject_Structure_Frame) then
      (ValueLabelsPageCtrl.Pages[i].Controls[0] as IProject_Structure_Frame).Refresh;
+
+  PageCtrl.ActivePage := ProjectOverviewTab;
+end;
+
+procedure TProject_Structure_Form.CloseFormActionExecute(Sender: TObject);
+begin
+  Close;
 end;
 
 constructor TProject_Structure_Form.Create(TheOwner: TComponent);
@@ -170,6 +180,7 @@ begin
         Cells[3, i+1] := TProject_Structure_ValueLabelSet_Frame(Frame).NumberOfMissingsLabel.Caption;
       end;
     end;
+    ValueLabelsTabSheet.PageIndex := PageCtrl.PageCount-1;
   end;
 end;
 
