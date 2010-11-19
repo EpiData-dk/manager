@@ -1,7 +1,7 @@
 inherited DesignHeadingForm: TDesignHeadingForm
-  Left = 610
+  Left = 2035
   Height = 95
-  Top = 438
+  Top = 203
   Width = 323
   ActiveControl = Panel1
   Caption = 'Heading Properties'

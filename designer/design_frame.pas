@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
-  design_field, design_heading, design_section, epicustombase, episettings,
-  design_custombase, AVL_Tree , LCLType;
+  design_field, design_heading, design_section, epicustombase,
+  design_custombase, AVL_Tree , LCLType, design_controls;
 
 type
 
@@ -154,10 +154,11 @@ type
     FLeftMouseUp:  TPoint;
     FRightMouseDown: TPoint;
     FRightMouseUp: TPoint;
+    FDesignControlForm: TDesignControlsForm;
     procedure   ResetMousePos;
     function    DesignControlTop(LocalCtrl: TControl): Integer;
     function    ShowForm(EpiControl: TEpiCustomControlItem;
-      Pos: TPoint): TModalResult;
+      Pos: TPoint; ForceShow: boolean = true): TModalResult;
     procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
   private
     { Import/Export/Paste }
@@ -260,9 +261,9 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Clipbrd, epidocument, epiadmin, math, import_form, LMessages,
+  Graphics, Clipbrd, epiadmin, math, import_form, LMessages,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
-  managerprocs, epiqeshandler, project_frame;
+  managerprocs, epiqeshandler;
 
 type
 
@@ -559,9 +560,8 @@ var
   EpiCtrl: TEpiCustomControlItem;
   Pt: TPoint;
 begin
-  // This action can be triggered from eg. ValueLabelsEditor...
   EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
-  Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left, EpiCtrl.Top));
+  Pt := FActiveControl.Parent.ClientToScreen(Point(EpiCtrl.Left + FActiveControl.Width, EpiCtrl.Top));
   ShowForm(EpiCtrl, Pt);
   UpdateStatusbarControl(EpiCtrl);
 end;
@@ -1043,21 +1043,23 @@ begin
 end;
 
 
-function TDesignFrame.ShowForm(EpiControl: TEpiCustomControlItem; Pos: TPoint
-  ): TModalResult;
-var
-  Form: TDesignCustomForm;
+function TDesignFrame.ShowForm(EpiControl: TEpiCustomControlItem; Pos: TPoint;
+  ForceShow: boolean): TModalResult;
 begin
-  if EpiControl is TEpiField then
-    Form := TDesignFieldForm.Create(Self);
-  if EpiControl is TEpiHeading then
-    Form := TDesignHeadingForm.Create(Self);
-  if EpiControl is TEpiSection then
-    Form := TDesignSectionForm.Create(Self);
-  Form.EpiControl := EpiControl;
-  Form.Left := Min(Pos.X, Screen.Width - Form.Width - 5);
-  Form.Top := Min(Pos.Y, Screen.Height - Form.Height - 5);
-  result := Form.ShowModal;
+  if (not Assigned(FDesignControlForm)) and (not ForceShow) then exit;
+
+  if not Assigned(FDesignControlForm) then
+    FDesignControlForm := TDesignControlsForm.Create(Self, DataFile.RootOwner);
+
+  if (not FDesignControlForm.Showing) and ForceShow then
+  begin
+    FDesignControlForm.Left := Min(Pos.X, Screen.Width - FDesignControlForm.Width - 5);
+    FDesignControlForm.Top := Min(Pos.Y, Screen.Height - FDesignControlForm.Height - 5);
+  end;
+  FDesignControlForm.EpiControl := EpiControl;
+
+  if ForceShow then
+    FDesignControlForm.Show;
 end;
 
 function TDesignFrame.NewDesignControl(AClass: TControlClass;
@@ -1126,11 +1128,6 @@ begin
     EndUpdate;
   end;
   Ctrl.Parent := FDesignerBox;
-
-{  // Forces designer box last in docksite list, because retrieving docksite
-  // is not implemented fully in the LCL.
-  FDesignerBox.DockSite := false;
-  FDesignerBox.DockSite := true;      }
 
   EnterControl(Result);
   AddToPositionHandler((FDesignerBox as IPositionHandler), Result);
@@ -1595,19 +1592,15 @@ begin
     3,4,5,6,7:
       begin
         EpiControl := NewField(TEpiFieldType(FActiveButton.Tag));
-        if ShowForm(EpiControl, FLeftMouseUp) = mrOK then
-          NewDesignControl(TDesignField, WinSender, ParentPt, EpiControl)
-        else
-          EpiControl.Free;
+        NewDesignControl(TDesignField, WinSender, ParentPt, EpiControl);
+        ShowForm(EpiControl, FLeftMouseUp);
       end;
     // Heading
     9:
       begin
         EpiControl := NewHeading;
-        if ShowForm(EpiControl, FLeftMouseUp) = mrOK then
-          NewDesignControl(TDesignHeading, WinSender, ParentPt, EpiControl)
-        else
-          EpiControl.Free;
+        NewDesignControl(TDesignHeading, WinSender, ParentPt, EpiControl);
+        ShowForm(EpiControl, FLeftMouseUp);
       end;
     // Section
     11:
@@ -1615,11 +1608,9 @@ begin
         // Sections can only be created on the designer.
         if not (Sender = FDesignerBox) then exit;
         EpiControl := NewSection;
-        if ShowForm(EpiControl, FLeftMouseDown) = mrOK then
-          NewSectionControl(WinSender.ScreenToClient(FLeftMouseDown),
-            WinSender.ScreenToClient(FLeftMouseUp), EpiControl)
-        else
-          EpiControl.Free;
+        NewSectionControl(WinSender.ScreenToClient(FLeftMouseDown),
+          WinSender.ScreenToClient(FLeftMouseUp), EpiControl);
+        ShowForm(EpiControl, FLeftMouseDown);
         FShowPanel.Free;
       end;
 
@@ -1784,12 +1775,9 @@ var
 begin
   Field := NewField(Ft);
   Pt := FindNewPosition(AParent, TDesignField);
-  if (not (ssShift in GetKeyShiftState)) and (ShowForm(Field, AParent.ClientToScreen(Pt)) <> mrOk) then
-  begin
-    Field.Free;
-    Exit;
-  end;
+
   NewDesignControl(TDesignField, AParent, Pt, Field);
+  ShowForm(Field, AParent.ClientToScreen(Pt), not (ssShift in GetKeyShiftState));
 end;
 
 function TDesignFrame.NewShortCutHeadingControl(AParent: TWinControl): TControl;
@@ -1871,6 +1859,8 @@ begin
   if DesignControlTop(FActiveControl) > (FDesignerBox.VertScrollBar.Position + FDesignerBox.VertScrollBar.Page) then
     FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - FDesignerBox.VertScrollBar.Page + FActiveControl.Height + 5;
   FActiveControl.Color := $00B6F5F5;
+
+  ShowForm(EpiControl, FActiveControl.ClientToScreen(Point(0,0)), false);
 end;
 
 procedure TDesignFrame.ExitControl(Sender: TObject);

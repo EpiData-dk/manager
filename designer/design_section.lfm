@@ -1,16 +1,16 @@
 inherited DesignSectionForm: TDesignSectionForm
-  Left = 529
-  Height = 210
-  Top = 254
+  Left = 2620
+  Height = 333
+  Top = 320
   Width = 391
   ActiveControl = PageControl1
   Caption = 'Section Properties'
-  ClientHeight = 210
+  ClientHeight = 333
   ClientWidth = 391
   OnShow = FormShow
   object PageControl1: TPageControl[0]
     Left = 0
-    Height = 160
+    Height = 283
     Top = 0
     Width = 391
     ActivePage = TabSheet1
@@ -19,17 +19,17 @@ inherited DesignSectionForm: TDesignSectionForm
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 125
+      ClientHeight = 248
       ClientWidth = 385
       object Panel1: TPanel
         Left = 0
-        Height = 125
+        Height = 248
         Top = 0
         Width = 385
         Align = alClient
         BevelInner = bvLowered
         BevelWidth = 2
-        ClientHeight = 125
+        ClientHeight = 248
         ClientWidth = 385
         Color = clSkyBlue
         ParentColor = False
@@ -92,7 +92,6 @@ inherited DesignSectionForm: TDesignSectionForm
             Height = 22
             Top = 87
             Width = 23
-            Color = clBtnFace
             Glyph.Data = {
               36040000424D3604000000000000360000002800000010000000100000000100
               2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -144,7 +143,6 @@ inherited DesignSectionForm: TDesignSectionForm
             Height = 22
             Top = 55
             Width = 23
-            Color = clBtnFace
             Glyph.Data = {
               36040000424D3604000000000000360000002800000010000000100000000100
               2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -188,47 +186,47 @@ inherited DesignSectionForm: TDesignSectionForm
     end
     object TabSheet2: TTabSheet
       Caption = 'Advanced'
-      ClientHeight = 125
+      ClientHeight = 248
       ClientWidth = 385
       object Panel2: TPanel
         Left = 0
-        Height = 134
+        Height = 248
         Top = 0
-        Width = 383
+        Width = 385
         Align = alClient
         BevelInner = bvLowered
         BevelWidth = 2
-        ClientHeight = 134
-        ClientWidth = 383
+        ClientHeight = 248
+        ClientWidth = 385
         Color = clSkyBlue
         ParentColor = False
         TabOrder = 0
         object Label5: TLabel
           Left = 8
-          Height = 14
+          Height = 18
           Top = 8
-          Width = 29
+          Width = 39
           Caption = 'Width'
           ParentColor = False
         end
         object Label6: TLabel
           Left = 8
-          Height = 14
+          Height = 18
           Top = 64
-          Width = 32
+          Width = 44
           Caption = 'Height'
           ParentColor = False
         end
         object WidthEdit: TEdit
           Left = 8
-          Height = 21
+          Height = 27
           Top = 32
           Width = 368
           TabOrder = 0
         end
         object HeightEdit: TEdit
           Left = 8
-          Height = 21
+          Height = 27
           Top = 88
           Width = 368
           TabOrder = 1
@@ -239,7 +237,7 @@ inherited DesignSectionForm: TDesignSectionForm
   object Panel3: TPanel[1]
     Left = 0
     Height = 50
-    Top = 160
+    Top = 283
     Width = 391
     Align = alBottom
     ClientHeight = 50
@@ -261,9 +259,9 @@ inherited DesignSectionForm: TDesignSectionForm
     end
     object CancelBtn: TBitBtn
       Left = 304
-      Height = 34
+      Height = 32
       Top = 11
-      Width = 81
+      Width = 79
       AutoSize = True
       Caption = 'Cancel'
       Kind = bkCancel

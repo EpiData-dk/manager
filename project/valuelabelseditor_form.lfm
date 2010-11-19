@@ -1,7 +1,7 @@
 object ValueLabelEditor: TValueLabelEditor
-  Left = 339
+  Left = 2028
   Height = 625
-  Top = 241
+  Top = 192
   Width = 1015
   ActiveControl = Panel1
   Caption = 'Value Labels'

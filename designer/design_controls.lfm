@@ -1,0 +1,429 @@
+object DesignControlsForm: TDesignControlsForm
+  Left = 458
+  Height = 577
+  Top = 301
+  Width = 599
+  ActiveControl = ApplyBtn
+  Caption = 'DesignControlsForm'
+  ClientHeight = 577
+  ClientWidth = 599
+  Color = clSkyBlue
+  OnShow = FormShow
+  LCLVersion = '0.9.29'
+  object EpiControlPageControl: TPageControl
+    Left = 0
+    Height = 527
+    Top = 0
+    Width = 599
+    ActivePage = HeadingTabSheet
+    Align = alClient
+    TabIndex = 2
+    TabOrder = 0
+    object SectionTabSheet: TTabSheet
+      Caption = 'SectionTabSheet'
+      ClientHeight = 492
+      ClientWidth = 593
+      object SectionPageControl: TPageControl
+        Left = 0
+        Height = 492
+        Top = 0
+        Width = 593
+        ActivePage = SectionAdvancedSheet
+        Align = alClient
+        TabIndex = 1
+        TabOrder = 0
+        object SectionBasicSheet: TTabSheet
+          Caption = 'Basic'
+          ClientHeight = 457
+          ClientWidth = 587
+          object SectionGroupAccessGroupBox: TGroupBox
+            Left = 8
+            Height = 168
+            Top = 72
+            Width = 368
+            Caption = 'Groups access:'
+            ClientHeight = 149
+            ClientWidth = 364
+            TabOrder = 1
+            object GroupAvailableListBox: TListBox
+              Left = 6
+              Height = 107
+              Top = 31
+              Width = 152
+              ItemHeight = 0
+              Sorted = True
+              TabOrder = 0
+              TopIndex = -1
+            end
+            object GroupAssignedListBox: TListBox
+              Left = 205
+              Height = 107
+              Top = 34
+              Width = 152
+              ItemHeight = 0
+              Sorted = True
+              TabOrder = 1
+              TopIndex = -1
+            end
+            object Label5: TLabel
+              Left = 6
+              Height = 18
+              Top = 7
+              Width = 65
+              Caption = 'Available:'
+              ParentColor = False
+            end
+            object GrpRightsMoveLeft: TSpeedButton
+              Left = 170
+              Height = 22
+              Top = 87
+              Width = 23
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF004DA1560647994FB8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF0053A95CD94DA156F747994F38FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF005DB868CF71BE7BFF7AC183FF5BAA64FF47994FFF419149FF3B8842FF3580
+                3BFF2F7835FF2A702FFF256929FF216324FF1D5E20FFFFFFFF00FFFFFF0065C3
+                71C47BC886FF9CD5A5FF98D3A1FF94D09DFF90CE98FF8BCB93FF87C98EFF82C6
+                89FF7EC384FF7AC180FF76BE7CFF72BD78FF216324FFFFFFFF00FFFFFF0068C7
+                74C97FCC8AFFA2D8ABFF9ED6A7FF9AD4A3FF96D29FFF93CF9AFF8ECC95FF89CA
+                90FF85C78BFF81C587FF7DC282FF78C07EFF256929FFFFFFFF00FFFFFF00FFFF
+                FF0068C774D180CD8BFF7CC987FF5DB868FF58B162FF53A95CFF4DA156FF4799
+                4FFF419149FF3B8842FF35803BFF2F7835FF2A702FFFFFFFFF00FFFFFF00FFFF
+                FF00FFFFFF0068C774DB65C371F7FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF0068C7740668C774BBFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+              }
+              NumGlyphs = 0
+            end
+            object Label6: TLabel
+              Left = 206
+              Height = 18
+              Top = 7
+              Width = 64
+              Caption = 'Assigned:'
+              ParentColor = False
+            end
+            object GrpRightsMoveRight: TSpeedButton
+              Left = 170
+              Height = 22
+              Top = 55
+              Width = 23
+              Glyph.Data = {
+                36040000424D3604000000000000360000002800000010000000100000000100
+                2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00216324B81D5E2006FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF002A702F38256929F7216324D9FFFFFF00FFFFFF00FFFFFF00FFFFFF0061BE
+                6DFF5DB868FF58B162FF53A95CFF4DA156FF47994FFF419149FF3B8842FF3580
+                3BFF3F8845FF59A15EFF448B49FF216324CFFFFFFF00FFFFFF00FFFFFF0065C3
+                71FFA0D7A9FF9CD5A5FF98D3A1FF94D09DFF90CE98FF8BCB93FF87C98EFF82C6
+                89FF7EC384FF7AC180FF76BE7CFF458C4AFF216324C4FFFFFF00FFFFFF0068C7
+                74FFA5DAAEFFA2D8ABFF9ED6A7FF9AD4A3FF96D29FFF93CF9AFF8ECC95FF89CA
+                90FF85C78BFF81C587FF7DC282FF4A9150FF256929C9FFFFFF00FFFFFF0068C7
+                74FF68C774FF65C371FF61BE6DFF5DB868FF58B162FF53A95CFF4DA156FF4799
+                4FFF419149FF5AA362FF559D5CFF2F7835D1FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00419149F73B8842DBFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF0047994FBB41914906FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+                FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+              }
+              NumGlyphs = 0
+            end
+          end
+          object SectionNameEdit: TEdit
+            Left = 8
+            Height = 27
+            Top = 32
+            Width = 368
+            TabOrder = 0
+          end
+          object Label4: TLabel
+            Left = 8
+            Height = 18
+            Top = 8
+            Width = 40
+            Caption = 'Name'
+            ParentColor = False
+          end
+        end
+        object SectionAdvancedSheet: TTabSheet
+          Caption = 'Advanced'
+          ClientHeight = 457
+          ClientWidth = 587
+          object HeightEdit: TEdit
+            Left = 8
+            Height = 27
+            Top = 88
+            Width = 368
+            TabOrder = 1
+          end
+          object WidthEdit: TEdit
+            Left = 8
+            Height = 27
+            Top = 32
+            Width = 368
+            TabOrder = 0
+          end
+          object Label8: TLabel
+            Left = 8
+            Height = 18
+            Top = 64
+            Width = 44
+            Caption = 'Height'
+            ParentColor = False
+          end
+          object Label7: TLabel
+            Left = 8
+            Height = 18
+            Top = 8
+            Width = 39
+            Caption = 'Width'
+            ParentColor = False
+          end
+        end
+      end
+    end
+    object FieldTabSheet: TTabSheet
+      Caption = 'FieldTabSheet'
+      ClientHeight = 492
+      ClientWidth = 593
+      object FieldPageControl: TPageControl
+        Left = 0
+        Height = 492
+        Top = 0
+        Width = 593
+        ActivePage = FieldAdvancedSheet
+        Align = alClient
+        TabIndex = 1
+        TabOrder = 0
+        object FieldBasicSheet: TTabSheet
+          Caption = 'Basic'
+          ClientHeight = 457
+          ClientWidth = 587
+          object DecimalsEdit: TEdit
+            Left = 162
+            Height = 27
+            Top = 157
+            Width = 150
+            OnEditingDone = LengthEditChange
+            TabOrder = 3
+            Visible = False
+          end
+          object DecimalsLabel: TLabel
+            Left = 162
+            Height = 18
+            Top = 133
+            Width = 66
+            Caption = 'Decimals:'
+            ParentColor = False
+            Visible = False
+          end
+          object LengthEdit: TEdit
+            Left = 8
+            Height = 27
+            Top = 157
+            Width = 150
+            OnEditingDone = LengthEditChange
+            TabOrder = 2
+          end
+          object LengthLabel: TLabel
+            Left = 8
+            Height = 18
+            Top = 133
+            Width = 49
+            Caption = 'Length:'
+            ParentColor = False
+          end
+          object QuestionEdit: TEdit
+            Left = 8
+            Height = 27
+            Top = 93
+            Width = 304
+            TabOrder = 1
+          end
+          object Label2: TLabel
+            Left = 8
+            Height = 18
+            Top = 69
+            Width = 63
+            Caption = 'Question:'
+            ParentColor = False
+          end
+          object NameEdit: TEdit
+            Left = 8
+            Height = 27
+            Top = 29
+            Width = 304
+            ParentBidiMode = False
+            TabOrder = 0
+          end
+          object Label1: TLabel
+            Left = 8
+            Height = 18
+            Top = 5
+            Width = 44
+            Caption = 'Name:'
+            ParentBidiMode = False
+            ParentColor = False
+          end
+        end
+        object FieldAdvancedSheet: TTabSheet
+          Caption = 'Advanced'
+          ClientHeight = 457
+          ClientWidth = 587
+          object ValueLabelComboBox: TComboBox
+            Left = 5
+            Height = 31
+            Top = 32
+            Width = 192
+            ItemHeight = 0
+            Style = csDropDownList
+            TabOrder = 0
+          end
+          object ManageValueLabelsButton: TButton
+            Left = 221
+            Height = 31
+            Top = 32
+            Width = 96
+            Caption = 'Manage...'
+            OnClick = ManageValueLabelsButtonClick
+            TabOrder = 1
+          end
+          object Label3: TLabel
+            Left = 5
+            Height = 18
+            Top = 8
+            Width = 77
+            Caption = 'Value label:'
+            ParentColor = False
+          end
+        end
+      end
+    end
+    object HeadingTabSheet: TTabSheet
+      Caption = 'HeadingTabSheet'
+      ClientHeight = 492
+      ClientWidth = 593
+      object CaptionEdit: TEdit
+        Left = 8
+        Height = 27
+        Top = 32
+        Width = 304
+        TabOrder = 0
+      end
+      object Label9: TLabel
+        Left = 8
+        Height = 18
+        Top = 8
+        Width = 32
+        Caption = 'Text:'
+        ParentColor = False
+      end
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Height = 50
+    Top = 527
+    Width = 599
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 599
+    TabOrder = 1
+    object OkBtn: TBitBtn
+      Left = 520
+      Height = 32
+      Top = 10
+      Width = 71
+      Action = CloseAction
+      Anchors = [akRight, akBottom]
+      AutoSize = True
+      Kind = bkOK
+      ModalResult = 1
+      TabOrder = 1
+    end
+    object CancelBtn: TBitBtn
+      Left = 432
+      Height = 32
+      Top = 10
+      Width = 79
+      Action = CancelAction
+      Anchors = [akRight, akBottom]
+      AutoSize = True
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 2
+    end
+    object ApplyBtn: TBitBtn
+      Left = 8
+      Height = 32
+      Top = 9
+      Width = 72
+      Action = ApplyAction
+      Anchors = [akRight, akBottom]
+      AutoSize = True
+      Default = True
+      Kind = bkRetry
+      ModalResult = 4
+      TabOrder = 0
+    end
+  end
+  object ActionList1: TActionList
+    left = 463
+    top = 380
+    object ApplyAction: TAction
+      Caption = '&Apply'
+      OnExecute = ApplyActionExecute
+    end
+    object CloseAction: TAction
+      Caption = '&Close'
+      OnExecute = CloseActionExecute
+    end
+    object CancelAction: TAction
+      Caption = 'C&ancel'
+      OnExecute = CancelActionExecute
+      SecondaryShortCuts.Strings = (
+        'F10'
+      )
+      ShortCut = 27
+    end
+  end
+end

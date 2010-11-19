@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Buttons, ExtCtrls, MaskEdit, ComCtrls, ActnList, epidatafiles,
-  epicustombase, design_custombase, AVL_Tree, episettings, epivaluelabels;
+  epicustombase, design_custombase, AVL_Tree, episettings, epivaluelabels,
+  design_controls;
 
 type
   { TDesignField }

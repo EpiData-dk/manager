@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="25">
+    <Units Count="26">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -212,6 +212,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="structure_valuelabelset_frame"/>
       </Unit24>
+      <Unit25>
+        <Filename Value="designer/design_controls.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DesignControlsForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_controls"/>
+      </Unit25>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

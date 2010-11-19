@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, Buttons, ExtCtrls, epidatafiles, epicustombase, design_custombase,
-  AVL_Tree;
+  AVL_Tree, design_controls;
 
 type
 

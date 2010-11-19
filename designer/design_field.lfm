@@ -1,7 +1,7 @@
 inherited DesignFieldForm: TDesignFieldForm
-  Left = 606
+  Left = 969
   Height = 274
-  Top = 291
+  Top = 378
   Width = 328
   ActiveControl = PageControl1
   Caption = 'Field Properties'
