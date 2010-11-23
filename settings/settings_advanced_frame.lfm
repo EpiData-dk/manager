@@ -47,7 +47,7 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
     Left = 205
     Height = 27
     Top = 16
-    Width = 163
+    Width = 169
     ShowHidden = False
     ButtonWidth = 23
     NumGlyphs = 0
@@ -57,7 +57,7 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
   object Label1: TLabel
     Left = 8
     Height = 18
-    Top = 112
+    Top = 114
     Width = 117
     Caption = 'Default save type'
     ParentColor = False
@@ -70,5 +70,13 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
     ItemHeight = 0
     Style = csDropDownList
     TabOrder = 2
+  end
+  object SaveWindowPositionsChkBox: TCheckBox
+    Left = 8
+    Height = 22
+    Top = 152
+    Width = 173
+    Caption = 'Save window positions'
+    TabOrder = 3
   end
 end

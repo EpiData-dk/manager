@@ -13,6 +13,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    DefaultWindowPosAction: TAction;
     CheckVersionAction: TAction;
     CopyProjectInfoAction: TAction;
     HelpMenuDivider1: TMenuItem;
@@ -21,6 +22,7 @@ type
     AboutMenuItem: TMenuItem;
     CheckVersionMenuItem: TMenuItem;
     ExportStataMenuItem: TMenuItem;
+    ResetWindowPosMenuItem: TMenuItem;
     ValueLabelsMenuItem: TMenuItem;
     ProjectMenuDivider1: TMenuItem;
     ProjectStructureMenuItem: TMenuItem;
@@ -54,6 +56,7 @@ type
     PageControl1: TPageControl;
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
+    procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -76,6 +79,7 @@ type
   public
     { public declarations }
     property Modified: boolean read FModified write SetModified;
+    class procedure RestoreDefaultPos;
   end;
 
 var
@@ -87,7 +91,8 @@ implementation
 
 uses
   workflow_frame, project_frame, LCLProc, LCLIntf, design_frame,
-  settings2, settings2_var, about, Clipbrd, epiversionutils;
+  settings2, settings2_var, about, Clipbrd, epiversionutils,
+  design_controls, structure_form, valuelabelseditor_form;
 
 { TMainForm }
 
@@ -97,6 +102,8 @@ begin
 //  ShowWorkFlowAction.Execute;
 
   LoadIniFile;
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'MainForm');
 
   NewProjectAction.Execute;
   TDesignFrame(TProjectFrame(PageControl1.ActivePage.Controls[0]).ActiveFrame).UpdateFrame;
@@ -120,6 +127,9 @@ begin
     end;
   end;
   {$ENDIF}
+
+  if CanClose and ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'MainForm');
 end;
 
 procedure TMainForm.CopyProjectInfoActionExecute(Sender: TObject);
@@ -137,6 +147,16 @@ begin
       'Record count: ' + IntToStr(DataFiles[0].Size);
   end;
   Clipboard.AsText := S;
+end;
+
+procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
+begin
+  TMainForm.RestoreDefaultPos;
+  TSettingsForm.RestoreDefaultPos;
+  TDesignControlsForm.RestoreDefaultPos;
+  TProject_Structure_Form.RestoreDefaultPos;
+  TValueLabelEditor.RestoreDefaultPos;
+  ManagerSettings.SaveWindowPositions := true;
 end;
 
 procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
@@ -297,7 +317,6 @@ procedure TMainForm.SetModified(const AValue: boolean);
 begin
   if FModified = AValue then exit;
   FModified := AValue;
-//  SetCaption;
 end;
 
 procedure TMainForm.ProjectModified(Sender: TObject);
@@ -321,6 +340,20 @@ begin
   if not DirectoryExistsUTF8(GetAppConfigDirUTF8(false)) then
     CreateDirUTF8(GetAppConfigDirUTF8(false));
   ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
+end;
+
+class procedure TMainForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 800;
+  Aform.Height := 600;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+
+  SaveFormPosition(Aform, 'MainForm');
+  Aform.Free;
 end;
 
 end.

@@ -29,6 +29,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    class procedure RestoreDefaultPos;
   end;
 
   {$IFDEF EPI_SHOWREVISION}
@@ -40,6 +41,10 @@ type
 function GetManagerVersion: String;
 function SaveSettingToIni(Const FileName: string): boolean;
 function LoadSettingsFromIni(Const FileName: string): boolean;
+
+procedure SaveFormPosition(Const AForm: TForm; Const SectionName: string);
+procedure LoadFormPosition(Var AForm: TForm; Const SectionName: string);
+
 
 procedure RegisterSettingFrame(const Order: byte;
   const AValue: TCustomFrameClass; const AName: string);
@@ -117,6 +122,7 @@ begin
       WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
       WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
       WriteInteger(Sec, 'SaveAsType', SaveType);
+      WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       Result := true;
     end;
   finally
@@ -134,47 +140,94 @@ begin
 
   if not FileExistsUTF8(FileName) then exit;
 
-  Ini := TIniFile.Create(FileName);
-  With Ini do
-  with ManagerSettings do
-  begin
-    {  // Visual design:
-      DefaultRightPostion:   Integer;
-      SnapFields:            boolean;
-      SnappingThresHold:     Integer;
-      SpaceBtwFieldField:    Integer;
-      SpaceBtwFieldLabel:    Integer;
-      SpaceBtwLabelLabel:    Integer;}
-    Sec := 'visual';
-    DefaultRightPostion   := ReadInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
-    SnapFields            := ReadBool   (Sec, 'SnapFields',            SnapFields);
-    SnappingThresHold     := ReadInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
-    SpaceBtwFieldField    := ReadInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
-    SpaceBtwFieldLabel    := ReadInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
-    SpaceBtwLabelLabel    := ReadInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
+  try
+    Ini := TIniFile.Create(FileName);
+    With Ini do
+    with ManagerSettings do
+    begin
+      {  // Visual design:
+        DefaultRightPostion:   Integer;
+        SnapFields:            boolean;
+        SnappingThresHold:     Integer;
+        SpaceBtwFieldField:    Integer;
+        SpaceBtwFieldLabel:    Integer;
+        SpaceBtwLabelLabel:    Integer;}
+      Sec := 'visual';
+      DefaultRightPostion   := ReadInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
+      SnapFields            := ReadBool   (Sec, 'SnapFields',            SnapFields);
+      SnappingThresHold     := ReadInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
+      SpaceBtwFieldField    := ReadInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
+      SpaceBtwFieldLabel    := ReadInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
+      SpaceBtwLabelLabel    := ReadInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
 
-    {  // Field definitions:
-    IntFieldLength:        Integer;
-    FloatIntLength:        Integer;
-    FloatDecimalLength:    Integer;
-    StringFieldLength:     Integer;
-    DefaultDateType:       TEpiFieldType;
-    FieldNamePrefix:       string;
-  //    FieldNamingStyle:      TFieldNaming;}
-    Sec := 'fielddefs';
-    IntFieldLength     := ReadInteger(Sec, 'IntFieldLength',     IntFieldLength);
-    FloatIntLength     := ReadInteger(Sec, 'FloatIntLength',     FloatIntLength);
-    FloatDecimalLength := ReadInteger(Sec, 'FloatDecimalLength', FloatDecimalLength);
-    StringFieldLength  := ReadInteger(Sec, 'StringFieldLength',  StringFieldLength);
-    DefaultDateType    := TEpiFieldType(ReadInteger(Sec, 'DefaultDateType', Word(DefaultDateType)));
+      {  // Field definitions:
+      IntFieldLength:        Integer;
+      FloatIntLength:        Integer;
+      FloatDecimalLength:    Integer;
+      StringFieldLength:     Integer;
+      DefaultDateType:       TEpiFieldType;
+      FieldNamePrefix:       string;
+    //    FieldNamingStyle:      TFieldNaming;}
+      Sec := 'fielddefs';
+      IntFieldLength     := ReadInteger(Sec, 'IntFieldLength',     IntFieldLength);
+      FloatIntLength     := ReadInteger(Sec, 'FloatIntLength',     FloatIntLength);
+      FloatDecimalLength := ReadInteger(Sec, 'FloatDecimalLength', FloatDecimalLength);
+      StringFieldLength  := ReadInteger(Sec, 'StringFieldLength',  StringFieldLength);
+      DefaultDateType    := TEpiFieldType(ReadInteger(Sec, 'DefaultDateType', Word(DefaultDateType)));
 
-{    // Advanced:
-    WorkingDirUTF8:        string;
-    PasteSpecialType:      byte;}
-    Sec := 'advanced';
-    WorkingDirUTF8   := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
-    PasteSpecialType := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
-    SaveType         := ReadInteger(Sec, 'SaveAsType', SaveType);
+  {    // Advanced:
+      WorkingDirUTF8:        string;
+      PasteSpecialType:      byte;}
+      Sec := 'advanced';
+      WorkingDirUTF8   := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+      PasteSpecialType := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
+      SaveType         := ReadInteger(Sec, 'SaveAsType', SaveType);
+      SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
+    end;
+  finally
+    Ini.Free;
+  end;
+end;
+
+procedure SaveFormPosition(const AForm: TForm; const SectionName: string);
+var
+  Ini: TIniFile;
+begin
+  if ManagerSettings.IniFileName = '' then exit;
+
+  try
+    Ini := TIniFile.Create(ManagerSettings.IniFileName);
+    With Ini do
+    with AForm do
+    begin
+      WriteInteger(SectionName, 'Top', Top);
+      WriteInteger(SectionName, 'Left', Left);
+      WriteInteger(SectionName, 'Width', Width);
+      WriteInteger(SectionName, 'Height', Height);
+    end;
+  finally
+    Ini.Free;
+  end;
+end;
+
+procedure LoadFormPosition(var AForm: TForm; const SectionName: string);
+var
+  Ini: TIniFile;
+begin
+  if ManagerSettings.IniFileName = '' then exit;
+
+  try
+    Ini := TIniFile.Create(ManagerSettings.IniFileName);
+    With Ini do
+    with AForm do
+    begin
+      Top     := ReadInteger(SectionName, 'Top', Top);
+      Left    := ReadInteger(SectionName, 'Left', Left);
+      Width   := ReadInteger(SectionName, 'Width', Width);
+      Height  := ReadInteger(SectionName, 'Height', Height);
+    end;
+  finally
+    Ini.Free;
   end;
 end;
 
@@ -206,6 +259,8 @@ procedure TSettingsForm.FormShow(Sender: TObject);
 begin
   FActiveFrame := TFrame(SettingsView.Items[0].Data);
   SettingsView.Selected := SettingsView.Items[0];
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'SettingsForm');
 
   if SettingsView.Items.Count > 0 then
     TFrame(SettingsView.Items[0].Data).Show;
@@ -217,6 +272,8 @@ begin
   CanClose := false;
   if not (FActiveFrame as ISettingsFrame).ApplySettings then exit;
   SaveSettingToIni(ManagerSettings.IniFileName);
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'SettingsForm');
   CanClose := true;
 end;
 
@@ -238,6 +295,19 @@ begin
     Frame.Parent := Self;
     SettingsView.Items.AddObject(nil, Frames[i], Pointer(Frame));
   end;
+end;
+
+class procedure TSettingsForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 800;
+  Aform.Height := 600;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'SettingsForm');
+  AForm.free;
 end;
 
 procedure RegisterSettingFrame(const Order: byte;

@@ -7,6 +7,7 @@ object Project_Structure_Form: TProject_Structure_Form
   Caption = 'Project Structure'
   ClientHeight = 522
   ClientWidth = 684
+  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   LCLVersion = '0.9.29'
   object PageCtrl: TPageControl

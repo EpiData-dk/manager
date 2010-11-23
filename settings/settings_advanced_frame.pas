@@ -13,6 +13,7 @@ type
   { TSettings_AdvancedFrame }
 
   TSettings_AdvancedFrame = class(TFrame, ISettingsFrame)
+    SaveWindowPositionsChkBox: TCheckBox;
     DefaultSaveTypeComboBox: TComboBox;
     DefaultPasteCombo: TComboBox;
     Label1: TLabel;
@@ -58,6 +59,7 @@ begin
     WorkingDirEdit.Text := WorkingDirUTF8;
     DefaultPasteCombo.ItemIndex := PasteSpecialType;
     DefaultSaveTypeComboBox.ItemIndex := SaveType;
+    SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
   end;
 end;
 
@@ -69,6 +71,7 @@ begin
       WorkingDirUTF8 := WorkingDirEdit.Text;
     PasteSpecialType := DefaultPasteCombo.ItemIndex;
     SaveType         := DefaultSaveTypeComboBox.ItemIndex;
+    SaveWindowPositions := SaveWindowPositionsChkBox.Checked;
   end;
   Result := true;
 end;

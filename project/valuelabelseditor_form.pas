@@ -58,6 +58,7 @@ type
     procedure DeleteGridRowUpdate(Sender: TObject);
     procedure DeleteValueLabelSetsExecute(Sender: TObject);
     procedure DeleteValueLabelSetsUpdate(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure InsertGridRowExecute(Sender: TObject);
     procedure NewFloatValueLabelSetActionExecute(Sender: TObject);
@@ -82,6 +83,7 @@ type
     FCurrentVLSet: TEpiValueLabelSet;
     FHintWindow: THintWindow;
     constructor Create(TheOwner: TComponent); override;
+    destructor  Destroy; override;
     function    DoNewValueLabelSet(Ft: TEpiFieldType): TEpiValueLabelSet;
     procedure   UpdateGridCells;
     procedure   ValueLabelsGridCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
@@ -99,6 +101,7 @@ type
     procedure   ValueLabelSetsHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   public
     { public declarations }
+    class procedure RestoreDefaultPos;
     property    ValueLabelsGrid: TValueLabelGrid read FValueLabelsGrid;
     property    DblClickedValueLabelSet: TEpiValueLabelSet read FDblClickedValueLabelSet;
   end;
@@ -110,7 +113,7 @@ implementation
 {$R *.lfm}
 
 uses
-  project_frame, math, LCLType, main;
+  project_frame, math, LCLType, main, settings2, settings2_var;
 
 var
   TheValueLabelEditor: TValueLabelEditor = nil;
@@ -329,6 +332,15 @@ begin
   FHintWindow.AutoHide := true;
 end;
 
+destructor TValueLabelEditor.Destroy;
+var
+  B: Boolean;
+begin
+  B:=true;
+  FormCloseQuery(nil, B); // enforces save of position in case program is closed.
+  inherited Destroy;
+end;
+
 function TValueLabelEditor.DoNewValueLabelSet(Ft: TEpiFieldType
   ): TEpiValueLabelSet;
 var
@@ -453,6 +465,19 @@ begin
   end;
 end;
 
+class procedure TValueLabelEditor.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 800;
+  Aform.Height := 600;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'ValueLabelEditorForm');
+  AForm.free;
+end;
+
 procedure TValueLabelEditor.DeleteValueLabelSetsExecute(Sender: TObject);
 var
   Node: TTreeNode;
@@ -491,6 +516,13 @@ begin
   TAction(Sender).Enabled :=
     (ValueLabelSetTreeView.Focused) and
     (ValueLabelSetTreeView.Items.Count > 0);
+end;
+
+procedure TValueLabelEditor.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'ValueLabelEditorForm');
 end;
 
 procedure TValueLabelEditor.DeleteGridRowExecute(Sender: TObject);
@@ -534,10 +566,11 @@ procedure TValueLabelEditor.FormShow(Sender: TObject);
 var
   A: TCollectionItem;
 begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'ValueLabelEditorForm');
+
   if ValueLabelSetTreeView.Items.Count > 0 then
     ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items[0];
-  Width := 600;
-  Height := 400;
   UpdateStatusbar;
   ValueLabelsGrid.AutoSizeColumns;
   FDblClickedValueLabelSet := nil;

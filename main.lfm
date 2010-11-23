@@ -69,6 +69,9 @@ object MainForm: TMainForm
         Caption = '&Settings'
         OnClick = SettingsActionExecute
       end
+      object ResetWindowPosMenuItem: TMenuItem
+        Action = DefaultWindowPosAction
+      end
     end
     object ProjectMenu: TMenuItem
       Caption = '&Project'
@@ -161,6 +164,11 @@ object MainForm: TMainForm
       Caption = 'Check Version Online'
       Hint = 'Check for latest version online (requires internet)'
       OnExecute = CheckVersionActionExecute
+    end
+    object DefaultWindowPosAction: TAction
+      Category = 'Edit'
+      Caption = 'Default Window Position'
+      OnExecute = DefaultWindowPosActionExecute
     end
   end
 end

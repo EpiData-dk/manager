@@ -27,6 +27,7 @@ type
 //    FieldNamingStyle:      TFieldNaming;
 
     // Advanced:
+    SaveWindowPositions:   boolean;
     WorkingDirUTF8:        string;
     PasteSpecialType:      byte;     // Index into list:
                                      //   0: QES
@@ -65,6 +66,7 @@ var
 //    FieldNamingStyle:      fnFirstWord;
 
     // Advanced:
+    SaveWindowPositions:   true;
     WorkingDirUTF8:        '';
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.

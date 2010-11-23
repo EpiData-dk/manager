@@ -39,6 +39,7 @@ type
     ValueLabelsSummarySheet: TTabSheet;
     ValueLabelsTabSheet: TTabSheet;
     procedure CloseFormActionExecute(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
   private
     FDocument: TEpiDocument;
@@ -49,6 +50,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const EpiDoc: TEpiDocument);
     property  Document: TEpiDocument read FDocument;
+    class procedure RestoreDefaultPos;
   end;
 
 implementation
@@ -57,7 +59,7 @@ implementation
 
 uses
   structure_datafile_frame, epidatafiles, epistringutils, math,
-  structure_valuelabelset_frame;
+  structure_valuelabelset_frame, settings2_var, settings2;
 
 { TProject_Structure_Form }
 
@@ -66,6 +68,9 @@ var
   i: Integer;
   j: Integer;
 begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'StructureForm');
+
   with DataFilesGrid do
     for i := 0 to ColCount - 1 do
       for j := 0 to RowCount - 1 do
@@ -90,6 +95,14 @@ end;
 procedure TProject_Structure_Form.CloseFormActionExecute(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TProject_Structure_Form.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  CanClose := true;
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'StructureForm');
 end;
 
 constructor TProject_Structure_Form.Create(TheOwner: TComponent);
@@ -182,6 +195,19 @@ begin
     end;
     ValueLabelsTabSheet.PageIndex := PageCtrl.PageCount-1;
   end;
+end;
+
+class procedure TProject_Structure_Form.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 800;
+  Aform.Height := 600;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'StructureForm');
+  AForm.free;
 end;
 
 end.

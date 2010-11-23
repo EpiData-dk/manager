@@ -37,6 +37,10 @@ type
   { TDesignControlsForm }
 
   TDesignControlsForm = class(TForm)
+    ShiftTo2Action: TAction;
+    ShiftTo1Action: TAction;
+    ShiftTo2: TAction;
+    ShiftTo1: TAction;
     CancelAction: TAction;
     CloseAction: TAction;
     ApplyAction: TAction;
@@ -84,9 +88,12 @@ type
     procedure ApplyActionExecute(Sender: TObject);
     procedure CancelActionExecute(Sender: TObject);
     procedure CloseActionExecute(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure LengthEditChange(Sender: TObject);
     procedure ManageValueLabelsButtonClick(Sender: TObject);
+    procedure ShiftTo1Execute(Sender: TObject);
+    procedure ShiftTo2Execute(Sender: TObject);
   private
     { private declarations }
     FEpiControl: TEpiCustomControlItem;
@@ -109,6 +116,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const EpiDocument: TEpiCustomBase);
     destructor  Destroy; override;
+    class procedure RestoreDefaultPos;
     procedure   Show;
     property    EpiControl: TEpiCustomControlItem read FEpiControl write SetEpiControl;
   end;
@@ -135,7 +143,7 @@ implementation
 
 uses
   epidatafilestypes, math, types, valuelabelseditor_form, epiadmin,
-  LCLProc;
+  LCLProc, settings2_var, settings2;
 
 const
   rsVLWarning = 'Warning: Valuelabels have changed...';
@@ -240,6 +248,8 @@ end;
 
 procedure TDesignControlsForm.FormShow(Sender: TObject);
 begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'ControlsForm');
   EpiControlPageControl.ShowTabs := false;
 end;
 
@@ -258,6 +268,24 @@ begin
   GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
 end;
 
+procedure TDesignControlsForm.ShiftTo1Execute(Sender: TObject);
+begin
+  if EpiControlPageControl.ActivePage = SectionTabSheet then
+    SectionPageControl.ActivePage := SectionBasicSheet;
+
+  if EpiControlPageControl.ActivePage = FieldTabSheet then
+    FieldPageControl.ActivePage := FieldBasicSheet;
+end;
+
+procedure TDesignControlsForm.ShiftTo2Execute(Sender: TObject);
+begin
+  if EpiControlPageControl.ActivePage = SectionTabSheet then
+    SectionPageControl.ActivePage := SectionAdvancedSheet;
+
+  if EpiControlPageControl.ActivePage = FieldTabSheet then
+    FieldPageControl.ActivePage := FieldAdvancedSheet;
+end;
+
 procedure TDesignControlsForm.ApplyActionExecute(Sender: TObject);
 begin
   ValidateControl;
@@ -271,6 +299,13 @@ end;
 procedure TDesignControlsForm.CloseActionExecute(Sender: TObject);
 begin
   if ValidateControl then Close;
+end;
+
+procedure TDesignControlsForm.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'ControlsForm');
 end;
 
 procedure TDesignControlsForm.SetEpiControl(const AValue: TEpiCustomControlItem);
@@ -636,6 +671,19 @@ begin
     FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelSetHook);
   FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelSetsHook);
   inherited Destroy;
+end;
+
+class procedure TDesignControlsForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 400;
+  Aform.Height := 400;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'ControlsForm');
+  AForm.free;
 end;
 
 procedure TDesignControlsForm.Show;
