@@ -68,6 +68,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    procedure   RestoreDefaultPos;
     property   EpiDocument: TEpiDocument read FEpiDocument;
     property   ActiveFrame: TFrame read FActiveFrame;
     property   ProjectFileName: string read FFileName write FFileName;
@@ -513,6 +514,14 @@ begin
   ProjectPanel.Enabled := false;
   ProjectPanel.Visible := false;
   {$ENDIF}
+end;
+
+procedure TProjectFrame.RestoreDefaultPos;
+begin
+  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
+  if Assigned(FActiveFrame) then
+    TDesignFrame(FActiveFrame).RestoreDefaultPos;
+  TProject_Structure_Form.RestoreDefaultPos;
 end;
 
 end.

@@ -252,6 +252,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent);
     procedure   UpdateFrame;
+    procedure   RestoreDefaultPos;
     property    DataFile: TEpiDataFile read FDataFile write SetDataFile;
     property    ImportedFileName: string read FImportedFileName;
   end;
@@ -2149,6 +2150,12 @@ begin
     3: PasteAsFloatAction.ShortCut   := CtrlV;
     4: PasteAsStringAction.ShortCut  := CtrlV;
   end;
+end;
+
+procedure TDesignFrame.RestoreDefaultPos;
+begin
+  if Assigned(FDesignControlForm) then
+    FDesignControlForm.RestoreDefaultPos;
 end;
 
 end.

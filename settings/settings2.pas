@@ -302,8 +302,8 @@ var
   Aform: TForm;
 begin
   Aform := TForm.Create(nil);
-  Aform.Width := 800;
-  Aform.Height := 600;
+  Aform.Width := 600;
+  Aform.Height := 480;
   Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
   Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
   SaveFormPosition(Aform, 'SettingsForm');

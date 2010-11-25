@@ -79,7 +79,7 @@ type
   public
     { public declarations }
     property Modified: boolean read FModified write SetModified;
-    class procedure RestoreDefaultPos;
+    procedure RestoreDefaultPos;
   end;
 
 var
@@ -151,12 +151,7 @@ end;
 
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
 begin
-  TMainForm.RestoreDefaultPos;
-  TSettingsForm.RestoreDefaultPos;
-  TDesignControlsForm.RestoreDefaultPos;
-  TProject_Structure_Form.RestoreDefaultPos;
-  TValueLabelEditor.RestoreDefaultPos;
-  ManagerSettings.SaveWindowPositions := true;
+  RestoreDefaultPos;
 end;
 
 procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
@@ -342,18 +337,20 @@ begin
   ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
 end;
 
-class procedure TMainForm.RestoreDefaultPos;
-var
-  Aform: TForm;
+procedure TMainForm.RestoreDefaultPos;
 begin
-  Aform := TForm.Create(nil);
-  Aform.Width := 800;
-  Aform.Height := 600;
-  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
-  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  if Assigned(FActiveFrame) then;
+    TProjectFrame(FActiveFrame).RestoreDefaultPos;
+  TSettingsForm.RestoreDefaultPos;
 
-  SaveFormPosition(Aform, 'MainForm');
-  Aform.Free;
+  BeginFormUpdate;
+  Width := 700;
+  Height := 600;
+  Top := 5;
+  Left := 5;
+  EndFormUpdate;
+
+  SaveFormPosition(Self, 'MainForm');
 end;
 
 end.

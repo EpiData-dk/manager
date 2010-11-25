@@ -101,7 +101,7 @@ type
     procedure   ValueLabelSetsHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   public
     { public declarations }
-    class procedure RestoreDefaultPos;
+    procedure   RestoreDefaultPos;
     property    ValueLabelsGrid: TValueLabelGrid read FValueLabelsGrid;
     property    DblClickedValueLabelSet: TEpiValueLabelSet read FDblClickedValueLabelSet;
   end;
@@ -465,17 +465,15 @@ begin
   end;
 end;
 
-class procedure TValueLabelEditor.RestoreDefaultPos;
-var
-  Aform: TForm;
+procedure TValueLabelEditor.RestoreDefaultPos;
 begin
-  Aform := TForm.Create(nil);
-  Aform.Width := 800;
-  Aform.Height := 600;
-  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
-  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
-  SaveFormPosition(Aform, 'ValueLabelEditorForm');
-  AForm.free;
+  BeginFormUpdate;
+  Width := 500;
+  Height := 300;
+  Top := 550;
+  Left := 300;
+  EndFormUpdate;
+  SaveFormPosition(Self, 'ValueLabelEditorForm');
 end;
 
 procedure TValueLabelEditor.DeleteValueLabelSetsExecute(Sender: TObject);

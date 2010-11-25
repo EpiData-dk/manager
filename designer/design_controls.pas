@@ -37,6 +37,8 @@ type
   { TDesignControlsForm }
 
   TDesignControlsForm = class(TForm)
+    Label10: TLabel;
+    FieldTypeLabel: TLabel;
     ShiftTo2Action: TAction;
     ShiftTo1Action: TAction;
     ShiftTo2: TAction;
@@ -89,6 +91,7 @@ type
     procedure CancelActionExecute(Sender: TObject);
     procedure CloseActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LengthEditChange(Sender: TObject);
     procedure ManageValueLabelsButtonClick(Sender: TObject);
@@ -116,7 +119,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const EpiDocument: TEpiCustomBase);
     destructor  Destroy; override;
-    class procedure RestoreDefaultPos;
+    procedure   RestoreDefaultPos;
     procedure   Show;
     property    EpiControl: TEpiCustomControlItem read FEpiControl write SetEpiControl;
   end;
@@ -143,7 +146,7 @@ implementation
 
 uses
   epidatafilestypes, math, types, valuelabelseditor_form, epiadmin,
-  LCLProc, settings2_var, settings2;
+  LCLProc, settings2_var, settings2, epimiscutils;
 
 const
   rsVLWarning = 'Warning: Valuelabels have changed...';
@@ -308,6 +311,14 @@ begin
     SaveFormPosition(Self, 'ControlsForm');
 end;
 
+procedure TDesignControlsForm.FormDestroy(Sender: TObject);
+var
+  B: Boolean;
+begin
+  B:=true;
+  FormCloseQuery(nil, B);
+end;
+
 procedure TDesignControlsForm.SetEpiControl(const AValue: TEpiCustomControlItem);
 var
   FField: TEpiField;
@@ -316,11 +327,12 @@ var
   i: Integer;
 begin
   if FEpiControl = AValue then exit;
-
   FEpiControl := AValue;
 
+  BeginFormUpdate;
   if FEpiControl is TEpiSection then
   begin
+    Caption := 'Section Properties';
     EpiControlPageControl.ActivePage := SectionTabSheet;
     FSection := TEpiSection(EpiControl);
 
@@ -349,11 +361,13 @@ begin
 
   if FEpiControl is TEpiField then
   begin
+    Caption := 'Field Properties';
     EpiControlPageControl.ActivePage := FieldTabSheet;
     FField := TEpiField(EpiControl);
 
     // Setup Basic page
     NameEdit.Text         := FField.Name;
+    FieldTypeLabel.Caption := EpiTypeNames[FField.FieldType];
     QuestionEdit.Text     := FField.Question.Caption.Text;
     LengthEdit.Text       := IntToStr(FField.Length);
     DecimalsEdit.Text     := IntToStr(FField.Decimals);
@@ -367,14 +381,15 @@ begin
     // Setup "advanced" page.
     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
     UpdateValueLabels;
-    ValueLabelComboBox.Enabled := (FField.FieldType in [ftInteger, ftString,ftUpperString, ftFloat])
   end;
 
   if FEpiControl is TEpiHeading then
   begin
+    Caption := 'Heading Properties';
     EpiControlPageControl.ActivePage := HeadingTabSheet;
     CaptionEdit.Text := TEpiHeading(EpiControl).Caption.Text;
   end;
+  EndFormUpdate;
 end;
 
 function TDesignControlsForm.UpdateValueLabels: boolean;
@@ -402,10 +417,14 @@ begin
   ValueLabelComboBox.Items.BeginUpdate;
   ValueLabelComboBox.Clear;
   ValueLabelComboBox.Sorted := true;
-  if FValueLabelSets.Count = 0 then
+  if (FValueLabelSets.Count = 0) or
+     (not (FField.FieldType in [ftInteger, ftFloat, ftString, ftUpperString])) then
   begin
-    ValueLabelComboBox.Enabled := false;
     OIdx := ValueLabelComboBox.Items.AddObject('(none)', nil);
+    if not (FField.FieldType in [ftInteger, ftFloat, ftString, ftUpperString]) then
+      ValueLabelComboBox.Hint := 'ValueLabels not support for this field type!'
+    else
+      ValueLabelComboBox.Hint := 'No Valuelabels Defined.' + LineEnding + 'Press "Manage" to create a ValueLabel set.';
   end else begin
    for i := 0 to FValueLabelSets.Count - 1 do
    begin
@@ -448,6 +467,15 @@ begin
      if DoAdd then
        ValueLabelComboBox.AddItem(CurrentVLSet.Name, CurrentVLSet);
    end;
+   S := 'Support ValueLabel types:' + LineEnding;
+   case FField.FieldType of
+     ftInteger: S := S + EpiTypeNames[ftInteger];
+     ftFloat:   S := S + EpiTypeNames[ftInteger] + LineEnding + EpiTypeNames[ftFloat];
+     ftString,
+     ftUpperString: S := S + EpiTypeNames[ftString] + LineEnding + EpiTypeNames[ftUpperString];
+   end;
+   ValueLabelComboBox.Hint := S;
+
    OIdx := ValueLabelComboBox.Items.AddObject('(none)', nil);
    if Assigned(PreSelectedVLSet) then
      Idx := ValueLabelComboBox.Items.IndexOfObject(PreSelectedVLSet)
@@ -673,17 +701,15 @@ begin
   inherited Destroy;
 end;
 
-class procedure TDesignControlsForm.RestoreDefaultPos;
-var
-  Aform: TForm;
+procedure TDesignControlsForm.RestoreDefaultPos;
 begin
-  Aform := TForm.Create(nil);
-  Aform.Width := 400;
-  Aform.Height := 400;
-  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
-  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
-  SaveFormPosition(Aform, 'ControlsForm');
-  AForm.free;
+  BeginFormUpdate;
+  Width := 500;
+  Height := 500;
+  Top := 20;
+  Left := 300;
+  EndFormUpdate;
+  SaveFormPosition(Self, 'ControlsForm');
 end;
 
 procedure TDesignControlsForm.Show;
