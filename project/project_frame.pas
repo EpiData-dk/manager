@@ -416,7 +416,7 @@ begin
     earStructure, earTranslate, earUsers, earPassword];
   FEpiDocument.DataFiles[0].MainSection.Groups.AddItem(Grp);
 
-  LocalVLSets := FEpiDocument.ValueLabelSets;
+{  LocalVLSets := FEpiDocument.ValueLabelSets;
   VLSet := LocalVLSets.NewValueLabelSet(ftInteger);
   VLSet.Name := 'The Set';
   for i := 1 to 10 do
@@ -448,7 +448,7 @@ begin
       TheLabel.Text := DupeString(IntToStr(i), 4);
       if (i mod 2) = 0 then
         IsMissingValue := true;
-    end;
+    end;                 }
   {$ENDIF}
 end;
 
