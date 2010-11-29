@@ -5,8 +5,8 @@ unit structure_form;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  Grids, ExtCtrls, StdCtrls, ActnList, epidocument, epivaluelabels;
+  Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
+  ComCtrls, Grids, ExtCtrls, StdCtrls, ActnList, epidocument, epivaluelabels;
 
 type
 
@@ -22,6 +22,8 @@ type
     CloseFormAction: TAction;
     ActionList1: TActionList;
     DataFilesGrid: TStringGrid;
+    Label5: TLabel;
+    NumberOfValueLabelSetsLabelOverview: TLabel;
     ValueLabelsGrid: TStringGrid;
     Label1: TLabel;
     Label2: TLabel;
@@ -39,8 +41,10 @@ type
     ValueLabelsSummarySheet: TTabSheet;
     ValueLabelsTabSheet: TTabSheet;
     procedure CloseFormActionExecute(Sender: TObject);
+    procedure DataFilesGridDblClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
+    procedure ValueLabelsGridDblClick(Sender: TObject);
   private
     FDocument: TEpiDocument;
     { private declarations }
@@ -92,9 +96,35 @@ begin
   PageCtrl.ActivePage := ProjectOverviewTab;
 end;
 
+procedure TProject_Structure_Form.ValueLabelsGridDblClick(Sender: TObject);
+var
+  Col, Row: Longint;
+  P: TPoint;
+begin
+  P := ValueLabelsGrid.ScreenToClient(Mouse.CursorPos);
+  ValueLabelsGrid.MouseToCell(P.X, P.Y, Col, Row);
+  if (Row <= 0) or (Col <= 0) then exit;
+
+  With ValueLabelsPageCtrl do
+    ActivePage := Pages[Row];
+end;
+
 procedure TProject_Structure_Form.CloseFormActionExecute(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TProject_Structure_Form.DataFilesGridDblClick(Sender: TObject);
+var
+  Col, Row: Longint;
+  P: TPoint;
+begin
+  P := DataFilesGrid.ScreenToClient(Mouse.CursorPos);
+  DataFilesGrid.MouseToCell(P.X, P.Y, Col, Row);
+  if (Row <= 0) or (Col <= 0) then exit;
+
+  With PageCtrl do
+    ActivePage := Pages[Row];
 end;
 
 procedure TProject_Structure_Form.FormCloseQuery(Sender: TObject;
@@ -127,9 +157,11 @@ begin
     NumberOfDataSetsLabel.Caption := IntToStr(Document.DataFiles.Count);
     CreatedLabel.Caption          := DateTimeToStr(Document.Study.Created);
     LastModifiedLabel.Caption     := DateTimeToStr(Document.Study.ModifiedDate);
+    NumberOfValueLabelSetsLabelOverview.Caption := IntToStr(Document.ValueLabelSets.Count);
 
     with DataFilesGrid do
     begin
+      AllowOutboundEvents := false;;
       Cells[0, 0] := 'No';
       Cells[1, 0] := 'Name';
       Cells[2, 0] := '# Records';
@@ -164,6 +196,7 @@ begin
     NumberOfValueLabelSetsLabel.Caption := IntToStr(Document.ValueLabelSets.Count);
     with ValueLabelsGrid do
     begin
+      AllowOutboundEvents := false;;
       ColCount := 4;
       RowCount := Document.ValueLabelSets.Count + 1;
 

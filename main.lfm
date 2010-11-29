@@ -1,10 +1,10 @@
 object MainForm: TMainForm
-  Left = 579
-  Height = 616
-  Top = 226
+  Left = 466
+  Height = 603
+  Top = 280
   Width = 1040
   Caption = 'MainForm'
-  ClientHeight = 591
+  ClientHeight = 578
   ClientWidth = 1040
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
@@ -14,7 +14,7 @@ object MainForm: TMainForm
   LCLVersion = '0.9.29'
   object PageControl1: TPageControl
     Left = 0
-    Height = 591
+    Height = 578
     Top = 0
     Width = 1040
     Align = alClient
@@ -26,6 +26,12 @@ object MainForm: TMainForm
     top = 192
     object FileMenuItem: TMenuItem
       Caption = '&File'
+      object NewProjectMenuItem: TMenuItem
+        Action = NewProjectAction
+      end
+      object FileMenuDivider1: TMenuItem
+        Caption = '-'
+      end
       object OpenProjectMenuItem: TMenuItem
         Caption = '&Open'
       end
@@ -37,7 +43,10 @@ object MainForm: TMainForm
       object SaveProjectAsMenuItem: TMenuItem
         Caption = 'Save &As'
       end
-      object FileMenuDivider1: TMenuItem
+      object CloseProjectMenuItem: TMenuItem
+        Action = CloseProjectAction
+      end
+      object FileMenuDivider2: TMenuItem
         Caption = '-'
       end
       object FileExitMenuItem: TMenuItem
@@ -129,8 +138,10 @@ object MainForm: TMainForm
       OnExecute = ShowWorkFlowActionExecute
     end
     object NewProjectAction: TAction
-      Caption = 'NewProjectAction'
+      Category = 'File'
+      Caption = '&New Project'
       OnExecute = NewProjectActionExecute
+      ShortCut = 16462
     end
     object SettingsAction: TAction
       Category = 'Edit'
@@ -169,6 +180,13 @@ object MainForm: TMainForm
       Category = 'Edit'
       Caption = 'Default Window Position'
       OnExecute = DefaultWindowPosActionExecute
+    end
+    object CloseProjectAction: TAction
+      Category = 'File'
+      Caption = 'Close Project'
+      OnExecute = CloseProjectActionExecute
+      OnUpdate = CloseProjectActionUpdate
+      ShortCut = 16499
     end
   end
 end

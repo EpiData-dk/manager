@@ -13,6 +13,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    CloseProjectAction: TAction;
     DefaultWindowPosAction: TAction;
     CheckVersionAction: TAction;
     CopyProjectInfoAction: TAction;
@@ -22,6 +23,9 @@ type
     AboutMenuItem: TMenuItem;
     CheckVersionMenuItem: TMenuItem;
     ExportStataMenuItem: TMenuItem;
+    FileMenuDivider1: TMenuItem;
+    CloseProjectMenuItem: TMenuItem;
+    NewProjectMenuItem: TMenuItem;
     ResetWindowPosMenuItem: TMenuItem;
     ValueLabelsMenuItem: TMenuItem;
     ProjectMenuDivider1: TMenuItem;
@@ -31,7 +35,7 @@ type
     FileExitAction: TFileExit;
     FileExitMenuItem: TMenuItem;
     HelpMenu: TMenuItem;
-    FileMenuDivider1: TMenuItem;
+    FileMenuDivider2: TMenuItem;
     EditMenuDivider1: TMenuItem;
     ProjectPropertiesMenuItem: TMenuItem;
     ProjectMenu: TMenuItem;
@@ -55,6 +59,8 @@ type
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
     procedure CheckVersionActionExecute(Sender: TObject);
+    procedure CloseProjectActionExecute(Sender: TObject);
+    procedure CloseProjectActionUpdate(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -76,8 +82,10 @@ type
     procedure SetModified(const AValue: boolean);
     procedure ProjectModified(Sender: TObject);
     procedure LoadIniFile;
+    function  DoCloseProject: boolean;
   public
     { public declarations }
+    constructor Create(TheOwner: TComponent); override;
     property Modified: boolean read FModified write SetModified;
     procedure RestoreDefaultPos;
   end;
@@ -99,14 +107,10 @@ uses
 procedure TMainForm.FormShow(Sender: TObject);
 begin
   SetCaption;
-//  ShowWorkFlowAction.Execute;
 
   LoadIniFile;
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'MainForm');
-
-  NewProjectAction.Execute;
-  TDesignFrame(TProjectFrame(PageControl1.ActivePage.Controls[0]).ActiveFrame).UpdateFrame;
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -116,15 +120,9 @@ begin
   CanClose := true;
 
   {$IFDEF EPI_RELEASE}
-  if Modified then
+  if Assigned(FActiveFrame) then
   begin
-    res := MessageDlg('Warning', 'Content has been modified since last save.' + LineEnding +
-             'Save before close?', mtWarning, mbYesNoCancel, 0, mbCancel);
-    case res of
-      mrYes:    SaveProjectMenuItem.Action.Execute;
-      mrNo:     exit;
-      mrCancel: CanClose := false;
-    end;
+    TProjectFrame(FActiveFrame).CloseQuery(CanClose);
   end;
   {$ENDIF}
 
@@ -199,20 +197,30 @@ begin
   ShowMessage(S);
 end;
 
+procedure TMainForm.CloseProjectActionExecute(Sender: TObject);
+begin
+  DoCloseProject;
+end;
+
+procedure TMainForm.CloseProjectActionUpdate(Sender: TObject);
+begin
+  CloseProjectAction.Enabled := Assigned(FActiveFrame);
+end;
+
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Modified := false;
-  {$IFDEF EPI_RELEASE}
-  Width := 800;
-  Height := 600;
-  {$ENDIF}
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
 var
   TabSheet: TTabSheet;
   Frame: TProjectFrame;
+  CanClose: boolean;
 begin
+  // Close Old frame (since we dont support multi projects yet.)
+  if not DoCloseProject then exit;
+
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -335,6 +343,25 @@ begin
   if not DirectoryExistsUTF8(GetAppConfigDirUTF8(false)) then
     CreateDirUTF8(GetAppConfigDirUTF8(false));
   ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
+end;
+
+function TMainForm.DoCloseProject: boolean;
+begin
+  result := true;
+  if Assigned(FActiveFrame) then
+  begin
+    TProjectFrame(FActiveFrame).CloseQuery(result);
+    if not Result then exit;
+
+    PageControl1.ActivePage.Free;
+    FActiveFrame := nil;
+  end;
+end;
+
+constructor TMainForm.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+  FActiveFrame := nil;
 end;
 
 procedure TMainForm.RestoreDefaultPos;

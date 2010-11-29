@@ -68,6 +68,8 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    destructor  Destroy; override;
+    procedure   CloseQuery(var CanClose: boolean);
     procedure   RestoreDefaultPos;
     property   EpiDocument: TEpiDocument read FEpiDocument;
     property   ActiveFrame: TFrame read FActiveFrame;
@@ -108,7 +110,7 @@ begin
 
   Df := EpiDocument.DataFiles.NewDataFile;
   Df.Name.Text := 'Dataform ' + IntToStr(FrameCount);
-  DoCreateReleaseSections;
+//  DoCreateReleaseSections;
   EpiDocument.Modified := false;
 
   DoNewDataForm(Df);
@@ -416,7 +418,7 @@ begin
     earStructure, earTranslate, earUsers, earPassword];
   FEpiDocument.DataFiles[0].MainSection.Groups.AddItem(Grp);
 
-{  LocalVLSets := FEpiDocument.ValueLabelSets;
+  LocalVLSets := FEpiDocument.ValueLabelSets;
   VLSet := LocalVLSets.NewValueLabelSet(ftInteger);
   VLSet.Name := 'The Set';
   for i := 1 to 10 do
@@ -448,7 +450,7 @@ begin
       TheLabel.Text := DupeString(IntToStr(i), 4);
       if (i mod 2) = 0 then
         IsMissingValue := true;
-    end;                 }
+    end;
   {$ENDIF}
 end;
 
@@ -468,6 +470,7 @@ end;
 
 procedure TProjectFrame.SetOnModified(const AValue: TNotifyEvent);
 begin
+  if FOnModified = AValue then exit;
   FOnModified := AValue;
 end;
 
@@ -513,6 +516,31 @@ begin
   {$ELSE}
   ProjectPanel.Enabled := false;
   ProjectPanel.Visible := false;
+  {$ENDIF}
+end;
+
+destructor TProjectFrame.Destroy;
+begin
+  FEpiDocument.Free;
+  inherited Destroy;
+end;
+
+procedure TProjectFrame.CloseQuery(var CanClose: boolean);
+var
+  res: LongInt;
+begin
+  CanClose := true;
+  {$IFDEF EPI_RELEASE}
+  if Modified or EpiDocument.Modified then
+  begin
+    res := MessageDlg('Warning', 'Content has been modified since last save.' + LineEnding +
+             'Save before close?', mtWarning, mbYesNoCancel, 0, mbCancel);
+    case res of
+      mrYes:    SaveProjectAction.Execute;
+      mrNo:     exit;
+      mrCancel: CanClose := false;
+    end;
+  end;
   {$ENDIF}
 end;
 

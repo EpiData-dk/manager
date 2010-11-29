@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 359
-  DesignTop = 234
+  DesignLeft = 725
+  DesignTop = 308
   object ProjectPanel: TPanel
     Left = 0
     Height = 658

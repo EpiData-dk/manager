@@ -146,7 +146,7 @@ implementation
 
 uses
   epidatafilestypes, math, types, valuelabelseditor_form, epiadmin,
-  LCLProc, settings2_var, settings2, epimiscutils;
+  LCLProc, settings2_var, settings2, epimiscutils, main;
 
 const
   rsVLWarning = 'Warning: Valuelabels have changed...';
@@ -291,7 +291,8 @@ end;
 
 procedure TDesignControlsForm.ApplyActionExecute(Sender: TObject);
 begin
-  ValidateControl;
+  if ValidateControl then
+    MainForm.SetFocus;
 end;
 
 procedure TDesignControlsForm.CancelActionExecute(Sender: TObject);
@@ -339,6 +340,10 @@ begin
     // Basic Page
     SectionNameEdit.Text := FSection.Name.Text;
 
+    {$IFNDEF EPI_DEBUG}
+    SectionGroupAccessGroupBox.Visible := false;
+    SectionGroupAccessGroupBox.Enabled := false;
+    {$ELSE}
     GroupAssignedListBox.Items.BeginUpdate;
     GroupAvailableListBox.Items.BeginUpdate;
     GroupAssignedListBox.Clear;
@@ -353,6 +358,7 @@ begin
     end;
     GroupAvailableListBox.Items.EndUpdate;
     GroupAssignedListBox.Items.EndUpdate;
+    {$ENDIF}
 
     // Advanced Page
     WidthEdit.Text := IntToStr(FSection.Width);
@@ -369,7 +375,10 @@ begin
     NameEdit.Text         := FField.Name;
     FieldTypeLabel.Caption := EpiTypeNames[FField.FieldType];
     QuestionEdit.Text     := FField.Question.Caption.Text;
-    LengthEdit.Text       := IntToStr(FField.Length);
+    if FField.FieldType = ftFloat then
+      LengthEdit.Text     := IntToStr(FField.Length - (FField.Decimals + 1))
+    else
+      LengthEdit.Text     := IntToStr(FField.Length);
     DecimalsEdit.Text     := IntToStr(FField.Decimals);
 
     // Visible edits
