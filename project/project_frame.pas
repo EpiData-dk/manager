@@ -21,7 +21,6 @@ type
     DeleteDataFormAction: TAction;
     SaveProjectAsAction: TAction;
     SaveProjectAction: TAction;
-    OpenProjectAction: TAction;
     ProjectImageList: TImageList;
     NewDataFormAction: TAction;
     ActionList1: TActionList;
@@ -38,7 +37,6 @@ type
     ToolButton7: TToolButton;
     procedure ExportStataActionExecute(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
-    procedure OpenProjectActionExecute(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
@@ -71,6 +69,7 @@ type
     destructor  Destroy; override;
     procedure   CloseQuery(var CanClose: boolean);
     procedure   RestoreDefaultPos;
+    procedure   UpdateFrame;
     property   EpiDocument: TEpiDocument read FEpiDocument;
     property   ActiveFrame: TFrame read FActiveFrame;
     property   ProjectFileName: string read FFileName write FFileName;
@@ -139,26 +138,6 @@ begin
     SaveDlg.Free;
     Exporter.Free;
   end;
-end;
-
-procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
-var
-  Dlg: TOpenDialog;
-begin
-  Dlg := TOpenDialog.Create(self);
-  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
-    false, false, false, true, false);
-
-  {$IFNDEF EPI_DEBUG}
-  if MessageDlg('Warning', 'Opening project will clear all.' + LineEnding +
-       'Continue?',
-       mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
-  {$ENDIF}
-
-  if not Dlg.Execute then exit;
-  DoOpenProject(Dlg.FileName);
-  Dlg.Free;
 end;
 
 procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);
@@ -550,6 +529,13 @@ begin
   if Assigned(FActiveFrame) then
     TDesignFrame(FActiveFrame).RestoreDefaultPos;
   TProject_Structure_Form.RestoreDefaultPos;
+end;
+
+procedure TProjectFrame.UpdateFrame;
+begin
+  // TODO : Update all frames.
+  if Assigned(FActiveFrame) then
+    TDesignFrame(FActiveFrame).UpdateFrame;
 end;
 
 end.

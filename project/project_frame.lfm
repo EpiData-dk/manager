@@ -6,7 +6,7 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 725
+  DesignLeft = 614
   DesignTop = 308
   object ProjectPanel: TPanel
     Left = 0
@@ -45,8 +45,10 @@ object ProjectFrame: TProjectFrame
       Transparent = True
       object OpenProjectToolBtn: TToolButton
         Left = 2
+        Hint = 'Open Project'
         Top = 1
-        Action = OpenProjectAction
+        Caption = '&Open Project'
+        ImageIndex = 0
         ParentShowHint = False
         ShowHint = True
       end
@@ -106,14 +108,6 @@ object ProjectFrame: TProjectFrame
     Images = ProjectImageList
     left = 624
     top = 256
-    object OpenProjectAction: TAction
-      Category = 'File'
-      Caption = '&Open Project'
-      Hint = 'Open Project'
-      ImageIndex = 0
-      OnExecute = OpenProjectActionExecute
-      ShortCut = 16463
-    end
     object SaveProjectAction: TAction
       Category = 'File'
       Caption = '&Save Project'

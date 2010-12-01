@@ -13,6 +13,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    OpenProjectAction: TAction;
     CloseProjectAction: TAction;
     DefaultWindowPosAction: TAction;
     CheckVersionAction: TAction;
@@ -67,6 +68,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
+    procedure OpenProjectActionExecute(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
@@ -83,6 +85,7 @@ type
     procedure ProjectModified(Sender: TObject);
     procedure LoadIniFile;
     function  DoCloseProject: boolean;
+    procedure UpdateMainMenu;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -135,7 +138,7 @@ var
   S: String;
 begin
   S := GetProgramInfo;
-  if Assigned(TProjectFrame(FActiveFrame).EpiDocument) then
+  if Assigned(FActiveFrame) then
   with TProjectFrame(FActiveFrame).EpiDocument do
   begin
     S := S + LineEnding +
@@ -239,6 +242,7 @@ begin
   PageControl1.ActivePage := TabSheet;
 
   // Only as long as one project is created!
+  UpdateMainMenu;
   SaveProjectMenuItem.Action := Frame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := Frame.SaveProjectAsAction;
   OpenProjectMenuItem.Action := Frame.OpenProjectAction;
@@ -257,6 +261,29 @@ begin
   Inc(TabNameCount);
 end;
 
+procedure TMainForm.OpenProjectActionExecute(Sender: TObject);
+var
+  Dlg: TOpenDialog;
+begin
+  Dlg := TOpenDialog.Create(self);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+  Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
+    false, false, false, true, false);
+
+  {$IFDEF EPI_RELEASE}
+  if Assigned(FActiveFrame) and
+     (MessageDlg('Warning', 'Opening project will clear all.' + LineEnding +
+       'Continue?',
+       mtWarning, mbYesNo, 0, mbNo) = mrNo) then exit;
+  {$ENDIF}
+
+  if not Dlg.Execute then exit;
+  DoCloseProject;
+
+//  DoOpenProject(Dlg.FileName);
+  Dlg.Free;
+end;
+
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
 var
   SettingForm: TSettingsForm;
@@ -265,7 +292,8 @@ begin
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
 
-  TDesignFrame(TProjectFrame(PageControl1.ActivePage.Controls[0]).ActiveFrame).UpdateFrame;
+  if Assigned(FActiveFrame) then
+    TProjectFrame(FActiveFrame).UpdateFrame;
 end;
 
 procedure TMainForm.ShortCutKeysMenuItemClick(Sender: TObject);
@@ -356,18 +384,44 @@ begin
     PageControl1.ActivePage.Free;
     FActiveFrame := nil;
   end;
+  UpdateMainMenu;
+end;
+
+procedure TMainForm.UpdateMainMenu;
+begin
+  // FILE:
+  CloseProjectAction.Enabled := Assigned(FActiveFrame);
+  OpenProjectMenuItem.Visible := Assigned(FActiveFrame);
+  SaveProjectMenuItem.Visible := Assigned(FActiveFrame);
+  SaveProjectAsMenuItem.Visible := Assigned(FActiveFrame);
+
+  // EDIT:
+  PasteAsQESMenuItem.Visible := Assigned(FActiveFrame);
+  PasteAsFloatMenuItem.Visible := Assigned(FActiveFrame);
+  PasteAsHeadingMenuItem.Visible := Assigned(FActiveFrame);
+  PasteAsIntMenuItem.Visible := Assigned(FActiveFrame);
+  PasteAsStringMenuItem.Visible := Assigned(FActiveFrame);
+  EditMenuDivider1.Visible := Assigned(FActiveFrame);
+
+  // PROJECT:
+  ProjectMenu.Visible := Assigned(FActiveFrame);
+
+  // TOOLS:
+  ToolsMenu.Visible := Assigned(FActiveFrame);
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FActiveFrame := nil;
+  UpdateMainMenu;
 end;
 
 procedure TMainForm.RestoreDefaultPos;
 begin
   if Assigned(FActiveFrame) then;
     TProjectFrame(FActiveFrame).RestoreDefaultPos;
+
   TSettingsForm.RestoreDefaultPos;
 
   BeginFormUpdate;
