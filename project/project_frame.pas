@@ -54,10 +54,12 @@ type
     function  DoCreateNewDocument: TEpiDocument;
     function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
     procedure DoSaveProject(AFileName: string);
-    procedure DoOpenProject(AFileName: string);
+    procedure DoOpenProject(Const AFileName: string);
     procedure DoNewDataForm(Df: TEpiDataFile);
     procedure DoCloseProject;
-    procedure DoCreateReleaseSections;
+    {$IFDEF EPI_DEBUG}
+    procedure AddDebugingContent;
+    {$ENDIF}
     procedure EpiDocumentModified(Sender: TObject);
     procedure SaveDlgTypeChange(Sender: TObject);
     procedure SetModified(const AValue: Boolean);
@@ -70,6 +72,7 @@ type
     procedure   CloseQuery(var CanClose: boolean);
     procedure   RestoreDefaultPos;
     procedure   UpdateFrame;
+    procedure   OpenProject(Const AFileName: string);
     property   EpiDocument: TEpiDocument read FEpiDocument;
     property   ActiveFrame: TFrame read FActiveFrame;
     property   ProjectFileName: string read FFileName write FFileName;
@@ -109,7 +112,6 @@ begin
 
   Df := EpiDocument.DataFiles.NewDataFile;
   Df.Name.Text := 'Dataform ' + IntToStr(FrameCount);
-//  DoCreateReleaseSections;
   EpiDocument.Modified := false;
 
   DoNewDataForm(Df);
@@ -255,7 +257,7 @@ begin
   UpdateCaption;
 end;
 
-procedure TProjectFrame.DoOpenProject(AFileName: string);
+procedure TProjectFrame.DoOpenProject(Const AFileName: string);
 var
   St: TMemoryStream;
 begin
@@ -287,6 +289,10 @@ begin
   Frame.DataFile := Df;
   FActiveFrame := Frame;
 
+  {$IFDEF EPI_DEBUG}
+  AddDebugingContent;
+  {$ENDIF}
+
   DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Name.Text, Frame);
   TEpiDataFileEx(Df).TreeNode := DataFilesTreeView.Selected;
   Df.Name.RegisterOnChangeHook(@OnDataFileChange);
@@ -295,92 +301,23 @@ end;
 procedure TProjectFrame.DoCloseProject;
 begin
   if not Assigned(FEpiDocument) then exit;
-
   FreeAndNil(FEpiDocument);
+  CloseValueLabelsEditor;
 
   // TODO : Delete ALL dataforms!
   FreeAndNil(FActiveFrame);
   DataFilesTreeView.Items.Clear;
 end;
 
-procedure TProjectFrame.DoCreateReleaseSections;
+{$IFDEF EPI_DEBUG}
+procedure TProjectFrame.AddDebugingContent;
 var
   i: Integer;
-  {$IFDEF EPI_RELEASE}
-  TmpEpiSection: TEpiSection;
-  H: TEpiHeading;
-  {$ENDIF EPI_RELEASE}
-  {$IFDEF EPI_DEBUG}
   LocalAdm: TEpiAdmin;
   Grp: TEpiGroup;
   LocalVLSets: TEpiValueLabelSets;
   VLSet: TEpiValueLabelSet;
-  {$ENDIF}
 begin
-  {$IFDEF EPI_RELEASE}
-  with FEpiDocument.DataFiles[0] do
-  begin
-    TmpEpiSection := NewSection;
-    TmpEpiSection.Name.Text := 'This is a test module for EpiData Manager';
-    TmpEpiSection.Top := 5;
-    TmpEpiSection.Left := 20;
-    TmpEpiSection.Width := {$IFDEF WINDOWS}600{$ELSE}700{$ENDIF};
-    TmpEpiSection.Height := 315;
-
-    for i := 1 to 14 do
-    begin
-      H := TmpEpiSection.NewHeading;
-      H.Left := 20;
-      H.Top  := 20 * (i - 1) + 5;
-
-      if (i >= 4) and (i <= 10) then
-        H.Left := 30;
-      if (i = 13) then
-        H.Left := {$IFDEF WINDOWS}70{$ELSE}90{$ENDIF};
-
-      case i of
-         1: H.Caption.Text := 'Comment and discuss on the epidata-list, see http://www.epidata.dk.';
-         2: H.Caption.Text := 'Please test: add fields, headings and sections. Import old datafiles.';
-         3: H.Caption.Text := '========================================================';
-         4: H.Caption.Text := 'A: Add fields and sections - click on buttons above and click in the form';
-         5: H.Caption.Text := 'B: Move fields/headings into and out of sections.';
-         6: H.Caption.Text := 'C: Edit or delete fields, sections & headings (red "X"/"DEL"/"ENTER" key/pencil).';
-         7: H.Caption.Text := 'D: Open/Save projects in new EpiData XML File format. (See "File" menu)';
-         8: H.Caption.Text := ' -- NEW in this version --';
-         9: H.Caption.Text := 'E: Paste text as fields - (See "Edit" menu or right click with mouse)';
-        10: H.Caption.Text := 'F: Only unique field names allowed.';
-        11: H.Caption.Text := '========================================================';
-        12: H.Caption.Text := 'NOTE 1): A section is a subdevision of a data entry form.';
-        13: H.Caption.Text := 'Later restricted access (via password) can be tied to section level';
-        14: H.Caption.Text := 'NOTE 2): Export is NOT part of this test release.';
-      end;
-    end;
-
-    TmpEpiSection := NewSection;
-    TmpEpiSection.Name.Text := 'Known major bugs in EpiData Manager:';
-    TmpEpiSection.Top := 335;
-    TmpEpiSection.Left := 20;
-    TmpEpiSection.Width := {$IFDEF WINDOWS}600{$ELSE}700{$ENDIF};
-    TmpEpiSection.Height := 110;
-
-    for i := 1 to 4 do
-    begin
-      H := TmpEpiSection.NewHeading;
-      H.Left := 30;
-      H.Top  := 20 * (i - 1) + 5;
-      if (i = 2) or (i = 5) then
-        H.Left := {$IFDEF WINDOWS}45{$ELSE}50{$ENDIF};
-      case i of
-        1: H.Caption.Text := 'A: On creating a new section dragging the cursor outside the program and';
-        2: H.Caption.Text := 'releasing the button, can cause the drawn area not to disapear. (Windows only)';
-        3: H.Caption.Text := 'B: Dragging fields/headings/sections in Mac OS X may not always work.';
-        4: H.Caption.Text := 'C: Dragging field/heading within same section does strange things.';
-      end;
-    end;
-  end;
-  {$ENDIF}
-
-  {$IFDEF EPI_DEBUG}
   // DEBUGGING!!!!
   LocalAdm := FEpiDocument.Admin;
   Grp := LocalAdm.NewGroup;
@@ -430,8 +367,8 @@ begin
       if (i mod 2) = 0 then
         IsMissingValue := true;
     end;
-  {$ENDIF}
 end;
+{$ENDIF}
 
 procedure TProjectFrame.EpiDocumentModified(Sender: TObject);
 begin
@@ -500,7 +437,7 @@ end;
 
 destructor TProjectFrame.Destroy;
 begin
-  FEpiDocument.Free;
+  DoCloseProject;
   inherited Destroy;
 end;
 
@@ -536,6 +473,11 @@ begin
   // TODO : Update all frames.
   if Assigned(FActiveFrame) then
     TDesignFrame(FActiveFrame).UpdateFrame;
+end;
+
+procedure TProjectFrame.OpenProject(const AFileName: string);
+begin
+  DoOpenProject(AFileName);
 end;
 
 end.

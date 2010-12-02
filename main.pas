@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList, StdActns;
+  Menus, ComCtrls, ActnList, StdActns, project_frame;
 
 type
 
@@ -54,7 +54,6 @@ type
     EditMenuItem: TMenuItem;
     SettingsMenuItem: TMenuItem;
     NewProjectAction: TAction;
-    ShowWorkFlowAction: TAction;
     ActionList1: TActionList;
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
@@ -73,18 +72,18 @@ type
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
     procedure ShowAboutActionExecute(Sender: TObject);
-    procedure ShowWorkFlowActionExecute(Sender: TObject);
   private
-    FModified: boolean;
     { private declarations }
-    WorkFlowSheet: TTabSheet;
-    FActiveFrame: TFrame;
+    FModified: boolean;
+    FActiveFrame: TProjectFrame;
     TabNameCount: integer;
     procedure SetCaption;
     procedure SetModified(const AValue: boolean);
     procedure ProjectModified(Sender: TObject);
     procedure LoadIniFile;
     function  DoCloseProject: boolean;
+    procedure DoNewProject;
+    procedure DoOpenProject(Const AFileName: string);
     procedure UpdateMainMenu;
   public
     { public declarations }
@@ -101,9 +100,9 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, project_frame, LCLProc, LCLIntf, design_frame,
+  workflow_frame, LCLProc, LCLIntf, design_frame,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
-  design_controls, structure_form, valuelabelseditor_form;
+  design_controls, structure_form, valuelabelseditor_form, epimiscutils;
 
 { TMainForm }
 
@@ -216,49 +215,8 @@ begin
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
-var
-  TabSheet: TTabSheet;
-  Frame: TProjectFrame;
-  CanClose: boolean;
 begin
-  // Close Old frame (since we dont support multi projects yet.)
-  if not DoCloseProject then exit;
-
-  TabSheet := TTabSheet.Create(PageControl1);
-  TabSheet.PageControl := PageControl1;
-  TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
-  TabSheet.Caption := 'Untitled';
-
-//  if PageControl1.PageCount >= 1 then
-//    PageControl1.ShowTabs := true;
-
-  Frame := TProjectFrame.Create(TabSheet);
-  Frame.Name := 'ProjectFrame' + IntToStr(TabNameCount);
-  Frame.Align := alClient;
-  Frame.Parent := TabSheet;
-  Frame.OnModified := @ProjectModified;
-  Frame.NewDataFormAction.Execute;
-  FActiveFrame := Frame;
-  PageControl1.ActivePage := TabSheet;
-
-  // Only as long as one project is created!
-  UpdateMainMenu;
-  SaveProjectMenuItem.Action := Frame.SaveProjectAction;
-  SaveProjectAsMenuItem.Action := Frame.SaveProjectAsAction;
-  OpenProjectMenuItem.Action := Frame.OpenProjectAction;
-
-  PasteAsQESMenuItem.Action     := TDesignFrame(Frame.ActiveFrame).PasteAsQESAction;
-  PasteAsHeadingMenuItem.Action := TDesignFrame(Frame.ActiveFrame).PasteAsHeadingAction;
-  PasteAsIntMenuItem.Action     := TDesignFrame(Frame.ActiveFrame).PasteAsIntAction;
-  PasteAsFloatMenuItem.Action   := TDesignFrame(Frame.ActiveFrame).PasteAsFloatAction;
-  PasteAsStringMenuItem.Action  := TDesignFrame(Frame.ActiveFrame).PasteAsStringAction;
-
-  ProjectPropertiesMenuItem.Action := Frame.ProjectSettingsAction;
-  ExportStataMenuItem.Action       := Frame.ExportStataAction;
-  ProjectStructureMenuItem.Action  := Frame.ShowStructureAction;
-  ValueLabelsMenuItem.Action       := Frame.ValueLabelEditorAction;
-
-  Inc(TabNameCount);
+  DoNewProject;
 end;
 
 procedure TMainForm.OpenProjectActionExecute(Sender: TObject);
@@ -270,17 +228,10 @@ begin
   Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
     false, false, false, true, false);
 
-  {$IFDEF EPI_RELEASE}
-  if Assigned(FActiveFrame) and
-     (MessageDlg('Warning', 'Opening project will clear all.' + LineEnding +
-       'Continue?',
-       mtWarning, mbYesNo, 0, mbNo) = mrNo) then exit;
-  {$ENDIF}
-
   if not Dlg.Execute then exit;
-  DoCloseProject;
+  if not DoCloseProject then exit;
 
-//  DoOpenProject(Dlg.FileName);
+  DoOpenProject(Dlg.FileName);
   Dlg.Free;
 end;
 
@@ -319,24 +270,6 @@ begin
   Frm := TAboutForm.Create(Self);
   Frm.ShowModal;
   Frm.Free;
-end;
-
-procedure TMainForm.ShowWorkFlowActionExecute(Sender: TObject);
-begin
-  if not Assigned(WorkFlowSheet) then
-  begin
-    WorkFlowSheet := TTabSheet.Create(PageControl1);
-    FActiveFrame := TWorkFlowFrame.Create(WorkFlowSheet);
-    with FActiveFrame do
-    begin
-      Parent := WorkFlowSheet;
-      Align := alClient;
-    end;
-    WorkFlowSheet.Parent := PageControl1;
-    WorkFlowSheet.PageIndex := 0;
-    WorkFlowSheet.Caption := 'WorkFlow';
-  end;
-  PageControl1.ActivePage := WorkFlowSheet;
 end;
 
 procedure TMainForm.SetCaption;
@@ -385,13 +318,62 @@ begin
     FActiveFrame := nil;
   end;
   UpdateMainMenu;
+  SetCaption;
+end;
+
+procedure TMainForm.DoNewProject;
+var
+  TabSheet: TTabSheet;
+  CanClose: boolean;
+begin
+  // Close Old project
+  if not DoCloseProject then exit;
+
+  TabSheet := TTabSheet.Create(PageControl1);
+  TabSheet.PageControl := PageControl1;
+  TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
+  TabSheet.Caption := 'Untitled';
+
+//  if PageControl1.PageCount >= 1 then
+//    PageControl1.ShowTabs := true;
+
+  FActiveFrame := TProjectFrame.Create(TabSheet);
+  FActiveFrame.Name := 'ProjectFrame' + IntToStr(TabNameCount);
+  FActiveFrame.Align := alClient;
+  FActiveFrame.Parent := TabSheet;
+  FActiveFrame.OnModified := @ProjectModified;
+  FActiveFrame.NewDataFormAction.Execute;
+  PageControl1.ActivePage := TabSheet;
+
+  // Only as long as one project is created!
+  UpdateMainMenu;
+  SaveProjectMenuItem.Action := FActiveFrame.SaveProjectAction;
+  SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
+
+  PasteAsQESMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsQESAction;
+  PasteAsHeadingMenuItem.Action := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
+  PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
+  PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
+  PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
+
+  ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
+  ExportStataMenuItem.Action       := FActiveFrame.ExportStataAction;
+  ProjectStructureMenuItem.Action  := FActiveFrame.ShowStructureAction;
+  ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
+
+  Inc(TabNameCount);
+end;
+
+procedure TMainForm.DoOpenProject(const AFileName: string);
+begin
+  DoNewProject;
+  FActiveFrame.OpenProject(AFileName);
 end;
 
 procedure TMainForm.UpdateMainMenu;
 begin
   // FILE:
   CloseProjectAction.Enabled := Assigned(FActiveFrame);
-  OpenProjectMenuItem.Visible := Assigned(FActiveFrame);
   SaveProjectMenuItem.Visible := Assigned(FActiveFrame);
   SaveProjectAsMenuItem.Visible := Assigned(FActiveFrame);
 

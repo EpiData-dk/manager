@@ -33,7 +33,7 @@ object MainForm: TMainForm
         Caption = '-'
       end
       object OpenProjectMenuItem: TMenuItem
-        Caption = '&Open'
+        Action = OpenProjectAction
       end
       object SaveProjectMenuItem: TMenuItem
         Caption = '&Save'
@@ -133,10 +133,6 @@ object MainForm: TMainForm
   object ActionList1: TActionList
     left = 416
     top = 208
-    object ShowWorkFlowAction: TAction
-      Caption = 'ShowWorkFlowAction'
-      OnExecute = ShowWorkFlowActionExecute
-    end
     object NewProjectAction: TAction
       Category = 'File'
       Caption = '&New Project'

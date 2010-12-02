@@ -107,6 +107,7 @@ type
   end;
 
 function GetValueLabelsEditor(EpiDoc: TEpiDocument): TValueLabelEditor;
+procedure CloseValueLabelsEditor;
 
 implementation
 
@@ -124,6 +125,13 @@ begin
     TheValueLabelEditor := TValueLabelEditor.Create(MainForm);
   TheValueLabelEditor.SetEpiDocument(EpiDoc);
   result := TheValueLabelEditor;
+end;
+
+procedure CloseValueLabelsEditor;
+begin
+  if Assigned(TheValueLabelEditor) and
+     TheValueLabelEditor.Showing then
+    TheValueLabelEditor.Close;
 end;
 
 { TValueLabelEditor }
