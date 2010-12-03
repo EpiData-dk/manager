@@ -85,6 +85,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     function    DoNewValueLabelSet(Ft: TEpiFieldType): TEpiValueLabelSet;
+    procedure   CompareTreeNodes(Sender: TObject; Node1, Node2: TTreeNode; var Compare: Integer);
     procedure   UpdateGridCells;
     procedure   ValueLabelsGridCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
     procedure   ValueLabelsGridColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex, tIndex: Integer);
@@ -96,9 +97,6 @@ type
     procedure   CalculateStatusbar;
     procedure   UpdateStatusbar;
     procedure   SetEpiDocument(EpiDoc: TEpiDocument);
-    procedure   UpdateTreeView;
-    procedure   ValueLabelSetHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure   ValueLabelSetsHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   public
     { public declarations }
     procedure   RestoreDefaultPos;
@@ -114,7 +112,7 @@ implementation
 {$R *.lfm}
 
 uses
-  project_frame, math, LCLType, main, settings2, settings2_var;
+  project_frame, math, LCLType, main, settings2, settings2_var, LCLProc;
 
 var
   TheValueLabelEditor: TValueLabelEditor = nil;
@@ -334,6 +332,7 @@ begin
     Align          := alClient;
     Parent         := Self;
   end;
+//  ValueLabelSetTreeView.OnCompare := @CompareTreeNodes;
 
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.HideInterval := 10 * 1000; // TODO : Adjust hint-timeout in settings.
@@ -353,6 +352,7 @@ function TValueLabelEditor.DoNewValueLabelSet(Ft: TEpiFieldType
   ): TEpiValueLabelSet;
 var
   i: Integer;
+  Node: TTreeNode;
 begin
   result := FValueLabelSets.NewValueLabelSet(Ft);
   result.name := '(untitled)';
@@ -362,7 +362,13 @@ begin
     result.Name := format('(untitled%d)', [i]);
     inc(i);
   end;
-  ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.FindNodeWithData(result);
+  Node := ValueLabelSetTreeView.Items.AddObject(nil, Result.Name, Result);
+  case ft of
+    ftInteger: Node.ImageIndex := 0;
+    ftFloat:   Node.ImageIndex := 1;
+    ftString:  Node.ImageIndex := 2;
+  end;
+  ValueLabelSetTreeView.Selected := Node;
   ValueLabelSetTreeView.CustomSort(nil);
 
   // Set manually as the ValueLabelSetTreeViewChange has not been fired at this point!
@@ -372,6 +378,13 @@ begin
   InsertGridRowAction.Execute;
   ValueLabelSetTreeView.Selected.EditText;
   UpdateStatusbar;
+end;
+
+procedure TValueLabelEditor.CompareTreeNodes(Sender: TObject; Node1,
+  Node2: TTreeNode; var Compare: Integer);
+begin
+  Compare := WideCompareStr(
+    UTF8Decode(Node1.Text), UTF8Decode(Node2.Text));
 end;
 
 procedure TValueLabelEditor.UpdateGridCells;
@@ -399,39 +412,12 @@ end;
 procedure TValueLabelEditor.SetEpiDocument(EpiDoc: TEpiDocument);
 var
   i: Integer;
+  Node: TTreeNode;
 begin
   if EpiDoc.ValueLabelSets <> FValueLabelSets then
-  begin
-    // Unregister previous hooks.
-    if Assigned(FValueLabelSets) then
-    begin
-      FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelSetsHook);
-      for i := 0 to FValueLabelSets.Count -1 do
-        FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelSetHook);
-    end;
-
     FValueLabelSets := EpiDoc.ValueLabelSets;
-    FValueLabelSets.RegisterOnChangeHook(@ValueLabelSetsHook, true);
-    for i := 0 to FValueLabelSets.Count -1 do
-      FValueLabelSets[i].RegisterOnChangeHook(@ValueLabelSetHook, True);
-  end;
-
-  UpdateTreeView;
-end;
-
-procedure TValueLabelEditor.UpdateTreeView;
-var
-  i: Integer;
-  Node: TTreeNode;
-  PreSelected: TObject;
-begin
-  if Assigned(ValueLabelSetTreeView.Selected) then
-    PreSelected := TObject(ValueLabelSetTreeView.Selected.Data)
-  else
-    PreSelected := nil;
 
   ValueLabelSetTreeView.BeginUpdate;
-  ValueLabelSetTreeView.SortType := stText;
   ValueLabelSetTreeView.Items.Clear;
   for i := 0 to FValueLabelSets.Count - 1 do
   begin
@@ -444,33 +430,6 @@ begin
   end;
   ValueLabelSetTreeView.CustomSort(nil);
   ValueLabelSetTreeView.EndUpdate;
-  ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.FindNodeWithData(PreSelected);
-
-  ValueLabelsGrid.Cells[0,0] := 'Order';
-  UpdateStatusbar;
-end;
-
-procedure TValueLabelEditor.ValueLabelSetHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-begin
-  if (EventGroup = eegValueLabels) and (EventType = Word(evceName)) then
-    UpdateTreeView;
-end;
-
-procedure TValueLabelEditor.ValueLabelSetsHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-begin
-  if (EventGroup = eegCustomBase) and (EventType = Word(ecceAddItem)) then
-  begin
-    TEpiValueLabelSet(Data).RegisterOnChangeHook(@ValueLabelSetHook, true);
-    UpdateTreeView;
-  end;
-
-  if (EventGroup = eegCustomBase) and (EventType = Word(ecceDelItem)) then
-  begin
-    TEpiValueLabelSet(Data).UnRegisterOnChangeHook(@ValueLabelSetHook);
-    UpdateTreeView;
-  end;
 end;
 
 procedure TValueLabelEditor.RestoreDefaultPos;
@@ -514,6 +473,7 @@ begin
 
   FValueLabelSets.RemoveItem(VLSet);
   VLSet.Free;
+  ValueLabelSetTreeView.Items.Delete(Node);
   ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.FindNodeWithData(Data);
 end;
 

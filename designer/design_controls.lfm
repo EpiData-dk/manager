@@ -238,8 +238,8 @@ object DesignControlsForm: TDesignControlsForm
         TabOrder = 0
         object FieldBasicSheet: TTabSheet
           Caption = 'Basic'
-          ClientHeight = 329
-          ClientWidth = 432
+          ClientHeight = 360
+          ClientWidth = 434
           object DecimalsEdit: TEdit
             Left = 162
             Height = 27
@@ -327,8 +327,8 @@ object DesignControlsForm: TDesignControlsForm
         end
         object FieldAdvancedSheet: TTabSheet
           Caption = 'Advanced'
-          ClientHeight = 329
-          ClientWidth = 432
+          ClientHeight = 360
+          ClientWidth = 434
           object ValueLabelComboBox: TComboBox
             Left = 5
             Height = 31

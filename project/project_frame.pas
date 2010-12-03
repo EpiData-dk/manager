@@ -318,7 +318,7 @@ var
   LocalVLSets: TEpiValueLabelSets;
   VLSet: TEpiValueLabelSet;
 begin
-  // DEBUGGING!!!!
+{  // DEBUGGING!!!!
   LocalAdm := FEpiDocument.Admin;
   Grp := LocalAdm.NewGroup;
   Grp.Name.Text := 'Group 1';
@@ -366,7 +366,7 @@ begin
       TheLabel.Text := DupeString(IntToStr(i), 4);
       if (i mod 2) = 0 then
         IsMissingValue := true;
-    end;
+    end;          }
 end;
 {$ENDIF}
 
