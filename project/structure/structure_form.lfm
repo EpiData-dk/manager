@@ -1,5 +1,5 @@
 object Project_Structure_Form: TProject_Structure_Form
-  Left = 719
+  Left = 316
   Height = 522
   Top = 292
   Width = 684
@@ -15,9 +15,9 @@ object Project_Structure_Form: TProject_Structure_Form
     Height = 522
     Top = 0
     Width = 684
-    ActivePage = ProjectOverviewTab
+    ActivePage = ValueLabelsTabSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object ProjectOverviewTab: TTabSheet
       Caption = 'Overview'
@@ -122,22 +122,21 @@ object Project_Structure_Form: TProject_Structure_Form
       ClientWidth = 678
       object ValueLabelsPageCtrl: TPageControl
         Left = 0
-        Height = 487
-        Top = 0
+        Height = 455
+        Top = 32
         Width = 678
         ActivePage = ValueLabelsSummarySheet
         Align = alClient
         TabIndex = 0
         TabOrder = 0
-        TabPosition = tpBottom
         object ValueLabelsSummarySheet: TTabSheet
           Caption = 'Summary'
-          ClientHeight = 452
+          ClientHeight = 420
           ClientWidth = 672
           object ValueLabelsGrid: TStringGrid
             Left = 0
             Height = 420
-            Top = 32
+            Top = 0
             Width = 672
             Align = alClient
             AutoEdit = False
@@ -152,32 +151,32 @@ object Project_Structure_Form: TProject_Structure_Form
             TitleFont.Name = 'Courier New'
             OnDblClick = ValueLabelsGridDblClick
           end
-          object Panel2: TPanel
-            Left = 0
-            Height = 32
-            Top = 0
-            Width = 672
-            Align = alTop
-            ClientHeight = 32
-            ClientWidth = 672
-            TabOrder = 1
-            object Label4: TLabel
-              Left = 13
-              Height = 18
-              Top = 8
-              Width = 177
-              Caption = 'Number of valuelabel sets:'
-              ParentColor = False
-            end
-            object NumberOfValueLabelSetsLabel: TLabel
-              Left = 197
-              Height = 18
-              Top = 8
-              Width = 202
-              Caption = 'NumberOfValueLabelSetsLabel'
-              ParentColor = False
-            end
-          end
+        end
+      end
+      object Panel2: TPanel
+        Left = 0
+        Height = 32
+        Top = 0
+        Width = 678
+        Align = alTop
+        ClientHeight = 32
+        ClientWidth = 678
+        TabOrder = 1
+        object Label4: TLabel
+          Left = 13
+          Height = 18
+          Top = 8
+          Width = 177
+          Caption = 'Number of valuelabel sets:'
+          ParentColor = False
+        end
+        object NumberOfValueLabelSetsLabel: TLabel
+          Left = 197
+          Height = 18
+          Top = 8
+          Width = 202
+          Caption = 'NumberOfValueLabelSetsLabel'
+          ParentColor = False
         end
       end
     end

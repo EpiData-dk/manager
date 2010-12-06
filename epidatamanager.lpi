@@ -42,7 +42,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="26">
+    <Units Count="22">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -77,148 +77,116 @@
         <UnitName Value="workflow_frame"/>
       </Unit4>
       <Unit5>
-        <Filename Value="designer/design_field.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="DesignFieldForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_field"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="designer/design_heading.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="DesignHeadingForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_heading"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="designer/design_section.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="DesignSectionForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_section"/>
-      </Unit7>
-      <Unit8>
-        <Filename Value="designer/design_custombase.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="DesignCustomForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_custombase"/>
-      </Unit8>
-      <Unit9>
         <Filename Value="utils/managerprocs.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="managerprocs"/>
-      </Unit9>
-      <Unit10>
+      </Unit5>
+      <Unit6>
         <Filename Value="project/project_settings.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSettingsForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="project_settings"/>
-      </Unit10>
-      <Unit11>
+      </Unit6>
+      <Unit7>
         <Filename Value="project/project_settings_field_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSettings_FieldFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_field_frame"/>
-      </Unit11>
-      <Unit12>
+      </Unit7>
+      <Unit8>
         <Filename Value="project/project_settings_interface.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="project_settings_interface"/>
-      </Unit12>
-      <Unit13>
+      </Unit8>
+      <Unit9>
         <Filename Value="about.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AboutForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="about"/>
-      </Unit13>
-      <Unit14>
+      </Unit9>
+      <Unit10>
         <Filename Value="project/project_settings_general_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSettings_GeneralFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_general_frame"/>
-      </Unit14>
-      <Unit15>
+      </Unit10>
+      <Unit11>
         <Filename Value="settings/settings2.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SettingsForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="settings2"/>
-      </Unit15>
-      <Unit16>
+      </Unit11>
+      <Unit12>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Settings_VisualDesign"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_visualdesign_frame"/>
-      </Unit16>
-      <Unit17>
+      </Unit12>
+      <Unit13>
         <Filename Value="settings/settings_fielddefinitions_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Settings_FieldDefinitionFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_fielddefinitions_frame"/>
-      </Unit17>
-      <Unit18>
+      </Unit13>
+      <Unit14>
         <Filename Value="settings/settings_advanced_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Settings_AdvancedFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_advanced_frame"/>
-      </Unit18>
-      <Unit19>
+      </Unit14>
+      <Unit15>
         <Filename Value="settings/settings2_interface.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="settings2_interface"/>
-      </Unit19>
-      <Unit20>
+      </Unit15>
+      <Unit16>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="settings2_var"/>
-      </Unit20>
-      <Unit21>
+      </Unit16>
+      <Unit17>
         <Filename Value="project/structure/structure_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Project_Structure_Form"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="structure_form"/>
-      </Unit21>
-      <Unit22>
+      </Unit17>
+      <Unit18>
         <Filename Value="project/structure/structure_datafile_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Project_Structure_Datafile_Frame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="structure_datafile_frame"/>
-      </Unit22>
-      <Unit23>
+      </Unit18>
+      <Unit19>
         <Filename Value="project/valuelabelseditor_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ValueLabelEditor"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="valuelabelseditor_form"/>
-      </Unit23>
-      <Unit24>
+      </Unit19>
+      <Unit20>
         <Filename Value="project/structure/structure_valuelabelset_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Project_Structure_ValueLabelSet_Frame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="structure_valuelabelset_frame"/>
-      </Unit24>
-      <Unit25>
+      </Unit20>
+      <Unit21>
         <Filename Value="designer/design_controls.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DesignControlsForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_controls"/>
-      </Unit25>
+      </Unit21>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

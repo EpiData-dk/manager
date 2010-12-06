@@ -10,8 +10,7 @@ uses
   cwstring,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, main, project_frame, design_frame, workflow_frame, design_field,
-  design_heading, design_section, design_custombase, managerprocs, sysutils,
+  Forms, main, project_frame, design_frame, workflow_frame, managerprocs, sysutils,
   project_settings, project_settings_field_frame, project_settings_interface,
   about, epidatacore, project_settings_general_frame, settings2,
   settings_visualdesign_frame, settings_fielddefinitions_frame,
