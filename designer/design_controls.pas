@@ -134,10 +134,11 @@ type
   { TDesignControlsForm }
 
   TDesignControlsForm = class(TForm)
+    FieldRangesBtn: TButton;
     FieldRangesEdit: TEdit;
     Label10: TLabel;
     FieldTypeLabel: TLabel;
-    Label11: TLabel;
+    FieldRangesLabel: TLabel;
     ShiftTo2Action: TAction;
     ShiftTo1Action: TAction;
     ShiftTo2: TAction;
@@ -245,8 +246,8 @@ implementation
 
 uses
   epidatafilestypes, math, types, valuelabelseditor_form, epiadmin,
-  LCLProc, settings2_var, settings2, epimiscutils, main, episettings{,
-  epiranges};
+  LCLProc, settings2_var, settings2, epimiscutils, main, episettings,
+  epiranges, strutils;
 
 const
   rsVLWarning = 'Warning: Valuelabels have changed...';
@@ -858,6 +859,26 @@ var
   FSection: TEpiSection;
   LocalGroups: TEpiGroups;
   i: Integer;
+  S: String;
+
+  function RangesToText(Const Ranges: TEpiRanges): string;
+  var
+    i: integer;
+  begin
+    result := '';
+    if not Assigned(Ranges) then exit;
+
+    for i := 0 to Ranges.Count - 1 do
+    with TEpiRange(Ranges[i]) do
+    begin
+      Result := AsString[true];
+      if not Single then
+        Result := Result + '-' + AsString[false];
+      Result := Result + '|';
+    end;
+    Delete(Result, Length(Result), 1);
+  end;
+
 begin
   if FEpiControl = AValue then exit;
   FEpiControl := AValue;
@@ -921,20 +942,11 @@ begin
 
     // Setup "advanced" page.
     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
-{    if Assigned(FField.Ranges) then
-    begin
-      FieldRangesEdit.Text := '';
-      S := '';
-      for i := 0 to FField.Ranges.Count -1 do
-      with TEpiRange(FField.Ranges[i]) do
-      begin
-        S := S + AsString[true];
-        if not Single then
-          S := S + '-' + AsString[false];
-        S := S + ',';
-      end;
-      Delete(S, Length(S), 1);
-    end;               }
+    FieldRangesEdit.Visible := FField.FieldType in [ftInteger, ftFloat, ftDMYDate, ftMDYDate, ftYMDDate, ftTime];
+    FieldRangesLabel.Visible := FieldRangesEdit.Visible;
+    FieldRangesEdit.Enabled := FField.FieldType in [ftInteger, ftFloat];
+    FieldRangesBtn.Visible := FieldRangesEdit.Visible and (not FieldRangesEdit.Enabled);
+
     UpdateValueLabels;
   end;
 
@@ -1064,6 +1076,42 @@ var
   NewLen: LongInt;
   NewDecLen: LongInt;
   i: Integer;
+
+{  function TextToRanges(Const Text: string; Ranges: TEpiRanges): boolean;
+  var
+    SList: TStringList;
+    i,IntRes: integer;
+    S: string;
+    P: LongInt;
+  begin
+    SList := TStringList.Create;
+    SList.Delimiter := '|';
+    SList.StrictDelimiter := true;
+    SList.DelimitedText := Text;
+
+    while Ranges.Count > 0 do
+      Ranges.DeleteItem(Ranges.Count - 1).Free;
+
+    for i := 0 to SList.Count -1 do
+    begin
+      S := SList[i];
+      T := Copy2SymbDel(S, '-');
+      case Ranges.FieldType of
+        ftInteger: if not TryStrToInt(T, IntRes) then
+                   begin
+                     ShowHintMsg(T + ' is not a valid integer', FieldRangesEdit);
+                     Exit(false);
+                   end;
+        ftFloat:   if not TryStrToFloat(T, FlRes) then
+                   begin
+                     ShowHintMsg(T + ' is not a valid integer', FieldRangesEdit);
+                     Exit(false);
+                   end;
+      end;
+    end;
+    Result := true;
+  end;}
+
 begin
   Result := false;
 
@@ -1142,6 +1190,8 @@ begin
     // "Advanced" page
     if ValueLabelComboBox.ItemIndex >= 0 then
       FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+
+
 
     FField.EndUpdate;
     Result := true;

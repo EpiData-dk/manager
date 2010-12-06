@@ -216,9 +216,18 @@
       </Options>
     </Linking>
     <Other>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
       <CustomOptions Value="-dEPI_DEBUG
 -dEPI_RELEASE1"/>
       <CompilerPath Value="$(CompPath)"/>
+      <ExecuteBefore>
+        <CompileReasons Compile="False" Build="False" Run="False"/>
+      </ExecuteBefore>
+      <ExecuteAfter>
+        <CompileReasons Compile="False" Build="False" Run="False"/>
+      </ExecuteAfter>
     </Other>
   </CompilerOptions>
   <Debugging>

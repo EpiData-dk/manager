@@ -30,9 +30,9 @@ object DesignControlsForm: TDesignControlsForm
         Height = 364
         Top = 0
         Width = 438
-        ActivePage = SectionBasicSheet
+        ActivePage = SectionAdvancedSheet
         Align = alClient
-        TabIndex = 0
+        TabIndex = 1
         TabOrder = 0
         object SectionBasicSheet: TTabSheet
           Caption = 'Basic'
@@ -357,7 +357,7 @@ object DesignControlsForm: TDesignControlsForm
             Caption = 'Value label:'
             ParentColor = False
           end
-          object Label11: TLabel
+          object FieldRangesLabel: TLabel
             Left = 5
             Height = 18
             Top = 72
@@ -369,8 +369,16 @@ object DesignControlsForm: TDesignControlsForm
             Left = 5
             Height = 27
             Top = 96
-            Width = 312
+            Width = 269
             TabOrder = 2
+          end
+          object FieldRangesBtn: TButton
+            Left = 287
+            Height = 27
+            Top = 96
+            Width = 27
+            Caption = '...'
+            TabOrder = 3
           end
         end
       end
