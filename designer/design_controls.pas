@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, ActnList, AVL_Tree, epicustombase, epidatafiles,
-  epidocument, epivaluelabels;
+  epidocument, epivaluelabels, LCLType;
 
 type
 
@@ -190,6 +190,8 @@ type
     procedure ApplyActionExecute(Sender: TObject);
     procedure CancelActionExecute(Sender: TObject);
     procedure CloseActionExecute(Sender: TObject);
+    procedure FieldRangesEditUTF8KeyPress(Sender: TObject;
+      var UTF8Key: TUTF8Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -838,6 +840,17 @@ begin
   if ValidateControl then Close;
 end;
 
+procedure TDesignControlsForm.FieldRangesEditUTF8KeyPress(Sender: TObject;
+  var UTF8Key: TUTF8Char);
+var
+  I: integer;
+  Ch: LongWord;
+begin
+  Ch := UTF8CharacterToUnicode(@UTF8Key[1], I);
+  if not (Char(Ch) in [VK_0..VK_9,VK_BACK,'.',',','|','-']) then
+    UTF8Key := '';
+end;
+
 procedure TDesignControlsForm.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
 begin
@@ -871,7 +884,7 @@ var
     for i := 0 to Ranges.Count - 1 do
     with TEpiRange(Ranges[i]) do
     begin
-      Result := AsString[true];
+      Result := Result + AsString[true];
       if not Single then
         Result := Result + '-' + AsString[false];
       Result := Result + '|';
@@ -946,6 +959,10 @@ begin
     FieldRangesLabel.Visible := FieldRangesEdit.Visible;
     FieldRangesEdit.Enabled := FField.FieldType in [ftInteger, ftFloat];
     FieldRangesBtn.Visible := FieldRangesEdit.Visible and (not FieldRangesEdit.Enabled);
+    if FieldRangesEdit.Visible then
+      FieldRangesEdit.Text := RangesToText(FField.Ranges)
+    else
+      FieldRangesEdit.Text := '';
 
     UpdateValueLabels;
   end;
@@ -1076,41 +1093,69 @@ var
   NewLen: LongInt;
   NewDecLen: LongInt;
   i: Integer;
+  Ranges: TEpiRanges;
 
-{  function TextToRanges(Const Text: string; Ranges: TEpiRanges): boolean;
+  function  TextToRanges(Text: string; Const AOwner: TEpiField; Out Ranges: TEpiRanges): boolean;
   var
     SList: TStringList;
-    i,IntRes: integer;
-    S: string;
+    i:     integer;
+    IntRes: EpiInteger;
+    FlRes: EpiFloat;
+    S, T: string;
     P: LongInt;
+    Range: TEpiRange;
   begin
-    SList := TStringList.Create;
-    SList.Delimiter := '|';
-    SList.StrictDelimiter := true;
-    SList.DelimitedText := Text;
-
-    while Ranges.Count > 0 do
-      Ranges.DeleteItem(Ranges.Count - 1).Free;
-
-    for i := 0 to SList.Count -1 do
-    begin
-      S := SList[i];
-      T := Copy2SymbDel(S, '-');
-      case Ranges.FieldType of
-        ftInteger: if not TryStrToInt(T, IntRes) then
-                   begin
-                     ShowHintMsg(T + ' is not a valid integer', FieldRangesEdit);
-                     Exit(false);
-                   end;
-        ftFloat:   if not TryStrToFloat(T, FlRes) then
-                   begin
-                     ShowHintMsg(T + ' is not a valid integer', FieldRangesEdit);
-                     Exit(false);
-                   end;
-      end;
-    end;
     Result := true;
-  end;}
+
+    Ranges := TEpiRanges.Create(AOwner);
+    Ranges.ItemOwner := true;
+
+    try
+      S := Copy2SymbDel(Text, '|');
+
+      while Length(S) > 0 do
+      begin
+        Range := Ranges.NewRange;
+        T := Copy2SymbDel(S, '-');
+        case Ranges.FieldType of
+          ftInteger: begin
+                       if not TryStrToInt64(T, IntRes) then
+                       begin
+                         ShowHintMsg(T + ' is not a valid integer', FieldRangesEdit);
+                         Exit(false);
+                       end;
+                       Range.AsInteger[true] := IntRes;
+
+                       if (Length(S) > 0) and (not TryStrToInt64(S, IntRes)) then
+                       begin
+                         ShowHintMsg(S + ' is not a valid integer', FieldRangesEdit);
+                         Exit(false);
+                       end;
+                       Range.AsInteger[false] := IntRes;
+                     end;
+          ftFloat:   begin
+                       if not TryStrToFloat(T, FlRes) then
+                       begin
+                         ShowHintMsg(T + ' is not a valid float', FieldRangesEdit);
+                         Exit(false);
+                       end;
+                       Range.AsFloat[true] := FlRes;
+
+                       if (Length(S) > 0) and (not TryStrToFloat(S, FlRes)) then
+                       begin
+                         ShowHintMsg(S + ' is not a valid float', FieldRangesEdit);
+                         Exit(false);
+                       end;
+                       Range.AsFloat[false] := FlRes;
+                     end;
+        end;
+        S := Copy2SymbDel(Text, '|');
+      end;
+    except
+      FreeAndNil(Ranges);
+      Result := false;
+    end;
+  end;
 
 begin
   Result := false;
@@ -1191,7 +1236,11 @@ begin
     if ValueLabelComboBox.ItemIndex >= 0 then
       FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
 
-
+    if (FieldRangesEdit.Text <> '') and (TextToRanges(FieldRangesEdit.Text, FField, Ranges)) then
+    begin
+      FField.Ranges.Free;
+      FField.Ranges := Ranges;
+    end;
 
     FField.EndUpdate;
     Result := true;

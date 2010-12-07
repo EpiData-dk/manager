@@ -85,7 +85,6 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     function    DoNewValueLabelSet(Ft: TEpiFieldType): TEpiValueLabelSet;
-    procedure   CompareTreeNodes(Sender: TObject; Node1, Node2: TTreeNode; var Compare: Integer);
     procedure   UpdateGridCells;
     procedure   ValueLabelsGridCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
     procedure   ValueLabelsGridColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex, tIndex: Integer);
@@ -332,7 +331,6 @@ begin
     Align          := alClient;
     Parent         := Self;
   end;
-//  ValueLabelSetTreeView.OnCompare := @CompareTreeNodes;
 
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.HideInterval := 10 * 1000; // TODO : Adjust hint-timeout in settings.
@@ -378,13 +376,6 @@ begin
   InsertGridRowAction.Execute;
   ValueLabelSetTreeView.Selected.EditText;
   UpdateStatusbar;
-end;
-
-procedure TValueLabelEditor.CompareTreeNodes(Sender: TObject; Node1,
-  Node2: TTreeNode; var Compare: Integer);
-begin
-  Compare := WideCompareStr(
-    UTF8Decode(Node1.Text), UTF8Decode(Node2.Text));
 end;
 
 procedure TValueLabelEditor.UpdateGridCells;
