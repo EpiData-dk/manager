@@ -232,9 +232,9 @@ object DesignControlsForm: TDesignControlsForm
         Height = 364
         Top = 0
         Width = 438
-        ActivePage = FieldBasicSheet
+        ActivePage = FieldAdvancedSheet
         Align = alClient
-        TabIndex = 0
+        TabIndex = 1
         TabOrder = 0
         object FieldBasicSheet: TTabSheet
           Caption = 'Basic'

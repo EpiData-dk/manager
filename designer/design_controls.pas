@@ -849,6 +849,8 @@ begin
   Ch := UTF8CharacterToUnicode(@UTF8Key[1], I);
   if not (Char(Ch) in [VK_0..VK_9,VK_BACK,'.',',','|','-']) then
     UTF8Key := '';
+  if (Char(Ch) in ['.',',']) then
+    UTF8Key := DecimalSeparator;
 end;
 
 procedure TDesignControlsForm.FormCloseQuery(Sender: TObject;
@@ -884,9 +886,15 @@ var
     for i := 0 to Ranges.Count - 1 do
     with TEpiRange(Ranges[i]) do
     begin
-      Result := Result + AsString[true];
+      if Ranges.FieldType = ftFloat then
+        Result := Result + Format(TEpiFloatField(FField).FormatString, [AsFloat[true]])
+      else
+        Result := Result + AsString[true];
       if not Single then
-        Result := Result + '-' + AsString[false];
+        if Ranges.FieldType = ftFloat then
+          Result := Result + '-' + Format(TEpiFloatField(FField).FormatString, [AsFloat[false]])
+        else
+          Result := Result + '-' + AsString[false];
       Result := Result + '|';
     end;
     Delete(Result, Length(Result), 1);
@@ -1134,6 +1142,7 @@ var
                        Range.AsInteger[false] := IntRes;
                      end;
           ftFloat:   begin
+//                       T := StringsReplace(T, ['.','.'], [DecimalSeparator, DecimalSeparator], [rfReplaceAll]);
                        if not TryStrToFloat(T, FlRes) then
                        begin
                          ShowHintMsg(T + ' is not a valid float', FieldRangesEdit);
@@ -1141,6 +1150,7 @@ var
                        end;
                        Range.AsFloat[true] := FlRes;
 
+//                       S := StringsReplace(S, ['.','.'], [DecimalSeparator, DecimalSeparator], [rfReplaceAll]);
                        if (Length(S) > 0) and (not TryStrToFloat(S, FlRes)) then
                        begin
                          ShowHintMsg(S + ' is not a valid float', FieldRangesEdit);
