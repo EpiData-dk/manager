@@ -875,31 +875,6 @@ var
   LocalGroups: TEpiGroups;
   i: Integer;
   S: String;
-
-  function RangesToText(Const Ranges: TEpiRanges): string;
-  var
-    i: integer;
-  begin
-    result := '';
-    if not Assigned(Ranges) then exit;
-
-    for i := 0 to Ranges.Count - 1 do
-    with TEpiRange(Ranges[i]) do
-    begin
-      if Ranges.FieldType = ftFloat then
-        Result := Result + Format(TEpiFloatField(FField).FormatString, [AsFloat[true]])
-      else
-        Result := Result + AsString[true];
-      if not Single then
-        if Ranges.FieldType = ftFloat then
-          Result := Result + '-' + Format(TEpiFloatField(FField).FormatString, [AsFloat[false]])
-        else
-          Result := Result + '-' + AsString[false];
-      Result := Result + '|';
-    end;
-    Delete(Result, Length(Result), 1);
-  end;
-
 begin
   if FEpiControl = AValue then exit;
   FEpiControl := AValue;
@@ -967,8 +942,8 @@ begin
     FieldRangesLabel.Visible := FieldRangesEdit.Visible;
     FieldRangesEdit.Enabled := FField.FieldType in [ftInteger, ftFloat];
     FieldRangesBtn.Visible := FieldRangesEdit.Visible and (not FieldRangesEdit.Enabled);
-    if FieldRangesEdit.Visible then
-      FieldRangesEdit.Text := RangesToText(FField.Ranges)
+    if (FieldRangesEdit.Visible) and (Assigned(FField.Ranges)) then
+      FieldRangesEdit.Text := FField.Ranges.RangesToText
     else
       FieldRangesEdit.Text := '';
 

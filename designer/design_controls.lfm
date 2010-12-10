@@ -1,7 +1,7 @@
 object DesignControlsForm: TDesignControlsForm
-  Left = 606
+  Left = 977
   Height = 449
-  Top = 307
+  Top = 347
   Width = 444
   ActiveControl = ApplyBtn
   Caption = 'DesignControlsForm'
@@ -326,7 +326,7 @@ object DesignControlsForm: TDesignControlsForm
           end
         end
         object FieldAdvancedSheet: TTabSheet
-          Caption = 'Advanced'
+          Caption = 'ValueLabel/Range'
           ClientHeight = 329
           ClientWidth = 432
           object ValueLabelComboBox: TComboBox
@@ -368,9 +368,12 @@ object DesignControlsForm: TDesignControlsForm
           object FieldRangesEdit: TEdit
             Left = 5
             Height = 27
+            Hint = 'Valid ranges for the field. E.g:'#10'20-80¦90 or 1.20-3.50¦4.50'#10#10'For date/time field click the "..." button.'
             Top = 96
             Width = 269
             OnUTF8KeyPress = FieldRangesEditUTF8KeyPress
+            ParentShowHint = False
+            ShowHint = True
             TabOrder = 2
           end
           object FieldRangesBtn: TButton

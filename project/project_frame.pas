@@ -65,6 +65,12 @@ type
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
     procedure UpdateCaption;
+  private
+    { Backup }
+    FBackupTimer: TTimer;
+    function  InitBackupTimer: boolean;
+    procedure UpdateTimer;
+    procedure TimedBackup(Sender: TObject);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -148,8 +154,10 @@ var
 begin
   ProjectSettings := TProjectSettingsForm.Create(self, EpiDocument);
   ProjectSettings.ShowModal;
-  TDesignFrame(ActiveFrame).UpdateFrame;
   ProjectSettings.Free;
+
+  TDesignFrame(ActiveFrame).UpdateFrame;
+  UpdateTimer;
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
@@ -158,6 +166,8 @@ begin
     SaveProjectAsAction.Execute
   else
     DoSaveProject(ProjectFileName);
+  EpiDocument.Modified := false;
+  UpdateCaption;
 end;
 
 procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
@@ -190,8 +200,15 @@ begin
   Dlg.OnTypeChange := @SaveDlgTypeChange;
   Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
   if not Dlg.Execute then exit;
-  DoSaveProject(Dlg.FileName);
+
+  if Dlg.FileName <> ProjectFileName then
+    FFileName := Dlg.FileName;
+
+  DoSaveProject(ProjectFileName);
   Dlg.Free;
+
+  EpiDocument.Modified := false;
+  UpdateCaption;
 end;
 
 procedure TProjectFrame.ShowStructureActionExecute(Sender: TObject);
@@ -239,22 +256,28 @@ var
   Fs: TFileStream;
   Ms: TMemoryStream;
 begin
-  if AFileName <> ProjectFileName then
-    FFileName := AFileName;
-  Ms := TMemoryStream.Create;
-  EpiDocument.SaveToStream(Ms);
-  Ms.Position := 0;
+  // If project haven't been saved before.
+  InitBackupTimer;
 
-  if ExtractFileExt(UTF8ToSys(AFileName)) = '.epz' then
-    StreamToZipFile(Ms, AFileName)
-  else begin
-    Fs := TFileStream.Create(AFileName, fmCreate);
-    Fs.CopyFrom(Ms, Ms.Size);
-    Fs.Free;
+  ActiveFrame.Cursor := crHourGlass;
+  Application.ProcessMessages;
+  try
+    Ms := TMemoryStream.Create;
+    EpiDocument.SaveToStream(Ms);
+    Ms.Position := 0;
+
+    if ExtractFileExt(UTF8ToSys(AFileName)) = '.epz' then
+      StreamToZipFile(Ms, AFileName)
+    else begin
+      Fs := TFileStream.Create(AFileName, fmCreate);
+      Fs.CopyFrom(Ms, Ms.Size);
+      Fs.Free;
+    end;
+  finally
+    ActiveFrame.Cursor := crDefault;
+    Application.ProcessMessages;
+    Ms.Free;
   end;
-  Ms.Free;
-  EpiDocument.Modified := false;
-  UpdateCaption;
 end;
 
 procedure TProjectFrame.DoOpenProject(Const AFileName: string);
@@ -275,6 +298,8 @@ begin
   FFileName := AFileName;
   DoNewDataForm(FEpiDocument.DataFiles[0]);
   St.Free;
+
+  InitBackupTimer;
 
   UpdateCaption;
 end;
@@ -306,6 +331,7 @@ begin
 
   // TODO : Delete ALL dataforms!
   FreeAndNil(FActiveFrame);
+  FreeAndNil(FBackupTimer);
   DataFilesTreeView.Items.Clear;
 end;
 
@@ -373,6 +399,10 @@ end;
 procedure TProjectFrame.EpiDocumentModified(Sender: TObject);
 begin
   Modified := TEpiDocument(Sender).Modified;
+
+  // Activates/Deactivates timed backup.
+  if Assigned(FBackupTimer) and Assigned(EpiDocument) then
+    FBackupTimer.Enabled := EpiDocument.Modified;
 end;
 
 procedure TProjectFrame.SetModified(const AValue: Boolean);
@@ -412,6 +442,45 @@ begin
     end;
   end;
   MainForm.Caption := S;
+end;
+
+function TProjectFrame.InitBackupTimer: boolean;
+begin
+  if Assigned(FBackupTimer) then
+    exit(true);
+
+  Result := false;
+  // Create backup process.
+  if EpiDocument.ProjectSettings.BackupInterval > 0 then
+  begin
+    FBackupTimer := TTimer.Create(Self);
+    FBackupTimer.Enabled := false;
+    FBackupTimer.OnTimer := @TimedBackup;
+    FBackupTimer.Interval := EpiDocument.ProjectSettings.BackupInterval * 60000;
+    Result := true;
+  end;
+end;
+
+procedure TProjectFrame.UpdateTimer;
+begin
+  if not Assigned(FBackupTimer) then exit;
+
+  // Only update interval time if new interval is smaller   (Milliseconds * 60 sec/min.)
+  if (FBackupTimer.Interval = 0) or
+     (FBackupTimer.Interval > EpiDocument.ProjectSettings.BackupInterval * 60000) then
+    FBackupTimer.Interval := EpiDocument.ProjectSettings.BackupInterval * 60000;
+end;
+
+procedure TProjectFrame.TimedBackup(Sender: TObject);
+begin
+  try
+    FBackupTimer.Enabled := false;
+    DoSaveProject(ProjectFileName + '.bak');
+    UpdateTimer;
+    FBackupTimer.Enabled := true;
+  except
+    //
+  end;
 end;
 
 constructor TProjectFrame.Create(TheOwner: TComponent);

@@ -1400,6 +1400,8 @@ begin
     if Assigned(ValueLabelSet) then
       FStatusbarFieldVLSetPanel.Text := EpiCutString(ValueLabelSet.Name, 10);
 
+    if Assigned(Ranges) then
+      FStatusbarFieldRangePanel.Text := 'R';
   end;
 
   if EpiControl is TEpiHeading then
@@ -1421,7 +1423,7 @@ var
   W: Integer;
   i: Integer;
 const
-  PanelBorder = 5;
+  PanelBorder = 10;
 begin
   W := 0;
   with DesignerStatusBar.Canvas do
