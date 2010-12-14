@@ -10,6 +10,7 @@ object ValueLabelEditor: TValueLabelEditor
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poDefault
+  ShowInTaskBar = stAlways
   LCLVersion = '0.9.29'
   object Panel1: TPanel
     Left = 0

@@ -1,19 +1,19 @@
 object DesignFrame: TDesignFrame
   Left = 0
-  Height = 639
+  Height = 653
   Top = 0
-  Width = 982
-  ClientHeight = 639
-  ClientWidth = 982
+  Width = 1085
+  ClientHeight = 653
+  ClientWidth = 1085
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 351
-  DesignTop = 284
+  DesignLeft = 652
+  DesignTop = 182
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
     Top = 0
-    Width = 982
+    Width = 1085
     ButtonHeight = 24
     ButtonWidth = 24
     Caption = 'DesignerToolBar'
@@ -208,15 +208,15 @@ object DesignFrame: TDesignFrame
     end
   end
   object Panel1: TPanel
-    Left = 717
-    Height = 592
+    Left = 820
+    Height = 580
     Top = 26
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 590
+    ClientHeight = 578
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
@@ -279,8 +279,8 @@ object DesignFrame: TDesignFrame
     end
   end
   object Splitter1: TSplitter
-    Left = 712
-    Height = 592
+    Left = 815
+    Height = 580
     Top = 26
     Width = 5
     Align = alRight
@@ -290,11 +290,360 @@ object DesignFrame: TDesignFrame
   object DesignerStatusBar: TStatusBar
     Left = 0
     Height = 21
-    Top = 618
-    Width = 982
+    Top = 632
+    Width = 1085
     Panels = <>
     SimplePanel = False
     SizeGrip = False
+  end
+  object StatusBarPanel: TPanel
+    Left = 0
+    Height = 26
+    Top = 606
+    Width = 1085
+    Align = alBottom
+    BevelOuter = bvNone
+    ClientHeight = 26
+    ClientWidth = 1085
+    TabOrder = 4
+    object SectionsPanel: TPanel
+      AnchorSideLeft.Control = RecordsPanel
+      AnchorSideLeft.Side = asrBottom
+      Left = 104
+      Height = 24
+      Top = 2
+      Width = 96
+      Alignment = taLeftJustify
+      BorderSpacing.Left = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 96
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 0
+      object SectionsLabel: TLabel
+        AnchorSideLeft.Control = SectionsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 64
+        Height = 18
+        Top = 4
+        Width = 91
+        BorderSpacing.Left = 2
+        Caption = 'SectionsLabel'
+        ParentColor = False
+      end
+      object SectionsStaticLabel: TLabel
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 60
+        Caption = 'Sections:'
+        ParentColor = False
+      end
+    end
+    object CurrentSectionPanel: TPanel
+      AnchorSideLeft.Control = SectionsPanel
+      AnchorSideLeft.Side = asrBottom
+      Left = 202
+      Height = 24
+      Top = 2
+      Width = 96
+      Alignment = taLeftJustify
+      BorderSpacing.Left = 2
+      BorderSpacing.Right = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 96
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 1
+      object CurrentSectionLabel: TLabel
+        Left = 3
+        Height = 18
+        Top = 4
+        Width = 132
+        Caption = 'CurrentSectionLabel'
+        ParentColor = False
+      end
+    end
+    object RecordsPanel: TPanel
+      Left = 2
+      Height = 24
+      Top = 2
+      Width = 100
+      Alignment = taLeftJustify
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 100
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 2
+      object RecordsLabel: TLabel
+        AnchorSideLeft.Control = RecordStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 60
+        Height = 18
+        Top = 4
+        Width = 87
+        BorderSpacing.Left = 2
+        Caption = 'RecordsLabel'
+        ParentColor = False
+      end
+      object RecordStaticLabel: TLabel
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 56
+        Caption = 'Records:'
+        ParentColor = False
+      end
+    end
+    object FieldsPanel: TPanel
+      AnchorSideLeft.Control = CurrentSectionPanel
+      AnchorSideLeft.Side = asrBottom
+      Left = 300
+      Height = 24
+      Top = 2
+      Width = 75
+      Alignment = taLeftJustify
+      BorderSpacing.Left = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 75
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 3
+      object FieldsLabel: TLabel
+        AnchorSideLeft.Control = FieldsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 47
+        Height = 18
+        Top = 4
+        Width = 74
+        BorderSpacing.Left = 2
+        Caption = 'FieldsLabel'
+        ParentColor = False
+      end
+      object FieldsStaticLabel: TLabel
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 43
+        Caption = 'Fields:'
+        ParentColor = False
+      end
+    end
+    object FieldNamePanel: TPanel
+      AnchorSideLeft.Control = FieldsPanel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = FieldTypePanel
+      Left = 377
+      Height = 24
+      Top = 2
+      Width = 339
+      Alignment = taLeftJustify
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 2
+      BorderSpacing.Right = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 339
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 4
+      object FieldNameLabel: TLabel
+        AnchorSideLeft.Control = FieldsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 106
+        BorderSpacing.Left = 2
+        Caption = 'FieldNameLabel'
+        ParentColor = False
+      end
+    end
+    object FieldTypePanel: TPanel
+      AnchorSideLeft.Control = FieldNamePanel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = DefaultValuePanel
+      Left = 718
+      Height = 24
+      Top = 2
+      Width = 75
+      Alignment = taLeftJustify
+      Anchors = [akTop, akRight]
+      BorderSpacing.Left = 2
+      BorderSpacing.Right = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 75
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 5
+      object FieldTypeLabel: TLabel
+        AnchorSideLeft.Control = FieldsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 97
+        BorderSpacing.Left = 2
+        Caption = 'FieldTypeLabel'
+        ParentColor = False
+      end
+    end
+    object DefaultValuePanel: TPanel
+      AnchorSideLeft.Control = FieldTypePanel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = ValueLabelPanel
+      Left = 795
+      Height = 24
+      Top = 2
+      Width = 55
+      Alignment = taLeftJustify
+      Anchors = [akTop, akRight]
+      BorderSpacing.Left = 2
+      BorderSpacing.Right = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 55
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 6
+      object DefaultValueLabel: TLabel
+        AnchorSideLeft.Control = FieldsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 120
+        BorderSpacing.Left = 2
+        Caption = 'DefaultValueLabel'
+        ParentColor = False
+      end
+    end
+    object ValueLabelPanel: TPanel
+      AnchorSideLeft.Control = DefaultValuePanel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = RangePanel
+      Left = 852
+      Height = 24
+      Top = 2
+      Width = 80
+      Alignment = taLeftJustify
+      Anchors = [akTop, akRight]
+      BorderSpacing.Left = 2
+      BorderSpacing.Right = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 80
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 7
+      object ValueLabelLabel: TLabel
+        AnchorSideLeft.Control = FieldsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 107
+        BorderSpacing.Left = 2
+        Caption = 'ValueLabelLabel'
+        ParentColor = False
+      end
+    end
+    object RangePanel: TPanel
+      AnchorSideLeft.Control = ValueLabelPanel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = KeyPanel
+      Left = 934
+      Height = 24
+      Top = 2
+      Width = 60
+      Alignment = taLeftJustify
+      Anchors = [akTop, akRight]
+      BorderSpacing.Left = 2
+      BorderSpacing.Right = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 60
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 8
+      object RangeLabel: TLabel
+        AnchorSideLeft.Control = FieldsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 77
+        BorderSpacing.Left = 2
+        Caption = 'RangeLabel'
+        ParentColor = False
+      end
+    end
+    object KeyPanel: TPanel
+      AnchorSideLeft.Control = RangePanel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = ExtendedPanel
+      Left = 996
+      Height = 24
+      Top = 2
+      Width = 35
+      Alignment = taLeftJustify
+      Anchors = [akTop, akRight]
+      BorderSpacing.Left = 2
+      BorderSpacing.Right = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 35
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 9
+      object KeyLabel: TLabel
+        AnchorSideLeft.Control = FieldsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 60
+        BorderSpacing.Left = 2
+        Caption = 'KeyLabel'
+        ParentColor = False
+      end
+    end
+    object ExtendedPanel: TPanel
+      AnchorSideLeft.Control = KeyPanel
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = StatusBarPanel
+      AnchorSideRight.Side = asrBottom
+      Left = 1033
+      Height = 24
+      Top = 2
+      Width = 50
+      Alignment = taLeftJustify
+      Anchors = [akTop, akRight]
+      BorderSpacing.Left = 2
+      BorderSpacing.Right = 2
+      BevelOuter = bvLowered
+      ClientHeight = 24
+      ClientWidth = 50
+      Color = clWhite
+      ParentColor = False
+      TabOrder = 10
+      object ExtendedLabel: TLabel
+        AnchorSideLeft.Control = FieldsStaticLabel
+        AnchorSideLeft.Side = asrBottom
+        Left = 2
+        Height = 18
+        Top = 4
+        Width = 97
+        BorderSpacing.Left = 2
+        Caption = 'ExtendedLabel'
+        ParentColor = False
+      end
+    end
   end
   object DesignerImageList: TImageList
     Height = 24

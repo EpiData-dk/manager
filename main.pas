@@ -401,7 +401,7 @@ end;
 
 procedure TMainForm.RestoreDefaultPos;
 begin
-  if Assigned(FActiveFrame) then;
+  if Assigned(FActiveFrame) then
     TProjectFrame(FActiveFrame).RestoreDefaultPos;
 
   TSettingsForm.RestoreDefaultPos;

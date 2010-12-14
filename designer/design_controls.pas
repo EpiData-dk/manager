@@ -141,8 +141,6 @@ type
     FieldRangesLabel: TLabel;
     ShiftTo2Action: TAction;
     ShiftTo1Action: TAction;
-    ShiftTo2: TAction;
-    ShiftTo1: TAction;
     CancelAction: TAction;
     CloseAction: TAction;
     ApplyAction: TAction;
@@ -193,6 +191,7 @@ type
     procedure FieldRangesEditUTF8KeyPress(Sender: TObject;
       var UTF8Key: TUTF8Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LengthEditChange(Sender: TObject);
@@ -207,7 +206,7 @@ type
     procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
     function    UpdateValueLabels: boolean;
     procedure   ShowHintMsg(Msg: string; Ctrl: TControl);
-    function    ValidateControl: boolean;
+    procedure   UpdateControlContent;
   private
     {Section Sheet}
     procedure GrpRightsMoveLeftClick(Sender: TObject);
@@ -221,6 +220,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const EpiDocument: TEpiCustomBase);
     destructor  Destroy; override;
+    function    ValidateControl: boolean;
     procedure   RestoreDefaultPos;
     procedure   Show;
     property    EpiControl: TEpiCustomControlItem read FEpiControl write SetEpiControl;
@@ -789,6 +789,9 @@ begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'ControlsForm');
   EpiControlPageControl.ShowTabs := false;
+
+  if Assigned(FEpiControl) then
+    UpdateControlContent;
 end;
 
 procedure TDesignControlsForm.LengthEditChange(Sender: TObject);
@@ -860,6 +863,16 @@ begin
     SaveFormPosition(Self, 'ControlsForm');
 end;
 
+procedure TDesignControlsForm.FormDeactivate(Sender: TObject);
+var
+  TmpForm: TCustomForm;
+begin
+  if not Showing then exit;
+
+  if not (ValidateControl) then
+    Self.SetFocus;
+end;
+
 procedure TDesignControlsForm.FormDestroy(Sender: TObject);
 var
   B: Boolean;
@@ -869,94 +882,13 @@ begin
 end;
 
 procedure TDesignControlsForm.SetEpiControl(const AValue: TEpiCustomControlItem);
-var
-  FField: TEpiField;
-  FSection: TEpiSection;
-  LocalGroups: TEpiGroups;
-  i: Integer;
-  S: String;
 begin
   if FEpiControl = AValue then exit;
+  if Assigned(FEpiControl) and
+     (not ValidateControl) then exit;
+
   FEpiControl := AValue;
-
-  BeginFormUpdate;
-  if FEpiControl is TEpiSection then
-  begin
-    Caption := 'Section Properties';
-    EpiControlPageControl.ActivePage := SectionTabSheet;
-    FSection := TEpiSection(EpiControl);
-
-    // Basic Page
-    SectionNameEdit.Text := FSection.Name.Text;
-
-    {$IFNDEF EPI_DEBUG}
-    SectionGroupAccessGroupBox.Visible := false;
-    SectionGroupAccessGroupBox.Enabled := false;
-    {$ELSE}
-    GroupAssignedListBox.Items.BeginUpdate;
-    GroupAvailableListBox.Items.BeginUpdate;
-    GroupAssignedListBox.Clear;
-    GroupAvailableListBox.Clear;
-    LocalGroups := TEpiDocument(FSection.RootOwner).Admin.Groups;
-    for i := 0 to LocalGroups.Count - 1 do
-    begin
-      if FSection.Groups.ItemExistsById(LocalGroups[i].Id) then
-        GroupAssignedListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i])
-      else
-        GroupAvailableListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i]);
-    end;
-    GroupAvailableListBox.Items.EndUpdate;
-    GroupAssignedListBox.Items.EndUpdate;
-    {$ENDIF}
-
-    // Advanced Page
-    WidthEdit.Text := IntToStr(FSection.Width);
-    HeightEdit.Text := IntToStr(FSection.Height);
-  end;
-
-  if FEpiControl is TEpiField then
-  begin
-    Caption := 'Field Properties';
-    EpiControlPageControl.ActivePage := FieldTabSheet;
-    FField := TEpiField(EpiControl);
-
-    // Setup Basic page
-    NameEdit.Text         := FField.Name;
-    FieldTypeLabel.Caption := EpiTypeNames[FField.FieldType];
-    QuestionEdit.Text     := FField.Question.Caption.Text;
-    if FField.FieldType = ftFloat then
-      LengthEdit.Text     := IntToStr(FField.Length - (FField.Decimals + 1))
-    else
-      LengthEdit.Text     := IntToStr(FField.Length);
-    DecimalsEdit.Text     := IntToStr(FField.Decimals);
-
-    // Visible edits
-    LengthEdit.Visible    := FField.FieldType in [ftInteger, ftAutoInc, ftFloat, ftString, ftUpperString];
-    LengthLabel.Visible   := LengthEdit.Visible;
-    DecimalsEdit.Visible  := FField.FieldType = ftFloat;
-    DecimalsLabel.Visible := DecimalsEdit.Visible;
-
-    // Setup "advanced" page.
-    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
-    FieldRangesEdit.Visible := FField.FieldType in [ftInteger, ftFloat, ftDMYDate, ftMDYDate, ftYMDDate, ftTime];
-    FieldRangesLabel.Visible := FieldRangesEdit.Visible;
-    FieldRangesEdit.Enabled := FField.FieldType in [ftInteger, ftFloat];
-    FieldRangesBtn.Visible := FieldRangesEdit.Visible and (not FieldRangesEdit.Enabled);
-    if (FieldRangesEdit.Visible) and (Assigned(FField.Ranges)) then
-      FieldRangesEdit.Text := FField.Ranges.RangesToText
-    else
-      FieldRangesEdit.Text := '';
-
-    UpdateValueLabels;
-  end;
-
-  if FEpiControl is TEpiHeading then
-  begin
-    Caption := 'Heading Properties';
-    EpiControlPageControl.ActivePage := HeadingTabSheet;
-    CaptionEdit.Text := TEpiHeading(EpiControl).Caption.Text;
-  end;
-  EndFormUpdate;
+  UpdateControlContent;
 end;
 
 function TDesignControlsForm.UpdateValueLabels: boolean;
@@ -1068,6 +1000,94 @@ begin
   FHintWindow.ActivateHint(R, Msg);
 end;
 
+procedure TDesignControlsForm.UpdateControlContent;
+var
+  FField: TEpiField;
+  FSection: TEpiSection;
+  LocalGroups: TEpiGroups;
+  i: Integer;
+  S: String;
+begin
+  BeginFormUpdate;
+  if FEpiControl is TEpiSection then
+  begin
+    Caption := 'Section Properties';
+    EpiControlPageControl.ActivePage := SectionTabSheet;
+    FSection := TEpiSection(EpiControl);
+
+    // Basic Page
+    SectionNameEdit.Text := FSection.Name.Text;
+
+    {$IFNDEF EPI_DEBUG}
+    SectionGroupAccessGroupBox.Visible := false;
+    SectionGroupAccessGroupBox.Enabled := false;
+    {$ELSE}
+    GroupAssignedListBox.Items.BeginUpdate;
+    GroupAvailableListBox.Items.BeginUpdate;
+    GroupAssignedListBox.Clear;
+    GroupAvailableListBox.Clear;
+    LocalGroups := TEpiDocument(FSection.RootOwner).Admin.Groups;
+    for i := 0 to LocalGroups.Count - 1 do
+    begin
+      if FSection.Groups.ItemExistsById(LocalGroups[i].Id) then
+        GroupAssignedListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i])
+      else
+        GroupAvailableListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i]);
+    end;
+    GroupAvailableListBox.Items.EndUpdate;
+    GroupAssignedListBox.Items.EndUpdate;
+    {$ENDIF}
+
+    // Advanced Page
+    WidthEdit.Text := IntToStr(FSection.Width);
+    HeightEdit.Text := IntToStr(FSection.Height);
+  end;
+
+  if FEpiControl is TEpiField then
+  begin
+    Caption := 'Field Properties';
+    EpiControlPageControl.ActivePage := FieldTabSheet;
+    FField := TEpiField(EpiControl);
+
+    // Setup Basic page
+    NameEdit.Text         := FField.Name;
+    FieldTypeLabel.Caption := EpiTypeNames[FField.FieldType];
+    QuestionEdit.Text     := FField.Question.Caption.Text;
+    if FField.FieldType = ftFloat then
+      LengthEdit.Text     := IntToStr(FField.Length - (FField.Decimals + 1))
+    else
+      LengthEdit.Text     := IntToStr(FField.Length);
+    DecimalsEdit.Text     := IntToStr(FField.Decimals);
+
+    // Visible edits
+    LengthEdit.Visible    := FField.FieldType in [ftInteger, ftAutoInc, ftFloat, ftString, ftUpperString];
+    LengthLabel.Visible   := LengthEdit.Visible;
+    DecimalsEdit.Visible  := FField.FieldType = ftFloat;
+    DecimalsLabel.Visible := DecimalsEdit.Visible;
+
+    // Setup "advanced" page.
+    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
+    FieldRangesEdit.Visible := FField.FieldType in [ftInteger, ftFloat, ftDMYDate, ftMDYDate, ftYMDDate, ftTime];
+    FieldRangesLabel.Visible := FieldRangesEdit.Visible;
+    FieldRangesEdit.Enabled := FField.FieldType in [ftInteger, ftFloat];
+    FieldRangesBtn.Visible := FieldRangesEdit.Visible and (not FieldRangesEdit.Enabled);
+    if (FieldRangesEdit.Visible) and (Assigned(FField.Ranges)) then
+      FieldRangesEdit.Text := FField.Ranges.RangesToText
+    else
+      FieldRangesEdit.Text := '';
+
+    UpdateValueLabels;
+  end;
+
+  if FEpiControl is TEpiHeading then
+  begin
+    Caption := 'Heading Properties';
+    EpiControlPageControl.ActivePage := HeadingTabSheet;
+    CaptionEdit.Text := TEpiHeading(EpiControl).Caption.Text;
+  end;
+  EndFormUpdate;
+end;
+
 function TDesignControlsForm.ValidateControl: boolean;
 var
   FSection: TEpiSection;
@@ -1144,6 +1164,8 @@ var
 
 begin
   Result := false;
+  if (not Showing) then exit(true);
+
 
   if EpiControl is TEpiSection then
   begin
@@ -1180,6 +1202,7 @@ begin
          (NewLen <= 0)
       then
       begin
+        ShiftTo1Execute(nil);
         LengthEdit.SetFocus;
         ShowHintMsg('Invalid length', LengthEdit);
         exit;
@@ -1192,6 +1215,7 @@ begin
       if (not TryStrToInt(DecimalsEdit.Text, NewDecLen)) or
          (NewDecLen <= 0) then
       begin
+        ShiftTo1Execute(nil);
         DecimalsEdit.SetFocus;
         ShowHintMsg('Invalid decimals', DecimalsEdit);
         exit;
@@ -1205,6 +1229,7 @@ begin
       if FField.Name <> NameEdit.Text then
       begin
         // Could not rename Fieldname, possibly due to same name already exists or invalid identifier.
+        ShiftTo1Execute(nil);
         NameEdit.SetFocus;
         ShowHintMsg('Name already exists or invalid identifier', NameEdit);
         FField.EndUpdate;

@@ -1,43 +1,45 @@
 object DesignControlsForm: TDesignControlsForm
-  Left = 977
-  Height = 449
-  Top = 347
-  Width = 444
+  Left = 973
+  Height = 422
+  Top = 323
+  Width = 407
   ActiveControl = ApplyBtn
   Caption = 'DesignControlsForm'
-  ClientHeight = 449
-  ClientWidth = 444
+  ClientHeight = 422
+  ClientWidth = 407
   Color = clSkyBlue
   OnCloseQuery = FormCloseQuery
+  OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
   OnShow = FormShow
+  ShowInTaskBar = stAlways
   LCLVersion = '0.9.29'
   object EpiControlPageControl: TPageControl
     Left = 0
-    Height = 399
+    Height = 372
     Top = 0
-    Width = 444
+    Width = 407
     ActivePage = FieldTabSheet
     Align = alClient
     TabIndex = 1
     TabOrder = 0
     object SectionTabSheet: TTabSheet
       Caption = 'SectionTabSheet'
-      ClientHeight = 364
-      ClientWidth = 438
+      ClientHeight = 337
+      ClientWidth = 401
       object SectionPageControl: TPageControl
         Left = 0
-        Height = 364
+        Height = 337
         Top = 0
-        Width = 438
-        ActivePage = SectionAdvancedSheet
+        Width = 401
+        ActivePage = SectionBasicSheet
         Align = alClient
-        TabIndex = 1
+        TabIndex = 0
         TabOrder = 0
         object SectionBasicSheet: TTabSheet
           Caption = 'Basic'
-          ClientHeight = 360
-          ClientWidth = 434
+          ClientHeight = 333
+          ClientWidth = 397
           object SectionGroupAccessGroupBox: TGroupBox
             Left = 8
             Height = 168
@@ -188,8 +190,8 @@ object DesignControlsForm: TDesignControlsForm
         end
         object SectionAdvancedSheet: TTabSheet
           Caption = 'Advanced'
-          ClientHeight = 360
-          ClientWidth = 434
+          ClientHeight = 333
+          ClientWidth = 397
           object HeightEdit: TEdit
             Left = 8
             Height = 27
@@ -225,21 +227,21 @@ object DesignControlsForm: TDesignControlsForm
     end
     object FieldTabSheet: TTabSheet
       Caption = 'FieldTabSheet'
-      ClientHeight = 364
-      ClientWidth = 438
+      ClientHeight = 337
+      ClientWidth = 401
       object FieldPageControl: TPageControl
         Left = 0
-        Height = 364
+        Height = 337
         Top = 0
-        Width = 438
+        Width = 401
         ActivePage = FieldAdvancedSheet
         Align = alClient
         TabIndex = 1
         TabOrder = 0
         object FieldBasicSheet: TTabSheet
           Caption = 'Basic'
-          ClientHeight = 329
-          ClientWidth = 432
+          ClientHeight = 302
+          ClientWidth = 395
           object DecimalsEdit: TEdit
             Left = 162
             Height = 27
@@ -327,8 +329,8 @@ object DesignControlsForm: TDesignControlsForm
         end
         object FieldAdvancedSheet: TTabSheet
           Caption = 'ValueLabel/Range'
-          ClientHeight = 329
-          ClientWidth = 432
+          ClientHeight = 302
+          ClientWidth = 395
           object ValueLabelComboBox: TComboBox
             Left = 5
             Height = 31
@@ -389,8 +391,8 @@ object DesignControlsForm: TDesignControlsForm
     end
     object HeadingTabSheet: TTabSheet
       Caption = 'HeadingTabSheet'
-      ClientHeight = 364
-      ClientWidth = 438
+      ClientHeight = 337
+      ClientWidth = 401
       object CaptionEdit: TEdit
         Left = 8
         Height = 27
@@ -411,14 +413,14 @@ object DesignControlsForm: TDesignControlsForm
   object Panel3: TPanel
     Left = 0
     Height = 50
-    Top = 399
-    Width = 444
+    Top = 372
+    Width = 407
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 444
+    ClientWidth = 407
     TabOrder = 1
     object OkBtn: TBitBtn
-      Left = 365
+      Left = 328
       Height = 32
       Top = 10
       Width = 71
@@ -430,7 +432,7 @@ object DesignControlsForm: TDesignControlsForm
       TabOrder = 1
     end
     object CancelBtn: TBitBtn
-      Left = 277
+      Left = 240
       Height = 32
       Top = 10
       Width = 79
@@ -455,8 +457,8 @@ object DesignControlsForm: TDesignControlsForm
     end
   end
   object ActionList1: TActionList
-    left = 463
-    top = 380
+    left = 104
+    top = 280
     object ApplyAction: TAction
       Caption = '&Apply'
       OnExecute = ApplyActionExecute

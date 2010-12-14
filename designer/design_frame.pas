@@ -20,6 +20,31 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    CurrentSectionPanel: TPanel;
+    KeyLabel: TLabel;
+    ExtendedLabel: TLabel;
+    KeyPanel: TPanel;
+    ExtendedPanel: TPanel;
+    ValueLabelLabel: TLabel;
+    RangeLabel: TLabel;
+    ValueLabelPanel: TPanel;
+    FieldNameLabel: TLabel;
+    FieldTypeLabel: TLabel;
+    FieldNamePanel: TPanel;
+    DefaultValueLabel: TLabel;
+    FieldTypePanel: TPanel;
+    DefaultValuePanel: TPanel;
+    RecordStaticLabel: TLabel;
+    FieldsStaticLabel: TLabel;
+    SectionsLabel: TLabel;
+    RecordsLabel: TLabel;
+    FieldsLabel: TLabel;
+    SectionsPanel: TPanel;
+    SectionsStaticLabel: TLabel;
+    CurrentSectionLabel: TLabel;
+    RecordsPanel: TPanel;
+    FieldsPanel: TPanel;
+    StatusBarPanel: TPanel;
     PasteAsQesMenuItem: TMenuItem;
     PasteAsQESAction: TAction;
     DeleteAllControlsAction: TAction;
@@ -110,7 +135,8 @@ type
     TodayDateSubMenu: TMenuItem;
     TestToolButton: TToolButton;
     DeleteAllToolButton: TToolButton;
-    procedure AddStructureActionExecute(Sender: TObject);
+    RangePanel: TPanel;
+    procedure   AddStructureActionExecute(Sender: TObject);
     procedure   Button1Click(Sender: TObject);
     procedure   Button2Click(Sender: TObject);
     procedure   Button3Click(Sender: TObject);
@@ -238,6 +264,7 @@ type
     FStatusbarFieldOtherPanel: TStatusPanel;
     FStatusbarFieldNamePanel: TStatusPanel;
     FStatusbarMousePanel: TStatusPanel;
+    procedure   EpiContolStatusbarUpdateHook(Sender: TObject; EventGrp: TEpiEventGroup; EventType: word; Data: Pointer);
     procedure   UpdateStatusbarControl(EpiControl: TEpiCustomControlItem);
     procedure   UpdateStatusbarSizes;
     procedure   VisualFeedbackHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
@@ -1362,17 +1389,28 @@ begin
         Length := ManagerSettings.StringFieldLength;
     end;
   end;
+  Result.RegisterOnChangeHook(@EpiContolStatusbarUpdateHook);
 end;
 
 function TDesignFrame.NewHeading: TEpiHeading;
 begin
   result := FActiveSection.NewHeading;
   result.Caption.Text := '(Untitled)';
+  Result.RegisterOnChangeHook(@EpiContolStatusbarUpdateHook);
 end;
 
 function TDesignFrame.NewSection: TEpiSection;
 begin
   result := DataFile.NewSection;
+  Result.RegisterOnChangeHook(@EpiContolStatusbarUpdateHook);
+end;
+
+procedure TDesignFrame.EpiContolStatusbarUpdateHook(Sender: TObject;
+  EventGrp: TEpiEventGroup; EventType: word; Data: Pointer);
+begin
+  if ((EventGrp = eegCustomBase) and (EventType = Word(ecceDestroy))) then exit;
+
+  UpdateStatusbarControl(TEpiCustomControlItem(Sender));
 end;
 
 procedure TDesignFrame.UpdateStatusbarControl(EpiControl: TEpiCustomControlItem
@@ -1415,17 +1453,57 @@ begin
     FStatusbarFieldTypePanel.Text := 'Section';
     FStatusbarFieldNamePanel.Text := TEpiSection(EpiControl).Name.Text;
   end;
+
+
+  // New "statusbar"
+  RecordsLabel.Caption := IntToStr(DataFile.Size);
+  SectionsLabel.Caption := IntToStr(DataFile.Sections.Count);
+  if FActiveSection = DataFile.MainSection then
+    CurrentSectionLabel.Caption := 'main'
+  else
+    CurrentSectionLabel.Caption := FActiveSection.Name.Text;
+  FieldsLabel.Caption := IntToStr(DataFile.Fields.Count);
+  if EpiControl is TEpiField then
+  with TEpiField(EpiControl) do
+  begin
+    FieldNameLabel.Caption    := Name;
+    FieldTypeLabel.Caption    := EpiTypeNames[FieldType];
+    DefaultValueLabel.Caption := ''; // TODO : Set when implement in core.
+    if Assigned(ValueLabelSet) then
+      ValueLabelLabel.Caption := ValueLabelSet.Name
+    else
+      ValueLabelLabel.Caption := '';
+    RangeLabel.Caption        := BoolToStr(Assigned(Ranges), 'Range', '');
+    KeyLabel.Caption          := ''; // TODO : Set when implement in core.
+    ExtendedLabel.Caption     := ''; // TODO : Set when implement in core.
+  end else begin
+    FieldNameLabel.Caption    := '';
+    FieldTypeLabel.Caption    := '';
+    DefaultValueLabel.Caption := '';
+    ValueLabelLabel.Caption   := '';
+    RangeLabel.Caption        := '';
+    KeyLabel.Caption          := '';
+    ExtendedLabel.Caption     := '';
+  end;
+
   UpdateStatusbarSizes;
 end;
 
 procedure TDesignFrame.UpdateStatusbarSizes;
-var
-  W: Integer;
-  i: Integer;
 const
-  PanelBorder = 10;
+  PanelBorder = 2;
+
+  function TW(Lbl: TLabel): Integer;
+  begin
+    Result := StatusBarPanel.Canvas.TextWidth(Lbl.Caption);
+  end;
+
 begin
-  W := 0;
+  RecordsPanel.Width  := RecordsLabel.Left + TW(RecordsLabel) + PanelBorder;
+  SectionsPanel.Width := SectionsLabel.Left + TW(SectionsLabel) + PanelBorder;
+  FieldsPanel.Width   := FieldsLabel.Left + TW(FieldsLabel) + PanelBorder;
+
+{  W := 0;
   with DesignerStatusBar.Canvas do
   begin
     FStatusbarSectionsPanel.Width := TextWidth(FStatusbarSectionsPanel.Text) + PanelBorder;
@@ -1460,7 +1538,7 @@ begin
   end;
 
   With DesignerStatusBar do
-    FStatusbarFieldNamePanel.Width := DesignerStatusBar.Width - W;
+    FStatusbarFieldNamePanel.Width := DesignerStatusBar.Width - W;      }
 end;
 
 procedure TDesignFrame.VisualFeedbackHook(Sender: TObject;
@@ -1468,7 +1546,7 @@ procedure TDesignFrame.VisualFeedbackHook(Sender: TObject;
 var
   SdrList: TEpiCustomList absolute Sender;
 begin
-  if TEpiCustomChangeEventType(EventType) in [ecceAddItem, ecceDelItem, ecceUpdate] then
+{  if TEpiCustomChangeEventType(EventType) in [ecceAddItem, ecceDelItem, ecceUpdate] then
   begin
     if Sender is TEpiSections then
       FStatusbarSectionsPanel.Text := 'Sections: ' + IntToStr(SdrList.Count - 1);
@@ -1482,7 +1560,7 @@ begin
   if (Sender is TEpiDataFile) and (not (ebsDestroying in TEpiDataFile(Sender).State)) then
     FStatusbarRecordsPanel.Text := Format('Records: %d', [DataFile.Size]);
 
-  FrameResize(nil);
+  FrameResize(nil);        }
 end;
 
 procedure TDesignFrame.SetDataFile(const AValue: TEpiDataFile);
@@ -1527,6 +1605,8 @@ begin
       end;
     end;
   end;
+  if not Assigned(FActiveControl) then
+    EnterControl(FDesignerBox);
   DataFile.EndUpdate;
 end;
 
@@ -1833,6 +1913,11 @@ var
   S, T: String;
   EpiControl: TEpiCustomControlItem;
 begin
+  // Validate active control in ControlDesign form - it could be in
+  //  invalid state.
+  if Assigned(FDesignControlForm) and
+     (not FDesignControlForm.ValidateControl) then exit;
+
   ExitControl(nil);
   if Not Assigned(Sender) then
     Sender := FDesignerBox;
@@ -1853,8 +1938,6 @@ begin
   else
     FActiveDockSite := TControl(Sender).Parent;
 
-  UpdateStatusbarControl(EpiControl);
-
   if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
     FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
 
@@ -1863,6 +1946,7 @@ begin
   FActiveControl.Color := $00B6F5F5;
 
   ShowForm(EpiControl, FActiveControl.ClientToScreen(Point(0,0)), false);
+  UpdateStatusbarControl(EpiControl);
 end;
 
 procedure TDesignFrame.ExitControl(Sender: TObject);
@@ -2122,6 +2206,9 @@ FStatusbarFieldRangePanel.Alignment := taCenter;
     FStatusbarMousePanel.Alignment    := taRightJustify;
 
     EndUpdate;
+    {$IFDEF EPI_RELEASE}
+    Visible := False;
+    {$ENDIF}
   end;
   {$IFNDEF EPI_DEBUG}
   Splitter1.Enabled := false;
