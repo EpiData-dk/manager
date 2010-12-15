@@ -52,8 +52,8 @@ procedure RegisterSettingFrame(const Order: byte;
 const
   ManagerVersion: TEpiVersionInfo = (
     VersionNo: 0;
-    MajorRev:  5;
-    MinorRev:  7;
+    MajorRev:  6;
+    MinorRev:  0;
     BuildNo:   0;
   );
 
@@ -123,6 +123,7 @@ begin
       WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
       WriteInteger(Sec, 'SaveAsType', SaveType);
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
+      WriteBool(Sec, 'ShowWelcome', ShowWelcome);
       Result := true;
     end;
   finally
@@ -179,10 +180,11 @@ begin
       WorkingDirUTF8:        string;
       PasteSpecialType:      byte;}
       Sec := 'advanced';
-      WorkingDirUTF8   := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
-      PasteSpecialType := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
-      SaveType         := ReadInteger(Sec, 'SaveAsType', SaveType);
+      WorkingDirUTF8      := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+      PasteSpecialType    := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
+      SaveType            := ReadInteger(Sec, 'SaveAsType', SaveType);
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
+      ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
     end;
   finally
     Ini.Free;

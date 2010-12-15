@@ -12,8 +12,7 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <MinorVersionNr Value="5"/>
-      <RevisionNr Value="8"/>
+      <MinorVersionNr Value="6"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -219,8 +218,8 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dEPI_DEBUG
--dEPI_RELEASE1"/>
+      <CustomOptions Value="-dEPI_DEBUG1
+-dEPI_RELEASE"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

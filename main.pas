@@ -113,6 +113,15 @@ begin
   LoadIniFile;
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'MainForm');
+
+  // Show welcome message
+
+  {$IFDEF EPI_RELEASE}
+  if ManagerSettings.ShowWelcome then
+    ShowMessagePos('EpiData Manager:' + LineEnding +
+                   'See help menu above for an introduction.' + LineEnding +
+                   'Get latest version from http://www.epidata.dk', 15, 15);
+  {$ENDIF}
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);

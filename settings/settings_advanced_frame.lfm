@@ -79,4 +79,12 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
     Caption = 'Save window positions'
     TabOrder = 3
   end
+  object ShowWelcomeChkBox: TCheckBox
+    Left = 8
+    Height = 22
+    Top = 184
+    Width = 152
+    Caption = 'Show Welcome Box'
+    TabOrder = 4
+  end
 end

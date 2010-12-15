@@ -13,6 +13,7 @@ type
   { TSettings_AdvancedFrame }
 
   TSettings_AdvancedFrame = class(TFrame, ISettingsFrame)
+    ShowWelcomeChkBox: TCheckBox;
     SaveWindowPositionsChkBox: TCheckBox;
     DefaultSaveTypeComboBox: TComboBox;
     DefaultPasteCombo: TComboBox;
@@ -60,6 +61,7 @@ begin
     DefaultPasteCombo.ItemIndex := PasteSpecialType;
     DefaultSaveTypeComboBox.ItemIndex := SaveType;
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
+    ShowWelcomeChkBox.Checked         := ShowWelcome;
   end;
 end;
 
@@ -68,10 +70,11 @@ begin
   with FData^ do
   begin
     if DirectoryExistsUTF8(WorkingDirEdit.Text) then
-      WorkingDirUTF8 := WorkingDirEdit.Text;
-    PasteSpecialType := DefaultPasteCombo.ItemIndex;
-    SaveType         := DefaultSaveTypeComboBox.ItemIndex;
+      WorkingDirUTF8    := WorkingDirEdit.Text;
+    PasteSpecialType    := DefaultPasteCombo.ItemIndex;
+    SaveType            := DefaultSaveTypeComboBox.ItemIndex;
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;
+    ShowWelcome         := ShowWelcomeChkBox.Checked;
   end;
   Result := true;
 end;

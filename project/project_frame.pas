@@ -283,14 +283,47 @@ end;
 procedure TProjectFrame.DoOpenProject(Const AFileName: string);
 var
   St: TMemoryStream;
+  Fn: String;
+  Res: Integer;
 begin
+  Fn := aFilename;
+  Res := mrNone;
+  if FileExistsUTF8(Fn + '.bak') then
+  begin
+    Res := MessageDlg('Information',
+             'A timed backup file exists. (loading of this overwrites previous project file)' + LineEnding + LineEnding +
+             'File: ' +  #9  + #9  + SysToUTF8(ExtractFileName(UTF8ToSys(Fn)))          +
+               ' (' + FormatDateTime('YYYY/MM/DD HH:NN:SS', FileDateToDateTime(FileAgeUTF8(Fn))) + ')' + LineEnding +
+             'Recovery: ' + #9 + SysToUTF8(ExtractFileName(UTF8ToSys(Fn + '.bak'))) +
+               ' (' + FormatDateTime('YYYY/MM/DD HH:NN:SS', FileDateToDateTime(FileAgeUTF8(Fn + '.bak'))) + ')' + LineEnding +  LineEnding +
+             'Load the backup instead?',
+             mtInformation, mbYesNoCancel, 0, mbYes);
+    case Res of
+      mrYes:    Fn := aFilename + '.bak';
+      mrNo:     begin
+                  Res := MessageDlg('Warning',
+                           'Loading ' + SysToUTF8(ExtractFileName(UTF8ToSys(Fn))) + ' will delete recovery file.' + LineEnding +
+                           'Continue?',
+                           mtWarning, mbYesNo, 0, mbNo);
+                  case Res of
+                    mrNo:  Exit;
+                    mrYes: Res := mrNo;  // Res used later to check for modification state.
+                  end;
+                end;
+      mrCancel: Exit;
+    end;
+  end;
+
   DoCloseProject;
 
+  Cursor := crHourGlass;
+  Application.ProcessMessages;
+
   St := TMemoryStream.Create;
-  if ExtractFileExt(UTF8ToSys(AFileName)) = '.epz' then
-    ZipFileToStream(St, AFileName)
+  if ExtractFileExt(UTF8ToSys(Fn)) = '.epz' then
+    ZipFileToStream(St, Fn)
   else
-    St.LoadFromFile(AFileName);
+    St.LoadFromFile(Fn);
 
   St.Position := 0;
   FEpiDocument := DoCreateNewDocument;
@@ -299,7 +332,13 @@ begin
   DoNewDataForm(FEpiDocument.DataFiles[0]);
   St.Free;
 
+  // Create backup process.
   InitBackupTimer;
+
+  Cursor := crDefault;
+  Application.ProcessMessages;
+  if Res = mrYes then
+    EpiDocument.Modified := true;
 
   UpdateCaption;
 end;
@@ -332,6 +371,8 @@ begin
   // TODO : Delete ALL dataforms!
   FreeAndNil(FActiveFrame);
   FreeAndNil(FBackupTimer);
+  if FileExistsUTF8(ProjectFileName + '.bak') then
+    DeleteFileUTF8(ProjectFileName + '.bak');
   DataFilesTreeView.Items.Clear;
 end;
 

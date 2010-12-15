@@ -28,6 +28,7 @@ type
 
     // Advanced:
     SaveWindowPositions:   boolean;
+    ShowWelcome:           boolean;
     WorkingDirUTF8:        string;
     PasteSpecialType:      byte;     // Index into list:
                                      //   0: QES
@@ -67,6 +68,7 @@ var
 
     // Advanced:
     SaveWindowPositions:   true;
+    ShowWelcome:           true;
     WorkingDirUTF8:        '';
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
