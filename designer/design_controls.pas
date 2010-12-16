@@ -134,8 +134,6 @@ type
   { TDesignControlsForm }
 
   TDesignControlsForm = class(TForm)
-    FieldRangesBtn: TButton;
-    FieldRangesEdit: TEdit;
     Label10: TLabel;
     FieldTypeLabel: TLabel;
     FieldRangesLabel: TLabel;
@@ -1067,14 +1065,6 @@ begin
 
     // Setup "advanced" page.
     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
-    FieldRangesEdit.Visible := FField.FieldType in [ftInteger, ftFloat, ftDMYDate, ftMDYDate, ftYMDDate, ftTime];
-    FieldRangesLabel.Visible := FieldRangesEdit.Visible;
-    FieldRangesEdit.Enabled := FField.FieldType in [ftInteger, ftFloat];
-    FieldRangesBtn.Visible := FieldRangesEdit.Visible and (not FieldRangesEdit.Enabled);
-    if (FieldRangesEdit.Visible) and (Assigned(FField.Ranges)) then
-      FieldRangesEdit.Text := FField.Ranges.RangesToText
-    else
-      FieldRangesEdit.Text := '';
 
     UpdateValueLabels;
   end;
@@ -1098,7 +1088,7 @@ var
   i: Integer;
   Ranges: TEpiRanges;
 
-  function  TextToRanges(Text: string; Const AOwner: TEpiField; Out Ranges: TEpiRanges): boolean;
+{  function  TextToRanges(Text: string; Const AOwner: TEpiField; Out Ranges: TEpiRanges): boolean;
   var
     SList: TStringList;
     i:     integer;
@@ -1160,7 +1150,7 @@ var
       FreeAndNil(Ranges);
       Result := false;
     end;
-  end;
+  end;                   }
 
 begin
   Result := false;
@@ -1245,12 +1235,6 @@ begin
     // "Advanced" page
     if ValueLabelComboBox.ItemIndex >= 0 then
       FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
-
-    if (FieldRangesEdit.Text <> '') and (TextToRanges(FieldRangesEdit.Text, FField, Ranges)) then
-    begin
-      FField.Ranges.Free;
-      FField.Ranges := Ranges;
-    end;
 
     FField.EndUpdate;
     Result := true;

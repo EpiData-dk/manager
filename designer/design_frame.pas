@@ -471,20 +471,6 @@ begin
     MoveEndAction.Execute;
     Key := VK_UNKNOWN;
   end;
-
-  // Ugly dirty way of capturing shortcuts involving keys.
-  // -- send to mainform, it automatically propagetes down through action lists..
-  if Key <> VK_UNKNOWN then
-  begin
-    KeyMsg.Msg := LM_KEYDOWN;
-    KeyMsg.KeyData := ShortCut(0, Shift);
-    if (ssAlt in Shift) then
-      KeyMsg.KeyData := KeyMsg.KeyData or $20000000;
-    KeyMsg.CharCode := Key;
-    KeyMsg.Result := 0;
-    if MainForm.IsShortcut(KeyMsg) then
-      Key := VK_UNKNOWN;
-  end;
 end;
 
 procedure TDesignFrame.Button2Click(Sender: TObject);

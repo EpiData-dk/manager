@@ -1,7 +1,7 @@
 object DesignControlsForm: TDesignControlsForm
-  Left = 973
+  Left = 576
   Height = 422
-  Top = 323
+  Top = 304
   Width = 407
   ActiveControl = ApplyBtn
   Caption = 'DesignControlsForm'
@@ -366,25 +366,6 @@ object DesignControlsForm: TDesignControlsForm
             Width = 53
             Caption = 'Ranges:'
             ParentColor = False
-          end
-          object FieldRangesEdit: TEdit
-            Left = 5
-            Height = 27
-            Hint = 'Valid ranges for the field. E.g:'#10'20-80¦90 or 1.20-3.50¦4.50'#10#10'For date/time field click the "..." button.'
-            Top = 96
-            Width = 269
-            OnUTF8KeyPress = FieldRangesEditUTF8KeyPress
-            ParentShowHint = False
-            ShowHint = True
-            TabOrder = 2
-          end
-          object FieldRangesBtn: TButton
-            Left = 287
-            Height = 27
-            Top = 96
-            Width = 27
-            Caption = '...'
-            TabOrder = 3
           end
         end
       end

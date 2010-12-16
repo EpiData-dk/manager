@@ -488,7 +488,11 @@ end;
 function TProjectFrame.InitBackupTimer: boolean;
 begin
   if Assigned(FBackupTimer) then
+  begin
+    if not FBackupTimer.Enabled then
+      FBackupTimer.Enabled := true;
     exit(true);
+  end;
 
   Result := false;
   // Create backup process.
@@ -513,9 +517,24 @@ begin
 end;
 
 procedure TProjectFrame.TimedBackup(Sender: TObject);
+var
+  Res: LongInt;
 begin
   try
     FBackupTimer.Enabled := false;
+
+    {$IFDEF EPI_RELEASE}
+    // Warn user that project has not yet been saved...
+    if ProjectFileName = '' then
+    begin
+      Res := MessageDlg('Warning',
+               'Your project have not yet been save.' + LineEnding +
+               'Do you wish to save now?' + LineEnding +
+               '(NO = you will NOT be asked again)', mtWarning, mbYesNo, 0, mbYes);
+      if Res = mrNo then exit;
+      SaveProjectAsAction.Execute;
+    end;
+    {$ENDIF}
     DoSaveProject(ProjectFileName + '.bak');
     UpdateTimer;
     FBackupTimer.Enabled := true;
@@ -536,6 +555,7 @@ begin
 
   FEpiDocument := DoCreateNewDocument;
   UpdateCaption;
+  InitBackupTimer;
 
   {$IFDEF EPI_DEBUG}
 
