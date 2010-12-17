@@ -134,9 +134,13 @@ type
   { TDesignControlsForm }
 
   TDesignControlsForm = class(TForm)
+    FromEdit: TEdit;
+    ToEdit: TEdit;
+    FieldRangesLabel: TLabel;
     Label10: TLabel;
     FieldTypeLabel: TLabel;
-    FieldRangesLabel: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
     ShiftTo2Action: TAction;
     ShiftTo1Action: TAction;
     CancelAction: TAction;
@@ -1065,6 +1069,14 @@ begin
 
     // Setup "advanced" page.
     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
+    if Assigned(FField.Ranges) and (FField.Ranges.Count > 0) then
+    begin
+      FromEdit.Text := TEpiRange(FField.Ranges[0]).AsString[true];
+      ToEdit.Text   := TEpiRange(FField.Ranges[0]).AsString[false];
+    end else begin
+      FromEdit.Text := '';
+      ToEdit.Text   := '';
+    end;
 
     UpdateValueLabels;
   end;
@@ -1087,71 +1099,7 @@ var
   NewDecLen: LongInt;
   i: Integer;
   Ranges: TEpiRanges;
-
-{  function  TextToRanges(Text: string; Const AOwner: TEpiField; Out Ranges: TEpiRanges): boolean;
-  var
-    SList: TStringList;
-    i:     integer;
-    IntRes: EpiInteger;
-    FlRes: EpiFloat;
-    S, T: string;
-    P: LongInt;
-    Range: TEpiRange;
-  begin
-    Result := true;
-
-    Ranges := TEpiRanges.Create(AOwner);
-    Ranges.ItemOwner := true;
-
-    try
-      S := Copy2SymbDel(Text, '|');
-
-      while Length(S) > 0 do
-      begin
-        Range := Ranges.NewRange;
-        T := Copy2SymbDel(S, '-');
-        case Ranges.FieldType of
-          ftInteger: begin
-                       if not TryStrToInt64(T, IntRes) then
-                       begin
-                         ShowHintMsg(T + ' is not a valid integer', FieldRangesEdit);
-                         Exit(false);
-                       end;
-                       Range.AsInteger[true] := IntRes;
-
-                       if (Length(S) > 0) and (not TryStrToInt64(S, IntRes)) then
-                       begin
-                         ShowHintMsg(S + ' is not a valid integer', FieldRangesEdit);
-                         Exit(false);
-                       end;
-                       Range.AsInteger[false] := IntRes;
-                     end;
-          ftFloat:   begin
-//                       T := StringsReplace(T, ['.','.'], [DecimalSeparator, DecimalSeparator], [rfReplaceAll]);
-                       if not TryStrToFloat(T, FlRes) then
-                       begin
-                         ShowHintMsg(T + ' is not a valid float', FieldRangesEdit);
-                         Exit(false);
-                       end;
-                       Range.AsFloat[true] := FlRes;
-
-//                       S := StringsReplace(S, ['.','.'], [DecimalSeparator, DecimalSeparator], [rfReplaceAll]);
-                       if (Length(S) > 0) and (not TryStrToFloat(S, FlRes)) then
-                       begin
-                         ShowHintMsg(S + ' is not a valid float', FieldRangesEdit);
-                         Exit(false);
-                       end;
-                       Range.AsFloat[false] := FlRes;
-                     end;
-        end;
-        S := Copy2SymbDel(Text, '|');
-      end;
-    except
-      FreeAndNil(Ranges);
-      Result := false;
-    end;
-  end;                   }
-
+  R: TEpiRange;
 begin
   Result := false;
   if (not Showing) then exit(true);
@@ -1212,6 +1160,46 @@ begin
       end;
     end;
 
+    if ((FromEdit.Text <> '') and (ToEdit.Text = '')) then
+    begin
+      ShiftTo2Execute(nil);
+      ToEdit.SetFocus;
+      ShowHintMsg('No "To" entered', ToEdit);
+      Exit;
+    end;
+
+    if ((FromEdit.Text = '') and (ToEdit.Text <> '')) then
+    begin
+      ShiftTo2Execute(nil);
+      FromEdit.SetFocus;
+      ShowHintMsg('No "From" entered', FromEdit);
+      Exit;
+    end;
+
+    if ((FromEdit.Text <> '') and (ToEdit.Text <> '')) then
+    begin
+      if Assigned(FField.Ranges) then
+      begin
+        Ranges := FField.Ranges;
+        R := TEpiRange(Ranges[0]);
+      end else begin
+        Ranges := TEpiRanges.Create(FField);
+        Ranges.ItemOwner := true;
+        R := Ranges.NewRange;
+      end;
+      Case Ranges.FieldType of
+        ftInteger: ;
+        ftFloat:   ;
+        ftTime:    ;
+        ftDMYDate,
+        ftMDYDate,
+        ftYMDDate: ;
+      end;
+//      R.AsString[true]  := FromEdit.Text;
+//      R.AsString[false] := ToEdit.Text;
+    end;
+
+
     FField.BeginUpdate;
     if NameEdit.Text <> FField.Name then
     begin
@@ -1235,6 +1223,7 @@ begin
     // "Advanced" page
     if ValueLabelComboBox.ItemIndex >= 0 then
       FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+
 
     FField.EndUpdate;
     Result := true;
