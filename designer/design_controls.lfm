@@ -1,12 +1,12 @@
 object DesignControlsForm: TDesignControlsForm
-  Left = 626
+  Left = 1067
   Height = 497
-  Top = 267
-  Width = 351
+  Top = 302
+  Width = 356
   ActiveControl = ApplyBtn
   Caption = 'DesignControlsForm'
   ClientHeight = 497
-  ClientWidth = 351
+  ClientWidth = 356
   Color = clSkyBlue
   OnCloseQuery = FormCloseQuery
   OnDeactivate = FormDeactivate
@@ -18,7 +18,7 @@ object DesignControlsForm: TDesignControlsForm
     Left = 0
     Height = 447
     Top = 0
-    Width = 351
+    Width = 356
     ActivePage = FieldTabSheet
     Align = alClient
     TabIndex = 1
@@ -26,12 +26,12 @@ object DesignControlsForm: TDesignControlsForm
     object SectionTabSheet: TTabSheet
       Caption = 'SectionTabSheet'
       ClientHeight = 412
-      ClientWidth = 345
+      ClientWidth = 350
       object SectionPageControl: TPageControl
         Left = 0
         Height = 412
         Top = 0
-        Width = 388
+        Width = 350
         ActivePage = SectionBasicSheet
         Align = alClient
         TabIndex = 0
@@ -39,7 +39,7 @@ object DesignControlsForm: TDesignControlsForm
         object SectionBasicSheet: TTabSheet
           Caption = 'Basic'
           ClientHeight = 377
-          ClientWidth = 382
+          ClientWidth = 344
           object SectionGroupAccessGroupBox: TGroupBox
             AnchorSideLeft.Control = SectionNameEdit
             AnchorSideRight.Control = SectionNameEdit
@@ -47,18 +47,18 @@ object DesignControlsForm: TDesignControlsForm
             Left = 8
             Height = 168
             Top = 72
-            Width = 362
+            Width = 322
             Anchors = [akTop, akLeft, akRight]
             Caption = 'Groups access:'
             ClientHeight = 149
-            ClientWidth = 358
+            ClientWidth = 318
             TabOrder = 1
             object GroupAvailableListBox: TListBox
               AnchorSideRight.Control = GrpRightsMoveRight
               Left = 6
               Height = 107
               Top = 31
-              Width = 156
+              Width = 136
               Anchors = [akTop, akLeft, akRight]
               BorderSpacing.Right = 5
               ItemHeight = 0
@@ -69,10 +69,10 @@ object DesignControlsForm: TDesignControlsForm
             object GroupAssignedListBox: TListBox
               AnchorSideLeft.Control = GrpRightsMoveRight
               AnchorSideLeft.Side = asrBottom
-              Left = 197
+              Left = 177
               Height = 107
               Top = 34
-              Width = 154
+              Width = 134
               Anchors = [akTop, akLeft, akRight]
               BorderSpacing.Left = 7
               ItemHeight = 0
@@ -92,7 +92,7 @@ object DesignControlsForm: TDesignControlsForm
               AnchorSideLeft.Control = GroupAvailableListBox
               AnchorSideLeft.Side = asrBottom
               AnchorSideRight.Control = GroupAssignedListBox
-              Left = 167
+              Left = 147
               Height = 22
               Top = 87
               Width = 23
@@ -137,7 +137,7 @@ object DesignControlsForm: TDesignControlsForm
             end
             object Label6: TLabel
               AnchorSideLeft.Control = GroupAssignedListBox
-              Left = 197
+              Left = 177
               Height = 18
               Top = 7
               Width = 64
@@ -148,7 +148,7 @@ object DesignControlsForm: TDesignControlsForm
               AnchorSideLeft.Control = GroupAvailableListBox
               AnchorSideLeft.Side = asrBottom
               AnchorSideRight.Control = GroupAvailableListBox
-              Left = 167
+              Left = 147
               Height = 22
               Top = 55
               Width = 23
@@ -196,7 +196,7 @@ object DesignControlsForm: TDesignControlsForm
             Left = 8
             Height = 27
             Top = 32
-            Width = 362
+            Width = 322
             Anchors = [akTop, akLeft, akRight]
             TabOrder = 0
           end
@@ -212,7 +212,7 @@ object DesignControlsForm: TDesignControlsForm
         object SectionAdvancedSheet: TTabSheet
           Caption = 'Advanced'
           ClientHeight = 377
-          ClientWidth = 382
+          ClientWidth = 344
           object HeightEdit: TEdit
             Left = 8
             Height = 27
@@ -249,12 +249,12 @@ object DesignControlsForm: TDesignControlsForm
     object FieldTabSheet: TTabSheet
       Caption = 'FieldTabSheet'
       ClientHeight = 412
-      ClientWidth = 345
+      ClientWidth = 350
       object FieldPageControl: TPageControl
         Left = 0
         Height = 412
         Top = 0
-        Width = 345
+        Width = 350
         ActivePage = FieldAdvancedSheet
         Align = alClient
         TabIndex = 1
@@ -262,12 +262,12 @@ object DesignControlsForm: TDesignControlsForm
         object FieldBasicSheet: TTabSheet
           Caption = 'Basic'
           ClientHeight = 377
-          ClientWidth = 339
+          ClientWidth = 344
           object DecimalsEdit: TEdit
             AnchorSideLeft.Side = asrBottom
             AnchorSideRight.Control = NameEdit
             AnchorSideRight.Side = asrBottom
-            Left = 179
+            Left = 184
             Height = 27
             Top = 157
             Width = 150
@@ -278,7 +278,7 @@ object DesignControlsForm: TDesignControlsForm
           end
           object DecimalsLabel: TLabel
             AnchorSideLeft.Control = DecimalsEdit
-            Left = 179
+            Left = 184
             Height = 18
             Top = 133
             Width = 66
@@ -291,7 +291,7 @@ object DesignControlsForm: TDesignControlsForm
             Left = 10
             Height = 27
             Top = 157
-            Width = 157
+            Width = 162
             Anchors = [akTop, akLeft, akRight]
             OnEditingDone = LengthEditChange
             TabOrder = 2
@@ -311,7 +311,7 @@ object DesignControlsForm: TDesignControlsForm
             Left = 10
             Height = 27
             Top = 93
-            Width = 319
+            Width = 324
             Anchors = [akTop, akLeft, akRight]
             TabOrder = 1
           end
@@ -330,7 +330,7 @@ object DesignControlsForm: TDesignControlsForm
             Left = 10
             Height = 27
             Top = 29
-            Width = 319
+            Width = 324
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Left = 10
             BorderSpacing.Right = 10
@@ -348,7 +348,7 @@ object DesignControlsForm: TDesignControlsForm
           end
           object Label10: TLabel
             AnchorSideRight.Control = FieldTypeLabel
-            Left = 195
+            Left = 200
             Height = 18
             Top = 5
             Width = 35
@@ -360,7 +360,7 @@ object DesignControlsForm: TDesignControlsForm
           object FieldTypeLabel: TLabel
             AnchorSideRight.Control = NameEdit
             AnchorSideRight.Side = asrBottom
-            Left = 232
+            Left = 237
             Height = 18
             Top = 5
             Width = 97
@@ -374,13 +374,15 @@ object DesignControlsForm: TDesignControlsForm
         object FieldAdvancedSheet: TTabSheet
           Caption = 'ValueLabel/Range'
           ClientHeight = 377
-          ClientWidth = 339
+          ClientWidth = 344
           object ValueLabelComboBox: TComboBox
-            Left = 5
+            AnchorSideLeft.Control = FieldAdvancedSheet
+            Left = 10
             Height = 31
             Top = 32
             Width = 229
             Anchors = [akTop, akLeft, akRight]
+            BorderSpacing.Left = 10
             ItemHeight = 0
             ParentShowHint = False
             ShowHint = True
@@ -388,11 +390,17 @@ object DesignControlsForm: TDesignControlsForm
             TabOrder = 0
           end
           object ManageValueLabelsButton: TButton
-            Left = 241
+            AnchorSideLeft.Control = ValueLabelComboBox
+            AnchorSideLeft.Side = asrBottom
+            AnchorSideRight.Control = FieldAdvancedSheet
+            AnchorSideRight.Side = asrBottom
+            Left = 249
             Height = 31
             Top = 32
-            Width = 89
-            Anchors = [akTop, akRight]
+            Width = 85
+            Anchors = [akTop, akLeft, akRight]
+            BorderSpacing.Left = 10
+            BorderSpacing.Right = 10
             Caption = 'Manage...'
             OnClick = ManageValueLabelsButtonClick
             TabOrder = 1
@@ -405,47 +413,65 @@ object DesignControlsForm: TDesignControlsForm
             Caption = 'Value label:'
             ParentColor = False
           end
-          object FieldRangesLabel: TLabel
-            Left = 5
-            Height = 18
+          object RangesGrpBox: TGroupBox
+            AnchorSideLeft.Control = FieldAdvancedSheet
+            AnchorSideRight.Control = FieldAdvancedSheet
+            AnchorSideRight.Side = asrBottom
+            Left = 10
+            Height = 80
             Top = 72
-            Width = 53
-            Caption = 'Ranges:'
-            ParentColor = False
-          end
-          object Label11: TLabel
-            Left = 5
-            Height = 18
-            Top = 110
-            Width = 38
-            Caption = 'From:'
-            ParentColor = False
-          end
-          object FromEdit: TEdit
-            Left = 59
-            Height = 27
-            Top = 101
-            Width = 95
+            Width = 324
+            Anchors = [akTop, akLeft, akRight]
+            BorderSpacing.Left = 10
+            BorderSpacing.Right = 10
+            Caption = 'Ranges'
+            ClientHeight = 61
+            ClientWidth = 320
             TabOrder = 2
-          end
-          object ToEdit: TEdit
-            Left = 229
-            Height = 27
-            Top = 101
-            Width = 101
-            Anchors = [akTop, akRight]
-            TabOrder = 3
-          end
-          object Label12: TLabel
-            AnchorSideRight.Control = ToEdit
-            Left = 205
-            Height = 18
-            Top = 110
-            Width = 19
-            Anchors = [akTop, akRight]
-            BorderSpacing.Right = 5
-            Caption = 'To:'
-            ParentColor = False
+            object Label11: TLabel
+              AnchorSideLeft.Control = RangesGrpBox
+              Left = 5
+              Height = 18
+              Top = 24
+              Width = 38
+              BorderSpacing.Left = 5
+              Caption = 'From:'
+              ParentColor = False
+            end
+            object FromEdit: TEdit
+              AnchorSideLeft.Control = Label11
+              AnchorSideLeft.Side = asrBottom
+              Left = 48
+              Height = 27
+              Top = 15
+              Width = 95
+              BorderSpacing.Left = 5
+              OnUTF8KeyPress = FieldRangesEditUTF8KeyPress
+              TabOrder = 0
+            end
+            object Label12: TLabel
+              AnchorSideRight.Control = ToEdit
+              Left = 190
+              Height = 18
+              Top = 23
+              Width = 19
+              Anchors = [akTop, akRight]
+              BorderSpacing.Right = 5
+              Caption = 'To:'
+              ParentColor = False
+            end
+            object ToEdit: TEdit
+              AnchorSideRight.Control = RangesGrpBox
+              AnchorSideRight.Side = asrBottom
+              Left = 214
+              Height = 27
+              Top = 15
+              Width = 101
+              Anchors = [akTop, akRight]
+              BorderSpacing.Right = 5
+              OnUTF8KeyPress = FieldRangesEditUTF8KeyPress
+              TabOrder = 1
+            end
           end
         end
       end
@@ -453,7 +479,7 @@ object DesignControlsForm: TDesignControlsForm
     object HeadingTabSheet: TTabSheet
       Caption = 'HeadingTabSheet'
       ClientHeight = 412
-      ClientWidth = 345
+      ClientWidth = 350
       object CaptionEdit: TEdit
         AnchorSideLeft.Control = HeadingTabSheet
         AnchorSideRight.Control = HeadingTabSheet
@@ -461,7 +487,7 @@ object DesignControlsForm: TDesignControlsForm
         Left = 10
         Height = 27
         Top = 32
-        Width = 368
+        Width = 330
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Right = 10
@@ -482,13 +508,13 @@ object DesignControlsForm: TDesignControlsForm
     Left = 0
     Height = 50
     Top = 447
-    Width = 351
+    Width = 356
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 351
+    ClientWidth = 356
     TabOrder = 1
     object OkBtn: TBitBtn
-      Left = 272
+      Left = 277
       Height = 32
       Top = 10
       Width = 71
@@ -500,7 +526,7 @@ object DesignControlsForm: TDesignControlsForm
       TabOrder = 1
     end
     object CancelBtn: TBitBtn
-      Left = 184
+      Left = 189
       Height = 32
       Top = 10
       Width = 79

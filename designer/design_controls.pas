@@ -135,12 +135,11 @@ type
 
   TDesignControlsForm = class(TForm)
     FromEdit: TEdit;
-    ToEdit: TEdit;
-    FieldRangesLabel: TLabel;
-    Label10: TLabel;
-    FieldTypeLabel: TLabel;
     Label11: TLabel;
     Label12: TLabel;
+    RangesGrpBox: TGroupBox;
+    Label10: TLabel;
+    FieldTypeLabel: TLabel;
     ShiftTo2Action: TAction;
     ShiftTo1Action: TAction;
     CancelAction: TAction;
@@ -185,6 +184,7 @@ type
     SectionTabSheet: TTabSheet;
     SectionBasicSheet: TTabSheet;
     SectionAdvancedSheet: TTabSheet;
+    ToEdit: TEdit;
     ValueLabelComboBox: TComboBox;
     WidthEdit: TEdit;
     procedure ApplyActionExecute(Sender: TObject);
@@ -251,7 +251,7 @@ implementation
 uses
   epidatafilestypes, math, types, valuelabelseditor_form, epiadmin,
   LCLProc, settings2_var, settings2, epimiscutils, main, episettings,
-  epiranges, strutils;
+  epiranges, strutils, epiconvertutils;
 
 const
   rsVLWarning = 'Warning: Valuelabels have changed...';
@@ -852,10 +852,15 @@ var
   Ch: LongWord;
 begin
   Ch := UTF8CharacterToUnicode(@UTF8Key[1], I);
-  if not (Char(Ch) in [VK_0..VK_9,VK_BACK,'.',',','|','-']) then
+  if not (Char(Ch) in [VK_0..VK_9, Char(VK_BACK)] + ['.',','] + ['-', ':', '.'] + ['/', '-', '\', '.']) then
     UTF8Key := '';
-  if (Char(Ch) in ['.',',']) then
-    UTF8Key := DecimalSeparator;
+  case TEpiField(EpiControl).FieldType of
+    ftFloat:   if (Char(Ch) in ['.',',']) then UTF8Key := DecimalSeparator;
+    ftTime:    if (Char(Ch) in ['-', ':', '.']) then UTF8Key := TimeSeparator;
+    ftDMYDate,
+    ftMDYDate,
+    ftYMDDate: if (Char(Ch) in ['/', '-', '\', '.']) then UTF8Key := DateSeparator;
+  end;
 end;
 
 procedure TDesignControlsForm.FormCloseQuery(Sender: TObject;
@@ -1069,6 +1074,7 @@ begin
 
     // Setup "advanced" page.
     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
+    RangesGrpBox.Visible  := Ffield.FieldType in [ftInteger, ftFloat, ftTime] + DateFieldTypes;
     if Assigned(FField.Ranges) and (FField.Ranges.Count > 0) then
     begin
       FromEdit.Text := TEpiRange(FField.Ranges[0]).AsString[true];
@@ -1098,8 +1104,27 @@ var
   NewLen: LongInt;
   NewDecLen: LongInt;
   i: Integer;
+  // Ranges vars.
   Ranges: TEpiRanges;
   R: TEpiRange;
+  Int1, Int2: EpiInteger;
+  Flt1, Flt2: EpiFloat;
+  D1, D2, M1, M2, Y1, Y2,
+  H1, H2, S1, S2: Word;
+  S: string;
+
+  procedure DoError(Const Msg: string; Ctrl: TWinControl);
+  var
+    P: TWinControl;
+  begin
+    P := Ctrl.Parent;
+    while not (P is TTabSheet) do
+      P := P.Parent;
+    TPageControl(P.Parent).ActivePage := TTabSheet(P);
+    Ctrl.SetFocus;
+    ShowHintMsg(Msg, Ctrl);
+  end;
+
 begin
   Result := false;
   if (not Showing) then exit(true);
@@ -1140,9 +1165,7 @@ begin
          (NewLen <= 0)
       then
       begin
-        ShiftTo1Execute(nil);
-        LengthEdit.SetFocus;
-        ShowHintMsg('Invalid length', LengthEdit);
+        DoError('Invalid length', LengthEdit);
         exit;
       end;
     end;
@@ -1153,29 +1176,24 @@ begin
       if (not TryStrToInt(DecimalsEdit.Text, NewDecLen)) or
          (NewDecLen <= 0) then
       begin
-        ShiftTo1Execute(nil);
-        DecimalsEdit.SetFocus;
-        ShowHintMsg('Invalid decimals', DecimalsEdit);
+        DoError('Invalid decimals', DecimalsEdit);
         exit;
       end;
     end;
 
     if ((FromEdit.Text <> '') and (ToEdit.Text = '')) then
     begin
-      ShiftTo2Execute(nil);
-      ToEdit.SetFocus;
-      ShowHintMsg('No "To" entered', ToEdit);
+      DoError('No "To" entered', ToEdit);
       Exit;
     end;
 
     if ((FromEdit.Text = '') and (ToEdit.Text <> '')) then
     begin
-      ShiftTo2Execute(nil);
-      FromEdit.SetFocus;
-      ShowHintMsg('No "From" entered', FromEdit);
+      DoError('No "From" entered', FromEdit);
       Exit;
     end;
 
+    R := nil;
     if ((FromEdit.Text <> '') and (ToEdit.Text <> '')) then
     begin
       if Assigned(FField.Ranges) then
@@ -1188,32 +1206,76 @@ begin
         R := Ranges.NewRange;
       end;
       Case Ranges.FieldType of
-        ftInteger: ;
-        ftFloat:   ;
-        ftTime:    ;
+        ftInteger:
+          begin
+            if not TryStrToInt64(FromEdit.Text, Int1) then
+            begin
+              DoError(Format('Not a valid integer: %s', [FromEdit.Text]), FromEdit);
+              Exit;
+            end;
+
+            if not TryStrToInt64(ToEdit.Text, Int2) then
+            begin
+              DoError(Format('Not a valid integer: %s', [ToEdit.Text]), ToEdit);
+              Exit;
+            end;
+          end;
+        ftFloat:
+          begin
+            if not TryStrToFloat(FromEdit.Text, Flt1) then
+            begin
+              DoError(Format('Not a valid float: %s', [FromEdit.Text]), FromEdit);
+              Exit;
+            end;
+
+            if not TryStrToFloat(ToEdit.Text, Flt2) then
+            begin
+              DoError(Format('Not a valid float: %s', [ToEdit.Text]), ToEdit);
+              Exit;
+            end;
+          end;
+        ftTime:
+          begin
+            if not EpiStrToTime(FromEdit.Text, TimeSeparator, H1, M1, S1, S) then
+            begin
+              DoError(S, FromEdit);
+              Exit;
+            end;
+
+            if not EpiStrToTime(ToEdit.Text, TimeSeparator, H2, M2, S2, S) then
+            begin
+              DoError(S, ToEdit);
+              Exit;
+            end;
+          end;
         ftDMYDate,
         ftMDYDate,
-        ftYMDDate: ;
+        ftYMDDate:
+          begin
+            if not EpiStrToDate(FromEdit.Text, DateSeparator, Ranges.FieldType, D1, M1, Y1, S) then
+            begin
+              DoError(S, FromEdit);
+              Exit;
+            end;
+
+            if not EpiStrToDate(ToEdit.Text, DateSeparator, Ranges.FieldType, D2, M2, Y2, S) then
+            begin
+              DoError(S, ToEdit);
+              Exit;
+            end;
+          end;
       end;
-//      R.AsString[true]  := FromEdit.Text;
-//      R.AsString[false] := ToEdit.Text;
     end;
 
+    if (NameEdit.Text <> FField.Name) and
+       (not FField.DataFile.ValidateFieldRename(FField, NameEdit.Text)) then
+    begin
+      DoError('Name already exists or invalid identifier', NameEdit);
+      Exit;
+    end;
 
     FField.BeginUpdate;
-    if NameEdit.Text <> FField.Name then
-    begin
-      FField.Name := NameEdit.Text;
-      if FField.Name <> NameEdit.Text then
-      begin
-        // Could not rename Fieldname, possibly due to same name already exists or invalid identifier.
-        ShiftTo1Execute(nil);
-        NameEdit.SetFocus;
-        ShowHintMsg('Name already exists or invalid identifier', NameEdit);
-        FField.EndUpdate;
-        Exit;
-      end;
-    end;
+    FField.Name := NameEdit.Text;
     FField.Length := NewLen;
     FField.Decimals := NewDecLen;
     if NewDecLen > 0 then
@@ -1224,6 +1286,34 @@ begin
     if ValueLabelComboBox.ItemIndex >= 0 then
       FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
 
+    if Assigned(R) then
+    begin
+      Case Ranges.FieldType of
+        ftInteger:
+          begin
+            R.AsInteger[true]  := Int1;
+            R.AsInteger[false] := Int2;
+          end;
+        ftFloat:
+          begin
+            R.AsFloat[true]  := Flt1;
+            R.AsFloat[false] := Flt2;
+          end;
+        ftTime:
+          begin
+            R.AsTime[true]  := EncodeTime(H1, M1, S1, 0);
+            R.AsTime[false] := EncodeTime(H2, M2, S2, 0);
+          end;
+        ftDMYDate,
+        ftMDYDate,
+        ftYMDDate:
+          begin
+            R.AsDate[true]  := Trunc(EncodeDate(Y1, M1, D1));
+            R.AsDate[false] := Trunc(EncodeDate(Y2, M2, D2));
+          end;
+      end;
+      FField.Ranges := Ranges;
+    end;
 
     FField.EndUpdate;
     Result := true;
