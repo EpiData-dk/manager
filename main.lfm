@@ -105,6 +105,19 @@ object MainForm: TMainForm
     end
     object HelpMenu: TMenuItem
       Caption = '&Help'
+      object TutorialSubMenu: TMenuItem
+        Caption = 'Tutorials'
+        object TutorialsMenuDivider1: TMenuItem
+          Caption = '-'
+        end
+        object WebTutorialsMenuItem: TMenuItem
+          Caption = 'Tutorials On Web'
+          OnClick = WebTutorialsMenuItemClick
+        end
+      end
+      object HelpMenuDivider1: TMenuItem
+        Caption = '-'
+      end
       object ShortIntroMenuItem: TMenuItem
         Caption = 'Short &Introduction'
         OnClick = ShortIntroMenuItemClick
@@ -113,7 +126,7 @@ object MainForm: TMainForm
         Caption = 'Show &Shortcuts'
         OnClick = ShortCutKeysMenuItemClick
       end
-      object HelpMenuDivider1: TMenuItem
+      object HelpMenuDivider2: TMenuItem
         Caption = '-'
       end
       object CopyVersionInfoMenuItem: TMenuItem
@@ -122,7 +135,7 @@ object MainForm: TMainForm
       object CheckVersionMenuItem: TMenuItem
         Action = CheckVersionAction
       end
-      object HelpMenuDivider2: TMenuItem
+      object HelpMenuDivider3: TMenuItem
         Caption = '-'
       end
       object AboutMenuItem: TMenuItem

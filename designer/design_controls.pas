@@ -134,12 +134,25 @@ type
   { TDesignControlsForm }
 
   TDesignControlsForm = class(TForm)
+    GotoFieldComboBox1: TComboBox;
+    JumpValueEdit: TEdit;
+    EntryRadioGroup: TRadioGroup;
+    DefaultEnterRadioBtn: TRadioButton;
+    JumpsGrpBox: TGroupBox;
+    Label13: TLabel;
+    Label14: TLabel;
+    MustEnterRadioBtn: TRadioButton;
+    NoEnterRadioBtn: TRadioButton;
+    JumpScrollBox: TScrollBox;
+    ShowValueLabelChkBox: TCheckBox;
     FromEdit: TEdit;
-    Label11: TLabel;
-    Label12: TLabel;
-    RangesGrpBox: TGroupBox;
     Label10: TLabel;
     FieldTypeLabel: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label3: TLabel;
+    ManageValueLabelsButton: TButton;
+    RangesGrpBox: TGroupBox;
     ShiftTo2Action: TAction;
     ShiftTo1Action: TAction;
     CancelAction: TAction;
@@ -161,7 +174,6 @@ type
     HeightEdit: TEdit;
     Label1: TLabel;
     Label2: TLabel;
-    Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -169,7 +181,6 @@ type
     Label8: TLabel;
     LengthEdit: TEdit;
     LengthLabel: TLabel;
-    ManageValueLabelsButton: TButton;
     NameEdit: TEdit;
     SectionNameEdit: TEdit;
     OkBtn: TBitBtn;
@@ -184,6 +195,8 @@ type
     SectionTabSheet: TTabSheet;
     SectionBasicSheet: TTabSheet;
     SectionAdvancedSheet: TTabSheet;
+    AddJumpBtn: TSpeedButton;
+    RemoveJumpBtn: TSpeedButton;
     ToEdit: TEdit;
     ValueLabelComboBox: TComboBox;
     WidthEdit: TEdit;

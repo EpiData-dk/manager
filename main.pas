@@ -13,14 +13,18 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    HelpMenuDivider1: TMenuItem;
+    TutorialsMenuDivider1: TMenuItem;
+    WebTutorialsMenuItem: TMenuItem;
+    TutorialSubMenu: TMenuItem;
     OpenProjectAction: TAction;
     CloseProjectAction: TAction;
     DefaultWindowPosAction: TAction;
     CheckVersionAction: TAction;
     CopyProjectInfoAction: TAction;
-    HelpMenuDivider1: TMenuItem;
-    CopyVersionInfoMenuItem: TMenuItem;
     HelpMenuDivider2: TMenuItem;
+    CopyVersionInfoMenuItem: TMenuItem;
+    HelpMenuDivider3: TMenuItem;
     AboutMenuItem: TMenuItem;
     CheckVersionMenuItem: TMenuItem;
     ExportStataMenuItem: TMenuItem;
@@ -72,6 +76,7 @@ type
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
     procedure ShowAboutActionExecute(Sender: TObject);
+    procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -81,6 +86,8 @@ type
     procedure SetModified(const AValue: boolean);
     procedure ProjectModified(Sender: TObject);
     procedure LoadIniFile;
+    procedure OpenTutorialMenuItemClick(Sender: TObject);
+    procedure LoadTutorials;
     function  DoCloseProject: boolean;
     procedure DoNewProject;
     procedure DoOpenProject(Const AFileName: string);
@@ -114,8 +121,9 @@ begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'MainForm');
 
-  // Show welcome message
 
+  LoadTutorials;
+  // Show welcome message
   {$IFDEF EPI_RELEASE}
   if ManagerSettings.ShowWelcome then
     ShowMessagePos('EpiData Manager:' + LineEnding +
@@ -252,6 +260,8 @@ begin
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
 
+  LoadTutorials;
+
   if Assigned(FActiveFrame) then
     TProjectFrame(FActiveFrame).UpdateFrame;
 end;
@@ -279,6 +289,11 @@ begin
   Frm := TAboutForm.Create(Self);
   Frm.ShowModal;
   Frm.Free;
+end;
+
+procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
+begin
+  OpenURL('http://www.epidata.dk/');
 end;
 
 procedure TMainForm.SetCaption;
@@ -313,6 +328,46 @@ begin
   if not DirectoryExistsUTF8(GetAppConfigDirUTF8(false)) then
     CreateDirUTF8(GetAppConfigDirUTF8(false));
   ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
+end;
+
+procedure TMainForm.OpenTutorialMenuItemClick(Sender: TObject);
+begin
+  OpenURL(ManagerSettings.TutorialDirUTF8 + DirectorySeparator + TMenuItem(Sender).Caption + '.pdf');
+end;
+
+procedure TMainForm.LoadTutorials;
+var
+  FileList: TStringList;
+  MenuItem: TMenuItem;
+  i: Integer;
+begin
+  // First delete all previous tutorials.. (could be a change in tutorial dir).
+  for i := TutorialSubMenu.Count - 1 downto 0 do
+  begin
+    if (TutorialSubMenu[i] = TutorialsMenuDivider1) or
+       (TutorialSubMenu[i] = WebTutorialsMenuItem) then continue;
+
+    MenuItem := TutorialSubMenu[i];
+    TutorialSubMenu.Delete(i);
+    MenuItem.Free;
+  end;
+
+  // Find all .pdf files in the directory set by TutorialsDirUTF8
+  FileList := FindAllFiles(ManagerSettings.TutorialDirUTF8, '*.pdf', false);
+  TutorialsMenuDivider1.Visible := FileList.Count > 0;
+
+  if FileList.Count = 0 then Exit;
+
+  for i := 0 to FileList.Count - 1 do
+  begin
+    MenuItem := TMenuItem.Create(TutorialSubMenu);
+    MenuItem.Name := 'TutorialMenuItem' + IntToStr(i);
+    MenuItem.Caption := ExtractFileNameOnly(FileList[i]);
+    MenuItem.OnClick := @OpenTutorialMenuItemClick;
+
+    With TutorialSubMenu do
+      Insert(IndexOf(TutorialsMenuDivider1), MenuItem);
+  end;
 end;
 
 function TMainForm.DoCloseProject: boolean;

@@ -2,9 +2,9 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
   Left = 0
   Height = 335
   Top = 0
-  Width = 638
+  Width = 477
   ClientHeight = 335
-  ClientWidth = 638
+  ClientWidth = 477
   TabOrder = 0
   DesignLeft = 527
   DesignTop = 327
@@ -12,14 +12,14 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
     Left = 8
     Height = 18
     Top = 25
-    Width = 124
-    Caption = 'Default data folder'
+    Width = 128
+    Caption = 'Default data folder:'
     ParentColor = False
   end
   object DefaultPasteCombo: TComboBox
     Left = 205
     Height = 31
-    Top = 57
+    Top = 112
     Width = 194
     ItemHeight = 0
     ItemIndex = 1
@@ -38,7 +38,7 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
   object Label18: TLabel
     Left = 8
     Height = 18
-    Top = 70
+    Top = 125
     Width = 172
     Caption = 'Default paste special type'
     ParentColor = False
@@ -57,7 +57,7 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
   object Label1: TLabel
     Left = 8
     Height = 18
-    Top = 114
+    Top = 169
     Width = 117
     Caption = 'Default save type'
     ParentColor = False
@@ -65,7 +65,7 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
   object DefaultSaveTypeComboBox: TComboBox
     Left = 205
     Height = 31
-    Top = 101
+    Top = 156
     Width = 194
     ItemHeight = 0
     Style = csDropDownList
@@ -74,7 +74,7 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
   object SaveWindowPositionsChkBox: TCheckBox
     Left = 8
     Height = 22
-    Top = 152
+    Top = 200
     Width = 173
     Caption = 'Save window positions'
     TabOrder = 3
@@ -82,9 +82,28 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
   object ShowWelcomeChkBox: TCheckBox
     Left = 8
     Height = 22
-    Top = 184
+    Top = 224
     Width = 152
     Caption = 'Show Welcome Box'
     TabOrder = 4
+  end
+  object Label19: TLabel
+    Left = 8
+    Height = 18
+    Top = 64
+    Width = 95
+    Caption = 'Tutorial folder:'
+    ParentColor = False
+  end
+  object TutorialDirEdit: TDirectoryEdit
+    Left = 205
+    Height = 27
+    Top = 55
+    Width = 169
+    ShowHidden = False
+    ButtonWidth = 23
+    NumGlyphs = 0
+    MaxLength = 0
+    TabOrder = 5
   end
 end

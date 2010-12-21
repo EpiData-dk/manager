@@ -30,6 +30,7 @@ type
     SaveWindowPositions:   boolean;
     ShowWelcome:           boolean;
     WorkingDirUTF8:        string;
+    TutorialDirUTF8:       string;
     PasteSpecialType:      byte;     // Index into list:
                                      //   0: QES
                                      //   1: Heading
@@ -70,6 +71,7 @@ var
     SaveWindowPositions:   true;
     ShowWelcome:           true;
     WorkingDirUTF8:        '';
+    TutorialDirUTF8:       '';
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
 

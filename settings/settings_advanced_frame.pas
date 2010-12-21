@@ -13,6 +13,7 @@ type
   { TSettings_AdvancedFrame }
 
   TSettings_AdvancedFrame = class(TFrame, ISettingsFrame)
+    Label19: TLabel;
     ShowWelcomeChkBox: TCheckBox;
     SaveWindowPositionsChkBox: TCheckBox;
     DefaultSaveTypeComboBox: TComboBox;
@@ -21,6 +22,7 @@ type
     Label17: TLabel;
     Label18: TLabel;
     WorkingDirEdit: TDirectoryEdit;
+    TutorialDirEdit: TDirectoryEdit;
   private
     { private declarations }
     FData: PManagerSettings;
@@ -58,6 +60,7 @@ begin
   with FData^ do
   begin
     WorkingDirEdit.Text := WorkingDirUTF8;
+    TutorialDirEdit.Text := TutorialDirUTF8;
     DefaultPasteCombo.ItemIndex := PasteSpecialType;
     DefaultSaveTypeComboBox.ItemIndex := SaveType;
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
@@ -71,6 +74,8 @@ begin
   begin
     if DirectoryExistsUTF8(WorkingDirEdit.Text) then
       WorkingDirUTF8    := WorkingDirEdit.Text;
+    if DirectoryExistsUTF8(TutorialDirEdit.Text) then
+      TutorialDirUTF8   := TutorialDirEdit.Text;
     PasteSpecialType    := DefaultPasteCombo.ItemIndex;
     SaveType            := DefaultSaveTypeComboBox.ItemIndex;
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;

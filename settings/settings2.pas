@@ -120,6 +120,7 @@ begin
       PasteSpecialType:      byte}
       Sec := 'advanced';
       WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+      WriteString(Sec, 'TutorialDirectory', TutorialDirUTF8);
       WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
       WriteInteger(Sec, 'SaveAsType', SaveType);
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
@@ -181,6 +182,7 @@ begin
       PasteSpecialType:      byte;}
       Sec := 'advanced';
       WorkingDirUTF8      := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
+      TutorialDirUTF8     := ReadString(Sec, 'TutorialDirectory', TutorialDirUTF8);
       PasteSpecialType    := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
       SaveType            := ReadInteger(Sec, 'SaveAsType', SaveType);
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
@@ -339,9 +341,13 @@ end;
 initialization
 
 begin
-  ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + {$IFDEF UNIX}'/data'{$ELSE}'\data'{$ENDIF};
+  ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
   if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then
     ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8;
+
+  ManagerSettings.TutorialDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'tutorials';
+  if not DirectoryExistsUTF8(ManagerSettings.TutorialDirUTF8) then
+    ManagerSettings.TutorialDirUTF8 := GetCurrentDirUTF8;
 end;
 
 finalization
