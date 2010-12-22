@@ -13,6 +13,7 @@ type
   { TSettings_AdvancedFrame }
 
   TSettings_AdvancedFrame = class(TFrame, ISettingsFrame)
+    ShowWorkToolBarChkBox: TCheckBox;
     Label19: TLabel;
     ShowWelcomeChkBox: TCheckBox;
     SaveWindowPositionsChkBox: TCheckBox;
@@ -65,6 +66,7 @@ begin
     DefaultSaveTypeComboBox.ItemIndex := SaveType;
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
     ShowWelcomeChkBox.Checked         := ShowWelcome;
+    ShowWorkToolBarChkBox.Checked     := ShowWorkToolBar;
   end;
 end;
 
@@ -80,6 +82,7 @@ begin
     SaveType            := DefaultSaveTypeComboBox.ItemIndex;
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;
     ShowWelcome         := ShowWelcomeChkBox.Checked;
+    ShowWorkToolBar     := ShowWorkToolBarChkBox.Checked;
   end;
   Result := true;
 end;

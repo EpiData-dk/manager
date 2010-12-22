@@ -18,7 +18,7 @@ type
     OpenProjectBtn: TButton;
     NewProjectBtn: TButton;
     HelpMenuDivider1: TMenuItem;
-    Panel1: TPanel;
+    ProcessToolPanel: TPanel;
     TutorialsMenuDivider1: TMenuItem;
     WebTutorialsMenuItem: TMenuItem;
     TutorialSubMenu: TMenuItem;
@@ -97,6 +97,7 @@ type
     procedure DoNewProject;
     procedure DoOpenProject(Const AFileName: string);
     procedure UpdateMainMenu;
+    procedure UpdateSettings;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -126,8 +127,8 @@ begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'MainForm');
 
+  UpdateSettings;
 
-  LoadTutorials;
   // Show welcome message
   {$IFDEF EPI_RELEASE}
   if ManagerSettings.ShowWelcome then
@@ -265,10 +266,7 @@ begin
   if SettingForm.ShowModal = mrCancel then exit;
   SettingForm.Free;
 
-  LoadTutorials;
-
-  if Assigned(FActiveFrame) then
-    TProjectFrame(FActiveFrame).UpdateFrame;
+  UpdateSettings;
 end;
 
 procedure TMainForm.ShortCutKeysMenuItemClick(Sender: TObject);
@@ -459,6 +457,16 @@ begin
 
   // TOOLS:
   ToolsMenu.Visible := Assigned(FActiveFrame);
+end;
+
+procedure TMainForm.UpdateSettings;
+begin
+  LoadTutorials;
+
+  ProcessToolPanel.Visible := ManagerSettings.ShowWorkToolBar;
+
+  if Assigned(FActiveFrame) then
+    TProjectFrame(FActiveFrame).UpdateFrame;
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);

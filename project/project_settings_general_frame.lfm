@@ -9,54 +9,92 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
   DesignLeft = 728
   DesignTop = 417
   object Label1: TLabel
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = BackupIntervalEdit
+    AnchorSideTop.Side = asrCenter
+    Left = 10
     Height = 18
     Hint = 'Number of minuts between timed recovery backup.'#13#10'Set to 0 for no backup (NOT recommended).'
-    Top = 97
+    Top = 83
     Width = 216
+    BorderSpacing.Left = 10
     Caption = 'Timed Recovery Backup Interval:'
     ParentColor = False
   end
   object BackupIntervalEdit: TMaskEdit
-    Left = 320
+    AnchorSideTop.Control = Bevel1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 296
     Height = 27
     Hint = 'Number of minuts between timed recovery backup.'#13#10'Set to 0 for no backup (NOT recommended).'
-    Top = 88
-    Width = 40
+    Top = 79
+    Width = 134
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
     CharCase = ecNormal
-    MaxLength = 2
+    MaxLength = 3
     TabOrder = 0
-    EditMask = '99;0;_'
+    EditMask = '999;0;_'
     SpaceChar = '_'
   end
   object BackupOnShutdownChkBox: TCheckBox
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = BackupIntervalEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
     Height = 22
     Hint = 'Automatically create a backup file of the'#13#10'entire project when program i closed.'
-    Top = 129
+    Top = 116
     Width = 264
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
     Caption = 'Save backup project file after Entry ?'
     TabOrder = 1
   end
   object Label2: TLabel
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
     Height = 18
-    Top = 16
+    Top = 10
     Width = 80
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
     Caption = 'Project title:'
     ParentColor = False
   end
   object ProjectTitleEdit: TEdit
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
     Height = 27
-    Top = 40
-    Width = 352
+    Top = 30
+    Width = 420
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
     TabOrder = 2
   end
   object Bevel1: TBevel
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ProjectTitleEdit
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
     Height = 2
-    Top = 80
-    Width = 352
+    Top = 67
+    Width = 420
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
   end
 end

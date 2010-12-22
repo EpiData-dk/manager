@@ -7,8 +7,8 @@ object DesignFrame: TDesignFrame
   ClientWidth = 1085
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 307
-  DesignTop = 182
+  DesignLeft = 460
+  DesignTop = 324
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -209,14 +209,14 @@ object DesignFrame: TDesignFrame
   end
   object Panel1: TPanel
     Left = 820
-    Height = 580
+    Height = 601
     Top = 26
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 578
+    ClientHeight = 599
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
@@ -280,32 +280,23 @@ object DesignFrame: TDesignFrame
   end
   object Splitter1: TSplitter
     Left = 815
-    Height = 580
+    Height = 601
     Top = 26
     Width = 5
     Align = alRight
     Beveled = True
     ResizeAnchor = akRight
   end
-  object DesignerStatusBar: TStatusBar
-    Left = 0
-    Height = 21
-    Top = 632
-    Width = 1085
-    Panels = <>
-    SimplePanel = False
-    SizeGrip = False
-  end
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
-    Top = 606
+    Top = 627
     Width = 1085
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 26
     ClientWidth = 1085
-    TabOrder = 4
+    TabOrder = 3
     object SectionsPanel: TPanel
       AnchorSideLeft.Control = RecordsPanel
       AnchorSideLeft.Side = asrBottom

@@ -29,6 +29,7 @@ type
     // Advanced:
     SaveWindowPositions:   boolean;
     ShowWelcome:           boolean;
+    ShowWorkToolBar:       boolean;
     WorkingDirUTF8:        string;
     TutorialDirUTF8:       string;
     PasteSpecialType:      byte;     // Index into list:
@@ -70,6 +71,7 @@ var
     // Advanced:
     SaveWindowPositions:   true;
     ShowWelcome:           true;
+    ShowWorkToolBar:       true;
     WorkingDirUTF8:        '';
     TutorialDirUTF8:       '';
     PasteSpecialType:      1;     // Heading.

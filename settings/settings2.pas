@@ -125,6 +125,7 @@ begin
       WriteInteger(Sec, 'SaveAsType', SaveType);
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       WriteBool(Sec, 'ShowWelcome', ShowWelcome);
+      WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
       Result := true;
     end;
   finally
@@ -187,6 +188,7 @@ begin
       SaveType            := ReadInteger(Sec, 'SaveAsType', SaveType);
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
+      ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
     end;
   finally
     Ini.Free;

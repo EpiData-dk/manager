@@ -134,6 +134,7 @@ type
   { TDesignControlsForm }
 
   TDesignControlsForm = class(TForm)
+    Bevel1: TBevel;
     GotoFieldComboBox1: TComboBox;
     JumpValueEdit: TEdit;
     EntryRadioGroup: TRadioGroup;
@@ -150,7 +151,7 @@ type
     FieldTypeLabel: TLabel;
     Label11: TLabel;
     Label12: TLabel;
-    Label3: TLabel;
+    ValueLabelLabel: TLabel;
     ManageValueLabelsButton: TButton;
     RangesGrpBox: TGroupBox;
     ShiftTo2Action: TAction;
@@ -172,8 +173,8 @@ type
     GrpRightsMoveLeft: TSpeedButton;
     GrpRightsMoveRight: TSpeedButton;
     HeightEdit: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
+    FieldNameLabel: TLabel;
+    QuestionLabel: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -1078,16 +1079,16 @@ begin
     else
       LengthEdit.Text     := IntToStr(FField.Length);
     DecimalsEdit.Text     := IntToStr(FField.Decimals);
+    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
 
-    // Visible edits
+    // Visiblity
     LengthEdit.Visible    := FField.FieldType in [ftInteger, ftAutoInc, ftFloat, ftString, ftUpperString];
     LengthLabel.Visible   := LengthEdit.Visible;
     DecimalsEdit.Visible  := FField.FieldType = ftFloat;
     DecimalsLabel.Visible := DecimalsEdit.Visible;
+    RangesGrpBox.Visible  := Ffield.FieldType in ((IntFieldTypes + FloatFieldTypes + DateFieldTypes) - AutoFieldTypes);
 
     // Setup "advanced" page.
-    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
-    RangesGrpBox.Visible  := Ffield.FieldType in [ftInteger, ftFloat, ftTime] + DateFieldTypes;
     if Assigned(FField.Ranges) and (FField.Ranges.Count > 0) then
     begin
       FromEdit.Text := TEpiRange(FField.Ranges[0]).AsString[true];

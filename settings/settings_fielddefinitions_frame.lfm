@@ -9,18 +9,24 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
   DesignLeft = 387
   DesignTop = 242
   object Label14: TLabel
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    Left = 10
     Height = 18
     Top = 160
     Width = 82
+    BorderSpacing.Left = 10
     Caption = 'Default date'
     ParentColor = False
   end
   object DefaultDateCombo: TComboBox
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
     Left = 127
     Height = 31
     Top = 155
-    Width = 131
+    Width = 624
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Right = 10
     ItemHeight = 0
     ItemIndex = 0
     Items.Strings = (
@@ -33,13 +39,21 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     Text = 'DD/MM/YYYY'
   end
   object GroupBox1: TGroupBox
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
     Height = 139
     Top = 10
-    Width = 250
+    Width = 741
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
     Caption = 'Default Field Lengths'
     ClientHeight = 120
-    ClientWidth = 246
+    ClientWidth = 737
     TabOrder = 1
     object Label10: TLabel
       Left = 8
@@ -53,11 +67,15 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       ShowHint = True
     end
     object Label11: TLabel
-      Left = 168
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 672
       Height = 18
       Hint = 'Default field length for:'#10'Float'
       Top = 48
       Width = 60
+      Anchors = [akTop, akRight]
+      BorderSpacing.Right = 5
       Caption = 'decimals'
       ParentColor = False
       ParentShowHint = False
@@ -75,11 +93,15 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       ShowHint = True
     end
     object IntLengthEdit: TMaskEdit
+      AnchorSideLeft.Control = FloatIntEdit
+      AnchorSideRight.Control = FloatIntEdit
+      AnchorSideRight.Side = asrBottom
       Left = 78
       Height = 27
       Hint = 'Default field length for:'#10'Integer and IdNum'
       Top = 2
-      Width = 35
+      Width = 301
+      Anchors = [akTop, akLeft, akRight]
       CharCase = ecNormal
       MaxLength = 3
       ParentShowHint = False
@@ -89,11 +111,13 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       SpaceChar = '_'
     end
     object FloatIntEdit: TMaskEdit
+      AnchorSideRight.Control = Label9
       Left = 78
       Height = 27
       Hint = 'Default field length for:'#10'Float'
       Top = 39
-      Width = 35
+      Width = 301
+      Anchors = [akTop, akLeft, akRight]
       CharCase = ecNormal
       MaxLength = 3
       ParentShowHint = False
@@ -103,11 +127,15 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       SpaceChar = '_'
     end
     object StringLengthEdit: TMaskEdit
+      AnchorSideLeft.Control = FloatIntEdit
+      AnchorSideRight.Control = FloatIntEdit
+      AnchorSideRight.Side = asrBottom
       Left = 78
       Height = 27
       Hint = 'Default field length for:'#10'String, Uppercase, Crypt and Soundex'
       Top = 79
-      Width = 35
+      Width = 301
+      Anchors = [akTop, akLeft, akRight]
       CharCase = ecNormal
       MaxLength = 3
       ParentShowHint = False
@@ -117,11 +145,16 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       SpaceChar = '_'
     end
     object DecimalLengthEdit: TMaskEdit
-      Left = 127
+      AnchorSideLeft.Control = Label9
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = Label11
+      Left = 390
       Height = 27
       Hint = 'Default decimal length for:'#10'Float'
       Top = 39
-      Width = 35
+      Width = 277
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Right = 5
       CharCase = ecNormal
       MaxLength = 3
       ParentShowHint = False
@@ -135,36 +168,57 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 18
       Hint = 'Default field length for:'#10'Float'
       Top = 48
-      Width = 34
-      Caption = 'Float'
+      Width = 38
+      Caption = 'Float:'
       ParentColor = False
       ParentShowHint = False
       ShowHint = True
     end
     object Label9: TLabel
-      Left = 118
+      AnchorSideLeft.Control = FloatIntEdit
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Control = DecimalLengthEdit
+      Left = 382
       Height = 18
-      Top = 48
+      Top = 45
       Width = 5
+      Anchors = [akTop]
+      BorderSpacing.Left = 3
+      BorderSpacing.Right = 3
       Caption = '.'
       ParentColor = False
     end
   end
   object GroupBox2: TGroupBox
-    Left = 8
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
     Height = 160
     Top = 192
-    Width = 250
+    Width = 741
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Right = 10
     Caption = 'Field Naming'
     ClientHeight = 141
-    ClientWidth = 246
+    ClientWidth = 737
     TabOrder = 2
     object FieldNamingGroup: TRadioGroup
-      Left = 14
-      Height = 79
+      AnchorSideLeft.Control = GroupBox2
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = GroupBox2
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 84
       Top = 47
-      Width = 216
+      Width = 717
+      Anchors = [akTop, akLeft, akRight, akBottom]
       AutoFill = True
+      BorderSpacing.Left = 10
+      BorderSpacing.Right = 10
+      BorderSpacing.Bottom = 10
       Caption = 'Field Naming from QES files'
       ChildSizing.LeftRightSpacing = 6
       ChildSizing.TopBottomSpacing = 6
@@ -174,25 +228,25 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       ChildSizing.ShrinkVertical = crsScaleChilds
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 60
-      ClientWidth = 212
+      ClientHeight = 65
+      ClientWidth = 713
       Enabled = False
       TabOrder = 0
       Visible = False
       object FieldNamingAutoRadio: TRadioButton
         Left = 6
-        Height = 24
+        Height = 27
         Top = 6
-        Width = 200
+        Width = 701
         Caption = 'Automatic'
         Enabled = False
         TabOrder = 0
       end
       object FieldNamingFirstWordRadio: TRadioButton
         Left = 6
-        Height = 24
-        Top = 30
-        Width = 200
+        Height = 26
+        Top = 33
+        Width = 701
         Caption = 'First word'
         Checked = True
         Enabled = False
@@ -201,18 +255,24 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       end
     end
     object Label1: TLabel
-      Left = 14
+      AnchorSideLeft.Control = GroupBox2
+      Left = 10
       Height = 18
       Top = 15
       Width = 73
+      BorderSpacing.Left = 10
       Caption = 'Field Prefix'
       ParentColor = False
     end
     object PrefixEdit: TEdit
-      Left = 131
+      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Side = asrBottom
+      Left = 116
       Height = 27
       Top = 7
-      Width = 99
+      Width = 611
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Right = 10
       TabOrder = 1
     end
   end

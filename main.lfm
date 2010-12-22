@@ -1,8 +1,8 @@
 object MainForm: TMainForm
-  Left = 273
+  Left = 497
   Height = 603
   Hint = 'New EpiData Project (XML)'
-  Top = 139
+  Top = 271
   Width = 910
   Caption = 'MainForm'
   ClientHeight = 578
@@ -15,68 +15,92 @@ object MainForm: TMainForm
   LCLVersion = '0.9.29'
   object PageControl1: TPageControl
     Left = 0
-    Height = 578
-    Top = 0
+    Height = 538
+    Top = 40
     Width = 910
     Align = alClient
     ParentShowHint = False
     ShowHint = True
     ShowTabs = False
-    TabOrder = 1
+    TabOrder = 0
   end
-  object Panel1: TPanel
-    Left = 1
-    Height = 32
-    Top = 4
-    Width = 1038
-    ClientHeight = 32
-    ClientWidth = 1038
+  object ProcessToolPanel: TPanel
+    Left = 0
+    Height = 40
+    Top = 0
+    Width = 910
+    Align = alTop
+    ClientHeight = 40
+    ClientWidth = 910
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 2
+    TabOrder = 1
     object OpenProjectBtn: TButton
-      Left = 162
-      Height = 25
+      AnchorSideLeft.Control = NewProjectBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 108
+      Height = 29
       Hint = 'Open existing project'
-      Top = 0
-      Width = 147
+      Top = 6
+      Width = 95
       Action = OpenProjectAction
+      AutoSize = True
+      BorderSpacing.Left = 10
       TabOrder = 0
     end
-  end
-  object UserAccessBtn: TButton
-    Left = 322
-    Height = 25
-    Hint = 'Define/Change User names and passwords'
-    Top = 4
-    Width = 184
-    Caption = 'User Access Control'
-    Enabled = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 3
-  end
-  object GCPBtn: TButton
-    Left = 516
-    Height = 25
-    Hint = 'Good Clinical Practice guideline tools'
-    Top = 4
-    Width = 184
-    Caption = 'Gcp Extension'
-    Enabled = False
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 4
-  end
-  object NewProjectBtn: TButton
-    Left = 9
-    Height = 25
-    Top = 4
-    Width = 147
-    Action = NewProjectAction
-    ParentShowHint = False
-    ShowHint = True
-    TabOrder = 0
+    object NewProjectBtn: TButton
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 8
+      Height = 29
+      Top = 6
+      Width = 90
+      Action = NewProjectAction
+      AutoSize = True
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object UserAccessBtn: TButton
+      AnchorSideLeft.Control = OpenProjectBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 213
+      Height = 29
+      Hint = 'Define/Change User names and passwords'
+      Top = 6
+      Width = 142
+      AutoSize = True
+      BorderSpacing.Left = 10
+      Caption = 'User Access Control'
+      Enabled = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Visible = False
+    end
+    object GCPBtn: TButton
+      AnchorSideLeft.Control = UserAccessBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 365
+      Height = 29
+      Hint = 'Good Clinical Practice guideline tools'
+      Top = 6
+      Width = 105
+      AutoSize = True
+      BorderSpacing.Left = 10
+      Caption = 'Gcp Extension'
+      Enabled = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      Visible = False
+    end
   end
   object MainMenu1: TMainMenu
     left = 159
