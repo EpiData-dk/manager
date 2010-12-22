@@ -6,14 +6,19 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList, StdActns, project_frame;
+  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, project_frame;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    UserAccessBtn: TButton;
+    GCPBtn: TButton;
+    OpenProjectBtn: TButton;
+    NewProjectBtn: TButton;
     HelpMenuDivider1: TMenuItem;
+    Panel1: TPanel;
     TutorialsMenuDivider1: TMenuItem;
     WebTutorialsMenuItem: TMenuItem;
     TutorialSubMenu: TMenuItem;
