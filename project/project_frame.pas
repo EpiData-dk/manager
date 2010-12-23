@@ -53,6 +53,7 @@ type
     procedure OnDataFileChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     function  DoCreateNewDocument: TEpiDocument;
     function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
+    procedure AddToRecent(Const AFileName: string);
     procedure DoSaveProject(AFileName: string);
     procedure DoOpenProject(Const AFileName: string);
     procedure DoNewDataForm(Df: TEpiDataFile);
@@ -251,6 +252,12 @@ begin
   result := TEpiDataFileEx;
 end;
 
+procedure TProjectFrame.AddToRecent(const AFileName: string);
+begin
+  settings2.AddToRecent(AFileName);
+  MainForm.UpdateRecentFiles;
+end;
+
 procedure TProjectFrame.DoSaveProject(AFileName: string);
 var
   Fs: TFileStream;
@@ -273,6 +280,7 @@ begin
       Fs.CopyFrom(Ms, Ms.Size);
       Fs.Free;
     end;
+    AddToRecent(AFileName);
   finally
     ActiveFrame.Cursor := crDefault;
     Application.ProcessMessages;
@@ -340,6 +348,7 @@ begin
   if Res = mrYes then
     EpiDocument.Modified := true;
 
+  AddToRecent(Fn);
   UpdateCaption;
 end;
 

@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = 497
+  Left = 482
   Height = 603
   Hint = 'New EpiData Project (XML)'
   Top = 271
@@ -115,6 +115,9 @@ object MainForm: TMainForm
       end
       object OpenProjectMenuItem: TMenuItem
         Action = OpenProjectAction
+      end
+      object RecentFilesSubMenu: TMenuItem
+        Caption = 'Open Recent...'
       end
       object SaveProjectMenuItem: TMenuItem
         Caption = '&Save'

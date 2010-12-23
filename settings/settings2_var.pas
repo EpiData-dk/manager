@@ -83,6 +83,9 @@ var
     IniFileName:           '';
   );
 
+var
+  RecentFiles: TStringList;
+
 implementation
 
 end.

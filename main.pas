@@ -6,13 +6,15 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, project_frame;
+  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
+  project_frame;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    RecentFilesSubMenu: TMenuItem;
     UserAccessBtn: TButton;
     GCPBtn: TButton;
     OpenProjectBtn: TButton;
@@ -81,6 +83,7 @@ type
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
     procedure ShowAboutActionExecute(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -98,11 +101,13 @@ type
     procedure DoOpenProject(Const AFileName: string);
     procedure UpdateMainMenu;
     procedure UpdateSettings;
+    procedure OpenRecentMenuItemClick(Sender: TObject);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
-    property Modified: boolean read FModified write SetModified;
+    property  Modified: boolean read FModified write SetModified;
     procedure RestoreDefaultPos;
+    procedure UpdateRecentFiles;
   end;
 
 var
@@ -128,6 +133,7 @@ begin
     LoadFormPosition(Self, 'MainForm');
 
   UpdateSettings;
+  UpdateRecentFiles;
 
   // Show welcome message
   {$IFDEF EPI_RELEASE}
@@ -153,6 +159,7 @@ begin
 
   if CanClose and ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, 'MainForm');
+  SaveSettingToIni(ManagerSettings.IniFileName);
 end;
 
 procedure TMainForm.CopyProjectInfoActionExecute(Sender: TObject);
@@ -292,6 +299,18 @@ begin
   Frm := TAboutForm.Create(Self);
   Frm.ShowModal;
   Frm.Free;
+end;
+
+procedure TMainForm.SpeedButton1Click(Sender: TObject);
+var
+  Pop: TPopupMenu;
+  i: Integer;
+begin
+{  Pop := TPopupMenu.Create(self);
+  for i := 0 to RecentFilesSubMenu.Count - 1 do
+    Pop.Items.Add(RecentFilesSubMenu.Items[i]);
+  with SpeedButton1 do
+    Pop.PopUp(Left + Height, Top + Height);}
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
@@ -467,6 +486,29 @@ begin
 
   if Assigned(FActiveFrame) then
     TProjectFrame(FActiveFrame).UpdateFrame;
+end;
+
+procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
+begin
+  DoOpenProject(ExpandFileNameUTF8(TMenuItem(Sender).Caption));
+end;
+
+procedure TMainForm.UpdateRecentFiles;
+var
+  Mi: TMenuItem;
+  i: Integer;
+begin
+  RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
+
+  RecentFilesSubMenu.Clear;
+  for i := 0 to RecentFiles.Count - 1 do
+  begin
+    Mi := TMenuItem.Create(RecentFilesSubMenu);
+    Mi.Name := 'recent' + inttostr(i);
+    Mi.Caption := RecentFiles[i];
+    Mi.OnClick := @OpenRecentMenuItemClick;
+    RecentFilesSubMenu.Add(Mi);
+  end;
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);

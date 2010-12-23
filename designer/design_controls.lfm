@@ -628,7 +628,7 @@ object DesignControlsForm: TDesignControlsForm
             Left = 10
             Height = 112
             Top = 10
-            Width = 438
+            Width = 452
             Anchors = [akTop, akLeft, akRight]
             AutoFill = True
             BorderSpacing.Left = 10
@@ -644,14 +644,14 @@ object DesignControlsForm: TDesignControlsForm
             ChildSizing.Layout = cclLeftToRightThenTopToBottom
             ChildSizing.ControlsPerLine = 1
             ClientHeight = 93
-            ClientWidth = 434
+            ClientWidth = 448
             Enabled = False
             TabOrder = 1
             object DefaultEnterRadioBtn: TRadioButton
               Left = 6
               Height = 27
               Top = 6
-              Width = 422
+              Width = 436
               Caption = 'Default entry'
               Checked = True
               TabOrder = 0
@@ -661,7 +661,7 @@ object DesignControlsForm: TDesignControlsForm
               Left = 6
               Height = 27
               Top = 33
-              Width = 422
+              Width = 436
               Caption = 'Must Enter'
               TabOrder = 1
             end
@@ -669,7 +669,7 @@ object DesignControlsForm: TDesignControlsForm
               Left = 6
               Height = 27
               Top = 60
-              Width = 422
+              Width = 436
               Caption = 'No Enter'
               TabOrder = 2
             end
@@ -685,7 +685,7 @@ object DesignControlsForm: TDesignControlsForm
             Left = 10
             Height = 214
             Top = 154
-            Width = 438
+            Width = 452
             Anchors = [akTop, akLeft, akRight, akBottom]
             BorderSpacing.Left = 10
             BorderSpacing.Top = 5
@@ -693,18 +693,18 @@ object DesignControlsForm: TDesignControlsForm
             BorderSpacing.Bottom = 10
             Caption = 'Jumps:'
             ClientHeight = 195
-            ClientWidth = 434
+            ClientWidth = 448
             Enabled = False
             TabOrder = 2
             object JumpScrollBox: TScrollBox
               Left = 0
               Height = 195
               Top = 0
-              Width = 434
+              Width = 448
               Align = alClient
               BorderStyle = bsNone
               ClientHeight = 195
-              ClientWidth = 434
+              ClientWidth = 448
               TabOrder = 0
               object Label13: TLabel
                 AnchorSideLeft.Control = JumpScrollBox
@@ -725,7 +725,7 @@ object DesignControlsForm: TDesignControlsForm
                 Left = 93
                 Height = 27
                 Top = 6
-                Width = 65
+                Width = 72
                 Anchors = [akTop, akLeft, akRight]
                 BorderSpacing.Left = 5
                 TabOrder = 0
@@ -736,7 +736,7 @@ object DesignControlsForm: TDesignControlsForm
                 AnchorSideTop.Control = GotoFieldComboBox1
                 AnchorSideTop.Side = asrCenter
                 AnchorSideRight.Control = GotoFieldComboBox1
-                Left = 173
+                Left = 180
                 Height = 18
                 Top = 10
                 Width = 68
@@ -750,10 +750,10 @@ object DesignControlsForm: TDesignControlsForm
                 AnchorSideLeft.Control = Label14
                 AnchorSideLeft.Side = asrBottom
                 AnchorSideRight.Control = RemoveJumpBtn
-                Left = 243
+                Left = 250
                 Height = 31
                 Top = 4
-                Width = 136
+                Width = 143
                 Anchors = [akTop, akLeft, akRight]
                 BorderSpacing.Right = 5
                 ItemHeight = 0
@@ -766,7 +766,7 @@ object DesignControlsForm: TDesignControlsForm
                 AnchorSideRight.Control = JumpScrollBox
                 AnchorSideRight.Side = asrBottom
                 AnchorSideBottom.Side = asrCenter
-                Left = 409
+                Left = 423
                 Height = 22
                 Top = 8
                 Width = 22
@@ -815,7 +815,7 @@ object DesignControlsForm: TDesignControlsForm
                 AnchorSideTop.Side = asrCenter
                 AnchorSideRight.Control = AddJumpBtn
                 AnchorSideBottom.Side = asrCenter
-                Left = 384
+                Left = 398
                 Height = 22
                 Top = 8
                 Width = 22

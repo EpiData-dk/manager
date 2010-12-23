@@ -45,6 +45,8 @@ function LoadSettingsFromIni(Const FileName: string): boolean;
 procedure SaveFormPosition(Const AForm: TForm; Const SectionName: string);
 procedure LoadFormPosition(Var AForm: TForm; Const SectionName: string);
 
+procedure AddToRecent(Const AFilename: string);
+
 
 procedure RegisterSettingFrame(const Order: byte;
   const AValue: TCustomFrameClass; const AName: string);
@@ -63,7 +65,7 @@ implementation
 
 uses
   settings2_interface, settings2_var, epidatafilestypes,
-  IniFiles;
+  IniFiles, strutils;
 
 var
   Frames: TStringList = nil;
@@ -77,6 +79,7 @@ function SaveSettingToIni(Const FileName: string): boolean;
 var
   Ini: TIniFile;
   Sec: string;
+  i: Integer;
 begin
   Result := false;
 
@@ -128,6 +131,10 @@ begin
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
       Result := true;
     end;
+
+    // Read recent files.
+    for i := 0 to RecentFiles.Count - 1 do
+      Ini.WriteString('recent', 'file'+inttostr(i), RecentFiles[i]);
   finally
     Ini.Free;
   end;
@@ -137,6 +144,8 @@ function LoadSettingsFromIni(Const FileName: string): boolean;
 var
   Ini: TIniFile;
   Sec: String;
+  i: Integer;
+  S: String;
 begin
   Result := false;
   ManagerSettings.IniFileName := FileName;
@@ -190,9 +199,19 @@ begin
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
     end;
+
+    // Read recent files.
+    Sec := 'recent';
+    for i := 0 to 9 do
+    begin
+      S := Ini.ReadString(sec, 'file'+inttostr(i), '');
+      if S > '' then
+        RecentFiles.Add(S);
+    end;
   finally
     Ini.Free;
   end;
+  Result := true;
 end;
 
 procedure SaveFormPosition(const AForm: TForm; const SectionName: string);
@@ -235,6 +254,17 @@ begin
   finally
     Ini.Free;
   end;
+end;
+
+procedure AddToRecent(const AFilename: string);
+var
+  Idx: Integer;
+begin
+  Idx := RecentFiles.IndexOf(AFilename);
+  if (Idx >= 0) then
+    RecentFiles.Exchange(Idx, 0)
+  else
+    RecentFiles.Insert(0, AFilename);
 end;
 
 { TSettingsForm }
@@ -350,12 +380,15 @@ begin
   ManagerSettings.TutorialDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'tutorials';
   if not DirectoryExistsUTF8(ManagerSettings.TutorialDirUTF8) then
     ManagerSettings.TutorialDirUTF8 := GetCurrentDirUTF8;
+
+  RecentFiles := TStringList.Create;
 end;
 
 finalization
 
 begin
   FinalizeFrames;
+  RecentFiles.Free
 end;
 
 end.
