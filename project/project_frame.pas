@@ -584,7 +584,6 @@ procedure TProjectFrame.CloseQuery(var CanClose: boolean);
 var
   res: LongInt;
 begin
-  CanClose := true;
   {$IFDEF EPI_RELEASE}
   if Modified or EpiDocument.Modified then
   begin

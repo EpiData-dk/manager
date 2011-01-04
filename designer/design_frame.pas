@@ -1529,7 +1529,12 @@ begin
     Exit;
   end;
 
-  ParentPt := WinSender.ScreenToClient(FLeftMouseUp);
+  ParentPt := Point(X, Y);
+  if (WinSender = FDesignerBox) then
+  begin
+    ParentPt.X += FDesignerBox.HorzScrollBar.Position;
+    ParentPt.Y += FDesignerBox.VertScrollBar.Position;
+  end;
 
   case FActiveButton.Index of
     // Dividers... should never get here:
@@ -1805,11 +1810,16 @@ begin
   else
     FActiveDockSite := TControl(Sender).Parent;
 
-  if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
-    FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
+  // DO NOT reposition on the "main" section, this hinders correct placement of
+  // new controls using the mouse, if eg. the box is scrolled some-what down.
+  if FActiveControl <> FDesignerBox then
+  begin
+    if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
+      FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
 
-  if DesignControlTop(FActiveControl) > (FDesignerBox.VertScrollBar.Position + FDesignerBox.VertScrollBar.Page) then
-    FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - FDesignerBox.VertScrollBar.Page + FActiveControl.Height + 5;
+    if DesignControlTop(FActiveControl) > (FDesignerBox.VertScrollBar.Position + FDesignerBox.VertScrollBar.Page) then
+      FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - FDesignerBox.VertScrollBar.Page + FActiveControl.Height + 5;
+  end;
   FActiveControl.Color := $00B6F5F5;
 
   ShowForm(EpiControl, FActiveControl.ClientToScreen(Point(0,0)), false);

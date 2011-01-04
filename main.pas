@@ -152,9 +152,7 @@ begin
 
   {$IFDEF EPI_RELEASE}
   if Assigned(FActiveFrame) then
-  begin
-    TProjectFrame(FActiveFrame).CloseQuery(CanClose);
-  end;
+    FActiveFrame.CloseQuery(CanClose);
   {$ENDIF}
 
   if CanClose and ManagerSettings.SaveWindowPositions then
@@ -397,7 +395,7 @@ begin
   result := true;
   if Assigned(FActiveFrame) then
   begin
-    TProjectFrame(FActiveFrame).CloseQuery(result);
+    FActiveFrame.CloseQuery(result);
     if not Result then exit;
 
     PageControl1.ActivePage.Free;

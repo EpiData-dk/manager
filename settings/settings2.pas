@@ -129,12 +129,13 @@ begin
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       WriteBool(Sec, 'ShowWelcome', ShowWelcome);
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
-      Result := true;
     end;
 
     // Read recent files.
     for i := 0 to RecentFiles.Count - 1 do
       Ini.WriteString('recent', 'file'+inttostr(i), RecentFiles[i]);
+
+    Result := true;
   finally
     Ini.Free;
   end;
@@ -265,6 +266,8 @@ begin
     RecentFiles.Exchange(Idx, 0)
   else
     RecentFiles.Insert(0, AFilename);
+  if RecentFiles.Count > 10 then
+    RecentFiles.Delete(10);
 end;
 
 { TSettingsForm }
