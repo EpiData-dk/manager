@@ -15,6 +15,8 @@ type
   TProjectSettings_GeneralFrame = class(TFrame, IProjectSettingsFrame)
     BackupOnShutdownChkBox: TCheckBox;
     Bevel1: TBevel;
+    Label3: TLabel;
+    AutoIncStartEdit: TMaskEdit;
     ProjectTitleEdit: TEdit;
     Label1: TLabel;
     BackupIntervalEdit: TMaskEdit;
@@ -45,6 +47,7 @@ begin
 
   BackupIntervalEdit.Text        := IntToStr(FProjectSettings.BackupInterval);
   BackupOnShutdownChkBox.Checked := FProjectSettings.BackupOnShutdown;
+  AutoIncStartEdit.Text          := IntToStr(FProjectSettings.AutoIncStartValue);
   ProjectTitleEdit.Text          := FDataFiles[0].Name.Text;
 end;
 
@@ -63,6 +66,7 @@ begin
   end;
   FProjectSettings.BackupInterval   := I;
   FProjectSettings.BackupOnShutdown := BackupOnShutdownChkBox.Checked;
+  FProjectSettings.AutoIncStartValue := StrToInt(AutoIncStartEdit.Text);
   FDataFiles[0].Name.Text           := ProjectTitleEdit.Text;
 end;
 

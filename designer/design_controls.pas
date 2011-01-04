@@ -1082,11 +1082,14 @@ begin
     ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
 
     // Visiblity
-    LengthEdit.Visible    := FField.FieldType in (IntFieldTypes + FloatFieldTypes + StringFieldTypes);
-    LengthLabel.Visible   := LengthEdit.Visible;
-    DecimalsEdit.Visible  := FField.FieldType in FloatFieldTypes;
-    DecimalsLabel.Visible := DecimalsEdit.Visible;
-    RangesGrpBox.Visible  := Ffield.FieldType in RangeFieldTypes;
+    LengthEdit.Visible              := FField.FieldType in (IntFieldTypes + FloatFieldTypes + StringFieldTypes);
+    LengthLabel.Visible             := LengthEdit.Visible;
+    DecimalsEdit.Visible            := FField.FieldType in FloatFieldTypes;
+    DecimalsLabel.Visible           := DecimalsEdit.Visible;
+    RangesGrpBox.Visible            := Ffield.FieldType in RangeFieldTypes;
+    ValueLabelComboBox.Visible      := FField.FieldType in ValueLabelFieldTypes;
+    ValueLabelLabel.Visible         := ValueLabelComboBox.Visible;
+    ManageValueLabelsButton.Visible := ValueLabelComboBox.Visible;
 
     // Setup "advanced" page.
     if Assigned(FField.Ranges) and (FField.Ranges.Count > 0) then

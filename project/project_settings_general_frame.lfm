@@ -2,9 +2,9 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
   Left = 0
   Height = 315
   Top = 0
-  Width = 440
+  Width = 472
   ClientHeight = 315
-  ClientWidth = 440
+  ClientWidth = 472
   TabOrder = 0
   DesignLeft = 728
   DesignTop = 417
@@ -30,7 +30,7 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
     Height = 27
     Hint = 'Number of minuts between timed recovery backup.'#13#10'Set to 0 for no backup (NOT recommended).'
     Top = 79
-    Width = 134
+    Width = 166
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
@@ -75,7 +75,7 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
     Left = 10
     Height = 27
     Top = 30
-    Width = 420
+    Width = 452
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
@@ -91,10 +91,40 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
     Left = 10
     Height = 2
     Top = 67
-    Width = 420
+    Width = 452
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
+  end
+  object Label3: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = AutoIncStartEdit
+    AnchorSideTop.Side = asrCenter
+    Left = 10
+    Height = 18
+    Top = 152
+    Width = 156
+    BorderSpacing.Left = 10
+    Caption = 'Auto Increment start at:'
+    ParentColor = False
+  end
+  object AutoIncStartEdit: TMaskEdit
+    AnchorSideTop.Control = BackupOnShutdownChkBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 296
+    Height = 27
+    Top = 148
+    Width = 166
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    CharCase = ecNormal
+    MaxLength = 6
+    TabOrder = 3
+    EditMask = '999999;0;_'
+    SpaceChar = '_'
   end
 end
