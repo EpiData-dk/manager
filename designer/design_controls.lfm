@@ -13,7 +13,7 @@ object DesignControlsForm: TDesignControlsForm
   OnDestroy = FormDestroy
   OnShow = FormShow
   ShowInTaskBar = stAlways
-  LCLVersion = '0.9.29'
+  LCLVersion = '0.9.31'
   object EpiControlPageControl: TPageControl
     Left = 0
     Height = 448

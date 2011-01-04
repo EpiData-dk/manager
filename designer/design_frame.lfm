@@ -277,6 +277,22 @@ object DesignFrame: TDesignFrame
       Caption = 'Label6'
       ParentColor = False
     end
+    object Label7: TLabel
+      Left = 75
+      Height = 18
+      Top = 77
+      Width = 44
+      Caption = 'Label7'
+      ParentColor = False
+    end
+    object Label8: TLabel
+      Left = 80
+      Height = 18
+      Top = 162
+      Width = 44
+      Caption = 'Label8'
+      ParentColor = False
+    end
   end
   object Splitter1: TSplitter
     Left = 815

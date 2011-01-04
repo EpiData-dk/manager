@@ -25,6 +25,8 @@ type
     ExtendedLabel: TLabel;
     KeyPanel: TPanel;
     ExtendedPanel: TPanel;
+    Label7: TLabel;
+    Label8: TLabel;
     ValueLabelLabel: TLabel;
     RangeLabel: TLabel;
     ValueLabelPanel: TPanel;
@@ -199,6 +201,8 @@ type
     FMouseState: TMouseState;
     FActiveDockSite: TWinControl;
     FShowPanel: TPanel; // For showing the area for a new section.
+    procedure   DesignBoxMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);  // not really valid for all dock-sites, but place here for convinience.
     procedure   DrawShowPanel(X, Y: Integer);
     procedure   DockSiteMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
@@ -490,7 +494,7 @@ begin
   Node := nil;
 
   {$IFNDEF EPI_DEBUG}
-  if not (ssShift in GetKeyShiftState) then
+  if not ([ssShift] = GetKeyShiftState) then
   begin
     if MessageDlg('Warning', 'Are you sure you want to delete?',
       mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
@@ -1305,6 +1309,14 @@ begin
   end;
 end;
 
+procedure TDesignFrame.DesignBoxMouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  with FDesignerBox.VertScrollBar do
+    Position := Position - WheelDelta;
+  Handled := true;
+end;
+
 procedure TDesignFrame.DrawShowPanel(X, Y: Integer);
 var
   Pt1: TPoint;
@@ -1336,12 +1348,21 @@ begin
 end;
 
 function TDesignFrame.NewField(FieldType: TEpiFieldType): TEpiField;
+var
+  TheName: String;
+  I: Integer;
 begin
   result := FActiveSection.NewField(FieldType);
 
   with result do
   begin
-    Name := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count);
+    I := -1;
+    repeat
+      Inc(i);
+      TheName := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count + i);
+    until DataFile.ValidateFieldRename(result, TheName);
+
+    Name := TheName;
     Case FieldType of
       ftBoolean:
         Length := 1;
@@ -1454,23 +1475,20 @@ begin
   DataFile.BeginUpdate;
   with DataFile do
   begin
-    if not ((Fields.Count = 0) and (Headings.Count = 0)) then
+    for i := 0 to Sections.Count - 1 do
     begin
-      for i := 0 to Sections.Count - 1 do
-      begin
-        if Section[i] <> MainSection then
-          TheParent := TWinControl(NewSectionControl(Point(Section[i].Left, Section[i].Top),
-            Point(Section[i].Left+Section[i].Width, Section[i].Top+Section[i].Height), Section[i]))
-        else
-          TheParent := FDesignerBox;
+      if Section[i] <> MainSection then
+        TheParent := TWinControl(NewSectionControl(Point(Section[i].Left, Section[i].Top),
+          Point(Section[i].Left+Section[i].Width, Section[i].Top+Section[i].Height), Section[i]))
+      else
+        TheParent := FDesignerBox;
 
-        with Section[i] do
-        begin
-          for j := 0 to Fields.Count - 1 do
-            NewDesignControl(TDesignField, TheParent, Point(Field[j].Left, Field[j].Top), Field[j]);
-          for j := 0 to Headings.Count - 1 do
-            NewDesignControl(TDesignHeading, TheParent, Point(Heading[j].Left, Heading[j].Top), Heading[j]);
-        end;
+      with Section[i] do
+      begin
+        for j := 0 to Fields.Count - 1 do
+          NewDesignControl(TDesignField, TheParent, Point(Field[j].Left, Field[j].Top), Field[j]);
+        for j := 0 to Headings.Count - 1 do
+          NewDesignControl(TDesignHeading, TheParent, Point(Heading[j].Left, Heading[j].Top), Heading[j]);
       end;
     end;
   end;
@@ -1516,8 +1534,8 @@ var
   panel: TPanel;
 begin
   case Button of
-    mbLeft: FLeftMouseUp := WinSender.ClientToScreen(Point(X, Y));
-    mbRight: FRightMouseUp := WinSender.ClientToScreen(Point(X, Y));
+    mbLeft: FLeftMouseUp := WinSender.ControlToScreen(Point(X, Y));
+    mbRight: FRightMouseUp := WinSender.ControlToScreen(Point(X, Y));
   end;
 
   FMouseState.Down := false;
@@ -1595,6 +1613,9 @@ begin
      (Sender as IPositionHandler).YTree.Count
     ]
   );
+
+  Label7.Caption := Format('Mouse:  X=%d,Y=%d', [X, Y]);
+  Label8.Caption := Format('Scollbar: Pos=%d', [FDesignerBox.VertScrollBar.Position]);
 
   // Used to paint box when creating the section.
   if not (
@@ -2030,6 +2051,7 @@ begin
   FDesignerBox.OnUnDock    := @DockSiteUnDock;
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
   FDesignerBox.OnKeyDown   := @DesignKeyDown;
+  FDesignerBox.OnMouseWheel := @DesignBoxMouseWheel;
   FActiveDockSite := FDesignerBox;
 
   {$IFNDEF EPI_DEBUG}
