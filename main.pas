@@ -345,8 +345,8 @@ begin
   // Todo - this is not optimal on Non-windows OS's. Do some checks for writeability first.
   if LoadSettingsFromIni(ExtractFilePath(Application.ExeName) + IniName) then exit;
 
-  if not DirectoryExistsUTF8(GetAppConfigDirUTF8(false)) then
-    CreateDirUTF8(GetAppConfigDirUTF8(false));
+  if not DirectoryExistsUTF8(ExtractFilePath(GetAppConfigFileUTF8(false))) then
+    ForceDirectoriesUTF8(ExtractFilePath(GetAppConfigFileUTF8(false)));
   ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
 end;
 

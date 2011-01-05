@@ -449,8 +449,8 @@ begin
             end;
 
             case BorderStyle of
-              bsNone:   SideBuf := 0;
-              bsSingle: SideBuf := 6;
+              bsNone:   SideBuf := {$IFDEF DARWIN}    6 {$ELSE} 0 {$ENDIF};
+              bsSingle: SideBuf := {$IFDEF MSWINDOWS} 7 {$ELSE} 6 {$ENDIF};
             end;
 
             //         Side buffer (pixel from controls left side to first character.
