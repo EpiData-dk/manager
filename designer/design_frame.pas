@@ -1103,8 +1103,8 @@ var
   Ctrl: TDesignSection;
   EpiSection: TEpiSection absolute EpiControl;
 const
-  MinSectionWidth = 200;
-  MinSectionHeight = 100;
+  MinSectionWidth = 20;
+  MinSectionHeight = 10;
 begin
   Ctrl := TDesignSection.Create(FDesignerBox);
   Result := Ctrl;
