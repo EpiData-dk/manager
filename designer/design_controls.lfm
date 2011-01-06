@@ -19,9 +19,9 @@ object DesignControlsForm: TDesignControlsForm
     Height = 448
     Top = 0
     Width = 484
-    ActivePage = FieldTabSheet
+    ActivePage = SectionTabSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object SectionTabSheet: TTabSheet
       Caption = 'SectionTabSheet'
@@ -38,8 +38,8 @@ object DesignControlsForm: TDesignControlsForm
         TabOrder = 0
         object SectionBasicSheet: TTabSheet
           Caption = 'Basic'
-          ClientHeight = 409
-          ClientWidth = 474
+          ClientHeight = 378
+          ClientWidth = 472
           object SectionGroupAccessGroupBox: TGroupBox
             AnchorSideLeft.Control = SectionNameEdit
             AnchorSideTop.Control = SectionNameEdit
@@ -241,8 +241,8 @@ object DesignControlsForm: TDesignControlsForm
         end
         object SectionAdvancedSheet: TTabSheet
           Caption = 'Advanced'
-          ClientHeight = 409
-          ClientWidth = 474
+          ClientHeight = 378
+          ClientWidth = 472
           object HeightEdit: TEdit
             AnchorSideLeft.Control = SectionAdvancedSheet
             AnchorSideTop.Control = Label8
