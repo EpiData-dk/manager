@@ -100,6 +100,7 @@ type
     procedure DoNewProject;
     procedure DoOpenProject(Const AFileName: string);
     procedure UpdateMainMenu;
+    procedure UpdateProcessToolbar;
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
   public
@@ -230,6 +231,7 @@ end;
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);
 begin
   DoCloseProject;
+  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.CloseProjectActionUpdate(Sender: TObject);
@@ -245,6 +247,7 @@ end;
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
 begin
   DoNewProject;
+  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.OpenProjectActionExecute(Sender: TObject);
@@ -260,6 +263,7 @@ begin
   if not DoCloseProject then exit;
 
   DoOpenProject(Dlg.FileName);
+  UpdateProcessToolbar;
   Dlg.Free;
 end;
 
@@ -476,11 +480,17 @@ begin
   ToolsMenu.Visible := Assigned(FActiveFrame);
 end;
 
+procedure TMainForm.UpdateProcessToolbar;
+begin
+  ProcessToolPanel.Visible :=
+    (not Assigned(FActiveFrame)) and
+    ManagerSettings.ShowWorkToolBar;
+end;
+
 procedure TMainForm.UpdateSettings;
 begin
   LoadTutorials;
-
-  ProcessToolPanel.Visible := ManagerSettings.ShowWorkToolBar;
+  UpdateProcessToolbar;
 
   if Assigned(FActiveFrame) then
     TProjectFrame(FActiveFrame).UpdateFrame;
