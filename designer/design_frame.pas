@@ -7,7 +7,10 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
-  epicustombase, AVL_Tree , LCLType, design_controls;
+  epicustombase, AVL_Tree , LCLType, design_controls, LMessages;
+
+const
+  LM_DESIGNER_DEL = LM_USER + 1;
 
 type
 
@@ -240,6 +243,8 @@ type
     procedure   ExitControl(Sender: TObject);
     procedure   DeleteControl(Sender: TObject);
     procedure   DeleteAllControls;
+    // - Custom message, used for deleting controls.
+    procedure   LMDesignerDel(var Msg: TLMessage); message LM_DESIGNER_DEL;
   private
     { Position handling }
     procedure   FindNearestControls(ParentControl: TWinControl;
@@ -279,7 +284,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Clipbrd, epiadmin, math, import_form, LMessages,
+  Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
   managerprocs, epiqeshandler;
 
@@ -461,6 +466,11 @@ begin
   begin
     MoveEndAction.Execute;
     Key := VK_UNKNOWN;
+  end;
+
+  if (Key = VK_DELETE) then
+  begin
+    PostMessage(Self.Handle, LM_DESIGNER_DEL, WPARAM(Sender), 0);
   end;
 end;
 
@@ -1367,7 +1377,7 @@ begin
       ftBoolean:
         Length := 1;
       ftInteger, ftAutoInc:
-        Length := ManagerSettings.IntFieldLength;
+          Length := ManagerSettings.IntFieldLength;
       ftFloat:
         begin
           Length := ManagerSettings.FloatIntLength;
@@ -1912,6 +1922,16 @@ begin
 
   DataFile.Size := 0;
   FDesignerBox.EndUpdateBounds;
+end;
+
+procedure TDesignFrame.LMDesignerDel(var Msg: TLMessage);
+var
+  Ctrl: TControl;
+begin
+  Ctrl := TControl(Msg.WParam);
+  if Ctrl = FDesignerBox then exit;
+  DeleteControlActionExecute(Ctrl);
+  TLMessage(Msg).Result := 1;
 end;
 
 procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;

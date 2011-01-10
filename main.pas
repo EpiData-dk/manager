@@ -83,7 +83,6 @@ type
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
     procedure ShowAboutActionExecute(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -142,6 +141,10 @@ begin
     ShowMessagePos('EpiData Manager:' + LineEnding +
                    'See help menu above for an introduction.' + LineEnding +
                    'Get latest version from http://www.epidata.dk', 15, 15);
+  {$ENDIF}
+
+  {$IFDEF EPI_DEBUG}
+  UserAccessBtn.Visible := true;
   {$ENDIF}
 end;
 
@@ -303,21 +306,9 @@ begin
   Frm.Free;
 end;
 
-procedure TMainForm.SpeedButton1Click(Sender: TObject);
-var
-  Pop: TPopupMenu;
-  i: Integer;
-begin
-{  Pop := TPopupMenu.Create(self);
-  for i := 0 to RecentFilesSubMenu.Count - 1 do
-    Pop.Items.Add(RecentFilesSubMenu.Items[i]);
-  with SpeedButton1 do
-    Pop.PopUp(Left + Height, Top + Height);}
-end;
-
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
 begin
-  OpenURL('http://www.epidata.dk/');
+  OpenURL(ManagerSettings.TutorialURLUTF8);
 end;
 
 procedure TMainForm.SetCaption;

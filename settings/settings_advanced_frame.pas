@@ -5,7 +5,7 @@ unit settings_advanced_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, EditBtn,
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, EditBtn, FileCtrl,
   settings2_interface, settings2_var;
 
 type
@@ -13,6 +13,8 @@ type
   { TSettings_AdvancedFrame }
 
   TSettings_AdvancedFrame = class(TFrame, ISettingsFrame)
+    TutorialURLEdit: TEdit;
+    Label2: TLabel;
     ShowWorkToolBarChkBox: TCheckBox;
     Label19: TLabel;
     ShowWelcomeChkBox: TCheckBox;
@@ -39,7 +41,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2, epimiscutils, strutils;
+  settings2, epimiscutils, strutils, LCLProc;
 
 
 { TSettings_AdvancedFrame }
@@ -62,6 +64,7 @@ begin
   begin
     WorkingDirEdit.Text := WorkingDirUTF8;
     TutorialDirEdit.Text := TutorialDirUTF8;
+    TutorialURLEdit.Text := TutorialURLUTF8;
     DefaultPasteCombo.ItemIndex := PasteSpecialType;
     DefaultSaveTypeComboBox.ItemIndex := SaveType;
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
@@ -78,6 +81,9 @@ begin
       WorkingDirUTF8    := WorkingDirEdit.Text;
     if DirectoryExistsUTF8(TutorialDirEdit.Text) then
       TutorialDirUTF8   := TutorialDirEdit.Text;
+    if (LeftStr(UTF8LowerCase(TutorialURLEdit.Text), 7) = 'http://') or
+       (LeftStr(UTF8LowerCase(TutorialURLEdit.Text), 8) = 'https://') then
+      TutorialURLUTF8 := TutorialURLEdit.Text;
     PasteSpecialType    := DefaultPasteCombo.ItemIndex;
     SaveType            := DefaultSaveTypeComboBox.ItemIndex;
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;

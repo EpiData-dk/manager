@@ -537,8 +537,8 @@ begin
     if ProjectFileName = '' then
     begin
       Res := MessageDlg('Warning',
-               'Your project have not yet been save.' + LineEnding +
-               'Do you wish to save now?' + LineEnding +
+               'Your project have not yet been saved' + LineEnding +
+               'Save now?' + LineEnding +
                '(NO = you will NOT be asked again)', mtWarning, mbYesNo, 0, mbYes);
       if Res = mrNo then exit;
       SaveProjectAsAction.Execute;

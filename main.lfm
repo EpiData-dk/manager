@@ -76,7 +76,6 @@ object MainForm: TMainForm
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'User Access Control'
-      Enabled = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2

@@ -32,6 +32,7 @@ type
     ShowWorkToolBar:       boolean;
     WorkingDirUTF8:        string;
     TutorialDirUTF8:       string;
+    TutorialURLUTF8:       string;
     PasteSpecialType:      byte;     // Index into list:
                                      //   0: QES
                                      //   1: Heading
@@ -74,6 +75,7 @@ var
     ShowWorkToolBar:       true;
     WorkingDirUTF8:        '';
     TutorialDirUTF8:       '';
+    TutorialURLUTF8:       'http://epidata.dk/documentation.php';
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
 

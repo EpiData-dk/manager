@@ -124,6 +124,7 @@ begin
       Sec := 'advanced';
       WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
       WriteString(Sec, 'TutorialDirectory', TutorialDirUTF8);
+      WriteString(Sec, 'TutorialURL', TutorialURLUTF8);
       WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
       WriteInteger(Sec, 'SaveAsType', SaveType);
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
@@ -194,6 +195,7 @@ begin
       Sec := 'advanced';
       WorkingDirUTF8      := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
       TutorialDirUTF8     := ReadString(Sec, 'TutorialDirectory', TutorialDirUTF8);
+      TutorialURLUTF8     := ReadString(Sec, 'TutorialURL', TutorialURLUTF8);
       PasteSpecialType    := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
       SaveType            := ReadInteger(Sec, 'SaveAsType', SaveType);
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);

@@ -1,19 +1,19 @@
 object DesignFrame: TDesignFrame
   Left = 0
-  Height = 653
+  Height = 654
   Top = 0
-  Width = 1085
-  ClientHeight = 653
-  ClientWidth = 1085
+  Width = 900
+  ClientHeight = 654
+  ClientWidth = 900
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 460
-  DesignTop = 324
+  DesignLeft = 296
+  DesignTop = 282
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
     Top = 0
-    Width = 1085
+    Width = 900
     ButtonHeight = 24
     ButtonWidth = 24
     Caption = 'DesignerToolBar'
@@ -208,15 +208,15 @@ object DesignFrame: TDesignFrame
     end
   end
   object Panel1: TPanel
-    Left = 820
-    Height = 601
+    Left = 635
+    Height = 602
     Top = 26
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 599
+    ClientHeight = 600
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
@@ -295,8 +295,8 @@ object DesignFrame: TDesignFrame
     end
   end
   object Splitter1: TSplitter
-    Left = 815
-    Height = 601
+    Left = 630
+    Height = 602
     Top = 26
     Width = 5
     Align = alRight
@@ -306,12 +306,12 @@ object DesignFrame: TDesignFrame
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
-    Top = 627
-    Width = 1085
+    Top = 628
+    Width = 900
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 26
-    ClientWidth = 1085
+    ClientWidth = 900
     TabOrder = 3
     object SectionsPanel: TPanel
       AnchorSideLeft.Control = RecordsPanel
@@ -447,21 +447,20 @@ object DesignFrame: TDesignFrame
       Left = 377
       Height = 24
       Top = 2
-      Width = 339
+      Width = 154
       Alignment = taLeftJustify
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 2
       BorderSpacing.Right = 2
       BevelOuter = bvLowered
       ClientHeight = 24
-      ClientWidth = 339
+      ClientWidth = 154
       Color = clWhite
       ParentColor = False
       TabOrder = 4
       object FieldNameLabel: TLabel
-        AnchorSideLeft.Control = FieldsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 2
+        AnchorSideLeft.Control = FieldNamePanel
+        Left = 3
         Height = 18
         Top = 4
         Width = 106
@@ -474,7 +473,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = FieldNamePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = DefaultValuePanel
-      Left = 718
+      Left = 533
       Height = 24
       Top = 2
       Width = 75
@@ -489,9 +488,8 @@ object DesignFrame: TDesignFrame
       ParentColor = False
       TabOrder = 5
       object FieldTypeLabel: TLabel
-        AnchorSideLeft.Control = FieldsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 2
+        AnchorSideLeft.Control = FieldTypePanel
+        Left = 3
         Height = 18
         Top = 4
         Width = 97
@@ -504,7 +502,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = FieldTypePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = ValueLabelPanel
-      Left = 795
+      Left = 610
       Height = 24
       Top = 2
       Width = 55
@@ -519,9 +517,8 @@ object DesignFrame: TDesignFrame
       ParentColor = False
       TabOrder = 6
       object DefaultValueLabel: TLabel
-        AnchorSideLeft.Control = FieldsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 2
+        AnchorSideLeft.Control = DefaultValuePanel
+        Left = 3
         Height = 18
         Top = 4
         Width = 120
@@ -534,7 +531,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = DefaultValuePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = RangePanel
-      Left = 852
+      Left = 667
       Height = 24
       Top = 2
       Width = 80
@@ -549,9 +546,8 @@ object DesignFrame: TDesignFrame
       ParentColor = False
       TabOrder = 7
       object ValueLabelLabel: TLabel
-        AnchorSideLeft.Control = FieldsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 2
+        AnchorSideLeft.Control = ValueLabelPanel
+        Left = 3
         Height = 18
         Top = 4
         Width = 107
@@ -564,7 +560,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = ValueLabelPanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = KeyPanel
-      Left = 934
+      Left = 749
       Height = 24
       Top = 2
       Width = 60
@@ -579,9 +575,8 @@ object DesignFrame: TDesignFrame
       ParentColor = False
       TabOrder = 8
       object RangeLabel: TLabel
-        AnchorSideLeft.Control = FieldsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 2
+        AnchorSideLeft.Control = RangePanel
+        Left = 3
         Height = 18
         Top = 4
         Width = 77
@@ -594,7 +589,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = RangePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = ExtendedPanel
-      Left = 996
+      Left = 811
       Height = 24
       Top = 2
       Width = 35
@@ -609,9 +604,8 @@ object DesignFrame: TDesignFrame
       ParentColor = False
       TabOrder = 9
       object KeyLabel: TLabel
-        AnchorSideLeft.Control = FieldsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 2
+        AnchorSideLeft.Control = KeyPanel
+        Left = 3
         Height = 18
         Top = 4
         Width = 60
@@ -625,7 +619,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = StatusBarPanel
       AnchorSideRight.Side = asrBottom
-      Left = 1033
+      Left = 848
       Height = 24
       Top = 2
       Width = 50
@@ -640,9 +634,8 @@ object DesignFrame: TDesignFrame
       ParentColor = False
       TabOrder = 10
       object ExtendedLabel: TLabel
-        AnchorSideLeft.Control = FieldsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 2
+        AnchorSideLeft.Control = ExtendedPanel
+        Left = 3
         Height = 18
         Top = 4
         Width = 97
@@ -1988,10 +1981,6 @@ object DesignFrame: TDesignFrame
       ImageIndex = 11
       OnExecute = DeleteControlActionExecute
       OnUpdate = DeleteControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        'Shift+Del'
-      )
-      ShortCut = 46
     end
     object ImportDataFileAction: TAction
       Category = 'File'
