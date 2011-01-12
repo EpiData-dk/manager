@@ -120,7 +120,8 @@ implementation
 uses
   workflow_frame, LCLProc, LCLIntf, design_frame,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
-  design_controls, structure_form, valuelabelseditor_form, epimiscutils;
+  design_controls, structure_form, valuelabelseditor_form, epimiscutils,
+  epicustombase, project_settings;
 
 { TMainForm }
 
@@ -446,7 +447,28 @@ end;
 procedure TMainForm.DoOpenProject(const AFileName: string);
 begin
   DoNewProject;
-  FActiveFrame.OpenProject(AFileName);
+  try
+    FActiveFrame.OpenProject(AFileName);
+  except
+    on E: TEpiCoreException do
+      begin
+        ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
+                    E.Message);
+        DoCloseProject;
+      end;
+    on E: EFOpenError do
+      begin
+        ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
+                    'File is corrupt or does not exist.');
+        DoCloseProject;
+      end;
+  else
+    begin
+      ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
+                  'An unknown error occured.');
+      DoCloseProject;
+    end;
+  end;
 end;
 
 procedure TMainForm.UpdateMainMenu;
@@ -523,6 +545,8 @@ begin
     TProjectFrame(FActiveFrame).RestoreDefaultPos;
 
   TSettingsForm.RestoreDefaultPos;
+  TProject_Structure_Form.RestoreDefaultPos;
+  TProjectSettingsForm.RestoreDefaultPos;
 
   BeginFormUpdate;
   Width := 700;

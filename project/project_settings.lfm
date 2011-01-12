@@ -12,7 +12,7 @@ object ProjectSettingsForm: TProjectSettingsForm
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.29'
+  LCLVersion = '0.9.31'
   object Panel1: TPanel
     Left = 0
     Height = 50

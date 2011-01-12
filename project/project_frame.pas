@@ -45,6 +45,7 @@ type
   private
     { private declarations }
     FFileName: string;
+    FFileTimeStamp: longint;
     FActiveFrame: TFrame;
     FModified: Boolean;
     FOnModified: TNotifyEvent;
@@ -95,7 +96,7 @@ uses
   design_frame, Clipbrd, project_settings, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
   structure_form, valuelabelseditor_form, epidatafilestypes,
-  strutils;
+  strutils, managerprocs;
 
 type
 
@@ -162,11 +163,36 @@ begin
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
+var
+  Res: LongInt;
 begin
   if ProjectFileName = '' then
     SaveProjectAsAction.Execute
   else
-    DoSaveProject(ProjectFileName);
+    try
+      if (FileExistsUTF8(ProjectFileName)) and
+         (FileAgeUTF8(ProjectFileName) <> FFileTimeStamp) then
+      begin
+        Res := MessageDlg('WARNING', 'Project file: ' + ProjectFileName + ' has been modified by another program since last save.' + LineEnding+
+                          'Backup existing file?', mtWarning, mbYesNoCancel, 0, mbCancel);
+        case Res of
+          mrYes:    CopyAndBackup(ProjectFileName);
+          mrCancel: Exit;
+          mrNo:     ; // do nothing.
+        end;
+      end;
+      DoSaveProject(ProjectFileName);
+    except
+      on E: EFCreateError do
+        begin
+          MessageDlg('Error',
+            'Unable to save project to:' + LineEnding +
+            ProjectFileName + LineEnding +
+            'Error message: ' + E.Message,
+            mtError, [mbOK], 0);
+          Exit;
+        end;
+    end;
   EpiDocument.Modified := false;
   UpdateCaption;
 end;
@@ -191,6 +217,7 @@ end;
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
 var
   Dlg: TSaveDialog;
+  Fn: String;
 begin
   Dlg := TSaveDialog.Create(Self);
   Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
@@ -200,13 +227,27 @@ begin
   SaveDlgTypeChange(Dlg);
   Dlg.OnTypeChange := @SaveDlgTypeChange;
   Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
+
   if not Dlg.Execute then exit;
-
-  if Dlg.FileName <> ProjectFileName then
-    FFileName := Dlg.FileName;
-
-  DoSaveProject(ProjectFileName);
+  Fn := Dlg.FileName;
   Dlg.Free;
+
+  try
+    DoSaveProject(Fn);
+  except
+    on E: EFCreateError do
+      begin
+        MessageDlg('Error',
+          'Unable to save project to:' + LineEnding +
+          Fn + LineEnding +
+          'Error message: ' + E.Message,
+          mtError, [mbOK], 0);
+        Exit;
+      end;
+  end;
+
+  if Fn <> ProjectFileName then
+    FFileName := Fn;
 
   EpiDocument.Modified := false;
   UpdateCaption;
@@ -268,6 +309,8 @@ begin
 
   ActiveFrame.Cursor := crHourGlass;
   Application.ProcessMessages;
+  Fs := nil;
+  Ms := nil;
   try
     Ms := TMemoryStream.Create;
     EpiDocument.SaveToStream(Ms);
@@ -278,13 +321,14 @@ begin
     else begin
       Fs := TFileStream.Create(AFileName, fmCreate);
       Fs.CopyFrom(Ms, Ms.Size);
-      Fs.Free;
     end;
+    FFileTimeStamp := FileAgeUTF8(AFileName);
     AddToRecent(AFileName);
   finally
     ActiveFrame.Cursor := crDefault;
     Application.ProcessMessages;
-    Ms.Free;
+    if Assigned(Ms) then FreeAndNil(Ms);
+    if Assigned(Fs) then FreeAndNil(Fs);
   end;
 end;
 
@@ -327,18 +371,27 @@ begin
   Cursor := crHourGlass;
   Application.ProcessMessages;
 
-  St := TMemoryStream.Create;
-  if ExtractFileExt(UTF8ToSys(Fn)) = '.epz' then
-    ZipFileToStream(St, Fn)
-  else
-    St.LoadFromFile(Fn);
+  St := nil;
+  try
+    St := TMemoryStream.Create;
+    if ExtractFileExt(UTF8ToSys(Fn)) = '.epz' then
+      ZipFileToStream(St, Fn)
+    else
+      St.LoadFromFile(Fn);
 
-  St.Position := 0;
-  FEpiDocument := DoCreateNewDocument;
-  FEpiDocument.LoadFromStream(St);
-  FFileName := AFileName;
-  DoNewDataForm(FEpiDocument.DataFiles[0]);
-  St.Free;
+    St.Position := 0;
+    FEpiDocument := DoCreateNewDocument;
+    FEpiDocument.LoadFromStream(St);
+    FFileName := AFileName;
+    DoNewDataForm(FEpiDocument.DataFiles[0]);
+    St.Free;
+  except
+    if Assigned(St) then FreeAndNil(St);
+    if Assigned(FEpiDocument) then FreeAndNil(FEpiDocument);
+    if Assigned(FActiveFrame) then FreeAndNil(FActiveFrame);
+    raise;
+  end;
+  FFileTimeStamp := FileAgeUTF8(fn);
 
   // Create backup process.
   InitBackupTimer;
@@ -544,7 +597,12 @@ begin
       SaveProjectAsAction.Execute;
     end;
     {$ENDIF}
-    DoSaveProject(ProjectFileName + '.bak');
+    try
+      DoSaveProject(ProjectFileName + '.bak');
+    except
+      // TODO : Message on bad backup?
+      Exit;
+    end;
     UpdateTimer;
     FBackupTimer.Enabled := true;
   except
@@ -603,7 +661,6 @@ begin
   GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
   if Assigned(FActiveFrame) then
     TDesignFrame(FActiveFrame).RestoreDefaultPos;
-  TProject_Structure_Form.RestoreDefaultPos;
 end;
 
 procedure TProjectFrame.UpdateFrame;

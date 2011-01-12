@@ -32,6 +32,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; AEpiDocument: TEpiCustomBase);
+    class procedure RestoreDefaultPos;
   end; 
 
 implementation
@@ -39,18 +40,16 @@ implementation
 {$R *.lfm}
 
 uses
-  project_settings_field_frame, project_settings_interface, project_settings_general_frame;
+  project_settings_field_frame, project_settings_interface,
+  project_settings_general_frame, settings2, settings2_var;
 
 { TProjectSettingsForm }
 
 procedure TProjectSettingsForm.FormShow(Sender: TObject);
 begin
-{  FActiveFrame := TFrame(ProjectSettingsView.Items[0].Data);
-  (FActiveFrame as IProjectSettingsFrame).SetProjectSettings(FEpiDocument);
-  FActiveFrame.Parent := Self;
-  FActiveFrame.Align := alClient;}
   ProjectSettingsView.Selected := ProjectSettingsView.Items[0];
-//  ProjectSettingsView.SetFocus;
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'ProjectSettings');
 end;
 
 procedure TProjectSettingsForm.FormCloseQuery(Sender: TObject;
@@ -61,6 +60,8 @@ begin
   if ModalResult = mrCancel then exit;
 
   CanClose := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
+  if CanClose and ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'ProjectSettings');
 end;
 
 procedure TProjectSettingsForm.ProjectSettingsViewChange(Sender: TObject;
@@ -102,6 +103,19 @@ begin
 
   ProjectSettingsView.Items.FindNodeWithText('General').Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
   ProjectSettingsView.Items.FindNodeWithText('Fields').Data := Pointer(TProjectSettings_FieldFrame.Create(Self));
+end;
+
+class procedure TProjectSettingsForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 480;
+  Aform.Height := 320;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'ProjectSettings');
+  AForm.free;
 end;
 
 end.
