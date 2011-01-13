@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
-  epicustombase, AVL_Tree , LCLType, design_controls, LMessages;
+  epicustombase, AVL_Tree , LCLType, design_controls, LMessages, StdActns;
 
 const
   LM_DESIGNER_DEL = LM_USER + 1;
@@ -23,6 +23,14 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    CopyControlPopupMenuItem: TMenuItem;
+    CopyControlMenuItem: TMenuItem;
+    PopupMenuDivider2: TMenuItem;
+    PopupMenuDivider1: TMenuItem;
+    PasteControPopupMenuItem: TMenuItem;
+    PasteControlMenuItem: TMenuItem;
+    PasteControlAction: TAction;
+    CopyControlAction: TAction;
     CurrentSectionPanel: TPanel;
     KeyLabel: TLabel;
     ExtendedLabel: TLabel;
@@ -144,6 +152,8 @@ type
     procedure   Button1Click(Sender: TObject);
     procedure   Button2Click(Sender: TObject);
     procedure   Button3Click(Sender: TObject);
+    procedure   CopyControlActionExecute(Sender: TObject);
+    procedure   CopyControlActionUpdate(Sender: TObject);
     procedure   DeleteAllControlsActionExecute(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   ControlActionUpdate(Sender: TObject);
@@ -172,6 +182,8 @@ type
     procedure   PasteAsIntActionExecute(Sender: TObject);
     procedure   PasteAsQESActionExecute(Sender: TObject);
     procedure   PasteAsStringActionExecute(Sender: TObject);
+    procedure   PasteControlActionExecute(Sender: TObject);
+    procedure   PasteControlActionUpdate(Sender: TObject);
     procedure   TestToolButtonClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
@@ -286,7 +298,7 @@ implementation
 uses
   Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
-  managerprocs, epiqeshandler;
+  managerprocs, epiqeshandler, copyobject;
 
 type
 
@@ -482,6 +494,46 @@ end;
 procedure TDesignFrame.Button3Click(Sender: TObject);
 begin
   Clipboard.AsText :=  WriteTree((FActiveDockSite as IPositionHandler).YTree);
+end;
+
+procedure TDesignFrame.CopyControlActionExecute(Sender: TObject);
+var
+  CO: TCopyObject;
+  EpiCtrl: TEpiCustomControlItem;
+begin
+  // Main section cannot be copied.
+  // TODO : Fix when multiple controls can be selected.
+  if FActiveControl = FDesignerBox then exit;
+
+  CO := NewCopyObject(FActiveControl);
+  EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
+  if EpiCtrl is TEpiField then
+    CO.CopyType := ctField;
+  if EpiCtrl is TEpiSection then
+    CO.CopyType := ctSection;
+  if EpiCtrl is TEpiHeading then
+    CO.CopyType := ctHeading;
+//  CO.Data := PtrInt(EpiCtrl);
+end;
+
+procedure TDesignFrame.CopyControlActionUpdate(Sender: TObject);
+var
+  S: String;
+begin
+  with TAction(Sender) do
+  begin
+    Enabled := Assigned(FActiveControl) and
+               (not FActiveControl.Equals(FDesignerBox));
+    if Enabled then
+      case DesignControlTypeFromControl(FActiveControl) of
+        dctField:   S := 'Field';
+        dctSection: S := 'Section';
+        dctHeading: S := 'Heading';
+      end
+    else
+      S := '(not allowed)';
+    Caption := 'Copy ' + S;
+  end;
 end;
 
 procedure TDesignFrame.DeleteAllControlsActionExecute(Sender: TObject);
@@ -1049,6 +1101,40 @@ end;
 procedure TDesignFrame.PasteAsStringActionExecute(Sender: TObject);
 begin
   PasteAsField(ftString);
+end;
+
+procedure TDesignFrame.PasteControlActionExecute(Sender: TObject);
+begin
+  if not Assigned(GetCopyObject) then exit;
+
+  if FActiveControl = FActiveDockSite then
+  begin
+    // Copying to section/main.
+  end else begin
+    // Copying properties.
+  end;
+end;
+
+procedure TDesignFrame.PasteControlActionUpdate(Sender: TObject);
+begin
+  With TAction(Sender) do
+  begin
+    Caption := 'Paste';
+    Enabled := Assigned(GetCopyObject) and
+               CopyCompatibleTable[DesignControlTypeFromControl(FActiveControl), GetCopyObject.CopyType] and
+               (not TObject(GetCopyObject.Data).Equals((FActiveControl as IDesignEpiControl).EpiControl));
+    if Enabled then
+      case GetCopyObject.CopyType of
+        ctField:     begin
+                       Caption := Caption + ' Field';
+                     end;
+        ctSection:   Caption := Caption + ' Section';
+        ctHeading:   Caption := Caption + ' Heading';
+        ctSelection: Caption := Caption + ' Selection';
+      end
+    else
+      Caption := Caption + ' (not allowed)';
+  end;
 end;
 
 procedure TDesignFrame.TestToolButtonClick(Sender: TObject);

@@ -34,6 +34,8 @@ type
     property YTree: TAVLTree read GetYTree;
   end;
 
+  TDesignerControlType = (dctField, dctSection, dctHeading);
+
   { TDesignField }
 
   TDesignField = class(TEdit, IDesignEpiControl)
@@ -255,6 +257,8 @@ procedure RemoveFromPositionHandler(PositionHandler: IPositionHandler;
 function EpiTextToControlText(Const Str: string): string;
 function ControlTextToEpiText(Const Str: string): string;
 
+function DesignControlTypeFromControl(Ctrl: TControl): TDesignerControlType;
+
 var
   DesignControlsForm: TDesignControlsForm;
 
@@ -364,6 +368,14 @@ end;
 function ControlTextToEpiText(const Str: string): string;
 begin
   result := StringReplace(Str, '&&', '&', [rfReplaceAll]);
+end;
+
+function DesignControlTypeFromControl(Ctrl: TControl): TDesignerControlType;
+begin
+  if Ctrl is TDesignField then exit(dctField);
+  if Ctrl is TDesignHeading then exit(dctHeading);
+  if (Ctrl is TDesignSection) or
+     (Ctrl is TScrollBox) then exit(dctSection);
 end;
 
 { TDesignField }

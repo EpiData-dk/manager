@@ -9,12 +9,13 @@ uses
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 procedure CopyAndBackup(Const AFileName: string);
+procedure LoadIniFile;
 
 
 implementation
 
 uses
-  Clipbrd, FileUtil;
+  Clipbrd, FileUtil, settings2, settings2_var, forms;
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 var
@@ -47,6 +48,23 @@ begin
     inc(i);
   until (not FileExistsUTF8(Fn));
   RenameFileUTF8(AFileName, Fn);
+end;
+
+procedure LoadIniFile;
+const
+  IniName = 'epidatamanager.ini';
+var
+  S: String;
+begin
+  // TODO : Settings can be loaded from commandline?
+  if LoadSettingsFromIni(GetAppConfigFileUTF8(false)) then exit;
+
+  // Todo - this is not optimal on Non-windows OS's. Do some checks for writeability first.
+  if LoadSettingsFromIni(ExtractFilePath(Application.ExeName) + IniName) then exit;
+
+  if not DirectoryExistsUTF8(ExtractFilePath(GetAppConfigFileUTF8(false))) then
+    ForceDirectoriesUTF8(ExtractFilePath(GetAppConfigFileUTF8(false)));
+  ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
 end;
 
 end.

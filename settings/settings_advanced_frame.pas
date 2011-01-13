@@ -13,6 +13,7 @@ type
   { TSettings_AdvancedFrame }
 
   TSettings_AdvancedFrame = class(TFrame, ISettingsFrame)
+    MultipleInstanceChkbox: TCheckBox;
     TutorialURLEdit: TEdit;
     Label2: TLabel;
     ShowWorkToolBarChkBox: TCheckBox;
@@ -70,6 +71,7 @@ begin
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
     ShowWelcomeChkBox.Checked         := ShowWelcome;
     ShowWorkToolBarChkBox.Checked     := ShowWorkToolBar;
+    MultipleInstanceChkbox.Checked    := MultipleInstances;
   end;
 end;
 
@@ -89,6 +91,7 @@ begin
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;
     ShowWelcome         := ShowWelcomeChkBox.Checked;
     ShowWorkToolBar     := ShowWorkToolBarChkBox.Checked;
+    MultipleInstances   := MultipleInstanceChkbox.Checked;
   end;
   Result := true;
 end;

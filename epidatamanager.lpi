@@ -41,7 +41,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="22">
+    <Units Count="23">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -186,6 +186,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_controls"/>
       </Unit21>
+      <Unit22>
+        <Filename Value="designer/copyobject.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="copyobject"/>
+      </Unit22>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -38,8 +38,8 @@ object DesignControlsForm: TDesignControlsForm
         TabOrder = 0
         object SectionBasicSheet: TTabSheet
           Caption = 'Basic'
-          ClientHeight = 378
-          ClientWidth = 472
+          ClientHeight = 409
+          ClientWidth = 474
           object SectionGroupAccessGroupBox: TGroupBox
             AnchorSideLeft.Control = SectionNameEdit
             AnchorSideTop.Control = SectionNameEdit
@@ -241,8 +241,8 @@ object DesignControlsForm: TDesignControlsForm
         end
         object SectionAdvancedSheet: TTabSheet
           Caption = 'Advanced'
-          ClientHeight = 378
-          ClientWidth = 472
+          ClientHeight = 409
+          ClientWidth = 474
           object HeightEdit: TEdit
             AnchorSideLeft.Control = SectionAdvancedSheet
             AnchorSideTop.Control = Label8

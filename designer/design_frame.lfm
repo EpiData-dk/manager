@@ -7,8 +7,8 @@ object DesignFrame: TDesignFrame
   ClientWidth = 900
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 296
-  DesignTop = 282
+  DesignLeft = 609
+  DesignTop = 257
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -2090,6 +2090,19 @@ object DesignFrame: TDesignFrame
       OnExecute = PasteAsStringActionExecute
       OnUpdate = NoControlActionUpdate
     end
+    object CopyControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Copy'
+      OnExecute = CopyControlActionExecute
+      OnUpdate = CopyControlActionUpdate
+      ShortCut = 16451
+    end
+    object PasteControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste Control'
+      OnExecute = PasteControlActionExecute
+      OnUpdate = PasteControlActionUpdate
+    end
   end
   object DesignControlPopUpMenu: TPopupMenu
     Images = DesignerImageList
@@ -2175,6 +2188,18 @@ object DesignFrame: TDesignFrame
       }
       GlyphShowMode = gsmSystem
       OnClick = EditControlActionExecute
+    end
+    object PopupMenuDivider1: TMenuItem
+      Caption = '-'
+    end
+    object CopyControlPopupMenuItem: TMenuItem
+      Action = CopyControlAction
+    end
+    object PasteControPopupMenuItem: TMenuItem
+      Action = PasteControlAction
+    end
+    object PopupMenuDivider2: TMenuItem
+      Caption = '-'
     end
     object DeletePopupMenuItem: TMenuItem
       Action = DeleteControlAction
@@ -3178,6 +3203,12 @@ object DesignFrame: TDesignFrame
         FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
       }
       OnClick = EditControlActionExecute
+    end
+    object CopyControlMenuItem: TMenuItem
+      Action = CopyControlAction
+    end
+    object PasteControlMenuItem: TMenuItem
+      Action = PasteControlAction
     end
     object DockingSitePopUpMenuDeleteItem: TMenuItem
       Action = DeleteControlAction

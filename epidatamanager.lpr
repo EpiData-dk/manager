@@ -16,7 +16,7 @@ uses
   settings_visualdesign_frame, settings_fielddefinitions_frame,
   settings_advanced_frame, settings2_interface, settings2_var, structure_form,
   structure_datafile_frame, valuelabelseditor_form,
-  structure_valuelabelset_frame, design_controls, UniqueInstanceRaw;
+  structure_valuelabelset_frame, design_controls, UniqueInstanceRaw, copyobject;
 
 {$R *.res}
 
@@ -27,7 +27,12 @@ end;
 
 begin
   OnGetApplicationName := @EpiDataApplicationName;
-  if InstanceRunning(EpiDataApplicationName) then exit;
+  // Load ini before anything else - it contains start-up info.
+  LoadIniFile;
+  {$IFDEF EPI_RELEASE}
+  if (not ManagerSettings.MultipleInstances) and
+     InstanceRunning(EpiDataApplicationName) then exit;
+  {$ENDIF}
   Application.Initialize;
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;

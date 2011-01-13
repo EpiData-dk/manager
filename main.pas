@@ -92,7 +92,6 @@ type
     procedure SetCaption;
     procedure SetModified(const AValue: boolean);
     procedure ProjectModified(Sender: TObject);
-    procedure LoadIniFile;
     procedure OpenTutorialMenuItemClick(Sender: TObject);
     procedure LoadTutorials;
     function  DoCloseProject: boolean;
@@ -129,7 +128,6 @@ procedure TMainForm.FormShow(Sender: TObject);
 begin
   SetCaption;
 
-  LoadIniFile;
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'MainForm');
 
@@ -326,24 +324,6 @@ end;
 procedure TMainForm.ProjectModified(Sender: TObject);
 begin
   Modified := TProjectFrame(Sender).Modified;
-end;
-
-procedure TMainForm.LoadIniFile;
-const
-  IniName = 'epidatamanager.ini';
-var
-  S: String;
-begin
-  // TODO : Settings can be loaded from commandline?
-
-  if LoadSettingsFromIni(GetAppConfigFileUTF8(false)) then exit;
-
-  // Todo - this is not optimal on Non-windows OS's. Do some checks for writeability first.
-  if LoadSettingsFromIni(ExtractFilePath(Application.ExeName) + IniName) then exit;
-
-  if not DirectoryExistsUTF8(ExtractFilePath(GetAppConfigFileUTF8(false))) then
-    ForceDirectoriesUTF8(ExtractFilePath(GetAppConfigFileUTF8(false)));
-  ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
 end;
 
 procedure TMainForm.OpenTutorialMenuItemClick(Sender: TObject);

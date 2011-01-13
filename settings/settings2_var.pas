@@ -30,6 +30,7 @@ type
     SaveWindowPositions:   boolean;
     ShowWelcome:           boolean;
     ShowWorkToolBar:       boolean;
+    MultipleInstances:     boolean;
     WorkingDirUTF8:        string;
     TutorialDirUTF8:       string;
     TutorialURLUTF8:       string;
@@ -73,6 +74,7 @@ var
     SaveWindowPositions:   true;
     ShowWelcome:           true;
     ShowWorkToolBar:       true;
+    MultipleInstances:     false;
     WorkingDirUTF8:        '';
     TutorialDirUTF8:       '';
     TutorialURLUTF8:       'http://epidata.dk/documentation.php';

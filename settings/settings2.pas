@@ -130,6 +130,7 @@ begin
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       WriteBool(Sec, 'ShowWelcome', ShowWelcome);
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
+      WriteBool(Sec, 'MultipleInstances', MultipleInstances);
     end;
 
     // Read recent files.
@@ -201,6 +202,7 @@ begin
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
+      MultipleInstances   := ReadBool(Sec, 'MultipleInstances', MultipleInstances);
     end;
 
     // Read recent files.
