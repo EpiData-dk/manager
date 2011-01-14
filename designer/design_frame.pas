@@ -298,7 +298,7 @@ implementation
 uses
   Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
-  managerprocs, epiqeshandler, copyobject;
+  managerprocs, epiqeshandler, copyobject, epiranges;
 
 type
 
@@ -504,16 +504,7 @@ begin
   // Main section cannot be copied.
   // TODO : Fix when multiple controls can be selected.
   if FActiveControl = FDesignerBox then exit;
-
-  CO := NewCopyObject(FActiveControl);
-  EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
-  if EpiCtrl is TEpiField then
-    CO.CopyType := ctField;
-  if EpiCtrl is TEpiSection then
-    CO.CopyType := ctSection;
-  if EpiCtrl is TEpiHeading then
-    CO.CopyType := ctHeading;
-//  CO.Data := PtrInt(EpiCtrl);
+  NewCopyObject(FActiveControl);
 end;
 
 procedure TDesignFrame.CopyControlActionUpdate(Sender: TObject);
@@ -1104,12 +1095,82 @@ begin
 end;
 
 procedure TDesignFrame.PasteControlActionExecute(Sender: TObject);
+var
+  CO: TCopyObject;
+  EpiCtrl: TEpiCustomControlItem;
+  OldEpiCtrl: TEpiCustomControlItem;
+  OrgField: TEpiField;
+  OrgSection: TEpiSection;
+  OrgHeading: TEpiHeading;
+  i: Integer;
+  Pt: TPoint;
+  SectionCtrl: TWincontrol;
+  J: Integer;
+  TheName: String;
+  FieldCount: LongInt;
 begin
   if not Assigned(GetCopyObject) then exit;
+
+  CO := GetCopyObject;
 
   if FActiveControl = FActiveDockSite then
   begin
     // Copying to section/main.
+    case CO.CopyType of
+      ctField:
+        begin
+          OrgField := TFieldCopyObject(CO.Data).Field;
+
+          // Create new field.
+          EpiCtrl := NewField(OrgField.FieldType);
+
+          // Copy properties.
+          EpiCtrl.Assign(OrgField);
+
+          // Place new field.
+          Pt := FindNewPosition(FActiveDockSite, TDesignField);
+          NewDesignControl(TDesignField, FActiveDockSite, Pt, EpiCtrl);
+        end;
+      ctSection:
+        begin
+          FieldCount := DataFile.Fields.Count;
+          OrgSection := TSectionCopyObject(CO.Data).Section;
+          EpiCtrl := NewSection;
+          EpiCtrl.Assign(OrgSection);
+          Pt := FindNewPosition(FActiveDockSite, TDesignSection);
+          SectionCtrl := TWincontrol(NewSectionControl(Pt, Point(Pt.X+OrgSection.Width, Pt.Y+OrgSection.Height), EpiCtrl));
+
+          // TODO : Find position for ALL fields and headings.
+          with TEpiSection(EpiCtrl) do
+          begin
+            for i := 0 to Fields.Count - 1 do
+            begin
+              OldEpiCtrl := Field[i];
+              J := 0;
+              repeat
+                inc(j);
+                TheName := ManagerSettings.FieldNamePrefix + IntToStr(FieldCount + j);
+              until DataFile.ValidateFieldRename(TEpiField(OldEpiCtrl), TheName);
+              TEpiField(OldEpiCtrl).Name := TheName;
+              NewDesignControl(TDesignField, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
+            end;
+            for i := 0 to Headings.Count - 1 do
+            begin
+              OldEpiCtrl := Heading[i];
+              NewDesignControl(TDesignHeading, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
+            end;
+          end;
+        end;
+      ctHeading:
+        begin
+          OrgHeading := THeadingCopyObject(CO.Data).Heading;
+          EpiCtrl := NewHeading;
+          EpiCtrl.Assign(OrgHeading);
+          Pt := FindNewPosition(FActiveDockSite, TDesignHeading);
+          NewDesignControl(TDesignHeading, FActiveDockSite, Pt, EpiCtrl);
+        end;
+      ctSelection: ;
+    end;
   end else begin
     // Copying properties.
   end;
@@ -1122,7 +1183,7 @@ begin
     Caption := 'Paste';
     Enabled := Assigned(GetCopyObject) and
                CopyCompatibleTable[DesignControlTypeFromControl(FActiveControl), GetCopyObject.CopyType] and
-               (not TObject(GetCopyObject.Data).Equals((FActiveControl as IDesignEpiControl).EpiControl));
+               (not GetCopyObject.ContainsControl(FActiveControl));
     if Enabled then
       case GetCopyObject.CopyType of
         ctField:     begin

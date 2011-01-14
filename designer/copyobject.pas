@@ -18,9 +18,14 @@ type
   private
     FCopyType: TCopyType;
     FData: PtrInt;
+    constructor Create;
+  protected
+    constructor Create(Const Ctrl: TControl);
   public
-    property CopyType: TCopyType read FCopyType write FCopyType;
-    property Data: PtrInt read FData write FData;
+    destructor Destroy; override;
+    function ContainsControl(Const Ctrl: TControl): boolean;
+    property CopyType: TCopyType read FCopyType;
+    property Data: PtrInt read FData;
   end;
 
   { TFieldCopyObject }
@@ -28,9 +33,9 @@ type
   TFieldCopyObject = class
   private
     FField: TEpiField;
-    procedure FieldHook(Sender: TObject; EventGrp: TEpiEventGroup; Event: Word; Data: Pointer);
   public
     constructor Create(Const Field: TEpiField);
+    destructor Destroy; override;
     property Field: TEpiField read FField;
   end;
 
@@ -41,6 +46,7 @@ type
     FSection: TEpiSection;
   public
     constructor Create(const Section: TEpiSection);
+    destructor Destroy; override;
     property Section: TEpiSection read FSection;
   end;
 
@@ -51,6 +57,7 @@ type
     FHeading: TEpiHeading;
   public
     constructor Create(Const Heading: TEpiHeading);
+    destructor Destroy; override;
     property Heading: TEpiHeading read FHeading;
   end;
 
@@ -88,35 +95,32 @@ const
 
 implementation
 
+uses
+  LCLProc;
+
+type
+
+  { TDestroyerObject }
+
+  TDestroyerObject = class
+  public
+    procedure CustomItemHook(Sender: TObject; EventGrp: TEpiEventGroup; Event: Word; Data: Pointer);
+  end;
+
 var
   TheCopyObject: TCopyObject = nil;
-
-function NewCopyObject: TCopyObject;
-begin
-  if Assigned(TheCopyObject) then
-  begin
-    case TheCopyObject.CopyType of
-      ctField:     TFieldCopyObject(TheCopyObject.Data).Free;
-      ctSection:   TSectionCopyObject(TheCopyObject.Data).Free;
-      ctHeading:   THeadingCopyObject(TheCopyObject.Data).Free;
-      ctSelection: ; // TODO : Assign when TSelectionCopyObject is working.;
-    end;
-    TheCopyObject.Free;
-  end;
-  TheCopyObject := TCopyObject.Create;
-end;
+  TheDestroyer: TDestroyerObject;
 
 function NewCopyObject(const Ctrl: TControl): TCopyObject;
 begin
-  result := NewCopyObject;
-  case DesignControlTypeFromControl(Ctrl) of
-    dctField:
-      begin
-        Result.Data := PtrInt(TFieldCopyObject.Create(TEpiField((Ctrl as IDesignEpiControl).EpiControl)));
-      end;
-    dctSection: ;
-    dctHeading: ;
-  end;
+  if not Assigned(TheDestroyer) then
+    TheDestroyer := TDestroyerObject.Create;
+
+  if Assigned(TheCopyObject) then
+    TheCopyObject.Free;
+
+  TheCopyObject := TCopyObject.Create(Ctrl);
+  Result := TheCopyObject;
 end;
 
 function GetCopyObject: TCopyObject;
@@ -124,33 +128,108 @@ begin
   result := TheCopyObject;
 end;
 
-{ TFieldCopyObject }
+{ TDestroyerObject }
 
-procedure TFieldCopyObject.FieldHook(Sender: TObject; EventGrp: TEpiEventGroup;
-  Event: Word; Data: Pointer);
+procedure TDestroyerObject.CustomItemHook(Sender: TObject;
+  EventGrp: TEpiEventGroup; Event: Word; Data: Pointer);
 begin
   if (EventGrp = eegCustomBase) and (Event = Word(ecceDestroy)) then
-    Self.Free;
+    FreeThenNil(TheCopyObject);
 end;
+
+{ TCopyObject }
+
+constructor TCopyObject.Create;
+begin
+  // Disallows multiple instances.
+end;
+
+constructor TCopyObject.Create(const Ctrl: TControl);
+begin
+  case DesignControlTypeFromControl(Ctrl) of
+    dctField:
+      begin
+        FData := PtrInt(TFieldCopyObject.Create(TEpiField((Ctrl as IDesignEpiControl).EpiControl)));
+        FCopyType := ctField;
+      end;
+    dctSection:
+      begin
+        FData := PtrInt(TSectionCopyObject.Create(TEpiSection((Ctrl as IDesignEpiControl).EpiControl)));
+        FCopyType := ctSection;
+      end;
+    dctHeading:
+      begin
+        FData := PtrInt(THeadingCopyObject.Create(TEpiHeading((Ctrl as IDesignEpiControl).EpiControl)));
+        FCopyType := ctHeading;
+      end;
+  end;
+end;
+
+destructor TCopyObject.Destroy;
+begin
+  case TheCopyObject.CopyType of
+    ctField:     TFieldCopyObject(TheCopyObject.Data).Free;
+    ctSection:   TSectionCopyObject(TheCopyObject.Data).Free;
+    ctHeading:   THeadingCopyObject(TheCopyObject.Data).Free;
+    ctSelection: ; // TODO : Assign when TSelectionCopyObject is working.;
+  end;
+  inherited Destroy;
+end;
+
+function TCopyObject.ContainsControl(const Ctrl: TControl): boolean;
+var
+  EpiCtrl: TEpiCustomControlItem;
+begin
+  case CopyType of
+    ctField:     EpiCtrl := TFieldCopyObject(Data).Field;
+    ctSection:   EpiCtrl := TSectionCopyObject(Data).Section;
+    ctHeading:   EpiCtrl := THeadingCopyObject(Data).Heading;
+    ctSelection: ;
+  end;
+  result := (Ctrl as IDesignEpiControl).EpiControl = EpiCtrl;
+end;
+
+{ TFieldCopyObject }
 
 constructor TFieldCopyObject.Create(const Field: TEpiField);
 begin
   FField := Field;
-  FField.RegisterOnChangeHook(@FieldHook);
+  FField.RegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+end;
+
+destructor TFieldCopyObject.Destroy;
+begin
+  FField.UnRegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+  inherited Destroy;
 end;
 
 { TSectionCopyObject }
 
+
 constructor TSectionCopyObject.Create(const Section: TEpiSection);
 begin
+  FSection := Section;
+  FSection.RegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+end;
 
+destructor TSectionCopyObject.Destroy;
+begin
+  FSection.UnRegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+  inherited Destroy;
 end;
 
 { THeadingCopyObject }
 
 constructor THeadingCopyObject.Create(const Heading: TEpiHeading);
 begin
+  FHeading := Heading;
+  FHeading.RegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+end;
 
+destructor THeadingCopyObject.Destroy;
+begin
+  FHeading.UnRegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+  inherited Destroy;
 end;
 
 { TSelectionCopyObject }
