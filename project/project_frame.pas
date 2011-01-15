@@ -447,7 +447,7 @@ var
   LocalVLSets: TEpiValueLabelSets;
   VLSet: TEpiValueLabelSet;
 begin
-{  // DEBUGGING!!!!
+  // DEBUGGING!!!!
   LocalAdm := FEpiDocument.Admin;
   Grp := LocalAdm.NewGroup;
   Grp.Name.Text := 'Group 1';
@@ -462,7 +462,7 @@ begin
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
   FEpiDocument.DataFiles[0].MainSection.Groups.AddItem(Grp);
-
+{
   LocalVLSets := FEpiDocument.ValueLabelSets;
   VLSet := LocalVLSets.NewValueLabelSet(ftInteger);
   VLSet.Name := 'The Set';

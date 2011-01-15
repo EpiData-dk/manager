@@ -92,6 +92,7 @@ type
     function GetYTree: TAVLTree;
   private
     procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnTextChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure UpdateHint;
   public
     constructor Create(AOwner: TComponent); Override;
@@ -618,6 +619,7 @@ procedure TDesignSection.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FSection := TEpiSection(AValue);
   FSection.RegisterOnChangeHook(@OnChange);
+  FSection.Name.RegisterOnChangeHook(@OnTextChange);
   Name := FSection.Id;
   Caption := '';
 end;
@@ -670,6 +672,12 @@ begin
       end;
   end;
   UpdateHint;
+end;
+
+procedure TDesignSection.OnTextChange(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  Caption := EpiTextToControlText(FSection.Name.Text);
 end;
 
 procedure TDesignSection.UpdateHint;
@@ -916,7 +924,12 @@ end;
 
 procedure TDesignControlsForm.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
-  if FEpiControl = AValue then exit;
+  if FEpiControl = AValue then
+  begin
+    UpdateControlContent;
+    exit;
+  end;
+
   if Assigned(FEpiControl) and
      (not ValidateControl) then exit;
 

@@ -7,8 +7,8 @@ object DesignFrame: TDesignFrame
   ClientWidth = 900
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 609
-  DesignTop = 257
+  DesignLeft = 400
+  DesignTop = 250
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26
@@ -2102,6 +2102,7 @@ object DesignFrame: TDesignFrame
       Caption = 'Paste Control'
       OnExecute = PasteControlActionExecute
       OnUpdate = PasteControlActionUpdate
+      ShortCut = 16470
     end
   end
   object DesignControlPopUpMenu: TPopupMenu

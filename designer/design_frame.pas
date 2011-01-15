@@ -1101,6 +1101,7 @@ var
   OldEpiCtrl: TEpiCustomControlItem;
   OrgField: TEpiField;
   OrgSection: TEpiSection;
+  ThisSection: TEpiSection;
   OrgHeading: TEpiHeading;
   i: Integer;
   Pt: TPoint;
@@ -1113,7 +1114,10 @@ begin
 
   CO := GetCopyObject;
 
-  if FActiveControl = FActiveDockSite then
+  if (FActiveControl = FDesignerBox) or
+     ((FActiveControl is TDesignSection) and
+      (CO.CopyType in [ctField, ctHeading]))
+  then
   begin
     // Copying to section/main.
     case CO.CopyType of
@@ -1171,8 +1175,35 @@ begin
         end;
       ctSelection: ;
     end;
+    EnterControl(FActiveDockSite);
   end else begin
     // Copying properties.
+    case CO.CopyType of
+      ctField:
+        begin
+          OrgField := TFieldCopyObject(CO.Data).Field;
+          EpiCtrl  := (FActiveControl as IDesignEpiControl).EpiControl;
+          EpiCtrl.Assign(OrgField);
+        end;
+      ctSection:
+        begin
+          OrgSection := TSectionCopyObject(CO.Data).Section;
+          EpiCtrl    := (FActiveControl as IDesignEpiControl).EpiControl;
+          ThisSection := TEpiSection(EpiCtrl);
+          ThisSection.Name.Assign(OrgSection.Name);
+          // TODO : Maybe change if CustomList changes assignment based on ItemOwner.
+          for i := 0 to OrgSection.Groups.Count - 1 do
+            ThisSection.Groups.AddItem(OrgSection.Groups[i]);
+        end;
+      ctHeading:
+        begin
+          OrgHeading := THeadingCopyObject(CO.Data).Heading;
+          EpiCtrl    := (FActiveControl as IDesignEpiControl).EpiControl;
+          EpiCtrl.Assign(OrgHeading);
+        end;
+      ctSelection: ;
+    end;
+    ShowForm(EpiCtrl, Point(0,0), false);
   end;
 end;
 
@@ -2233,7 +2264,7 @@ end;
 
 procedure TDesignFrame.UpdateFrame;
 var
-  CtrlV: TShortCut;
+  CtrlS: TShortCut;
 begin
   PasteAsQESAction.ShortCut     := 0;
   PasteAsHeadingAction.ShortCut := 0;
@@ -2241,13 +2272,13 @@ begin
   PasteAsFloatAction.ShortCut   := 0;
   PasteAsStringAction.ShortCut  := 0;
 
-  CtrlV := ShortCut(VK_V, [ssCtrl]);
+  CtrlS := ShortCut(VK_S, [ssCtrl]);
   Case ManagerSettings.PasteSpecialType of
-    0: PasteAsQESAction.ShortCut     := CtrlV;
-    1: PasteAsHeadingAction.ShortCut := CtrlV;
-    2: PasteAsIntAction.ShortCut     := CtrlV;
-    3: PasteAsFloatAction.ShortCut   := CtrlV;
-    4: PasteAsStringAction.ShortCut  := CtrlV;
+    0: PasteAsQESAction.ShortCut     := CtrlS;
+    1: PasteAsHeadingAction.ShortCut := CtrlS;
+    2: PasteAsIntAction.ShortCut     := CtrlS;
+    3: PasteAsFloatAction.ShortCut   := CtrlS;
+    4: PasteAsStringAction.ShortCut  := CtrlS;
   end;
 end;
 
