@@ -138,13 +138,22 @@ type
 
   TDesignControlsForm = class(TForm)
     Bevel1: TBevel;
+    Bevel2: TBevel;
+    Bevel3: TBevel;
+    Bevel4: TBevel;
+    ResetValueComboBox: TComboBox;
+    ResetLabel: TLabel;
+    JumpGotoBevel: TBevel;
+    GotoResetBevel: TBevel;
+    ResetAddBevel: TBevel;
+    TopBevel: TBevel;
     GotoFieldComboBox1: TComboBox;
     JumpValueEdit: TEdit;
     EntryRadioGroup: TRadioGroup;
     DefaultEnterRadioBtn: TRadioButton;
     JumpsGrpBox: TGroupBox;
-    Label13: TLabel;
-    Label14: TLabel;
+    JumpValueLabel: TLabel;
+    GotoFieldLabel: TLabel;
     MustEnterRadioBtn: TRadioButton;
     NoEnterRadioBtn: TRadioButton;
     JumpScrollBox: TScrollBox;

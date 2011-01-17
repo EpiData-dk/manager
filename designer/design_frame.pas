@@ -1230,8 +1230,38 @@ begin
 end;
 
 procedure TDesignFrame.TestToolButtonClick(Sender: TObject);
+var
+  Field: TEpiField;
+  Jumps: TEpiJumps;
+  J: TEpiJump;
 begin
   MainForm.FlipChildren(true);
+  if MainForm.MainMenu1.BidiMode = bdRightToLeft then
+    MainForm.MainMenu1.BidiMode := bdLeftToRight
+  else
+    MainForm.MainMenu1.BidiMode := bdRightToLeft;
+{  Field := TepiField((FActiveControl as IDesignEpiControl).EpiControl);
+  Jumps := TEpiJumps.Create(Field);
+
+  J := Jumps.NewJump;
+  J.JumpToField := Field;
+  J.ResetOnJump := true;
+  TEpiIntJump(J).JumpValue := 0;
+  TEpiIntJump(j).ResetValue := 9;
+
+  J := Jumps.NewJump;
+  J.JumpToField := Field;
+  J.ResetOnJump := true;
+  TEpiIntJump(J).JumpValue := 1;
+  TEpiIntJump(j).ResetValue := 9;
+
+  J := Jumps.NewJump;
+  J.JumpToField := Field;
+  J.ResetOnJump := true;
+  TEpiIntJump(J).JumpValue := 2;
+  TEpiIntJump(j).ResetValue := 9;
+
+  Field.Jumps := Jumps;         }
 end;
 
 
