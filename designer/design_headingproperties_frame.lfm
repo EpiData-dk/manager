@@ -1,0 +1,39 @@
+object HeadingPropertiesFrame: THeadingPropertiesFrame
+  Left = 0
+  Height = 417
+  Top = 0
+  Width = 793
+  ClientHeight = 417
+  ClientWidth = 793
+  TabOrder = 0
+  DesignLeft = 655
+  DesignTop = 421
+  object Label9: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
+    Height = 18
+    Top = 10
+    Width = 32
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Text:'
+    ParentColor = False
+  end
+  object CaptionEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label9
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 30
+    Width = 773
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 0
+  end
+end

@@ -1,0 +1,286 @@
+object SectionPropertiesFrame: TSectionPropertiesFrame
+  Left = 0
+  Height = 403
+  Top = 0
+  Width = 506
+  ClientHeight = 403
+  ClientWidth = 506
+  TabOrder = 0
+  DesignLeft = 813
+  DesignTop = 395
+  object SectionPageControl: TPageControl
+    Left = 0
+    Height = 403
+    Top = 0
+    Width = 506
+    ActivePage = SectionBasicSheet
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 0
+    object SectionBasicSheet: TTabSheet
+      Caption = 'Basic'
+      ClientHeight = 368
+      ClientWidth = 500
+      object SectionGroupAccessGroupBox: TGroupBox
+        AnchorSideLeft.Control = SectionNameEdit
+        AnchorSideTop.Control = SectionNameEdit
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = SectionNameEdit
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 170
+        Top = 62
+        Width = 480
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Top = 5
+        Caption = 'Groups access:'
+        ClientHeight = 151
+        ClientWidth = 476
+        TabOrder = 1
+        object GroupAvailableListBox: TListBox
+          AnchorSideTop.Control = Label5
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = GrpRightsMoveRight
+          AnchorSideBottom.Control = SectionGroupAccessGroupBox
+          AnchorSideBottom.Side = asrBottom
+          Left = 6
+          Height = 121
+          Top = 25
+          Width = 215
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BorderSpacing.Top = 2
+          BorderSpacing.Right = 5
+          BorderSpacing.Bottom = 5
+          ItemHeight = 0
+          Sorted = True
+          TabOrder = 0
+          TopIndex = -1
+        end
+        object GroupAssignedListBox: TListBox
+          AnchorSideLeft.Control = GrpRightsMoveRight
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = Label6
+          AnchorSideTop.Side = asrBottom
+          AnchorSideBottom.Control = SectionGroupAccessGroupBox
+          AnchorSideBottom.Side = asrBottom
+          Left = 256
+          Height = 121
+          Top = 25
+          Width = 213
+          Anchors = [akTop, akLeft, akRight, akBottom]
+          BorderSpacing.Left = 7
+          BorderSpacing.Top = 2
+          BorderSpacing.Bottom = 5
+          ItemHeight = 0
+          Sorted = True
+          TabOrder = 1
+          TopIndex = -1
+        end
+        object Label5: TLabel
+          AnchorSideTop.Control = SectionGroupAccessGroupBox
+          Left = 6
+          Height = 18
+          Top = 5
+          Width = 65
+          BorderSpacing.Top = 5
+          Caption = 'Available:'
+          ParentColor = False
+        end
+        object GrpRightsMoveLeft: TSpeedButton
+          AnchorSideLeft.Control = GroupAvailableListBox
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideRight.Control = GroupAssignedListBox
+          Left = 226
+          Height = 22
+          Top = 87
+          Width = 23
+          Anchors = [akTop]
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF004DA1560647994FB8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF0053A95CD94DA156F747994F38FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF005DB868CF71BE7BFF7AC183FF5BAA64FF47994FFF419149FF3B8842FF3580
+            3BFF2F7835FF2A702FFF256929FF216324FF1D5E20FFFFFFFF00FFFFFF0065C3
+            71C47BC886FF9CD5A5FF98D3A1FF94D09DFF90CE98FF8BCB93FF87C98EFF82C6
+            89FF7EC384FF7AC180FF76BE7CFF72BD78FF216324FFFFFFFF00FFFFFF0068C7
+            74C97FCC8AFFA2D8ABFF9ED6A7FF9AD4A3FF96D29FFF93CF9AFF8ECC95FF89CA
+            90FF85C78BFF81C587FF7DC282FF78C07EFF256929FFFFFFFF00FFFFFF00FFFF
+            FF0068C774D180CD8BFF7CC987FF5DB868FF58B162FF53A95CFF4DA156FF4799
+            4FFF419149FF3B8842FF35803BFF2F7835FF2A702FFFFFFFFF00FFFFFF00FFFF
+            FF00FFFFFF0068C774DB65C371F7FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF0068C7740668C774BBFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+          }
+          NumGlyphs = 0
+          OnClick = GrpRightsMoveLeftClick
+        end
+        object Label6: TLabel
+          AnchorSideLeft.Control = GroupAssignedListBox
+          AnchorSideTop.Control = SectionGroupAccessGroupBox
+          Left = 256
+          Height = 18
+          Top = 5
+          Width = 64
+          BorderSpacing.Top = 5
+          Caption = 'Assigned:'
+          ParentColor = False
+        end
+        object GrpRightsMoveRight: TSpeedButton
+          AnchorSideLeft.Control = GroupAvailableListBox
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideRight.Control = GroupAvailableListBox
+          Left = 226
+          Height = 22
+          Top = 55
+          Width = 23
+          Anchors = [akTop]
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00216324B81D5E2006FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF002A702F38256929F7216324D9FFFFFF00FFFFFF00FFFFFF00FFFFFF0061BE
+            6DFF5DB868FF58B162FF53A95CFF4DA156FF47994FFF419149FF3B8842FF3580
+            3BFF3F8845FF59A15EFF448B49FF216324CFFFFFFF00FFFFFF00FFFFFF0065C3
+            71FFA0D7A9FF9CD5A5FF98D3A1FF94D09DFF90CE98FF8BCB93FF87C98EFF82C6
+            89FF7EC384FF7AC180FF76BE7CFF458C4AFF216324C4FFFFFF00FFFFFF0068C7
+            74FFA5DAAEFFA2D8ABFF9ED6A7FF9AD4A3FF96D29FFF93CF9AFF8ECC95FF89CA
+            90FF85C78BFF81C587FF7DC282FF4A9150FF256929C9FFFFFF00FFFFFF0068C7
+            74FF68C774FF65C371FF61BE6DFF5DB868FF58B162FF53A95CFF4DA156FF4799
+            4FFF419149FF5AA362FF559D5CFF2F7835D1FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00419149F73B8842DBFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF0047994FBB41914906FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+          }
+          NumGlyphs = 0
+          OnClick = GrpRightsMoveRightClick
+        end
+      end
+      object SectionNameEdit: TEdit
+        AnchorSideLeft.Control = SectionBasicSheet
+        AnchorSideTop.Control = Label4
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = SectionBasicSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 27
+        Top = 30
+        Width = 480
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        TabOrder = 0
+      end
+      object Label4: TLabel
+        AnchorSideLeft.Control = SectionNameEdit
+        AnchorSideTop.Control = SectionBasicSheet
+        Left = 10
+        Height = 18
+        Top = 10
+        Width = 40
+        BorderSpacing.Top = 10
+        Caption = 'Name'
+        ParentColor = False
+      end
+    end
+    object SectionAdvancedSheet: TTabSheet
+      Caption = 'Advanced'
+      ClientHeight = 368
+      ClientWidth = 500
+      object HeightEdit: TEdit
+        AnchorSideLeft.Control = SectionAdvancedSheet
+        AnchorSideTop.Control = Label8
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = SectionAdvancedSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 27
+        Top = 87
+        Width = 452
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        TabOrder = 1
+      end
+      object WidthEdit: TEdit
+        AnchorSideLeft.Control = SectionAdvancedSheet
+        AnchorSideTop.Control = Label7
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = SectionAdvancedSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 27
+        Top = 30
+        Width = 452
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        TabOrder = 0
+      end
+      object Label8: TLabel
+        AnchorSideLeft.Control = HeightEdit
+        AnchorSideTop.Control = WidthEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 18
+        Top = 67
+        Width = 48
+        BorderSpacing.Top = 10
+        Caption = 'Height:'
+        ParentColor = False
+      end
+      object Label7: TLabel
+        AnchorSideLeft.Control = WidthEdit
+        AnchorSideTop.Control = SectionAdvancedSheet
+        Left = 10
+        Height = 18
+        Top = 10
+        Width = 43
+        BorderSpacing.Top = 10
+        Caption = 'Width:'
+        ParentColor = False
+      end
+    end
+  end
+end

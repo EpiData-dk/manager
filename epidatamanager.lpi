@@ -41,7 +41,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="23">
+    <Units Count="26">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -191,6 +191,27 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="copyobject"/>
       </Unit22>
+      <Unit23>
+        <Filename Value="designer/design_fieldproperties_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FieldPropertiesFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_fieldproperties_frame"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="designer/design_sectionproperties_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SectionPropertiesFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_sectionproperties_frame"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="designer/design_headingproperties_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="HeadingPropertiesFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_headingproperties_frame"/>
+      </Unit25>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

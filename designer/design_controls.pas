@@ -11,6 +11,27 @@ uses
 
 type
 
+  { TDesignPropertiesFrame }
+
+  TDesignPropertiesFrame = class;
+
+  TDesingFrameShowHintEvent = procedure(Sender: TDesignPropertiesFrame; Ctrl: TControl; const Msg: string) of object;
+  TDesignPropertiesFrame = class(TFrame)
+  private
+    FEpiControl: TEpiCustomControlItem;
+    FOnShowHintMsg: TDesingFrameShowHintEvent;
+  protected
+    procedure SetEpiControl(const AValue: TEpiCustomControlItem); virtual;
+    procedure ShiftToTabSheet(Const SheetNo: Byte); virtual; abstract;
+    procedure ShowHintMsg(const Msg: string; Ctrl: TControl);
+  public
+    function  ValidateControl: boolean; virtual; abstract;
+    procedure UpdateFormContent; virtual; abstract;
+    procedure ForceShow; virtual;
+    property  EpiControl: TEpiCustomControlItem read FEpiControl write SetEpiControl;
+    property  OnShowHintMsg: TDesingFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
+  end;
+
   { IDesignEpiControl }
 
   IDesignEpiControl = interface ['{D816F23A-0CC6-418A-8A6F-B1D28FC42E52}']
@@ -137,113 +158,32 @@ type
   { TDesignControlsForm }
 
   TDesignControlsForm = class(TForm)
-    Bevel1: TBevel;
-    Bevel2: TBevel;
-    Bevel3: TBevel;
-    Bevel4: TBevel;
-    ResetValueComboBox: TComboBox;
-    ResetLabel: TLabel;
-    JumpGotoBevel: TBevel;
-    GotoResetBevel: TBevel;
-    ResetAddBevel: TBevel;
-    TopBevel: TBevel;
-    GotoFieldComboBox1: TComboBox;
-    JumpValueEdit: TEdit;
-    EntryRadioGroup: TRadioGroup;
-    DefaultEnterRadioBtn: TRadioButton;
-    JumpsGrpBox: TGroupBox;
-    JumpValueLabel: TLabel;
-    GotoFieldLabel: TLabel;
-    MustEnterRadioBtn: TRadioButton;
-    NoEnterRadioBtn: TRadioButton;
-    JumpScrollBox: TScrollBox;
-    ShowValueLabelChkBox: TCheckBox;
-    FromEdit: TEdit;
-    Label10: TLabel;
-    FieldTypeLabel: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    ValueLabelLabel: TLabel;
-    ManageValueLabelsButton: TButton;
-    RangesGrpBox: TGroupBox;
-    ShiftTo2Action: TAction;
-    ShiftTo1Action: TAction;
     CancelAction: TAction;
     CloseAction: TAction;
     ApplyAction: TAction;
     ActionList1: TActionList;
-    FieldAdvancedSheet: TTabSheet;
-    FieldBasicSheet: TTabSheet;
     CancelBtn: TBitBtn;
-    CaptionEdit: TEdit;
-    DecimalsEdit: TEdit;
-    DecimalsLabel: TLabel;
-    GroupAssignedListBox: TListBox;
-    GroupAvailableListBox: TListBox;
-    Label9: TLabel;
-    SectionGroupAccessGroupBox: TGroupBox;
-    GrpRightsMoveLeft: TSpeedButton;
-    GrpRightsMoveRight: TSpeedButton;
-    HeightEdit: TEdit;
-    FieldNameLabel: TLabel;
-    QuestionLabel: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
-    LengthEdit: TEdit;
-    LengthLabel: TLabel;
-    NameEdit: TEdit;
-    SectionNameEdit: TEdit;
     OkBtn: TBitBtn;
-    EpiControlPageControl: TPageControl;
-    FieldTabSheet: TTabSheet;
-    HeadingTabSheet: TTabSheet;
     ApplyBtn: TBitBtn;
-    FieldPageControl: TPageControl;
-    SectionPageControl: TPageControl;
     Panel3: TPanel;
-    QuestionEdit: TEdit;
-    SectionTabSheet: TTabSheet;
-    SectionBasicSheet: TTabSheet;
-    SectionAdvancedSheet: TTabSheet;
-    AddJumpBtn: TSpeedButton;
-    RemoveJumpBtn: TSpeedButton;
-    ToEdit: TEdit;
-    ValueLabelComboBox: TComboBox;
-    WidthEdit: TEdit;
     procedure ApplyActionExecute(Sender: TObject);
     procedure CancelActionExecute(Sender: TObject);
     procedure CloseActionExecute(Sender: TObject);
-    procedure FieldRangesEditUTF8KeyPress(Sender: TObject;
-      var UTF8Key: TUTF8Char);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
-    procedure LengthEditChange(Sender: TObject);
-    procedure ManageValueLabelsButtonClick(Sender: TObject);
-    procedure ShiftTo1Execute(Sender: TObject);
-    procedure ShiftTo2Execute(Sender: TObject);
   private
     { private declarations }
+    FActiveFrame: TDesignPropertiesFrame;
     FEpiControl: TEpiCustomControlItem;
     FHintWindow: THintWindow;
+    FEpiDocument: TEpiDocument;
     constructor Create(TheOwner: TComponent); override;
     procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
-    function    UpdateValueLabels: boolean;
-    procedure   ShowHintMsg(Msg: string; Ctrl: TControl);
+    procedure   ShowHintMsg(Sender: TDesignPropertiesFrame; Ctrl: TControl; const Msg: string);
     procedure   UpdateControlContent;
-  private
-    {Section Sheet}
-    procedure GrpRightsMoveLeftClick(Sender: TObject);
-    procedure GrpRightsMoveRightClick(Sender: TObject);
-  private
-    {ValueLabel hooks}
-    FValueLabelSets: TEpiValueLabelSets;
-    procedure ValueLabelSetHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure ValueLabelSetsHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const EpiDocument: TEpiCustomBase);
@@ -252,6 +192,7 @@ type
     procedure   RestoreDefaultPos;
     procedure   Show;
     property    EpiControl: TEpiCustomControlItem read FEpiControl write SetEpiControl;
+    property    ActiveFrame: TDesignPropertiesFrame read FActiveFrame;
   end;
 
 
@@ -279,10 +220,13 @@ implementation
 uses
   epidatafilestypes, math, types, valuelabelseditor_form, epiadmin,
   LCLProc, settings2_var, settings2, epimiscutils, main, episettings,
-  epiranges, strutils, epiconvertutils;
+  epiranges, strutils, epiconvertutils,
+  // EpiControls property frames.
+  design_fieldproperties_frame, design_headingproperties_frame,
+  design_sectionproperties_frame;
 
-const
-  rsVLWarning = 'Warning: Valuelabels have changed...';
+var
+  DesignPropertyFrames: array[0..2] of TDesignPropertiesFrame;
 
 function XTreeSort(Item1, Item2: Pointer): Integer;
 var
@@ -386,6 +330,25 @@ begin
   if Ctrl is TDesignHeading then exit(dctHeading);
   if (Ctrl is TDesignSection) or
      (Ctrl is TScrollBox) then exit(dctSection);
+end;
+
+{ TDesignPropertiesFrame }
+
+procedure TDesignPropertiesFrame.SetEpiControl(
+  const AValue: TEpiCustomControlItem);
+begin
+  FEpiControl := AValue;
+end;
+
+procedure TDesignPropertiesFrame.ShowHintMsg(const Msg: string; Ctrl: TControl);
+begin
+  if Assigned(OnShowHintMsg) then
+    OnShowHintMsg(Self, Ctrl, Msg);
+end;
+
+procedure TDesignPropertiesFrame.ForceShow;
+begin
+  ShiftToTabSheet(1);
 end;
 
 { TDesignField }
@@ -833,48 +796,15 @@ procedure TDesignControlsForm.FormShow(Sender: TObject);
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'ControlsForm');
-  EpiControlPageControl.ShowTabs := false;
 
-  if Assigned(FEpiControl) then
-    UpdateControlContent;
-end;
-
-procedure TDesignControlsForm.LengthEditChange(Sender: TObject);
-begin
-  if ValueLabelComboBox.ItemIndex = -1 then exit;
-
-  if UpdateValueLabels then
-    ShowHintMsg(rsVLWarning, TControl(Sender))
-  else
-    FHintWindow.Hide;
-end;
-
-procedure TDesignControlsForm.ManageValueLabelsButtonClick(Sender: TObject);
-begin
-  GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
-end;
-
-procedure TDesignControlsForm.ShiftTo1Execute(Sender: TObject);
-begin
-  if EpiControlPageControl.ActivePage = SectionTabSheet then
-    SectionPageControl.ActivePage := SectionBasicSheet;
-
-  if EpiControlPageControl.ActivePage = FieldTabSheet then
-    FieldPageControl.ActivePage := FieldBasicSheet;
-end;
-
-procedure TDesignControlsForm.ShiftTo2Execute(Sender: TObject);
-begin
-  if EpiControlPageControl.ActivePage = SectionTabSheet then
-    SectionPageControl.ActivePage := SectionAdvancedSheet;
-
-  if EpiControlPageControl.ActivePage = FieldTabSheet then
-    FieldPageControl.ActivePage := FieldAdvancedSheet;
+  if Assigned(FActiveFrame) and
+     Assigned(FActiveFrame.EpiControl) then
+    FActiveFrame.UpdateFormContent;
 end;
 
 procedure TDesignControlsForm.ApplyActionExecute(Sender: TObject);
 begin
-  if ValidateControl then
+  if FActiveFrame.ValidateControl then
     MainForm.SetFocus;
 end;
 
@@ -885,25 +815,7 @@ end;
 
 procedure TDesignControlsForm.CloseActionExecute(Sender: TObject);
 begin
-  if ValidateControl then Close;
-end;
-
-procedure TDesignControlsForm.FieldRangesEditUTF8KeyPress(Sender: TObject;
-  var UTF8Key: TUTF8Char);
-var
-  I: integer;
-  Ch: LongWord;
-begin
-  Ch := UTF8CharacterToUnicode(@UTF8Key[1], I);
-  if not (Char(Ch) in [VK_0..VK_9, Char(VK_BACK)] + ['.',','] + ['-', ':', '.'] + ['/', '-', '\', '.']) then
-    UTF8Key := '';
-  case TEpiField(EpiControl).FieldType of
-    ftFloat:   if (Char(Ch) in ['.',',']) then UTF8Key := DecimalSeparator;
-    ftTime:    if (Char(Ch) in ['-', ':', '.']) then UTF8Key := TimeSeparator;
-    ftDMYDate,
-    ftMDYDate,
-    ftYMDDate: if (Char(Ch) in ['/', '-', '\', '.']) then UTF8Key := DateSeparator;
-  end;
+  if FActiveFrame.ValidateControl then Close;
 end;
 
 procedure TDesignControlsForm.FormCloseQuery(Sender: TObject;
@@ -919,7 +831,7 @@ var
 begin
   if not Showing then exit;
 
-  if not (ValidateControl) then
+  if not (FActiveFrame.ValidateControl) then
     Self.SetFocus;
 end;
 
@@ -931,124 +843,58 @@ begin
   FormCloseQuery(nil, B);
 end;
 
+procedure TDesignControlsForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key in [VK_0..VK_9]) and ([ssAlt] = Shift) then
+    FActiveFrame.ShiftToTabSheet(Key - VK_0);
+end;
+
 procedure TDesignControlsForm.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
-  if FEpiControl = AValue then
-  begin
-    UpdateControlContent;
-    exit;
+  try
+    BeginFormUpdate;
+
+    if Assigned(FActiveFrame) then
+    begin
+      if FActiveFrame.EpiControl = AValue then
+      begin
+        FActiveFrame.UpdateFormContent;
+        exit;
+      end;
+
+      if Assigned(FActiveFrame.FEpiControl) and
+         (not FActiveFrame.ValidateControl) then exit;
+      FActiveFrame.Parent := nil;
+    end;
+
+    if AValue is TEpiField then
+      FActiveFrame := DesignPropertyFrames[0];
+    if AValue is TEpiSection then
+      FActiveFrame := DesignPropertyFrames[1];
+    if AValue is TEpiHeading then
+      FActiveFrame := DesignPropertyFrames[2];
+    FActiveFrame.Align := alClient;
+    FActiveFrame.Parent := self;
+
+    FActiveFrame.EpiControl := AValue;
+  finally
+    EndFormUpdate;
   end;
-
-  if Assigned(FEpiControl) and
-     (not ValidateControl) then exit;
-
-  FEpiControl := AValue;
-  UpdateControlContent;
 end;
 
-function TDesignControlsForm.UpdateValueLabels: boolean;
-var
-  i: Integer;
-  DoAdd: boolean;
-  FList: TStringList;
-  Idx: LongInt;
-  l: Integer;
-  PreSelectedVLSet: TEpiValueLabelSet;
-  OIdx: LongInt;
-  CurrentVLSet: TEpiValueLabelSet;
-  IntL: Integer;
-  DecL: Integer;
-  j: Integer;
-  S: String;
-  FField: TEpiField;
-begin
-  FField := TEpiField(EpiControl);
-  PreSelectedVLSet := nil;
-  if ValueLabelComboBox.ItemIndex >= 0 then
-    PreSelectedVLSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
-  Idx := -1;
-
-  ValueLabelComboBox.Items.BeginUpdate;
-  ValueLabelComboBox.Clear;
-  ValueLabelComboBox.Sorted := true;
-  if (FValueLabelSets.Count = 0) or
-     (not (FField.FieldType in [ftInteger, ftFloat, ftString, ftUpperString])) then
-  begin
-    OIdx := ValueLabelComboBox.Items.AddObject('(none)', nil);
-    if not (FField.FieldType in [ftInteger, ftFloat, ftString, ftUpperString]) then
-      ValueLabelComboBox.Hint := 'ValueLabels not support for this field type!'
-    else
-      ValueLabelComboBox.Hint := 'No Valuelabels Defined.' + LineEnding + 'Press "Manage" to create a ValueLabel set.';
-  end else begin
-   for i := 0 to FValueLabelSets.Count - 1 do
-   begin
-     CurrentVLSet := FValueLabelSets[i];
-     case CurrentVLSet.LabelType of
-       ftInteger:
-         begin
-           DoAdd := FField.FieldType in [ftInteger, ftFloat];
-           if FField.FieldType = ftFloat then
-             DoAdd := DoAdd and (CurrentVLSet.MaxValueLength <= StrToIntDef(LengthEdit.Text, (FField.Length - FField.Decimals - 1)))
-           else
-             DoAdd := DoAdd and (CurrentVLSet.MaxValueLength <= StrToIntDef(LengthEdit.Text, FField.Length));
-         end;
-       ftFloat:
-         begin
-           DoAdd := FField.FieldType = ftFloat;
-
-           if DoAdd then
-           begin
-             IntL := 0;
-             DecL := 0;
-             for j := 0 to CurrentVLSet.Count - 1 do
-             begin
-               S := CurrentVLSet[j].ValueAsString;
-               l := Pos(DecimalSeparator, S);
-               if l = 0 then
-                 IntL := Length(S)
-               else
-                 IntL := Max(IntL, l - 1);
-               DecL := Max(DecL, Length(S) - (IntL+1));
-             end;
-           end;
-           DoAdd := DoAdd and
-             (IntL <= StrToIntDef(LengthEdit.Text, FField.Length - FField.Decimals - 1)) and
-             (DecL <= StrToIntDef(DecimalsEdit.Text, FField.Decimals));
-         end;
-       ftString:  DoAdd := FField.FieldType in [ftString, ftUpperString];
-     end;
-
-     if DoAdd then
-       ValueLabelComboBox.AddItem(CurrentVLSet.Name, CurrentVLSet);
-   end;
-   S := 'Support ValueLabel types:' + LineEnding;
-   case FField.FieldType of
-     ftInteger: S := S + EpiTypeNames[ftInteger];
-     ftFloat:   S := S + EpiTypeNames[ftInteger] + LineEnding + EpiTypeNames[ftFloat];
-     ftString,
-     ftUpperString: S := S + EpiTypeNames[ftString] + LineEnding + EpiTypeNames[ftUpperString];
-   end;
-   ValueLabelComboBox.Hint := S;
-
-   OIdx := ValueLabelComboBox.Items.AddObject('(none)', nil);
-   if Assigned(PreSelectedVLSet) then
-     Idx := ValueLabelComboBox.Items.IndexOfObject(PreSelectedVLSet)
-   else if Assigned(FField.ValueLabelSet) then
-     Idx := ValueLabelComboBox.Items.IndexOfObject(FField.ValueLabelSet);
-  end;
-  if Idx = -1 then
-    Idx := OIdx;
-  ValueLabelComboBox.Items.EndUpdate;
-  ValueLabelComboBox.ItemIndex := Idx;
-
-  result := (PreSelectedVLSet <> ValueLabelComboBox.Items.Objects[Idx]);
-end;
-
-procedure TDesignControlsForm.ShowHintMsg(Msg: string; Ctrl: TControl);
+procedure TDesignControlsForm.ShowHintMsg(Sender: TDesignPropertiesFrame;
+  Ctrl: TControl; const Msg: string);
 var
   R: TRect;
   P: TPoint;
 begin
+  if (Msg = '') and (Ctrl = nil) then
+  begin
+    FHintWindow.Hide;
+    exit;
+  end;
+
   R := FHintWindow.CalcHintRect(0, Msg, nil);
   P := Ctrl.ClientToScreen(Point(0,0));
   OffsetRect(R, P.X, P.Y + Ctrl.Height + 2);
@@ -1056,364 +902,16 @@ begin
 end;
 
 procedure TDesignControlsForm.UpdateControlContent;
-var
-  FField: TEpiField;
-  FSection: TEpiSection;
-  LocalGroups: TEpiGroups;
-  i: Integer;
-  S: String;
 begin
   BeginFormUpdate;
-  if FEpiControl is TEpiSection then
-  begin
-    Caption := 'Section Properties';
-    EpiControlPageControl.ActivePage := SectionTabSheet;
-    FSection := TEpiSection(EpiControl);
-
-    // Basic Page
-    SectionNameEdit.Text := FSection.Name.Text;
-
-    {$IFNDEF EPI_DEBUG}
-    SectionGroupAccessGroupBox.Visible := false;
-    SectionGroupAccessGroupBox.Enabled := false;
-    {$ELSE}
-    GroupAssignedListBox.Items.BeginUpdate;
-    GroupAvailableListBox.Items.BeginUpdate;
-    GroupAssignedListBox.Clear;
-    GroupAvailableListBox.Clear;
-    LocalGroups := TEpiDocument(FSection.RootOwner).Admin.Groups;
-    for i := 0 to LocalGroups.Count - 1 do
-    begin
-      if FSection.Groups.ItemExistsById(LocalGroups[i].Id) then
-        GroupAssignedListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i])
-      else
-        GroupAvailableListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i]);
-    end;
-    GroupAvailableListBox.Items.EndUpdate;
-    GroupAssignedListBox.Items.EndUpdate;
-    {$ENDIF}
-
-    // Advanced Page
-    WidthEdit.Text := IntToStr(FSection.Width);
-    HeightEdit.Text := IntToStr(FSection.Height);
-  end;
-
-  if FEpiControl is TEpiField then
-  begin
-    Caption := 'Field Properties';
-    EpiControlPageControl.ActivePage := FieldTabSheet;
-    FField := TEpiField(EpiControl);
-
-    // Setup Basic page
-    NameEdit.Text         := FField.Name;
-    FieldTypeLabel.Caption := EpiTypeNames[FField.FieldType];
-    QuestionEdit.Text     := FField.Question.Caption.Text;
-    if FField.FieldType = ftFloat then
-      LengthEdit.Text     := IntToStr(FField.Length - (FField.Decimals + 1))
-    else
-      LengthEdit.Text     := IntToStr(FField.Length);
-    DecimalsEdit.Text     := IntToStr(FField.Decimals);
-    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
-
-    // Visiblity
-    LengthEdit.Visible              := FField.FieldType in (IntFieldTypes + FloatFieldTypes + StringFieldTypes);
-    LengthLabel.Visible             := LengthEdit.Visible;
-    DecimalsEdit.Visible            := FField.FieldType in FloatFieldTypes;
-    DecimalsLabel.Visible           := DecimalsEdit.Visible;
-    RangesGrpBox.Visible            := Ffield.FieldType in RangeFieldTypes;
-    ValueLabelComboBox.Visible      := FField.FieldType in ValueLabelFieldTypes;
-    ValueLabelLabel.Visible         := ValueLabelComboBox.Visible;
-    ManageValueLabelsButton.Visible := ValueLabelComboBox.Visible;
-
-    // Setup "advanced" page.
-    if Assigned(FField.Ranges) and (FField.Ranges.Count > 0) then
-    begin
-      FromEdit.Text := TEpiRange(FField.Ranges[0]).AsString[true];
-      ToEdit.Text   := TEpiRange(FField.Ranges[0]).AsString[false];
-    end else begin
-      FromEdit.Text := '';
-      ToEdit.Text   := '';
-    end;
-
-    UpdateValueLabels;
-  end;
-
-  if FEpiControl is TEpiHeading then
-  begin
-    Caption := 'Heading Properties';
-    EpiControlPageControl.ActivePage := HeadingTabSheet;
-    CaptionEdit.Text := TEpiHeading(EpiControl).Caption.Text;
-  end;
+  FActiveFrame.UpdateFormContent;
   EndFormUpdate;
 end;
 
 function TDesignControlsForm.ValidateControl: boolean;
-var
-  FSection: TEpiSection;
-  FField: TEpiField;
-  FHeading: TEpiHeading;
-  NewLen: LongInt;
-  NewDecLen: LongInt;
-  i: Integer;
-  // Ranges vars.
-  Ranges: TEpiRanges;
-  R: TEpiRange;
-  Int1, Int2: EpiInteger;
-  Flt1, Flt2: EpiFloat;
-  D1, D2, M1, M2, Y1, Y2,
-  H1, H2, S1, S2: Word;
-  S: string;
-
-  procedure DoError(Const Msg: string; Ctrl: TWinControl);
-  var
-    P: TWinControl;
-  begin
-    P := Ctrl.Parent;
-    while not (P is TTabSheet) do
-      P := P.Parent;
-    TPageControl(P.Parent).ActivePage := TTabSheet(P);
-    Ctrl.SetFocus;
-    ShowHintMsg(Msg, Ctrl);
-  end;
-
 begin
-  Result := false;
   if (not Showing) then exit(true);
-
-
-  if EpiControl is TEpiSection then
-  begin
-    FSection := TEpiSection(EpiControl);
-    FSection.BeginUpdate;
-
-    // Basic Page
-    FSection.Name.Text := SectionNameEdit.Text;
-    for i := 0 to GroupAssignedListBox.Count - 1 do
-      if not FSection.Groups.ItemExistsById(TEpiGroup(GroupAssignedListBox.Items.Objects[i]).Id) then
-        FSection.Groups.AddItem(TEpiGroup(GroupAssignedListBox.Items.Objects[i]));
-
-    // Advanced Page
-    FSection.Width := StrToInt(WidthEdit.Text);
-    FSection.Height := StrToInt(HeightEdit.Text);
-
-    FSection.EndUpdate;
-
-    Result := true;
-    Exit;
-  end;
-
-  if EpiControl is TEpiField then
-  begin
-    FField := TEpiField(EpiControl);
-
-    // "Standard" page
-    // Rules for field creation!
-    NewLen := FField.Length;
-    if LengthEdit.Visible then
-    begin
-      if (not TryStrToInt(LengthEdit.Text, NewLen)) or
-         ((FField.FieldType = ftInteger) and (NewLen >= 19)) or
-         (NewLen <= 0)
-      then
-      begin
-        DoError('Invalid length', LengthEdit);
-        exit;
-      end;
-    end;
-
-    NewDecLen := FField.Decimals;
-    if DecimalsEdit.Visible then
-    begin
-      if (not TryStrToInt(DecimalsEdit.Text, NewDecLen)) or
-         (NewDecLen <= 0) then
-      begin
-        DoError('Invalid decimals', DecimalsEdit);
-        exit;
-      end;
-    end;
-
-    if ((FromEdit.Text <> '') and (ToEdit.Text = '')) then
-    begin
-      DoError('No "To" entered', ToEdit);
-      Exit;
-    end;
-
-    if ((FromEdit.Text = '') and (ToEdit.Text <> '')) then
-    begin
-      DoError('No "From" entered', FromEdit);
-      Exit;
-    end;
-
-    R := nil;
-    if ((FromEdit.Text <> '') and (ToEdit.Text <> '')) then
-    begin
-      if Assigned(FField.Ranges) then
-      begin
-        Ranges := FField.Ranges;
-        R := TEpiRange(Ranges[0]);
-      end else begin
-        Ranges := TEpiRanges.Create(FField);
-        Ranges.ItemOwner := true;
-        R := Ranges.NewRange;
-      end;
-      Case Ranges.FieldType of
-        ftInteger:
-          begin
-            if not TryStrToInt64(FromEdit.Text, Int1) then
-            begin
-              DoError(Format('Not a valid integer: %s', [FromEdit.Text]), FromEdit);
-              Exit;
-            end;
-
-            if not TryStrToInt64(ToEdit.Text, Int2) then
-            begin
-              DoError(Format('Not a valid integer: %s', [ToEdit.Text]), ToEdit);
-              Exit;
-            end;
-          end;
-        ftFloat:
-          begin
-            if not TryStrToFloat(FromEdit.Text, Flt1) then
-            begin
-              DoError(Format('Not a valid float: %s', [FromEdit.Text]), FromEdit);
-              Exit;
-            end;
-
-            if not TryStrToFloat(ToEdit.Text, Flt2) then
-            begin
-              DoError(Format('Not a valid float: %s', [ToEdit.Text]), ToEdit);
-              Exit;
-            end;
-          end;
-        ftTime:
-          begin
-            if not EpiStrToTime(FromEdit.Text, TimeSeparator, H1, M1, S1, S) then
-            begin
-              DoError(S, FromEdit);
-              Exit;
-            end;
-
-            if not EpiStrToTime(ToEdit.Text, TimeSeparator, H2, M2, S2, S) then
-            begin
-              DoError(S, ToEdit);
-              Exit;
-            end;
-          end;
-        ftDMYDate,
-        ftMDYDate,
-        ftYMDDate:
-          begin
-            if not EpiStrToDate(FromEdit.Text, DateSeparator, Ranges.FieldType, D1, M1, Y1, S) then
-            begin
-              DoError(S, FromEdit);
-              Exit;
-            end;
-
-            if not EpiStrToDate(ToEdit.Text, DateSeparator, Ranges.FieldType, D2, M2, Y2, S) then
-            begin
-              DoError(S, ToEdit);
-              Exit;
-            end;
-          end;
-      end;
-    end;
-
-    if (NameEdit.Text <> FField.Name) and
-       (not FField.DataFile.ValidateFieldRename(FField, NameEdit.Text)) then
-    begin
-      DoError('Name already exists or invalid identifier', NameEdit);
-      Exit;
-    end;
-
-    FField.BeginUpdate;
-    FField.Name := NameEdit.Text;
-    FField.Length := NewLen;
-    FField.Decimals := NewDecLen;
-    if NewDecLen > 0 then
-      FField.Length := FField.Length + FField.Decimals + 1;
-    FField.Question.Caption.Text := QuestionEdit.Text;
-
-    // "Advanced" page
-    if ValueLabelComboBox.ItemIndex >= 0 then
-      FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
-
-    if Assigned(R) then
-    begin
-      Case Ranges.FieldType of
-        ftInteger:
-          begin
-            R.AsInteger[true]  := Int1;
-            R.AsInteger[false] := Int2;
-          end;
-        ftFloat:
-          begin
-            R.AsFloat[true]  := Flt1;
-            R.AsFloat[false] := Flt2;
-          end;
-        ftTime:
-          begin
-            R.AsTime[true]  := EncodeTime(H1, M1, S1, 0);
-            R.AsTime[false] := EncodeTime(H2, M2, S2, 0);
-          end;
-        ftDMYDate,
-        ftMDYDate,
-        ftYMDDate:
-          begin
-            R.AsDate[true]  := Trunc(EncodeDate(Y1, M1, D1));
-            R.AsDate[false] := Trunc(EncodeDate(Y2, M2, D2));
-          end;
-      end;
-      FField.Ranges := Ranges;
-    end;
-
-    FField.EndUpdate;
-    Result := true;
-    exit;
-  end;
-
-  if EpiControl is TEpiHeading then
-  begin
-    FHeading := TEpiHeading(EpiControl);
-
-    if UTF8Length(CaptionEdit.Text) = 0 then
-    begin
-      ShowHintMsg('Empty heading not allowed...', CaptionEdit);
-      Exit;
-    end;
-
-    FHeading.BeginUpdate;
-    FHeading.Caption.Text := CaptionEdit.Text;
-    FHeading.EndUpdate;
-
-    Result := true;
-    Exit;
-  end;
-end;
-
-procedure TDesignControlsForm.GrpRightsMoveLeftClick(Sender: TObject);
-var
-  Idx: LongInt;
-  Grp: TEpiGroup;
-begin
-  if GroupAssignedListBox.ItemIndex < 0 then exit;
-
-  Idx := GroupAssignedListBox.ItemIndex;
-  Grp := TEpiGroup(GroupAssignedListBox.Items.Objects[Idx]);
-  GroupAvailableListBox.Items.AddObject(Grp.Name.Text, Grp);
-  GroupAssignedListBox.Items.Delete(Idx);
-end;
-
-procedure TDesignControlsForm.GrpRightsMoveRightClick(Sender: TObject);
-var
-  Grp: TEpiGroup;
-  Idx: LongInt;
-begin
-  if GroupAvailableListBox.ItemIndex < 0 then exit;
-
-  Idx := GroupAvailableListBox.ItemIndex;
-  Grp := TEpiGroup(GroupAvailableListBox.Items.Objects[Idx]);
-  GroupAssignedListBox.Items.AddObject(Grp.Name.Text, Grp);
-  GroupAvailableListBox.Items.Delete(Idx);
+  result := FActiveFrame.ValidateControl;
 end;
 
 constructor TDesignControlsForm.Create(TheOwner: TComponent);
@@ -1422,38 +920,6 @@ begin
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.AutoHide := true;
   FHintWindow.HideInterval := 5 * 1000;
-
-  GrpRightsMoveLeft.OnClick := @GrpRightsMoveLeftClick;
-  GrpRightsMoveRight.OnClick := @GrpRightsMoveRightClick;
-end;
-
-procedure TDesignControlsForm.ValueLabelSetHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-begin
-  if (EventGroup = eegValueLabels) and (EventType = Word(evceName)) then
-    UpdateValueLabels;
-end;
-
-procedure TDesignControlsForm.ValueLabelSetsHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-begin
-  if (EventGroup = eegCustomBase) and (EventType = Word(ecceAddItem)) then
-    TEpiValueLabelSet(Data).RegisterOnChangeHook(@ValueLabelSetHook, true);
-
-  if (EventGroup = eegCustomBase) and (EventType = Word(ecceDelItem)) then
-  begin
-    TEpiValueLabelSet(Data).UnRegisterOnChangeHook(@ValueLabelSetHook);
-    if UpdateValueLabels then
-      ShowHintMsg(
-        Format('Warning: Valuelabels changed for field "%s"', [TEpiField(EpiControl).Name]),
-        GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).ToolBar1);
-  end;
-
-  if (EventGroup = eegCustomBase) and (EventType = Word(ecceUpdate)) then
-  begin
-    if UpdateValueLabels then
-      ShowHintMsg(rsVLWarning, Self);
-  end;
 end;
 
 constructor TDesignControlsForm.Create(TheOwner: TComponent;
@@ -1462,20 +928,19 @@ var
   i: Integer;
 begin
   Create(TheOwner);
-  FValueLabelSets := TEpiDocument(EpiDocument).ValueLabelSets;
-  FValueLabelSets.RegisterOnChangeHook(@ValueLabelSetsHook, true);
+  FEpiDocument := TEpiDocument(EpiDocument);
 
-  for i := 0 to FValueLabelSets.Count - 1 do
-    FValueLabelSets[i].RegisterOnChangeHook(@ValueLabelSetHook, true);
+  DesignPropertyFrames[0] := TFieldPropertiesFrame.Create(Self, FEpiDocument.ValueLabelSets);
+  DesignPropertyFrames[0].OnShowHintMsg := @ShowHintMsg;
+  DesignPropertyFrames[1] := TSectionPropertiesFrame.Create(Self, FEpiDocument.Admin);
+  DesignPropertyFrames[1].OnShowHintMsg := @ShowHintMsg;
+  DesignPropertyFrames[2] := THeadingPropertiesFrame.Create(Self);
+  DesignPropertyFrames[2].OnShowHintMsg := @ShowHintMsg;
 end;
 
 destructor TDesignControlsForm.Destroy;
-var
-  i: Integer;
 begin
-  for i := 0 to FValueLabelSets.Count - 1 do
-    FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelSetHook);
-  FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelSetsHook);
+  FActiveFrame.Free;
   inherited Destroy;
 end;
 
@@ -1492,21 +957,10 @@ end;
 
 procedure TDesignControlsForm.Show;
 begin
-  if not Assigned(EpiControl) then exit;
+  if not Assigned(FActiveFrame) then exit;
 
   Visible := true;
-  if EpiControl is TEpiSection then
-  begin
-    SectionPageControl.ActivePage := SectionBasicSheet;
-    SectionNameEdit.SetFocus;
-  end;
-  if EpiControl is TEpiField then
-  begin
-    FieldPageControl.ActivePage := FieldBasicSheet;
-    QuestionEdit.SetFocus;
-  end;
-  if EpiControl is TEpiHeading then
-    CaptionEdit.SetFocus;
+  FActiveFrame.ForceShow;
   BringToFront;
 end;
 
