@@ -1,14 +1,12 @@
-object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 0
+inherited FieldPropertiesFrame: TFieldPropertiesFrame
   Height = 474
-  Top = 0
   Width = 595
   ClientHeight = 474
   ClientWidth = 595
   TabOrder = 0
-  DesignLeft = 990
-  DesignTop = 456
-  object FieldPageControl: TPageControl
+  DesignLeft = 840
+  DesignTop = 281
+  object FieldPageControl: TPageControl[0]
     Left = 0
     Height = 474
     Top = 0
@@ -515,6 +513,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
               FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
             }
             NumGlyphs = 0
+            OnClick = AddJumpBtnClick
           end
           object RemoveJumpBtn: TSpeedButton
             AnchorSideTop.Control = GotoFieldComboBox1
@@ -566,6 +565,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
               FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
             }
             NumGlyphs = 0
+            OnClick = RemoveJumpBtnClick
             ShowCaption = False
           end
           object JumpGotoBevel: TBevel

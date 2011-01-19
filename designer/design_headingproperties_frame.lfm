@@ -1,13 +1,11 @@
 object HeadingPropertiesFrame: THeadingPropertiesFrame
   Left = 0
   Height = 417
-  Top = 0
+  Top = 25
   Width = 793
   ClientHeight = 417
   ClientWidth = 793
-  TabOrder = 0
-  DesignLeft = 655
-  DesignTop = 421
+  LCLVersion = '0.9.31'
   object Label9: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner

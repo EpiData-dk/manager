@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, ExtCtrls,
-  Buttons, LCLType, epicustombase, design_controls, epivaluelabels, epidatafiles;
+  Buttons, LCLType, epicustombase, design_controls, epivaluelabels, epidatafiles,
+  design_propertiesbase_frame;
 
 type
 
@@ -57,22 +58,36 @@ type
     TopBevel: TBevel;
     ValueLabelComboBox: TComboBox;
     ValueLabelLabel: TLabel;
+    procedure AddJumpBtnClick(Sender: TObject);
     procedure LengthEditEditingDone(Sender: TObject);
     procedure ManageValueLabelsButtonClick(Sender: TObject);
     procedure RangeEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+    procedure RemoveJumpBtnClick(Sender: TObject);
   private
     { private declarations }
+    FDataFile: TEpiDataFile;
     FValueLabelSets: TEpiValueLabelSets;
-    function GetField: TEpiField;
+    function  GetField: TEpiField;
     function  UpdateValueLabels: boolean;
     procedure ValueLabelSetHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure ValueLabelSetsHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+  private
+    { Jumps section }
+    FJumpComponentsList: TList;
+    procedure UpdateFieldComboBox(Combo: TComboBox);
+    procedure AddFieldsToCombo(Combo: TComboBox);
+    function  DoAddNewJump: pointer;
+    function  UpdateJumps: boolean;
   protected
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
     procedure ShiftToTabSheet(const SheetNo: Byte); override;
+  private
+    { Validation }
+    function    InternalValidate: boolean;
+    procedure   InternalApply;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; Const AValueLabelSets: TEpiValueLabelSets);
+    constructor Create(TheOwner: TComponent; Const AValueLabelSets: TEpiValueLabelSets; Const DataFile: TEpiDataFile);
     destructor  Destroy; override;
     function    ValidateControl: boolean; override;
     procedure   UpdateFormContent; override;
@@ -92,6 +107,13 @@ uses
 const
   rsVLWarning = 'Warning: Valuelabels have changed...';
 
+type
+  TJumpComponents = record
+    ValueEdit: PtrInt;
+    GotoCombo: PtrInt;
+    ResetCombo: PtrInt;
+  end;
+  PJumpComponents = ^TJumpComponents;
 
 { TFieldPropertiesFrame }
 
@@ -111,6 +133,23 @@ begin
     ftMDYDate,
     ftYMDDate: if (Char(Ch) in ['/', '-', '\', '.']) then UTF8Key := DateSeparator;
   end;
+end;
+
+procedure TFieldPropertiesFrame.RemoveJumpBtnClick(Sender: TObject);
+var
+  Sibling: TControl;
+begin
+  if FJumpComponentsList.Count <= 1 then exit;
+  with PJumpComponents(FJumpComponentsList.Last)^ do
+  begin
+    TObject(ValueEdit).Free;
+    TObject(GotoCombo).Free;
+    TObject(ResetCombo).Free;
+    FJumpComponentsList.Delete(FJumpComponentsList.Count - 1);
+  end;
+  Sibling := TControl(PJumpComponents(FJumpComponentsList.Last)^.GotoCombo);
+  AddJumpBtn.AnchorVerticalCenterTo(Sibling);
+  RemoveJumpBtn.AnchorVerticalCenterTo(Sibling);
 end;
 
 function TFieldPropertiesFrame.UpdateValueLabels: boolean;
@@ -243,6 +282,119 @@ begin
   end;
 end;
 
+
+procedure TFieldPropertiesFrame.UpdateFieldComboBox(Combo: TComboBox);
+var
+  CurrentSelect: TObject;
+begin
+  CurrentSelect := Combo.Items.Objects[Combo.ItemIndex];
+  AddFieldsToCombo(Combo);
+  Combo.ItemIndex := Combo.Items.IndexOfObject(CurrentSelect);
+end;
+
+procedure TFieldPropertiesFrame.AddFieldsToCombo(Combo: TComboBox);
+var
+  i: Integer;
+begin
+  Combo.Items.BeginUpdate;
+  Combo.Clear;
+  Combo.Items.AddObject('(none)', nil);
+  for i := 0 to FDataFile.Fields.Count - 1 do
+  with FDataFile do
+  begin
+     if not (Field[i].FieldType in AutoFieldTypes) then
+       Combo.Items.AddObject(Field[i].Name, Field[i]);
+  end;
+  Combo.Items.EndUpdate;
+end;
+
+function TFieldPropertiesFrame.DoAddNewJump: pointer;
+var
+  JVE: TEdit;     // Jump-to value edit.
+  GFC: TComboBox; // Goto field combo
+  RVC: TComboBox; // Reset value combo
+  JRec: PJumpComponents;
+begin
+  GFC := TComboBox.Create(JumpScrollBox);
+  with GFC do
+  begin
+    AnchorToNeighbour(akTop, 3, TControl(PJumpComponents(FJumpComponentsList[FJumpComponentsList.Count-1])^.GotoCombo));
+    AnchorToNeighbour(akLeft, 5, JumpGotoBevel);
+    AnchorToNeighbour(akRight, 5, GotoResetBevel);
+    AddFieldsToCombo(GFC);
+    Style := csDropDownList;
+    Parent := JumpScrollBox;
+  end;
+
+  JVE := TEdit.Create(JumpScrollBox);
+  with JVE do
+  begin
+    AnchorParallel(akLeft, 10, JumpScrollBox);
+    AnchorToNeighbour(akRight, 5, JumpGotoBevel);
+    AnchorVerticalCenterTo(GFC);
+    Parent := JumpScrollBox;
+  end;
+
+  RVC := TComboBox.Create(JumpScrollBox);
+  with RVC do
+  begin
+    AnchorToNeighbour(akLeft, 5, GotoResetBevel);
+    AnchorToNeighbour(akRight, 5, ResetAddBevel);
+    AnchorVerticalCenterTo(GFC);
+    Parent := JumpScrollBox;
+  end;
+
+  RemoveJumpBtn.AnchorVerticalCenterTo(GFC);
+  AddJumpBtn.AnchorVerticalCenterTo(GFC);
+
+  Jrec := New(PJumpComponents);
+  with Jrec^ do
+  begin
+    ValueEdit := PtrInt(JVE);
+    GotoCombo := PtrInt(GFC);
+    ResetCombo := PtrInt(RVC);
+  end;
+  FJumpComponentsList.Add(JRec);
+  Result := JRec;
+end;
+
+function TFieldPropertiesFrame.UpdateJumps: boolean;
+var
+  i: Integer;
+begin
+  while FJumpComponentsList.Count > 1 do
+  with PJumpComponents(FJumpComponentsList.Last)^ do
+  begin
+    TObject(ValueEdit).Free;
+    TObject(GotoCombo).Free;
+    TObject(ResetCombo).Free;
+    FJumpComponentsList.Delete(FJumpComponentsList.Count-1);
+  end;
+
+  if not Assigned(Field.Jumps) then exit;
+
+  with Field do
+  begin
+    with Jumps[0] do
+    begin
+      JumpValueEdit.Text           := JumpValueAsString;
+      GotoFieldComboBox1.ItemIndex := GotoFieldComboBox1.Items.IndexOfObject(JumpToField);
+      if ResetOnJump then
+        ResetValueComboBox.Text    := ResetValueAsString;
+    end;
+
+    for i := 1 to Jumps.Count -1 do
+    with PJumpComponents(DoAddNewJump)^ do
+    with Jumps[i] do
+    begin
+      TEdit(ValueEdit).Text          := JumpValueAsString;
+      TComboBox(GotoCombo).ItemIndex := TComboBox(GotoCombo).Items.IndexOfObject(JumpToField);
+      if ResetOnJump then
+        TComboBox(ResetCombo).Text   := ResetValueAsString;
+    end;
+  end;
+end;
+
 procedure TFieldPropertiesFrame.LengthEditEditingDone(Sender: TObject);
 begin
   if ValueLabelComboBox.ItemIndex = -1 then exit;
@@ -251,6 +403,11 @@ begin
     ShowHintMsg(rsVLWarning, TControl(Sender))
   else
     ShowHintMsg('', nil);
+end;
+
+procedure TFieldPropertiesFrame.AddJumpBtnClick(Sender: TObject);
+begin
+  DoAddNewJump;
 end;
 
 procedure TFieldPropertiesFrame.ManageValueLabelsButtonClick(Sender: TObject);
@@ -272,10 +429,201 @@ begin
   FieldPageControl.ActivePageIndex := SheetNo - 1;
 end;
 
+function TFieldPropertiesFrame.InternalValidate: boolean;
+
+procedure DoError(Const Msg: string; Ctrl: TWinControl);
+  var
+    P: TWinControl;
+  begin
+    P := Ctrl.Parent;
+    while not (P is TTabSheet) do
+      P := P.Parent;
+    TPageControl(P.Parent).ActivePage := TTabSheet(P);
+    Ctrl.SetFocus;
+    ShowHintMsg(Msg, Ctrl);
+  end;
+
+var
+  I: integer;
+  I64: int64;
+  F: Extended;
+  S: string;
+  w: Word;
+begin
+  Result := false;
+
+  if LengthEdit.Visible then
+  begin
+    if (not TryStrToInt(LengthEdit.Text, I)) or
+       ((Field.FieldType = ftInteger) and (I >= 19)) or
+       (I <= 0)
+    then
+    begin
+      DoError('Invalid length', LengthEdit);
+      exit;
+    end;
+  end;
+
+  if DecimalsEdit.Visible then
+  begin
+    if (not TryStrToInt(DecimalsEdit.Text, I)) or
+       (I <= 0) then
+    begin
+      DoError('Invalid decimals', DecimalsEdit);
+      exit;
+    end;
+  end;
+
+  if ((FromEdit.Text <> '') and (ToEdit.Text = '')) then
+  begin
+    DoError('No "To" entered', ToEdit);
+    Exit;
+  end;
+
+  if ((FromEdit.Text = '') and (ToEdit.Text <> '')) then
+  begin
+    DoError('No "From" entered', FromEdit);
+    Exit;
+  end;
+
+  if ((FromEdit.Text <> '') and (ToEdit.Text <> '')) then
+  begin
+    Case Field.FieldType of
+      ftInteger:
+        begin
+          if not TryStrToInt64(FromEdit.Text, I64) then
+          begin
+            DoError(Format('Not a valid integer: %s', [FromEdit.Text]), FromEdit);
+            Exit;
+          end;
+
+          if not TryStrToInt64(ToEdit.Text, I64) then
+          begin
+            DoError(Format('Not a valid integer: %s', [ToEdit.Text]), ToEdit);
+            Exit;
+          end;
+        end;
+      ftFloat:
+        begin
+          if not TryStrToFloat(FromEdit.Text, F) then
+          begin
+            DoError(Format('Not a valid float: %s', [FromEdit.Text]), FromEdit);
+            Exit;
+          end;
+
+          if not TryStrToFloat(ToEdit.Text, F) then
+          begin
+            DoError(Format('Not a valid float: %s', [ToEdit.Text]), ToEdit);
+            Exit;
+          end;
+        end;
+      ftTime:
+        begin
+          if not EpiStrToTime(FromEdit.Text, TimeSeparator, w, W, W, S) then
+          begin
+            DoError(S, FromEdit);
+            Exit;
+          end;
+
+          if not EpiStrToTime(ToEdit.Text, TimeSeparator, W, W, W, S) then
+          begin
+            DoError(S, ToEdit);
+            Exit;
+          end;
+        end;
+      ftDMYDate,
+      ftMDYDate,
+      ftYMDDate:
+        begin
+          if not EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, W, W, W, S) then
+          begin
+            DoError(S, FromEdit);
+            Exit;
+          end;
+
+          if not EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, W, W, W, S) then
+          begin
+            DoError(S, ToEdit);
+            Exit;
+          end;
+        end;
+    end;
+  end;
+
+  if (NameEdit.Text <> Field.Name) and
+     (not FDataFile.ValidateFieldRename(Field, NameEdit.Text)) then
+  begin
+    DoError('Name already exists or invalid identifier', NameEdit);
+    Exit;
+  end;
+
+  Result := true;
+end;
+
+procedure TFieldPropertiesFrame.InternalApply;
+var
+  R: TEpiRange;
+  S: string;
+begin
+  Field.BeginUpdate;
+  Field.Name := NameEdit.Text;
+  Field.Length := StrToInt(LengthEdit.Text);
+  Field.Decimals := StrToInt(DecimalsEdit.Text);
+  if Field.Decimals > 0 then
+    Field.Length := Field.Length + Field.Decimals + 1;
+  Field.Question.Caption.Text := QuestionEdit.Text;
+
+  if UpdateValueLabels then
+    ShowHintMsg(rsVLWarning, MainForm.ActiveControl);
+
+  if ValueLabelComboBox.ItemIndex >= 0 then
+    Field.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+
+  if FromEdit.Text <> '' then
+  begin
+    if Assigned(Field.Ranges) then
+      R := Field.Ranges[0]
+    else begin
+      Field.Ranges := TEpiRanges.Create(Field);
+      Field.Ranges.ItemOwner := true;
+      R := Field.Ranges.NewRange;
+    end;
+    Case Field.FieldType of
+      ftInteger:
+        begin
+          R.AsInteger[true]  := StrToInt64(FromEdit.Text);
+          R.AsInteger[false] := StrToInt64(ToEdit.Text);
+        end;
+      ftFloat:
+        begin
+          R.AsFloat[true]  := StrToFloat(FromEdit.Text);
+          R.AsFloat[false] := StrToFloat(ToEdit.Text);
+        end;
+      ftTime:
+        begin
+          R.AsTime[true]  := EpiStrToTime(FromEdit.Text, TimeSeparator, S);
+          R.AsTime[false] := EpiStrToTime(ToEdit.Text, TimeSeparator, S);
+        end;
+      ftDMYDate,
+      ftMDYDate,
+      ftYMDDate:
+        begin
+          R.AsDate[true]  := Trunc(EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, S));
+          R.AsDate[false] := Trunc(EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, S));
+        end;
+    end;
+  end;
+
+  // "Advanced" page
+
+  Field.EndUpdate;
+end;
+
 constructor TFieldPropertiesFrame.Create(TheOwner: TComponent;
-  const AValueLabelSets: TEpiValueLabelSets);
+  const AValueLabelSets: TEpiValueLabelSets; const DataFile: TEpiDataFile);
 var
   i: Integer;
+  Jrec: PJumpComponents;
 begin
   inherited Create(TheOwner);
   FValueLabelSets := AValueLabelSets;
@@ -283,6 +631,20 @@ begin
 
   for i := 0 to FValueLabelSets.Count - 1 do
     FValueLabelSets[i].RegisterOnChangeHook(@ValueLabelSetHook, true);
+
+  FDataFile := DataFile;
+
+
+  Jrec := New(PJumpComponents);
+  with JRec^ do
+  begin
+    ValueEdit := PtrInt(JumpValueEdit);
+    GotoCombo := PtrInt(GotoFieldComboBox1);
+    ResetCombo := PtrInt(ResetValueComboBox);
+  end;
+  FJumpComponentsList := TList.Create;
+  FJumpComponentsList.Add(Jrec);
+  AddFieldsToCombo(GotoFieldComboBox1);
 end;
 
 destructor TFieldPropertiesFrame.Destroy;
@@ -310,204 +672,17 @@ var
   H1, H2, S1, S2: Word;
   S: string;
 
-  procedure DoError(Const Msg: string; Ctrl: TWinControl);
-  var
-    P: TWinControl;
-  begin
-    P := Ctrl.Parent;
-    while not (P is TTabSheet) do
-      P := P.Parent;
-    TPageControl(P.Parent).ActivePage := TTabSheet(P);
-    Ctrl.SetFocus;
-    ShowHintMsg(Msg, Ctrl);
-  end;
 
 begin
-  Result := false;
-  FField := TEpiField(EpiControl);
+  result := InternalValidate;
+  if not Result then exit;
 
-  // "Standard" page
-  // Rules for field creation!
-  NewLen := FField.Length;
-  if LengthEdit.Visible then
-  begin
-    if (not TryStrToInt(LengthEdit.Text, NewLen)) or
-       ((FField.FieldType = ftInteger) and (NewLen >= 19)) or
-       (NewLen <= 0)
-    then
-    begin
-      DoError('Invalid length', LengthEdit);
-      exit;
-    end;
-  end;
-
-  NewDecLen := FField.Decimals;
-  if DecimalsEdit.Visible then
-  begin
-    if (not TryStrToInt(DecimalsEdit.Text, NewDecLen)) or
-       (NewDecLen <= 0) then
-    begin
-      DoError('Invalid decimals', DecimalsEdit);
-      exit;
-    end;
-  end;
-
-  if ((FromEdit.Text <> '') and (ToEdit.Text = '')) then
-  begin
-    DoError('No "To" entered', ToEdit);
-    Exit;
-  end;
-
-  if ((FromEdit.Text = '') and (ToEdit.Text <> '')) then
-  begin
-    DoError('No "From" entered', FromEdit);
-    Exit;
-  end;
-
-  R := nil;
-  if ((FromEdit.Text <> '') and (ToEdit.Text <> '')) then
-  begin
-    if Assigned(FField.Ranges) then
-    begin
-      Ranges := FField.Ranges;
-      R := TEpiRange(Ranges[0]);
-    end else begin
-      Ranges := TEpiRanges.Create(FField);
-      Ranges.ItemOwner := true;
-      R := Ranges.NewRange;
-    end;
-    Case Ranges.FieldType of
-      ftInteger:
-        begin
-          if not TryStrToInt64(FromEdit.Text, Int1) then
-          begin
-            DoError(Format('Not a valid integer: %s', [FromEdit.Text]), FromEdit);
-            Exit;
-          end;
-
-          if not TryStrToInt64(ToEdit.Text, Int2) then
-          begin
-            DoError(Format('Not a valid integer: %s', [ToEdit.Text]), ToEdit);
-            Exit;
-          end;
-        end;
-      ftFloat:
-        begin
-          if not TryStrToFloat(FromEdit.Text, Flt1) then
-          begin
-            DoError(Format('Not a valid float: %s', [FromEdit.Text]), FromEdit);
-            Exit;
-          end;
-
-          if not TryStrToFloat(ToEdit.Text, Flt2) then
-          begin
-            DoError(Format('Not a valid float: %s', [ToEdit.Text]), ToEdit);
-            Exit;
-          end;
-        end;
-      ftTime:
-        begin
-          if not EpiStrToTime(FromEdit.Text, TimeSeparator, H1, M1, S1, S) then
-          begin
-            DoError(S, FromEdit);
-            Exit;
-          end;
-
-          if not EpiStrToTime(ToEdit.Text, TimeSeparator, H2, M2, S2, S) then
-          begin
-            DoError(S, ToEdit);
-            Exit;
-          end;
-        end;
-      ftDMYDate,
-      ftMDYDate,
-      ftYMDDate:
-        begin
-          if not EpiStrToDate(FromEdit.Text, DateSeparator, Ranges.FieldType, D1, M1, Y1, S) then
-          begin
-            DoError(S, FromEdit);
-            Exit;
-          end;
-
-          if not EpiStrToDate(ToEdit.Text, DateSeparator, Ranges.FieldType, D2, M2, Y2, S) then
-          begin
-            DoError(S, ToEdit);
-            Exit;
-          end;
-        end;
-    end;
-  end;
-
-  if (NameEdit.Text <> FField.Name) and
-     (not FField.DataFile.ValidateFieldRename(FField, NameEdit.Text)) then
-  begin
-    DoError('Name already exists or invalid identifier', NameEdit);
-    Exit;
-  end;
-
-  FField.BeginUpdate;
-  FField.Name := NameEdit.Text;
-  FField.Length := NewLen;
-  FField.Decimals := NewDecLen;
-  if NewDecLen > 0 then
-    FField.Length := FField.Length + FField.Decimals + 1;
-  FField.Question.Caption.Text := QuestionEdit.Text;
-
-  // "Advanced" page
-  if UpdateValueLabels then
-    ShowHintMsg(rsVLWarning, MainForm.ActiveControl);
-
-  if ValueLabelComboBox.ItemIndex >= 0 then
-    FField.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
-
-  if Assigned(R) then
-  begin
-    Case Ranges.FieldType of
-      ftInteger:
-        begin
-          R.AsInteger[true]  := Int1;
-          R.AsInteger[false] := Int2;
-        end;
-      ftFloat:
-        begin
-          R.AsFloat[true]  := Flt1;
-          R.AsFloat[false] := Flt2;
-        end;
-      ftTime:
-        begin
-          R.AsTime[true]  := EncodeTime(H1, M1, S1, 0);
-          R.AsTime[false] := EncodeTime(H2, M2, S2, 0);
-        end;
-      ftDMYDate,
-      ftMDYDate,
-      ftYMDDate:
-        begin
-          R.AsDate[true]  := Trunc(EncodeDate(Y1, M1, D1));
-          R.AsDate[false] := Trunc(EncodeDate(Y2, M2, D2));
-        end;
-    end;
-    FField.Ranges := Ranges;
-  end;
-
-  FField.EndUpdate;
-  Result := true;
+  InternalApply;
 end;
 
 procedure TFieldPropertiesFrame.UpdateFormContent;
 begin
   Caption := 'Field Properties';
-//  EpiControlPageControl.ActivePage := FieldTabSheet;
-
-  // Setup Basic page
-  NameEdit.Text         := Field.Name;
-  FieldTypeLabel.Caption := EpiTypeNames[Field.FieldType];
-  QuestionEdit.Text     := Field.Question.Caption.Text;
-  if Field.FieldType = ftFloat then
-    LengthEdit.Text     := IntToStr(Field.Length - (Field.Decimals + 1))
-  else
-    LengthEdit.Text     := IntToStr(Field.Length);
-  DecimalsEdit.Text     := IntToStr(Field.Decimals);
-  ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
 
   // Visiblity
   LengthEdit.Visible              := Field.FieldType in (IntFieldTypes + FloatFieldTypes + StringFieldTypes);
@@ -519,7 +694,18 @@ begin
   ValueLabelLabel.Visible         := ValueLabelComboBox.Visible;
   ManageValueLabelsButton.Visible := ValueLabelComboBox.Visible;
 
-  // Setup "advanced" page.
+  // Setup Basic page
+  NameEdit.Text         := Field.Name;
+  FieldTypeLabel.Caption := EpiTypeNames[Field.FieldType];
+  QuestionEdit.Text     := Field.Question.Caption.Text;
+  if Field.FieldType = ftFloat then
+    LengthEdit.Text     := IntToStr(Field.Length - (Field.Decimals + 1))
+  else
+    LengthEdit.Text     := IntToStr(Field.Length);
+  DecimalsEdit.Text     := IntToStr(Field.Decimals);
+  ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
+  UpdateValueLabels;
+
   if Assigned(Field.Ranges) and (Field.Ranges.Count > 0) then
   begin
     FromEdit.Text := TEpiRange(Field.Ranges[0]).AsString[true];
@@ -529,7 +715,8 @@ begin
     ToEdit.Text   := '';
   end;
 
-  UpdateValueLabels;
+  // Setup "advanced" page.
+  UpdateJumps;
 end;
 
 procedure TFieldPropertiesFrame.ForceShow;

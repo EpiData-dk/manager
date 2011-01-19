@@ -18,7 +18,8 @@ uses
   settings2_var, structure_form, structure_datafile_frame,
   valuelabelseditor_form, structure_valuelabelset_frame, design_controls,
   UniqueInstanceRaw, copyobject, design_fieldproperties_frame, 
-design_sectionproperties_frame, design_headingproperties_frame;
+design_sectionproperties_frame, design_headingproperties_frame, 
+design_propertiesbase_frame;
 
 {$R *.res}
 

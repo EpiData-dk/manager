@@ -1,0 +1,9 @@
+object DesignPropertiesFrame: TDesignPropertiesFrame
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 320
+  LCLVersion = '0.9.31'
+  DesignLeft = 816
+  DesignTop = 373
+end

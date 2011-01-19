@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, Buttons,
-  design_controls, epicustombase, epidatafiles, epiadmin;
+  design_controls, epicustombase, epidatafiles, epiadmin, design_propertiesbase_frame;
 
 
 type
