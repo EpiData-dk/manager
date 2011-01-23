@@ -8,7 +8,7 @@ object AboutForm: TAboutForm
   ClientHeight = 365
   ClientWidth = 449
   OnCreate = FormCreate
-  LCLVersion = '0.9.29'
+  LCLVersion = '0.9.31'
   object ButtonPanel: TPanel
     Left = 0
     Height = 50
@@ -44,9 +44,9 @@ object AboutForm: TAboutForm
     Height = 315
     Top = 0
     Width = 449
-    ActivePage = VersionPage
+    ActivePage = AboutPage
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 1
     object VersionPage: TTabSheet
       Caption = 'Version'

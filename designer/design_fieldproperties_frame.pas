@@ -76,6 +76,7 @@ type
     FJumpComponentsList: TList;
     procedure UpdateFieldComboBox(Combo: TComboBox);
     procedure AddFieldsToCombo(Combo: TComboBox);
+    procedure FieldJumpHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     function  DoAddNewJump: pointer;
     function  UpdateJumps: boolean;
   protected
@@ -287,7 +288,9 @@ procedure TFieldPropertiesFrame.UpdateFieldComboBox(Combo: TComboBox);
 var
   CurrentSelect: TObject;
 begin
-  CurrentSelect := Combo.Items.Objects[Combo.ItemIndex];
+  CurrentSelect := nil;
+  if Combo.ItemIndex > -1 then
+    CurrentSelect := Combo.Items.Objects[Combo.ItemIndex];
   AddFieldsToCombo(Combo);
   Combo.ItemIndex := Combo.Items.IndexOfObject(CurrentSelect);
 end;
@@ -298,7 +301,7 @@ var
 begin
   Combo.Items.BeginUpdate;
   Combo.Clear;
-  Combo.Items.AddObject('(none)', nil);
+  Combo.Items.AddObject('(Save Record)', nil);
   for i := 0 to FDataFile.Fields.Count - 1 do
   with FDataFile do
   begin
@@ -306,6 +309,16 @@ begin
        Combo.Items.AddObject(Field[i].Name, Field[i]);
   end;
   Combo.Items.EndUpdate;
+end;
+
+procedure TFieldPropertiesFrame.FieldJumpHook(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if ((EventGroup = eegFields) and (EventType = Word(efceName))) or
+     ((EventGroup = eegCustomBase) and (EventType = Word(ecceUpdate))) then
+  begin
+    UpdateJumps;
+  end;
 end;
 
 function TFieldPropertiesFrame.DoAddNewJump: pointer;
@@ -370,7 +383,7 @@ begin
     TObject(ResetCombo).Free;
     FJumpComponentsList.Delete(FJumpComponentsList.Count-1);
   end;
-
+  UpdateFieldComboBox(GotoFieldComboBox1);
   if not Assigned(Field.Jumps) then exit;
 
   with Field do
@@ -418,8 +431,11 @@ end;
 procedure TFieldPropertiesFrame.SetEpiControl(
   const AValue: TEpiCustomControlItem);
 begin
+  if Assigned(Field) then
+    Field.UnRegisterOnChangeHook(@FieldJumpHook);
   inherited SetEpiControl(AValue);
   UpdateFormContent;
+  AValue.RegisterOnChangeHook(@FieldJumpHook);
 end;
 
 procedure TFieldPropertiesFrame.ShiftToTabSheet(const SheetNo: Byte);
@@ -564,6 +580,8 @@ procedure TFieldPropertiesFrame.InternalApply;
 var
   R: TEpiRange;
   S: string;
+  NJump: TEpiJump;
+  i: Integer;
 begin
   Field.BeginUpdate;
   Field.Name := NameEdit.Text;
@@ -615,7 +633,42 @@ begin
   end;
 
   // "Advanced" page
-
+  {Field.Jumps.Free;
+  if (FJumpComponentsList.Count > 1) or (JumpValueEdit.Text <> '') then
+  begin
+    Field.Jumps := TEpiJumps.Create(Field);
+    Field.Jumps.ItemOwner := true;
+    for i := 0 to FJumpComponentsList.Count - 1 do
+    with Field.Jumps do
+    begin
+      NJump := NewJump;
+      with PJumpComponents(FJumpComponentsList)^ do
+      begin
+        NJump.JumpToField := TEpiField(TComboBox(GotoCombo).Items.Objects[TComboBox(GotoCombo).ItemIndex]);
+        Case Field.FieldType of
+          ftBoolean: begin
+                       TEpiBoolJump(NJump).JumpValue  := StrToInt(TEdit(ValueEdit).Text);
+                       TEpiBoolJump(NJump).ResetValue := StrToInt(TComboBox(ResetCombo).Text);
+                     end;
+          ftInteger: begin
+                       TEpiIntJump(NJump).JumpValue  := StrToInt(TEdit(ValueEdit).Text);
+                       TEpiIntJump(NJump).ResetValue := StrToInt(TComboBox(ResetCombo).Text);
+                     end;
+          ftFloat:   begin
+                       TEpiFloatJump(NJump).JumpValue  := StrToFloat(TEdit(ValueEdit).Text);
+                       TEpiFloatJump(NJump).ResetValue := StrToFloat(TComboBox(ResetCombo).Text);
+                     end;
+          ftString,
+          ftUpperString:
+                     begin
+                       TEpiStringJump(NJump).JumpValue  := TEdit(ValueEdit).Text;
+                       TEpiStringJump(NJump).ResetValue := TComboBox(ResetCombo).Text;
+                     end;
+        end;
+      end;
+    end;
+  end;
+   }
   Field.EndUpdate;
 end;
 
@@ -658,26 +711,9 @@ begin
 end;
 
 function TFieldPropertiesFrame.ValidateControl: boolean;
-var
-  FField: TEpiField;
-  NewLen: LongInt;
-  NewDecLen: LongInt;
-  i: Integer;
-  // Ranges vars.
-  Ranges: TEpiRanges;
-  R: TEpiRange;
-  Int1, Int2: EpiInteger;
-  Flt1, Flt2: EpiFloat;
-  D1, D2, M1, M2, Y1, Y2,
-  H1, H2, S1, S2: Word;
-  S: string;
-
-
 begin
   result := InternalValidate;
-  if not Result then exit;
-
-  InternalApply;
+  if Result then InternalApply;
 end;
 
 procedure TFieldPropertiesFrame.UpdateFormContent;
