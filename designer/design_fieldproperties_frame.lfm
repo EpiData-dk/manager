@@ -1,23 +1,23 @@
 inherited FieldPropertiesFrame: TFieldPropertiesFrame
-  Height = 474
+  Height = 487
   Width = 595
-  ClientHeight = 474
+  ClientHeight = 487
   ClientWidth = 595
   TabOrder = 0
-  DesignLeft = 797
-  DesignTop = 281
+  DesignLeft = 1982
+  DesignTop = 123
   object FieldPageControl: TPageControl[0]
     Left = 0
-    Height = 474
+    Height = 487
     Top = 0
     Width = 595
-    ActivePage = FieldBasicSheet
+    ActivePage = FieldAdvancedSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 439
+      ClientHeight = 452
       ClientWidth = 589
       object DecimalsEdit: TEdit
         AnchorSideLeft.Control = Bevel1
@@ -304,7 +304,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object FieldAdvancedSheet: TTabSheet
       Caption = 'Extended'
-      ClientHeight = 439
+      ClientHeight = 452
       ClientWidth = 589
       object ShowValueLabelChkBox: TCheckBox
         AnchorSideLeft.Control = FieldAdvancedSheet
@@ -383,7 +383,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideBottom.Control = FieldAdvancedSheet
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 275
+        Height = 288
         Top = 154
         Width = 569
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -392,17 +392,17 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Jumps:'
-        ClientHeight = 256
+        ClientHeight = 269
         ClientWidth = 565
         TabOrder = 2
         object JumpScrollBox: TScrollBox
           Left = 0
-          Height = 256
+          Height = 269
           Top = 0
           Width = 565
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 256
+          ClientHeight = 269
           ClientWidth = 565
           TabOrder = 0
           object JumpValueLabel: TLabel
@@ -416,21 +416,6 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             BorderSpacing.Top = 10
             Caption = 'Jump Value:'
             ParentColor = False
-          end
-          object JumpValueEdit: TEdit
-            AnchorSideLeft.Control = JumpScrollBox
-            AnchorSideTop.Control = GotoFieldComboBox1
-            AnchorSideTop.Side = asrCenter
-            AnchorSideRight.Control = JumpGotoBevel
-            Left = 10
-            Height = 27
-            Top = 39
-            Width = 95
-            Anchors = [akTop, akLeft, akRight]
-            BorderSpacing.Left = 10
-            BorderSpacing.Top = 5
-            BorderSpacing.Right = 5
-            TabOrder = 0
           end
           object GotoFieldLabel: TLabel
             AnchorSideLeft.Control = JumpGotoBevel
@@ -447,35 +432,17 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             Caption = 'Goto Field:'
             ParentColor = False
           end
-          object GotoFieldComboBox1: TComboBox
-            AnchorSideLeft.Control = JumpGotoBevel
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = TopBevel
-            AnchorSideTop.Side = asrBottom
-            AnchorSideRight.Control = GotoResetBevel
-            Left = 118
-            Height = 31
-            Top = 37
-            Width = 190
-            Anchors = [akTop, akLeft, akRight]
-            BorderSpacing.Left = 5
-            BorderSpacing.Top = 3
-            BorderSpacing.Right = 5
-            ItemHeight = 0
-            Style = csDropDownList
-            TabOrder = 1
-          end
           object AddJumpBtn: TSpeedButton
-            AnchorSideTop.Control = GotoFieldComboBox1
             AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = RemoveJumpBtn
-            AnchorSideBottom.Side = asrCenter
+            AnchorSideBottom.Control = TopBevel
             Left = 513
             Height = 22
-            Top = 41
+            Top = 4
             Width = 22
-            Anchors = [akTop, akRight]
+            Anchors = [akRight, akBottom]
             BorderSpacing.Right = 3
+            BorderSpacing.Bottom = 3
             Glyph.Data = {
               36040000424D3604000000000000360000002800000010000000100000000100
               2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -516,14 +483,14 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             OnClick = AddJumpBtnClick
           end
           object RemoveJumpBtn: TSpeedButton
-            AnchorSideTop.Control = GotoFieldComboBox1
+            AnchorSideTop.Control = AddJumpBtn
             AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = JumpScrollBox
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrCenter
             Left = 538
             Height = 22
-            Top = 41
+            Top = 4
             Width = 22
             Anchors = [akTop, akRight]
             BorderSpacing.Right = 5
@@ -574,7 +541,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 110
-            Height = 218
+            Height = 231
             Top = 36
             Width = 3
             Anchors = [akTop, akLeft, akBottom]
@@ -587,7 +554,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 313
-            Height = 218
+            Height = 231
             Top = 36
             Width = 3
             Anchors = [akTop, akBottom]
@@ -602,7 +569,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 505
-            Height = 218
+            Height = 231
             Top = 36
             Width = 3
             Anchors = [akTop, akRight, akBottom]
@@ -673,22 +640,6 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             Width = 3
             Anchors = [akTop, akLeft, akRight, akBottom]
             BorderSpacing.Bottom = 2
-          end
-          object ResetValueComboBox: TComboBox
-            AnchorSideLeft.Control = GotoResetBevel
-            AnchorSideLeft.Side = asrBottom
-            AnchorSideTop.Control = GotoFieldComboBox1
-            AnchorSideTop.Side = asrCenter
-            AnchorSideRight.Control = ResetAddBevel
-            Left = 321
-            Height = 29
-            Top = 38
-            Width = 179
-            Anchors = [akTop, akLeft, akRight]
-            BorderSpacing.Left = 5
-            BorderSpacing.Right = 5
-            ItemHeight = 0
-            TabOrder = 2
           end
         end
       end

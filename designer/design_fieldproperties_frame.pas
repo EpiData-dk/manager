@@ -29,13 +29,11 @@ type
     FieldPageControl: TPageControl;
     FieldTypeLabel: TLabel;
     FromEdit: TEdit;
-    GotoFieldComboBox1: TComboBox;
     GotoFieldLabel: TLabel;
     GotoResetBevel: TBevel;
     JumpGotoBevel: TBevel;
     JumpScrollBox: TScrollBox;
     JumpsGrpBox: TGroupBox;
-    JumpValueEdit: TEdit;
     JumpValueLabel: TLabel;
     Label10: TLabel;
     Label11: TLabel;
@@ -52,7 +50,6 @@ type
     RemoveJumpBtn: TSpeedButton;
     ResetAddBevel: TBevel;
     ResetLabel: TLabel;
-    ResetValueComboBox: TComboBox;
     ShowValueLabelChkBox: TCheckBox;
     ToEdit: TEdit;
     TopBevel: TBevel;
@@ -125,9 +122,10 @@ var
   Ch: LongWord;
 begin
   Ch := UTF8CharacterToUnicode(@UTF8Key[1], I);
-  if not (Char(Ch) in [VK_0..VK_9, Char(VK_BACK)] + ['.',','] + ['-', ':', '.'] + ['/', '-', '\', '.']) then
+  if (not (Field.FieldType in StringFieldTypes)) and
+     (not (Char(Ch) in [VK_0..VK_9, Char(VK_BACK)] + ['.',','] + ['-', ':', '.'] + ['/', '-', '\', '.'])) then
     UTF8Key := '';
-  case TEpiField(EpiControl).FieldType of
+  case Field.FieldType of
     ftFloat:   if (Char(Ch) in ['.',',']) then UTF8Key := DecimalSeparator;
     ftTime:    if (Char(Ch) in ['-', ':', '.']) then UTF8Key := TimeSeparator;
     ftDMYDate,
@@ -140,7 +138,6 @@ procedure TFieldPropertiesFrame.RemoveJumpBtnClick(Sender: TObject);
 var
   Sibling: TControl;
 begin
-  if FJumpComponentsList.Count <= 1 then exit;
   with PJumpComponents(FJumpComponentsList.Last)^ do
   begin
     TObject(ValueEdit).Free;
@@ -148,9 +145,12 @@ begin
     TObject(ResetCombo).Free;
     FJumpComponentsList.Delete(FJumpComponentsList.Count - 1);
   end;
-  Sibling := TControl(PJumpComponents(FJumpComponentsList.Last)^.GotoCombo);
-  AddJumpBtn.AnchorVerticalCenterTo(Sibling);
-  RemoveJumpBtn.AnchorVerticalCenterTo(Sibling);
+  if FJumpComponentsList.Count = 0  then
+  begin
+    AddJumpBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
+    RemoveJumpBtn.Enabled := false;
+  end else
+    AddJumpBtn.AnchorVerticalCenterTo(TControl(PJumpComponents(FJumpComponentsList.Last)^.GotoCombo));
 end;
 
 function TFieldPropertiesFrame.UpdateValueLabels: boolean;
@@ -301,13 +301,17 @@ var
 begin
   Combo.Items.BeginUpdate;
   Combo.Clear;
-  Combo.Items.AddObject('(Save Record)', nil);
+  Combo.Items.AddObject('(Save Record)', TObject(jtSaveRecord));
+  Combo.Items.AddObject('(Exit Section)', TObject(jtExitSection));
+  Combo.Items.AddObject('(Skip Next Field)', TObject(jtSkipNextField));
   for i := 0 to FDataFile.Fields.Count - 1 do
   with FDataFile do
   begin
-     if not (Field[i].FieldType in AutoFieldTypes) then
+     if (not (EpiControl = Field[i])) and
+        (not (Field[i].FieldType in AutoFieldTypes)) then
        Combo.Items.AddObject(Field[i].Name, Field[i]);
   end;
+  Combo.ItemIndex := 0;
   Combo.Items.EndUpdate;
 end;
 
@@ -331,7 +335,10 @@ begin
   GFC := TComboBox.Create(JumpScrollBox);
   with GFC do
   begin
-    AnchorToNeighbour(akTop, 3, TControl(PJumpComponents(FJumpComponentsList[FJumpComponentsList.Count-1])^.GotoCombo));
+    if FJumpComponentsList.Count = 0 then
+      AnchorToNeighbour(akTop, 3, TopBevel)
+    else
+      AnchorToNeighbour(akTop, 3, TControl(PJumpComponents(FJumpComponentsList[FJumpComponentsList.Count-1])^.GotoCombo));
     AnchorToNeighbour(akLeft, 5, JumpGotoBevel);
     AnchorToNeighbour(akRight, 5, GotoResetBevel);
     AddFieldsToCombo(GFC);
@@ -345,6 +352,7 @@ begin
     AnchorParallel(akLeft, 10, JumpScrollBox);
     AnchorToNeighbour(akRight, 5, JumpGotoBevel);
     AnchorVerticalCenterTo(GFC);
+    OnUTF8KeyPress := @RangeEditUTF8KeyPress;
     Parent := JumpScrollBox;
   end;
 
@@ -354,11 +362,20 @@ begin
     AnchorToNeighbour(akLeft, 5, GotoResetBevel);
     AnchorToNeighbour(akRight, 5, ResetAddBevel);
     AnchorVerticalCenterTo(GFC);
+    Style := csDropDownList;
+    with Items do
+    begin
+      AddObject('Leave as is', TObject(jrLeaveAsIs));
+      AddObject('System missing (.)', TObject(jrSystemMissing));
+      AddObject('Max defined missingvalue', TObject(jrMaxMissing));
+      AddObject('Second max defined missing value', TObject(jr2ndMissing));
+    end;
+    ItemIndex := 0;
     Parent := JumpScrollBox;
   end;
 
-  RemoveJumpBtn.AnchorVerticalCenterTo(GFC);
   AddJumpBtn.AnchorVerticalCenterTo(GFC);
+  RemoveJumpBtn.Enabled := true;
 
   Jrec := New(PJumpComponents);
   with Jrec^ do
@@ -375,7 +392,7 @@ function TFieldPropertiesFrame.UpdateJumps: boolean;
 var
   i: Integer;
 begin
-  while FJumpComponentsList.Count > 1 do
+  while FJumpComponentsList.Count > 0 do
   with PJumpComponents(FJumpComponentsList.Last)^ do
   begin
     TObject(ValueEdit).Free;
@@ -383,29 +400,21 @@ begin
     TObject(ResetCombo).Free;
     FJumpComponentsList.Delete(FJumpComponentsList.Count-1);
   end;
-  UpdateFieldComboBox(GotoFieldComboBox1);
+  AddJumpBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
+  RemoveJumpBtn.Enabled := Assigned(Field.Jumps);
   if not Assigned(Field.Jumps) then exit;
 
-  with Field do
-  begin
-    with Jumps[0] do
-    begin
-      JumpValueEdit.Text           := JumpValueAsString;
-      GotoFieldComboBox1.ItemIndex := GotoFieldComboBox1.Items.IndexOfObject(JumpToField);
-      if ResetOnJump then
-        ResetValueComboBox.Text    := ResetValueAsString;
-    end;
-
-    for i := 1 to Jumps.Count -1 do
+  for i := 0 to Field.Jumps.Count -1 do
     with PJumpComponents(DoAddNewJump)^ do
-    with Jumps[i] do
-    begin
-      TEdit(ValueEdit).Text          := JumpValueAsString;
-      TComboBox(GotoCombo).ItemIndex := TComboBox(GotoCombo).Items.IndexOfObject(JumpToField);
-      if ResetOnJump then
-        TComboBox(ResetCombo).Text   := ResetValueAsString;
-    end;
-  end;
+      with Field.Jumps[i] do
+      begin
+        TEdit(ValueEdit).Text          := JumpValueAsString;
+        if JumpType = jtToField then
+          TComboBox(GotoCombo).ItemIndex := TComboBox(GotoCombo).Items.IndexOfObject(JumpToField)
+        else
+          TComboBox(GotoCombo).ItemIndex := TComboBox(GotoCombo).Items.IndexOfObject(TObject(PtrInt(JumpType)));
+        TComboBox(ResetCombo).ItemIndex := TComboBox(ResetCombo).Items.IndexOfObject(TObject(PtrInt(ResetType)));
+      end;
 end;
 
 procedure TFieldPropertiesFrame.LengthEditEditingDone(Sender: TObject);
@@ -447,7 +456,7 @@ end;
 
 function TFieldPropertiesFrame.InternalValidate: boolean;
 
-procedure DoError(Const Msg: string; Ctrl: TWinControl);
+function DoError(Const Msg: string; Ctrl: TWinControl): boolean;
   var
     P: TWinControl;
   begin
@@ -457,6 +466,7 @@ procedure DoError(Const Msg: string; Ctrl: TWinControl);
     TPageControl(P.Parent).ActivePage := TTabSheet(P);
     Ctrl.SetFocus;
     ShowHintMsg(Msg, Ctrl);
+    Result := false;
   end;
 
 var
@@ -573,6 +583,24 @@ begin
     Exit;
   end;
 
+  for I := 0 to FJumpComponentsList.Count - 1 do
+  begin
+    with PJumpComponents(FJumpComponentsList[I])^ do
+    begin
+      if TEdit(ValueEdit).Text = '' then
+        Exit(DoError('Empty jump value!', TEdit(ValueEdit)));
+
+      with TEdit(ValueEdit) do
+      case Field.FieldType of
+        ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format('Not a valid boolean: %s', [Text]), TEdit(ValueEdit)));
+        ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format('Not a valid integer: %s', [Text]), TEdit(ValueEdit)));
+        ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format('Not a valid float: %s',   [Text]), TEdit(ValueEdit)));
+        ftString,
+        ftUpperString:  ;
+      end;
+    end;
+  end;
+
   Result := true;
 end;
 
@@ -633,8 +661,8 @@ begin
   end;
 
   // "Advanced" page
-  {Field.Jumps.Free;
-  if (FJumpComponentsList.Count > 1) or (JumpValueEdit.Text <> '') then
+  Field.Jumps.Free;
+  if (FJumpComponentsList.Count > 0) then
   begin
     Field.Jumps := TEpiJumps.Create(Field);
     Field.Jumps.ItemOwner := true;
@@ -642,33 +670,25 @@ begin
     with Field.Jumps do
     begin
       NJump := NewJump;
-      with PJumpComponents(FJumpComponentsList)^ do
+      with PJumpComponents(FJumpComponentsList[i])^ do
       begin
-        NJump.JumpToField := TEpiField(TComboBox(GotoCombo).Items.Objects[TComboBox(GotoCombo).ItemIndex]);
+        if TComboBox(GotoCombo).ItemIndex <= 2 then
+          NJump.JumpType := TEpiJumpType(PtrInt(TComboBox(GotoCombo).Items.Objects[TComboBox(GotoCombo).ItemIndex]))
+        else begin
+          NJump.JumpType := jtToField;
+          NJump.JumpToField := TEpiField(TComboBox(GotoCombo).Items.Objects[TComboBox(GotoCombo).ItemIndex]);
+        end;
+        NJump.ResetType := TEpiJumpResetType(PtrInt(TComboBox(ResetCombo).Items.Objects[TComboBox(ResetCombo).ItemIndex]));
         Case Field.FieldType of
-          ftBoolean: begin
-                       TEpiBoolJump(NJump).JumpValue  := StrToInt(TEdit(ValueEdit).Text);
-                       TEpiBoolJump(NJump).ResetValue := StrToInt(TComboBox(ResetCombo).Text);
-                     end;
-          ftInteger: begin
-                       TEpiIntJump(NJump).JumpValue  := StrToInt(TEdit(ValueEdit).Text);
-                       TEpiIntJump(NJump).ResetValue := StrToInt(TComboBox(ResetCombo).Text);
-                     end;
-          ftFloat:   begin
-                       TEpiFloatJump(NJump).JumpValue  := StrToFloat(TEdit(ValueEdit).Text);
-                       TEpiFloatJump(NJump).ResetValue := StrToFloat(TComboBox(ResetCombo).Text);
-                     end;
+          ftBoolean:     TEpiBoolJump(NJump).JumpValue  := StrToInt(TEdit(ValueEdit).Text);
+          ftInteger:     TEpiIntJump(NJump).JumpValue  := StrToInt(TEdit(ValueEdit).Text);
+          ftFloat:       TEpiFloatJump(NJump).JumpValue  := StrToFloat(TEdit(ValueEdit).Text);
           ftString,
-          ftUpperString:
-                     begin
-                       TEpiStringJump(NJump).JumpValue  := TEdit(ValueEdit).Text;
-                       TEpiStringJump(NJump).ResetValue := TComboBox(ResetCombo).Text;
-                     end;
+          ftUpperString: TEpiStringJump(NJump).JumpValue  := TEdit(ValueEdit).Text;
         end;
       end;
     end;
   end;
-   }
   Field.EndUpdate;
 end;
 
@@ -686,18 +706,7 @@ begin
     FValueLabelSets[i].RegisterOnChangeHook(@ValueLabelSetHook, true);
 
   FDataFile := DataFile;
-
-
-  Jrec := New(PJumpComponents);
-  with JRec^ do
-  begin
-    ValueEdit := PtrInt(JumpValueEdit);
-    GotoCombo := PtrInt(GotoFieldComboBox1);
-    ResetCombo := PtrInt(ResetValueComboBox);
-  end;
   FJumpComponentsList := TList.Create;
-  FJumpComponentsList.Add(Jrec);
-  AddFieldsToCombo(GotoFieldComboBox1);
 end;
 
 destructor TFieldPropertiesFrame.Destroy;
@@ -729,6 +738,7 @@ begin
   ValueLabelComboBox.Visible      := Field.FieldType in ValueLabelFieldTypes;
   ValueLabelLabel.Visible         := ValueLabelComboBox.Visible;
   ManageValueLabelsButton.Visible := ValueLabelComboBox.Visible;
+  JumpsGrpBox.Visible             := Field.FieldType in JumpsFieldTypes;
 
   // Setup Basic page
   NameEdit.Text         := Field.Name;

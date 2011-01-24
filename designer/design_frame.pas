@@ -1239,27 +1239,24 @@ begin
   if MainForm.MainMenu1.BidiMode = bdRightToLeft then
     MainForm.MainMenu1.BidiMode := bdLeftToRight
   else
-    MainForm.MainMenu1.BidiMode := bdRightToLeft;            }
+    MainForm.MainMenu1.BidiMode := bdRightToLeft; }
   Field := TepiField((FActiveControl as IDesignEpiControl).EpiControl);
   Jumps := TEpiJumps.Create(Field);
 
   J := Jumps.NewJump;
-  J.JumpToField := Field;
-  J.ResetOnJump := true;
+  J.ResetType := jrLeaveAsIs;
+  J.JumpType := jtSkipNextField;
   TEpiIntJump(J).JumpValue := 0;
-  TEpiIntJump(j).ResetValue := 9;
 
   J := Jumps.NewJump;
-  J.JumpToField := Field;
-  J.ResetOnJump := true;
+  J.ResetType := jrSystemMissing;
+  J.JumpType := jtExitSection;
   TEpiIntJump(J).JumpValue := 1;
-  TEpiIntJump(j).ResetValue := 9;
 
   J := Jumps.NewJump;
-  J.JumpToField := Field;
-  J.ResetOnJump := true;
-  TEpiIntJump(J).JumpValue := 2;
-  TEpiIntJump(j).ResetValue := 9;
+  J.ResetType := jrMaxMissing;
+  J.JumpType := jtSaveRecord;
+  TEpiIntJump(J).JumpValue := 9;
 
   Field.Jumps := Jumps;
 end;
