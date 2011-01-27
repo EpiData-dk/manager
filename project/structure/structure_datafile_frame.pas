@@ -56,7 +56,6 @@ constructor TProject_Structure_Datafile_Frame.Create(TheOwner: TComponent;
   const ADataFile: TEpiDataFile);
 var
   i: Integer;
-  Section: TEpiSection;
   S: String;
   j: Integer;
 begin
@@ -90,7 +89,6 @@ begin
         Cells[4, i+1] := Format('%d.%d', [Length - Decimals - 1, Decimals])
       else
         Cells[4, i+1] := IntToStr(Length);
-      Section := TEpiSection(Owner.Owner);
       if Section = DataFile.MainSection then
         Cells[5, i+1] := '(main)'
       else
@@ -123,7 +121,7 @@ begin
         S := S + ',' + Groups[j].Name.Text;
       Cells[4, i+1] := S;
     end;
-end;
+  end;
 end;
 
 procedure TProject_Structure_Datafile_Frame.Refresh;
