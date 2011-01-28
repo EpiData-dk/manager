@@ -17,8 +17,57 @@
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
     </VersionInfo>
-    <BuildModes Count="1">
-      <Item1 Name="default" Default="True"/>
+    <MacroValues Count="1">
+      <Macro1 Name="EPI_DEBUG" Value="1"/>
+    </MacroValues>
+    <BuildModes Count="2">
+      <Item1 Name="Debug" Default="True"/>
+      <Item2 Name="Release">
+        <MacroValues Count="1">
+          <Macro1 Name="EPI_RELEASE" Value="1"/>
+        </MacroValues>
+        <CompilerOptions>
+          <Version Value="10"/>
+          <Target>
+            <Filename Value="epidatamanager"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir)"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;project/structure"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <Optimizations>
+              <OptimizationLevel Value="0"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <GenerateDebugInfo Value="True"/>
+              <GenerateDwarf Value="True"/>
+            </Debugging>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
+          </Linking>
+          <Other>
+            <CompilerMessages>
+              <UseMsgFile Value="True"/>
+            </CompilerMessages>
+            <CustomOptions Value="-dEPI_DEBUG
+-dEPI_RELEASE1"/>
+            <CompilerPath Value="$(CompPath)"/>
+            <ExecuteBefore>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
+            </ExecuteBefore>
+            <ExecuteAfter>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
+            </ExecuteAfter>
+          </Other>
+        </CompilerOptions>
+      </Item2>
     </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
@@ -32,14 +81,18 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Minor="5" Release="1" Valid="True"/>
+        <PackageName Value="LCLBase"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="LCL"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Minor="5" Release="1" Valid="True"/>
       </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
     </RequiredPackages>
     <Units Count="27">
       <Unit0>
@@ -251,8 +304,7 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dEPI_DEBUG
--dEPI_RELEASE1"/>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

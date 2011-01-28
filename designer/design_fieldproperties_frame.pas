@@ -21,7 +21,6 @@ type
     Bevel4: TBevel;
     DecimalsEdit: TEdit;
     DecimalsLabel: TLabel;
-    DefaultEnterRadioBtn: TRadioButton;
     EntryRadioGroup: TRadioGroup;
     FieldAdvancedSheet: TTabSheet;
     FieldBasicSheet: TTabSheet;
@@ -41,9 +40,7 @@ type
     LengthEdit: TEdit;
     LengthLabel: TLabel;
     ManageValueLabelsButton: TButton;
-    MustEnterRadioBtn: TRadioButton;
     NameEdit: TEdit;
-    NoEnterRadioBtn: TRadioButton;
     QuestionEdit: TEdit;
     QuestionLabel: TLabel;
     RangesGrpBox: TGroupBox;
@@ -51,6 +48,7 @@ type
     ResetAddBevel: TBevel;
     ResetLabel: TLabel;
     ShowValueLabelChkBox: TCheckBox;
+    ConfirmEntryChkBox: TCheckBox;
     ToEdit: TEdit;
     TopBevel: TBevel;
     ValueLabelComboBox: TComboBox;
@@ -660,7 +658,10 @@ begin
     end;
   end;
 
-  // "Advanced" page
+  // Extended page
+  Field.EntryMode := TEpiEntryMode(PtrUInt(EntryRadioGroup.Items.Objects[EntryRadioGroup.ItemIndex]));
+  Field.ConfirmEntry := ConfirmEntryChkBox.Checked;
+
   Field.Jumps.Free;
   if (FJumpComponentsList.Count > 0) then
   begin
@@ -707,6 +708,15 @@ begin
 
   FDataFile := DataFile;
   FJumpComponentsList := TList.Create;
+
+  with EntryRadioGroup.Items do
+  begin
+    BeginUpdate;
+    AddObject('Default', TObject(emDefault));
+    AddObject('Must Enter', TObject(emMustEnter));
+    AddObject('No Enter', TObject(emNoEnter));
+    EndUpdate;
+  end;
 end;
 
 destructor TFieldPropertiesFrame.Destroy;
@@ -730,6 +740,7 @@ begin
   Caption := 'Field Properties';
 
   // Visiblity
+  // - basic
   LengthEdit.Visible              := Field.FieldType in (IntFieldTypes + FloatFieldTypes + StringFieldTypes);
   LengthLabel.Visible             := LengthEdit.Visible;
   DecimalsEdit.Visible            := Field.FieldType in FloatFieldTypes;
@@ -738,9 +749,13 @@ begin
   ValueLabelComboBox.Visible      := Field.FieldType in ValueLabelFieldTypes;
   ValueLabelLabel.Visible         := ValueLabelComboBox.Visible;
   ManageValueLabelsButton.Visible := ValueLabelComboBox.Visible;
+  // - extended
+  EntryRadioGroup.Visible         := Field.FieldType in EntryModeFieldTypes;
+  ConfirmEntryChkBox.Visible      := Field.FieldType in ConfirmEntryFieldTypes;
   JumpsGrpBox.Visible             := Field.FieldType in JumpsFieldTypes;
 
-  // Setup Basic page
+  // Setup
+  // - basic
   NameEdit.Text         := Field.Name;
   FieldTypeLabel.Caption := EpiTypeNames[Field.FieldType];
   QuestionEdit.Text     := Field.Question.Caption.Text;
@@ -751,7 +766,6 @@ begin
   DecimalsEdit.Text     := IntToStr(Field.Decimals);
   ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(nil);
   UpdateValueLabels;
-
   if Assigned(Field.Ranges) and (Field.Ranges.Count > 0) then
   begin
     FromEdit.Text := TEpiRange(Field.Ranges[0]).AsString[true];
@@ -760,8 +774,9 @@ begin
     FromEdit.Text := '';
     ToEdit.Text   := '';
   end;
-
-  // Setup "advanced" page.
+  // - extended
+  EntryRadioGroup.ItemIndex := EntryRadioGroup.Items.IndexOfObject(TObject(PtrUInt(Field.EntryMode)));
+  ConfirmEntryChkBox.Checked := Field.ConfirmEntry;
   UpdateJumps;
 end;
 

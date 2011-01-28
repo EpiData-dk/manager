@@ -4,8 +4,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
   ClientHeight = 487
   ClientWidth = 595
   TabOrder = 0
-  DesignLeft = 1982
-  DesignTop = 123
+  DesignLeft = 1983
+  DesignTop = 203
   object FieldPageControl: TPageControl[0]
     Left = 0
     Height = 487
@@ -334,7 +334,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
-        Caption = 'Entry:'
+        Caption = 'Entry Mode:'
         ChildSizing.LeftRightSpacing = 6
         ChildSizing.TopBottomSpacing = 6
         ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -343,48 +343,19 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 93
-        ClientWidth = 565
-        Enabled = False
         TabOrder = 1
-        object DefaultEnterRadioBtn: TRadioButton
-          Left = 6
-          Height = 27
-          Top = 6
-          Width = 553
-          Caption = 'Default entry'
-          Checked = True
-          TabOrder = 0
-          TabStop = True
-        end
-        object MustEnterRadioBtn: TRadioButton
-          Left = 6
-          Height = 27
-          Top = 33
-          Width = 553
-          Caption = 'Must Enter'
-          TabOrder = 1
-        end
-        object NoEnterRadioBtn: TRadioButton
-          Left = 6
-          Height = 27
-          Top = 60
-          Width = 553
-          Caption = 'No Enter'
-          TabOrder = 2
-        end
       end
       object JumpsGrpBox: TGroupBox
         AnchorSideLeft.Control = FieldAdvancedSheet
-        AnchorSideTop.Control = ShowValueLabelChkBox
+        AnchorSideTop.Control = ConfirmEntryChkBox
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = FieldAdvancedSheet
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = FieldAdvancedSheet
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 288
-        Top = 154
+        Height = 261
+        Top = 181
         Width = 569
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
@@ -392,17 +363,17 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Jumps:'
-        ClientHeight = 269
+        ClientHeight = 242
         ClientWidth = 565
         TabOrder = 2
         object JumpScrollBox: TScrollBox
           Left = 0
-          Height = 269
+          Height = 242
           Top = 0
           Width = 565
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 269
+          ClientHeight = 242
           ClientWidth = 565
           TabOrder = 0
           object JumpValueLabel: TLabel
@@ -541,7 +512,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 110
-            Height = 231
+            Height = 204
             Top = 36
             Width = 3
             Anchors = [akTop, akLeft, akBottom]
@@ -554,7 +525,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 313
-            Height = 231
+            Height = 204
             Top = 36
             Width = 3
             Anchors = [akTop, akBottom]
@@ -569,7 +540,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 505
-            Height = 231
+            Height = 204
             Top = 36
             Width = 3
             Anchors = [akTop, akRight, akBottom]
@@ -642,6 +613,19 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             BorderSpacing.Bottom = 2
           end
         end
+      end
+      object ConfirmEntryChkBox: TCheckBox
+        AnchorSideLeft.Control = FieldAdvancedSheet
+        AnchorSideTop.Control = ShowValueLabelChkBox
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 22
+        Top = 154
+        Width = 145
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        Caption = 'Confirm field entry'
+        TabOrder = 3
       end
     end
   end
