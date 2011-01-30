@@ -1479,7 +1479,7 @@ begin
       Pt.Y := FLastRecCtrl.Top;
       if (FLastRecCtrl is TDesignField) and (Sender is TEpiField) then
         Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 5 +                                   // This calculates right side of previous placed control (with 5px margin)
-                FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Question.Caption.Text) + 5 +// This gives a rough estimate of the width of the Question text (5px margin)
+                FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Question.Text) + 5 +        // This gives a rough estimate of the width of the Question text (5px margin)
                 FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
       else
         Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 10;
@@ -1515,7 +1515,7 @@ begin
           fnAuto:      FieldName := AutoFieldName(Cbl[i]);
         end;                       }
 //        FieldName := DataFile.CreateUniqueFieldName(FieldName);
-        Question.Caption.Text := Trim(Cbl[i]);
+        Question.Text := Trim(Cbl[i]);
       end;
       NewDesignControl(TDesignField, FActiveDockSite, Pt, TmpField);
     end;

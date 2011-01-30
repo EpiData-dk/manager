@@ -56,7 +56,6 @@ type
     procedure   OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   OnQuestionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   OnProjectSettingsChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure   UpdateNameLabel;
     procedure   UpdateHint;
   protected
     procedure   SetParent(NewParent: TWinControl); override;
@@ -376,11 +375,8 @@ begin
           begin
             // Set label first - else width of Question is not calculated.
             FNameLabel.Caption        := FField.Name;
-
             Left                      := FField.Left;
-            FField.Question.Left      := FField.Left - (FQuestionLabel.Width + 5);
             Top                       := FField.Top;
-            FField.Question.Top       := FField.Top;
 
             if Self.Parent is TScrollBox then
               Cv := TScrollBox(Self.Parent).Canvas
@@ -404,24 +400,21 @@ begin
         ecceSetLeft:
           begin
             Left                      := FField.Left;
-            FField.Question.Left      := FField.Left - (FQuestionLabel.Width + 5);
           end;
         ecceSetTop:
           begin
             Top                       := FField.Top;
-            FField.Question.Top       := FField.Top;
           end;
         ecceText: FNameLabel.Caption  := FField.Name;
       end;
   end;
-  UpdateNameLabel;
   UpdateHint;
 end;
 
 procedure TDesignField.OnQuestionChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 var
-  Question: TEpiHeading absolute Sender;
+  Question: TEpiTranslatedText absolute Sender;
 begin
   with FQuestionLabel do
   case EventGroup of
@@ -429,17 +422,9 @@ begin
       case TEpiCustomChangeEventType(EventType) of
         ecceDestroy: exit;
         ecceUpdate:
-          begin
-            Caption := Question.Caption.Text;
-            Left    := Question.Left;
-            Top     := Question.Top;
-          end;
-        ecceSetTop:
-            Top     := Question.Top;
-        ecceSetLeft:
-            Left    := Question.Left;
+            Caption := Question.Text;
         ecceText:
-            Caption := Question.Caption.Text;
+            Caption := Question.Text;
       end;
   end;
   UpdateHint;
@@ -454,17 +439,10 @@ begin
      (TEpiCustomChangeEventType(EventType) = ecceDestroy) then exit;
 
   FNameLabel.Visible := ProjectSettings.ShowFieldNames;
-  UpdateNameLabel;
   if ProjectSettings.ShowFieldBorders then
     BorderStyle := bsSingle
   else
     BorderStyle := bsNone;
-end;
-
-procedure TDesignField.UpdateNameLabel;
-begin
-  FNameLabel.Left := FQuestionLabel.Left - (FNameLabel.Width + 5);
-  FNameLabel.Top := FQuestionLabel.Top;
 end;
 
 procedure TDesignField.UpdateHint;
@@ -486,7 +464,7 @@ begin
       'Question: %s' + LineEnding +
       'X: %d, Y: %d',
       [UTF8Decode(Name), {$IFDEF EPI_DEBUG} S, {$ENDIF}
-       Length, UTF8Decode(Question.Caption.Text),
+       Length, UTF8Decode(Question.Text),
        Left, Top]
     );
 end;
@@ -496,15 +474,21 @@ begin
   inherited SetParent(NewParent);
   if csDestroying in ComponentState then exit;
 
-  FNameLabel.Parent := NewParent;
   FQuestionLabel.Parent := NewParent;
+  FNameLabel.Parent := NewParent;
 end;
 
 constructor TDesignField.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FNameLabel := TLabel.Create(Self);
   FQuestionLabel := TLabel.Create(Self);
+  FQuestionLabel.Anchors := [];
+  FQuestionLabel.AnchorToNeighbour(akRight, 5, Self);
+  FQuestionLabel.AnchorParallel(akBottom, 0, Self);
+  FNameLabel := TLabel.Create(Self);
+  FNameLabel.Anchors := [];
+  FNameLabel.AnchorToNeighbour(akRight, 5, FQuestionLabel);
+  FNameLabel.AnchorParallel(akBottom, 0, FQuestionLabel);
 
   // Standard properties being set for the component.
   DragKind := dkDock;

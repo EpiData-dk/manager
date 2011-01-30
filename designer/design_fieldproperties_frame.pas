@@ -615,7 +615,7 @@ begin
   Field.Decimals := StrToInt(DecimalsEdit.Text);
   if Field.Decimals > 0 then
     Field.Length := Field.Length + Field.Decimals + 1;
-  Field.Question.Caption.Text := QuestionEdit.Text;
+  Field.Question.Text := QuestionEdit.Text;
 
   if UpdateValueLabels then
     ShowHintMsg(rsVLWarning, MainForm.ActiveControl);
@@ -758,7 +758,7 @@ begin
   // - basic
   NameEdit.Text         := Field.Name;
   FieldTypeLabel.Caption := EpiTypeNames[Field.FieldType];
-  QuestionEdit.Text     := Field.Question.Caption.Text;
+  QuestionEdit.Text     := Field.Question.Text;
   if Field.FieldType = ftFloat then
     LengthEdit.Text     := IntToStr(Field.Length - (Field.Decimals + 1))
   else

@@ -83,7 +83,7 @@ begin
     begin
       Cells[0, i+1] := IntToStr(i+1);
       Cells[1, i+1] := Name;
-      Cells[2, i+1] := Question.Caption.Text;
+      Cells[2, i+1] := Question.Text;
       Cells[3, i+1] := EpiTypeNames[FieldType];
       if FieldType = ftFloat then
         Cells[4, i+1] := Format('%d.%d', [Length - Decimals - 1, Decimals])
