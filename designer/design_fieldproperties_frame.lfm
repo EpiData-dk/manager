@@ -318,7 +318,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Top = 5
         Caption = 'Show category text after value entry'
         Enabled = False
-        TabOrder = 0
+        TabOrder = 2
       end
       object EntryRadioGroup: TRadioGroup
         AnchorSideLeft.Control = FieldAdvancedSheet
@@ -343,7 +343,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        TabOrder = 1
+        TabOrder = 0
       end
       object JumpsGrpBox: TGroupBox
         AnchorSideLeft.Control = FieldAdvancedSheet
@@ -365,7 +365,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Caption = 'Jumps:'
         ClientHeight = 242
         ClientWidth = 565
-        TabOrder = 2
+        TabOrder = 3
         object JumpScrollBox: TScrollBox
           Left = 0
           Height = 242
@@ -394,13 +394,13 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Control = JumpValueLabel
             AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = GotoResetBevel
-            Left = 118
+            Left = 105
             Height = 18
             Top = 10
-            Width = 71
+            Width = 76
             BorderSpacing.Left = 5
             BorderSpacing.Right = 5
-            Caption = 'Goto Field:'
+            Caption = 'Go To Field:'
             ParentColor = False
           end
           object AddJumpBtn: TSpeedButton
@@ -511,7 +511,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Side = asrBottom
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
-            Left = 110
+            Left = 97
             Height = 204
             Top = 36
             Width = 3
@@ -524,7 +524,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Side = asrBottom
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
-            Left = 313
+            Left = 329
             Height = 204
             Top = 36
             Width = 3
@@ -565,7 +565,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = JumpValueLabel
             AnchorSideTop.Side = asrCenter
-            Left = 321
+            Left = 337
             Height = 18
             Top = 10
             Width = 81
@@ -579,7 +579,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = JumpGotoBevel
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Control = TopBevel
-            Left = 110
+            Left = 97
             Height = 17
             Top = 10
             Width = 3
@@ -592,7 +592,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = GotoResetBevel
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Control = TopBevel
-            Left = 313
+            Left = 329
             Height = 17
             Top = 10
             Width = 3
@@ -625,7 +625,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         Caption = 'Confirm field entry'
-        TabOrder = 3
+        TabOrder = 1
       end
     end
   end

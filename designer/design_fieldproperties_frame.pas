@@ -299,9 +299,9 @@ var
 begin
   Combo.Items.BeginUpdate;
   Combo.Clear;
-  Combo.Items.AddObject('(Save Record)', TObject(jtSaveRecord));
-  Combo.Items.AddObject('(Exit Section)', TObject(jtExitSection));
   Combo.Items.AddObject('(Skip Next Field)', TObject(jtSkipNextField));
+  Combo.Items.AddObject('(Exit Section)', TObject(jtExitSection));
+  Combo.Items.AddObject('(Save Record)', TObject(jtSaveRecord));
   for i := 0 to FDataFile.Fields.Count - 1 do
   with FDataFile do
   begin
@@ -330,7 +330,10 @@ var
   RVC: TComboBox; // Reset value combo
   JRec: PJumpComponents;
 begin
+  JVE := TEdit.Create(JumpScrollBox);
   GFC := TComboBox.Create(JumpScrollBox);
+  RVC := TComboBox.Create(JumpScrollBox);
+
   with GFC do
   begin
     if FJumpComponentsList.Count = 0 then
@@ -344,7 +347,6 @@ begin
     Parent := JumpScrollBox;
   end;
 
-  JVE := TEdit.Create(JumpScrollBox);
   with JVE do
   begin
     AnchorParallel(akLeft, 10, JumpScrollBox);
@@ -354,7 +356,6 @@ begin
     Parent := JumpScrollBox;
   end;
 
-  RVC := TComboBox.Create(JumpScrollBox);
   with RVC do
   begin
     AnchorToNeighbour(akLeft, 5, GotoResetBevel);
@@ -374,6 +375,10 @@ begin
 
   AddJumpBtn.AnchorVerticalCenterTo(GFC);
   RemoveJumpBtn.Enabled := true;
+
+  {JVE.TabOrder := (FJumpComponentsList.Count * 3);
+  GFC.TabOrder := (FJumpComponentsList.Count * 3) + 1;
+  JVE.TabOrder := (FJumpComponentsList.Count * 3) + 2;}
 
   Jrec := New(PJumpComponents);
   with Jrec^ do

@@ -1645,7 +1645,11 @@ begin
       ValueLabelLabel.Caption := '';
     RangeLabel.Caption        := BoolToStr(Assigned(Ranges), 'Range', '');
     KeyLabel.Caption          := ''; // TODO : Set when implement in core.
-    ExtendedLabel.Caption     := ''; // TODO : Set when implement in core.
+    ExtendedLabel.Caption     := BoolToStr(Assigned(Jumps),       'J', ' ') +
+                                 BoolToStr(EntryMode=emMustEnter, 'M', '') +
+                                 BoolToStr(EntryMode=emNoEnter,   'N', '') +
+                                 BoolToStr(EntryMode=emDefault,   ' ', '') +
+                                 BoolToStr(ConfirmEntry,          'C', ' ');
   end else begin
     FieldNameLabel.Caption    := '';
     FieldTypeLabel.Caption    := '';
@@ -1679,6 +1683,8 @@ var
   i: Integer;
   TheParent: TWinControl;
   j: Integer;
+  Ft: TEpiFieldType;
+  W: Integer;
 begin
   if DataFile = AValue then exit;
   FDataFile := AValue;
@@ -1710,6 +1716,11 @@ begin
   if not Assigned(FActiveControl) then
     EnterControl(FDesignerBox);
   DataFile.EndUpdate;
+
+  W := 0;
+  for Ft := Low(TEpiFieldType) to High(TEpiFieldType) do
+    W := Max(W, StatusBarPanel.Canvas.TextWidth(EpiTypeNames[Ft]));
+  FieldTypePanel.Width := FieldTypeLabel.Left + W + 2;
 end;
 
 procedure TDesignFrame.DockSiteMouseDown(Sender: TObject;

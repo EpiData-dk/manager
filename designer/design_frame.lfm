@@ -447,14 +447,14 @@ object DesignFrame: TDesignFrame
       Left = 377
       Height = 24
       Top = 2
-      Width = 154
+      Width = 141
       Alignment = taLeftJustify
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 2
       BorderSpacing.Right = 2
       BevelOuter = bvLowered
       ClientHeight = 24
-      ClientWidth = 154
+      ClientWidth = 141
       Color = clWhite
       ParentColor = False
       TabOrder = 4
@@ -473,17 +473,17 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = FieldNamePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = DefaultValuePanel
-      Left = 533
+      Left = 520
       Height = 24
       Top = 2
-      Width = 75
+      Width = 88
       Alignment = taLeftJustify
       Anchors = [akTop, akRight]
       BorderSpacing.Left = 2
       BorderSpacing.Right = 2
       BevelOuter = bvLowered
       ClientHeight = 24
-      ClientWidth = 75
+      ClientWidth = 88
       Color = clWhite
       ParentColor = False
       TabOrder = 5
@@ -638,10 +638,13 @@ object DesignFrame: TDesignFrame
         Left = 3
         Height = 18
         Top = 4
-        Width = 97
+        Width = 105
         BorderSpacing.Left = 2
         Caption = 'ExtendedLabel'
+        Font.Height = -13
+        Font.Name = 'DejaVu Sans Mono'
         ParentColor = False
+        ParentFont = False
       end
     end
   end
