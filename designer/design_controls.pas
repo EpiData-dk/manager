@@ -53,6 +53,7 @@ type
   private
     FNameLabel: TLabel;
     FQuestionLabel: TLabel;
+    FValueLabelLabel: TLabel;
     procedure   OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   OnQuestionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   OnProjectSettingsChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
@@ -396,6 +397,11 @@ begin
 
             //         Side buffer (pixel from controls left side to first character.
             Width   := (SideBuf * 2) + Cv.GetTextWidth(S) * FField.Length;
+            FValueLabelLabel.Visible := FField.ShowValueLabel;
+            if Assigned(FField.ValueLabelSet) then
+              FValueLabelLabel.Caption := FField.ValueLabelSet.Name
+            else
+              FValueLabelLabel.Caption := '';
           end;
         ecceSetLeft:
           begin
@@ -476,6 +482,7 @@ begin
 
   FQuestionLabel.Parent := NewParent;
   FNameLabel.Parent := NewParent;
+  FValueLabelLabel.Parent := NewParent;
 end;
 
 constructor TDesignField.Create(AOwner: TComponent);
@@ -489,6 +496,11 @@ begin
   FNameLabel.Anchors := [];
   FNameLabel.AnchorToNeighbour(akRight, 5, FQuestionLabel);
   FNameLabel.AnchorParallel(akBottom, 0, FQuestionLabel);
+  FValueLabelLabel := TLabel.Create(Self);
+  FValueLabelLabel.Anchors := [];
+  FValueLabelLabel.AnchorToNeighbour(akLeft, 10, Self);
+  FValueLabelLabel.AnchorParallel(akBottom, 0, Self);
+  FValueLabelLabel.Font.Color := clLime;
 
   // Standard properties being set for the component.
   DragKind := dkDock;
@@ -506,6 +518,7 @@ destructor TDesignField.Destroy;
 begin
   FNameLabel.Free;
   FQuestionLabel.Free;
+  FValueLabelLabel.Free;
   if Assigned(FField) then
   begin
     FField.UnRegisterOnChangeHook(@OnFieldChange);

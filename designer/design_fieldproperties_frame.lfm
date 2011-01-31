@@ -11,9 +11,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     Height = 487
     Top = 0
     Width = 595
-    ActivePage = FieldAdvancedSheet
+    ActivePage = FieldBasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
@@ -172,6 +172,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Top = 2
         BorderSpacing.Right = 10
         ItemHeight = 0
+        OnChange = ValueLabelComboBoxChange
         ParentShowHint = False
         ShowHint = True
         Style = csDropDownList
@@ -209,13 +210,13 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
       end
       object RangesGrpBox: TGroupBox
         AnchorSideLeft.Control = FieldBasicSheet
-        AnchorSideTop.Control = ValueLabelComboBox
+        AnchorSideTop.Control = ShowValueLabelChkBox
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = FieldBasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 70
-        Top = 242
+        Top = 269
         Width = 569
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
@@ -224,7 +225,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Caption = 'Range'
         ClientHeight = 51
         ClientWidth = 565
-        TabOrder = 6
+        TabOrder = 7
         object Label11: TLabel
           AnchorSideLeft.Control = RangesGrpBox
           AnchorSideTop.Control = FromEdit
@@ -301,25 +302,24 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Shape = bsSpacer
         Style = bsRaised
       end
+      object ShowValueLabelChkBox: TCheckBox
+        AnchorSideLeft.Control = ValueLabelComboBox
+        AnchorSideTop.Control = ValueLabelComboBox
+        AnchorSideTop.Side = asrBottom
+        Left = 20
+        Height = 22
+        Top = 237
+        Width = 263
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        Caption = 'Show category text after value entry'
+        TabOrder = 6
+      end
     end
     object FieldAdvancedSheet: TTabSheet
       Caption = 'Extended'
       ClientHeight = 452
       ClientWidth = 589
-      object ShowValueLabelChkBox: TCheckBox
-        AnchorSideLeft.Control = FieldAdvancedSheet
-        AnchorSideTop.Control = EntryRadioGroup
-        AnchorSideTop.Side = asrBottom
-        Left = 10
-        Height = 22
-        Top = 127
-        Width = 263
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 5
-        Caption = 'Show category text after value entry'
-        Enabled = False
-        TabOrder = 2
-      end
       object EntryRadioGroup: TRadioGroup
         AnchorSideLeft.Control = FieldAdvancedSheet
         AnchorSideTop.Control = FieldAdvancedSheet
@@ -354,8 +354,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideBottom.Control = FieldAdvancedSheet
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 261
-        Top = 181
+        Height = 288
+        Top = 154
         Width = 569
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
@@ -363,17 +363,17 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Jumps:'
-        ClientHeight = 242
+        ClientHeight = 269
         ClientWidth = 565
-        TabOrder = 3
+        TabOrder = 2
         object JumpScrollBox: TScrollBox
           Left = 0
-          Height = 242
+          Height = 269
           Top = 0
           Width = 565
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 242
+          ClientHeight = 269
           ClientWidth = 565
           TabOrder = 0
           object JumpValueLabel: TLabel
@@ -512,7 +512,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 97
-            Height = 204
+            Height = 231
             Top = 36
             Width = 3
             Anchors = [akTop, akLeft, akBottom]
@@ -525,7 +525,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 329
-            Height = 204
+            Height = 231
             Top = 36
             Width = 3
             Anchors = [akTop, akBottom]
@@ -540,7 +540,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 505
-            Height = 204
+            Height = 231
             Top = 36
             Width = 3
             Anchors = [akTop, akRight, akBottom]
@@ -616,11 +616,11 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
       end
       object ConfirmEntryChkBox: TCheckBox
         AnchorSideLeft.Control = FieldAdvancedSheet
-        AnchorSideTop.Control = ShowValueLabelChkBox
+        AnchorSideTop.Control = EntryRadioGroup
         AnchorSideTop.Side = asrBottom
         Left = 10
         Height = 22
-        Top = 154
+        Top = 127
         Width = 145
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5

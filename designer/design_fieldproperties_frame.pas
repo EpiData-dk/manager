@@ -47,8 +47,8 @@ type
     RemoveJumpBtn: TSpeedButton;
     ResetAddBevel: TBevel;
     ResetLabel: TLabel;
-    ShowValueLabelChkBox: TCheckBox;
     ConfirmEntryChkBox: TCheckBox;
+    ShowValueLabelChkBox: TCheckBox;
     ToEdit: TEdit;
     TopBevel: TBevel;
     ValueLabelComboBox: TComboBox;
@@ -58,6 +58,7 @@ type
     procedure ManageValueLabelsButtonClick(Sender: TObject);
     procedure RangeEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure RemoveJumpBtnClick(Sender: TObject);
+    procedure ValueLabelComboBoxChange(Sender: TObject);
   private
     { private declarations }
     FDataFile: TEpiDataFile;
@@ -149,6 +150,12 @@ begin
     RemoveJumpBtn.Enabled := false;
   end else
     AddJumpBtn.AnchorVerticalCenterTo(TControl(PJumpComponents(FJumpComponentsList.Last)^.GotoCombo));
+end;
+
+procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
+begin
+  ShowValueLabelChkBox.Enabled :=
+    ValueLabelComboBox.ItemIndex <> ValueLabelComboBox.Items.IndexOfObject(nil);
 end;
 
 function TFieldPropertiesFrame.UpdateValueLabels: boolean;
@@ -627,6 +634,7 @@ begin
 
   if ValueLabelComboBox.ItemIndex >= 0 then
     Field.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+  Field.ShowValueLabel := ShowValueLabelChkBox.Checked;
 
   if FromEdit.Text <> '' then
   begin
@@ -754,6 +762,8 @@ begin
   ValueLabelComboBox.Visible      := Field.FieldType in ValueLabelFieldTypes;
   ValueLabelLabel.Visible         := ValueLabelComboBox.Visible;
   ManageValueLabelsButton.Visible := ValueLabelComboBox.Visible;
+  ShowValueLabelChkBox.Visible    := ValueLabelComboBox.Visible;
+
   // - extended
   EntryRadioGroup.Visible         := Field.FieldType in EntryModeFieldTypes;
   ConfirmEntryChkBox.Visible      := Field.FieldType in ConfirmEntryFieldTypes;
@@ -779,6 +789,10 @@ begin
     FromEdit.Text := '';
     ToEdit.Text   := '';
   end;
+  ShowValueLabelChkBox.Checked := Field.ShowValueLabel;
+  ShowValueLabelChkBox.Enabled := Assigned(Field.ValueLabelSet);
+
+
   // - extended
   EntryRadioGroup.ItemIndex := EntryRadioGroup.Items.IndexOfObject(TObject(PtrUInt(Field.EntryMode)));
   ConfirmEntryChkBox.Checked := Field.ConfirmEntry;
