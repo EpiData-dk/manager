@@ -96,7 +96,7 @@ uses
   design_frame, Clipbrd, project_settings, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
   structure_form, valuelabelseditor_form, epidatafilestypes,
-  strutils, managerprocs;
+  strutils, managerprocs, Menus, LCLType;
 
 type
 
@@ -623,6 +623,12 @@ begin
   FEpiDocument := DoCreateNewDocument;
   UpdateCaption;
   InitBackupTimer;
+
+  {$IFDEF DARWIN}
+  SaveProjectAction.ShortCut := ShortCut(VK_S, [ssMeta]);
+  SaveProjectAsAction.ShortCut := ShortCut(VK_S, [ssShift, ssMeta]);
+
+  {$ENDIF}
 
   {$IFDEF EPI_DEBUG}
 

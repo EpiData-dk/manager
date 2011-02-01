@@ -514,7 +514,7 @@ begin
   with TAction(Sender) do
   begin
     Enabled := Assigned(FActiveControl) and
-               (not FActiveControl.Equals(FDesignerBox));
+               (not (FActiveControl = FDesignerBox));
     if Enabled then
       case DesignControlTypeFromControl(FActiveControl) of
         dctField:   S := 'Field';

@@ -120,7 +120,7 @@ uses
   workflow_frame, LCLProc, LCLIntf, design_frame,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   design_controls, structure_form, valuelabelseditor_form, epimiscutils,
-  epicustombase, project_settings;
+  epicustombase, project_settings, LCLType;
 
 { TMainForm }
 
@@ -244,6 +244,12 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Modified := false;
+  {$IFDEF DARWIN}
+  NewProjectAction.ShortCut := ShortCut(VK_N, [ssMeta]);
+  SettingsAction.ShortCut   := ShortCut(VK_OEM_COMMA, [ssMeta]);
+  CloseProjectAction.ShortCut := ShortCut(VK_W, [ssShift, ssMeta]);
+  OpenProjectAction.ShortCut  := ShortCut(VK_O, [ssMeta]);
+  {$ENDIF}
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
@@ -539,4 +545,3 @@ begin
 end;
 
 end.
-
