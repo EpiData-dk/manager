@@ -1183,7 +1183,14 @@ begin
         begin
           OrgField := TFieldCopyObject(CO.Data).Field;
           EpiCtrl  := (FActiveControl as IDesignEpiControl).EpiControl;
+          EpiCtrl.BeginUpdate;
+          TheName := '';
+          if TEpiField(EpiCtrl).Question.Text <> '' then
+            TheName := TEpiField(EpiCtrl).Question.Text;
           EpiCtrl.Assign(OrgField);
+          if TheName <> '' then
+            TEpiField(EpiCtrl).Question.Text := TheName;
+          EpiCtrl.EndUpdate;
         end;
       ctSection:
         begin
