@@ -1183,6 +1183,11 @@ begin
         begin
           OrgField := TFieldCopyObject(CO.Data).Field;
           EpiCtrl  := (FActiveControl as IDesignEpiControl).EpiControl;
+          if TEpiField(EpiCtrl).FieldType <> Orgfield.FieldType then
+          begin
+            exit;
+          end;
+
           EpiCtrl.BeginUpdate;
           TheName := '';
           if TEpiField(EpiCtrl).Question.Text <> '' then
@@ -2297,6 +2302,8 @@ begin
   FDesignerBox.OnMouseWheel := @DesignBoxMouseWheel;
   FActiveDockSite := FDesignerBox;
 
+  UpdateFrame;
+
   {$IFNDEF EPI_DEBUG}
   Splitter1.Enabled := false;
   Splitter1.Visible := False;
@@ -2317,7 +2324,7 @@ begin
   PasteAsFloatAction.ShortCut   := 0;
   PasteAsStringAction.ShortCut  := 0;
 
-  CtrlS := ShortCut(VK_S, [ssCtrl]);
+  CtrlS := ShortCut(VK_N, [ssCtrl]);
   Case ManagerSettings.PasteSpecialType of
     0: PasteAsQESAction.ShortCut     := CtrlS;
     1: PasteAsHeadingAction.ShortCut := CtrlS;
