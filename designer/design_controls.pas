@@ -7,37 +7,11 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, ActnList, AVL_Tree, epicustombase, epidatafiles,
-  epidocument, epivaluelabels, LCLType, design_propertiesbase_frame;
+  epidocument, epivaluelabels, LCLType, design_propertiesbase_frame, design_types;
 
 type
 
-  { IDesignEpiControl }
-
-  IDesignEpiControl = interface ['{D816F23A-0CC6-418A-8A6F-B1D28FC42E52}']
-    function  GetEpiControl: TEpiCustomControlItem;
-    function  GetXTreeNode: TAVLTreeNode;
-    function  GetYTreeNode: TAVLTreeNode;
-    procedure SetEpiControl(const AValue: TEpiCustomControlItem);
-    procedure SetXTreeNode(const AValue: TAVLTreeNode);
-    procedure SetYTreeNode(const AValue: TAVLTreeNode);
-    property  EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
-    property  XTreeNode: TAVLTreeNode read GetXTreeNode write SetXTreeNode;
-    property  YTreeNode: TAVLTreeNode read GetYTreeNode write SetYTreeNode;
-  end;
-
-  { IPositionHandler }
-
-  IPositionHandler = interface ['{EE58F27F-C0EB-43E1-BCF2-8525F632F527}']
-    function GetXTree: TAVLTree;
-    function GetYTree: TAVLTree;
-    property XTree: TAVLTree read GetXTree;
-    property YTree: TAVLTree read GetYTree;
-  end;
-
-  TDesignerControlType = (dctField, dctSection, dctHeading);
-
   { TDesignField }
-
   TDesignField = class(TEdit, IDesignEpiControl)
   private
     // IDesignEpiControl
@@ -157,11 +131,11 @@ type
     { private declarations }
     FActiveFrame: TDesignPropertiesFrame;
     FEpiControl: TEpiCustomControlItem;
-    FHintWindow: THintWindow;
     FEpiDocument: TEpiDocument;
+    FOnShowHintMsg: TDesignFrameShowHintEvent;
     constructor Create(TheOwner: TComponent); override;
     procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
-    procedure   ShowHintMsg(Sender: TDesignPropertiesFrame; Ctrl: TControl; const Msg: string);
+    procedure   ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
     procedure   UpdateControlContent;
   public
     { public declarations }
@@ -172,6 +146,7 @@ type
     procedure   Show;
     property    EpiControl: TEpiCustomControlItem read FEpiControl write SetEpiControl;
     property    ActiveFrame: TDesignPropertiesFrame read FActiveFrame;
+    property    OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
   end;
 
 
@@ -840,22 +815,11 @@ begin
   end;
 end;
 
-procedure TDesignControlsForm.ShowHintMsg(Sender: TDesignPropertiesFrame;
-  Ctrl: TControl; const Msg: string);
-var
-  R: TRect;
-  P: TPoint;
+procedure TDesignControlsForm.ShowHintMsg(Sender: TObject; Ctrl: TControl;
+  const Msg: string);
 begin
-  if (Msg = '') and (Ctrl = nil) then
-  begin
-    FHintWindow.Hide;
-    exit;
-  end;
-
-  R := FHintWindow.CalcHintRect(0, Msg, nil);
-  P := Ctrl.ClientToScreen(Point(0,0));
-  OffsetRect(R, P.X, P.Y + Ctrl.Height + 2);
-  FHintWindow.ActivateHint(R, Msg);
+  if Assigned(FOnShowHintMsg) then
+    OnShowHintMsg(Sender, Ctrl, Msg);
 end;
 
 procedure TDesignControlsForm.UpdateControlContent;
@@ -874,9 +838,6 @@ end;
 constructor TDesignControlsForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  FHintWindow := THintWindow.Create(Self);
-  FHintWindow.AutoHide := true;
-  FHintWindow.HideInterval := 5 * 1000;
 end;
 
 constructor TDesignControlsForm.Create(TheOwner: TComponent;

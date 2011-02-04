@@ -5,14 +5,11 @@ unit design_propertiesbase_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, epicustombase;
+  Classes, SysUtils, FileUtil, Forms, Controls, epicustombase, design_types;
 
 type
   { DesignPropertiesFrame }
 
-  TDesignPropertiesFrame = class;
-
-  TDesignFrameShowHintEvent = procedure(Sender: TDesignPropertiesFrame; Ctrl: TControl; const Msg: string) of object;
   TDesignPropertiesFrame = class(TFrame)
   private
     FEpiControl: TEpiCustomControlItem;

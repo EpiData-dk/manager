@@ -608,9 +608,13 @@ begin
         ftString,
         ftUpperString:  ;
       end;
+
+      if TComboBox(GotoCombo).ItemIndex = -1 then
+        Exit(DoError('Invalid "Go To" selection"', TComboBox(GotoCombo)));
     end;
   end;
 
+  ShowHintMsg('', nil);
   Result := true;
 end;
 

@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="27">
+    <Units Count="28">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -223,6 +223,11 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_propertiesbase_frame"/>
       </Unit26>
+      <Unit27>
+        <Filename Value="designer/design_types.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="design_types"/>
+      </Unit27>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

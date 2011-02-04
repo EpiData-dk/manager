@@ -5,7 +5,8 @@ unit copyobject;
 interface
 
 uses
-  Classes, SysUtils, epidatafiles, epicustombase, design_controls, Controls;
+  Classes, SysUtils, epidatafiles, epicustombase, Controls,
+  design_types;
 
 
 type
@@ -96,7 +97,7 @@ const
 implementation
 
 uses
-  LCLProc;
+  LCLProc, design_controls;
 
 type
 

@@ -4,16 +4,16 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
   ClientHeight = 487
   ClientWidth = 595
   TabOrder = 0
-  DesignLeft = 797
-  DesignTop = 203
+  DesignLeft = 1054
+  DesignTop = 242
   object FieldPageControl: TPageControl[0]
     Left = 0
     Height = 487
     Top = 0
     Width = 595
-    ActivePage = FieldBasicSheet
+    ActivePage = FieldAdvancedSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'

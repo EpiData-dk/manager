@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
-  epicustombase, AVL_Tree , LCLType, design_controls, LMessages, StdActns;
+  epicustombase, AVL_Tree , LCLType, LMessages, StdActns, design_controls;
 
 const
   LM_DESIGNER_DEL = LM_USER + 1;
@@ -196,11 +196,13 @@ type
     FRightMouseDown: TPoint;
     FRightMouseUp: TPoint;
     FDesignControlForm: TDesignControlsForm;
+    FHintWindow:  THintWindow;
     procedure   ResetMousePos;
     function    DesignControlTop(LocalCtrl: TControl): Integer;
     function    ShowForm(EpiControl: TEpiCustomControlItem;
       Pos: TPoint; ForceShow: boolean = true): TModalResult;
     procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
+    procedure   ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
   private
     { Import/Export/Paste }
     FLastRecYPos: Integer;
@@ -298,7 +300,7 @@ implementation
 uses
   Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
-  managerprocs, epiqeshandler, copyobject, epiranges;
+  managerprocs, epiqeshandler, copyobject, epiranges, design_types;
 
 type
 
@@ -1185,6 +1187,7 @@ begin
           EpiCtrl  := (FActiveControl as IDesignEpiControl).EpiControl;
           if TEpiField(EpiCtrl).FieldType <> Orgfield.FieldType then
           begin
+            ShowHintMsg(nil, FActiveControl, 'Cannot copy properties:'+LineEnding+'Fields must of same type');
             exit;
           end;
 
@@ -1280,7 +1283,10 @@ begin
   if (not Assigned(FDesignControlForm)) and (not ForceShow) then exit;
 
   if not Assigned(FDesignControlForm) then
+  begin
     FDesignControlForm := TDesignControlsForm.Create(Self, DataFile.RootOwner);
+    FDesignControlForm.OnShowHintMsg := @ShowHintMsg;
+  end;
 
   if (not FDesignControlForm.Showing) and ForceShow then
   begin
@@ -1379,6 +1385,24 @@ begin
     DockingSitePopUpMenu.PopUp(Pos.X, Pos.Y)
   else
     DesignControlPopUpMenu.PopUp(Pos.X, Pos.Y);
+end;
+
+procedure TDesignFrame.ShowHintMsg(Sender: TObject; Ctrl: TControl;
+  const Msg: string);
+var
+  R: TRect;
+  P: TPoint;
+begin
+  if (Msg = '') and (Ctrl = nil) then
+  begin
+    FHintWindow.Hide;
+    exit;
+  end;
+
+  R := FHintWindow.CalcHintRect(0, Msg, nil);
+  P := Ctrl.ClientToScreen(Point(0,0));
+  OffsetRect(R, P.X, P.Y + Ctrl.Height + 2);
+  FHintWindow.ActivateHint(R, Msg);
 end;
 
 procedure TDesignFrame.DoPostImportAlignment(ParentControl: TWinControl; StartControl,
@@ -2270,6 +2294,10 @@ begin
   // ==================================
   // Essetial things are created first!
   // ==================================
+  FHintWindow := THintWindow.Create(Self);
+  FHintWindow.AutoHide := true;
+  FHintWindow.HideInterval := 5 * 1000;
+
   DateToolButton.Tag := Ord(ManagerSettings.DefaultDateType);
   DateToolButton.ImageIndex := Ord(ManagerSettings.DefaultDateType);
   FActiveButton := SelectorToolButton;
