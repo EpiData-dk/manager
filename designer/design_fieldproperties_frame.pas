@@ -383,9 +383,10 @@ begin
   AddJumpBtn.AnchorVerticalCenterTo(GFC);
   RemoveJumpBtn.Enabled := true;
 
-  {JVE.TabOrder := (FJumpComponentsList.Count * 3);
+  JVE.TabOrder := (FJumpComponentsList.Count * 3);
   GFC.TabOrder := (FJumpComponentsList.Count * 3) + 1;
-  JVE.TabOrder := (FJumpComponentsList.Count * 3) + 2;}
+  RVC.TabOrder := (FJumpComponentsList.Count * 3) + 2;
+  JVE.SetFocus;
 
   Jrec := New(PJumpComponents);
   with Jrec^ do

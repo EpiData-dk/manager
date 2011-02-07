@@ -42,10 +42,12 @@ type
     NewIntValueLabelSetMenuItem: TMenuItem;
     NewStringValueLabelSetMenuItem: TMenuItem;
     NewFloatValueLabelSetMenuItem: TMenuItem;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
     ValueLabelEditorStatusBar: TStatusBar;
-    ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
+    IntSetBtn: TToolButton;
+    FloatSetBtn: TToolButton;
+    StringSetBtn: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
     TreeViewActionList: TActionList;
@@ -64,24 +66,24 @@ type
     procedure NewFloatValueLabelSetActionExecute(Sender: TObject);
     procedure NewIntValueLabelSetActionExecute(Sender: TObject);
     procedure NewStringValueLabelSetActionExecute(Sender: TObject);
+    procedure ToolBarBtnClick(Sender: TObject);
+    procedure ToolButton6Click(Sender: TObject);
     procedure ValueLabelEditorStatusBarResize(Sender: TObject);
-    procedure ValueLabelSetTreeViewDblClick(Sender: TObject);
     procedure ValueLabelSetTreeViewEdited(Sender: TObject; Node: TTreeNode;
       var S: string);
     procedure ValueLabelSetTreeViewChange(Sender: TObject; Node: TTreeNode);
-    procedure ValueLabelSetTreeViewChanging(Sender: TObject; Node: TTreeNode;
-      var AllowChange: Boolean);
     procedure ValueLabelSetTreeViewEditing(Sender: TObject; Node: TTreeNode;
       var AllowEdit: Boolean);
     procedure ValueLabelSetTreeViewKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
   private
-    FDblClickedValueLabelSet: TEpiValueLabelSet;
     { private declarations }
+    FDblClickedValueLabelSet: TEpiValueLabelSet;
     FValueLabelsGrid: TValueLabelGrid;
     FValueLabelSets: TEpiValueLabelSets;
     FCurrentVLSet: TEpiValueLabelSet;
     FHintWindow: THintWindow;
+    FActiveButton: TToolButton;
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     function    DoNewValueLabelSet(Ft: TEpiFieldType): TEpiValueLabelSet;
@@ -181,15 +183,6 @@ begin
 
   FCurrentVLSet := TEpiValueLabelSet(Node.Data);
   UpdateGridCells;
-end;
-
-procedure TValueLabelEditor.ValueLabelSetTreeViewChanging(Sender: TObject;
-  Node: TTreeNode; var AllowChange: Boolean);
-var
-  TreeView: TTreeView absolute Sender;
-begin
-  // Happens before change is done.
-  if csDestroying in TreeView.ComponentState then exit;
 end;
 
 procedure TValueLabelEditor.ValueLabelSetTreeViewEditing(Sender: TObject;
@@ -326,7 +319,7 @@ begin
 
     UseXORFeatures := true;
     TitleStyle     := tsStandard;
-    Options        := Options + [goEditing, goRowMoving, goColSizing];
+    Options        := Options + [goEditing, goRowMoving, goColSizing, goTabs];
     AutoAdvance    := aaRightDown;
     Align          := alClient;
     Parent         := Self;
@@ -335,6 +328,8 @@ begin
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.HideInterval := 10 * 1000; // TODO : Adjust hint-timeout in settings.
   FHintWindow.AutoHide := true;
+
+  FActiveButton := nil;
 end;
 
 destructor TValueLabelEditor.Destroy;
@@ -655,24 +650,41 @@ begin
   DoNewValueLabelSet(ftString);
 end;
 
+procedure TValueLabelEditor.ToolBarBtnClick(Sender: TObject);
+var
+  ToolBtn: TToolButton absolute Sender;
+begin
+  if Assigned(FActiveButton) then
+    FActiveButton.Down := false;
+
+  if FActiveButton = ToolBtn then
+  begin
+    FActiveButton := nil;
+    Exit;
+  end;
+
+  ToolBtn.Down := true;
+  FActiveButton := ToolBtn;
+end;
+
+procedure TValueLabelEditor.ToolButton6Click(Sender: TObject);
+begin
+  if not Assigned(FActiveButton) then exit;
+
+  if FActiveButton = IntSetBtn then
+    DoNewValueLabelSet(ftInteger);
+  if FActiveButton = FloatSetBtn then
+    DoNewValueLabelSet(ftFloat);
+  if FActiveButton = StringSetBtn then
+    DoNewValueLabelSet(ftString);
+
+  FActiveButton.Down := false;
+  FActiveButton := nil;
+end;
+
 procedure TValueLabelEditor.ValueLabelEditorStatusBarResize(Sender: TObject);
 begin
   CalculateStatusbar;
-end;
-
-procedure TValueLabelEditor.ValueLabelSetTreeViewDblClick(Sender: TObject);
-var
-  P: TPoint;
-  N: TTreeNode;
-begin
-  if (fsModal in FormState) then
-  begin
-    P := ValueLabelSetTreeView.ScreenToClient(Mouse.CursorPos);
-    N := ValueLabelSetTreeView.GetNodeAt(P.X, P.Y);
-    if Assigned(N) then
-      FDblClickedValueLabelSet := TEpiValueLabelSet(N.Data);
-    ModalResult := mrOk;
-  end;
 end;
 
 { TValueLabelGrid }
@@ -688,7 +700,7 @@ end;
 
 procedure TValueLabelGrid.KeyDown(var Key: Word; Shift: TShiftState);
 begin
-  if (Key = VK_RETURN) and (Col = 4) then
+  if (Key in [VK_RETURN, VK_TAB]) and (Col = 4) then
   begin
     if (Row = (RowCount - 1)) then
       TValueLabelEditor(Parent).InsertGridRowAction.Execute

@@ -1,7 +1,7 @@
 object ValueLabelEditor: TValueLabelEditor
-  Left = 2028
+  Left = 286
   Height = 625
-  Top = 192
+  Top = 233
   Width = 1015
   ActiveControl = Panel1
   Caption = 'Value Labels'
@@ -11,7 +11,7 @@ object ValueLabelEditor: TValueLabelEditor
   OnShow = FormShow
   Position = poDefault
   ShowInTaskBar = stAlways
-  LCLVersion = '0.9.29'
+  LCLVersion = '0.9.31'
   object Panel1: TPanel
     Left = 0
     Height = 604
@@ -30,35 +30,55 @@ object ValueLabelEditor: TValueLabelEditor
       EdgeBorders = [ebTop, ebBottom]
       Images = ImageList1
       ParentShowHint = False
+      ShowCaptions = True
       ShowHint = True
       TabOrder = 0
       Transparent = True
-      object ToolButton1: TToolButton
-        Left = 1
+      object IntSetBtn: TToolButton
+        Left = 70
+        Hint = 'Integer Valuelabels'
         Top = 2
-        Action = NewIntValueLabelSetAction
+        ImageIndex = 0
+        OnClick = ToolBarBtnClick
       end
-      object ToolButton2: TToolButton
-        Left = 29
+      object FloatSetBtn: TToolButton
+        Left = 98
+        Hint = 'Float Valuelabels'
         Top = 2
-        Action = NewFloatValueLabelSetAction
+        ImageIndex = 1
+        OnClick = ToolBarBtnClick
       end
-      object ToolButton3: TToolButton
-        Left = 57
+      object StringSetBtn: TToolButton
+        Left = 126
+        Hint = 'String Valuelabels'
         Top = 2
-        Action = NewStringValueLabelSetAction
+        ImageIndex = 2
+        OnClick = ToolBarBtnClick
       end
       object ToolButton4: TToolButton
-        Left = 85
+        Left = 154
         Top = 2
         Width = 4
         Caption = 'ToolButton4'
         Style = tbsDivider
       end
       object ToolButton5: TToolButton
-        Left = 89
+        Left = 34
         Top = 2
         Action = DeleteValueLabelSets
+      end
+      object ToolButton6: TToolButton
+        Left = 1
+        Top = 2
+        Caption = 'Add'
+        OnClick = ToolButton6Click
+      end
+      object ToolButton7: TToolButton
+        Left = 62
+        Top = 2
+        Width = 8
+        Caption = 'ToolButton7'
+        Style = tbsSeparator
       end
     end
     object ValueLabelSetTreeView: TTreeView
@@ -80,8 +100,6 @@ object ValueLabelEditor: TValueLabelEditor
       StateImages = ImageList1
       TabOrder = 1
       OnChange = ValueLabelSetTreeViewChange
-      OnChanging = ValueLabelSetTreeViewChanging
-      OnDblClick = ValueLabelSetTreeViewDblClick
       OnEdited = ValueLabelSetTreeViewEdited
       OnKeyDown = ValueLabelSetTreeViewKeyDown
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoToolTips, tvoThemedDraw]
@@ -120,7 +138,6 @@ object ValueLabelEditor: TValueLabelEditor
     top = 272
     object DeleteValueLabelSets: TAction
       Category = 'TreeView'
-      Caption = 'Delete Valuelabel Set'
       Hint = 'Delete Valuelabel Set'
       ImageIndex = 3
       OnExecute = DeleteValueLabelSetsExecute
@@ -132,7 +149,6 @@ object ValueLabelEditor: TValueLabelEditor
     end
     object NewIntValueLabelSetAction: TAction
       Category = 'TreeView'
-      Caption = 'Integer Valuelabels'
       Hint = 'Integer Valuelabels'
       ImageIndex = 0
       OnExecute = NewIntValueLabelSetActionExecute
@@ -140,7 +156,6 @@ object ValueLabelEditor: TValueLabelEditor
     end
     object NewFloatValueLabelSetAction: TAction
       Category = 'TreeView'
-      Caption = 'Float Valuelabels'
       Hint = 'Float Valuelabels'
       ImageIndex = 1
       OnExecute = NewFloatValueLabelSetActionExecute
@@ -148,7 +163,6 @@ object ValueLabelEditor: TValueLabelEditor
     end
     object NewStringValueLabelSetAction: TAction
       Category = 'TreeView'
-      Caption = 'String Valuelabels'
       Hint = 'String Valuelabels'
       ImageIndex = 2
       OnExecute = NewStringValueLabelSetActionExecute

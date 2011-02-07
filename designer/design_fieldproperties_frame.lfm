@@ -4,8 +4,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
   ClientHeight = 487
   ClientWidth = 595
   TabOrder = 0
-  DesignLeft = 1054
-  DesignTop = 242
+  DesignLeft = 796
+  DesignTop = 241
   object FieldPageControl: TPageControl[0]
     Left = 0
     Height = 487
@@ -354,8 +354,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideBottom.Control = FieldAdvancedSheet
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 288
-        Top = 154
+        Height = 289
+        Top = 153
         Width = 569
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
@@ -363,17 +363,17 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Jumps:'
-        ClientHeight = 269
+        ClientHeight = 270
         ClientWidth = 565
         TabOrder = 2
         object JumpScrollBox: TScrollBox
           Left = 0
-          Height = 269
+          Height = 270
           Top = 0
           Width = 565
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 269
+          ClientHeight = 270
           ClientWidth = 565
           TabOrder = 0
           object JumpValueLabel: TLabel
@@ -382,7 +382,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             Left = 10
             Height = 18
             Top = 10
-            Width = 78
+            Width = 76
             BorderSpacing.Left = 10
             BorderSpacing.Top = 10
             Caption = 'Jump Value:'
@@ -397,7 +397,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             Left = 105
             Height = 18
             Top = 10
-            Width = 76
+            Width = 72
             BorderSpacing.Left = 5
             BorderSpacing.Right = 5
             Caption = 'Go To Field:'
@@ -512,7 +512,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 97
-            Height = 231
+            Height = 232
             Top = 36
             Width = 3
             Anchors = [akTop, akLeft, akBottom]
@@ -525,7 +525,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 329
-            Height = 231
+            Height = 232
             Top = 36
             Width = 3
             Anchors = [akTop, akBottom]
@@ -540,7 +540,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 505
-            Height = 231
+            Height = 232
             Top = 36
             Width = 3
             Anchors = [akTop, akRight, akBottom]
@@ -568,7 +568,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             Left = 337
             Height = 18
             Top = 10
-            Width = 81
+            Width = 79
             BorderSpacing.Left = 5
             Caption = 'Reset Value:'
             ParentColor = False
@@ -619,9 +619,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Control = EntryRadioGroup
         AnchorSideTop.Side = asrBottom
         Left = 10
-        Height = 22
+        Height = 21
         Top = 127
-        Width = 145
+        Width = 140
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         Caption = 'Confirm field entry'
