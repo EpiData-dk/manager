@@ -16,7 +16,7 @@ object DesignControlsForm: TDesignControlsForm
   OnShow = FormShow
   ShowInTaskBar = stAlways
   LCLVersion = '0.9.31'
-  object Panel3: TPanel
+  object OkApplyPanel: TPanel
     Left = 0
     Height = 42
     Top = 328
@@ -26,9 +26,9 @@ object DesignControlsForm: TDesignControlsForm
     ClientWidth = 395
     TabOrder = 0
     object OkBtn: TBitBtn
-      AnchorSideRight.Control = Panel3
+      AnchorSideRight.Control = OkApplyPanel
       AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = Panel3
+      AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
       Left = 313
       Height = 32
@@ -44,7 +44,7 @@ object DesignControlsForm: TDesignControlsForm
     end
     object CancelBtn: TBitBtn
       AnchorSideRight.Control = OkBtn
-      AnchorSideBottom.Control = Panel3
+      AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
       Left = 224
       Height = 32
@@ -59,8 +59,8 @@ object DesignControlsForm: TDesignControlsForm
       TabOrder = 2
     end
     object ApplyBtn: TBitBtn
-      AnchorSideLeft.Control = Panel3
-      AnchorSideBottom.Control = Panel3
+      AnchorSideLeft.Control = OkApplyPanel
+      AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
       Left = 11
       Height = 32

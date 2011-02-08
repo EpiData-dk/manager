@@ -50,8 +50,8 @@ end;
 
 procedure THeadingPropertiesFrame.UpdateFormContent;
 begin
-  Caption := 'Heading Properties';
   CaptionEdit.Text := TEpiHeading(EpiControl).Caption.Text;
+  UpdateCaption('Heading Properties');
 end;
 
 procedure THeadingPropertiesFrame.ForceShow;

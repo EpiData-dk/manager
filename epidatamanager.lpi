@@ -213,7 +213,7 @@
         <Filename Value="designer/design_headingproperties_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="HeadingPropertiesFrame"/>
-        <ResourceBaseClass Value="Form"/>
+        <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_headingproperties_frame"/>
       </Unit25>
       <Unit26>

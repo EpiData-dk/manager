@@ -73,11 +73,14 @@ type
     procedure UpdateFieldComboBox(Combo: TComboBox);
     procedure AddFieldsToCombo(Combo: TComboBox);
     procedure FieldJumpHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure JumpValueEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     function  DoAddNewJump: pointer;
     function  UpdateJumps: boolean;
   protected
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
     procedure ShiftToTabSheet(const SheetNo: Byte); override;
+    procedure UpdateCaption(const S: String); override;
   private
     { Validation }
     function    InternalValidate: boolean;
@@ -330,6 +333,17 @@ begin
   end;
 end;
 
+procedure TFieldPropertiesFrame.JumpValueEditKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+var
+  JVE: TEdit absolute Sender;
+begin
+  if Key <> VK_RETURN then exit;
+
+  TComboBox(PJumpComponents(FJumpComponentsList[JVE.Tag])^.GotoCombo).SetFocus;
+  Key := VK_UNKNOWN;
+end;
+
 function TFieldPropertiesFrame.DoAddNewJump: pointer;
 var
   JVE: TEdit;     // Jump-to value edit.
@@ -383,10 +397,10 @@ begin
   AddJumpBtn.AnchorVerticalCenterTo(GFC);
   RemoveJumpBtn.Enabled := true;
 
+  JVE.Tag      := FJumpComponentsList.Count;
   JVE.TabOrder := (FJumpComponentsList.Count * 3);
   GFC.TabOrder := (FJumpComponentsList.Count * 3) + 1;
   RVC.TabOrder := (FJumpComponentsList.Count * 3) + 2;
-  JVE.SetFocus;
 
   Jrec := New(PJumpComponents);
   with Jrec^ do
@@ -440,7 +454,7 @@ end;
 
 procedure TFieldPropertiesFrame.AddJumpBtnClick(Sender: TObject);
 begin
-  DoAddNewJump;
+  TEdit(PJumpComponents(DoAddNewJump)^.ValueEdit).SetFocus;
 end;
 
 procedure TFieldPropertiesFrame.ManageValueLabelsButtonClick(Sender: TObject);
@@ -463,6 +477,14 @@ begin
   if SheetNo = 0 then exit;
   if SheetNo > FieldPageControl.PageCount then exit;
   FieldPageControl.ActivePageIndex := SheetNo - 1;
+end;
+
+procedure TFieldPropertiesFrame.UpdateCaption(const S: String);
+var
+  T: String;
+begin
+  T := 'Field Properties: ' + Field.Name;
+  inherited UpdateCaption(T);
 end;
 
 function TFieldPropertiesFrame.InternalValidate: boolean;
@@ -709,6 +731,7 @@ begin
     end;
   end;
   Field.EndUpdate;
+  UpdateCaption('');
 end;
 
 constructor TFieldPropertiesFrame.Create(TheOwner: TComponent;
@@ -802,6 +825,7 @@ begin
   EntryRadioGroup.ItemIndex := EntryRadioGroup.Items.IndexOfObject(TObject(PtrUInt(Field.EntryMode)));
   ConfirmEntryChkBox.Checked := Field.ConfirmEntry;
   UpdateJumps;
+  UpdateCaption('');
 end;
 
 procedure TFieldPropertiesFrame.ForceShow;

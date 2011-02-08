@@ -1,12 +1,12 @@
-object HeadingPropertiesFrame: THeadingPropertiesFrame
-  Left = 0
-  Height = 417
-  Top = 25
-  Width = 793
-  ClientHeight = 417
-  ClientWidth = 793
-  LCLVersion = '0.9.31'
-  object Label9: TLabel
+inherited HeadingPropertiesFrame: THeadingPropertiesFrame
+  Height = 84
+  Width = 400
+  ClientHeight = 84
+  ClientWidth = 400
+  Constraints.MinHeight = 100
+  Constraints.MinWidth = 380
+  TabOrder = 0
+  object Label9: TLabel[0]
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 10
@@ -18,7 +18,7 @@ object HeadingPropertiesFrame: THeadingPropertiesFrame
     Caption = 'Text:'
     ParentColor = False
   end
-  object CaptionEdit: TEdit
+  object CaptionEdit: TEdit[1]
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Label9
     AnchorSideTop.Side = asrBottom
@@ -27,7 +27,7 @@ object HeadingPropertiesFrame: THeadingPropertiesFrame
     Left = 10
     Height = 27
     Top = 30
-    Width = 773
+    Width = 380
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2

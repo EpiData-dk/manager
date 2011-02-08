@@ -118,7 +118,7 @@ type
     CancelBtn: TBitBtn;
     OkBtn: TBitBtn;
     ApplyBtn: TBitBtn;
-    Panel3: TPanel;
+    OkApplyPanel: TPanel;
     procedure ApplyActionExecute(Sender: TObject);
     procedure CancelActionExecute(Sender: TObject);
     procedure CloseActionExecute(Sender: TObject);
@@ -137,6 +137,7 @@ type
     procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure   ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
     procedure   UpdateControlContent;
+    procedure   UpdateCaption(Const S: String);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const EpiDocument: TEpiCustomBase);
@@ -809,6 +810,9 @@ begin
     FActiveFrame.Align := alClient;
     FActiveFrame.Parent := self;
 
+    Constraints.Assign(FActiveFrame.Constraints);
+    Constraints.MinHeight := Constraints.MinHeight + OkApplyPanel.Height;
+
     FActiveFrame.EpiControl := AValue;
   finally
     EndFormUpdate;
@@ -827,6 +831,11 @@ begin
   BeginFormUpdate;
   FActiveFrame.UpdateFormContent;
   EndFormUpdate;
+end;
+
+procedure TDesignControlsForm.UpdateCaption(const S: String);
+begin
+  Caption := S;
 end;
 
 function TDesignControlsForm.ValidateControl: boolean;
@@ -850,10 +859,13 @@ begin
 
   DesignPropertyFrames[0] := TFieldPropertiesFrame.Create(Self, FEpiDocument.ValueLabelSets, FEpiDocument.DataFiles[0]);
   DesignPropertyFrames[0].OnShowHintMsg := @ShowHintMsg;
+  DesignPropertyFrames[0].OnUpdateCaption := @UpdateCaption;
   DesignPropertyFrames[1] := TSectionPropertiesFrame.Create(Self, FEpiDocument.Admin);
   DesignPropertyFrames[1].OnShowHintMsg := @ShowHintMsg;
+  DesignPropertyFrames[1].OnUpdateCaption := @UpdateCaption;
   DesignPropertyFrames[2] := THeadingPropertiesFrame.Create(Self);
   DesignPropertyFrames[2].OnShowHintMsg := @ShowHintMsg;
+  DesignPropertyFrames[2].OnUpdateCaption := @UpdateCaption;
 end;
 
 destructor TDesignControlsForm.Destroy;

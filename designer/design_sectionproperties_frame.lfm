@@ -1,26 +1,26 @@
-object SectionPropertiesFrame: TSectionPropertiesFrame
-  Left = 0
-  Height = 403
-  Top = 0
-  Width = 506
-  ClientHeight = 403
-  ClientWidth = 506
+inherited SectionPropertiesFrame: TSectionPropertiesFrame
+  Height = 160
+  Width = 380
+  ClientHeight = 160
+  ClientWidth = 380
+  Constraints.MinHeight = 160
+  Constraints.MinWidth = 380
   TabOrder = 0
-  DesignLeft = 813
+  DesignLeft = 814
   DesignTop = 395
-  object SectionPageControl: TPageControl
+  object SectionPageControl: TPageControl[0]
     Left = 0
-    Height = 403
+    Height = 160
     Top = 0
-    Width = 506
-    ActivePage = SectionBasicSheet
+    Width = 380
+    ActivePage = SectionAdvancedSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object SectionBasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 368
-      ClientWidth = 500
+      ClientHeight = 125
+      ClientWidth = 374
       object SectionGroupAccessGroupBox: TGroupBox
         AnchorSideLeft.Control = SectionNameEdit
         AnchorSideTop.Control = SectionNameEdit
@@ -30,12 +30,12 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         Left = 10
         Height = 170
         Top = 62
-        Width = 480
+        Width = 357
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
         Caption = 'Groups access:'
         ClientHeight = 151
-        ClientWidth = 476
+        ClientWidth = 353
         TabOrder = 1
         object GroupAvailableListBox: TListBox
           AnchorSideTop.Control = Label5
@@ -46,7 +46,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
           Left = 6
           Height = 121
           Top = 25
-          Width = 215
+          Width = 154
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 2
           BorderSpacing.Right = 5
@@ -63,10 +63,10 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = SectionGroupAccessGroupBox
           AnchorSideBottom.Side = asrBottom
-          Left = 256
+          Left = 195
           Height = 121
           Top = 25
-          Width = 213
+          Width = 151
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 7
           BorderSpacing.Top = 2
@@ -90,7 +90,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideLeft.Control = GroupAvailableListBox
           AnchorSideLeft.Side = asrBottom
           AnchorSideRight.Control = GroupAssignedListBox
-          Left = 226
+          Left = 165
           Height = 22
           Top = 87
           Width = 23
@@ -137,7 +137,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         object Label6: TLabel
           AnchorSideLeft.Control = GroupAssignedListBox
           AnchorSideTop.Control = SectionGroupAccessGroupBox
-          Left = 256
+          Left = 195
           Height = 18
           Top = 5
           Width = 64
@@ -149,7 +149,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideLeft.Control = GroupAvailableListBox
           AnchorSideLeft.Side = asrBottom
           AnchorSideRight.Control = GroupAvailableListBox
-          Left = 226
+          Left = 165
           Height = 22
           Top = 55
           Width = 23
@@ -203,7 +203,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         Left = 10
         Height = 27
         Top = 30
-        Width = 480
+        Width = 357
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -224,8 +224,8 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
     end
     object SectionAdvancedSheet: TTabSheet
       Caption = 'Advanced'
-      ClientHeight = 368
-      ClientWidth = 500
+      ClientHeight = 125
+      ClientWidth = 374
       object HeightEdit: TEdit
         AnchorSideLeft.Control = SectionAdvancedSheet
         AnchorSideTop.Control = Label8
@@ -235,7 +235,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         Left = 10
         Height = 27
         Top = 87
-        Width = 452
+        Width = 354
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -251,7 +251,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         Left = 10
         Height = 27
         Top = 30
-        Width = 452
+        Width = 354
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2

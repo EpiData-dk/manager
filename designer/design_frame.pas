@@ -1199,6 +1199,7 @@ begin
           if TheName <> '' then
             TEpiField(EpiCtrl).Question.Text := TheName;
           EpiCtrl.EndUpdate;
+
         end;
       ctSection:
         begin
@@ -1219,6 +1220,7 @@ begin
       ctSelection: ;
     end;
     ShowForm(EpiCtrl, Point(0,0), false);
+    UpdateStatusbarControl(EpiCtrl);
   end;
 end;
 

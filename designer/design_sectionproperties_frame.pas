@@ -39,6 +39,7 @@ type
   protected
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
     procedure ShiftToTabSheet(const SheetNo: Byte); override;
+    procedure UpdateCaption(const S: String); override;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; AAdmin: TEpiAdmin);
@@ -99,6 +100,14 @@ begin
   SectionPageControl.ActivePageIndex := SheetNo - 1;
 end;
 
+procedure TSectionPropertiesFrame.UpdateCaption(const S: String);
+var
+  T: String;
+begin
+  T := 'Section Properties: ' + Section.Name.Text;
+  inherited UpdateCaption(T);
+end;
+
 constructor TSectionPropertiesFrame.Create(TheOwner: TComponent;
   AAdmin: TEpiAdmin);
 begin
@@ -129,6 +138,7 @@ begin
   FSection.EndUpdate;
 
   Result := true;
+  UpdateCaption('');
 end;
 
 procedure TSectionPropertiesFrame.UpdateFormContent;
@@ -164,6 +174,7 @@ begin
   // Advanced Page
   WidthEdit.Text := IntToStr(Section.Width);
   HeightEdit.Text := IntToStr(Section.Height);
+  UpdateCaption('');
 end;
 
 procedure TSectionPropertiesFrame.ForceShow;

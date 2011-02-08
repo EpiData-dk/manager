@@ -14,6 +14,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    EpiDataTutorialsMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
     UserAccessBtn: TButton;
     GCPBtn: TButton;
@@ -74,6 +75,7 @@ type
     procedure CloseProjectActionUpdate(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
+    procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -183,6 +185,11 @@ end;
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
 begin
   RestoreDefaultPos;
+end;
+
+procedure TMainForm.EpiDataTutorialsMenuItemClick(Sender: TObject);
+begin
+  OpenURL('http://www.epidata.org/dokuwiki/doku.php/documentation:tutorials');
 end;
 
 procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
@@ -347,7 +354,9 @@ begin
   for i := TutorialSubMenu.Count - 1 downto 0 do
   begin
     if (TutorialSubMenu[i] = TutorialsMenuDivider1) or
-       (TutorialSubMenu[i] = WebTutorialsMenuItem) then continue;
+       (TutorialSubMenu[i] = WebTutorialsMenuItem) or
+       (TutorialSubMenu[i] = EpiDataTutorialsMenuItem)
+       then continue;
 
     MenuItem := TutorialSubMenu[i];
     TutorialSubMenu.Delete(i);
@@ -498,6 +507,7 @@ end;
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
 begin
   DoOpenProject(ExpandFileNameUTF8(TMenuItem(Sender).Caption));
+  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.UpdateRecentFiles;
