@@ -329,7 +329,7 @@ begin
   FHintWindow.HideInterval := 10 * 1000; // TODO : Adjust hint-timeout in settings.
   FHintWindow.AutoHide := true;
 
-  FActiveButton := nil;
+  FActiveButton := IntSetBtn;
 end;
 
 destructor TValueLabelEditor.Destroy;
@@ -654,23 +654,20 @@ procedure TValueLabelEditor.ToolBarBtnClick(Sender: TObject);
 var
   ToolBtn: TToolButton absolute Sender;
 begin
-  if Assigned(FActiveButton) then
-    FActiveButton.Down := false;
+  BeginFormUpdate;
 
-  if FActiveButton = ToolBtn then
-  begin
-    FActiveButton := nil;
-    Exit;
-  end;
-
+  FActiveButton.Down := false;
+  ToolBtn.Down := not ToolBtn.Down;
+  if not ToolBtn.Down then
+    ToolBtn := IntSetBtn;
   ToolBtn.Down := true;
   FActiveButton := ToolBtn;
+
+  EndFormUpdate;
 end;
 
 procedure TValueLabelEditor.ToolButton6Click(Sender: TObject);
 begin
-  if not Assigned(FActiveButton) then exit;
-
   if FActiveButton = IntSetBtn then
     DoNewValueLabelSet(ftInteger);
   if FActiveButton = FloatSetBtn then
@@ -678,8 +675,7 @@ begin
   if FActiveButton = StringSetBtn then
     DoNewValueLabelSet(ftString);
 
-  FActiveButton.Down := false;
-  FActiveButton := nil;
+  ToolBarBtnClick(IntSetBtn);
 end;
 
 procedure TValueLabelEditor.ValueLabelEditorStatusBarResize(Sender: TObject);

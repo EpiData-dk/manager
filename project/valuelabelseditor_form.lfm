@@ -38,6 +38,7 @@ object ValueLabelEditor: TValueLabelEditor
         Left = 70
         Hint = 'Integer Valuelabels'
         Top = 2
+        Down = True
         ImageIndex = 0
         OnClick = ToolBarBtnClick
       end

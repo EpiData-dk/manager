@@ -524,6 +524,12 @@ begin
     Mi.Name := 'recent' + inttostr(i);
     Mi.Caption := RecentFiles[i];
     Mi.OnClick := @OpenRecentMenuItemClick;
+    if i < 9 then
+      {$IFDEF DARWIN}
+      Mi.ShortCut := ShortCut(VK_1 + i, [ssMeta, ssShift]);
+      {$ELSE}
+      Mi.ShortCut := ShortCut(VK_1 + i, [ssCtrl, ssShift]);
+      {$ENDIF}
     RecentFilesSubMenu.Add(Mi);
   end;
 end;
