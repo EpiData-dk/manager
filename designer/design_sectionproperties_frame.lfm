@@ -1,7 +1,7 @@
 inherited SectionPropertiesFrame: TSectionPropertiesFrame
-  Height = 160
+  Height = 382
   Width = 380
-  ClientHeight = 160
+  ClientHeight = 382
   ClientWidth = 380
   Constraints.MinHeight = 160
   Constraints.MinWidth = 380
@@ -10,7 +10,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
   DesignTop = 395
   object SectionPageControl: TPageControl[0]
     Left = 0
-    Height = 160
+    Height = 382
     Top = 0
     Width = 380
     ActivePage = SectionAdvancedSheet
@@ -19,7 +19,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
     TabOrder = 0
     object SectionBasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 125
+      ClientHeight = 347
       ClientWidth = 374
       object SectionGroupAccessGroupBox: TGroupBox
         AnchorSideLeft.Control = SectionNameEdit
@@ -30,12 +30,12 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         Left = 10
         Height = 170
         Top = 62
-        Width = 357
+        Width = 354
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
         Caption = 'Groups access:'
         ClientHeight = 151
-        ClientWidth = 353
+        ClientWidth = 350
         TabOrder = 1
         object GroupAvailableListBox: TListBox
           AnchorSideTop.Control = Label5
@@ -46,7 +46,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           Left = 6
           Height = 121
           Top = 25
-          Width = 154
+          Width = 153
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 2
           BorderSpacing.Right = 5
@@ -63,10 +63,10 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = SectionGroupAccessGroupBox
           AnchorSideBottom.Side = asrBottom
-          Left = 195
+          Left = 194
           Height = 121
           Top = 25
-          Width = 151
+          Width = 149
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 7
           BorderSpacing.Top = 2
@@ -90,7 +90,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideLeft.Control = GroupAvailableListBox
           AnchorSideLeft.Side = asrBottom
           AnchorSideRight.Control = GroupAssignedListBox
-          Left = 165
+          Left = 164
           Height = 22
           Top = 87
           Width = 23
@@ -137,7 +137,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         object Label6: TLabel
           AnchorSideLeft.Control = GroupAssignedListBox
           AnchorSideTop.Control = SectionGroupAccessGroupBox
-          Left = 195
+          Left = 194
           Height = 18
           Top = 5
           Width = 64
@@ -149,7 +149,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideLeft.Control = GroupAvailableListBox
           AnchorSideLeft.Side = asrBottom
           AnchorSideRight.Control = GroupAvailableListBox
-          Left = 165
+          Left = 164
           Height = 22
           Top = 55
           Width = 23
@@ -203,7 +203,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         Left = 10
         Height = 27
         Top = 30
-        Width = 357
+        Width = 354
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -224,7 +224,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
     end
     object SectionAdvancedSheet: TTabSheet
       Caption = 'Advanced'
-      ClientHeight = 125
+      ClientHeight = 347
       ClientWidth = 374
       object HeightEdit: TEdit
         AnchorSideLeft.Control = SectionAdvancedSheet

@@ -212,6 +212,7 @@ begin
     exit;
   end;
 
+  BeginFormUpdate;
   with ManagerVersion do
     EntryScore  := (VersionNo * 10000) + (MajorRev * 100) + (MinorRev);
   With Stable do

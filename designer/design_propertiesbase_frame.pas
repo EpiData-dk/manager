@@ -14,10 +14,10 @@ type
 
   TDesignPropertiesFrame = class(TFrame)
   private
-    FEpiControl: TEpiCustomControlItem;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FOnUpdateCaption: TGetStrProc;
   protected
+    FEpiControl: TEpiCustomControlItem;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); virtual;
     procedure ShowHintMsg(const Msg: string; Ctrl: TControl);
     procedure UpdateCaption(Const S: String); virtual;

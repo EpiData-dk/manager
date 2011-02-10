@@ -1984,6 +1984,10 @@ object DesignFrame: TDesignFrame
       ImageIndex = 11
       OnExecute = DeleteControlActionExecute
       OnUpdate = DeleteControlActionUpdate
+      SecondaryShortCuts.Strings = (
+        'Shift+Del'
+      )
+      ShortCut = 46
     end
     object ImportDataFileAction: TAction
       Category = 'File'

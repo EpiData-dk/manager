@@ -130,10 +130,10 @@ type
   private
     { private declarations }
     FActiveFrame: TDesignPropertiesFrame;
-    FEpiControl: TEpiCustomControlItem;
     FEpiDocument: TEpiDocument;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     constructor Create(TheOwner: TComponent); override;
+    function    GetEpiControl: TEpiCustomControlItem;
     procedure   SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure   ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
     procedure   UpdateControlContent;
@@ -145,7 +145,7 @@ type
     function    ValidateControl: boolean;
     procedure   RestoreDefaultPos;
     procedure   Show;
-    property    EpiControl: TEpiCustomControlItem read FEpiControl write SetEpiControl;
+    property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
     property    ActiveFrame: TDesignPropertiesFrame read FActiveFrame;
     property    OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
   end;
@@ -785,6 +785,7 @@ end;
 
 procedure TDesignControlsForm.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
+  if AValue = nil then exit;
   try
     BeginFormUpdate;
 
@@ -841,12 +842,20 @@ end;
 function TDesignControlsForm.ValidateControl: boolean;
 begin
   if (not Showing) then exit(true);
+  if (not Assigned(FActiveFrame.EpiControl)) then exit(true);
+
   result := FActiveFrame.ValidateControl;
 end;
 
 constructor TDesignControlsForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+end;
+
+
+function TDesignControlsForm.GetEpiControl: TEpiCustomControlItem;
+begin
+  result := FActiveFrame.EpiControl;
 end;
 
 constructor TDesignControlsForm.Create(TheOwner: TComponent;

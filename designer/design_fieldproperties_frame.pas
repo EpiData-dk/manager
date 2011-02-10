@@ -72,7 +72,7 @@ type
     FJumpComponentsList: TList;
     procedure UpdateFieldComboBox(Combo: TComboBox);
     procedure AddFieldsToCombo(Combo: TComboBox);
-    procedure FieldJumpHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure FieldHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure JumpValueEditKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     function  DoAddNewJump: pointer;
@@ -323,13 +323,19 @@ begin
   Combo.Items.EndUpdate;
 end;
 
-procedure TFieldPropertiesFrame.FieldJumpHook(Sender: TObject;
+procedure TFieldPropertiesFrame.FieldHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   if ((EventGroup = eegFields) and (EventType = Word(efceName))) or
      ((EventGroup = eegCustomBase) and (EventType = Word(ecceUpdate))) then
   begin
     UpdateJumps;
+  end;
+
+  if (EventGroup = eegCustomBase) and
+     (EventType = Word(ecceDestroy)) then
+  begin
+    FEpiControl := nil;
   end;
 end;
 
@@ -466,10 +472,10 @@ procedure TFieldPropertiesFrame.SetEpiControl(
   const AValue: TEpiCustomControlItem);
 begin
   if Assigned(Field) then
-    Field.UnRegisterOnChangeHook(@FieldJumpHook);
+    Field.UnRegisterOnChangeHook(@FieldHook);
   inherited SetEpiControl(AValue);
   UpdateFormContent;
-  AValue.RegisterOnChangeHook(@FieldJumpHook);
+  AValue.RegisterOnChangeHook(@FieldHook);
 end;
 
 procedure TFieldPropertiesFrame.ShiftToTabSheet(const SheetNo: Byte);

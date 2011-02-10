@@ -256,6 +256,7 @@ type
     procedure   EnterControl(Sender: TObject);
     procedure   ExitControl(Sender: TObject);
     procedure   DeleteControl(Sender: TObject);
+    procedure   DoDeleteControl(Sender: TObject);
     procedure   DeleteAllControls;
     // - Custom message, used for deleting controls.
     procedure   LMDesignerDel(var Msg: TLMessage); message LM_DESIGNER_DEL;
@@ -482,10 +483,10 @@ begin
     Key := VK_UNKNOWN;
   end;
 
-  if (Key = VK_DELETE) then
+{  if (Key = VK_DELETE) then
   begin
     PostMessage(Self.Handle, LM_DESIGNER_DEL, WPARAM(Sender), 0);
-  end;
+  end;}
 end;
 
 procedure TDesignFrame.Button2Click(Sender: TObject);
@@ -540,57 +541,8 @@ begin
 end;
 
 procedure TDesignFrame.DeleteControlActionExecute(Sender: TObject);
-var
-  EpiCtrl: TEpiCustomControlItem;
-  LocalCtrl: TControl;
-  Node, NNode: TAVLTreeNode;
-  YTree: TAVLTree;
 begin
-  Node := nil;
-
-  {$IFNDEF EPI_DEBUG}
-  if not ([ssShift] = GetKeyShiftState) then
-  begin
-    if MessageDlg('Warning', 'Are you sure you want to delete?',
-      mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
-
-
-    if FActiveControl is TDesignSection then
-    begin
-      YTree := (FActiveControl as IPositionHandler).YTree;
-      Node := Ytree.FindLowest;
-      while Assigned(Node) do
-      begin
-        if TControl(Node.Data) is TDesignField then break;
-        Node := YTree.FindSuccessor(Node);
-      end;
-    end else if FActiveControl is TDesignField then
-      Node := (FActiveControl as IDesignEpiControl).YTreeNode;
-
-    // Issue warning for last data-containing control will reset size to 0 (zero).
-    if (DataFile.Size > 0) and (
-         ((DataFile.Fields.Count = 1) and (FActiveControl is TDesignField)) or
-         ((FActiveControl is TDesignSection) and
-           (TEpiSection(TDesignSection(FActiveControl).EpiControl).Fields.Count = DataFile.Fields.Count))
-       ) then
-    begin
-      if MessageDlg('Warning', 'Last field/section containing data is being deleted.' + LineEnding +
-                    'This will reset datafile to 0 (zero) records. Are you sure you want to delete?',
-                    mtWarning, mbYesNo, 0, mbNo) = mrNo then
-        exit;
-    end else
-    if (Assigned(Node)) and
-       (DataFile.Size > 0) and
-       (MessageDlg('Warning', 'Field(s) contains data.' + LineEnding +
-        'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
-      exit;
-  end;  // ssShift!
-  {$ENDIF}
-
-  DeleteControl(nil);
-
-  if DataFile.Fields.Count = 0 then
-    DataFile.Size := 0;
+  PostMessage(Self.Handle, LM_DESIGNER_DEL, WPARAM(Sender), 0);
 end;
 
 procedure TDesignFrame.ControlActionUpdate(Sender: TObject);
@@ -695,8 +647,6 @@ begin
 
   DeleteAllControls;
 
-  NewIntFieldAction.ShortCut := ShortCut(VK_V, [ssCtrl]);
-
   FActiveSection := FDataFile.MainSection;
   FActiveSection.Fields.RegisterOnChangeHook(@ImportHook, true);
   FActiveSection.Headings.RegisterOnChangeHook(@ImportHook, true);
@@ -704,7 +654,7 @@ begin
   FLastRecYPos := -1;
   FLastRecCtrl := nil;
   Importer := TEpiImport.Create;
-  Fn := Dlg.FileName; //ImportForm.ImportFileEdit.FileName;
+  Fn := Dlg.FileName;
   Ext := ExtractFileExt(UTF8LowerCase(Fn));
 
   if ext = '.rec' then
@@ -2127,6 +2077,60 @@ var
   Node, NNode: TAVLTreeNode;
   YTree: TAVLTree;
 begin
+  Node := nil;
+
+  {$IFNDEF EPI_DEBUG}
+  if not ([ssShift] = GetKeyShiftState) then
+  begin
+    if MessageDlg('Warning', 'Are you sure you want to delete?',
+      mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+
+
+    if FActiveControl is TDesignSection then
+    begin
+      YTree := (FActiveControl as IPositionHandler).YTree;
+      Node := Ytree.FindLowest;
+      while Assigned(Node) do
+      begin
+        if TControl(Node.Data) is TDesignField then break;
+        Node := YTree.FindSuccessor(Node);
+      end;
+    end else if FActiveControl is TDesignField then
+      Node := (FActiveControl as IDesignEpiControl).YTreeNode;
+
+    // Issue warning for last data-containing control will reset size to 0 (zero).
+    if (DataFile.Size > 0) and (
+         ((DataFile.Fields.Count = 1) and (FActiveControl is TDesignField)) or
+         ((FActiveControl is TDesignSection) and
+           (TEpiSection(TDesignSection(FActiveControl).EpiControl).Fields.Count = DataFile.Fields.Count))
+       ) then
+    begin
+      if MessageDlg('Warning', 'Last field/section containing data is being deleted.' + LineEnding +
+                    'This will reset datafile to 0 (zero) records. Are you sure you want to delete?',
+                    mtWarning, mbYesNo, 0, mbNo) = mrNo then
+        exit;
+    end else
+    if (Assigned(Node)) and
+       (DataFile.Size > 0) and
+       (MessageDlg('Warning', 'Field(s) contains data.' + LineEnding +
+        'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
+      exit;
+  end;  // ssShift!
+  {$ENDIF}
+
+  DoDeleteControl(nil);
+
+  if DataFile.Fields.Count = 0 then
+    DataFile.Size := 0;
+end;
+
+procedure TDesignFrame.DoDeleteControl(Sender: TObject);
+var
+  EpiCtrl: TEpiCustomControlItem;
+  LocalCtrl: TControl;
+  Node, NNode: TAVLTreeNode;
+  YTree: TAVLTree;
+begin
   LocalCtrl := FActiveControl;
   EpiCtrl := (LocalCtrl as IDesignEpiControl).EpiControl;
   Node    := (LocalCtrl as IDesignEpiControl).YTreeNode;
@@ -2159,7 +2163,10 @@ begin
   Node  := YTree.FindLowest;
 
   FDesignerBox.BeginUpdateBounds;
+
   ExitControl(nil);
+  EnterControl(FDesignerBox);
+
   while Assigned(Node) do
   begin
     LocalCtrl := TControl(Node.Data);
@@ -2172,8 +2179,6 @@ begin
   YTree.Clear;
   TScrollBoxEx(FDesignerBox).XTree.Clear;
 
-  EnterControl(FDesignerBox);
-
   DataFile.Size := 0;
   FDesignerBox.EndUpdateBounds;
 end;
@@ -2184,7 +2189,7 @@ var
 begin
   Ctrl := TControl(Msg.WParam);
   if Ctrl = FDesignerBox then exit;
-  DeleteControlActionExecute(Ctrl);
+  DeleteControl(Ctrl);
   TLMessage(Msg).Result := 1;
 end;
 
