@@ -11,6 +11,7 @@ type
   TManagerSettings = record
     // Visual design:
     DefaultRightPostion:   Integer;
+    DefaultLabelPostion:   Integer;
     SnapFields:            boolean;
     SnappingThresHold:     Integer;
     SpaceBtwFieldField:    Integer;
@@ -55,6 +56,7 @@ var
   ManagerSettings: TManagerSettings = (
     // Visual design:
     DefaultRightPostion:   200;
+    DefaultLabelPostion:   20;
     SnapFields:            true;
     SnappingThresHold:     10;
     SpaceBtwFieldField:    10;

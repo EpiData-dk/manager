@@ -265,7 +265,7 @@ type
     procedure   FindNearestControls(ParentControl: TWinControl;
       Control: TControl; var XCtrl: TControl; var YCtrl: TControl);
     function    FindLowestDesignControl(ParentControl: TWinControl;
-      var Control: TControl): TPoint;
+      var Control: TControl; AClass: TControlClass): TPoint;
     function    FindNewPosition(ParentControl: TWinControl;
       AClass: TControlClass): TPoint;
   private
@@ -2253,14 +2253,18 @@ begin
 end;
 
 function TDesignFrame.FindLowestDesignControl(ParentControl: TWinControl;
-  var Control: TControl): TPoint;
+  var Control: TControl; AClass: TControlClass): TPoint;
 var
   YTree: TAVLTree;
   Hit: TAVLTreeNode;
   Prd: TAVLTreeNode;
 begin
   // Initialization
-  Result := Point(ManagerSettings.DefaultRightPostion, 5);
+  if AClass = TDesignField then
+    Result := Point(ManagerSettings.DefaultRightPostion, 5);
+  if AClass = TDesignHeading then
+    Result := Point(ManagerSettings.DefaultLabelPostion, 5);
+
   Control := nil;
 
   // Look in the tree for lowest component (highest value in tree).

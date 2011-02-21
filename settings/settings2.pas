@@ -97,6 +97,7 @@ begin
         SpaceBtwLabelLabel:    Integer;}
       Sec := 'visual';
       WriteInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
+      WriteInteger(Sec, 'DefaultLabelPostion',   DefaultLabelPostion);
       WriteBool   (Sec, 'SnapFields',            SnapFields);
       WriteInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
       WriteInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
@@ -169,6 +170,7 @@ begin
         SpaceBtwLabelLabel:    Integer;}
       Sec := 'visual';
       DefaultRightPostion   := ReadInteger(Sec, 'DefaultRightPostion',   DefaultRightPostion);
+      DefaultLabelPostion   := ReadInteger(Sec, 'DefaultLabelPostion',   DefaultLabelPostion);
       SnapFields            := ReadBool   (Sec, 'SnapFields',            SnapFields);
       SnappingThresHold     := ReadInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
       SpaceBtwFieldField    := ReadInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);

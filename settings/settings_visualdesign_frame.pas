@@ -14,6 +14,8 @@ type
 
   TSettings_VisualDesign = class(TFrame, ISettingsFrame)
     DefaultRightPosEdit: TMaskEdit;
+    Label8: TLabel;
+    LabelLeftPosition: TMaskEdit;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
     GroupBox1: TGroupBox;
