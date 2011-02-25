@@ -429,7 +429,6 @@ end;
 procedure TDesignFrame.DesignKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
-  KeyMsg: TLMKey;
   Ctrl: TControl absolute Sender;
   Handler: IPositionHandler;
 begin
@@ -482,11 +481,6 @@ begin
     MoveEndAction.Execute;
     Key := VK_UNKNOWN;
   end;
-
-{  if (Key = VK_DELETE) then
-  begin
-    PostMessage(Self.Handle, LM_DESIGNER_DEL, WPARAM(Sender), 0);
-  end;}
 end;
 
 procedure TDesignFrame.Button2Click(Sender: TObject);
@@ -1539,7 +1533,7 @@ var
   Control: TControl;
   Dist: LongInt;
 begin
-  result := FindLowestDesignControl(ParentControl, Control);
+  result := FindLowestDesignControl(ParentControl, Control, AClass);
   if not Assigned(Control) then exit;
 
   Dist := ManagerSettings.SpaceBtwFieldLabel;
@@ -2019,6 +2013,8 @@ procedure TDesignFrame.EnterControl(Sender: TObject);
 var
   S, T: String;
   EpiControl: TEpiCustomControlItem;
+  ControlTop: LongInt;
+  Delta: Integer;
 begin
   // Validate active control in ControlDesign form - it could be in
   //  invalid state.
@@ -2049,11 +2045,23 @@ begin
   // new controls using the mouse, if eg. the box is scrolled some-what down.
   if FActiveControl <> FDesignerBox then
   begin
+    Delta := FDesignerBox.Height div 4;
+    ControlTop := DesignControlTop(FActiveControl);
+
+    With FDesignerBox.VertScrollBar do
+    begin
+      if ControlTop < (Position + Delta) then
+        Position := ControlTop - Delta;
+
+      if ControlTop > (Position + Page - Delta) then
+        Position := ControlTop - Page + FActiveControl.Height + Delta;
+    end;
+{
     if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
       FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
 
     if DesignControlTop(FActiveControl) > (FDesignerBox.VertScrollBar.Position + FDesignerBox.VertScrollBar.Page) then
-      FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - FDesignerBox.VertScrollBar.Page + FActiveControl.Height + 5;
+      FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - FDesignerBox.VertScrollBar.Page + FActiveControl.Height + 5;  }
   end;
   FActiveControl.Color := $00B6F5F5;
 
