@@ -1945,7 +1945,7 @@ begin
   if (NewTarget.ClassType = Client.ClassType) then exit;
 
   // No sure if this is needed, but better safe than sorry. Basically we prevent
-  // anything from docking into other controls that a section and the scrollbox.
+  // anything from docking into other controls than a section and the scrollbox.
   if (NewTarget = FDesignerBox) or
     (NewTarget is TDesignSection) then Allow := true;
 end;
@@ -1970,12 +1970,9 @@ var
 begin
   Heading := NewHeading;
   Pt := FindNewPosition(AParent, TDesignHeading);
-  if (not (ssShift in GetKeyShiftState)) and (ShowForm(Heading, AParent.ClientToScreen(Pt)) <> mrOk) then
-  begin
-    Heading.Free;
-    Exit;
-  end;
+
   NewDesignControl(TDesignHeading, AParent, Pt, Heading);
+  ShowForm(Heading, AParent.ClientToScreen(Pt), not (ssShift in GetKeyShiftState));
 end;
 
 procedure TDesignFrame.DesignControlMouseDown(Sender: TObject;
