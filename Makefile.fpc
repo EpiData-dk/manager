@@ -4,7 +4,7 @@
 
 [package]
 name=epidatamanager
-version=0.5.5.0
+version=0.7.0.0
 
 [target]
 programs=epidatamanager
@@ -17,6 +17,7 @@ unitdir=designer \
 	project/structure \
 	utils \
 	settings \
+	import \
 	$(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET) $(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM) \
 	$(CORE_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
 	$(DCPCRYPT_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
@@ -40,6 +41,7 @@ files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
       $(wildcard ./project/structure/*$(OEXT)) $(wildcard ./project/structure/*$(PPUEXT)) \
       $(wildcard ./settings/*$(OEXT)) $(wildcard ./settings/*$(PPUEXT)) \
       $(wildcard ./utils/*$(OEXT)) $(wildcard ./utils/*$(PPUEXT)) \
+      $(wildcard ./import/*$(OEXT)) $(wildcard ./import/*$(PPUEXT)) \
       $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *$(RSTEXT))
 
 

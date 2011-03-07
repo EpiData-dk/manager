@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="28">
+    <Units Count="29">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -228,6 +228,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_types"/>
       </Unit27>
+      <Unit28>
+        <Filename Value="import/import_structure_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ImportStructureForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="import_structure_form"/>
+      </Unit28>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -237,7 +244,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;project/structure"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
@@ -260,8 +267,8 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dEPI_DEBUG1
--dEPI_RELEASE"/>
+      <CustomOptions Value="-dEPI_DEBUG
+-dEPI_RELEASE1"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

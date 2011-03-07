@@ -37,6 +37,7 @@ type
     ToolButton7: TToolButton;
     procedure ExportStataActionExecute(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
+    procedure OpenProjectToolBtnClick(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
@@ -124,6 +125,11 @@ begin
 
   DoNewDataForm(Df);
   UpdateCaption;
+end;
+
+procedure TProjectFrame.OpenProjectToolBtnClick(Sender: TObject);
+begin
+
 end;
 
 procedure TProjectFrame.ExportStataActionExecute(Sender: TObject);

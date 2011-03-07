@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
-  epicustombase, AVL_Tree , LCLType, LMessages, StdActns, design_controls;
+  epicustombase, AVL_Tree , LCLType, LMessages, StdActns, design_controls,
+  epidocument;
 
 const
   LM_DESIGNER_DEL = LM_USER + 1;
@@ -212,6 +213,7 @@ type
     procedure   ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure   PasteAsField(FieldType: TEpiFieldType);
+    procedure   PasteEpiDoc(Const ImportDoc: TEpiDocument);
   private
     { Docksite methods }
     // - mouse
@@ -301,7 +303,8 @@ implementation
 uses
   Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
-  managerprocs, epiqeshandler, copyobject, epiranges, design_types;
+  managerprocs, epiqeshandler, copyobject, epiranges, design_types,
+  import_structure_form;
 
 type
 
@@ -579,38 +582,29 @@ end;
 procedure TDesignFrame.AddStructureActionExecute(Sender: TObject);
 var
   Dlg: TOpenDialog;
-  Importer: TEpiImport;
-  Ext: String;
-  Fn: String;
+  ImpStructurForm: TImportStructureForm;
+  i: Integer;
 begin
-  Dlg := TOpenDialog.Create(Self);
-  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(false, false, true, false, false, false,
-    true, false, true, true, false);
-  if not Dlg.Execute then exit;
+  Dlg := nil;
+  ImpStructurForm := nil;
+  try
+    Dlg := TOpenDialog.Create(Self);
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    Dlg.Filter := GetEpiDialogFilter(true, true, true, false, false, false,
+      true, false, false, true, false);
+    Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
+    if not Dlg.Execute then exit;
 
-  FActiveSection := DataFile.MainSection;
-  DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
-  DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+    ImpStructurForm := TImportStructureForm.Create(Self, Dlg.Files);
+    if ImpStructurForm.ShowModal = mrCancel then exit;
 
-  FLastRecYPos := -1;
-  FLastRecCtrl := nil;
-  Importer := TEpiImport.Create;
-  Fn := Dlg.FileName; //ImportForm.ImportFileEdit.FileName;
-  Ext := ExtractFileExt(UTF8LowerCase(Fn));
+    for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
+      PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments[i]));
 
-  if ext = '.rec' then
-    Importer.ImportRec(Fn, FDataFile, false)
-  else if ext = '.dta' then
-    Importer.ImportStata(Fn, FDataFile, false)
-  else if ext = '.qes' then
-    Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
-
-  Importer.Free;
-
-  DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-  DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
-  Dlg.Free;
+  finally
+    Dlg.Free;
+    ImpStructurForm.Free;
+  end;
 end;
 
 procedure TDesignFrame.ImportDataFileActionExecute(Sender: TObject);
@@ -1090,7 +1084,7 @@ begin
           Pt := FindNewPosition(FActiveDockSite, TDesignSection);
           SectionCtrl := TWincontrol(NewSectionControl(Pt, Point(Pt.X+OrgSection.Width, Pt.Y+OrgSection.Height), EpiCtrl));
 
-          // TODO : Find position for ALL fields and headings.
+          // TODO : New desing controls for ALL fields and headings.
           with TEpiSection(EpiCtrl) do
           begin
             for i := 0 to Fields.Count - 1 do
@@ -1503,6 +1497,66 @@ begin
     end;
   finally
     Cbl.Free;
+  end;
+end;
+
+procedure TDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument);
+var
+  Pt: TPoint;
+  i: Integer;
+  TheSection: TEpiSection;
+  EpiCtrl: TEpiCustomControlItem;
+  WinSection: TWinControl;
+  j: Integer;
+  NSection: TEpiSection;
+
+  procedure CopyField(Const AField: TEpiField; AParent: TWinControl; Const AddTop: Integer);
+  var
+    NField: TEpiField;
+  begin
+    NField := NewField(AField.FieldType);
+    NField.Assign(AField);
+    NField.Top := NField.Top + AddTop;
+    NewDesignControl(TDesignField, AParent, Point(NField.Left, NField.Top), NField);
+  end;
+
+  procedure CopyHeading(Const AHeading: TEpiHeading; AParent: TWinControl; Const AddTop: Integer);
+  var
+    NHeading: TEpiHeading;
+  begin
+    NHeading := NewHeading;
+    NHeading.Assign(AHeading);
+    NHeading.Top := NHeading.Top + AddTop;
+    NewDesignControl(TDesignHeading, AParent, Point(NHeading.Left, NHeading.Top), NHeading);
+  end;
+
+begin
+  Pt := FindNewPosition(FDesignerBox, TDesignField);
+
+  // First place main section - it's easiest.
+  TheSection := ImportDoc.DataFiles[0].MainSection;
+  // Do fields...
+  for i := 0 to TheSection.Fields.Count - 1 do
+    CopyField(TheSection.Field[i], FDesignerBox, Pt.Y);
+  // Do Headings...
+  for i := 0 to TheSection.Headings.Count - 1 do
+    CopyHeading(TheSection.Heading[i], FDesignerBox, Pt.Y);
+
+  for i := 0 to ImportDoc.DataFiles[0].Sections.Count - 1 do
+  begin
+    TheSection := ImportDoc.DataFiles[0].Section[i];
+    if TheSection = ImportDoc.DataFiles[0].MainSection then continue;
+
+    NSection := NewSection;
+    NSection.Assign(TheSection);
+    NSection.Top := NSection.Top + Pt.Y;
+    with NSection do
+      WinSection := TWinControl(NewSectionControl(Point(Left, Top), Point(Left + Width, Top + Height), NSection));
+
+    for j := 0 to NSection.Fields.Count - 1 do
+      CopyField(NSection.Field[j], WinSection, 0);
+    for j := 0 to NSection.Headings.Count - 1 do
+      CopyHeading(NSection.Heading[j], WinSection, 0);
   end;
 end;
 
