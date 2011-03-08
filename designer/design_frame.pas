@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
   epicustombase, AVL_Tree , LCLType, LMessages, StdActns, design_controls,
-  epidocument;
+  epidocument, epivaluelabels;
 
 const
   LM_DESIGNER_DEL = LM_USER + 1;
@@ -595,13 +595,15 @@ begin
     Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
     if not Dlg.Execute then exit;
 
-    ImpStructurForm := TImportStructureForm.Create(Self, Dlg.Files);
+    ImpStructurForm := TImportStructureForm.Create(FDesignerBox, Dlg.Files);
     if ImpStructurForm.ShowModal = mrCancel then exit;
 
+    MainForm.BeginUpdatingForm;
     for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
       PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments[i]));
 
   finally
+    MainForm.EndUpdatingForm;
     Dlg.Free;
     ImpStructurForm.Free;
   end;
@@ -1070,6 +1072,8 @@ begin
 
           // Copy properties.
           EpiCtrl.Assign(OrgField);
+          // Since Valuelabels are NOT copied - do it manually.
+          TEpiField(EpiCtrl).ValueLabelSet := OrgField.ValueLabelSet;
 
           // Place new field.
           Pt := FindNewPosition(FActiveDockSite, TDesignField);
@@ -1084,7 +1088,7 @@ begin
           Pt := FindNewPosition(FActiveDockSite, TDesignSection);
           SectionCtrl := TWincontrol(NewSectionControl(Pt, Point(Pt.X+OrgSection.Width, Pt.Y+OrgSection.Height), EpiCtrl));
 
-          // TODO : New desing controls for ALL fields and headings.
+          // New design controls for ALL fields and headings.
           with TEpiSection(EpiCtrl) do
           begin
             for i := 0 to Fields.Count - 1 do
@@ -1096,6 +1100,8 @@ begin
                 TheName := ManagerSettings.FieldNamePrefix + IntToStr(FieldCount + j);
               until DataFile.ValidateFieldRename(TEpiField(OldEpiCtrl), TheName);
               TEpiField(OldEpiCtrl).Name := TheName;
+              // Since Valuelabels are NOT copied - do it manually.
+              TEpiField(OldEpiCtrl).ValueLabelSet := OrgSection.Field[i].ValueLabelSet;
               NewDesignControl(TDesignField, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
             end;
             for i := 0 to Headings.Count - 1 do
@@ -1134,10 +1140,11 @@ begin
           if TEpiField(EpiCtrl).Question.Text <> '' then
             TheName := TEpiField(EpiCtrl).Question.Text;
           EpiCtrl.Assign(OrgField);
+          // Since Valuelabels are NOT copied - do it manually.
+          TEpiField(EpiCtrl).ValueLabelSet := OrgField.ValueLabelSet;
           if TheName <> '' then
             TEpiField(EpiCtrl).Question.Text := TheName;
           EpiCtrl.EndUpdate;
-
         end;
       ctSection:
         begin
@@ -1509,6 +1516,8 @@ var
   WinSection: TWinControl;
   j: Integer;
   NSection: TEpiSection;
+  VLSet: TEpiValueLabelSet;
+  OldSet: TEpiValueLabelSet;
 
   procedure CopyField(Const AField: TEpiField; AParent: TWinControl; Const AddTop: Integer);
   var
@@ -1517,6 +1526,10 @@ var
     NField := NewField(AField.FieldType);
     NField.Assign(AField);
     NField.Top := NField.Top + AddTop;
+    // The ValuelabelSet have previously been assigned to new Document and hence,
+    // stored the pointer to the new VLSet in ObjectData.
+    if Assigned(AField.ValueLabelSet) then
+      NField.ValueLabelSet := TEpiValueLabelSet(AField.ValueLabelSet.ObjectData);
     NewDesignControl(TDesignField, AParent, Point(NField.Left, NField.Top), NField);
   end;
 
@@ -1531,6 +1544,18 @@ var
   end;
 
 begin
+  // Copy ValueLabels first...
+  if ImportDoc.ValueLabelSets.Count > 0 then
+  begin
+    for i := 0 to ImportDoc.ValueLabelSets.Count - 1 do
+    begin
+      OldSet := ImportDoc.ValueLabelSets[i];
+      VLSet := DataFile.ValueLabels.NewValueLabelSet(OldSet.LabelType);
+      VLSet.Assign(OldSet);
+      OldSet.ObjectData := PtrUInt(VLSet);
+    end;
+  end;
+
   Pt := FindNewPosition(FDesignerBox, TDesignField);
 
   // First place main section - it's easiest.
@@ -1554,9 +1579,16 @@ begin
       WinSection := TWinControl(NewSectionControl(Point(Left, Top), Point(Left + Width, Top + Height), NSection));
 
     for j := 0 to NSection.Fields.Count - 1 do
-      CopyField(NSection.Field[j], WinSection, 0);
+    with NSection.Field[j] do
+    begin
+      // OBS!!! NSection.Field[j] = TheSection.Field[j]
+      if Assigned(TheSection.Field[j].ValueLabelSet) then
+        ValueLabelSet := TEpiValueLabelSet(TheSection.Field[j].ValueLabelSet.ObjectData);
+      NewDesignControl(TDesignField, WinSection, Point(Left, Top), NSection.Field[j]);
+    end;
     for j := 0 to NSection.Headings.Count - 1 do
-      CopyHeading(NSection.Heading[j], WinSection, 0);
+    with NSection.Heading[j] do
+      NewDesignControl(TDesignHeading, WinSection, Point(Left, Top), NSection.Heading[j]);
   end;
 end;
 

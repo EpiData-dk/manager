@@ -513,7 +513,7 @@ var
   I64: int64;
   F: Extended;
   S: string;
-  w: Word;
+  W1, W2, W3: Word;
 begin
   Result := false;
 
@@ -584,13 +584,13 @@ begin
         end;
       ftTime:
         begin
-          if not EpiStrToTime(FromEdit.Text, TimeSeparator, w, W, W, S) then
+          if not EpiStrToTime(FromEdit.Text, TimeSeparator, W1, W2, W3, S) then
           begin
             DoError(S, FromEdit);
             Exit;
           end;
 
-          if not EpiStrToTime(ToEdit.Text, TimeSeparator, W, W, W, S) then
+          if not EpiStrToTime(ToEdit.Text, TimeSeparator, W1, W2, W3, S) then
           begin
             DoError(S, ToEdit);
             Exit;
@@ -600,13 +600,13 @@ begin
       ftMDYDate,
       ftYMDDate:
         begin
-          if not EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, W, W, W, S) then
+          if not EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, W1, W2, W3, S) then
           begin
             DoError(S, FromEdit);
             Exit;
           end;
 
-          if not EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, W, W, W, S) then
+          if not EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, W1, W2, W3, S) then
           begin
             DoError(S, ToEdit);
             Exit;

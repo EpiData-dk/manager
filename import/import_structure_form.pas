@@ -33,9 +33,10 @@ type
     { private declarations }
     FSelectedDocuments: TList;
     FDocList: TList;
-    FLastRecYPos: integer;
-    FLastRecCtrl: TEpiCustomControlItem;
+    FLastRecYPos: Integer;
+    FLastEpiCtrl: TEpiCustomControlItem;
     DataFile: TEpiDatafile;
+    FDesignerBox: TScrollBox;
     procedure ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure  ReadFiles(Const Files: TStrings);
@@ -44,6 +45,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Files: TStrings);
+    destructor Destroy; override;
     property    SelectedDocuments: TList read FSelectedDocuments;
   end; 
 
@@ -52,7 +54,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epidocument, epimiscutils, settings2_var;
+  epiimport, LCLProc, epidocument, epimiscutils, settings2_var,
+  epidatafilestypes;
 
 { TImportStructureForm }
 
@@ -94,6 +97,33 @@ procedure TImportStructureForm.ImportHook(Sender: TObject; EventGroup: TEpiEvent
 var
   Cls: TControlClass;
   Pt: TPoint;
+  S: Char;
+const
+  FieldHeigth =
+    {$IFDEF WINDOWS}
+      21
+    {$ELSE}
+      {$IFDEF DARWIN}
+      22
+      {$ELSE}
+        {$IFDEF LINUX}
+      27
+        {$ENDIF}
+    {$ENDIF}
+  {$ENDIF};
+
+  HeadingHeigth =
+    {$IFDEF WINDOWS}
+      14
+    {$ELSE}
+      {$IFDEF DARWIN}
+      17
+      {$ELSE}
+        {$IFDEF LINUX}
+      18
+        {$ENDIF}
+    {$ENDIF}
+  {$ENDIF};
 begin
   if (Sender is TEpiFields) then
   begin
@@ -112,25 +142,80 @@ begin
   if (Sender is TEpiCustomControlItem) and (EventGroup = eegCustomBase) and (EventType = Ord(ecceUpdate)) then
   begin
     TEpiCustomControlItem(Sender).UnRegisterOnChangeHook(@ImportHook);
-{
-    Cls := TDesignField;
-    if Sender is TEpiHeading then
-      Cls := TDesignHeading;
-    Pt := FindNewPosition(FActiveDockSite, Cls);
 
-    if (not (FLastRecYPos = -1)) and (FLastRecYPos = TEpiCustomControlItem(Sender).Top) then
+    if FLastEpiCtrl = nil then
     begin
-      Pt.Y := FLastRecCtrl.Top;
-      if (FLastRecCtrl is TDesignField) and (Sender is TEpiField) then
-        Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 5 +                                   // This calculates right side of previous placed control (with 5px margin)
-                FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Question.Text) + 5 +        // This gives a rough estimate of the width of the Question text (5px margin)
-                FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
-      else
-        Pt.X := FLastRecCtrl.Left + FLastRecCtrl.Width + 10;
+      Pt := Point(ManagerSettings.DefaultLabelPostion, 5);
+      if Sender is TEpiField then
+        Pt.X := ManagerSettings.DefaultRightPostion;
+    end else begin
+      if (FLastRecYPos <> -1) and (FLastRecYPos = TEpiCustomControlItem(Sender).Top) then
+      begin
+        Pt.Y := FLastEpiCtrl.Top;
+
+        if (FLastEpiCtrl is TEpiField) then
+        begin
+          S := '4';
+          if TEpiField(FLastEpiCtrl).FieldType in StringFieldTypes then
+            S := 'W';
+
+          if (Sender is TEpiField) then
+            Pt.X := FLastEpiCtrl.Left +
+                    FDesignerBox.Canvas.GetTextWidth(S) * TEpiField(FLastEpiCtrl).Length + 15 +   // This calculates right side of previous placed control (with 5px margin)
+                    FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Question.Text) + 5 +        // This gives a rough estimate of the width of the Question text (5px margin)
+                    FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
+          else
+            Pt.X := FLastEpiCtrl.Left +
+                    FDesignerBox.Canvas.GetTextWidth(S) * TEpiField(FLastEpiCtrl).Length + 15;    // This calculates right side of previous placed control (with 5px margin)
+        end else begin
+          if (Sender is TEpiField) then
+            Pt.X := FLastEpiCtrl.Left +
+                    FDesignerBox.Canvas.GetTextWidth(TEpiHeading(FLastEpiCtrl).Caption.Text) + 10 +
+                    FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Question.Text) + 5 +        // This gives a rough estimate of the width of the Question text (5px margin)
+                    FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
+          else
+            Pt.X := FLastEpiCtrl.Left +
+                    FDesignerBox.Canvas.GetTextWidth(TEpiHeading(FLastEpiCtrl).Caption.Text) + 10;
+        end;
+      end else begin
+        if (FLastEpiCtrl is TEpiField) then
+        begin
+          Pt.Y := FLastEpiCtrl.Top + FieldHeigth;
+          if (Sender is TEpiField) then
+          begin
+            Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldField;
+            Pt.X := ManagerSettings.DefaultRightPostion;
+          end else begin
+            Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldLabel;
+            Pt.X := ManagerSettings.DefaultLabelPostion;
+          end;
+        end;
+        if (FLastEpiCtrl is TEpiHeading) then
+        begin
+          Pt.Y := FLastEpiCtrl.Top + HeadingHeigth;
+          if (Sender is TEpiField) then
+          begin
+            Pt.Y := Pt.Y + ManagerSettings.SpaceBtwFieldLabel;
+            Pt.X := ManagerSettings.DefaultRightPostion;
+          end else begin
+            Pt.Y := Pt.Y + ManagerSettings.SpaceBtwLabelLabel;
+            Pt.X := ManagerSettings.DefaultLabelPostion;
+          end;
+        end;
+      end;
     end;
 
-    FLastRecYPos := TEpiCustomControlItem(Sender).Top;
-    FLastRecCtrl := NewDesignControl(Cls, FActiveDockSite, Pt, TEpiCustomControlItem(Sender));}
+    with TEpiCustomControlItem(Sender) do
+    begin
+      // Top not yet adjusted for pixel position...
+      FLastRecYPos := Top;
+
+      BeginUpdate;
+      Top := Pt.Y;
+      Left := Pt.X;
+      EndUpdate;
+    end;
+    FLastEpiCtrl := TEpiCustomControlItem(Sender);
   end;
 end;
 
@@ -163,26 +248,26 @@ begin
   try
     // Needed for rec/dta file import.
     FLastRecYPos := -1;
-    FLastRecCtrl := nil;
+    FLastEpiCtrl := nil;
 
     Doc := TEpiDocument.Create('en');
     if ext = '.rec' then
     begin
       DataFile := Doc.DataFiles.NewDataFile;
-//      DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
-//      DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+      DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
+      DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
       Importer.ImportRec(FileName , DataFile, false);
-//      DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-//      DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+      DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+      DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
     end
     else if ext = '.dta' then
     begin
       DataFile := Doc.DataFiles.NewDataFile;
-//      DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
-//      DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+      DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
+      DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
       Importer.ImportStata(FileName, DataFile, false);
-//      DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-//      DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+      DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+      DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
     end
     else if ext = '.epx' then
       Doc.LoadFromFile(FileName)
@@ -222,10 +307,29 @@ constructor TImportStructureForm.Create(TheOwner: TComponent;
   const Files: TStrings);
 begin
   inherited Create(TheOwner);
+
+  if TheOwner is TScrollBox then
+    FDesignerBox := TScrollBox(TheOwner);
+
   FSelectedDocuments := TList.Create;
   FDocList := TList.Create;
 
   ReadFiles(Files);
+end;
+
+destructor TImportStructureForm.Destroy;
+var
+  I: TObject;
+begin
+  while FDocList.Count > 0 do
+  begin
+    I := TObject(FDocList.Last);
+    FDocList.Remove(I);
+    I.Free;
+  end;
+  FDocList.Free;
+  FSelectedDocuments.Free;
+  inherited Destroy;
 end;
 
 end.

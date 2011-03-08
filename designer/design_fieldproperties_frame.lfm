@@ -13,9 +13,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     Height = 582
     Top = 0
     Width = 630
-    ActivePage = FieldAdvancedSheet
+    ActivePage = FieldBasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'

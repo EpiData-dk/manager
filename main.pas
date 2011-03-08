@@ -109,6 +109,8 @@ type
     property  Modified: boolean read FModified write SetModified;
     procedure RestoreDefaultPos;
     procedure UpdateRecentFiles;
+    procedure BeginUpdatingForm;
+    procedure EndUpdatingForm;
   end;
 
 var
@@ -532,6 +534,16 @@ begin
       {$ENDIF}
     RecentFilesSubMenu.Add(Mi);
   end;
+end;
+
+procedure TMainForm.BeginUpdatingForm;
+begin
+  BeginFormUpdate;
+end;
+
+procedure TMainForm.EndUpdatingForm;
+begin
+  EndFormUpdate;
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);
