@@ -7,13 +7,14 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase, epiadmin,
-  epivaluelabels;
+  epivaluelabels, manager_messages;
 
 type
 
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    OpenProjectAction: TAction;
     ValueLabelEditorAction: TAction;
     ShowStructureAction: TAction;
     ExportStataAction: TAction;
@@ -37,7 +38,7 @@ type
     ToolButton7: TToolButton;
     procedure ExportStataActionExecute(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
-    procedure OpenProjectToolBtnClick(Sender: TObject);
+    procedure OpenProjectActionExecute(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
@@ -97,7 +98,7 @@ uses
   design_frame, Clipbrd, project_settings, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
   structure_form, valuelabelseditor_form, epidatafilestypes,
-  strutils, managerprocs, Menus, LCLType;
+  strutils, managerprocs, Menus, LCLType, LCLIntf;
 
 type
 
@@ -127,9 +128,9 @@ begin
   UpdateCaption;
 end;
 
-procedure TProjectFrame.OpenProjectToolBtnClick(Sender: TObject);
+procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
-
+  PostMessage(MainForm.Handle, LM_MAIN_OPENPROJECT, 0, 0);
 end;
 
 procedure TProjectFrame.ExportStataActionExecute(Sender: TObject);
@@ -319,6 +320,7 @@ begin
   Ms := nil;
   try
     Ms := TMemoryStream.Create;
+    EpiDocument.Study.ModifiedDate := Now;
     EpiDocument.SaveToStream(Ms);
     Ms.Position := 0;
 
@@ -420,6 +422,11 @@ begin
   Frame.Parent := Self;
   Frame.DataFile := Df;
   FActiveFrame := Frame;
+
+  Frame.OpenProjectToolBtn.Action := OpenProjectAction;
+  Frame.SaveProjectToolBtn.Action := SaveProjectAction;
+  Frame.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
+  Frame.ProjectToolBar.Images := ProjectImageList;
 
   {$IFDEF EPI_DEBUG}
   AddDebugingContent;

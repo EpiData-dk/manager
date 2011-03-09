@@ -19,7 +19,8 @@ uses
   valuelabelseditor_form, structure_valuelabelset_frame, design_controls,
   UniqueInstanceRaw, copyobject, design_fieldproperties_frame, 
   design_sectionproperties_frame, design_headingproperties_frame,
-  design_propertiesbase_frame, design_types, import_structure_form;
+  design_propertiesbase_frame, design_types, import_structure_form, 
+manager_messages;
 
 {$R *.res}
 

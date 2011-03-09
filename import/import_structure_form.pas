@@ -14,7 +14,7 @@ type
   { TImportStructureForm }
 
   TImportStructureForm = class(TForm)
-    OpenAction: TAction;
+    AddFilesAction: TAction;
     CancelAction: TAction;
     ErrorListBox: TListBox;
     OkAction: TAction;
@@ -25,8 +25,10 @@ type
     OpenBtn: TBitBtn;
     StructureGrid: TStringGrid;
     procedure CancelActionExecute(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
     procedure OkActionExecute(Sender: TObject);
-    procedure OpenActionExecute(Sender: TObject);
+    procedure AddFilesActionExecute(Sender: TObject);
     procedure StructureGridColRowMoved(Sender: TObject; IsColumn: Boolean;
       sIndex, tIndex: Integer);
   private
@@ -46,6 +48,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Files: TStrings);
     destructor Destroy; override;
+    class procedure RestoreDefaultPos;
     property    SelectedDocuments: TList read FSelectedDocuments;
   end; 
 
@@ -55,7 +58,7 @@ implementation
 
 uses
   epiimport, LCLProc, epidocument, epimiscutils, settings2_var,
-  epidatafilestypes;
+  epidatafilestypes, settings2;
 
 { TImportStructureForm }
 
@@ -70,7 +73,7 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TImportStructureForm.OpenActionExecute(Sender: TObject);
+procedure TImportStructureForm.AddFilesActionExecute(Sender: TObject);
 var
   Dlg: TOpenDialog;
 begin
@@ -234,6 +237,20 @@ begin
   ModalResult := mrCancel;
 end;
 
+procedure TImportStructureForm.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'ImportStructureForm');
+  CanClose := true;
+end;
+
+procedure TImportStructureForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'ImportStructureForm');
+end;
+
 procedure TImportStructureForm.ImportFile(const FileName: string);
 var
   Importer: TEpiImport;
@@ -283,9 +300,22 @@ begin
     begin
       RowCount := RowCount + 1;
       Idx := RowCount - 1;
-      Cells[1, Idx] := ExtractFileName(FileName);  // Filename column.
-      Cells[2, Idx] := '1';                        // Include row.
-      Cells[3, Idx] := Doc.DataFiles[0].Name.Text; // Info
+      Cells[1, Idx] := ExtractFileName(FileName);                           // Filename column.
+      Cells[2, Idx] := '1';                                                 // Include row.
+      if (ext = '.epx') or (ext ='.epz') then
+      begin
+        Cells[3, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.Created);                      // Created
+        Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.ModifiedDate);                 // Edited
+      end else begin
+        Cells[3, Idx] := 'N/A';                                             // Created
+        Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
+      end;
+      with Doc.DataFiles[0] do
+      begin
+        Cells[5, Idx] := Name.Text;                                         // Info
+        Cells[6, Idx] := IntToStr(Sections.Count);                          // Sections
+        Cells[7, Idx] := IntToStr(Fields.Count);                            // Fields
+      end;
     end;
     FDocList.Add(Doc);
   except
@@ -330,6 +360,19 @@ begin
   FDocList.Free;
   FSelectedDocuments.Free;
   inherited Destroy;
+end;
+
+class procedure TImportStructureForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 600;
+  Aform.Height := 600;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'ImportStructureForm');
+  AForm.free;
 end;
 
 end.

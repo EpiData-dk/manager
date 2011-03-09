@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 610
-  DesignTop = 284
+  DesignLeft = 2016
+  DesignTop = 186
   object ProjectPanel: TPanel
     Left = 0
     Height = 658
@@ -24,7 +24,7 @@ object ProjectFrame: TProjectFrame
       Top = 26
       Width = 200
       Align = alClient
-      DefaultItemHeight = 18
+      DefaultItemHeight = 19
       ReadOnly = True
       ScrollBars = ssAutoBoth
       ShowRoot = False
@@ -157,6 +157,13 @@ object ProjectFrame: TProjectFrame
       Caption = 'Value labels...'
       OnExecute = ValueLabelEditorActionExecute
       ShortCut = 32854
+    end
+    object OpenProjectAction: TAction
+      Category = 'File'
+      Caption = 'Open Project'
+      Hint = 'Open Project'
+      ImageIndex = 0
+      OnExecute = OpenProjectActionExecute
     end
   end
   object ProjectImageList: TImageList

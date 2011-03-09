@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
-  project_frame;
+  project_frame, LMessages, manager_messages;
 
 type
 
@@ -103,6 +103,10 @@ type
     procedure UpdateProcessToolbar;
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
+    procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
+    procedure LMOpenRecent(var Msg: TLMessage);   message LM_MAIN_OPENRECENT;
+    procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
+    procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -241,8 +245,7 @@ end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);
 begin
-  DoCloseProject;
-  UpdateProcessToolbar;
+  PostMessage(Self.Handle, LM_MAIN_CLOSEPROJECT, 0, 0);
 end;
 
 procedure TMainForm.CloseProjectActionUpdate(Sender: TObject);
@@ -263,25 +266,12 @@ end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
 begin
-  DoNewProject;
-  UpdateProcessToolbar;
+  PostMessage(Self.Handle, LM_MAIN_NEWPROJECT, 0, 0);
 end;
 
 procedure TMainForm.OpenProjectActionExecute(Sender: TObject);
-var
-  Dlg: TOpenDialog;
 begin
-  Dlg := TOpenDialog.Create(self);
-  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
-    false, false, false, true, false);
-
-  if not Dlg.Execute then exit;
-  if not DoCloseProject then exit;
-
-  DoOpenProject(Dlg.FileName);
-  UpdateProcessToolbar;
-  Dlg.Free;
+  PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, 0, 0);
 end;
 
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
@@ -508,7 +498,44 @@ end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
 begin
-  DoOpenProject(ExpandFileNameUTF8(TMenuItem(Sender).Caption));
+  PostMessage(Self.Handle, LM_MAIN_OPENRECENT, WParam(Sender), 0);
+end;
+
+procedure TMainForm.LMOpenProject(var Msg: TLMessage);
+var
+  Dlg: TOpenDialog;
+begin
+  Dlg := TOpenDialog.Create(self);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+  Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
+    false, false, false, true, false);
+
+  if not Dlg.Execute then exit;
+  if not DoCloseProject then exit;
+
+  DoOpenProject(Dlg.FileName);
+  UpdateProcessToolbar;
+  Dlg.Free;
+end;
+
+procedure TMainForm.LMOpenRecent(var Msg: TLMessage);
+var
+  Item: TMenuItem;
+begin
+  Item := TMenuItem(Msg.WParam);
+  DoOpenProject(ExpandFileNameUTF8(Item.Caption));
+  UpdateProcessToolbar;
+end;
+
+procedure TMainForm.LMNewProject(var Msg: TLMessage);
+begin
+  DoNewProject;
+  UpdateProcessToolbar;
+end;
+
+procedure TMainForm.LMCloseProject(var Msg: TLMessage);
+begin
+  DoCloseProject;
   UpdateProcessToolbar;
 end;
 
@@ -556,7 +583,7 @@ end;
 procedure TMainForm.RestoreDefaultPos;
 begin
   if Assigned(FActiveFrame) then
-    TProjectFrame(FActiveFrame).RestoreDefaultPos;
+    FActiveFrame.RestoreDefaultPos;
 
   TSettingsForm.RestoreDefaultPos;
   TProject_Structure_Form.RestoreDefaultPos;

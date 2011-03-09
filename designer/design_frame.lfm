@@ -7,219 +7,21 @@ object DesignFrame: TDesignFrame
   ClientWidth = 900
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 400
-  DesignTop = 250
-  object DesignerToolBar: TToolBar
-    Left = 0
-    Height = 26
-    Top = 0
-    Width = 900
-    ButtonHeight = 24
-    ButtonWidth = 24
-    Caption = 'DesignerToolBar'
-    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
-    EdgeInner = esNone
-    EdgeOuter = esRaised
-    Images = DesignerImageList
-    TabOrder = 0
-    Transparent = True
-    object Divider0: TToolButton
-      Left = 2
-      Top = 1
-      Width = 4
-      Caption = 'Divider0'
-      Style = tbsDivider
-    end
-    object SelectorToolButton: TToolButton
-      Left = 6
-      Top = 1
-      Caption = 'SelectorToolButton'
-      Down = True
-      ImageIndex = 0
-      OnClick = ToggleToolBtn
-    end
-    object Divider1: TToolButton
-      Left = 34
-      Top = 1
-      Width = 4
-      Caption = 'Divider1'
-      Style = tbsDivider
-    end
-    object IntToolButton: TToolButton
-      Tag = 1
-      Left = 38
-      Hint = 'New Integer Field (F2)'
-      Top = 1
-      Caption = 'New Integer Field'
-      ImageIndex = 1
-      OnClick = ToggleToolBtn
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object FloatToolButton: TToolButton
-      Tag = 3
-      Left = 66
-      Hint = 'New Float Field (F3)'
-      Top = 1
-      Caption = 'New Float Field'
-      ImageIndex = 2
-      OnClick = ToggleToolBtn
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object StringToolButton: TToolButton
-      Tag = 12
-      Left = 94
-      Hint = 'New String Field  (F4)'
-      Top = 1
-      Caption = 'New String Field'
-      ImageIndex = 3
-      OnClick = ToggleToolBtn
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object DateToolButton: TToolButton
-      Tag = 4
-      Left = 122
-      Hint = 'New DMY Field (F5)'
-      Top = 1
-      Caption = 'New DMY Field'
-      ImageIndex = 4
-      OnClick = ToggleToolBtn
-      ParentShowHint = False
-      PopupMenu = DateFieldPopupMenu
-      ShowHint = True
-    end
-    object OtherToolButton: TToolButton
-      Left = 150
-      Hint = 'Other Field Types...'
-      Top = 1
-      Caption = 'OtherToolButton'
-      DropdownMenu = OtherFieldsPopup
-      ImageIndex = 7
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object Divider2: TToolButton
-      Left = 178
-      Top = 1
-      Width = 4
-      Caption = 'Divider2'
-      Style = tbsDivider
-    end
-    object HeadingToolButton: TToolButton
-      Tag = 5
-      Left = 182
-      Hint = 'New Heading (F6)'
-      Top = 1
-      Caption = 'New Heading'
-      ImageIndex = 8
-      OnClick = ToggleToolBtn
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object Divider3: TToolButton
-      Left = 210
-      Top = 1
-      Width = 4
-      Caption = 'Divider3'
-      Style = tbsDivider
-    end
-    object SectionToolButton: TToolButton
-      Tag = 6
-      Left = 214
-      Hint = 'New Section'
-      Top = 1
-      Caption = 'New Section'
-      ImageIndex = 9
-      OnClick = ToggleToolBtn
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object Divider4: TToolButton
-      Left = 242
-      Top = 1
-      Width = 4
-      Caption = 'Divider4'
-      Style = tbsDivider
-    end
-    object EditToolButton: TToolButton
-      Left = 246
-      Top = 1
-      Action = EditControlAction
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object DeleteToolButton: TToolButton
-      Left = 274
-      Top = 1
-      Action = DeleteControlAction
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object DeleteAllToolButton: TToolButton
-      Left = 302
-      Top = 1
-      Action = DeleteAllControlsAction
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object Divider5: TToolButton
-      Left = 330
-      Top = 1
-      Width = 4
-      Caption = 'Divider5'
-      Style = tbsDivider
-    end
-    object LoadToolButton: TToolButton
-      Left = 334
-      Top = 1
-      Action = ImportDataFileAction
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object ImportToolButton: TToolButton
-      Left = 362
-      Top = 1
-      Action = AddStructureAction
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object ExportToolButton: TToolButton
-      Left = 390
-      Top = 1
-      Action = ExportDataformAction
-      ParentShowHint = False
-      ShowHint = True
-    end
-    object Divider6: TToolButton
-      Left = 418
-      Top = 1
-      Width = 4
-      Caption = 'Divider6'
-      Style = tbsDivider
-    end
-    object TestToolButton: TToolButton
-      Left = 422
-      Top = 1
-      Caption = 'TestToolButton'
-      ImageIndex = 0
-      OnClick = TestToolButtonClick
-    end
-  end
+  DesignLeft = 528
+  DesignTop = 259
   object Panel1: TPanel
     Left = 635
-    Height = 602
-    Top = 26
+    Height = 600
+    Top = 28
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 600
+    ClientHeight = 598
     ClientWidth = 263
     ParentColor = False
-    TabOrder = 1
+    TabOrder = 0
     object Label1: TLabel
       Left = 11
       Height = 18
@@ -296,8 +98,8 @@ object DesignFrame: TDesignFrame
   end
   object Splitter1: TSplitter
     Left = 630
-    Height = 602
-    Top = 26
+    Height = 600
+    Top = 28
     Width = 5
     Align = alRight
     Beveled = True
@@ -312,7 +114,7 @@ object DesignFrame: TDesignFrame
     BevelOuter = bvNone
     ClientHeight = 26
     ClientWidth = 900
-    TabOrder = 3
+    TabOrder = 2
     object SectionsPanel: TPanel
       AnchorSideLeft.Control = RecordsPanel
       AnchorSideLeft.Side = asrBottom
@@ -645,6 +447,248 @@ object DesignFrame: TDesignFrame
         Font.Name = 'DejaVu Sans Mono'
         ParentColor = False
         ParentFont = False
+      end
+    end
+  end
+  object ToolBarPanel: TPanel
+    Left = 0
+    Height = 28
+    Top = 0
+    Width = 900
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 28
+    ClientWidth = 900
+    TabOrder = 3
+    object DesignerToolBar: TToolBar
+      AnchorSideRight.Control = ToolBarPanel
+      AnchorSideRight.Side = asrBottom
+      Left = 80
+      Height = 26
+      Top = 0
+      Width = 820
+      Align = alNone
+      Anchors = [akTop, akLeft, akRight]
+      ButtonHeight = 24
+      ButtonWidth = 24
+      Caption = 'DesignerToolBar'
+      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+      EdgeInner = esNone
+      EdgeOuter = esRaised
+      Images = DesignerImageList
+      TabOrder = 0
+      Transparent = True
+      object SelectorToolButton: TToolButton
+        Left = 2
+        Top = 1
+        Caption = 'SelectorToolButton'
+        Down = True
+        ImageIndex = 0
+        OnClick = ToggleToolBtn
+      end
+      object Divider1: TToolButton
+        Left = 30
+        Top = 1
+        Width = 4
+        Caption = 'Divider1'
+        Style = tbsDivider
+      end
+      object IntToolButton: TToolButton
+        Tag = 1
+        Left = 34
+        Hint = 'New Integer Field (F2)'
+        Top = 1
+        Caption = 'New Integer Field'
+        ImageIndex = 1
+        OnClick = ToggleToolBtn
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object FloatToolButton: TToolButton
+        Tag = 3
+        Left = 62
+        Hint = 'New Float Field (F3)'
+        Top = 1
+        Caption = 'New Float Field'
+        ImageIndex = 2
+        OnClick = ToggleToolBtn
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object StringToolButton: TToolButton
+        Tag = 12
+        Left = 90
+        Hint = 'New String Field  (F4)'
+        Top = 1
+        Caption = 'New String Field'
+        ImageIndex = 3
+        OnClick = ToggleToolBtn
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object DateToolButton: TToolButton
+        Tag = 4
+        Left = 118
+        Hint = 'New DMY Field (F5)'
+        Top = 1
+        Caption = 'New DMY Field'
+        ImageIndex = 4
+        OnClick = ToggleToolBtn
+        ParentShowHint = False
+        PopupMenu = DateFieldPopupMenu
+        ShowHint = True
+      end
+      object OtherToolButton: TToolButton
+        Left = 146
+        Hint = 'Other Field Types...'
+        Top = 1
+        Caption = 'OtherToolButton'
+        DropdownMenu = OtherFieldsPopup
+        ImageIndex = 7
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider2: TToolButton
+        Left = 174
+        Top = 1
+        Width = 4
+        Caption = 'Divider2'
+        Style = tbsDivider
+      end
+      object HeadingToolButton: TToolButton
+        Tag = 5
+        Left = 178
+        Hint = 'New Heading (F6)'
+        Top = 1
+        Caption = 'New Heading'
+        ImageIndex = 8
+        OnClick = ToggleToolBtn
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider3: TToolButton
+        Left = 206
+        Top = 1
+        Width = 4
+        Caption = 'Divider3'
+        Style = tbsDivider
+      end
+      object SectionToolButton: TToolButton
+        Tag = 6
+        Left = 210
+        Hint = 'New Section'
+        Top = 1
+        Caption = 'New Section'
+        ImageIndex = 9
+        OnClick = ToggleToolBtn
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider4: TToolButton
+        Left = 238
+        Top = 1
+        Width = 4
+        Caption = 'Divider4'
+        Style = tbsDivider
+      end
+      object EditToolButton: TToolButton
+        Left = 242
+        Top = 1
+        Action = EditControlAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object DeleteToolButton: TToolButton
+        Left = 270
+        Top = 1
+        Action = DeleteControlAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object DeleteAllToolButton: TToolButton
+        Left = 298
+        Top = 1
+        Action = DeleteAllControlsAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider5: TToolButton
+        Left = 326
+        Top = 1
+        Width = 4
+        Caption = 'Divider5'
+        Style = tbsDivider
+      end
+      object LoadToolButton: TToolButton
+        Left = 330
+        Top = 1
+        Action = ImportDataFileAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object ImportToolButton: TToolButton
+        Left = 358
+        Top = 1
+        Action = AddStructureAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object ExportToolButton: TToolButton
+        Left = 386
+        Top = 1
+        Action = ExportDataformAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider6: TToolButton
+        Left = 414
+        Top = 1
+        Width = 4
+        Caption = 'Divider6'
+        Style = tbsDivider
+      end
+      object TestToolButton: TToolButton
+        Left = 418
+        Top = 1
+        Caption = 'TestToolButton'
+        ImageIndex = 0
+        OnClick = TestToolButtonClick
+      end
+    end
+    object ProjectToolBar: TToolBar
+      Left = 0
+      Height = 26
+      Top = 0
+      Width = 80
+      Align = alNone
+      ButtonHeight = 24
+      ButtonWidth = 24
+      Caption = 'ProjectToolBar'
+      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+      EdgeInner = esNone
+      EdgeOuter = esRaised
+      TabOrder = 1
+      object OpenProjectToolBtn: TToolButton
+        Left = 2
+        Top = 1
+        Caption = 'OpenProjectToolBtn'
+      end
+      object ProjectDivider1: TToolButton
+        Left = 26
+        Top = 1
+        Width = 4
+        Caption = 'ProjectDivider1'
+        Style = tbsDivider
+      end
+      object SaveProjectToolBtn: TToolButton
+        Left = 30
+        Top = 1
+        Caption = 'SaveProjectToolBtn'
+      end
+      object SaveProjectAsToolBtn: TToolButton
+        Left = 54
+        Top = 1
+        Caption = 'SaveProjectAsToolBtn'
       end
     end
   end

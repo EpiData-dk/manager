@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="29">
+    <Units Count="30">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -235,6 +235,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="import_structure_form"/>
       </Unit28>
+      <Unit29>
+        <Filename Value="manager_messages.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="manager_messages"/>
+      </Unit29>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

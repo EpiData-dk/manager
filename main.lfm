@@ -1,8 +1,8 @@
 object MainForm: TMainForm
-  Left = 374
+  Left = 1981
   Height = 603
   Hint = 'New EpiData Project (XML)'
-  Top = 235
+  Top = 299
   Width = 910
   Caption = 'MainForm'
   ClientHeight = 578
@@ -287,6 +287,8 @@ object MainForm: TMainForm
     object OpenProjectAction: TAction
       Category = 'File'
       Caption = 'Open Project'
+      Hint = 'Open Project'
+      ImageIndex = 0
       OnExecute = OpenProjectActionExecute
       ShortCut = 16463
     end

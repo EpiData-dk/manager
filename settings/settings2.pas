@@ -229,8 +229,7 @@ begin
 
   try
     Ini := TIniFile.Create(ManagerSettings.IniFileName);
-    With Ini do
-    with AForm do
+    With Ini, AForm do
     begin
       WriteInteger(SectionName, 'Top', Top);
       WriteInteger(SectionName, 'Left', Left);

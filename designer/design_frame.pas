@@ -8,10 +8,7 @@ uses
   Classes, SysUtils, types, FileUtil, LResources, Forms, ComCtrls, Controls,
   ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles, epidatafilestypes,
   epicustombase, AVL_Tree , LCLType, LMessages, StdActns, design_controls,
-  epidocument, epivaluelabels;
-
-const
-  LM_DESIGNER_DEL = LM_USER + 1;
+  epidocument, epivaluelabels, manager_messages;
 
 type
 
@@ -26,6 +23,7 @@ type
   TDesignFrame = class(TFrame)
     CopyControlPopupMenuItem: TMenuItem;
     CopyControlMenuItem: TMenuItem;
+    ToolBarPanel: TPanel;
     PopupMenuDivider2: TMenuItem;
     PopupMenuDivider1: TMenuItem;
     PasteControPopupMenuItem: TMenuItem;
@@ -39,6 +37,11 @@ type
     ExtendedPanel: TPanel;
     Label7: TLabel;
     Label8: TLabel;
+    ProjectToolBar: TToolBar;
+    OpenProjectToolBtn: TToolButton;
+    ProjectDivider1: TToolButton;
+    SaveProjectToolBtn: TToolButton;
+    SaveProjectAsToolBtn: TToolButton;
     ValueLabelLabel: TLabel;
     RangeLabel: TLabel;
     ValueLabelPanel: TPanel;
@@ -135,7 +138,6 @@ type
     OtherToolButton: TToolButton;
     Divider6: TToolButton;
     Divider3: TToolButton;
-    Divider0: TToolButton;
     DeleteToolButton: TToolButton;
     Divider5: TToolButton;
     LoadToolButton: TToolButton;
@@ -1848,9 +1850,9 @@ begin
     ParentPt.Y += FDesignerBox.VertScrollBar.Position;
   end;
 
-  case FActiveButton.Index of
+  case (FActiveButton.Index + 1) of
     // Dividers... should never get here:
-    0, 2, 8, 10, 12, 15, 19:
+    2, 8, 10, 12, 15, 19:
       Exit;
 
     // Selector
@@ -2468,6 +2470,7 @@ procedure TDesignFrame.RestoreDefaultPos;
 begin
   if Assigned(FDesignControlForm) then
     FDesignControlForm.RestoreDefaultPos;
+  TImportStructureForm.RestoreDefaultPos;
 end;
 
 end.
