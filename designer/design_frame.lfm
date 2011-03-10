@@ -3345,10 +3345,6 @@ object DesignFrame: TDesignFrame
     object DockingSitePopUpMenuDivider1: TMenuItem
       Caption = '-'
     end
-    object PasteAsQesMenuItem: TMenuItem
-      Action = PasteAsQESAction
-      OnClick = PasteAsQESActionExecute
-    end
     object PasteAsHeadingMenuItem: TMenuItem
       Action = PasteAsHeadingAction
       Bitmap.Data = {

@@ -62,7 +62,6 @@ type
     RecordsPanel: TPanel;
     FieldsPanel: TPanel;
     StatusBarPanel: TPanel;
-    PasteAsQesMenuItem: TMenuItem;
     PasteAsQESAction: TAction;
     DeleteAllControlsAction: TAction;
     NewUpperCaseMenu: TMenuItem;
@@ -1809,7 +1808,7 @@ begin
 
   EnterControl(Sender);
 
-  if FActiveButton.Index <> 11 then exit;
+  if FActiveButton <> SectionToolButton then exit;
   // For drawing the area where the new section is going to be.
   FShowPanel := TPanel.Create(FDesignerBox);
   FShowPanel.Color := clWhite;

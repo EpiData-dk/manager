@@ -52,7 +52,6 @@ type
     EditMenuDivider1: TMenuItem;
     ProjectPropertiesMenuItem: TMenuItem;
     ProjectMenu: TMenuItem;
-    PasteAsQESMenuItem: TMenuItem;
     PasteAsFloatMenuItem: TMenuItem;
     PasteAsStringMenuItem: TMenuItem;
     PasteAsHeadingMenuItem: TMenuItem;
@@ -417,7 +416,6 @@ begin
   SaveProjectMenuItem.Action := FActiveFrame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
 
-  PasteAsQESMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsQESAction;
   PasteAsHeadingMenuItem.Action := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
   PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
@@ -466,7 +464,6 @@ begin
   SaveProjectAsMenuItem.Visible := Assigned(FActiveFrame);
 
   // EDIT:
-  PasteAsQESMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsFloatMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsHeadingMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsIntMenuItem.Visible := Assigned(FActiveFrame);
