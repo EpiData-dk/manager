@@ -53,7 +53,8 @@ begin
 
   with FData^ do
   begin
-    DefaultRightPosEdit.Text          := IntToStr(DefaultRightPostion);
+    DefaultRightPosEdit.Text          := IntToStr(DefaultRightPosition);
+    LabelLabelEdit.Text               := IntToStr(DefaultLabelPosition);
     SnapFieldsChkBox.Checked          := SnapFields;
     SnapThresholdEdit.Text            := IntToStr(SnappingThresHold);
     FieldFieldEdit.Text               := IntToStr(SpaceBtwFieldField);
@@ -71,7 +72,10 @@ begin
   begin
     S := Trim(DefaultRightPosEdit.Text);
     if not((S = '') or (StrToInt(S) <= 0)) then
-      DefaultRightPostion := StrToInt(S);
+      DefaultRightPosition := StrToInt(S);
+    S := Trim(LabelLeftPosition.Text);
+    if not((S = '') or (StrToInt(S) <= 0)) then
+      DefaultLabelPosition := StrToInt(S);
     SnapFields            := SnapFieldsChkBox.Checked;
     S := Trim(SnapThresholdEdit.Text);
     if not((S = '') or (StrToInt(S) <= 0)) then

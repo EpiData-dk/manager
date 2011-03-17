@@ -148,9 +148,9 @@ begin
 
     if FLastEpiCtrl = nil then
     begin
-      Pt := Point(ManagerSettings.DefaultLabelPostion, 5);
+      Pt := Point(ManagerSettings.DefaultLabelPosition, 5);
       if Sender is TEpiField then
-        Pt.X := ManagerSettings.DefaultRightPostion;
+        Pt.X := ManagerSettings.DefaultRightPosition;
     end else begin
       if (FLastRecYPos <> -1) and (FLastRecYPos = TEpiCustomControlItem(Sender).Top) then
       begin
@@ -187,10 +187,10 @@ begin
           if (Sender is TEpiField) then
           begin
             Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldField;
-            Pt.X := ManagerSettings.DefaultRightPostion;
+            Pt.X := ManagerSettings.DefaultRightPosition;
           end else begin
             Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldLabel;
-            Pt.X := ManagerSettings.DefaultLabelPostion;
+            Pt.X := ManagerSettings.DefaultLabelPosition;
           end;
         end;
         if (FLastEpiCtrl is TEpiHeading) then
@@ -199,10 +199,10 @@ begin
           if (Sender is TEpiField) then
           begin
             Pt.Y := Pt.Y + ManagerSettings.SpaceBtwFieldLabel;
-            Pt.X := ManagerSettings.DefaultRightPostion;
+            Pt.X := ManagerSettings.DefaultRightPosition;
           end else begin
             Pt.Y := Pt.Y + ManagerSettings.SpaceBtwLabelLabel;
-            Pt.X := ManagerSettings.DefaultLabelPostion;
+            Pt.X := ManagerSettings.DefaultLabelPosition;
           end;
         end;
       end;

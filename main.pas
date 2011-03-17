@@ -552,9 +552,9 @@ begin
     Mi.OnClick := @OpenRecentMenuItemClick;
     if i < 9 then
       {$IFDEF DARWIN}
-      Mi.ShortCut := ShortCut(VK_1 + i, [ssMeta, ssShift]);
+      Mi.ShortCut := KeyToShortCut(VK_1 + i, [ssMeta, ssShift]);
       {$ELSE}
-      Mi.ShortCut := ShortCut(VK_1 + i, [ssCtrl, ssShift]);
+      Mi.ShortCut := KeyToShortCut(VK_1 + i, [ssCtrl, ssShift]);
       {$ENDIF}
     RecentFilesSubMenu.Add(Mi);
   end;

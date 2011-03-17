@@ -10,8 +10,8 @@ uses
 type
   TManagerSettings = record
     // Visual design:
-    DefaultRightPostion:   Integer;
-    DefaultLabelPostion:   Integer;
+    DefaultRightPosition:  Integer;
+    DefaultLabelPosition:  Integer;
     SnapFields:            boolean;
     SnappingThresHold:     Integer;
     SpaceBtwFieldField:    Integer;
@@ -55,8 +55,8 @@ type
 var
   ManagerSettings: TManagerSettings = (
     // Visual design:
-    DefaultRightPostion:   200;
-    DefaultLabelPostion:   20;
+    DefaultRightPosition:  200;
+    DefaultLabelPosition:  20;
     SnapFields:            true;
     SnappingThresHold:     10;
     SpaceBtwFieldField:    10;

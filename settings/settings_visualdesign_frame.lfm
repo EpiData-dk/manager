@@ -15,7 +15,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
     Left = 10
     Height = 18
     Top = 14
-    Width = 133
+    Width = 140
     BorderSpacing.Left = 10
     Caption = 'Default Field &Position'
     ParentColor = False
@@ -62,7 +62,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 10
       Height = 22
       Top = 10
-      Width = 124
+      Width = 127
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Autosnap Fields'
@@ -75,7 +75,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 10
       Height = 18
       Top = 40
-      Width = 129
+      Width = 130
       BorderSpacing.Left = 10
       Caption = 'Snapping threshold:'
       ParentColor = False
@@ -123,7 +123,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 10
       Height = 18
       Top = 3
-      Width = 74
+      Width = 80
       BorderSpacing.Left = 10
       Caption = 'Field - Field:'
       ParentColor = False
@@ -135,7 +135,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 10
       Height = 18
       Top = 67
-      Width = 86
+      Width = 88
       BorderSpacing.Left = 10
       Caption = 'Label - Label:'
       ParentColor = False
@@ -147,7 +147,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 10
       Height = 18
       Top = 34
-      Width = 80
+      Width = 84
       BorderSpacing.Left = 10
       Caption = 'Field - Label:'
       ParentColor = False
@@ -231,7 +231,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
     Left = 10
     Height = 18
     Top = 51
-    Width = 139
+    Width = 144
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Default Label Position'

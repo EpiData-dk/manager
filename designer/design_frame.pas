@@ -599,12 +599,20 @@ begin
     ImpStructurForm := TImportStructureForm.Create(FDesignerBox, Dlg.Files);
     if ImpStructurForm.ShowModal = mrCancel then exit;
 
+    // Prepare screen...
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
     MainForm.BeginUpdatingForm;
+
     for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
       PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments[i]));
 
+    EnterControl(TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data));
   finally
     MainForm.EndUpdatingForm;
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+
     Dlg.Free;
     ImpStructurForm.Free;
   end;
@@ -630,37 +638,51 @@ begin
   end;
   {$ENDIF}
 
-  Dlg := TOpenDialog.Create(Self);
-  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(false, false, true, false, false, false,
-    true, false, true, true, false);
-  if not Dlg.Execute then exit;
+  try
+    Dlg := TOpenDialog.Create(Self);
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    Dlg.Filter := GetEpiDialogFilter(false, false, true, false, false, false,
+      true, false, true, true, false);
+    if not Dlg.Execute then exit;
 
-  DeleteAllControls;
+    DeleteAllControls;
 
-  FActiveSection := FDataFile.MainSection;
-  FActiveSection.Fields.RegisterOnChangeHook(@ImportHook, true);
-  FActiveSection.Headings.RegisterOnChangeHook(@ImportHook, true);
+    // Prepare screen...
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
+    MainForm.BeginUpdatingForm;
 
-  FLastRecYPos := -1;
-  FLastRecCtrl := nil;
-  Importer := TEpiImport.Create;
-  Fn := Dlg.FileName;
-  Ext := ExtractFileExt(UTF8LowerCase(Fn));
+    // Set import hook
+    FActiveSection := FDataFile.MainSection;
+    FActiveSection.Fields.RegisterOnChangeHook(@ImportHook, true);
+    FActiveSection.Headings.RegisterOnChangeHook(@ImportHook, true);
 
-  if ext = '.rec' then
-    Importer.ImportRec(Fn, FDataFile, true)
-  else if ext = '.dta' then
-    Importer.ImportStata(Fn, FDataFile, true)
-  else if ext = '.qes' then
-    Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
-  Importer.Free;
-  FImportedFileName := fn;
+    // prepare import variables
+    FLastRecYPos := -1;
+    FLastRecCtrl := nil;
+    Importer := TEpiImport.Create;
+    Fn := Dlg.FileName;
+    Ext := ExtractFileExt(UTF8LowerCase(Fn));
 
-  FActiveSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-  FActiveSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+    // Do the import.
+    if ext = '.rec' then
+      Importer.ImportRec(Fn, FDataFile, true)
+    else if ext = '.dta' then
+      Importer.ImportStata(Fn, FDataFile, true)
+    else if ext = '.qes' then
+      Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
+    Importer.Free;
+    FImportedFileName := fn;
 
-  Dlg.Free;
+    EnterControl(TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data));
+  finally
+    MainForm.EndUpdatingForm;
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+    FActiveSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+    FActiveSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+    Dlg.Free;
+  end;
 end;
 
 procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);
@@ -1762,6 +1784,7 @@ begin
   FActiveSection := DataFile.MainSection;
   (FDesignerBox as IDesignEpiControl).EpiControl := DataFile.MainSection;
 
+  MainForm.BeginUpdatingForm;
   DataFile.BeginUpdate;
   with DataFile do
   begin
@@ -1785,6 +1808,7 @@ begin
   if not Assigned(FActiveControl) then
     EnterControl(FDesignerBox);
   DataFile.EndUpdate;
+  MainForm.EndUpdatingForm;
 
   W := 0;
   for Ft := Low(TEpiFieldType) to High(TEpiFieldType) do
@@ -2353,9 +2377,9 @@ var
 begin
   // Initialization
   if AClass = TDesignField then
-    Result := Point(ManagerSettings.DefaultRightPostion, 5);
+    Result := Point(ManagerSettings.DefaultRightPosition, 5);
   if AClass = TDesignHeading then
-    Result := Point(ManagerSettings.DefaultLabelPostion, 5);
+    Result := Point(ManagerSettings.DefaultLabelPosition, 5);
 
   Control := nil;
 
@@ -2455,7 +2479,7 @@ begin
   PasteAsFloatAction.ShortCut   := 0;
   PasteAsStringAction.ShortCut  := 0;
 
-  CtrlS := ShortCut(VK_N, [ssCtrl]);
+  CtrlS := KeyToShortCut(VK_N, [ssCtrl]);
   Case ManagerSettings.PasteSpecialType of
     0: PasteAsQESAction.ShortCut     := CtrlS;
     1: PasteAsHeadingAction.ShortCut := CtrlS;
