@@ -1534,25 +1534,62 @@ procedure TDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument);
 var
   Pt: TPoint;
   i: Integer;
-  TheSection: TEpiSection;
-  EpiCtrl: TEpiCustomControlItem;
-  WinSection: TWinControl;
   j: Integer;
-  NSection: TEpiSection;
   VLSet: TEpiValueLabelSet;
   OldSet: TEpiValueLabelSet;
+  OField: TEpiField;
+  NField: TEpiField;
+  TheSection: TEpiSection;
+
+  function NewFieldName(Const OldName: string): string;
+  var
+    FC, i: integer;
+    TheName: String;
+  begin
+    Result := OldName;
+    if DataFile.ValidateFieldRename(nil, OldName) then exit;
+
+    i := 0;
+    repeat
+      inc(i);
+      Result := OldName + IntToStr(i);
+    until DataFile.ValidateFieldRename(nil, Result);
+  end;
 
   procedure CopyField(Const AField: TEpiField; AParent: TWinControl; Const AddTop: Integer);
   var
     NField: TEpiField;
   begin
     NField := NewField(AField.FieldType);
-    NField.Assign(AField);
-    NField.Top := NField.Top + AddTop;
-    // The ValuelabelSet have previously been assigned to new Document and hence,
-    // stored the pointer to the new VLSet in ObjectData.
-    if Assigned(AField.ValueLabelSet) then
-      NField.ValueLabelSet := TEpiValueLabelSet(AField.ValueLabelSet.ObjectData);
+    // Can be used later on...
+    NField.ObjectData := PtrUInt(AField);
+    AField.ObjectData := PtrUInt(NField);
+    With NField do
+    begin
+      Name           := NewFieldName(AField.Name);
+
+      Question.Assign(AField.Question);
+      Top            := Afield.Top + AddTop;
+      Left           := Afield.Left;
+      Length         := Afield.Length;
+      Decimals       := AField.Decimals;
+      EntryMode      := Afield.EntryMode;
+      ConfirmEntry   := AField.ConfirmEntry;
+      ShowValueLabel := AField.ShowValueLabel;
+
+      if Assigned(AField.Ranges) then
+      begin
+        Ranges := TEpiRanges.Create(NField);
+        Ranges.Assign(AField.Ranges);
+      end;
+
+      // Cannot copy jumps, since a jump-yo field may not exists yet.
+
+      // The ValuelabelSet have previously been assigned to new Document and hence,
+      // stored the pointer to the new VLSet in ObjectData.
+      if Assigned(AField.ValueLabelSet) then
+        ValueLabelSet := TEpiValueLabelSet(AField.ValueLabelSet.ObjectData);
+    end;
     NewDesignControl(TDesignField, AParent, Point(NField.Left, NField.Top), NField);
   end;
 
@@ -1562,8 +1599,39 @@ var
   begin
     NHeading := NewHeading;
     NHeading.Assign(AHeading);
-    NHeading.Top := NHeading.Top + AddTop;
+    NHeading.Top := AHeading.Top + AddTop;
     NewDesignControl(TDesignHeading, AParent, Point(NHeading.Left, NHeading.Top), NHeading);
+  end;
+
+  procedure CopySection(Const ASection: TEpiSection; Const AddTop: integer);
+  var
+    NSection: TEpiSection;
+    WinSection: TWinControl;
+    OldActiveSection: TEpiSection;
+    i,j: integer;
+  begin
+    NSection := NewSection;
+
+    with NSection do
+    begin
+      Top  := ASection.Top + AddTop;
+      Left := ASection.Left;
+      Width := ASection.Width;
+      Height := ASection.Height;
+      Name.Assign(ASection.Name);
+
+      WinSection := TWinControl(NewSectionControl(Point(Left, Top), Point(Left + Width, Top + Height), NSection));
+    end;
+
+    OldActiveSection := FActiveSection;
+    FActiveSection := NSection;
+
+    for i := 0 to ASection.Fields.Count -1 do
+      CopyField(ASection.Fields[i], WinSection, 0);
+    for i := 0 to ASection.Headings.Count -1 do
+      CopyHeading(ASection.Heading[i], WinSection, 0);
+
+    FActiveSection := OldActiveSection;
   end;
 
 begin
@@ -1580,6 +1648,7 @@ begin
   end;
 
   Pt := FindNewPosition(FDesignerBox, TDesignField);
+  FActiveSection := TEpiSection((FDesignerBox as IDesignEpiControl).EpiControl);
 
   // First place main section - it's easiest.
   TheSection := ImportDoc.DataFiles[0].MainSection;
@@ -1591,6 +1660,30 @@ begin
     CopyHeading(TheSection.Heading[i], FDesignerBox, Pt.Y);
 
   for i := 0 to ImportDoc.DataFiles[0].Sections.Count - 1 do
+    if ImportDoc.DataFiles[0].Section[i] <> ImportDoc.DataFiles[0].MainSection then
+      CopySection(ImportDoc.DataFiles[0].Section[i], Pt.Y);
+
+  // Now all fields are copied - try to copy jumps.
+  for i := 0 to ImportDoc.DataFiles[0].Fields.Count - 1 do
+  begin
+    if not Assigned(ImportDoc.DataFiles[0].Field[i].Jumps) then continue;
+
+    OField := ImportDoc.DataFiles[0].Field[i];
+    NField := TepiField(OField.ObjectData);
+
+    NField.Jumps := TEpiJumps.Create(NField);
+    // Simple assign work for non jump-to-field jumps.
+    NField.Jumps.Assign(OField.Jumps);
+
+    for j := 0 to OField.Jumps.Count -1 do
+    with TEpiJump(OField.Jumps[j]) do
+    begin
+      if JumpType <> jtToField then continue;
+      NField.Jumps[j].JumpToField := TEpiField(JumpToField.ObjectData);;
+    end;
+  end;
+
+  {
   begin
     TheSection := ImportDoc.DataFiles[0].Section[i];
     if TheSection = ImportDoc.DataFiles[0].MainSection then continue;
@@ -1607,12 +1700,13 @@ begin
       // OBS!!! NSection.Field[j] = TheSection.Field[j]
       if Assigned(TheSection.Field[j].ValueLabelSet) then
         ValueLabelSet := TEpiValueLabelSet(TheSection.Field[j].ValueLabelSet.ObjectData);
+      Name := NewFieldName(TheSection.Field[j].Name);
       NewDesignControl(TDesignField, WinSection, Point(Left, Top), NSection.Field[j]);
     end;
     for j := 0 to NSection.Headings.Count - 1 do
     with NSection.Heading[j] do
       NewDesignControl(TDesignHeading, WinSection, Point(Left, Top), NSection.Heading[j]);
-  end;
+  end; }
 end;
 
 procedure TDesignFrame.DesignBoxMouseWheel(Sender: TObject; Shift: TShiftState;
