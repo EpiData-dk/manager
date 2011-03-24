@@ -1,7 +1,7 @@
 inherited HeadingPropertiesFrame: THeadingPropertiesFrame
-  Height = 84
+  Height = 132
   Width = 400
-  ClientHeight = 84
+  ClientHeight = 132
   ClientWidth = 400
   Constraints.MinHeight = 100
   Constraints.MinWidth = 380
@@ -12,13 +12,13 @@ inherited HeadingPropertiesFrame: THeadingPropertiesFrame
     Left = 10
     Height = 18
     Top = 10
-    Width = 32
+    Width = 44
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
-    Caption = 'Text:'
+    Caption = 'Name:'
     ParentColor = False
   end
-  object CaptionEdit: TEdit[1]
+  object NameEdit: TEdit[1]
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Label9
     AnchorSideTop.Side = asrBottom
@@ -33,5 +33,34 @@ inherited HeadingPropertiesFrame: THeadingPropertiesFrame
     BorderSpacing.Top = 2
     BorderSpacing.Right = 10
     TabOrder = 0
+  end
+  object Label10: TLabel[2]
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = NameEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 59
+    Width = 32
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    Caption = 'Text:'
+    ParentColor = False
+  end
+  object CaptionEdit: TEdit[3]
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label10
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 79
+    Width = 380
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 1
   end
 end

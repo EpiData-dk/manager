@@ -19,6 +19,13 @@ type
     Bevel2: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
+    DefaultValueEdit: TEdit;
+    Label1: TLabel;
+    DefaulValueLabel: TLabel;
+    UpdateModeRadioGrp: TRadioGroup;
+    ValueLabelWriteToLabel: TLabel;
+    NotesMemo: TMemo;
+    RepeatValueChkBox: TCheckBox;
     DecimalsEdit: TEdit;
     DecimalsLabel: TLabel;
     EntryRadioGroup: TRadioGroup;
@@ -49,9 +56,11 @@ type
     ResetLabel: TLabel;
     ConfirmEntryChkBox: TCheckBox;
     ShowValueLabelChkBox: TCheckBox;
+    NotesSheet: TTabSheet;
     ToEdit: TEdit;
     TopBevel: TBevel;
     ValueLabelComboBox: TComboBox;
+    ValueLabelWriteToComboBox: TComboBox;
     ValueLabelLabel: TLabel;
     procedure AddJumpBtnClick(Sender: TObject);
     procedure LengthEditEditingDone(Sender: TObject);
@@ -63,8 +72,10 @@ type
     { private declarations }
     FDataFile: TEpiDataFile;
     FValueLabelSets: TEpiValueLabelSets;
+    FNilValueLabel: TObject;
     function  GetField: TEpiField;
     function  UpdateValueLabels: boolean;
+    procedure UpdateValueLabelWriteTo;
     procedure ValueLabelSetHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure ValueLabelSetsHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   private
@@ -78,6 +89,7 @@ type
     function  DoAddNewJump: pointer;
     function  UpdateJumps: boolean;
   protected
+    { Inheritance overrides }
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
     procedure ShiftToTabSheet(const SheetNo: Byte); override;
     procedure UpdateCaption(const S: String); override;
@@ -104,8 +116,9 @@ uses
   LCLProc, epidatafilestypes, valuelabelseditor_form, epimiscutils, epiranges,
   math, epidocument, epiconvertutils, main;
 
-const
+resourcestring
   rsVLWarning = 'Warning: Valuelabels have changed...';
+  rsNotAValidType = 'Not a valid %s: %s';
 
 type
   TJumpComponents = record
@@ -159,6 +172,8 @@ procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
 begin
   ShowValueLabelChkBox.Enabled :=
     ValueLabelComboBox.ItemIndex <> ValueLabelComboBox.Items.IndexOfObject(nil);
+  ValueLabelWriteToComboBox.Enabled := ShowValueLabelChkBox.Enabled;
+  UpdateValueLabelWriteTo;
 end;
 
 function TFieldPropertiesFrame.UpdateValueLabels: boolean;
@@ -187,7 +202,7 @@ begin
   if (FValueLabelSets.Count = 0) or
      (not (Field.FieldType in [ftInteger, ftFloat, ftString, ftUpperString])) then
   begin
-    OIdx := ValueLabelComboBox.Items.AddObject('(none)', nil);
+    OIdx := ValueLabelComboBox.Items.AddObject('(none)', FNilValueLabel);
     if not (Field.FieldType in [ftInteger, ftFloat, ftString, ftUpperString]) then
       ValueLabelComboBox.Hint := 'ValueLabels not support for this field type!'
     else
@@ -243,7 +258,7 @@ begin
    end;
    ValueLabelComboBox.Hint := S;
 
-   OIdx := ValueLabelComboBox.Items.AddObject('(none)', nil);
+   OIdx := ValueLabelComboBox.Items.AddObject('(none)', FNilValueLabel);
    if Assigned(PreSelectedVLSet) then
      Idx := ValueLabelComboBox.Items.IndexOfObject(PreSelectedVLSet)
    else if Assigned(Field.ValueLabelSet) then
@@ -255,6 +270,32 @@ begin
   ValueLabelComboBox.ItemIndex := Idx;
 
   result := (PreSelectedVLSet <> ValueLabelComboBox.Items.Objects[Idx]);
+end;
+
+procedure TFieldPropertiesFrame.UpdateValueLabelWriteTo;
+var
+  i: Integer;
+  Idx: LongInt;
+begin
+  with ValueLabelWriteToComboBox do
+  begin
+    Items.BeginUpdate;
+    Clear;
+    Sorted := true;
+
+    for i := 0 to FDataFile.Fields.Count -1 do
+    with FDataFile.Field[i] do
+    begin
+      if not (FieldType in StringFieldTypes) then continue;
+      Items.AddObject(Name, FDataFile.Field[i]);
+    end;
+    Idx := Items.AddObject('(none)', nil);
+    if Assigned(Field.ValueLabelWriteField) then
+      Idx := Items.IndexOfObject(Field.ValueLabelWriteField);
+
+    Items.EndUpdate;
+    ItemIndex := Idx;
+  end;
 end;
 
 function TFieldPropertiesFrame.GetField: TEpiField;
@@ -326,8 +367,8 @@ end;
 procedure TFieldPropertiesFrame.FieldHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
-  if ((EventGroup = eegFields) and (EventType = Word(efceName))) or
-     ((EventGroup = eegCustomBase) and (EventType = Word(ecceUpdate))) then
+  if (EventGroup = eegCustomBase) and
+     (TEpiCustomChangeEventType(EventType) in [ecceUpdate, ecceName]) then
   begin
     UpdateJumps;
   end;
@@ -615,11 +656,29 @@ begin
     end;
   end;
 
-  if (NameEdit.Text <> Field.Name) and
-     (not FDataFile.ValidateFieldRename(Field, NameEdit.Text)) then
+  if (not Field.ValidateRename(NameEdit.Text, false)) then
   begin
     DoError('Name already exists or invalid identifier', NameEdit);
     Exit;
+  end;
+
+  if DefaultValueEdit.Text <> '' then
+  with DefaultValueEdit do
+  begin
+    if (Field.FieldType in BoolFieldTypes) and (not TryStrToInt64(Text, I64)) then
+      Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), DefaultValueEdit));
+
+    if (Field.FieldType in IntFieldTypes) and (not TryStrToInt64(Text, I64)) then
+      Exit(DoError(Format(rsNotAValidType, ['integer', Text]), DefaultValueEdit));
+
+    if (Field.FieldType in FloatFieldTypes) and (not TryStrToFloat(Text, F)) then
+      Exit(DoError(Format(rsNotAValidType, ['float', Text]), DefaultValueEdit));
+
+    if (Field.FieldType in DateFieldTypes) and (not EpiStrToDate(Text, DateSeparator, Field.FieldType, W1, W2, W3, S)) then
+      Exit(DoError(S, DefaultValueEdit));
+
+    if (Field.FieldType in TimeFieldTypes) and (not EpiStrToTime(Text, TimeSeparator, W1, W2, W3, S)) then
+      Exit(DoError(S, DefaultValueEdit));
   end;
 
   for I := 0 to FJumpComponentsList.Count - 1 do
@@ -631,9 +690,9 @@ begin
 
       with TEdit(ValueEdit) do
       case Field.FieldType of
-        ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format('Not a valid boolean: %s', [Text]), TEdit(ValueEdit)));
-        ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format('Not a valid integer: %s', [Text]), TEdit(ValueEdit)));
-        ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format('Not a valid float: %s',   [Text]), TEdit(ValueEdit)));
+        ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), TEdit(ValueEdit)));
+        ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), TEdit(ValueEdit)));
+        ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format(rsNotAValidType, ['float', Text]), TEdit(ValueEdit)));
         ftString,
         ftUpperString:  ;
       end;
@@ -666,8 +725,15 @@ begin
     ShowHintMsg(rsVLWarning, MainForm.ActiveControl);
 
   if ValueLabelComboBox.ItemIndex >= 0 then
-    Field.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+    if ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex] = FNilValueLabel then
+      Field.ValueLabelSet := nil
+    else
+      Field.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
   Field.ShowValueLabel := ShowValueLabelChkBox.Checked;
+
+  if ValueLabelWriteToComboBox.Enabled and
+     (ValueLabelWriteToComboBox.ItemIndex >= 0) then
+    Field.ValueLabelWriteField := TEpiField(ValueLabelWriteToComboBox.Items.Objects[ValueLabelWriteToComboBox.ItemIndex]);
 
   if FromEdit.Text <> '' then
   begin
@@ -707,6 +773,9 @@ begin
   // Extended page
   Field.EntryMode := TEpiEntryMode(PtrUInt(EntryRadioGroup.Items.Objects[EntryRadioGroup.ItemIndex]));
   Field.ConfirmEntry := ConfirmEntryChkBox.Checked;
+  Field.RepeatValue := RepeatValueChkBox.Checked;
+  if Field is TEpiCustomAutoField then
+    TEpiCustomAutoField(Field).AutoMode := TEpiAutoUpdateMode(PtrUInt(UpdateModeRadioGrp.Items.Objects[UpdateModeRadioGrp.ItemIndex]));
 
   Field.Jumps.Free;
   if (FJumpComponentsList.Count > 0) then
@@ -736,6 +805,15 @@ begin
       end;
     end;
   end;
+
+  if DefaultValueEdit.Text <> '' then
+    Field.DefaultValueAsString := DefaultValueEdit.Text
+  else
+    Field.HasDefaultValue := false;
+
+  // Notes
+  Field.Notes.Text := NotesMemo.Text;
+
   Field.EndUpdate;
   UpdateCaption('');
 end;
@@ -744,7 +822,6 @@ constructor TFieldPropertiesFrame.Create(TheOwner: TComponent;
   const AValueLabelSets: TEpiValueLabelSets; const DataFile: TEpiDataFile);
 var
   i: Integer;
-  Jrec: PJumpComponents;
 begin
   inherited Create(TheOwner);
   FValueLabelSets := AValueLabelSets;
@@ -756,12 +833,22 @@ begin
   FDataFile := DataFile;
   FJumpComponentsList := TList.Create;
 
+  FNilValueLabel := TObject.Create;
+
   with EntryRadioGroup.Items do
   begin
     BeginUpdate;
     AddObject('Default', TObject(emDefault));
     AddObject('Must Enter', TObject(emMustEnter));
     AddObject('No Enter', TObject(emNoEnter));
+    EndUpdate;
+  end;
+
+  with UpdateModeRadioGrp.Items do
+  begin
+    BeginUpdate;
+    AddObject('On new record', TObject(umCreated));
+    AddObject('On save/update record', TObject(umUpdated));
     EndUpdate;
   end;
 end;
@@ -797,11 +884,20 @@ begin
   ValueLabelLabel.Visible         := ValueLabelComboBox.Visible;
   ManageValueLabelsButton.Visible := ValueLabelComboBox.Visible;
   ShowValueLabelChkBox.Visible    := ValueLabelComboBox.Visible;
+  ValueLabelWriteToLabel.Visible  := ValueLabelComboBox.Visible;
+  ValueLabelWriteToComboBox.Visible := ValueLabelComboBox.Visible;
 
   // - extended
   EntryRadioGroup.Visible         := Field.FieldType in EntryModeFieldTypes;
   ConfirmEntryChkBox.Visible      := Field.FieldType in ConfirmEntryFieldTypes;
+  RepeatValueChkBox.Visible       := Field.FieldType in RepeatValueFieldTypes;
+  DefaultValueEdit.Visible        := Field.FieldType in DefaultValueFieldTypes;
+  DefaulValueLabel.Visible        := DefaultValueEdit.Visible;
+  UpdateModeRadioGrp.Visible      := Field.FieldType in AutoUpdateFieldTypes;
   JumpsGrpBox.Visible             := Field.FieldType in JumpsFieldTypes;
+
+  // - notes
+  NotesSheet.Visible              := Field.FieldType in NotesFieldTypes;
 
   // Setup
   // - basic
@@ -825,12 +921,22 @@ begin
   end;
   ShowValueLabelChkBox.Checked := Field.ShowValueLabel;
   ShowValueLabelChkBox.Enabled := Assigned(Field.ValueLabelSet);
-
+  ValueLabelWriteToComboBox.Enabled := ShowValueLabelChkBox.Enabled;
+  UpdateValueLabelWriteTo;
 
   // - extended
   EntryRadioGroup.ItemIndex := EntryRadioGroup.Items.IndexOfObject(TObject(PtrUInt(Field.EntryMode)));
   ConfirmEntryChkBox.Checked := Field.ConfirmEntry;
+  RepeatValueChkBox.Checked := Field.RepeatValue;
+  DefaultValueEdit.Text := Field.DefaultValueAsString;
   UpdateJumps;
+  if Field is TEpiCustomAutoField then
+    UpdateModeRadioGrp.ItemIndex := UpdateModeRadioGrp.Items.IndexOfObject(TObject(PtrUInt(TEpiCustomAutoField(Field).AutoMode)));
+
+  // - notes
+  NotesMemo.Clear;
+  NotesMemo.Text := Field.Notes.Text;
+
   UpdateCaption('');
 end;
 

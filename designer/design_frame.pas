@@ -274,6 +274,7 @@ type
   private
     { Epidata Core Objects }
     FActiveSection: TEpiSection;
+    function    FieldNameHook: string;
     function    NewField(FieldType: TEpiFieldType): TEpiField;
     function    NewHeading: TEpiHeading;
     function    NewSection: TEpiSection;
@@ -1117,12 +1118,12 @@ begin
             for i := 0 to Fields.Count - 1 do
             begin
               OldEpiCtrl := Field[i];
-              J := 0;
+{              J := 0;
               repeat
                 inc(j);
                 TheName := ManagerSettings.FieldNamePrefix + IntToStr(FieldCount + j);
               until DataFile.ValidateFieldRename(TEpiField(OldEpiCtrl), TheName);
-              TEpiField(OldEpiCtrl).Name := TheName;
+              TEpiField(OldEpiCtrl).Name := TheName;           }
               // Since Valuelabels are NOT copied - do it manually.
               TEpiField(OldEpiCtrl).ValueLabelSet := OrgSection.Field[i].ValueLabelSet;
               NewDesignControl(TDesignField, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
@@ -1174,7 +1175,7 @@ begin
           OrgSection := TSectionCopyObject(CO.Data).Section;
           EpiCtrl    := (FActiveControl as IDesignEpiControl).EpiControl;
           ThisSection := TEpiSection(EpiCtrl);
-          ThisSection.Name.Assign(OrgSection.Name);
+          ThisSection.Caption.Assign(OrgSection.Caption);
           // TODO : Maybe change if CustomList changes assignment based on ItemOwner.
           for i := 0 to OrgSection.Groups.Count - 1 do
             ThisSection.Groups.AddItem(OrgSection.Groups[i]);
@@ -1547,13 +1548,13 @@ var
     TheName: String;
   begin
     Result := OldName;
-    if DataFile.ValidateFieldRename(nil, OldName) then exit;
+    if DataFile.ValidateRename(OldName) then exit;
 
     i := 0;
     repeat
       inc(i);
       Result := OldName + IntToStr(i);
-    until DataFile.ValidateFieldRename(nil, Result);
+    until DataFile.ValidateRename(Result);
   end;
 
   procedure CopyField(Const AField: TEpiField; AParent: TWinControl; Const AddTop: Integer);
@@ -1618,7 +1619,7 @@ var
       Left := ASection.Left;
       Width := ASection.Width;
       Height := ASection.Height;
-      Name.Assign(ASection.Name);
+      Caption.Assign(ASection.Caption);
 
       WinSection := TWinControl(NewSectionControl(Point(Left, Top), Point(Left + Width, Top + Height), NSection));
     end;
@@ -1747,6 +1748,11 @@ begin
   Result.Y += (Control.Height + Dist);
 end;
 
+function TDesignFrame.FieldNameHook: string;
+begin
+  result := ManagerSettings.FieldNamePrefix;
+end;
+
 function TDesignFrame.NewField(FieldType: TEpiFieldType): TEpiField;
 var
   TheName: String;
@@ -1756,16 +1762,7 @@ begin
 
   with result do
   begin
-    I := -1;
-    repeat
-      Inc(i);
-      TheName := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count + i);
-    until DataFile.ValidateFieldRename(result, TheName);
-
-    Name := TheName;
     Case FieldType of
-      ftBoolean:
-        Length := 1;
       ftInteger, ftAutoInc:
           Length := ManagerSettings.IntFieldLength;
       ftFloat:
@@ -1773,12 +1770,6 @@ begin
           Length := ManagerSettings.FloatIntLength;
           Decimals := ManagerSettings.FloatDecimalLength;
         end;
-      ftDMYDate, ftDMYToday,
-      ftMDYDate, ftMDYToday,
-      ftYMDDate, ftYMDToday:
-        Length := 10;
-      ftTime, ftTimeNow:
-        Length := 8;
       ftString, ftUpperString:
         Length := ManagerSettings.StringFieldLength;
     end;
@@ -1797,6 +1788,7 @@ function TDesignFrame.NewSection: TEpiSection;
 begin
   result := DataFile.NewSection;
   Result.RegisterOnChangeHook(@EpiContolStatusbarUpdateHook);
+  Result.Fields.OnGetNamePrefix := @FieldNameHook;
 end;
 
 procedure TDesignFrame.EpiContolStatusbarUpdateHook(Sender: TObject;
@@ -1816,12 +1808,13 @@ begin
   if FActiveSection = DataFile.MainSection then
     CurrentSectionLabel.Caption := 'main'
   else
-    CurrentSectionLabel.Caption := FActiveSection.Name.Text;
+    CurrentSectionLabel.Caption := FActiveSection.Caption.Text;
   FieldsLabel.Caption := IntToStr(DataFile.Fields.Count);
+  FieldNameLabel.Caption := EpiControl.Name;
+
   if EpiControl is TEpiField then
   with TEpiField(EpiControl) do
   begin
-    FieldNameLabel.Caption    := Name;
     FieldTypeLabel.Caption    := EpiTypeNames[FieldType];
     DefaultValueLabel.Caption := ''; // TODO : Set when implement in core.
     if Assigned(ValueLabelSet) then
@@ -1836,7 +1829,6 @@ begin
                                  BoolToStr(EntryMode=emDefault,   ' ', '') +
                                  BoolToStr(ConfirmEntry,          'C', ' ');
   end else begin
-    FieldNameLabel.Caption    := '';
     FieldTypeLabel.Caption    := '';
     DefaultValueLabel.Caption := '';
     ValueLabelLabel.Caption   := '';
@@ -1892,6 +1884,7 @@ begin
 
       with Section[i] do
       begin
+        Fields.OnGetNamePrefix := @FieldNameHook;
         for j := 0 to Fields.Count - 1 do
           NewDesignControl(TDesignField, TheParent, Point(Field[j].Left, Field[j].Top), Field[j]);
         for j := 0 to Headings.Count - 1 do

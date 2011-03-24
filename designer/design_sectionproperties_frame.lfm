@@ -6,30 +6,30 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
   Constraints.MinHeight = 160
   Constraints.MinWidth = 380
   TabOrder = 0
-  DesignLeft = 814
-  DesignTop = 395
+  DesignLeft = 969
+  DesignTop = 363
   object SectionPageControl: TPageControl[0]
     Left = 0
     Height = 382
     Top = 0
     Width = 380
-    ActivePage = SectionAdvancedSheet
+    ActivePage = SectionBasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object SectionBasicSheet: TTabSheet
       Caption = 'Basic'
       ClientHeight = 347
       ClientWidth = 374
       object SectionGroupAccessGroupBox: TGroupBox
-        AnchorSideLeft.Control = SectionNameEdit
-        AnchorSideTop.Control = SectionNameEdit
+        AnchorSideLeft.Control = NameEdit
+        AnchorSideTop.Control = CaptionEdit
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = SectionNameEdit
+        AnchorSideRight.Control = NameEdit
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 170
-        Top = 62
+        Top = 111
         Width = 354
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
@@ -194,7 +194,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           OnClick = GrpRightsMoveRightClick
         end
       end
-      object SectionNameEdit: TEdit
+      object NameEdit: TEdit
         AnchorSideLeft.Control = SectionBasicSheet
         AnchorSideTop.Control = Label4
         AnchorSideTop.Side = asrBottom
@@ -211,14 +211,42 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         TabOrder = 0
       end
       object Label4: TLabel
-        AnchorSideLeft.Control = SectionNameEdit
+        AnchorSideLeft.Control = NameEdit
         AnchorSideTop.Control = SectionBasicSheet
         Left = 10
         Height = 18
         Top = 10
-        Width = 40
+        Width = 44
         BorderSpacing.Top = 10
-        Caption = 'Name'
+        Caption = 'Name:'
+        ParentColor = False
+      end
+      object CaptionEdit: TEdit
+        AnchorSideLeft.Control = SectionBasicSheet
+        AnchorSideTop.Control = Label9
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = SectionBasicSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 27
+        Top = 79
+        Width = 354
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        TabOrder = 2
+      end
+      object Label9: TLabel
+        AnchorSideLeft.Control = NameEdit
+        AnchorSideTop.Control = NameEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 18
+        Top = 59
+        Width = 55
+        BorderSpacing.Top = 2
+        Caption = 'Caption:'
         ParentColor = False
       end
     end

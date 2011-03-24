@@ -24,10 +24,12 @@ type
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
+    Label9: TLabel;
     SectionAdvancedSheet: TTabSheet;
     SectionBasicSheet: TTabSheet;
     SectionGroupAccessGroupBox: TGroupBox;
-    SectionNameEdit: TEdit;
+    NameEdit: TEdit;
+    CaptionEdit: TEdit;
     SectionPageControl: TPageControl;
     WidthEdit: TEdit;
     procedure GrpRightsMoveLeftClick(Sender: TObject);
@@ -64,7 +66,7 @@ begin
 
   Idx := GroupAvailableListBox.ItemIndex;
   Grp := TEpiGroup(GroupAvailableListBox.Items.Objects[Idx]);
-  GroupAssignedListBox.Items.AddObject(Grp.Name.Text, Grp);
+  GroupAssignedListBox.Items.AddObject(Grp.Caption.Text, Grp);
   GroupAvailableListBox.Items.Delete(Idx);
 end;
 
@@ -82,7 +84,7 @@ begin
 
   Idx := GroupAssignedListBox.ItemIndex;
   Grp := TEpiGroup(GroupAssignedListBox.Items.Objects[Idx]);
-  GroupAvailableListBox.Items.AddObject(Grp.Name.Text, Grp);
+  GroupAvailableListBox.Items.AddObject(Grp.Caption.Text, Grp);
   GroupAssignedListBox.Items.Delete(Idx);
 end;
 
@@ -104,7 +106,7 @@ procedure TSectionPropertiesFrame.UpdateCaption(const S: String);
 var
   T: String;
 begin
-  T := 'Section Properties: ' + Section.Name.Text;
+  T := 'Section Properties: ' + Section.Name;
   inherited UpdateCaption(T);
 end;
 
@@ -116,6 +118,20 @@ begin
 end;
 
 function TSectionPropertiesFrame.ValidateControl: boolean;
+
+function DoError(Const Msg: string; Ctrl: TWinControl): boolean;
+  var
+    P: TWinControl;
+  begin
+    P := Ctrl.Parent;
+    while not (P is TTabSheet) do
+      P := P.Parent;
+    TPageControl(P.Parent).ActivePage := TTabSheet(P);
+    Ctrl.SetFocus;
+    ShowHintMsg(Msg, Ctrl);
+    Result := false;
+  end;
+
 var
   FSection: TEpiSection;
   i: Integer;
@@ -123,19 +139,28 @@ begin
   result := false;
 
   FSection := TEpiSection(EpiControl);
-  FSection.BeginUpdate;
+  try
+    FSection.BeginUpdate;
 
-  // Basic Page
-  FSection.Name.Text := SectionNameEdit.Text;
-  for i := 0 to GroupAssignedListBox.Count - 1 do
-    if not FSection.Groups.ItemExistsById(TEpiGroup(GroupAssignedListBox.Items.Objects[i]).Id) then
-      FSection.Groups.AddItem(TEpiGroup(GroupAssignedListBox.Items.Objects[i]));
+    // Basic Page
+    if (not FSection.ValidateRename(NameEdit.Text, true)) then
+    begin
+      DoError('Name already exists or invalid identifier', NameEdit);
+      Exit;
+    end;
 
-  // Advanced Page
-  FSection.Width := StrToInt(WidthEdit.Text);
-  FSection.Height := StrToInt(HeightEdit.Text);
+    FSection.Caption.Text := CaptionEdit.Text;
+    for i := 0 to GroupAssignedListBox.Count - 1 do
+      if not FSection.Groups.ItemExistsById(TEpiGroup(GroupAssignedListBox.Items.Objects[i]).Id) then
+        FSection.Groups.AddItem(TEpiGroup(GroupAssignedListBox.Items.Objects[i]));
 
-  FSection.EndUpdate;
+    // Advanced Page
+    FSection.Width := StrToInt(WidthEdit.Text);
+    FSection.Height := StrToInt(HeightEdit.Text);
+
+  finally
+    FSection.EndUpdate;
+  end;
 
   Result := true;
   UpdateCaption('');
@@ -149,7 +174,10 @@ begin
   Caption := 'Section Properties';
 
   // Basic Page
-  SectionNameEdit.Text := Section.Name.Text;
+  NameEdit.Text := Section.Name;
+  NameEdit.Enabled := Section.DataFile.MainSection <> Section;
+
+  CaptionEdit.Text := Section.Caption.Text;
 
   {$IFNDEF EPI_DEBUG}
   SectionGroupAccessGroupBox.Visible := false;
@@ -163,9 +191,9 @@ begin
   for i := 0 to LocalGroups.Count - 1 do
   begin
     if Section.Groups.ItemExistsById(LocalGroups[i].Id) then
-      GroupAssignedListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i])
+      GroupAssignedListBox.Items.AddObject(LocalGroups[i].Caption.Text, LocalGroups[i])
     else
-      GroupAvailableListBox.Items.AddObject(LocalGroups[i].Name.Text, LocalGroups[i]);
+      GroupAvailableListBox.Items.AddObject(LocalGroups[i].Caption.Text, LocalGroups[i]);
   end;
   GroupAvailableListBox.Items.EndUpdate;
   GroupAssignedListBox.Items.EndUpdate;
@@ -180,7 +208,7 @@ end;
 procedure TSectionPropertiesFrame.ForceShow;
 begin
   inherited ForceShow;
-  SectionNameEdit.SetFocus;
+  CaptionEdit.SetFocus;
 end;
 
 end.

@@ -118,6 +118,7 @@ begin
       WriteInteger(Sec, 'FloatDecimalLength', FloatDecimalLength);
       WriteInteger(Sec, 'StringFieldLength',  StringFieldLength);
       WriteInteger(Sec, 'DefaultDateType',    Word(DefaultDateType));
+      WriteString(Sec,  'FieldNamePrefix',    FieldNamePrefix);
 
   {    // Advanced:
       WorkingDirUTF8:        string;
@@ -186,11 +187,12 @@ begin
       FieldNamePrefix:       string;
     //    FieldNamingStyle:      TFieldNaming;}
       Sec := 'fielddefs';
+      DefaultDateType    := TEpiFieldType(ReadInteger(Sec, 'DefaultDateType', Word(DefaultDateType)));
       IntFieldLength     := ReadInteger(Sec, 'IntFieldLength',     IntFieldLength);
       FloatIntLength     := ReadInteger(Sec, 'FloatIntLength',     FloatIntLength);
       FloatDecimalLength := ReadInteger(Sec, 'FloatDecimalLength', FloatDecimalLength);
       StringFieldLength  := ReadInteger(Sec, 'StringFieldLength',  StringFieldLength);
-      DefaultDateType    := TEpiFieldType(ReadInteger(Sec, 'DefaultDateType', Word(DefaultDateType)));
+      FieldNamePrefix    := ReadString(Sec,  'FieldNamePrefix',    FieldNamePrefix);
 
   {    // Advanced:
       WorkingDirUTF8:        string;

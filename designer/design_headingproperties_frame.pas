@@ -13,7 +13,9 @@ type
   { THeadingPropertiesFrame }
 
   THeadingPropertiesFrame = class(TDesignPropertiesFrame)
+    NameEdit: TEdit;
     CaptionEdit: TEdit;
+    Label10: TLabel;
     Label9: TLabel;
   private
     { private declarations }
@@ -50,8 +52,9 @@ end;
 
 procedure THeadingPropertiesFrame.UpdateFormContent;
 begin
+  NameEdit.Text := TEpiHeading(EpiControl).Name;
   CaptionEdit.Text := TEpiHeading(EpiControl).Caption.Text;
-  UpdateCaption('Heading Properties');
+  UpdateCaption('Heading Properties: ' + TEpiHeading(EpiControl).Name);
 end;
 
 procedure THeadingPropertiesFrame.ForceShow;
@@ -67,6 +70,12 @@ begin
   result := false;
   FHeading := TEpiHeading(EpiControl);
 
+  if not FHeading.ValidateRename(NameEdit.Text, false) then
+  begin
+    ShowHintMsg('Name already exists or invalid identifier', NameEdit);
+    Exit;
+  end;
+
   if UTF8Length(CaptionEdit.Text) = 0 then
   begin
     ShowHintMsg('Empty heading not allowed...', CaptionEdit);
@@ -75,6 +84,7 @@ begin
 
   FHeading.BeginUpdate;
   FHeading.Caption.Text := CaptionEdit.Text;
+  FHeading.Name := NameEdit.Text;
   FHeading.EndUpdate;
 
   Result := true;

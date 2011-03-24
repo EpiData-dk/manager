@@ -92,7 +92,7 @@ begin
       if Section = DataFile.MainSection then
         Cells[5, i+1] := '(main)'
       else
-        Cells[5, i+1] := Section.Name.Text;
+        Cells[5, i+1] := Section.Caption.Text;
     end;
   end;
 
@@ -112,13 +112,13 @@ begin
       if DataFile.Sections[i] = DataFile.MainSection then
         Cells[1, i+1] := '(main)'
       else
-        Cells[1, i+1] := Name.Text;
+        Cells[1, i+1] := Caption.Text;
       Cells[2, i+1] := IntToStr(Fields.Count);
       Cells[3, i+1] := IntToStr(Headings.Count);
       if Groups.Count > 0 then
-        S := Groups[0].Name.Text;
+        S := Groups[0].Caption.Text;
       for j := 1 to Groups.Count -1 do
-        S := S + ',' + Groups[j].Name.Text;
+        S := S + ',' + Groups[j].Caption.Text;
       Cells[4, i+1] := S;
     end;
   end;

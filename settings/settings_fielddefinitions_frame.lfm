@@ -22,7 +22,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 127
-    Height = 31
+    Height = 27
     Top = 155
     Width = 624
     Anchors = [akTop, akLeft, akRight]

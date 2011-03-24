@@ -524,7 +524,7 @@ procedure TDesignSection.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FSection := TEpiSection(AValue);
   FSection.RegisterOnChangeHook(@OnChange);
-  FSection.Name.RegisterOnChangeHook(@OnTextChange);
+  FSection.Caption.RegisterOnChangeHook(@OnTextChange);
   Name := FSection.Id;
   Caption := '';
 end;
@@ -558,12 +558,12 @@ begin
         ecceDestroy: exit;
         ecceSetLeft: Left := FSection.Left;
         ecceSetTop:  Top  := FSection.Top;
-        ecceText:    Caption := EpiTextToControlText(FSection.Name.Text);
+        ecceText:    Caption := EpiTextToControlText(FSection.Caption.Text);
         ecceUpdate:
           begin
             Left := FSection.Left;
             Top  := FSection.Top;
-            Caption := EpiTextToControlText(FSection.Name.Text);
+            Caption := EpiTextToControlText(FSection.Caption.Text);
             Width := FSection.Width;
             Height := FSection.Height;
           end;
@@ -582,7 +582,7 @@ end;
 procedure TDesignSection.OnTextChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
-  Caption := EpiTextToControlText(FSection.Name.Text);
+  Caption := EpiTextToControlText(FSection.Caption.Text);
 end;
 
 procedure TDesignSection.UpdateHint;
@@ -598,10 +598,12 @@ begin
   With FSection do
     Hint := WideFormat(
       'Name: %s' + LineEnding +
+      'Caption: %s' + LineEnding +
 //      'Groups: %s' + LineEnding +
       'X: %d, Y: %d' + LineEnding +
       'W: %d, H: %d',
-      [UTF8Decode(Name.Text), {UTF8Decode(S),}
+      [UTF8Decode(Name),
+       UTF8Decode(Caption.Text), {UTF8Decode(S),}
        Left, Top, Width, Height]
     );
 end;
@@ -697,9 +699,11 @@ procedure TDesignHeading.UpdateHint;
 begin
   with FHeading do
     Hint := WideFormat(
+      'Name: %s' + LineEnding +
       'Caption: %s' + LineEnding +
       'X: %d, Y: %d',
-      [UTF8Decode(Caption.Text),
+      [UTF8Decode(Name),
+       UTF8Decode(Caption.Text),
        Left,
        Top]
     );
