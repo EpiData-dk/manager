@@ -1,36 +1,37 @@
 inherited FieldPropertiesFrame: TFieldPropertiesFrame
-  Height = 717
-  Width = 380
-  ClientHeight = 717
-  ClientWidth = 380
-  Constraints.MinHeight = 435
+  Height = 568
+  Width = 730
+  ClientHeight = 568
+  ClientWidth = 730
+  Constraints.MinHeight = 365
   Constraints.MinWidth = 380
   TabOrder = 0
-  DesignLeft = 501
-  DesignTop = 228
+  DesignLeft = 317
+  DesignTop = 303
   object FieldPageControl: TPageControl[0]
+    AnchorSideLeft.Control = Owner
     Left = 0
-    Height = 717
+    Height = 568
     Top = 0
-    Width = 380
-    ActivePage = FieldAdvancedSheet
+    Width = 730
+    ActivePage = CalcTabSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 3
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 682
-      ClientWidth = 374
+      ClientHeight = 533
+      ClientWidth = 724
       object DecimalsEdit: TEdit
         AnchorSideLeft.Control = Bevel1
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = LengthEdit
         AnchorSideRight.Control = NameEdit
         AnchorSideRight.Side = asrBottom
-        Left = 249
+        Left = 478
         Height = 27
         Top = 144
-        Width = 115
+        Width = 241
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         TabOrder = 3
@@ -39,7 +40,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
       object DecimalsLabel: TLabel
         AnchorSideLeft.Control = DecimalsEdit
         AnchorSideBottom.Control = DecimalsEdit
-        Left = 249
+        Left = 478
         Height = 18
         Top = 124
         Width = 66
@@ -57,7 +58,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 27
         Top = 144
-        Width = 224
+        Width = 453
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 2
         BorderSpacing.Right = 5
@@ -86,7 +87,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 27
         Top = 87
-        Width = 354
+        Width = 709
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 2
         TabOrder = 1
@@ -112,7 +113,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 27
         Top = 30
-        Width = 354
+        Width = 709
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -135,7 +136,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
       object Label10: TLabel
         AnchorSideRight.Control = FieldTypeLabel
         AnchorSideBottom.Control = NameEdit
-        Left = 230
+        Left = 585
         Height = 18
         Top = 10
         Width = 35
@@ -150,7 +151,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = Label10
         AnchorSideBottom.Side = asrBottom
-        Left = 267
+        Left = 622
         Height = 18
         Top = 10
         Width = 97
@@ -160,74 +161,24 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ParentColor = False
         Transparent = False
       end
-      object ValueLabelComboBox: TComboBox
-        AnchorSideLeft.Control = FieldBasicSheet
-        AnchorSideTop.Control = ValueLabelLabel
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = ManageValueLabelsButton
-        Left = 10
-        Height = 31
-        Top = 201
-        Width = 258
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 2
-        BorderSpacing.Right = 10
-        ItemHeight = 0
-        OnChange = ValueLabelComboBoxChange
-        ParentShowHint = False
-        ShowHint = True
-        Style = csDropDownList
-        TabOrder = 4
-      end
-      object ManageValueLabelsButton: TButton
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = ValueLabelComboBox
-        AnchorSideRight.Control = FieldBasicSheet
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = ValueLabelComboBox
-        AnchorSideBottom.Side = asrBottom
-        Left = 278
-        Height = 31
-        Top = 201
-        Width = 86
-        Anchors = [akTop, akRight, akBottom]
-        BorderSpacing.Left = 10
-        BorderSpacing.Right = 10
-        Caption = 'Manage...'
-        OnClick = ManageValueLabelsButtonClick
-        TabOrder = 5
-      end
-      object ValueLabelLabel: TLabel
-        AnchorSideLeft.Control = ValueLabelComboBox
-        AnchorSideTop.Control = LengthEdit
-        AnchorSideTop.Side = asrBottom
-        Left = 10
-        Height = 18
-        Top = 181
-        Width = 77
-        BorderSpacing.Top = 10
-        Caption = 'Value label:'
-        ParentColor = False
-      end
       object RangesGrpBox: TGroupBox
         AnchorSideLeft.Control = FieldBasicSheet
-        AnchorSideTop.Control = ValueLabelWriteToComboBox
+        AnchorSideTop.Control = ValueLabelGrpBox
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = FieldBasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 70
-        Top = 330
-        Width = 354
+        Top = 258
+        Width = 709
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Range'
         ClientHeight = 51
-        ClientWidth = 350
-        TabOrder = 8
+        ClientWidth = 705
+        TabOrder = 4
         object Label11: TLabel
           AnchorSideLeft.Control = RangesGrpBox
           AnchorSideTop.Control = FromEdit
@@ -249,7 +200,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 48
           Height = 27
           Top = 12
-          Width = 120
+          Width = 303
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 5
           OnUTF8KeyPress = RangeEditUTF8KeyPress
@@ -260,7 +211,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = ToEdit
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = ToEdit
-          Left = 173
+          Left = 356
           Height = 18
           Top = 16
           Width = 19
@@ -277,10 +228,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = RangesGrpBox
           AnchorSideRight.Side = asrBottom
-          Left = 197
+          Left = 380
           Height = 27
           Top = 12
-          Width = 148
+          Width = 320
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Right = 5
           OnUTF8KeyPress = RangeEditUTF8KeyPress
@@ -294,7 +245,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Control = DecimalsEdit
         AnchorSideBottom.Control = LengthEdit
         AnchorSideBottom.Side = asrBottom
-        Left = 239
+        Left = 468
         Height = 27
         Top = 144
         Width = 5
@@ -304,55 +255,95 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Shape = bsSpacer
         Style = bsRaised
       end
-      object ShowValueLabelChkBox: TCheckBox
-        AnchorSideLeft.Control = ValueLabelComboBox
-        AnchorSideTop.Control = ValueLabelComboBox
-        AnchorSideTop.Side = asrBottom
-        Left = 20
-        Height = 22
-        Top = 237
-        Width = 274
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 5
-        Caption = 'Show valuelabel text after value entry'
-        TabOrder = 6
-      end
-      object ValueLabelWriteToComboBox: TComboBox
-        AnchorSideLeft.Control = ValueLabelWriteToLabel
-        AnchorSideTop.Control = ValueLabelWriteToLabel
+      object UpdateModeRadioGrp: TRadioGroup
+        AnchorSideLeft.Control = FieldBasicSheet
+        AnchorSideTop.Control = RangesGrpBox
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = FieldBasicSheet
         AnchorSideRight.Side = asrBottom
-        Left = 20
-        Height = 31
-        Top = 289
-        Width = 344
+        Left = 10
+        Height = 76
+        Top = 338
+        Width = 709
         Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Top = 2
-        BorderSpacing.Right = 10
-        ItemHeight = 0
-        ParentShowHint = False
-        ShowHint = True
-        Style = csDropDownList
-        TabOrder = 7
-      end
-      object ValueLabelWriteToLabel: TLabel
-        AnchorSideLeft.Control = ShowValueLabelChkBox
-        AnchorSideTop.Control = ShowValueLabelChkBox
-        AnchorSideTop.Side = asrBottom
-        Left = 20
-        Height = 18
-        Top = 269
-        Width = 130
+        AutoFill = True
+        BorderSpacing.Left = 10
         BorderSpacing.Top = 10
-        Caption = 'Write Label to Field:'
-        ParentColor = False
+        BorderSpacing.Right = 10
+        Caption = 'Update Mode:'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        TabOrder = 5
+      end
+      object ValueLabelGrpBox: TGroupBox
+        AnchorSideLeft.Control = FieldBasicSheet
+        AnchorSideTop.Control = LengthEdit
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = FieldBasicSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 67
+        Top = 181
+        Width = 709
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        Caption = 'Valuelabel:'
+        ClientHeight = 48
+        ClientWidth = 705
+        TabOrder = 6
+        object ValueLabelComboBox: TComboBox
+          AnchorSideLeft.Control = ValueLabelGrpBox
+          AnchorSideTop.Control = ValueLabelGrpBox
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ManageValueLabelsButton
+          Left = 10
+          Height = 31
+          Top = 9
+          Width = 589
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 2
+          BorderSpacing.Right = 10
+          ItemHeight = 0
+          OnChange = ValueLabelComboBoxChange
+          ParentShowHint = False
+          ShowHint = True
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object ManageValueLabelsButton: TButton
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ValueLabelComboBox
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ValueLabelGrpBox
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = ValueLabelComboBox
+          AnchorSideBottom.Side = asrBottom
+          Left = 609
+          Height = 31
+          Top = 9
+          Width = 86
+          Anchors = [akTop, akRight]
+          BorderSpacing.Left = 10
+          BorderSpacing.Right = 10
+          Caption = 'Manage...'
+          OnClick = ManageValueLabelsButtonClick
+          TabOrder = 1
+        end
       end
     end
     object FieldAdvancedSheet: TTabSheet
       Caption = 'Extended'
-      ClientHeight = 682
-      ClientWidth = 374
+      ClientHeight = 533
+      ClientWidth = 724
       object EntryRadioGroup: TRadioGroup
         AnchorSideLeft.Control = FieldAdvancedSheet
         AnchorSideTop.Control = FieldAdvancedSheet
@@ -361,7 +352,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 112
         Top = 10
-        Width = 354
+        Width = 709
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
         BorderSpacing.Left = 10
@@ -376,38 +367,190 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
+        ClientHeight = 93
+        ClientWidth = 705
         TabOrder = 0
+        object ConfirmEntryChkBox: TCheckBox
+          AnchorSideLeft.Control = FieldAdvancedSheet
+          AnchorSideTop.Control = EntryRadioGroup
+          AnchorSideRight.Control = EntryRadioGroup
+          AnchorSideRight.Side = asrBottom
+          Left = 554
+          Height = 22
+          Top = 10
+          Width = 145
+          Anchors = [akTop, akRight]
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 10
+          Caption = 'Confirm field entry'
+          TabOrder = 0
+        end
       end
-      object JumpsGrpBox: TGroupBox
+      object AutoValuesGrpBox: TGroupBox
         AnchorSideLeft.Control = FieldAdvancedSheet
-        AnchorSideTop.Control = UpdateModeRadioGrp
+        AnchorSideTop.Control = EntryRadioGroup
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = FieldAdvancedSheet
         AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = FieldAdvancedSheet
+        Left = 10
+        Height = 68
+        Top = 132
+        Width = 709
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        Caption = 'Automatic Values:'
+        ClientHeight = 49
+        ClientWidth = 705
+        TabOrder = 1
+        object RepeatValueChkBox: TCheckBox
+          AnchorSideLeft.Control = AutoValuesGrpBox
+          AnchorSideTop.Control = AutoValuesGrpBox
+          AnchorSideTop.Side = asrCenter
+          Left = 10
+          Height = 22
+          Top = 13
+          Width = 137
+          BorderSpacing.Left = 10
+          Caption = 'Repeat last value'
+          TabOrder = 0
+        end
+        object DefaulValueLabel: TLabel
+          AnchorSideLeft.Control = RepeatValueChkBox
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = AutoValuesGrpBox
+          AnchorSideTop.Side = asrCenter
+          AnchorSideBottom.Control = DefaultValueEdit
+          AnchorSideBottom.Side = asrBottom
+          Left = 172
+          Height = 18
+          Top = 15
+          Width = 93
+          BorderSpacing.Left = 25
+          BorderSpacing.Top = 10
+          Caption = 'Default Value:'
+          ParentColor = False
+        end
+        object DefaultValueEdit: TEdit
+          AnchorSideLeft.Control = DefaulValueLabel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = AutoValuesGrpBox
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = AutoValuesGrpBox
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = DefaulValueLabel
+          AnchorSideBottom.Side = asrBottom
+          Left = 275
+          Height = 27
+          Top = 11
+          Width = 420
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 7
+          BorderSpacing.Right = 10
+          OnUTF8KeyPress = RangeEditUTF8KeyPress
+          TabOrder = 1
+        end
+      end
+      object ValueLabelSettingGrpBox: TGroupBox
+        AnchorSideLeft.Control = FieldAdvancedSheet
+        AnchorSideTop.Control = AutoValuesGrpBox
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = FieldAdvancedSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 118
+        Top = 210
+        Width = 709
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        Caption = 'Valuelabel Setting:'
+        ClientHeight = 99
+        ClientWidth = 705
+        TabOrder = 2
+        object ValueLabelWriteToLabel: TLabel
+          AnchorSideLeft.Control = ValueLabelSettingGrpBox
+          AnchorSideTop.Control = ShowValueLabelChkBox
+          AnchorSideTop.Side = asrBottom
+          Left = 10
+          Height = 18
+          Top = 37
+          Width = 130
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 10
+          Caption = 'Write Label to Field:'
+          ParentColor = False
+        end
+        object ShowValueLabelChkBox: TCheckBox
+          AnchorSideLeft.Control = ValueLabelSettingGrpBox
+          AnchorSideTop.Control = ValueLabelSettingGrpBox
+          Left = 10
+          Height = 22
+          Top = 5
+          Width = 274
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 5
+          Caption = 'Show valuelabel text after value entry'
+          TabOrder = 0
+        end
+        object ValueLabelWriteToComboBox: TComboBox
+          AnchorSideLeft.Control = ValueLabelSettingGrpBox
+          AnchorSideTop.Control = ValueLabelWriteToLabel
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = ValueLabelSettingGrpBox
+          AnchorSideRight.Side = asrBottom
+          Left = 10
+          Height = 31
+          Top = 57
+          Width = 685
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 2
+          BorderSpacing.Right = 10
+          ItemHeight = 0
+          ParentShowHint = False
+          ShowHint = True
+          Style = csDropDownList
+          TabOrder = 1
+        end
+      end
+    end
+    object JumpSheet: TTabSheet
+      Caption = 'Jumps'
+      ClientHeight = 533
+      ClientWidth = 724
+      object JumpsGrpBox: TGroupBox
+        AnchorSideLeft.Control = JumpSheet
+        AnchorSideTop.Control = JumpSheet
+        AnchorSideRight.Control = JumpSheet
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = JumpSheet
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 403
-        Top = 269
-        Width = 354
+        Height = 465
+        Top = 10
+        Width = 709
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
-        BorderSpacing.Top = 5
+        BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Jumps:'
-        ClientHeight = 384
-        ClientWidth = 350
-        TabOrder = 4
+        ClientHeight = 446
+        ClientWidth = 705
+        TabOrder = 0
         object JumpScrollBox: TScrollBox
           Left = 0
-          Height = 384
+          Height = 446
           Top = 0
-          Width = 350
+          Width = 705
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 384
-          ClientWidth = 350
+          ClientHeight = 446
+          ClientWidth = 705
           TabOrder = 0
           object JumpValueLabel: TLabel
             AnchorSideLeft.Control = JumpScrollBox
@@ -440,7 +583,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = RemoveJumpBtn
             AnchorSideBottom.Control = TopBevel
-            Left = 298
+            Left = 653
             Height = 22
             Top = 4
             Width = 22
@@ -492,7 +635,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = JumpScrollBox
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrCenter
-            Left = 323
+            Left = 678
             Height = 22
             Top = 4
             Width = 22
@@ -545,7 +688,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 97
-            Height = 346
+            Height = 408
             Top = 36
             Width = 3
             Anchors = [akTop, akLeft, akBottom]
@@ -557,8 +700,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Side = asrBottom
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
-            Left = 203
-            Height = 346
+            Left = 410
+            Height = 408
             Top = 36
             Width = 3
             Anchors = [akTop, akBottom]
@@ -572,8 +715,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = AddJumpBtn
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
-            Left = 290
-            Height = 346
+            Left = 645
+            Height = 408
             Top = 36
             Width = 3
             Anchors = [akTop, akRight, akBottom]
@@ -588,7 +731,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             Left = 10
             Height = 5
             Top = 29
-            Width = 330
+            Width = 685
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Left = 10
             BorderSpacing.Right = 10
@@ -598,7 +741,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = JumpValueLabel
             AnchorSideTop.Side = asrCenter
-            Left = 211
+            Left = 418
             Height = 18
             Top = 10
             Width = 81
@@ -625,7 +768,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = GotoResetBevel
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Control = TopBevel
-            Left = 203
+            Left = 410
             Height = 17
             Top = 10
             Width = 3
@@ -638,7 +781,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = ResetAddBevel
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Control = TopBevel
-            Left = 290
+            Left = 645
             Height = 17
             Top = 10
             Width = 3
@@ -647,95 +790,685 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           end
         end
       end
-      object ConfirmEntryChkBox: TCheckBox
-        AnchorSideLeft.Control = FieldAdvancedSheet
-        AnchorSideTop.Control = EntryRadioGroup
-        AnchorSideTop.Side = asrBottom
+    end
+    object CalcTabSheet: TTabSheet
+      Caption = 'Calculated'
+      ClientHeight = 533
+      ClientWidth = 724
+      object TimeDiffGrpBox: TGroupBox
+        AnchorSideLeft.Control = RadioButton1
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = CalcTabSheet
+        AnchorSideRight.Control = CalcTabSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 34
+        Height = 100
+        Top = 10
+        Width = 680
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        Caption = 'Time difference:'
+        ClientHeight = 81
+        ClientWidth = 676
+        TabOrder = 0
+        object ComboBox1: TComboBox
+          AnchorSideLeft.Control = TimeDiffGrpBox
+          AnchorSideTop.Control = Label2
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = EqLabel
+          Left = 10
+          Height = 31
+          Top = 33
+          Width = 113
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 5
+          BorderSpacing.Right = 2
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object ComboBox2: TComboBox
+          AnchorSideLeft.Control = EqLabel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = PlusLabel1
+          Left = 148
+          Height = 31
+          Top = 33
+          Width = 114
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 2
+          BorderSpacing.Right = 2
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 1
+        end
+        object ComboBox3: TComboBox
+          AnchorSideLeft.Control = PlusLabel1
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = MidLabel
+          Left = 278
+          Height = 31
+          Top = 33
+          Width = 113
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 2
+          BorderSpacing.Right = 2
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 2
+        end
+        object ComboBox4: TComboBox
+          AnchorSideLeft.Control = MidLabel
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = PlusLabel2
+          Left = 419
+          Height = 31
+          Top = 33
+          Width = 114
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 2
+          BorderSpacing.Right = 2
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 3
+        end
+        object ComboBox5: TComboBox
+          AnchorSideLeft.Control = PlusLabel2
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = EndLabel
+          Left = 549
+          Height = 31
+          Top = 33
+          Width = 114
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 2
+          BorderSpacing.Right = 2
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 4
+        end
+        object Label2: TLabel
+          AnchorSideLeft.Control = TimeDiffGrpBox
+          AnchorSideTop.Control = TimeDiffGrpBox
+          Left = 10
+          Height = 18
+          Top = 10
+          Width = 41
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 10
+          Caption = 'Result'
+          ParentColor = False
+        end
+        object Label3: TLabel
+          AnchorSideLeft.Control = ComboBox3
+          AnchorSideTop.Control = TimeDiffGrpBox
+          Left = 278
+          Height = 18
+          Top = 10
+          Width = 38
+          BorderSpacing.Top = 10
+          Caption = 'Time:'
+          ParentColor = False
+        end
+        object Label4: TLabel
+          AnchorSideLeft.Control = ComboBox4
+          AnchorSideTop.Control = TimeDiffGrpBox
+          AnchorSideBottom.Side = asrBottom
+          Left = 419
+          Height = 18
+          Top = 10
+          Width = 36
+          BorderSpacing.Top = 10
+          Caption = 'Date:'
+          ParentColor = False
+        end
+        object Label5: TLabel
+          AnchorSideLeft.Control = ComboBox2
+          AnchorSideTop.Control = TimeDiffGrpBox
+          Left = 148
+          Height = 18
+          Top = 10
+          Width = 36
+          BorderSpacing.Top = 10
+          Caption = 'Date:'
+          ParentColor = False
+        end
+        object Label6: TLabel
+          AnchorSideLeft.Control = ComboBox5
+          AnchorSideTop.Control = TimeDiffGrpBox
+          Left = 549
+          Height = 18
+          Top = 10
+          Width = 38
+          BorderSpacing.Top = 10
+          Caption = 'Time:'
+          ParentColor = False
+        end
+        object EqLabel: TLabel
+          AnchorSideLeft.Control = ComboBox1
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox2
+          Left = 125
+          Height = 18
+          Top = 39
+          Width = 21
+          Anchors = [akTop]
+          Caption = '= ('
+          ParentColor = False
+        end
+        object PlusLabel1: TLabel
+          AnchorSideLeft.Control = ComboBox2
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox3
+          Left = 264
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '+'
+          ParentColor = False
+        end
+        object MidLabel: TLabel
+          AnchorSideLeft.Control = ComboBox3
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox4
+          Left = 393
+          Height = 18
+          Top = 39
+          Width = 24
+          Anchors = [akTop]
+          Caption = ') - ('
+          ParentColor = False
+        end
+        object PlusLabel2: TLabel
+          AnchorSideLeft.Control = ComboBox4
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox5
+          Left = 535
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '+'
+          ParentColor = False
+        end
+        object EndLabel: TLabel
+          AnchorSideLeft.Control = ComboBox5
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = TimeDiffGrpBox
+          AnchorSideRight.Side = asrBottom
+          Left = 665
+          Height = 18
+          Top = 39
+          Width = 6
+          Anchors = [akTop, akRight]
+          BorderSpacing.Right = 5
+          Caption = ')'
+          ParentColor = False
+        end
+      end
+      object RadioButton1: TRadioButton
+        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideTop.Control = TimeDiffGrpBox
+        AnchorSideTop.Side = asrCenter
         Left = 10
         Height = 22
-        Top = 127
-        Width = 145
+        Top = 49
+        Width = 24
         BorderSpacing.Left = 10
-        BorderSpacing.Top = 5
-        Caption = 'Confirm field entry'
+        Checked = True
         TabOrder = 1
       end
-      object RepeatValueChkBox: TCheckBox
-        AnchorSideLeft.Control = ConfirmEntryChkBox
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = ConfirmEntryChkBox
+      object RadioButton2: TRadioButton
+        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideTop.Control = CombineDateGrpBox
         AnchorSideTop.Side = asrCenter
-        Left = 165
+        Left = 10
         Height = 22
-        Top = 127
-        Width = 137
+        Top = 159
+        Width = 24
         BorderSpacing.Left = 10
-        Caption = 'Repeat last value'
         TabOrder = 2
       end
-      object DefaultValueEdit: TEdit
-        AnchorSideLeft.Control = DefaulValueLabel
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = ConfirmEntryChkBox
-        AnchorSideTop.Side = asrBottom
-        AnchorSideBottom.Control = DefaulValueLabel
-        AnchorSideBottom.Side = asrBottom
-        Left = 113
-        Height = 27
-        Top = 156
-        Width = 108
+      object RadioButton3: TRadioButton
+        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideTop.Control = CombineStringGrpBox
+        AnchorSideTop.Side = asrCenter
+        Left = 10
+        Height = 22
+        Top = 269
+        Width = 24
         BorderSpacing.Left = 10
-        BorderSpacing.Top = 7
-        OnUTF8KeyPress = RangeEditUTF8KeyPress
         TabOrder = 3
       end
-      object DefaulValueLabel: TLabel
-        AnchorSideLeft.Control = FieldAdvancedSheet
-        AnchorSideTop.Control = ConfirmEntryChkBox
+      object CombineDateGrpBox: TGroupBox
+        AnchorSideLeft.Control = RadioButton2
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = TimeDiffGrpBox
         AnchorSideTop.Side = asrBottom
-        AnchorSideBottom.Control = DefaultValueEdit
-        AnchorSideBottom.Side = asrBottom
-        Left = 10
-        Height = 18
-        Top = 165
-        Width = 93
-        Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 10
-        Caption = 'Default Value:'
-        ParentColor = False
-      end
-      object UpdateModeRadioGrp: TRadioGroup
-        AnchorSideLeft.Control = FieldAdvancedSheet
-        AnchorSideTop.Control = DefaultValueEdit
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldAdvancedSheet
+        AnchorSideRight.Control = CalcTabSheet
         AnchorSideRight.Side = asrBottom
-        Left = 10
-        Height = 76
-        Top = 188
-        Width = 354
+        Left = 34
+        Height = 100
+        Top = 120
+        Width = 680
         Anchors = [akTop, akLeft, akRight]
-        AutoFill = True
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 5
+        BorderSpacing.Top = 10
         BorderSpacing.Right = 10
-        Caption = 'Update Mode:'
-        ChildSizing.LeftRightSpacing = 6
-        ChildSizing.TopBottomSpacing = 6
-        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-        ChildSizing.EnlargeVertical = crsHomogenousChildResize
-        ChildSizing.ShrinkHorizontal = crsScaleChilds
-        ChildSizing.ShrinkVertical = crsScaleChilds
-        ChildSizing.Layout = cclLeftToRightThenTopToBottom
-        ChildSizing.ControlsPerLine = 1
+        Caption = 'Create Date:'
+        ClientHeight = 81
+        ClientWidth = 676
+        TabOrder = 4
+        object ComboBox6: TComboBox
+          AnchorSideLeft.Control = EqLabelCrdate
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = PlusLabelCrDate
+          Left = 182
+          Height = 31
+          Top = 33
+          Width = 150
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 2
+          BorderSpacing.Right = 2
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object ComboBox7: TComboBox
+          AnchorSideLeft.Control = PlusLabelCrDate
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = PlusLabelCrDate2
+          Left = 348
+          Height = 31
+          Top = 33
+          Width = 151
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 2
+          BorderSpacing.Right = 2
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 1
+        end
+        object ComboBox8: TComboBox
+          AnchorSideLeft.Control = PlusLabelCrDate2
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = CombineDateGrpBox
+          AnchorSideRight.Side = asrBottom
+          Left = 515
+          Height = 31
+          Top = 33
+          Width = 156
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 2
+          BorderSpacing.Right = 5
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 2
+        end
+        object CombineDateResultCombo: TComboBox
+          AnchorSideLeft.Control = CombineDateGrpBox
+          AnchorSideTop.Control = Label7
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = EqLabelCrdate
+          Left = 10
+          Height = 31
+          Top = 33
+          Width = 156
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 5
+          BorderSpacing.Right = 2
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 3
+        end
+        object Label7: TLabel
+          AnchorSideLeft.Control = CombineDateGrpBox
+          AnchorSideTop.Control = CombineDateGrpBox
+          Left = 10
+          Height = 18
+          Top = 10
+          Width = 41
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 10
+          Caption = 'Result'
+          ParentColor = False
+        end
+        object Label8: TLabel
+          AnchorSideLeft.Control = ComboBox6
+          AnchorSideTop.Control = CombineDateGrpBox
+          Left = 182
+          Height = 18
+          Top = 10
+          Width = 30
+          BorderSpacing.Top = 10
+          Caption = 'Day:'
+          ParentColor = False
+        end
+        object Label9: TLabel
+          AnchorSideLeft.Control = ComboBox7
+          AnchorSideTop.Control = CombineDateGrpBox
+          Left = 348
+          Height = 18
+          Top = 10
+          Width = 46
+          BorderSpacing.Top = 10
+          Caption = 'Month:'
+          ParentColor = False
+        end
+        object Label13: TLabel
+          AnchorSideLeft.Control = ComboBox8
+          AnchorSideTop.Control = CombineDateGrpBox
+          Left = 515
+          Height = 18
+          Top = 10
+          Width = 32
+          BorderSpacing.Top = 10
+          Caption = 'Year:'
+          ParentColor = False
+        end
+        object EqLabelCrdate: TLabel
+          AnchorSideLeft.Control = CombineDateResultCombo
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox6
+          Left = 168
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '='
+          ParentColor = False
+        end
+        object PlusLabelCrDate: TLabel
+          AnchorSideLeft.Control = ComboBox6
+          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox7
+          Left = 334
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '+'
+          ParentColor = False
+        end
+        object PlusLabelCrDate2: TLabel
+          AnchorSideLeft.Control = ComboBox7
+          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox8
+          Left = 501
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '+'
+          ParentColor = False
+        end
+      end
+      object CombineStringGrpBox: TGroupBox
+        AnchorSideLeft.Control = RadioButton3
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = CombineDateGrpBox
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = CalcTabSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 34
+        Height = 100
+        Top = 230
+        Width = 680
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        Caption = 'Combine Field:'
+        ClientHeight = 81
+        ClientWidth = 676
         TabOrder = 5
+        object ComboBox9: TComboBox
+          AnchorSideLeft.Control = CombineStringGrpBox
+          AnchorSideTop.Control = Label14
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = Label18
+          Left = 10
+          Height = 31
+          Top = 33
+          Width = 105
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 5
+          BorderSpacing.Right = 5
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object ComboBox10: TComboBox
+          AnchorSideLeft.Control = Label18
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = Label19
+          Left = 137
+          Height = 31
+          Top = 33
+          Width = 103
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 5
+          BorderSpacing.Right = 5
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 1
+        end
+        object ComboBox11: TComboBox
+          AnchorSideLeft.Control = Label20
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = Label21
+          Left = 326
+          Height = 31
+          Top = 33
+          Width = 114
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 5
+          BorderSpacing.Right = 5
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 2
+        end
+        object ComboBox12: TComboBox
+          AnchorSideLeft.Control = Label22
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = CombineStringGrpBox
+          AnchorSideRight.Side = asrBottom
+          Left = 528
+          Height = 31
+          Top = 33
+          Width = 143
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 5
+          BorderSpacing.Right = 5
+          ItemHeight = 0
+          Style = csDropDownList
+          TabOrder = 3
+        end
+        object Edit1: TEdit
+          AnchorSideLeft.Control = Label19
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = Label20
+          Left = 262
+          Height = 27
+          Top = 35
+          Width = 42
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 5
+          BorderSpacing.Right = 5
+          Constraints.MinWidth = 22
+          TabOrder = 4
+        end
+        object Edit2: TEdit
+          AnchorSideLeft.Control = Label21
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = Label22
+          Left = 462
+          Height = 27
+          Top = 35
+          Width = 44
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 5
+          BorderSpacing.Right = 5
+          Constraints.MinWidth = 22
+          TabOrder = 5
+        end
+        object Label14: TLabel
+          AnchorSideLeft.Control = CombineStringGrpBox
+          AnchorSideTop.Control = CombineStringGrpBox
+          Left = 10
+          Height = 18
+          Top = 10
+          Width = 41
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 10
+          Caption = 'Result'
+          ParentColor = False
+        end
+        object Label15: TLabel
+          AnchorSideLeft.Control = ComboBox10
+          AnchorSideTop.Control = CombineStringGrpBox
+          Left = 137
+          Height = 18
+          Top = 10
+          Width = 48
+          BorderSpacing.Top = 10
+          Caption = 'Field 1:'
+          ParentColor = False
+        end
+        object Label16: TLabel
+          AnchorSideLeft.Control = ComboBox11
+          AnchorSideTop.Control = CombineStringGrpBox
+          Left = 326
+          Height = 18
+          Top = 10
+          Width = 48
+          BorderSpacing.Top = 10
+          Caption = 'Field 2:'
+          ParentColor = False
+        end
+        object Label17: TLabel
+          AnchorSideLeft.Control = ComboBox12
+          AnchorSideTop.Control = CombineStringGrpBox
+          Left = 528
+          Height = 18
+          Top = 10
+          Width = 48
+          BorderSpacing.Top = 10
+          Caption = 'Field 3:'
+          ParentColor = False
+        end
+        object Label18: TLabel
+          AnchorSideLeft.Control = ComboBox9
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox10
+          Left = 120
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '='
+          ParentColor = False
+        end
+        object Label19: TLabel
+          AnchorSideLeft.Control = ComboBox10
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = Edit1
+          Left = 245
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '+'
+          ParentColor = False
+        end
+        object Label20: TLabel
+          AnchorSideLeft.Control = Edit1
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox11
+          Left = 309
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '+'
+          ParentColor = False
+        end
+        object Label21: TLabel
+          AnchorSideLeft.Control = ComboBox11
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = Edit2
+          Left = 445
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '+'
+          ParentColor = False
+        end
+        object Label22: TLabel
+          AnchorSideLeft.Control = Edit2
+          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ComboBox12
+          Left = 511
+          Height = 18
+          Top = 39
+          Width = 12
+          Anchors = [akTop]
+          Caption = '+'
+          ParentColor = False
+        end
       end
     end
     object NotesSheet: TTabSheet
       Caption = 'Notes'
-      ClientHeight = 682
-      ClientWidth = 374
+      ClientHeight = 533
+      ClientWidth = 724
       object NotesMemo: TMemo
         AnchorSideLeft.Control = NotesSheet
         AnchorSideTop.Control = Label1
@@ -745,9 +1478,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideBottom.Control = NotesSheet
         AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 647
+        Height = 535
         Top = 30
-        Width = 364
+        Width = 613
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 5
         BorderSpacing.Top = 2
@@ -761,10 +1494,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 18
         Top = 10
-        Width = 78
+        Width = 333
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
-        Caption = 'Field Notes:'
+        Caption = 'Notes with definitions or help to show during entry:'
         ParentColor = False
       end
     end

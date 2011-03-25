@@ -19,9 +19,61 @@ type
     Bevel2: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
+    ComboBox1: TComboBox;
+    ComboBox10: TComboBox;
+    ComboBox11: TComboBox;
+    ComboBox12: TComboBox;
+    ComboBox2: TComboBox;
+    ComboBox3: TComboBox;
+    ComboBox4: TComboBox;
+    ComboBox5: TComboBox;
+    ComboBox6: TComboBox;
+    ComboBox7: TComboBox;
+    ComboBox8: TComboBox;
+    CombineDateResultCombo: TComboBox;
+    ComboBox9: TComboBox;
     DefaultValueEdit: TEdit;
+    AutoValuesGrpBox: TGroupBox;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Label13: TLabel;
+    EqLabelCrdate: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label22: TLabel;
+    PlusLabelCrDate: TLabel;
+    PlusLabelCrDate2: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    EqLabel: TLabel;
+    EndLabel: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    MidLabel: TLabel;
+    PlusLabel1: TLabel;
+    PlusLabel2: TLabel;
+    TimeDiffGrpBox: TGroupBox;
+    CombineDateGrpBox: TGroupBox;
+    CombineStringGrpBox: TGroupBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
+    ValueLabelSettingGrpBox: TGroupBox;
+    CalcTabSheet: TTabSheet;
+    ValueLabelGrpBox: TGroupBox;
     Label1: TLabel;
     DefaulValueLabel: TLabel;
+    JumpSheet: TTabSheet;
     UpdateModeRadioGrp: TRadioGroup;
     ValueLabelWriteToLabel: TLabel;
     NotesMemo: TMemo;
@@ -61,7 +113,6 @@ type
     TopBevel: TBevel;
     ValueLabelComboBox: TComboBox;
     ValueLabelWriteToComboBox: TComboBox;
-    ValueLabelLabel: TLabel;
     procedure AddJumpBtnClick(Sender: TObject);
     procedure LengthEditEditingDone(Sender: TObject);
     procedure ManageValueLabelsButtonClick(Sender: TObject);
@@ -170,9 +221,8 @@ end;
 
 procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
 begin
-  ShowValueLabelChkBox.Enabled :=
-    ValueLabelComboBox.ItemIndex <> ValueLabelComboBox.Items.IndexOfObject(nil);
-  ValueLabelWriteToComboBox.Enabled := ShowValueLabelChkBox.Enabled;
+  ValueLabelSettingGrpBox.Visible :=
+    ValueLabelComboBox.ItemIndex <> ValueLabelComboBox.Items.IndexOfObject(FNilValueLabel);
   UpdateValueLabelWriteTo;
 end;
 
@@ -287,6 +337,7 @@ begin
     with FDataFile.Field[i] do
     begin
       if not (FieldType in StringFieldTypes) then continue;
+      if FDataFile.Field[i] = Field then continue;
       Items.AddObject(Name, FDataFile.Field[i]);
     end;
     Idx := Items.AddObject('(none)', nil);
@@ -879,22 +930,22 @@ begin
   LengthLabel.Visible             := LengthEdit.Visible;
   DecimalsEdit.Visible            := Field.FieldType in FloatFieldTypes;
   DecimalsLabel.Visible           := DecimalsEdit.Visible;
+  ValueLabelGrpBox.Visible        := Field.FieldType in ValueLabelFieldTypes;
   RangesGrpBox.Visible            := field.FieldType in RangeFieldTypes;
-  ValueLabelComboBox.Visible      := Field.FieldType in ValueLabelFieldTypes;
-  ValueLabelLabel.Visible         := ValueLabelComboBox.Visible;
-  ManageValueLabelsButton.Visible := ValueLabelComboBox.Visible;
-  ShowValueLabelChkBox.Visible    := ValueLabelComboBox.Visible;
-  ValueLabelWriteToLabel.Visible  := ValueLabelComboBox.Visible;
-  ValueLabelWriteToComboBox.Visible := ValueLabelComboBox.Visible;
+  UpdateModeRadioGrp.Visible      := Field.FieldType in AutoUpdateFieldTypes;
 
   // - extended
   EntryRadioGroup.Visible         := Field.FieldType in EntryModeFieldTypes;
   ConfirmEntryChkBox.Visible      := Field.FieldType in ConfirmEntryFieldTypes;
-  RepeatValueChkBox.Visible       := Field.FieldType in RepeatValueFieldTypes;
-  DefaultValueEdit.Visible        := Field.FieldType in DefaultValueFieldTypes;
-  DefaulValueLabel.Visible        := DefaultValueEdit.Visible;
-  UpdateModeRadioGrp.Visible      := Field.FieldType in AutoUpdateFieldTypes;
-  JumpsGrpBox.Visible             := Field.FieldType in JumpsFieldTypes;
+  AutoValuesGrpBox.Visible        := Field.FieldType in (RepeatValueFieldTypes + DefaultValueFieldTypes);
+  ValueLabelSettingGrpBox.Visible := Field.FieldType in ValueLabelFieldTypes;
+  FieldAdvancedSheet.TabVisible   := not (Field.FieldType in AutoFieldTypes);
+
+  // - jumps
+  JumpSheet.TabVisible            := Field.FieldType in JumpsFieldTypes;
+
+  // - calc
+  CalcTabSheet.TabVisible         := not (Field.FieldType in AutoFieldTypes);
 
   // - notes
   NotesSheet.Visible              := Field.FieldType in NotesFieldTypes;
@@ -919,19 +970,21 @@ begin
     FromEdit.Text := '';
     ToEdit.Text   := '';
   end;
-  ShowValueLabelChkBox.Checked := Field.ShowValueLabel;
-  ShowValueLabelChkBox.Enabled := Assigned(Field.ValueLabelSet);
-  ValueLabelWriteToComboBox.Enabled := ShowValueLabelChkBox.Enabled;
-  UpdateValueLabelWriteTo;
+  if Field is TEpiCustomAutoField then
+    UpdateModeRadioGrp.ItemIndex := UpdateModeRadioGrp.Items.IndexOfObject(TObject(PtrUInt(TEpiCustomAutoField(Field).AutoMode)));
 
   // - extended
   EntryRadioGroup.ItemIndex := EntryRadioGroup.Items.IndexOfObject(TObject(PtrUInt(Field.EntryMode)));
   ConfirmEntryChkBox.Checked := Field.ConfirmEntry;
   RepeatValueChkBox.Checked := Field.RepeatValue;
   DefaultValueEdit.Text := Field.DefaultValueAsString;
+
+  ValueLabelSettingGrpBox.Visible := ValueLabelSettingGrpBox.Visible and Assigned(Field.ValueLabelSet);
+  ShowValueLabelChkBox.Checked := Field.ShowValueLabel;
+  UpdateValueLabelWriteTo;
+
+  // - jumps
   UpdateJumps;
-  if Field is TEpiCustomAutoField then
-    UpdateModeRadioGrp.ItemIndex := UpdateModeRadioGrp.Items.IndexOfObject(TObject(PtrUInt(TEpiCustomAutoField(Field).AutoMode)));
 
   // - notes
   NotesMemo.Clear;
