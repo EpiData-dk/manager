@@ -19,23 +19,23 @@ type
     Bevel2: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
-    ComboBox1: TComboBox;
-    ComboBox10: TComboBox;
-    ComboBox11: TComboBox;
-    ComboBox12: TComboBox;
-    ComboBox2: TComboBox;
-    ComboBox3: TComboBox;
-    ComboBox4: TComboBox;
-    ComboBox5: TComboBox;
-    ComboBox6: TComboBox;
-    ComboBox7: TComboBox;
-    ComboBox8: TComboBox;
-    CombineDateResultCombo: TComboBox;
-    ComboBox9: TComboBox;
+    TimeResultCombo: TComboBox;
+    Field1Combo: TComboBox;
+    Field2Combo: TComboBox;
+    Field3Combo: TComboBox;
+    StartDateCombo: TComboBox;
+    StartTimeCombo: TComboBox;
+    EndDateCombo: TComboBox;
+    EndTimeCombo: TComboBox;
+    DayCombo: TComboBox;
+    MonthCombo: TComboBox;
+    YearCombo: TComboBox;
+    DateResultCombo: TComboBox;
+    StringResultCombo: TComboBox;
     DefaultValueEdit: TEdit;
     AutoValuesGrpBox: TGroupBox;
-    Edit1: TEdit;
-    Edit2: TEdit;
+    Delim1Edit: TEdit;
+    Delim2Edit: TEdit;
     Label13: TLabel;
     EqLabelCrdate: TLabel;
     Label14: TLabel;
@@ -62,6 +62,7 @@ type
     MidLabel: TLabel;
     PlusLabel1: TLabel;
     PlusLabel2: TLabel;
+    RadioButton4: TRadioButton;
     TimeDiffGrpBox: TGroupBox;
     CombineDateGrpBox: TGroupBox;
     CombineStringGrpBox: TGroupBox;
@@ -116,6 +117,7 @@ type
     procedure AddJumpBtnClick(Sender: TObject);
     procedure LengthEditEditingDone(Sender: TObject);
     procedure ManageValueLabelsButtonClick(Sender: TObject);
+    procedure RadioButton4Change(Sender: TObject);
     procedure RangeEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure RemoveJumpBtnClick(Sender: TObject);
     procedure ValueLabelComboBoxChange(Sender: TObject);
@@ -139,6 +141,9 @@ type
       Shift: TShiftState);
     function  DoAddNewJump: pointer;
     function  UpdateJumps: boolean;
+  private
+    { Calculation section }
+    procedure UpdateCalcFields;
   protected
     { Inheritance overrides }
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
@@ -540,6 +545,127 @@ begin
       end;
 end;
 
+procedure TFieldPropertiesFrame.UpdateCalcFields;
+var
+  F: TEpiField;
+  i: Integer;
+
+  procedure InitCombo(Combo: TComboBox);
+  begin
+    Combo.Items.BeginUpdate;
+    Combo.Clear;
+    Combo.Sorted := true;
+  end;
+
+  procedure AddField(AField: TEpiField; FieldTypes: TEpiFieldTypes; Combo: TComboBox);
+  begin
+    if AField.FieldType in FieldTypes then Combo.Items.AddObject(AField.Name, AField);
+  end;
+
+  procedure FinishCombo(Combo: TComboBox);
+  var
+    Idx: LongInt;
+  begin
+    Idx := Combo.Items.AddObject('(none)', nil);
+    Combo.Items.EndUpdate;
+    Combo.ItemIndex := Idx;
+  end;
+
+  procedure UpdateCalcCombo(Combo: TComboBox; AField: TEpiField);
+  begin
+    if Assigned(AField) then
+      Combo.ItemIndex := Combo.Items.IndexOfObject(AField);
+  end;
+  procedure UpdateTimeCalc(Calculation: TEpiTimeCalc);
+  begin
+    UpdateCalcCombo(TimeResultCombo, Calculation.ResultField);
+    UpdateCalcCombo(StartDateCombo,  Calculation.StartDate);
+    UpdateCalcCombo(EndDateCombo,    Calculation.EndDate);
+    UpdateCalcCombo(StartTimeCombo,  Calculation.StartTime);
+    UpdateCalcCombo(EndTimeCombo,    Calculation.EndTime);
+  end;
+  procedure UpdateDateCalc(Calculation: TEpiCombineDateCalc);
+  begin
+    UpdateCalcCombo(DateResultCombo, Calculation.ResultField);
+    UpdateCalcCombo(DayCombo,        Calculation.Day);
+    UpdateCalcCombo(MonthCombo,      Calculation.Month);
+    UpdateCalcCombo(YearCombo,       Calculation.Year);
+  end;
+  procedure UpdateStringCalc(Calculation: TEpiCombineStringCalc);
+  begin
+    UpdateCalcCombo(StringResultCombo, Calculation.ResultField);
+    UpdateCalcCombo(Field1Combo,       Calculation.Field1);
+    UpdateCalcCombo(Field2Combo,       Calculation.Field2);
+    UpdateCalcCombo(Field3Combo,       Calculation.Field3);
+    Delim1Edit.Text := Calculation.Delim1;
+    Delim2Edit.Text := Calculation.Delim2;
+  end;
+
+begin
+  InitCombo(TimeResultCombo);
+  InitCombo(StartDateCombo);
+  InitCombo(EndDateCombo);
+  InitCombo(StartTimeCombo);
+  InitCombo(EndTimeCombo);
+
+  InitCombo(DateResultCombo);
+  InitCombo(DayCombo);
+  InitCombo(MonthCombo);
+  InitCombo(YearCombo);
+
+  InitCombo(StringResultCombo);
+  InitCombo(Field1Combo);
+  InitCombo(Field2Combo);
+  InitCombo(Field3Combo);
+
+  for i := 0 to FDataFile.Fields.Count -1 do
+  begin
+    F := FDataFile.Field[i];
+
+    // Time difference:
+    AddField(F, [ftInteger, ftFloat], TimeResultCombo);
+    AddField(F, DateFieldTypes, StartDateCombo);
+    AddField(F, DateFieldTypes, EndDateCombo);
+    AddField(F, TimeFieldTypes, StartTimeCombo);
+    AddField(F, TimeFieldTypes, EndTimeCombo);
+
+    // Create Date:
+    AddField(F, DateFieldTypes-AutoFieldTypes, DateResultCombo);
+    AddField(F, [ftInteger], DayCombo);
+    AddField(F, [ftInteger], MonthCombo);
+    AddField(F, [ftInteger], YearCombo);
+
+    // Combine String:
+    AddField(F, StringFieldTypes, StringResultCombo);
+    AddField(F, AllFieldTypes, Field1Combo);
+    AddField(F, AllFieldTypes, Field2Combo);
+    AddField(F, AllFieldTypes, Field2Combo);
+  end;
+
+  FinishCombo(TimeResultCombo);
+  FinishCombo(StartDateCombo);
+  FinishCombo(EndDateCombo);
+  FinishCombo(StartTimeCombo);
+  FinishCombo(EndTimeCombo);
+
+  FinishCombo(DateResultCombo);
+  FinishCombo(DayCombo);
+  FinishCombo(MonthCombo);
+  FinishCombo(YearCombo);
+
+  FinishCombo(StringResultCombo);
+  FinishCombo(Field1Combo);
+  FinishCombo(Field2Combo);
+  FinishCombo(Field3Combo);
+
+  if Assigned(Field.Calculation) then
+  case Field.Calculation.CalcType of
+    ctTimeDiff:      UpdateTimeCalc(TEpiTimeCalc(Field.Calculation));
+    ctCombineDate:   UpdateDateCalc(TEpiCombineDateCalc(Field.Calculation));
+    ctCombineString: UpdateStringCalc(TEpiCombineStringCalc(Field.Calculation));
+  end;
+end;
+
 procedure TFieldPropertiesFrame.LengthEditEditingDone(Sender: TObject);
 begin
   if ValueLabelComboBox.ItemIndex = -1 then exit;
@@ -558,6 +684,13 @@ end;
 procedure TFieldPropertiesFrame.ManageValueLabelsButtonClick(Sender: TObject);
 begin
   GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
+end;
+
+procedure TFieldPropertiesFrame.RadioButton4Change(Sender: TObject);
+begin
+  TimeDiffGrpBox.Enabled      := RadioButton1.Checked;
+  CombineDateGrpBox.Enabled   := RadioButton2.Checked;
+  CombineStringGrpBox.Enabled := RadioButton3.Checked;
 end;
 
 procedure TFieldPropertiesFrame.SetEpiControl(
@@ -985,6 +1118,9 @@ begin
 
   // - jumps
   UpdateJumps;
+
+  // - calculated
+  UpdateCalcFields;
 
   // - notes
   NotesMemo.Clear;

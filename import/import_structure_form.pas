@@ -312,7 +312,7 @@ begin
       end;
       with Doc.DataFiles[0] do
       begin
-        Cells[5, Idx] := Name.Text;                                         // Info
+        Cells[5, Idx] := Caption.Text;                                         // Info
         Cells[6, Idx] := IntToStr(Sections.Count);                          // Sections
         Cells[7, Idx] := IntToStr(Fields.Count);                            // Fields
       end;

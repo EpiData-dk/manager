@@ -6,8 +6,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
   Constraints.MinHeight = 365
   Constraints.MinWidth = 380
   TabOrder = 0
-  DesignLeft = 317
-  DesignTop = 303
+  DesignLeft = 428
+  DesignTop = 247
   object FieldPageControl: TPageControl[0]
     AnchorSideLeft.Control = Owner
     Left = 0
@@ -798,12 +798,13 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
       object TimeDiffGrpBox: TGroupBox
         AnchorSideLeft.Control = RadioButton1
         AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = CalcTabSheet
+        AnchorSideTop.Control = RadioButton4
+        AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = CalcTabSheet
         AnchorSideRight.Side = asrBottom
         Left = 34
         Height = 100
-        Top = 10
+        Top = 42
         Width = 680
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
@@ -812,13 +813,14 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ClientHeight = 81
         ClientWidth = 676
         TabOrder = 0
-        object ComboBox1: TComboBox
+        object TimeResultCombo: TComboBox
           AnchorSideLeft.Control = TimeDiffGrpBox
           AnchorSideTop.Control = Label2
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = EqLabel
           Left = 10
           Height = 31
+          Hint = 'Valid fields for result'
           Top = 33
           Width = 113
           Anchors = [akTop, akLeft, akRight]
@@ -829,10 +831,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 0
         end
-        object ComboBox2: TComboBox
+        object StartDateCombo: TComboBox
           AnchorSideLeft.Control = EqLabel
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = PlusLabel1
           Left = 148
@@ -846,10 +848,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 1
         end
-        object ComboBox3: TComboBox
+        object StartTimeCombo: TComboBox
           AnchorSideLeft.Control = PlusLabel1
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = MidLabel
           Left = 278
@@ -863,10 +865,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 2
         end
-        object ComboBox4: TComboBox
+        object EndDateCombo: TComboBox
           AnchorSideLeft.Control = MidLabel
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = PlusLabel2
           Left = 419
@@ -880,10 +882,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 3
         end
-        object ComboBox5: TComboBox
+        object EndTimeCombo: TComboBox
           AnchorSideLeft.Control = PlusLabel2
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = EndLabel
           Left = 549
@@ -903,25 +905,25 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 18
           Top = 10
-          Width = 41
+          Width = 39
           BorderSpacing.Left = 10
           BorderSpacing.Top = 10
           Caption = 'Result'
           ParentColor = False
         end
         object Label3: TLabel
-          AnchorSideLeft.Control = ComboBox3
+          AnchorSideLeft.Control = StartTimeCombo
           AnchorSideTop.Control = TimeDiffGrpBox
           Left = 278
           Height = 18
           Top = 10
-          Width = 38
+          Width = 36
           BorderSpacing.Top = 10
           Caption = 'Time:'
           ParentColor = False
         end
         object Label4: TLabel
-          AnchorSideLeft.Control = ComboBox4
+          AnchorSideLeft.Control = EndDateCombo
           AnchorSideTop.Control = TimeDiffGrpBox
           AnchorSideBottom.Side = asrBottom
           Left = 419
@@ -933,7 +935,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object Label5: TLabel
-          AnchorSideLeft.Control = ComboBox2
+          AnchorSideLeft.Control = StartDateCombo
           AnchorSideTop.Control = TimeDiffGrpBox
           Left = 148
           Height = 18
@@ -944,22 +946,22 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object Label6: TLabel
-          AnchorSideLeft.Control = ComboBox5
+          AnchorSideLeft.Control = EndTimeCombo
           AnchorSideTop.Control = TimeDiffGrpBox
           Left = 549
           Height = 18
           Top = 10
-          Width = 38
+          Width = 36
           BorderSpacing.Top = 10
           Caption = 'Time:'
           ParentColor = False
         end
         object EqLabel: TLabel
-          AnchorSideLeft.Control = ComboBox1
+          AnchorSideLeft.Control = TimeResultCombo
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox2
+          AnchorSideRight.Control = StartDateCombo
           Left = 125
           Height = 18
           Top = 39
@@ -969,11 +971,11 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object PlusLabel1: TLabel
-          AnchorSideLeft.Control = ComboBox2
+          AnchorSideLeft.Control = StartDateCombo
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox3
+          AnchorSideRight.Control = StartTimeCombo
           Left = 264
           Height = 18
           Top = 39
@@ -983,10 +985,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object MidLabel: TLabel
-          AnchorSideLeft.Control = ComboBox3
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideLeft.Control = StartTimeCombo
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox4
+          AnchorSideRight.Control = EndDateCombo
           Left = 393
           Height = 18
           Top = 39
@@ -996,11 +998,11 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object PlusLabel2: TLabel
-          AnchorSideLeft.Control = ComboBox4
+          AnchorSideLeft.Control = EndDateCombo
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox5
+          AnchorSideRight.Control = EndTimeCombo
           Left = 535
           Height = 18
           Top = 39
@@ -1010,9 +1012,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object EndLabel: TLabel
-          AnchorSideLeft.Control = ComboBox5
+          AnchorSideLeft.Control = EndTimeCombo
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox1
+          AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = TimeDiffGrpBox
           AnchorSideRight.Side = asrBottom
@@ -1032,10 +1034,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Side = asrCenter
         Left = 10
         Height = 22
-        Top = 49
+        Top = 81
         Width = 24
         BorderSpacing.Left = 10
-        Checked = True
+        OnChange = RadioButton4Change
         TabOrder = 1
       end
       object RadioButton2: TRadioButton
@@ -1044,9 +1046,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Side = asrCenter
         Left = 10
         Height = 22
-        Top = 159
+        Top = 191
         Width = 24
         BorderSpacing.Left = 10
+        OnChange = RadioButton4Change
         TabOrder = 2
       end
       object RadioButton3: TRadioButton
@@ -1055,9 +1058,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Side = asrCenter
         Left = 10
         Height = 22
-        Top = 269
+        Top = 301
         Width = 24
         BorderSpacing.Left = 10
+        OnChange = RadioButton4Change
         TabOrder = 3
       end
       object CombineDateGrpBox: TGroupBox
@@ -1069,7 +1073,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         Left = 34
         Height = 100
-        Top = 120
+        Top = 152
         Width = 680
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
@@ -1078,10 +1082,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ClientHeight = 81
         ClientWidth = 676
         TabOrder = 4
-        object ComboBox6: TComboBox
+        object DayCombo: TComboBox
           AnchorSideLeft.Control = EqLabelCrdate
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = PlusLabelCrDate
           Left = 182
@@ -1095,10 +1099,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 0
         end
-        object ComboBox7: TComboBox
+        object MonthCombo: TComboBox
           AnchorSideLeft.Control = PlusLabelCrDate
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = PlusLabelCrDate2
           Left = 348
@@ -1112,10 +1116,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 1
         end
-        object ComboBox8: TComboBox
+        object YearCombo: TComboBox
           AnchorSideLeft.Control = PlusLabelCrDate2
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = CombineDateGrpBox
           AnchorSideRight.Side = asrBottom
@@ -1130,7 +1134,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 2
         end
-        object CombineDateResultCombo: TComboBox
+        object DateResultCombo: TComboBox
           AnchorSideLeft.Control = CombineDateGrpBox
           AnchorSideTop.Control = Label7
           AnchorSideTop.Side = asrBottom
@@ -1153,51 +1157,51 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 18
           Top = 10
-          Width = 41
+          Width = 39
           BorderSpacing.Left = 10
           BorderSpacing.Top = 10
           Caption = 'Result'
           ParentColor = False
         end
         object Label8: TLabel
-          AnchorSideLeft.Control = ComboBox6
+          AnchorSideLeft.Control = DayCombo
           AnchorSideTop.Control = CombineDateGrpBox
           Left = 182
           Height = 18
           Top = 10
-          Width = 30
+          Width = 29
           BorderSpacing.Top = 10
           Caption = 'Day:'
           ParentColor = False
         end
         object Label9: TLabel
-          AnchorSideLeft.Control = ComboBox7
+          AnchorSideLeft.Control = MonthCombo
           AnchorSideTop.Control = CombineDateGrpBox
           Left = 348
           Height = 18
           Top = 10
-          Width = 46
+          Width = 45
           BorderSpacing.Top = 10
           Caption = 'Month:'
           ParentColor = False
         end
         object Label13: TLabel
-          AnchorSideLeft.Control = ComboBox8
+          AnchorSideLeft.Control = YearCombo
           AnchorSideTop.Control = CombineDateGrpBox
           Left = 515
           Height = 18
           Top = 10
-          Width = 32
+          Width = 31
           BorderSpacing.Top = 10
           Caption = 'Year:'
           ParentColor = False
         end
         object EqLabelCrdate: TLabel
-          AnchorSideLeft.Control = CombineDateResultCombo
+          AnchorSideLeft.Control = DateResultCombo
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox6
+          AnchorSideRight.Control = DayCombo
           Left = 168
           Height = 18
           Top = 39
@@ -1207,10 +1211,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object PlusLabelCrDate: TLabel
-          AnchorSideLeft.Control = ComboBox6
-          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideLeft.Control = DayCombo
+          AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox7
+          AnchorSideRight.Control = MonthCombo
           Left = 334
           Height = 18
           Top = 39
@@ -1220,10 +1224,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object PlusLabelCrDate2: TLabel
-          AnchorSideLeft.Control = ComboBox7
-          AnchorSideTop.Control = CombineDateResultCombo
+          AnchorSideLeft.Control = MonthCombo
+          AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox8
+          AnchorSideRight.Control = YearCombo
           Left = 501
           Height = 18
           Top = 39
@@ -1242,7 +1246,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         Left = 34
         Height = 100
-        Top = 230
+        Top = 262
         Width = 680
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
@@ -1251,7 +1255,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ClientHeight = 81
         ClientWidth = 676
         TabOrder = 5
-        object ComboBox9: TComboBox
+        object StringResultCombo: TComboBox
           AnchorSideLeft.Control = CombineStringGrpBox
           AnchorSideTop.Control = Label14
           AnchorSideTop.Side = asrBottom
@@ -1268,10 +1272,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 0
         end
-        object ComboBox10: TComboBox
+        object Field1Combo: TComboBox
           AnchorSideLeft.Control = Label18
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label19
           Left = 137
@@ -1285,10 +1289,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 1
         end
-        object ComboBox11: TComboBox
+        object Field2Combo: TComboBox
           AnchorSideLeft.Control = Label20
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label21
           Left = 326
@@ -1302,10 +1306,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 2
         end
-        object ComboBox12: TComboBox
+        object Field3Combo: TComboBox
           AnchorSideLeft.Control = Label22
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = CombineStringGrpBox
           AnchorSideRight.Side = asrBottom
@@ -1320,10 +1324,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Style = csDropDownList
           TabOrder = 3
         end
-        object Edit1: TEdit
+        object Delim1Edit: TEdit
           AnchorSideLeft.Control = Label19
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label20
           Left = 262
@@ -1336,10 +1340,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Constraints.MinWidth = 22
           TabOrder = 4
         end
-        object Edit2: TEdit
+        object Delim2Edit: TEdit
           AnchorSideLeft.Control = Label21
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label22
           Left = 462
@@ -1358,51 +1362,51 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 18
           Top = 10
-          Width = 41
+          Width = 39
           BorderSpacing.Left = 10
           BorderSpacing.Top = 10
           Caption = 'Result'
           ParentColor = False
         end
         object Label15: TLabel
-          AnchorSideLeft.Control = ComboBox10
+          AnchorSideLeft.Control = Field1Combo
           AnchorSideTop.Control = CombineStringGrpBox
           Left = 137
           Height = 18
           Top = 10
-          Width = 48
+          Width = 45
           BorderSpacing.Top = 10
           Caption = 'Field 1:'
           ParentColor = False
         end
         object Label16: TLabel
-          AnchorSideLeft.Control = ComboBox11
+          AnchorSideLeft.Control = Field2Combo
           AnchorSideTop.Control = CombineStringGrpBox
           Left = 326
           Height = 18
           Top = 10
-          Width = 48
+          Width = 45
           BorderSpacing.Top = 10
           Caption = 'Field 2:'
           ParentColor = False
         end
         object Label17: TLabel
-          AnchorSideLeft.Control = ComboBox12
+          AnchorSideLeft.Control = Field3Combo
           AnchorSideTop.Control = CombineStringGrpBox
           Left = 528
           Height = 18
           Top = 10
-          Width = 48
+          Width = 45
           BorderSpacing.Top = 10
           Caption = 'Field 3:'
           ParentColor = False
         end
         object Label18: TLabel
-          AnchorSideLeft.Control = ComboBox9
+          AnchorSideLeft.Control = StringResultCombo
           AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox10
+          AnchorSideRight.Control = Field1Combo
           Left = 120
           Height = 18
           Top = 39
@@ -1412,10 +1416,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object Label19: TLabel
-          AnchorSideLeft.Control = ComboBox10
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideLeft.Control = Field1Combo
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = Edit1
+          AnchorSideRight.Control = Delim1Edit
           Left = 245
           Height = 18
           Top = 39
@@ -1425,10 +1429,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object Label20: TLabel
-          AnchorSideLeft.Control = Edit1
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideLeft.Control = Delim1Edit
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox11
+          AnchorSideRight.Control = Field2Combo
           Left = 309
           Height = 18
           Top = 39
@@ -1438,10 +1442,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object Label21: TLabel
-          AnchorSideLeft.Control = ComboBox11
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideLeft.Control = Field2Combo
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = Edit2
+          AnchorSideRight.Control = Delim2Edit
           Left = 445
           Height = 18
           Top = 39
@@ -1451,10 +1455,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           ParentColor = False
         end
         object Label22: TLabel
-          AnchorSideLeft.Control = Edit2
-          AnchorSideTop.Control = ComboBox9
+          AnchorSideLeft.Control = Delim2Edit
+          AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ComboBox12
+          AnchorSideRight.Control = Field3Combo
           Left = 511
           Height = 18
           Top = 39
@@ -1463,6 +1467,21 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Caption = '+'
           ParentColor = False
         end
+      end
+      object RadioButton4: TRadioButton
+        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideTop.Control = CalcTabSheet
+        Left = 10
+        Height = 22
+        Top = 10
+        Width = 58
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'None'
+        Checked = True
+        OnChange = RadioButton4Change
+        TabOrder = 6
+        TabStop = True
       end
     end
     object NotesSheet: TTabSheet

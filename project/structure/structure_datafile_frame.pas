@@ -62,7 +62,7 @@ begin
   Create(TheOwner);
   FDataFile := ADataFile;
 
-  DataSetNameLabel.Caption := DataFile.Name.Text;
+  DataSetNameLabel.Caption := DataFile.Caption.Text;
   NumberOfRecordsLabel.Caption := IntToStr(DataFile.Size);
   NumberOfFieldsLabel.Caption := IntToStr(DataFile.Fields.Count);
   NumberOfSectionsLabel.Caption := IntToStr(DataFile.Sections.Count);

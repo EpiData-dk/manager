@@ -121,7 +121,7 @@ begin
   inc(FrameCount);
 
   Df := EpiDocument.DataFiles.NewDataFile;
-  Df.Name.Text := 'Dataform ' + IntToStr(FrameCount);
+  Df.Caption.Text := 'Dataform ' + IntToStr(FrameCount);
   EpiDocument.Modified := false;
 
   DoNewDataForm(Df);
@@ -282,7 +282,7 @@ begin
   if (EventGroup = eegCustomBase) and (EventType = Word(ecceText)) then
   begin
     Df := TEpiDataFileEx(TEpiCustomItem(Sender).Owner);
-    Df.TreeNode.Text := Df.Name.Text;
+    Df.TreeNode.Text := Df.Caption.Text;
     UpdateCaption;
   end;
 end;
@@ -432,9 +432,9 @@ begin
   AddDebugingContent;
   {$ENDIF}
 
-  DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Name.Text, Frame);
+  DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Caption.Text, Frame);
   TEpiDataFileEx(Df).TreeNode := DataFilesTreeView.Selected;
-  Df.Name.RegisterOnChangeHook(@OnDataFileChange);
+  Df.Caption.RegisterOnChangeHook(@OnDataFileChange);
 end;
 
 procedure TProjectFrame.DoCloseProject;
@@ -552,7 +552,7 @@ begin
 
     if Assigned(ActiveFrame) then
     begin
-      T := TDesignFrame(ActiveFrame).DataFile.Name.Text;
+      T := TDesignFrame(ActiveFrame).DataFile.Caption.Text;
       if (T <> '') then
         S := S + ' [' + EpiCutString(T, 20) + ']';
     end;

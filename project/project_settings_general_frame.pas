@@ -48,7 +48,7 @@ begin
   BackupIntervalEdit.Text        := IntToStr(FProjectSettings.BackupInterval);
   BackupOnShutdownChkBox.Checked := FProjectSettings.BackupOnShutdown;
   AutoIncStartEdit.Text          := IntToStr(FProjectSettings.AutoIncStartValue);
-  ProjectTitleEdit.Text          := FDataFiles[0].Name.Text;
+  ProjectTitleEdit.Text          := FDataFiles[0].Caption.Text;
 end;
 
 function TProjectSettings_GeneralFrame.ApplySettings: boolean;
@@ -67,7 +67,7 @@ begin
   FProjectSettings.BackupInterval   := I;
   FProjectSettings.BackupOnShutdown := BackupOnShutdownChkBox.Checked;
   FProjectSettings.AutoIncStartValue := StrToInt(AutoIncStartEdit.Text);
-  FDataFiles[0].Name.Text           := ProjectTitleEdit.Text;
+  FDataFiles[0].Caption.Text           := ProjectTitleEdit.Text;
 end;
 
 end.

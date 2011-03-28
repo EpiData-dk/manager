@@ -175,7 +175,7 @@ begin
         Df := DataFiles[i];
 
         Cells[0, i+1] := IntToStr(i+1);
-        Cells[1, i+1] := Df.Name.Text;
+        Cells[1, i+1] := Df.Caption.Text;
         Cells[2, i+1] := IntToStr(Df.Size);
         Cells[3, i+1] := IntToStr(Df.Sections.Count);
         Cells[4, i+1] := IntToStr(Df.Fields.Count);
@@ -183,7 +183,7 @@ begin
 
         Tab := TTabSheet.Create(PageCtrl);
         Tab.Name := 'DataFileTab' + IntToStr(i);
-        Tab.Caption := EpiCutString(Df.Name.Text, 15);
+        Tab.Caption := EpiCutString(Df.Caption.Text, 15);
         Tab.PageControl := PageCtrl;
 
         Frame := TProject_Structure_Datafile_Frame.Create(Tab, Df);
