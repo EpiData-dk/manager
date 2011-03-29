@@ -19,6 +19,14 @@ type
     Bevel2: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
+    CalcFieldLabel: TLabel;
+    Label23: TLabel;
+    Label24: TLabel;
+    AsYearRadio: TRadioButton;
+    AsMonthRadio: TRadioButton;
+    AsWeeksRadio: TRadioButton;
+    AsDaysRadio: TRadioButton;
+    AsTimeRadio: TRadioButton;
     TimeResultCombo: TComboBox;
     Field1Combo: TComboBox;
     Field2Combo: TComboBox;
@@ -62,13 +70,13 @@ type
     MidLabel: TLabel;
     PlusLabel1: TLabel;
     PlusLabel2: TLabel;
-    RadioButton4: TRadioButton;
+    NoCalcRadio: TRadioButton;
     TimeDiffGrpBox: TGroupBox;
     CombineDateGrpBox: TGroupBox;
     CombineStringGrpBox: TGroupBox;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
-    RadioButton3: TRadioButton;
+    TimeCalcRadio: TRadioButton;
+    CombineDateRadio: TRadioButton;
+    CombineStringRadio: TRadioButton;
     ValueLabelSettingGrpBox: TGroupBox;
     CalcTabSheet: TTabSheet;
     ValueLabelGrpBox: TGroupBox;
@@ -117,7 +125,7 @@ type
     procedure AddJumpBtnClick(Sender: TObject);
     procedure LengthEditEditingDone(Sender: TObject);
     procedure ManageValueLabelsButtonClick(Sender: TObject);
-    procedure RadioButton4Change(Sender: TObject);
+    procedure NoCalcRadioChange(Sender: TObject);
     procedure RangeEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure RemoveJumpBtnClick(Sender: TObject);
     procedure ValueLabelComboBoxChange(Sender: TObject);
@@ -144,6 +152,7 @@ type
   private
     { Calculation section }
     procedure UpdateCalcFields;
+    function  CalcFieldComboIsNil(Const Combo: TComboBox): boolean;
   protected
     { Inheritance overrides }
     procedure SetEpiControl(const AValue: TEpiCustomControlItem); override;
@@ -583,6 +592,14 @@ var
     UpdateCalcCombo(EndDateCombo,    Calculation.EndDate);
     UpdateCalcCombo(StartTimeCombo,  Calculation.StartTime);
     UpdateCalcCombo(EndTimeCombo,    Calculation.EndTime);
+    Case Calculation.TimeCalcType of
+      ctAsYear:        AsYearRadio.Checked := true;
+      ctAsMonths:      AsMonthRadio.Checked := true;
+      ctAsWeeks:       AsWeeksRadio.Checked := true;
+      ctAsDays:        AsDaysRadio.Checked := true;
+      ctAsDayFraction: AsTimeRadio.Checked := true;
+    end;
+    TimeCalcRadio.Checked := true;
   end;
   procedure UpdateDateCalc(Calculation: TEpiCombineDateCalc);
   begin
@@ -590,6 +607,7 @@ var
     UpdateCalcCombo(DayCombo,        Calculation.Day);
     UpdateCalcCombo(MonthCombo,      Calculation.Month);
     UpdateCalcCombo(YearCombo,       Calculation.Year);
+    CombineDateRadio.Checked := true;
   end;
   procedure UpdateStringCalc(Calculation: TEpiCombineStringCalc);
   begin
@@ -599,6 +617,7 @@ var
     UpdateCalcCombo(Field3Combo,       Calculation.Field3);
     Delim1Edit.Text := Calculation.Delim1;
     Delim2Edit.Text := Calculation.Delim2;
+    CombineStringRadio.Checked := true;
   end;
 
 begin
@@ -623,23 +642,29 @@ begin
     F := FDataFile.Field[i];
 
     // Time difference:
-    AddField(F, [ftInteger, ftFloat], TimeResultCombo);
+    // - active field cannot also be result field.
+    if F <> Field then
+      AddField(F, [ftInteger, ftFloat], TimeResultCombo);
     AddField(F, DateFieldTypes, StartDateCombo);
     AddField(F, DateFieldTypes, EndDateCombo);
     AddField(F, TimeFieldTypes, StartTimeCombo);
     AddField(F, TimeFieldTypes, EndTimeCombo);
 
     // Create Date:
-    AddField(F, DateFieldTypes-AutoFieldTypes, DateResultCombo);
+    // - active field cannot also be result field.
+    if F <> Field then
+      AddField(F, DateFieldTypes-AutoFieldTypes, DateResultCombo);
     AddField(F, [ftInteger], DayCombo);
     AddField(F, [ftInteger], MonthCombo);
     AddField(F, [ftInteger], YearCombo);
 
     // Combine String:
-    AddField(F, StringFieldTypes, StringResultCombo);
+    // - active field cannot also be result field.
+    if F <> Field then
+      AddField(F, StringFieldTypes, StringResultCombo);
     AddField(F, AllFieldTypes, Field1Combo);
     AddField(F, AllFieldTypes, Field2Combo);
-    AddField(F, AllFieldTypes, Field2Combo);
+    AddField(F, AllFieldTypes, Field3Combo);
   end;
 
   FinishCombo(TimeResultCombo);
@@ -659,11 +684,19 @@ begin
   FinishCombo(Field3Combo);
 
   if Assigned(Field.Calculation) then
-  case Field.Calculation.CalcType of
-    ctTimeDiff:      UpdateTimeCalc(TEpiTimeCalc(Field.Calculation));
-    ctCombineDate:   UpdateDateCalc(TEpiCombineDateCalc(Field.Calculation));
-    ctCombineString: UpdateStringCalc(TEpiCombineStringCalc(Field.Calculation));
-  end;
+    case Field.Calculation.CalcType of
+      ctTimeDiff:      UpdateTimeCalc(TEpiTimeCalc(Field.Calculation));
+      ctCombineDate:   UpdateDateCalc(TEpiCombineDateCalc(Field.Calculation));
+      ctCombineString: UpdateStringCalc(TEpiCombineStringCalc(Field.Calculation));
+    end
+  else
+    NoCalcRadio.Checked := true;
+end;
+
+function TFieldPropertiesFrame.CalcFieldComboIsNil(const Combo: TComboBox
+  ): boolean;
+begin
+  result := Combo.ItemIndex = Combo.Items.IndexOfObject(nil);
 end;
 
 procedure TFieldPropertiesFrame.LengthEditEditingDone(Sender: TObject);
@@ -686,11 +719,11 @@ begin
   GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
 end;
 
-procedure TFieldPropertiesFrame.RadioButton4Change(Sender: TObject);
+procedure TFieldPropertiesFrame.NoCalcRadioChange(Sender: TObject);
 begin
-  TimeDiffGrpBox.Enabled      := RadioButton1.Checked;
-  CombineDateGrpBox.Enabled   := RadioButton2.Checked;
-  CombineStringGrpBox.Enabled := RadioButton3.Checked;
+  TimeDiffGrpBox.Enabled      := TimeCalcRadio.Checked;
+  CombineDateGrpBox.Enabled   := CombineDateRadio.Checked;
+  CombineStringGrpBox.Enabled := CombineStringRadio.Checked;
 end;
 
 procedure TFieldPropertiesFrame.SetEpiControl(
@@ -714,6 +747,8 @@ procedure TFieldPropertiesFrame.UpdateCaption(const S: String);
 var
   T: String;
 begin
+  // Also updates field name/question on Calculate tabsheet.
+  CalcFieldLabel.Caption := 'After entry in ' + Field.Name + ' ' + Field.Question.Text;
   T := 'Field Properties: ' + Field.Name;
   inherited UpdateCaption(T);
 end;
@@ -886,6 +921,50 @@ begin
     end;
   end;
 
+  // Calculate
+  if not (NoCalcRadio.Checked) then
+  begin
+    if TimeCalcRadio.Checked then
+    begin
+      if CalcFieldComboIsNil(TimeResultCombo) then
+        Exit(DoError('No result field assigned!', TimeResultCombo));
+
+      if CalcFieldComboIsNil(StartDateCombo) and
+         CalcFieldComboIsNil(StartTimeCombo) then
+        Exit(DoError('No start date or time assigned!', StartDateCombo));
+
+      if CalcFieldComboIsNil(EndDateCombo) and
+         CalcFieldComboIsNil(EndTimeCombo) then
+        Exit(DoError('No end date or time assigned!', EndDateCombo));
+    end;
+
+    if CombineDateRadio.Checked then
+    begin
+      if CalcFieldComboIsNil(DateResultCombo) then
+        Exit(DoError('No result field assigned!', DateResultCombo));
+
+      if CalcFieldComboIsNil(DayCombo) then
+        Exit(DoError('No day field assigned!', DayCombo));
+
+      if CalcFieldComboIsNil(MonthCombo) then
+        Exit(DoError('No month field assigned!', MonthCombo));
+
+      if CalcFieldComboIsNil(YearCombo) then
+        Exit(DoError('No year field assigned!', YearCombo));
+    end;
+
+    if CombineStringRadio.Checked then
+    begin
+      if CalcFieldComboIsNil(StringResultCombo) then
+        Exit(DoError('No result field assigned!', StringResultCombo));
+
+      if CalcFieldComboIsNil(Field1Combo) and
+         CalcFieldComboIsNil(Field2Combo) and
+         CalcFieldComboIsNil(Field3Combo) then
+        Exit(DoError('At least one field must be assigned!', Field1Combo));
+    end;
+  end;
+
   ShowHintMsg('', nil);
   Result := true;
 end;
@@ -896,6 +975,7 @@ var
   S: string;
   NJump: TEpiJump;
   i: Integer;
+  Calc: TEpiCalculation;
 begin
   Field.BeginUpdate;
   Field.Name := NameEdit.Text;
@@ -994,6 +1074,68 @@ begin
     Field.DefaultValueAsString := DefaultValueEdit.Text
   else
     Field.HasDefaultValue := false;
+
+  // Calculate
+  if not NoCalcRadio.Checked then
+  begin
+    if Assigned(Field.Calculation) then
+      Field.Calculation.Free;
+
+    if TimeCalcRadio.Checked then
+    begin
+      Calc := TEpiTimeCalc.Create(Field);
+      with TEpiTimeCalc(Calc) do
+      begin
+        ResultField := TEpiField(TimeResultCombo.Items.Objects[TimeResultCombo.ItemIndex]);
+
+        if not CalcFieldComboIsNil(StartDateCombo) then
+          StartDate := TEpiDateField(StartDateCombo.Items.Objects[StartDateCombo.ItemIndex]);
+        if not CalcFieldComboIsNil(StartTimeCombo) then
+          StartTime := TEpiDateTimeField(StartTimeCombo.Items.Objects[StartTimeCombo.ItemIndex]);
+
+        if not CalcFieldComboIsNil(EndDateCombo) then
+          EndDate := TEpiDateField(EndDateCombo.Items.Objects[EndDateCombo.ItemIndex]);
+        if not CalcFieldComboIsNil(EndTimeCombo) then
+          EndTime := TEpiDateTimeField(EndTimeCombo.Items.Objects[EndTimeCombo.ItemIndex]);
+
+        if AsYearRadio.Checked  then TimeCalcType := ctAsYear;
+        if AsMonthRadio.Checked then TimeCalcType := ctAsMonths;
+        if AsWeeksRadio.Checked then TimeCalcType := ctAsWeeks;
+        if AsDaysRadio.Checked  then TimeCalcType := ctAsDays;
+        if AsTimeRadio.Checked  then TimeCalcType := ctAsDayFraction;
+      end;
+    end;
+    if CombineDateRadio.Checked then
+    begin
+      Calc := TEpiCombineDateCalc.Create(Field);
+      with TEpiCombineDateCalc(Calc) do
+      begin
+        ResultField := TEpiField(DateResultCombo.Items.Objects[DateResultCombo.ItemIndex]);
+
+        Day   := TEpiIntField(DayCombo.Items.Objects[DayCombo.ItemIndex]);
+        Month := TEpiIntField(MonthCombo.Items.Objects[MonthCombo.ItemIndex]);
+        Year  := TEpiIntField(YearCombo.Items.Objects[YearCombo.ItemIndex]);
+      end;
+    end;
+    if CombineStringRadio.Checked then
+    begin
+      Calc := TEpiCombineStringCalc.Create(Field);
+      with TEpiCombineStringCalc(Calc) do
+      begin
+        ResultField := TEpiField(StringResultCombo.Items.Objects[StringResultCombo.ItemIndex]);
+
+        if not CalcFieldComboIsNil(Field1Combo) then
+          Field1 := TEpiDateField(Field1Combo.Items.Objects[Field1Combo.ItemIndex]);
+        if not CalcFieldComboIsNil(Field2Combo) then
+          Field2 := TEpiDateTimeField(Field2Combo.Items.Objects[Field2Combo.ItemIndex]);
+        if not CalcFieldComboIsNil(Field3Combo) then
+          Field3 := TEpiDateField(Field3Combo.Items.Objects[Field3Combo.ItemIndex]);
+        Delim1 := Delim1Edit.Text;
+        Delim2 := Delim2Edit.Text;
+      end;
+    end;
+    Field.Calculation := Calc;
+  end;
 
   // Notes
   Field.Notes.Text := NotesMemo.Text;
