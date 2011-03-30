@@ -25,7 +25,6 @@ type
     Label7: TLabel;
     Label8: TLabel;
     Label9: TLabel;
-    SectionAdvancedSheet: TTabSheet;
     SectionBasicSheet: TTabSheet;
     SectionGroupAccessGroupBox: TGroupBox;
     NameEdit: TEdit;

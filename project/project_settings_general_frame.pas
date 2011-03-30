@@ -14,17 +14,13 @@ type
 
   TProjectSettings_GeneralFrame = class(TFrame, IProjectSettingsFrame)
     BackupOnShutdownChkBox: TCheckBox;
-    Bevel1: TBevel;
     Label3: TLabel;
     AutoIncStartEdit: TMaskEdit;
-    ProjectTitleEdit: TEdit;
     Label1: TLabel;
     BackupIntervalEdit: TMaskEdit;
-    Label2: TLabel;
   private
     { private declarations }
     FProjectSettings: TEpiProjectSettings;
-    FDataFiles: TEpiDataFiles;
   public
     { public declarations }
     procedure SetProjectSettings(AValue: TEpiCustomBase);
@@ -43,12 +39,10 @@ uses
 procedure TProjectSettings_GeneralFrame.SetProjectSettings(AValue: TEpiCustomBase);
 begin
   FProjectSettings               := TEpiDocument(AValue).ProjectSettings;
-  FDataFiles                     := TEpiDocument(AValue).DataFiles;
 
   BackupIntervalEdit.Text        := IntToStr(FProjectSettings.BackupInterval);
   BackupOnShutdownChkBox.Checked := FProjectSettings.BackupOnShutdown;
   AutoIncStartEdit.Text          := IntToStr(FProjectSettings.AutoIncStartValue);
-  ProjectTitleEdit.Text          := FDataFiles[0].Caption.Text;
 end;
 
 function TProjectSettings_GeneralFrame.ApplySettings: boolean;
@@ -67,7 +61,6 @@ begin
   FProjectSettings.BackupInterval   := I;
   FProjectSettings.BackupOnShutdown := BackupOnShutdownChkBox.Checked;
   FProjectSettings.AutoIncStartValue := StrToInt(AutoIncStartEdit.Text);
-  FDataFiles[0].Caption.Text           := ProjectTitleEdit.Text;
 end;
 
 end.

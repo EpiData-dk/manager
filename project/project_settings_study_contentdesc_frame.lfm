@@ -1,0 +1,173 @@
+object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
+  Left = 0
+  Height = 446
+  Top = 0
+  Width = 571
+  ClientHeight = 446
+  ClientWidth = 571
+  TabOrder = 0
+  DesignLeft = 623
+  DesignTop = 341
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
+    Height = 18
+    Top = 10
+    Width = 57
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Purpose:'
+    ParentColor = False
+  end
+  object PurposeEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 30
+    Width = 551
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 0
+  end
+  object Label2: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = PurposeEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 67
+    Width = 59
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Abstract:'
+    ParentColor = False
+  end
+  object AbstractEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 87
+    Width = 551
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 1
+  end
+  object Label3: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = AbstractEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 124
+    Width = 63
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Citations:'
+    ParentColor = False
+  end
+  object CitationsEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label3
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 144
+    Width = 551
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 2
+  end
+  object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = CitationsEdit
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 147
+    Top = 181
+    Width = 551
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Coverage:'
+    ClientHeight = 128
+    ClientWidth = 547
+    TabOrder = 3
+    object Label4: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = GroupBox1
+      Left = 10
+      Height = 18
+      Top = 10
+      Width = 91
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Geographical:'
+      ParentColor = False
+    end
+    object GeoCoverageEdit: TEdit
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Label4
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 27
+      Top = 30
+      Width = 527
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 10
+      TabOrder = 0
+    end
+    object Label5: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = GeoCoverageEdit
+      AnchorSideTop.Side = asrBottom
+      Left = 10
+      Height = 18
+      Top = 67
+      Width = 83
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Time period:'
+      ParentColor = False
+    end
+    object TimeCoverageEdit: TEdit
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Label5
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 27
+      Top = 87
+      Width = 527
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 10
+      TabOrder = 1
+    end
+  end
+end

@@ -41,7 +41,9 @@ implementation
 
 uses
   project_settings_field_frame, project_settings_interface,
-  project_settings_general_frame, settings2, settings2_var;
+  project_settings_general_frame, settings2, settings2_var,
+  project_settings_study_frame, project_settings_study_contentdesc_frame,
+  project_settings_study_ownership_frame;
 
 { TProjectSettingsForm }
 
@@ -101,8 +103,14 @@ begin
   Create(TheOwner);
   FEpiDocument := AEpiDocument;
 
-  ProjectSettingsView.Items.FindNodeWithText('General').Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
-  ProjectSettingsView.Items.FindNodeWithText('Fields').Data := Pointer(TProjectSettings_FieldFrame.Create(Self));
+  with ProjectSettingsView.Items do
+  begin
+    FindNodeWithText('General').Data             := Pointer(TProjectSettings_GeneralFrame.Create(Self));
+    FindNodeWithText('Fields').Data              := Pointer(TProjectSettings_FieldFrame.Create(Self));
+    FindNodeWithText('Study').Data               := Pointer(TProjectsettings_StudyFrame.Create(Self));
+    FindNodeWithText('Content description').Data := Pointer(TProjectSetting_ContentDescFrame.Create(Self));
+    FindNodeWithText('Ownership').Data           := Pointer(TProjectSetting_OwnershipFrame.Create(Self));
+  end;
 end;
 
 class procedure TProjectSettingsForm.RestoreDefaultPos;

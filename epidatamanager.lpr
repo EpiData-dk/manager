@@ -20,7 +20,9 @@ uses
   UniqueInstanceRaw, copyobject, design_fieldproperties_frame, 
   design_sectionproperties_frame, design_headingproperties_frame,
   design_propertiesbase_frame, design_types, import_structure_form, 
-  manager_messages;
+  manager_messages, project_settings_study_frame, 
+project_settings_study_contentdesc_frame, 
+project_settings_study_ownership_frame;
 
 {$R *.res}
 

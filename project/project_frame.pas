@@ -54,6 +54,7 @@ type
     FrameCount: integer;
     FEpiDocument: TEpiDocument;
     procedure OnDataFileChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnTitleChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     function  DoCreateNewDocument: TEpiDocument;
     function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
     procedure AddToRecent(Const AFileName: string);
@@ -283,13 +284,21 @@ begin
   begin
     Df := TEpiDataFileEx(TEpiCustomItem(Sender).Owner);
     Df.TreeNode.Text := Df.Caption.Text;
-    UpdateCaption;
   end;
+end;
+
+procedure TProjectFrame.OnTitleChange(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  UpdateCaption;
 end;
 
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
   Result := TEpiDocument.Create('en');
+  Result.Study.Language := 'en';
+  Result.Study.Title.RegisterOnChangeHook(@OnTitleChange);
+  Result.Study.Title.Text := 'New Project';
   Result.DataFiles.OnNewItemClass := @NewDataFileItem;
   Result.OnModified := @EpiDocumentModified;
 end;
@@ -550,12 +559,9 @@ begin
     if EpiDocument.Modified then
       S := S + '*';
 
-    if Assigned(ActiveFrame) then
-    begin
-      T := TDesignFrame(ActiveFrame).DataFile.Caption.Text;
-      if (T <> '') then
-        S := S + ' [' + EpiCutString(T, 20) + ']';
-    end;
+    T := EpiDocument.Study.Title.Text;
+    if (T <> '') then
+      S := S + ' [' + EpiCutString(T, 20) + ']';
   end;
   MainForm.Caption := S;
 end;

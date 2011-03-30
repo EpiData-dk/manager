@@ -747,6 +747,8 @@ end;
 
 procedure TDesignControlsForm.CancelActionExecute(Sender: TObject);
 begin
+  // Restores active frame to a valid state, loosing changes - but that's the point!
+  FActiveFrame.UpdateFormContent;
   Close;
 end;
 

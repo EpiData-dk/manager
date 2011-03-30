@@ -62,7 +62,6 @@ type
     RecordsPanel: TPanel;
     FieldsPanel: TPanel;
     StatusBarPanel: TPanel;
-    PasteAsQESAction: TAction;
     DeleteAllControlsAction: TAction;
     NewUpperCaseMenu: TMenuItem;
     PasteAsFloatMenuItem: TMenuItem;
@@ -674,6 +673,9 @@ begin
       Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
     Importer.Free;
     FImportedFileName := fn;
+
+    // Update Title with imported file description.
+    TEpiDocument(FDataFile.RootOwner).Study.Title.Text := FDataFile.Caption.Text;
 
     EnterControl(TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data));
   finally
@@ -2279,13 +2281,23 @@ var
   LocalCtrl: TControl;
   Node, NNode: TAVLTreeNode;
   YTree: TAVLTree;
+  S: String;
 begin
   Node := nil;
 
   {$IFNDEF EPI_DEBUG}
   if not ([ssShift] = GetKeyShiftState) then
   begin
-    if MessageDlg('Warning', 'Are you sure you want to delete?',
+    EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
+    if EpiCtrl is TEpiSection then
+      S := 'Section: ';
+    if EpiCtrl is TEpiField then
+      S := 'Field: ';
+    if EpiCtrl is TEpiHeading then
+      S := 'Heading: ';
+    S += EpiCtrl.Name;
+
+    if MessageDlg('Warning', 'Are you sure you want to delete?' + LineEnding + S,
       mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
 
 
@@ -2559,20 +2571,24 @@ end;
 procedure TDesignFrame.UpdateFrame;
 var
   CtrlS: TShortCut;
+  EpiCtrl: TEpiCustomControlItem;
 begin
-  PasteAsQESAction.ShortCut     := 0;
   PasteAsHeadingAction.ShortCut := 0;
   PasteAsIntAction.ShortCut     := 0;
   PasteAsFloatAction.ShortCut   := 0;
   PasteAsStringAction.ShortCut  := 0;
 
-  CtrlS := KeyToShortCut(VK_N, [ssCtrl]);
+  CtrlS := KeyToShortCut(VK_G, [ssCtrl]);
   Case ManagerSettings.PasteSpecialType of
-    0: PasteAsQESAction.ShortCut     := CtrlS;
     1: PasteAsHeadingAction.ShortCut := CtrlS;
     2: PasteAsIntAction.ShortCut     := CtrlS;
     3: PasteAsFloatAction.ShortCut   := CtrlS;
     4: PasteAsStringAction.ShortCut  := CtrlS;
+  end;
+  if Assigned(FActiveControl) then
+  begin
+    EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
+    ShowForm(EpiCtrl, Point(EpiCtrl.Left, EpiCtrl.Top), false);
   end;
 end;
 

@@ -46,7 +46,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="30">
+    <Units Count="33">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -241,6 +241,27 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="manager_messages"/>
       </Unit29>
+      <Unit30>
+        <Filename Value="project/project_settings_study_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Projectsettings_StudyFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_study_frame"/>
+      </Unit30>
+      <Unit31>
+        <Filename Value="project/project_settings_study_contentdesc_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectSetting_ContentDescFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_study_contentdesc_frame"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="project/project_settings_study_ownership_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectSetting_OwnershipFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_study_ownership_frame"/>
+      </Unit32>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

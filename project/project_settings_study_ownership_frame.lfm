@@ -1,0 +1,126 @@
+object ProjectSetting_OwnershipFrame: TProjectSetting_OwnershipFrame
+  Left = 0
+  Height = 645
+  Top = 0
+  Width = 705
+  ClientHeight = 645
+  ClientWidth = 705
+  TabOrder = 0
+  DesignLeft = 645
+  DesignTop = 281
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
+    Height = 18
+    Top = 10
+    Width = 48
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Author:'
+    ParentColor = False
+  end
+  object AuthorEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 30
+    Width = 685
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 0
+  end
+  object Label2: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = AuthorEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 67
+    Width = 42
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Rights'
+    ParentColor = False
+  end
+  object RightsEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 87
+    Width = 685
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 1
+  end
+  object Label3: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = RightsEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 124
+    Width = 65
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Publisher:'
+    ParentColor = False
+  end
+  object PublisherEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label3
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 144
+    Width = 685
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 2
+  end
+  object Label4: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = PublisherEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 181
+    Width = 56
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Funding:'
+    ParentColor = False
+  end
+  object FundingEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label4
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 201
+    Width = 685
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    TabOrder = 3
+  end
+end

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, ExtCtrls,
   Buttons, LCLType, epicustombase, design_controls, epivaluelabels, epidatafiles,
-  design_propertiesbase_frame;
+  design_propertiesbase_frame, epidatafilestypes;
 
 type
 
@@ -130,6 +130,12 @@ type
     procedure RemoveJumpBtnClick(Sender: TObject);
     procedure ValueLabelComboBoxChange(Sender: TObject);
   private
+    { Common combo handling }
+    procedure InitCombo(Combo: TComboBox);
+    procedure AddFieldToCombo(AField: TEpiField; FieldTypes: TEpiFieldTypes; Combo: TComboBox; AddSelf: boolean = false);
+    procedure UpdateFieldCombo(Combo: TComboBox; AField: TEpiField);
+    procedure FinishCombo(Combo: TComboBox; NilObject: TObject);
+  private
     { private declarations }
     FDataFile: TEpiDataFile;
     FValueLabelSets: TEpiValueLabelSets;
@@ -178,8 +184,8 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLProc, epidatafilestypes, valuelabelseditor_form, epimiscutils, epiranges,
-  math, epidocument, epiconvertutils, main;
+  LCLProc, valuelabelseditor_form, epimiscutils, epiranges,
+  math, epidocument, epiconvertutils, main, epistringutils;
 
 resourcestring
   rsVLWarning = 'Warning: Valuelabels have changed...';
@@ -203,7 +209,7 @@ var
 begin
   Ch := UTF8CharacterToUnicode(@UTF8Key[1], I);
   if (not (Field.FieldType in StringFieldTypes)) and
-     (not (Char(Ch) in [VK_0..VK_9, Char(VK_BACK)] + ['.',','] + ['-', ':', '.'] + ['/', '-', '\', '.'])) then
+     (not (Char(Ch) in [VK_0..VK_9, VK_RETURN, Char(VK_BACK)] + ['.',','] + ['-', ':', '.'] + ['/', '-', '\', '.'])) then
     UTF8Key := '';
   case Field.FieldType of
     ftFloat:   if (Char(Ch) in ['.',',']) then UTF8Key := DecimalSeparator;
@@ -235,9 +241,45 @@ end;
 
 procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
 begin
-  ValueLabelSettingGrpBox.Visible :=
+  ValueLabelSettingGrpBox.Enabled :=
     ValueLabelComboBox.ItemIndex <> ValueLabelComboBox.Items.IndexOfObject(FNilValueLabel);
   UpdateValueLabelWriteTo;
+end;
+
+procedure TFieldPropertiesFrame.InitCombo(Combo: TComboBox);
+begin
+  Combo.Items.BeginUpdate;
+  Combo.Clear;
+  Combo.Sorted := true;
+end;
+
+procedure TFieldPropertiesFrame.AddFieldToCombo(AField: TEpiField;
+  FieldTypes: TEpiFieldTypes; Combo: TComboBox; AddSelf: boolean);
+begin
+  if (not AddSelf) and (AField = Field) then exit;
+  if (not (AField.FieldType in FieldTypes)) then exit;
+
+  // Else...
+  Combo.Items.AddObject(
+    AField.Name + BoolToStr(AField.Question.Text <> '', ': ' + EpiCutString(AField.Question.Text, 20 - UTF8Length(AField.Name)), ''),
+    AField);
+end;
+
+procedure TFieldPropertiesFrame.UpdateFieldCombo(Combo: TComboBox;
+  AField: TEpiField);
+begin
+  if Assigned(AField) then
+    Combo.ItemIndex := Combo.Items.IndexOfObject(AField);
+end;
+
+procedure TFieldPropertiesFrame.FinishCombo(Combo: TComboBox; NilObject: TObject
+  );
+var
+  Idx: LongInt;
+begin
+  Idx := Combo.Items.AddObject('(none)', NilObject);
+  Combo.Items.EndUpdate;
+  Combo.ItemIndex := Idx;
 end;
 
 function TFieldPropertiesFrame.UpdateValueLabels: boolean;
@@ -341,26 +383,11 @@ var
   i: Integer;
   Idx: LongInt;
 begin
-  with ValueLabelWriteToComboBox do
-  begin
-    Items.BeginUpdate;
-    Clear;
-    Sorted := true;
-
-    for i := 0 to FDataFile.Fields.Count -1 do
-    with FDataFile.Field[i] do
-    begin
-      if not (FieldType in StringFieldTypes) then continue;
-      if FDataFile.Field[i] = Field then continue;
-      Items.AddObject(Name, FDataFile.Field[i]);
-    end;
-    Idx := Items.AddObject('(none)', nil);
-    if Assigned(Field.ValueLabelWriteField) then
-      Idx := Items.IndexOfObject(Field.ValueLabelWriteField);
-
-    Items.EndUpdate;
-    ItemIndex := Idx;
-  end;
+  InitCombo(ValueLabelWriteToComboBox);
+  for i := 0 to FDataFile.Fields.Count -1 do
+    AddFieldToCombo(FDataFile.Field[i], StringFieldTypes, ValueLabelWriteToComboBox);
+  FinishCombo(ValueLabelWriteToComboBox, nil);
+  UpdateFieldCombo(ValueLabelWriteToComboBox, Field.ValueLabelWriteField);
 end;
 
 function TFieldPropertiesFrame.GetField: TEpiField;
@@ -419,12 +446,7 @@ begin
   Combo.Items.AddObject('(Exit Section)', TObject(jtExitSection));
   Combo.Items.AddObject('(Save Record)', TObject(jtSaveRecord));
   for i := 0 to FDataFile.Fields.Count - 1 do
-  with FDataFile do
-  begin
-     if (not (EpiControl = Field[i])) and
-        (not (Field[i].FieldType in AutoFieldTypes)) then
-       Combo.Items.AddObject(Field[i].Name, Field[i]);
-  end;
+    AddFieldToCombo(FDataFile.Field[i], AllFieldTypes - AutoFieldTypes, Combo);
   Combo.ItemIndex := 0;
   Combo.Items.EndUpdate;
 end;
@@ -559,39 +581,13 @@ var
   F: TEpiField;
   i: Integer;
 
-  procedure InitCombo(Combo: TComboBox);
-  begin
-    Combo.Items.BeginUpdate;
-    Combo.Clear;
-    Combo.Sorted := true;
-  end;
-
-  procedure AddField(AField: TEpiField; FieldTypes: TEpiFieldTypes; Combo: TComboBox);
-  begin
-    if AField.FieldType in FieldTypes then Combo.Items.AddObject(AField.Name, AField);
-  end;
-
-  procedure FinishCombo(Combo: TComboBox);
-  var
-    Idx: LongInt;
-  begin
-    Idx := Combo.Items.AddObject('(none)', nil);
-    Combo.Items.EndUpdate;
-    Combo.ItemIndex := Idx;
-  end;
-
-  procedure UpdateCalcCombo(Combo: TComboBox; AField: TEpiField);
-  begin
-    if Assigned(AField) then
-      Combo.ItemIndex := Combo.Items.IndexOfObject(AField);
-  end;
   procedure UpdateTimeCalc(Calculation: TEpiTimeCalc);
   begin
-    UpdateCalcCombo(TimeResultCombo, Calculation.ResultField);
-    UpdateCalcCombo(StartDateCombo,  Calculation.StartDate);
-    UpdateCalcCombo(EndDateCombo,    Calculation.EndDate);
-    UpdateCalcCombo(StartTimeCombo,  Calculation.StartTime);
-    UpdateCalcCombo(EndTimeCombo,    Calculation.EndTime);
+    UpdateFieldCombo(TimeResultCombo, Calculation.ResultField);
+    UpdateFieldCombo(StartDateCombo,  Calculation.StartDate);
+    UpdateFieldCombo(EndDateCombo,    Calculation.EndDate);
+    UpdateFieldCombo(StartTimeCombo,  Calculation.StartTime);
+    UpdateFieldCombo(EndTimeCombo,    Calculation.EndTime);
     Case Calculation.TimeCalcType of
       ctAsYear:        AsYearRadio.Checked := true;
       ctAsMonths:      AsMonthRadio.Checked := true;
@@ -603,18 +599,18 @@ var
   end;
   procedure UpdateDateCalc(Calculation: TEpiCombineDateCalc);
   begin
-    UpdateCalcCombo(DateResultCombo, Calculation.ResultField);
-    UpdateCalcCombo(DayCombo,        Calculation.Day);
-    UpdateCalcCombo(MonthCombo,      Calculation.Month);
-    UpdateCalcCombo(YearCombo,       Calculation.Year);
+    UpdateFieldCombo(DateResultCombo, Calculation.ResultField);
+    UpdateFieldCombo(DayCombo,        Calculation.Day);
+    UpdateFieldCombo(MonthCombo,      Calculation.Month);
+    UpdateFieldCombo(YearCombo,       Calculation.Year);
     CombineDateRadio.Checked := true;
   end;
   procedure UpdateStringCalc(Calculation: TEpiCombineStringCalc);
   begin
-    UpdateCalcCombo(StringResultCombo, Calculation.ResultField);
-    UpdateCalcCombo(Field1Combo,       Calculation.Field1);
-    UpdateCalcCombo(Field2Combo,       Calculation.Field2);
-    UpdateCalcCombo(Field3Combo,       Calculation.Field3);
+    UpdateFieldCombo(StringResultCombo, Calculation.ResultField);
+    UpdateFieldCombo(Field1Combo,       Calculation.Field1);
+    UpdateFieldCombo(Field2Combo,       Calculation.Field2);
+    UpdateFieldCombo(Field3Combo,       Calculation.Field3);
     Delim1Edit.Text := Calculation.Delim1;
     Delim2Edit.Text := Calculation.Delim2;
     CombineStringRadio.Checked := true;
@@ -643,45 +639,42 @@ begin
 
     // Time difference:
     // - active field cannot also be result field.
-    if F <> Field then
-      AddField(F, [ftInteger, ftFloat], TimeResultCombo);
-    AddField(F, DateFieldTypes, StartDateCombo);
-    AddField(F, DateFieldTypes, EndDateCombo);
-    AddField(F, TimeFieldTypes, StartTimeCombo);
-    AddField(F, TimeFieldTypes, EndTimeCombo);
+    AddFieldToCombo(F, [ftInteger, ftFloat], TimeResultCombo);
+    AddFieldToCombo(F, DateFieldTypes, StartDateCombo, true);
+    AddFieldToCombo(F, DateFieldTypes, EndDateCombo, true);
+    AddFieldToCombo(F, TimeFieldTypes, StartTimeCombo, true);
+    AddFieldToCombo(F, TimeFieldTypes, EndTimeCombo, true);
 
     // Create Date:
     // - active field cannot also be result field.
-    if F <> Field then
-      AddField(F, DateFieldTypes-AutoFieldTypes, DateResultCombo);
-    AddField(F, [ftInteger], DayCombo);
-    AddField(F, [ftInteger], MonthCombo);
-    AddField(F, [ftInteger], YearCombo);
+    AddFieldToCombo(F, DateFieldTypes-AutoFieldTypes, DateResultCombo);
+    AddFieldToCombo(F, [ftInteger], DayCombo, true);
+    AddFieldToCombo(F, [ftInteger], MonthCombo, true);
+    AddFieldToCombo(F, [ftInteger], YearCombo, true);
 
     // Combine String:
     // - active field cannot also be result field.
-    if F <> Field then
-      AddField(F, StringFieldTypes, StringResultCombo);
-    AddField(F, AllFieldTypes, Field1Combo);
-    AddField(F, AllFieldTypes, Field2Combo);
-    AddField(F, AllFieldTypes, Field3Combo);
+    AddFieldToCombo(F, StringFieldTypes, StringResultCombo);
+    AddFieldToCombo(F, AllFieldTypes, Field1Combo, true);
+    AddFieldToCombo(F, AllFieldTypes, Field2Combo, true);
+    AddFieldToCombo(F, AllFieldTypes, Field3Combo, true);
   end;
 
-  FinishCombo(TimeResultCombo);
-  FinishCombo(StartDateCombo);
-  FinishCombo(EndDateCombo);
-  FinishCombo(StartTimeCombo);
-  FinishCombo(EndTimeCombo);
+  FinishCombo(TimeResultCombo, nil);
+  FinishCombo(StartDateCombo, nil);
+  FinishCombo(EndDateCombo, nil);
+  FinishCombo(StartTimeCombo, nil);
+  FinishCombo(EndTimeCombo, nil);
 
-  FinishCombo(DateResultCombo);
-  FinishCombo(DayCombo);
-  FinishCombo(MonthCombo);
-  FinishCombo(YearCombo);
+  FinishCombo(DateResultCombo, nil);
+  FinishCombo(DayCombo, nil);
+  FinishCombo(MonthCombo, nil);
+  FinishCombo(YearCombo, nil);
 
-  FinishCombo(StringResultCombo);
-  FinishCombo(Field1Combo);
-  FinishCombo(Field2Combo);
-  FinishCombo(Field3Combo);
+  FinishCombo(StringResultCombo, nil);
+  FinishCombo(Field1Combo, nil);
+  FinishCombo(Field2Combo, nil);
+  FinishCombo(Field3Combo, nil);
 
   if Assigned(Field.Calculation) then
     case Field.Calculation.CalcType of
@@ -1076,11 +1069,13 @@ begin
     Field.HasDefaultValue := false;
 
   // Calculate
+  if Assigned(Field.Calculation) then
+  begin
+    Field.Calculation.Free;
+    Field.Calculation := nil;
+  end;
   if not NoCalcRadio.Checked then
   begin
-    if Assigned(Field.Calculation) then
-      Field.Calculation.Free;
-
     if TimeCalcRadio.Checked then
     begin
       Calc := TEpiTimeCalc.Create(Field);
@@ -1254,7 +1249,7 @@ begin
   RepeatValueChkBox.Checked := Field.RepeatValue;
   DefaultValueEdit.Text := Field.DefaultValueAsString;
 
-  ValueLabelSettingGrpBox.Visible := ValueLabelSettingGrpBox.Visible and Assigned(Field.ValueLabelSet);
+  ValueLabelSettingGrpBox.Enabled := Assigned(Field.ValueLabelSet);
   ShowValueLabelChkBox.Checked := Field.ShowValueLabel;
   UpdateValueLabelWriteTo;
 

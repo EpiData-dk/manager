@@ -2102,13 +2102,6 @@ object DesignFrame: TDesignFrame
       OnExecute = DeleteAllControlsActionExecute
       OnUpdate = NoControlActionUpdate
     end
-    object PasteAsQESAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As QES'
-      Hint = 'Paste As QES'
-      OnExecute = PasteAsQESActionExecute
-      OnUpdate = NoControlActionUpdate
-    end
     object PasteAsHeadingAction: TAction
       Category = 'Edit'
       Caption = 'Paste As Headings'
