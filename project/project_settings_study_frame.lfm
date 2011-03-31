@@ -1,10 +1,10 @@
 object Projectsettings_StudyFrame: TProjectsettings_StudyFrame
   Left = 0
-  Height = 452
+  Height = 596
   Top = 0
-  Width = 550
-  ClientHeight = 452
-  ClientWidth = 550
+  Width = 730
+  ClientHeight = 596
+  ClientWidth = 730
   TabOrder = 0
   DesignLeft = 577
   DesignTop = 296
@@ -29,7 +29,7 @@ object Projectsettings_StudyFrame: TProjectsettings_StudyFrame
     Left = 10
     Height = 27
     Top = 30
-    Width = 530
+    Width = 710
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
@@ -57,12 +57,15 @@ object Projectsettings_StudyFrame: TProjectsettings_StudyFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 27
+    Hint = 'Project identifier in local systems or Good Clinical Practice Study Id'
     Top = 87
-    Width = 530
+    Width = 710
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
     BorderSpacing.Right = 10
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 1
   end
   object Label3: TLabel
@@ -86,12 +89,16 @@ object Projectsettings_StudyFrame: TProjectsettings_StudyFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 27
+    Hint = 'Default language - two letter ISO. Eg:'#10'en, de, da, fr'
     Top = 144
-    Width = 530
+    Width = 710
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
     BorderSpacing.Right = 10
+    MaxLength = 2
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 2
   end
   object Label4: TLabel
@@ -115,12 +122,15 @@ object Projectsettings_StudyFrame: TProjectsettings_StudyFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 27
+    Hint = 'User specified version in free text'
     Top = 201
-    Width = 530
+    Width = 710
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
     BorderSpacing.Right = 10
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
   end
 end

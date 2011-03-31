@@ -13,14 +13,14 @@ type
   { TProjectSetting_OwnershipFrame }
 
   TProjectSetting_OwnershipFrame = class(TFrame, IProjectSettingsFrame)
-    RightsEdit: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    FundingMemo: TMemo;
+    AuthorsMemo: TMemo;
+    RightsMemo: TMemo;
     PublisherEdit: TEdit;
-    AuthorEdit: TEdit;
-    FundingEdit: TEdit;
   private
     { private declarations }
     Study: TEpiStudy;
@@ -43,10 +43,10 @@ begin
   Study := TEpiDocument(Avalue).Study;
   with Study do
   begin
-    AuthorEdit.Text := Author;
-    RightsEdit.Text := Rights.Text;
+    AuthorsMemo.Text := Author;
+    RightsMemo.Text := Rights.Text;
     PublisherEdit.Text := Publisher.Text;
-    FundingEdit.Text := Funding.Text;
+    FundingMemo.Text := Funding.Text;
   end;
 end;
 
@@ -54,10 +54,10 @@ function TProjectSetting_OwnershipFrame.ApplySettings: boolean;
 begin
   with Study do
   begin
-    Author := AuthorEdit.Text;
-    Rights.Text := RightsEdit.Text;
+    Author := AuthorsMemo.Text;
+    Rights.Text := RightsMemo.Text;
     Publisher.Text := PublisherEdit.Text;
-    Funding.Text := FundingEdit.Text;
+    Funding.Text := FundingMemo.Text;
   end;
   result := true;
 end;

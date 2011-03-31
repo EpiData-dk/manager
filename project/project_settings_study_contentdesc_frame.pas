@@ -14,16 +14,16 @@ type
 
   TProjectSetting_ContentDescFrame = class(TFrame, IProjectSettingsFrame)
     GeoCoverageEdit: TEdit;
+    AbstractMemo: TMemo;
+    PurposeMemo: TMemo;
+    CitationsMemo: TMemo;
     TimeCoverageEdit: TEdit;
     GroupBox1: TGroupBox;
-    AbstractEdit: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
-    CitationsEdit: TEdit;
     Label4: TLabel;
     Label5: TLabel;
-    PurposeEdit: TEdit;
   private
     { private declarations }
     Study: TEpiStudy;
@@ -47,9 +47,9 @@ begin
   Study := TEpiDocument(AValue).Study;
   with Study do
   begin
-    PurposeEdit.Text := Purpose.Text;
-    AbstractEdit.Text := AbstractText.Text;
-    CitationsEdit.Text := Citations.Text;
+    PurposeMemo.Text := Purpose.Text;
+    AbstractMemo.Text := AbstractText.Text;
+    CitationsMemo.Text := Citations.Text;
     GeoCoverageEdit.Text := GeographicalCoverage.Text;
     TimeCoverageEdit.Text := TimeCoverage.Text;
   end;
@@ -59,9 +59,9 @@ function TProjectSetting_ContentDescFrame.ApplySettings: boolean;
 begin
   with Study do
   begin
-    Purpose.Text := PurposeEdit.Text;
-    AbstractText.Text := AbstractEdit.Text;
-    Citations.Text := CitationsEdit.Text;
+    Purpose.Text := PurposeMemo.Text;
+    AbstractText.Text := AbstractMemo.Text;
+    Citations.Text := CitationsMemo.Text;
     GeographicalCoverage.Text := GeoCoverageEdit.Text;
     TimeCoverage.Text := TimeCoverageEdit.Text;
   end;

@@ -1,77 +1,46 @@
 object ProjectSetting_OwnershipFrame: TProjectSetting_OwnershipFrame
   Left = 0
   Height = 645
+  Hint = 'Who created the data set and study,'#10'including contributors.'
   Top = 0
   Width = 705
   ClientHeight = 645
   ClientWidth = 705
   TabOrder = 0
-  DesignLeft = 645
-  DesignTop = 281
+  DesignLeft = 464
+  DesignTop = 280
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 10
     Height = 18
     Top = 10
-    Width = 48
+    Width = 55
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
-    Caption = 'Author:'
+    Caption = 'Authors:'
     ParentColor = False
-  end
-  object AuthorEdit: TEdit
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Label1
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 10
-    Height = 27
-    Top = 30
-    Width = 685
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Left = 10
-    BorderSpacing.Top = 2
-    BorderSpacing.Right = 10
-    TabOrder = 0
   end
   object Label2: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = AuthorEdit
+    AnchorSideTop.Control = AuthorsMemo
     AnchorSideTop.Side = asrBottom
     Left = 10
     Height = 18
-    Top = 67
-    Width = 42
+    Top = 98
+    Width = 46
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
-    Caption = 'Rights'
+    Caption = 'Rights:'
     ParentColor = False
-  end
-  object RightsEdit: TEdit
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Label2
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 10
-    Height = 27
-    Top = 87
-    Width = 685
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Left = 10
-    BorderSpacing.Top = 2
-    BorderSpacing.Right = 10
-    TabOrder = 1
   end
   object Label3: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = RightsEdit
+    AnchorSideTop.Control = RightsMemo
     AnchorSideTop.Side = asrBottom
     Left = 10
     Height = 18
-    Top = 124
+    Top = 186
     Width = 65
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
@@ -86,13 +55,16 @@ object ProjectSetting_OwnershipFrame: TProjectSetting_OwnershipFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 27
-    Top = 144
+    Hint = 'Organisation to contact and contact information'
+    Top = 206
     Width = 685
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
     BorderSpacing.Right = 10
-    TabOrder = 2
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 1
   end
   object Label4: TLabel
     AnchorSideLeft.Control = Owner
@@ -100,27 +72,68 @@ object ProjectSetting_OwnershipFrame: TProjectSetting_OwnershipFrame
     AnchorSideTop.Side = asrBottom
     Left = 10
     Height = 18
-    Top = 181
+    Top = 243
     Width = 56
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Funding:'
     ParentColor = False
   end
-  object FundingEdit: TEdit
+  object RightsMemo: TMemo
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 55
+    Hint = 'Right to use data'
+    Top = 121
+    Width = 685
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 10
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+  end
+  object FundingMemo: TMemo
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Label4
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 10
-    Height = 27
-    Top = 201
+    Height = 55
+    Hint = 'Contributors'
+    Top = 266
     Width = 685
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
-    BorderSpacing.Top = 2
+    BorderSpacing.Top = 5
     BorderSpacing.Right = 10
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 2
+  end
+  object AuthorsMemo: TMemo
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 55
+    Hint = 'Who created the data set and study, including contributors'
+    Top = 33
+    Width = 685
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 10
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
   end
 end

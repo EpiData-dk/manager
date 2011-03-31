@@ -298,7 +298,7 @@ begin
   Result := TEpiDocument.Create('en');
   Result.Study.Language := 'en';
   Result.Study.Title.RegisterOnChangeHook(@OnTitleChange);
-  Result.Study.Title.Text := 'New Project';
+  Result.Study.Title.Text := 'Untitled Project';
   Result.DataFiles.OnNewItemClass := @NewDataFileItem;
   Result.OnModified := @EpiDocumentModified;
 end;
