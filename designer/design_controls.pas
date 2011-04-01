@@ -765,8 +765,6 @@ begin
 end;
 
 procedure TDesignControlsForm.FormDeactivate(Sender: TObject);
-var
-  TmpForm: TCustomForm;
 begin
   if not Showing then exit;
 
