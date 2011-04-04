@@ -46,7 +46,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="33">
+    <Units Count="34">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -142,7 +142,7 @@
       <Unit14>
         <Filename Value="settings/settings_advanced_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Settings_AdvancedFrame"/>
+        <ComponentName Value="Settings_PathsFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_advanced_frame"/>
       </Unit14>
@@ -262,6 +262,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_study_ownership_frame"/>
       </Unit32>
+      <Unit33>
+        <Filename Value="settings/settings_general_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Settings_GeneralFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="settings_general_frame"/>
+      </Unit33>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

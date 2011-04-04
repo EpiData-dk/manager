@@ -107,7 +107,7 @@ end;
 initialization
 
 begin
-  RegisterSettingFrame(1, TSettings_FieldDefinitionFrame, 'Field Definitions');
+  RegisterSettingFrame(2, TSettings_FieldDefinitionFrame, 'Field Definitions');
 end;
 
 end.

@@ -1,4 +1,4 @@
-object Settings_AdvancedFrame: TSettings_AdvancedFrame
+object Settings_PathsFrame: TSettings_PathsFrame
   Left = 0
   Height = 333
   Top = 0
@@ -6,8 +6,8 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
   ClientHeight = 333
   ClientWidth = 512
   TabOrder = 0
-  DesignLeft = 527
-  DesignTop = 327
+  DesignLeft = 570
+  DesignTop = 232
   object Label17: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = WorkingDirEdit
@@ -15,198 +15,88 @@ object Settings_AdvancedFrame: TSettings_AdvancedFrame
     Left = 10
     Height = 18
     Top = 14
-    Width = 128
+    Width = 124
+    Anchors = [akLeft]
     BorderSpacing.Left = 10
     Caption = 'Default data folder:'
     ParentColor = False
   end
-  object DefaultPasteCombo: TComboBox
-    AnchorSideLeft.Control = TutorialDirEdit
-    AnchorSideTop.Control = TutorialURLEdit
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = TutorialDirEdit
-    AnchorSideRight.Side = asrBottom
-    Left = 205
-    Height = 31
-    Top = 121
-    Width = 278
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 10
-    ItemHeight = 0
-    ItemIndex = 1
-    Items.Strings = (
-      'QES'
-      'Heading'
-      'Integer'
-      'Float'
-      'String'
-      ''
-    )
-    Style = csDropDownList
-    TabOrder = 0
-    Text = 'Heading'
-  end
-  object Label18: TLabel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = DefaultPasteCombo
-    AnchorSideTop.Side = asrCenter
-    Left = 10
-    Height = 18
-    Top = 127
-    Width = 172
-    BorderSpacing.Left = 10
-    Caption = 'Default paste special type'
-    ParentColor = False
-  end
   object WorkingDirEdit: TDirectoryEdit
-    AnchorSideTop.Control = Owner
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label17
+    AnchorSideTop.Side = asrBottom
     AnchorSideRight.Side = asrBottom
-    Left = 205
+    Left = 10
     Height = 27
-    Top = 10
-    Width = 278
+    Top = 34
+    Width = 476
     ShowHidden = False
     ButtonWidth = 23
     NumGlyphs = 0
     Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 10
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
     MaxLength = 0
-    TabOrder = 1
-  end
-  object Label1: TLabel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = DefaultSaveTypeComboBox
-    AnchorSideTop.Side = asrCenter
-    Left = 10
-    Height = 18
-    Top = 168
-    Width = 117
-    BorderSpacing.Left = 10
-    Caption = 'Default save type'
-    ParentColor = False
-  end
-  object DefaultSaveTypeComboBox: TComboBox
-    AnchorSideLeft.Control = DefaultPasteCombo
-    AnchorSideTop.Control = DefaultPasteCombo
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = DefaultPasteCombo
-    AnchorSideRight.Side = asrBottom
-    Left = 205
-    Height = 31
-    Top = 162
-    Width = 278
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 10
-    ItemHeight = 0
-    Style = csDropDownList
-    TabOrder = 2
-  end
-  object SaveWindowPositionsChkBox: TCheckBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = DefaultSaveTypeComboBox
-    AnchorSideTop.Side = asrBottom
-    Left = 10
-    Height = 22
-    Top = 203
-    Width = 173
-    BorderSpacing.Left = 10
-    BorderSpacing.Top = 10
-    Caption = 'Save window positions'
-    TabOrder = 3
-  end
-  object ShowWelcomeChkBox: TCheckBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = SaveWindowPositionsChkBox
-    AnchorSideTop.Side = asrBottom
-    Left = 10
-    Height = 22
-    Top = 235
-    Width = 152
-    BorderSpacing.Left = 10
-    BorderSpacing.Top = 10
-    Caption = 'Show Welcome Box'
-    TabOrder = 4
+    TabOrder = 0
   end
   object Label19: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = TutorialDirEdit
-    AnchorSideTop.Side = asrCenter
+    AnchorSideTop.Control = WorkingDirEdit
+    AnchorSideTop.Side = asrBottom
     Left = 10
     Height = 18
-    Top = 51
-    Width = 95
+    Top = 71
+    Width = 90
     BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
     Caption = 'Tutorial folder:'
     ParentColor = False
   end
   object TutorialDirEdit: TDirectoryEdit
-    AnchorSideLeft.Control = WorkingDirEdit
-    AnchorSideTop.Control = WorkingDirEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label19
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = WorkingDirEdit
     AnchorSideRight.Side = asrBottom
-    Left = 205
+    Left = 10
     Height = 27
-    Top = 47
-    Width = 278
+    Top = 91
+    Width = 476
     ShowHidden = False
     ButtonWidth = 23
     NumGlyphs = 0
     Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 10
-    MaxLength = 0
-    TabOrder = 5
-  end
-  object ShowWorkToolBarChkBox: TCheckBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = ShowWelcomeChkBox
-    AnchorSideTop.Side = asrBottom
-    Left = 10
-    Height = 22
-    Top = 267
-    Width = 147
     BorderSpacing.Left = 10
-    BorderSpacing.Top = 10
-    Caption = 'Show Work Toolbar'
-    TabOrder = 6
+    BorderSpacing.Top = 2
+    MaxLength = 0
+    TabOrder = 1
   end
   object Label2: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = TutorialURLEdit
-    AnchorSideTop.Side = asrCenter
+    AnchorSideTop.Control = TutorialDirEdit
+    AnchorSideTop.Side = asrBottom
     Left = 10
     Height = 18
-    Top = 88
-    Width = 114
+    Top = 128
+    Width = 109
     BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
     Caption = 'Web tutorial URL:'
     ParentColor = False
   end
   object TutorialURLEdit: TEdit
-    AnchorSideLeft.Control = TutorialDirEdit
-    AnchorSideTop.Control = TutorialDirEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label2
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = TutorialDirEdit
     AnchorSideRight.Side = asrBottom
-    Left = 205
-    Height = 27
-    Top = 84
-    Width = 278
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 10
-    TabOrder = 7
-  end
-  object MultipleInstanceChkbox: TCheckBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = ShowWorkToolBarChkBox
-    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 22
-    Top = 299
-    Width = 260
+    Height = 27
+    Top = 148
+    Width = 476
+    Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
-    BorderSpacing.Top = 10
-    Caption = 'Allow multiple instances of program'
-    TabOrder = 8
+    BorderSpacing.Top = 2
+    TabOrder = 2
   end
 end

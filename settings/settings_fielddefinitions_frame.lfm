@@ -13,7 +13,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     Left = 10
     Height = 18
     Top = 160
-    Width = 82
+    Width = 80
     BorderSpacing.Left = 10
     Caption = 'Default date'
     ParentColor = False
@@ -60,7 +60,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 18
       Hint = 'Default field length for:'#10'Integer and IdNum'
       Top = 11
-      Width = 51
+      Width = 50
       Caption = 'Integer:'
       ParentColor = False
       ParentShowHint = False
@@ -69,11 +69,11 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     object Label11: TLabel
       AnchorSideRight.Control = GroupBox1
       AnchorSideRight.Side = asrBottom
-      Left = 672
+      Left = 674
       Height = 18
       Hint = 'Default field length for:'#10'Float'
       Top = 48
-      Width = 60
+      Width = 58
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 5
       Caption = 'decimals'
@@ -152,7 +152,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 27
       Hint = 'Default decimal length for:'#10'Float'
       Top = 39
-      Width = 277
+      Width = 279
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Right = 5
       CharCase = ecNormal
@@ -168,7 +168,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 18
       Hint = 'Default field length for:'#10'Float'
       Top = 48
-      Width = 38
+      Width = 36
       Caption = 'Float:'
       ParentColor = False
       ParentShowHint = False
@@ -259,7 +259,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Left = 10
       Height = 18
       Top = 15
-      Width = 73
+      Width = 68
       BorderSpacing.Left = 10
       Caption = 'Field Prefix'
       ParentColor = False

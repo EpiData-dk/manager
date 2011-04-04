@@ -96,7 +96,7 @@ end;
 initialization
 
 begin
-  RegisterSettingFrame(0, TSettings_VisualDesign, 'Visual Design');
+  RegisterSettingFrame(3, TSettings_VisualDesign, 'Visual Design');
 end;
 
 end.

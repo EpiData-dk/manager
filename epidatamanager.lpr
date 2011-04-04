@@ -13,16 +13,22 @@ uses
   Forms, main, project_frame, design_frame, workflow_frame, managerprocs,
   sysutils, project_settings, project_settings_field_frame,
   project_settings_interface, about, epidatacore,
-  project_settings_general_frame, settings2, settings_visualdesign_frame,
-  settings_fielddefinitions_frame, settings_advanced_frame, settings2_interface,
+  project_settings_general_frame,
+  // Settings - import order defines order!
+  settings2,  settings2_interface,
+  settings_general_frame,
+  settings_advanced_frame,
+  settings_fielddefinitions_frame,
+  settings_visualdesign_frame,
+  // No mor settings
   settings2_var, structure_form, structure_datafile_frame,
   valuelabelseditor_form, structure_valuelabelset_frame, design_controls,
   UniqueInstanceRaw, copyobject, design_fieldproperties_frame, 
   design_sectionproperties_frame, design_headingproperties_frame,
   design_propertiesbase_frame, design_types, import_structure_form, 
   manager_messages, project_settings_study_frame, 
-project_settings_study_contentdesc_frame, 
-project_settings_study_ownership_frame;
+  project_settings_study_contentdesc_frame,
+  project_settings_study_ownership_frame;
 
 {$R *.res}
 

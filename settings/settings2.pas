@@ -18,6 +18,7 @@ type
     BitBtn2: TBitBtn;
     Panel1: TPanel;
     SettingsView: TTreeView;
+    Splitter1: TSplitter;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure SettingsViewChange(Sender: TObject; Node: TTreeNode);
