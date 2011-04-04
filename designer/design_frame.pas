@@ -1818,7 +1818,7 @@ begin
   with TEpiField(EpiControl) do
   begin
     FieldTypeLabel.Caption    := EpiTypeNames[FieldType];
-    DefaultValueLabel.Caption := ''; // TODO : Set when implement in core.
+    DefaultValueLabel.Caption := BoolToStr(HasDefaultValue, DefaultValueAsString, '');
     if Assigned(ValueLabelSet) then
       ValueLabelLabel.Caption := ValueLabelSet.Name
     else
@@ -1826,10 +1826,12 @@ begin
     RangeLabel.Caption        := BoolToStr(Assigned(Ranges), 'Range', '');
     KeyLabel.Caption          := ''; // TODO : Set when implement in core.
     ExtendedLabel.Caption     := BoolToStr(Assigned(Jumps),       'J', ' ') +
-                                 BoolToStr(EntryMode=emMustEnter, 'M', '') +
-                                 BoolToStr(EntryMode=emNoEnter,   'N', '') +
-                                 BoolToStr(EntryMode=emDefault,   ' ', '') +
-                                 BoolToStr(ConfirmEntry,          'C', ' ');
+                                 BoolToStr(RepeatValue,           'R', ' ') +
+                                 BoolToStr(EntryMode=emMustEnter, 'M', '')  +
+                                 BoolToStr(EntryMode=emNoEnter,   'N', '')  +
+                                 BoolToStr(EntryMode=emDefault,   ' ', '')  +
+                                 BoolToStr(ConfirmEntry,          'F', ' ') +
+                                 BoolToStr(Assigned(Calculation), 'C', ' ');
   end else begin
     FieldTypeLabel.Caption    := '';
     DefaultValueLabel.Caption := '';

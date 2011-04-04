@@ -8,7 +8,6 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, epicustombase, design_types;
 
 type
-  { DesignPropertiesFrame }
 
   { TDesignPropertiesFrame }
 

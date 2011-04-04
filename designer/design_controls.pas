@@ -122,6 +122,7 @@ type
     procedure ApplyActionExecute(Sender: TObject);
     procedure CancelActionExecute(Sender: TObject);
     procedure CloseActionExecute(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -755,6 +756,11 @@ end;
 procedure TDesignControlsForm.CloseActionExecute(Sender: TObject);
 begin
   if FActiveFrame.ValidateControl then Close;
+end;
+
+procedure TDesignControlsForm.FormActivate(Sender: TObject);
+begin
+  FActiveFrame.UpdateFormContent;
 end;
 
 procedure TDesignControlsForm.FormCloseQuery(Sender: TObject;

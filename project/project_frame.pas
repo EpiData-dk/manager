@@ -458,6 +458,8 @@ begin
   if FileExistsUTF8(ProjectFileName + '.bak') then
     DeleteFileUTF8(ProjectFileName + '.bak');
   DataFilesTreeView.Items.Clear;
+
+  Modified := false;
 end;
 
 {$IFDEF EPI_DEBUG}
@@ -668,7 +670,8 @@ var
   res: LongInt;
 begin
   {$IFDEF EPI_RELEASE}
-  if Modified or EpiDocument.Modified then
+  if Modified or
+    (Assigned(EpiDocument) and (EpiDocument.Modified)) then
   begin
     res := MessageDlg('Warning', 'Content has been modified since last save.' + LineEnding +
              'Save before close?', mtWarning, mbYesNoCancel, 0, mbCancel);
