@@ -31,10 +31,10 @@ object DesignControlsForm: TDesignControlsForm
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
-      Left = 314
+      Left = 313
       Height = 32
       Top = 5
-      Width = 70
+      Width = 71
       Action = CloseAction
       Anchors = [akRight, akBottom]
       AutoSize = True
@@ -48,9 +48,9 @@ object DesignControlsForm: TDesignControlsForm
       AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
       Left = 224
-      Height = 34
-      Top = 4
-      Width = 80
+      Height = 32
+      Top = 5
+      Width = 79
       Action = CancelAction
       Anchors = [akRight, akBottom]
       AutoSize = True
@@ -64,8 +64,8 @@ object DesignControlsForm: TDesignControlsForm
       AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
       Left = 11
-      Height = 34
-      Top = 4
+      Height = 32
+      Top = 5
       Width = 72
       Action = ApplyAction
       Anchors = [akLeft, akBottom]

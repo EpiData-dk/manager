@@ -193,9 +193,9 @@ resourcestring
 
 type
   TJumpComponents = record
-    ValueEdit: PtrInt;
-    GotoCombo: PtrInt;
-    ResetCombo: PtrInt;
+    ValueEdit: PtrUInt;
+    GotoCombo: PtrUInt;
+    ResetCombo: PtrUInt;
   end;
   PJumpComponents = ^TJumpComponents;
 
@@ -539,9 +539,9 @@ begin
   Jrec := New(PJumpComponents);
   with Jrec^ do
   begin
-    ValueEdit := PtrInt(JVE);
-    GotoCombo := PtrInt(GFC);
-    ResetCombo := PtrInt(RVC);
+    ValueEdit := PtrUInt(JVE);
+    GotoCombo := PtrUInt(GFC);
+    ResetCombo := PtrUInt(RVC);
   end;
   FJumpComponentsList.Add(JRec);
   Result := JRec;
