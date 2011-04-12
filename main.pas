@@ -15,6 +15,8 @@ type
 
   TMainForm = class(TForm)
     EpiDataTutorialsMenuItem: TMenuItem;
+    MenuItem1: TMenuItem;
+    PackMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
     UserAccessBtn: TButton;
     GCPBtn: TButton;
@@ -41,7 +43,6 @@ type
     NewProjectMenuItem: TMenuItem;
     ResetWindowPosMenuItem: TMenuItem;
     ValueLabelsMenuItem: TMenuItem;
-    ProjectMenuDivider1: TMenuItem;
     ProjectStructureMenuItem: TMenuItem;
     ToolsMenu: TMenuItem;
     ShowAboutAction: TAction;
@@ -112,6 +113,7 @@ type
     property  Modified: boolean read FModified write SetModified;
     procedure RestoreDefaultPos;
     procedure UpdateRecentFiles;
+    procedure AssignActionLinks;
     procedure BeginUpdatingForm;
     procedure EndUpdatingForm;
   end;
@@ -411,20 +413,7 @@ begin
   FActiveFrame.NewDataFormAction.Execute;
   PageControl1.ActivePage := TabSheet;
 
-  // Only as long as one project is created!
-  UpdateMainMenu;
-  SaveProjectMenuItem.Action := FActiveFrame.SaveProjectAction;
-  SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
-
-  PasteAsHeadingMenuItem.Action := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
-  PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
-  PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
-  PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-
-  ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
-  ExportStataMenuItem.Action       := FActiveFrame.ExportStataAction;
-  ProjectStructureMenuItem.Action  := FActiveFrame.ShowStructureAction;
-  ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
+  AssignActionLinks;
 
   Inc(TabNameCount);
 end;
@@ -558,6 +547,27 @@ begin
       {$ENDIF}
     RecentFilesSubMenu.Add(Mi);
   end;
+end;
+
+procedure TMainForm.AssignActionLinks;
+begin
+  // Only as long as one project is created!
+  if Not Assigned(FActiveFrame) then exit;
+
+  UpdateMainMenu;
+  SaveProjectMenuItem.Action := FActiveFrame.SaveProjectAction;
+  SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
+
+  PackMenuItem.Action           := TDesignFrame(FActiveFrame.ActiveFrame).PackFileAction;
+  PasteAsHeadingMenuItem.Action := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
+  PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
+  PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
+  PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
+
+  ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
+  ExportStataMenuItem.Action       := FActiveFrame.ExportStataAction;
+  ProjectStructureMenuItem.Action  := FActiveFrame.ShowStructureAction;
+  ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
 end;
 
 procedure TMainForm.BeginUpdatingForm;

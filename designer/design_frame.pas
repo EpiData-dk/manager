@@ -21,6 +21,7 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    PackFileAction: TAction;
     CopyControlPopupMenuItem: TMenuItem;
     CopyControlMenuItem: TMenuItem;
     ToolBarPanel: TPanel;
@@ -178,6 +179,7 @@ type
     procedure   NewOtherFieldMenuClick(Sender: TObject);
     procedure   NewStringFieldActionExecute(Sender: TObject);
     procedure   NewYMDFieldActionExecute(Sender: TObject);
+    procedure   PackFileActionExecute(Sender: TObject);
     procedure   PasteAsFloatActionExecute(Sender: TObject);
     procedure   PasteAsHeadingActionExecute(Sender: TObject);
     procedure   PasteAsIntActionExecute(Sender: TObject);
@@ -993,6 +995,32 @@ end;
 procedure TDesignFrame.NewYMDFieldActionExecute(Sender: TObject);
 begin
   NewShortCutFieldControl(ftYMDDate, FActiveDockSite);
+end;
+
+procedure TDesignFrame.PackFileActionExecute(Sender: TObject);
+var
+  S: LongInt;
+begin
+  if DataFile.Size > 0 then
+  begin
+    S := DataFile.Size;
+    if MessageDlg('Warning!',
+      'Packing the dataset will irriversibly remove ALL records marked for deletion!' + LineEnding +
+      'Do you wish to continue?',
+      mtWarning,
+      mbYesNo,
+      0,
+      mbNo
+    ) = mrNo then
+      Exit
+    else
+      DataFile.Pack;
+
+    if S = DataFile.Size then
+      ShowHintMsg(Self, RecordsPanel, 'No records removed!')
+    else
+      ShowHintMsg(Self, RecordsPanel, Format('Removed %s records!', [S - DataFile.Size]));
+  end;
 end;
 
 procedure TDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
@@ -2579,6 +2607,9 @@ begin
   PasteAsIntAction.ShortCut     := 0;
   PasteAsFloatAction.ShortCut   := 0;
   PasteAsStringAction.ShortCut  := 0;
+
+  DateToolButton.Tag := Ord(ManagerSettings.DefaultDateType);
+  DateToolButton.ImageIndex := Ord(ManagerSettings.DefaultDateType);
 
   CtrlS := KeyToShortCut(VK_G, [ssCtrl]);
   Case ManagerSettings.PasteSpecialType of

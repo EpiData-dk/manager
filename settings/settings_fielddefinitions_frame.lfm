@@ -13,7 +13,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     Left = 10
     Height = 18
     Top = 160
-    Width = 80
+    Width = 82
     BorderSpacing.Left = 10
     Caption = 'Default date'
     ParentColor = False
@@ -28,15 +28,13 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Right = 10
     ItemHeight = 0
-    ItemIndex = 0
     Items.Strings = (
       'DD/MM/YYYY'
       'MM/DD/YYYY'
-      'YY/MM/DDDD'
+      'YYYY/MM/DD'
     )
     Style = csDropDownList
     TabOrder = 0
-    Text = 'DD/MM/YYYY'
   end
   object GroupBox1: TGroupBox
     AnchorSideLeft.Control = Owner
@@ -60,7 +58,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 18
       Hint = 'Default field length for:'#10'Integer and IdNum'
       Top = 11
-      Width = 50
+      Width = 51
       Caption = 'Integer:'
       ParentColor = False
       ParentShowHint = False
@@ -69,11 +67,11 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     object Label11: TLabel
       AnchorSideRight.Control = GroupBox1
       AnchorSideRight.Side = asrBottom
-      Left = 674
+      Left = 672
       Height = 18
       Hint = 'Default field length for:'#10'Float'
       Top = 48
-      Width = 58
+      Width = 60
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 5
       Caption = 'decimals'
@@ -152,7 +150,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 27
       Hint = 'Default decimal length for:'#10'Float'
       Top = 39
-      Width = 279
+      Width = 277
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Right = 5
       CharCase = ecNormal
@@ -168,7 +166,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 18
       Hint = 'Default field length for:'#10'Float'
       Top = 48
-      Width = 36
+      Width = 38
       Caption = 'Float:'
       ParentColor = False
       ParentShowHint = False
@@ -259,7 +257,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Left = 10
       Height = 18
       Top = 15
-      Width = 68
+      Width = 73
       BorderSpacing.Left = 10
       Caption = 'Field Prefix'
       ParentColor = False

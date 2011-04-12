@@ -410,6 +410,8 @@ begin
   end;
   FFileTimeStamp := FileAgeUTF8(fn);
 
+  MainForm.AssignActionLinks;
+
   // Create backup process.
   InitBackupTimer;
 

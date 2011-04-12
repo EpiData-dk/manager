@@ -2148,6 +2148,11 @@ object DesignFrame: TDesignFrame
       OnUpdate = PasteControlActionUpdate
       ShortCut = 16470
     end
+    object PackFileAction: TAction
+      Category = 'File'
+      Caption = 'Pack Dataset'
+      OnExecute = PackFileActionExecute
+    end
   end
   object DesignControlPopUpMenu: TPopupMenu
     Images = DesignerImageList
@@ -2330,7 +2335,7 @@ object DesignFrame: TDesignFrame
   end
   object DateFieldPopupMenu: TPopupMenu
     Images = DesignerImageList
-    left = 120
+    left = 192
     top = 32
     object NewDMYFieldMenu: TMenuItem
       Tag = 4
@@ -2581,8 +2586,8 @@ object DesignFrame: TDesignFrame
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList
-    left = 152
-    top = 32
+    left = 232
+    top = 48
     object TodayDateSubMenu: TMenuItem
       Caption = 'Auto Date...'
       Hint = 'Today Fields'

@@ -1,8 +1,8 @@
 object MainForm: TMainForm
-  Left = 360
+  Left = 730
   Height = 603
   Hint = 'New EpiData Project (XML)'
-  Top = 224
+  Top = 272
   Width = 910
   Caption = 'MainForm'
   ClientHeight = 578
@@ -170,7 +170,7 @@ object MainForm: TMainForm
       object ValueLabelsMenuItem: TMenuItem
         Caption = 'ValueLabels'
       end
-      object ProjectMenuDivider1: TMenuItem
+      object MenuItem1: TMenuItem
         Caption = '-'
       end
       object ProjectPropertiesMenuItem: TMenuItem
@@ -181,6 +181,9 @@ object MainForm: TMainForm
       Caption = 'Tools'
       object ExportStataMenuItem: TMenuItem
         Caption = 'ExportStata'
+      end
+      object PackMenuItem: TMenuItem
+        Caption = 'Pack'
       end
     end
     object HelpMenu: TMenuItem
