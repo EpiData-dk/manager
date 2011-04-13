@@ -1019,7 +1019,7 @@ begin
     if S = DataFile.Size then
       ShowHintMsg(Self, RecordsPanel, 'No records removed!')
     else
-      ShowHintMsg(Self, RecordsPanel, Format('Removed %s records!', [S - DataFile.Size]));
+      ShowHintMsg(Self, RecordsPanel, Format('Removed %d records!', [S - DataFile.Size]));
   end;
 end;
 
