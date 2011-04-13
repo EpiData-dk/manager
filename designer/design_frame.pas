@@ -1021,6 +1021,7 @@ begin
     else
       ShowHintMsg(Self, RecordsPanel, Format('Removed %d records!', [S - DataFile.Size]));
   end;
+  UpdateStatusbarControl((FActiveControl as IDesignEpiControl).EpiControl);
 end;
 
 procedure TDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
