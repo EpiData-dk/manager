@@ -1005,7 +1005,7 @@ begin
   begin
     S := DataFile.Size;
     if MessageDlg('Warning!',
-      'Packing the dataset will irriversibly remove ALL records marked for deletion!' + LineEnding +
+      'Packing the dataset will permanently remove ALL records marked for deletion!' + LineEnding +
       'Do you wish to continue?',
       mtWarning,
       mbYesNo,

@@ -20,6 +20,9 @@ type
     Bevel3: TBevel;
     Bevel4: TBevel;
     CalcFieldLabel: TLabel;
+    CompareToCombo: TComboBox;
+    CompareTypeCombo: TComboBox;
+    CompareGroupBox: TGroupBox;
     Label23: TLabel;
     Label24: TLabel;
     AsYearRadio: TRadioButton;
@@ -27,6 +30,8 @@ type
     AsWeeksRadio: TRadioButton;
     AsDaysRadio: TRadioButton;
     AsTimeRadio: TRadioButton;
+    Label25: TLabel;
+    Label26: TLabel;
     TimeResultCombo: TComboBox;
     Field1Combo: TComboBox;
     Field2Combo: TComboBox;
@@ -143,6 +148,7 @@ type
     function  GetField: TEpiField;
     function  UpdateValueLabels: boolean;
     procedure UpdateValueLabelWriteTo;
+    procedure UpdateComparison;
     procedure ValueLabelSetHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure ValueLabelSetsHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   private
@@ -388,6 +394,22 @@ begin
     AddFieldToCombo(FDataFile.Field[i], StringFieldTypes, ValueLabelWriteToComboBox);
   FinishCombo(ValueLabelWriteToComboBox, nil);
   UpdateFieldCombo(ValueLabelWriteToComboBox, Field.ValueLabelWriteField);
+end;
+
+procedure TFieldPropertiesFrame.UpdateComparison;
+var
+  i: Integer;
+begin
+  InitCombo(CompareToCombo);
+  for i := 0 to FDataFile.Fields.Count -1 do
+    AddFieldToCombo(FDataFile.Field[i], NativeFieldTypeSetFromFieldType(Field.FieldType) - AutoFieldTypes, CompareToCombo);
+  FinishCombo(CompareToCombo, nil);
+  if Assigned(Field.Comparison) then
+  begin
+    UpdateFieldCombo(CompareToCombo, Field.Comparison.CompareField);
+    CompareTypeCombo.ItemIndex := Integer(Field.Comparison.CompareType);
+  end else
+    CompareTypeCombo.ItemIndex := 3;
 end;
 
 function TFieldPropertiesFrame.GetField: TEpiField;
@@ -986,11 +1008,6 @@ begin
       Field.ValueLabelSet := nil
     else
       Field.ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
-  Field.ShowValueLabel := ShowValueLabelChkBox.Checked;
-
-  if ValueLabelWriteToComboBox.Enabled and
-     (ValueLabelWriteToComboBox.ItemIndex >= 0) then
-    Field.ValueLabelWriteField := TEpiField(ValueLabelWriteToComboBox.Items.Objects[ValueLabelWriteToComboBox.ItemIndex]);
 
   if FromEdit.Text <> '' then
   begin
@@ -1026,14 +1043,34 @@ begin
         end;
     end;
   end;
+  if Field is TEpiCustomAutoField then
+    TEpiCustomAutoField(Field).AutoMode := TEpiAutoUpdateMode(PtrUInt(UpdateModeRadioGrp.Items.Objects[UpdateModeRadioGrp.ItemIndex]));
 
   // Extended page
   Field.EntryMode := TEpiEntryMode(PtrUInt(EntryRadioGroup.Items.Objects[EntryRadioGroup.ItemIndex]));
   Field.ConfirmEntry := ConfirmEntryChkBox.Checked;
   Field.RepeatValue := RepeatValueChkBox.Checked;
-  if Field is TEpiCustomAutoField then
-    TEpiCustomAutoField(Field).AutoMode := TEpiAutoUpdateMode(PtrUInt(UpdateModeRadioGrp.Items.Objects[UpdateModeRadioGrp.ItemIndex]));
+  if DefaultValueEdit.Text <> '' then
+    Field.DefaultValueAsString := DefaultValueEdit.Text
+  else
+    Field.HasDefaultValue := false;
+  Field.ShowValueLabel := ShowValueLabelChkBox.Checked;
+  if ValueLabelWriteToComboBox.Enabled and
+     (ValueLabelWriteToComboBox.ItemIndex >= 0) then
+    Field.ValueLabelWriteField := TEpiField(ValueLabelWriteToComboBox.Items.Objects[ValueLabelWriteToComboBox.ItemIndex]);
+  if CompareGroupBox.Visible then
+  begin
+    if CompareToCombo.ItemIndex = CompareToCombo.Items.IndexOfObject(nil) then
+      Field.Comparison.Free
+    else begin
+      if Assigned(Field.Comparison) then Field.Comparison.Free;
+      Field.Comparison := TEpiComparison.Create(Field);
+      Field.Comparison.CompareType := TEpiComparisonType(CompareTypeCombo.ItemIndex);
+      Field.Comparison.CompareField := TEpiField(CompareToCombo.Items.Objects[CompareToCombo.ItemIndex]);
+    end;
+  end;
 
+  // Jumps
   Field.Jumps.Free;
   if (FJumpComponentsList.Count > 0) then
   begin
@@ -1062,11 +1099,6 @@ begin
       end;
     end;
   end;
-
-  if DefaultValueEdit.Text <> '' then
-    Field.DefaultValueAsString := DefaultValueEdit.Text
-  else
-    Field.HasDefaultValue := false;
 
   // Calculate
   if Assigned(Field.Calculation) then
@@ -1209,6 +1241,7 @@ begin
   ConfirmEntryChkBox.Visible      := Field.FieldType in ConfirmEntryFieldTypes;
   AutoValuesGrpBox.Visible        := Field.FieldType in (RepeatValueFieldTypes + DefaultValueFieldTypes);
   ValueLabelSettingGrpBox.Visible := Field.FieldType in ValueLabelFieldTypes;
+  CompareGroupBox.Visible         := Field.FieldType in CompareFieldTypes;
   FieldAdvancedSheet.TabVisible   := not (Field.FieldType in AutoFieldTypes);
 
   // - jumps
@@ -1252,6 +1285,7 @@ begin
   ValueLabelSettingGrpBox.Enabled := Assigned(Field.ValueLabelSet);
   ShowValueLabelChkBox.Checked := Field.ShowValueLabel;
   UpdateValueLabelWriteTo;
+  UpdateComparison;
 
   // - jumps
   UpdateJumps;
