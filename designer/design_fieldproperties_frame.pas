@@ -20,6 +20,7 @@ type
     Bevel3: TBevel;
     Bevel4: TBevel;
     CalcFieldLabel: TLabel;
+    ForcePickListChkBox: TCheckBox;
     CompareToCombo: TComboBox;
     CompareTypeCombo: TComboBox;
     CompareGroupBox: TGroupBox;
@@ -1055,6 +1056,7 @@ begin
   else
     Field.HasDefaultValue := false;
   Field.ShowValueLabel := ShowValueLabelChkBox.Checked;
+  Field.ForcePickList  := ForcePickListChkBox.Checked;
   if ValueLabelWriteToComboBox.Enabled and
      (ValueLabelWriteToComboBox.ItemIndex >= 0) then
     Field.ValueLabelWriteField := TEpiField(ValueLabelWriteToComboBox.Items.Objects[ValueLabelWriteToComboBox.ItemIndex]);
@@ -1274,16 +1276,17 @@ begin
     ToEdit.Text   := '';
   end;
   if Field is TEpiCustomAutoField then
-    UpdateModeRadioGrp.ItemIndex := UpdateModeRadioGrp.Items.IndexOfObject(TObject(PtrUInt(TEpiCustomAutoField(Field).AutoMode)));
+    UpdateModeRadioGrp.ItemIndex  := UpdateModeRadioGrp.Items.IndexOfObject(TObject(PtrUInt(TEpiCustomAutoField(Field).AutoMode)));
 
   // - extended
-  EntryRadioGroup.ItemIndex := EntryRadioGroup.Items.IndexOfObject(TObject(PtrUInt(Field.EntryMode)));
-  ConfirmEntryChkBox.Checked := Field.ConfirmEntry;
-  RepeatValueChkBox.Checked := Field.RepeatValue;
-  DefaultValueEdit.Text := Field.DefaultValueAsString;
+  EntryRadioGroup.ItemIndex       := EntryRadioGroup.Items.IndexOfObject(TObject(PtrUInt(Field.EntryMode)));
+  ConfirmEntryChkBox.Checked      := Field.ConfirmEntry;
+  RepeatValueChkBox.Checked       := Field.RepeatValue;
+  DefaultValueEdit.Text           := Field.DefaultValueAsString;
 
   ValueLabelSettingGrpBox.Enabled := Assigned(Field.ValueLabelSet);
-  ShowValueLabelChkBox.Checked := Field.ShowValueLabel;
+  ShowValueLabelChkBox.Checked    := Field.ShowValueLabel;
+  ForcePickListChkBox.Checked     := Field.ForcePickList;
   UpdateValueLabelWriteTo;
   UpdateComparison;
 
