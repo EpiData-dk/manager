@@ -12,8 +12,7 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <MinorVersionNr Value="7"/>
-      <RevisionNr Value="2"/>
+      <MinorVersionNr Value="8"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>

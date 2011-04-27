@@ -55,8 +55,8 @@ procedure RegisterSettingFrame(const Order: byte;
 const
   ManagerVersion: TEpiVersionInfo = (
     VersionNo: 0;
-    MajorRev:  7;
-    MinorRev:  2;
+    MajorRev:  8;
+    MinorRev:  0;
     BuildNo:   0;
   );
 
