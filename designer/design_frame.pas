@@ -215,7 +215,7 @@ type
     procedure   ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure   PasteAsField(FieldType: TEpiFieldType);
-    procedure   PasteEpiDoc(Const ImportDoc: TEpiDocument);
+    procedure   PasteEpiDoc(Const ImportDoc: TEpiDocument; RenameVL, RenameFields: boolean);
   private
     { Docksite methods }
     // - mouse
@@ -607,7 +607,8 @@ begin
     MainForm.BeginUpdatingForm;
 
     for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
-      PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments[i]));
+      PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments[i]),
+        ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex=1, ImpStructurForm.FieldsRenameGrpBox.ItemIndex=1);
 
     EnterControl(TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data));
   finally
@@ -1562,7 +1563,8 @@ begin
   end;
 end;
 
-procedure TDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument);
+procedure TDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument; RenameVL,
+  RenameFields: boolean);
 var
   Pt: TPoint;
   i: Integer;
@@ -1590,15 +1592,22 @@ var
 
   procedure CopyField(Const AField: TEpiField; AParent: TWinControl; Const AddTop: Integer);
   var
-    NField: TEpiField;
+    NField, OField: TEpiField;
   begin
+    OField := DataFile.Fields.FieldByName[AField.Name];
+    if (not RenameFields) and
+       Assigned(OField) and
+       (AField.FieldType = OField.FieldType) then
+      exit;
+
     NField := NewField(AField.FieldType);
     // Can be used later on...
     NField.ObjectData := PtrUInt(AField);
     AField.ObjectData := PtrUInt(NField);
     With NField do
     begin
-      Name           := NewFieldName(AField.Name);
+      if not ValidateRename(AField.Name, true) then
+        Name := NewFieldName(AField.Name);
 
       Question.Assign(AField.Question);
       Top            := Afield.Top + AddTop;
@@ -1615,7 +1624,7 @@ var
         Ranges.Assign(AField.Ranges);
       end;
 
-      // Cannot copy jumps, since a jump-yo field may not exists yet.
+      // Cannot copy jumps, since a jump-to field may not exists yet.
 
       // The ValuelabelSet have previously been assigned to new Document and hence,
       // stored the pointer to the new VLSet in ObjectData.
@@ -1673,6 +1682,18 @@ begin
     for i := 0 to ImportDoc.ValueLabelSets.Count - 1 do
     begin
       OldSet := ImportDoc.ValueLabelSets[i];
+      VLSet  := DataFile.ValueLabels.GetValueLabelSetByName(OldSet.Name);
+
+      // Rename vs. Keep options.
+      if (not RenameVL) and
+         Assigned(VLSet) and
+         (VLSet.LabelType = OldSet.LabelType) then
+      begin
+        // Old set must carry a pointer to "new" set, else field copy will fail.
+        OldSet.ObjectData := PtrUInt(VLSet);
+        continue;
+      end;
+
       VLSet := DataFile.ValueLabels.NewValueLabelSet(OldSet.LabelType);
       VLSet.Assign(OldSet);
       OldSet.ObjectData := PtrUInt(VLSet);
@@ -1714,31 +1735,6 @@ begin
       NField.Jumps[j].JumpToField := TEpiField(JumpToField.ObjectData);;
     end;
   end;
-
-  {
-  begin
-    TheSection := ImportDoc.DataFiles[0].Section[i];
-    if TheSection = ImportDoc.DataFiles[0].MainSection then continue;
-
-    NSection := NewSection;
-    NSection.Assign(TheSection);
-    NSection.Top := NSection.Top + Pt.Y;
-    with NSection do
-      WinSection := TWinControl(NewSectionControl(Point(Left, Top), Point(Left + Width, Top + Height), NSection));
-
-    for j := 0 to NSection.Fields.Count - 1 do
-    with NSection.Field[j] do
-    begin
-      // OBS!!! NSection.Field[j] = TheSection.Field[j]
-      if Assigned(TheSection.Field[j].ValueLabelSet) then
-        ValueLabelSet := TEpiValueLabelSet(TheSection.Field[j].ValueLabelSet.ObjectData);
-      Name := NewFieldName(TheSection.Field[j].Name);
-      NewDesignControl(TDesignField, WinSection, Point(Left, Top), NSection.Field[j]);
-    end;
-    for j := 0 to NSection.Headings.Count - 1 do
-    with NSection.Heading[j] do
-      NewDesignControl(TDesignHeading, WinSection, Point(Left, Top), NSection.Heading[j]);
-  end; }
 end;
 
 procedure TDesignFrame.DesignBoxMouseWheel(Sender: TObject; Shift: TShiftState;

@@ -17,12 +17,16 @@ type
     AddFilesAction: TAction;
     CancelAction: TAction;
     ErrorListBox: TListBox;
+    Label1: TLabel;
     OkAction: TAction;
     ActionList1: TActionList;
     CancelBtn: TBitBtn;
     OkApplyPanel: TPanel;
     OkBtn: TBitBtn;
     OpenBtn: TBitBtn;
+    OptionsPanel: TPanel;
+    FieldsRenameGrpBox: TRadioGroup;
+    ValueLabelsRenameGrpBox: TRadioGroup;
     StructureGrid: TStringGrid;
     procedure CancelActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
