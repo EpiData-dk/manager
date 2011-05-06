@@ -185,6 +185,9 @@ object MainForm: TMainForm
       object PackMenuItem: TMenuItem
         Caption = 'Pack'
       end
+      object EntryClientMenuItem: TMenuItem
+        Action = StartEntryClientAction
+      end
     end
     object HelpMenu: TMenuItem
       Caption = '&Help'
@@ -291,6 +294,12 @@ object MainForm: TMainForm
       ImageIndex = 0
       OnExecute = OpenProjectActionExecute
       ShortCut = 16463
+    end
+    object StartEntryClientAction: TAction
+      Category = 'Tools'
+      Caption = 'EpiData EntryClient'
+      OnExecute = StartEntryClientActionExecute
+      OnUpdate = StartEntryClientActionUpdate
     end
   end
 end

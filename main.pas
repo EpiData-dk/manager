@@ -14,8 +14,10 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    StartEntryClientAction: TAction;
     EpiDataTutorialsMenuItem: TMenuItem;
     MenuItem1: TMenuItem;
+    EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
     UserAccessBtn: TButton;
@@ -85,6 +87,8 @@ type
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
     procedure ShowAboutActionExecute(Sender: TObject);
+    procedure StartEntryClientActionExecute(Sender: TObject);
+    procedure StartEntryClientActionUpdate(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -309,6 +313,16 @@ begin
   Frm := TAboutForm.Create(Self);
   Frm.ShowModal;
   Frm.Free;
+end;
+
+procedure TMainForm.StartEntryClientActionExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TMainForm.StartEntryClientActionUpdate(Sender: TObject);
+begin
+  //
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);

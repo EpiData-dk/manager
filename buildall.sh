@@ -29,6 +29,7 @@ compile() {
 
 #  echo "make clean release CPU_TARGET=$MY_CPU_TARGET OS_TARGET=$MY_OS_TARGET > /dev/null"
    make clean release CPU_TARGET=$MY_CPU_TARGET OS_TARGET=$MY_OS_TARGET > /dev/null 
+#   make clean release CPU_TARGET=$MY_CPU_TARGET OS_TARGET=$MY_OS_TARGET
 
 #  make clean debug CPU_TARGET=$MY_CPU_TARGET OS_TARGET=$MY_OS_TARGET > /dev/null
 
@@ -122,6 +123,11 @@ get_version_info() {
   fi
 
   PROGRAM_VERSION="$V1.$V2.$V3.$V4"
+
+  echo "    VersionNo: $V1;" > $PROGRAMNAME.version.inc
+  echo "    MajorRev:  $V2;" >> $PROGRAMNAME.version.inc
+  echo "    MinorRev:  $V3;" >> $PROGRAMNAME.version.inc
+  echo "    BuildNo:   $V4;" >> $PROGRAMNAME.version.inc
 }
 get_version_info
 

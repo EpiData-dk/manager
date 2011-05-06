@@ -49,12 +49,18 @@ procedure LoadFormPosition(Var AForm: TForm; Const SectionName: string);
 procedure AddToRecent(Const AFilename: string);
 
 const
-  ManagerVersion: TEpiVersionInfo = (
-    VersionNo: 0;
-    MajorRev:  8;
-    MinorRev:  0;
-    BuildNo:   0;
-  );
+  {$IFDEF EPI_SHOWREVISION}
+    ManagerVersion: TEpiVersionInfo = (
+    {$I epidatamanager.version.inc}
+    );
+  {$ELSE}
+    ManagerVersion: TEpiVersionInfo = (
+      VersionNo: 0;
+      MajorRev:  0;
+      MinorRev:  0;
+      BuildNo:   0;
+    );
+  {$ENDIF}
 
 implementation
 
