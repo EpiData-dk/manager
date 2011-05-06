@@ -6,13 +6,14 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
+  settings2, settings2_var, settings2_interface,
   project_settings_interface, epicustombase, epistudy;
 
 type
 
   { TProjectSetting_ContentDescFrame }
 
-  TProjectSetting_ContentDescFrame = class(TFrame, IProjectSettingsFrame)
+  TProjectSetting_ContentDescFrame = class(TFrame, IProjectSettingsFrame, ISettingsFrame)
     GeoCoverageEdit: TEdit;
     AbstractMemo: TMemo;
     PurposeMemo: TMemo;
@@ -27,16 +28,18 @@ type
   private
     { private declarations }
     Study: TEpiStudy;
+    FManagerSettings: PManagerSettings;
   public
     { public declarations }
     procedure SetProjectSettings(AValue: TEpiCustomBase);
+    procedure SetSettings(Data: PManagerSettings);
     function  ApplySettings: boolean;
   end;
 
 implementation
 
 uses
-  epidocument;
+  epidocument, project_settings_study_frame;
 {$R *.lfm}
 
 { TProjectSetting_ContentDescFrame }
@@ -55,8 +58,24 @@ begin
   end;
 end;
 
+procedure TProjectSetting_ContentDescFrame.SetSettings(Data: PManagerSettings);
+begin
+  FManagerSettings := Data;
+  with FManagerSettings^ do
+  begin
+    PurposeMemo.Text := ContPurpose;
+    AbstractMemo.Text := ContAbstract;
+    CitationsMemo.Text := ContCitation;
+    GeoCoverageEdit.Text := ContGeoCover;
+    TimeCoverageEdit.Text := ContTimeCover;
+  end;
+end;
+
 function TProjectSetting_ContentDescFrame.ApplySettings: boolean;
 begin
+  result := true;
+
+  if Assigned(Study) then
   with Study do
   begin
     Purpose.Text := PurposeMemo.Text;
@@ -65,7 +84,16 @@ begin
     GeographicalCoverage.Text := GeoCoverageEdit.Text;
     TimeCoverage.Text := TimeCoverageEdit.Text;
   end;
-  result := true;
+
+  if Assigned(FManagerSettings) then
+  with FManagerSettings^ do
+  begin
+    ContPurpose := PurposeMemo.Text;
+    ContAbstract := AbstractMemo.Text;
+    ContCitation := CitationsMemo.Text;
+    ContGeoCover := GeoCoverageEdit.Text;
+    ContTimeCover := TimeCoverageEdit.Text;
+  end;
 end;
 
 end.

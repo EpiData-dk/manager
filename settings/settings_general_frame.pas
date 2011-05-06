@@ -79,11 +79,5 @@ begin
   Result := true;
 end;
 
-initialization
-
-begin
-  RegisterSettingFrame(0, TSettings_GeneralFrame, 'General');
-end;
-
 end.
 

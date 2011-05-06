@@ -1,7 +1,7 @@
 object ProjectSettingsForm: TProjectSettingsForm
-  Left = 746
+  Left = 2089
   Height = 378
-  Top = 329
+  Top = 246
   Width = 627
   ActiveControl = ProjectSettingsView
   Caption = 'Project Properties'

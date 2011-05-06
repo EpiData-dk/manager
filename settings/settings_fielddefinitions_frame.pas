@@ -104,11 +104,5 @@ begin
   Result := true;
 end;
 
-initialization
-
-begin
-  RegisterSettingFrame(2, TSettings_FieldDefinitionFrame, 'Field Definitions');
-end;
-
 end.
 

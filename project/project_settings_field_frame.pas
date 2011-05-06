@@ -6,22 +6,26 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
-  project_settings_interface, epicustombase, episettings;
+  project_settings_interface, epicustombase, episettings,
+  // for use in settings interface
+  settings2_interface, settings2_var, settings2;
 
 type
 
   { TProjectSettings_FieldFrame }
 
-  TProjectSettings_FieldFrame = class(TFrame, IProjectSettingsFrame)
+  TProjectSettings_FieldFrame = class(TFrame, IProjectSettingsFrame, ISettingsFrame)
     ShowFieldNamesChkBox: TCheckBox;
     ShowFieldBordersChkBox: TCheckBox;
   private
     { private declarations }
     FProjectSettings: TEpiProjectSettings;
+    FManagerSettings: PManagerSettings;
   public
     { public declarations }
     procedure SetProjectSettings(AValue: TEpiCustomBase);
     function  ApplySettings: boolean;
+    procedure SetSettings(Data: PManagerSettings);
   end;
 
 implementation
@@ -44,10 +48,30 @@ end;
 
 function TProjectSettings_FieldFrame.ApplySettings: boolean;
 begin
-  FProjectSettings.ShowFieldNames   := ShowFieldNamesChkBox.Checked;
-  FProjectSettings.ShowFieldBorders := ShowFieldBordersChkBox.Checked;
-
   result := true;
+
+  if Assigned(FProjectSettings) then
+  begin
+    FProjectSettings.ShowFieldNames   := ShowFieldNamesChkBox.Checked;
+    FProjectSettings.ShowFieldBorders := ShowFieldBordersChkBox.Checked;
+  end;
+
+  if Assigned(FManagerSettings) then
+  with FManagerSettings^ do
+  begin
+    ShowNames   := ShowFieldNamesChkBox.Checked;
+    ShowBorders := ShowFieldBordersChkBox.Checked;
+  end;
+end;
+
+procedure TProjectSettings_FieldFrame.SetSettings(Data: PManagerSettings);
+begin
+  FManagerSettings := Data;
+  with FManagerSettings^ do
+  begin
+    ShowFieldNamesChkBox.Checked   := ShowNames;
+    ShowFieldBordersChkBox.Checked := ShowBorders;
+  end;
 end;
 
 end.

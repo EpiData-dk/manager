@@ -45,6 +45,31 @@ type
                                      //   0: .epx
                                      //   1: .epz
 
+    // Project Defaults
+    // - general:
+    TimedRecoveryInterval: integer;
+    SaveBackup:            boolean;
+    AutoIncStart:          integer;
+    // - Fields:
+    ShowNames:             boolean;
+    ShowBorders:           boolean;
+    // - Study:
+    StudyTitle:            string;
+    StudyIndent:           string;
+    StudyLang:             string;
+    StudyVersion:          string;
+    // - Content Desc:
+    ContPurpose:           string;
+    ContAbstract:          string;
+    ContCitation:          string;
+    ContGeoCover:          string;
+    ContTimeCover:         string;
+    // - Ownership:
+    OwnAuthers:            string;
+    OwnRights:             string;
+    OwnPublisher:          string;
+    OwnFunding:            string;
+
     // Not shown in dialog.
     SelectedControlColour: Integer;
     LabelNamePrefix:       string;
@@ -82,6 +107,34 @@ var
     TutorialURLUTF8:       'http://epidata.dk/documentation.php';
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
+
+
+    // Project Defaults
+    // - general:
+    TimedRecoveryInterval: 10;
+    SaveBackup:            true;
+    AutoIncStart:          1;
+    // - Fields:
+    ShowNames:             false;
+    ShowBorders:           true;
+    // - Study:
+    StudyTitle:            'Untitled Project';
+    StudyIndent:           '';
+    StudyLang:             'en';
+    StudyVersion:          '1';
+    // - Content Desc:
+    ContPurpose:           '';
+    ContAbstract:          '';
+    ContCitation:          '';
+    ContGeoCover:          '';
+    ContTimeCover:         '';
+    // - Ownership:
+    OwnAuthers:            '';
+    OwnRights:             '';
+    OwnPublisher:          '';
+    OwnFunding:            '';
+
+
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;

@@ -65,12 +65,6 @@ begin
   Result := true;
 end;
 
-initialization
-
-begin
-  RegisterSettingFrame(1, TSettings_PathsFrame, 'Paths');
-end;
-
 end.
 
 

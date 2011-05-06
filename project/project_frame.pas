@@ -96,10 +96,10 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame, Clipbrd, project_settings, epimiscutils,
+  design_frame, Clipbrd, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
   structure_form, valuelabelseditor_form, epidatafilestypes,
-  strutils, managerprocs, Menus, LCLType, LCLIntf;
+  strutils, managerprocs, Menus, LCLType, LCLIntf, project_settings;
 
 type
 
@@ -295,10 +295,42 @@ end;
 
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
-  Result := TEpiDocument.Create('en');
-  Result.Study.Language := 'en';
-  Result.Study.Title.RegisterOnChangeHook(@OnTitleChange);
-  Result.Study.Title.Text := 'Untitled Project';
+  Result := TEpiDocument.Create(ManagerSettings.StudyLang);
+  Result.Study.Language := ManagerSettings.StudyLang;
+
+  with Result.ProjectSettings, ManagerSettings do
+  begin
+    BackupInterval    := TimedRecoveryInterval;
+    BackupOnShutdown  := SaveBackup;
+    AutoIncStartValue := AutoIncStart;
+    // - Fields:
+    ShowFieldNames    := ShowNames;
+    ShowFieldBorders  := ShowBorders;
+  end;
+
+  with Result.Study, ManagerSettings do
+  begin
+    Title.RegisterOnChangeHook(@OnTitleChange);
+
+    // - Study:
+    Title.Text                := StudyTitle;
+    Identifier                := StudyIndent;
+    Version                   := StudyVersion;
+
+    // - Content Desc:
+    Purpose.Text              := ContPurpose;
+    AbstractText.Text         := ContAbstract;
+    Citations.Text            := ContCitation;
+    GeographicalCoverage.Text := ContGeoCover;
+    TimeCoverage.Text         := ContTimeCover;
+
+    // - Ownership;
+    Author                    := OwnAuthers;
+    Rights.Text               := OwnRights;
+    Publisher.Text            := OwnPublisher;
+    Funding.Text              := OwnFunding;
+  end;
+
   Result.DataFiles.OnNewItemClass := @NewDataFileItem;
   Result.OnModified := @EpiDocumentModified;
 end;

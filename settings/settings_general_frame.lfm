@@ -14,7 +14,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 205
-    Height = 27
+    Height = 31
     Top = 138
     Width = 351
     Anchors = [akTop, akLeft, akRight]
@@ -36,7 +36,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 18
-    Top = 142
+    Top = 144
     Width = 172
     BorderSpacing.Left = 10
     Caption = 'Default paste special type'
@@ -48,7 +48,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 18
-    Top = 181
+    Top = 185
     Width = 117
     BorderSpacing.Left = 10
     Caption = 'Default save type'
@@ -62,7 +62,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Side = asrBottom
     Left = 205
     Height = 31
-    Top = 175
+    Top = 179
     Width = 351
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10

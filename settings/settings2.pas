@@ -48,10 +48,6 @@ procedure LoadFormPosition(Var AForm: TForm; Const SectionName: string);
 
 procedure AddToRecent(Const AFilename: string);
 
-
-procedure RegisterSettingFrame(const Order: byte;
-  const AValue: TCustomFrameClass; const AName: string);
-
 const
   ManagerVersion: TEpiVersionInfo = (
     VersionNo: 0;
@@ -66,10 +62,14 @@ implementation
 
 uses
   settings2_interface, settings2_var, epidatafilestypes,
-  IniFiles, strutils;
-
-var
-  Frames: TStringList = nil;
+  IniFiles, strutils,
+  // settings
+  settings_advanced_frame, settings_fielddefinitions_frame,
+  settings_general_frame, settings_visualdesign_frame,
+  // project settings
+  project_settings_field_frame, project_settings_general_frame,
+  project_settings_study_contentdesc_frame, project_settings_study_frame,
+  project_settings_study_ownership_frame;
 
 function GetManagerVersion: String;
 begin
@@ -134,6 +134,36 @@ begin
       WriteBool(Sec, 'ShowWelcome', ShowWelcome);
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
       WriteBool(Sec, 'MultipleInstances', MultipleInstances);
+
+      // Project Defaults
+      // - general:
+      Sec := 'ProjectGeneral';
+      WriteInteger(Sec, 'TimedRecoveryInterval', TimedRecoveryInterval);
+      WriteBool(Sec, 'SaveBackup', SaveBackup);
+      WriteInteger(Sec, 'AutoIncStart', AutoIncStart);
+      // - Fields:
+      Sec := 'ProjectFields';
+      WriteBool(Sec, 'ShowNames', ShowNames);
+      WriteBool(Sec, 'ShowBorders', ShowBorders);
+      // - Study:
+      Sec := 'ProjectStudy';
+      WriteString(Sec, 'StudyTitle', StudyTitle);
+      WriteString(Sec, 'StudyIndent', StudyIndent);
+      WriteString(Sec, 'StudyLang', StudyLang);
+      WriteString(Sec, 'StudyVersion', StudyVersion);
+      // - Content Desc:
+      Sec := 'ProjectContent';
+      WriteString(Sec, 'ContPurpose', ContPurpose);
+      WriteString(Sec, 'ContAbstract', ContAbstract);
+      WriteString(Sec, 'ContCitation', ContCitation);
+      WriteString(Sec, 'ContGeoCover', ContGeoCover);
+      WriteString(Sec, 'ContTimeCover', ContTimeCover);
+      // - Ownership:
+      Sec := 'ProjectOwnership';
+      WriteString(Sec, 'OwnAuthers', OwnAuthers);
+      WriteString(Sec, 'OwnRights', OwnRights);
+      WriteString(Sec, 'OwnPublisher', OwnPublisher);
+      WriteString(Sec, 'OwnFunding', OwnFunding);
     end;
 
     // Read recent files.
@@ -208,6 +238,36 @@ begin
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
       MultipleInstances   := ReadBool(Sec, 'MultipleInstances', MultipleInstances);
+
+      // Project Defaults
+      // - general:
+      Sec := 'ProjectGeneral';
+      TimedRecoveryInterval := ReadInteger(Sec, 'TimedRecoveryInterval', TimedRecoveryInterval);
+      SaveBackup            := ReadBool(Sec, 'SaveBackup', SaveBackup);
+      AutoIncStart          := ReadInteger(Sec, 'AutoIncStart', AutoIncStart);
+      // - Fields:
+      Sec := 'ProjectFields';
+      ShowNames             := ReadBool(Sec, 'ShowNames', ShowNames);
+      ShowBorders           := ReadBool(Sec, 'ShowBorders', ShowBorders);
+      // - Study:
+      Sec := 'ProjectStudy';
+      StudyTitle            := ReadString(Sec, 'StudyTitle', StudyTitle);
+      StudyIndent           := ReadString(Sec, 'StudyIndent', StudyIndent);
+      StudyLang             := ReadString(Sec, 'StudyLang', StudyLang);
+      StudyVersion          := ReadString(Sec, 'StudyVersion', StudyVersion);
+      // - Content Desc:
+      Sec := 'ProjectContent';
+      ContPurpose           := ReadString(Sec, 'ContPurpose', ContPurpose);
+      ContAbstract          := ReadString(Sec, 'ContAbstract', ContAbstract);
+      ContCitation          := ReadString(Sec, 'ContCitation', ContCitation);
+      ContGeoCover          := ReadString(Sec, 'ContGeoCover', ContGeoCover);
+      ContTimeCover         := ReadString(Sec, 'ContTimeCover', ContTimeCover);
+      // - Ownership:
+      Sec := 'ProjectOwnership';
+      OwnAuthers            := ReadString(Sec, 'OwnAuthers', OwnAuthers);
+      OwnRights             := ReadString(Sec, 'OwnRights', OwnRights);
+      OwnPublisher          := ReadString(Sec, 'OwnPublisher', OwnPublisher);
+      OwnFunding            := ReadString(Sec, 'OwnFunding', OwnFunding);
     end;
 
     // Read recent files.
@@ -281,26 +341,36 @@ end;
 
 { TSettingsForm }
 
+procedure TSettingsForm.SettingsViewChange(Sender: TObject; Node: TTreeNode);
+begin
+  // Happens after the change...
+  if csDestroying in ComponentState then exit;
+
+  if Node.Text = 'Project Defaults' then
+  begin
+    SettingsView.Selected := SettingsView.Items.FindNodeWithText('Project Defaults').GetFirstChild;
+    Exit;
+  end;
+
+  FActiveFrame := TFrame(Node.Data);
+  (FActiveFrame as ISettingsFrame).SetSettings(@ManagerSettings);
+  FActiveFrame.Parent := Self;
+  FActiveFrame.Align := alClient;
+  FActiveFrame.Show;
+end;
+
 procedure TSettingsForm.SettingsViewChanging(Sender: TObject; Node: TTreeNode;
   var AllowChange: Boolean);
 begin
   // Happens before the change...
   if csDestroying in ComponentState then exit;
+  if Node.Text = 'Project Defaults' then exit;
 
   FActiveFrame := TFrame(Node.Data);
   AllowChange := (FActiveFrame as ISettingsFrame).ApplySettings;
   if not AllowChange then exit;
 
   FActiveFrame.Hide;
-end;
-
-procedure TSettingsForm.SettingsViewChange(Sender: TObject; Node: TTreeNode);
-begin
-  // Happens after the change...
-  if csDestroying in ComponentState then exit;
-
-  FActiveFrame := TFrame(Node.Data);
-  FActiveFrame.Show;
 end;
 
 procedure TSettingsForm.FormShow(Sender: TObject);
@@ -333,15 +403,20 @@ var
 begin
   inherited Create(TheOwner);
 
-  for i := 0 to Frames.Count - 1 do
+
+  with SettingsView.Items do
   begin
-    FrameClass := TCustomFrameClass(Frames.Objects[i]);
-    Frame := FrameClass.Create(Self);
-    (Frame as ISettingsFrame).SetSettings(@ManagerSettings);
-    Frame.Hide;
-    Frame.Align := alClient;
-    Frame.Parent := Self;
-    SettingsView.Items.AddObject(nil, Frames[i], Pointer(Frame));
+    FindNodeWithText('General').Data             := Pointer(TSettings_GeneralFrame.Create(Self));
+    FindNodeWithText('Paths').Data               := Pointer(TSettings_PathsFrame.Create(Self));
+    FindNodeWithText('Field Definitions').Data   := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
+    FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
+
+    //
+    FindNodeWithText('Project Defaults').GetFirstChild.Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
+    FindNodeWithText('Fields').Data              := Pointer(TProjectSettings_FieldFrame.Create(Self));
+    FindNodeWithText('Study').Data               := Pointer(TProjectsettings_StudyFrame.Create(Self));
+    FindNodeWithText('Content Description').Data := Pointer(TProjectSetting_ContentDescFrame.Create(Self));
+    FindNodeWithText('Ownership').Data           := Pointer(TProjectSetting_OwnershipFrame.Create(Self));
   end;
 end;
 
@@ -356,30 +431,6 @@ begin
   Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
   SaveFormPosition(Aform, 'SettingsForm');
   AForm.free;
-end;
-
-procedure RegisterSettingFrame(const Order: byte;
-  const AValue: TCustomFrameClass; const AName: string);
-begin
-  if not Assigned(Frames) then
-    Frames := TStringList.Create;
-
-  if not Supports(AValue, ISettingsFrame) then
-    Raise Exception.CreateFmt('Class %s does not support required interface', [AValue.ClassName]);
-
-  if Order >= Frames.Count then
-    Frames.AddObject(AName, TObject(AValue))
-  else
-    Frames.InsertObject(Order, AName, TObject(AValue));
-end;
-
-procedure FinalizeFrames;
-var
-  i: integer;
-begin
-  for i := 0 to Frames.Count - 1 do
-    Frames.Strings[i] := '';
-  Frames.Free;
 end;
 
 initialization
@@ -399,7 +450,6 @@ end;
 finalization
 
 begin
-  FinalizeFrames;
   RecentFiles.Free
 end;
 

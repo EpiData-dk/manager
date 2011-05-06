@@ -1,12 +1,12 @@
 object SettingsForm: TSettingsForm
-  Left = 692
-  Height = 440
-  Top = 268
-  Width = 582
+  Left = 2179
+  Height = 363
+  Top = 591
+  Width = 611
   ActiveControl = SettingsView
   Caption = 'Settings'
-  ClientHeight = 440
-  ClientWidth = 582
+  ClientHeight = 363
+  ClientWidth = 611
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
@@ -15,20 +15,20 @@ object SettingsForm: TSettingsForm
     AnchorSideTop.Side = asrCenter
     Left = 0
     Height = 50
-    Top = 390
-    Width = 582
+    Top = 313
+    Width = 611
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 582
+    ClientWidth = 611
     TabOrder = 0
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn2
-      Left = 428
-      Height = 34
-      Top = 8
-      Width = 80
+      Left = 457
+      Height = 32
+      Top = 9
+      Width = 79
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -43,10 +43,10 @@ object SettingsForm: TSettingsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 518
+      Left = 546
       Height = 32
       Top = 9
-      Width = 53
+      Width = 54
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -59,9 +59,9 @@ object SettingsForm: TSettingsForm
   end
   object SettingsView: TTreeView
     Left = 0
-    Height = 390
+    Height = 313
     Top = 0
-    Width = 150
+    Width = 195
     Align = alLeft
     DefaultItemHeight = 19
     ReadOnly = True
@@ -70,10 +70,25 @@ object SettingsForm: TSettingsForm
     OnChange = SettingsViewChange
     OnChanging = SettingsViewChanging
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    Items.Data = {
+      F9FFFFFF020005000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+      0000000700000047656E6572616CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00000000000000050000005061746873FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      000000000000000000110000004669656C6420446566696E6974696F6E73FFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000000D0000005669737561
+      6C2044657369676EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0300000000000000
+      011000000050726F6A6563742044656661756C7473FFFFFFFFFFFFFFFFFFFFFF
+      FFFFFFFFFF0000000000000000000700000047656E6572616CFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFFFF000000000000000000060000004669656C6473FFFFFFFF
+      FFFFFFFFFFFFFFFFFFFFFFFF020000000000000001050000005374756479FFFF
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000013000000436F6E7465
+      6E74204465736372697074696F6EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+      00000000000000090000004F776E657273686970
+    }
   end
   object Splitter1: TSplitter
-    Left = 150
-    Height = 390
+    Left = 195
+    Height = 313
     Top = 0
     Width = 5
   end

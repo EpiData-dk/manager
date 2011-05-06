@@ -93,11 +93,5 @@ begin
   Result := true;
 end;
 
-initialization
-
-begin
-  RegisterSettingFrame(3, TSettings_VisualDesign, 'Visual Design');
-end;
-
 end.
 
