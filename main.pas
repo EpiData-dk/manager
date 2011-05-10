@@ -133,7 +133,7 @@ uses
   workflow_frame, LCLProc, LCLIntf, design_frame,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   design_controls, structure_form, valuelabelseditor_form, epimiscutils,
-  epicustombase, project_settings, LCLType;
+  epicustombase, project_settings, LCLType, UTF8Process;
 
 { TMainForm }
 
@@ -316,13 +316,27 @@ begin
 end;
 
 procedure TMainForm.StartEntryClientActionExecute(Sender: TObject);
+var
+  Path: String;
+  Ext: String;
+  Entry: TProcessUTF8;
 begin
-  //
+  Path := ExtractFilePath(UTF8ToSys(Application.ExeName));
+  Ext := ExtractFileExt(Application.ExeName);
+  Entry := TProcessUTF8.Create(nil);
+  Entry.CommandLine := Path + 'epidataentryclient' + ext;
+  Entry.Execute;
+  Entry.Free;
 end;
 
 procedure TMainForm.StartEntryClientActionUpdate(Sender: TObject);
+var
+  Path: String;
+  Ext: String;
 begin
-  //
+  Path := ExtractFilePath(UTF8ToSys(Application.ExeName));
+  Ext := ExtractFileExt(Application.ExeName);
+  TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
@@ -477,7 +491,7 @@ begin
   ProjectMenu.Visible := Assigned(FActiveFrame);
 
   // TOOLS:
-  ToolsMenu.Visible := Assigned(FActiveFrame);
+//  ToolsMenu.Visible := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;

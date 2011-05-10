@@ -141,6 +141,12 @@ begin
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
       WriteBool(Sec, 'MultipleInstances', MultipleInstances);
 
+      Sec := 'fonts';
+      WriteString(sec, 'FieldFontName', DesignerFont.Name);
+      WriteInteger(sec, 'FieldFontSize', DesignerFont.Size);
+      WriteInteger(sec, 'FieldFontStyle', Integer(DesignerFont.Style));
+      WriteInteger(sec, 'FieldFontColour', DesignerFont.Color);
+
       // Project Defaults
       // - general:
       Sec := 'ProjectGeneral';
@@ -244,6 +250,13 @@ begin
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
       MultipleInstances   := ReadBool(Sec, 'MultipleInstances', MultipleInstances);
+
+      // Fonts
+      Sec := 'fonts';
+      DesignerFont.Name   := ReadString(sec, 'FieldFontName', DesignerFont.Name);
+      DesignerFont.Size   := ReadInteger(sec, 'FieldFontSize', DesignerFont.Size);
+      DesignerFont.Style  := TFontStyles(ReadInteger(sec, 'FieldFontStyle', Integer(DesignerFont.Style)));
+      DesignerFont.Color  := ReadInteger(sec, 'FieldFontColour', DesignerFont.Color);
 
       // Project Defaults
       // - general:
@@ -442,6 +455,8 @@ end;
 initialization
 
 begin
+  ManagerSettings.DesignerFont := TFont.Create;
+
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
   if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then
     ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8;

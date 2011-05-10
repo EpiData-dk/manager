@@ -2,9 +2,9 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   Left = 0
   Height = 435
   Top = 0
-  Width = 566
+  Width = 525
   ClientHeight = 435
-  ClientWidth = 566
+  ClientWidth = 525
   TabOrder = 0
   DesignLeft = 697
   DesignTop = 341
@@ -14,9 +14,9 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 205
-    Height = 31
+    Height = 27
     Top = 138
-    Width = 351
+    Width = 310
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
@@ -36,7 +36,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 18
-    Top = 144
+    Top = 142
     Width = 172
     BorderSpacing.Left = 10
     Caption = 'Default paste special type'
@@ -48,7 +48,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 18
-    Top = 185
+    Top = 181
     Width = 117
     BorderSpacing.Left = 10
     Caption = 'Default save type'
@@ -62,8 +62,8 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Side = asrBottom
     Left = 205
     Height = 31
-    Top = 179
-    Width = 351
+    Top = 175
+    Width = 310
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     ItemHeight = 0
@@ -120,5 +120,41 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     BorderSpacing.Top = 10
     Caption = 'Allow multiple instances of program'
     TabOrder = 5
+  end
+  object EditButton1: TEditButton
+    AnchorSideLeft.Control = DefaultSaveTypeComboBox
+    AnchorSideTop.Control = DefaultSaveTypeComboBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Side = asrBottom
+    Left = 205
+    Height = 27
+    Top = 216
+    Width = 286
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 10
+    ButtonWidth = 23
+    CharCase = ecNormal
+    MaxLength = 0
+    NumGlyphs = 0
+    OnButtonClick = EditButton1ButtonClick
+    TabOrder = 6
+  end
+  object Label2: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = EditButton1
+    AnchorSideTop.Side = asrCenter
+    Left = 10
+    Height = 18
+    Top = 220
+    Width = 73
+    BorderSpacing.Left = 10
+    Caption = 'Font / Size:'
+    ParentColor = False
+  end
+  object FontDialog1: TFontDialog
+    MinFontSize = 0
+    MaxFontSize = 0
+    left = 375
+    top = 343
   end
 end

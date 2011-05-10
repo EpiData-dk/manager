@@ -5,7 +5,7 @@ unit settings2_var;
 interface
 
 uses
-  Classes, SysUtils, epidatafilestypes;
+  Classes, SysUtils, epidatafilestypes, Graphics;
 
 type
   TManagerSettings = record
@@ -44,6 +44,7 @@ type
     SaveType:              byte;     // Index into list:
                                      //   0: .epx
                                      //   1: .epz
+    DesignerFont:          TFont;
 
     // Project Defaults
     // - general:
@@ -107,6 +108,7 @@ var
     TutorialURLUTF8:       'http://epidata.dk/documentation.php';
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
+    DesignerFont:          nil;
 
 
     // Project Defaults

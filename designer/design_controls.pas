@@ -345,6 +345,7 @@ begin
       case TEpiCustomChangeEventType(EventType) of
         ecceDestroy:
           begin
+            FField.UnRegisterOnChangeHook(@OnFieldChange);
             FField := nil;
             Exit;
           end;
@@ -403,7 +404,13 @@ begin
   case EventGroup of
     eegCustomBase:
       case TEpiCustomChangeEventType(EventType) of
-        ecceDestroy: exit;
+        ecceDestroy:
+            begin
+              // Dirty trick, since RootOwner does not exists when OnFieldchange is called.
+              TEpiDocument(FField.RootOwner).ProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
+              Question.UnRegisterOnChangeHook(@OnQuestionChange);
+              exit;
+            end;
         ecceUpdate:
             Caption := Question.Text;
         ecceText:
@@ -492,6 +499,8 @@ begin
 end;
 
 destructor TDesignField.Destroy;
+var
+  ProjectSettings: TEpiProjectSettings;
 begin
   FNameLabel.Free;
   FQuestionLabel.Free;
@@ -500,6 +509,8 @@ begin
   begin
     FField.UnRegisterOnChangeHook(@OnFieldChange);
     FField.Question.UnRegisterOnChangeHook(@OnQuestionChange);
+    ProjectSettings := TEpiDocument(FField.RootOwner).ProjectSettings;
+    ProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
   end;
   inherited Destroy;
 end;
@@ -622,6 +633,7 @@ begin
   ShowHint := true;
   Color := clWhite;
   ParentColor := false;
+  ParentFont := true;
 end;
 
 destructor TDesignSection.Destroy;

@@ -2608,6 +2608,12 @@ begin
   DateToolButton.Tag := Ord(ManagerSettings.DefaultDateType);
   DateToolButton.ImageIndex := Ord(ManagerSettings.DefaultDateType);
 
+  if Assigned(ManagerSettings.DesignerFont) then
+  begin
+    FDesignerBox.ParentFont := false;
+    FDesignerBox.Font.Assign(ManagerSettings.DesignerFont);
+  end;
+
   CtrlS := KeyToShortCut(VK_G, [ssCtrl]);
   Case ManagerSettings.PasteSpecialType of
     1: PasteAsHeadingAction.ShortCut := CtrlS;
