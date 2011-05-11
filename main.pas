@@ -321,7 +321,7 @@ var
   Ext: String;
   Entry: TProcessUTF8;
 begin
-  Path := ExtractFilePath(UTF8ToSys(Application.ExeName));
+  Path := ManagerSettings.EntryClientDirUTF8 + PathDelim;
   Ext := ExtractFileExt(Application.ExeName);
   Entry := TProcessUTF8.Create(nil);
   Entry.CommandLine := Path + 'epidataentryclient' + ext;
@@ -334,8 +334,13 @@ var
   Path: String;
   Ext: String;
 begin
-  Path := ExtractFilePath(UTF8ToSys(Application.ExeName));
+  Path := ManagerSettings.EntryClientDirUTF8 + PathDelim;
   Ext := ExtractFileExt(Application.ExeName);
+{  showmessage(
+    'Path: ' + Path + LineEnding +
+    'Ext: ' + Ext + LineEnding +
+    'File: ' + Path + 'epidataentryclient' + Ext
+    );}
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
 end;
 

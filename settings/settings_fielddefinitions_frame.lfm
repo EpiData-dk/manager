@@ -6,8 +6,8 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
   ClientHeight = 498
   ClientWidth = 761
   TabOrder = 0
-  DesignLeft = 387
-  DesignTop = 242
+  DesignLeft = 575
+  DesignTop = 263
   object Label14: TLabel
     AnchorSideLeft.Control = Owner
     Left = 10
@@ -22,7 +22,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 127
-    Height = 27
+    Height = 31
     Top = 155
     Width = 624
     Anchors = [akTop, akLeft, akRight]

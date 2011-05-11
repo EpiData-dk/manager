@@ -134,6 +134,7 @@ begin
       WriteString(Sec, 'WorkingDirectory', WorkingDirUTF8);
       WriteString(Sec, 'TutorialDirectory', TutorialDirUTF8);
       WriteString(Sec, 'TutorialURL', TutorialURLUTF8);
+      WriteString(Sec, 'EntryCLientDirectory', EntryClientDirUTF8);
       WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
       WriteInteger(Sec, 'SaveAsType', SaveType);
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
@@ -244,6 +245,7 @@ begin
       WorkingDirUTF8      := ReadString(Sec, 'WorkingDirectory', WorkingDirUTF8);
       TutorialDirUTF8     := ReadString(Sec, 'TutorialDirectory', TutorialDirUTF8);
       TutorialURLUTF8     := ReadString(Sec, 'TutorialURL', TutorialURLUTF8);
+      EntryClientDirUTF8  := ReadString(Sec, 'EntryClientDirectory', EntryClientDirUTF8);
       PasteSpecialType    := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
       SaveType            := ReadInteger(Sec, 'SaveAsType', SaveType);
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
@@ -406,6 +408,12 @@ end;
 
 procedure TSettingsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
+  if ModalResult = mrCancel then
+  begin
+    CanClose := true;
+    exit;
+  end;
+
   CanClose := false;
   if not (FActiveFrame as ISettingsFrame).ApplySettings then exit;
   SaveSettingToIni(ManagerSettings.IniFileName);
@@ -464,6 +472,8 @@ begin
   ManagerSettings.TutorialDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'tutorials';
   if not DirectoryExistsUTF8(ManagerSettings.TutorialDirUTF8) then
     ManagerSettings.TutorialDirUTF8 := GetCurrentDirUTF8;
+
+  ManagerSettings.EntryClientDirUTF8 := SysToUTF8(ExtractFilePath(UTF8ToSys(Application.ExeName)));
 
   RecentFiles := TStringList.Create;
 end;

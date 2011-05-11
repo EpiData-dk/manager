@@ -35,6 +35,7 @@ type
     WorkingDirUTF8:        string;
     TutorialDirUTF8:       string;
     TutorialURLUTF8:       string;
+    EntryClientDirUTF8:    string;
     PasteSpecialType:      byte;     // Index into list:
                                      //   0: QES
                                      //   1: Heading
@@ -106,6 +107,7 @@ var
     WorkingDirUTF8:        '';
     TutorialDirUTF8:       '';
     TutorialURLUTF8:       'http://epidata.dk/documentation.php';
+    EntryClientDirUTF8:    '';
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
     DesignerFont:          nil;

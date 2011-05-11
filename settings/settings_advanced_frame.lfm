@@ -6,8 +6,8 @@ object Settings_PathsFrame: TSettings_PathsFrame
   ClientHeight = 333
   ClientWidth = 512
   TabOrder = 0
-  DesignLeft = 570
-  DesignTop = 232
+  DesignLeft = 517
+  DesignTop = 396
   object Label17: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = WorkingDirEdit
@@ -15,7 +15,7 @@ object Settings_PathsFrame: TSettings_PathsFrame
     Left = 10
     Height = 18
     Top = 14
-    Width = 124
+    Width = 128
     Anchors = [akLeft]
     BorderSpacing.Left = 10
     Caption = 'Default data folder:'
@@ -46,7 +46,7 @@ object Settings_PathsFrame: TSettings_PathsFrame
     Left = 10
     Height = 18
     Top = 71
-    Width = 90
+    Width = 95
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Tutorial folder:'
@@ -78,7 +78,7 @@ object Settings_PathsFrame: TSettings_PathsFrame
     Left = 10
     Height = 18
     Top = 128
-    Width = 109
+    Width = 114
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Web tutorial URL:'
@@ -98,5 +98,37 @@ object Settings_PathsFrame: TSettings_PathsFrame
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
     TabOrder = 2
+  end
+  object EntryClientDirEdit: TDirectoryEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = TutorialURLEdit
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 205
+    Width = 476
+    ShowHidden = False
+    ButtonWidth = 23
+    NumGlyphs = 0
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    MaxLength = 0
+    TabOrder = 3
+  end
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = TutorialURLEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 185
+    Width = 191
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'EpiData EntryClient Location:'
+    ParentColor = False
   end
 end

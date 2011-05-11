@@ -54,7 +54,7 @@ begin
   with FData^ do
   begin
     DefaultRightPosEdit.Text          := IntToStr(DefaultRightPosition);
-    LabelLabelEdit.Text               := IntToStr(DefaultLabelPosition);
+    LabelLeftPosition.Text               := IntToStr(DefaultLabelPosition);
     SnapFieldsChkBox.Checked          := SnapFields;
     SnapThresholdEdit.Text            := IntToStr(SnappingThresHold);
     FieldFieldEdit.Text               := IntToStr(SpaceBtwFieldField);

@@ -46,7 +46,7 @@ uses
 
 procedure TSettings_GeneralFrame.EditButton1ButtonClick(Sender: TObject);
 begin
-  FontDialog1.Font := MainForm.Font;
+  FontDialog1.Font.Assign(EditButton1.Font);
   if not FontDialog1.Execute then exit;
   EditButton1.Text := FontDialog1.Font.Name + ' (' + IntToStr(FontDialog1.Font.Size) + ')';
   EditButton1.Font.Assign(FontDialog1.Font);
@@ -74,8 +74,8 @@ begin
     ShowWelcomeChkBox.Checked         := ShowWelcome;
     ShowWorkToolBarChkBox.Checked     := ShowWorkToolBar;
     MultipleInstanceChkbox.Checked    := MultipleInstances;
-    if Assigned(DesignerFont) then
-      EditButton1.Text                  := DesignerFont.Name + ' (' + IntToStr(DesignerFont.Size) + ')';
+    EditButton1.Text                  := DesignerFont.Name + ' (' + IntToStr(DesignerFont.Size) + ')';
+    EditButton1.Font.Assign(DesignerFont);
   end;
 end;
 

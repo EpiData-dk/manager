@@ -1,10 +1,10 @@
 object ImportStructureForm: TImportStructureForm
-  Left = 607
-  Height = 786
-  Top = 291
+  Left = 849
+  Height = 679
+  Top = 244
   Width = 677
-  Caption = 'ImportStructureForm'
-  ClientHeight = 786
+  Caption = 'Import Structure From...'
+  ClientHeight = 679
   ClientWidth = 677
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
@@ -13,7 +13,7 @@ object ImportStructureForm: TImportStructureForm
   object OkApplyPanel: TPanel
     Left = 0
     Height = 42
-    Top = 744
+    Top = 637
     Width = 677
     Align = alBottom
     ClientHeight = 42
@@ -106,7 +106,7 @@ object ImportStructureForm: TImportStructureForm
   end
   object StructureGrid: TStringGrid
     Left = 0
-    Height = 485
+    Height = 378
     Top = 152
     Width = 677
     Align = alClient
@@ -154,7 +154,7 @@ object ImportStructureForm: TImportStructureForm
   object ErrorListBox: TListBox
     Left = 0
     Height = 107
-    Top = 637
+    Top = 530
     Width = 677
     Align = alBottom
     ItemHeight = 0
@@ -186,7 +186,7 @@ object ImportStructureForm: TImportStructureForm
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       BorderSpacing.Right = 10
-      Caption = 'Rename ValueLabels:'
+      Caption = 'Repeated Value Labels:'
       ChildSizing.LeftRightSpacing = 6
       ChildSizing.TopBottomSpacing = 6
       ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -199,7 +199,7 @@ object ImportStructureForm: TImportStructureForm
       ClientWidth = 266
       ItemIndex = 0
       Items.Strings = (
-        'Use first occurance'
+        'Keep First, drop all other'
         'Rename'
       )
       TabOrder = 0
@@ -222,7 +222,7 @@ object ImportStructureForm: TImportStructureForm
       Top = 40
       Width = 273
       AutoFill = True
-      Caption = 'Rename Fields:'
+      Caption = 'Repeated Fields Names:'
       ChildSizing.LeftRightSpacing = 6
       ChildSizing.TopBottomSpacing = 6
       ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -235,7 +235,7 @@ object ImportStructureForm: TImportStructureForm
       ClientWidth = 269
       ItemIndex = 1
       Items.Strings = (
-        'Use first occurance'
+        'Keep First, drop all other'
         'Rename'
       )
       TabOrder = 1
