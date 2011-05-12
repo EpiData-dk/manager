@@ -143,10 +143,18 @@ begin
       WriteBool(Sec, 'MultipleInstances', MultipleInstances);
 
       Sec := 'fonts';
-      WriteString(sec, 'FieldFontName', DesignerFont.Name);
-      WriteInteger(sec, 'FieldFontSize', DesignerFont.Size);
-      WriteInteger(sec, 'FieldFontStyle', Integer(DesignerFont.Style));
-      WriteInteger(sec, 'FieldFontColour', DesignerFont.Color);
+      WriteString(sec, 'FieldFontName', FieldFont.Name);
+      WriteInteger(sec, 'FieldFontSize', FieldFont.Size);
+      WriteInteger(sec, 'FieldFontStyle', Integer(FieldFont.Style));
+      WriteInteger(sec, 'FieldFontColour', FieldFont.Color);
+      WriteString(sec, 'HeadingFontName', HeadingFont.Name);
+      WriteInteger(sec, 'HeadingFontSize', HeadingFont.Size);
+      WriteInteger(sec, 'HeadingFontStyle', Integer(HeadingFont.Style));
+      WriteInteger(sec, 'HeadingFontColour', HeadingFont.Color);
+      WriteString(sec, 'SectionFontName', SectionFont.Name);
+      WriteInteger(sec, 'SectionFontSize', SectionFont.Size);
+      WriteInteger(sec, 'SectionFontStyle', Integer(SectionFont.Style));
+      WriteInteger(sec, 'SectionFontColour', SectionFont.Color);
 
       // Project Defaults
       // - general:
@@ -255,10 +263,18 @@ begin
 
       // Fonts
       Sec := 'fonts';
-      DesignerFont.Name   := ReadString(sec, 'FieldFontName', DesignerFont.Name);
-      DesignerFont.Size   := ReadInteger(sec, 'FieldFontSize', DesignerFont.Size);
-      DesignerFont.Style  := TFontStyles(ReadInteger(sec, 'FieldFontStyle', Integer(DesignerFont.Style)));
-      DesignerFont.Color  := ReadInteger(sec, 'FieldFontColour', DesignerFont.Color);
+      FieldFont.Name   := ReadString(sec, 'FieldFontName', FieldFont.Name);
+      FieldFont.Size   := ReadInteger(sec, 'FieldFontSize', FieldFont.Size);
+      FieldFont.Style  := TFontStyles(ReadInteger(sec, 'FieldFontStyle', Integer(FieldFont.Style)));
+      FieldFont.Color  := ReadInteger(sec, 'FieldFontColour', FieldFont.Color);
+      HeadingFont.Name   := ReadString(sec, 'HeadingFontName', HeadingFont.Name);
+      HeadingFont.Size   := ReadInteger(sec, 'HeadingFontSize', HeadingFont.Size);
+      HeadingFont.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle', Integer(HeadingFont.Style)));
+      HeadingFont.Color  := ReadInteger(sec, 'HeadingFontColour', HeadingFont.Color);
+      SectionFont.Name   := ReadString(sec, 'SectionFontName', SectionFont.Name);
+      SectionFont.Size   := ReadInteger(sec, 'SectionFontSize', SectionFont.Size);
+      SectionFont.Style  := TFontStyles(ReadInteger(sec, 'SectionFontStyle', Integer(SectionFont.Style)));
+      SectionFont.Color  := ReadInteger(sec, 'SectionFontColour', SectionFont.Color);
 
       // Project Defaults
       // - general:
@@ -463,7 +479,9 @@ end;
 initialization
 
 begin
-  ManagerSettings.DesignerFont := TFont.Create;
+  ManagerSettings.FieldFont := TFont.Create;
+  ManagerSettings.HeadingFont := TFont.Create;
+  ManagerSettings.SectionFont := TFont.Create;
 
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
   if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then

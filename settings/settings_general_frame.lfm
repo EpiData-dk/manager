@@ -6,8 +6,8 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   ClientHeight = 435
   ClientWidth = 525
   TabOrder = 0
-  DesignLeft = 697
-  DesignTop = 341
+  DesignLeft = 348
+  DesignTop = 308
   object DefaultPasteCombo: TComboBox
     AnchorSideTop.Control = MultipleInstanceChkbox
     AnchorSideTop.Side = asrBottom
@@ -120,41 +120,5 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     BorderSpacing.Top = 10
     Caption = 'Allow multiple instances of program'
     TabOrder = 5
-  end
-  object EditButton1: TEditButton
-    AnchorSideLeft.Control = DefaultSaveTypeComboBox
-    AnchorSideTop.Control = DefaultSaveTypeComboBox
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Side = asrBottom
-    Left = 205
-    Height = 27
-    Top = 220
-    Width = 286
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 10
-    ButtonWidth = 23
-    CharCase = ecNormal
-    MaxLength = 0
-    NumGlyphs = 0
-    OnButtonClick = EditButton1ButtonClick
-    TabOrder = 6
-  end
-  object Label2: TLabel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = EditButton1
-    AnchorSideTop.Side = asrCenter
-    Left = 10
-    Height = 18
-    Top = 224
-    Width = 73
-    BorderSpacing.Left = 10
-    Caption = 'Font / Size:'
-    ParentColor = False
-  end
-  object FontDialog1: TFontDialog
-    MinFontSize = 0
-    MaxFontSize = 0
-    left = 375
-    top = 343
   end
 end

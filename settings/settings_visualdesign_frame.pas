@@ -5,8 +5,8 @@ unit settings_visualdesign_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, MaskEdit,
-  settings2_interface, settings2_var;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, MaskEdit, EditBtn,
+  Dialogs, settings2_interface, settings2_var, Graphics;
 
 type
 
@@ -14,12 +14,20 @@ type
 
   TSettings_VisualDesign = class(TFrame, ISettingsFrame)
     DefaultRightPosEdit: TMaskEdit;
+    FieldFontEditBtn: TEditButton;
+    HeadingFontEditBtn: TEditButton;
+    FontDialog1: TFontDialog;
+    FontGrpBox: TGroupBox;
+    SectionFontEditBtn: TEditButton;
+    Label10: TLabel;
+    Label2: TLabel;
     Label8: TLabel;
+    Label9: TLabel;
     LabelLeftPosition: TMaskEdit;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
+    SnappingGrpBox: TGroupBox;
+    DistGrpBox: TGroupBox;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -28,9 +36,11 @@ type
     LabelLabelEdit: TMaskEdit;
     SnapFieldsChkBox: TCheckBox;
     SnapThresholdEdit: TMaskEdit;
+    procedure FieldFontEditBtnButtonClick(Sender: TObject);
   private
     { private declarations }
     FData: PManagerSettings;
+    procedure SetFont(AFont: TFont; Btn: TEditButton);
   public
     { public declarations }
     procedure SetSettings(Data: PManagerSettings);
@@ -47,6 +57,21 @@ uses
 
 { TSettings_VisualDesign }
 
+procedure TSettings_VisualDesign.FieldFontEditBtnButtonClick(Sender: TObject);
+var
+  Btn: TEditButton absolute Sender;
+begin
+  FontDialog1.Font.Assign(Btn.Font);
+  if not FontDialog1.Execute then exit;
+  SetFont(FontDialog1.Font, Btn);
+end;
+
+procedure TSettings_VisualDesign.SetFont(AFont: TFont; Btn: TEditButton);
+begin
+  Btn.Text := AFont.Name + ' (' + IntToStr(AFont.Size) + ')';
+  Btn.Font.Assign(AFont);
+end;
+
 procedure TSettings_VisualDesign.SetSettings(Data: PManagerSettings);
 begin
   FData := Data;
@@ -60,6 +85,9 @@ begin
     FieldFieldEdit.Text               := IntToStr(SpaceBtwFieldField);
     FieldLabelEdit.Text               := IntToStr(SpaceBtwFieldLabel);
     LabelLabelEdit.Text               := IntToStr(SpaceBtwLabelLabel);
+    SetFont(FieldFont, FieldFontEditBtn);
+    SetFont(HeadingFont, HeadingFontEditBtn);
+    SetFont(SectionFont, SectionFontEditBtn);
   end;
 end;
 
@@ -89,6 +117,9 @@ begin
     S := Trim(LabelLabelEdit.Text);
     if not((S = '') or (StrToInt(S) <= 0)) then
       SpaceBtwLabelLabel := StrToInt(S);
+    FieldFont.Assign(FieldFontEditBtn.Font);
+    HeadingFont.Assign(HeadingFontEditBtn.Font);
+    SectionFont.Assign(SectionFontEditBtn.Font);
   end;
   Result := true;
 end;

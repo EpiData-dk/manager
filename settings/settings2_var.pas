@@ -45,7 +45,9 @@ type
     SaveType:              byte;     // Index into list:
                                      //   0: .epx
                                      //   1: .epz
-    DesignerFont:          TFont;
+    FieldFont:             TFont;
+    HeadingFont:           TFont;
+    SectionFont:           TFont;
 
     // Project Defaults
     // - general:
@@ -110,7 +112,9 @@ var
     EntryClientDirUTF8:    '';
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
-    DesignerFont:          nil;
+    FieldFont:             nil;
+    HeadingFont:           nil;
+    SectionFont:           nil;
 
 
     // Project Defaults

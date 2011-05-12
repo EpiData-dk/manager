@@ -1,13 +1,13 @@
 object Settings_VisualDesign: TSettings_VisualDesign
   Left = 0
-  Height = 385
+  Height = 482
   Top = 0
-  Width = 601
-  ClientHeight = 385
-  ClientWidth = 601
+  Width = 610
+  ClientHeight = 482
+  ClientWidth = 610
   TabOrder = 0
-  DesignLeft = 514
-  DesignTop = 399
+  DesignLeft = 810
+  DesignTop = 307
   object Label3: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = DefaultRightPosEdit
@@ -27,7 +27,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
     Left = 168
     Height = 27
     Top = 10
-    Width = 411
+    Width = 420
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     BorderSpacing.Right = 22
@@ -38,27 +38,27 @@ object Settings_VisualDesign: TSettings_VisualDesign
     Text = '   '
     SpaceChar = '_'
   end
-  object GroupBox1: TGroupBox
+  object SnappingGrpBox: TGroupBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = GroupBox2
+    AnchorSideTop.Control = DistGrpBox
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 88
     Top = 207
-    Width = 581
+    Width = 590
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
     Caption = 'Snapping:'
     ClientHeight = 69
-    ClientWidth = 577
+    ClientWidth = 586
     TabOrder = 1
     object SnapFieldsChkBox: TCheckBox
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideTop.Control = GroupBox1
+      AnchorSideLeft.Control = SnappingGrpBox
+      AnchorSideTop.Control = SnappingGrpBox
       Left = 10
       Height = 22
       Top = 10
@@ -69,7 +69,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       TabOrder = 0
     end
     object Label4: TLabel
-      AnchorSideLeft.Control = GroupBox1
+      AnchorSideLeft.Control = SnappingGrpBox
       AnchorSideTop.Control = SnapThresholdEdit
       AnchorSideTop.Side = asrCenter
       Left = 10
@@ -81,12 +81,12 @@ object Settings_VisualDesign: TSettings_VisualDesign
       ParentColor = False
     end
     object SnapThresholdEdit: TMaskEdit
-      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Control = SnappingGrpBox
       AnchorSideRight.Side = asrBottom
       Left = 156
       Height = 27
       Top = 36
-      Width = 411
+      Width = 420
       Anchors = [akTop, akLeft, akRight]
       AutoSelect = False
       BorderSpacing.Right = 10
@@ -98,7 +98,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       SpaceChar = '_'
     end
   end
-  object GroupBox2: TGroupBox
+  object DistGrpBox: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = LabelLeftPosition
     AnchorSideTop.Side = asrBottom
@@ -107,17 +107,17 @@ object Settings_VisualDesign: TSettings_VisualDesign
     Left = 10
     Height = 113
     Top = 84
-    Width = 581
+    Width = 590
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
     Caption = 'Vertical distances:'
     ClientHeight = 94
-    ClientWidth = 577
+    ClientWidth = 586
     TabOrder = 2
     object Label5: TLabel
-      AnchorSideLeft.Control = GroupBox2
+      AnchorSideLeft.Control = DistGrpBox
       AnchorSideTop.Control = FieldFieldEdit
       AnchorSideTop.Side = asrCenter
       Left = 10
@@ -129,7 +129,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       ParentColor = False
     end
     object Label6: TLabel
-      AnchorSideLeft.Control = GroupBox2
+      AnchorSideLeft.Control = DistGrpBox
       AnchorSideTop.Control = LabelLabelEdit
       AnchorSideTop.Side = asrCenter
       Left = 10
@@ -141,7 +141,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       ParentColor = False
     end
     object Label7: TLabel
-      AnchorSideLeft.Control = GroupBox2
+      AnchorSideLeft.Control = DistGrpBox
       AnchorSideTop.Control = FieldLabelEdit
       AnchorSideTop.Side = asrCenter
       Left = 10
@@ -153,12 +153,12 @@ object Settings_VisualDesign: TSettings_VisualDesign
       ParentColor = False
     end
     object FieldFieldEdit: TMaskEdit
-      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Control = DistGrpBox
       AnchorSideRight.Side = asrBottom
       Left = 156
       Height = 27
       Top = -1
-      Width = 411
+      Width = 420
       Anchors = [akTop, akLeft, akRight]
       AutoSelect = False
       BorderSpacing.Right = 10
@@ -170,12 +170,12 @@ object Settings_VisualDesign: TSettings_VisualDesign
       SpaceChar = '_'
     end
     object FieldLabelEdit: TMaskEdit
-      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Control = DistGrpBox
       AnchorSideRight.Side = asrBottom
       Left = 156
       Height = 27
       Top = 30
-      Width = 411
+      Width = 420
       Anchors = [akTop, akLeft, akRight]
       AutoSelect = False
       BorderSpacing.Right = 10
@@ -187,12 +187,12 @@ object Settings_VisualDesign: TSettings_VisualDesign
       SpaceChar = '_'
     end
     object LabelLabelEdit: TMaskEdit
-      AnchorSideRight.Control = GroupBox2
+      AnchorSideRight.Control = DistGrpBox
       AnchorSideRight.Side = asrBottom
       Left = 156
       Height = 27
       Top = 63
-      Width = 411
+      Width = 420
       Anchors = [akTop, akLeft, akRight]
       AutoSelect = False
       BorderSpacing.Right = 10
@@ -213,7 +213,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
     Left = 168
     Height = 27
     Top = 47
-    Width = 411
+    Width = 420
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     BorderSpacing.Right = 22
@@ -236,5 +236,126 @@ object Settings_VisualDesign: TSettings_VisualDesign
     BorderSpacing.Top = 10
     Caption = 'Default Label Position'
     ParentColor = False
+  end
+  object FontGrpBox: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = SnappingGrpBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 151
+    Top = 305
+    Width = 590
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Fonts:'
+    ClientHeight = 132
+    ClientWidth = 586
+    TabOrder = 4
+    object FieldFontEditBtn: TEditButton
+      AnchorSideTop.Control = FontGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 204
+      Height = 27
+      Top = 10
+      Width = 340
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      CharCase = ecNormal
+      MaxLength = 0
+      NumGlyphs = 0
+      OnButtonClick = FieldFontEditBtnButtonClick
+      TabOrder = 0
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = FontGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = FieldFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 18
+      Top = 19
+      Width = 163
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Questions / Field Names:'
+      ParentColor = False
+    end
+    object HeadingFontEditBtn: TEditButton
+      AnchorSideLeft.Control = FieldFontEditBtn
+      AnchorSideTop.Control = FieldFontEditBtn
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = FieldFontEditBtn
+      AnchorSideRight.Side = asrBottom
+      Left = 204
+      Height = 27
+      Top = 47
+      Width = 340
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      CharCase = ecNormal
+      MaxLength = 0
+      NumGlyphs = 0
+      OnButtonClick = FieldFontEditBtnButtonClick
+      TabOrder = 1
+    end
+    object Label9: TLabel
+      AnchorSideLeft.Control = FontGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = HeadingFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 18
+      Top = 56
+      Width = 66
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Headings:'
+      ParentColor = False
+    end
+    object SectionFontEditBtn: TEditButton
+      AnchorSideLeft.Control = FieldFontEditBtn
+      AnchorSideTop.Control = HeadingFontEditBtn
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = FieldFontEditBtn
+      AnchorSideRight.Side = asrBottom
+      Left = 204
+      Height = 27
+      Top = 84
+      Width = 340
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      CharCase = ecNormal
+      MaxLength = 0
+      NumGlyphs = 0
+      OnButtonClick = FieldFontEditBtnButtonClick
+      TabOrder = 2
+    end
+    object Label10: TLabel
+      AnchorSideLeft.Control = FontGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = SectionFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 18
+      Top = 93
+      Width = 60
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Sections:'
+      ParentColor = False
+    end
+  end
+  object FontDialog1: TFontDialog
+    MinFontSize = 0
+    MaxFontSize = 0
+    left = 536
+    top = 400
   end
 end

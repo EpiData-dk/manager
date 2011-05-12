@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, ActnList, AVL_Tree, epicustombase, epidatafiles,
-  epidocument, epivaluelabels, LCLType, design_propertiesbase_frame, design_types;
+  epidocument, epivaluelabels, LCLType, design_propertiesbase_frame, design_types,
+  LMessages;
 
 type
 
@@ -34,6 +35,7 @@ type
     procedure   UpdateHint;
   protected
     procedure   SetParent(NewParent: TWinControl); override;
+    procedure   WMPaint(var Msg: TLMPaint); message LM_PAINT;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
@@ -68,6 +70,8 @@ type
     procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnTextChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure UpdateHint;
+  protected
+    procedure WMPaint(var Msg: TLMPaint); message LM_PAINT;
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
@@ -97,6 +101,8 @@ type
     procedure   OnHeadingChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   OnCaptionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure   UpdateHint;
+  protected
+    procedure Paint; override;
   public
     constructor Create(AOwner: TComponent); Override;
     destructor  Destroy; override;
@@ -469,6 +475,13 @@ begin
   FValueLabelLabel.Parent := NewParent;
 end;
 
+procedure TDesignField.WMPaint(var Msg: TLMPaint);
+begin
+  FQuestionLabel.Font.Assign(ManagerSettings.FieldFont);
+  FNameLabel.Font.Assign(ManagerSettings.FieldFont);
+  inherited WMPaint(Msg);
+end;
+
 constructor TDesignField.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -476,10 +489,12 @@ begin
   FQuestionLabel.Anchors := [];
   FQuestionLabel.AnchorToNeighbour(akRight, 5, Self);
   FQuestionLabel.AnchorParallel(akBottom, 0, Self);
+  FQuestionLabel.ParentFont := false;
   FNameLabel := TLabel.Create(Self);
   FNameLabel.Anchors := [];
   FNameLabel.AnchorToNeighbour(akRight, 5, FQuestionLabel);
   FNameLabel.AnchorParallel(akBottom, 0, FQuestionLabel);
+  FNameLabel.ParentFont := false;
   FValueLabelLabel := TLabel.Create(Self);
   FValueLabelLabel.Anchors := [];
   FValueLabelLabel.AnchorToNeighbour(akLeft, 10, Self);
@@ -620,6 +635,12 @@ begin
     );
 end;
 
+procedure TDesignSection.WMPaint(var Msg: TLMPaint);
+begin
+  Font.Assign(ManagerSettings.SectionFont);
+  inherited WMPaint(Msg);
+end;
+
 constructor TDesignSection.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -633,7 +654,7 @@ begin
   ShowHint := true;
   Color := clWhite;
   ParentColor := false;
-  ParentFont := true;
+  Font := ManagerSettings.SectionFont;
 end;
 
 destructor TDesignSection.Destroy;
@@ -722,6 +743,12 @@ begin
     );
 end;
 
+procedure TDesignHeading.Paint;
+begin
+  Font.Assign(ManagerSettings.HeadingFont);
+  inherited Paint;
+end;
+
 constructor TDesignHeading.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -729,7 +756,8 @@ begin
   // Standard properties being set for the component.
   DragKind := dkDock;
   DragMode := dmAutomatic;
-  Font.Style := [fsBold];
+  ParentFont := false;
+  Font := ManagerSettings.HeadingFont;
   Align := alNone;
   ShowHint := true;
   ParentColor := true;
