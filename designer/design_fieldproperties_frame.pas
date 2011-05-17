@@ -1063,8 +1063,10 @@ begin
   if CompareGroupBox.Visible then
   begin
     if CompareToCombo.ItemIndex = CompareToCombo.Items.IndexOfObject(nil) then
-      Field.Comparison.Free
-    else begin
+    begin
+      Field.Comparison.Free;
+      Field.Comparison := nil;
+    end else begin
       if Assigned(Field.Comparison) then Field.Comparison.Free;
       Field.Comparison := TEpiComparison.Create(Field);
       Field.Comparison.CompareType := TEpiComparisonType(CompareTypeCombo.ItemIndex);

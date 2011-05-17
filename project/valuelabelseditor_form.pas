@@ -42,6 +42,7 @@ type
     NewIntValueLabelSetMenuItem: TMenuItem;
     NewStringValueLabelSetMenuItem: TMenuItem;
     NewFloatValueLabelSetMenuItem: TMenuItem;
+    StringGrid1: TStringGrid;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ValueLabelEditorStatusBar: TStatusBar;
@@ -281,7 +282,7 @@ end;
 
 procedure TValueLabelEditor.ValueLabelsGridEditingDone(Sender: TObject);
 begin
-  UpdateGridCells;
+//  UpdateGridCells;
 end;
 
 constructor TValueLabelEditor.Create(TheOwner: TComponent);
