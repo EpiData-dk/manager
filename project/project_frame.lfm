@@ -143,11 +143,6 @@ object ProjectFrame: TProjectFrame
       OnExecute = ProjectSettingsActionExecute
       ShortCut = 32848
     end
-    object ExportStataAction: TAction
-      Category = 'Tools'
-      Caption = 'Export To Stata'
-      OnExecute = ExportStataActionExecute
-    end
     object ShowStructureAction: TAction
       Caption = 'Show Structure'
       OnExecute = ShowStructureActionExecute

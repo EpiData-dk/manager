@@ -2148,11 +2148,6 @@ object DesignFrame: TDesignFrame
       OnUpdate = PasteControlActionUpdate
       ShortCut = 16470
     end
-    object PackFileAction: TAction
-      Category = 'File'
-      Caption = '&Pack Dataset'
-      OnExecute = PackFileActionExecute
-    end
   end
   object DesignControlPopUpMenu: TPopupMenu
     Images = DesignerImageList

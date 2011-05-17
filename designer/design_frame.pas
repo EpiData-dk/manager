@@ -21,7 +21,6 @@ type
   end;
 
   TDesignFrame = class(TFrame)
-    PackFileAction: TAction;
     CopyControlPopupMenuItem: TMenuItem;
     CopyControlMenuItem: TMenuItem;
     ToolBarPanel: TPanel;
@@ -179,7 +178,6 @@ type
     procedure   NewOtherFieldMenuClick(Sender: TObject);
     procedure   NewStringFieldActionExecute(Sender: TObject);
     procedure   NewYMDFieldActionExecute(Sender: TObject);
-    procedure   PackFileActionExecute(Sender: TObject);
     procedure   PasteAsFloatActionExecute(Sender: TObject);
     procedure   PasteAsHeadingActionExecute(Sender: TObject);
     procedure   PasteAsIntActionExecute(Sender: TObject);
@@ -206,6 +204,8 @@ type
       Pos: TPoint; ForceShow: boolean = true): TModalResult;
     procedure   ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
     procedure   ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
+    procedure   DataFileHook(Sender: TObject; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
   private
     { Import/Export/Paste }
     FLastRecYPos: Integer;
@@ -998,33 +998,6 @@ begin
   NewShortCutFieldControl(ftYMDDate, FActiveDockSite);
 end;
 
-procedure TDesignFrame.PackFileActionExecute(Sender: TObject);
-var
-  S: LongInt;
-begin
-  if DataFile.Size > 0 then
-  begin
-    S := DataFile.Size;
-    if MessageDlg('Warning!',
-      'Packing the dataset will permanently remove ALL records marked for deletion!' + LineEnding +
-      'Do you wish to continue?',
-      mtWarning,
-      mbYesNo,
-      0,
-      mbNo
-    ) = mrNo then
-      Exit
-    else
-      DataFile.Pack;
-
-    if S = DataFile.Size then
-      ShowHintMsg(Self, RecordsPanel, 'No records removed!')
-    else
-      ShowHintMsg(Self, RecordsPanel, Format('Removed %d records!', [S - DataFile.Size]));
-  end;
-  UpdateStatusbarControl((FActiveControl as IDesignEpiControl).EpiControl);
-end;
-
 procedure TDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
 begin
   PasteAsField(ftFloat);
@@ -1406,6 +1379,15 @@ begin
   P := Ctrl.ClientToScreen(Point(0,0));
   OffsetRect(R, P.X, P.Y + Ctrl.Height + 2);
   FHintWindow.ActivateHint(R, Msg);
+end;
+
+procedure TDesignFrame.DataFileHook(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if (EventGroup = eegCustomBase) and (EventType = Word(ecceDestroy)) then exit;
+
+  if (EventGroup = eegDataFiles) and (EventType = Word(edceSize)) then
+    UpdateStatusbarControl((FActiveControl as IDesignEpiControl).EpiControl);
 end;
 
 procedure TDesignFrame.DoPostImportAlignment(ParentControl: TWinControl; StartControl,
@@ -1925,6 +1907,8 @@ begin
     EnterControl(FDesignerBox);
   DataFile.EndUpdate;
   MainForm.EndUpdatingForm;
+
+  DataFile.RegisterOnChangeHook(@DataFileHook);
 
   W := 0;
   for Ft := Low(TEpiFieldType) to High(TEpiFieldType) do

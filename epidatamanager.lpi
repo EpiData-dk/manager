@@ -46,7 +46,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="34">
+    <Units Count="35">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -269,6 +269,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_general_frame"/>
       </Unit33>
+      <Unit34>
+        <Filename Value="tools/toolsform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ToolsForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="toolsform"/>
+      </Unit34>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -278,7 +285,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import;tools"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

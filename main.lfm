@@ -180,10 +180,16 @@ object MainForm: TMainForm
     object ToolsMenu: TMenuItem
       Caption = '&Tools'
       object ExportStataMenuItem: TMenuItem
-        Caption = 'ExportStata'
+        Action = StataExportAction
       end
       object PackMenuItem: TMenuItem
-        Caption = 'Pack'
+        Action = PackAction
+      end
+      object ToolMenuDivider1: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem2: TMenuItem
+        Caption = 'Test'
       end
       object EntryClientMenuItem: TMenuItem
         Action = StartEntryClientAction
@@ -300,6 +306,16 @@ object MainForm: TMainForm
       Caption = 'EpiData EntryClient'
       OnExecute = StartEntryClientActionExecute
       OnUpdate = StartEntryClientActionUpdate
+    end
+    object PackAction: TAction
+      Category = 'Tools'
+      Caption = 'Pack Datafiles'
+      OnExecute = PackActionExecute
+    end
+    object StataExportAction: TAction
+      Category = 'Tools'
+      Caption = 'Export To Stata'
+      OnExecute = StataExportActionExecute
     end
   end
 end

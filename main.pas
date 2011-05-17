@@ -14,6 +14,10 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    StataExportAction: TAction;
+    PackAction: TAction;
+    MenuItem2: TMenuItem;
+    ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
     EpiDataTutorialsMenuItem: TMenuItem;
     MenuItem1: TMenuItem;
@@ -83,12 +87,14 @@ type
     procedure FormShow(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
+    procedure PackActionExecute(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
     procedure ShowAboutActionExecute(Sender: TObject);
     procedure StartEntryClientActionExecute(Sender: TObject);
     procedure StartEntryClientActionUpdate(Sender: TObject);
+    procedure StataExportActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -133,7 +139,9 @@ uses
   workflow_frame, LCLProc, LCLIntf, design_frame,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   design_controls, structure_form, valuelabelseditor_form, epimiscutils,
-  epicustombase, project_settings, LCLType, UTF8Process;
+  epicustombase, project_settings, LCLType, UTF8Process,
+  toolsform, epidocument, epidatafiles, epistringutils, epiexport,
+  strutils;
 
 { TMainForm }
 
@@ -279,6 +287,84 @@ begin
   PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, 0, 0);
 end;
 
+procedure TMainForm.PackActionExecute(Sender: TObject);
+var
+  F: TToolsForm;
+  Dlg: TOpenDialog;
+  Doc: TEpiDocument;
+  LocalDoc: Boolean;
+  S: LongInt;
+  T: Integer;
+  Str: String;
+  i: Integer;
+begin
+  try
+    F := nil;
+    Dlg := nil;
+    Doc := nil;
+    if Assigned(FActiveFrame) then
+    begin
+      LocalDoc := false;
+      Doc := FActiveFrame.EpiDocument
+    end else begin
+      Dlg := TOpenDialog.Create(Self);
+      Dlg.Filter := GetEpiDialogFilter(True, True, False, False, False, False, False, False, False, True, False);
+      Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+      if not Dlg.Execute then exit;
+      Doc := TEpiDocument.Create('');
+      Doc.LoadFromFile(Dlg.FileName);
+      LocalDoc := true;
+    end;
+    F := TToolsForm.Create(Self);
+    F.Caption := 'Pack: ' + Doc.Study.Title.Text;
+    F.EpiDocument := Doc;
+    if F.ShowModal = mrCancel then exit;
+
+    if F.SelectedDatafiles.Count = 0 then
+    begin
+      ShowMessage('No datasets selected.');
+      Exit;
+    end;
+
+    if MessageDlg('Warning!',
+      'Packing the dataset will permanently remove ALL records marked for deletion!' + LineEnding +
+      'Do you wish to continue?',
+      mtWarning,
+      mbYesNo,
+      0,
+      mbNo
+    ) = mrNo then
+      Exit;
+
+    T := 0;
+    Str := '';
+    for i := 0 to F.SelectedDatafiles.Count - 1 do
+    with TEpiDataFile(F.SelectedDatafiles[i]) do
+    begin
+      S := Size;
+      Pack;
+      S := S - Size;
+
+      Str := Str + LineEnding +
+        Caption.Text + ': ' + IntToStr(S);
+      T := T + S;
+    end;
+
+    ShowMessage(
+      'Removed records:' +
+      Str + LineEnding + LineEnding +
+      'Total: ' + IntToStr(T));
+
+    if LocalDoc then
+      Doc.SaveToFile(Dlg.FileName);
+  finally
+    if LocalDoc and Assigned(Doc) then
+      Doc.Free;
+    if Assigned(Dlg) then Dlg.Free;
+    if Assigned(F) then F.free;
+  end;
+end;
+
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
 var
   SettingForm: TSettingsForm;
@@ -342,6 +428,78 @@ begin
     'File: ' + Path + 'epidataentryclient' + Ext
     );}
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
+end;
+
+procedure TMainForm.StataExportActionExecute(Sender: TObject);
+var
+  LocalDoc: Boolean;
+  Doc: TEpiDocument;
+  Dlg: TOpenDialog;
+  SaveDlg: TSaveDialog;
+  F: TToolsForm;
+  i: Integer;
+  Exporter: TEpiExport;
+  FN: string;
+begin
+  try
+    F := nil;
+    Dlg := nil;
+    Doc := nil;
+    Exporter := nil;
+    SaveDlg := nil;
+    if Assigned(FActiveFrame) then
+    begin
+      LocalDoc := false;
+      Doc := FActiveFrame.EpiDocument;
+      FN := FActiveFrame.ProjectFileName;
+    end else begin
+      Dlg := TOpenDialog.Create(Self);
+      Dlg.Filter := GetEpiDialogFilter(True, True, False, False, False, False, False, False, False, True, False);
+      Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+      if not Dlg.Execute then exit;
+      Doc := TEpiDocument.Create('');
+      Doc.LoadFromFile(Dlg.FileName);
+      LocalDoc := true;
+      FN := Dlg.FileName;
+    end;
+    F := TToolsForm.Create(Self);
+    F.Caption := 'Export To Stata: ' + Doc.Study.Title.Text;
+    F.EpiDocument := Doc;
+    if F.ShowModal = mrCancel then exit;
+
+    if F.SelectedDatafiles.Count = 0 then
+    begin
+      ShowMessage('No datasets selected.');
+      Exit;
+    end;
+
+    FN := ExtractFileNameWithoutExt(FN);
+    Exporter := TEpiExport.Create;
+    SaveDlg := TSaveDialog.Create(Self);
+    SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    SaveDlg.Filter := GetEpiDialogFilter(false, false, false, false, false, false, true, false, false, false, false);
+    SaveDlg.Options := SaveDlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
+    SaveDlg.DefaultExt := 'dta';
+    for i := 0 to F.SelectedDatafiles.Count - 1 do
+    with TEpiDataFile(F.SelectedDatafiles[i]) do
+    begin
+      SaveDlg.Title := 'Export "' + EpiCutString(Caption.Text, 15) + '" to Stata file...';
+      if F.SelectedDatafiles.Count = 1 then
+        SaveDlg.FileName := FN + '.dta'
+      else
+        SaveDlg.FileName := FN + '-' + StringReplace(Trim(Caption.Text), ' ', '_', [rfReplaceAll]) + '.dta';
+      if not SaveDlg.Execute then exit;
+
+      Exporter.ExportStata(SaveDlg.FileName, TEpiDataFile(F.SelectedDatafiles[i]));
+    end;
+  finally
+    if LocalDoc and Assigned(Doc) then
+      Doc.Free;
+    if Assigned(Dlg) then Dlg.Free;
+    if Assigned(F) then F.free;
+    if Assigned(SaveDlg) then SaveDlg.Free;
+    if Assigned(Exporter) then Exporter.free;
+  end;
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
@@ -591,14 +749,12 @@ begin
   SaveProjectMenuItem.Action := FActiveFrame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
 
-  PackMenuItem.Action           := TDesignFrame(FActiveFrame.ActiveFrame).PackFileAction;
   PasteAsHeadingMenuItem.Action := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
   PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
-  ExportStataMenuItem.Action       := FActiveFrame.ExportStataAction;
   ProjectStructureMenuItem.Action  := FActiveFrame.ShowStructureAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
 end;

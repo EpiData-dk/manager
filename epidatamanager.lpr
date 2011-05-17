@@ -36,7 +36,7 @@ uses
   UniqueInstanceRaw, copyobject, design_fieldproperties_frame, 
   design_sectionproperties_frame, design_headingproperties_frame,
   design_propertiesbase_frame, design_types, import_structure_form, 
-  manager_messages;
+  manager_messages, toolsform;
 
 {$R *.res}
 

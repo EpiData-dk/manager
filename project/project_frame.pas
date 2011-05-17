@@ -17,7 +17,6 @@ type
     OpenProjectAction: TAction;
     ValueLabelEditorAction: TAction;
     ShowStructureAction: TAction;
-    ExportStataAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
     SaveProjectAsAction: TAction;
@@ -36,7 +35,6 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
-    procedure ExportStataActionExecute(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
@@ -132,30 +130,6 @@ end;
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
   PostMessage(MainForm.Handle, LM_MAIN_OPENPROJECT, 0, 0);
-end;
-
-procedure TProjectFrame.ExportStataActionExecute(Sender: TObject);
-var
-  SaveDlg: TSaveDialog;
-  Exporter: TEpiExport;
-begin
-  SaveDlg := TSaveDialog.Create(Self);
-  try
-    SaveDlg.Title := 'Export current form to Stata file...';
-    SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-    SaveDlg.Filter := GetEpiDialogFilter(false, false, false, false, false, false, true, false, false, false, false);
-    SaveDlg.Options := SaveDlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
-    SaveDlg.DefaultExt := 'dta';
-    SaveDlg.FileName   := ChangeFileExt(FFileName, '.dta');
-    if not SaveDlg.Execute then exit;
-
-    // TODO : Support different datafiles export.
-    Exporter := TEpiExport.Create;
-    Exporter.ExportStata(SaveDlg.FileName, EpiDocument.DataFiles[0]);
-  finally
-    SaveDlg.Free;
-    Exporter.Free;
-  end;
 end;
 
 procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);

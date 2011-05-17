@@ -18,6 +18,7 @@ unitdir=designer \
 	utils \
 	settings \
 	import \
+	tools \
 	$(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET) $(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM) \
 	$(CORE_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
 	$(DCPCRYPT_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
@@ -42,6 +43,7 @@ files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
       $(wildcard ./settings/*$(OEXT)) $(wildcard ./settings/*$(PPUEXT)) \
       $(wildcard ./utils/*$(OEXT)) $(wildcard ./utils/*$(PPUEXT)) \
       $(wildcard ./import/*$(OEXT)) $(wildcard ./import/*$(PPUEXT)) \
+      $(wildcard ./tools/*$(OEXT)) $(wildcard ./tools/*$(PPUEXT)) \
       $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *$(RSTEXT))
 
 

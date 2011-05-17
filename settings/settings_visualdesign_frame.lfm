@@ -261,7 +261,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 204
       Height = 27
       Top = 10
-      Width = 340
+      Width = 312
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 10
       ButtonWidth = 23
@@ -294,7 +294,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 204
       Height = 27
       Top = 47
-      Width = 340
+      Width = 312
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 10
       ButtonWidth = 23
@@ -327,7 +327,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 204
       Height = 27
       Top = 84
-      Width = 340
+      Width = 312
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 10
       ButtonWidth = 23
@@ -351,11 +351,101 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Caption = 'Sections:'
       ParentColor = False
     end
+    object FieldColourBtn: TColorButton
+      AnchorSideLeft.Control = FieldFontEditBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = FieldFontEditBtn
+      AnchorSideRight.Control = FontGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = FieldFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 544
+      Height = 27
+      Top = 10
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      ColorDialog = ColorDialog1
+      OnColorChanged = FieldColourBtnColorChanged
+    end
+    object HeadingColourBtn: TColorButton
+      AnchorSideLeft.Control = HeadingFontEditBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn
+      AnchorSideRight.Control = FontGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = HeadingFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 544
+      Height = 27
+      Top = 47
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      ColorDialog = ColorDialog1
+      OnColorChanged = FieldColourBtnColorChanged
+    end
+    object SectionColourBtn: TColorButton
+      AnchorSideLeft.Control = SectionFontEditBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = SectionFontEditBtn
+      AnchorSideRight.Control = FontGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = SectionFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 544
+      Height = 27
+      Top = 84
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      ColorDialog = ColorDialog1
+      OnColorChanged = FieldColourBtnColorChanged
+    end
   end
   object FontDialog1: TFontDialog
     MinFontSize = 0
     MaxFontSize = 0
-    left = 536
-    top = 400
+    left = 280
+    top = 392
+  end
+  object ColorDialog1: TColorDialog
+    Color = clBlack
+    CustomColors.Strings = (
+      'ColorA=000000'
+      'ColorB=000080'
+      'ColorC=008000'
+      'ColorD=008080'
+      'ColorE=800000'
+      'ColorF=800080'
+      'ColorG=808000'
+      'ColorH=808080'
+      'ColorI=C0C0C0'
+      'ColorJ=0000FF'
+      'ColorK=00FF00'
+      'ColorL=00FFFF'
+      'ColorM=FF0000'
+      'ColorN=FF00FF'
+      'ColorO=FFFF00'
+      'ColorP=FFFFFF'
+      'ColorQ=C0DCC0'
+      'ColorR=F0CAA6'
+      'ColorS=F0FBFF'
+      'ColorT=A4A0A0'
+    )
+    left = 390
+    top = 399
   end
 end

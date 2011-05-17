@@ -13,6 +13,10 @@ type
   { TSettings_VisualDesign }
 
   TSettings_VisualDesign = class(TFrame, ISettingsFrame)
+    FieldColourBtn: TColorButton;
+    HeadingColourBtn: TColorButton;
+    SectionColourBtn: TColorButton;
+    ColorDialog1: TColorDialog;
     DefaultRightPosEdit: TMaskEdit;
     FieldFontEditBtn: TEditButton;
     HeadingFontEditBtn: TEditButton;
@@ -36,6 +40,7 @@ type
     LabelLabelEdit: TMaskEdit;
     SnapFieldsChkBox: TCheckBox;
     SnapThresholdEdit: TMaskEdit;
+    procedure FieldColourBtnColorChanged(Sender: TObject);
     procedure FieldFontEditBtnButtonClick(Sender: TObject);
   private
     { private declarations }
@@ -66,6 +71,19 @@ begin
   SetFont(FontDialog1.Font, Btn);
 end;
 
+procedure TSettings_VisualDesign.FieldColourBtnColorChanged(Sender: TObject);
+var
+  Btn: TEditButton;
+begin
+  if Sender = FieldColourBtn then
+    Btn := FieldFontEditBtn;
+  if Sender = HeadingColourBtn then
+    Btn := HeadingFontEditBtn;
+  if SEnder = SectionColourBtn then
+    Btn := SectionFontEditBtn;
+  Btn.Font.Color := TColorButton(Sender).ButtonColor;
+end;
+
 procedure TSettings_VisualDesign.SetFont(AFont: TFont; Btn: TEditButton);
 begin
   Btn.Text := AFont.Name + ' (' + IntToStr(AFont.Size) + ')';
@@ -86,8 +104,11 @@ begin
     FieldLabelEdit.Text               := IntToStr(SpaceBtwFieldLabel);
     LabelLabelEdit.Text               := IntToStr(SpaceBtwLabelLabel);
     SetFont(FieldFont, FieldFontEditBtn);
+    FieldColourBtn.ButtonColor := FieldFont.Color;
     SetFont(HeadingFont, HeadingFontEditBtn);
+    HeadingColourBtn.ButtonColor := HeadingFont.Color;
     SetFont(SectionFont, SectionFontEditBtn);
+    SectionColourBtn.ButtonColor := SectionFont.Color;
   end;
 end;
 
