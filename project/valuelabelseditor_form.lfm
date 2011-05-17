@@ -133,13 +133,6 @@ object ValueLabelEditor: TValueLabelEditor
     SimplePanel = False
     OnResize = ValueLabelEditorStatusBarResize
   end
-  object StringGrid1: TStringGrid
-    Left = 486
-    Height = 234
-    Top = 196
-    Width = 302
-    TabOrder = 3
-  end
   object TreeViewActionList: TActionList
     Images = ImageList1
     left = 96
