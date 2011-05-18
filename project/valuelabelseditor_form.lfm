@@ -36,7 +36,7 @@ object ValueLabelEditor: TValueLabelEditor
       TabOrder = 0
       Transparent = True
       object IntSetBtn: TToolButton
-        Left = 76
+        Left = 103
         Hint = 'Integer Valuelabels'
         Top = 2
         Down = True
@@ -44,43 +44,49 @@ object ValueLabelEditor: TValueLabelEditor
         OnClick = ToolBarBtnClick
       end
       object FloatSetBtn: TToolButton
-        Left = 110
+        Left = 137
         Hint = 'Float Valuelabels'
         Top = 2
         ImageIndex = 1
         OnClick = ToolBarBtnClick
       end
       object StringSetBtn: TToolButton
-        Left = 144
+        Left = 171
         Hint = 'String Valuelabels'
         Top = 2
         ImageIndex = 2
         OnClick = ToolBarBtnClick
       end
       object ToolButton4: TToolButton
-        Left = 178
+        Left = 205
         Top = 2
         Width = 4
         Caption = 'ToolButton4'
         Style = tbsDivider
       end
       object ToolButton5: TToolButton
-        Left = 34
+        Left = 61
         Top = 2
         Action = DeleteValueLabelSets
       end
       object ToolButton6: TToolButton
-        Left = 1
+        Left = 28
         Top = 2
         Caption = 'Add'
         OnClick = ToolButton6Click
       end
       object ToolButton7: TToolButton
-        Left = 68
+        Left = 95
         Top = 2
         Width = 8
         Caption = 'ToolButton7'
         Style = tbsSeparator
+      end
+      object OkToolBtn: TToolButton
+        Left = 1
+        Top = 2
+        Caption = 'OK'
+        OnClick = OkToolBtnClick
       end
     end
     object ValueLabelSetTreeView: TTreeView
