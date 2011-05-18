@@ -16,7 +16,6 @@ type
   TMainForm = class(TForm)
     StataExportAction: TAction;
     PackAction: TAction;
-    MenuItem2: TMenuItem;
     ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
     EpiDataTutorialsMenuItem: TMenuItem;

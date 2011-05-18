@@ -64,7 +64,7 @@ begin
   FieldCountPanel.Caption := IntToStr(DF.Fields.Count);
   SectionCountPanel.Caption := IntToStr(DF.Sections.Count);
   RecordCountPanel.Caption := IntToStr(DF.Size);
-  DeletedCountPanel.Caption := IntToStr(DF.Size);
+  DeletedCountPanel.Caption := IntToStr(DF.DeletedCount);
 end;
 
 procedure TToolsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);

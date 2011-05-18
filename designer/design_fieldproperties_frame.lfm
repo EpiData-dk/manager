@@ -5,8 +5,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
   ClientWidth = 446
   Constraints.MinHeight = 365
   Constraints.MinWidth = 380
-  DesignLeft = 2070
-  DesignTop = 301
+  TabOrder = 0
+  DesignLeft = 1278
+  DesignTop = 389
   object FieldPageControl: TPageControl[0]
     AnchorSideLeft.Control = Owner
     Left = 0
@@ -27,10 +28,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Control = LengthEdit
         AnchorSideRight.Control = NameEdit
         AnchorSideRight.Side = asrBottom
-        Left = 219
+        Left = 215
         Height = 27
         Top = 144
-        Width = 211
+        Width = 215
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         TabOrder = 3
@@ -39,7 +40,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
       object DecimalsLabel: TLabel
         AnchorSideLeft.Control = DecimalsEdit
         AnchorSideBottom.Control = DecimalsEdit
-        Left = 219
+        Left = 215
         Height = 18
         Top = 124
         Width = 66
@@ -57,7 +58,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 27
         Top = 144
-        Width = 194
+        Width = 190
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 2
         BorderSpacing.Right = 5
@@ -249,7 +250,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Control = DecimalsEdit
         AnchorSideBottom.Control = LengthEdit
         AnchorSideBottom.Side = asrBottom
-        Left = 209
+        Left = 205
         Height = 27
         Top = 144
         Width = 5

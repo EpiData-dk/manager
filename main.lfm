@@ -188,9 +188,6 @@ object MainForm: TMainForm
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
       end
-      object MenuItem2: TMenuItem
-        Caption = 'Test'
-      end
       object EntryClientMenuItem: TMenuItem
         Action = StartEntryClientAction
       end

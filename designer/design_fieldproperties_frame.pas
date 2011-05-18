@@ -759,19 +759,6 @@ var
 begin
   if SheetNo = 0 then exit;
   if SheetNo > FieldPageControl.PageCount then exit;
-{
-  for i := 0 to FieldPageControl.PageCount - 1 do
-    if FieldPageControl.Pages[i].VisibleIndex = (SheetNo - 1) then
-    begin
-      FieldPageControl.ActivePageIndex := FieldPageControl.Pages[i].VisibleIndex;
-      Exit;
-    end;          }
-{
-  SN := SheetNo;
-  for i := 0 to Min(SN - 1, FieldPageControl.PageCount - 1) do
-    if not  then
-      Inc(SN);}
-
   FieldPageControl.ActivePageIndex := SheetNo - 1;
 end;
 
@@ -1256,6 +1243,10 @@ begin
   LengthLabel.Visible             := LengthEdit.Visible;
   DecimalsEdit.Visible            := Field.FieldType in FloatFieldTypes;
   DecimalsLabel.Visible           := DecimalsEdit.Visible;
+  if not DecimalsEdit.Visible then
+    Bevel1.Left := QuestionEdit.Left + QuestionEdit.Width
+  else
+    Bevel1.Left := QuestionEdit.Left + ((QuestionEdit.Width - Bevel1.Width) div 2);
   ValueLabelGrpBox.Visible        := Field.FieldType in ValueLabelFieldTypes;
   RangesGrpBox.Visible            := field.FieldType in RangeFieldTypes;
   UpdateModeRadioGrp.Visible      := Field.FieldType in AutoUpdateFieldTypes;
