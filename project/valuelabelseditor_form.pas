@@ -42,6 +42,7 @@ type
     NewIntValueLabelSetMenuItem: TMenuItem;
     NewStringValueLabelSetMenuItem: TMenuItem;
     NewFloatValueLabelSetMenuItem: TMenuItem;
+    OkToolBtn: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
     ValueLabelEditorStatusBar: TStatusBar;
@@ -67,6 +68,7 @@ type
     procedure NewIntValueLabelSetActionExecute(Sender: TObject);
     procedure NewStringValueLabelSetActionExecute(Sender: TObject);
     procedure ToolBarBtnClick(Sender: TObject);
+    procedure OkToolBtnClick(Sender: TObject);
     procedure ToolButton6Click(Sender: TObject);
     procedure ValueLabelEditorStatusBarResize(Sender: TObject);
     procedure ValueLabelSetTreeViewEdited(Sender: TObject; Node: TTreeNode;
@@ -664,6 +666,11 @@ begin
   FActiveButton := ToolBtn;
 
   EndFormUpdate;
+end;
+
+procedure TValueLabelEditor.OkToolBtnClick(Sender: TObject);
+begin
+  //
 end;
 
 procedure TValueLabelEditor.ToolButton6Click(Sender: TObject);

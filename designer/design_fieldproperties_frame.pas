@@ -753,9 +753,25 @@ begin
 end;
 
 procedure TFieldPropertiesFrame.ShiftToTabSheet(const SheetNo: Byte);
+var
+  SN: Byte;
+  i: Integer;
 begin
   if SheetNo = 0 then exit;
   if SheetNo > FieldPageControl.PageCount then exit;
+{
+  for i := 0 to FieldPageControl.PageCount - 1 do
+    if FieldPageControl.Pages[i].VisibleIndex = (SheetNo - 1) then
+    begin
+      FieldPageControl.ActivePageIndex := FieldPageControl.Pages[i].VisibleIndex;
+      Exit;
+    end;          }
+{
+  SN := SheetNo;
+  for i := 0 to Min(SN - 1, FieldPageControl.PageCount - 1) do
+    if not  then
+      Inc(SN);}
+
   FieldPageControl.ActivePageIndex := SheetNo - 1;
 end;
 
@@ -1075,7 +1091,11 @@ begin
   end;
 
   // Jumps
-  Field.Jumps.Free;
+  if Assigned(Field.Jumps) then
+  begin
+    Field.Jumps.Free;
+    Field.Jumps := nil;
+  end;
   if (FJumpComponentsList.Count > 0) then
   begin
     Field.Jumps := TEpiJumps.Create(Field);
