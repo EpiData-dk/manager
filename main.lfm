@@ -179,6 +179,17 @@ object MainForm: TMainForm
     end
     object ToolsMenu: TMenuItem
       Caption = '&Tools'
+      object MenuItem2: TMenuItem
+        Caption = 'Reports'
+        Visible = False
+        object CodeBookMenuItem: TMenuItem
+          Caption = 'CodeBook'
+        end
+      end
+      object MenuItem3: TMenuItem
+        Caption = '-'
+        Visible = False
+      end
       object ExportStataMenuItem: TMenuItem
         Action = StataExportAction
       end

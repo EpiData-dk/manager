@@ -14,6 +14,9 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    CodeBookMenuItem: TMenuItem;
     StataExportAction: TAction;
     PackAction: TAction;
     ToolMenuDivider1: TMenuItem;
