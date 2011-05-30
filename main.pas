@@ -7,13 +7,21 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
-  project_frame, LMessages, manager_messages;
+  project_frame, LMessages, manager_messages, epidocument;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    CombinedListReportAction: TAction;
+    ValueLabelListReportAction: TAction;
+    ValueLabaleListReportMenuItem: TMenuItem;
+    CombinedReportMenuItem: TMenuItem;
+    QuestionListReportMenuItem: TMenuItem;
+    MenuItem5: TMenuItem;
+    QuestionListReportAction: TAction;
+    ReportGeneratorAction: TAction;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     CodeBookMenuItem: TMenuItem;
@@ -90,6 +98,8 @@ type
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
+    procedure QuestionListReportActionExecute(Sender: TObject);
+    procedure ReportGeneratorActionExecute(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
@@ -115,6 +125,7 @@ type
     procedure UpdateProcessToolbar;
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
+    function  ToolsCheckOpenFile(out FileName: string; out LocalDoc: boolean): TEpiDocument;
     procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
     procedure LMOpenRecent(var Msg: TLMessage);   message LM_MAIN_OPENRECENT;
     procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
@@ -142,7 +153,7 @@ uses
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   design_controls, structure_form, valuelabelseditor_form, epimiscutils,
   epicustombase, project_settings, LCLType, UTF8Process,
-  toolsform, epidocument, epidatafiles, epistringutils, epiexport,
+  toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   strutils;
 
 { TMainForm }
@@ -292,31 +303,19 @@ end;
 procedure TMainForm.PackActionExecute(Sender: TObject);
 var
   F: TToolsForm;
-  Dlg: TOpenDialog;
   Doc: TEpiDocument;
   LocalDoc: Boolean;
   S: LongInt;
   T: Integer;
   Str: String;
   i: Integer;
+  Fn: string;
 begin
   try
     F := nil;
-    Dlg := nil;
-    Doc := nil;
-    if Assigned(FActiveFrame) then
-    begin
-      LocalDoc := false;
-      Doc := FActiveFrame.EpiDocument
-    end else begin
-      Dlg := TOpenDialog.Create(Self);
-      Dlg.Filter := GetEpiDialogFilter(True, True, False, False, False, False, False, False, False, True, False);
-      Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-      if not Dlg.Execute then exit;
-      Doc := TEpiDocument.Create('');
-      Doc.LoadFromFile(Dlg.FileName);
-      LocalDoc := true;
-    end;
+    Doc := ToolsCheckOpenFile(Fn, LocalDoc);
+    if not Assigned(Doc) then exit;
+
     F := TToolsForm.Create(Self);
     F.Caption := 'Pack: ' + Doc.Study.Title.Text;
     F.EpiDocument := Doc;
@@ -358,13 +357,29 @@ begin
       'Total: ' + IntToStr(T));
 
     if LocalDoc then
-      Doc.SaveToFile(Dlg.FileName);
+      Doc.SaveToFile(Fn);
   finally
     if LocalDoc and Assigned(Doc) then
       Doc.Free;
-    if Assigned(Dlg) then Dlg.Free;
     if Assigned(F) then F.free;
   end;
+end;
+
+procedure TMainForm.QuestionListReportActionExecute(Sender: TObject);
+var
+  F: TToolsForm;
+begin
+  F := TToolsForm.Create(Self);
+  F.Show;
+end;
+
+procedure TMainForm.ReportGeneratorActionExecute(Sender: TObject);
+var
+  RGF: TReportGeneratorForm;
+begin
+  RGF := TReportGeneratorForm.Create(Self);
+  RGF.ShowModal;
+  RGF.Free;
 end;
 
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
@@ -436,7 +451,6 @@ procedure TMainForm.StataExportActionExecute(Sender: TObject);
 var
   LocalDoc: Boolean;
   Doc: TEpiDocument;
-  Dlg: TOpenDialog;
   SaveDlg: TSaveDialog;
   F: TToolsForm;
   i: Integer;
@@ -445,25 +459,11 @@ var
 begin
   try
     F := nil;
-    Dlg := nil;
-    Doc := nil;
     Exporter := nil;
     SaveDlg := nil;
-    if Assigned(FActiveFrame) then
-    begin
-      LocalDoc := false;
-      Doc := FActiveFrame.EpiDocument;
-      FN := FActiveFrame.ProjectFileName;
-    end else begin
-      Dlg := TOpenDialog.Create(Self);
-      Dlg.Filter := GetEpiDialogFilter(True, True, False, False, False, False, False, False, False, True, False);
-      Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-      if not Dlg.Execute then exit;
-      Doc := TEpiDocument.Create('');
-      Doc.LoadFromFile(Dlg.FileName);
-      LocalDoc := true;
-      FN := Dlg.FileName;
-    end;
+    Doc := ToolsCheckOpenFile(Fn, LocalDoc);
+    if not Assigned(Doc) then exit;
+
     F := TToolsForm.Create(Self);
     F.Caption := 'Export To Stata: ' + Doc.Study.Title.Text;
     F.EpiDocument := Doc;
@@ -497,7 +497,6 @@ begin
   finally
     if LocalDoc and Assigned(Doc) then
       Doc.Free;
-    if Assigned(Dlg) then Dlg.Free;
     if Assigned(F) then F.free;
     if Assigned(SaveDlg) then SaveDlg.Free;
     if Assigned(Exporter) then Exporter.free;
@@ -678,6 +677,29 @@ end;
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
 begin
   PostMessage(Self.Handle, LM_MAIN_OPENRECENT, WParam(Sender), 0);
+end;
+
+function TMainForm.ToolsCheckOpenFile(out FileName: string;
+  out LocalDoc: boolean): TEpiDocument;
+var
+  Dlg: TOpenDialog;
+begin
+  Result := nil;
+  if Assigned(FActiveFrame) then
+  begin
+    LocalDoc := false;
+    Result := FActiveFrame.EpiDocument;
+    FileName := FActiveFrame.ProjectFileName;
+  end else begin
+    Dlg := TOpenDialog.Create(Self);
+    Dlg.Filter := GetEpiDialogFilter(True, True, False, False, False, False, False, False, False, True, False);
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    if not Dlg.Execute then exit;
+    Result := TEpiDocument.Create('');
+    Result.LoadFromFile(Dlg.FileName);
+    LocalDoc := true;
+    FileName := Dlg.FileName;
+  end;
 end;
 
 procedure TMainForm.LMOpenProject(var Msg: TLMessage);

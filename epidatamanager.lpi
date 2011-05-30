@@ -46,7 +46,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="35">
+    <Units Count="37">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -276,6 +276,18 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="toolsform"/>
       </Unit34>
+      <Unit35>
+        <Filename Value="reports/reportgenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ReportGeneratorForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="reportgenerator"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="reports/report_fieldlist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_fieldlist"/>
+      </Unit36>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -285,7 +297,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import;tools"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import;tools;reports"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

@@ -181,14 +181,26 @@ object MainForm: TMainForm
       Caption = '&Tools'
       object MenuItem2: TMenuItem
         Caption = 'Reports'
-        Visible = False
+        object QuestionListReportMenuItem: TMenuItem
+          Action = QuestionListReportAction
+        end
+        object ValueLabaleListReportMenuItem: TMenuItem
+          Action = ValueLabelListReportAction
+        end
+        object CombinedReportMenuItem: TMenuItem
+          Action = CombinedListReportAction
+        end
+        object MenuItem5: TMenuItem
+          Caption = '-'
+          Visible = False
+        end
         object CodeBookMenuItem: TMenuItem
-          Caption = 'CodeBook'
+          Action = ReportGeneratorAction
+          Visible = False
         end
       end
       object MenuItem3: TMenuItem
         Caption = '-'
-        Visible = False
       end
       object ExportStataMenuItem: TMenuItem
         Action = StataExportAction
@@ -324,6 +336,24 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Export To Stata'
       OnExecute = StataExportActionExecute
+    end
+    object ReportGeneratorAction: TAction
+      Category = 'Tools'
+      Caption = 'Report Generator...'
+      OnExecute = ReportGeneratorActionExecute
+    end
+    object QuestionListReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Question List'
+      OnExecute = QuestionListReportActionExecute
+    end
+    object ValueLabelListReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Valuelabel List'
+    end
+    object CombinedListReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Combined List'
     end
   end
 end
