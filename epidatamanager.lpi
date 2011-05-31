@@ -33,20 +33,24 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="3">
+    <RequiredPackages Count="4">
       <Item1>
-        <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
+        <PackageName Value="HtmlComp"/>
+        <MinVersion Release="4" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Minor="5" Release="1" Valid="True"/>
+        <PackageName Value="LCLBase"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item2>
       <Item3>
-        <PackageName Value="LCL"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Minor="5" Release="1" Valid="True"/>
       </Item3>
+      <Item4>
+        <PackageName Value="LCL"/>
+      </Item4>
     </RequiredPackages>
-    <Units Count="37">
+    <Units Count="38">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -288,6 +292,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="report_fieldlist"/>
       </Unit36>
+      <Unit37>
+        <Filename Value="reports/viewer_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="HtmlViewerForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="viewer_form"/>
+      </Unit37>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

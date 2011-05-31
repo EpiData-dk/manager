@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
-  project_frame, LMessages, manager_messages, epidocument;
+  project_frame, LMessages, Htmlview, manager_messages, epidocument;
 
 type
 
@@ -15,6 +15,7 @@ type
 
   TMainForm = class(TForm)
     CombinedListReportAction: TAction;
+    SelectDirectoryDialog1: TSelectDirectoryDialog;
     ValueLabelListReportAction: TAction;
     ValueLabaleListReportMenuItem: TMenuItem;
     CombinedReportMenuItem: TMenuItem;
@@ -154,7 +155,7 @@ uses
   design_controls, structure_form, valuelabelseditor_form, epimiscutils,
   epicustombase, project_settings, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
-  strutils;
+  strutils, report_fieldlist, viewer_form;
 
 { TMainForm }
 
@@ -367,10 +368,21 @@ end;
 
 procedure TMainForm.QuestionListReportActionExecute(Sender: TObject);
 var
-  F: TToolsForm;
+  L: TStringList;
+  R: TReportFieldLists;
+  F: THtmlViewerForm;
 begin
-  F := TToolsForm.Create(Self);
-  F.Show;
+  SelectDirectoryDialog1.InitialDir := ManagerSettings.WorkingDirUTF8;
+  if not SelectDirectoryDialog1.Execute then exit;
+
+  L := FindAllFiles(SelectDirectoryDialog1.FileName, '*.epx', false);
+  R := TReportFieldLists.Create(L);
+
+  F := THtmlViewerForm.Create(Self);
+  F.SetHtml(R.RunReport);
+  F.ShowModal;
+  F.Free;
+  L.Free;
 end;
 
 procedure TMainForm.ReportGeneratorActionExecute(Sender: TObject);

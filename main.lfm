@@ -356,4 +356,8 @@ object MainForm: TMainForm
       Caption = 'Combined List'
     end
   end
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
+    left = 182
+    top = 137
+  end
 end

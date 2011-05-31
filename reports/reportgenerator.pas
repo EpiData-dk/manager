@@ -31,9 +31,6 @@ type
     constructor Create(TheOwner: TComponent); override;
   end; 
 
-var
-  ReportGeneratorForm: TReportGeneratorForm;
-
 implementation
 
 {$R *.lfm}
