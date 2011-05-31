@@ -1,17 +1,19 @@
-unit report_fieldlist;
+unit report_valuelabellist;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils; 
 
 type
 
   { TReportFieldLists }
 
-  TReportFieldLists = class
+  { TReportValueLabelList }
+
+  TReportValueLabelList = class
   private
     FDocuments: TStringList;
   public
@@ -25,12 +27,12 @@ implementation
 
 uses
   epidocument,
-  epireport_base, epireport_fieldlist_simple,
+  epireport_base, epireport_valuelabels,
   epireport_htmlgenerator, epireport_filelist;
 
-{ TReportFieldLists }
+{ TReportValueLabelList }
 
-constructor TReportFieldLists.Create(const FileNames: TStringList);
+constructor TReportValueLabelList.Create(const FileNames: TStringList);
 var
   Doc: TEpiDocument;
   i: Integer;
@@ -44,7 +46,7 @@ begin
   end;
 end;
 
-destructor TReportFieldLists.Destroy;
+destructor TReportValueLabelList.Destroy;
 var
   i: Integer;
 begin
@@ -55,13 +57,13 @@ begin
   inherited Destroy;
 end;
 
-function TReportFieldLists.RunReport: string;
+function TReportValueLabelList.RunReport: string;
 var
   Doc: TEpiDocument;
   i: Integer;
   R: TEpiReportBase;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of questions/fields.');
+  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of valuelabels.');
 
   R := TEpiReportFileListHtml.Create(FDocuments);
   R.RunReport;
@@ -71,7 +73,7 @@ begin
   for i := 0 to FDocuments.Count - 1 do
   begin
     Result += '<h2>File: ' + FDocuments[i] + '</h2>';
-    R := TEpiReportSimpleFieldListHtml.Create(TEpiDocument(FDocuments.Objects[i]), stEntryFlow);
+    R := TEpiReportValueLabelsHtml.Create(TEpiDocument(FDocuments.Objects[i]), false);
     R.RunReport;
 
     Result += R.ReportText +

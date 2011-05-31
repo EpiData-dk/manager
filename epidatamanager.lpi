@@ -50,7 +50,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="38">
+    <Units Count="40">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -299,6 +299,16 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="viewer_form"/>
       </Unit37>
+      <Unit38>
+        <Filename Value="reports/report_valuelabellist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_valuelabellist"/>
+      </Unit38>
+      <Unit39>
+        <Filename Value="reports/report_combinedlist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_combinedlist"/>
+      </Unit39>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

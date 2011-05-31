@@ -1,17 +1,17 @@
-unit report_fieldlist;
+unit report_combinedlist;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils; 
 
 type
 
-  { TReportFieldLists }
+  { TReportCombinedList }
 
-  TReportFieldLists = class
+  TReportCombinedList = class
   private
     FDocuments: TStringList;
   public
@@ -26,11 +26,12 @@ implementation
 uses
   epidocument,
   epireport_base, epireport_fieldlist_simple,
+  epireport_valuelabels,
   epireport_htmlgenerator, epireport_filelist;
 
-{ TReportFieldLists }
+{ TReportCombinedList }
 
-constructor TReportFieldLists.Create(const FileNames: TStringList);
+constructor TReportCombinedList.Create(const FileNames: TStringList);
 var
   Doc: TEpiDocument;
   i: Integer;
@@ -44,7 +45,7 @@ begin
   end;
 end;
 
-destructor TReportFieldLists.Destroy;
+destructor TReportCombinedList.Destroy;
 var
   i: Integer;
 begin
@@ -55,13 +56,13 @@ begin
   inherited Destroy;
 end;
 
-function TReportFieldLists.RunReport: string;
+function TReportCombinedList.RunReport: string;
 var
   Doc: TEpiDocument;
   i: Integer;
   R: TEpiReportBase;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of questions/fields.');
+  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: Combined list of fields/question and valuelabels.');
 
   R := TEpiReportFileListHtml.Create(FDocuments);
   R.RunReport;
@@ -73,10 +74,13 @@ begin
     Result += '<h2>File: ' + FDocuments[i] + '</h2>';
     R := TEpiReportSimpleFieldListHtml.Create(TEpiDocument(FDocuments.Objects[i]), stEntryFlow);
     R.RunReport;
+    Result += R.ReportText;
+    R.Free;
 
+    R := TEpiReportValueLabelsHtml.Create(TEpiDocument(FDocuments.Objects[i]), false);
+    R.RunReport;
     Result += R.ReportText +
       '<div style="page-break-after:always;">' + LineEnding ;
-
     R.Free;
   end;
 
