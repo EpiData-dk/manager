@@ -60,7 +60,6 @@ type
     NewProjectMenuItem: TMenuItem;
     ResetWindowPosMenuItem: TMenuItem;
     ValueLabelsMenuItem: TMenuItem;
-    ProjectStructureMenuItem: TMenuItem;
     ToolsMenu: TMenuItem;
     ShowAboutAction: TAction;
     FileExitAction: TFileExit;
@@ -832,7 +831,7 @@ begin
   PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
-  ProjectStructureMenuItem.Action  := FActiveFrame.ShowStructureAction;
+//  ProjectStructureMenuItem.Action  := FActiveFrame.ShowStructureAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
 end;
 

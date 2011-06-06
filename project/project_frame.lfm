@@ -55,33 +55,33 @@ object ProjectFrame: TProjectFrame
       object ToolButton1: TToolButton
         Left = 25
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'ToolButton1'
         Style = tbsDivider
       end
       object SaveProjectToolBtn: TToolButton
-        Left = 29
+        Left = 30
         Top = 1
         Action = SaveProjectAction
         ParentShowHint = False
         ShowHint = True
       end
       object SaveProjectAsToolBtn: TToolButton
-        Left = 52
+        Left = 53
         Top = 1
         Action = SaveProjectAsAction
         ParentShowHint = False
         ShowHint = True
       end
       object ToolButton4: TToolButton
-        Left = 75
+        Left = 76
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'ToolButton4'
         Style = tbsDivider
       end
       object AddDataFormToolBtn: TToolButton
-        Left = 79
+        Left = 81
         Top = 1
         Action = NewDataFormAction
         Enabled = False
@@ -89,16 +89,16 @@ object ProjectFrame: TProjectFrame
         ShowHint = True
       end
       object DeleteDataFormToolBtn: TToolButton
-        Left = 102
+        Left = 104
         Top = 1
         Action = DeleteDataFormAction
         ParentShowHint = False
         ShowHint = True
       end
       object ToolButton7: TToolButton
-        Left = 125
+        Left = 127
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'ToolButton7'
         Style = tbsDivider
       end
@@ -142,10 +142,6 @@ object ProjectFrame: TProjectFrame
       Caption = 'Properties'
       OnExecute = ProjectSettingsActionExecute
       ShortCut = 32848
-    end
-    object ShowStructureAction: TAction
-      Caption = 'Show Structure'
-      OnExecute = ShowStructureActionExecute
     end
     object ValueLabelEditorAction: TAction
       Category = 'Project'

@@ -5,19 +5,15 @@ unit report_fieldlist;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, report_base;
 
 type
 
   { TReportFieldLists }
 
-  TReportFieldLists = class
-  private
-    FDocuments: TStringList;
+  TReportFieldLists = class(TReportListBase)
   public
-    constructor Create(const FileNames: TStringList);
-    destructor Destroy; override;
-    function RunReport: string;
+    function RunReport: string; override;
   end;
 
 implementation
@@ -30,48 +26,23 @@ uses
 
 { TReportFieldLists }
 
-constructor TReportFieldLists.Create(const FileNames: TStringList);
-var
-  Doc: TEpiDocument;
-  i: Integer;
-begin
-  FDocuments := TStringList.Create;
-  for i := 0 to FileNames.Count - 1 do
-  begin
-    Doc := TEpiDocument.Create('');
-    Doc.LoadFromFile(FileNames[i]);
-    FDocuments.AddObject(FileNames[i], Doc);
-  end;
-end;
-
-destructor TReportFieldLists.Destroy;
-var
-  i: Integer;
-begin
-  for i := 0 to FDocuments.Count - 1 do
-    FDocuments.Objects[i].Free;
-
-  FDocuments.Free;
-  inherited Destroy;
-end;
-
 function TReportFieldLists.RunReport: string;
 var
   Doc: TEpiDocument;
   i: Integer;
   R: TEpiReportBase;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of questions/fields.');
+  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of questions/fields.', StyleSheet);
 
-  R := TEpiReportFileListHtml.Create(FDocuments);
+  R := TEpiReportFileListHtml.Create(Documents);
   R.RunReport;
   Result += R.ReportText;
   R.Free;
 
-  for i := 0 to FDocuments.Count - 1 do
+  for i := 0 to Documents.Count - 1 do
   begin
-    Result += '<h2>File: ' + FDocuments[i] + '</h2>';
-    R := TEpiReportSimpleFieldListHtml.Create(TEpiDocument(FDocuments.Objects[i]), stEntryFlow);
+    Result += '<h2>File: ' + Documents[i] + '</h2>';
+    R := TEpiReportSimpleFieldListHtml.Create(TEpiDocument(Documents.Objects[i]), stEntryFlow);
     R.RunReport;
 
     Result += R.ReportText +

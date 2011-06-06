@@ -28,15 +28,12 @@ uses
   project_settings_field_frame,
   project_settings_study_frame,
   project_settings_study_contentdesc_frame,
-  project_settings_study_ownership_frame,
-
-  // No more settings
-  structure_form, structure_datafile_frame, valuelabelseditor_form,
-  structure_valuelabelset_frame, design_controls, UniqueInstanceRaw, copyobject,
+  project_settings_study_ownership_frame, valuelabelseditor_form, design_controls, UniqueInstanceRaw, copyobject,
   design_fieldproperties_frame, design_sectionproperties_frame,
   design_headingproperties_frame, design_propertiesbase_frame, design_types,
   import_structure_form, manager_messages, toolsform, reportgenerator,
-  report_fieldlist, viewer_form, report_valuelabellist, report_combinedlist;
+  report_fieldlist, viewer_form, report_valuelabellist, report_combinedlist,
+  report_base;
 
 {$R *.res}
 

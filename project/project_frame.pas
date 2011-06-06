@@ -16,7 +16,6 @@ type
   TProjectFrame = class(TFrame)
     OpenProjectAction: TAction;
     ValueLabelEditorAction: TAction;
-    ShowStructureAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
     SaveProjectAsAction: TAction;
@@ -40,7 +39,6 @@ type
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
-    procedure ShowStructureActionExecute(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
   private
     { private declarations }
@@ -96,7 +94,7 @@ implementation
 uses
   design_frame, Clipbrd, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
-  structure_form, valuelabelseditor_form, epidatafilestypes,
+  valuelabelseditor_form, epidatafilestypes,
   strutils, managerprocs, Menus, LCLType, LCLIntf, project_settings;
 
 type
@@ -233,15 +231,6 @@ begin
 
   EpiDocument.Modified := false;
   UpdateCaption;
-end;
-
-procedure TProjectFrame.ShowStructureActionExecute(Sender: TObject);
-var
-  StructureForm: TProject_Structure_Form;
-begin
-  StructureForm := TProject_Structure_Form.Create(Self, EpiDocument);
-  StructureForm.ShowModal;
-  StructureForm.Free;
 end;
 
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);

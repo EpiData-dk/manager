@@ -40,11 +40,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 105
+      Left = 108
       Height = 29
       Hint = 'Open existing project'
       Top = 6
-      Width = 94
+      Width = 95
       Action = OpenProjectAction
       AutoSize = True
       BorderSpacing.Left = 10
@@ -56,7 +56,7 @@ object MainForm: TMainForm
       Left = 8
       Height = 29
       Top = 6
-      Width = 87
+      Width = 90
       Action = NewProjectAction
       AutoSize = True
       ParentShowHint = False
@@ -68,11 +68,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 209
+      Left = 213
       Height = 29
       Hint = 'Define/Change User names and passwords'
       Top = 6
-      Width = 141
+      Width = 142
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'User Access Control'
@@ -86,11 +86,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 360
+      Left = 365
       Height = 29
       Hint = 'Good Clinical Practice guideline tools'
       Top = 6
-      Width = 103
+      Width = 105
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Gcp Extension'
@@ -164,9 +164,6 @@ object MainForm: TMainForm
     end
     object ProjectMenu: TMenuItem
       Caption = 'P&roject'
-      object ProjectStructureMenuItem: TMenuItem
-        Caption = 'Structure'
-      end
       object ValueLabelsMenuItem: TMenuItem
         Caption = 'ValueLabels'
       end

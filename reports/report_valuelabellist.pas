@@ -5,20 +5,14 @@ unit report_valuelabellist;
 interface
 
 uses
-  Classes, SysUtils; 
+  Classes, SysUtils, report_base;
 
 type
 
-  { TReportFieldLists }
-
   { TReportValueLabelList }
 
-  TReportValueLabelList = class
-  private
-    FDocuments: TStringList;
+  TReportValueLabelList = class(TReportListBase)
   public
-    constructor Create(const FileNames: TStringList);
-    destructor Destroy; override;
     function RunReport: string;
   end;
 
@@ -32,48 +26,24 @@ uses
 
 { TReportValueLabelList }
 
-constructor TReportValueLabelList.Create(const FileNames: TStringList);
-var
-  Doc: TEpiDocument;
-  i: Integer;
-begin
-  FDocuments := TStringList.Create;
-  for i := 0 to FileNames.Count - 1 do
-  begin
-    Doc := TEpiDocument.Create('');
-    Doc.LoadFromFile(FileNames[i]);
-    FDocuments.AddObject(FileNames[i], Doc);
-  end;
-end;
-
-destructor TReportValueLabelList.Destroy;
-var
-  i: Integer;
-begin
-  for i := 0 to FDocuments.Count - 1 do
-    FDocuments.Objects[i].Free;
-
-  FDocuments.Free;
-  inherited Destroy;
-end;
-
 function TReportValueLabelList.RunReport: string;
 var
   Doc: TEpiDocument;
   i: Integer;
   R: TEpiReportBase;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of valuelabels.');
+  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of valuelabels.',
+    StyleSheet);
 
-  R := TEpiReportFileListHtml.Create(FDocuments);
+  R := TEpiReportFileListHtml.Create(Documents);
   R.RunReport;
   Result += R.ReportText;
   R.Free;
 
-  for i := 0 to FDocuments.Count - 1 do
+  for i := 0 to Documents.Count - 1 do
   begin
-    Result += '<h2>File: ' + FDocuments[i] + '</h2>';
-    R := TEpiReportValueLabelsHtml.Create(TEpiDocument(FDocuments.Objects[i]), false);
+    Result += '<h2>File: ' + Documents[i] + '</h2>';
+    R := TEpiReportValueLabelsHtml.Create(TEpiDocument(Documents.Objects[i]), false);
     R.RunReport;
 
     Result += R.ReportText +
