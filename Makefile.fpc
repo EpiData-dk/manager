@@ -13,16 +13,17 @@ programs=epidatamanager
 options=-l -dLCL -dLCL$(LCL_PLATFORM) -MObjFPC -Schi -dEPI_SHOWREVISION
 unittargetdir=./lib/$(CPU_TARGET)-$(OS_TARGET)
 unitdir=designer \
-	project \
-	project/structure \
-	utils \
-	settings \
 	import \
+	project \
+	reports \
+	settings \
 	tools \
+	utils \
 	$(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET) $(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM) \
 	$(CORE_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
 	$(DCPCRYPT_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
 	$(LNET_PATH)/lazaruspackage/lib/$(CPU_TARGET)-$(OS_TARGET) \
+	$(THTMLPORT_PATH)/package/units/$(CPU_TARGET)-$(OS_TARGET) \
 	.
 targetdir=.
 
@@ -38,11 +39,11 @@ files=$(wildcard $(COMPILER_UNITTARGETDIR)/*$(OEXT)) \
       $(wildcard $(COMPILER_UNITTARGETDIR)/*.res) \
       $(wildcard $(COMPILER_UNITTARGETDIR)/*.or) \
       $(wildcard ./designer/*$(OEXT)) $(wildcard ./designer/*$(PPUEXT)) \
+      $(wildcard ./import/*$(OEXT)) $(wildcard ./import/*$(PPUEXT)) \
       $(wildcard ./project/*$(OEXT)) $(wildcard ./project/*$(PPUEXT)) \
-      $(wildcard ./project/structure/*$(OEXT)) $(wildcard ./project/structure/*$(PPUEXT)) \
+      $(wildcard ./reports/*$(OEXT)) $(wildcard ./reports/*$(PPUEXT)) \
       $(wildcard ./settings/*$(OEXT)) $(wildcard ./settings/*$(PPUEXT)) \
       $(wildcard ./utils/*$(OEXT)) $(wildcard ./utils/*$(PPUEXT)) \
-      $(wildcard ./import/*$(OEXT)) $(wildcard ./import/*$(PPUEXT)) \
       $(wildcard ./tools/*$(OEXT)) $(wildcard ./tools/*$(PPUEXT)) \
       $(wildcard *$(OEXT)) $(wildcard *$(PPUEXT)) $(wildcard *$(RSTEXT))
 
@@ -80,6 +81,9 @@ clean:	fpc_clean
 revisioninc:
 	./update_revision.sh
 
+thtmlport:
+	$(MAKE) -C $(THTMLPORT_PATH)/package all
+
 core:
 	$(MAKE) -C $(CORE_PATH) all
 
@@ -89,11 +93,11 @@ core_debug:
 core_release:
 	$(MAKE) -C $(CORE_PATH) all OPT='$(RELEASE_OPT) $(OPT)'
 
-all:	$(COMPILER_UNITTARGETDIR) core revisioninc
+all:	$(COMPILER_UNITTARGETDIR) core thtmlport revisioninc
 	$(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT)
 
-debug:   $(COMPILER_UNITTARGETDIR) core_debug revisioninc
+debug:   $(COMPILER_UNITTARGETDIR) core_debug thtmlport revisioninc
 	 $(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT) OPT='$(DEBUG_OPT) $(OPT)'
 
-release: $(COMPILER_UNITTARGETDIR) core_release revisioninc
+release: $(COMPILER_UNITTARGETDIR) core_release thtmlport revisioninc
 	 $(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT) OPT='$(RELEASE_OPT) $(OPT)'

@@ -153,7 +153,7 @@ implementation
 uses
   workflow_frame, LCLProc, LCLIntf, design_frame,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
-  design_controls, structure_form, valuelabelseditor_form, epimiscutils,
+  design_controls, valuelabelseditor_form, epimiscutils,
   epicustombase, project_settings, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   strutils, report_fieldlist, report_valuelabellist,
@@ -858,7 +858,6 @@ begin
     FActiveFrame.RestoreDefaultPos;
 
   TSettingsForm.RestoreDefaultPos;
-  TProject_Structure_Form.RestoreDefaultPos;
   TProjectSettingsForm.RestoreDefaultPos;
 
   BeginFormUpdate;
