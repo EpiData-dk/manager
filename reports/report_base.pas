@@ -15,8 +15,10 @@ type
     FStyleSheet: string;
   protected
     constructor Create; virtual;
+    function GetTitle: string; virtual; abstract;
   public
     property StyleSheet: string read FStyleSheet;
+    property ReportTitle: string read GetTitle;
   end;
 
   { TReportListBase }

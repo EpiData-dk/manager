@@ -12,6 +12,8 @@ type
   { TReportCombinedList }
 
   TReportCombinedList = class(TReportListBase)
+  protected
+    function GetTitle: string; override;
   public
     function RunReport: string;
   end;
@@ -25,7 +27,16 @@ uses
   epireport_valuelabels,
   epireport_htmlgenerator, epireport_filelist;
 
+
+resourcestring
+  rsReportCombinedListTitle = 'Report: Combined list of fields/question and valuelabels.';
+
 { TReportCombinedList }
+
+function TReportCombinedList.GetTitle: string;
+begin
+  Result := rsReportCombinedListTitle;
+end;
 
 function TReportCombinedList.RunReport: string;
 var
@@ -33,9 +44,9 @@ var
   i: Integer;
   R: TEpiReportBase;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader(
-    'Report: Combined list of fields/question and valuelabels.',
-    StyleSheet);
+  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
+  Result +=
+    '<h3>Report: ' + ReportTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now)  + '</h3>';
 
   R := TEpiReportFileListHtml.Create(Documents);
   R.RunReport;

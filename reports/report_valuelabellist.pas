@@ -12,19 +12,28 @@ type
   { TReportValueLabelList }
 
   TReportValueLabelList = class(TReportListBase)
+  protected
+    function GetTitle: string; override;
   public
     function RunReport: string;
   end;
 
 implementation
 
-
 uses
   epidocument,
   epireport_base, epireport_valuelabels,
   epireport_htmlgenerator, epireport_filelist;
 
+resourcestring
+  rsReportValueLabelListTitle = 'Report: List of valuelabels.';
+
 { TReportValueLabelList }
+
+function TReportValueLabelList.GetTitle: string;
+begin
+  Result := rsReportValueLabelListTitle;
+end;
 
 function TReportValueLabelList.RunReport: string;
 var
@@ -32,8 +41,9 @@ var
   i: Integer;
   R: TEpiReportBase;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of valuelabels.',
-    StyleSheet);
+  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
+  Result +=
+    '<h3>Report: ' + ReportTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now)  + '</h3>';
 
   R := TEpiReportFileListHtml.Create(Documents);
   R.RunReport;

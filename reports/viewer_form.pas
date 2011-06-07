@@ -13,12 +13,13 @@ type
   { THtmlViewerForm }
 
   THtmlViewerForm = class(TForm)
+    BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    Button1: TButton;
     HTMLViewer1: THTMLViewer;
     Panel1: TPanel;
     SaveDialog1: TSaveDialog;
     procedure Button1Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { private declarations }
   public
@@ -29,6 +30,8 @@ type
 
 implementation
 
+uses
+  LCLType;
 {$R *.lfm}
 
 { THtmlViewerForm }
@@ -46,6 +49,12 @@ begin
   Fs.CopyFrom(Ss, ss.Size);
   Fs.Free;
   Ss.Free;
+end;
+
+procedure THtmlViewerForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_ESCAPE) and (Shift = []) then Close;
 end;
 
 constructor THtmlViewerForm.Create(TheOwner: TComponent);

@@ -12,6 +12,8 @@ type
   { TReportFieldLists }
 
   TReportFieldLists = class(TReportListBase)
+  protected
+    function GetTitle: string; override;
   public
     function RunReport: string; override;
   end;
@@ -24,7 +26,16 @@ uses
   epireport_base, epireport_fieldlist_simple,
   epireport_htmlgenerator, epireport_filelist;
 
+
+resourcestring
+  rsReportFieldListTitle = 'Report: List of questions/fields.';
+
 { TReportFieldLists }
+
+function TReportFieldLists.GetTitle: string;
+begin
+  Result := rsReportFieldListTitle;
+end;
 
 function TReportFieldLists.RunReport: string;
 var
@@ -32,7 +43,9 @@ var
   i: Integer;
   R: TEpiReportBase;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader('Report: List of questions/fields.', StyleSheet);
+  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
+  Result +=
+    '<h3>Report: ' + ReportTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now)  + '</h3>';
 
   R := TEpiReportFileListHtml.Create(Documents);
   R.RunReport;

@@ -295,9 +295,9 @@ begin
   R := TReportCombinedList.Create(L);
 
   F := THtmlViewerForm.Create(Self);
+  F.Caption := R.ReportTitle;
   F.SetHtml(R.RunReport);
-  F.ShowModal;
-  F.Free;
+  F.Show;
   L.Free;
 end;
 
@@ -400,9 +400,9 @@ begin
   R := TReportFieldLists.Create(L);
 
   F := THtmlViewerForm.Create(Self);
+  F.Caption := R.ReportTitle;
   F.SetHtml(R.RunReport);
-  F.ShowModal;
-  F.Free;
+  F.Show;
   L.Free;
 end;
 
@@ -549,9 +549,9 @@ begin
   R := TReportValueLabelList.Create(L);
 
   F := THtmlViewerForm.Create(Self);
+  F.Caption := R.ReportTitle;
   F.SetHtml(R.RunReport);
-  F.ShowModal;
-  F.Free;
+  F.Show;
   L.Free;
 end;
 
