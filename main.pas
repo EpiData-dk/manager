@@ -822,7 +822,7 @@ begin
   if Not Assigned(FActiveFrame) then exit;
 
   UpdateMainMenu;
-  SaveProjectMenuItem.Action := FActiveFrame.SaveProjectAction;
+  SaveProjectMenuItem.Action   := FActiveFrame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
 
   PasteAsHeadingMenuItem.Action := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
@@ -831,7 +831,6 @@ begin
   PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
-//  ProjectStructureMenuItem.Action  := FActiveFrame.ShowStructureAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
 end;
 

@@ -489,13 +489,13 @@ object DesignFrame: TDesignFrame
       object Divider1: TToolButton
         Left = 30
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'Divider1'
         Style = tbsDivider
       end
       object IntToolButton: TToolButton
         Tag = 1
-        Left = 34
+        Left = 35
         Hint = 'New Integer Field (F2)'
         Top = 1
         Caption = 'New Integer Field'
@@ -506,7 +506,7 @@ object DesignFrame: TDesignFrame
       end
       object FloatToolButton: TToolButton
         Tag = 3
-        Left = 62
+        Left = 63
         Hint = 'New Float Field (F3)'
         Top = 1
         Caption = 'New Float Field'
@@ -517,7 +517,7 @@ object DesignFrame: TDesignFrame
       end
       object StringToolButton: TToolButton
         Tag = 12
-        Left = 90
+        Left = 91
         Hint = 'New String Field  (F4)'
         Top = 1
         Caption = 'New String Field'
@@ -528,7 +528,7 @@ object DesignFrame: TDesignFrame
       end
       object DateToolButton: TToolButton
         Tag = 4
-        Left = 118
+        Left = 119
         Hint = 'New DMY Field (F5)'
         Top = 1
         Caption = 'New DMY Field'
@@ -539,7 +539,7 @@ object DesignFrame: TDesignFrame
         ShowHint = True
       end
       object OtherToolButton: TToolButton
-        Left = 146
+        Left = 147
         Hint = 'Other Field Types...'
         Top = 1
         Caption = 'OtherToolButton'
@@ -549,15 +549,15 @@ object DesignFrame: TDesignFrame
         ShowHint = True
       end
       object Divider2: TToolButton
-        Left = 174
+        Left = 175
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'Divider2'
         Style = tbsDivider
       end
       object HeadingToolButton: TToolButton
         Tag = 5
-        Left = 178
+        Left = 180
         Hint = 'New Heading (F6)'
         Top = 1
         Caption = 'New Heading'
@@ -567,15 +567,15 @@ object DesignFrame: TDesignFrame
         ShowHint = True
       end
       object Divider3: TToolButton
-        Left = 206
+        Left = 208
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'Divider3'
         Style = tbsDivider
       end
       object SectionToolButton: TToolButton
         Tag = 6
-        Left = 210
+        Left = 213
         Hint = 'New Section'
         Top = 1
         Caption = 'New Section'
@@ -585,70 +585,70 @@ object DesignFrame: TDesignFrame
         ShowHint = True
       end
       object Divider4: TToolButton
-        Left = 238
+        Left = 241
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'Divider4'
         Style = tbsDivider
       end
       object EditToolButton: TToolButton
-        Left = 242
+        Left = 246
         Top = 1
         Action = EditControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteToolButton: TToolButton
-        Left = 270
+        Left = 274
         Top = 1
         Action = DeleteControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteAllToolButton: TToolButton
-        Left = 298
+        Left = 302
         Top = 1
         Action = DeleteAllControlsAction
         ParentShowHint = False
         ShowHint = True
       end
       object Divider5: TToolButton
-        Left = 326
+        Left = 330
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'Divider5'
         Style = tbsDivider
       end
       object LoadToolButton: TToolButton
-        Left = 330
+        Left = 335
         Top = 1
         Action = ImportDataFileAction
         ParentShowHint = False
         ShowHint = True
       end
       object ImportToolButton: TToolButton
-        Left = 358
+        Left = 363
         Top = 1
         Action = AddStructureAction
         ParentShowHint = False
         ShowHint = True
       end
       object ExportToolButton: TToolButton
-        Left = 386
+        Left = 391
         Top = 1
         Action = ExportDataformAction
         ParentShowHint = False
         ShowHint = True
       end
       object Divider6: TToolButton
-        Left = 414
+        Left = 419
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'Divider6'
         Style = tbsDivider
       end
       object TestToolButton: TToolButton
-        Left = 418
+        Left = 424
         Top = 1
         Caption = 'TestToolButton'
         ImageIndex = 0
@@ -676,17 +676,17 @@ object DesignFrame: TDesignFrame
       object ProjectDivider1: TToolButton
         Left = 26
         Top = 1
-        Width = 4
+        Width = 5
         Caption = 'ProjectDivider1'
         Style = tbsDivider
       end
       object SaveProjectToolBtn: TToolButton
-        Left = 30
+        Left = 31
         Top = 1
         Caption = 'SaveProjectToolBtn'
       end
       object SaveProjectAsToolBtn: TToolButton
-        Left = 54
+        Left = 55
         Top = 1
         Caption = 'SaveProjectAsToolBtn'
       end

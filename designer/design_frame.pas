@@ -1090,7 +1090,7 @@ begin
       (CO.CopyType in [ctField, ctHeading]))
   then
   begin
-    // Copying to section/main.
+    // Creating new control in section/main.
     case CO.CopyType of
       ctField:
         begin
@@ -1123,12 +1123,6 @@ begin
             for i := 0 to Fields.Count - 1 do
             begin
               OldEpiCtrl := Field[i];
-{              J := 0;
-              repeat
-                inc(j);
-                TheName := ManagerSettings.FieldNamePrefix + IntToStr(FieldCount + j);
-              until DataFile.ValidateFieldRename(TEpiField(OldEpiCtrl), TheName);
-              TEpiField(OldEpiCtrl).Name := TheName;           }
               // Since Valuelabels are NOT copied - do it manually.
               TEpiField(OldEpiCtrl).ValueLabelSet := OrgSection.Field[i].ValueLabelSet;
               NewDesignControl(TDesignField, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
