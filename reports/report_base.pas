@@ -34,6 +34,7 @@ type
     function    RunReport: string; virtual; abstract;
     property    Documents: TStringList read FDocuments;
   end;
+  TReportListBaseClass = class of TReportListBase;
 
 implementation
 

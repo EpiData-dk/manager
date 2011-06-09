@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Buttons, ActnList, Grids, StdCtrls, ShellCtrls, epicustombase,
-  epidatafiles;
+  epidatafiles, projectfilelist_frame, epidocument;
 
 type
 
@@ -16,7 +16,6 @@ type
   TImportStructureForm = class(TForm)
     AddFilesAction: TAction;
     CancelAction: TAction;
-    ErrorListBox: TListBox;
     Label1: TLabel;
     OkAction: TAction;
     ActionList1: TActionList;
@@ -27,27 +26,23 @@ type
     OptionsPanel: TPanel;
     FieldsRenameGrpBox: TRadioGroup;
     ValueLabelsRenameGrpBox: TRadioGroup;
-    StructureGrid: TStringGrid;
     procedure CancelActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure OkActionExecute(Sender: TObject);
     procedure AddFilesActionExecute(Sender: TObject);
-    procedure StructureGridColRowMoved(Sender: TObject; IsColumn: Boolean;
-      sIndex, tIndex: Integer);
   private
     { private declarations }
     FSelectedDocuments: TList;
-    FDocList: TList;
     FLastRecYPos: Integer;
     FLastEpiCtrl: TEpiCustomControlItem;
     DataFile: TEpiDatafile;
     FDesignerBox: TScrollBox;
+    FProjectList: TProjectFileListFrame;
     procedure ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
-    procedure  ReadFiles(Const Files: TStrings);
-    procedure  ImportFile(Const FileName: string);
-    procedure  ReportError(Const Msg: string);
+    procedure BeforeLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
+    procedure AfterLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Files: TStrings);
@@ -61,7 +56,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epidocument, epimiscutils, settings2_var,
+  epiimport, LCLProc, epimiscutils, settings2_var,
   epidatafilestypes, settings2;
 
 { TImportStructureForm }
@@ -70,9 +65,7 @@ procedure TImportStructureForm.OkActionExecute(Sender: TObject);
 var
   i: Integer;
 begin
-  for i := 1 to StructureGrid.RowCount - 1 do
-    if StructureGrid.Cells[2, i] <> '0' then
-      FSelectedDocuments.Add(FDocList.Items[i - 1]);
+  FSelectedDocuments := FProjectList.SelectedList;
 
   ModalResult := mrOk;
 end;
@@ -88,15 +81,7 @@ begin
   Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
   if not Dlg.Execute then exit;
 
-  ReadFiles(Dlg.Files);
-end;
-
-procedure TImportStructureForm.StructureGridColRowMoved(Sender: TObject;
-  IsColumn: Boolean; sIndex, tIndex: Integer);
-begin
-  if IsColumn then exit;
-
-  FDocList.Move(sIndex - 1, tIndex - 1);
+  FProjectList.AddFiles(Dlg.Files);
 end;
 
 procedure TImportStructureForm.ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
@@ -226,14 +211,32 @@ begin
   end;
 end;
 
-procedure TImportStructureForm.ReadFiles(const Files: TStrings);
+procedure TImportStructureForm.BeforeLoad(Sender: TObject; Doc: TEpiDocument;
+  const FN: string);
 var
-  i: Integer;
+  Ext: String;
 begin
-  if Assigned(Files) then
-    for i := 0 to Files.Count -1 do
-      ImportFile(Files[i]);
-  StructureGrid.AutoAdjustColumns;
+  Ext := ExtractFileExt(FN);
+  if (Ext = '.epx') or (Ext = '.epz') then exit;
+
+  FLastRecYPos := -1;
+  FLastEpiCtrl := nil;
+
+  DataFile := Doc.DataFiles[Doc.DataFiles.Count - 1];
+  DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
+  DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+end;
+
+procedure TImportStructureForm.AfterLoad(Sender: TObject; Doc: TEpiDocument;
+  const FN: string);
+var
+  Ext: String;
+begin
+  Ext := ExtractFileExt(FN);
+  if (Ext = '.epx') or (Ext = '.epz') then exit;
+
+  DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+  DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
 end;
 
 procedure TImportStructureForm.CancelActionExecute(Sender: TObject);
@@ -255,113 +258,36 @@ begin
     LoadFormPosition(Self, 'ImportStructureForm');
 end;
 
-procedure TImportStructureForm.ImportFile(const FileName: string);
-var
-  Importer: TEpiImport;
-  Ext: String;
-  Doc: TEpiDocument;
-  St: TMemoryStream;
-  Idx: Integer;
-begin
-  Importer := TEpiImport.Create;
-  Ext := ExtractFileExt(UTF8LowerCase(FileName));
-
-  try
-    // Needed for rec/dta file import.
-    FLastRecYPos := -1;
-    FLastEpiCtrl := nil;
-
-    Doc := TEpiDocument.Create('en');
-    if ext = '.rec' then
-    begin
-      DataFile := Doc.DataFiles.NewDataFile;
-      DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
-      DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
-      Importer.ImportRec(FileName , DataFile, false);
-      DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-      DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
-    end
-    else if ext = '.dta' then
-    begin
-      DataFile := Doc.DataFiles.NewDataFile;
-      DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
-      DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
-      Importer.ImportStata(FileName, DataFile, false);
-      DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-      DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
-    end
-    else if ext = '.epx' then
-      Doc.LoadFromFile(FileName)
-    else if ext = '.epz' then
-    begin
-      St := TMemoryStream.Create;
-      ZipFileToStream(St, FileName);
-      Doc.LoadFromStream(St);
-      St.Free;
-    end;
-
-    with StructureGrid do
-    begin
-      RowCount := RowCount + 1;
-      Idx := RowCount - 1;
-      Cells[1, Idx] := ExtractFileName(FileName);                           // Filename column.
-      Cells[2, Idx] := '1';                                                 // Include row.
-      if (ext = '.epx') or (ext ='.epz') then
-      begin
-        Cells[3, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.Created);                      // Created
-        Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.ModifiedDate);                 // Edited
-      end else begin
-        Cells[3, Idx] := 'N/A';                                             // Created
-        Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
-      end;
-      with Doc.DataFiles[0] do
-      begin
-        Cells[5, Idx] := Caption.Text;                                         // Info
-        Cells[6, Idx] := IntToStr(Sections.Count);                          // Sections
-        Cells[7, Idx] := IntToStr(Fields.Count);                            // Fields
-      end;
-    end;
-    FDocList.Add(Doc);
-  except
-    on E: Exception do
-      ReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
-  end;
-  Importer.Free;
-end;
-
-procedure TImportStructureForm.ReportError(const Msg: string);
-begin
-  if not ErrorListBox.Visible then
-    ErrorListBox.Visible := true;
-
-  ErrorListBox.Items.Add(Msg);
-end;
-
 constructor TImportStructureForm.Create(TheOwner: TComponent;
   const Files: TStrings);
 begin
   inherited Create(TheOwner);
+  FProjectList := TProjectFileListFrame.Create(Self);
+  with FProjectList do
+  begin
+    FProjectList.OnBeforeImportFile := @BeforeLoad;
+    FProjectList.OnAfterImportFile  := @AfterLoad;
+
+    FProjectList.Align := alClient;
+    FProjectList.Parent := Self;
+  end;
 
   if TheOwner is TScrollBox then
     FDesignerBox := TScrollBox(TheOwner);
 
-  FSelectedDocuments := TList.Create;
-  FDocList := TList.Create;
-
-  ReadFiles(Files);
+  FProjectList.AddFiles(Files);
 end;
 
 destructor TImportStructureForm.Destroy;
 var
   I: TObject;
 begin
-  while FDocList.Count > 0 do
+  while FProjectList.DocList.Count > 0 do
   begin
-    I := TObject(FDocList.Last);
-    FDocList.Remove(I);
+    I := TObject(FProjectList.DocList.Last);
+    FProjectList.DocList.Remove(I);
     I.Free;
   end;
-  FDocList.Free;
   FSelectedDocuments.Free;
   inherited Destroy;
 end;

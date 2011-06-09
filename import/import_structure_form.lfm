@@ -1,7 +1,7 @@
 object ImportStructureForm: TImportStructureForm
-  Left = 849
+  Left = 664
   Height = 679
-  Top = 244
+  Top = 224
   Width = 677
   Caption = 'Import Structure From...'
   ClientHeight = 679
@@ -104,65 +104,6 @@ object ImportStructureForm: TImportStructureForm
       TabOrder = 2
     end
   end
-  object StructureGrid: TStringGrid
-    Left = 0
-    Height = 378
-    Top = 152
-    Width = 677
-    Align = alClient
-    ColCount = 8
-    Columns = <    
-      item
-        ReadOnly = True
-        Title.Caption = 'Filename'
-      end    
-      item
-        ButtonStyle = cbsCheckboxColumn
-        Title.Caption = 'Include'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Created'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Last edited'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Name'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Sections'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Fields'
-      end>
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goTabs, goSmoothScroll, goFixedRowNumbering]
-    RowCount = 1
-    TabOrder = 1
-    OnColRowMoved = StructureGridColRowMoved
-    Cells = (
-      1
-      0
-      0
-      'Order'
-    )
-  end
-  object ErrorListBox: TListBox
-    Left = 0
-    Height = 107
-    Top = 530
-    Width = 677
-    Align = alBottom
-    ItemHeight = 0
-    ScrollWidth = 675
-    TabOrder = 2
-    TopIndex = -1
-    Visible = False
-  end
   object OptionsPanel: TPanel
     Left = 0
     Height = 152
@@ -171,7 +112,7 @@ object ImportStructureForm: TImportStructureForm
     Align = alTop
     ClientHeight = 152
     ClientWidth = 677
-    TabOrder = 3
+    TabOrder = 1
     object ValueLabelsRenameGrpBox: TRadioGroup
       AnchorSideLeft.Control = OptionsPanel
       AnchorSideTop.Control = OptionsPanel
