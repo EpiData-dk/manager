@@ -10,18 +10,20 @@ uses
 
 type
 
-  { TForm1 }
+  { TStaticReportsForm }
 
-  TForm1 = class(TForm)
+  TStaticReportsForm = class(TForm)
     AddFilesBtn: TBitBtn;
     BitBtn1: TBitBtn;
     Panel1: TPanel;
+    procedure AddFilesBtnClick(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
     FProjectList: TProjectFileListFrame;
     FReportClass: TReportListBaseClass;
+    function ShowDialog(out Files: TStrings): boolean;
   protected
     constructor Create(TheOwner: TComponent); override;
   public
@@ -30,7 +32,7 @@ type
   end;
 
 var
-  Form1: TForm1; 
+  StaticReportsForm: TStaticReportsForm;
 
 implementation
 
@@ -39,40 +41,67 @@ implementation
 uses
   settings2_var, epimiscutils, viewer_form;
 
-{ TForm1 }
+{ TStaticReportsForm }
 
-procedure TForm1.FormShow(Sender: TObject);
+procedure TStaticReportsForm.FormShow(Sender: TObject);
+var
+  Files: TStrings;
+begin
+  if ShowDialog(Files) then
+  begin
+    FProjectList.AddFiles(Files);
+    Files.Free;
+  end;
+end;
+
+function TStaticReportsForm.ShowDialog(out Files: TStrings): boolean;
 var
   Dlg: TOpenDialog;
 begin
-  Dlg := TOpenDialog.Create(Self);
-  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(true, true, true, false, false, false, true, false, false, true, false);
-  Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
-  if not Dlg.Execute then
-  begin
-    Close;
-    Exit;
-  end;
+  Result := false;
+  Files := nil;
+  Dlg := nil;
 
-//  Caption := FReportClass.ReportTitle;
+  try
+    Dlg := TOpenDialog.Create(Self);
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    Dlg.Filter := GetEpiDialogFilter(true, true, true, false, false, false, true, false, false, true, false);
+    Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
+    if not Dlg.Execute then exit;
+
+    Files := TStringList.Create;
+    Files.Assign(Dlg.Files);
+    Result := true
+  finally
+    Dlg.Free;
+  end;
 end;
 
-procedure TForm1.BitBtn1Click(Sender: TObject);
+procedure TStaticReportsForm.BitBtn1Click(Sender: TObject);
 var
   R: TReportListBase;
+  F: THtmlViewerForm;
 begin
-//  ModalResult := mr;
-  R := FReportClass.Create(nil);
+  R := FReportClass.Create(FProjectList.SelectedList);
 
   F := THtmlViewerForm.Create(nil);
   F.Caption := R.ReportTitle;
   F.SetHtml(R.RunReport);
   F.Show;
-//  L.Free;
 end;
 
-constructor TForm1.Create(TheOwner: TComponent);
+procedure TStaticReportsForm.AddFilesBtnClick(Sender: TObject);
+var
+  Files: TStrings;
+begin
+  if ShowDialog(Files) then
+  begin
+    FProjectList.AddFiles(Files);
+    Files.Free;
+  end;
+end;
+
+constructor TStaticReportsForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
@@ -84,7 +113,7 @@ begin
   end;
 end;
 
-constructor TForm1.Create(TheOwner: TComponent;
+constructor TStaticReportsForm.Create(TheOwner: TComponent;
   ReportClass: TReportListBaseClass);
 begin
   Create(TheOwner);

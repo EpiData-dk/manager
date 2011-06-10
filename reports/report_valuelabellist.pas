@@ -15,7 +15,7 @@ type
   protected
     function GetTitle: string; override;
   public
-    function RunReport: string;
+    function RunReport: string; override;
   end;
 
 implementation

@@ -157,7 +157,7 @@ uses
   epicustombase, project_settings, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   strutils, report_fieldlist, report_valuelabellist,
-  report_combinedlist, viewer_form;
+  report_combinedlist, viewer_form, staticreports_form;
 
 { TMainForm }
 
@@ -284,21 +284,11 @@ end;
 
 procedure TMainForm.CombinedListReportActionExecute(Sender: TObject);
 var
-  L: TStringList;
-  R: TReportCombinedList;
-  F: THtmlViewerForm;
+  F: TStaticReportsForm;
 begin
-  SelectDirectoryDialog1.InitialDir := ManagerSettings.WorkingDirUTF8;
-  if not SelectDirectoryDialog1.Execute then exit;
-
-  L := FindAllFiles(SelectDirectoryDialog1.FileName, '*.epx', false);
-  R := TReportCombinedList.Create(L);
-
-  F := THtmlViewerForm.Create(Self);
-  F.Caption := R.ReportTitle;
-  F.SetHtml(R.RunReport);
-  F.Show;
-  L.Free;
+  F := TStaticReportsForm.Create(Self, TReportCombinedList);
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -389,21 +379,11 @@ end;
 
 procedure TMainForm.QuestionListReportActionExecute(Sender: TObject);
 var
-  L: TStringList;
-  R: TReportFieldLists;
-  F: THtmlViewerForm;
+  F: TStaticReportsForm;
 begin
-  SelectDirectoryDialog1.InitialDir := ManagerSettings.WorkingDirUTF8;
-  if not SelectDirectoryDialog1.Execute then exit;
-
-  L := FindAllFiles(SelectDirectoryDialog1.FileName, '*.epx', false);
-  R := TReportFieldLists.Create(L);
-
-  F := THtmlViewerForm.Create(Self);
-  F.Caption := R.ReportTitle;
-  F.SetHtml(R.RunReport);
-  F.Show;
-  L.Free;
+  F := TStaticReportsForm.Create(Self, TReportFieldLists);
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TMainForm.ReportGeneratorActionExecute(Sender: TObject);
@@ -538,21 +518,11 @@ end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
 var
-  L: TStringList;
-  R: TReportValueLabelList;
-  F: THtmlViewerForm;
+  F: TStaticReportsForm;
 begin
-  SelectDirectoryDialog1.InitialDir := ManagerSettings.WorkingDirUTF8;
-  if not SelectDirectoryDialog1.Execute then exit;
-
-  L := FindAllFiles(SelectDirectoryDialog1.FileName, '*.epx', false);
-  R := TReportValueLabelList.Create(L);
-
-  F := THtmlViewerForm.Create(Self);
-  F.Caption := R.ReportTitle;
-  F.SetHtml(R.RunReport);
-  F.Show;
-  L.Free;
+  F := TStaticReportsForm.Create(Self, TReportValueLabelList);
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);

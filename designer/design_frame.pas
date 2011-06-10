@@ -607,7 +607,7 @@ begin
     MainForm.BeginUpdatingForm;
 
     for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
-      PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments[i]),
+      PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
         ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex=1, ImpStructurForm.FieldsRenameGrpBox.ItemIndex=1);
 
     EnterControl(TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data));

@@ -1,9 +1,9 @@
-object Form1: TForm1
-  Left = 897
+object StaticReportsForm: TStaticReportsForm
+  Left = 975
   Height = 516
-  Top = 306
+  Top = 388
   Width = 595
-  Caption = 'Form1'
+  Caption = 'StaticReportsForm'
   ClientHeight = 516
   ClientWidth = 595
   OnShow = FormShow
@@ -64,6 +64,7 @@ object Form1: TForm1
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00EAC39DFFE6BF96FFE4BB92FFE4BB
         92FFD1A06CF5D09E6DF6CC965FDAC479427EB2673C09FFFFFF00
       }
+      OnClick = AddFilesBtnClick
       TabOrder = 0
     end
     object BitBtn1: TBitBtn

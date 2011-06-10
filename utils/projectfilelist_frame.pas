@@ -23,10 +23,10 @@ type
       sIndex, tIndex: Integer);
   private
     { private declarations }
-    FDocList: TList;
+    FDocList: TStringList;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
-    function GetSelectedList: TList;
+    function   GetSelectedList: TStringList;
     procedure  ImportFile(Const FileName: string);
     procedure  ReportError(Const Msg: string);
     procedure  SetOnAfterImportFile(const AValue: TProjectListFileEvent);
@@ -41,8 +41,8 @@ type
     procedure   AddFiles(Const Files: TStrings);
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
-    property    SelectedList: TList read GetSelectedList;
-    property    DocList: TList read FDocList;
+    property    SelectedList: TStringList read GetSelectedList;
+    property    DocList: TStringList read FDocList;
   end; 
 
 implementation
@@ -59,7 +59,7 @@ procedure TProjectFileListFrame.StructureGridColRowMoved(Sender: TObject;
 begin
   if IsColumn then exit;
 
-//  FDocList.Move(sIndex - 1, tIndex - 1);
+  FDocList.Move(sIndex - 1, tIndex - 1);
 end;
 
 procedure TProjectFileListFrame.ImportFile(const FileName: string);
@@ -123,7 +123,7 @@ begin
         Cells[7, Idx] := IntToStr(Fields.Count);                            // Fields
       end;
     end;
-    FDocList.Add(Doc);
+    FDocList.AddObject(FileName, Doc);
   except
     on E: Exception do
       ReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
@@ -131,15 +131,15 @@ begin
   Importer.Free;
 end;
 
-function TProjectFileListFrame.GetSelectedList: TList;
+function TProjectFileListFrame.GetSelectedList: TStringList;
 var
   i: Integer;
 begin
-  Result := TList.Create;
+  Result := TStringList.Create;
 
   for i := 1 to StructureGrid.RowCount - 1 do
     if StructureGrid.Cells[2, i] <> '0' then
-      Result.Add(FDocList.Items[i - 1]);
+      Result.AddObject(FDocList[i - 1], FDocList.Objects[i - 1]);
 end;
 
 procedure TProjectFileListFrame.ReportError(const Msg: string);
@@ -187,7 +187,7 @@ end;
 constructor TProjectFileListFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  FDocList := TList.Create;
+  FDocList := TStringList.Create;
 end;
 
 destructor TProjectFileListFrame.Destroy;

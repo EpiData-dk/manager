@@ -33,7 +33,7 @@ type
     procedure AddFilesActionExecute(Sender: TObject);
   private
     { private declarations }
-    FSelectedDocuments: TList;
+    FSelectedDocuments: TStringList;
     FLastRecYPos: Integer;
     FLastEpiCtrl: TEpiCustomControlItem;
     DataFile: TEpiDatafile;
@@ -48,7 +48,7 @@ type
     constructor Create(TheOwner: TComponent; Const Files: TStrings);
     destructor Destroy; override;
     class procedure RestoreDefaultPos;
-    property    SelectedDocuments: TList read FSelectedDocuments;
+    property    SelectedDocuments: TStringList read FSelectedDocuments;
   end; 
 
 implementation
@@ -282,12 +282,12 @@ destructor TImportStructureForm.Destroy;
 var
   I: TObject;
 begin
-  while FProjectList.DocList.Count > 0 do
+{  while FProjectList.DocList.Count > 0 do
   begin
     I := TObject(FProjectList.DocList.Last);
     FProjectList.DocList.Remove(I);
     I.Free;
-  end;
+  end; }
   FSelectedDocuments.Free;
   inherited Destroy;
 end;

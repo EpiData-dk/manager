@@ -88,9 +88,17 @@ var
   i: Integer;
 begin
   inherited Create;
+
   FDocuments := TStringList.Create;
   for i := 0 to FileNames.Count - 1 do
   begin
+    if Assigned(FileNames.Objects[i]) and
+       (FileNames.Objects[i] is TEpiDocument) then
+    begin
+      FDocuments.AddObject(FileNames[i], FileNames.Objects[i]);
+      Continue;
+    end;
+
     Doc := TEpiDocument.Create('');
     Doc.LoadFromFile(FileNames[i]);
     FDocuments.AddObject(FileNames[i], Doc);

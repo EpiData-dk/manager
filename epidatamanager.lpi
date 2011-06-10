@@ -303,7 +303,7 @@
       <Unit39>
         <Filename Value="reports/staticreports_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
+        <ComponentName Value="StaticReportsForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="staticreports_form"/>
       </Unit39>
