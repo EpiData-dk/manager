@@ -1,4 +1,4 @@
-unit report_combinedlist;
+unit report_project_overview;
 
 {$mode objfpc}{$H+}
 
@@ -9,9 +9,9 @@ uses
 
 type
 
-  { TReportCombinedList }
+  { TReportProjectOverview }
 
-  TReportCombinedList = class(TReportListBase)
+  TReportProjectOverview = class(TReportListBase)
   protected
     function GetTitle: string; override;
   public
@@ -20,25 +20,23 @@ type
 
 implementation
 
-
 uses
   epidocument,
-  epireport_base, epireport_types, epireport_fieldlist_simple,
-  epireport_valuelabels,
+  epireport_base, epireport_types, epireport_project_overview,
   epireport_htmlgenerator, epireport_filelist;
 
 
 resourcestring
-  rsReportCombinedListTitle = 'Report: Combined list of fields/question and valuelabels.';
+  rsReportProjectOverviewTitle = 'Project Overview.';
 
-{ TReportCombinedList }
+{ TReportProjectOverview }
 
-function TReportCombinedList.GetTitle: string;
+function TReportProjectOverview.GetTitle: string;
 begin
-  Result := rsReportCombinedListTitle;
+  Result := rsReportProjectOverviewTitle;
 end;
 
-function TReportCombinedList.RunReport: string;
+function TReportProjectOverview.RunReport: string;
 var
   Doc: TEpiDocument;
   i: Integer;
@@ -56,15 +54,12 @@ begin
   for i := 0 to Documents.Count - 1 do
   begin
     Result += '<h2>File: ' + Documents[i] + '</h2>';
-    R := TEpiReportSimpleFieldListHtml.Create(TEpiDocument(Documents.Objects[i]), stEntryFlow);
+    R := TEpiReportProjectOverViewHtml.Create(TEpiDocument(Documents.Objects[i]));
     R.RunReport;
-    Result += R.ReportText;
-    R.Free;
 
-    R := TEpiReportValueLabelsHtml.Create(TEpiDocument(Documents.Objects[i]), false);
-    R.RunReport;
     Result += R.ReportText +
       '<div style="page-break-after:always;">' + LineEnding ;
+
     R.Free;
   end;
 

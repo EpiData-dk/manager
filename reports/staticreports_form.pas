@@ -22,6 +22,7 @@ type
   private
     { private declarations }
     FProjectList: TProjectFileListFrame;
+    FReport: TReportListBase;
     FReportClass: TReportListBaseClass;
     function ShowDialog(out Files: TStrings): boolean;
   protected
@@ -29,6 +30,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; ReportClass: TReportListBaseClass);
+    property    Report: TReportListBase read FReport;
   end;
 
 var
@@ -78,16 +80,8 @@ begin
 end;
 
 procedure TStaticReportsForm.BitBtn1Click(Sender: TObject);
-var
-  R: TReportListBase;
-  F: THtmlViewerForm;
 begin
-  R := FReportClass.Create(FProjectList.SelectedList);
-
-  F := THtmlViewerForm.Create(nil);
-  F.Caption := R.ReportTitle;
-  F.SetHtml(R.RunReport);
-  F.Show;
+  FReport := FReportClass.Create(FProjectList.SelectedList);
 end;
 
 procedure TStaticReportsForm.AddFilesBtnClick(Sender: TObject);
@@ -118,6 +112,7 @@ constructor TStaticReportsForm.Create(TheOwner: TComponent;
 begin
   Create(TheOwner);
   FReportClass := ReportClass;
+  FReport := nil;;
 end;
 
 end.

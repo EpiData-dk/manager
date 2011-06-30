@@ -33,7 +33,8 @@ uses
   design_headingproperties_frame, design_propertiesbase_frame, design_types,
   import_structure_form, manager_messages, toolsform, reportgenerator,
   report_fieldlist, viewer_form, report_valuelabellist, report_combinedlist,
-  report_base, projectfilelist_frame, staticreports_form;
+  report_base, projectfilelist_frame, staticreports_form, 
+report_fieldlist_extended, report_project_overview;
 
 {$R *.res}
 

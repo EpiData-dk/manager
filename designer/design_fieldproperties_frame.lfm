@@ -1,26 +1,26 @@
 inherited FieldPropertiesFrame: TFieldPropertiesFrame
-  Height = 505
+  Height = 506
   Width = 446
-  ClientHeight = 505
+  ClientHeight = 506
   ClientWidth = 446
   Constraints.MinHeight = 365
   Constraints.MinWidth = 380
   TabOrder = 0
-  DesignLeft = 1278
-  DesignTop = 389
+  DesignLeft = 2093
+  DesignTop = 282
   object FieldPageControl: TPageControl[0]
     AnchorSideLeft.Control = Owner
     Left = 0
-    Height = 505
+    Height = 506
     Top = 0
     Width = 446
-    ActivePage = FieldBasicSheet
+    ActivePage = FieldAdvancedSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 470
+      ClientHeight = 471
       ClientWidth = 440
       object DecimalsEdit: TEdit
         AnchorSideLeft.Control = Bevel1
@@ -347,7 +347,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object FieldAdvancedSheet: TTabSheet
       Caption = 'Extended'
-      ClientHeight = 470
+      ClientHeight = 471
       ClientWidth = 440
       object EntryRadioGroup: TRadioGroup
         AnchorSideLeft.Control = FieldAdvancedSheet
@@ -357,7 +357,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 86
         Top = 10
-        Width = 451
+        Width = 420
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
         BorderSpacing.Left = 10
@@ -373,14 +373,14 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
         ClientHeight = 67
-        ClientWidth = 447
+        ClientWidth = 416
         TabOrder = 0
         object ConfirmEntryChkBox: TCheckBox
           AnchorSideLeft.Control = FieldAdvancedSheet
           AnchorSideTop.Control = EntryRadioGroup
           AnchorSideRight.Control = EntryRadioGroup
           AnchorSideRight.Side = asrBottom
-          Left = 296
+          Left = 265
           Height = 22
           Top = 10
           Width = 145
@@ -400,14 +400,14 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 62
         Top = 106
-        Width = 451
+        Width = 420
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Automatic Values:'
         ClientHeight = 43
-        ClientWidth = 447
+        ClientWidth = 416
         TabOrder = 1
         object RepeatValueChkBox: TCheckBox
           AnchorSideLeft.Control = AutoValuesGrpBox
@@ -449,7 +449,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 275
           Height = 27
           Top = 8
-          Width = 162
+          Width = 131
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 7
@@ -467,14 +467,14 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 134
         Top = 178
-        Width = 451
+        Width = 420
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Valuelabel Setting:'
         ClientHeight = 115
-        ClientWidth = 447
+        ClientWidth = 416
         TabOrder = 2
         object ValueLabelWriteToLabel: TLabel
           AnchorSideLeft.Control = ValueLabelSettingGrpBox
@@ -510,7 +510,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 31
           Top = 79
-          Width = 427
+          Width = 396
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 2
@@ -544,14 +544,14 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 62
         Top = 322
-        Width = 451
+        Width = 420
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Comparison:'
         ClientHeight = 43
-        ClientWidth = 447
+        ClientWidth = 416
         TabOrder = 3
         object Label25: TLabel
           AnchorSideLeft.Control = CompareGroupBox
@@ -608,7 +608,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 217
           Height = 31
           Top = 6
-          Width = 225
+          Width = 194
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 5
@@ -620,7 +620,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object JumpSheet: TTabSheet
       Caption = 'Jumps'
-      ClientHeight = 470
+      ClientHeight = 471
       ClientWidth = 440
       object JumpsGrpBox: TGroupBox
         AnchorSideLeft.Control = JumpSheet
@@ -630,29 +630,29 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideBottom.Control = JumpSheet
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 487
+        Height = 450
         Top = 10
-        Width = 451
+        Width = 420
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Jumps:'
-        ClientHeight = 468
-        ClientWidth = 447
+        ClientHeight = 431
+        ClientWidth = 416
         TabOrder = 0
         object JumpScrollBox: TScrollBox
           Left = 0
-          Height = 468
+          Height = 431
           Top = 0
-          Width = 447
-          HorzScrollBar.Page = 447
-          VertScrollBar.Page = 468
+          Width = 416
+          HorzScrollBar.Page = 416
+          VertScrollBar.Page = 431
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 468
-          ClientWidth = 447
+          ClientHeight = 431
+          ClientWidth = 416
           TabOrder = 0
           object JumpValueLabel: TLabel
             AnchorSideLeft.Control = JumpScrollBox
@@ -685,7 +685,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = RemoveJumpBtn
             AnchorSideBottom.Control = TopBevel
-            Left = 395
+            Left = 364
             Height = 22
             Top = 20
             Width = 22
@@ -737,7 +737,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = JumpScrollBox
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrCenter
-            Left = 420
+            Left = 389
             Height = 22
             Top = 20
             Width = 22
@@ -790,7 +790,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 97
-            Height = 414
+            Height = 377
             Top = 52
             Width = 3
             Anchors = [akTop, akLeft, akBottom]
@@ -802,8 +802,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Side = asrBottom
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
-            Left = 260
-            Height = 414
+            Left = 242
+            Height = 377
             Top = 52
             Width = 3
             Anchors = [akTop, akBottom]
@@ -817,8 +817,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = AddJumpBtn
             AnchorSideBottom.Control = JumpScrollBox
             AnchorSideBottom.Side = asrBottom
-            Left = 387
-            Height = 414
+            Left = 356
+            Height = 377
             Top = 52
             Width = 3
             Anchors = [akTop, akRight, akBottom]
@@ -833,7 +833,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             Left = 10
             Height = 5
             Top = 45
-            Width = 427
+            Width = 396
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Left = 10
             BorderSpacing.Right = 10
@@ -843,7 +843,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideLeft.Side = asrBottom
             AnchorSideTop.Control = JumpValueLabel
             AnchorSideTop.Side = asrCenter
-            Left = 268
+            Left = 250
             Height = 18
             Top = 10
             Width = 81
@@ -870,7 +870,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = GotoResetBevel
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Control = TopBevel
-            Left = 260
+            Left = 242
             Height = 33
             Top = 10
             Width = 3
@@ -883,7 +883,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideRight.Control = ResetAddBevel
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Control = TopBevel
-            Left = 387
+            Left = 356
             Height = 33
             Top = 10
             Width = 3
@@ -895,7 +895,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object CalcTabSheet: TTabSheet
       Caption = 'Calculate'
-      ClientHeight = 470
+      ClientHeight = 471
       ClientWidth = 440
       object TimeDiffGrpBox: TGroupBox
         AnchorSideLeft.Control = TimeCalcRadio
@@ -907,13 +907,13 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 34
         Height = 118
         Top = 90
-        Width = 427
+        Width = 396
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Time difference:'
         ClientHeight = 99
-        ClientWidth = 423
+        ClientWidth = 392
         TabOrder = 2
         object TimeResultCombo: TComboBox
           AnchorSideLeft.Control = TimeDiffGrpBox
@@ -924,7 +924,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Height = 31
           Hint = 'Valid fields for result'
           Top = 33
-          Width = 62
+          Width = 56
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
@@ -939,10 +939,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = PlusLabel1
-          Left = 97
+          Left = 91
           Height = 31
           Top = 33
-          Width = 64
+          Width = 58
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 2
@@ -956,10 +956,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = MidLabel
-          Left = 177
+          Left = 165
           Height = 31
           Top = 33
-          Width = 62
+          Width = 55
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 2
@@ -973,10 +973,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = PlusLabel2
-          Left = 267
+          Left = 248
           Height = 31
           Top = 33
-          Width = 64
+          Width = 58
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 2
@@ -990,10 +990,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = EndLabel
-          Left = 347
+          Left = 322
           Height = 31
           Top = 33
-          Width = 63
+          Width = 57
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 2
@@ -1016,7 +1016,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label3: TLabel
           AnchorSideLeft.Control = StartTimeCombo
           AnchorSideTop.Control = TimeDiffGrpBox
-          Left = 177
+          Left = 165
           Height = 18
           Top = 10
           Width = 38
@@ -1028,7 +1028,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideLeft.Control = EndDateCombo
           AnchorSideTop.Control = TimeDiffGrpBox
           AnchorSideBottom.Side = asrBottom
-          Left = 267
+          Left = 248
           Height = 18
           Top = 10
           Width = 36
@@ -1039,7 +1039,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label5: TLabel
           AnchorSideLeft.Control = StartDateCombo
           AnchorSideTop.Control = TimeDiffGrpBox
-          Left = 97
+          Left = 91
           Height = 18
           Top = 10
           Width = 36
@@ -1050,7 +1050,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label6: TLabel
           AnchorSideLeft.Control = EndTimeCombo
           AnchorSideTop.Control = TimeDiffGrpBox
-          Left = 347
+          Left = 322
           Height = 18
           Top = 10
           Width = 38
@@ -1064,7 +1064,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = StartDateCombo
-          Left = 74
+          Left = 68
           Height = 18
           Top = 39
           Width = 21
@@ -1078,7 +1078,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = StartTimeCombo
-          Left = 163
+          Left = 151
           Height = 18
           Top = 39
           Width = 12
@@ -1091,7 +1091,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = EndDateCombo
-          Left = 241
+          Left = 222
           Height = 18
           Top = 39
           Width = 24
@@ -1105,7 +1105,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = TimeResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = EndTimeCombo
-          Left = 333
+          Left = 308
           Height = 18
           Top = 39
           Width = 12
@@ -1120,7 +1120,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = TimeDiffGrpBox
           AnchorSideRight.Side = asrBottom
-          Left = 412
+          Left = 381
           Height = 18
           Top = 39
           Width = 6
@@ -1256,13 +1256,13 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 34
         Height = 100
         Top = 218
-        Width = 427
+        Width = 396
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Create Date:'
         ClientHeight = 81
-        ClientWidth = 423
+        ClientWidth = 392
         TabOrder = 4
         object DayCombo: TComboBox
           AnchorSideLeft.Control = EqLabelCrdate
@@ -1270,10 +1270,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = PlusLabelCrDate
-          Left = 117
+          Left = 109
           Height = 31
           Top = 33
-          Width = 88
+          Width = 80
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 2
@@ -1287,10 +1287,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = PlusLabelCrDate2
-          Left = 221
+          Left = 205
           Height = 31
           Top = 33
-          Width = 88
+          Width = 81
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 2
@@ -1305,10 +1305,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = CombineDateGrpBox
           AnchorSideRight.Side = asrBottom
-          Left = 325
+          Left = 302
           Height = 31
           Top = 33
-          Width = 93
+          Width = 85
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 5
@@ -1324,7 +1324,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 31
           Top = 33
-          Width = 91
+          Width = 83
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
@@ -1348,7 +1348,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label8: TLabel
           AnchorSideLeft.Control = DayCombo
           AnchorSideTop.Control = CombineDateGrpBox
-          Left = 117
+          Left = 109
           Height = 18
           Top = 10
           Width = 30
@@ -1359,7 +1359,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label9: TLabel
           AnchorSideLeft.Control = MonthCombo
           AnchorSideTop.Control = CombineDateGrpBox
-          Left = 221
+          Left = 205
           Height = 18
           Top = 10
           Width = 46
@@ -1370,7 +1370,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label13: TLabel
           AnchorSideLeft.Control = YearCombo
           AnchorSideTop.Control = CombineDateGrpBox
-          Left = 325
+          Left = 302
           Height = 18
           Top = 10
           Width = 32
@@ -1384,7 +1384,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = DayCombo
-          Left = 103
+          Left = 95
           Height = 18
           Top = 39
           Width = 12
@@ -1397,7 +1397,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = MonthCombo
-          Left = 207
+          Left = 191
           Height = 18
           Top = 39
           Width = 12
@@ -1410,7 +1410,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = DateResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = YearCombo
-          Left = 311
+          Left = 288
           Height = 18
           Top = 39
           Width = 12
@@ -1429,13 +1429,13 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 34
         Height = 100
         Top = 328
-        Width = 427
+        Width = 396
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Combine Fields:'
         ClientHeight = 81
-        ClientWidth = 423
+        ClientWidth = 392
         TabOrder = 6
         object StringResultCombo: TComboBox
           AnchorSideLeft.Control = CombineStringGrpBox
@@ -1445,7 +1445,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 31
           Top = 33
-          Width = 58
+          Width = 52
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
@@ -1460,10 +1460,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label19
-          Left = 90
+          Left = 84
           Height = 31
           Top = 33
-          Width = 56
+          Width = 50
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 5
           BorderSpacing.Right = 5
@@ -1477,10 +1477,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label21
-          Left = 208
+          Left = 194
           Height = 31
           Top = 33
-          Width = 63
+          Width = 56
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 5
           BorderSpacing.Right = 5
@@ -1495,10 +1495,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = CombineStringGrpBox
           AnchorSideRight.Side = asrBottom
-          Left = 335
+          Left = 311
           Height = 31
           Top = 33
-          Width = 83
+          Width = 76
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 5
           BorderSpacing.Right = 5
@@ -1512,7 +1512,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label20
-          Left = 168
+          Left = 156
           Height = 27
           Top = 35
           Width = 22
@@ -1528,7 +1528,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label22
-          Left = 293
+          Left = 272
           Height = 27
           Top = 35
           Width = 22
@@ -1553,7 +1553,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label15: TLabel
           AnchorSideLeft.Control = Field1Combo
           AnchorSideTop.Control = CombineStringGrpBox
-          Left = 90
+          Left = 84
           Height = 18
           Top = 10
           Width = 48
@@ -1564,7 +1564,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label16: TLabel
           AnchorSideLeft.Control = Field2Combo
           AnchorSideTop.Control = CombineStringGrpBox
-          Left = 208
+          Left = 194
           Height = 18
           Top = 10
           Width = 48
@@ -1575,7 +1575,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         object Label17: TLabel
           AnchorSideLeft.Control = Field3Combo
           AnchorSideTop.Control = CombineStringGrpBox
-          Left = 335
+          Left = 311
           Height = 18
           Top = 10
           Width = 48
@@ -1589,7 +1589,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Field1Combo
-          Left = 73
+          Left = 67
           Height = 18
           Top = 39
           Width = 12
@@ -1602,7 +1602,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Delim1Edit
-          Left = 151
+          Left = 139
           Height = 18
           Top = 39
           Width = 12
@@ -1615,7 +1615,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Field2Combo
-          Left = 191
+          Left = 177
           Height = 18
           Top = 39
           Width = 12
@@ -1628,7 +1628,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Delim2Edit
-          Left = 276
+          Left = 255
           Height = 18
           Top = 39
           Width = 12
@@ -1641,7 +1641,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = StringResultCombo
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Field3Combo
-          Left = 318
+          Left = 294
           Height = 18
           Top = 39
           Width = 12
@@ -1692,7 +1692,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object NotesSheet: TTabSheet
       Caption = 'Notes'
-      ClientHeight = 470
+      ClientHeight = 471
       ClientWidth = 440
       object NotesMemo: TMemo
         AnchorSideLeft.Control = NotesSheet
@@ -1703,9 +1703,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideBottom.Control = NotesSheet
         AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 498
+        Height = 435
         Top = 30
-        Width = 714
+        Width = 430
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 5
         BorderSpacing.Top = 2

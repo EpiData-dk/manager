@@ -23,12 +23,12 @@ implementation
 
 uses
   epidocument,
-  epireport_base, epireport_fieldlist_simple,
+  epireport_base, epireport_types, epireport_fieldlist_simple,
   epireport_htmlgenerator, epireport_filelist;
 
 
 resourcestring
-  rsReportFieldListTitle = 'Report: List of questions/fields.';
+  rsReportFieldListTitle = 'List of questions/fields.';
 
 { TReportFieldLists }
 

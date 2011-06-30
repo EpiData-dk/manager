@@ -7,14 +7,18 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
-  project_frame, LMessages, Htmlview, manager_messages, epidocument;
+  project_frame, LMessages, Htmlview, manager_messages, epidocument, report_base;
 
 type
 
   { TMainForm }
 
   TMainForm = class(TForm)
+    ProjectOverviewReportMenuItem: TMenuItem;
+    ProjectReportAction: TAction;
+    ExtendedListReportAction: TAction;
     CombinedListReportAction: TAction;
+    ExtendedReportMenuItem: TMenuItem;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     ValueLabelListReportAction: TAction;
     ValueLabaleListReportMenuItem: TMenuItem;
@@ -93,12 +97,14 @@ type
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
+    procedure ExtendedListReportActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
+    procedure ProjectReportActionExecute(Sender: TObject);
     procedure QuestionListReportActionExecute(Sender: TObject);
     procedure ReportGeneratorActionExecute(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
@@ -128,6 +134,9 @@ type
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(out FileName: string; out LocalDoc: boolean): TEpiDocument;
+    function  RunReport(ReportClass: TReportListBaseClass): boolean;
+  private
+    { Messages }
     procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
     procedure LMOpenRecent(var Msg: TLMessage);   message LM_MAIN_OPENRECENT;
     procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
@@ -157,7 +166,8 @@ uses
   epicustombase, project_settings, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   strutils, report_fieldlist, report_valuelabellist,
-  report_combinedlist, viewer_form, staticreports_form;
+  report_combinedlist, viewer_form, staticreports_form,
+  report_fieldlist_extended, report_project_overview;
 
 { TMainForm }
 
@@ -227,6 +237,11 @@ begin
   OpenURL('http://www.epidata.org/dokuwiki/doku.php/documentation:tutorials');
 end;
 
+procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
+begin
+  RunReport(TReportFieldListExtended);
+end;
+
 procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
 var
   Stable: TEpiVersionInfo;
@@ -283,12 +298,8 @@ begin
 end;
 
 procedure TMainForm.CombinedListReportActionExecute(Sender: TObject);
-var
-  F: TStaticReportsForm;
 begin
-  F := TStaticReportsForm.Create(Self, TReportCombinedList);
-  F.ShowModal;
-  F.Free;
+  RunReport(TReportCombinedList);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -377,13 +388,14 @@ begin
   end;
 end;
 
-procedure TMainForm.QuestionListReportActionExecute(Sender: TObject);
-var
-  F: TStaticReportsForm;
+procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
 begin
-  F := TStaticReportsForm.Create(Self, TReportFieldLists);
-  F.ShowModal;
-  F.Free;
+  RunReport(TReportProjectOverview);
+end;
+
+procedure TMainForm.QuestionListReportActionExecute(Sender: TObject);
+begin
+  RunReport(TReportFieldLists);
 end;
 
 procedure TMainForm.ReportGeneratorActionExecute(Sender: TObject);
@@ -517,12 +529,8 @@ begin
 end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
-var
-  F: TStaticReportsForm;
 begin
-  F := TStaticReportsForm.Create(Self, TReportValueLabelList);
-  F.ShowModal;
-  F.Free;
+  RunReport(TReportValueLabelList);
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
@@ -722,6 +730,25 @@ begin
     LocalDoc := true;
     FileName := Dlg.FileName;
   end;
+end;
+
+function TMainForm.RunReport(ReportClass: TReportListBaseClass): boolean;
+var
+  F: TStaticReportsForm;
+  R: TReportListBase;
+  H: THtmlViewerForm;
+begin
+  R := nil;
+
+  F := TStaticReportsForm.Create(Self, ReportClass);
+  if F.ShowModal = mrOK then
+    R := F.Report;
+  F.Free;
+  if not Assigned(R) then exit;
+
+  H := THtmlViewerForm.Create(Self);
+  H.SetHtml(R.RunReport);
+  H.Show;
 end;
 
 procedure TMainForm.LMOpenProject(var Msg: TLMessage);

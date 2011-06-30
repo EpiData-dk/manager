@@ -30,8 +30,8 @@ object MainForm: TMainForm
     Top = 0
     Width = 910
     Align = alTop
-    ClientHeight = 40
-    ClientWidth = 910
+    ClientHeight = 36
+    ClientWidth = 906
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
@@ -43,7 +43,7 @@ object MainForm: TMainForm
       Left = 108
       Height = 29
       Hint = 'Open existing project'
-      Top = 6
+      Top = 4
       Width = 95
       Action = OpenProjectAction
       AutoSize = True
@@ -55,7 +55,7 @@ object MainForm: TMainForm
       AnchorSideTop.Side = asrCenter
       Left = 8
       Height = 29
-      Top = 6
+      Top = 4
       Width = 90
       Action = NewProjectAction
       AutoSize = True
@@ -71,7 +71,7 @@ object MainForm: TMainForm
       Left = 213
       Height = 29
       Hint = 'Define/Change User names and passwords'
-      Top = 6
+      Top = 4
       Width = 142
       AutoSize = True
       BorderSpacing.Left = 10
@@ -89,7 +89,7 @@ object MainForm: TMainForm
       Left = 365
       Height = 29
       Hint = 'Good Clinical Practice guideline tools'
-      Top = 6
+      Top = 4
       Width = 105
       AutoSize = True
       BorderSpacing.Left = 10
@@ -178,6 +178,9 @@ object MainForm: TMainForm
       Caption = '&Tools'
       object MenuItem2: TMenuItem
         Caption = 'Reports'
+        object ProjectOverviewReportMenuItem: TMenuItem
+          Action = ProjectReportAction
+        end
         object QuestionListReportMenuItem: TMenuItem
           Action = QuestionListReportAction
         end
@@ -186,6 +189,9 @@ object MainForm: TMainForm
         end
         object CombinedReportMenuItem: TMenuItem
           Action = CombinedListReportAction
+        end
+        object ExtendedReportMenuItem: TMenuItem
+          Action = ExtendedListReportAction
         end
         object MenuItem5: TMenuItem
           Caption = '-'
@@ -353,6 +359,16 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Combined List'
       OnExecute = CombinedListReportActionExecute
+    end
+    object ExtendedListReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Extended List'
+      OnExecute = ExtendedListReportActionExecute
+    end
+    object ProjectReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Project Overview'
+      OnExecute = ProjectReportActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

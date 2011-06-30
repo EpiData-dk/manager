@@ -1,19 +1,19 @@
 object HtmlViewerForm: THtmlViewerForm
   Left = 494
-  Height = 457
+  Height = 481
   Top = 254
-  Width = 654
+  Width = 679
   Caption = 'HtmlViewerForm'
-  ClientHeight = 457
-  ClientWidth = 654
+  ClientHeight = 481
+  ClientWidth = 679
   KeyPreview = True
   OnKeyDown = FormKeyDown
   LCLVersion = '0.9.31'
   object HTMLViewer1: THTMLViewer
     Left = 0
-    Height = 407
+    Height = 431
     Top = 0
-    Width = 654
+    Width = 679
     TabOrder = 0
     Align = alClient
     DefBackground = clWhite
@@ -32,20 +32,20 @@ object HtmlViewerForm: THtmlViewerForm
   object Panel1: TPanel
     Left = 0
     Height = 50
-    Top = 407
-    Width = 654
+    Top = 431
+    Width = 679
     Align = alBottom
-    ClientHeight = 50
-    ClientWidth = 654
+    ClientHeight = 46
+    ClientWidth = 675
     TabOrder = 1
     object BitBtn2: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 568
+      Left = 589
       Height = 30
-      Top = 10
+      Top = 8
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 10
@@ -60,7 +60,7 @@ object HtmlViewerForm: THtmlViewerForm
       AnchorSideTop.Side = asrCenter
       Left = 11
       Height = 29
-      Top = 11
+      Top = 9
       Width = 63
       AutoSize = True
       BorderSpacing.Left = 10
