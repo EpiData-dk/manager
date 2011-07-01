@@ -59,6 +59,7 @@ end;
 function TStaticReportsForm.ShowDialog(out Files: TStrings): boolean;
 var
   Dlg: TOpenDialog;
+  F: THtmlViewerForm;
 begin
   Result := false;
   Files := nil;

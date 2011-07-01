@@ -469,7 +469,7 @@ end;
 procedure TValueLabelEditor.DeleteValueLabelSetsUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    (ValueLabelSetTreeView.Focused) and
+//    (ValueLabelSetTreeView.Focused) and
     (ValueLabelSetTreeView.Items.Count > 0);
 end;
 
