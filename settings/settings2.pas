@@ -166,6 +166,7 @@ begin
       Sec := 'ProjectFields';
       WriteBool(Sec, 'ShowNames', ShowNames);
       WriteBool(Sec, 'ShowBorders', ShowBorders);
+      WriteBool(Sec, 'ShowValuelabelText', ShowValuelabelText);
       // - Study:
       Sec := 'ProjectStudy';
       WriteString(Sec, 'StudyTitle', StudyTitle);
@@ -286,6 +287,7 @@ begin
       Sec := 'ProjectFields';
       ShowNames             := ReadBool(Sec, 'ShowNames', ShowNames);
       ShowBorders           := ReadBool(Sec, 'ShowBorders', ShowBorders);
+      ShowValuelabelText    := ReadBool(Sec, 'ShowValuelabelText', ShowValuelabelText);
       // - Study:
       Sec := 'ProjectStudy';
       StudyTitle            := ReadString(Sec, 'StudyTitle', StudyTitle);

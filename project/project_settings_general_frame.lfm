@@ -6,8 +6,8 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
   ClientHeight = 315
   ClientWidth = 472
   TabOrder = 0
-  DesignLeft = 728
-  DesignTop = 417
+  DesignLeft = 2033
+  DesignTop = 177
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = BackupIntervalEdit

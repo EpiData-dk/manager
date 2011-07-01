@@ -1765,6 +1765,7 @@ begin
 
   with result do
   begin
+    ShowValueLabel := ManagerSettings.ShowValuelabelText;
     Case FieldType of
       ftInteger, ftAutoInc:
           Length := ManagerSettings.IntFieldLength;

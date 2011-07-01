@@ -57,6 +57,7 @@ type
     // - Fields:
     ShowNames:             boolean;
     ShowBorders:           boolean;
+    ShowValuelabelText:    boolean;
     // - Study:
     StudyTitle:            string;
     StudyIndent:           string;
@@ -125,6 +126,7 @@ var
     // - Fields:
     ShowNames:             false;
     ShowBorders:           true;
+    ShowValuelabelText:    true;
     // - Study:
     StudyTitle:            'Untitled Project';
     StudyIndent:           '';

@@ -3,12 +3,11 @@ object ProjectSettings_FieldFrame: TProjectSettings_FieldFrame
   Height = 356
   Top = 0
   Width = 488
-  Anchors = [akLeft]
   ClientHeight = 356
   ClientWidth = 488
   TabOrder = 0
-  DesignLeft = 933
-  DesignTop = 389
+  DesignLeft = 2057
+  DesignTop = 570
   object ShowFieldNamesChkBox: TCheckBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -33,5 +32,18 @@ object ProjectSettings_FieldFrame: TProjectSettings_FieldFrame
     BorderSpacing.Top = 10
     Caption = 'Show field border (box around field)'
     TabOrder = 1
+  end
+  object ShowValueLabelTextChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ShowFieldBordersChkBox
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 22
+    Top = 74
+    Width = 248
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Show value label text during entry'
+    TabOrder = 2
   end
 end

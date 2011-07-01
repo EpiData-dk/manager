@@ -15,6 +15,7 @@ type
   { TProjectSettings_FieldFrame }
 
   TProjectSettings_FieldFrame = class(TFrame, IProjectSettingsFrame, ISettingsFrame)
+    ShowValueLabelTextChkBox: TCheckBox;
     ShowFieldNamesChkBox: TCheckBox;
     ShowFieldBordersChkBox: TCheckBox;
   private
@@ -44,6 +45,7 @@ begin
 
   ShowFieldNamesChkBox.Checked   := FProjectSettings.ShowFieldNames;
   ShowFieldBordersChkBox.Checked := FProjectSettings.ShowFieldBorders;
+  ShowValueLabelTextChkBox.Visible := false;
 end;
 
 function TProjectSettings_FieldFrame.ApplySettings: boolean;
@@ -61,16 +63,20 @@ begin
   begin
     ShowNames   := ShowFieldNamesChkBox.Checked;
     ShowBorders := ShowFieldBordersChkBox.Checked;
+    ShowValuelabelText := ShowValueLabelTextChkBox.Checked;
   end;
 end;
 
 procedure TProjectSettings_FieldFrame.SetSettings(Data: PManagerSettings);
 begin
+  ShowValueLabelTextChkBox.Visible := true;
+
   FManagerSettings := Data;
   with FManagerSettings^ do
   begin
     ShowFieldNamesChkBox.Checked   := ShowNames;
     ShowFieldBordersChkBox.Checked := ShowBorders;
+    ShowValueLabelTextChkBox.Checked := ShowValuelabelText;
   end;
 end;
 
