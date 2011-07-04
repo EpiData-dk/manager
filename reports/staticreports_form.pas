@@ -18,6 +18,7 @@ type
     Panel1: TPanel;
     procedure AddFilesBtnClick(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
   private
     { private declarations }
@@ -30,6 +31,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; ReportClass: TReportListBaseClass);
+    class procedure RestoreDefaultPos;
     property    Report: TReportListBase read FReport;
   end;
 
@@ -41,7 +43,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, epimiscutils, viewer_form;
+  settings2_var, settings2, epimiscutils, viewer_form;
 
 { TStaticReportsForm }
 
@@ -54,6 +56,8 @@ begin
     FProjectList.AddFiles(Files);
     Files.Free;
   end;
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'StaticReportsForm');
 end;
 
 function TStaticReportsForm.ShowDialog(out Files: TStrings): boolean;
@@ -85,6 +89,13 @@ begin
   FReport := FReportClass.Create(FProjectList.SelectedList);
 end;
 
+procedure TStaticReportsForm.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'StaticReportsForm');
+end;
+
 procedure TStaticReportsForm.AddFilesBtnClick(Sender: TObject);
 var
   Files: TStrings;
@@ -114,6 +125,19 @@ begin
   Create(TheOwner);
   FReportClass := ReportClass;
   FReport := nil;;
+end;
+
+class procedure TStaticReportsForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 600;
+  Aform.Height := 480;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'StaticReportsForm');
+  AForm.free;
 end;
 
 end.

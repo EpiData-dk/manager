@@ -250,6 +250,8 @@ procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
 begin
   ValueLabelSettingGrpBox.Enabled :=
     ValueLabelComboBox.ItemIndex <> ValueLabelComboBox.Items.IndexOfObject(FNilValueLabel);
+  if not ValueLabelSettingGrpBox.Enabled then
+    Field.ValueLabelWriteField := nil;
   UpdateValueLabelWriteTo;
 end;
 

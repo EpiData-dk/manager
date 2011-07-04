@@ -6,6 +6,7 @@ object StaticReportsForm: TStaticReportsForm
   Caption = 'StaticReportsForm'
   ClientHeight = 516
   ClientWidth = 595
+  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   LCLVersion = '0.9.31'
   object Panel1: TPanel
@@ -14,8 +15,8 @@ object StaticReportsForm: TStaticReportsForm
     Top = 466
     Width = 595
     Align = alBottom
-    ClientHeight = 50
-    ClientWidth = 595
+    ClientHeight = 46
+    ClientWidth = 591
     TabOrder = 0
     object AddFilesBtn: TBitBtn
       AnchorSideLeft.Control = Panel1
@@ -23,7 +24,7 @@ object StaticReportsForm: TStaticReportsForm
       AnchorSideTop.Side = asrCenter
       Left = 11
       Height = 29
-      Top = 11
+      Top = 9
       Width = 102
       AutoSize = True
       BorderSpacing.Left = 10
@@ -72,9 +73,9 @@ object StaticReportsForm: TStaticReportsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 530
+      Left = 526
       Height = 32
-      Top = 9
+      Top = 7
       Width = 54
       Anchors = [akTop, akRight]
       AutoSize = True
