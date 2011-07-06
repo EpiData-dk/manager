@@ -259,7 +259,7 @@ procedure TFieldPropertiesFrame.InitCombo(Combo: TComboBox);
 begin
   Combo.Items.BeginUpdate;
   Combo.Clear;
-  Combo.Sorted := true;
+//  Combo.Sorted := true;
 end;
 
 procedure TFieldPropertiesFrame.AddFieldToCombo(AField: TEpiField;
@@ -313,11 +313,11 @@ begin
 
   ValueLabelComboBox.Items.BeginUpdate;
   ValueLabelComboBox.Clear;
-  ValueLabelComboBox.Sorted := true;
+  ValueLabelComboBox.Items.AddObject('(none)', FNilValueLabel);
+
   if (FValueLabelSets.Count = 0) or
      (not (Field.FieldType in [ftInteger, ftFloat, ftString, ftUpperString])) then
   begin
-    OIdx := ValueLabelComboBox.Items.AddObject('(none)', FNilValueLabel);
     if not (Field.FieldType in [ftInteger, ftFloat, ftString, ftUpperString]) then
       ValueLabelComboBox.Hint := 'ValueLabels not support for this field type!'
     else
@@ -373,15 +373,15 @@ begin
    end;
    ValueLabelComboBox.Hint := S;
 
-   OIdx := ValueLabelComboBox.Items.AddObject('(none)', FNilValueLabel);
    if Assigned(PreSelectedVLSet) then
      Idx := ValueLabelComboBox.Items.IndexOfObject(PreSelectedVLSet)
    else if Assigned(Field.ValueLabelSet) then
      Idx := ValueLabelComboBox.Items.IndexOfObject(Field.ValueLabelSet);
   end;
-  if Idx = -1 then
-    Idx := OIdx;
   ValueLabelComboBox.Items.EndUpdate;
+
+  if Idx = -1 then
+    Idx := ValueLabelComboBox.Items.IndexOfObject(FNilValueLabel);
   ValueLabelComboBox.ItemIndex := Idx;
 
   result := (PreSelectedVLSet <> ValueLabelComboBox.Items.Objects[Idx]);
