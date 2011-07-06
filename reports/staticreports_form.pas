@@ -121,10 +121,16 @@ end;
 
 constructor TStaticReportsForm.Create(TheOwner: TComponent;
   ReportClass: TReportListBaseClass);
+var
+  FakeReport: TReportListBase;
 begin
   Create(TheOwner);
   FReportClass := ReportClass;
-  FReport := nil;;
+  FReport := nil;
+
+  FakeReport := FReportClass.Create(TStringList.Create);
+  Caption := 'Generate Report: ' + FakeReport.ReportTitle;
+  FakeReport.Free;
 end;
 
 class procedure TStaticReportsForm.RestoreDefaultPos;

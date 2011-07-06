@@ -747,6 +747,7 @@ begin
   if not Assigned(R) then exit;
 
   H := THtmlViewerForm.Create(Self);
+  H.Caption := 'Report of: ' + R.ReportTitle;
   H.SetHtml(R.RunReport);
   H.Show;
 end;
