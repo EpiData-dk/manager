@@ -471,15 +471,18 @@ begin
   // DEBUGGING!!!!
   LocalAdm := FEpiDocument.Admin;
   Grp := LocalAdm.NewGroup;
-  Grp.Name.Text := 'Group 1';
+  GRp.Name := 'G1';
+  Grp.Caption.Text := 'Group 1';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
   Grp := LocalAdm.NewGroup;
-  Grp.Name.Text := 'Group 2';
+  Grp.Name := 'G2';
+  Grp.Caption.Text := 'Group 2';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
   Grp := LocalAdm.NewGroup;
-  Grp.Name.Text := 'Group 3';
+  Grp.Name := 'G3';
+  Grp.Caption.Text := 'Group 3';
   Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
     earStructure, earTranslate, earUsers, earPassword];
   FEpiDocument.DataFiles[0].MainSection.Groups.AddItem(Grp);

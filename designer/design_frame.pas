@@ -1935,7 +1935,9 @@ begin
   FShowPanel.BorderWidth := 1;
   FShowPanel.BevelOuter := bvNone;
   FShowPanel.BevelInner := bvNone;
+  {$IFNDEF DARWIN}
   DrawShowPanel(X+1, Y+1);
+  {$ENDIF DARWIN}
   FShowPanel.Parent := FDesignerBox;
 end;
 
