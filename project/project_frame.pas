@@ -72,6 +72,7 @@ type
     function  InitBackupTimer: boolean;
     procedure UpdateTimer;
     procedure TimedBackup(Sender: TObject);
+    procedure UpdateShortCuts;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -95,7 +96,8 @@ uses
   design_frame, Clipbrd, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form, epidatafilestypes,
-  strutils, managerprocs, Menus, LCLType, LCLIntf, project_settings;
+  strutils, managerprocs, Menus, LCLType, LCLIntf, project_settings,
+  shortcuts;
 
 type
 
@@ -635,6 +637,18 @@ begin
   end;
 end;
 
+procedure TProjectFrame.UpdateShortCuts;
+begin
+  // Project Frame
+  SaveProjectAction.ShortCut      := P_SaveProject;
+  SaveProjectAsAction.ShortCut    := P_SaveProjectAs;
+  NewDataFormAction.ShortCut      := P_NewDataForm;
+  DeleteDataFormAction.ShortCut   := P_DelDataForm;
+  ProjectSettingsAction.ShortCut  := P_ProjectSettings;
+  ValueLabelEditorAction.ShortCut := P_StartValueLabelEditor;
+  OpenProjectAction.ShortCut      := P_OpenProject;
+end;
+
 constructor TProjectFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -647,13 +661,8 @@ begin
 
   FEpiDocument := DoCreateNewDocument;
   UpdateCaption;
+  UpdateShortCuts;
   InitBackupTimer;
-
-  {$IFDEF DARWIN}
-  SaveProjectAction.ShortCut := ShortCut(VK_S, [ssMeta]);
-  SaveProjectAsAction.ShortCut := ShortCut(VK_S, [ssShift, ssMeta]);
-
-  {$ENDIF}
 
   {$IFDEF EPI_DEBUG}
 
@@ -697,6 +706,10 @@ end;
 
 procedure TProjectFrame.UpdateFrame;
 begin
+  UpdateShortCuts;
+  if ValueLabelsEditorCreated then
+    GetValueLabelsEditor(EpiDocument).UpdateSettings;
+
   // TODO : Update all frames.
   if Assigned(FActiveFrame) then
     TDesignFrame(FActiveFrame).UpdateFrame;

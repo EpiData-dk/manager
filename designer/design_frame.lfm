@@ -496,7 +496,7 @@ object DesignFrame: TDesignFrame
       object IntToolButton: TToolButton
         Tag = 1
         Left = 35
-        Hint = 'New Integer Field (F2)'
+        Hint = 'New Integer Field'
         Top = 1
         Caption = 'New Integer Field'
         ImageIndex = 1
@@ -507,7 +507,7 @@ object DesignFrame: TDesignFrame
       object FloatToolButton: TToolButton
         Tag = 3
         Left = 63
-        Hint = 'New Float Field (F3)'
+        Hint = 'New Float Field'
         Top = 1
         Caption = 'New Float Field'
         ImageIndex = 2
@@ -518,7 +518,7 @@ object DesignFrame: TDesignFrame
       object StringToolButton: TToolButton
         Tag = 12
         Left = 91
-        Hint = 'New String Field  (F4)'
+        Hint = 'New String Field'
         Top = 1
         Caption = 'New String Field'
         ImageIndex = 3
@@ -529,7 +529,7 @@ object DesignFrame: TDesignFrame
       object DateToolButton: TToolButton
         Tag = 4
         Left = 119
-        Hint = 'New DMY Field (F5)'
+        Hint = 'New DMY Field'
         Top = 1
         Caption = 'New DMY Field'
         ImageIndex = 4
@@ -558,7 +558,7 @@ object DesignFrame: TDesignFrame
       object HeadingToolButton: TToolButton
         Tag = 5
         Left = 180
-        Hint = 'New Heading (F6)'
+        Hint = 'New Heading'
         Top = 1
         Caption = 'New Heading'
         ImageIndex = 8
@@ -2010,6 +2010,7 @@ object DesignFrame: TDesignFrame
       Caption = 'New Section'
       Hint = 'New Section'
       ImageIndex = 9
+      OnExecute = NewSectionActionExecute
       OnUpdate = NoControlActionUpdate
     end
     object EditControlAction: TAction

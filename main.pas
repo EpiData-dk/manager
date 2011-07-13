@@ -131,6 +131,7 @@ type
     procedure DoOpenProject(Const AFileName: string);
     procedure UpdateMainMenu;
     procedure UpdateProcessToolbar;
+    procedure UpdateShortCuts;
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(out FileName: string; out LocalDoc: boolean): TEpiDocument;
@@ -167,7 +168,8 @@ uses
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   strutils, report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
-  report_fieldlist_extended, report_project_overview;
+  report_fieldlist_extended, report_project_overview,
+  shortcuts;
 
 { TMainForm }
 
@@ -695,10 +697,34 @@ begin
     ManagerSettings.ShowWorkToolBar;
 end;
 
+procedure TMainForm.UpdateShortCuts;
+begin
+  UpdateRecentFiles;
+
+  NewProjectAction.ShortCut           := M_NewProject;
+  SettingsAction.ShortCut             := M_Settings;
+  FileExitAction.ShortCut             := M_Exit;
+  ShowAboutAction.ShortCut            := M_ShowAbout;
+  CopyProjectInfoAction.ShortCut      := M_CopyProjectInfo;
+  CheckVersionAction.ShortCut         := M_CheckVersion;
+  DefaultWindowPosAction.ShortCut     := M_DefaultPos;
+  CloseProjectAction.ShortCut         := M_CloseProject;
+  OpenProjectAction.ShortCut          := M_OpenProject;
+  StartEntryClientAction.ShortCut     := M_StartEntryClient;
+  PackAction.ShortCut                 := M_Pack;
+  StataExportAction.ShortCut          := M_ExportStata;
+  QuestionListReportAction.ShortCut   := M_QuestionListReport;
+  ValueLabelListReportAction.ShortCut := M_ValueLabelListReport;
+  CombinedListReportAction.ShortCut   := M_CombinedListReport;
+  ExtendedListReportAction.ShortCut   := M_ExtendedListReport;
+  ProjectReportAction.ShortCut        := M_ProjectOverviewReport;
+end;
+
 procedure TMainForm.UpdateSettings;
 begin
   LoadTutorials;
   UpdateProcessToolbar;
+  UpdateShortCuts;
 
   if Assigned(FActiveFrame) then
     TProjectFrame(FActiveFrame).UpdateFrame;
@@ -794,9 +820,13 @@ procedure TMainForm.UpdateRecentFiles;
 var
   Mi: TMenuItem;
   i: Integer;
+  K: Word;
+  Shift: TShiftState;
 begin
-  RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
+  ShortCutToKey(M_OpenRecent, K, Shift);
 
+
+  RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
   RecentFilesSubMenu.Clear;
   for i := 0 to RecentFiles.Count - 1 do
   begin
@@ -805,11 +835,11 @@ begin
     Mi.Caption := RecentFiles[i];
     Mi.OnClick := @OpenRecentMenuItemClick;
     if i < 9 then
-      {$IFDEF DARWIN}
+{      {$IFDEF DARWIN}
       Mi.ShortCut := KeyToShortCut(VK_1 + i, [ssMeta, ssShift]);
-      {$ELSE}
-      Mi.ShortCut := KeyToShortCut(VK_1 + i, [ssCtrl, ssShift]);
-      {$ENDIF}
+      {$ELSE}}
+      Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
+//      {$ENDIF}
     RecentFilesSubMenu.Add(Mi);
   end;
 end;

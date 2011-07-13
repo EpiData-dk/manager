@@ -99,14 +99,17 @@ type
     procedure   DisplayHint(Const S: string; Const Ctrl: TControl; Const Pos: TPoint);
     procedure   CalculateStatusbar;
     procedure   UpdateStatusbar;
+    procedure   UpdateShortCuts;
     procedure   SetEpiDocument(EpiDoc: TEpiDocument);
   public
     { public declarations }
+    procedure   UpdateSettings;
     procedure   RestoreDefaultPos;
     property    ValueLabelsGrid: TValueLabelGrid read FValueLabelsGrid;
     property    DblClickedValueLabelSet: TEpiValueLabelSet read FDblClickedValueLabelSet;
   end;
 
+function ValueLabelsEditorCreated: boolean;
 function GetValueLabelsEditor(EpiDoc: TEpiDocument): TValueLabelEditor;
 procedure CloseValueLabelsEditor;
 
@@ -116,14 +119,19 @@ implementation
 
 uses
   project_frame, math, LCLType, main, settings2, settings2_var, LCLProc,
-  design_controls, epidatafiles;
+  design_controls, epidatafiles, shortcuts;
 
 var
   TheValueLabelEditor: TValueLabelEditor = nil;
 
+function ValueLabelsEditorCreated: boolean;
+begin
+  result := Assigned(TheValueLabelEditor);
+end;
+
 function GetValueLabelsEditor(EpiDoc: TEpiDocument): TValueLabelEditor;
 begin
-  if not Assigned(TheValueLabelEditor) then
+  if not ValueLabelsEditorCreated then
     TheValueLabelEditor := TValueLabelEditor.Create(MainForm);
   TheValueLabelEditor.SetEpiDocument(EpiDoc);
   result := TheValueLabelEditor;
@@ -292,6 +300,7 @@ var
   Cl: TGridColumn;
 begin
   inherited Create(TheOwner);
+  UpdateSettings;
 
   FValueLabelsGrid := TValueLabelGrid.Create(Self);
   with ValueLabelsGrid do
@@ -419,6 +428,11 @@ begin
   end;
   ValueLabelSetTreeView.CustomSort(nil);
   ValueLabelSetTreeView.EndUpdate;
+end;
+
+procedure TValueLabelEditor.UpdateSettings;
+begin
+  UpdateShortCuts;
 end;
 
 procedure TValueLabelEditor.RestoreDefaultPos;
@@ -591,6 +605,19 @@ begin
     Panels[1].Text := Format('Float: %d', [F]);
     Panels[2].Text := Format('String: %d', [S]);
   end;
+end;
+
+procedure TValueLabelEditor.UpdateShortCuts;
+begin
+  // ValueLabel Editor
+  // - tree actions
+  DeleteValueLabelSets.ShortCut := V_TREE_DeleteValueLabelSet;
+  NewIntValueLabelSetAction.ShortCut := V_TREE_NewIntValueLabelSet;
+  NewFloatValueLabelSetAction.ShortCut := V_TREE_NewFloatValueLabelSet;
+  NewStringValueLabelSetAction.ShortCut := V_TREE_NewStringValueLabelSet;
+  // - grid
+  DeleteGridRowAction.ShortCut := V_GRID_DeleteRow;
+  InsertGridRowAction.ShortCut := V_GRID_InsertRow;
 end;
 
 procedure TValueLabelEditor.InsertGridRowExecute(Sender: TObject);

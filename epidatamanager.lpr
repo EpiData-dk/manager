@@ -34,7 +34,7 @@ uses
   import_structure_form, manager_messages, toolsform, reportgenerator,
   report_fieldlist, viewer_form, report_valuelabellist, report_combinedlist,
   report_base, projectfilelist_frame, staticreports_form, 
-report_fieldlist_extended, report_project_overview;
+  report_fieldlist_extended, report_project_overview, shortcuts;
 
 {$R *.res}
 

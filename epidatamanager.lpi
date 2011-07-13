@@ -50,7 +50,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="42">
+    <Units Count="43">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -317,6 +317,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="report_project_overview"/>
       </Unit41>
+      <Unit42>
+        <Filename Value="shortcuts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="shortcuts"/>
+      </Unit42>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -325,7 +330,7 @@
       <Filename Value="epidatamanager"/>
     </Target>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir)"/>
+      <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
       <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import;tools;reports"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>

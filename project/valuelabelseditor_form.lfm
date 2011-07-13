@@ -1,7 +1,7 @@
 object ValueLabelEditor: TValueLabelEditor
-  Left = 342
+  Left = 359
   Height = 625
-  Top = 195
+  Top = 309
   Width = 1015
   ActiveControl = Panel1
   Caption = 'Value Labels'
@@ -14,11 +14,11 @@ object ValueLabelEditor: TValueLabelEditor
   LCLVersion = '0.9.31'
   object Panel1: TPanel
     Left = 0
-    Height = 610
+    Height = 604
     Top = 0
     Width = 241
     Align = alLeft
-    ClientHeight = 610
+    ClientHeight = 604
     ClientWidth = 241
     TabOrder = 0
     object ToolBar1: TToolBar
@@ -91,7 +91,7 @@ object ValueLabelEditor: TValueLabelEditor
     end
     object ValueLabelSetTreeView: TTreeView
       Left = 1
-      Height = 582
+      Height = 576
       Top = 27
       Width = 239
       Align = alClient
@@ -115,14 +115,14 @@ object ValueLabelEditor: TValueLabelEditor
   end
   object Splitter1: TSplitter
     Left = 241
-    Height = 610
+    Height = 604
     Top = 0
     Width = 5
   end
   object ValueLabelEditorStatusBar: TStatusBar
     Left = 0
-    Height = 15
-    Top = 610
+    Height = 21
+    Top = 604
     Width = 1015
     Panels = <    
       item

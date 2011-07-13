@@ -159,6 +159,7 @@ type
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   ControlActionUpdate(Sender: TObject);
     procedure   DeleteControlActionUpdate(Sender: TObject);
+    procedure NewSectionActionExecute(Sender: TObject);
     procedure   NoControlActionUpdate(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
@@ -254,9 +255,6 @@ type
     // - Mouse events.
     procedure   DesignControlMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    // - Key controls.
-    procedure   DesignKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
     procedure   EnterControl(Sender: TObject);
     procedure   ExitControl(Sender: TObject);
     procedure   DeleteControl(Sender: TObject);
@@ -284,6 +282,7 @@ type
     procedure   EpiContolStatusbarUpdateHook(Sender: TObject; EventGrp: TEpiEventGroup; EventType: word; Data: Pointer);
     procedure   UpdateStatusbarControl(EpiControl: TEpiCustomControlItem);
     procedure   UpdateStatusbarSizes;
+    procedure   UpdateShortCuts;
   private
     FModified: Boolean;
     FOnModified: TNotifyEvent;
@@ -307,7 +306,7 @@ uses
   Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
   managerprocs, epiqeshandler, copyobject, epiranges, design_types,
-  import_structure_form;
+  import_structure_form, shortcuts;
 
 type
 
@@ -432,63 +431,6 @@ begin
   Clipboard.AsText := DataFile.SaveToXml('', 0);
 end;
 
-procedure TDesignFrame.DesignKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-var
-  Ctrl: TControl absolute Sender;
-  Handler: IPositionHandler;
-begin
-  if Key = VK_RETURN then
-  begin
-    EditToolButton.Click;
-    Key := VK_UNKNOWN;
-  end;
-
-  Handler := nil;
-  if Supports(Ctrl.Parent, IPositionHandler) then
-    Handler := (Ctrl.Parent as IPositionHandler);
-
-  // Movement actions.
-  // ..going up: (Up, Shift+Tab, PgUp, Ctrl+Home)
-  // - Single step = Up, shift + Tab
-  if (Key = VK_UP) or ((Key = VK_TAB) and (ssShift in Shift)) then
-  begin
-    MoveUpAction.Execute;
-    Key := VK_UNKNOWN
-  end;
-  // - Page step = PageUp (VK_PRIOR)
-  if (Key = VK_PRIOR) then
-  begin
-    MovePgUpAction.Execute;
-    Key := VK_UNKNOWN;
-  end;
-  // - Top step = Ctrl + Home
-  if (Key = VK_HOME) and (ssCtrl in Shift) then
-  begin
-    MoveHomeAction.Execute;
-    Key := VK_UNKNOWN;
-  end;
-  // ..going down: (Down, Tab, PgDown, Ctrl+End)
-  // - Single step = Down, Tab
-  if (Key = VK_DOWN) or (Key = VK_TAB) then
-  begin
-    MoveDownAction.Execute;
-    Key := VK_UNKNOWN
-  end;
-  // - Page step = PageDown (VK_NEXT)
-  if (Key = VK_NEXT) then
-  begin
-    MovePgDnAction.Execute;
-    Key := VK_UNKNOWN;
-  end;
-  // - Bottom step = Ctrl + End
-  if (Key = VK_END) and (ssCtrl in Shift) then
-  begin
-    MoveEndAction.Execute;
-    Key := VK_UNKNOWN;
-  end;
-end;
-
 procedure TDesignFrame.Button2Click(Sender: TObject);
 begin
   Clipboard.AsText :=  WriteTree((FActiveDockSite as IPositionHandler).XTree);
@@ -558,6 +500,11 @@ begin
     (MainForm.Active) and
     (Assigned(FActiveControl)) and
     (FActiveControl <> FDesignerBox);
+end;
+
+procedure TDesignFrame.NewSectionActionExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TDesignFrame.NoControlActionUpdate(Sender: TObject);
@@ -1284,8 +1231,6 @@ begin
     OnMouseDown := @DesignControlMouseDown;
     OnMouseUp   := @DesignControlMouseUp;
     OnStartDock := @DesignControlStartDock;
-    if Result is TWinControl then
-      TWinControl(Result).OnKeyDown   := @DesignKeyDown;
     Parent      := AParent;
   end;
 
@@ -1322,7 +1267,6 @@ begin
     OnUnDock    := @DockSiteUnDock;
     OnDockOver  := @DockSiteDockOver;
     OnStartDock := @DesignControlStartDock;
-    OnKeyDown   := @DesignKeyDown;
   end;
 
   with EpiSection do
@@ -1859,6 +1803,52 @@ begin
   RecordsPanel.Width  := RecordsLabel.Left + TW(RecordsLabel) + PanelBorder;
   SectionsPanel.Width := SectionsLabel.Left + TW(SectionsLabel) + PanelBorder;
   FieldsPanel.Width   := FieldsLabel.Left + TW(FieldsLabel) + PanelBorder;
+end;
+
+procedure TDesignFrame.UpdateShortCuts;
+
+  procedure UpdateControlActionShortCut(
+    Const TheAction: TAction;
+    Const PrimareShortCut, SecondaryShortCut: TShortCut);
+  begin
+    TheAction.ShortCut := PrimareShortCut;
+    TheAction.SecondaryShortCuts.Clear;
+    TheAction.SecondaryShortCuts.Add(ShortCutToText(SecondaryShortCut));
+  end;
+
+begin
+  PasteAsHeadingAction.ShortCut := 0;
+  PasteAsIntAction.ShortCut     := 0;
+  PasteAsFloatAction.ShortCut   := 0;
+  PasteAsStringAction.ShortCut  := 0;
+
+  Case ManagerSettings.PasteSpecialType of
+    1: PasteAsHeadingAction.ShortCut := D_PasteAs;
+    2: PasteAsIntAction.ShortCut     := D_PasteAs;
+    3: PasteAsFloatAction.ShortCut   := D_PasteAs;
+    4: PasteAsStringAction.ShortCut  := D_PasteAs;
+  end;
+
+  // Designer Frame
+  UpdateControlActionShortCut(NewIntFieldAction, D_NewIntField, D_NewIntField_Fast);
+  UpdateControlActionShortCut(NewFloatFieldAction, D_NewFloatField, D_NewFloatField_Fast);
+  UpdateControlActionShortCut(NewStringFieldAction, D_NewStringField, D_NewStringField_Fast);
+  UpdateControlActionShortCut(NewDMYFieldAction, D_NewDateField, D_NewDateField_Fast);
+  UpdateControlActionShortCut(NewHeadingAction, D_NewHeadingField, D_NewHeadingField_Fast);
+  NewSectionAction.ShortCut := D_NewSection;
+  EditControlAction.ShortCut := D_EditControl;
+  DeleteControlAction.ShortCut := D_DeleteControl;
+  ImportDataFileAction.ShortCut := D_ImportData;
+  AddStructureAction.ShortCut := D_AddStructure;
+  MoveHomeAction.ShortCut := D_MoveTop;
+  MovePgUpAction.ShortCut := D_MoveSideUp;
+  MoveUpAction.ShortCut := D_MoveControlUp;
+  MoveDownAction.ShortCut := D_MoveControlDown;
+  MovePgDnAction.ShortCut := D_MoveSideDown;
+  MoveEndAction.ShortCut := D_MoveBottom;
+  DeleteAllControlsAction.ShortCut := D_DeleteAllControl;
+  CopyControlAction.ShortCut := D_CopyControl;
+  PasteControlAction.ShortCut := D_PasteControl;
 end;
 
 procedure TDesignFrame.SetDataFile(const AValue: TEpiDataFile);
@@ -2560,7 +2550,6 @@ begin
   FDesignerBox.OnDockDrop  := @DockSiteDockDrop;
   FDesignerBox.OnUnDock    := @DockSiteUnDock;
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
-  FDesignerBox.OnKeyDown   := @DesignKeyDown;
   FDesignerBox.OnMouseWheel := @DesignBoxMouseWheel;
   FActiveDockSite := FDesignerBox;
 
@@ -2578,26 +2567,15 @@ end;
 
 procedure TDesignFrame.UpdateFrame;
 var
-  CtrlS: TShortCut;
   EpiCtrl: TEpiCustomControlItem;
 begin
-  PasteAsHeadingAction.ShortCut := 0;
-  PasteAsIntAction.ShortCut     := 0;
-  PasteAsFloatAction.ShortCut   := 0;
-  PasteAsStringAction.ShortCut  := 0;
+  UpdateShortCuts;
 
   DateToolButton.Tag := Ord(ManagerSettings.DefaultDateType);
   DateToolButton.ImageIndex := Ord(ManagerSettings.DefaultDateType);
 
   FDesignerBox.Invalidate;
 
-  CtrlS := KeyToShortCut(VK_G, [ssCtrl]);
-  Case ManagerSettings.PasteSpecialType of
-    1: PasteAsHeadingAction.ShortCut := CtrlS;
-    2: PasteAsIntAction.ShortCut     := CtrlS;
-    3: PasteAsFloatAction.ShortCut   := CtrlS;
-    4: PasteAsStringAction.ShortCut  := CtrlS;
-  end;
   if Assigned(FActiveControl) then
   begin
     EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
