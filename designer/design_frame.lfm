@@ -1936,82 +1936,6 @@ object DesignFrame: TDesignFrame
       ImageIndex = 1
       OnExecute = NewIntFieldActionExecute
       OnUpdate = NoControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        'Shift+F2'
-      )
-      ShortCut = 113
-    end
-    object NewFloatFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New Float Field'
-      Hint = 'New Float Field'
-      ImageIndex = 2
-      OnExecute = NewFloatFieldActionExecute
-      OnUpdate = NoControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        'Shift+F3'
-      )
-      ShortCut = 114
-    end
-    object NewStringFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New String Field'
-      Hint = 'New String Field'
-      ImageIndex = 3
-      OnExecute = NewStringFieldActionExecute
-      OnUpdate = NoControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        'Shift+F4'
-      )
-      ShortCut = 115
-    end
-    object NewDMYFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New DMY Field'
-      Hint = 'New DMY Field'
-      ImageIndex = 4
-      OnExecute = NewDMYFieldActionExecute
-      OnUpdate = NoControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        'Shift+F5'
-      )
-      ShortCut = 116
-    end
-    object NewMDYFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New MDY Field'
-      Hint = 'New MDY Field'
-      ImageIndex = 5
-      OnExecute = NewMDYFieldActionExecute
-      OnUpdate = NoControlActionUpdate
-    end
-    object NewYMDFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New YMD Field'
-      Hint = 'New YMD Field'
-      ImageIndex = 6
-      OnExecute = NewYMDFieldActionExecute
-      OnUpdate = NoControlActionUpdate
-    end
-    object NewHeadingAction: TAction
-      Category = 'Controls'
-      Caption = 'New Heading'
-      Hint = 'New Heading'
-      ImageIndex = 8
-      OnExecute = NewHeadingActionExecute
-      OnUpdate = NoControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        'Shift+F6'
-      )
-      ShortCut = 117
-    end
-    object NewSectionAction: TAction
-      Category = 'Controls'
-      Caption = 'New Section'
-      Hint = 'New Section'
-      ImageIndex = 9
-      OnExecute = NewSectionActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object EditControlAction: TAction
       Category = 'Edit'
@@ -2148,6 +2072,130 @@ object DesignFrame: TDesignFrame
       OnExecute = PasteControlActionExecute
       OnUpdate = PasteControlActionUpdate
       ShortCut = 16470
+    end
+    object NewIntFieldFastAction: TAction
+      Category = 'Controls'
+      Caption = 'New Integer Field'
+      Hint = 'New Integer Field'
+      ImageIndex = 1
+      OnExecute = NewIntFieldFastActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewFloatFieldAction: TAction
+      Category = 'Controls'
+      Caption = 'New Float Field'
+      Hint = 'New Float Field'
+      ImageIndex = 2
+      OnExecute = NewFloatFieldActionExecute
+      OnUpdate = NoControlActionUpdate
+      ShortCut = 114
+    end
+    object NewFloatFieldFastAction: TAction
+      Category = 'Controls'
+      Caption = 'New Float Field'
+      ImageIndex = 2
+      OnExecute = NewFloatFieldFastActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewStringFieldAction: TAction
+      Category = 'Controls'
+      Caption = 'New String Field'
+      Hint = 'New String Field'
+      ImageIndex = 3
+      OnExecute = NewStringFieldActionExecute
+      OnUpdate = NoControlActionUpdate
+      SecondaryShortCuts.Strings = (
+        ''
+      )
+      ShortCut = 115
+    end
+    object NewStringFieldFastAction: TAction
+      Category = 'Controls'
+      Caption = 'New String Field'
+      Hint = 'New String Field'
+      ImageIndex = 3
+      OnExecute = NewStringFieldFastActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewDMYFieldAction: TAction
+      Category = 'Controls'
+      Caption = 'New DMY Field'
+      Hint = 'New DMY Field'
+      ImageIndex = 4
+      OnExecute = NewDMYFieldActionExecute
+      OnUpdate = NoControlActionUpdate
+      SecondaryShortCuts.Strings = (
+        ''
+      )
+      ShortCut = 116
+    end
+    object NewDMYFieldFastAction: TAction
+      Category = 'Controls'
+      Caption = 'New DMY Field'
+      Hint = 'New DMY Field'
+      ImageIndex = 4
+      OnExecute = NewDMYFieldFastActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewMDYFieldAction: TAction
+      Category = 'Controls'
+      Caption = 'New MDY Field'
+      Hint = 'New MDY Field'
+      ImageIndex = 5
+      OnExecute = NewMDYFieldActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewMDYFieldFastAction: TAction
+      Category = 'Controls'
+      Caption = 'New MDY Field'
+      Hint = 'New MDY Field'
+      ImageIndex = 5
+      OnExecute = NewMDYFieldFastActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewYMDFieldAction: TAction
+      Category = 'Controls'
+      Caption = 'New YMD Field'
+      Hint = 'New YMD Field'
+      ImageIndex = 6
+      OnExecute = NewYMDFieldActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewYMDFieldFastAction: TAction
+      Category = 'Controls'
+      Caption = 'New YMD Field'
+      Hint = 'New YMD Field'
+      ImageIndex = 6
+      OnExecute = NewYMDFieldFastActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewHeadingAction: TAction
+      Category = 'Controls'
+      Caption = 'New Heading'
+      Hint = 'New Heading'
+      ImageIndex = 8
+      OnExecute = NewHeadingActionExecute
+      OnUpdate = NoControlActionUpdate
+      SecondaryShortCuts.Strings = (
+        ''
+      )
+      ShortCut = 117
+    end
+    object NewHeadingFastAction: TAction
+      Category = 'Controls'
+      Caption = 'New Heading'
+      Hint = 'New Heading'
+      ImageIndex = 8
+      OnExecute = NewHeadingFastActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object NewSectionAction: TAction
+      Category = 'Controls'
+      Caption = 'New Section'
+      Hint = 'New Section'
+      ImageIndex = 9
+      OnExecute = NewSectionActionExecute
+      OnUpdate = NoControlActionUpdate
     end
   end
   object DesignControlPopUpMenu: TPopupMenu

@@ -21,6 +21,13 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    NewHeadingFastAction: TAction;
+    NewYMDFieldFastAction: TAction;
+    NewMDYFieldFastAction: TAction;
+    NewDMYFieldFastAction: TAction;
+    NewStringFieldFastAction: TAction;
+    NewFloatFieldFastAction: TAction;
+    NewIntFieldFastAction: TAction;
     CopyControlPopupMenuItem: TMenuItem;
     CopyControlMenuItem: TMenuItem;
     ToolBarPanel: TPanel;
@@ -153,14 +160,12 @@ type
     procedure   Button1Click(Sender: TObject);
     procedure   Button2Click(Sender: TObject);
     procedure   Button3Click(Sender: TObject);
+    procedure   ControlActionUpdate(Sender: TObject);
     procedure   CopyControlActionExecute(Sender: TObject);
     procedure   CopyControlActionUpdate(Sender: TObject);
     procedure   DeleteAllControlsActionExecute(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
-    procedure   ControlActionUpdate(Sender: TObject);
     procedure   DeleteControlActionUpdate(Sender: TObject);
-    procedure NewSectionActionExecute(Sender: TObject);
-    procedure   NoControlActionUpdate(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
     procedure   ImportDataFileActionExecute(Sender: TObject);
@@ -172,13 +177,22 @@ type
     procedure   MoveUpActionExecute(Sender: TObject);
     procedure   NewDateFieldMenuClick(Sender: TObject);
     procedure   NewDMYFieldActionExecute(Sender: TObject);
+    procedure   NewDMYFieldFastActionExecute(Sender: TObject);
     procedure   NewFloatFieldActionExecute(Sender: TObject);
+    procedure   NewFloatFieldFastActionExecute(Sender: TObject);
     procedure   NewHeadingActionExecute(Sender: TObject);
+    procedure   NewHeadingFastActionExecute(Sender: TObject);
     procedure   NewIntFieldActionExecute(Sender: TObject);
+    procedure   NewIntFieldFastActionExecute(Sender: TObject);
     procedure   NewMDYFieldActionExecute(Sender: TObject);
+    procedure   NewMDYFieldFastActionExecute(Sender: TObject);
     procedure   NewOtherFieldMenuClick(Sender: TObject);
+    procedure   NewSectionActionExecute(Sender: TObject);
     procedure   NewStringFieldActionExecute(Sender: TObject);
+    procedure   NewStringFieldFastActionExecute(Sender: TObject);
     procedure   NewYMDFieldActionExecute(Sender: TObject);
+    procedure   NewYMDFieldFastActionExecute(Sender: TObject);
+    procedure   NoControlActionUpdate(Sender: TObject);
     procedure   PasteAsFloatActionExecute(Sender: TObject);
     procedure   PasteAsHeadingActionExecute(Sender: TObject);
     procedure   PasteAsIntActionExecute(Sender: TObject);
@@ -243,8 +257,9 @@ type
     { Design controls - methods }
     FActiveControl: TControl;
     function    NewShortCutFieldControl(Ft: TEpiFieldType;
-      AParent: TWinControl): TControl;
-    function    NewShortCutHeadingControl(AParent: TWinControl): TControl;
+      AParent: TWinControl; ForceShowForm: Boolean): TControl;
+    function    NewShortCutHeadingControl(AParent: TWinControl;
+      ForceShowForm: Boolean): TControl;
     function    NewDesignControl(AClass: TControlClass;
       AParent: TWinControl; Pos: TPoint;
       EpiControl: TEpiCustomControlItem): TControl;
@@ -902,29 +917,53 @@ end;
 
 procedure TDesignFrame.NewDMYFieldActionExecute(Sender: TObject);
 begin
-  NewShortCutFieldControl(ftDMYDate, FActiveDockSite);
+  NewShortCutFieldControl(ftDMYDate, FActiveDockSite, true);
+end;
+
+procedure TDesignFrame.NewDMYFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftDMYDate, FActiveDockSite, false);
 end;
 
 procedure TDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
 begin
-  NewShortCutFieldControl(ftFloat, FActiveDockSite);
+  NewShortCutFieldControl(ftFloat, FActiveDockSite, true);
+end;
+
+procedure TDesignFrame.NewFloatFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftFloat, FActiveDockSite, false);
 end;
 
 procedure TDesignFrame.NewHeadingActionExecute(Sender: TObject);
 begin
-  NewShortCutHeadingControl(FActiveDockSite);
+  NewShortCutHeadingControl(FActiveDockSite, true);
+end;
+
+procedure TDesignFrame.NewHeadingFastActionExecute(Sender: TObject);
+begin
+  NewShortCutHeadingControl(FActiveDockSite, false);
 end;
 
 procedure TDesignFrame.NewIntFieldActionExecute(Sender: TObject);
 begin
-  NewShortCutFieldControl(ftInteger, FActiveDockSite);
+  NewShortCutFieldControl(ftInteger, FActiveDockSite, true);
+end;
+
+procedure TDesignFrame.NewIntFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftInteger, FActiveDockSite, false);
 end;
 
 procedure TDesignFrame.NewMDYFieldActionExecute(Sender: TObject);
 begin
-  NewShortCutFieldControl(ftMDYDate, FActiveDockSite);
+  NewShortCutFieldControl(ftMDYDate, FActiveDockSite, true);
 end;
 
+procedure TDesignFrame.NewMDYFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftMDYDate, FActiveDockSite, false);
+end;
 
 procedure TDesignFrame.NewOtherFieldMenuClick(Sender: TObject);
 begin
@@ -937,12 +976,22 @@ end;
 
 procedure TDesignFrame.NewStringFieldActionExecute(Sender: TObject);
 begin
-  NewShortCutFieldControl(ftString, FActiveDockSite);
+  NewShortCutFieldControl(ftString, FActiveDockSite, true);
+end;
+
+procedure TDesignFrame.NewStringFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftString, FActiveDockSite, false);
 end;
 
 procedure TDesignFrame.NewYMDFieldActionExecute(Sender: TObject);
 begin
-  NewShortCutFieldControl(ftYMDDate, FActiveDockSite);
+  NewShortCutFieldControl(ftYMDDate, FActiveDockSite, true);
+end;
+
+procedure TDesignFrame.NewYMDFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutFieldControl(ftYMDDate, FActiveDockSite, false);
 end;
 
 procedure TDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
@@ -1806,16 +1855,6 @@ begin
 end;
 
 procedure TDesignFrame.UpdateShortCuts;
-
-  procedure UpdateControlActionShortCut(
-    Const TheAction: TAction;
-    Const PrimareShortCut, SecondaryShortCut: TShortCut);
-  begin
-    TheAction.ShortCut := PrimareShortCut;
-    TheAction.SecondaryShortCuts.Clear;
-    TheAction.SecondaryShortCuts.Add(ShortCutToText(SecondaryShortCut));
-  end;
-
 begin
   PasteAsHeadingAction.ShortCut := 0;
   PasteAsIntAction.ShortCut     := 0;
@@ -1830,11 +1869,16 @@ begin
   end;
 
   // Designer Frame
-  UpdateControlActionShortCut(NewIntFieldAction, D_NewIntField, D_NewIntField_Fast);
-  UpdateControlActionShortCut(NewFloatFieldAction, D_NewFloatField, D_NewFloatField_Fast);
-  UpdateControlActionShortCut(NewStringFieldAction, D_NewStringField, D_NewStringField_Fast);
-  UpdateControlActionShortCut(NewDMYFieldAction, D_NewDateField, D_NewDateField_Fast);
-  UpdateControlActionShortCut(NewHeadingAction, D_NewHeadingField, D_NewHeadingField_Fast);
+  NewIntFieldAction.ShortCut := D_NewIntField;
+  NewIntFieldFastAction.ShortCut := D_NewIntField_Fast;
+  NewFloatFieldAction.ShortCut := D_NewFloatField;
+  NewFloatFieldFastAction.ShortCut := D_NewFloatField_Fast;
+  NewStringFieldAction.ShortCut := D_NewStringField;
+  NewStringFieldFastAction.ShortCut := D_NewStringField_Fast;
+  NewDMYFieldAction.ShortCut := D_NewDateField;
+  NewDMYFieldFastAction.ShortCut := D_NewDateField_Fast;
+  NewHeadingAction.ShortCut := D_NewHeading;
+  NewHeadingFastAction.ShortCut := D_NewHeading_Fast;
   NewSectionAction.ShortCut := D_NewSection;
   EditControlAction.ShortCut := D_EditControl;
   DeleteControlAction.ShortCut := D_DeleteControl;
@@ -2149,7 +2193,7 @@ begin
 end;
 
 function TDesignFrame.NewShortCutFieldControl(Ft: TEpiFieldType;
-  AParent: TWinControl): TControl;
+  AParent: TWinControl; ForceShowForm: Boolean): TControl;
 var
   Pt: TPoint;
   Field: TEpiField;
@@ -2158,10 +2202,11 @@ begin
   Pt := FindNewPosition(AParent, TDesignField);
 
   NewDesignControl(TDesignField, AParent, Pt, Field);
-  ShowForm(Field, AParent.ClientToScreen(Pt), not (ssShift in GetKeyShiftState));
+  ShowForm(Field, AParent.ClientToScreen(Pt), ForceShowForm {not (ssShift in GetKeyShiftState)});
 end;
 
-function TDesignFrame.NewShortCutHeadingControl(AParent: TWinControl): TControl;
+function TDesignFrame.NewShortCutHeadingControl(AParent: TWinControl;
+  ForceShowForm: Boolean): TControl;
 var
   Pt: TPoint;
   Heading: TEpiHeading;
@@ -2170,7 +2215,7 @@ begin
   Pt := FindNewPosition(AParent, TDesignHeading);
 
   NewDesignControl(TDesignHeading, AParent, Pt, Heading);
-  ShowForm(Heading, AParent.ClientToScreen(Pt), not (ssShift in GetKeyShiftState));
+  ShowForm(Heading, AParent.ClientToScreen(Pt), ForceShowForm);
 end;
 
 procedure TDesignFrame.DesignControlMouseDown(Sender: TObject;

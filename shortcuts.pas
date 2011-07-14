@@ -44,7 +44,7 @@ var
   D_NewFloatField, D_NewFloatField_Fast,
   D_NewStringField, D_NewStringField_Fast,
   D_NewDateField, D_NewDateField_Fast,
-  D_NewHeadingField, D_NewHeadingField_Fast,
+  D_NewHeading, D_NewHeading_Fast,
   D_NewSection,
   D_EditControl,
   D_DeleteControl,
