@@ -48,6 +48,7 @@ begin
   D_NewSection                 := KeyToShortCut(VK_6, []);
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
+  D_DeleteControl_Fast         := KeyToShortCut(VK_DELETE, [ssMeta]);
   D_ImportData                 := KeyToShortCut(VK_UNKNOWN, []);
   D_AddStructure               := KeyToShortCut(VK_UNKNOWN, []);
   D_MoveTop                    := KeyToShortCut(VK_UP, [ssMeta]);
@@ -63,12 +64,14 @@ begin
 
   // ValueLabel Editor
   // - tree actions
-  V_TREE_DeleteValueLabelSet   := KeyToShortCut(VK_BACK, []);
-  V_TREE_NewIntValueLabelSet   := KeyToShortCut(VK_1, [ssMeta]);
-  V_TREE_NewFloatValueLabelSet := KeyToShortCut(VK_2, [ssMeta]);
-  V_TREE_NewStringValueLabelSet := KeyToShortCut(VK_3, [ssMeta]);
+  V_TREE_DeleteValueLabelSet      := KeyToShortCut(VK_BACK, []);
+  V_TREE_DeleteValueLabelSet_Fast := KeyToShortCut(VK_BACK, [ssMeta]);
+  V_TREE_NewIntValueLabelSet      := KeyToShortCut(VK_1, [ssMeta]);
+  V_TREE_NewFloatValueLabelSet    := KeyToShortCut(VK_2, [ssMeta]);
+  V_TREE_NewStringValueLabelSet   := KeyToShortCut(VK_3, [ssMeta]);
   // - grid
-  V_GRID_DeleteRow              := KeyToShortCut(VK_D, [ssMeta]);
-  V_GRID_InsertRow              := KeyToShortCut(VK_INSERT, []);
+  V_GRID_DeleteRow                := KeyToShortCut(VK_D, [ssMeta]);
+  V_GRID_DeleteRow_Fast           := KeyToShortCut(VK_D, [ssMeta, ssShift]);
+  V_GRID_InsertRow                := KeyToShortCut(VK_INSERT, []);
 end;
 

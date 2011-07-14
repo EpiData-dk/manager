@@ -47,7 +47,7 @@ var
   D_NewHeading, D_NewHeading_Fast,
   D_NewSection,
   D_EditControl,
-  D_DeleteControl,
+  D_DeleteControl, D_DeleteControl_Fast,
   D_ImportData,
   D_AddStructure,
   D_MoveTop,
@@ -65,12 +65,12 @@ var
 
   // ValueLabel Editor
   // - tree actions
-  V_TREE_DeleteValueLabelSet,
+  V_TREE_DeleteValueLabelSet, V_TREE_DeleteValueLabelSet_Fast,
   V_TREE_NewIntValueLabelSet,
   V_TREE_NewFloatValueLabelSet,
   V_TREE_NewStringValueLabelSet,
   // - grid
-  V_GRID_DeleteRow,
+  V_GRID_DeleteRow, V_GRID_DeleteRow_Fast,
   V_GRID_InsertRow:
     TShortCut;
 

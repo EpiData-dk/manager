@@ -9,7 +9,7 @@ uses
 
 const
   // Designer messages
-  LM_DESIGNER_DEL = LM_USER + 1;
+  LM_DESIGNER_DEL = LM_USER + 1;       // WParam = Control;  LParam: 1=Force Delete, 0=Ask User.
   // Last Designer message... always update when inserting new messages.!
   LM_DESIGNER_LAST = LM_DESIGNER_DEL;
 

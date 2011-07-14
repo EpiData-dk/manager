@@ -1929,14 +1929,6 @@ object DesignFrame: TDesignFrame
     Images = DesignerImageList
     left = 248
     top = 352
-    object NewIntFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New Integer Field'
-      Hint = 'New Integer Field'
-      ImageIndex = 1
-      OnExecute = NewIntFieldActionExecute
-      OnUpdate = NoControlActionUpdate
-    end
     object EditControlAction: TAction
       Category = 'Edit'
       Caption = 'Edit'
@@ -1944,7 +1936,6 @@ object DesignFrame: TDesignFrame
       ImageIndex = 10
       OnExecute = EditControlActionExecute
       OnUpdate = ControlActionUpdate
-      ShortCut = 13
     end
     object DeleteControlAction: TAction
       Category = 'Edit'
@@ -1953,10 +1944,6 @@ object DesignFrame: TDesignFrame
       ImageIndex = 11
       OnExecute = DeleteControlActionExecute
       OnUpdate = DeleteControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        'Shift+Del'
-      )
-      ShortCut = 46
     end
     object ImportDataFileAction: TAction
       Category = 'File'
@@ -1982,96 +1969,44 @@ object DesignFrame: TDesignFrame
       Caption = 'MoveHomeAction'
       OnExecute = MoveHomeActionExecute
       OnUpdate = ControlActionUpdate
-      ShortCut = 36
     end
     object MovePgUpAction: TAction
       Category = 'Move'
       Caption = 'MovePgUpAction'
       OnExecute = MovePgUpActionExecute
       OnUpdate = ControlActionUpdate
-      ShortCut = 33
     end
     object MoveUpAction: TAction
       Category = 'Move'
       Caption = 'MoveUpAction'
       OnExecute = MoveUpActionExecute
       OnUpdate = ControlActionUpdate
-      ShortCut = 38
     end
     object MoveDownAction: TAction
       Category = 'Move'
       Caption = 'MoveDownAction'
       OnExecute = MoveDownActionExecute
       OnUpdate = ControlActionUpdate
-      ShortCut = 40
     end
     object MovePgDnAction: TAction
       Category = 'Move'
       Caption = 'MovePgDnAction'
       OnExecute = MovePgDnActionExecute
       OnUpdate = ControlActionUpdate
-      ShortCut = 34
     end
     object MoveEndAction: TAction
       Category = 'Move'
       Caption = 'MoveEndAction'
       OnExecute = MoveEndActionExecute
       OnUpdate = ControlActionUpdate
-      ShortCut = 35
     end
-    object DeleteAllControlsAction: TAction
-      Category = 'Edit'
-      Caption = 'Erase All'
-      Hint = 'Erase All'
-      ImageIndex = 16
-      OnExecute = DeleteAllControlsActionExecute
-      OnUpdate = NoControlActionUpdate
-    end
-    object PasteAsHeadingAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As Headings'
-      Hint = 'Paste As Headings...'
-      ImageIndex = 8
-      OnExecute = PasteAsHeadingActionExecute
-      OnUpdate = NoControlActionUpdate
-    end
-    object PasteAsIntAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As Integer'
-      Hint = 'Paste As Integer...'
+    object NewIntFieldAction: TAction
+      Category = 'Controls'
+      Caption = 'New Integer Field'
+      Hint = 'New Integer Field'
       ImageIndex = 1
-      OnExecute = PasteAsIntActionExecute
+      OnExecute = NewIntFieldActionExecute
       OnUpdate = NoControlActionUpdate
-    end
-    object PasteAsFloatAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As Float'
-      Hint = 'Paste As Float...'
-      ImageIndex = 2
-      OnExecute = PasteAsFloatActionExecute
-      OnUpdate = NoControlActionUpdate
-    end
-    object PasteAsStringAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As String'
-      Hint = 'Paste As String...'
-      ImageIndex = 3
-      OnExecute = PasteAsStringActionExecute
-      OnUpdate = NoControlActionUpdate
-    end
-    object CopyControlAction: TAction
-      Category = 'Edit'
-      Caption = 'Copy'
-      OnExecute = CopyControlActionExecute
-      OnUpdate = CopyControlActionUpdate
-      ShortCut = 16451
-    end
-    object PasteControlAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste Control'
-      OnExecute = PasteControlActionExecute
-      OnUpdate = PasteControlActionUpdate
-      ShortCut = 16470
     end
     object NewIntFieldFastAction: TAction
       Category = 'Controls'
@@ -2088,7 +2023,6 @@ object DesignFrame: TDesignFrame
       ImageIndex = 2
       OnExecute = NewFloatFieldActionExecute
       OnUpdate = NoControlActionUpdate
-      ShortCut = 114
     end
     object NewFloatFieldFastAction: TAction
       Category = 'Controls'
@@ -2104,10 +2038,6 @@ object DesignFrame: TDesignFrame
       ImageIndex = 3
       OnExecute = NewStringFieldActionExecute
       OnUpdate = NoControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        ''
-      )
-      ShortCut = 115
     end
     object NewStringFieldFastAction: TAction
       Category = 'Controls'
@@ -2124,10 +2054,6 @@ object DesignFrame: TDesignFrame
       ImageIndex = 4
       OnExecute = NewDMYFieldActionExecute
       OnUpdate = NoControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        ''
-      )
-      ShortCut = 116
     end
     object NewDMYFieldFastAction: TAction
       Category = 'Controls'
@@ -2176,10 +2102,6 @@ object DesignFrame: TDesignFrame
       ImageIndex = 8
       OnExecute = NewHeadingActionExecute
       OnUpdate = NoControlActionUpdate
-      SecondaryShortCuts.Strings = (
-        ''
-      )
-      ShortCut = 117
     end
     object NewHeadingFastAction: TAction
       Category = 'Controls'
@@ -2196,6 +2118,66 @@ object DesignFrame: TDesignFrame
       ImageIndex = 9
       OnExecute = NewSectionActionExecute
       OnUpdate = NoControlActionUpdate
+    end
+    object DeleteControlFastAction: TAction
+      Category = 'Edit'
+      Caption = 'Delete'
+      Hint = 'Delete...'
+      ImageIndex = 11
+      OnExecute = DeleteControlFastActionExecute
+      OnUpdate = DeleteControlActionUpdate
+    end
+    object DeleteAllControlsAction: TAction
+      Category = 'Edit'
+      Caption = 'Erase All'
+      Hint = 'Erase All'
+      ImageIndex = 16
+      OnExecute = DeleteAllControlsActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object PasteAsHeadingAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Headings'
+      Hint = 'Paste As Headings...'
+      ImageIndex = 8
+      OnExecute = PasteAsHeadingActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object PasteAsIntAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Integer'
+      Hint = 'Paste As Integer...'
+      ImageIndex = 1
+      OnExecute = PasteAsIntActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object PasteAsFloatAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Float'
+      Hint = 'Paste As Float...'
+      ImageIndex = 2
+      OnExecute = PasteAsFloatActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object PasteAsStringAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As String'
+      Hint = 'Paste As String...'
+      ImageIndex = 3
+      OnExecute = PasteAsStringActionExecute
+      OnUpdate = NoControlActionUpdate
+    end
+    object CopyControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Copy'
+      OnExecute = CopyControlActionExecute
+      OnUpdate = CopyControlActionUpdate
+    end
+    object PasteControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste Control'
+      OnExecute = PasteControlActionExecute
+      OnUpdate = PasteControlActionUpdate
     end
   end
   object DesignControlPopUpMenu: TPopupMenu
@@ -2630,8 +2612,8 @@ object DesignFrame: TDesignFrame
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList
-    left = 232
-    top = 48
+    left = 248
+    top = 104
     object TodayDateSubMenu: TMenuItem
       Caption = 'Auto Date...'
       Hint = 'Today Fields'

@@ -64,7 +64,7 @@ object ValueLabelEditor: TValueLabelEditor
         Caption = 'ToolButton4'
         Style = tbsDivider
       end
-      object ToolButton5: TToolButton
+      object DelVLSetToolBtn: TToolButton
         Left = 61
         Top = 2
         Action = DeleteValueLabelSets
@@ -151,30 +151,34 @@ object ValueLabelEditor: TValueLabelEditor
       OnExecute = DeleteValueLabelSetsExecute
       OnUpdate = DeleteValueLabelSetsUpdate
       SecondaryShortCuts.Strings = (
-        'Shift+Del'
+        ''
       )
-      ShortCut = 46
+    end
+    object DeleteValueLabelSetsFastAction: TAction
+      Category = 'TreeView'
+      Caption = 'DeleteValueLabelSetsFastAction'
+      Hint = 'Delete Valuelabel Set'
+      ImageIndex = 3
+      OnExecute = DeleteValueLabelSetsFastActionExecute
+      OnUpdate = DeleteValueLabelSetsUpdate
     end
     object NewIntValueLabelSetAction: TAction
       Category = 'TreeView'
       Hint = 'Integer Valuelabels'
       ImageIndex = 0
       OnExecute = NewIntValueLabelSetActionExecute
-      ShortCut = 113
     end
     object NewFloatValueLabelSetAction: TAction
       Category = 'TreeView'
       Hint = 'Float Valuelabels'
       ImageIndex = 1
       OnExecute = NewFloatValueLabelSetActionExecute
-      ShortCut = 114
     end
     object NewStringValueLabelSetAction: TAction
       Category = 'TreeView'
       Hint = 'String Valuelabels'
       ImageIndex = 2
       OnExecute = NewStringValueLabelSetActionExecute
-      ShortCut = 115
     end
   end
   object NewValueLabelSetTypeDropDown: TPopupMenu
@@ -198,10 +202,11 @@ object ValueLabelEditor: TValueLabelEditor
       Enabled = False
       OnExecute = DeleteGridRowExecute
       OnUpdate = DeleteGridRowUpdate
-      SecondaryShortCuts.Strings = (
-        'Shift+Del'
-      )
-      ShortCut = 46
+    end
+    object DeleteGridRowFastAction: TAction
+      Caption = 'Delete Valuelabel'
+      OnExecute = DeleteGridRowFastActionExecute
+      OnUpdate = DeleteGridRowUpdate
     end
     object InsertGridRowAction: TAction
       Caption = 'Insert Valuelabel'

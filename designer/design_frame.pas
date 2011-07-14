@@ -21,6 +21,7 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    DeleteControlFastAction: TAction;
     NewHeadingFastAction: TAction;
     NewYMDFieldFastAction: TAction;
     NewMDYFieldFastAction: TAction;
@@ -166,6 +167,7 @@ type
     procedure   DeleteAllControlsActionExecute(Sender: TObject);
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   DeleteControlActionUpdate(Sender: TObject);
+    procedure   DeleteControlFastActionExecute(Sender: TObject);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
     procedure   ImportDataFileActionExecute(Sender: TObject);
@@ -272,7 +274,7 @@ type
     procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure   EnterControl(Sender: TObject);
     procedure   ExitControl(Sender: TObject);
-    procedure   DeleteControl(Sender: TObject);
+    procedure   DeleteControl(Sender: TObject; ForceDelete: Boolean);
     procedure   DoDeleteControl(Sender: TObject);
     procedure   DeleteAllControls;
     // - Custom message, used for deleting controls.
@@ -515,6 +517,11 @@ begin
     (MainForm.Active) and
     (Assigned(FActiveControl)) and
     (FActiveControl <> FDesignerBox);
+end;
+
+procedure TDesignFrame.DeleteControlFastActionExecute(Sender: TObject);
+begin
+  PostMessage(Self.Handle, LM_DESIGNER_DEL, WPARAM(Sender), 1);
 end;
 
 procedure TDesignFrame.NewSectionActionExecute(Sender: TObject);
@@ -1882,6 +1889,7 @@ begin
   NewSectionAction.ShortCut := D_NewSection;
   EditControlAction.ShortCut := D_EditControl;
   DeleteControlAction.ShortCut := D_DeleteControl;
+  DeleteControlFastAction.ShortCut := D_DeleteControl_Fast;
   ImportDataFileAction.ShortCut := D_ImportData;
   AddStructureAction.ShortCut := D_AddStructure;
   MoveHomeAction.ShortCut := D_MoveTop;
@@ -2202,7 +2210,7 @@ begin
   Pt := FindNewPosition(AParent, TDesignField);
 
   NewDesignControl(TDesignField, AParent, Pt, Field);
-  ShowForm(Field, AParent.ClientToScreen(Pt), ForceShowForm {not (ssShift in GetKeyShiftState)});
+  ShowForm(Field, AParent.ClientToScreen(Pt), ForceShowForm);
 end;
 
 function TDesignFrame.NewShortCutHeadingControl(AParent: TWinControl;
@@ -2318,7 +2326,7 @@ begin
   FActiveControl := nil;
 end;
 
-procedure TDesignFrame.DeleteControl(Sender: TObject);
+procedure TDesignFrame.DeleteControl(Sender: TObject; ForceDelete: Boolean);
 var
   EpiCtrl: TEpiCustomControlItem;
   LocalCtrl: TControl;
@@ -2328,8 +2336,7 @@ var
 begin
   Node := nil;
 
-  {$IFNDEF EPI_DEBUG}
-  if not ([ssShift] = GetKeyShiftState) then
+  if not ForceDelete then
   begin
     EpiCtrl := (FActiveControl as IDesignEpiControl).EpiControl;
     if EpiCtrl is TEpiSection then
@@ -2373,8 +2380,7 @@ begin
        (MessageDlg('Warning', 'Field(s) contains data.' + LineEnding +
         'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
       exit;
-  end;  // ssShift!
-  {$ENDIF}
+  end;  // ForceDelete
 
   DoDeleteControl(nil);
 
@@ -2447,8 +2453,8 @@ var
 begin
   Ctrl := TControl(Msg.WParam);
   if Ctrl = FDesignerBox then exit;
-  DeleteControl(Ctrl);
-  TLMessage(Msg).Result := 1;
+  DeleteControl(Ctrl, Msg.LParam = 1);
+  Msg.Result := 1;
 end;
 
 procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;

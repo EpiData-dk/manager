@@ -31,6 +31,8 @@ type
   { TValueLabelEditor }
 
   TValueLabelEditor = class(TForm)
+    DeleteGridRowFastAction: TAction;
+    DeleteValueLabelSetsFastAction: TAction;
     ImageList1: TImageList;
     InsertGridRowAction: TAction;
     DeleteGridRowAction: TAction;
@@ -50,7 +52,7 @@ type
     FloatSetBtn: TToolButton;
     StringSetBtn: TToolButton;
     ToolButton4: TToolButton;
-    ToolButton5: TToolButton;
+    DelVLSetToolBtn: TToolButton;
     TreeViewActionList: TActionList;
     Panel1: TPanel;
     NewValueLabelSetTypeDropDown: TPopupMenu;
@@ -58,8 +60,10 @@ type
     ToolBar1: TToolBar;
     ValueLabelSetTreeView: TTreeView;
     procedure DeleteGridRowExecute(Sender: TObject);
+    procedure DeleteGridRowFastActionExecute(Sender: TObject);
     procedure DeleteGridRowUpdate(Sender: TObject);
     procedure DeleteValueLabelSetsExecute(Sender: TObject);
+    procedure DeleteValueLabelSetsFastActionExecute(Sender: TObject);
     procedure DeleteValueLabelSetsUpdate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
@@ -89,6 +93,8 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     function    DoNewValueLabelSet(Ft: TEpiFieldType): TEpiValueLabelSet;
+    procedure   DoDeleteValueLabelSet(Const ForceDelete: boolean);
+    procedure   DoDeleteGridRow(Const ForceDelete: boolean);
     procedure   UpdateGridCells;
     procedure   ValueLabelsGridCheckboxToggled(sender: TObject; aCol, aRow: Integer; aState: TCheckboxState);
     procedure   ValueLabelsGridColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex, tIndex: Integer);
@@ -385,6 +391,65 @@ begin
   UpdateStatusbar;
 end;
 
+procedure TValueLabelEditor.DoDeleteValueLabelSet(const ForceDelete: boolean);
+var
+  Node: TTreeNode;
+  VLSet: TEpiValueLabelSet;
+  NNode: TTreeNode;
+  Data: Pointer;
+begin
+  Node := ValueLabelSetTreeView.Selected;
+  NNode := Node.GetNext;
+  if not Assigned(NNode) then
+    NNode := Node.GetPrev;
+  if Assigned(NNode) then
+    Data := NNode.Data
+  else
+    Data := nil;
+
+
+  VLSet := TEpiValueLabelSet(Node.Data);
+
+  if not ForceDelete then
+  begin
+    if MessageDlg('Warning',
+      format('Are you sure you want to delete "%s"?', [VLSet.Name]),
+      mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+  end;
+
+  FValueLabelSets.RemoveItem(VLSet);
+  VLSet.Free;
+  ValueLabelSetTreeView.Items.Delete(Node);
+  ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.FindNodeWithData(Data);
+end;
+
+procedure TValueLabelEditor.DoDeleteGridRow(const ForceDelete: boolean);
+var
+  Idx: LongInt;
+  i: LongInt;
+begin
+  with ValueLabelsGrid do
+  begin
+    Idx := Row;
+
+    if not ForceDelete then
+    begin
+      if MessageDlg('Warning',
+        Format('Are you sure you want to delete "%s = %s"?',[Cells[1, Idx], Cells[2, Idx]]),
+        mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+    end;
+
+    BeginUpdate;
+    DeleteRow(Idx);
+    EndUpdate;
+  end;
+  Dec(Idx);
+  FCurrentVLSet.DeleteItem(Idx).Free;
+  for i := Idx to FCurrentVLSet.Count -1 do
+    FCurrentVLSet[i].Order := i;
+  UpdateGridCells;
+end;
+
 procedure TValueLabelEditor.UpdateGridCells;
 var
   i: Integer;
@@ -447,43 +512,28 @@ begin
 end;
 
 procedure TValueLabelEditor.DeleteValueLabelSetsExecute(Sender: TObject);
-var
-  Node: TTreeNode;
-  VLSet: TEpiValueLabelSet;
-  NNode: TTreeNode;
-  Data: Pointer;
 begin
-  Node := ValueLabelSetTreeView.Selected;
-  NNode := Node.GetNext;
-  if not Assigned(NNode) then
-    NNode := Node.GetPrev;
-  if Assigned(NNode) then
-    Data := NNode.Data
-  else
-    Data := nil;
+  DoDeleteValueLabelSet(false);
+end;
 
-
-  VLSet := TEpiValueLabelSet(Node.Data);
-
-  {$IFNDEF EPI_DEBUG}
-  if not (ssShift in GetKeyShiftState) then
-  begin
-    if MessageDlg('Warning',
-      format('Are you sure you want to delete "%s"?', [VLSet.Name]),
-      mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
-  end;
-  {$ENDIF}
-
-  FValueLabelSets.RemoveItem(VLSet);
-  VLSet.Free;
-  ValueLabelSetTreeView.Items.Delete(Node);
-  ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.FindNodeWithData(Data);
+procedure TValueLabelEditor.DeleteValueLabelSetsFastActionExecute(
+  Sender: TObject);
+begin
+  DoDeleteValueLabelSet(true);
 end;
 
 procedure TValueLabelEditor.DeleteValueLabelSetsUpdate(Sender: TObject);
+var
+  A: TAction absolute Sender;
 begin
-  TAction(Sender).Enabled :=
-//    (ValueLabelSetTreeView.Focused) and
+  if Assigned(A.ActionComponent) and (A.ActionComponent = DelVLSetToolBtn) then
+  begin
+    A.Enabled := ValueLabelSetTreeView.Items.Count > 0;
+    Exit;
+  end;
+
+  A.Enabled :=
+    (ValueLabelSetTreeView.Focused) and
     (ValueLabelSetTreeView.Items.Count > 0);
 end;
 
@@ -495,32 +545,13 @@ begin
 end;
 
 procedure TValueLabelEditor.DeleteGridRowExecute(Sender: TObject);
-var
-  Idx: LongInt;
-  i: LongInt;
 begin
-  with ValueLabelsGrid do
-  begin
-    Idx := Row;
+  DoDeleteGridRow(false);
+end;
 
-    {$IFNDEF EPI_DEBUG}
-    if not (ssShift in GetKeyShiftState) then
-    begin
-      if MessageDlg('Warning',
-        Format('Are you sure you want to delete "%s = %s"?',[Cells[1, Idx], Cells[2, Idx]]),
-        mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
-    end;
-    {$ENDIF}
-
-    BeginUpdate;
-    DeleteRow(Idx);
-    EndUpdate;
-  end;
-  Dec(Idx);
-  FCurrentVLSet.DeleteItem(Idx).Free;
-  for i := Idx to FCurrentVLSet.Count -1 do
-    FCurrentVLSet[i].Order := i;
-  UpdateGridCells;
+procedure TValueLabelEditor.DeleteGridRowFastActionExecute(Sender: TObject);
+begin
+  DoDeleteGridRow(true);
 end;
 
 procedure TValueLabelEditor.DeleteGridRowUpdate(Sender: TObject);
@@ -612,11 +643,13 @@ begin
   // ValueLabel Editor
   // - tree actions
   DeleteValueLabelSets.ShortCut := V_TREE_DeleteValueLabelSet;
+  DeleteValueLabelSetsFastAction.ShortCut := V_TREE_DeleteValueLabelSet_Fast;
   NewIntValueLabelSetAction.ShortCut := V_TREE_NewIntValueLabelSet;
   NewFloatValueLabelSetAction.ShortCut := V_TREE_NewFloatValueLabelSet;
   NewStringValueLabelSetAction.ShortCut := V_TREE_NewStringValueLabelSet;
   // - grid
   DeleteGridRowAction.ShortCut := V_GRID_DeleteRow;
+  DeleteGridRowFastAction.ShortCut := V_GRID_DeleteRow_Fast;
   InsertGridRowAction.ShortCut := V_GRID_InsertRow;
 end;
 
