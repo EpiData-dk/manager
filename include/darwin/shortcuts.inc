@@ -43,8 +43,8 @@ begin
   D_NewStringField_Fast        := KeyToShortCut(VK_3, [ssMeta]);
   D_NewDateField               := KeyToShortCut(VK_4, []);
   D_NewDateField_Fast          := KeyToShortCut(VK_4, [ssMeta]);
-  D_NewHeadingField            := KeyToShortCut(VK_5, []);
-  D_NewHeadingField_Fast       := KeyToShortCut(VK_5, [ssMeta]);
+  D_NewHeading                 := KeyToShortCut(VK_5, []);
+  D_NewHeading_Fast            := KeyToShortCut(VK_5, [ssMeta]);
   D_NewSection                 := KeyToShortCut(VK_6, []);
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
