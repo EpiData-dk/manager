@@ -195,7 +195,7 @@ end;
 constructor TFieldCopyObject.Create(const Field: TEpiField);
 begin
   FField := Field;
-  FField.RegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+  FField.RegisterOnChangeHook(@TheDestroyer.CustomItemHook, true);
 end;
 
 destructor TFieldCopyObject.Destroy;
@@ -210,7 +210,7 @@ end;
 constructor TSectionCopyObject.Create(const Section: TEpiSection);
 begin
   FSection := Section;
-  FSection.RegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+  FSection.RegisterOnChangeHook(@TheDestroyer.CustomItemHook, true);
 end;
 
 destructor TSectionCopyObject.Destroy;
@@ -224,7 +224,7 @@ end;
 constructor THeadingCopyObject.Create(const Heading: TEpiHeading);
 begin
   FHeading := Heading;
-  FHeading.RegisterOnChangeHook(@TheDestroyer.CustomItemHook);
+  FHeading.RegisterOnChangeHook(@TheDestroyer.CustomItemHook, true);
 end;
 
 destructor THeadingCopyObject.Destroy;

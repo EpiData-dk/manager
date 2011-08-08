@@ -687,7 +687,6 @@ begin
   ProjectMenu.Visible := Assigned(FActiveFrame);
 
   // TOOLS:
-//  ToolsMenu.Visible := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;
