@@ -48,7 +48,7 @@ begin
   D_NewSection                 := KeyToShortCut(VK_6, []);
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
-  D_DeleteControl_Fast         := KeyToShortCut(VK_DELETE, [ssMeta]);
+  D_DeleteControl_Fast         := KeyToShortCut(VK_BACK, [ssMeta]);
   D_ImportData                 := KeyToShortCut(VK_UNKNOWN, []);
   D_AddStructure               := KeyToShortCut(VK_UNKNOWN, []);
   D_MoveTop                    := KeyToShortCut(VK_UP, [ssMeta]);

@@ -22,6 +22,7 @@ type
 
   TDesignFrame = class(TFrame)
     DeleteControlFastAction: TAction;
+    NewBooleanMenu: TMenuItem;
     NewHeadingFastAction: TAction;
     NewYMDFieldFastAction: TAction;
     NewMDYFieldFastAction: TAction;

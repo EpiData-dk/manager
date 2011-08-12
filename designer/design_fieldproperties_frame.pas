@@ -751,7 +751,7 @@ begin
     Field.UnRegisterOnChangeHook(@FieldHook);
   inherited SetEpiControl(AValue);
   UpdateFormContent;
-  AValue.RegisterOnChangeHook(@FieldHook);
+  AValue.RegisterOnChangeHook(@FieldHook, true);
 end;
 
 procedure TFieldPropertiesFrame.ShiftToTabSheet(const SheetNo: Byte);
