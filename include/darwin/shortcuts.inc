@@ -36,15 +36,15 @@ begin
 
   // Designer Frame
   D_NewIntField                := KeyToShortCut(VK_1, []);
-  D_NewIntField_Fast           := KeyToShortCut(VK_1, [ssMeta]);
+  D_NewIntField_Fast           := KeyToShortCut(VK_1, [ssShift]);
   D_NewFloatField              := KeyToShortCut(VK_2, []);
-  D_NewFloatField_Fast         := KeyToShortCut(VK_2, [ssMeta]);
+  D_NewFloatField_Fast         := KeyToShortCut(VK_2, [ssShift]);
   D_NewStringField             := KeyToShortCut(VK_3, []);
-  D_NewStringField_Fast        := KeyToShortCut(VK_3, [ssMeta]);
+  D_NewStringField_Fast        := KeyToShortCut(VK_3, [ssShift]);
   D_NewDateField               := KeyToShortCut(VK_4, []);
-  D_NewDateField_Fast          := KeyToShortCut(VK_4, [ssMeta]);
+  D_NewDateField_Fast          := KeyToShortCut(VK_4, [ssShift]);
   D_NewHeading                 := KeyToShortCut(VK_5, []);
-  D_NewHeading_Fast            := KeyToShortCut(VK_5, [ssMeta]);
+  D_NewHeading_Fast            := KeyToShortCut(VK_5, [ssShift]);
   D_NewSection                 := KeyToShortCut(VK_6, []);
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
