@@ -9,9 +9,9 @@ uses
 
 const
   // Designer messages
-  LM_DESIGNER_DEL = LM_USER + 1;       // WParam = Control;  LParam: 1=Force Delete, 0=Ask User.
-  // Last Designer message... always update when inserting new messages.!
-  LM_DESIGNER_LAST = LM_DESIGNER_DEL;
+  LM_DESIGNER_DEL      = LM_USER + 1;              // WParam = Control;  LParam: 1=Force Delete, 0=Ask User.
+  LM_DESIGNER_DELALL   = LM_DESIGNER_DEL + 1;
+  LM_DESIGNER_LAST     = LM_DESIGNER_DELALL;       // Last Designer message... always update when inserting new messages.!
 
   LM_MAIN_OPENPROJECT  = LM_DESIGNER_LAST    + 1;
   LM_MAIN_OPENRECENT   = LM_MAIN_OPENPROJECT + 1;

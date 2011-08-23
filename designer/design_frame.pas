@@ -280,6 +280,7 @@ type
     procedure   DeleteAllControls;
     // - Custom message, used for deleting controls.
     procedure   LMDesignerDel(var Msg: TLMessage); message LM_DESIGNER_DEL;
+    procedure   LMDesignerDelAll(var Msg: TLMessage); message LM_DESIGNER_DELALL;
   private
     { Position handling }
     procedure   FindNearestControls(ParentControl: TWinControl;
@@ -497,7 +498,7 @@ begin
     mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
   {$ENDIF}
 
-  DeleteAllControls;
+  PostMessage(Self.Handle, LM_DESIGNER_DELALL, 0, 0);
 end;
 
 procedure TDesignFrame.DeleteControlActionExecute(Sender: TObject);
@@ -1089,110 +1090,116 @@ begin
 
   CO := GetCopyObject;
 
-  if (FActiveControl = FDesignerBox) or
-     ((FActiveControl is TDesignSection) and
-      (CO.CopyType in [ctField, ctHeading]))
-  then
-  begin
-    // Creating new control in section/main.
-    case CO.CopyType of
-      ctField:
-        begin
-          OrgField := TFieldCopyObject(CO.Data).Field;
+  try
+    MainForm.BeginUpdatingForm;
 
-          // Create new field.
-          EpiCtrl := NewField(OrgField.FieldType);
-
-          // Copy properties.
-          EpiCtrl.Assign(OrgField);
-          // Since Valuelabels are NOT copied - do it manually.
-          TEpiField(EpiCtrl).ValueLabelSet := OrgField.ValueLabelSet;
-
-          // Place new field.
-          Pt := FindNewPosition(FActiveDockSite, TDesignField);
-          NewDesignControl(TDesignField, FActiveDockSite, Pt, EpiCtrl);
-        end;
-      ctSection:
-        begin
-          FieldCount := DataFile.Fields.Count;
-          OrgSection := TSectionCopyObject(CO.Data).Section;
-          EpiCtrl := NewSection;
-          EpiCtrl.Assign(OrgSection);
-          Pt := FindNewPosition(FActiveDockSite, TDesignSection);
-          SectionCtrl := TWincontrol(NewSectionControl(Pt, Point(Pt.X+OrgSection.Width, Pt.Y+OrgSection.Height), EpiCtrl));
-
-          // New design controls for ALL fields and headings.
-          with TEpiSection(EpiCtrl) do
+    if (FActiveControl = FDesignerBox) or
+       ((FActiveControl is TDesignSection) and
+        (CO.CopyType in [ctField, ctHeading]))
+    then
+    begin
+      // Creating new control in section/main.
+      case CO.CopyType of
+        ctField:
           begin
-            for i := 0 to Fields.Count - 1 do
+            OrgField := TFieldCopyObject(CO.Data).Field;
+
+            // Create new field.
+            EpiCtrl := NewField(OrgField.FieldType);
+
+            // Copy properties.
+            EpiCtrl.Assign(OrgField);
+            // Since Valuelabels are NOT copied - do it manually.
+            TEpiField(EpiCtrl).ValueLabelSet := OrgField.ValueLabelSet;
+
+            // Place new field.
+            Pt := FindNewPosition(FActiveDockSite, TDesignField);
+            NewDesignControl(TDesignField, FActiveDockSite, Pt, EpiCtrl);
+          end;
+        ctSection:
+          begin
+            FieldCount := DataFile.Fields.Count;
+            OrgSection := TSectionCopyObject(CO.Data).Section;
+            EpiCtrl := NewSection;
+            EpiCtrl.Assign(OrgSection);
+            Pt := FindNewPosition(FActiveDockSite, TDesignSection);
+            SectionCtrl := TWincontrol(NewSectionControl(Pt, Point(Pt.X+OrgSection.Width, Pt.Y+OrgSection.Height), EpiCtrl));
+
+            // New design controls for ALL fields and headings.
+            with TEpiSection(EpiCtrl) do
             begin
-              OldEpiCtrl := Field[i];
-              // Since Valuelabels are NOT copied - do it manually.
-              TEpiField(OldEpiCtrl).ValueLabelSet := OrgSection.Field[i].ValueLabelSet;
-              NewDesignControl(TDesignField, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
-            end;
-            for i := 0 to Headings.Count - 1 do
-            begin
-              OldEpiCtrl := Heading[i];
-              NewDesignControl(TDesignHeading, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
+              for i := 0 to Fields.Count - 1 do
+              begin
+                OldEpiCtrl := Field[i];
+                // Since Valuelabels are NOT copied - do it manually.
+                TEpiField(OldEpiCtrl).ValueLabelSet := OrgSection.Field[i].ValueLabelSet;
+                NewDesignControl(TDesignField, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
+              end;
+              for i := 0 to Headings.Count - 1 do
+              begin
+                OldEpiCtrl := Heading[i];
+                NewDesignControl(TDesignHeading, SectionCtrl, Point(OldEpiCtrl.Left, OldEpiCtrl.Top), OldEpiCtrl);
+              end;
             end;
           end;
-        end;
-      ctHeading:
-        begin
-          OrgHeading := THeadingCopyObject(CO.Data).Heading;
-          EpiCtrl := NewHeading;
-          EpiCtrl.Assign(OrgHeading);
-          Pt := FindNewPosition(FActiveDockSite, TDesignHeading);
-          NewDesignControl(TDesignHeading, FActiveDockSite, Pt, EpiCtrl);
-        end;
-      ctSelection: ;
-    end;
-    EnterControl(FActiveDockSite);
-  end else begin
-    // Copying properties.
-    case CO.CopyType of
-      ctField:
-        begin
-          OrgField := TFieldCopyObject(CO.Data).Field;
-          EpiCtrl  := (FActiveControl as IDesignEpiControl).EpiControl;
-          if TEpiField(EpiCtrl).FieldType <> Orgfield.FieldType then
+        ctHeading:
           begin
-            ShowHintMsg(nil, FActiveControl, 'Cannot copy properties:'+LineEnding+'Fields must of same type');
-            exit;
+            OrgHeading := THeadingCopyObject(CO.Data).Heading;
+            EpiCtrl := NewHeading;
+            EpiCtrl.Assign(OrgHeading);
+            Pt := FindNewPosition(FActiveDockSite, TDesignHeading);
+            NewDesignControl(TDesignHeading, FActiveDockSite, Pt, EpiCtrl);
           end;
+        ctSelection: ;
+      end;
+      EnterControl(FActiveDockSite);
+    end else begin
+      // Copying properties.
+      case CO.CopyType of
+        ctField:
+          begin
+            OrgField := TFieldCopyObject(CO.Data).Field;
+            EpiCtrl  := (FActiveControl as IDesignEpiControl).EpiControl;
+            if TEpiField(EpiCtrl).FieldType <> Orgfield.FieldType then
+            begin
+              ShowHintMsg(nil, FActiveControl, 'Cannot copy properties:'+LineEnding+'Fields must of same type');
+              exit;
+            end;
 
-          EpiCtrl.BeginUpdate;
-          TheName := '';
-          if TEpiField(EpiCtrl).Question.Text <> '' then
-            TheName := TEpiField(EpiCtrl).Question.Text;
-          EpiCtrl.Assign(OrgField);
-          // Since Valuelabels are NOT copied - do it manually.
-          TEpiField(EpiCtrl).ValueLabelSet := OrgField.ValueLabelSet;
-          if TheName <> '' then
-            TEpiField(EpiCtrl).Question.Text := TheName;
-          EpiCtrl.EndUpdate;
-        end;
-      ctSection:
-        begin
-          OrgSection := TSectionCopyObject(CO.Data).Section;
-          EpiCtrl    := (FActiveControl as IDesignEpiControl).EpiControl;
-          ThisSection := TEpiSection(EpiCtrl);
-          ThisSection.Caption.Assign(OrgSection.Caption);
-          // TODO : Maybe change if CustomList changes assignment based on ItemOwner.
-          for i := 0 to OrgSection.Groups.Count - 1 do
-            ThisSection.Groups.AddItem(OrgSection.Groups[i]);
-        end;
-      ctHeading:
-        begin
-          OrgHeading := THeadingCopyObject(CO.Data).Heading;
-          EpiCtrl    := (FActiveControl as IDesignEpiControl).EpiControl;
-          EpiCtrl.Assign(OrgHeading);
-        end;
-      ctSelection: ;
+            EpiCtrl.BeginUpdate;
+            TheName := '';
+            if TEpiField(EpiCtrl).Question.Text <> '' then
+              TheName := TEpiField(EpiCtrl).Question.Text;
+            EpiCtrl.Assign(OrgField);
+            // Since Valuelabels are NOT copied - do it manually.
+            TEpiField(EpiCtrl).ValueLabelSet := OrgField.ValueLabelSet;
+            if TheName <> '' then
+              TEpiField(EpiCtrl).Question.Text := TheName;
+            EpiCtrl.EndUpdate;
+          end;
+        ctSection:
+          begin
+            OrgSection := TSectionCopyObject(CO.Data).Section;
+            EpiCtrl    := (FActiveControl as IDesignEpiControl).EpiControl;
+            ThisSection := TEpiSection(EpiCtrl);
+            ThisSection.Caption.Assign(OrgSection.Caption);
+            // TODO : Maybe change if CustomList changes assignment based on ItemOwner.
+            for i := 0 to OrgSection.Groups.Count - 1 do
+              ThisSection.Groups.AddItem(OrgSection.Groups[i]);
+          end;
+        ctHeading:
+          begin
+            OrgHeading := THeadingCopyObject(CO.Data).Heading;
+            EpiCtrl    := (FActiveControl as IDesignEpiControl).EpiControl;
+            EpiCtrl.Assign(OrgHeading);
+          end;
+        ctSelection: ;
+      end;
+      ShowForm(EpiCtrl, Point(0,0), false);
+      UpdateStatusbarControl(EpiCtrl);
     end;
-    ShowForm(EpiCtrl, Point(0,0), false);
-    UpdateStatusbarControl(EpiCtrl);
+  finally
+    MainForm.EndUpdatingForm;
   end;
 end;
 
@@ -1279,6 +1286,8 @@ function TDesignFrame.NewDesignControl(AClass: TControlClass;
 var
   Ctrl: TControlEx;
 begin
+  MainForm.BeginUpdatingForm;
+
   Result := AClass.Create(AParent);
   Ctrl := TControlEx(Result);
 
@@ -1300,6 +1309,8 @@ begin
   end;
   EnterControl(Result);
   AddToPositionHandler((AParent as IPositionHandler), Result);
+
+  MainForm.EndUpdatingForm;
 end;
 
 function TDesignFrame.NewSectionControl(StartPos, EndPos: TPoint;
@@ -1311,6 +1322,8 @@ const
   MinSectionWidth = 20;
   MinSectionHeight = 10;
 begin
+  MainForm.BeginUpdatingForm;
+
   Ctrl := TDesignSection.Create(FDesignerBox);
   Result := Ctrl;
 
@@ -1339,6 +1352,8 @@ begin
 
   EnterControl(Result);
   AddToPositionHandler((FDesignerBox as IPositionHandler), Result);
+
+  MainForm.EndUpdatingForm;
 end;
 
 procedure TDesignFrame.DesignControlStartDock(Sender: TObject;
@@ -2396,6 +2411,8 @@ var
   Node, NNode: TAVLTreeNode;
   YTree: TAVLTree;
 begin
+  MainForm.BeginUpdatingForm;
+
   LocalCtrl := FActiveControl;
   EpiCtrl := (LocalCtrl as IDesignEpiControl).EpiControl;
   Node    := (LocalCtrl as IDesignEpiControl).YTreeNode;
@@ -2415,6 +2432,8 @@ begin
   RemoveFromPositionHandler(LocalCtrl.Parent as IPositionHandler, LocalCtrl);
   EpiCtrl.Free;  // This also removes the epicontrol from it's parent/list.
   LocalCtrl.Free;
+
+  MainForm.EndUpdatingForm;
 end;
 
 procedure TDesignFrame.DeleteAllControls;
@@ -2456,6 +2475,11 @@ begin
   if Ctrl = FDesignerBox then exit;
   DeleteControl(Ctrl, Msg.LParam = 1);
   Msg.Result := 1;
+end;
+
+procedure TDesignFrame.LMDesignerDelAll(var Msg: TLMessage);
+begin
+  DeleteAllControls;
 end;
 
 procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;
