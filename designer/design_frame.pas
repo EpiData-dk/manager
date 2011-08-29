@@ -21,6 +21,7 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    MoreSpaceAction: TAction;
     DeleteControlFastAction: TAction;
     NewBooleanMenu: TMenuItem;
     NewHeadingFastAction: TAction;
@@ -51,6 +52,7 @@ type
     ProjectDivider1: TToolButton;
     SaveProjectToolBtn: TToolButton;
     SaveProjectAsToolBtn: TToolButton;
+    ToolButton1: TToolButton;
     ValueLabelLabel: TLabel;
     RangeLabel: TLabel;
     ValueLabelPanel: TPanel;
@@ -172,6 +174,7 @@ type
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
     procedure   ImportDataFileActionExecute(Sender: TObject);
+    procedure MoreSpaceActionExecute(Sender: TObject);
     procedure   MoveDownActionExecute(Sender: TObject);
     procedure   MoveEndActionExecute(Sender: TObject);
     procedure   MoveHomeActionExecute(Sender: TObject);
@@ -660,6 +663,22 @@ begin
     FActiveSection.Headings.UnRegisterOnChangeHook(@ImportHook);
     Dlg.Free;
   end;
+end;
+
+procedure TDesignFrame.MoreSpaceActionExecute(Sender: TObject);
+var
+  Heading: TEpiHeading;
+  Pt: TPoint;
+begin
+  Heading := NewHeading;
+  Heading.Caption.Text := 'Space extender! Delete when fields/sections reach here.';
+
+  Pt := FindNewPosition(FDesignerBox, TDesignHeading);
+  Pt.X := 50;
+  Pt.Y := Pt.Y + (FDesignerBox.VertScrollBar.Page * 2);
+
+  NewDesignControl(TDesignHeading, FDesignerBox, Pt, Heading);
+  ShowForm(Heading, FDesignerBox.ClientToScreen(Pt), False);
 end;
 
 procedure TDesignFrame.MoveDownActionExecute(Sender: TObject);

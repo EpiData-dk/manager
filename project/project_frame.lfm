@@ -24,7 +24,6 @@ object ProjectFrame: TProjectFrame
       Top = 26
       Width = 200
       Align = alClient
-      DefaultItemHeight = 19
       ReadOnly = True
       ScrollBars = ssAutoBoth
       ShowRoot = False
