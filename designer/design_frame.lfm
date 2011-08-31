@@ -24,41 +24,41 @@ object DesignFrame: TDesignFrame
     TabOrder = 0
     object Label1: TLabel
       Left = 11
-      Height = 16
+      Height = 18
       Top = 38
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 11
-      Height = 16
+      Height = 18
       Top = 118
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
     object Label3: TLabel
       Left = 11
-      Height = 16
+      Height = 18
       Top = 198
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
     object Label4: TLabel
       Left = 11
-      Height = 16
+      Height = 18
       Top = 294
-      Width = 43
+      Width = 44
       Caption = 'Label1'
       ParentColor = False
     end
     object Label5: TLabel
       Left = 11
-      Height = 16
+      Height = 18
       Top = 378
-      Width = 43
+      Width = 44
       Caption = 'Label5'
       ParentColor = False
     end
@@ -73,25 +73,25 @@ object DesignFrame: TDesignFrame
     end
     object Label6: TLabel
       Left = 11
-      Height = 16
+      Height = 18
       Top = 454
-      Width = 43
+      Width = 44
       Caption = 'Label6'
       ParentColor = False
     end
     object Label7: TLabel
       Left = 75
-      Height = 16
+      Height = 18
       Top = 77
-      Width = 43
+      Width = 44
       Caption = 'Label7'
       ParentColor = False
     end
     object Label8: TLabel
       Left = 80
-      Height = 16
+      Height = 18
       Top = 162
-      Width = 43
+      Width = 44
       Caption = 'Label8'
       ParentColor = False
     end
@@ -134,16 +134,16 @@ object DesignFrame: TDesignFrame
         AnchorSideLeft.Control = SectionsStaticLabel
         AnchorSideLeft.Side = asrBottom
         Left = 64
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 90
+        Width = 91
         BorderSpacing.Left = 2
         Caption = 'SectionsLabel'
         ParentColor = False
       end
       object SectionsStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 18
         Top = 4
         Width = 60
         Caption = 'Sections:'
@@ -168,9 +168,9 @@ object DesignFrame: TDesignFrame
       TabOrder = 1
       object CurrentSectionLabel: TLabel
         Left = 3
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 131
+        Width = 132
         Caption = 'CurrentSectionLabel'
         ParentColor = False
       end
@@ -190,19 +190,19 @@ object DesignFrame: TDesignFrame
       object RecordsLabel: TLabel
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 59
-        Height = 16
+        Left = 60
+        Height = 18
         Top = 4
-        Width = 85
+        Width = 87
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         ParentColor = False
       end
       object RecordStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 55
+        Width = 56
         Caption = 'Records:'
         ParentColor = False
       end
@@ -225,19 +225,19 @@ object DesignFrame: TDesignFrame
       object FieldsLabel: TLabel
         AnchorSideLeft.Control = FieldsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 44
-        Height = 16
+        Left = 47
+        Height = 18
         Top = 4
-        Width = 70
+        Width = 74
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         ParentColor = False
       end
       object FieldsStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 40
+        Width = 43
         Caption = 'Fields:'
         ParentColor = False
       end
@@ -263,9 +263,9 @@ object DesignFrame: TDesignFrame
       object FieldNameLabel: TLabel
         AnchorSideLeft.Control = FieldNamePanel
         Left = 3
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 102
+        Width = 106
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         ParentColor = False
@@ -292,9 +292,9 @@ object DesignFrame: TDesignFrame
       object FieldTypeLabel: TLabel
         AnchorSideLeft.Control = FieldTypePanel
         Left = 3
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 91
+        Width = 97
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         ParentColor = False
@@ -321,9 +321,9 @@ object DesignFrame: TDesignFrame
       object DefaultValueLabel: TLabel
         AnchorSideLeft.Control = DefaultValuePanel
         Left = 3
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 116
+        Width = 120
         BorderSpacing.Left = 2
         Caption = 'DefaultValueLabel'
         ParentColor = False
@@ -350,9 +350,9 @@ object DesignFrame: TDesignFrame
       object ValueLabelLabel: TLabel
         AnchorSideLeft.Control = ValueLabelPanel
         Left = 3
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 104
+        Width = 107
         BorderSpacing.Left = 2
         Caption = 'ValueLabelLabel'
         ParentColor = False
@@ -379,9 +379,9 @@ object DesignFrame: TDesignFrame
       object RangeLabel: TLabel
         AnchorSideLeft.Control = RangePanel
         Left = 3
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 75
+        Width = 77
         BorderSpacing.Left = 2
         Caption = 'RangeLabel'
         ParentColor = False
@@ -408,9 +408,9 @@ object DesignFrame: TDesignFrame
       object KeyLabel: TLabel
         AnchorSideLeft.Control = KeyPanel
         Left = 3
-        Height = 16
+        Height = 18
         Top = 4
-        Width = 57
+        Width = 60
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         ParentColor = False
@@ -438,7 +438,7 @@ object DesignFrame: TDesignFrame
       object ExtendedLabel: TLabel
         AnchorSideLeft.Control = ExtendedPanel
         Left = 3
-        Height = 16
+        Height = 18
         Top = 4
         Width = 105
         BorderSpacing.Left = 2

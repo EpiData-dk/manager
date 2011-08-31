@@ -263,15 +263,10 @@ type
   private
     { Design controls - methods }
     FActiveControl: TControl;
-    function    NewShortCutFieldControl(Ft: TEpiFieldType;
-      AParent: TWinControl; ForceShowForm: Boolean): TControl;
-    function    NewShortCutHeadingControl(AParent: TWinControl;
-      ForceShowForm: Boolean): TControl;
-    function    NewDesignControl(AClass: TControlClass;
-      AParent: TWinControl; Pos: TPoint;
-      EpiControl: TEpiCustomControlItem): TControl;
-    function    NewSectionControl(StartPos, EndPos: TPoint;
-      EpiControl: TEpiCustomControlItem): TControl;
+    function    NewShortCutFieldControl(Ft: TEpiFieldType; AParent: TWinControl; ForceShowForm: Boolean): TControl;
+    function    NewShortCutHeadingControl(AParent: TWinControl; ForceShowForm: Boolean): TControl;
+    function    NewDesignControl(AClass: TControlClass; AParent: TWinControl; Pos: TPoint; EpiControl: TEpiCustomControlItem): TControl;
+    function    NewSectionControl(StartPos, EndPos: TPoint; EpiControl: TEpiCustomControlItem): TControl;
     // - Dock Events.
     procedure   DesignControlStartDock(Sender: TObject; var DragObject: TDragDockObject);
     // - Mouse events.
@@ -645,14 +640,17 @@ begin
     // Do the import.
     if ext = '.rec' then
     begin
-      Importer.OnRequestPassword := @RecPasswordRequest;
-      Importer.ImportRec(Fn, FDataFile, true)
+      try
+        Importer.OnRequestPassword := @RecPasswordRequest;
+        Importer.ImportRec(Fn, FDataFile, true)
+      except
+        on E: Exception do begin ShowMessage(E.Message); exit; end;
+      end;
     end
     else if ext = '.dta' then
       Importer.ImportStata(Fn, FDataFile, true)
     else if ext = '.qes' then
       Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
-    Importer.Free;
     FImportedFileName := fn;
 
     // Update Title with imported file description.
@@ -660,6 +658,7 @@ begin
 
     EnterControl(TControl((FDesignerBox as IPositionHandler).YTree.FindLowest.Data));
   finally
+    Importer.Free;
     MainForm.EndUpdatingForm;
     Screen.Cursor := crDefault;
     Application.ProcessMessages;
@@ -1320,7 +1319,8 @@ begin
     OnMouseDown := @DesignControlMouseDown;
     OnMouseUp   := @DesignControlMouseUp;
     OnStartDock := @DesignControlStartDock;
-    Parent      := AParent;
+    Dock(AParent, Bounds(Pos.X, Pos.Y, Width, Height));
+//    Parent      := AParent;
   end;
 
   with EpiControl do
@@ -1360,6 +1360,7 @@ begin
     OnUnDock    := @DockSiteUnDock;
     OnDockOver  := @DockSiteDockOver;
     OnStartDock := @DesignControlStartDock;
+    Dock(FDesignerBox, Bounds(StartPos.X, StartPos.Y, Width, Height));
   end;
 
   with EpiSection do
@@ -1371,7 +1372,7 @@ begin
     Height := Max(Abs(StartPos.Y - EndPos.Y), MinSectionHeight);
     EndUpdate;
   end;
-  Ctrl.Parent := FDesignerBox;
+//  Ctrl.Parent := FDesignerBox;
 
   EnterControl(Result);
   AddToPositionHandler((FDesignerBox as IPositionHandler), Result);
@@ -2194,7 +2195,7 @@ begin
     FindNearestControls(TWinControl(Sender), Control, XCtrl, YCtrl);
     Dx := EpiControl.Left - XCtrl.Left;
     // Snapping distance according to bottoms.
-    Dy := Abs(EpiControl.Top - YCtrl.Top) - Abs(YCtrl.Height - Control.Height);
+    Dy := (EpiControl.Top + Control.Height) - (YCtrl.Top + YCtrl.Height);
 
     if Abs(Dx) <= ManagerSettings.SnappingThresHold then
       EpiControl.Left := XCtrl.Left;
