@@ -174,7 +174,7 @@ type
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
     procedure   ImportDataFileActionExecute(Sender: TObject);
-    procedure MoreSpaceActionExecute(Sender: TObject);
+    procedure   MoreSpaceActionExecute(Sender: TObject);
     procedure   MoveDownActionExecute(Sender: TObject);
     procedure   MoveEndActionExecute(Sender: TObject);
     procedure   MoveHomeActionExecute(Sender: TObject);
@@ -237,6 +237,7 @@ type
       EventType: Word; Data: Pointer);
     procedure   PasteAsField(FieldType: TEpiFieldType);
     procedure   PasteEpiDoc(Const ImportDoc: TEpiDocument; RenameVL, RenameFields: boolean);
+    procedure   RecPasswordRequest(Sender: TObject; var Login: string; var Password: string);
   private
     { Docksite methods }
     // - mouse
@@ -643,7 +644,10 @@ begin
 
     // Do the import.
     if ext = '.rec' then
+    begin
+      Importer.OnRequestPassword := @RecPasswordRequest;
       Importer.ImportRec(Fn, FDataFile, true)
+    end
     else if ext = '.dta' then
       Importer.ImportStata(Fn, FDataFile, true)
     else if ext = '.qes' then
@@ -1307,7 +1311,7 @@ var
 begin
   MainForm.BeginUpdatingForm;
 
-  Result := AClass.Create(AParent);
+  Result := AClass.Create(Self);
   Ctrl := TControlEx(Result);
 
   (Ctrl as IDesignEpiControl).EpiControl := EpiControl;
@@ -1343,7 +1347,7 @@ const
 begin
   MainForm.BeginUpdatingForm;
 
-  Ctrl := TDesignSection.Create(FDesignerBox);
+  Ctrl := TDesignSection.Create(Self);
   Result := Ctrl;
 
   Ctrl.EpiControl := EpiSection;
@@ -1746,6 +1750,13 @@ begin
       NField.Jumps[j].JumpToField := TEpiField(JumpToField.ObjectData);;
     end;
   end;
+end;
+
+procedure TDesignFrame.RecPasswordRequest(Sender: TObject; var Login: string;
+  var Password: string);
+begin
+  Login := '';
+  Password := PasswordBox('WARNING', 'File is encrypted.' + LineEnding + 'Enter password:');
 end;
 
 procedure TDesignFrame.DesignBoxMouseWheel(Sender: TObject; Shift: TShiftState;
