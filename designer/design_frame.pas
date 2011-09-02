@@ -671,7 +671,7 @@ var
   Pt: TPoint;
 begin
   Heading := NewHeading;
-  Heading.Caption.Text := 'Space extender! Delete when fields/sections reach here.';
+  Heading.Caption.Text := '_________ automatic extension _________';
 
   Pt := FindNewPosition(FDesignerBox, TDesignHeading);
   Pt.X := 50;
