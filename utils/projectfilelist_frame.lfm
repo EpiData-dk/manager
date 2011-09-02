@@ -31,30 +31,37 @@ object ProjectFileListFrame: TProjectFileListFrame
       item
         ReadOnly = True
         Title.Caption = 'Filename'
+        Title.PrefixOption = poNone
       end    
       item
         ButtonStyle = cbsCheckboxColumn
         Title.Caption = 'Include'
+        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Created'
+        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Last edited'
+        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Name'
+        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Sections'
+        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Fields'
+        Title.PrefixOption = poNone
       end>
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goTabs, goSmoothScroll, goFixedRowNumbering]
     RowCount = 1

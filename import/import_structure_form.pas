@@ -76,8 +76,7 @@ var
 begin
   Dlg := TOpenDialog.Create(Self);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(true, true, true, false, false, false,
-    true, false, false, true, false);
+  Dlg.Filter := GetEpiDialogFilter(dfImport + [dfCollection]);
   Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
   if not Dlg.Execute then exit;
 
@@ -279,15 +278,7 @@ begin
 end;
 
 destructor TImportStructureForm.Destroy;
-var
-  I: TObject;
 begin
-{  while FProjectList.DocList.Count > 0 do
-  begin
-    I := TObject(FProjectList.DocList.Last);
-    FProjectList.DocList.Remove(I);
-    I.Free;
-  end; }
   FSelectedDocuments.Free;
   inherited Destroy;
 end;

@@ -45,7 +45,7 @@ var
   S: String;
 begin
   inherited Create(TheOwner);
-  S := GetEpiDialogFilter(true, true, false, false, false, false, false, false, false, false, false);
+  S := GetEpiDialogFilter([dfEPX, dfEPZ]);
   DefaultSaveTypeComboBox.AddItem(Copy2SymbDel(S, '|'), nil); Copy2SymbDel(S, '|');
   DefaultSaveTypeComboBox.AddItem(Copy2SymbDel(S, '|'), nil); Copy2SymbDel(S, '|');
   DefaultSaveTypeComboBox.ItemIndex := 0;

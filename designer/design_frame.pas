@@ -202,7 +202,6 @@ type
     procedure   PasteAsFloatActionExecute(Sender: TObject);
     procedure   PasteAsHeadingActionExecute(Sender: TObject);
     procedure   PasteAsIntActionExecute(Sender: TObject);
-    procedure   PasteAsQESActionExecute(Sender: TObject);
     procedure   PasteAsStringActionExecute(Sender: TObject);
     procedure   PasteControlActionExecute(Sender: TObject);
     procedure   PasteControlActionUpdate(Sender: TObject);
@@ -323,7 +322,7 @@ implementation
 uses
   Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
-  managerprocs, epiqeshandler, copyobject, epiranges, design_types,
+  managerprocs, copyobject, epiranges, design_types,
   import_structure_form, shortcuts;
 
 type
@@ -563,8 +562,7 @@ begin
   try
     Dlg := TOpenDialog.Create(Self);
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-    Dlg.Filter := GetEpiDialogFilter(true, true, true, false, false, false,
-      true, false, false, true, false);
+    Dlg.Filter := GetEpiDialogFilter(dfImport + [dfCollection]);
     Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
     if not Dlg.Execute then exit;
 
@@ -611,11 +609,12 @@ begin
   end;
   {$ENDIF}
 
+  Importer := nil;
+  Dlg := nil;
   try
     Dlg := TOpenDialog.Create(Self);
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-    Dlg.Filter := GetEpiDialogFilter(false, false, true, false, false, false,
-      true, false, true, true, false);
+    Dlg.Filter := GetEpiDialogFilter([dfDTA, dfREC, dfCollection]);
     if not Dlg.Execute then exit;
 
     DeleteAllControls;
@@ -648,9 +647,7 @@ begin
       end;
     end
     else if ext = '.dta' then
-      Importer.ImportStata(Fn, FDataFile, true)
-    else if ext = '.qes' then
-      Importer.ImportQES(Fn, FDataFile, nil, ManagerSettings.FieldNamePrefix);
+      Importer.ImportStata(Fn, FDataFile, true);
     FImportedFileName := fn;
 
     // Update Title with imported file description.
@@ -1058,33 +1055,6 @@ end;
 procedure TDesignFrame.PasteAsIntActionExecute(Sender: TObject);
 begin
   PasteAsField(ftInteger);
-end;
-
-procedure TDesignFrame.PasteAsQESActionExecute(Sender: TObject);
-var
-  QH: TQesHandler;
-  Cbl: TStringList;
-begin
-  Cbl := TStringList.Create;
-  try
-    ReadClipBoard(Cbl);
-
-    FLastRecYPos := -1;
-    FLastRecCtrl := nil;
-
-    FActiveSection.Headings.RegisterOnChangeHook(@ImportHook);
-    FActiveSection.Fields.RegisterOnChangeHook(@ImportHook);
-
-    QH := TQesHandler.Create;
-    QH.FieldPrefix := ManagerSettings.FieldNamePrefix;
-    QH.QesToDatafile(Cbl, FDataFile, FActiveSection);
-    QH.Free;
-
-    FActiveSection.Headings.UnRegisterOnChangeHook(@ImportHook);
-    FActiveSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-  finally
-    Cbl.Free;
-  end;
 end;
 
 procedure TDesignFrame.PasteAsStringActionExecute(Sender: TObject);

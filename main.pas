@@ -506,7 +506,7 @@ begin
     Exporter := TEpiExport.Create;
     SaveDlg := TSaveDialog.Create(Self);
     SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-    SaveDlg.Filter := GetEpiDialogFilter(false, false, false, false, false, false, true, false, false, false, false);
+    SaveDlg.Filter := GetEpiDialogFilter(dfExport);
     SaveDlg.Options := SaveDlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
     SaveDlg.DefaultExt := 'dta';
     for i := 0 to F.SelectedDatafiles.Count - 1 do
@@ -747,7 +747,7 @@ begin
     FileName := FActiveFrame.ProjectFileName;
   end else begin
     Dlg := TOpenDialog.Create(Self);
-    Dlg.Filter := GetEpiDialogFilter(True, True, False, False, False, False, False, False, False, True, False);
+    Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ, dfCollection]);
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     if not Dlg.Execute then exit;
     Result := TEpiDocument.Create('');
@@ -783,8 +783,7 @@ var
 begin
   Dlg := TOpenDialog.Create(self);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
-    false, false, false, true, false);
+  Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ, dfCollection]);
 
   if not Dlg.Execute then exit;
   if not DoCloseProject then exit;

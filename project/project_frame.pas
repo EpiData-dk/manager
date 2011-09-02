@@ -202,8 +202,7 @@ var
   Fn: String;
 begin
   Dlg := TSaveDialog.Create(Self);
-  Dlg.Filter := GetEpiDialogFilter(true, true, false, false, false, false,
-    false, false, false, false, false);
+  Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.FilterIndex := ManagerSettings.SaveType + 1;
   SaveDlgTypeChange(Dlg);

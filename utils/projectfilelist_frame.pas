@@ -23,6 +23,7 @@ type
       sIndex, tIndex: Integer);
   private
     { private declarations }
+    FCurrentFile: string;
     FDocList: TStringList;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
@@ -34,6 +35,7 @@ type
   protected
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  DoAfterImportFile(Document: TEpiDocument; Const FileName: string);
+    procedure  RecImportPassword(Sender: TObject; var Login: string; var Password: string);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -50,7 +52,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epimiscutils;
+  epiimport, LCLProc, epimiscutils, Dialogs;
 
 { TProjectFileListFrame }
 
@@ -72,6 +74,7 @@ var
   DataFile: TEpiDataFile;
 begin
   Importer := TEpiImport.Create;
+  FCurrentFile := FileName;
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
 
   try
@@ -82,8 +85,10 @@ begin
       DoBeforeImportFile(Doc, FileName);
       if (ext = '.dta') then
         Importer.ImportStata(FileName, DataFile, false)
-      else
+      else begin
+        Importer.OnRequestPassword := @RecImportPassword;
         Importer.ImportRec(FileName , DataFile, false);
+      end;
       DoAfterImportFile(Doc, FileName);
     end
     else if ext = '.epx' then
@@ -129,6 +134,7 @@ begin
       ReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
   end;
   Importer.Free;
+  FCurrentFile := '';
 end;
 
 function TProjectFileListFrame.GetSelectedList: TStringList;
@@ -176,6 +182,15 @@ procedure TProjectFileListFrame.DoAfterImportFile(Document: TEpiDocument;
 begin
   if Assigned(FOnAfterImportFile) then
     FOnAfterImportFile(Self, Document, FileName);
+end;
+
+procedure TProjectFileListFrame.RecImportPassword(Sender: TObject;
+  var Login: string; var Password: string);
+begin
+  Login := '';
+  Password :=
+    PasswordBox('IMPORTANT!',
+    ' Password needed for "' + ExtractFileName(FCurrentFile) + '":');
 end;
 
 procedure TProjectFileListFrame.StructureGridCheckboxToggled(sender: TObject;
