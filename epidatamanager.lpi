@@ -51,7 +51,7 @@
         <PackageName Value="LCL"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="43">
+    <Units Count="44">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -323,6 +323,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="shortcuts"/>
       </Unit42>
+      <Unit43>
+        <Filename Value="project/valuelabelseditor_form2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ValuelabelEditor2"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabelseditor_form2"/>
+      </Unit43>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -355,7 +362,7 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dEPI_DEBUG1
+      <CustomOptions Value="-dEPI_DEBUG
 -dEPI_RELEASE"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>

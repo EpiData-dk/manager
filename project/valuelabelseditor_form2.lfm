@@ -1,0 +1,89 @@
+object ValuelabelEditor2: TValuelabelEditor2
+  Left = 595
+  Height = 433
+  Top = 257
+  Width = 710
+  Caption = 'ValuelabelEditor2'
+  ClientHeight = 433
+  ClientWidth = 710
+  LCLVersion = '0.9.31'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 0
+    Width = 710
+    Align = alTop
+    ClientHeight = 50
+    ClientWidth = 710
+    TabOrder = 0
+    object ComboBox1: TComboBox
+      Left = 16
+      Height = 25
+      Top = 16
+      Width = 180
+      ItemHeight = 0
+      TabOrder = 0
+      Text = 'ComboBox1'
+    end
+    object Button1: TButton
+      Left = 216
+      Height = 25
+      Top = 16
+      Width = 75
+      Caption = 'Add'
+      TabOrder = 1
+    end
+    object Button2: TButton
+      Left = 304
+      Height = 25
+      Top = 16
+      Width = 75
+      Caption = 'Delete'
+      TabOrder = 2
+    end
+    object Button3: TButton
+      Left = 624
+      Height = 25
+      Top = 16
+      Width = 75
+      Caption = 'View All'
+      TabOrder = 3
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 383
+    Top = 50
+    Width = 710
+    Align = alClient
+    ClientHeight = 383
+    ClientWidth = 710
+    TabOrder = 1
+    object Panel3: TPanel
+      Left = 1
+      Height = 37
+      Top = 1
+      Width = 708
+      Align = alTop
+      ClientHeight = 37
+      ClientWidth = 708
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 7
+        Height = 16
+        Top = 14
+        Width = 113
+        Caption = 'Valuelabel Name:'
+        ParentColor = False
+      end
+      object Edit1: TEdit
+        Left = 151
+        Height = 25
+        Top = 5
+        Width = 80
+        TabOrder = 0
+        Text = 'Edit1'
+      end
+    end
+  end
+end

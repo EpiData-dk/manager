@@ -114,6 +114,7 @@ type
     procedure StartEntryClientActionExecute(Sender: TObject);
     procedure StartEntryClientActionUpdate(Sender: TObject);
     procedure StataExportActionExecute(Sender: TObject);
+    procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
@@ -169,7 +170,7 @@ uses
   strutils, report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
-  shortcuts;
+  shortcuts, valuelabelseditor_form2;
 
 { TMainForm }
 
@@ -528,6 +529,15 @@ begin
     if Assigned(SaveDlg) then SaveDlg.Free;
     if Assigned(Exporter) then Exporter.free;
   end;
+end;
+
+procedure TMainForm.UserAccessBtnClick(Sender: TObject);
+var
+  V: TValuelabelEditor2;
+begin
+  V := TValuelabelEditor2.Create(Self);
+  V.ShowModal;
+  V.Free;
 end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
