@@ -102,6 +102,7 @@ begin
       St := TMemoryStream.Create;
       ZipFileToStream(St, FileName);
       DoBeforeImportFile(Doc, FileName);
+      St.Position := 0;
       Doc.LoadFromStream(St);
       DoAfterImportFile(Doc, FileName);
       St.Free;

@@ -14,6 +14,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    ValueLabelEditor2MenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
     ExtendedListReportAction: TAction;

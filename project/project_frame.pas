@@ -436,7 +436,7 @@ begin
   Frame.ProjectToolBar.Images := ProjectImageList;
 
   {$IFDEF EPI_DEBUG}
-  AddDebugingContent;
+//  AddDebugingContent;
   {$ENDIF}
 
   DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Caption.Text, Frame);

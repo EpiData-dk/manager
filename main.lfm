@@ -40,11 +40,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 103
-      Height = 25
+      Left = 108
+      Height = 29
       Hint = 'Open existing project'
-      Top = 8
-      Width = 92
+      Top = 6
+      Width = 95
       Action = OpenProjectAction
       AutoSize = True
       BorderSpacing.Left = 10
@@ -54,9 +54,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 8
-      Height = 25
-      Top = 8
-      Width = 85
+      Height = 29
+      Top = 6
+      Width = 90
       Action = NewProjectAction
       AutoSize = True
       ParentShowHint = False
@@ -68,11 +68,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 205
-      Height = 25
+      Left = 213
+      Height = 29
       Hint = 'Define/Change User names and passwords'
-      Top = 8
-      Width = 139
+      Top = 6
+      Width = 142
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'User Access Control'
@@ -87,11 +87,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 354
-      Height = 25
+      Left = 365
+      Height = 29
       Hint = 'Good Clinical Practice guideline tools'
-      Top = 8
-      Width = 101
+      Top = 6
+      Width = 105
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Gcp Extension'
@@ -167,6 +167,10 @@ object MainForm: TMainForm
       Caption = 'P&roject'
       object ValueLabelsMenuItem: TMenuItem
         Caption = 'ValueLabels'
+      end
+      object ValueLabelEditor2MenuItem: TMenuItem
+        Caption = 'Valuelabel Editor 2'
+        OnClick = UserAccessBtnClick
       end
       object MenuItem1: TMenuItem
         Caption = '-'
