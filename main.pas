@@ -536,9 +536,9 @@ procedure TMainForm.UserAccessBtnClick(Sender: TObject);
 var
   V: TValuelabelEditor2;
 begin
-  V := TValuelabelEditor2.Create(Self);
+{  V := TValuelabelEditor2.Create(Self);
   V.ShowModal;
-  V.Free;
+  V.Free; }
 end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);

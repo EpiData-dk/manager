@@ -312,7 +312,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 31
           Top = 9
-          Width = 300
+          Width = 349
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 2
@@ -332,14 +332,14 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = ValueLabelComboBox
           AnchorSideBottom.Side = asrBottom
-          Left = 320
+          Left = 369
           Height = 31
           Top = 9
-          Width = 86
+          Width = 37
           Anchors = [akTop, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Right = 10
-          Caption = 'Manage...'
+          Caption = '+'
           OnClick = ManageValueLabelsButtonClick
           TabOrder = 1
         end

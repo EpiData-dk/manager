@@ -191,7 +191,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLProc, valuelabelseditor_form, epimiscutils, epiranges,
+  LCLProc, valuelabelseditor_form, valuelabelseditor_form2, epimiscutils, epiranges,
   math, epidocument, epiconvertutils, main, epistringutils;
 
 resourcestring
@@ -373,7 +373,7 @@ begin
    end;
    ValueLabelComboBox.Hint := S;
 
-   if Assigned(PreSelectedVLSet) then
+   if Assigned(PreSelectedVLSet) and (PreSelectedVLSet <> FNilValueLabel) then
      Idx := ValueLabelComboBox.Items.IndexOfObject(PreSelectedVLSet)
    else if Assigned(Field.ValueLabelSet) then
      Idx := ValueLabelComboBox.Items.IndexOfObject(Field.ValueLabelSet);
@@ -733,8 +733,21 @@ begin
 end;
 
 procedure TFieldPropertiesFrame.ManageValueLabelsButtonClick(Sender: TObject);
+var
+  VLEdit: TValuelabelEditor2;
 begin
-  GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
+  //GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
+  VLEdit := TValuelabelEditor2.Create(Self, Field.FieldType);
+  VLEdit.ValueLabelSets := FValueLabelSets;
+  VLEdit.ShowModal;
+
+  if assigned(VLEdit.ResultValueLabelSet) then
+  begin
+    Field.ValueLabelSet := VLEdit.ResultValueLabelSet;
+    UpdateValueLabels;
+  end;
+
+  VLEDit.Free;
 end;
 
 procedure TFieldPropertiesFrame.NoCalcRadioChange(Sender: TObject);
