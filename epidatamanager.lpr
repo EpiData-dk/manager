@@ -3,6 +3,7 @@ program epidatamanager;
 {$mode objfpc}{$H+}
 
 uses
+//  heaptrc,
   {$IFDEF UNIX}
     {$IFDEF UseCThreads}
     cthreads,

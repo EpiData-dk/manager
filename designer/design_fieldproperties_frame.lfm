@@ -20,18 +20,18 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 471
-      ClientWidth = 440
+      ClientHeight = 477
+      ClientWidth = 442
       object DecimalsEdit: TEdit
         AnchorSideLeft.Control = Bevel1
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = LengthEdit
         AnchorSideRight.Control = NameEdit
         AnchorSideRight.Side = asrBottom
-        Left = 215
-        Height = 27
-        Top = 144
-        Width = 215
+        Left = 216
+        Height = 25
+        Top = 134
+        Width = 216
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         TabOrder = 3
@@ -40,10 +40,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
       object DecimalsLabel: TLabel
         AnchorSideLeft.Control = DecimalsEdit
         AnchorSideBottom.Control = DecimalsEdit
-        Left = 215
-        Height = 18
-        Top = 124
-        Width = 66
+        Left = 216
+        Height = 16
+        Top = 116
+        Width = 64
         Anchors = [akLeft, akBottom]
         BorderSpacing.Bottom = 2
         Caption = 'Decimals:'
@@ -56,9 +56,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = Bevel1
         Left = 10
-        Height = 27
-        Top = 144
-        Width = 190
+        Height = 25
+        Top = 134
+        Width = 191
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 2
         BorderSpacing.Right = 5
@@ -71,8 +71,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Side = asrBottom
         AnchorSideBottom.Control = LengthEdit
         Left = 10
-        Height = 18
-        Top = 124
+        Height = 16
+        Top = 116
         Width = 49
         BorderSpacing.Top = 10
         Caption = 'Length:'
@@ -85,9 +85,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Control = NameEdit
         AnchorSideRight.Side = asrBottom
         Left = 10
-        Height = 27
-        Top = 87
-        Width = 420
+        Height = 25
+        Top = 81
+        Width = 422
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 2
         TabOrder = 1
@@ -97,9 +97,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Control = NameEdit
         AnchorSideTop.Side = asrBottom
         Left = 10
-        Height = 18
-        Top = 67
-        Width = 63
+        Height = 16
+        Top = 63
+        Width = 62
         BorderSpacing.Top = 10
         Caption = 'Question:'
         ParentColor = False
@@ -111,9 +111,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Control = FieldBasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
-        Height = 27
-        Top = 30
-        Width = 420
+        Height = 25
+        Top = 28
+        Width = 422
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -124,7 +124,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideLeft.Control = NameEdit
         AnchorSideTop.Control = FieldBasicSheet
         Left = 10
-        Height = 18
+        Height = 16
         Top = 10
         Width = 44
         BorderSpacing.Top = 10
@@ -135,10 +135,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
       object Label10: TLabel
         AnchorSideRight.Control = FieldTypeLabel
         AnchorSideBottom.Control = NameEdit
-        Left = 296
-        Height = 18
+        Left = 306
+        Height = 16
         Top = 10
-        Width = 35
+        Width = 33
         Anchors = [akRight, akBottom]
         BorderSpacing.Right = 2
         BorderSpacing.Bottom = 2
@@ -150,10 +150,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = Label10
         AnchorSideBottom.Side = asrBottom
-        Left = 333
-        Height = 18
+        Left = 341
+        Height = 16
         Top = 10
-        Width = 97
+        Width = 91
         Anchors = [akRight, akBottom]
         Caption = 'FieldTypeLabel'
         Color = 14771271
@@ -168,24 +168,24 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 70
-        Top = 258
-        Width = 420
+        Top = 246
+        Width = 422
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Range'
-        ClientHeight = 51
-        ClientWidth = 416
+        ClientHeight = 53
+        ClientWidth = 418
         TabOrder = 5
         object Label11: TLabel
           AnchorSideLeft.Control = RangesGrpBox
           AnchorSideTop.Control = FromEdit
           AnchorSideTop.Side = asrCenter
           Left = 5
-          Height = 18
-          Top = 16
-          Width = 38
+          Height = 16
+          Top = 18
+          Width = 37
           BorderSpacing.Left = 5
           Caption = 'From:'
           ParentColor = False
@@ -196,11 +196,11 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = RangesGrpBox
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = Label12
-          Left = 48
-          Height = 27
+          Left = 47
+          Height = 25
           Hint = 'Define missing as a value label'
-          Top = 12
-          Width = 153
+          Top = 14
+          Width = 155
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 5
           OnUTF8KeyPress = RangeEditUTF8KeyPress
@@ -213,10 +213,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Control = ToEdit
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = ToEdit
-          Left = 206
-          Height = 18
-          Top = 16
-          Width = 19
+          Left = 207
+          Height = 16
+          Top = 18
+          Width = 18
           Anchors = [akTop]
           BorderSpacing.Left = 5
           BorderSpacing.Right = 5
@@ -231,10 +231,10 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideRight.Control = RangesGrpBox
           AnchorSideRight.Side = asrBottom
           Left = 230
-          Height = 27
+          Height = 25
           Hint = 'Define missing as a value label'
-          Top = 12
-          Width = 181
+          Top = 14
+          Width = 183
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Right = 5
           OnUTF8KeyPress = RangeEditUTF8KeyPress
@@ -250,9 +250,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Control = DecimalsEdit
         AnchorSideBottom.Control = LengthEdit
         AnchorSideBottom.Side = asrBottom
-        Left = 205
-        Height = 27
-        Top = 144
+        Left = 206
+        Height = 25
+        Top = 134
         Width = 5
         Anchors = [akTop, akBottom]
         BorderSpacing.Left = 5
@@ -268,8 +268,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 76
-        Top = 338
-        Width = 420
+        Top = 326
+        Width = 422
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
         BorderSpacing.Left = 10
@@ -294,15 +294,15 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 67
-        Top = 181
-        Width = 420
+        Top = 169
+        Width = 422
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Valuelabel:'
-        ClientHeight = 48
-        ClientWidth = 416
+        ClientHeight = 50
+        ClientWidth = 418
         TabOrder = 4
         object ValueLabelComboBox: TComboBox
           AnchorSideLeft.Control = ValueLabelGrpBox
@@ -310,9 +310,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = ManageValueLabelsButton
           Left = 10
-          Height = 31
-          Top = 9
-          Width = 349
+          Height = 27
+          Top = 12
+          Width = 367
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 2
@@ -332,11 +332,12 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = ValueLabelComboBox
           AnchorSideBottom.Side = asrBottom
-          Left = 369
-          Height = 31
-          Top = 9
-          Width = 37
+          Left = 387
+          Height = 25
+          Top = 13
+          Width = 21
           Anchors = [akTop, akRight]
+          AutoSize = True
           BorderSpacing.Left = 10
           BorderSpacing.Right = 10
           Caption = '+'
@@ -347,8 +348,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object FieldAdvancedSheet: TTabSheet
       Caption = 'Extended'
-      ClientHeight = 471
-      ClientWidth = 440
+      ClientHeight = 477
+      ClientWidth = 442
       object EntryRadioGroup: TRadioGroup
         AnchorSideLeft.Control = FieldAdvancedSheet
         AnchorSideTop.Control = FieldAdvancedSheet
@@ -372,7 +373,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 67
+        ClientHeight = 69
         ClientWidth = 414
         TabOrder = 0
         object ConfirmEntryChkBox: TCheckBox
@@ -406,7 +407,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Automatic Values:'
-        ClientHeight = 43
+        ClientHeight = 45
         ClientWidth = 414
         TabOrder = 1
         object RepeatValueChkBox: TCheckBox
@@ -473,7 +474,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Valuelabel Setting:'
-        ClientHeight = 115
+        ClientHeight = 117
         ClientWidth = 414
         TabOrder = 2
         object ValueLabelWriteToLabel: TLabel
@@ -550,7 +551,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Comparison:'
-        ClientHeight = 43
+        ClientHeight = 45
         ClientWidth = 414
         TabOrder = 3
         object Label25: TLabel
@@ -620,8 +621,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object JumpSheet: TTabSheet
       Caption = 'Jumps'
-      ClientHeight = 471
-      ClientWidth = 440
+      ClientHeight = 477
+      ClientWidth = 442
       object JumpsGrpBox: TGroupBox
         AnchorSideLeft.Control = JumpSheet
         AnchorSideTop.Control = JumpSheet
@@ -639,7 +640,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Jumps:'
-        ClientHeight = 431
+        ClientHeight = 433
         ClientWidth = 416
         TabOrder = 0
         object JumpScrollBox: TScrollBox
@@ -895,8 +896,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object CalcTabSheet: TTabSheet
       Caption = 'Calculate'
-      ClientHeight = 471
-      ClientWidth = 440
+      ClientHeight = 477
+      ClientWidth = 442
       object TimeDiffGrpBox: TGroupBox
         AnchorSideLeft.Control = TimeCalcRadio
         AnchorSideLeft.Side = asrBottom
@@ -912,7 +913,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Time difference:'
-        ClientHeight = 99
+        ClientHeight = 101
         ClientWidth = 392
         TabOrder = 2
         object TimeResultCombo: TComboBox
@@ -1261,7 +1262,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Create Date:'
-        ClientHeight = 81
+        ClientHeight = 83
         ClientWidth = 392
         TabOrder = 4
         object DayCombo: TComboBox
@@ -1434,7 +1435,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Combine Fields:'
-        ClientHeight = 81
+        ClientHeight = 83
         ClientWidth = 392
         TabOrder = 6
         object StringResultCombo: TComboBox
@@ -1692,8 +1693,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
     end
     object NotesSheet: TTabSheet
       Caption = 'Notes'
-      ClientHeight = 471
-      ClientWidth = 440
+      ClientHeight = 477
+      ClientWidth = 442
       object NotesMemo: TMemo
         AnchorSideLeft.Control = NotesSheet
         AnchorSideTop.Control = Label1

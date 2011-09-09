@@ -5,14 +5,16 @@ unit valuelabelseditor_form2;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, ComCtrls, Buttons, VirtualTrees, epivaluelabels, epidatafilestypes;
+  Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, StdCtrls, ComCtrls, Buttons, VirtualTrees, epivaluelabels,
+  epidatafilestypes, LCLType;
 
 type
 
   { TValuelabelEditor2 }
 
   TValuelabelEditor2 = class(TForm)
+    Button1: TButton;
     CancelBtn: TBitBtn;
     OkBtn: TBitBtn;
     ImageList1: TImageList;
@@ -24,15 +26,26 @@ type
     Label1: TLabel;
     Panel1: TPanel;
     Panel3: TPanel;
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure OkBtnClick(Sender: TObject);
     procedure DelLineBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure NewLineBtnClick(Sender: TObject);
-    procedure VLSTEditor(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; out EditLink: IVTEditLink);
+    procedure ValueLabelNameEditEditingDone(Sender: TObject);
+  private
+    FHintWindow: THintWindow;
+    function  DoAddNewLine: PVirtualNode;
+    procedure  ShowHintMsg(Ctrl: TControl; Msg: String);
   private
     { Virtual TreeView }
     VLST: TVirtualStringTree;
+    procedure VLSTEdited(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex);
+    procedure VLSTSendPostEdit(Data: PtrInt);
+    procedure VLSTEditor(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; out EditLink: IVTEditLink);
+    procedure VLSTUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure VLSTChecking(Sender: TBaseVirtualTree; Node: PVirtualNode;
       var NewState: TCheckState; var Allowed: Boolean);
     procedure VLSTKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -46,12 +59,12 @@ type
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure SetNodeText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; const NewText: String);
-    procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
   private
     {EpiData Properties}
     FResultValueLabelSet: TEpiValueLabelSet;
     FValueLabelSets: TEpiValueLabelSets;
     FFieldType: TEpiFieldType;
+    procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; FieldType: TEpiFieldType);
@@ -64,7 +77,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLType;
+  LCLIntf, LMessages, valuelabelseditor_form, epidocument;
 
 type
   PVLRecord = ^TVLRecord;
@@ -86,32 +99,37 @@ end;
 
 type
 
-  { TValidatedStringEditLing }
+  { TValidatedStringEditLink }
 
-  TValidatedStringEditLing = class(TStringEditLink, IVTEditLink)
+  TValidatedStringEditLink = class(TStringEditLink, IVTEditLink)
   private
-    FFieldType: TEpiFieldType;
+    FEditor: TValuelabelEditor2;
   public
     function EndEdit: Boolean; override; stdcall;
-    property FieldType: TEpiFieldType read FFieldType write FFieldType;
+    property Editor: TValuelabelEditor2 read FEditor write FEditor;
   end;
 
 { TValidatedStringEditLing }
 
-function TValidatedStringEditLing.EndEdit: Boolean; stdcall;
+function TValidatedStringEditLink.EndEdit: Boolean; stdcall;
 var
   I: integer;
   F: Extended;
 begin
   Result := not FStopping;
 
-  if result and Edit.Modified then
+  if result then
   begin
-    case FieldType of
+    case Editor.FFieldType of
       ftInteger:
         result := TryStrToInt(Edit.Text, I);
       ftFloat:
         result := TryStrToFloat(Edit.Text, F);
+    end;
+    if not Result then
+    begin
+      FEditor.ShowHintMsg(Edit, Edit.Text + ' is not a valid value!');
+      FTree.CancelEditNode;
     end;
   end;
 
@@ -131,16 +149,19 @@ begin
     Color := clNone;
     NodeDataSize := SizeOF(TVLRecord);
     WantTabs := true;
+    TabStop := true;
 
     // Events:
-    OnInitNode  := @InitNode;
-    OnFreeNode   := @FreeNode;
-    OnGetText   := @GetNodeText;
-    OnNewText    := @SetNodeText;
-    OnFocusChanging  := @FocusChanging;
-    OnKeyDown   := @VLSTKeyDown;
-    OnChecking  := @VLSTChecking;
+    OnInitNode      := @InitNode;
+    OnFreeNode      := @FreeNode;
+    OnGetText       := @GetNodeText;
+    OnNewText       := @SetNodeText;
+    OnFocusChanging := @FocusChanging;
+    OnKeyDown       := @VLSTKeyDown;
+    OnUTF8KeyPress  := @VLSTUTF8KeyPress;
+    OnChecking      := @VLSTChecking;
     OnCreateEditor  := @VLSTEditor;
+    OnEdited        := @VLSTEdited;
   end;
 
   with VLST.TreeOptions do
@@ -215,6 +236,7 @@ end;
 procedure TValuelabelEditor2.DelLineBtnClick(Sender: TObject);
 var
   NewNode: PVirtualNode;
+  Data: PVLRecord;
 begin
   if not Assigned(VLST.FocusedNode) then exit;
 
@@ -222,10 +244,21 @@ begin
   if not Assigned(NewNode) then
     NewNode := VLST.GetPreviousSibling(VLST.FocusedNode);
 
-  VLST.DeleteSelectedNodes;
+
+  Data := VLST.GetNodeData(VLST.FocusedNode);
+  with Data^ do
+    if MessageDlg('Warning',
+         Format('Are you sure you want to delete "%s = %s"?',[Value, VLabel]),
+         mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+
+  VLST.DeleteNode(VLST.FocusedNode);
 
   if Assigned(NewNode) then
+  begin
     VLST.FocusedNode := NewNode;
+    VLST.Selected[NewNode] := true;
+  end;
+  VLST.Refresh;
 end;
 
 procedure TValuelabelEditor2.OkBtnClick(Sender: TObject);
@@ -276,24 +309,114 @@ begin
   ModalResult := mrOk;
 end;
 
+procedure TValuelabelEditor2.Button1Click(Sender: TObject);
+begin
+  GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
+  BringToFront;
+end;
+
+procedure TValuelabelEditor2.FormShow(Sender: TObject);
+begin
+  DoAddNewLine;
+end;
+
 procedure TValuelabelEditor2.NewLineBtnClick(Sender: TObject);
 begin
-  VLST.AddChild(nil);
+  DoAddNewLine;
+  VLST.SetFocus;
+end;
+
+procedure TValuelabelEditor2.ValueLabelNameEditEditingDone(Sender: TObject);
+const
+  InEditingDone: boolean = false;
+begin
+  if InEditingDone then exit;
+  InEditingDone := true;
+
+  VLST.SetFocus;
+  VLST.FocusedNode := VLST.GetFirstSelected();
+
+  InEditingDone := false;
+end;
+
+function TValuelabelEditor2.DoAddNewLine: PVirtualNode;
+var
+  Node: PVirtualNode;
+begin
+  VLST.BeginUpdate;
+
+  Node := VLST.GetLast();
+
+  Result := VLST.AddChild(nil);
+  VLST.FocusedNode := Result;
+  VLST.FocusedColumn := 0;
+  VLST.Selected[Result] := true;
+  if FFieldType in [ftFloat,ftInteger] then
+  begin
+    if Assigned(Node) then
+      VLST.Text[Result, 0] := FloatToStr(StrToFloat(PVLRecord(VLST.GetNodeData(Node))^.Value) + 1)
+    else
+      VLST.Text[Result, 0] := '0';
+  end;
+
+  VLST.EndUpdate;
+end;
+
+procedure TValuelabelEditor2.ShowHintMsg(Ctrl: TControl; Msg: String);
+var
+  R: TRect;
+  P: TPoint;
+begin
+  if not Assigned(FHintWindow) then
+    FHintWindow := THintWindow.Create(Self);
+
+  if (Ctrl = nil) or (Msg = '') then
+  begin
+    FHintWindow.Hide;
+    Exit;
+  end;
+
+  R := FHintWindow.CalcHintRect(0, Msg, nil);
+  P := Ctrl.ControlToScreen(Ctrl.BoundsRect.TopLeft);
+  OffsetRect(R, P.X, P.Y);
+  FHintWindow.ActivateHint(R, Msg);
+end;
+
+procedure TValuelabelEditor2.VLSTSendPostEdit(Data: PtrInt);
+begin
+  VLST.FocusedColumn := 1;
+  VLST.EditNode(PVirtualNode(Data), 1);
+end;
+
+procedure TValuelabelEditor2.VLSTEdited(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex);
+begin
+  if Column = 0 then
+    Application.QueueAsyncCall(@VLSTSendPostEdit, PtrInt(Node));
 end;
 
 procedure TValuelabelEditor2.VLSTEditor(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
 var
-  EL: TValidatedStringEditLing;
+  EL: TValidatedStringEditLink;
 begin
   if Column = 0 then
   begin
-    EL := TValidatedStringEditLing.Create;
-    EL.FieldType := FFieldType;
+    EL := TValidatedStringEditLink.Create;
+    EL.Editor := Self;
     EditLink := EL;
   end else begin
     EditLink := TStringEditLink.Create;
   end;
+end;
+
+procedure TValuelabelEditor2.VLSTUTF8KeyPress(Sender: TObject;
+  var UTF8Key: TUTF8Char);
+begin
+  if UTF8Key = Char(VK_SPACE) then exit;
+  if UTF8Key = Char(VK_RETURN) then exit;
+
+  VLST.EditNode(VLST.FocusedNode, VLST.FocusedColumn);
 end;
 
 procedure TValuelabelEditor2.VLSTChecking(Sender: TBaseVirtualTree;
@@ -309,17 +432,26 @@ end;
 procedure TValuelabelEditor2.VLSTKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
+  ShowHintMsg(nil, '');
+
   case Key of
     VK_RETURN:
       begin
         if ssCtrl in Shift then
         begin
-          VLST.FocusedNode := VLST.AddChild(nil);
-          VLST.FocusedColumn := 0;
-          VLST.Refresh;
+          DoAddNewLine;
+          Key := VK_UNKNOWN;
         end;
         if (Shift = []) and (Assigned(VLST.FocusedNode)) then
+        begin
           VLST.EditNode(VLST.FocusedNode, VLST.FocusedColumn);
+          Key := VK_UNKNOWN;
+        end;
+      end;
+    VK_DELETE:
+      begin
+        DelLineBtn.Click;
+      Key := VK_UNKNOWN;
       end;
   end;
 end;
@@ -358,7 +490,6 @@ procedure TValuelabelEditor2.InitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
   Node^.CheckType := ctCheckBox;
-  ResetVLRecord(Sender.GetNodeData(Node));
 end;
 
 procedure TValuelabelEditor2.SetNodeText(Sender: TBaseVirtualTree;
