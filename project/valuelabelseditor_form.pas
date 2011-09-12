@@ -107,6 +107,8 @@ type
     procedure   UpdateStatusbar;
     procedure   UpdateShortCuts;
     procedure   SetEpiDocument(EpiDoc: TEpiDocument);
+    procedure   UpdateVLTreeView;
+    procedure   UpdateVLHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   public
     { public declarations }
     procedure   UpdateSettings;
@@ -373,14 +375,8 @@ begin
     result.Name := format('(untitled%d)', [i]);
     inc(i);
   end;
-  Node := ValueLabelSetTreeView.Items.AddObject(nil, Result.Name, Result);
-  case ft of
-    ftInteger: Node.ImageIndex := 0;
-    ftFloat:   Node.ImageIndex := 1;
-    ftString:  Node.ImageIndex := 2;
-  end;
+  Node := ValueLabelSetTreeView.Items.FindNodeWithData(Result);
   ValueLabelSetTreeView.Selected := Node;
-  ValueLabelSetTreeView.CustomSort(nil);
 
   // Set manually as the ValueLabelSetTreeViewChange has not been fired at this point!
   FCurrentVLSet := result;
@@ -478,7 +474,28 @@ var
   Node: TTreeNode;
 begin
   if EpiDoc.ValueLabelSets <> FValueLabelSets then
+  begin
+    if Assigned(FValueLabelSets) then
+      FValueLabelSets.UnRegisterOnChangeHook(@UpdateVLHook);
     FValueLabelSets := EpiDoc.ValueLabelSets;
+    FValueLabelSets.RegisterOnChangeHook(@UpdateVLHook, true);
+  end;
+
+  for i := 0 to FValueLabelSets.Count - 1 do
+    FValueLabelSets[i].RegisterOnChangeHook(@UpdateVLHook, true);
+
+  UpdateVLTreeView;
+end;
+
+procedure TValueLabelEditor.UpdateVLTreeView;
+var
+  Node: TTreeNode;
+  VLSet: Pointer;
+  i: Integer;
+begin
+  VLSet := nil;
+  if Assigned(ValueLabelSetTreeView.Selected) then
+    VLSet := ValueLabelSetTreeView.Selected.Data;
 
   ValueLabelSetTreeView.BeginUpdate;
   ValueLabelSetTreeView.Items.Clear;
@@ -493,6 +510,61 @@ begin
   end;
   ValueLabelSetTreeView.CustomSort(nil);
   ValueLabelSetTreeView.EndUpdate;
+
+  if Assigned(VLSet) then
+    ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.FindNodeWithData(VLSet)
+  else
+    ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.GetFirstNode;
+end;
+
+procedure TValueLabelEditor.UpdateVLHook(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if Sender is TEpiValueLabelSets then
+    case TEpiCustomChangeEventType(EventType) of
+      ecceDestroy: Exit;
+      ecceUpdate:  UpdateVLTreeView;
+      ecceAddItem: begin
+                     TEpiValueLabelSet(Data).RegisterOnChangeHook(@UpdateVLHook, true);
+                     UpdateVLTreeView;
+                     ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.FindNodeWithData(Data);
+                   end;
+      ecceDelItem: begin
+                     TEpiValueLabelSet(Data).UnRegisterOnChangeHook(@UpdateVLHook);
+                     UpdateVLTreeView;
+                   end;
+    end;
+
+  if Sender is TEpiValueLabelSet then
+    case TEpiCustomChangeEventType(EventType) of
+      ecceDestroy: Exit;
+      ecceUpdate:  begin
+                     UpdateVLTreeView;
+                     UpdateGridCells;
+                   end;
+      ecceName:    UpdateVLTreeView;
+      ecceAddItem: begin
+                     TEpiCustomValueLabel(Data).RegisterOnChangeHook(@UpdateVLHook, true);
+                     UpdateGridCells;
+                   end;
+      ecceDelItem: begin
+                     TEpiCustomValueLabel(Data).UnRegisterOnChangeHook(@UpdateVLHook);
+                     UpdateGridCells;
+                   end;
+    end;
+
+  if Sender is TEpiCustomValueLabel then
+    if EventGroup = eegCustomBase then
+      case TEpiCustomChangeEventType(EventType) of
+        ecceDestroy: Exit;
+        ecceUpdate,
+        ecceText:    UpdateGridCells;
+      end;
+    if EventGroup = eegValueLabels then
+      case TEpiValueLabelChangeEvent(EventType) of
+        evceValue,
+        evceMissing: UpdateGridCells;
+      end;
 end;
 
 procedure TValueLabelEditor.UpdateSettings;
@@ -682,7 +754,7 @@ begin
         end;
     end;
 
-  with ValueLabelsGrid do
+{  with ValueLabelsGrid do
   begin
     if not Focused then SetFocus;
     BeginUpdate;
@@ -691,6 +763,9 @@ begin
     Cells[1, RowCount-1] := VL.ValueAsString;
     Cells[4, RowCount-1] := '0';
     EndUpdate;
+  end;}
+  with ValueLabelsGrid do
+  begin
     Col := 1;
     Row := RowCount - 1;
   end;

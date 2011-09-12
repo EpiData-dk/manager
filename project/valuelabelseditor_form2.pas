@@ -23,6 +23,8 @@ type
     Panel1: TPanel;
     Panel3: TPanel;
     procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure OkBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -37,8 +39,8 @@ type
     procedure  ShowHintMsg(Ctrl: TControl; Msg: String);
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; FieldType: TEpiFieldType);
-    property  ValueLabelSets: TEpiValueLabelSets read FValueLabelSets write SetValueLabelSets;
+    constructor Create(TheOwner: TComponent; AValueLabelSet: TEpiValueLabelSets; FieldType: TEpiFieldType);
+    property  ValueLabelSets: TEpiValueLabelSets read FValueLabelSets;
     property  ResultValueLabelSet: TEpiValueLabelSet read FResultValueLabelSet;
   end;
 
@@ -59,6 +61,7 @@ begin
     // Setup:
     Align := alClient;
     Parent := Panel2;
+    ValueLabelSet := FValueLabelSets.NewValueLabelSet(FFieldType);
   end;
 end;
 
@@ -68,46 +71,21 @@ var
   VL: TEpiCustomValueLabel;
 begin
   ModalResult := mrNone;
-{  if not Assigned(FValueLabelSets) then exit;
+  if not Assigned(FValueLabelSets) then exit;
 
   if not FValueLabelSets.ValidateRename(nil, ValueLabelNameEdit.Text) then
   begin
+    ShowHintMsg(ValueLabelNameEdit, 'A ValueLabel set with same name already exists.');
     ValueLabelNameEdit.SetFocus;
     Exit;
   end;
 
+  if not FGridFrame.ValidateGridEntries then exit;
 
-  Node := VLSt.GetFirstChild(nil);
-  While Assigned(Node) do
-  begin
-    with PVLRecord(VLST.GetNodeData(Node))^ do
-    begin
-      // Validate node data?
-    end;
-    Node := VLSt.GetNextSibling(Node);
-  end;
-
-  FResultValueLabelSet := FValueLabelSets.NewValueLabelSet(FFieldType);
+  FResultValueLabelSet := FGridFrame.ValueLabelSet;
   FResultValueLabelSet.Name := ValueLabelNameEdit.Text;
 
-  Node := VLSt.GetFirstChild(nil);
-  While Assigned(Node) do
-  begin
-    VL := FResultValueLabelSet.NewValueLabel;
-    with PVLRecord(VLST.GetNodeData(Node))^ do
-    begin
-      case FFieldType of
-        ftInteger:  TEpiIntValueLabel(VL).Value := StrToInt(Value);
-        ftFloat:    TEpiFloatValueLabel(VL).Value := StrToFloat(Value);
-        ftString:   TEpiStringValueLabel(VL).Value := Value;
-      end;
-      VL.TheLabel.Text := VLabel;
-      VL.IsMissingValue := Missing;
-    end;
-    Node := VLSt.GetNextSibling(Node);
-  end;
-
-  ModalResult := mrOk;   }
+  ModalResult := mrOk;
 end;
 
 procedure TValuelabelEditor2.Button1Click(Sender: TObject);
@@ -116,9 +94,27 @@ begin
   BringToFront;
 end;
 
+procedure TValuelabelEditor2.FormClose(Sender: TObject;
+  var CloseAction: TCloseAction);
+begin
+  if ModalResult <> mrOk then
+    FGridFrame.ValueLabelSet.Free;
+end;
+
+procedure TValuelabelEditor2.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_ESCAPE) and (Shift = []) then
+  begin
+    Key := VK_UNKNOWN;
+    ModalResult := mrCancel;
+  end;
+end;
+
 procedure TValuelabelEditor2.FormShow(Sender: TObject);
 begin
-//  DoAddNewLine;
+  FGridFrame.NewLineBtn.Click;
+  ValueLabelNameEdit.SetFocus;
 end;
 
 procedure TValuelabelEditor2.ValueLabelNameEditEditingDone(Sender: TObject);
@@ -128,7 +124,7 @@ begin
   if InEditingDone then exit;
   InEditingDone := true;
 
-  FGridFrame.SetFocus;
+  FGridFrame.VLG.SetFocus;
 
   InEditingDone := false;
 end;
@@ -160,9 +156,10 @@ begin
 end;
 
 constructor TValuelabelEditor2.Create(TheOwner: TComponent;
-  FieldType: TEpiFieldType);
+  AValueLabelSet: TEpiValueLabelSets; FieldType: TEpiFieldType);
 begin
   inherited Create(TheOwner);
+  FValueLabelSets := AValueLabelSet;
   FFieldType := FieldType;
 end;
 

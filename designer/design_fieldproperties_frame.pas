@@ -423,7 +423,7 @@ end;
 procedure TFieldPropertiesFrame.ValueLabelSetHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
-  if (EventGroup = eegValueLabels) and (EventType = Word(evceName)) then
+  if (EventGroup = eegCustomBase) and (EventType = Word(ecceName)) then
     UpdateValueLabels;
 end;
 
@@ -737,14 +737,13 @@ var
   VLEdit: TValuelabelEditor2;
 begin
   //GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
-  VLEdit := TValuelabelEditor2.Create(Self, Field.FieldType);
-  VLEdit.ValueLabelSets := FValueLabelSets;
-  VLEdit.ShowModal;
-
-  if assigned(VLEdit.ResultValueLabelSet) then
+  VLEdit := TValuelabelEditor2.Create(Self, FValueLabelSets, Field.FieldType);
+  if VLEdit.ShowModal = mrOK then
   begin
     Field.ValueLabelSet := VLEdit.ResultValueLabelSet;
     UpdateValueLabels;
+  end else begin
+    VLEdit.ResultValueLabelSet.Free;
   end;
 
   VLEDit.Free;

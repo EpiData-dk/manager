@@ -21,13 +21,12 @@ type
     procedure NewLineBtnClick(Sender: TObject);
   private
     { StringTree privates }
-    VLG: TVirtualStringTree;
+    FVLG: TVirtualStringTree;
     procedure DoAddLine;
     procedure VLGChecking(Sender: TBaseVirtualTree; Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
     procedure VLGEdited(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
     procedure VLGEditor(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
     procedure VLGFocusChanging(Sender: TBaseVirtualTree; OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex; var Allowed: Boolean);
-    procedure VLGFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VLGGetNodeText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure VLGInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure VLGKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -37,12 +36,14 @@ type
   private
     { Other frame parts }
     FValueLabelSet: TEpiValueLabelSet;
-    function GetValueLabelSet: TEpiValueLabelSet;
     procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
+    function ValueLabelFromNode(Node: PVirtualNode): TEpiCustomValueLabel;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
-    property    ValueLabelSet: TEpiValueLabelSet read GetValueLabelSet write SetValueLabelSet;
+    function    ValidateGridEntries: boolean;
+    property    ValueLabelSet: TEpiValueLabelSet read FValueLabelSet write SetValueLabelSet;
+    property    VLG: TVirtualStringTree read FVLG;
   end; 
 
 implementation
@@ -50,15 +51,10 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Dialogs;
+  Graphics, Dialogs, LCLProc;
 
 type
-  PVLRecord = ^TVLRecord;
-  TVLRecord = record
-    Value: string;
-    VLabel: string;
-    Missing: boolean;
-  end;
+  PEpiValueLabel = ^TEpiCustomValueLabel;
 
   { TValidatedStringEditLink }
 
@@ -78,10 +74,10 @@ var
   F: Extended;
 begin
   Result := not FStopping;
-{
+
   if result then
   begin
-    case Editor.FFieldType of
+    case Editor.FValueLabelSet.LabelType of
       ftInteger:
         result := TryStrToInt(Edit.Text, I);
       ftFloat:
@@ -89,22 +85,12 @@ begin
     end;
     if not Result then
     begin
-      FEditor.ShowHintMsg(Edit, Edit.Text + ' is not a valid value!');
+//      FEditor.ShowHintMsg(Edit, Edit.Text + ' is not a valid value!');
       FTree.CancelEditNode;
     end;
-  end;           }
+  end;
 
   Result := Result and inherited;
-end;
-
-procedure ResetVLRecord(VLRec: PVLRecord);
-begin
-  with VLRec^ do
-  begin
-    Value := '';
-    VLabel := '';
-    Missing := false;
-  end;
 end;
 
 { TValueLabelGridFrame }
@@ -118,7 +104,7 @@ end;
 procedure TValueLabelGridFrame.DelLineBtnClick(Sender: TObject);
 var
   NewNode: PVirtualNode;
-  Data: PVLRecord;
+  VL: TEpiCustomValueLabel;
 begin
   if not Assigned(VLG.FocusedNode) then exit;
 
@@ -127,13 +113,14 @@ begin
     NewNode := VLG.GetPreviousSibling(VLG.FocusedNode);
 
 
-  Data := VLG.GetNodeData(VLG.FocusedNode);
-  with Data^ do
+  VL := ValueLabelFromNode(VLG.FocusedNode);
+  with VL do
     if MessageDlg('Warning',
-         Format('Are you sure you want to delete "%s = %s"?',[Value, VLabel]),
+         Format('Are you sure you want to delete "%s = %s"?',[ValueAsString, TheLabel.Text]),
          mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
 
   VLG.DeleteNode(VLG.FocusedNode);
+  VL.Free;
 
   if Assigned(NewNode) then
   begin
@@ -147,34 +134,33 @@ procedure TValueLabelGridFrame.DoAddLine;
 var
   Node: PVirtualNode;
   Last: PVirtualNode;
+  D: Pointer;
 begin
   VLG.BeginUpdate;
 
   Last := VLG.GetLast();
-  Node := VLG.AddChild(nil);
+  D := Pointer(FValueLabelSet.NewValueLabel);
+  Node := VLG.AddChild(nil, D);
+
+  if FValueLabelSet.LabelType in [ftFloat,ftInteger] then
+  begin
+    if Assigned(Last) then
+      VLG.Text[Node, 0] := FloatToStr(StrToFloat(ValueLabelFromNode(Last).ValueAsString) + 1)
+    else
+      VLG.Text[Node, 0] := '0';
+  end;
 
   VLG.FocusedNode := Node;
   VLG.FocusedColumn := 0;
   VLG.Selected[Node] := true;
-{  if FieldType in [ftFloat,ftInteger] then
-  begin
-    if Assigned(Node) then
-      Text[Node, 0] := FloatToStr(StrToFloat(PVLRecord(GetNodeData(Last))^.Value) + 1)
-    else
-      Text[Node, 0] := '0';
-  end;             }
 
   VLG.EndUpdate;
 end;
 
 procedure TValueLabelGridFrame.VLGChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
-var
-  Data: PVLRecord;
 begin
-  Data := Sender.GetNodeData(Node);
-  with Data^ do
-    Missing := NewState in [csCheckedNormal, csCheckedPressed];
+  ValueLabelFromNode(Node).IsMissingValue := NewState in [csCheckedNormal, csCheckedPressed];
 end;
 
 procedure TValueLabelGridFrame.VLGEdited(Sender: TBaseVirtualTree;
@@ -205,24 +191,18 @@ begin
   if (NewColumn = 2) or (NewColumn = -1) then Allowed := false;
 end;
 
-procedure TValueLabelGridFrame.VLGFreeNode(Sender: TBaseVirtualTree;
-  Node: PVirtualNode);
-begin
-  ResetVLRecord(Sender.GetNodeData(Node));
-end;
-
 procedure TValueLabelGridFrame.VLGGetNodeText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
 var
-  Data: PVLRecord;
+  VL: TEpiCustomValueLabel;
 begin
-  Data := Sender.GetNodeData(Node);
-  with Data^ do
+  VL := ValueLabelFromNode(Node);
+  with VL do
   begin
     case Column of
-      0: CellText := Value;
-      1: CellText := VLabel;
+      0: CellText := ValueAsString;
+      1: CellText := TheLabel.Text;
       2: CellText := '';
     end;
   end;
@@ -230,6 +210,8 @@ end;
 
 procedure TValueLabelGridFrame.VLGInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+var
+  Data: Pointer;
 begin
   Node^.CheckType := ctCheckBox;
 end;
@@ -247,15 +229,19 @@ begin
           DoAddLine;
           Key := VK_UNKNOWN;
         end;
-        if (Shift = []) and (Assigned(VLG.FocusedNode)) then
+
+        if (Shift = []) then
         begin
+          if not Assigned(VLG.FocusedNode) then
+            VLG.FocusedNode := VLG.GetFirstSelected(false);
+
           VLG.EditNode(VLG.FocusedNode, VLG.FocusedColumn);
           Key := VK_UNKNOWN;
         end;
       end;
     VK_DELETE:
       begin
-//        DelLineBtn.Click;
+        DelLineBtn.Click;
         Key := VK_UNKNOWN;
       end;
   end;
@@ -270,14 +256,19 @@ end;
 procedure TValueLabelGridFrame.VLGSetNodeText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; const NewText: String);
 var
-  Data: PVLRecord;
+  VL: TEpiCustomValueLabel;
 begin
-  Data := Sender.GetNodeData(Node);
-  with Data^ do
+  VL := ValueLabelFromNode(Node);
+  with VL do
   begin
     case Column of
-      0: Value := NewText;
-      1: VLabel := NewText;
+      0: case FValueLabelSet.LabelType of
+           ftInteger:     TEpiIntValueLabel(VL).Value := StrToInt(NewText);
+           ftFloat:       TEpiFloatValueLabel(Vl).Value := StrToFloat(NewText);
+           ftString:      TEpiStringValueLabel(VL).Value := NewText;
+           ftUpperString: TEpiStringValueLabel(VL).Value := UTF8UpperCase(NewText);
+         end;
+      1: TheLabel.Text := NewText;
       2: ; // do nothing
     end;
   end;
@@ -289,6 +280,9 @@ begin
   if UTF8Key = Char(VK_SPACE) then exit;
   if UTF8Key = Char(VK_RETURN) then exit;
 
+  if not Assigned(VLG.FocusedNode) then
+    VLG.FocusedNode := VLG.GetFirstSelected(false);
+
   VLG.EditNode(VLG.FocusedNode, VLG.FocusedColumn);
 end;
 
@@ -296,31 +290,32 @@ procedure TValueLabelGridFrame.SetValueLabelSet(AValue: TEpiValueLabelSet);
 begin
   if FValueLabelSet = AValue then Exit;
   FValueLabelSet := AValue;
+
+  VLG.RootNodeCount := FValueLabelSet.Count;
 end;
 
-
-function TValueLabelGridFrame.GetValueLabelSet: TEpiValueLabelSet;
+function TValueLabelGridFrame.ValueLabelFromNode(Node: PVirtualNode
+  ): TEpiCustomValueLabel;
 begin
-
+  Result := TEpiCustomValueLabel(VLG.GetNodeData(Node)^);
 end;
 
 constructor TValueLabelGridFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-  VLG := TVirtualStringTree.Create(Self);
+  FVLG := TVirtualStringTree.Create(Self);
   with VLG do
   begin
     Align := alClient;
     Parent := Self;
     Color := clNone;
-    NodeDataSize := SizeOF(TVLRecord);
+    NodeDataSize := SizeOF(PEpiValueLabel);
     WantTabs := true;
     TabStop := true;
 
     // Events:
     OnInitNode      := @VLGInitNode;
-    OnFreeNode      := @VLGFreeNode;
     OnGetText       := @VLGGetNodeText;
     OnNewText       := @VLGSetNodeText;
     OnFocusChanging := @VLGFocusChanging;
@@ -335,17 +330,7 @@ begin
   begin
     AnimationOptions := [];
     AutoOptions := [];
-{   toCheckSupport,             // Show checkboxes/radio buttons.
-    toEditable,                 // Node captions can be edited.
-    toGridExtensions,           // Use some special enhancements to simulate and support grid behavior.
-    toWheelPanning,             // Support for mouse panning (wheel mice only). This option and toMiddleClickSelect are
-                                // mutal exclusive, where panning has precedence.
-    toEditOnDblClick            // Editing mode can be entered with a double click}
     MiscOptions := [toCheckSupport, toEditable, toGridExtensions, toWheelPanning, toEditOnDblClick];
-{   toShowHorzGridLines,       // Display horizontal lines to simulate a grid.
-    toShowVertGridLines,       // Display vertical lines (depending on columns) to simulate a grid.
-    toThemeAware,              // Draw UI elements (header, tree buttons etc.) according to the current theme if
-                               // enabled (Windows XP+ only, application must be themed). }
     PaintOptions := [toShowHorzGridLines, toShowVertGridLines, toThemeAware];
     SelectionOptions := [toExtendedFocus, toRightClickSelect, toCenterScrollIntoView];
   end;
@@ -356,23 +341,6 @@ begin
     with Columns.Add do
     begin
       Text := 'Value';
-
-      {   coAllowClick,            // Column can be clicked (must be enabled too).
-          coDraggable,             // Column can be dragged.
-          coEnabled,               // Column is enabled.
-          coParentBidiMode,        // Column uses the parent's bidi mode.
-          coParentColor,           // Column uses the parent's background color.
-          coResizable,             // Column can be resized.
-          coShowDropMark,          // Column shows the drop mark if it is currently the drop target.
-          coVisible,               // Column is shown.
-          coAutoSpring,            // Column takes part in the auto spring feature of the header (must be resizable too).
-          coFixed,                 // Column is fixed and can not be selected or scrolled etc.
-          coSmartResize,           // Column is resized to its largest entry which is in view (instead of its largest
-                                   // visible entry).
-          coAllowFocus,            // Column can be focused.
-          coDisableAnimatedResize, // Column resizing is not animated.
-          coWrapCaption,           // Caption could be wrapped across several header lines to fit columns width.
-          coUseCaptionAlignment    // Column's caption has its own aligment.  }
       Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus];
       Width := 20;
     end;
@@ -398,6 +366,10 @@ begin
   end;
 end;
 
+function TValueLabelGridFrame.ValidateGridEntries: boolean;
+begin
+  Result := true;
+end;
 
 end.
 
