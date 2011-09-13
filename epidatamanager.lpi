@@ -327,11 +327,11 @@
         <UnitName Value="shortcuts"/>
       </Unit42>
       <Unit43>
-        <Filename Value="project/valuelabelseditor_form2.pas"/>
+        <Filename Value="designer/field_valuelabelseditor_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ValuelabelEditor2"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="valuelabelseditor_form2"/>
+        <UnitName Value="field_valuelabelseditor_form"/>
       </Unit43>
       <Unit44>
         <Filename Value="project/valuelabelgrid_frame.pas"/>

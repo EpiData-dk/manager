@@ -171,7 +171,7 @@ uses
   strutils, report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
-  shortcuts, valuelabelseditor_form2;
+  shortcuts, field_valuelabelseditor_form;
 
 { TMainForm }
 

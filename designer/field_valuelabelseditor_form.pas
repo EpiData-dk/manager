@@ -1,4 +1,4 @@
-unit valuelabelseditor_form2;
+unit field_valuelabelseditor_form;
 
 {$mode objfpc}{$H+}
 

@@ -191,7 +191,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLProc, valuelabelseditor_form, valuelabelseditor_form2, epimiscutils, epiranges,
+  LCLProc, valuelabelseditor_form, field_valuelabelseditor_form, epimiscutils, epiranges,
   math, epidocument, epiconvertutils, main, epistringutils;
 
 resourcestring
@@ -321,7 +321,7 @@ begin
     if not (Field.FieldType in [ftInteger, ftFloat, ftString, ftUpperString]) then
       ValueLabelComboBox.Hint := 'ValueLabels not support for this field type!'
     else
-      ValueLabelComboBox.Hint := 'No Valuelabels Defined.' + LineEnding + 'Press "Manage" to create a ValueLabel set.';
+      ValueLabelComboBox.Hint := 'Define new value label at "+"';
   end else begin
    for i := 0 to FValueLabelSets.Count - 1 do
    begin
@@ -364,14 +364,7 @@ begin
      if DoAdd then
        ValueLabelComboBox.AddItem(CurrentVLSet.Name, CurrentVLSet);
    end;
-   S := 'Support ValueLabel types:' + LineEnding;
-   case Field.FieldType of
-     ftInteger: S := S + EpiTypeNames[ftInteger];
-     ftFloat:   S := S + EpiTypeNames[ftInteger] + LineEnding + EpiTypeNames[ftFloat];
-     ftString,
-     ftUpperString: S := S + EpiTypeNames[ftString] + LineEnding + EpiTypeNames[ftUpperString];
-   end;
-   ValueLabelComboBox.Hint := S;
+   ValueLabelComboBox.Hint := 'Select value label or define new at "+"';
 
    if Assigned(PreSelectedVLSet) and (PreSelectedVLSet <> FNilValueLabel) then
      Idx := ValueLabelComboBox.Items.IndexOfObject(PreSelectedVLSet)
