@@ -727,10 +727,9 @@ end;
 
 procedure TFieldPropertiesFrame.ManageValueLabelsButtonClick(Sender: TObject);
 var
-  VLEdit: TValuelabelEditor2;
+  VLEdit: TFieldValueLabelEditor;
 begin
-  //GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
-  VLEdit := TValuelabelEditor2.Create(Self, FValueLabelSets, Field.FieldType);
+  VLEdit := TFieldValueLabelEditor.Create(Self, FValueLabelSets, Field.FieldType);
   if VLEdit.ShowModal = mrOK then
   begin
     Field.ValueLabelSet := VLEdit.ResultValueLabelSet;

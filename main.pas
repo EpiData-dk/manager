@@ -171,7 +171,7 @@ uses
   strutils, report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
-  shortcuts, field_valuelabelseditor_form;
+  shortcuts, valuelabelseditor_form2;
 
 { TMainForm }
 
@@ -533,12 +533,8 @@ begin
 end;
 
 procedure TMainForm.UserAccessBtnClick(Sender: TObject);
-var
-  V: TValuelabelEditor2;
 begin
-{  V := TValuelabelEditor2.Create(Self);
-  V.ShowModal;
-  V.Free; }
+  ShowValueLabelEditor2(FActiveFrame.EpiDocument.ValueLabelSets);
 end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);

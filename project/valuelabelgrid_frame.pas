@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, VirtualTrees, epivaluelabels,
-  epidatafilestypes, LCLType, ComCtrls;
+  epidatafilestypes, LCLType, ComCtrls, design_types;
 
 type
 
@@ -35,15 +35,18 @@ type
     procedure VLGUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
   private
     { Other frame parts }
+    FOnShowHintMsg: TDesignFrameShowHintEvent;
     FValueLabelSet: TEpiValueLabelSet;
     procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
     function ValueLabelFromNode(Node: PVirtualNode): TEpiCustomValueLabel;
+    procedure DoShowHintMsg(Ctrl: TControl; Const Msg: String);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     function    ValidateGridEntries: boolean;
     property    ValueLabelSet: TEpiValueLabelSet read FValueLabelSet write SetValueLabelSet;
     property    VLG: TVirtualStringTree read FVLG;
+    property    OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
   end; 
 
 implementation
@@ -51,7 +54,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Dialogs, LCLProc;
+  Graphics, Dialogs, LCLProc, epimiscutils;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -85,7 +88,7 @@ begin
     end;
     if not Result then
     begin
-//      FEditor.ShowHintMsg(Edit, Edit.Text + ' is not a valid value!');
+      FEditor.DoShowHintMsg(Edit, Edit.Text + ' is not a valid ' + LowerCase(EpiTypeNames[Editor.FValueLabelSet.LabelType]));
       FTree.CancelEditNode;
     end;
   end;
@@ -134,13 +137,11 @@ procedure TValueLabelGridFrame.DoAddLine;
 var
   Node: PVirtualNode;
   Last: PVirtualNode;
-  D: Pointer;
 begin
   VLG.BeginUpdate;
 
   Last := VLG.GetLast();
-  D := Pointer(FValueLabelSet.NewValueLabel);
-  Node := VLG.AddChild(nil, D);
+  Node := VLG.AddChild(nil, FValueLabelSet.NewValueLabel);
 
   if FValueLabelSet.LabelType in [ftFloat,ftInteger] then
   begin
@@ -219,7 +220,7 @@ end;
 procedure TValueLabelGridFrame.VLGKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-//  ShowHintMsg(nil, '');
+  DoShowHintMsg(nil, '');
 
   case Key of
     VK_RETURN:
@@ -298,6 +299,12 @@ function TValueLabelGridFrame.ValueLabelFromNode(Node: PVirtualNode
   ): TEpiCustomValueLabel;
 begin
   Result := TEpiCustomValueLabel(VLG.GetNodeData(Node)^);
+end;
+
+procedure TValueLabelGridFrame.DoShowHintMsg(Ctrl: TControl; const Msg: String);
+begin
+  if Assigned(OnShowHintMsg) then
+    OnShowHintMsg(Self, Ctrl, Msg);
 end;
 
 constructor TValueLabelGridFrame.Create(TheOwner: TComponent);

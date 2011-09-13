@@ -1,224 +1,118 @@
-object ValueLabelEditor: TValueLabelEditor
-  Left = 1026
-  Height = 542
-  Top = 269
-  Width = 533
-  ActiveControl = Panel1
-  Caption = 'Value Labels'
-  ClientHeight = 542
-  ClientWidth = 533
-  OnCloseQuery = FormCloseQuery
-  OnShow = FormShow
-  Position = poDefault
-  ShowInTaskBar = stAlways
+object ValueLabelEditor2: TValueLabelEditor2
+  Left = 648
+  Height = 464
+  Top = 308
+  Width = 625
+  Caption = 'ValueLabelEditor2'
+  ClientHeight = 464
+  ClientWidth = 625
+  KeyPreview = True
+  OnCreate = FormCreate
   LCLVersion = '0.9.31'
   object Panel1: TPanel
     Left = 0
-    Height = 523
+    Height = 414
     Top = 0
-    Width = 241
+    Width = 210
     Align = alLeft
-    ClientHeight = 523
-    ClientWidth = 241
+    BevelOuter = bvNone
+    ClientHeight = 414
+    ClientWidth = 210
     TabOrder = 0
     object ToolBar1: TToolBar
-      Left = 1
+      Left = 0
       Height = 26
-      Top = 1
-      Width = 239
-      Caption = 'ToolBar1'
-      EdgeBorders = [ebTop, ebBottom]
-      Images = ImageList1
-      List = True
-      ParentShowHint = False
+      Top = 0
+      Width = 210
+      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
       ShowCaptions = True
-      ShowHint = True
       TabOrder = 0
-      Transparent = True
-      object IntSetBtn: TToolButton
-        Left = 104
-        Hint = 'Integer Valuelabels'
+      object ToolButton1: TToolButton
+        Left = 3
         Top = 2
-        Down = True
-        ImageIndex = 0
-        OnClick = ToolBarBtnClick
-      end
-      object FloatSetBtn: TToolButton
-        Left = 138
-        Hint = 'Float Valuelabels'
-        Top = 2
-        ImageIndex = 1
-        OnClick = ToolBarBtnClick
-      end
-      object StringSetBtn: TToolButton
-        Left = 172
-        Hint = 'String Valuelabels'
-        Top = 2
-        ImageIndex = 2
-        OnClick = ToolBarBtnClick
-      end
-      object ToolButton4: TToolButton
-        Left = 206
-        Top = 2
-        Width = 5
-        Caption = 'ToolButton4'
-        Style = tbsDivider
-      end
-      object DelVLSetToolBtn: TToolButton
-        Left = 60
-        Top = 2
-        Action = DeleteValueLabelSets
-      end
-      object ToolButton6: TToolButton
-        Left = 27
-        Top = 2
+        AutoSize = True
         Caption = 'Add'
-        OnClick = ToolButton6Click
-      end
-      object ToolButton7: TToolButton
-        Left = 94
-        Top = 2
-        Width = 10
-        Caption = 'ToolButton7'
-        Style = tbsSeparator
-      end
-      object OkToolBtn: TToolButton
-        Left = 1
-        Top = 2
-        Caption = 'OK'
-        OnClick = OkToolBtnClick
+        DropdownMenu = PopupMenu1
+        OnClick = ToolButton1Click
+        Style = tbsDropDown
       end
     end
-    object ValueLabelSetTreeView: TTreeView
-      Left = 1
-      Height = 495
-      Top = 27
-      Width = 239
+    object VLSetsTree: TVirtualStringTree
+      Left = 0
+      Height = 388
+      Top = 26
+      Width = 210
       Align = alClient
-      DefaultItemHeight = 24
-      Font.Height = -15
-      Font.Name = 'Sans'
+      Color = clNone
+      DefaultText = 'Node'
+      Header.AutoSizeIndex = 0
+      Header.Columns = <>
+      Header.DefaultHeight = 17
+      Header.MainColumn = -1
       Images = ImageList1
-      ParentFont = False
-      ScrollBars = ssAutoBoth
-      ShowButtons = False
-      ShowLines = False
-      ShowRoot = False
-      SortType = stText
+      RootNodeCount = 3
+      ScrollBarOptions.ScrollBars = ssAutoBoth
       StateImages = ImageList1
       TabOrder = 1
-      OnChange = ValueLabelSetTreeViewChange
-      OnEdited = ValueLabelSetTreeViewEdited
-      OnKeyDown = ValueLabelSetTreeViewKeyDown
-      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoToolTips, tvoThemedDraw]
+      TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnDblClick]
+      OnGetText = VLSetsTreeGetText
+      OnGetImageIndex = VLSetsTreeGetImageIndex
+      OnInitNode = VLSetsTreeInitNode
     end
   end
   object Splitter1: TSplitter
-    Left = 241
-    Height = 523
+    Left = 210
+    Height = 414
     Top = 0
     Width = 5
+    AutoSnap = False
+    Beveled = True
   end
-  object ValueLabelEditorStatusBar: TStatusBar
+  object Panel2: TPanel
     Left = 0
-    Height = 19
-    Top = 523
-    Width = 533
-    Panels = <    
-      item
-        Text = 'Integer'
-        Width = 50
-      end    
-      item
-        Text = 'Float'
-        Width = 50
-      end    
-      item
-        Text = 'String'
-        Width = 50
-      end>
-    SimplePanel = False
-    OnResize = ValueLabelEditorStatusBarResize
-  end
-  object TreeViewActionList: TActionList
-    Images = ImageList1
-    left = 96
-    top = 272
-    object DeleteValueLabelSets: TAction
-      Category = 'TreeView'
-      Hint = 'Delete Valuelabel Set'
-      ImageIndex = 3
-      OnExecute = DeleteValueLabelSetsExecute
-      OnUpdate = DeleteValueLabelSetsUpdate
-      SecondaryShortCuts.Strings = (
-        ''
-      )
-    end
-    object DeleteValueLabelSetsFastAction: TAction
-      Category = 'TreeView'
-      Caption = 'DeleteValueLabelSetsFastAction'
-      Hint = 'Delete Valuelabel Set'
-      ImageIndex = 3
-      OnExecute = DeleteValueLabelSetsFastActionExecute
-      OnUpdate = DeleteValueLabelSetsUpdate
-    end
-    object NewIntValueLabelSetAction: TAction
-      Category = 'TreeView'
-      Hint = 'Integer Valuelabels'
-      ImageIndex = 0
-      OnExecute = NewIntValueLabelSetActionExecute
-    end
-    object NewFloatValueLabelSetAction: TAction
-      Category = 'TreeView'
-      Hint = 'Float Valuelabels'
-      ImageIndex = 1
-      OnExecute = NewFloatValueLabelSetActionExecute
-    end
-    object NewStringValueLabelSetAction: TAction
-      Category = 'TreeView'
-      Hint = 'String Valuelabels'
-      ImageIndex = 2
-      OnExecute = NewStringValueLabelSetActionExecute
+    Height = 50
+    Top = 414
+    Width = 625
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 625
+    TabOrder = 2
+    object BitBtn1: TBitBtn
+      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Side = asrBottom
+      Left = 544
+      Height = 32
+      Top = 9
+      Width = 70
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      BorderSpacing.Right = 10
+      Caption = '&Close'
+      Kind = bkClose
+      ModalResult = 11
+      TabOrder = 0
     end
   end
-  object NewValueLabelSetTypeDropDown: TPopupMenu
-    left = 96
-    top = 56
-    object NewIntValueLabelSetMenuItem: TMenuItem
-      Action = NewIntValueLabelSetAction
+  object PopupMenu1: TPopupMenu
+    left = 104
+    top = 136
+    object MenuItem1: TMenuItem
+      Caption = 'Interger Value Label'
     end
-    object NewFloatValueLabelSetMenuItem: TMenuItem
-      Action = NewFloatValueLabelSetAction
+    object MenuItem2: TMenuItem
+      Caption = 'Float Value Label'
     end
-    object NewStringValueLabelSetMenuItem: TMenuItem
-      Action = NewStringValueLabelSetAction
-    end
-  end
-  object GridActionList: TActionList
-    left = 328
-    top = 272
-    object DeleteGridRowAction: TAction
-      Caption = 'Delete Valuelabel'
-      Enabled = False
-      OnExecute = DeleteGridRowExecute
-      OnUpdate = DeleteGridRowUpdate
-    end
-    object DeleteGridRowFastAction: TAction
-      Caption = 'Delete Valuelabel'
-      OnExecute = DeleteGridRowFastActionExecute
-      OnUpdate = DeleteGridRowUpdate
-    end
-    object InsertGridRowAction: TAction
-      Caption = 'Insert Valuelabel'
-      OnExecute = InsertGridRowExecute
-      ShortCut = 45
+    object MenuItem3: TMenuItem
+      Caption = 'String Value Label'
     end
   end
   object ImageList1: TImageList
     Height = 24
     Width = 24
-    left = 320
-    top = 144
+    left = 348
+    top = 172
     Bitmap = {
       4C69050000001800000018000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

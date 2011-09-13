@@ -36,7 +36,7 @@ uses
   report_fieldlist, viewer_form, report_valuelabellist, report_combinedlist,
   report_base, projectfilelist_frame, staticreports_form, 
   report_fieldlist_extended, report_project_overview, shortcuts, 
-field_valuelabelseditor_form, valuelabelgrid_frame;
+field_valuelabelseditor_form, valuelabelgrid_frame, valuelabelseditor_form2;
 
 {$R *.res}
 

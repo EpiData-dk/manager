@@ -1,9 +1,9 @@
-object ValuelabelEditor2: TValuelabelEditor2
+object FieldValueLabelEditor: TFieldValueLabelEditor
   Left = 734
   Height = 581
   Top = 278
   Width = 576
-  Caption = 'ValuelabelEditor2'
+  Caption = 'FieldValueLabelEditor'
   ClientHeight = 581
   ClientWidth = 576
   KeyPreview = True

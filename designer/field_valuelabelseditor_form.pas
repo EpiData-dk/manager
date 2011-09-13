@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TValuelabelEditor2 }
+  { TFieldValueLabelEditor }
 
-  TValuelabelEditor2 = class(TForm)
+  TFieldValueLabelEditor = class(TForm)
     Button1: TButton;
     CancelBtn: TBitBtn;
     OkBtn: TBitBtn;
@@ -36,7 +36,7 @@ type
     FValueLabelSets: TEpiValueLabelSets;
     FFieldType: TEpiFieldType;
     procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
-    procedure  ShowHintMsg(Ctrl: TControl; Msg: String);
+    procedure ShowHintMsg(Sender: TObject; Ctrl: TControl; Const Msg: String);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; AValueLabelSet: TEpiValueLabelSets; FieldType: TEpiFieldType);
@@ -51,21 +51,22 @@ implementation
 uses
   LCLIntf, LMessages, valuelabelseditor_form, epidocument;
 
-  { TValuelabelEditor2 }
+  { TFieldValueLabelEditor }
 
-procedure TValuelabelEditor2.FormCreate(Sender: TObject);
+procedure TFieldValueLabelEditor.FormCreate(Sender: TObject);
 begin
   FGridFrame := TValueLabelGridFrame.Create(Self);
   with FGridFrame do
   begin
     // Setup:
+    OnShowHintMsg := @ShowHintMsg;
     Align := alClient;
     Parent := Panel2;
     ValueLabelSet := FValueLabelSets.NewValueLabelSet(FFieldType);
   end;
 end;
 
-procedure TValuelabelEditor2.OkBtnClick(Sender: TObject);
+procedure TFieldValueLabelEditor.OkBtnClick(Sender: TObject);
 var
   Node: PVirtualNode;
   VL: TEpiCustomValueLabel;
@@ -73,9 +74,16 @@ begin
   ModalResult := mrNone;
   if not Assigned(FValueLabelSets) then exit;
 
+  if TRim(ValueLabelNameEdit.Text) = '' then;
+  begin
+    ShowHintMsg(Self, ValueLabelNameEdit, 'ValueLabel name must not be empty.');
+    ValueLabelNameEdit.SetFocus;
+    Exit;
+  end;
+
   if not FValueLabelSets.ValidateRename(nil, ValueLabelNameEdit.Text) then
   begin
-    ShowHintMsg(ValueLabelNameEdit, 'A ValueLabel set with same name already exists.');
+    ShowHintMsg(Self, ValueLabelNameEdit, 'A ValueLabel set with same name already exists.');
     ValueLabelNameEdit.SetFocus;
     Exit;
   end;
@@ -88,20 +96,20 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TValuelabelEditor2.Button1Click(Sender: TObject);
+procedure TFieldValueLabelEditor.Button1Click(Sender: TObject);
 begin
   GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
   BringToFront;
 end;
 
-procedure TValuelabelEditor2.FormClose(Sender: TObject;
+procedure TFieldValueLabelEditor.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
   if ModalResult <> mrOk then
     FGridFrame.ValueLabelSet.Free;
 end;
 
-procedure TValuelabelEditor2.FormKeyDown(Sender: TObject; var Key: Word;
+procedure TFieldValueLabelEditor.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (Key = VK_ESCAPE) and (Shift = []) then
@@ -111,13 +119,13 @@ begin
   end;
 end;
 
-procedure TValuelabelEditor2.FormShow(Sender: TObject);
+procedure TFieldValueLabelEditor.FormShow(Sender: TObject);
 begin
   FGridFrame.NewLineBtn.Click;
   ValueLabelNameEdit.SetFocus;
 end;
 
-procedure TValuelabelEditor2.ValueLabelNameEditEditingDone(Sender: TObject);
+procedure TFieldValueLabelEditor.ValueLabelNameEditEditingDone(Sender: TObject);
 const
   InEditingDone: boolean = false;
 begin
@@ -129,7 +137,8 @@ begin
   InEditingDone := false;
 end;
 
-procedure TValuelabelEditor2.ShowHintMsg(Ctrl: TControl; Msg: String);
+procedure TFieldValueLabelEditor.ShowHintMsg(Sender: TObject; Ctrl: TControl;
+  const Msg: String);
 var
   R: TRect;
   P: TPoint;
@@ -144,18 +153,18 @@ begin
   end;
 
   R := FHintWindow.CalcHintRect(0, Msg, nil);
-  P := Ctrl.ControlToScreen(Ctrl.BoundsRect.TopLeft);
+  P := Ctrl.ClientToScreen(Point(Ctrl.Width + 5, 0));
   OffsetRect(R, P.X, P.Y);
   FHintWindow.ActivateHint(R, Msg);
 end;
 
-procedure TValuelabelEditor2.SetValueLabelSets(AValue: TEpiValueLabelSets);
+procedure TFieldValueLabelEditor.SetValueLabelSets(AValue: TEpiValueLabelSets);
 begin
   if FValueLabelSets = AValue then Exit;
   FValueLabelSets := AValue;
 end;
 
-constructor TValuelabelEditor2.Create(TheOwner: TComponent;
+constructor TFieldValueLabelEditor.Create(TheOwner: TComponent;
   AValueLabelSet: TEpiValueLabelSets; FieldType: TEpiFieldType);
 begin
   inherited Create(TheOwner);

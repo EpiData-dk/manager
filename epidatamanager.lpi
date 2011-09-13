@@ -54,7 +54,7 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="45">
+    <Units Count="46">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -329,7 +329,7 @@
       <Unit43>
         <Filename Value="designer/field_valuelabelseditor_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="ValuelabelEditor2"/>
+        <ComponentName Value="FieldValueLabelEditor"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="field_valuelabelseditor_form"/>
       </Unit43>
@@ -340,6 +340,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="valuelabelgrid_frame"/>
       </Unit44>
+      <Unit45>
+        <Filename Value="project/valuelabelseditor_form2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ValueLabelEditor2"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabelseditor_form2"/>
+      </Unit45>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
