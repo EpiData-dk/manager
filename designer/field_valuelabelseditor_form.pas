@@ -74,7 +74,7 @@ begin
   ModalResult := mrNone;
   if not Assigned(FValueLabelSets) then exit;
 
-  if TRim(ValueLabelNameEdit.Text) = '' then;
+  if TRim(ValueLabelNameEdit.Text) = '' then
   begin
     ShowHintMsg(Self, ValueLabelNameEdit, 'ValueLabel name must not be empty.');
     ValueLabelNameEdit.SetFocus;

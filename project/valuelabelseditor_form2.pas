@@ -5,8 +5,8 @@ unit valuelabelseditor_form2;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, StdCtrls, ComCtrls, Menus, VirtualTrees, epidatafilestypes,
+  Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, Buttons, StdCtrls, ComCtrls, Menus, VirtualTrees, epidatafilestypes,
   valuelabelgrid_frame, epivaluelabels;
 
 type
@@ -27,7 +27,11 @@ type
     ToolButton1: TToolButton;
     VLSetsTree: TVirtualStringTree;
     procedure FormCreate(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure MenuItem2Click(Sender: TObject);
+    procedure MenuItem3Click(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
+    procedure VLSetsTreeChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VLSetsTreeGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
       var Ghosted: Boolean; var ImageIndex: Integer);
@@ -35,14 +39,19 @@ type
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure VLSetsTreeInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+    procedure VLSetsTreeNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; const NewText: String);
   private
     { private declarations }
     FGridFrame: TValueLabelGridFrame;
     FValueLabelSets: TEpiValueLabelSets;
     procedure DoAddNewValueLabelSet(FieldType: TEpiFieldType);
     procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
-    procedure UpdateTreeView;
     function  ValueLabelSetFromNode(Node: PVirtualNode): TEpiValueLabelSet;
+  private
+    { Hint }
+    FHintWindow: THintWindow;
+    procedure DoShowHintMsg(Sender: TObject; Ctrl: TControl; Const Msg: string);
   public
     { public declarations }
     property ValueLabelSets: TEpiValueLabelSets read FValueLabelSets write SetValueLabelSets;
@@ -56,7 +65,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Main;
+  Main, settings2_var;
 
 var
   Editor: TValueLabelEditor2 = nil;
@@ -74,6 +83,13 @@ end;
 procedure TValueLabelEditor2.ToolButton1Click(Sender: TObject);
 begin
   DoAddNewValueLabelSet(ftInteger);
+end;
+
+procedure TValueLabelEditor2.VLSetsTreeChange(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+begin
+  if Assigned(Node) then
+    FGridFrame.ValueLabelSet := ValueLabelSetFromNode(Node);
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeGetImageIndex(Sender: TBaseVirtualTree;
@@ -101,6 +117,27 @@ begin
   //
 end;
 
+procedure TValueLabelEditor2.VLSetsTreeNewText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; const NewText: String);
+var
+  S: String;
+begin
+  if Trim(NewText) = '' then
+  begin
+    DoShowHintMsg(nil, VLSetsTree, 'Value label name must not be empty!');
+    Exit;
+  end;
+
+  if ValueLabelSetFromNode(Node).Name = NewText then exit;
+
+  S := ValueLabelSetFromNode(Node).Name;
+  ValueLabelSetFromNode(Node).Name := NewText;
+  if S = ValueLabelSetFromNode(Node).Name then
+  begin
+    DoShowHintMsg(nil, VLSetsTree, 'Value label name already used!');
+  end;
+end;
+
 procedure TValueLabelEditor2.FormCreate(Sender: TObject);
 begin
   FGridFrame := TValueLabelGridFrame.Create(Self);
@@ -109,12 +146,30 @@ begin
     Align := alClient;
     Parent := Self;
     ValueLabelSet := nil;
+    OnShowHintMsg := @DoShowHintMsg;
   end;
+end;
+
+procedure TValueLabelEditor2.MenuItem1Click(Sender: TObject);
+begin
+  DoAddNewValueLabelSet(ftInteger);
+end;
+
+procedure TValueLabelEditor2.MenuItem2Click(Sender: TObject);
+begin
+  DoAddNewValueLabelSet(ftFloat);
+end;
+
+procedure TValueLabelEditor2.MenuItem3Click(Sender: TObject);
+begin
+  DoAddNewValueLabelSet(ftString);
 end;
 
 procedure TValueLabelEditor2.DoAddNewValueLabelSet(FieldType: TEpiFieldType);
 begin
-
+  FValueLabelSets.NewValueLabelSet(FieldType).Name := '(Untitled)';
+  VLSetsTree.RootNodeCount := FValueLabelSets.Count;
+  VLSetsTree.Refresh;
 end;
 
 procedure TValueLabelEditor2.SetValueLabelSets(AValue: TEpiValueLabelSets);
@@ -125,15 +180,34 @@ begin
   VLSetsTree.RootNodeCount := FValueLabelSets.Count;
 end;
 
-procedure TValueLabelEditor2.UpdateTreeView;
-begin
-  //
-end;
-
 function TValueLabelEditor2.ValueLabelSetFromNode(Node: PVirtualNode
   ): TEpiValueLabelSet;
 begin
   result := FValueLabelSets[Node^.Index];
+end;
+
+procedure TValueLabelEditor2.DoShowHintMsg(Sender: TObject; Ctrl: TControl;
+  const Msg: string);
+var
+  R: TRect;
+  P: TPoint;
+begin
+  if not Assigned(FHintWindow) then
+  begin
+    FHintWindow := THintWindow.Create(Self);
+    FHintWindow.HideInterval := 5*1000;
+  end;
+
+  if (Msg = '') or (Ctrl = nil) then
+  begin
+    FHintWindow.Hide;
+    Exit;
+  end;
+
+  R := FHintWindow.CalcHintRect(0, Msg, nil);
+  P := Ctrl.ClientToScreen(Point(Ctrl.Width + 5, 0));
+  OffsetRect(R, P.X, P.Y);
+  FHintWindow.ActivateHint(R, Msg);
 end;
 
 end.

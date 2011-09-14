@@ -38,7 +38,7 @@ type
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FValueLabelSet: TEpiValueLabelSet;
     procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
-    function ValueLabelFromNode(Node: PVirtualNode): TEpiCustomValueLabel;
+    function  ValueLabelFromNode(Node: PVirtualNode): TEpiCustomValueLabel;
     procedure DoShowHintMsg(Ctrl: TControl; Const Msg: String);
   public
     { public declarations }
@@ -212,9 +212,16 @@ end;
 procedure TValueLabelGridFrame.VLGInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 var
-  Data: Pointer;
+  P, //: PtrUInt;
+  D: Pointer;
 begin
   Node^.CheckType := ctCheckBox;
+  if not Assigned(ValueLabelFromNode(Node)) then
+  begin
+    Pointer(Sender.GetNodeData(Node)^) := FValueLabelSet[Node^.Index];
+    if ValueLabelFromNode(Node).IsMissingValue then
+      Node^.CheckState := csCheckedNormal;
+  end;
 end;
 
 procedure TValueLabelGridFrame.VLGKeyDown(Sender: TObject; var Key: Word;
@@ -292,6 +299,7 @@ begin
   if FValueLabelSet = AValue then Exit;
   FValueLabelSet := AValue;
 
+  VLG.Clear;
   VLG.RootNodeCount := FValueLabelSet.Count;
 end;
 

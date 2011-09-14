@@ -52,12 +52,13 @@ object ValueLabelEditor2: TValueLabelEditor2
       Images = ImageList1
       RootNodeCount = 3
       ScrollBarOptions.ScrollBars = ssAutoBoth
-      StateImages = ImageList1
       TabOrder = 1
       TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnDblClick]
+      OnChange = VLSetsTreeChange
       OnGetText = VLSetsTreeGetText
       OnGetImageIndex = VLSetsTreeGetImageIndex
       OnInitNode = VLSetsTreeInitNode
+      OnNewText = VLSetsTreeNewText
     end
   end
   object Splitter1: TSplitter
@@ -82,10 +83,10 @@ object ValueLabelEditor2: TValueLabelEditor2
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel2
       AnchorSideRight.Side = asrBottom
-      Left = 544
+      Left = 543
       Height = 32
       Top = 9
-      Width = 70
+      Width = 71
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -96,16 +97,23 @@ object ValueLabelEditor2: TValueLabelEditor2
     end
   end
   object PopupMenu1: TPopupMenu
+    Images = ImageList1
     left = 104
     top = 136
     object MenuItem1: TMenuItem
       Caption = 'Interger Value Label'
+      ImageIndex = 0
+      OnClick = MenuItem1Click
     end
     object MenuItem2: TMenuItem
       Caption = 'Float Value Label'
+      ImageIndex = 1
+      OnClick = MenuItem2Click
     end
     object MenuItem3: TMenuItem
       Caption = 'String Value Label'
+      ImageIndex = 2
+      OnClick = MenuItem3Click
     end
   end
   object ImageList1: TImageList
