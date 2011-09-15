@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Buttons, StdCtrls, ComCtrls, Menus, VirtualTrees, epidatafilestypes,
-  valuelabelgrid_frame, epivaluelabels;
+  valuelabelgrid_frame, epivaluelabels, manager_messages, LMessages;
 
 type
 
@@ -24,21 +24,23 @@ type
     PopupMenu1: TPopupMenu;
     Splitter1: TSplitter;
     ToolBar1: TToolBar;
-    ToolButton1: TToolButton;
+    AddBtn: TToolButton;
+    DelBtn: TToolButton;
     VLSetsTree: TVirtualStringTree;
+    procedure DelBtnClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
-    procedure ToolButton1Click(Sender: TObject);
+    procedure AddBtnClick(Sender: TObject);
     procedure VLSetsTreeChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VLSetsTreeGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
       var Ghosted: Boolean; var ImageIndex: Integer);
     procedure VLSetsTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
-    procedure VLSetsTreeInitNode(Sender: TBaseVirtualTree; ParentNode,
-      Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+    procedure VLSetsTreeKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure VLSetsTreeNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; const NewText: String);
   private
@@ -46,8 +48,10 @@ type
     FGridFrame: TValueLabelGridFrame;
     FValueLabelSets: TEpiValueLabelSets;
     procedure DoAddNewValueLabelSet(FieldType: TEpiFieldType);
+    procedure DoDeleteValueLabelSet(Node: PVirtualNode);
     procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
     function  ValueLabelSetFromNode(Node: PVirtualNode): TEpiValueLabelSet;
+    procedure LMEditNode(var Message: TLMessage); message LM_VLEDIT_STARTEDIT;
   private
     { Hint }
     FHintWindow: THintWindow;
@@ -65,7 +69,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Main, settings2_var;
+  Main, settings2_var, LCLIntf, LCLType;
 
 var
   Editor: TValueLabelEditor2 = nil;
@@ -80,7 +84,7 @@ end;
 
 { TValueLabelEditor2 }
 
-procedure TValueLabelEditor2.ToolButton1Click(Sender: TObject);
+procedure TValueLabelEditor2.AddBtnClick(Sender: TObject);
 begin
   DoAddNewValueLabelSet(ftInteger);
 end;
@@ -111,10 +115,23 @@ begin
   CellText := FValueLabelSets[Node^.Index].Name;
 end;
 
-procedure TValueLabelEditor2.VLSetsTreeInitNode(Sender: TBaseVirtualTree;
-  ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+procedure TValueLabelEditor2.VLSetsTreeKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
 begin
-  //
+  DoShowHintMsg(nil, nil, '');
+
+  case Key of
+    VK_RETURN:
+      begin
+        PostMessage(Self.Handle, LM_VLEDIT_STARTEDIT, WPARAM(VLSetsTree.FocusedNode), 0);
+        Key := VK_UNKNOWN;
+      end;
+    VK_DELETE:
+      begin
+        DoDeleteValueLabelSet(VLSetsTree.FocusedNode);
+        Key := VK_UNKNOWN;
+      end;
+  end;
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeNewText(Sender: TBaseVirtualTree;
@@ -147,7 +164,13 @@ begin
     Parent := Self;
     ValueLabelSet := nil;
     OnShowHintMsg := @DoShowHintMsg;
+    TabOrder := Panel1.TabOrder + 1;
   end;
+end;
+
+procedure TValueLabelEditor2.DelBtnClick(Sender: TObject);
+begin
+  DoDeleteValueLabelSet(VLSetsTree.FocusedNode);
 end;
 
 procedure TValueLabelEditor2.MenuItem1Click(Sender: TObject);
@@ -166,10 +189,36 @@ begin
 end;
 
 procedure TValueLabelEditor2.DoAddNewValueLabelSet(FieldType: TEpiFieldType);
+var
+  Node: PVirtualNode;
 begin
-  FValueLabelSets.NewValueLabelSet(FieldType).Name := '(Untitled)';
-  VLSetsTree.RootNodeCount := FValueLabelSets.Count;
+  FGridFrame.ValueLabelSet := FValueLabelSets.NewValueLabelSet(FieldType);
+  FGridFrame.ValueLabelSet.Name := '(Untitled)';
+  Node := VLSetsTree.AddChild(nil);
   VLSetsTree.Refresh;
+  FGridFrame.NewLineBtn.Click;
+
+  PostMessage(Self.Handle, LM_VLEDIT_STARTEDIT, WParam(Node), 0);
+end;
+
+procedure TValueLabelEditor2.DoDeleteValueLabelSet(Node: PVirtualNode);
+var
+  VL: TEpiValueLabelSet;
+  NewNode: PVirtualNode;
+begin
+  if not Assigned(Node) then exit;
+
+  NewNode := VLSetsTree.GetNextSibling(Node);
+  if not Assigned(NewNode) then
+    NewNode := VLSetsTree.GetPreviousSibling(Node);
+
+  VL := ValueLabelSetFromNode(Node);
+  VLSetsTree.DeleteNode(Node);
+  VL.Free;
+
+  VLSetsTree.FocusedNode := NewNode;
+  if Assigned(NewNode) then
+    VLSetsTree.Selected[NewNode] := true;
 end;
 
 procedure TValueLabelEditor2.SetValueLabelSets(AValue: TEpiValueLabelSets);
@@ -184,6 +233,15 @@ function TValueLabelEditor2.ValueLabelSetFromNode(Node: PVirtualNode
   ): TEpiValueLabelSet;
 begin
   result := FValueLabelSets[Node^.Index];
+end;
+
+procedure TValueLabelEditor2.LMEditNode(var Message: TLMessage);
+var
+  Node: PVirtualNode;
+begin
+  Node := PVirtualNode(Message.WParam);
+  VLSetsTree.Selected[Node] := true;
+  VLSetsTree.EditNode(Node, -1);
 end;
 
 procedure TValueLabelEditor2.DoShowHintMsg(Sender: TObject; Ctrl: TControl;

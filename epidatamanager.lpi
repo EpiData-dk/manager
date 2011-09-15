@@ -40,7 +40,6 @@
       </Item1>
       <Item2>
         <PackageName Value="HtmlComp"/>
-        <MinVersion Release="4" Valid="True"/>
       </Item2>
       <Item3>
         <PackageName Value="LCLBase"/>

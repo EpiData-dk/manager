@@ -39,7 +39,8 @@ type
     FValueLabelSet: TEpiValueLabelSet;
     procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
     function  ValueLabelFromNode(Node: PVirtualNode): TEpiCustomValueLabel;
-    procedure DoShowHintMsg(Ctrl: TControl; Const Msg: String);
+    procedure DoShowHintMsg(Ctrl: TControl; Const Msg: String); overload;
+    procedure DoShowHintMsg(R: TRect; Const Msg: string); overload;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -315,6 +316,21 @@ begin
     OnShowHintMsg(Self, Ctrl, Msg);
 end;
 
+procedure TValueLabelGridFrame.DoShowHintMsg(R: TRect; const Msg: string);
+var
+  Ctrl: TWinControl;
+begin
+  Ctrl := TWinControl.Create(nil);
+  Ctrl.Top := R.Top;
+  Ctrl.Left := R.Left;
+  Ctrl.Width := R.Right - R.Left;
+  Ctrl.Height := R.Bottom - R.Top;
+  Ctrl.Visible := false;
+  Ctrl.Parent := VLG;
+  DoShowHintMsg(Ctrl, Msg);
+  Ctrl.Free;
+end;
+
 constructor TValueLabelGridFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -382,8 +398,33 @@ begin
 end;
 
 function TValueLabelGridFrame.ValidateGridEntries: boolean;
+var
+  VL: TEpiCustomValueLabel;
+  Node: PVirtualNode;
 begin
-  Result := true;
+  Result := false;
+  Node := VLG.GetFirstChild(nil);
+
+  while Assigned(node) do
+  begin
+    VL := ValueLabelFromNode(Node);
+
+    if Trim(VL.ValueAsString) = '' then
+    begin
+      DoShowHintMsg(VLG.GetDisplayRect(Node, 0, true), Format('Value must not be empty (Row: %d)', [Node^.Index + 1]));
+      Exit;
+    end;
+
+    if Trim(VL.TheLabel.Text) = '' then
+    begin
+      DoShowHintMsg(VLG.GetDisplayRect(Node, 1, true), Format('Label must no be empty (%s)', [VL.ValueAsString]));
+      Exit;
+    end;
+
+    Node := VLG.GetNextSibling(Node);
+  end;
+
+  result := true;
 end;
 
 end.
