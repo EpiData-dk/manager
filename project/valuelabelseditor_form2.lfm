@@ -7,6 +7,7 @@ object ValueLabelEditor2: TValueLabelEditor2
   ClientHeight = 464
   ClientWidth = 625
   KeyPreview = True
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   LCLVersion = '0.9.31'
   object Panel1: TPanel
@@ -61,7 +62,7 @@ object ValueLabelEditor2: TValueLabelEditor2
       ScrollBarOptions.ScrollBars = ssAutoBoth
       TabOrder = 1
       TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnDblClick]
-      OnChange = VLSetsTreeChange
+      OnFocusChanging = VLSetsTreeFocusChanging
       OnGetText = VLSetsTreeGetText
       OnGetImageIndex = VLSetsTreeGetImageIndex
       OnKeyDown = VLSetsTreeKeyDown

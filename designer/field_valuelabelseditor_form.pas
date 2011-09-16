@@ -114,6 +114,9 @@ procedure TFieldValueLabelEditor.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if (Key = VK_ESCAPE) and (Shift = []) then
   begin
+    // Do not catch key if grid is in editing state!
+    if FGridFrame.VLG.IsEditing then exit;
+
     Key := VK_UNKNOWN;
     ModalResult := mrCancel;
   end;

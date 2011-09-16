@@ -28,12 +28,15 @@ type
     DelBtn: TToolButton;
     VLSetsTree: TVirtualStringTree;
     procedure DelBtnClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
-    procedure VLSetsTreeChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure VLSetsTreeFocusChanging(Sender: TBaseVirtualTree; OldNode,
+      NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
+      var Allowed: Boolean);
     procedure VLSetsTreeGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
       var Ghosted: Boolean; var ImageIndex: Integer);
@@ -89,11 +92,17 @@ begin
   DoAddNewValueLabelSet(ftInteger);
 end;
 
-procedure TValueLabelEditor2.VLSetsTreeChange(Sender: TBaseVirtualTree;
-  Node: PVirtualNode);
+procedure TValueLabelEditor2.VLSetsTreeFocusChanging(Sender: TBaseVirtualTree;
+  OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
+  var Allowed: Boolean);
 begin
-  if Assigned(Node) then
-    FGridFrame.ValueLabelSet := ValueLabelSetFromNode(Node);
+  if Assigned(OldNode) then
+  begin
+    Allowed := FGridFrame.ValidateGridEntries;
+    if not Allowed then exit;
+  end;
+
+  FGridFrame.ValueLabelSet := ValueLabelSetFromNode(NewNode);
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeGetImageIndex(Sender: TBaseVirtualTree;
@@ -173,6 +182,13 @@ begin
   DoDeleteValueLabelSet(VLSetsTree.FocusedNode);
 end;
 
+procedure TValueLabelEditor2.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  if Assigned(FGridFrame) then
+    CanClose := FGridFrame.ValidateGridEntries;
+end;
+
 procedure TValueLabelEditor2.MenuItem1Click(Sender: TObject);
 begin
   DoAddNewValueLabelSet(ftInteger);
@@ -191,11 +207,27 @@ end;
 procedure TValueLabelEditor2.DoAddNewValueLabelSet(FieldType: TEpiFieldType);
 var
   Node: PVirtualNode;
+  i: Integer;
+  VLSet: TEpiValueLabelSet;
 begin
-  FGridFrame.ValueLabelSet := FValueLabelSets.NewValueLabelSet(FieldType);
-  FGridFrame.ValueLabelSet.Name := '(Untitled)';
+  if not FGridFrame.ValidateGridEntries then exit;
+
+  VLSet := FValueLabelSets.NewValueLabelSet(FieldType);
+  With VLSet do
+  begin
+    Name := '(Untitled)';
+
+    i := 1;
+    while (name = '') do
+    begin
+      Name := format('(Untitled%d)', [i]);
+      inc(i);
+    end;
+  end;
+
   Node := VLSetsTree.AddChild(nil);
-  VLSetsTree.Refresh;
+  VLSetsTree.FocusedNode := Node;
+//  VLSetsTree.Refresh;
   FGridFrame.NewLineBtn.Click;
 
   PostMessage(Self.Handle, LM_VLEDIT_STARTEDIT, WParam(Node), 0);
@@ -218,7 +250,9 @@ begin
 
   VLSetsTree.FocusedNode := NewNode;
   if Assigned(NewNode) then
-    VLSetsTree.Selected[NewNode] := true;
+    VLSetsTree.Selected[NewNode] := true
+  else
+    FGridFrame.ValueLabelSet := nil;
 end;
 
 procedure TValueLabelEditor2.SetValueLabelSets(AValue: TEpiValueLabelSets);
@@ -232,7 +266,9 @@ end;
 function TValueLabelEditor2.ValueLabelSetFromNode(Node: PVirtualNode
   ): TEpiValueLabelSet;
 begin
-  result := FValueLabelSets[Node^.Index];
+  Result := nil;
+  if Assigned(Node) then
+    result := FValueLabelSets[Node^.Index];
 end;
 
 procedure TValueLabelEditor2.LMEditNode(var Message: TLMessage);

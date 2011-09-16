@@ -63,14 +63,28 @@ type
   { TValidatedStringEditLink }
 
   TValidatedStringEditLink = class(TStringEditLink, IVTEditLink)
+    procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FEditor: TValueLabelGridFrame;
   public
+    constructor Create; override;
     function EndEdit: Boolean; override; stdcall;
     property Editor: TValueLabelGridFrame read FEditor write FEditor;
   end;
 
 { TValidatedStringEditLing }
+
+procedure TValidatedStringEditLink.KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  FEditor.DoShowHintMsg(nil, '');
+end;
+
+constructor TValidatedStringEditLink.Create;
+begin
+  inherited Create;
+  Edit.OnKeyDown  := @KeyDown;
+end;
 
 function TValidatedStringEditLink.EndEdit: Boolean; stdcall;
 var
@@ -79,7 +93,7 @@ var
 begin
   Result := not FStopping;
 
-  if result then
+  if (result) and (FColumn = 0) then
   begin
     case Editor.FValueLabelSet.LabelType of
       ftInteger:
@@ -139,6 +153,8 @@ var
   Node: PVirtualNode;
   Last: PVirtualNode;
 begin
+  if not Assigned(ValueLabelSet) then exit;
+
   VLG.BeginUpdate;
 
   Last := VLG.GetLast();
@@ -176,14 +192,9 @@ procedure TValueLabelGridFrame.VLGEditor(Sender: TBaseVirtualTree;
 var
   EL: TValidatedStringEditLink;
 begin
-  if Column = 0 then
-  begin
-    EL := TValidatedStringEditLink.Create;
-    EL.Editor := Self;
-    EditLink := EL;
-  end else begin
-    EditLink := TStringEditLink.Create;
-  end;
+  EL := TValidatedStringEditLink.Create;
+  EL.Editor := Self;
+  EditLink := EL;
 end;
 
 procedure TValueLabelGridFrame.VLGFocusChanging(Sender: TBaseVirtualTree; OldNode,
@@ -212,9 +223,6 @@ end;
 
 procedure TValueLabelGridFrame.VLGInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-var
-  P, //: PtrUInt;
-  D: Pointer;
 begin
   Node^.CheckType := ctCheckBox;
   if not Assigned(ValueLabelFromNode(Node)) then
@@ -301,7 +309,10 @@ begin
   FValueLabelSet := AValue;
 
   VLG.Clear;
-  VLG.RootNodeCount := FValueLabelSet.Count;
+  if Assigned(FValueLabelSet) then
+    VLG.RootNodeCount := FValueLabelSet.Count
+  else
+    VLG.RootNodeCount := 0;
 end;
 
 function TValueLabelGridFrame.ValueLabelFromNode(Node: PVirtualNode
@@ -401,23 +412,36 @@ function TValueLabelGridFrame.ValidateGridEntries: boolean;
 var
   VL: TEpiCustomValueLabel;
   Node: PVirtualNode;
+
+  procedure NodeError(Node: PVirtualNode; Column: TColumnIndex; Const Msg: string);
+  var
+    R: TRect;
+  begin
+    R := VLG.GetDisplayRect(Node, Column, true);
+    OffsetRect(R, 0, R.Bottom - R.Top);
+    DoShowHintMsg(R, Msg);
+    VLG.Selected[Node] := true;
+    VLG.EditNode(Node, Column);
+  end;
+
 begin
+  if not Assigned(FValueLabelSet) then exit(true);
+
   Result := false;
   Node := VLG.GetFirstChild(nil);
-
   while Assigned(node) do
   begin
     VL := ValueLabelFromNode(Node);
 
     if Trim(VL.ValueAsString) = '' then
     begin
-      DoShowHintMsg(VLG.GetDisplayRect(Node, 0, true), Format('Value must not be empty (Row: %d)', [Node^.Index + 1]));
+      NodeError(Node, 0, Format('Value must not be empty (Row: %d)', [Node^.Index + 1]));
       Exit;
     end;
 
     if Trim(VL.TheLabel.Text) = '' then
     begin
-      DoShowHintMsg(VLG.GetDisplayRect(Node, 1, true), Format('Label must no be empty (%s)', [VL.ValueAsString]));
+      NodeError(Node, 1, Format('Label must no be empty (Value = %s)', [VL.ValueAsString]));
       Exit;
     end;
 
