@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Buttons, StdCtrls, ComCtrls, Menus, VirtualTrees, epidatafilestypes,
-  valuelabelgrid_frame, epivaluelabels, manager_messages, LMessages;
+  valuelabelgrid_frame, epivaluelabels, manager_messages, LMessages, epicustombase;
 
 type
 
@@ -56,16 +56,25 @@ type
     function  ValueLabelSetFromNode(Node: PVirtualNode): TEpiValueLabelSet;
     procedure LMEditNode(var Message: TLMessage); message LM_VLEDIT_STARTEDIT;
   private
+    { ValueLabelSet(s) Hook / Update }
+    FLocalUpdating: boolean;
+    procedure UpdateVLSetsTree;
+    procedure ValueLabelsHook(Sender: TObject; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+  private
     { Hint }
     FHintWindow: THintWindow;
     procedure DoShowHintMsg(Sender: TObject; Ctrl: TControl; Const Msg: string);
   public
     { public declarations }
+    constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     property ValueLabelSets: TEpiValueLabelSets read FValueLabelSets write SetValueLabelSets;
   end;
 
 
 procedure ShowValueLabelEditor2(ValueLabelSet: TEpiValueLabelSets);
+procedure CloseValueLabelEditor2;
 
 implementation
 
@@ -83,6 +92,11 @@ begin
     Editor := TValueLabelEditor2.Create(MainForm);
   Editor.ValueLabelSets := ValueLabelSet;
   Editor.Show;
+end;
+
+procedure CloseValueLabelEditor2;
+begin
+  FreeAndNil(Editor);
 end;
 
 { TValueLabelEditor2 }
@@ -211,6 +225,7 @@ var
   VLSet: TEpiValueLabelSet;
 begin
   if not FGridFrame.ValidateGridEntries then exit;
+  FLocalUpdating := true;
 
   VLSet := FValueLabelSets.NewValueLabelSet(FieldType);
   With VLSet do
@@ -227,9 +242,9 @@ begin
 
   Node := VLSetsTree.AddChild(nil);
   VLSetsTree.FocusedNode := Node;
-//  VLSetsTree.Refresh;
   FGridFrame.NewLineBtn.Click;
 
+  FLocalUpdating := False;
   PostMessage(Self.Handle, LM_VLEDIT_STARTEDIT, WParam(Node), 0);
 end;
 
@@ -239,6 +254,7 @@ var
   NewNode: PVirtualNode;
 begin
   if not Assigned(Node) then exit;
+  FLocalUpdating := true;
 
   NewNode := VLSetsTree.GetNextSibling(Node);
   if not Assigned(NewNode) then
@@ -253,12 +269,31 @@ begin
     VLSetsTree.Selected[NewNode] := true
   else
     FGridFrame.ValueLabelSet := nil;
+
+  FLocalUpdating := false;
 end;
 
 procedure TValueLabelEditor2.SetValueLabelSets(AValue: TEpiValueLabelSets);
+var
+  i: Integer;
 begin
   if FValueLabelSets = AValue then Exit;
+
+  if Assigned(FValueLabelSets) then
+  begin // Unregister old hooks.
+    FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelsHook);
+    for i := 0 to FValueLabelSets.Count - 1 do
+      FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelsHook);
+  end;
+
   FValueLabelSets := AValue;
+
+  if Assigned(FValueLabelSets) then
+  begin // Register hook in new ValueLabelSets
+    FValueLabelSets.RegisterOnChangeHook(@ValueLabelsHook, true);
+    for i := 0 to FValueLabelSets.Count - 1 do
+      FValueLabelSets[i].RegisterOnChangeHook(@ValueLabelsHook, true);
+  end;
 
   VLSetsTree.RootNodeCount := FValueLabelSets.Count;
 end;
@@ -278,6 +313,49 @@ begin
   Node := PVirtualNode(Message.WParam);
   VLSetsTree.Selected[Node] := true;
   VLSetsTree.EditNode(Node, -1);
+end;
+
+procedure TValueLabelEditor2.UpdateVLSetsTree;
+begin
+  if FLocalUpdating then exit;
+
+  VLSetsTree.BeginUpdate;
+  VLSetsTree.Clear;
+  VLSetsTree.RootNodeCount := FValueLabelSets.Count;
+  VLSetsTree.EndUpdate;
+end;
+
+procedure TValueLabelEditor2.ValueLabelsHook(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if Sender is TEpiValueLabelSet then
+  begin
+    if EventGroup = eegCustomBase then
+    case TEpiCustomChangeEventType(EventType) of
+      ecceDestroy: Exit;
+      ecceUpdate,
+      ecceName:    UpdateVLSetsTree;
+    end;
+    Exit;
+  end;
+
+  if Sender is TEpiValueLabelSets then
+  begin
+    if EventGroup = eegCustomBase then
+    case TEpiCustomChangeEventType(EventType) of
+      ecceDestroy: Exit;
+      ecceAddItem:
+        begin
+          TEpiValueLabelSet(Data).RegisterOnChangeHook(@ValueLabelsHook, true);
+          UpdateVLSetsTree;
+        end;
+      ecceDelItem:
+        begin
+          TEpiValueLabelSet(Data).UnRegisterOnChangeHook(@ValueLabelsHook);
+          UpdateVLSetsTree;
+        end;
+    end;
+  end;
 end;
 
 procedure TValueLabelEditor2.DoShowHintMsg(Sender: TObject; Ctrl: TControl;
@@ -302,6 +380,18 @@ begin
   P := Ctrl.ClientToScreen(Point(Ctrl.Width + 5, 0));
   OffsetRect(R, P.X, P.Y);
   FHintWindow.ActivateHint(R, Msg);
+end;
+
+constructor TValueLabelEditor2.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+  FLocalUpdating := false;
+end;
+
+destructor TValueLabelEditor2.Destroy;
+begin
+  inherited Destroy;
+  Editor := nil;
 end;
 
 end.

@@ -7,8 +7,6 @@ object FieldValueLabelEditor: TFieldValueLabelEditor
   ClientHeight = 581
   ClientWidth = 576
   KeyPreview = True
-  OnClose = FormClose
-  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   LCLVersion = '0.9.31'

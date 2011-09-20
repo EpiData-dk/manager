@@ -23,25 +23,23 @@ type
     Panel1: TPanel;
     Panel3: TPanel;
     procedure Button1Click(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure OkBtnClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure ValueLabelNameEditEditingDone(Sender: TObject);
   private
     FGridFrame: TValueLabelGridFrame;
     FHintWindow: THintWindow;
-    FResultValueLabelSet: TEpiValueLabelSet;
     FValueLabelSets: TEpiValueLabelSets;
     FFieldType: TEpiFieldType;
-    procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
+    function GetValueLabelSet: TEpiValueLabelSet;
+    procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
     procedure ShowHintMsg(Sender: TObject; Ctrl: TControl; Const Msg: String);
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; AValueLabelSet: TEpiValueLabelSets; FieldType: TEpiFieldType);
+    constructor Create(TheOwner: TComponent; ValueLabelSets: TEpiValueLabelSets);
     property  ValueLabelSets: TEpiValueLabelSets read FValueLabelSets;
-    property  ResultValueLabelSet: TEpiValueLabelSet read FResultValueLabelSet;
+    property  ValueLabelSet: TEpiValueLabelSet read GetValueLabelSet write SetValueLabelSet;
   end;
 
 implementation
@@ -52,19 +50,6 @@ uses
   LCLIntf, LMessages, valuelabelseditor_form, epidocument;
 
   { TFieldValueLabelEditor }
-
-procedure TFieldValueLabelEditor.FormCreate(Sender: TObject);
-begin
-  FGridFrame := TValueLabelGridFrame.Create(Self);
-  with FGridFrame do
-  begin
-    // Setup:
-    OnShowHintMsg := @ShowHintMsg;
-    Align := alClient;
-    Parent := Panel2;
-    ValueLabelSet := FValueLabelSets.NewValueLabelSet(FFieldType);
-  end;
-end;
 
 procedure TFieldValueLabelEditor.OkBtnClick(Sender: TObject);
 var
@@ -81,7 +66,8 @@ begin
     Exit;
   end;
 
-  if not FValueLabelSets.ValidateRename(nil, ValueLabelNameEdit.Text) then
+  if (ValueLabelSet.Name <> ValueLabelNameEdit.Text) and
+     (not FValueLabelSets.ValidateRename(nil, ValueLabelNameEdit.Text)) then
   begin
     ShowHintMsg(Self, ValueLabelNameEdit, 'A ValueLabel set with same name already exists.');
     ValueLabelNameEdit.SetFocus;
@@ -89,9 +75,7 @@ begin
   end;
 
   if not FGridFrame.ValidateGridEntries then exit;
-
-  FResultValueLabelSet := FGridFrame.ValueLabelSet;
-  FResultValueLabelSet.Name := ValueLabelNameEdit.Text;
+  FGridFrame.ValueLabelSet.Name := ValueLabelNameEdit.Text;
 
   ModalResult := mrOk;
 end;
@@ -100,13 +84,6 @@ procedure TFieldValueLabelEditor.Button1Click(Sender: TObject);
 begin
   GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
   BringToFront;
-end;
-
-procedure TFieldValueLabelEditor.FormClose(Sender: TObject;
-  var CloseAction: TCloseAction);
-begin
-  if ModalResult <> mrOk then
-    FGridFrame.ValueLabelSet.Free;
 end;
 
 procedure TFieldValueLabelEditor.FormKeyDown(Sender: TObject; var Key: Word;
@@ -118,14 +95,21 @@ begin
     if FGridFrame.VLG.IsEditing then exit;
 
     Key := VK_UNKNOWN;
-    ModalResult := mrCancel;
+    ModalResult := mrCancel
   end;
 end;
 
 procedure TFieldValueLabelEditor.FormShow(Sender: TObject);
 begin
-  FGridFrame.NewLineBtn.Click;
-  ValueLabelNameEdit.SetFocus;
+  if FGridFrame.ValueLabelSet.Name <> '' then // assume existing VL set.
+  begin
+    ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
+    FGridFrame.VLG.SetFocus;
+    CancelBtn.Enabled := false
+  end else begin
+    FGridFrame.NewLineBtn.Click;
+    ValueLabelNameEdit.SetFocus;
+  end;
 end;
 
 procedure TFieldValueLabelEditor.ValueLabelNameEditEditingDone(Sender: TObject);
@@ -161,18 +145,31 @@ begin
   FHintWindow.ActivateHint(R, Msg);
 end;
 
-procedure TFieldValueLabelEditor.SetValueLabelSets(AValue: TEpiValueLabelSets);
+procedure TFieldValueLabelEditor.SetValueLabelSet(AValue: TEpiValueLabelSet);
 begin
-  if FValueLabelSets = AValue then Exit;
-  FValueLabelSets := AValue;
+  if FGridFrame.ValueLabelSet = AValue then Exit;
+  FGridFrame.ValueLabelSet := AValue;
+end;
+
+function TFieldValueLabelEditor.GetValueLabelSet: TEpiValueLabelSet;
+begin
+  result := FGridFrame.ValueLabelSet;
 end;
 
 constructor TFieldValueLabelEditor.Create(TheOwner: TComponent;
-  AValueLabelSet: TEpiValueLabelSets; FieldType: TEpiFieldType);
+  ValueLabelSets: TEpiValueLabelSets);
 begin
   inherited Create(TheOwner);
-  FValueLabelSets := AValueLabelSet;
-  FFieldType := FieldType;
+  FValueLabelSets := ValueLabelSets;
+
+  FGridFrame := TValueLabelGridFrame.Create(Self);
+  with FGridFrame do
+  begin
+    // Setup:
+    OnShowHintMsg := @ShowHintMsg;
+    Align := alClient;
+    Parent := Panel2;
+  end;
 end;
 
 end.

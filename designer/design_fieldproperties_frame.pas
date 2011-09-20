@@ -19,6 +19,7 @@ type
     Bevel2: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
+    ManageValueLabelsBtn: TButton;
     CalcFieldLabel: TLabel;
     ForcePickListChkBox: TCheckBox;
     CompareToCombo: TComboBox;
@@ -113,7 +114,7 @@ type
     Label12: TLabel;
     LengthEdit: TEdit;
     LengthLabel: TLabel;
-    ManageValueLabelsButton: TButton;
+    AddEditValueLabelBtn: TButton;
     NameEdit: TEdit;
     QuestionEdit: TEdit;
     QuestionLabel: TLabel;
@@ -130,7 +131,8 @@ type
     ValueLabelWriteToComboBox: TComboBox;
     procedure AddJumpBtnClick(Sender: TObject);
     procedure LengthEditEditingDone(Sender: TObject);
-    procedure ManageValueLabelsButtonClick(Sender: TObject);
+    procedure AddEditValueLabelBtnClick(Sender: TObject);
+    procedure ManageValueLabelsBtnClick(Sender: TObject);
     procedure NoCalcRadioChange(Sender: TObject);
     procedure RangeEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure RemoveJumpBtnClick(Sender: TObject);
@@ -148,6 +150,7 @@ type
     FNilValueLabel: TObject;
     function  GetField: TEpiField;
     function  UpdateValueLabels: boolean;
+    function  HasSelectedValueLabel(out ValueLabelSet: TEpiValueLabelSet): boolean;
     procedure UpdateValueLabelWriteTo;
     procedure UpdateComparison;
     procedure ValueLabelSetHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
@@ -191,7 +194,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLProc, valuelabelseditor_form, field_valuelabelseditor_form, epimiscutils, epiranges,
+  LCLProc, valuelabelseditor_form2, valuelabelseditor_form, field_valuelabelseditor_form, epimiscutils, epiranges,
   math, epidocument, epiconvertutils, main, epistringutils;
 
 resourcestring
@@ -378,6 +381,13 @@ begin
   ValueLabelComboBox.ItemIndex := Idx;
 
   result := (PreSelectedVLSet <> ValueLabelComboBox.Items.Objects[Idx]);
+end;
+
+function TFieldPropertiesFrame.HasSelectedValueLabel(out
+  ValueLabelSet: TEpiValueLabelSet): boolean;
+begin
+  ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
+  result := ValueLabelSet <> FNilValueLabel;
 end;
 
 procedure TFieldPropertiesFrame.UpdateValueLabelWriteTo;
@@ -725,20 +735,38 @@ begin
   TEdit(PJumpComponents(DoAddNewJump)^.ValueEdit).SetFocus;
 end;
 
-procedure TFieldPropertiesFrame.ManageValueLabelsButtonClick(Sender: TObject);
+procedure TFieldPropertiesFrame.AddEditValueLabelBtnClick(Sender: TObject);
 var
   VLEdit: TFieldValueLabelEditor;
+  NewVL: Boolean;
+  VLSet: TEpiValueLabelSet;
 begin
-  VLEdit := TFieldValueLabelEditor.Create(Self, FValueLabelSets, Field.FieldType);
+  NewVL := false;
+
+  VLEdit := TFieldValueLabelEditor.Create(Self, FValueLabelSets);
+  if HasSelectedValueLabel(VLSet) then
+  begin
+    VLEdit.ValueLabelSet := VLSet
+  end else begin
+    VLEdit.ValueLabelSet := FValueLabelSets.NewValueLabelSet(Field.FieldType);
+    NewVL := true;
+  end;
+
   if VLEdit.ShowModal = mrOK then
   begin
-    Field.ValueLabelSet := VLEdit.ResultValueLabelSet;
+    Field.ValueLabelSet := VLEdit.ValueLabelSet;
     UpdateValueLabels;
   end else begin
-    VLEdit.ResultValueLabelSet.Free;
+    if NewVL then
+      VLEdit.ValueLabelSet.Free;
   end;
 
   VLEDit.Free;
+end;
+
+procedure TFieldPropertiesFrame.ManageValueLabelsBtnClick(Sender: TObject);
+begin
+  ShowValueLabelEditor2(FValueLabelSets);
 end;
 
 procedure TFieldPropertiesFrame.NoCalcRadioChange(Sender: TObject);

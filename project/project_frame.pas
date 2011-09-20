@@ -95,7 +95,7 @@ implementation
 uses
   design_frame, Clipbrd, epimiscutils,
   epiexport, main, settings2, settings2_var, epistringutils,
-  valuelabelseditor_form, epidatafilestypes,
+  valuelabelseditor_form2, epidatafilestypes,
   strutils, managerprocs, Menus, LCLType, LCLIntf, project_settings,
   shortcuts;
 
@@ -236,7 +236,7 @@ end;
 
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
 begin
-  GetValueLabelsEditor(EpiDocument).Show;
+  ShowValueLabelEditor2(EpiDocument.ValueLabelSets);
 end;
 
 procedure TProjectFrame.OnDataFileChange(Sender: TObject;
@@ -448,7 +448,7 @@ procedure TProjectFrame.DoCloseProject;
 begin
   if not Assigned(FEpiDocument) then exit;
   FreeAndNil(FEpiDocument);
-  CloseValueLabelsEditor;
+  CloseValueLabelEditor2;
 
   // TODO : Delete ALL dataforms!
   FreeAndNil(FActiveFrame);
@@ -698,7 +698,7 @@ end;
 
 procedure TProjectFrame.RestoreDefaultPos;
 begin
-  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
+//  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
   if Assigned(FActiveFrame) then
     TDesignFrame(FActiveFrame).RestoreDefaultPos;
 end;
@@ -706,8 +706,8 @@ end;
 procedure TProjectFrame.UpdateFrame;
 begin
   UpdateShortCuts;
-  if ValueLabelsEditorCreated then
-    GetValueLabelsEditor(EpiDocument).UpdateSettings;
+//  if ValueLabelsEditorCreated then
+//    GetValueLabelsEditor(EpiDocument).UpdateSettings;
 
   // TODO : Update all frames.
   if Assigned(FActiveFrame) then
