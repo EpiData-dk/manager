@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, VirtualTrees, epivaluelabels,
-  epidatafilestypes, LCLType, ComCtrls, design_types;
+  epidatafilestypes, LCLType, ComCtrls, design_types, epicustombase;
 
 type
 
@@ -37,6 +37,8 @@ type
     { Other frame parts }
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FValueLabelSet: TEpiValueLabelSet;
+    procedure UpdateGrid;
+    procedure EventHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
     function  ValueLabelFromNode(Node: PVirtualNode): TEpiCustomValueLabel;
     procedure DoShowHintMsg(Ctrl: TControl; Const Msg: String); overload;
@@ -158,7 +160,8 @@ begin
   VLG.BeginUpdate;
 
   Last := VLG.GetLast();
-  Node := VLG.AddChild(nil, FValueLabelSet.NewValueLabel);
+  FValueLabelSet.NewValueLabel;
+  Node := VLG.GetLast();
 
   if FValueLabelSet.LabelType in [ftFloat,ftInteger] then
   begin
@@ -225,12 +228,12 @@ procedure TValueLabelGridFrame.VLGInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
   Node^.CheckType := ctCheckBox;
-  if not Assigned(ValueLabelFromNode(Node)) then
+{  if not Assigned(ValueLabelFromNode(Node)) then
   begin
     Pointer(Sender.GetNodeData(Node)^) := FValueLabelSet[Node^.Index];
     if ValueLabelFromNode(Node).IsMissingValue then
       Node^.CheckState := csCheckedNormal;
-  end;
+  end;}
 end;
 
 procedure TValueLabelGridFrame.VLGKeyDown(Sender: TObject; var Key: Word;
@@ -303,11 +306,8 @@ begin
   VLG.EditNode(VLG.FocusedNode, VLG.FocusedColumn);
 end;
 
-procedure TValueLabelGridFrame.SetValueLabelSet(AValue: TEpiValueLabelSet);
+procedure TValueLabelGridFrame.UpdateGrid;
 begin
-  if FValueLabelSet = AValue then Exit;
-  FValueLabelSet := AValue;
-
   VLG.Clear;
   if Assigned(FValueLabelSet) then
     VLG.RootNodeCount := FValueLabelSet.Count
@@ -315,10 +315,50 @@ begin
     VLG.RootNodeCount := 0;
 end;
 
+procedure TValueLabelGridFrame.EventHook(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  case EventGroup of
+    eegCustomBase:
+      begin
+        case TEpiCustomChangeEventType(EventType) of
+          ecceDestroy:
+            begin
+              FValueLabelSet := nil;
+              UpdateGrid;
+            end;
+          ecceUpdate,
+          ecceAddItem,
+          ecceDelItem: UpdateGrid;
+          ecceSetItem,
+          ecceSetTop,
+          ecceSetLeft,
+          ecceText,
+          ecceName:    Exit;
+        end;
+      end;
+  end;
+end;
+
+procedure TValueLabelGridFrame.SetValueLabelSet(AValue: TEpiValueLabelSet);
+begin
+  if FValueLabelSet = AValue then Exit;
+
+  if Assigned(FValueLabelSet) then
+    FValueLabelSet.UnRegisterOnChangeHook(@EventHook);
+
+  FValueLabelSet := AValue;
+
+  if Assigned(FValueLabelSet) then
+    FValueLabelSet.RegisterOnChangeHook(@EventHook, true);
+
+  UpdateGrid;
+end;
+
 function TValueLabelGridFrame.ValueLabelFromNode(Node: PVirtualNode
   ): TEpiCustomValueLabel;
 begin
-  Result := TEpiCustomValueLabel(VLG.GetNodeData(Node)^);
+  Result := FValueLabelSet[Node^.Index];
 end;
 
 procedure TValueLabelGridFrame.DoShowHintMsg(Ctrl: TControl; const Msg: String);
