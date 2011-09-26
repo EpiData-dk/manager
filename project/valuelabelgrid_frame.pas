@@ -154,6 +154,7 @@ procedure TValueLabelGridFrame.DoAddLine;
 var
   Node: PVirtualNode;
   Last: PVirtualNode;
+  V1, V2: Extended;
 begin
   if not Assigned(ValueLabelSet) then exit;
 
@@ -166,7 +167,19 @@ begin
   if FValueLabelSet.LabelType in [ftFloat,ftInteger] then
   begin
     if Assigned(Last) then
-      VLG.Text[Node, 0] := FloatToStr(StrToFloat(ValueLabelFromNode(Last).ValueAsString) + 1)
+    begin
+      if FValueLabelSet.LabelType = ftInteger then
+        VLG.Text[Node, 0] := FloatToStr(StrToInt(ValueLabelFromNode(Last).ValueAsString) + 1)
+      else begin
+        if Assigned(VLG.GetPrevious(Last)) then
+        begin
+          V2 := StrToFloat(ValueLabelFromNode(Last).ValueAsString);
+          V1 := StrToFloat(ValueLabelFromNode(VLG.GetPrevious(Last)).ValueAsString);
+          VLG.Text[Node, 0] := FloatToStr(V2 + (V2 - V1));
+        end else
+          VLG.Text[Node, 0] := FloatToStr(StrToFloat(ValueLabelFromNode(Last).ValueAsString) * 2);
+      end;
+    end
     else
       VLG.Text[Node, 0] := '0';
   end;
@@ -228,11 +241,12 @@ procedure TValueLabelGridFrame.VLGInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
   Node^.CheckType := ctCheckBox;
+  if ValueLabelFromNode(Node).IsMissingValue then
+    Node^.CheckState := csCheckedNormal;
+
 {  if not Assigned(ValueLabelFromNode(Node)) then
   begin
     Pointer(Sender.GetNodeData(Node)^) := FValueLabelSet[Node^.Index];
-    if ValueLabelFromNode(Node).IsMissingValue then
-      Node^.CheckState := csCheckedNormal;
   end;}
 end;
 
@@ -244,11 +258,11 @@ begin
   case Key of
     VK_RETURN:
       begin
-        if ssCtrl in Shift then
+{        if ssCtrl in Shift then
         begin
           DoAddLine;
           Key := VK_UNKNOWN;
-        end;
+        end;}
 
         if (Shift = []) then
         begin
@@ -262,6 +276,13 @@ begin
     VK_DELETE:
       begin
         DelLineBtn.Click;
+        Key := VK_UNKNOWN;
+      end;
+    VK_N:
+      begin
+        if not (Shift = [ssCtrl]) then exit;
+
+        DoAddLine;
         Key := VK_UNKNOWN;
       end;
   end;

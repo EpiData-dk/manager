@@ -1,14 +1,15 @@
 object ValueLabelEditor2: TValueLabelEditor2
-  Left = 648
+  Left = 980
   Height = 464
-  Top = 308
+  Top = 374
   Width = 625
-  Caption = 'ValueLabelEditor2'
+  Caption = 'Valuelabel Editor'
   ClientHeight = 464
   ClientWidth = 625
   KeyPreview = True
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
   LCLVersion = '0.9.31'
   object Panel1: TPanel
     Left = 0

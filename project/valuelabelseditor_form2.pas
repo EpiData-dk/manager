@@ -30,6 +30,7 @@ type
     procedure DelBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
@@ -55,6 +56,7 @@ type
     procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
     function  ValueLabelSetFromNode(Node: PVirtualNode): TEpiValueLabelSet;
     procedure LMEditNode(var Message: TLMessage); message LM_VLEDIT_STARTEDIT;
+    procedure LMCheckFocusedNode(var Message: TLMessage); message LM_VLEDIT_FOCUSCHECK;
   private
     { ValueLabelSet(s) Hook / Update }
     FLocalUpdating: boolean;
@@ -110,13 +112,16 @@ procedure TValueLabelEditor2.VLSetsTreeFocusChanging(Sender: TBaseVirtualTree;
   OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
   var Allowed: Boolean);
 begin
+  if OldNode = NewNode then exit;
+
   if Assigned(OldNode) then
-  begin
     Allowed := FGridFrame.ValidateGridEntries;
-    if not Allowed then exit;
-  end;
+
+  if not Allowed then exit;
 
   FGridFrame.ValueLabelSet := ValueLabelSetFromNode(NewNode);
+
+  PostMessage(Self.Handle, LM_VLEDIT_FOCUSCHECK, WPARAM(NewNode), 0);
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeGetImageIndex(Sender: TBaseVirtualTree;
@@ -162,6 +167,8 @@ procedure TValueLabelEditor2.VLSetsTreeNewText(Sender: TBaseVirtualTree;
 var
   S: String;
 begin
+  FLocalUpdating := true;
+
   if Trim(NewText) = '' then
   begin
     DoShowHintMsg(nil, VLSetsTree, 'Value label name must not be empty!');
@@ -173,9 +180,8 @@ begin
   S := ValueLabelSetFromNode(Node).Name;
   ValueLabelSetFromNode(Node).Name := NewText;
   if S = ValueLabelSetFromNode(Node).Name then
-  begin
     DoShowHintMsg(nil, VLSetsTree, 'Value label name already used!');
-  end;
+  FLocalUpdating := false;
 end;
 
 procedure TValueLabelEditor2.FormCreate(Sender: TObject);
@@ -188,6 +194,16 @@ begin
     ValueLabelSet := nil;
     OnShowHintMsg := @DoShowHintMsg;
     TabOrder := Panel1.TabOrder + 1;
+  end;
+end;
+
+procedure TValueLabelEditor2.FormDeactivate(Sender: TObject);
+begin
+  if (Assigned(FValueLabelSets)) and
+     (Assigned(FGridFrame.ValueLabelSet)) and
+     (not FGridFrame.ValidateGridEntries) then
+  begin
+    Self.SetFocus;
   end;
 end;
 
@@ -313,6 +329,19 @@ begin
   Node := PVirtualNode(Message.WParam);
   VLSetsTree.Selected[Node] := true;
   VLSetsTree.EditNode(Node, -1);
+end;
+
+procedure TValueLabelEditor2.LMCheckFocusedNode(var Message: TLMessage);
+var
+  Node: PVirtualNode;
+begin
+  Node := PVirtualNode(Message.WParam);
+
+  if VLSetsTree.FocusedNode <> Node then
+    VLSetsTree.FocusedNode := Node;
+
+  if not VLSetsTree.Selected[Node] then
+    VLSetsTree.Selected[Node] := true;
 end;
 
 procedure TValueLabelEditor2.UpdateVLSetsTree;

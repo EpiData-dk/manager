@@ -3,7 +3,7 @@ object FieldValueLabelEditor: TFieldValueLabelEditor
   Height = 581
   Top = 278
   Width = 576
-  Caption = 'FieldValueLabelEditor'
+  Caption = 'Field Valuelabel Editor'
   ClientHeight = 581
   ClientWidth = 576
   KeyPreview = True

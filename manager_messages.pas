@@ -24,6 +24,9 @@ const
 
   // Value Label Editor (2) messages
   LM_VLEDIT_STARTEDIT  = LM_MAIN_LAST + 1;        // WParam = PVirtualNode.
+  LM_VLEDIT_FOCUSCHECK = LM_VLEDIT_STARTEDIT + 1; // WParam = PVirtualNode.
+  // Last ValueLabelEditor message... always update when inserting new messages.!
+  LM_VLEDIT_LAST       = LM_VLEDIT_FOCUSCHECK;
 
 implementation
 
