@@ -19,11 +19,15 @@ unitdir=designer \
 	settings \
 	tools \
 	utils \
-	$(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET) $(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM) \
+	$(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET) \
+	$(LAZ_PATH)/packager/units/$(CPU_TARGET)-$(OS_TARGET) \
+	$(LAZ_PATH)/lcl/units/$(CPU_TARGET)-$(OS_TARGET)/$(LCL_PLATFORM) \
 	$(CORE_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
 	$(DCPCRYPT_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET) \
 	$(LNET_PATH)/lazaruspackage/lib/$(CPU_TARGET)-$(OS_TARGET) \
-	$(THTMLPORT_PATH)/package/units/$(CPU_TARGET)-$(OS_TARGET) \
+	$(THTMLPORT_PATH)/units/$(CPU_TARGET)-$(OS_TARGET) \
+	$(VIRTUALTREEVIEW_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM) \
+	$(LCLEXTENSIONS_PATH)/lib/$(CPU_TARGET)-$(OS_TARGET)-$(LCL_PLATFORM) \
 	.
 targetdir=.
 includedir=include \
@@ -84,7 +88,15 @@ revisioninc:
 	./update_revision.sh
 
 thtmlport:
-	$(MAKE) -C $(THTMLPORT_PATH)/package all
+	$(MAKE) -C $(THTMLPORT_PATH) all
+
+lclextensions:
+	$(MAKE) -C $(LCLEXTENSIONS_PATH) all
+
+virtualtreeview:
+	$(MAKE) -C $(VIRTUALTREEVIEW_PATH) all
+
+managerlibs: thtmlport lclextensions virtualtreeview
 
 core:
 	$(MAKE) -C $(CORE_PATH) all
@@ -95,11 +107,11 @@ core_debug:
 core_release:
 	$(MAKE) -C $(CORE_PATH) all OPT='$(RELEASE_OPT) $(OPT)'
 
-all:	$(COMPILER_UNITTARGETDIR) core thtmlport revisioninc
+all:	$(COMPILER_UNITTARGETDIR) core managerlibs revisioninc
 	$(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT)
 
-debug:   $(COMPILER_UNITTARGETDIR) core_debug thtmlport revisioninc
+debug:   $(COMPILER_UNITTARGETDIR) core_debug managerlibs revisioninc
 	 $(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT) OPT='$(DEBUG_OPT) $(OPT)'
 
-release: $(COMPILER_UNITTARGETDIR) core_release thtmlport revisioninc
+release: $(COMPILER_UNITTARGETDIR) core_release managerlibs revisioninc
 	 $(MAKE) --assume-new=epidatamanager.lpr epidatamanager$(EXEEXT) OPT='$(RELEASE_OPT) $(OPT)'
