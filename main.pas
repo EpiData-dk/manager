@@ -745,6 +745,7 @@ function TMainForm.ToolsCheckOpenFile(out FileName: string;
   out LocalDoc: boolean): TEpiDocument;
 var
   Dlg: TOpenDialog;
+  St: TMemoryStream;
 begin
   Result := nil;
   if Assigned(FActiveFrame) then
@@ -757,8 +758,16 @@ begin
     Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ, dfCollection]);
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     if not Dlg.Execute then exit;
-    Result := TEpiDocument.Create('');
-    Result.LoadFromFile(Dlg.FileName);
+
+    St := TMemoryStream.Create;
+    if ExtractFileExt(UTF8ToSys(Dlg.FileName)) = '.epz' then
+      ZipFileToStream(St, Dlg.FileName)
+    else
+      St.LoadFromFile(Dlg.FileName);
+
+    St.Position := 0;
+    Result := TEpiDocument.Create(ManagerSettings.StudyLang);
+    Result.LoadFromStream(St);
     LocalDoc := true;
     FileName := Dlg.FileName;
   end;

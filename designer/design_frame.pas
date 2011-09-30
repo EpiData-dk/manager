@@ -1532,16 +1532,7 @@ begin
 
       Pt := FindNewPosition(FActiveDockSite, TDesignField);
       TmpField := NewField(FieldType);
-      with TmpField do
-      begin
-        Name := FirstWord(Cbl[i]);
-{        case ManagerSettings.FieldNamingStyle of
-          fnFirstWord: FieldName := FirstWord(Cbl[i]);
-          fnAuto:      FieldName := AutoFieldName(Cbl[i]);
-        end;                       }
-//        FieldName := DataFile.CreateUniqueFieldName(FieldName);
-        Question.Text := Trim(Cbl[i]);
-      end;
+      TmpField.Question.Text := Trim(Cbl[i]);
       NewDesignControl(TDesignField, FActiveDockSite, Pt, TmpField);
     end;
   finally
