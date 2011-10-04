@@ -27,6 +27,7 @@ type
     FDocList: TStringList;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
+    procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedList: TStringList;
     procedure  ImportFile(Const FileName: string);
     procedure  ReportError(Const Msg: string);
@@ -41,6 +42,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     procedure   AddFiles(Const Files: TStrings);
+    procedure   AddDocument(Const FileName: string; Const Doc: TEpiDocument);
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
     property    SelectedList: TStringList read GetSelectedList;
@@ -62,6 +64,37 @@ begin
   if IsColumn then exit;
 
   FDocList.Move(sIndex - 1, tIndex - 1);
+end;
+
+procedure TProjectFileListFrame.AddDocumentToGrid(const FileName: string;
+  const Doc: TEpiDocument);
+var
+  Idx: Integer;
+  Ext: String;
+begin
+  Ext := ExtractFileExt(UTF8LowerCase(FileName));
+  with StructureGrid do
+  begin
+    Idx := RowCount;
+    RowCount := RowCount + 1;
+    Cells[1, Idx] := ExtractFileName(FileName);                           // Filename column.
+    Cells[2, Idx] := '1';                                                 // Include row.
+    if (ext = '.epx') or (ext ='.epz') then
+    begin
+      Cells[3, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.Created);                      // Created
+      Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.ModifiedDate);                 // Edited
+    end else begin
+      Cells[3, Idx] := 'N/A';                                             // Created
+      Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
+    end;
+    with Doc.DataFiles[0] do
+    begin
+      Cells[5, Idx] := Caption.Text;                                         // Info
+      Cells[6, Idx] := IntToStr(Sections.Count);                          // Sections
+      Cells[7, Idx] := IntToStr(Fields.Count);                            // Fields
+    end;
+  end;
+  FDocList.AddObject(FileName, Doc);
 end;
 
 procedure TProjectFileListFrame.ImportFile(const FileName: string);
@@ -108,28 +141,7 @@ begin
       St.Free;
     end;
 
-    with StructureGrid do
-    begin
-      RowCount := RowCount + 1;
-      Idx := RowCount - 1;
-      Cells[1, Idx] := ExtractFileName(FileName);                           // Filename column.
-      Cells[2, Idx] := '1';                                                 // Include row.
-      if (ext = '.epx') or (ext ='.epz') then
-      begin
-        Cells[3, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.Created);                      // Created
-        Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.ModifiedDate);                 // Edited
-      end else begin
-        Cells[3, Idx] := 'N/A';                                             // Created
-        Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
-      end;
-      with Doc.DataFiles[0] do
-      begin
-        Cells[5, Idx] := Caption.Text;                                         // Info
-        Cells[6, Idx] := IntToStr(Sections.Count);                          // Sections
-        Cells[7, Idx] := IntToStr(Fields.Count);                            // Fields
-      end;
-    end;
-    FDocList.AddObject(FileName, Doc);
+    AddDocumentToGrid(FileName, Doc);
   except
     on E: Exception do
       ReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
@@ -220,6 +232,12 @@ begin
     for i := 0 to Files.Count -1 do
       ImportFile(Files[i]);
   StructureGrid.AutoAdjustColumns;
+end;
+
+procedure TProjectFileListFrame.AddDocument(const FileName: string;
+  const Doc: TEpiDocument);
+begin
+  AddDocumentToGrid(FileName, Doc);
 end;
 
 end.

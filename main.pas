@@ -778,10 +778,20 @@ var
   F: TStaticReportsForm;
   R: TReportListBase;
   H: THtmlViewerForm;
+  S: String;
 begin
   R := nil;
 
   F := TStaticReportsForm.Create(Self, ReportClass);
+  if Assigned(FActiveFrame) and
+     Assigned(FActiveFrame.EpiDocument)
+  then
+  begin
+    S := '(Not Saved)';
+    if FActiveFrame.ProjectFileName <> '' then
+      S := FActiveFrame.ProjectFileName;
+    F.AddInitialDocument(S, FActiveFrame.EpiDocument);
+  end;
   if F.ShowModal = mrOK then
     R := F.Report;
   F.Free;

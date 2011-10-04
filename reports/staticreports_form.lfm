@@ -15,17 +15,17 @@ object StaticReportsForm: TStaticReportsForm
     Top = 466
     Width = 595
     Align = alBottom
-    ClientHeight = 46
-    ClientWidth = 591
+    ClientHeight = 50
+    ClientWidth = 595
     TabOrder = 0
     object AddFilesBtn: TBitBtn
       AnchorSideLeft.Control = Panel1
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 29
-      Top = 9
-      Width = 102
+      Height = 28
+      Top = 11
+      Width = 99
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Add Files...'
@@ -73,10 +73,10 @@ object StaticReportsForm: TStaticReportsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 526
+      Left = 531
       Height = 32
-      Top = 7
-      Width = 54
+      Top = 9
+      Width = 53
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -86,6 +86,24 @@ object StaticReportsForm: TStaticReportsForm
       ModalResult = 1
       OnClick = BitBtn1Click
       TabOrder = 1
+    end
+    object BitBtn2: TBitBtn
+      AnchorSideTop.Control = BitBtn1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = BitBtn1
+      Left = 441
+      Height = 34
+      Top = 8
+      Width = 80
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      BorderSpacing.Right = 10
+      Cancel = True
+      DefaultCaption = True
+      Kind = bkCancel
+      ModalResult = 2
+      OnClick = BitBtn2Click
+      TabOrder = 2
     end
   end
 end

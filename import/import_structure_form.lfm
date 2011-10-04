@@ -24,10 +24,10 @@ object ImportStructureForm: TImportStructureForm
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
-      Left = 613
+      Left = 614
       Height = 32
       Top = 5
-      Width = 53
+      Width = 52
       Action = OkAction
       Anchors = [akRight, akBottom]
       AutoSize = True
@@ -41,9 +41,9 @@ object ImportStructureForm: TImportStructureForm
       AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
       Left = 524
-      Height = 32
-      Top = 5
-      Width = 79
+      Height = 34
+      Top = 4
+      Width = 80
       Action = CancelAction
       Anchors = [akRight, akBottom]
       AutoSize = True
@@ -58,9 +58,9 @@ object ImportStructureForm: TImportStructureForm
       AnchorSideBottom.Control = OkApplyPanel
       AnchorSideBottom.Side = asrCenter
       Left = 11
-      Height = 29
-      Top = 6
-      Width = 102
+      Height = 28
+      Top = 7
+      Width = 99
       Action = AddFilesAction
       Anchors = [akLeft, akBottom]
       AutoSize = True
@@ -106,23 +106,24 @@ object ImportStructureForm: TImportStructureForm
   end
   object OptionsPanel: TPanel
     Left = 0
-    Height = 152
+    Height = 144
     Top = 0
     Width = 677
     Align = alTop
-    ClientHeight = 152
+    ClientHeight = 144
     ClientWidth = 677
     TabOrder = 1
     object ValueLabelsRenameGrpBox: TRadioGroup
-      AnchorSideLeft.Control = OptionsPanel
-      AnchorSideTop.Control = OptionsPanel
+      AnchorSideLeft.Control = FieldsRenameGrpBox
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = FieldsRenameGrpBox
+      AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = OptionsPanel
       AnchorSideRight.Side = asrBottom
-      Left = 11
+      Left = 294
       Height = 93
-      Top = 40
+      Top = 32
       Width = 270
-      Anchors = [akLeft]
       AutoFill = True
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -136,7 +137,7 @@ object ImportStructureForm: TImportStructureForm
       ChildSizing.ShrinkVertical = crsScaleChilds
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 74
+      ClientHeight = 76
       ClientWidth = 266
       ItemIndex = 0
       Items.Strings = (
@@ -149,21 +150,26 @@ object ImportStructureForm: TImportStructureForm
       AnchorSideLeft.Control = OptionsPanel
       AnchorSideTop.Control = OptionsPanel
       Left = 11
-      Height = 18
+      Height = 16
       Top = 6
-      Width = 162
+      Width = 160
       BorderSpacing.Left = 10
       BorderSpacing.Top = 5
       Caption = 'Import structure options:'
       ParentColor = False
     end
     object FieldsRenameGrpBox: TRadioGroup
-      Left = 296
+      AnchorSideLeft.Control = OptionsPanel
+      AnchorSideTop.Control = Label1
+      AnchorSideTop.Side = asrBottom
+      Left = 11
       Height = 93
-      Top = 40
+      Top = 32
       Width = 273
       AutoFill = True
-      Caption = 'Repeated Fields Names:'
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Repeated Field Names:'
       ChildSizing.LeftRightSpacing = 6
       ChildSizing.TopBottomSpacing = 6
       ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -172,7 +178,7 @@ object ImportStructureForm: TImportStructureForm
       ChildSizing.ShrinkVertical = crsScaleChilds
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
-      ClientHeight = 74
+      ClientHeight = 76
       ClientWidth = 269
       ItemIndex = 1
       Items.Strings = (

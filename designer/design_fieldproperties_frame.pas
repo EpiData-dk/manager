@@ -309,6 +309,8 @@ var
   j: Integer;
   S: String;
 begin
+  if not Assigned(Field) then exit(false);
+
   PreSelectedVLSet := nil;
   if ValueLabelComboBox.ItemIndex >= 0 then
     PreSelectedVLSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);

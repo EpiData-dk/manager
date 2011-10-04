@@ -5,14 +5,14 @@ begin
   // Main Form
   M_NewProject           := KeyToShortCut(VK_N, [ssCtrl]);
   M_Settings             := KeyToShortCut(VK_S, [ssAlt]);
-  M_Exit                 := KeyToShortCut(VK_F10, []);
+  M_Exit                 := KeyToShortCut(VK_Q, [ssCtrl]);
   M_OpenRecent           := KeyToShortCut(VK_UNKNOWN, [ssShift, ssCtrl]);
   M_ShowAbout            := KeyToShortCut(VK_UNKNOWN, []);
   M_CopyProjectInfo      := KeyToShortCut(VK_UNKNOWN, []);
   M_CheckVersion         := KeyToShortCut(VK_UNKNOWN, []);
   M_DefaultPos           := KeyToShortCut(VK_UNKNOWN, []);
-  M_CloseProject         := KeyToShortCut(VK_F4, [ssCtrl]);
-  M_OpenProject          := KeyToShortCut(VK_O,  [ssCtrl]);
+  M_CloseProject         := KeyToShortCut(VK_W, [ssCtrl]);
+  M_OpenProject          := KeyToShortCut(VK_O, [ssCtrl]);
   M_StartEntryClient     := KeyToShortCut(VK_UNKNOWN, []);
   M_Pack                 := KeyToShortCut(VK_UNKNOWN, []);
   M_ExportStata          := KeyToShortCut(VK_UNKNOWN, []);
@@ -23,9 +23,6 @@ begin
   M_ProjectOverviewReport:= KeyToShortCut(VK_UNKNOWN, []);
 
   // Project Frame
-{  SaveProjectAction.ShortCut := ShortCut(VK_S, [ssMeta]);
-  SaveProjectAsAction.ShortCut := ShortCut(VK_S, [ssShift, ssMeta]);}
-
   P_SaveProject                := KeyToShortCut(VK_S, [ssCtrl]);
   P_SaveProjectAs              := KeyToShortCut(VK_S, [ssCtrl, ssShift]);
   P_NewDataForm                := KeyToShortCut(VK_UNKNOWN, []);

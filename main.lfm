@@ -288,7 +288,7 @@ object MainForm: TMainForm
       Category = 'File'
       Caption = 'E&xit'
       Hint = 'Exit'
-      ShortCut = 121
+      ShortCut = 16465
       SecondaryShortCuts.Strings = (
         'Alt+Q'
       )
@@ -319,7 +319,7 @@ object MainForm: TMainForm
       Caption = 'Close Project'
       OnExecute = CloseProjectActionExecute
       OnUpdate = CloseProjectActionUpdate
-      ShortCut = 16499
+      ShortCut = 16471
     end
     object OpenProjectAction: TAction
       Category = 'File'

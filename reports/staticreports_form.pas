@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, StdCtrls, projectfilelist_frame, report_base;
+  Buttons, StdCtrls, projectfilelist_frame, report_base, epidocument;
 
 type
 
@@ -15,9 +15,11 @@ type
   TStaticReportsForm = class(TForm)
     AddFilesBtn: TBitBtn;
     BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
     Panel1: TPanel;
     procedure AddFilesBtnClick(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
   private
@@ -31,6 +33,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; ReportClass: TReportListBaseClass);
+    procedure   AddInitialDocument(Const FileName: string; Const Doc: TEpiDocument);
     class procedure RestoreDefaultPos;
     property    Report: TReportListBase read FReport;
   end;
@@ -65,7 +68,13 @@ var
   Dlg: TOpenDialog;
   F: THtmlViewerForm;
 begin
+  // Result = true, is a confirmation that the dialog was execute
+  // and the user selected some files
   Result := false;
+
+  // Do not show the dialog if a/some document(s) was pre-loaded.
+  if FProjectList.DocList.Count > 0 then exit;
+
   Files := nil;
   Dlg := nil;
 
@@ -87,6 +96,11 @@ end;
 procedure TStaticReportsForm.BitBtn1Click(Sender: TObject);
 begin
   FReport := FReportClass.Create(FProjectList.SelectedList);
+end;
+
+procedure TStaticReportsForm.BitBtn2Click(Sender: TObject);
+begin
+  FReport := nil;
 end;
 
 procedure TStaticReportsForm.FormCloseQuery(Sender: TObject;
@@ -131,6 +145,12 @@ begin
   FakeReport := FReportClass.Create(TStringList.Create);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
   FakeReport.Free;
+end;
+
+procedure TStaticReportsForm.AddInitialDocument(const FileName: string;
+  const Doc: TEpiDocument);
+begin
+  FProjectList.AddDocument(FileName, Doc);
 end;
 
 class procedure TStaticReportsForm.RestoreDefaultPos;
