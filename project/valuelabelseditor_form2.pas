@@ -272,11 +272,15 @@ begin
   if not Assigned(Node) then exit;
   FLocalUpdating := true;
 
+  VL := ValueLabelSetFromNode(Node);
+  if MessageDlg('Warning',
+    format('Are you sure you want to delete "%s"?', [VL.Name]),
+    mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+
   NewNode := VLSetsTree.GetNextSibling(Node);
   if not Assigned(NewNode) then
     NewNode := VLSetsTree.GetPreviousSibling(Node);
 
-  VL := ValueLabelSetFromNode(Node);
   VLSetsTree.DeleteNode(Node);
   VL.Free;
 

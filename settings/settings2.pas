@@ -68,10 +68,11 @@ implementation
 
 uses
   settings2_interface, settings2_var, epidatafilestypes,
-  IniFiles, strutils,
+  IniFiles, strutils, epieximtypes,
   // settings
   settings_advanced_frame, settings_fielddefinitions_frame,
   settings_general_frame, settings_visualdesign_frame,
+  settings_export,
   // project settings
   project_settings_field_frame, project_settings_general_frame,
   project_settings_study_contentdesc_frame, project_settings_study_frame,
@@ -155,6 +156,11 @@ begin
       WriteInteger(sec, 'SectionFontSize', SectionFont.Size);
       WriteInteger(sec, 'SectionFontStyle', Integer(SectionFont.Style));
       WriteInteger(sec, 'SectionFontColour', SectionFont.Color);
+
+      // Export:
+      Sec := 'export';
+      WriteInteger(sec, 'StataExportVersion', StataExportVersion);
+      WriteInteger(sec, 'StataExportEncoding', Integer(StataExportEncoding));
 
       // Project Defaults
       // - general:
@@ -261,6 +267,11 @@ begin
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
       MultipleInstances   := ReadBool(Sec, 'MultipleInstances', MultipleInstances);
+
+      // Export:
+      Sec := 'export';
+      StataExportVersion  := ReadInteger(sec, 'StataExportVersion', StataExportVersion);
+      StataExportEncoding := TEpiEncoding(ReadInteger(sec, 'StataExportEncoding', Integer(StataExportEncoding)));
 
       // Fonts
       Sec := 'fonts';
@@ -455,6 +466,7 @@ begin
     FindNodeWithText('Paths').Data               := Pointer(TSettings_PathsFrame.Create(Self));
     FindNodeWithText('Field Definitions').Data   := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
     FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
+    FindNodeWithText('Export').Data              := Pointer(TSettings_ExportFrame.Create(Self));
 
     //
     FindNodeWithText('Project Defaults').GetFirstChild.Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));

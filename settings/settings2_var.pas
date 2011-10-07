@@ -5,7 +5,7 @@ unit settings2_var;
 interface
 
 uses
-  Classes, SysUtils, epidatafilestypes, Graphics;
+  Classes, SysUtils, epidatafilestypes, Graphics, epieximtypes;
 
 type
   TManagerSettings = record
@@ -48,6 +48,10 @@ type
     FieldFont:             TFont;
     HeadingFont:           TFont;
     SectionFont:           TFont;
+
+    // Export:
+    StataExportVersion:    Byte;
+    StataExportEncoding:   TEpiEncoding;
 
     // Project Defaults
     // - general:
@@ -116,6 +120,10 @@ var
     FieldFont:             nil;
     HeadingFont:           nil;
     SectionFont:           nil;
+
+    // Export:
+    StataExportVersion:    $71;                    // Default to Version 8
+    StataExportEncoding:   eeUTF8;
 
 
     // Project Defaults

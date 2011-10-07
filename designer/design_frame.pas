@@ -1280,7 +1280,7 @@ var
 begin
   MainForm.BeginUpdatingForm;
 
-  Result := AClass.Create(Self);
+  Result := AClass.Create(AParent);
   Ctrl := TControlEx(Result);
 
   (Ctrl as IDesignEpiControl).EpiControl := EpiControl;
@@ -1290,7 +1290,6 @@ begin
     OnMouseUp   := @DesignControlMouseUp;
     OnStartDock := @DesignControlStartDock;
     Dock(AParent, Bounds(Pos.X, Pos.Y, Width, Height));
-//    Parent      := AParent;
   end;
 
   with EpiControl do
@@ -1317,7 +1316,7 @@ const
 begin
   MainForm.BeginUpdatingForm;
 
-  Ctrl := TDesignSection.Create(Self);
+  Ctrl := TDesignSection.Create(FDesignerBox);
   Result := Ctrl;
 
   Ctrl.EpiControl := EpiSection;
@@ -2129,12 +2128,14 @@ var
   XCtrl, YCtrl: TControl;
   Dx: Integer;
   Dy: Integer;
+  OldDockSite: TWinControl;
 begin
   // Sender = the site being dragged onto.
   // Source.control = the control being dragged.
+  OldDockSite := TDesignDockObject(Source).FOldDockSite;
 
   RemoveFromPositionHandler(
-    (TDesignDockObject(Source).FOldDockSite as IPositionHandler),
+    (OldDockSite as IPositionHandler),
     Source.Control);
   EpiControl := (Source.Control as IDesignEpiControl).EpiControl;
 
@@ -2179,12 +2180,19 @@ begin
   if NSection = OSection then exit;
 
   // Remove from old parent
+  // - TComponent
+  OldDockSite.RemoveComponent(Source.Control);
+  // - EpiData Core
   TEpiCustomList(EpiControl.Owner).RemoveItem(EpiControl);
+
   // Insert into new
+  // - EpiData Core
   if EpiControl is TEpiField then
     NSection.Fields.AddItem(EpiControl)
   else
     NSection.Headings.AddItem(EpiControl);
+  // - TComponent
+  TComponent(Sender).InsertComponent(Source.Control);
 end;
 
 procedure TDesignFrame.DockSiteUnDock(Sender: TObject; Client: TControl;

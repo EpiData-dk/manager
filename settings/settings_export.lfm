@@ -1,0 +1,72 @@
+object Settings_ExportFrame: TSettings_ExportFrame
+  Left = 0
+  Height = 371
+  Top = 0
+  Width = 394
+  ClientHeight = 371
+  ClientWidth = 394
+  TabOrder = 0
+  DesignLeft = 924
+  DesignTop = 286
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrCenter
+    AnchorSideBottom.Control = StataVersionCmbBx
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 16
+    Top = 21
+    Width = 90
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 10
+    Caption = 'Stata version:'
+    ParentColor = False
+  end
+  object StataVersionCmbBx: TComboBox
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 150
+    Height = 27
+    Top = 10
+    Width = 234
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    ItemHeight = 0
+    Style = csDropDownList
+    TabOrder = 0
+  end
+  object Label2: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideBottom.Control = StataEncodingCmbBx
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 16
+    Top = 58
+    Width = 124
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 10
+    Caption = 'Stata file encoding:'
+    ParentColor = False
+  end
+  object StataEncodingCmbBx: TComboBox
+    AnchorSideTop.Control = StataVersionCmbBx
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 150
+    Height = 27
+    Top = 47
+    Width = 234
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    ItemHeight = 0
+    Style = csDropDownList
+    TabOrder = 1
+  end
+end

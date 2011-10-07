@@ -1,20 +1,20 @@
 object Settings_GeneralFrame: TSettings_GeneralFrame
   Left = 0
-  Height = 414
+  Height = 389
   Top = 0
   Width = 525
-  ClientHeight = 414
+  ClientHeight = 389
   ClientWidth = 525
   TabOrder = 0
   DesignLeft = 2090
-  DesignTop = 341
+  DesignTop = 366
   object DefaultPasteCombo: TComboBox
     AnchorSideTop.Control = MultipleInstanceChkbox
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 205
-    Height = 27
+    Height = 25
     Top = 138
     Width = 310
     Anchors = [akTop, akLeft, akRight]
@@ -35,9 +35,9 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Control = DefaultPasteCombo
     AnchorSideTop.Side = asrCenter
     Left = 10
-    Height = 18
+    Height = 16
     Top = 142
-    Width = 172
+    Width = 167
     BorderSpacing.Left = 10
     Caption = 'Default paste special type'
     ParentColor = False
@@ -47,9 +47,9 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Control = DefaultSaveTypeComboBox
     AnchorSideTop.Side = asrCenter
     Left = 10
-    Height = 18
-    Top = 181
-    Width = 117
+    Height = 16
+    Top = 179
+    Width = 113
     BorderSpacing.Left = 10
     Caption = 'Default save type'
     ParentColor = False
@@ -61,8 +61,8 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Control = DefaultPasteCombo
     AnchorSideRight.Side = asrBottom
     Left = 205
-    Height = 31
-    Top = 175
+    Height = 29
+    Top = 173
     Width = 310
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
@@ -76,7 +76,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 10
-    Width = 173
+    Width = 166
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Save window positions'
@@ -89,7 +89,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 42
-    Width = 152
+    Width = 147
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Show Welcome Box'
@@ -102,7 +102,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 74
-    Width = 147
+    Width = 141
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Show Work Toolbar'
@@ -115,7 +115,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 106
-    Width = 260
+    Width = 251
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Allow multiple instances of program'
