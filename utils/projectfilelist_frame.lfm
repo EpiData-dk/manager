@@ -6,7 +6,7 @@ object ProjectFileListFrame: TProjectFileListFrame
   ClientHeight = 553
   ClientWidth = 764
   TabOrder = 0
-  DesignLeft = 899
+  DesignLeft = 834
   DesignTop = 302
   object ErrorListBox: TListBox
     Left = 0
@@ -15,7 +15,7 @@ object ProjectFileListFrame: TProjectFileListFrame
     Width = 764
     Align = alBottom
     ItemHeight = 0
-    ScrollWidth = 762
+    ScrollWidth = 760
     TabOrder = 0
     TopIndex = -1
     Visible = False

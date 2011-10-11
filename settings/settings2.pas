@@ -159,7 +159,7 @@ begin
 
       // Export:
       Sec := 'export';
-      WriteInteger(sec, 'StataExportVersion', StataExportVersion);
+      WriteInteger(sec, 'StataExportVersion', Integer(StataExportVersion));
       WriteInteger(sec, 'StataExportEncoding', Integer(StataExportEncoding));
 
       // Project Defaults
@@ -270,7 +270,7 @@ begin
 
       // Export:
       Sec := 'export';
-      StataExportVersion  := ReadInteger(sec, 'StataExportVersion', StataExportVersion);
+      StataExportVersion  := TEpiStataVersion(ReadInteger(sec, 'StataExportVersion', Integer(StataExportVersion)));
       StataExportEncoding := TEpiEncoding(ReadInteger(sec, 'StataExportEncoding', Integer(StataExportEncoding)));
 
       // Fonts

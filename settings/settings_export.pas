@@ -86,7 +86,7 @@ function TSettings_ExportFrame.ApplySettings: boolean;
 begin
   with FData ^ do
   begin
-    StataExportVersion := PtrUInt(StataVersionCmbBx.Items.Objects[StataVersionCmbBx.ItemIndex]);
+    StataExportVersion := TEpiStataVersion(PtrUInt(StataVersionCmbBx.Items.Objects[StataVersionCmbBx.ItemIndex]));
     StataExportEncoding := TEpiEncoding(PtrUInt(StataEncodingCmbBx.Items.Objects[StataEncodingCmbBx.ItemIndex]));
   end;
   result := true;

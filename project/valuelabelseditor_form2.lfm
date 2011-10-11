@@ -1,7 +1,7 @@
 object ValueLabelEditor2: TValueLabelEditor2
-  Left = 980
+  Left = 619
   Height = 464
-  Top = 374
+  Top = 208
   Width = 625
   Caption = 'Valuelabel Editor'
   ClientHeight = 464
@@ -92,10 +92,10 @@ object ValueLabelEditor2: TValueLabelEditor2
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel2
       AnchorSideRight.Side = asrBottom
-      Left = 542
-      Height = 34
-      Top = 8
-      Width = 72
+      Left = 546
+      Height = 30
+      Top = 10
+      Width = 68
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10

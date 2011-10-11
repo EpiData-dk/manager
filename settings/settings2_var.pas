@@ -50,7 +50,7 @@ type
     SectionFont:           TFont;
 
     // Export:
-    StataExportVersion:    Byte;
+    StataExportVersion:    TEpiStataVersion;
     StataExportEncoding:   TEpiEncoding;
 
     // Project Defaults
@@ -122,7 +122,7 @@ var
     SectionFont:           nil;
 
     // Export:
-    StataExportVersion:    $71;                    // Default to Version 8
+    StataExportVersion:    dta8;   // Default to Version 8
     StataExportEncoding:   eeUTF8;
 
 

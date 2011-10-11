@@ -647,7 +647,7 @@ begin
       end;
     end
     else if ext = '.dta' then
-      Importer.ImportStata(Fn, FDataFile, true);
+      Importer.ImportStata(Fn, TEpiDocument(FDataFile.RootOwner), FDataFile, true);
     FImportedFileName := fn;
 
     // Update Title with imported file description.
@@ -1491,6 +1491,7 @@ begin
     begin
       if Name = '' then
         Name := ManagerSettings.FieldNamePrefix + IntToStr(DataFile.Fields.Count);
+      ShowValueLabel := ManagerSettings.ShowValuelabelText;
     end;
 
     Cls := TDesignField;

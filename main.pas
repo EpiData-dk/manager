@@ -506,6 +506,15 @@ begin
 
     FN := ExtractFileNameWithoutExt(FN);
     Exporter := TEpiExport.Create;
+    Exporter.ExportEncoding := ManagerSettings.StataExportEncoding;
+    with Exporter.ExportLines do
+    begin
+      Add('Exported from EpiData Manager ' + GetEpiVersionInfo(ManagerVersion));
+      Add('On: ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now));
+      Add('Title: ' + Doc.Study.Title.Text);
+      Add('Version: ' + Doc.Study.Version);
+    end;
+
     SaveDlg := TSaveDialog.Create(Self);
     SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     SaveDlg.Filter := GetEpiDialogFilter(dfExport);
@@ -521,7 +530,7 @@ begin
         SaveDlg.FileName := FN + '-' + StringReplace(Trim(Caption.Text), ' ', '_', [rfReplaceAll]) + '.dta';
       if not SaveDlg.Execute then exit;
 
-      Exporter.ExportStata(SaveDlg.FileName, TEpiDataFile(F.SelectedDatafiles[i]));
+      Exporter.ExportStata(SaveDlg.FileName, Doc, 0, ManagerSettings.StataExportVersion);
     end;
   finally
     if LocalDoc and Assigned(Doc) then

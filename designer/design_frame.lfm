@@ -8,7 +8,7 @@ object DesignFrame: TDesignFrame
   OnResize = FrameResize
   TabOrder = 0
   DesignLeft = 552
-  DesignTop = 271
+  DesignTop = 220
   object Panel1: TPanel
     Left = 635
     Height = 600
