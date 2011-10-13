@@ -23,6 +23,7 @@ type
     Panel1: TPanel;
     Panel3: TPanel;
     procedure Button1Click(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure OkBtnClick(Sender: TObject);
@@ -38,6 +39,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; ValueLabelSets: TEpiValueLabelSets);
+    class procedure RestoreDefaultPos;
     property  ValueLabelSets: TEpiValueLabelSets read FValueLabelSets;
     property  ValueLabelSet: TEpiValueLabelSet read GetValueLabelSet write SetValueLabelSet;
   end;
@@ -47,7 +49,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLIntf, LMessages, valuelabelseditor_form, epidocument;
+  LCLIntf, LMessages, valuelabelseditor_form, epidocument, settings2_var, settings2;
 
   { TFieldValueLabelEditor }
 
@@ -86,6 +88,14 @@ begin
   BringToFront;
 end;
 
+procedure TFieldValueLabelEditor.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  CanClose := true;
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'FieldValueLabelEditor');
+end;
+
 procedure TFieldValueLabelEditor.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -110,6 +120,8 @@ begin
     FGridFrame.NewLineBtn.Click;
     ValueLabelNameEdit.SetFocus;
   end;
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'FieldValueLabelEditor');
 end;
 
 procedure TFieldValueLabelEditor.ValueLabelNameEditEditingDone(Sender: TObject);
@@ -170,6 +182,19 @@ begin
     Align := alClient;
     Parent := Panel2;
   end;
+end;
+
+class procedure TFieldValueLabelEditor.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 600;
+  Aform.Height := 480;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'FieldValueLabelEditor');
+  AForm.free;
 end;
 
 end.

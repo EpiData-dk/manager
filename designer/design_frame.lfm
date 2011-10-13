@@ -2076,6 +2076,7 @@ object DesignFrame: TDesignFrame
   end
   object DesignerActionList: TActionList
     Images = DesignerImageList
+    OnUpdate = DesignerActionListUpdate
     left = 248
     top = 352
     object EditControlAction: TAction
@@ -2155,7 +2156,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New Integer Field'
       ImageIndex = 1
       OnExecute = NewIntFieldActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewIntFieldFastAction: TAction
       Category = 'Controls'
@@ -2163,7 +2163,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New Integer Field'
       ImageIndex = 1
       OnExecute = NewIntFieldFastActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewFloatFieldAction: TAction
       Category = 'Controls'
@@ -2171,14 +2170,12 @@ object DesignFrame: TDesignFrame
       Hint = 'New Float Field'
       ImageIndex = 2
       OnExecute = NewFloatFieldActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewFloatFieldFastAction: TAction
       Category = 'Controls'
       Caption = 'New Float Field'
       ImageIndex = 2
       OnExecute = NewFloatFieldFastActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewStringFieldAction: TAction
       Category = 'Controls'
@@ -2186,7 +2183,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New String Field'
       ImageIndex = 3
       OnExecute = NewStringFieldActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewStringFieldFastAction: TAction
       Category = 'Controls'
@@ -2194,7 +2190,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New String Field'
       ImageIndex = 3
       OnExecute = NewStringFieldFastActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewDMYFieldAction: TAction
       Category = 'Controls'
@@ -2202,7 +2197,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New DMY Field'
       ImageIndex = 4
       OnExecute = NewDMYFieldActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewDMYFieldFastAction: TAction
       Category = 'Controls'
@@ -2210,7 +2204,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New DMY Field'
       ImageIndex = 4
       OnExecute = NewDMYFieldFastActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewMDYFieldAction: TAction
       Category = 'Controls'
@@ -2218,7 +2211,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New MDY Field'
       ImageIndex = 5
       OnExecute = NewMDYFieldActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewMDYFieldFastAction: TAction
       Category = 'Controls'
@@ -2226,7 +2218,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New MDY Field'
       ImageIndex = 5
       OnExecute = NewMDYFieldFastActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewYMDFieldAction: TAction
       Category = 'Controls'
@@ -2234,7 +2225,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New YMD Field'
       ImageIndex = 6
       OnExecute = NewYMDFieldActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewYMDFieldFastAction: TAction
       Category = 'Controls'
@@ -2242,7 +2232,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New YMD Field'
       ImageIndex = 6
       OnExecute = NewYMDFieldFastActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewHeadingAction: TAction
       Category = 'Controls'
@@ -2250,7 +2239,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New Heading'
       ImageIndex = 8
       OnExecute = NewHeadingActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewHeadingFastAction: TAction
       Category = 'Controls'
@@ -2258,7 +2246,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New Heading'
       ImageIndex = 8
       OnExecute = NewHeadingFastActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object NewSectionAction: TAction
       Category = 'Controls'
@@ -2266,7 +2253,6 @@ object DesignFrame: TDesignFrame
       Hint = 'New Section'
       ImageIndex = 9
       OnExecute = NewSectionActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object DeleteControlFastAction: TAction
       Category = 'Edit'
@@ -2282,7 +2268,6 @@ object DesignFrame: TDesignFrame
       Hint = 'Erase All'
       ImageIndex = 16
       OnExecute = DeleteAllControlsActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object PasteAsHeadingAction: TAction
       Category = 'Edit'
@@ -2290,7 +2275,6 @@ object DesignFrame: TDesignFrame
       Hint = 'Paste As Headings...'
       ImageIndex = 8
       OnExecute = PasteAsHeadingActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object PasteAsIntAction: TAction
       Category = 'Edit'
@@ -2298,7 +2282,6 @@ object DesignFrame: TDesignFrame
       Hint = 'Paste As Integer...'
       ImageIndex = 1
       OnExecute = PasteAsIntActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object PasteAsFloatAction: TAction
       Category = 'Edit'
@@ -2306,7 +2289,6 @@ object DesignFrame: TDesignFrame
       Hint = 'Paste As Float...'
       ImageIndex = 2
       OnExecute = PasteAsFloatActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object PasteAsStringAction: TAction
       Category = 'Edit'
@@ -2314,7 +2296,6 @@ object DesignFrame: TDesignFrame
       Hint = 'Paste As String...'
       ImageIndex = 3
       OnExecute = PasteAsStringActionExecute
-      OnUpdate = NoControlActionUpdate
     end
     object CopyControlAction: TAction
       Category = 'Edit'

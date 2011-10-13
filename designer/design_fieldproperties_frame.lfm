@@ -6,8 +6,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
   Constraints.MinHeight = 365
   Constraints.MinWidth = 380
   TabOrder = 0
-  DesignLeft = 615
-  DesignTop = 404
+  DesignLeft = 1203
+  DesignTop = 282
   object FieldPageControl: TPageControl[0]
     AnchorSideLeft.Control = Owner
     Left = 0

@@ -171,6 +171,8 @@ type
     procedure   DeleteControlActionExecute(Sender: TObject);
     procedure   DeleteControlActionUpdate(Sender: TObject);
     procedure   DeleteControlFastActionExecute(Sender: TObject);
+    procedure DesignerActionListUpdate(AAction: TBasicAction;
+      var Handled: Boolean);
     procedure   EditControlActionExecute(Sender: TObject);
     procedure   FrameResize(Sender: TObject);
     procedure   ImportDataFileActionExecute(Sender: TObject);
@@ -198,7 +200,6 @@ type
     procedure   NewStringFieldFastActionExecute(Sender: TObject);
     procedure   NewYMDFieldActionExecute(Sender: TObject);
     procedure   NewYMDFieldFastActionExecute(Sender: TObject);
-    procedure   NoControlActionUpdate(Sender: TObject);
     procedure   PasteAsFloatActionExecute(Sender: TObject);
     procedure   PasteAsHeadingActionExecute(Sender: TObject);
     procedure   PasteAsIntActionExecute(Sender: TObject);
@@ -507,14 +508,14 @@ end;
 procedure TDesignFrame.ControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-  (MainForm.Active) and
-  (Assigned(FActiveControl));
+    TAction(Sender).Enabled and
+    (Assigned(FActiveControl));
 end;
 
 procedure TDesignFrame.DeleteControlActionUpdate(Sender: TObject);
 begin
-   TAction(Sender).Enabled :=
-    (MainForm.Active) and
+  TAction(Sender).Enabled :=
+    TAction(Sender).Enabled and
     (Assigned(FActiveControl)) and
     (FActiveControl <> FDesignerBox);
 end;
@@ -524,15 +525,18 @@ begin
   PostMessage(Self.Handle, LM_DESIGNER_DEL, WPARAM(Sender), 1);
 end;
 
+procedure TDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
+  var Handled: Boolean);
+begin
+  // All designer actions require to be executed on the mainform.
+  // - avoids executing "delete controls", etc. on eg. Field Properties Frame.
+  if AAction.Owner = Self then   {Check for Owner since ALL ACTIONS are run through this UpdateAction on Application Idle!}
+    TCustomAction(AAction).Enabled := (Screen.ActiveCustomForm = MainForm);
+end;
+
 procedure TDesignFrame.NewSectionActionExecute(Sender: TObject);
 begin
   //
-end;
-
-procedure TDesignFrame.NoControlActionUpdate(Sender: TObject);
-begin
-  TAction(Sender).Enabled :=
-    (MainForm.Active);
 end;
 
 procedure TDesignFrame.EditControlActionExecute(Sender: TObject);
