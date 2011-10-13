@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
-  project_frame, LMessages, Htmlview, manager_messages, epidocument, report_base;
+  project_frame, LMessages, Htmlview, manager_messages, epidocument, report_base,
+  simpleipc;
 
 type
 
@@ -144,6 +145,11 @@ type
     procedure LMOpenRecent(var Msg: TLMessage);   message LM_MAIN_OPENRECENT;
     procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
     procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
+  private
+    { Process communication }
+    FIPCServer: TSimpleIPCServer;
+    procedure  SetupIPCServer;
+    function  CheckEntryClientOpenFile(Const FileName: string): boolean;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -812,6 +818,20 @@ begin
   H.Show;
 end;
 
+function TMainForm.CheckEntryClientOpenFile(const FileName: string): boolean;
+var
+  IC: TSimpleIPCClient;
+begin
+  {$IFDEF EPI_DEBUG}
+    IC := TSimpleIPCClient.Create(Self);
+    IC.ServerID := 'epidataentryclient';
+    if IC.ServerRunning then
+      IC.SendStringMessage(FileName);
+  {$ELSE}
+    result := false;
+  {$ENDIF}
+end;
+
 procedure TMainForm.LMOpenProject(var Msg: TLMessage);
 var
   Dlg: TOpenDialog;
@@ -821,6 +841,8 @@ begin
   Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ, dfCollection]);
 
   if not Dlg.Execute then exit;
+
+  CheckEntryClientOpenFile(Dlg.FileName);
   if not DoCloseProject then exit;
 
   DoOpenProject(Dlg.FileName);
@@ -849,6 +871,15 @@ begin
   UpdateProcessToolbar;
 end;
 
+procedure TMainForm.SetupIPCServer;
+begin
+  {$IFDEF EPI_DEBUG}
+  FIPCServer := TSimpleIPCServer.Create(Self);
+  FIPCServer.ServerID := ApplicationName;
+  FIPCServer.PeekMessage();
+  {$ENDIF}
+end;
+
 procedure TMainForm.UpdateRecentFiles;
 var
   Mi: TMenuItem;
@@ -868,11 +899,7 @@ begin
     Mi.Caption := RecentFiles[i];
     Mi.OnClick := @OpenRecentMenuItemClick;
     if i < 9 then
-{      {$IFDEF DARWIN}
-      Mi.ShortCut := KeyToShortCut(VK_1 + i, [ssMeta, ssShift]);
-      {$ELSE}}
       Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
-//      {$ENDIF}
     RecentFilesSubMenu.Add(Mi);
   end;
 end;
