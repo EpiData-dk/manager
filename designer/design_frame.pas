@@ -288,6 +288,7 @@ type
       var Control: TControl; AClass: TControlClass): TPoint;
     function    FindNewPosition(ParentControl: TWinControl;
       AClass: TControlClass): TPoint;
+    procedure   ComputeScrollbarPosition(Const Ctrl: TControl);
   private
     { Epidata Core Objects }
     FActiveSection: TEpiSection;
@@ -679,7 +680,7 @@ begin
 
   Pt := FindNewPosition(FDesignerBox, TDesignHeading);
   Pt.X := 50;
-  Pt.Y := Pt.Y + (FDesignerBox.VertScrollBar.Page * 2);
+  Pt.Y := Pt.Y + (FDesignerBox.VertScrollBar.Page);
 
   NewDesignControl(TDesignHeading, FDesignerBox, Pt, Heading);
   ShowForm(Heading, FDesignerBox.ClientToScreen(Pt), False);
@@ -1364,7 +1365,7 @@ end;
 
 procedure TDesignFrame.ShowEpiControlPopup(Sender: TControl; Pos: TPoint);
 begin
-  if Supports(Sender, IPositionHandler) then
+  if Supports(Sender, 'IPositionHandler') then
     DockingSitePopUpMenu.PopUp(Pos.X, Pos.Y)
   else
     DesignControlPopUpMenu.PopUp(Pos.X, Pos.Y);
@@ -1761,6 +1762,24 @@ begin
   if (AClass = TDesignHeading) and (Control is TDesignHeading) then
     Dist := ManagerSettings.SpaceBtwLabelLabel;
   Result.Y += (Control.Height + Dist);
+end;
+
+procedure TDesignFrame.ComputeScrollbarPosition(const Ctrl: TControl);
+var
+  Delta: Integer;
+  ControlTop: Integer;
+begin
+  Delta := FDesignerBox.Height div 4;
+  ControlTop := DesignControlTop(Ctrl);
+
+  With FDesignerBox.VertScrollBar do
+  begin
+    if ControlTop < (Position + Delta) then
+      Position := ControlTop - Delta;
+
+    if ControlTop > (Position + Page - Delta) then
+      Position := ControlTop - Page + FActiveControl.Height + Delta;
+  end;
 end;
 
 function TDesignFrame.FieldNameHook: string;
@@ -2175,6 +2194,12 @@ begin
   AddToPositionHandler((Sender as IPositionHandler),
     Source.Control);
 
+  // Dirty hack for placing vert. scrollbar correctly - but works.
+  MainForm.BeginUpdatingForm;
+  FDesignerBox.VertScrollBar.Position := 1;
+  ComputeScrollbarPosition(Source.Control);
+  MainForm.EndUpdatingForm;
+
   // Sanity checks:
   // - sections do not need to be relocated in the Core structure.
   if EpiControl is TEpiSection then  exit;
@@ -2280,10 +2305,7 @@ end;
 
 procedure TDesignFrame.EnterControl(Sender: TObject);
 var
-  S, T: String;
   EpiControl: TEpiCustomControlItem;
-  ControlTop: LongInt;
-  Delta: Integer;
 begin
   // Validate active control in ControlDesign form - it could be in
   //  invalid state.
@@ -2305,7 +2327,7 @@ begin
   else
     FActiveSection := TEpiSection(EpiControl.Owner.Owner);
 
-  if Supports(Sender, IPositionHandler) then
+  if Supports(Sender, 'IPositionHandler') then
     FActiveDockSite := TWinControl(Sender)
   else
     FActiveDockSite := TControl(Sender).Parent;
@@ -2313,25 +2335,7 @@ begin
   // DO NOT reposition on the "main" section, this hinders correct placement of
   // new controls using the mouse, if eg. the box is scrolled some-what down.
   if FActiveControl <> FDesignerBox then
-  begin
-    Delta := FDesignerBox.Height div 4;
-    ControlTop := DesignControlTop(FActiveControl);
-
-    With FDesignerBox.VertScrollBar do
-    begin
-      if ControlTop < (Position + Delta) then
-        Position := ControlTop - Delta;
-
-      if ControlTop > (Position + Page - Delta) then
-        Position := ControlTop - Page + FActiveControl.Height + Delta;
-    end;
-{
-    if DesignControlTop(FActiveControl) < FDesignerBox.VertScrollBar.Position then
-      FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - 5;
-
-    if DesignControlTop(FActiveControl) > (FDesignerBox.VertScrollBar.Position + FDesignerBox.VertScrollBar.Page) then
-      FDesignerBox.VertScrollBar.Position := DesignControlTop(FActiveControl) - FDesignerBox.VertScrollBar.Page + FActiveControl.Height + 5;  }
-  end;
+    ComputeScrollbarPosition(FActiveControl);
   FActiveControl.Color := $00B6F5F5;
 
   ShowForm(EpiControl, FActiveControl.ClientToScreen(Point(0,0)), false);

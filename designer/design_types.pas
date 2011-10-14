@@ -1,6 +1,7 @@
 unit design_types;
 
 {$mode objfpc}{$H+}
+{$INTERFACES CORBA}
 
 interface
 
@@ -10,7 +11,7 @@ uses
 type
   { IDesignEpiControl }
 
-  IDesignEpiControl = interface ['{D816F23A-0CC6-418A-8A6F-B1D28FC42E52}']
+  IDesignEpiControl = interface ['IDesignEpiControl'] //['{D816F23A-0CC6-418A-8A6F-B1D28FC42E52}']
     function  GetEpiControl: TEpiCustomControlItem;
     function  GetXTreeNode: TAVLTreeNode;
     function  GetYTreeNode: TAVLTreeNode;
@@ -24,7 +25,7 @@ type
 
   { IPositionHandler }
 
-  IPositionHandler = interface ['{EE58F27F-C0EB-43E1-BCF2-8525F632F527}']
+  IPositionHandler = interface ['IPositionHandler'] //['{EE58F27F-C0EB-43E1-BCF2-8525F632F527}']
     function GetXTree: TAVLTree;
     function GetYTree: TAVLTree;
     property XTree: TAVLTree read GetXTree;
