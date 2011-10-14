@@ -509,14 +509,12 @@ end;
 procedure TDesignFrame.ControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    TAction(Sender).Enabled and
     (Assigned(FActiveControl));
 end;
 
 procedure TDesignFrame.DeleteControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    TAction(Sender).Enabled and
     (Assigned(FActiveControl)) and
     (FActiveControl <> FDesignerBox);
 end;
@@ -531,8 +529,10 @@ procedure TDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
 begin
   // All designer actions require to be executed on the mainform.
   // - avoids executing "delete controls", etc. on eg. Field Properties Frame.
-  if AAction.Owner = Self then   {Check for Owner since ALL ACTIONS are run through this UpdateAction on Application Idle!}
-    TCustomAction(AAction).Enabled := (Screen.ActiveCustomForm = MainForm);
+  if (Screen.ActiveCustomForm = MainForm) then
+    DesignerActionList.State := asNormal
+  else
+    DesignerActionList.State := asSuspended;
 end;
 
 procedure TDesignFrame.NewSectionActionExecute(Sender: TObject);
@@ -1900,10 +1900,10 @@ begin
   PasteAsStringAction.ShortCut  := 0;
 
   Case ManagerSettings.PasteSpecialType of
-    1: PasteAsHeadingAction.ShortCut := D_PasteAs;
-    2: PasteAsIntAction.ShortCut     := D_PasteAs;
-    3: PasteAsFloatAction.ShortCut   := D_PasteAs;
-    4: PasteAsStringAction.ShortCut  := D_PasteAs;
+    0: PasteAsHeadingAction.ShortCut := D_PasteAs;
+    1: PasteAsIntAction.ShortCut     := D_PasteAs;
+    2: PasteAsFloatAction.ShortCut   := D_PasteAs;
+    3: PasteAsStringAction.ShortCut  := D_PasteAs;
   end;
 
   // Designer Frame

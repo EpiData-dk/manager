@@ -37,11 +37,10 @@ type
     TutorialURLUTF8:       string;
     EntryClientDirUTF8:    string;
     PasteSpecialType:      byte;     // Index into list:
-                                     //   0: QES
-                                     //   1: Heading
-                                     //   2: Int
-                                     //   3: Float
-                                     //   4: String
+                                     //   0: Heading
+                                     //   1: Int
+                                     //   2: Float
+                                     //   3: String
     SaveType:              byte;     // Index into list:
                                      //   0: .epx
                                      //   1: .epz
