@@ -95,20 +95,6 @@ object FieldValueLabelEditor: TFieldValueLabelEditor
       OnClick = OkBtnClick
       TabOrder = 0
     end
-    object Button1: TButton
-      AnchorSideLeft.Control = Panel1
-      AnchorSideTop.Control = Panel1
-      AnchorSideTop.Side = asrCenter
-      Left = 11
-      Height = 27
-      Top = 12
-      Width = 60
-      AutoSize = True
-      BorderSpacing.Left = 10
-      Caption = 'View All'
-      OnClick = Button1Click
-      TabOrder = 2
-    end
   end
   object Panel2: TPanel
     Left = 0

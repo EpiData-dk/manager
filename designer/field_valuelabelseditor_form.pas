@@ -14,7 +14,6 @@ type
   { TFieldValueLabelEditor }
 
   TFieldValueLabelEditor = class(TForm)
-    Button1: TButton;
     CancelBtn: TBitBtn;
     OkBtn: TBitBtn;
     Panel2: TPanel;
@@ -22,7 +21,6 @@ type
     Label1: TLabel;
     Panel1: TPanel;
     Panel3: TPanel;
-    procedure Button1Click(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
@@ -80,12 +78,6 @@ begin
   FGridFrame.ValueLabelSet.Name := ValueLabelNameEdit.Text;
 
   ModalResult := mrOk;
-end;
-
-procedure TFieldValueLabelEditor.Button1Click(Sender: TObject);
-begin
-  GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).Show;
-  BringToFront;
 end;
 
 procedure TFieldValueLabelEditor.FormCloseQuery(Sender: TObject;
