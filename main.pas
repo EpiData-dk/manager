@@ -313,14 +313,14 @@ begin
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
+var
+  Fn: String;
 begin
   Modified := false;
-  {$IFDEF DARWIN}
-  NewProjectAction.ShortCut := ShortCut(VK_N, [ssMeta]);
-  SettingsAction.ShortCut   := ShortCut(VK_OEM_COMMA, [ssMeta]);
-  CloseProjectAction.ShortCut := ShortCut(VK_W, [ssShift, ssMeta]);
-  OpenProjectAction.ShortCut  := ShortCut(VK_O, [ssMeta]);
-  {$ENDIF}
+  if Paramcount < 1 then exit;
+  Fn := ParamStrUTF8(1);
+  if FileExistsUTF8(Fn) then
+    PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, WPARAM(TString.Create(Fn)), 0);
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
@@ -835,19 +835,28 @@ end;
 procedure TMainForm.LMOpenProject(var Msg: TLMessage);
 var
   Dlg: TOpenDialog;
+  Fn: String;
 begin
-  Dlg := TOpenDialog.Create(self);
-  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ, dfCollection]);
+  if Msg.WParam = 0 then
+  begin
+    Dlg := TOpenDialog.Create(self);
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ, dfCollection]);
 
-  if not Dlg.Execute then exit;
+    if not Dlg.Execute then exit;
 
-  CheckEntryClientOpenFile(Dlg.FileName);
+    Fn := Dlg.FileName;
+    Dlg.Free;
+  end else begin
+    Fn := TString(Msg.WParam).Str;
+    TString(Msg.WParam).Free;
+  end;
+
+  CheckEntryClientOpenFile(Fn);
   if not DoCloseProject then exit;
 
-  DoOpenProject(Dlg.FileName);
+  DoOpenProject(Fn);
   UpdateProcessToolbar;
-  Dlg.Free;
 end;
 
 procedure TMainForm.LMOpenRecent(var Msg: TLMessage);

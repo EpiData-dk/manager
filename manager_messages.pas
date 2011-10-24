@@ -15,8 +15,8 @@ const
   LM_DESIGNER_LAST     = LM_DESIGNER_DELALL;
 
   // Main messages
-  LM_MAIN_OPENPROJECT  = LM_DESIGNER_LAST    + 1;
-  LM_MAIN_OPENRECENT   = LM_MAIN_OPENPROJECT + 1;
+  LM_MAIN_OPENPROJECT  = LM_DESIGNER_LAST    + 1;   // WParam = TString object containing the filename. Has been checked for exisistence. (TString object MUST BE FREED at the message handler).
+  LM_MAIN_OPENRECENT   = LM_MAIN_OPENPROJECT + 1;   // WParam = index into the TMenuItem list of filenames.
   LM_MAIN_NEWPROJECT   = LM_MAIN_OPENRECENT  + 1;
   LM_MAIN_CLOSEPROJECT = LM_MAIN_NEWPROJECT  + 1;
   // Last Main message... always update when inserting new messages.!
