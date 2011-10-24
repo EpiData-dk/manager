@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 730
+  Left = 615
   Height = 363
-  Top = 312
+  Top = 340
   Width = 611
   ActiveControl = SettingsView
   Caption = 'Settings'

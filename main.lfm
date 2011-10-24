@@ -1,8 +1,8 @@
 object MainForm: TMainForm
-  Left = 297
+  Left = 608
   Height = 603
   Hint = 'New EpiData Project (XML)'
-  Top = 180
+  Top = 305
   Width = 910
   Caption = 'MainForm'
   ClientHeight = 580

@@ -2,21 +2,21 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   Left = 0
   Height = 389
   Top = 0
-  Width = 525
+  Width = 488
   ClientHeight = 389
-  ClientWidth = 525
+  ClientWidth = 488
   TabOrder = 0
-  DesignLeft = 2090
-  DesignTop = 366
+  DesignLeft = 841
+  DesignTop = 301
   object DefaultPasteCombo: TComboBox
     AnchorSideTop.Control = MultipleInstanceChkbox
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 205
-    Height = 25
+    Left = 224
+    Height = 29
     Top = 138
-    Width = 310
+    Width = 254
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
@@ -36,7 +36,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 16
-    Top = 142
+    Top = 144
     Width = 167
     BorderSpacing.Left = 10
     Caption = 'Default paste special type'
@@ -48,7 +48,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 16
-    Top = 179
+    Top = 183
     Width = 113
     BorderSpacing.Left = 10
     Caption = 'Default save type'
@@ -60,10 +60,10 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = DefaultPasteCombo
     AnchorSideRight.Side = asrBottom
-    Left = 205
+    Left = 224
     Height = 29
-    Top = 173
-    Width = 310
+    Top = 177
+    Width = 254
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     ItemHeight = 0
@@ -120,5 +120,50 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     BorderSpacing.Top = 10
     Caption = 'Allow multiple instances of program'
     TabOrder = 5
+  end
+  object AssociateLabel: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = UnAssociateBtn
+    AnchorSideTop.Side = asrCenter
+    Left = 10
+    Height = 16
+    Top = 221
+    Width = 200
+    BorderSpacing.Left = 10
+    Caption = 'Associate filetypes (.epx, .epz):'
+    ParentColor = False
+  end
+  object UnAssociateBtn: TButton
+    AnchorSideTop.Control = AssociateBtn
+    AnchorSideRight.Control = AssociateBtn
+    Left = 297
+    Height = 27
+    Top = 216
+    Width = 97
+    Anchors = [akTop, akRight]
+    AutoSize = True
+    BorderSpacing.Right = 10
+    Caption = 'Un-Associate'
+    OnClick = UnAssociateBtnClick
+    TabOrder = 6
+  end
+  object AssociateBtn: TButton
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = DefaultSaveTypeComboBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 404
+    Height = 27
+    Top = 216
+    Width = 74
+    Anchors = [akTop, akRight]
+    AutoSize = True
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Associate'
+    OnClick = AssociateBtnClick
+    TabOrder = 7
   end
 end
