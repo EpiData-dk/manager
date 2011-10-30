@@ -44,6 +44,7 @@ begin
 end;
 
 begin
+  Application.Title := 'EpiData Manager';
   OnGetApplicationName := @EpiDataApplicationName;
   // Load ini before anything else - it contains start-up info.
   LoadIniFile;
