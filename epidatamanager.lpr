@@ -5,9 +5,9 @@ program epidatamanager;
 uses
 //  heaptrc,
   {$IFDEF UNIX}
-    {$IFDEF UseCThreads}
+//    {$IFDEF UseCThreads}
     cthreads,
-    {$ENDIF}
+//    {$ENDIF}
   cwstring,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset

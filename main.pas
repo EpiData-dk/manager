@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
   project_frame, LMessages, Htmlview, manager_messages, epidocument, report_base,
-  simpleipc;
+  episervice_ipc, episervice_ipctypes, simpleipc;
 
 type
 
@@ -147,9 +147,10 @@ type
     procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
   private
     { Process communication }
-    FIPCServer: TSimpleIPCServer;
-    procedure  SetupIPCServer;
-    function  CheckEntryClientOpenFile(Const FileName: string): boolean;
+    FEpiIPC:  TEpiIPC;
+    procedure  SetupIPC;
+    function   CheckEntryClientOpenFile(Const FileName: string): boolean;
+    procedure  CheckHasOpenFile(Const MsgType: TMessageType; Const Msg: string; out Ack: TMessageType);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -819,17 +820,20 @@ begin
 end;
 
 function TMainForm.CheckEntryClientOpenFile(const FileName: string): boolean;
-var
-  IC: TSimpleIPCClient;
 begin
   {$IFDEF EPI_DEBUG}
-    IC := TSimpleIPCClient.Create(Self);
-    IC.ServerID := 'epidataentryclient';
-    if IC.ServerRunning then
-      IC.SendStringMessage(FileName);
+    result := FEpiIPC.IsFileOpenMsg(FileName);
   {$ELSE}
     result := false;
   {$ENDIF}
+end;
+
+procedure TMainForm.CheckHasOpenFile(const MsgType: TMessageType;
+  const Msg: string; out Ack: TMessageType);
+begin
+  Ack := epiIPC_Ack_FileNotOpen;
+  if Assigned(FActiveFrame) and (FActiveFrame.ProjectFileName = Msg) then
+    Ack := epiIPC_Ack_FileIsOpen;
 end;
 
 procedure TMainForm.LMOpenProject(var Msg: TLMessage);
@@ -852,7 +856,19 @@ begin
     TString(Msg.WParam).Free;
   end;
 
-  CheckEntryClientOpenFile(Fn);
+  if CheckEntryClientOpenFile(Fn) then
+  begin
+    if MessageDlg('Warning',
+      'The file: ' + LineEnding +
+      Fn + LineEnding +
+      'is already opened by EpiData EntryClient.' + LineEnding +
+      'Having the same file open in both programs may cause loss of data, due to overwriting of the file.' + LineEnding +
+      'Do you wish to open file anyway?',
+      mtWarning,
+      mbYesNo,
+      0,
+      mbNo) = mrNo then exit;
+  end;
   if not DoCloseProject then exit;
 
   DoOpenProject(Fn);
@@ -880,12 +896,11 @@ begin
   UpdateProcessToolbar;
 end;
 
-procedure TMainForm.SetupIPCServer;
+procedure TMainForm.SetupIPC;
 begin
   {$IFDEF EPI_DEBUG}
-  FIPCServer := TSimpleIPCServer.Create(Self);
-  FIPCServer.ServerID := ApplicationName;
-  FIPCServer.PeekMessage();
+  FEpiIPC := TEpiIPC.Create(ApplicationName, Self);
+  FEpiIPC.OnRequest := @CheckHasOpenFile;
   {$ENDIF}
 end;
 
@@ -897,7 +912,6 @@ var
   Shift: TShiftState;
 begin
   ShortCutToKey(M_OpenRecent, K, Shift);
-
 
   RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
   RecentFilesSubMenu.Clear;
@@ -945,6 +959,7 @@ constructor TMainForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FActiveFrame := nil;
+  SetupIPC;
   UpdateMainMenu;
 end;
 
