@@ -821,7 +821,7 @@ end;
 
 function TMainForm.CheckEntryClientOpenFile(const FileName: string): boolean;
 begin
-  {$IFDEF EPI_DEBUG}
+  {$IFDEF EPI_USEIPC}
     result := FEpiIPC.IsFileOpenMsg(FileName);
   {$ELSE}
     result := false;
@@ -898,7 +898,7 @@ end;
 
 procedure TMainForm.SetupIPC;
 begin
-  {$IFDEF EPI_DEBUG}
+  {$IFDEF EPI_USEIPC}
   FEpiIPC := TEpiIPC.Create(ApplicationName, Self);
   FEpiIPC.OnRequest := @CheckHasOpenFile;
   {$ENDIF}

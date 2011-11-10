@@ -9,6 +9,21 @@ uses
 
 type
   TManagerSettings = record
+    // General:
+    SaveWindowPositions:   boolean;
+    ShowWelcome:           boolean;
+    ShowWorkToolBar:       boolean;
+    ShowA4GuideLines:      boolean;
+    MultipleInstances:     boolean;
+    PasteSpecialType:      byte;     // Index into list:
+                                     //   0: Heading
+                                     //   1: Int
+                                     //   2: Float
+                                     //   3: String
+    SaveType:              byte;     // Index into list:
+                                     //   0: .epx
+                                     //   1: .epz
+
     // Visual design:
     DefaultRightPosition:  Integer;
     DefaultLabelPosition:  Integer;
@@ -28,22 +43,10 @@ type
 //    FieldNamingStyle:      TFieldNaming;
 
     // Advanced:
-    SaveWindowPositions:   boolean;
-    ShowWelcome:           boolean;
-    ShowWorkToolBar:       boolean;
-    MultipleInstances:     boolean;
     WorkingDirUTF8:        string;
     TutorialDirUTF8:       string;
     TutorialURLUTF8:       string;
     EntryClientDirUTF8:    string;
-    PasteSpecialType:      byte;     // Index into list:
-                                     //   0: Heading
-                                     //   1: Int
-                                     //   2: Float
-                                     //   3: String
-    SaveType:              byte;     // Index into list:
-                                     //   0: .epx
-                                     //   1: .epz
     FieldFont:             TFont;
     HeadingFont:           TFont;
     SectionFont:           TFont;
@@ -87,6 +90,15 @@ type
 
 var
   ManagerSettings: TManagerSettings = (
+    // General:
+    SaveWindowPositions:   true;
+    ShowWelcome:           true;
+    ShowWorkToolBar:       true;
+    ShowA4GuideLines:      true;
+    MultipleInstances:     false;
+    PasteSpecialType:      1;     // Heading.
+    SaveType:              0;     // epx format.
+
     // Visual design:
     DefaultRightPosition:  200;
     DefaultLabelPosition:  20;
@@ -106,16 +118,10 @@ var
 //    FieldNamingStyle:      fnFirstWord;
 
     // Advanced:
-    SaveWindowPositions:   true;
-    ShowWelcome:           true;
-    ShowWorkToolBar:       true;
-    MultipleInstances:     false;
     WorkingDirUTF8:        '';
     TutorialDirUTF8:       '';
     TutorialURLUTF8:       'http://epidata.dk/documentation.php';
     EntryClientDirUTF8:    '';
-    PasteSpecialType:      1;     // Heading.
-    SaveType:              0;     // epx format.
     FieldFont:             nil;
     HeadingFont:           nil;
     SectionFont:           nil;

@@ -302,6 +302,7 @@ type
     procedure   UpdateStatusbarControl(EpiControl: TEpiCustomControlItem);
     procedure   UpdateStatusbarSizes;
     procedure   UpdateShortCuts;
+    procedure   DesignBoxPaintA4(Sender: TObject);
   private
     FModified: Boolean;
     FOnModified: TNotifyEvent;
@@ -522,6 +523,21 @@ end;
 procedure TDesignFrame.DeleteControlFastActionExecute(Sender: TObject);
 begin
   PostMessage(Self.Handle, LM_DESIGNER_DEL, WPARAM(Sender), 1);
+end;
+
+procedure TDesignFrame.DesignBoxPaintA4(Sender: TObject);
+var
+  P: TPoint;
+begin
+  if not ManagerSettings.ShowA4GuideLines then exit;
+
+  with TScrollBox(Sender) do
+  begin
+    P := GetClientScrollOffset;
+    Canvas.Pen.Style := psDot;
+    Canvas.Line(744, 0 + P.Y, 744, Height + P.Y);
+    Canvas.Line(0 + P.X, 1052, Width + P.X, 1052);
+  end;
 end;
 
 procedure TDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
@@ -2636,6 +2652,7 @@ begin
   FDesignerBox.OnUnDock    := @DockSiteUnDock;
   FDesignerBox.OnDockOver  := @DockSiteDockOver;
   FDesignerBox.OnMouseWheel := @DesignBoxMouseWheel;
+  FDesignerBox.OnPaint         := @DesignBoxPaintA4;
   FActiveDockSite := FDesignerBox;
 
   UpdateFrame;

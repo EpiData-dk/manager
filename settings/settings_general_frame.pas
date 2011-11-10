@@ -13,6 +13,7 @@ type
   { TSettings_GeneralFrame }
 
   TSettings_GeneralFrame = class(TFrame, ISettingsFrame)
+    ShowA4LinesChkBox: TCheckBox;
     UnAssociateBtn: TButton;
     AssociateBtn: TButton;
     DefaultPasteCombo: TComboBox;
@@ -139,6 +140,7 @@ begin
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
     ShowWelcomeChkBox.Checked         := ShowWelcome;
     ShowWorkToolBarChkBox.Checked     := ShowWorkToolBar;
+    ShowA4LinesChkBox.Checked         := ShowA4GuideLines;
     MultipleInstanceChkbox.Checked    := MultipleInstances;
   end;
 end;
@@ -153,6 +155,7 @@ begin
     ShowWelcome         := ShowWelcomeChkBox.Checked;
     ShowWorkToolBar     := ShowWorkToolBarChkBox.Checked;
     MultipleInstances   := MultipleInstanceChkbox.Checked;
+    ShowA4GuideLines    := ShowA4LinesChkBox.Checked;
   end;
   Result := true;
 end;

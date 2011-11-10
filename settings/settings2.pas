@@ -141,6 +141,7 @@ begin
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       WriteBool(Sec, 'ShowWelcome', ShowWelcome);
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
+      WriteBool(Sec, 'ShowA4GuideLines', ShowA4GuideLines);
       WriteBool(Sec, 'MultipleInstances', MultipleInstances);
 
       Sec := 'fonts';
@@ -266,6 +267,7 @@ begin
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
+      ShowA4GuideLines    := ReadBool(Sec, 'ShowA4GuideLines', ShowA4GuideLines);
       MultipleInstances   := ReadBool(Sec, 'MultipleInstances', MultipleInstances);
 
       // Export:

@@ -13,11 +13,15 @@ type
   { TSettings_VisualDesign }
 
   TSettings_VisualDesign = class(TFrame, ISettingsFrame)
+    DefaultRightPosEdit: TMaskEdit;
     FieldColourBtn: TColorButton;
+    Label3: TLabel;
+    Label8: TLabel;
+    LabelLeftPosition: TMaskEdit;
+    PositionsGrpBox: TGroupBox;
     HeadingColourBtn: TColorButton;
     SectionColourBtn: TColorButton;
     ColorDialog1: TColorDialog;
-    DefaultRightPosEdit: TMaskEdit;
     FieldFontEditBtn: TEditButton;
     HeadingFontEditBtn: TEditButton;
     FontDialog1: TFontDialog;
@@ -25,14 +29,11 @@ type
     SectionFontEditBtn: TEditButton;
     Label10: TLabel;
     Label2: TLabel;
-    Label8: TLabel;
     Label9: TLabel;
-    LabelLeftPosition: TMaskEdit;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
     SnappingGrpBox: TGroupBox;
     DistGrpBox: TGroupBox;
-    Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;

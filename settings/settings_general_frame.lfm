@@ -6,16 +6,16 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   ClientHeight = 389
   ClientWidth = 488
   TabOrder = 0
-  DesignLeft = 841
-  DesignTop = 301
+  DesignLeft = 2068
+  DesignTop = 80
   object DefaultPasteCombo: TComboBox
     AnchorSideTop.Control = MultipleInstanceChkbox
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 224
-    Height = 29
-    Top = 138
+    Height = 25
+    Top = 170
     Width = 254
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
@@ -36,7 +36,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 16
-    Top = 144
+    Top = 174
     Width = 167
     BorderSpacing.Left = 10
     Caption = 'Default paste special type'
@@ -48,7 +48,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 16
-    Top = 183
+    Top = 211
     Width = 113
     BorderSpacing.Left = 10
     Caption = 'Default save type'
@@ -62,7 +62,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Side = asrBottom
     Left = 224
     Height = 29
-    Top = 177
+    Top = 205
     Width = 254
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
@@ -110,11 +110,11 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   end
   object MultipleInstanceChkbox: TCheckBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = ShowWorkToolBarChkBox
+    AnchorSideTop.Control = ShowA4LinesChkBox
     AnchorSideTop.Side = asrBottom
     Left = 10
     Height = 22
-    Top = 106
+    Top = 138
     Width = 251
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
@@ -127,7 +127,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 16
-    Top = 221
+    Top = 249
     Width = 200
     BorderSpacing.Left = 10
     Caption = 'Associate filetypes (.epx, .epz):'
@@ -138,7 +138,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Control = AssociateBtn
     Left = 297
     Height = 27
-    Top = 216
+    Top = 244
     Width = 97
     Anchors = [akTop, akRight]
     AutoSize = True
@@ -155,7 +155,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Side = asrBottom
     Left = 404
     Height = 27
-    Top = 216
+    Top = 244
     Width = 74
     Anchors = [akTop, akRight]
     AutoSize = True
@@ -165,5 +165,18 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Caption = 'Associate'
     OnClick = AssociateBtnClick
     TabOrder = 7
+  end
+  object ShowA4LinesChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ShowWorkToolBarChkBox
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 22
+    Top = 106
+    Width = 147
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Show A4 guidelines'
+    TabOrder = 8
   end
 end
