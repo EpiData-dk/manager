@@ -34,24 +34,27 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="5">
+    <RequiredPackages Count="6">
       <Item1>
-        <PackageName Value="virtualtreeview_package"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item1>
       <Item2>
-        <PackageName Value="HtmlComp"/>
+        <PackageName Value="virtualtreeview_package"/>
       </Item2>
       <Item3>
-        <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Valid="True" Release="1"/>
+        <PackageName Value="HtmlComp"/>
       </Item3>
       <Item4>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Minor="5" Valid="True" Release="1"/>
+        <PackageName Value="LCLBase"/>
+        <MinVersion Major="1" Valid="True" Release="1"/>
       </Item4>
       <Item5>
-        <PackageName Value="LCL"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Minor="5" Valid="True" Release="1"/>
       </Item5>
+      <Item6>
+        <PackageName Value="LCL"/>
+      </Item6>
     </RequiredPackages>
     <Units Count="47">
       <Unit0>

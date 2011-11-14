@@ -11,8 +11,8 @@ uses
   cwstring,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, virtualtreeview_package, main, project_frame, design_frame,
-  workflow_frame, managerprocs, sysutils, about, epidatacore,
+  Forms, fpvectorialpkg, virtualtreeview_package, main, project_frame,
+  design_frame, workflow_frame, managerprocs, sysutils, about, epidatacore,
 
   // Settings - import order defines order!
   settings2,

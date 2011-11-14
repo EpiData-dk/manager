@@ -21,6 +21,7 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    PrintDataFormAction: TAction;
     MoreSpaceAction: TAction;
     DeleteControlFastAction: TAction;
     NewBooleanMenu: TMenuItem;
@@ -206,6 +207,7 @@ type
     procedure   PasteAsStringActionExecute(Sender: TObject);
     procedure   PasteControlActionExecute(Sender: TObject);
     procedure   PasteControlActionUpdate(Sender: TObject);
+    procedure   PrintDataFormActionExecute(Sender: TObject);
     procedure   TestToolButtonClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
   private
@@ -302,7 +304,10 @@ type
     procedure   UpdateStatusbarControl(EpiControl: TEpiCustomControlItem);
     procedure   UpdateStatusbarSizes;
     procedure   UpdateShortCuts;
+  private
+    { Printing }
     procedure   DesignBoxPaintA4(Sender: TObject);
+    procedure   DoExportDataformToSVG;
   private
     FModified: Boolean;
     FOnModified: TNotifyEvent;
@@ -326,7 +331,12 @@ uses
   Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
   managerprocs, copyobject, epiranges, design_types,
-  import_structure_form, shortcuts;
+  import_structure_form, shortcuts, fpvectorial, fpvutils, FPimage;
+
+const
+  PIXELS_PER_MILIMETER = 3.5433;
+  A4_PIXEL_HEIGHT      = trunc(297 * PIXELS_PER_MILIMETER);
+  A4_PIXEL_WIDT        = trunc(210 * PIXELS_PER_MILIMETER);
 
 type
 
@@ -535,11 +545,152 @@ begin
   begin
     P := GetClientScrollOffset;
     Canvas.Pen.Style := psDot;
-    Canvas.Line(744, 0 + P.Y, 744, Height + P.Y);
-    Canvas.Line(0 + P.X, 1052, Width + P.X, 1052);
+    // Vert. line
+    Canvas.Line(
+      A4_PIXEL_WIDT, 0 + P.Y,        // X1, Y1
+      A4_PIXEL_WIDT, Height + P.Y    // X2, Y2
+    );
+    // Horz. line
+    Canvas.Line(
+      0 + P.X, A4_PIXEL_HEIGHT,      // X1, Y1
+      Width + P.X, A4_PIXEL_HEIGHT   // X2, Y2
+    );
   end;
 end;
 
+procedure TDesignFrame.DoExportDataformToSVG;
+var
+  FieldCount: Integer;
+  VecDoc: TvVectorialDocument;
+  Page: TvVectorialPage;
+  F: TEpiField;
+  i: Integer;
+  L, R, T, B, W: Double;
+  SectionCount: Integer;
+  S: TEpiSection;
+  HeadingCount: Integer;
+  H: TEpiHeading;
+  SaveDlg: TSaveDialog;
+  FS: Integer;
+  FN: String;
+const
+  FieldHeigth =
+    {$IFDEF WINDOWS}
+      21
+    {$ELSE}
+      {$IFDEF DARWIN}
+      22
+      {$ELSE}
+        {$IFDEF LINUX}
+      27
+        {$ENDIF}
+    {$ENDIF}
+  {$ENDIF};
+
+
+  function FieldTop(F: TEpiField): integer; inline;
+  begin
+    Result := F.Top + F.Section.Top;
+  end;
+
+  function FieldLeft(F: TEpiField): integer; inline;
+  begin
+    Result := F.Left + F.Section.Left;
+  end;
+
+  function HeadingTop(H: TEpiHeading): integer; inline;
+  begin
+    Result := H.Top + H.Section.Top;
+  end;
+
+  function HeadingLeft(H: TEpiHeading): integer; inline;
+  begin
+    Result := H.Left + H.Section.Left;
+  end;
+
+begin
+  SaveDlg := nil;
+  VecDoc  := nil;
+  try
+    SaveDlg := TSaveDialog.Create(Self);
+    SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    SaveDlg.Filter := 'Scalable Vector Graphics (*.svg)|*.svg|' + GetEpiDialogFilter([dfAll]);
+    if not SaveDlg.Execute then exit;
+
+    VecDoc := TvVectorialDocument.Create;
+    VecDoc.Width := 210;
+    VecDoc.Height := 297;
+    Page := VecDoc.AddPage();
+    Page.Width := VecDoc.Width;
+    Page.Height := VecDoc.Height;
+
+    FS := ManagerSettings.FieldFont.Size;
+    FN := ManagerSettings.FieldFont.Name;
+    if FS = 0 then FS := 10;
+
+    FieldCount := DataFile.Fields.Count;
+    for i := 0 to FieldCount -1 do
+    begin
+      F := DataFile.Field[i];
+
+      L := (FieldLeft(F) - Self.Canvas.TextWidth(F.Question.Text)) / PIXELS_PER_MILIMETER;
+      T := CanvasTextPosToFPVectorial(FieldTop(F) + (FieldHeigth - Self.Canvas.TextHeight(F.Question.Text)), A4_PIXEL_HEIGHT, Self.Canvas.TextHeight(F.Question.Text)) / PIXELS_PER_MILIMETER;
+      Page.AddText(L, T, 0, FN, FS, F.Question.Text);
+
+      L := FieldLeft(F) / PIXELS_PER_MILIMETER;
+      R := (FieldLeft(F) + (F.Length * Self.Canvas.TextWidth('W'))) / PIXELS_PER_MILIMETER;
+      T := CanvasCoordsToFPVectorial(FieldTop(F) + (FieldHeigth div 2), A4_PIXEL_HEIGHT) / PIXELS_PER_MILIMETER;
+      B := CanvasCoordsToFPVectorial(FieldTop(F) + FieldHeigth, A4_PIXEL_HEIGHT)/ PIXELS_PER_MILIMETER;
+      Page.StartPath(L, T);
+      Page.AddLineToPath(L, B);
+      Page.AddLineToPath(R, B);
+      Page.AddLineToPath(R, T);
+      Page.AddLineToPath(L, T, FPColor($FF, $FF, $FF, $FF));
+      Page.EndPath();
+    end;
+
+    HeadingCount := DataFile.Headings.Count;
+    for i := 0 to HeadingCount -1 do
+    begin
+      H := DataFile.Heading[i];
+
+      L := HeadingLeft(H) / PIXELS_PER_MILIMETER;
+      T := CanvasTextPosToFPVectorial(HeadingTop(H), A4_PIXEL_HEIGHT, Self.Canvas.TextHeight(H.Caption.Text)) / PIXELS_PER_MILIMETER;
+
+      Page.AddText(L, T, 0, FN, FS, H.Caption.Text);
+    end;
+
+    SectionCount := DataFile.Sections.Count;
+    for i := 0 to SectionCount - 1 do
+    begin
+      S := DataFile.Section[i];
+      if S = DataFile.MainSection then continue;
+
+      L := S.Left / PIXELS_PER_MILIMETER;
+      R := (S.Left + S.Width)  / PIXELS_PER_MILIMETER;
+      T := CanvasCoordsToFPVectorial(S.Top, A4_PIXEL_HEIGHT)  / PIXELS_PER_MILIMETER;
+      B := CanvasCoordsToFPVectorial(S.Top + S.Height, A4_PIXEL_HEIGHT)  / PIXELS_PER_MILIMETER;
+      W := Self.Canvas.TextWidth(S.Caption.Text) / PIXELS_PER_MILIMETER;
+
+      Page.StartPath(L, T);
+      Page.AddLineToPath(L, B);
+      Page.AddLineToPath(R, B);
+      Page.AddLineToPath(R, T);
+      Page.AddLineToPath(Min(L + W, R), T);
+      Page.AddLineToPath(L, T, FPColor($FF, $FF, $FF, $FF));
+      Page.EndPath();
+
+      L := (S.Left + 3) / PIXELS_PER_MILIMETER;
+      T := CanvasTextPosToFPVectorial(S.Top, A4_PIXEL_HEIGHT, Self.Canvas.TextHeight(S.Caption.Text) div 2) / PIXELS_PER_MILIMETER;
+      Page.AddText(L, T, 0, FN, FS, S.Caption.Text);
+    end;
+
+    VecDoc.WriteToFile(SaveDlg.FileName, vfSVG);
+  finally
+    SaveDlg.Free;
+    VecDoc.Free;
+  end;
+end;
 procedure TDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
@@ -1236,6 +1387,11 @@ begin
     else
       Caption := Caption + ' (not allowed)';
   end;
+end;
+
+procedure TDesignFrame.PrintDataFormActionExecute(Sender: TObject);
+begin
+  DoExportDataformToSVG;
 end;
 
 procedure TDesignFrame.TestToolButtonClick(Sender: TObject);
