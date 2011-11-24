@@ -1823,7 +1823,7 @@ function TDesignFrame.NewSection: TEpiSection;
 begin
   result := DataFile.NewSection;
   Result.RegisterOnChangeHook(@EpiContolStatusbarUpdateHook);
-  Result.Fields.OnGetNamePrefix := @FieldNameHook;
+  Result.Fields.OnGetPrefix := @FieldNameHook;
 end;
 
 procedure TDesignFrame.EpiContolStatusbarUpdateHook(Sender: TObject;
@@ -1945,7 +1945,7 @@ begin
   if DataFile = AValue then exit;
   FDataFile := AValue;
 
-  Name := DataFile.Id;
+  Name := DataFile.Name;
   FActiveSection := DataFile.MainSection;
   (FDesignerBox as IDesignEpiControl).EpiControl := DataFile.MainSection;
 
@@ -1963,7 +1963,7 @@ begin
 
       with Section[i] do
       begin
-        Fields.OnGetNamePrefix := @FieldNameHook;
+        Fields.OnGetPrefix := @FieldNameHook;
         for j := 0 to Fields.Count - 1 do
           NewDesignControl(TDesignField, TheParent, Point(Field[j].Left, Field[j].Top), Field[j]);
         for j := 0 to Headings.Count - 1 do

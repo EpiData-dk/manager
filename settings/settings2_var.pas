@@ -67,12 +67,15 @@ type
     StudyLang:             string;
     StudyVersion:          string;
     // - Content Desc:
+    ContKeywords:          string;
     ContPurpose:           string;
     ContAbstract:          string;
     ContCitation:          string;
     ContGeoCover:          string;
     ContTimeCover:         string;
+    ContPopulation:        string;
     // - Ownership:
+    OwnAgency:             string;
     OwnAuthers:            string;
     OwnRights:             string;
     OwnPublisher:          string;
@@ -140,12 +143,15 @@ var
     StudyLang:             'en';
     StudyVersion:          '1';
     // - Content Desc:
+    ContKeywords:          '';
     ContPurpose:           '';
     ContAbstract:          '';
     ContCitation:          '';
     ContGeoCover:          '';
     ContTimeCover:         '';
+    ContPopulation:        '';
     // - Ownership:
+    OwnAgency:             '';
     OwnAuthers:            '';
     OwnRights:             '';
     OwnPublisher:          '';

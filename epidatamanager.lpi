@@ -356,7 +356,7 @@
     </Units>
   </ProjectOptions>
   <CompilerOptions>
-    <Version Value="10"/>
+    <Version Value="11"/>
     <Target>
       <Filename Value="epidatamanager"/>
     </Target>
@@ -372,7 +372,6 @@
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="True"/>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
       <Options>

@@ -320,7 +320,7 @@ begin
   FField.Question.RegisterOnChangeHook(@OnQuestionChange);
   ProjectSettings := TEpiDocument(FField.RootOwner).ProjectSettings;
   ProjectSettings.RegisterOnChangeHook(@OnProjectSettingsChange);
-  Name := FField.Id;
+  Name := FField.Name;
   Caption := '';
 
   if not ProjectSettings.ShowFieldBorders then
@@ -552,7 +552,7 @@ begin
   FSection := TEpiSection(AValue);
   FSection.RegisterOnChangeHook(@OnChange);
   FSection.Caption.RegisterOnChangeHook(@OnTextChange);
-  Name := FSection.Id;
+  Name := FSection.Name;
   Caption := '';
 end;
 
@@ -686,7 +686,7 @@ begin
   FHeading := TEpiHeading(AValue);
   FHeading.RegisterOnChangeHook(@OnHeadingChange);
   FHeading.Caption.RegisterOnChangeHook(@OnCaptionChange);
-  Name := FHeading.Id;
+  Name := FHeading.Name;
   Caption := '';
 end;
 
