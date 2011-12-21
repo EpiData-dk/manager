@@ -13,8 +13,7 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <MinorVersionNr Value="8"/>
-      <RevisionNr Value="8"/>
+      <MajorVersionNr Value="1"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -374,11 +373,6 @@
       <Debugging>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
-      <Options>
-        <Win32>
-          <GraphicApplication Value="True"/>
-        </Win32>
-      </Options>
     </Linking>
     <Other>
       <CompilerMessages>
