@@ -20,11 +20,14 @@ type
     CoreVersionLabel: TLabel;
     FPCVersionLabel: TLabel;
     Image1: TImage;
+    Memo1: TMemo;
+    Panel1: TPanel;
     PlatformLabel: TLabel;
     RevisionLabel: TLabel;
     VersionLabel: TLabel;
     VersionPage: TTabSheet;
     procedure FormCreate(Sender: TObject);
+    procedure VersionPageResize(Sender: TObject);
   private
     { private declarations }
   public
@@ -90,6 +93,12 @@ begin
   RevisionLabel.Caption    := RevisionCaption;
   FPCVersionLabel.Caption  := FPCCaption;
   PlatformLabel.Caption    := PlatformCaption;
+end;
+
+procedure TAboutForm.VersionPageResize(Sender: TObject);
+begin
+  Panel1.Left := (VersionPage.Width div 2) - (Panel1.Width div 2);
+  Panel1.Top  := (VersionPage.Height div 2) - (Panel1.Height div 2);
 end;
 
 end.
