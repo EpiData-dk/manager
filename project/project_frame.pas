@@ -260,7 +260,7 @@ end;
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
   Result := TEpiDocument.Create(ManagerSettings.StudyLang);
-  Result.Study.Language := ManagerSettings.StudyLang;
+//  Result.Study.Language := ManagerSettings.StudyLang;
 
   with Result.ProjectSettings, ManagerSettings do
   begin

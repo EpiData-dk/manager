@@ -14,8 +14,11 @@ type
   { TProjectSetting_ContentDescFrame }
 
   TProjectSetting_ContentDescFrame = class(TFrame, IProjectSettingsFrame, ISettingsFrame)
+    KeywordsEdit: TEdit;
     GeoCoverageEdit: TEdit;
     AbstractMemo: TMemo;
+    Label6: TLabel;
+    Label7: TLabel;
     PurposeMemo: TMemo;
     CitationsMemo: TMemo;
     TimeCoverageEdit: TEdit;
@@ -25,6 +28,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
+    PopulationEdit: TEdit;
   private
     { private declarations }
     Study: TEpiStudy;
@@ -50,11 +54,13 @@ begin
   Study := TEpiDocument(AValue).Study;
   with Study do
   begin
+    KeywordsEdit.Text := KeyWords;
     PurposeMemo.Text := Purpose.Text;
     AbstractMemo.Text := AbstractText.Text;
     CitationsMemo.Text := Citations.Text;
     GeoCoverageEdit.Text := GeographicalCoverage.Text;
     TimeCoverageEdit.Text := TimeCoverage.Text;
+    PopulationEdit.Text := Population.Text;
   end;
 end;
 
@@ -63,11 +69,13 @@ begin
   FManagerSettings := Data;
   with FManagerSettings^ do
   begin
+    KeywordsEdit.Text := ContKeywords;
     PurposeMemo.Text := ContPurpose;
     AbstractMemo.Text := ContAbstract;
     CitationsMemo.Text := ContCitation;
     GeoCoverageEdit.Text := ContGeoCover;
     TimeCoverageEdit.Text := ContTimeCover;
+    PopulationEdit.Text := ContPopulation;
   end;
 end;
 
@@ -78,21 +86,25 @@ begin
   if Assigned(Study) then
   with Study do
   begin
-    Purpose.Text := PurposeMemo.Text;
-    AbstractText.Text := AbstractMemo.Text;
-    Citations.Text := CitationsMemo.Text;
+    KeyWords                  := KeywordsEdit.Text;
+    Purpose.Text              := PurposeMemo.Text;
+    AbstractText.Text         := AbstractMemo.Text;
+    Citations.Text            := CitationsMemo.Text;
     GeographicalCoverage.Text := GeoCoverageEdit.Text;
-    TimeCoverage.Text := TimeCoverageEdit.Text;
+    TimeCoverage.Text         := TimeCoverageEdit.Text;
+    Population.Text           := PopulationEdit.Text;
   end;
 
   if Assigned(FManagerSettings) then
   with FManagerSettings^ do
   begin
+    ContKeywords := KeywordsEdit.Text;
     ContPurpose := PurposeMemo.Text;
     ContAbstract := AbstractMemo.Text;
     ContCitation := CitationsMemo.Text;
     ContGeoCover := GeoCoverageEdit.Text;
     ContTimeCover := TimeCoverageEdit.Text;
+    ContPopulation := PopulationEdit.Text;
   end;
 end;
 

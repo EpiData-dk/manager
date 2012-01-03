@@ -14,12 +14,14 @@ type
   { TProjectSetting_OwnershipFrame }
 
   TProjectSetting_OwnershipFrame = class(TFrame, IProjectSettingsFrame, ISettingsFrame)
+    AgencyEdit: TEdit;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     FundingMemo: TMemo;
     AuthorsMemo: TMemo;
+    Label5: TLabel;
     RightsMemo: TMemo;
     PublisherEdit: TEdit;
   private
@@ -48,6 +50,7 @@ begin
   Study := TEpiDocument(Avalue).Study;
   with Study do
   begin
+    AgencyEdit.Text := Agency;
     AuthorsMemo.Text := Author;
     RightsMemo.Text := Rights.Text;
     PublisherEdit.Text := Publisher.Text;
@@ -60,6 +63,7 @@ begin
   FManagerSettings := Data;
   with FManagerSettings^ do
   begin
+    AgencyEdit.Text :=  OwnAgency;
     AuthorsMemo.Text := OwnAuthers;
     RightsMemo.Text := OwnRights;
     PublisherEdit.Text := OwnPublisher;
@@ -73,6 +77,7 @@ begin
   if Assigned(Study) then
   with Study do
   begin
+    Agency := AgencyEdit.Text;
     Author := AuthorsMemo.Text;
     Rights.Text := RightsMemo.Text;
     Publisher.Text := PublisherEdit.Text;
@@ -82,6 +87,7 @@ begin
   if Assigned(FManagerSettings) then
   with FManagerSettings^ do
   begin
+    OwnAgency := AgencyEdit.Text;
     OwnAuthers := AuthorsMemo.Text;
     OwnRights := RightsMemo.Text;
     OwnPublisher := PublisherEdit.Text;

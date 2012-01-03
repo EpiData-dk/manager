@@ -1,7 +1,6 @@
 object MainForm: TMainForm
   Left = 608
   Height = 603
-  Hint = 'New EpiData Project (XML)'
   Top = 305
   Width = 910
   Caption = 'MainForm'
@@ -55,6 +54,7 @@ object MainForm: TMainForm
       AnchorSideTop.Side = asrCenter
       Left = 8
       Height = 27
+      Hint = 'New EpiData Project'
       Top = 7
       Width = 87
       Action = NewProjectAction

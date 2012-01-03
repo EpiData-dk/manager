@@ -231,7 +231,7 @@ begin
   begin
     S := S + LineEnding +
       'Filename: ' + TProjectFrame(FActiveFrame).ProjectFileName + LineEnding +
-      'XML Version: ' + IntToStr(XMLSettings.Version) + LineEnding +
+      'XML Version: ' + IntToStr(Version) + LineEnding +
       'Field count: ' + IntToStr(DataFiles[0].Fields.Count) + LineEnding +
       'Record count: ' + IntToStr(DataFiles[0].Size);
   end;

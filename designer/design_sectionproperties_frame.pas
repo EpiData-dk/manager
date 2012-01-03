@@ -150,7 +150,7 @@ begin
 
     FSection.Caption.Text := CaptionEdit.Text;
     for i := 0 to GroupAssignedListBox.Count - 1 do
-      if not FSection.Groups.ItemExistsById(TEpiGroup(GroupAssignedListBox.Items.Objects[i]).Id) then
+      if not FSection.Groups.ItemExistsByName(TEpiGroup(GroupAssignedListBox.Items.Objects[i]).Name) then
         FSection.Groups.AddItem(TEpiGroup(GroupAssignedListBox.Items.Objects[i]));
 
     // Advanced Page

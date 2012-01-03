@@ -435,6 +435,10 @@ end;
 procedure TFieldPropertiesFrame.ValueLabelSetsHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
+  if (EventGroup = eegCustomBase) and (EventType = Word(ecceDestroy)) then
+    FValueLabelSets := nil;
+
+
   if (EventGroup = eegCustomBase) and (EventType = Word(ecceAddItem)) then
     TEpiValueLabelSet(Data).RegisterOnChangeHook(@ValueLabelSetHook, true);
 
@@ -1257,9 +1261,12 @@ destructor TFieldPropertiesFrame.Destroy;
 var
   i: Integer;
 begin
-  for i := 0 to FValueLabelSets.Count - 1 do
-    FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelSetHook);
-  FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelSetsHook);
+  if assigned(FValueLabelSets) then
+  begin
+    for i := 0 to FValueLabelSets.Count - 1 do
+      FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelSetHook);
+    FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelSetsHook);
+  end;
   inherited Destroy;
 end;
 

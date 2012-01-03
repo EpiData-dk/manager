@@ -10,10 +10,11 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
   DesignTop = 301
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
+    AnchorSideTop.Control = KeywordsEdit
+    AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 18
-    Top = 10
+    Height = 16
+    Top = 66
     Width = 57
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
@@ -25,8 +26,8 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
     AnchorSideTop.Control = PurposeMemo
     AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 18
-    Top = 98
+    Height = 16
+    Top = 152
     Width = 59
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
@@ -38,9 +39,9 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
     AnchorSideTop.Side = asrBottom
     AnchorSideBottom.Control = CitationsMemo
     Left = 10
-    Height = 18
-    Top = 367
-    Width = 63
+    Height = 16
+    Top = 314
+    Width = 61
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 10
     BorderSpacing.Bottom = 5
@@ -55,16 +56,16 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 10
-    Height = 147
+    Height = 202
     Hint = 'Geographical and time period'
-    Top = 455
+    Top = 400
     Width = 585
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 10
     BorderSpacing.Right = 10
     BorderSpacing.Bottom = 10
     Caption = 'Coverage:'
-    ClientHeight = 128
+    ClientHeight = 185
     ClientWidth = 581
     ParentShowHint = False
     ShowHint = True
@@ -73,9 +74,9 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
       AnchorSideLeft.Control = GroupBox1
       AnchorSideTop.Control = GroupBox1
       Left = 10
-      Height = 18
+      Height = 16
       Top = 10
-      Width = 91
+      Width = 89
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Geographical:'
@@ -88,8 +89,8 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
       AnchorSideRight.Control = GroupBox1
       AnchorSideRight.Side = asrBottom
       Left = 10
-      Height = 27
-      Top = 30
+      Height = 25
+      Top = 28
       Width = 561
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
@@ -102,9 +103,9 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
       AnchorSideTop.Control = GeoCoverageEdit
       AnchorSideTop.Side = asrBottom
       Left = 10
-      Height = 18
-      Top = 67
-      Width = 83
+      Height = 16
+      Top = 63
+      Width = 80
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Time period:'
@@ -117,14 +118,43 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
       AnchorSideRight.Control = GroupBox1
       AnchorSideRight.Side = asrBottom
       Left = 10
-      Height = 27
-      Top = 87
+      Height = 25
+      Top = 81
       Width = 561
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 2
       BorderSpacing.Right = 10
       TabOrder = 1
+    end
+    object Label6: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = TimeCoverageEdit
+      AnchorSideTop.Side = asrBottom
+      Left = 10
+      Height = 16
+      Top = 116
+      Width = 72
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Population:'
+      ParentColor = False
+    end
+    object PopulationEdit: TEdit
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Label6
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 25
+      Top = 134
+      Width = 561
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 10
+      TabOrder = 2
     end
   end
   object AbstractMemo: TMemo
@@ -135,8 +165,8 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Label3
     Left = 10
-    Height = 241
-    Top = 121
+    Height = 136
+    Top = 173
     Width = 585
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 10
@@ -154,7 +184,7 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 55
-    Top = 33
+    Top = 87
     Width = 585
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
@@ -170,12 +200,40 @@ object ProjectSetting_ContentDescFrame: TProjectSetting_ContentDescFrame
     AnchorSideBottom.Control = GroupBox1
     Left = 10
     Height = 55
-    Top = 390
+    Top = 335
     Width = 585
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 10
     BorderSpacing.Right = 10
     BorderSpacing.Bottom = 10
     TabOrder = 3
+  end
+  object Label7: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
+    Height = 16
+    Top = 10
+    Width = 64
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Keywords:'
+    ParentColor = False
+  end
+  object KeywordsEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label7
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 25
+    Top = 31
+    Width = 585
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 10
+    TabOrder = 4
   end
 end

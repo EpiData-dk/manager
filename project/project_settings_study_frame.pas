@@ -50,7 +50,7 @@ begin
   begin
     TitleEdit.Text     := Title.Text;
     IdentfierEdit.Text := Identifier;
-    LanguageEdit.Text  := Language;
+//    LanguageEdit.Text  := Language;
     VersionEdit.Text   := Version;
   end
 end;
@@ -73,16 +73,16 @@ begin
   if Assigned(FStudy) then
   With FStudy do
   begin
-    if LanguageEdit.Text <> Language then
+{    if LanguageEdit.Text <> Language then
       if MessageDlg('Warning!',
         'Changing language will reset ALL texts/captions (not field/section/heading names).' + LineEnding+
         'Are you sure you wish to proceed?',
         mtWarning, mbYesNo, 0, mbNo
         ) = mrNo then exit;
 
-    Language := LanguageEdit.Text;
+//    Language := LanguageEdit.Text;
     TEpiDocument(RootOwner).SetLanguage(Language, true);
-    TEpiDocument(RootOwner).SetLanguage(Language, false);
+    TEpiDocument(RootOwner).SetLanguage(Language, false);}
 
     Title.Text := TitleEdit.Text;
     Identifier := IdentfierEdit.Text;
