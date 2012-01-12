@@ -1,9 +1,203 @@
-object CSVFrame: TCSVFrame
+object ExportCSVFrame: TExportCSVFrame
   Left = 0
   Height = 240
   Top = 0
   Width = 320
+  ClientHeight = 240
+  ClientWidth = 320
   TabOrder = 0
-  DesignLeft = 696
-  DesignTop = 430
+  DesignLeft = 491
+  DesignTop = 288
+  object SeparatorGrpBox: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 20
+    Height = 156
+    Top = 20
+    Width = 280
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 20
+    BorderSpacing.Top = 20
+    BorderSpacing.Right = 20
+    Caption = 'Separators:'
+    ClientHeight = 139
+    ClientWidth = 276
+    TabOrder = 0
+    object Label1: TLabel
+      AnchorSideLeft.Control = SeparatorGrpBox
+      AnchorSideTop.Control = SeparatorGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = FieldSepEdit
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 16
+      Top = 19
+      Width = 99
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Field separator:'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = SeparatorGrpBox
+      AnchorSideTop.Control = Label1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Control = DateSepEdit
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 16
+      Top = 49
+      Width = 104
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Date Separator:'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      AnchorSideLeft.Control = SeparatorGrpBox
+      AnchorSideTop.Control = Label2
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Control = TimeSepEdit
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 16
+      Top = 79
+      Width = 104
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Time Separator:'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      AnchorSideLeft.Control = SeparatorGrpBox
+      AnchorSideTop.Control = Label3
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Control = DecimalSepEdit
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 16
+      Top = 109
+      Width = 125
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Decimal Separator:'
+      ParentColor = False
+    end
+    object FieldSepEdit: TMaskEdit
+      AnchorSideTop.Control = SeparatorGrpBox
+      AnchorSideRight.Control = SeparatorGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 222
+      Height = 25
+      Top = 10
+      Width = 24
+      Anchors = [akTop, akRight]
+      AutoSelect = False
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 30
+      CharCase = ecNormal
+      MaxLength = 1
+      TabOrder = 0
+      EditMask = 'A;1;_'
+      Text = ' '
+      SpaceChar = '_'
+    end
+    object DateSepEdit: TMaskEdit
+      AnchorSideTop.Control = FieldSepEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = SeparatorGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 222
+      Height = 25
+      Top = 40
+      Width = 24
+      Anchors = [akTop, akRight]
+      AutoSelect = False
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 30
+      CharCase = ecNormal
+      MaxLength = 1
+      TabOrder = 1
+      EditMask = 'A;1;_'
+      Text = ' '
+      SpaceChar = '_'
+    end
+    object TimeSepEdit: TMaskEdit
+      AnchorSideTop.Control = DateSepEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = SeparatorGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 222
+      Height = 25
+      Top = 70
+      Width = 24
+      Anchors = [akTop, akRight]
+      AutoSelect = False
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 30
+      CharCase = ecNormal
+      MaxLength = 1
+      TabOrder = 2
+      EditMask = 'A;1;_'
+      Text = ' '
+      SpaceChar = '_'
+    end
+    object DecimalSepEdit: TMaskEdit
+      AnchorSideTop.Control = TimeSepEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = SeparatorGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 222
+      Height = 25
+      Top = 100
+      Width = 24
+      Anchors = [akTop, akRight]
+      AutoSelect = False
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 30
+      CharCase = ecNormal
+      MaxLength = 1
+      TabOrder = 3
+      EditMask = 'A;1;_'
+      Text = ' '
+      SpaceChar = '_'
+    end
+  end
+  object Label5: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = SeparatorGrpBox
+    AnchorSideTop.Side = asrCenter
+    AnchorSideBottom.Control = NewLineCmbBox
+    AnchorSideBottom.Side = asrBottom
+    Left = 20
+    Height = 16
+    Top = 197
+    Width = 62
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 20
+    BorderSpacing.Top = 10
+    Caption = 'New Line:'
+    ParentColor = False
+  end
+  object NewLineCmbBox: TComboBox
+    AnchorSideTop.Control = SeparatorGrpBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = SeparatorGrpBox
+    AnchorSideRight.Side = asrBottom
+    Left = 160
+    Height = 27
+    Top = 186
+    Width = 140
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 10
+    ItemHeight = 0
+    Style = csDropDownList
+    TabOrder = 1
+  end
 end

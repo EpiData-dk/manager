@@ -384,7 +384,7 @@
       <Unit51>
         <Filename Value="export/export_csv_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="CSVFrame"/>
+        <ComponentName Value="ExportCSVFrame"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_csv_frame"/>
       </Unit51>

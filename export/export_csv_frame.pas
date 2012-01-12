@@ -5,18 +5,30 @@ unit export_csv_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, epiexportsettings,
-  export_frame_types, epimiscutils;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, MaskEdit,
+  epiexportsettings, export_frame_types, epimiscutils;
 
 type
 
-  { TCSVFrame }
+  { TExportCSVFrame }
 
-  TCSVFrame = class(TFrame, IExportSettingsPresenterFrame)
+  TExportCSVFrame = class(TFrame, IExportSettingsPresenterFrame)
+    NewLineCmbBox: TComboBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    FieldSepEdit: TMaskEdit;
+    DateSepEdit: TMaskEdit;
+    TimeSepEdit: TMaskEdit;
+    DecimalSepEdit: TMaskEdit;
+    SeparatorGrpBox: TGroupBox;
   private
     { private declarations }
   public
     { public declarations }
+    constructor Create(TheOwner: TComponent); override;
     function GetExportName: string;
     function GetFrameCaption: string;
     function UpdateExportSetting(Setting: TEpiExportSetting): boolean;
@@ -28,32 +40,56 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form;
+  export_form, epistringutils;
 
-{ TCSVFrame }
+{ TExportCSVFrame }
 
-function TCSVFrame.GetExportName: string;
+constructor TExportCSVFrame.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+
+  FieldSepEdit.Text := ',';
+  DateSepEdit.Text := DefaultFormatSettings.DateSeparator;
+  TimeSepEdit.Text := DefaultFormatSettings.TimeSeparator;
+  DecimalSepEdit.Text := DefaultFormatSettings.DecimalSeparator;
+
+  with NewLineCmbBox.Items do
+  begin
+    Clear;
+    AddObject('Linux' {$IFDEF LINUX}+ ' (System)'{$ENDIF}, TString.Create(#10));
+    AddObject('Mac' {$IFDEF DARWIN}+ ' (System)'{$ENDIF}, TString.Create(#13));
+    AddObject('Windows' {$IFDEF WINDOWS}+ ' (System)'{$ENDIF}, TString.Create(#13#10));
+  end;
+
+{  FieldSeparator: string;
+  DateSeparator: string;
+  TimeSeparator: string;
+  DecimalSeparator: string;
+  NewLine: string;}
+end;
+
+function TExportCSVFrame.GetExportName: string;
 begin
   result := 'CSV File';
 end;
 
-function TCSVFrame.GetFrameCaption: string;
+function TExportCSVFrame.GetFrameCaption: string;
 begin
   result := 'CSV Export';
 end;
 
-function TCSVFrame.UpdateExportSetting(Setting: TEpiExportSetting): boolean;
+function TExportCSVFrame.UpdateExportSetting(Setting: TEpiExportSetting): boolean;
 begin
   result := true;
 end;
 
-function TCSVFrame.GetFileDialogExtensions: TEpiDialogFilters;
+function TExportCSVFrame.GetFileDialogExtensions: TEpiDialogFilters;
 begin
   result := [dfText];
 end;
 
 initialization
-  RegisterExportFrame(TCSVFrame, TEpiCSVExportSetting);
+  RegisterExportFrame(TExportCSVFrame, TEpiCSVExportSetting);
 
 end.
 
