@@ -510,6 +510,7 @@ begin
   ManagerSettings.EntryClientDirUTF8 := SysToUTF8(ExtractFilePath(UTF8ToSys(Application.ExeName)));
 
   RecentFiles := TStringList.Create;
+  RecentFiles.CaseSensitive := true;
 end;
 
 finalization

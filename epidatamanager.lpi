@@ -55,7 +55,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="47">
+    <Units Count="52">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -355,6 +355,39 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_export"/>
       </Unit46>
+      <Unit47>
+        <Filename Value="export/export_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ExportForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="export_form"/>
+      </Unit47>
+      <Unit48>
+        <Filename Value="export/export_stata_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ExportStataFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_stata_frame"/>
+      </Unit48>
+      <Unit49>
+        <Filename Value="export/export_customvaluelabel_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CustomValueLabelFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_customvaluelabel_frame"/>
+      </Unit49>
+      <Unit50>
+        <Filename Value="export/export_frame_types.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="export_frame_types"/>
+      </Unit50>
+      <Unit51>
+        <Filename Value="export/export_csv_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CSVFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_csv_frame"/>
+      </Unit51>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -364,7 +397,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import;tools;reports"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import;tools;reports;export"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

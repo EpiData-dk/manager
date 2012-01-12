@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 608
+  Left = 632
   Height = 603
-  Top = 305
+  Top = 325
   Width = 910
   Caption = 'MainForm'
   ClientHeight = 580
@@ -210,6 +210,10 @@ object MainForm: TMainForm
       end
       object MenuItem3: TMenuItem
         Caption = '-'
+      end
+      object ExportMenuItem: TMenuItem
+        Caption = 'Export...'
+        OnClick = ExportMenuItemClick
       end
       object ExportStataMenuItem: TMenuItem
         Action = StataExportAction

@@ -15,6 +15,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    ExportMenuItem: TMenuItem;
     ValueLabelEditor2MenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
@@ -99,6 +100,7 @@ type
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
+    procedure ExportMenuItemClick(Sender: TObject);
     procedure ExtendedListReportActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -178,7 +180,7 @@ uses
   strutils, report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
-  shortcuts, valuelabelseditor_form2;
+  shortcuts, valuelabelseditor_form2, export_form;
 
 { TMainForm }
 
@@ -246,6 +248,22 @@ end;
 procedure TMainForm.EpiDataTutorialsMenuItemClick(Sender: TObject);
 begin
   OpenURL('http://www.epidata.org/dokuwiki/doku.php/documentation:tutorials');
+end;
+
+procedure TMainForm.ExportMenuItemClick(Sender: TObject);
+var
+  IsLocalDoc: boolean;
+  Fn: string;
+  Doc: TEpiDocument;
+  ExportForm: TExportForm;
+begin
+  Doc := ToolsCheckOpenFile(Fn, IsLocalDoc);
+
+  if not Assigned(Doc) then exit;
+
+  ExportForm := TExportForm.Create(nil, Doc.DataFiles[0]);
+  ExportForm.ShowModal;
+  ExportForm.Free;
 end;
 
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);

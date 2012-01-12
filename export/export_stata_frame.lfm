@@ -1,0 +1,67 @@
+object ExportStataFrame: TExportStataFrame
+  Left = 0
+  Height = 412
+  Top = 0
+  Width = 516
+  ClientHeight = 412
+  ClientWidth = 516
+  TabOrder = 0
+  DesignLeft = 770
+  DesignTop = 387
+  object Label4: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = VersionComboBox
+    AnchorSideTop.Side = asrCenter
+    Left = 20
+    Height = 16
+    Top = 26
+    Width = 52
+    BorderSpacing.Left = 20
+    Caption = 'Version:'
+    ParentColor = False
+  end
+  object VersionComboBox: TComboBox
+    AnchorSideLeft.Control = Label4
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 82
+    Height = 29
+    Top = 20
+    Width = 414
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 20
+    BorderSpacing.Right = 20
+    ItemHeight = 0
+    Style = csDropDownList
+    TabOrder = 0
+  end
+  object FieldNamingRGrp: TRadioGroup
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 20
+    Height = 4
+    Top = 58
+    Width = 476
+    Anchors = [akTop, akLeft, akRight]
+    AutoFill = True
+    AutoSize = True
+    BorderSpacing.Left = 20
+    BorderSpacing.Right = 20
+    Caption = 'Field naming'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.TopBottomSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 1
+    ClientWidth = 472
+    TabOrder = 1
+  end
+end
