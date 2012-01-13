@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, EditBtn, Buttons, CheckLst, ExtCtrls, epiexportsettings,
-  export_stata_frame, epidatafiles;
+  export_stata_frame, epidatafiles, epidocument;
 
 type
 
@@ -82,6 +82,9 @@ var
 begin
   if not Assigned(RegisterList) then
     RegisterList := TList.Create;
+
+  if not Supports(CFC, IExportSettingsPresenterFrame) then
+    Exit;
 
   Rec := new(PFrameRec);
   Rec^.CFC := CFC;

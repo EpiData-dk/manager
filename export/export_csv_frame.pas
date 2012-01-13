@@ -13,22 +13,24 @@ type
   { TExportCSVFrame }
 
   TExportCSVFrame = class(TFrame, IExportSettingsPresenterFrame)
+    FieldSepEdit: TEdit;
+    DateSepEdit: TEdit;
+    TimeSepEdit: TEdit;
+    DecimalSepEdit: TEdit;
     NewLineCmbBox: TComboBox;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
-    FieldSepEdit: TMaskEdit;
-    DateSepEdit: TMaskEdit;
-    TimeSepEdit: TMaskEdit;
-    DecimalSepEdit: TMaskEdit;
     SeparatorGrpBox: TGroupBox;
   private
     { private declarations }
+    FTextExport: TFrame;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     function GetExportName: string;
     function GetFrameCaption: string;
     function UpdateExportSetting(Setting: TEpiExportSetting): boolean;
@@ -40,7 +42,7 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form, epistringutils;
+  export_form, epistringutils, export_customtext_frame;
 
 { TExportCSVFrame }
 
@@ -61,11 +63,22 @@ begin
     AddObject('Windows' {$IFDEF WINDOWS}+ ' (System)'{$ENDIF}, TString.Create(#13#10));
   end;
 
-{  FieldSeparator: string;
-  DateSeparator: string;
-  TimeSeparator: string;
-  DecimalSeparator: string;
-  NewLine: string;}
+  // Custom Text Frame;
+  FTextExport := TExportCustomTextFrame.Create(self);
+  FTextExport.Parent := Self;
+  FTextExport.AnchorToNeighbour(akTop, 10, NewLineCmbBox);
+  FTextExport.AnchorParallel(akLeft, 20, Self);
+  FTextExport.AnchorParallel(akRight, 20, Self);
+  FTextExport.AnchorParallel(akBottom, 10, Self);
+end;
+
+destructor TExportCSVFrame.Destroy;
+var
+  i: Integer;
+begin
+  for i := 0 to NewLineCmbBox.Items.Count - 1 do
+    NewLineCmbBox.Items.Objects[i].Free;
+  inherited Destroy;
 end;
 
 function TExportCSVFrame.GetExportName: string;
@@ -80,7 +93,16 @@ end;
 
 function TExportCSVFrame.UpdateExportSetting(Setting: TEpiExportSetting): boolean;
 begin
-  result := true;
+  with TEpiCSVExportSetting(Setting) do
+  begin
+    FieldSeparator    := FieldSepEdit.Text;
+    DateSeparator     := DateSepEdit.Text;
+    TimeSeparator     := TimeSepEdit.Text;
+    DecimalSeparator  := DecimalSepEdit.Text;
+    NewLine           := TString(NewLineCmbBox.Items.Objects[NewLineCmbBox.ItemIndex]).Str;
+  end;
+
+  result := (FTextExport as IExportSettingsFrame).UpdateExportSetting(Setting);
 end;
 
 function TExportCSVFrame.GetFileDialogExtensions: TEpiDialogFilters;

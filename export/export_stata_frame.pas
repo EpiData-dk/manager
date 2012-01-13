@@ -44,11 +44,10 @@ begin
 
   LocalFrame := TCustomValueLabelFrame.Create(self);
   LocalFrame.Parent := self;
-  // FIX ME!
-  LocalFrame.AnchorToNeighbour(akTop, 10, VersionComboBox);
-  LocalFrame.AnchorToNeighbour(akLeft, 20, Self);
-  LocalFrame.AnchorToNeighbour(akRight, 20, Self);
-  LocalFrame.AnchorToNeighbour(akBottom, 10, Self);
+  LocalFrame.AnchorToNeighbour(akTop, 10, FieldNamingRGrp);
+  LocalFrame.AnchorParallel(akLeft, 20, Self);
+  LocalFrame.AnchorParallel(akRight, 20, Self);
+  LocalFrame.AnchorParallel(akBottom, 10, Self);
 
   with VersionComboBox.Items do
   begin

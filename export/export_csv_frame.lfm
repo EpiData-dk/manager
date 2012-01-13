@@ -6,8 +6,8 @@ object ExportCSVFrame: TExportCSVFrame
   ClientHeight = 240
   ClientWidth = 320
   TabOrder = 0
-  DesignLeft = 491
-  DesignTop = 288
+  DesignLeft = 895
+  DesignTop = 579
   object SeparatorGrpBox: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -89,84 +89,64 @@ object ExportCSVFrame: TExportCSVFrame
       Caption = 'Decimal Separator:'
       ParentColor = False
     end
-    object FieldSepEdit: TMaskEdit
+    object FieldSepEdit: TEdit
       AnchorSideTop.Control = SeparatorGrpBox
       AnchorSideRight.Control = SeparatorGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 222
+      Left = 242
       Height = 25
       Top = 10
       Width = 24
       Anchors = [akTop, akRight]
-      AutoSelect = False
       BorderSpacing.Top = 10
-      BorderSpacing.Right = 30
-      CharCase = ecNormal
+      BorderSpacing.Right = 10
       MaxLength = 1
       TabOrder = 0
-      EditMask = 'A;1;_'
-      Text = ' '
-      SpaceChar = '_'
     end
-    object DateSepEdit: TMaskEdit
+    object DateSepEdit: TEdit
       AnchorSideTop.Control = FieldSepEdit
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = SeparatorGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 222
+      Left = 242
       Height = 25
       Top = 40
       Width = 24
       Anchors = [akTop, akRight]
-      AutoSelect = False
       BorderSpacing.Top = 5
-      BorderSpacing.Right = 30
-      CharCase = ecNormal
+      BorderSpacing.Right = 10
       MaxLength = 1
       TabOrder = 1
-      EditMask = 'A;1;_'
-      Text = ' '
-      SpaceChar = '_'
     end
-    object TimeSepEdit: TMaskEdit
+    object TimeSepEdit: TEdit
       AnchorSideTop.Control = DateSepEdit
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = SeparatorGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 222
+      Left = 242
       Height = 25
       Top = 70
       Width = 24
       Anchors = [akTop, akRight]
-      AutoSelect = False
       BorderSpacing.Top = 5
-      BorderSpacing.Right = 30
-      CharCase = ecNormal
+      BorderSpacing.Right = 10
       MaxLength = 1
       TabOrder = 2
-      EditMask = 'A;1;_'
-      Text = ' '
-      SpaceChar = '_'
     end
-    object DecimalSepEdit: TMaskEdit
+    object DecimalSepEdit: TEdit
       AnchorSideTop.Control = TimeSepEdit
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = SeparatorGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 222
+      Left = 242
       Height = 25
       Top = 100
       Width = 24
       Anchors = [akTop, akRight]
-      AutoSelect = False
       BorderSpacing.Top = 5
-      BorderSpacing.Right = 30
-      CharCase = ecNormal
+      BorderSpacing.Right = 10
       MaxLength = 1
       TabOrder = 3
-      EditMask = 'A;1;_'
-      Text = ' '
-      SpaceChar = '_'
     end
   end
   object Label5: TLabel
@@ -177,7 +157,7 @@ object ExportCSVFrame: TExportCSVFrame
     AnchorSideBottom.Side = asrBottom
     Left = 20
     Height = 16
-    Top = 197
+    Top = 199
     Width = 62
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 20
@@ -191,7 +171,7 @@ object ExportCSVFrame: TExportCSVFrame
     AnchorSideRight.Control = SeparatorGrpBox
     AnchorSideRight.Side = asrBottom
     Left = 160
-    Height = 27
+    Height = 29
     Top = 186
     Width = 140
     Anchors = [akTop, akRight]

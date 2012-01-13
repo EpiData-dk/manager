@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
   project_frame, LMessages, Htmlview, manager_messages, epidocument, report_base,
-  episervice_ipc, episervice_ipctypes, simpleipc;
+  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc;
 
 type
 
@@ -256,14 +256,27 @@ var
   Fn: string;
   Doc: TEpiDocument;
   ExportForm: TExportForm;
+  Settings: TEpiExportSetting;
+  Exporter: TEpiExport;
 begin
-  Doc := ToolsCheckOpenFile(Fn, IsLocalDoc);
+  Settings := nil;
 
+  Doc := ToolsCheckOpenFile(Fn, IsLocalDoc);
   if not Assigned(Doc) then exit;
 
   ExportForm := TExportForm.Create(nil, Doc.DataFiles[0]);
-  ExportForm.ShowModal;
+  if ExportForm.ShowModal = mrOK then
+  begin
+    Settings := ExportForm.ExportSetting;
+    Settings.Doc := Doc;
+    Settings.DataFileIndex := 0;
+  end;
   ExportForm.Free;
+
+  Exporter := TEpiExport.Create;
+  Exporter.Export(Settings);
+  Exporter.Free;
+  Settings.Free;
 end;
 
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);

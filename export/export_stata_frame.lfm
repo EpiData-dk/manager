@@ -60,8 +60,6 @@ object ExportStataFrame: TExportStataFrame
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 1
-    ClientWidth = 472
     TabOrder = 1
   end
 end

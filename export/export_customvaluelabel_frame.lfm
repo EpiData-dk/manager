@@ -11,11 +11,10 @@ object CustomValueLabelFrame: TCustomValueLabelFrame
   object ExportValueLabelsChkBox: TCheckBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
-    Left = 10
+    Left = 0
     Height = 22
     Top = 10
     Width = 149
-    BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Export Value Labels'
     TabOrder = 0

@@ -1,0 +1,50 @@
+object ExportCustomTextFrame: TExportCustomTextFrame
+  Left = 0
+  Height = 221
+  Top = 0
+  Width = 338
+  ClientHeight = 221
+  ClientWidth = 338
+  TabOrder = 0
+  DesignLeft = 756
+  DesignTop = 418
+  object ExportFieldNameChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 0
+    Height = 22
+    Top = 0
+    Width = 204
+    Caption = 'Export Field Name (first row)'
+    TabOrder = 0
+  end
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ExportFieldNameChkBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = QuoteCharEdit
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 16
+    Top = 36
+    Width = 111
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Top = 10
+    Caption = 'Quote Character:'
+    ParentColor = False
+  end
+  object QuoteCharEdit: TEdit
+    AnchorSideTop.Control = ExportFieldNameChkBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 310
+    Height = 25
+    Top = 27
+    Width = 28
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 5
+    MaxLength = 1
+    TabOrder = 1
+  end
+end
