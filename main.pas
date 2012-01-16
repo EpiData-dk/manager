@@ -264,19 +264,18 @@ begin
   Doc := ToolsCheckOpenFile(Fn, IsLocalDoc);
   if not Assigned(Doc) then exit;
 
-  ExportForm := TExportForm.Create(nil, Doc.DataFiles[0]);
-  if ExportForm.ShowModal = mrOK then
-  begin
-    Settings := ExportForm.ExportSetting;
-    Settings.Doc := Doc;
-    Settings.DataFileIndex := 0;
-  end;
-  ExportForm.Free;
+  try
+    ExportForm := TExportForm.Create(Self, Doc, Fn);
+    if ExportForm.ShowModal <> mrOK then exit;
 
-  Exporter := TEpiExport.Create;
-  Exporter.Export(Settings);
-  Exporter.Free;
-  Settings.Free;
+    Exporter := TEpiExport.Create;
+    if not Exporter.Export(ExportForm.ExportSetting) then
+      ShowMessage('Export Failed.');
+  finally
+    ExportForm.Free;
+    Exporter.Free;
+    Settings.Free;
+  end;
 end;
 
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
@@ -545,13 +544,13 @@ begin
     FN := ExtractFileNameWithoutExt(FN);
     Exporter := TEpiExport.Create;
     Exporter.ExportEncoding := ManagerSettings.StataExportEncoding;
-    with Exporter.ExportLines do
+{    with Exporter.ExportLines do
     begin
       Add('Exported from EpiData Manager ' + GetEpiVersionInfo(ManagerVersion));
       Add('On: ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now));
       Add('Title: ' + Doc.Study.Title.Text);
       Add('Version: ' + Doc.Study.Version);
-    end;
+    end;         }
 
     SaveDlg := TSaveDialog.Create(Self);
     SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
@@ -568,7 +567,7 @@ begin
         SaveDlg.FileName := FN + '-' + StringReplace(Trim(Caption.Text), ' ', '_', [rfReplaceAll]) + '.dta';
       if not SaveDlg.Execute then exit;
 
-      Exporter.ExportStata(SaveDlg.FileName, Doc, 0, ManagerSettings.StataExportVersion);
+//      Exporter.ExportStata(SaveDlg.FileName, Doc, 0, ManagerSettings.StataExportVersion);
     end;
   finally
     if LocalDoc and Assigned(Doc) then

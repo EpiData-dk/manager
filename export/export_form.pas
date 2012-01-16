@@ -46,10 +46,11 @@ type
   private
     FExportSetting: TEpiExportSetting;
     FActiveSheet: TTabSheet;
+    FDoc: TEpiDocument;
     { private declarations }
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; Const DataFile: TEpiDataFile);
+    constructor Create(TheOwner: TComponent; Const Doc: TEpiDocument; Const FileName: string);
     property ExportSetting: TEpiExportSetting read FExportSetting;
   end;
 
@@ -106,7 +107,9 @@ begin
   FExportSetting := Rec^.ESC.Create;
   with FExportSetting do
   begin
+    Doc := FDoc;
     ExportFileName := ExportFileNameEdit.Text;
+    DataFileIndex := 0;
     if RangeRBtn.Checked then
     begin
       FromRecord := StrToInt(FromRecordEdit.Text);
@@ -174,8 +177,8 @@ begin
     QuestionLabel.Caption := TEpiField(FieldsChkListBox.Items.Objects[Idx]).Question.Text;
 end;
 
-constructor TExportForm.Create(TheOwner: TComponent;
-  const DataFile: TEpiDataFile);
+constructor TExportForm.Create(TheOwner: TComponent; const Doc: TEpiDocument;
+  const FileName: string);
 var
   Rec: PFrameRec;
   Tab: TTabSheet;
@@ -187,6 +190,13 @@ begin
   FExportSetting := nil;
   FActiveSheet := nil;
   DialogFilters := [];
+
+  FDoc := Doc;
+
+  // Export File Name
+  ExportFileNameEdit.Filter := GetEpiDialogFilter(DialogFilters + [dfAll]);
+  ExportFileNameEdit.InitialDir := ManagerSettings.WorkingDirUTF8;
+  ExportFileNameEdit.FileName := FileName;
 
   // Export types and their frames
   for i := 0 to RegisterList.Count - 1 do
@@ -209,11 +219,9 @@ begin
     end;
   end;
   ExportTypeCombo.ItemIndex := 0;
+  // Forces a change of filename extension and frame!
   ExportTypeComboSelect(ExportTypeCombo);
 
-  // Export File Name
-  ExportFileNameEdit.Filter := GetEpiDialogFilter(DialogFilters + [dfAll]);
-  ExportFileNameEdit.InitialDir := ManagerSettings.WorkingDirUTF8;
 
   // Encodings
   with EncodingCmbBox.Items do
@@ -239,9 +247,9 @@ begin
   EncodingCmbBox.ItemIndex := 0;
 
   // Fields:
-
-  for i := 0 to DataFile.Fields.Count - 1 do
-    FieldsChkListBox.AddItem(DataFile.Fields[i].Name, DataFile.Fields[i]);
+  // TODO : Using only for datafile until more df's are supported.
+  for i := 0 to Doc.DataFiles[0].Fields.Count - 1 do
+    FieldsChkListBox.AddItem(Doc.DataFiles[0].Fields[i].Name, Doc.DataFiles[0].Fields[i]);
   FieldsChkListBox.CheckAll(cbChecked, false, false);
 end;
 

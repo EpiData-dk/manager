@@ -34,7 +34,8 @@ implementation
 {$R *.lfm}
 
 uses
-  export_customvaluelabel_frame, epieximtypes, export_form;
+  export_customvaluelabel_frame, epieximtypes, export_form,
+  epiversionutils, settings2;
 
 { TExportStataFrame }
 
@@ -76,7 +77,14 @@ begin
   with TEpiStataExportSetting(Setting) do
   begin
     Version := TEpiStataVersion(PtrUInt(VersionComboBox.Items.Objects[VersionComboBox.ItemIndex]));
-    FieldNameCase := TEpiStataFieldNamingCase(PtrUInt(FieldNamingRGrp.Items.Objects[VersionComboBox.ItemIndex]));
+    FieldNameCase := TEpiStataFieldNamingCase(PtrUInt(FieldNamingRGrp.Items.Objects[FieldNamingRGrp.ItemIndex]));
+    with ExportLines do
+    begin
+      Add('Exported from EpiData Manager ' + GetEpiVersionInfo(ManagerVersion));
+      Add('On: ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now));
+      Add('Title: ' + Doc.Study.Title.Text);
+      Add('Version: ' + Doc.Study.Version);
+    end;
   end;
 
   result := result and
