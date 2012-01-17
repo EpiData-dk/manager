@@ -37,6 +37,7 @@ type
     AllRecordRBtn: TRadioButton;
     RangeRBtn: TRadioButton;
     BasicSheet: TTabSheet;
+    procedure FromRecordEditClick(Sender: TObject);
     procedure NoneBitBtnClick(Sender: TObject);
     procedure ExportTypeComboSelect(Sender: TObject);
     procedure FieldsChkListBoxMouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -112,8 +113,8 @@ begin
     DataFileIndex := 0;
     if RangeRBtn.Checked then
     begin
-      FromRecord := StrToInt(FromRecordEdit.Text);
-      ToRecord   := StrToInt(ToRecordEdit.Text);
+      FromRecord := StrToInt(FromRecordEdit.Text) - 1;  // -1 because the record count in Cores
+      ToRecord   := StrToInt(ToRecordEdit.Text) - 1;    // expect the numbers 0-indexed.
     end;
     Encoding := TEpiEncoding(PtrUInt(EncodingCmbBox.Items.Objects[EncodingCmbBox.ItemIndex]));
     for i := 0 to FieldsChkListBox.Items.Count - 1 do
@@ -125,7 +126,7 @@ end;
 
 procedure TExportForm.FromRecordEditKeyPress(Sender: TObject; var Key: char);
 begin
-  if Key in [Char('0')..Char('9')] then Key := #0;
+  if not (Key in [Char('0')..Char('9')]) then Key := #0;
 end;
 
 procedure TExportForm.ExportTypeComboSelect(Sender: TObject);
@@ -165,6 +166,11 @@ begin
   else
     State := cbChecked;
   FieldsChkListBox.CheckAll(State, false, false);
+end;
+
+procedure TExportForm.FromRecordEditClick(Sender: TObject);
+begin
+  RangeRBtn.Checked := true;
 end;
 
 procedure TExportForm.FieldsChkListBoxMouseMove(Sender: TObject;

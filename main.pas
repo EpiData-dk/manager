@@ -260,6 +260,8 @@ var
   Exporter: TEpiExport;
 begin
   Settings := nil;
+  Exporter := nil;
+  ExportForm := nil;
 
   Doc := ToolsCheckOpenFile(Fn, IsLocalDoc);
   if not Assigned(Doc) then exit;

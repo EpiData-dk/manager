@@ -123,6 +123,7 @@ object ExportForm: TExportForm
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 20
           BorderSpacing.Right = 10
+          OnClick = FromRecordEditClick
           OnKeyPress = FromRecordEditKeyPress
           TabOrder = 2
         end
@@ -138,6 +139,7 @@ object ExportForm: TExportForm
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Right = 10
+          OnClick = FromRecordEditClick
           OnKeyPress = FromRecordEditKeyPress
           TabOrder = 3
         end
