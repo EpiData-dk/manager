@@ -85,7 +85,7 @@ begin
   if not Assigned(RegisterList) then
     RegisterList := TList.Create;
 
-  if not Supports(CFC, IExportSettingsPresenterFrame) then
+  if (CFC <> nil) and (not Supports(CFC, IExportSettingsPresenterFrame)) then
     Exit;
 
   Rec := new(PFrameRec);
@@ -209,6 +209,7 @@ begin
   begin
     Rec := PFrameRec(RegisterList[i]);
 
+//    if Rec^
 
     Tab := PageControl1.AddTabSheet;
     Tab.TabVisible := false;

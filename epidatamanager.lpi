@@ -55,7 +55,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="53">
+    <Units Count="54">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -395,6 +395,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_customtext_frame"/>
       </Unit52>
+      <Unit53>
+        <Filename Value="export/export_spss_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ExportSPSSFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_spss_frame"/>
+      </Unit53>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
