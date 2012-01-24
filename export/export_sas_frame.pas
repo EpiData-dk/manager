@@ -61,7 +61,7 @@ end;
 
 function TExportSASFrame.GetFileDialogExtensions: TEpiDialogFilters;
 begin
-  result := [dfSPSS];
+  result := [dfSAS];
 end;
 
 initialization
