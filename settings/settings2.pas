@@ -92,7 +92,7 @@ begin
   Result := false;
 
   try
-    Ini := TIniFile.Create(FileName);
+    Ini := TIniFile.Create(UTF8ToSys(FileName));
     With Ini do
     with ManagerSettings do
     begin
@@ -218,7 +218,7 @@ begin
   if not FileExistsUTF8(FileName) then exit;
 
   try
-    Ini := TIniFile.Create(FileName);
+    Ini := TIniFile.Create(UTF8ToSys(FileName));
     With Ini do
     with ManagerSettings do
     begin
