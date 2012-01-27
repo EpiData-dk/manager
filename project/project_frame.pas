@@ -332,7 +332,7 @@ begin
     if ExtractFileExt(UTF8ToSys(AFileName)) = '.epz' then
       StreamToZipFile(Ms, AFileName)
     else begin
-      Fs := TFileStream.Create(AFileName, fmCreate);
+      Fs := TFileStream.Create(UTF8ToSys(AFileName), fmCreate);
       Fs.CopyFrom(Ms, Ms.Size);
     end;
     FFileTimeStamp := FileAgeUTF8(AFileName);
@@ -390,7 +390,7 @@ begin
     if ExtractFileExt(UTF8ToSys(Fn)) = '.epz' then
       ZipFileToStream(St, Fn)
     else
-      St.LoadFromFile(Fn);
+      St.LoadFromFile(UTF8ToSys(Fn));
 
     St.Position := 0;
     FEpiDocument := DoCreateNewDocument;
