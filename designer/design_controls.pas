@@ -172,6 +172,8 @@ function ControlTextToEpiText(Const Str: string): string;
 
 function DesignControlTypeFromControl(Ctrl: TControl): TDesignerControlType;
 
+function GetRandomComponentName: string;
+
 var
   DesignControlsForm: TDesignControlsForm;
 
@@ -294,6 +296,18 @@ begin
      (Ctrl is TScrollBox) then exit(dctSection);
 end;
 
+function GetRandomComponentName: string;
+var
+  GUID: TGUID;
+begin
+  // Hack: Create a GUID to use as Component name.
+  //  - the comp. name is not used in other parts of the program anyway,
+  //  - so using GUID is a valid way to create random components names... :)
+  //  - And the chance of creating to equal component name are very-very-very unlikely.
+  CreateGUID(GUID);
+  Result := '_' + StringsReplace(GUIDToString(GUID), ['{','}','-'], ['','',''], [rfReplaceAll]);
+end;
+
 { TDesignField }
 
 function TDesignField.GetEpiControl: TEpiCustomControlItem;
@@ -314,13 +328,13 @@ end;
 procedure TDesignField.SetEpiControl(const AValue: TEpiCustomControlItem);
 var
   ProjectSettings: TEpiProjectSettings;
+  GUID: TGUID;
 begin
   FField := TEpiField(AValue);
   FField.RegisterOnChangeHook(@OnFieldChange);
   FField.Question.RegisterOnChangeHook(@OnQuestionChange);
   ProjectSettings := TEpiDocument(FField.RootOwner).ProjectSettings;
   ProjectSettings.RegisterOnChangeHook(@OnProjectSettingsChange);
-  Name := FField.Name;
   Caption := '';
 
   if not ProjectSettings.ShowFieldBorders then
@@ -485,6 +499,7 @@ end;
 constructor TDesignField.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  Name := GetRandomComponentName;
   FQuestionLabel := TLabel.Create(Self);
   FQuestionLabel.Anchors := [];
   FQuestionLabel.AnchorToNeighbour(akRight, 5, Self);
@@ -552,7 +567,6 @@ begin
   FSection := TEpiSection(AValue);
   FSection.RegisterOnChangeHook(@OnChange);
   FSection.Caption.RegisterOnChangeHook(@OnTextChange);
-  Name := FSection.Name;
   Caption := '';
 end;
 
@@ -644,6 +658,7 @@ end;
 constructor TDesignSection.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  Name := GetRandomComponentName;
 
   FXTree := TAVLTree.Create(@XTreeSort);
   FYTree := TAVLTree.Create(@YTreeSort);
@@ -686,7 +701,6 @@ begin
   FHeading := TEpiHeading(AValue);
   FHeading.RegisterOnChangeHook(@OnHeadingChange);
   FHeading.Caption.RegisterOnChangeHook(@OnCaptionChange);
-  Name := FHeading.Name;
   Caption := '';
 end;
 
@@ -752,6 +766,7 @@ end;
 constructor TDesignHeading.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  Name := GetRandomComponentName;
 
   // Standard properties being set for the component.
   DragKind := dkDock;
