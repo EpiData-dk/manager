@@ -44,7 +44,7 @@ function SaveSettingToIni(Const FileName: string): boolean;
 function LoadSettingsFromIni(Const FileName: string): boolean;
 
 procedure SaveFormPosition(Const AForm: TForm; Const SectionName: string);
-procedure LoadFormPosition(Var AForm: TForm; Const SectionName: string);
+procedure LoadFormPosition(AForm: TForm; Const SectionName: string);
 
 procedure AddToRecent(Const AFilename: string);
 
@@ -354,7 +354,7 @@ begin
   end;
 end;
 
-procedure LoadFormPosition(var AForm: TForm; const SectionName: string);
+procedure LoadFormPosition(AForm: TForm; const SectionName: string);
 var
   Ini: TIniFile;
 begin
