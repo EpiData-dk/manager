@@ -48,7 +48,7 @@ begin
   OnGetApplicationName := @EpiDataApplicationName;
   // Load ini before anything else - it contains start-up info.
   LoadIniFile;
-  {$IFDEF EPI_RELEASE}
+  {$IFNDEF EPI_DEBUG}
   if (not ManagerSettings.MultipleInstances) and
      InstanceRunning(EpiDataApplicationName) then exit;
   {$ENDIF}

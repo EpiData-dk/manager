@@ -192,7 +192,7 @@ begin
   UpdateRecentFiles;
 
   // Show welcome message
-  {$IFDEF EPI_RELEASE}
+  {$IFNDEF EPI_DEBUG}
   if ManagerSettings.ShowWelcome then
     ShowMessagePos('EpiData Manager:' + LineEnding +
                    'See help menu above for an introduction.' + LineEnding +
@@ -210,7 +210,7 @@ var
 begin
   CanClose := true;
 
-  {$IFDEF EPI_RELEASE}
+  {$IFNDEF EPI_DEBUG}
   if Assigned(FActiveFrame) then
     FActiveFrame.CloseQuery(CanClose);
   {$ENDIF}
