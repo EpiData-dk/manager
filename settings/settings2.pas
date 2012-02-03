@@ -33,11 +33,7 @@ type
     class procedure RestoreDefaultPos;
   end;
 
-  {$IFDEF EPI_SHOWREVISION}
-    {$I revision.inc}
-  {$ELSE}
-    const RevisionStr = '(DEBUG)';
-  {$ENDIF}
+  {$I epidatamanager.revision.inc}
 
 function GetManagerVersion: String;
 function SaveSettingToIni(Const FileName: string): boolean;
@@ -49,18 +45,9 @@ procedure LoadFormPosition(AForm: TForm; Const SectionName: string);
 procedure AddToRecent(Const AFilename: string);
 
 const
-  {$IFDEF EPI_SHOWREVISION}
-    ManagerVersion: TEpiVersionInfo = (
+  ManagerVersion: TEpiVersionInfo = (
     {$I epidatamanager.version.inc}
-    );
-  {$ELSE}
-    ManagerVersion: TEpiVersionInfo = (
-      VersionNo: 0;
-      MajorRev:  0;
-      MinorRev:  0;
-      BuildNo:   0;
-    );
-  {$ENDIF}
+  );
 
 implementation
 

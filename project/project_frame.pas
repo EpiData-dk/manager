@@ -612,7 +612,7 @@ begin
   try
     FBackupTimer.Enabled := false;
 
-    {$IFDEF EPI_RELEASE}
+    {$IFNDEF EPI_DEBUG}
     // Warn user that project has not yet been saved...
     if ProjectFileName = '' then
     begin
@@ -682,7 +682,7 @@ procedure TProjectFrame.CloseQuery(var CanClose: boolean);
 var
   res: LongInt;
 begin
-  {$IFDEF EPI_RELEASE}
+  {$IFNDEF EPI_DEBUG}
   if Modified or
     (Assigned(EpiDocument) and (EpiDocument.Modified)) then
   begin
