@@ -5,7 +5,8 @@ unit settings2_var;
 interface
 
 uses
-  Classes, SysUtils, epidatafilestypes, Graphics, epieximtypes;
+  Classes, SysUtils, epidatafilestypes, Graphics, epieximtypes,
+  epiexportsettings, Forms;
 
 type
   TManagerSettings = record
@@ -52,8 +53,28 @@ type
     SectionFont:           TFont;
 
     // Export:
-    StataExportVersion:    TEpiStataVersion;
-    StataExportEncoding:   TEpiEncoding;
+    ExportType:            Integer;
+    ExportDeleted:         boolean;
+    ExportEncoding:        TEpiEncoding;
+
+    // - Stata:
+    ExportStataVersion:    TEpiStataVersion;
+    ExportStataFieldCase:  TEpiStataFieldNamingCase;
+    ExportStataValueLabels: boolean;
+
+    // - CSV
+    ExportCSVFieldName:    boolean;
+    ExportCSVQuote:        string;
+    ExportCSVFieldSep:     string;
+    ExportCSVDateSep:      string;
+    ExportCSVTimeSep:      string;
+    ExportCSVDecSep:       string;
+    ExportCSVNewLine:      integer;
+
+    // - SAS
+    ExportSASValueLabels: boolean;
+    // - SPSS
+    ExportSPSSValueLabels: boolean;
 
     // Project Defaults
     // - general:
@@ -130,9 +151,31 @@ var
     SectionFont:           nil;
 
     // Export:
-    StataExportVersion:    dta8;   // Default to Version 8
-    StataExportEncoding:   eeUTF8;
+    ExportType:            0;     // 0 = Stata
+                                  // 1 = CSV
+                                  // 2 = SPSS
+                                  // 3 = SAS
+    ExportDeleted:         false;
+    ExportEncoding:        eeUTF8;
 
+    // - Stata:
+    ExportStataVersion:    dta8;   // Default to Version 8
+    ExportStataFieldCase:  fncAsIs;
+    ExportStataValueLabels: true;
+
+    // - CSV
+    ExportCSVFieldName:    true;
+    ExportCSVQuote:        '"';
+    ExportCSVFieldSep:     ',';
+    ExportCSVDateSep:      '-';
+    ExportCSVTimeSep:      ':';
+    ExportCSVDecSep:       '.';
+    ExportCSVNewLine:      0;
+
+    // - SAS
+    ExportSASValueLabels:  true;
+    // - SPSS
+    ExportSPSSValueLabels: true;
 
     // Project Defaults
     // - general:

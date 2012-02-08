@@ -15,7 +15,7 @@ begin
   M_OpenProject          := KeyToShortCut(VK_O, [ssMeta]);
   M_StartEntryClient     := KeyToShortCut(VK_UNKNOWN, []);
   M_Pack                 := KeyToShortCut(VK_UNKNOWN, []);
-  M_ExportStata          := KeyToShortCut(VK_UNKNOWN, []);
+  M_Export               := KeyToShortCut(VK_UNKNOWN, []);
   M_QuestionListReport   := KeyToShortCut(VK_UNKNOWN, []);
   M_ValueLabelListReport := KeyToShortCut(VK_UNKNOWN, []);
   M_CombinedListReport   := KeyToShortCut(VK_UNKNOWN, []);

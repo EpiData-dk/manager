@@ -1,7 +1,7 @@
 object ExportForm: TExportForm
-  Left = 913
+  Left = 903
   Height = 457
-  Top = 418
+  Top = 236
   Width = 700
   Caption = 'ExportForm'
   ClientHeight = 457

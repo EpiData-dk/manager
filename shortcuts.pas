@@ -21,7 +21,7 @@ var
   M_OpenProject,
   M_StartEntryClient,
   M_Pack,
-  M_ExportStata,
+  M_Export,
   M_QuestionListReport,
   M_ValueLabelListReport,
   M_CombinedListReport,

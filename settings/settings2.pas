@@ -55,11 +55,15 @@ implementation
 
 uses
   settings2_interface, settings2_var, epidatafilestypes,
-  IniFiles, strutils, epieximtypes,
+  IniFiles, strutils, epieximtypes, epiexportsettings,
   // settings
   settings_advanced_frame, settings_fielddefinitions_frame,
   settings_general_frame, settings_visualdesign_frame,
   settings_export,
+
+  // export
+  export_csv_frame, export_stata_frame, export_sas_frame, export_spss_frame,
+
   // project settings
   project_settings_field_frame, project_settings_general_frame,
   project_settings_study_contentdesc_frame, project_settings_study_frame,
@@ -147,8 +151,29 @@ begin
 
       // Export:
       Sec := 'export';
-      WriteInteger(sec, 'StataExportVersion', Integer(StataExportVersion));
-      WriteInteger(sec, 'StataExportEncoding', Integer(StataExportEncoding));
+      WriteInteger(sec, 'ExportType', ExportType);
+      WriteBool(sec, 'ExportDeleted', ExportDeleted);
+      WriteInteger(sec, 'ExportEncoding', Integer(ExportEncoding));
+
+      Sec := 'exportstata';
+      WriteInteger(sec, 'ExportStataVersion', Integer(ExportStataVersion));
+      WriteInteger(sec, 'ExportStataFieldCase', Integer(ExportStataFieldCase));
+      WriteBool(sec, 'ExportStataValueLabels', ExportStataValueLabels);
+
+      sec := 'exportcsv';
+      WriteBool(sec, 'ExportCSVFieldName', ExportCSVFieldName);
+      WriteInteger(sec, 'ExportCSVNewLine', ExportCSVNewLine);
+      WriteString(sec, 'ExportCSVQuote', ExportCSVQuote);
+      WriteString(sec, 'ExportCSVFieldSep', ExportCSVFieldSep);
+      WriteString(sec, 'ExportCSVDateSep', ExportCSVDateSep);
+      WriteString(sec, 'ExportCSVTimeSep', ExportCSVTimeSep);
+      WriteString(sec, 'ExportCSVDecSep', ExportCSVDecSep);
+
+      sec := 'exportsas';
+      WriteBool(sec, 'ExportSASValueLabels', ExportSASValueLabels);
+
+      sec := 'exportspss';
+      WriteBool(sec, 'ExportSPSSValueLabels', ExportSPSSValueLabels);
 
       // Project Defaults
       // - general:
@@ -259,8 +284,29 @@ begin
 
       // Export:
       Sec := 'export';
-      StataExportVersion  := TEpiStataVersion(ReadInteger(sec, 'StataExportVersion', Integer(StataExportVersion)));
-      StataExportEncoding := TEpiEncoding(ReadInteger(sec, 'StataExportEncoding', Integer(StataExportEncoding)));
+      ExportType             := ReadInteger(sec, 'ExportType', ExportType);
+      ExportDeleted          := ReadBool(sec, 'ExportDeleted', ExportDeleted);
+      ExportEncoding         := TEpiEncoding(ReadInteger(sec, 'ExportEncoding', Integer(ExportEncoding)));
+
+      Sec := 'exportstata';
+      ExportStataVersion     := TEpiStataVersion(ReadInteger(sec, 'ExportStataVersion', Integer(ExportStataVersion)));
+      ExportStataFieldCase   := TEpiStataFieldNamingCase(ReadInteger(sec, 'ExportStataFieldCase', Integer(ExportStataFieldCase)));
+      ExportStataValueLabels := ReadBool(sec, 'ExportStataValueLabels', ExportStataValueLabels);
+
+      sec := 'exportcsv';
+      ExportCSVFieldName     := ReadBool(sec, 'ExportCSVFieldName', ExportCSVFieldName);
+      ExportCSVNewLine       := ReadInteger(sec, 'ExportCSVNewLine', ExportCSVNewLine);
+      ExportCSVQuote         := ReadString(sec, 'ExportCSVQuote', ExportCSVQuote);
+      ExportCSVFieldSep      := ReadString(sec, 'ExportCSVFieldSep', ExportCSVFieldSep);
+      ExportCSVDateSep       := ReadString(sec, 'ExportCSVDateSep', ExportCSVDateSep);
+      ExportCSVTimeSep       := ReadString(sec, 'ExportCSVTimeSep', ExportCSVTimeSep);
+      ExportCSVDecSep        := ReadString(sec, 'ExportCSVDecSep', ExportCSVDecSep);
+
+      sec := 'exportsas';
+      ExportSASValueLabels   := ReadBool(sec, 'ExportSASValueLabels', ExportSASValueLabels);
+
+      sec := 'exportspss';
+      ExportSPSSValueLabels  := ReadBool(sec, 'ExportSPSSValueLabels', ExportSPSSValueLabels);
 
       // Fonts
       Sec := 'fonts';
@@ -455,9 +501,15 @@ begin
     FindNodeWithText('Paths').Data               := Pointer(TSettings_PathsFrame.Create(Self));
     FindNodeWithText('Field Definitions').Data   := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
     FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
-    FindNodeWithText('Export').Data              := Pointer(TSettings_ExportFrame.Create(Self));
 
-    //
+    // Export
+    FindNodeWithText('Export').Data              := Pointer(TSettings_ExportFrame.Create(Self));
+    FindNodeWithText('Stata').Data               := Pointer(TExportStataFrame.Create(Self));
+    FindNodeWithText('CSV').Data                 := Pointer(TExportCSVFrame.Create(Self));
+    FindNodeWithText('SPSS').Data                := Pointer(TExportSPSSFrame.Create(Self));
+    FindNodeWithText('SAS').Data                 := Pointer(TExportSASFrame.Create(Self));
+
+    // Project options
     FindNodeWithText('Project Defaults').GetFirstChild.Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
     FindNodeWithText('Fields').Data              := Pointer(TProjectSettings_FieldFrame.Create(Self));
     FindNodeWithText('Study').Data               := Pointer(TProjectsettings_StudyFrame.Create(Self));

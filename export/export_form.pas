@@ -191,6 +191,7 @@ var
   Frame: TCustomFrame;
   i: Integer;
   DialogFilters: TEpiDialogFilters;
+  S: String;
 begin
   inherited Create(TheOwner);
   FExportSetting := nil;
@@ -209,8 +210,6 @@ begin
   begin
     Rec := PFrameRec(RegisterList[i]);
 
-//    if Rec^
-
     Tab := PageControl1.AddTabSheet;
     Tab.TabVisible := false;
     Frame := Rec^.CFC.Create(Tab);
@@ -225,10 +224,6 @@ begin
       DialogFilters := DialogFilters + GetFileDialogExtensions;
     end;
   end;
-  ExportTypeCombo.ItemIndex := 0;
-  // Forces a change of filename extension and frame!
-  ExportTypeComboSelect(ExportTypeCombo);
-
 
   // Encodings
   with EncodingCmbBox.Items do
@@ -251,13 +246,29 @@ begin
     AddObject('Korean (CP949)',         TObject(eeCP949));
     AddObject('Japanes (CP932)',        TObject(eeCP932));
   end;
-  EncodingCmbBox.ItemIndex := 0;
 
   // Fields:
   // TODO : Using only for datafile until more df's are supported.
   for i := 0 to Doc.DataFiles[0].Fields.Count - 1 do
     FieldsChkListBox.AddItem(Doc.DataFiles[0].Fields[i].Name, Doc.DataFiles[0].Fields[i]);
   FieldsChkListBox.CheckAll(cbChecked, false, false);
+
+  // SETUP ACCORDING TO MANAGERSETTINGS.
+  // Export type:
+  //  - Dirty way of doing, but works for now.
+  case ManagerSettings.ExportType of
+    0: S := 'Stata';
+    1: S := 'CSV File';
+    2: S := 'SPSS';
+    3: S := 'SAS';
+  end;
+  ExportTypeCombo.ItemIndex := ExportTypeCombo.Items.IndexOf(S);
+  // Forces a change of filename extension and frame!
+  ExportTypeComboSelect(ExportTypeCombo);
+  // Encoding:
+  EncodingCmbBox.ItemIndex := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ManagerSettings.ExportEncoding)));
+  // Export Deleted:
+  ExportDeletedChkBox.Checked := ManagerSettings.ExportDeleted;
 end;
 
 end.

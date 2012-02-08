@@ -212,11 +212,7 @@ object MainForm: TMainForm
         Caption = '-'
       end
       object ExportMenuItem: TMenuItem
-        Caption = 'Export...'
-        OnClick = ExportMenuItemClick
-      end
-      object ExportStataMenuItem: TMenuItem
-        Action = StataExportAction
+        Action = ExportAction
       end
       object PackMenuItem: TMenuItem
         Action = PackAction
@@ -344,11 +340,6 @@ object MainForm: TMainForm
       Caption = 'Pack Datafiles'
       OnExecute = PackActionExecute
     end
-    object StataExportAction: TAction
-      Category = 'Tools'
-      Caption = 'Export To Stata'
-      OnExecute = StataExportActionExecute
-    end
     object ReportGeneratorAction: TAction
       Category = 'Tools'
       Caption = 'Report Generator...'
@@ -378,6 +369,11 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Project Overview'
       OnExecute = ProjectReportActionExecute
+    end
+    object ExportAction: TAction
+      Category = 'Tools'
+      Caption = 'Export...'
+      OnExecute = ExportActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

@@ -7,19 +7,20 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls,
   StdCtrls, ExtCtrls, export_frame_types, epiexportsettings,
-  epimiscutils;
+  epimiscutils, settings2_interface, settings2_var;
 
 type
 
   { TExportStataFrame }
 
-  TExportStataFrame = class(TFrame, IExportSettingsPresenterFrame)
+  TExportStataFrame = class(TFrame, IExportSettingsPresenterFrame, ISettingsFrame)
     VersionComboBox: TComboBox;
     Label4: TLabel;
     FieldNamingRGrp: TRadioGroup;
   private
     { private declarations }
     LocalFrame: TFrame;
+    FData: PManagerSettings;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -27,6 +28,8 @@ type
     function GetFrameCaption: string;
     function GetExportName: string;
     function GetFileDialogExtensions: TEpiDialogFilters;
+    procedure SetSettings(Data: PManagerSettings);
+    function  ApplySettings: boolean;
   end;
 
 implementation
@@ -60,7 +63,6 @@ begin
     AddObject('Stata 10, 11', TObject(dta10));
     AddObject('Stata 12',     TObject(dta12));
   end;
-  VersionComboBox.ItemIndex := 0;
 
   with FieldNamingRGrp.Items do
   begin
@@ -69,7 +71,8 @@ begin
     AddObject('lowercase', TObject(fncLower));
     AddObject('Leave As Is', TObject(fncAsIs));
   end;
-  FieldNamingRGrp.ItemIndex := FieldNamingRGrp.Items.Count - 1;
+
+  SetSettings(@ManagerSettings);
 end;
 
 function TExportStataFrame.UpdateExportSetting(Setting: TEpiExportSetting): boolean;
@@ -104,6 +107,28 @@ end;
 function TExportStataFrame.GetFileDialogExtensions: TEpiDialogFilters;
 begin
   result := [dfDTA];
+end;
+
+procedure TExportStataFrame.SetSettings(Data: PManagerSettings);
+begin
+  FData := Data;
+  with FData^ do
+  begin
+    VersionComboBox.ItemIndex := VersionComboBox.Items.IndexOfObject(TObject(PtrUInt(ExportStataVersion)));
+    FieldNamingRGrp.ItemIndex := FieldNamingRGrp.Items.IndexOfObject(TObject(PtrUInt(ExportStataFieldCase)));
+    TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked := ExportStataValueLabels;
+  end;
+end;
+
+function TExportStataFrame.ApplySettings: boolean;
+begin
+  with FData^ do
+  begin
+    ExportStataVersion := TEpiStataVersion(PtrUInt(VersionComboBox.Items.Objects[VersionComboBox.ItemIndex]));
+    ExportStataFieldCase := TEpiStataFieldNamingCase(PtrUInt(FieldNamingRGrp.Items.Objects[FieldNamingRGrp.ItemIndex]));
+    ExportStataValueLabels := TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked;
+  end;
+  result := true;
 end;
 
 initialization

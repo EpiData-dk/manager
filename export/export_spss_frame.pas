@@ -6,16 +6,18 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls,
-  epiexportsettings, export_frame_types, epimiscutils;
+  epiexportsettings, export_frame_types, epimiscutils, settings2_interface,
+  settings2_var;
 
 type
 
   { TExportSPSSFrame }
 
-  TExportSPSSFrame = class(TFrame, IExportSettingsPresenterFrame)
+  TExportSPSSFrame = class(TFrame, IExportSettingsPresenterFrame, ISettingsFrame)
   private
     { private declarations }
     FFrame: TFrame;
+    FData:  PManagerSettings;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -23,6 +25,8 @@ type
     function GetFrameCaption: string;
     function GetExportName: string;
     function GetFileDialogExtensions: TEpiDialogFilters;
+    procedure SetSettings(Data: PManagerSettings);
+    function ApplySettings: boolean;
   end;
 
 implementation
@@ -41,6 +45,9 @@ begin
   FFrame := TCustomValueLabelFrame.Create(self);
   FFrame.Parent := self;
   FFrame.Align := alClient;
+
+  // SETUP ACCORDING TO MANAGERSETTINGS.
+  SetSettings(@ManagerSettings);
 end;
 
 function TExportSPSSFrame.UpdateExportSetting(Setting: TEpiExportSetting
@@ -62,6 +69,18 @@ end;
 function TExportSPSSFrame.GetFileDialogExtensions: TEpiDialogFilters;
 begin
   result := [dfSPSS];
+end;
+
+procedure TExportSPSSFrame.SetSettings(Data: PManagerSettings);
+begin
+  FData := Data;
+  TCustomValueLabelFrame(FFrame).ExportValueLabelsChkBox.Checked := FData^.ExportSPSSValueLabels;
+end;
+
+function TExportSPSSFrame.ApplySettings: boolean;
+begin
+  FData^.ExportSPSSValueLabels := TCustomValueLabelFrame(FFrame).ExportValueLabelsChkBox.Checked;
+  result := true;
 end;
 
 initialization

@@ -6,8 +6,8 @@ object ExportCSVFrame: TExportCSVFrame
   ClientHeight = 240
   ClientWidth = 320
   TabOrder = 0
-  DesignLeft = 895
-  DesignTop = 579
+  DesignLeft = 1150
+  DesignTop = 477
   object SeparatorGrpBox: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner

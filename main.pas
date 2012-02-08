@@ -15,6 +15,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    ExportAction: TAction;
     ExportMenuItem: TMenuItem;
     ValueLabelEditor2MenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
@@ -33,7 +34,6 @@ type
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     CodeBookMenuItem: TMenuItem;
-    StataExportAction: TAction;
     PackAction: TAction;
     ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
@@ -61,7 +61,6 @@ type
     HelpMenuDivider3: TMenuItem;
     AboutMenuItem: TMenuItem;
     CheckVersionMenuItem: TMenuItem;
-    ExportStataMenuItem: TMenuItem;
     FileMenuDivider1: TMenuItem;
     CloseProjectMenuItem: TMenuItem;
     NewProjectMenuItem: TMenuItem;
@@ -100,7 +99,7 @@ type
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
-    procedure ExportMenuItemClick(Sender: TObject);
+    procedure ExportActionExecute(Sender: TObject);
     procedure ExtendedListReportActionExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -117,7 +116,6 @@ type
     procedure ShowAboutActionExecute(Sender: TObject);
     procedure StartEntryClientActionExecute(Sender: TObject);
     procedure StartEntryClientActionUpdate(Sender: TObject);
-    procedure StataExportActionExecute(Sender: TObject);
     procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
@@ -250,7 +248,7 @@ begin
   OpenURL('http://www.epidata.org/dokuwiki/doku.php/documentation:tutorials');
 end;
 
-procedure TMainForm.ExportMenuItemClick(Sender: TObject);
+procedure TMainForm.ExportActionExecute(Sender: TObject);
 var
   IsLocalDoc: boolean;
   Fn: string;
@@ -515,71 +513,6 @@ begin
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
 end;
 
-procedure TMainForm.StataExportActionExecute(Sender: TObject);
-var
-  LocalDoc: Boolean;
-  Doc: TEpiDocument;
-  SaveDlg: TSaveDialog;
-  F: TToolsForm;
-  i: Integer;
-  Exporter: TEpiExport;
-  FN: string;
-begin
-  try
-    F := nil;
-    Exporter := nil;
-    SaveDlg := nil;
-    Doc := ToolsCheckOpenFile(Fn, LocalDoc);
-    if not Assigned(Doc) then exit;
-
-    F := TToolsForm.Create(Self);
-    F.Caption := 'Export To Stata: ' + Doc.Study.Title.Text;
-    F.EpiDocument := Doc;
-    if F.ShowModal = mrCancel then exit;
-
-    if F.SelectedDatafiles.Count = 0 then
-    begin
-      ShowMessage('No datasets selected.');
-      Exit;
-    end;
-
-    FN := ExtractFileNameWithoutExt(FN);
-    Exporter := TEpiExport.Create;
-    Exporter.ExportEncoding := ManagerSettings.StataExportEncoding;
-{    with Exporter.ExportLines do
-    begin
-      Add('Exported from EpiData Manager ' + GetEpiVersionInfo(ManagerVersion));
-      Add('On: ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now));
-      Add('Title: ' + Doc.Study.Title.Text);
-      Add('Version: ' + Doc.Study.Version);
-    end;         }
-
-    SaveDlg := TSaveDialog.Create(Self);
-    SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-    SaveDlg.Filter := GetEpiDialogFilter(dfExport);
-    SaveDlg.Options := SaveDlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
-    SaveDlg.DefaultExt := 'dta';
-    for i := 0 to F.SelectedDatafiles.Count - 1 do
-    with TEpiDataFile(F.SelectedDatafiles[i]) do
-    begin
-      SaveDlg.Title := 'Export "' + EpiCutString(Caption.Text, 15) + '" to Stata file...';
-      if F.SelectedDatafiles.Count = 1 then
-        SaveDlg.FileName := FN + '.dta'
-      else
-        SaveDlg.FileName := FN + '-' + StringReplace(Trim(Caption.Text), ' ', '_', [rfReplaceAll]) + '.dta';
-      if not SaveDlg.Execute then exit;
-
-//      Exporter.ExportStata(SaveDlg.FileName, Doc, 0, ManagerSettings.StataExportVersion);
-    end;
-  finally
-    if LocalDoc and Assigned(Doc) then
-      Doc.Free;
-    if Assigned(F) then F.free;
-    if Assigned(SaveDlg) then SaveDlg.Free;
-    if Assigned(Exporter) then Exporter.free;
-  end;
-end;
-
 procedure TMainForm.UserAccessBtnClick(Sender: TObject);
 begin
   ShowValueLabelEditor2(FActiveFrame.EpiDocument.ValueLabelSets);
@@ -766,7 +699,7 @@ begin
   OpenProjectAction.ShortCut          := M_OpenProject;
   StartEntryClientAction.ShortCut     := M_StartEntryClient;
   PackAction.ShortCut                 := M_Pack;
-  StataExportAction.ShortCut          := M_ExportStata;
+  ExportAction.ShortCut               := M_Export;
   QuestionListReportAction.ShortCut   := M_QuestionListReport;
   ValueLabelListReportAction.ShortCut := M_ValueLabelListReport;
   CombinedListReportAction.ShortCut   := M_CombinedListReport;

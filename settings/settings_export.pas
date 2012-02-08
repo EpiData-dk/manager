@@ -13,10 +13,11 @@ type
   { TSettings_ExportFrame }
 
   TSettings_ExportFrame = class(TFrame, ISettingsFrame)
-    StataVersionCmbBx: TComboBox;
-    StataEncodingCmbBx: TComboBox;
+    EncodingCmbBox: TComboBox;
+    ExportDeletedChkBox: TCheckBox;
+    ExportTypeCombo: TComboBox;
     Label1: TLabel;
-    Label2: TLabel;
+    Label5: TLabel;
   private
     { private declarations }
     FData: PManagerSettings;
@@ -39,18 +40,17 @@ uses
 constructor TSettings_ExportFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  with StataVersionCmbBx.Items do
+  with ExportTypeCombo.Items do
   begin
     Clear;
-    AddObject('Stata 4',      TObject($69));
-    AddObject('Stata 5, 6',   TObject($6C));
-    AddObject('Stata 7',      TObject($6E));
-    AddObject('Stata 8, 9',   TObject($71));
-    AddObject('Stata 10, 11', TObject($72));
-    AddObject('Stata 12',     TObject($73));
+    AddObject('Stata', TObject(0));
+    AddObject('CSV',   TObject(1));
+    AddObject('SPSS',  TObject(2));
+    AddObject('SAS',   TObject(3));
   end;
 
-  with StataEncodingCmbBx.Items do
+  // Encodings
+  with EncodingCmbBox.Items do
   begin
     Clear;
     AddObject('Unicode (UTF-8)',        TObject(eeUTF8));
@@ -77,8 +77,9 @@ begin
   FData := Data;
   with FData^ do
   begin
-    StataVersionCmbBx.ItemIndex := StataVersionCmbBx.Items.IndexOfObject(TObject(PtrUInt(StataExportVersion)));
-    StataEncodingCmbBx.ItemIndex := StataEncodingCmbBx.Items.IndexOfObject(TObject(PtrUInt(StataExportEncoding)));
+    ExportTypeCombo.ItemIndex   := ExportTypeCombo.Items.IndexOfObject(TObject(PtrUInt(ExportType)));
+    EncodingCmbBox.ItemIndex    := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ExportEncoding)));
+    ExportDeletedChkBox.Checked := ExportDeleted;
   end;
 end;
 
@@ -86,8 +87,9 @@ function TSettings_ExportFrame.ApplySettings: boolean;
 begin
   with FData ^ do
   begin
-    StataExportVersion := TEpiStataVersion(PtrUInt(StataVersionCmbBx.Items.Objects[StataVersionCmbBx.ItemIndex]));
-    StataExportEncoding := TEpiEncoding(PtrUInt(StataEncodingCmbBx.Items.Objects[StataEncodingCmbBx.ItemIndex]));
+    ExportType     := PtrUInt(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex]);
+    ExportEncoding := TEpiEncoding(PtrUInt(EncodingCmbBox.Items.Objects[EncodingCmbBox.ItemIndex]));
+    ExportDeleted  := ExportDeletedChkBox.Checked;
   end;
   result := true;
 end;

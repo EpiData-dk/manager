@@ -6,13 +6,14 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, MaskEdit,
-  epiexportsettings, export_frame_types, epimiscutils;
+  epiexportsettings, export_frame_types, epimiscutils, settings2_interface,
+  settings2_var;
 
 type
 
   { TExportCSVFrame }
 
-  TExportCSVFrame = class(TFrame, IExportSettingsPresenterFrame)
+  TExportCSVFrame = class(TFrame, IExportSettingsPresenterFrame, ISettingsFrame)
     FieldSepEdit: TEdit;
     DateSepEdit: TEdit;
     TimeSepEdit: TEdit;
@@ -27,6 +28,7 @@ type
   private
     { private declarations }
     FTextExport: TFrame;
+    FData:       PManagerSettings;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -35,6 +37,8 @@ type
     function GetFrameCaption: string;
     function UpdateExportSetting(Setting: TEpiExportSetting): boolean;
     function GetFileDialogExtensions: TEpiDialogFilters;
+    procedure SetSettings(Data: PManagerSettings);
+    function ApplySettings: boolean;
   end; 
 
 implementation
@@ -70,6 +74,9 @@ begin
   FTextExport.AnchorParallel(akLeft, 20, Self);
   FTextExport.AnchorParallel(akRight, 20, Self);
   FTextExport.AnchorParallel(akBottom, 10, Self);
+
+  // SETUP ACCORDING TO MANAGERSETTINGS.
+  SetSettings(@ManagerSettings);
 end;
 
 destructor TExportCSVFrame.Destroy;
@@ -108,6 +115,45 @@ end;
 function TExportCSVFrame.GetFileDialogExtensions: TEpiDialogFilters;
 begin
   result := [dfText];
+end;
+
+procedure TExportCSVFrame.SetSettings(Data: PManagerSettings);
+var
+  I: Integer;
+begin
+  FData := Data;
+  with FData^ do
+  begin
+    FieldSepEdit.Text                                                 := ExportCSVFieldSep;
+    DateSepEdit.Text                                                  := ExportCSVDateSep;
+    TimeSepEdit.Text                                                  := ExportCSVTimeSep;
+    DecimalSepEdit.Text                                               := ExportCSVDecSep;
+    TExportCustomTextFrame(FTextExport).ExportFieldNameChkBox.Checked := ExportCSVFieldName;
+    TExportCustomTextFrame(FTextExport).QuoteCharEdit.Text            := ExportCSVQuote;
+    NewLineCmbBox.ItemIndex                                           := ExportCSVNewLine;
+  end;
+end;
+
+function TExportCSVFrame.ApplySettings: boolean;
+begin
+  Result :=
+    (FieldSepEdit.Text <> '') and
+    (DateSepEdit.Text <> '') and
+    (TimeSepEdit.Text <> '') and
+    (DecimalSepEdit.Text <> '') and
+    (TExportCustomTextFrame(FTextExport).QuoteCharEdit.Text <> '');
+  if not result then exit;
+
+  with FData^ do
+  begin
+    ExportCSVFieldSep  := FieldSepEdit.Text;
+    ExportCSVDateSep   := DateSepEdit.Text;
+    ExportCSVTimeSep   := TimeSepEdit.Text;
+    ExportCSVDecSep    := DecimalSepEdit.Text;
+    ExportCSVFieldName := TExportCustomTextFrame(FTextExport).ExportFieldNameChkBox.Checked;
+    ExportCSVQuote     := TExportCustomTextFrame(FTextExport).QuoteCharEdit.Text;
+    ExportCSVNewLine   := NewLineCmbBox.ItemIndex;
+  end;
 end;
 
 initialization
