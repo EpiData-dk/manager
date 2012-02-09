@@ -58,6 +58,7 @@ begin
   D_PasteAs                    := KeyToShortCut(VK_G, [ssCtrl]);
   D_CopyControl                := KeyToShortCut(VK_C, [ssCtrl]);
   D_PasteControl               := KeyToShortCut(VK_V, [ssCtrl]);
+  D_ViewDataSet                := KeyToShortCut(VK_UNKNOWN, []);
 
   // ValueLabel Editor
   // - tree actions

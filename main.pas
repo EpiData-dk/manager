@@ -17,6 +17,8 @@ type
   TMainForm = class(TForm)
     ExportAction: TAction;
     ExportMenuItem: TMenuItem;
+    DataSetMenu: TMenuItem;
+    ViewDataSetMenuItem: TMenuItem;
     ValueLabelEditor2MenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
@@ -675,6 +677,7 @@ begin
   ProjectMenu.Visible := Assigned(FActiveFrame);
 
   // TOOLS:
+  DataSetMenu.Visible := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;
@@ -905,6 +908,7 @@ begin
   PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
+  ViewDataSetMenuItem.Action              := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;

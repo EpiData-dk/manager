@@ -104,7 +104,7 @@ object MainForm: TMainForm
   end
   object MainMenu1: TMainMenu
     left = 159
-    top = 192
+    top = 216
     object FileMenuItem: TMenuItem
       Caption = '&File'
       object NewProjectMenuItem: TMenuItem
@@ -178,6 +178,12 @@ object MainForm: TMainForm
       end
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
+      end
+    end
+    object DataSetMenu: TMenuItem
+      Caption = '&Dataset'
+      object ViewDataSetMenuItem: TMenuItem
+        Caption = 'ViewDataSet'
       end
     end
     object ToolsMenu: TMenuItem

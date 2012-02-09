@@ -21,6 +21,7 @@ type
   end;
 
   TDesignFrame = class(TFrame)
+    ViewDataSetAction: TAction;
     PrintDataFormAction: TAction;
     MoreSpaceAction: TAction;
     DeleteControlFastAction: TAction;
@@ -210,6 +211,7 @@ type
     procedure   PrintDataFormActionExecute(Sender: TObject);
     procedure   TestToolButtonClick(Sender: TObject);
     procedure   ToggleToolBtn(Sender: TObject);
+    procedure   ViewDataSetActionExecute(Sender: TObject);
   private
     { common private }
     FDataFile: TEpiDataFile;
@@ -331,7 +333,8 @@ uses
   Graphics, Clipbrd, epiadmin, math, import_form, LCLIntf,
   main, settings2_var, epiimport, LCLProc, dialogs, epimiscutils, epistringutils,
   managerprocs, copyobject, epiranges, design_types,
-  import_structure_form, shortcuts, fpvectorial, fpvutils, FPimage;
+  import_structure_form, shortcuts, fpvectorial, fpvutils, FPimage,
+  datasetviewer_frame, settings2;
 
 const
   PIXELS_PER_MILIMETER = 3.5433;
@@ -435,6 +438,28 @@ begin
 
   TToolButton(Sender).Down := true;
   FActiveButton := TToolButton(Sender);
+end;
+
+procedure TDesignFrame.ViewDataSetActionExecute(Sender: TObject);
+var
+  F: TForm;
+  V: TDataSetViewFrame;
+begin
+  F := nil;
+  try
+    F := TForm.Create(Self);
+    V := TDataSetViewFrame.Create(F, DataFile);
+    V.Align := alClient;
+    V.Parent := F;
+
+    if ManagerSettings.SaveWindowPositions then
+      LoadFormPosition(F, 'DataSetViewer');
+    F.ShowModal;
+    if ManagerSettings.SaveWindowPositions then
+      SaveFormPosition(F, 'DataSetViewer');
+  finally
+    F.Free;
+  end;
 end;
 
 procedure TDesignFrame.ResetMousePos;
@@ -2842,10 +2867,20 @@ begin
 end;
 
 procedure TDesignFrame.RestoreDefaultPos;
+var
+  Aform: TForm;
 begin
   if Assigned(FDesignControlForm) then
     FDesignControlForm.RestoreDefaultPos;
   TImportStructureForm.RestoreDefaultPos;
+
+  Aform := TForm.Create(nil);
+  Aform.Width := 600;
+  Aform.Height := 600;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'DataSetViewer');
+  AForm.free;
 end;
 
 end.

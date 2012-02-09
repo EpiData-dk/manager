@@ -2395,6 +2395,11 @@ object DesignFrame: TDesignFrame
       ImageIndex = 19
       OnExecute = PrintDataFormActionExecute
     end
+    object ViewDataSetAction: TAction
+      Category = 'DataSet'
+      Caption = 'View DataSet'
+      OnExecute = ViewDataSetActionExecute
+    end
   end
   object DesignControlPopUpMenu: TPopupMenu
     Images = DesignerImageList

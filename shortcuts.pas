@@ -59,7 +59,8 @@ var
   D_DeleteAllControl,
   D_PasteAs,
   D_CopyControl,
-  D_PasteControl:
+  D_PasteControl,
+  D_ViewDataSet:
     TShortCut;
 
 
