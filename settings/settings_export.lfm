@@ -1,72 +1,83 @@
 object Settings_ExportFrame: TSettings_ExportFrame
   Left = 0
-  Height = 371
+  Height = 350
   Top = 0
-  Width = 394
-  ClientHeight = 371
-  ClientWidth = 394
+  Width = 465
+  ClientHeight = 350
+  ClientWidth = 465
   TabOrder = 0
-  DesignLeft = 924
-  DesignTop = 286
-  object Label1: TLabel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Side = asrCenter
-    AnchorSideBottom.Control = StataVersionCmbBx
-    AnchorSideBottom.Side = asrBottom
-    Left = 10
-    Height = 16
-    Top = 21
-    Width = 90
-    Anchors = [akLeft, akBottom]
-    BorderSpacing.Left = 10
-    Caption = 'Stata version:'
-    ParentColor = False
-  end
-  object StataVersionCmbBx: TComboBox
+  DesignLeft = 467
+  DesignTop = 362
+  object ExportTypeCombo: TComboBox
+    AnchorSideLeft.Control = Label1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 150
-    Height = 27
-    Top = 10
-    Width = 234
+    Left = 104
+    Height = 29
+    Top = 20
+    Width = 341
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
-    BorderSpacing.Top = 10
-    BorderSpacing.Right = 10
+    BorderSpacing.Top = 20
+    BorderSpacing.Right = 20
     ItemHeight = 0
     Style = csDropDownList
     TabOrder = 0
   end
-  object Label2: TLabel
+  object Label1: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideBottom.Control = StataEncodingCmbBx
-    AnchorSideBottom.Side = asrBottom
-    Left = 10
+    AnchorSideTop.Control = ExportTypeCombo
+    AnchorSideTop.Side = asrCenter
+    Left = 20
     Height = 16
-    Top = 58
-    Width = 124
-    Anchors = [akLeft, akBottom]
-    BorderSpacing.Left = 10
-    Caption = 'Stata file encoding:'
+    Top = 26
+    Width = 74
+    BorderSpacing.Left = 20
+    Caption = 'Export Type'
     ParentColor = False
   end
-  object StataEncodingCmbBx: TComboBox
-    AnchorSideTop.Control = StataVersionCmbBx
+  object Label5: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = EncodingCmbBox
+    AnchorSideTop.Side = asrCenter
+    Left = 20
+    Height = 16
+    Top = 70
+    Width = 63
+    BorderSpacing.Left = 20
+    Caption = 'Encoding:'
+    ParentColor = False
+  end
+  object EncodingCmbBox: TComboBox
+    AnchorSideLeft.Control = ExportTypeCombo
+    AnchorSideTop.Control = ExportTypeCombo
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 150
-    Height = 27
-    Top = 47
-    Width = 234
+    Left = 104
+    Height = 29
+    Top = 64
+    Width = 341
     Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Left = 10
-    BorderSpacing.Top = 10
-    BorderSpacing.Right = 10
+    BorderSpacing.Top = 15
+    BorderSpacing.Right = 20
     ItemHeight = 0
     Style = csDropDownList
     TabOrder = 1
+  end
+  object ExportDeletedChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = EncodingCmbBox
+    AnchorSideTop.Side = asrBottom
+    Left = 20
+    Height = 22
+    Top = 113
+    Width = 169
+    BorderSpacing.Left = 20
+    BorderSpacing.Top = 20
+    Caption = 'Export deleted records'
+    TabOrder = 2
   end
 end
