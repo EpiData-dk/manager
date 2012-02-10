@@ -46,6 +46,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    destructor  Destroy; override;
     function    ValidateGridEntries: boolean;
     property    ValueLabelSet: TEpiValueLabelSet read FValueLabelSet write SetValueLabelSet;
     property    VLG: TVirtualStringTree read FVLG;
@@ -467,6 +468,14 @@ begin
     Height := 25;
     MainColumn := 2;
   end;
+end;
+
+destructor TValueLabelGridFrame.Destroy;
+begin
+  if Assigned(FValueLabelSet) then
+    FValueLabelSet.UnRegisterOnChangeHook(@EventHook);
+
+  inherited Destroy;
 end;
 
 function TValueLabelGridFrame.ValidateGridEntries: boolean;

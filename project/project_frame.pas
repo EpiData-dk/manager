@@ -447,9 +447,11 @@ end;
 
 procedure TProjectFrame.DoCloseProject;
 begin
+  // Close VAlueLabel Editor - else the reference to
+  // ValueLabelSEts is incomplete!
+  CloseValueLabelEditor2;
   if not Assigned(FEpiDocument) then exit;
   FreeAndNil(FEpiDocument);
-  CloseValueLabelEditor2;
 
   // TODO : Delete ALL dataforms!
   FreeAndNil(FActiveFrame);
