@@ -14,6 +14,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ProjectPasswordAction: TAction;
     OpenProjectAction: TAction;
     ValueLabelEditorAction: TAction;
     ProjectSettingsAction: TAction;
@@ -36,6 +37,7 @@ type
     ToolButton7: TToolButton;
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
+    procedure ProjectPasswordActionExecute(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
@@ -55,6 +57,8 @@ type
     function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
     procedure AddToRecent(Const AFileName: string);
     procedure DoSaveProject(AFileName: string);
+    procedure EpiDocumentPassWord(Sender: TObject; var Login: string;
+      var Password: string);
     procedure DoOpenProject(Const AFileName: string);
     procedure DoNewDataForm(Df: TEpiDataFile);
     procedure DoCloseProject;
@@ -127,9 +131,40 @@ begin
   UpdateCaption;
 end;
 
+procedure TProjectFrame.EpiDocumentPassWord(Sender: TObject; var Login: string;
+  var Password: string);
+begin
+  PassWord :=
+    PasswordBox('Project Password',
+                'Project data is password protected.' + LineEnding +
+                'Please enter password:');
+end;
+
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
   PostMessage(MainForm.Handle, LM_MAIN_OPENPROJECT, 0, 0);
+end;
+
+procedure TProjectFrame.ProjectPasswordActionExecute(Sender: TObject);
+var
+  PW: String;
+  PW2: String;
+  Header: String;
+begin
+  PW := '';
+  PW2 := '';
+  Header := 'Set Project Password';
+
+  PW := PasswordBox(Header, 'Enter New Project Password' + LineEnding + '(Press enter to clear):');
+  if PW <> '' then
+    PW2 := PasswordBox(Header, 'Re-enter Password:')
+  else
+    MessageDlg(Header, 'Password successfully reset!', mtInformation, [mbOK], 0);
+
+  if PW = PW2 then
+    EpiDocument.PassWord := PW
+  else
+    MessageDlg(Header, 'The two passwords are not identical!' + LineEnding + 'Password NOT set.', mtError, [mbOK], 0);
 end;
 
 procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);
@@ -260,7 +295,6 @@ end;
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
   Result := TEpiDocument.Create(ManagerSettings.StudyLang);
-//  Result.Study.Language := ManagerSettings.StudyLang;
 
   with Result.ProjectSettings, ManagerSettings do
   begin
@@ -381,44 +415,47 @@ begin
 
   DoCloseProject;
 
-  Cursor := crHourGlass;
-  Application.ProcessMessages;
-
-  St := nil;
   try
-    St := TMemoryStream.Create;
-    if ExtractFileExt(UTF8ToSys(Fn)) = '.epz' then
-      ZipFileToStream(St, Fn)
-    else
-      St.LoadFromFile(UTF8ToSys(Fn));
+    Cursor := crHourGlass;
+    Application.ProcessMessages;
 
-    St.Position := 0;
-    FEpiDocument := DoCreateNewDocument;
-    FEpiDocument.LoadFromStream(St);
-    FFileName := AFileName;
-    DoNewDataForm(FEpiDocument.DataFiles[0]);
-    St.Free;
-  except
-    if Assigned(St) then FreeAndNil(St);
-    if Assigned(FEpiDocument) then FreeAndNil(FEpiDocument);
-    if Assigned(FActiveFrame) then FreeAndNil(FActiveFrame);
-    raise;
+    St := nil;
+    try
+      St := TMemoryStream.Create;
+      if ExtractFileExt(UTF8ToSys(Fn)) = '.epz' then
+        ZipFileToStream(St, Fn)
+      else
+        St.LoadFromFile(UTF8ToSys(Fn));
+
+      St.Position := 0;
+      FEpiDocument := DoCreateNewDocument;
+      FEpiDocument.OnPassword  := @EpiDocumentPassWord;
+      FEpiDocument.LoadFromStream(St);
+      FFileName := AFileName;
+      DoNewDataForm(FEpiDocument.DataFiles[0]);
+      St.Free;
+    except
+      if Assigned(St) then FreeAndNil(St);
+      if Assigned(FEpiDocument) then FreeAndNil(FEpiDocument);
+      if Assigned(FActiveFrame) then FreeAndNil(FActiveFrame);
+      raise
+    end;
+    FFileTimeStamp := FileAgeUTF8(fn);
+
+    MainForm.AssignActionLinks;
+
+    // Create backup process.
+    InitBackupTimer;
+
+    if Res = mrYes then
+      EpiDocument.Modified := true;
+
+    AddToRecent(Fn);
+    UpdateCaption;
+  finally
+    Cursor := crDefault;
+    Application.ProcessMessages;
   end;
-  FFileTimeStamp := FileAgeUTF8(fn);
-
-
-  MainForm.AssignActionLinks;
-
-  // Create backup process.
-  InitBackupTimer;
-
-  Cursor := crDefault;
-  Application.ProcessMessages;
-  if Res = mrYes then
-    EpiDocument.Modified := true;
-
-  AddToRecent(Fn);
-  UpdateCaption;
 end;
 
 procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);

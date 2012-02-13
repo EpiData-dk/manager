@@ -179,6 +179,9 @@ object MainForm: TMainForm
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
       end
+      object ProjectPasswordMenuItem: TMenuItem
+        Caption = 'Set Password'
+      end
     end
     object DataSetMenu: TMenuItem
       Caption = '&Dataset'

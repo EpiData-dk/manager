@@ -55,10 +55,10 @@
 -dEPI_RELEASE"/>
             <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
-              <CompileReasons Run="False" Build="False" Compile="False"/>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
             <ExecuteAfter>
-              <CompileReasons Run="False" Build="False" Compile="False"/>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteAfter>
           </Other>
         </CompilerOptions>
@@ -88,11 +88,11 @@
       </Item3>
       <Item4>
         <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Valid="True" Release="1"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item4>
       <Item5>
         <PackageName Value="epidatacore"/>
-        <MinVersion Minor="5" Valid="True" Release="1"/>
+        <MinVersion Minor="5" Release="1" Valid="True"/>
       </Item5>
       <Item6>
         <PackageName Value="LCL"/>
@@ -487,10 +487,10 @@
       </CompilerMessages>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
-        <CompileReasons Run="False" Build="False" Compile="False"/>
+        <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteBefore>
       <ExecuteAfter>
-        <CompileReasons Run="False" Build="False" Compile="False"/>
+        <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteAfter>
     </Other>
   </CompilerOptions>

@@ -156,6 +156,11 @@ object ProjectFrame: TProjectFrame
       ImageIndex = 0
       OnExecute = OpenProjectActionExecute
     end
+    object ProjectPasswordAction: TAction
+      Category = 'Project'
+      Caption = 'Set Password'
+      OnExecute = ProjectPasswordActionExecute
+    end
   end
   object ProjectImageList: TImageList
     left = 384

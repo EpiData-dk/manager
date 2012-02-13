@@ -18,6 +18,7 @@ type
     ExportAction: TAction;
     ExportMenuItem: TMenuItem;
     DataSetMenu: TMenuItem;
+    ProjectPasswordMenuItem: TMenuItem;
     ViewDataSetMenuItem: TMenuItem;
     ValueLabelEditor2MenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
@@ -180,7 +181,7 @@ uses
   strutils, report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
-  shortcuts, valuelabelseditor_form2, export_form;
+  shortcuts, valuelabelseditor_form2, export_form, epiadmin;
 
 { TMainForm }
 
@@ -650,6 +651,15 @@ begin
                     'File is corrupt or does not exist.');
         DoCloseProject;
       end;
+    on EEpiBadPassword do
+      begin
+        MessageDlg('Error',
+                   'Unable to open the file: ' + AFileName + LineEnding + LineEnding +
+                   'Invalid Password!',
+                   mtError,
+                   [mbOK], 0);
+        DoCloseProject;
+      end;
   else
     begin
       ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
@@ -912,6 +922,7 @@ begin
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
+  ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
 end;
 
 procedure TMainForm.BeginUpdatingForm;
