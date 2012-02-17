@@ -98,7 +98,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="56">
+    <Units Count="57">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -459,6 +459,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="datasetviewer_frame"/>
       </Unit55>
+      <Unit56>
+        <Filename Value="project/project_settings_keys_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectSettings_KeysFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_keys_frame"/>
+      </Unit56>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
