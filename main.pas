@@ -15,9 +15,14 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    VerifyDoubleEntryAction: TAction;
+    PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
     ExportMenuItem: TMenuItem;
     DataSetMenu: TMenuItem;
+    DoubleEntryMenu: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
     ProjectPasswordMenuItem: TMenuItem;
     ViewDataSetMenuItem: TMenuItem;
     ValueLabelEditor2MenuItem: TMenuItem;
@@ -110,6 +115,7 @@ type
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
+    procedure PrepareDoubleEntryActionExecute(Sender: TObject);
     procedure ProjectReportActionExecute(Sender: TObject);
     procedure QuestionListReportActionExecute(Sender: TObject);
     procedure ReportGeneratorActionExecute(Sender: TObject);
@@ -121,6 +127,7 @@ type
     procedure StartEntryClientActionUpdate(Sender: TObject);
     procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
+    procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -432,6 +439,11 @@ begin
   end;
 end;
 
+procedure TMainForm.PrepareDoubleEntryActionExecute(Sender: TObject);
+begin
+  //
+end;
+
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportProjectOverview);
@@ -524,6 +536,11 @@ end;
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportValueLabelList);
+end;
+
+procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);

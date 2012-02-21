@@ -1,8 +1,9 @@
 object MainForm: TMainForm
-  Left = 632
+  Left = 477
   Height = 603
-  Top = 325
+  Top = 282
   Width = 910
+  ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
   ClientHeight = 580
   ClientWidth = 910
@@ -226,6 +227,15 @@ object MainForm: TMainForm
       object PackMenuItem: TMenuItem
         Action = PackAction
       end
+      object DoubleEntryMenu: TMenuItem
+        Caption = 'Double Entry'
+        object MenuItem6: TMenuItem
+          Action = PrepareDoubleEntryAction
+        end
+        object MenuItem7: TMenuItem
+          Action = VerifyDoubleEntryAction
+        end
+      end
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
       end
@@ -383,6 +393,16 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Export...'
       OnExecute = ExportActionExecute
+    end
+    object PrepareDoubleEntryAction: TAction
+      Category = 'Tools'
+      Caption = 'Prepare...'
+      OnExecute = PrepareDoubleEntryActionExecute
+    end
+    object VerifyDoubleEntryAction: TAction
+      Category = 'Tools'
+      Caption = 'Validate...'
+      OnExecute = VerifyDoubleEntryActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
