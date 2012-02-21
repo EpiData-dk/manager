@@ -158,10 +158,10 @@ object ProjectSettings_KeysFrame: TProjectSettings_KeysFrame
     Left = 10
     Height = 16
     Top = 16
-    Width = 66
+    Width = 161
     Anchors = [akLeft, akBottom]
     BorderSpacing.Bottom = 5
-    Caption = 'Key Fields:'
+    Caption = 'Key Fields (unique index):'
     ParentColor = False
   end
 end

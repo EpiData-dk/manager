@@ -107,7 +107,7 @@ begin
   begin
     FindNodeWithText('General').Data             := Pointer(TProjectSettings_GeneralFrame.Create(Self));
     FindNodeWithText('Fields').Data              := Pointer(TProjectSettings_FieldFrame.Create(Self));
-    FindNodeWithText('Keys').Data                := Pointer(TProjectSettings_KeysFrame.Create(Self));
+    FindNodeWithText('Key Fields').Data          := Pointer(TProjectSettings_KeysFrame.Create(Self));
     FindNodeWithText('Study').Data               := Pointer(TProjectsettings_StudyFrame.Create(Self));
     FindNodeWithText('Content description').Data := Pointer(TProjectSetting_ContentDescFrame.Create(Self));
     FindNodeWithText('Ownership').Data           := Pointer(TProjectSetting_OwnershipFrame.Create(Self));
