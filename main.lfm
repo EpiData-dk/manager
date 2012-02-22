@@ -40,11 +40,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 101
-      Height = 23
+      Left = 105
+      Height = 27
       Hint = 'Open existing project'
-      Top = 9
-      Width = 90
+      Top = 7
+      Width = 94
       Action = OpenProjectAction
       AutoSize = True
       BorderSpacing.Left = 10
@@ -54,10 +54,10 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 8
-      Height = 23
+      Height = 27
       Hint = 'New EpiData Project'
-      Top = 9
-      Width = 83
+      Top = 7
+      Width = 87
       Action = NewProjectAction
       AutoSize = True
       ParentShowHint = False
@@ -69,11 +69,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 201
-      Height = 23
+      Left = 209
+      Height = 27
       Hint = 'Define/Change User names and passwords'
-      Top = 9
-      Width = 137
+      Top = 7
+      Width = 141
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'User Access Control'
@@ -88,11 +88,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 348
-      Height = 23
+      Left = 360
+      Height = 27
       Hint = 'Good Clinical Practice guideline tools'
-      Top = 9
-      Width = 99
+      Top = 7
+      Width = 103
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Gcp Extension'
@@ -185,15 +185,43 @@ object MainForm: TMainForm
       end
     end
     object DataSetMenu: TMenuItem
-      Caption = '&Dataset'
+      Caption = '&Document'
+      object structureItemSet: TMenuItem
+        Caption = '&Structure/Labels'
+        object MenuItem4: TMenuItem
+          Action = ProjectReportAction
+        end
+        object MenuItem8: TMenuItem
+          Action = QuestionListReportAction
+          RightJustify = True
+        end
+        object MenuItem11: TMenuItem
+          Action = ValueLabelListReportAction
+        end
+        object MenuItem9: TMenuItem
+          Action = CombinedListReportAction
+          RightJustify = True
+        end
+        object MenuItem10: TMenuItem
+          Action = ExtendedListReportAction
+          RightJustify = True
+        end
+      end
       object ViewDataSetMenuItem: TMenuItem
         Caption = 'ViewDataSet'
+      end
+      object Validateitem: TMenuItem
+        Action = VerifyDoubleEntryAction
+      end
+      object VerifyIndexItem: TMenuItem
+        Caption = '&Verify Index'
       end
     end
     object ToolsMenu: TMenuItem
       Caption = '&Tools'
       object MenuItem2: TMenuItem
         Caption = 'Reports'
+        Visible = False
         object ProjectOverviewReportMenuItem: TMenuItem
           Action = ProjectReportAction
         end
@@ -403,6 +431,9 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Validate...'
       OnExecute = VerifyDoubleEntryActionExecute
+    end
+    object VIewDataFormAction: TAction
+      Caption = 'View Data'
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

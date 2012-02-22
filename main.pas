@@ -15,6 +15,15 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    VIewDataFormAction: TAction;
+    MenuItem10: TMenuItem;
+    MenuItem11: TMenuItem;
+    VerifyIndexItem: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
+    structureItemSet: TMenuItem;
+    Validateitem: TMenuItem;
     VerifyDoubleEntryAction: TAction;
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
@@ -128,6 +137,8 @@ type
     procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
+
+
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -543,6 +554,8 @@ begin
   //
 end;
 
+
+
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
 begin
   OpenURL(ManagerSettings.TutorialURLUTF8);
@@ -704,7 +717,7 @@ begin
   ProjectMenu.Visible := Assigned(FActiveFrame);
 
   // TOOLS:
-  DataSetMenu.Visible := Assigned(FActiveFrame);
+  DataSetMenu.Visible := True; /// todo JL change - was := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;
@@ -935,7 +948,7 @@ begin
   PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-  ViewDataSetMenuItem.Action              := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
+  ViewDataSetMenuItem.Action    := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
