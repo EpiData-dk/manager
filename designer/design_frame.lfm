@@ -3992,4 +3992,9 @@ object DesignFrame: TDesignFrame
       OnClick = PasteAsStringActionExecute
     end
   end
+  object PrintDialog1: TPrintDialog
+    PrintToFile = True
+    left = 417
+    top = 177
+  end
 end
