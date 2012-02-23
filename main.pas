@@ -15,15 +15,8 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    VIewDataFormAction: TAction;
-    MenuItem10: TMenuItem;
-    MenuItem11: TMenuItem;
-    VerifyIndexItem: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem8: TMenuItem;
-    MenuItem9: TMenuItem;
-    structureItemSet: TMenuItem;
-    Validateitem: TMenuItem;
+    IntegrityCheckAction: TAction;
+    IntegrityMenuItem: TMenuItem;
     VerifyDoubleEntryAction: TAction;
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
@@ -121,6 +114,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure IntegrityCheckActionExecute(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
@@ -137,8 +131,6 @@ type
     procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
-
-
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -199,7 +191,8 @@ uses
   strutils, report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
-  shortcuts, valuelabelseditor_form2, export_form, epiadmin;
+  shortcuts, valuelabelseditor_form2, export_form, epiadmin,
+  epiintegritycheck;
 
 { TMainForm }
 
@@ -224,6 +217,24 @@ begin
   {$IFDEF EPI_DEBUG}
   UserAccessBtn.Visible := true;
   {$ENDIF}
+end;
+
+procedure TMainForm.IntegrityCheckActionExecute(Sender: TObject);
+var
+  Fn: string;
+  Local: boolean;
+  Doc: TEpiDocument;
+  Checker: TEpiIntegrityChecker;
+  FailedRecords: TBoundArray;
+begin
+  Doc := ToolsCheckOpenFile(Fn, Local);
+
+  Checker := TEpiIntegrityChecker.Create;
+  Checker.IndexIntegrity(Doc.DataFiles[0], FailedRecords);
+  Checker.Free;
+
+  ShowMessage('Found ' + IntToStr(Length(FailedRecords)) + ' dublicate records!');
+  Finalize(FailedRecords);
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -554,8 +565,6 @@ begin
   //
 end;
 
-
-
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
 begin
   OpenURL(ManagerSettings.TutorialURLUTF8);
@@ -717,7 +726,7 @@ begin
   ProjectMenu.Visible := Assigned(FActiveFrame);
 
   // TOOLS:
-  DataSetMenu.Visible := True; /// todo JL change - was := Assigned(FActiveFrame);
+  DataSetMenu.Visible := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;
@@ -948,7 +957,7 @@ begin
   PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-  ViewDataSetMenuItem.Action    := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
+  ViewDataSetMenuItem.Action              := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;

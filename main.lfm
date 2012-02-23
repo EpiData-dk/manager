@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 368
+  Left = 473
   Height = 603
-  Top = 162
+  Top = 227
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -185,43 +185,15 @@ object MainForm: TMainForm
       end
     end
     object DataSetMenu: TMenuItem
-      Caption = '&Document'
-      object structureItemSet: TMenuItem
-        Caption = '&Structure/Labels'
-        object MenuItem4: TMenuItem
-          Action = ProjectReportAction
-        end
-        object MenuItem8: TMenuItem
-          Action = QuestionListReportAction
-          RightJustify = True
-        end
-        object MenuItem11: TMenuItem
-          Action = ValueLabelListReportAction
-        end
-        object MenuItem9: TMenuItem
-          Action = CombinedListReportAction
-          RightJustify = True
-        end
-        object MenuItem10: TMenuItem
-          Action = ExtendedListReportAction
-          RightJustify = True
-        end
-      end
+      Caption = '&Dataset'
       object ViewDataSetMenuItem: TMenuItem
         Caption = 'ViewDataSet'
-      end
-      object Validateitem: TMenuItem
-        Action = VerifyDoubleEntryAction
-      end
-      object VerifyIndexItem: TMenuItem
-        Caption = '&Verify Index'
       end
     end
     object ToolsMenu: TMenuItem
       Caption = '&Tools'
       object MenuItem2: TMenuItem
         Caption = 'Reports'
-        Visible = False
         object ProjectOverviewReportMenuItem: TMenuItem
           Action = ProjectReportAction
         end
@@ -263,6 +235,9 @@ object MainForm: TMainForm
         object MenuItem7: TMenuItem
           Action = VerifyDoubleEntryAction
         end
+      end
+      object IntegrityMenuItem: TMenuItem
+        Action = IntegrityCheckAction
       end
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
@@ -432,8 +407,10 @@ object MainForm: TMainForm
       Caption = 'Validate...'
       OnExecute = VerifyDoubleEntryActionExecute
     end
-    object VIewDataFormAction: TAction
-      Caption = 'View Data'
+    object IntegrityCheckAction: TAction
+      Category = 'Tools'
+      Caption = 'Integrity Check'
+      OnExecute = IntegrityCheckActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

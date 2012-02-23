@@ -6,8 +6,8 @@ object ProjectSettings_KeysFrame: TProjectSettings_KeysFrame
   ClientHeight = 437
   ClientWidth = 524
   TabOrder = 0
-  DesignLeft = 480
-  DesignTop = 293
+  DesignLeft = 848
+  DesignTop = 373
   object TopBevel: TBevel
     AnchorSideLeft.Control = Owner
     AnchorSideRight.Control = Owner

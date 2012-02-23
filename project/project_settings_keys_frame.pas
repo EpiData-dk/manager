@@ -5,8 +5,9 @@ unit project_settings_keys_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, Buttons, StdCtrls,
-  project_settings_interface, epicustombase, epidocument, epidatafiles;
+  Classes, SysUtils, types, FileUtil, Forms, Controls, ExtCtrls, Buttons,
+  StdCtrls, project_settings_interface, epicustombase, epidocument,
+  epidatafiles;
 
 type
 
@@ -26,9 +27,12 @@ type
     FEpiDoc: TEpiDocument;
     FKeyFields: TEpiFields;
     FKeyList: TList;
+    FHintWindow: THintWindow;
     function  DoAddNewKey: TComboBox;
     procedure SetItemIndexOnField(Combo: TComboBox; Field: TEpiField);
     procedure AddFieldsToCombo(Combo: TComboBox);
+    procedure RemoveAllCombos;
+    function  ShowError(Const Msg: string; Const Ctrl: TControl): boolean;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -39,6 +43,9 @@ type
 implementation
 
 {$R *.lfm}
+
+uses
+  epiintegritycheck;
 
 { TProjectSettings_KeysFrame }
 
@@ -112,10 +119,41 @@ begin
   end;
 end;
 
+procedure TProjectSettings_KeysFrame.RemoveAllCombos;
+begin
+  while FKeyList.Count > 0 do
+    RemoveJumpBtnClick(nil);
+end;
+
+function TProjectSettings_KeysFrame.ShowError(const Msg: string;
+  const Ctrl: TControl): boolean;
+var
+  R: TRect;
+  P: TPoint;
+begin
+  result := false;
+
+  if (Msg = '') and (Ctrl = nil) then
+  begin
+    FHintWindow.Hide;
+    exit;
+  end;
+
+  R := FHintWindow.CalcHintRect(0, Msg, nil);
+  P := Ctrl.ClientToScreen(Point(0,0));
+  OffsetRect(R, P.X, P.Y + Ctrl.Height + 2);
+  FHintWindow.ActivateHint(R, Msg);
+end;
+
 constructor TProjectSettings_KeysFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FKeyList := TList.Create;
+  FHintWindow := THintWindow.Create(Self);
+  FHintWindow.HideInterval := 5 * 1000;
+  FHintWindow.AutoHide := true;
+  FHintWindow.Hide;
+//  FHintWindow.OnClose := ;
 end;
 
 procedure TProjectSettings_KeysFrame.SetProjectSettings(AValue: TEpiCustomBase);
@@ -126,6 +164,8 @@ begin
   FEpiDoc := TEpiDocument(AValue);
   FKeyFields := FEpiDoc.DataFiles[0].KeyFields;
 
+  RemoveAllCombos;
+
   for i := 0 to FKeyFields.Count -1 do
     SetItemIndexOnField(DoAddNewKey, FKeyFields[i]);
 end;
@@ -133,19 +173,37 @@ end;
 function TProjectSettings_KeysFrame.ApplySettings: boolean;
 var
   i: Integer;
+  Checker: TEpiIntegrityChecker;
+  FailedRecords: TBoundArray;
 begin
   result := true;
 
   for i := 0 to FKeyList.Count - 1 do
   with TComboBox(FKeyList[i]) do
-    if ItemIndex = -1 then result := false;
+    if ItemIndex = -1 then
+      result := ShowError('Key field not defined', TComboBox(FKeyList[i]));
 
   if not result then exit;
 
   FKeyFields.Clear;
+  try
   for i := 0 to FKeyList.Count - 1 do
-  with TComboBox(FKeyList[i]) do
-    FKeyFields.AddItem(TEpiField(Items.Objects[ItemIndex]));
+    with TComboBox(FKeyList[i]) do
+      FKeyFields.AddItem(TEpiField(Items.Objects[ItemIndex]));
+  except
+    result := ShowError('A field may only be used once as key field', TComboBox(FKeyList[i]));
+    exit;
+  end;
+
+  try
+    Checker := TEpiIntegrityChecker.Create;
+    if not Checker.IndexIntegrity(FEpiDoc.DataFiles[0], FailedRecords, true) then
+      ShowError('Warning: Index not uniquely defined!' + LineEnding +
+                'Use "Integrity Check" to get a list of affected records.',
+                Self);
+  finally
+    Checker.Free;
+  end;
 end;
 
 end.
