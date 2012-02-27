@@ -6,7 +6,7 @@ object DataSetViewFrame: TDataSetViewFrame
   ClientHeight = 476
   ClientWidth = 681
   TabOrder = 0
-  DesignLeft = 958
+  DesignLeft = 597
   DesignTop = 225
   object ListGrid: TStringGrid
     Left = 0

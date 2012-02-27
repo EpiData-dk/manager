@@ -184,7 +184,7 @@ begin
 
   ListGrid.Align := alClient;
   ListGrid.Cells[0,0] := 'Record No:';
-  ListGrid.OnCompareCells := @GridIndexSort;
+  ListGrid.OnCompareCells := @GridColumnSort;
   UpdateGrid;
   ListGrid.Parent := Self;
 end;

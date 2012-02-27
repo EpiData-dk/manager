@@ -43,6 +43,12 @@ var
   i: Integer;
   DoSend: Boolean;
 begin
+  if EpiDoc.DataFiles[0].KeyFields.Count = 0 then
+  begin
+    ShowMessage('No Index defined!');
+    Exit;
+  end;
+
   try
     Checker := TEpiIntegrityChecker.Create;
     if not Checker.IndexIntegrity(EpiDoc.DataFiles[0], FailedRecords) then
