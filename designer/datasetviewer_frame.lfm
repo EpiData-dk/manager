@@ -6,8 +6,8 @@ object DataSetViewFrame: TDataSetViewFrame
   ClientHeight = 476
   ClientWidth = 681
   TabOrder = 0
-  DesignLeft = 860
-  DesignTop = 294
+  DesignLeft = 958
+  DesignTop = 225
   object ListGrid: TStringGrid
     Left = 0
     Height = 434
@@ -16,7 +16,6 @@ object DataSetViewFrame: TDataSetViewFrame
     Align = alClient
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goSmoothScroll, goHeaderHotTracking, goHeaderPushedLook]
     TabOrder = 0
-    OnCompareCells = ListGridCompareCells
     OnHeaderClick = ListGridHeaderClick
     OnPrepareCanvas = ListGridPrepareCanvas
   end
@@ -34,9 +33,32 @@ object DataSetViewFrame: TDataSetViewFrame
       Height = 25
       Top = 8
       Width = 168
-      Caption = 'Show &Values / Labels'
-      OnClick = Button1Click
+      Action = ShowValuesOrLabelsAction
       TabOrder = 0
+    end
+    object Button2: TButton
+      AnchorSideLeft.Control = Button1
+      AnchorSideLeft.Side = asrBottom
+      Left = 194
+      Height = 25
+      Top = 8
+      Width = 102
+      Action = SortByIndexAction
+      BorderSpacing.Left = 10
+      TabOrder = 1
+    end
+  end
+  object ActionList1: TActionList
+    left = 298
+    top = 213
+    object ShowValuesOrLabelsAction: TAction
+      Caption = 'Show Values / Labels'
+      OnExecute = ShowValuesOrLabelsActionExecute
+    end
+    object SortByIndexAction: TAction
+      Caption = 'Sort by Index'
+      OnExecute = SortByIndexActionExecute
+      OnUpdate = SortByIndexActionUpdate
     end
   end
 end

@@ -409,7 +409,7 @@ object MainForm: TMainForm
     end
     object IntegrityCheckAction: TAction
       Category = 'Tools'
-      Caption = 'Integrity Check'
+      Caption = 'Index Integrity Check'
       OnExecute = IntegrityCheckActionExecute
     end
   end

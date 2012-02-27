@@ -285,6 +285,7 @@ type
     // - Custom message, used for deleting controls.
     procedure   LMDesignerDel(var Msg: TLMessage); message LM_DESIGNER_DEL;
     procedure   LMDesignerDelAll(var Msg: TLMessage); message LM_DESIGNER_DELALL;
+    procedure   LMDesignerAddField(var Msg: TLMessage); message LM_DESIGNER_ADDFIELD;
   private
     { Position handling }
     procedure   FindNearestControls(ParentControl: TWinControl;
@@ -2705,6 +2706,23 @@ end;
 procedure TDesignFrame.LMDesignerDelAll(var Msg: TLMessage);
 begin
   DeleteAllControls;
+end;
+
+procedure TDesignFrame.LMDesignerAddField(var Msg: TLMessage);
+var
+  Field: TEpiField;
+  Pt: TPoint;
+begin
+  // WParam = TEpiField;
+  // May currently only place fields on MAIN Section
+  Field := TEpiField(Msg.WParam);
+  if Field.Section <> FDataFile.MainSection then
+    // FAIL
+    Raise Exception.Create('Does not compute!');
+
+  Pt := FindNewPosition(FDesignerBox, TDesignField);
+  NewDesignControl(TDesignField, FDesignerBox, Pt, Field);
+  ShowForm(Field, Pt, false);
 end;
 
 procedure TDesignFrame.FindNearestControls(ParentControl: TWinControl;

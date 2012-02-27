@@ -175,25 +175,29 @@ var
   i: Integer;
   Checker: TEpiIntegrityChecker;
   FailedRecords: TBoundArray;
+  L: TList;
 begin
   result := true;
 
   for i := 0 to FKeyList.Count - 1 do
   with TComboBox(FKeyList[i]) do
     if ItemIndex = -1 then
-      result := ShowError('Key field not defined', TComboBox(FKeyList[i]));
+      exit(ShowError('Key field not defined', TComboBox(FKeyList[i])));
 
-  if not result then exit;
+  L := TList.Create;
+  for i := 0 to FKeyList.Count - 1 do
+    with TComboBox(FKeyList[i]) do
+      if L.IndexOf(Items.Objects[ItemIndex]) <> -1 then
+      begin
+        result := ShowError('A field may only be used once as key field', TComboBox(FKeyList[i]));
+        exit;
+      end else
+        L.Add(Items.Objects[ItemIndex]);
 
   FKeyFields.Clear;
-  try
   for i := 0 to FKeyList.Count - 1 do
     with TComboBox(FKeyList[i]) do
       FKeyFields.AddItem(TEpiField(Items.Objects[ItemIndex]));
-  except
-    result := ShowError('A field may only be used once as key field', TComboBox(FKeyList[i]));
-    exit;
-  end;
 
   try
     Checker := TEpiIntegrityChecker.Create;

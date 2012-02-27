@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase, epiadmin,
-  epivaluelabels, manager_messages;
+  epivaluelabels, manager_messages, LMessages;
 
 type
 
@@ -77,6 +77,10 @@ type
     procedure UpdateTimer;
     procedure TimedBackup(Sender: TObject);
     procedure UpdateShortCuts;
+  private
+    { Messages }
+    // Message relaying...
+    procedure LMDesignerAddField(var Msg: TLMessage); message LM_DESIGNER_ADDFIELD;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -686,6 +690,13 @@ begin
   ProjectSettingsAction.ShortCut  := P_ProjectSettings;
   ValueLabelEditorAction.ShortCut := P_StartValueLabelEditor;
   OpenProjectAction.ShortCut      := P_OpenProject;
+end;
+
+procedure TProjectFrame.LMDesignerAddField(var Msg: TLMessage);
+begin
+  if Assigned(FActiveFrame) then
+  with Msg do
+    Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
 end;
 
 constructor TProjectFrame.Create(TheOwner: TComponent);

@@ -158,6 +158,8 @@ type
     procedure LMOpenRecent(var Msg: TLMessage);   message LM_MAIN_OPENRECENT;
     procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
     procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
+    // Message relaying...
+    procedure LMDesignerAddField(var Msg: TLMessage); message LM_DESIGNER_ADDFIELD;
   private
     { Process communication }
     FEpiIPC:  TEpiIPC;
@@ -192,7 +194,7 @@ uses
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
-  epiintegritycheck;
+  epiintegritycheck, datasetviewer_frame, indexintegrity;
 
 { TMainForm }
 
@@ -226,15 +228,15 @@ var
   Doc: TEpiDocument;
   Checker: TEpiIntegrityChecker;
   FailedRecords: TBoundArray;
+  F: TForm;
+  V: TDataSetViewFrame;
 begin
   Doc := ToolsCheckOpenFile(Fn, Local);
 
-  Checker := TEpiIntegrityChecker.Create;
-  Checker.IndexIntegrity(Doc.DataFiles[0], FailedRecords);
-  Checker.Free;
+  if not Assigned(Doc) then exit;
+  CheckIndexIntegrity(Doc);
 
-  ShowMessage('Found ' + IntToStr(Length(FailedRecords)) + ' dublicate records!');
-  Finalize(FailedRecords);
+  if Local then Doc.Free;
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -462,8 +464,13 @@ begin
 end;
 
 procedure TMainForm.PrepareDoubleEntryActionExecute(Sender: TObject);
+var
+  Fn: string;
+  Local: boolean;
+  Doc: TEpiDocument;
 begin
-  //
+  //Doc := ToolsCheckOpenFile(Fn, Local);
+
 end;
 
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
@@ -911,6 +918,13 @@ procedure TMainForm.LMCloseProject(var Msg: TLMessage);
 begin
   DoCloseProject;
   UpdateProcessToolbar;
+end;
+
+procedure TMainForm.LMDesignerAddField(var Msg: TLMessage);
+begin
+  if Assigned(FActiveFrame) then
+  with Msg do
+    Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
 end;
 
 procedure TMainForm.SetupIPC;
