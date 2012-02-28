@@ -10,22 +10,24 @@ uses
 
 type
 
-  { TForm1 }
+  { TPrepareDoubleEntryForm }
 
-  TForm1 = class(TForm)
+  TPrepareDoubleEntryForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    TitleEdit: TEdit;
     FileNameEdit: TFileNameEdit;
+    FileNameLabel: TLabel;
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
-    FileNameLabel: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Panel2: TPanel;
     Panel1: TPanel;
+    TitleEdit: TEdit;
     TitleLabel: TLabel;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   private
     { private declarations }
     FDoc: TEpiDocument;
@@ -36,16 +38,21 @@ type
       Const FileName: String);
   end;
 
-var
-  Form1: TForm1;
+procedure PrepareDoubleEntry(Const Doc: TEpiDocument; Const FileName: string);
 
 implementation
 
 {$R *.lfm}
 
-{ TForm1 }
+{ TPrepareDoubleEntryForm }
 
-constructor TForm1.Create(TheOwner: TComponent; const Doc: TEpiDocument;
+procedure TPrepareDoubleEntryForm.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  //
+end;
+
+constructor TPrepareDoubleEntryForm.Create(TheOwner: TComponent; const Doc: TEpiDocument;
   const FileName: String);
 begin
   inherited Create(TheOwner);
@@ -54,6 +61,17 @@ begin
 
   FileNameLabel.Caption := FFileName;
   TitleLabel.Caption := FDoc.Study.Title.Text;
+
+  FileNameEdit.Text := ChangeFileExt(FFileName, '.double.epx');
+  TitleEdit.Text    := TitleLabel.Caption + ' (double entry file)';
+end;
+
+procedure PrepareDoubleEntry(const Doc: TEpiDocument; const FileName: string);
+var
+  F: TPrepareDoubleEntryForm;
+begin
+  F := TPrepareDoubleEntryForm.Create(nil, Doc, FileName);
+  F.ShowModal;
 end;
 
 end.

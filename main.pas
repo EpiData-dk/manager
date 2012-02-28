@@ -194,7 +194,8 @@ uses
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
-  epiintegritycheck, datasetviewer_frame, indexintegrity;
+  epiintegritycheck, datasetviewer_frame, indexintegrity,
+  prepare_double_entry_form;
 
 { TMainForm }
 
@@ -469,8 +470,10 @@ var
   Local: boolean;
   Doc: TEpiDocument;
 begin
-  //Doc := ToolsCheckOpenFile(Fn, Local);
-
+  Doc := ToolsCheckOpenFile(Fn, Local);
+  PrepareDoubleEntry(Doc, Fn);
+  if Local then
+    Doc.Free;
 end;
 
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);

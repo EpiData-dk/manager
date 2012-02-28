@@ -1,131 +1,28 @@
-object Form1: TForm1
+object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
   Left = 503
-  Height = 311
+  Height = 331
   Top = 255
-  Width = 589
-  Caption = 'Form1'
-  ClientHeight = 311
-  ClientWidth = 589
+  Width = 578
+  Caption = 'PrepareDoubleEntryForm'
+  ClientHeight = 331
+  ClientWidth = 578
+  OnCloseQuery = FormCloseQuery
   LCLVersion = '0.9.31'
-  object GroupBox1: TGroupBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 15
-    Height = 97
-    Top = 15
-    Width = 559
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Left = 15
-    BorderSpacing.Top = 15
-    BorderSpacing.Right = 15
-    Caption = 'Existing Project:'
-    ClientHeight = 80
-    ClientWidth = 555
-    TabOrder = 0
-    object Label1: TLabel
-      Left = 16
-      Height = 16
-      Top = 18
-      Width = 62
-      Caption = 'Filename:'
-      ParentColor = False
-    end
-    object Label2: TLabel
-      Left = 16
-      Height = 16
-      Top = 50
-      Width = 31
-      Caption = 'Title:'
-      ParentColor = False
-    end
-    object FileNameLabel: TLabel
-      Left = 96
-      Height = 16
-      Top = 18
-      Width = 94
-      Caption = 'FileNameLabel'
-      ParentColor = False
-    end
-    object TitleLabel: TLabel
-      Left = 96
-      Height = 16
-      Top = 50
-      Width = 61
-      Caption = 'TitleLabel'
-      ParentColor = False
-    end
-  end
-  object GroupBox2: TGroupBox
-    AnchorSideLeft.Control = GroupBox1
-    AnchorSideTop.Control = GroupBox1
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = GroupBox1
-    AnchorSideRight.Side = asrBottom
-    Left = 15
-    Height = 117
-    Top = 127
-    Width = 559
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 15
-    Caption = 'New Project:'
-    ClientHeight = 100
-    ClientWidth = 555
-    TabOrder = 1
-    object Label3: TLabel
-      Left = 16
-      Height = 16
-      Top = 26
-      Width = 62
-      Caption = 'Filename:'
-      ParentColor = False
-    end
-    object FileNameEdit: TFileNameEdit
-      Left = 96
-      Height = 25
-      Top = 17
-      Width = 421
-      FilterIndex = 0
-      HideDirectories = False
-      ButtonWidth = 23
-      NumGlyphs = 0
-      Anchors = [akTop, akLeft, akRight]
-      MaxLength = 0
-      TabOrder = 0
-    end
-    object Label4: TLabel
-      Left = 16
-      Height = 16
-      Top = 58
-      Width = 31
-      Caption = 'Title:'
-      ParentColor = False
-    end
-    object TitleEdit: TEdit
-      Left = 96
-      Height = 25
-      Top = 49
-      Width = 421
-      Anchors = [akTop, akLeft, akRight]
-      TabOrder = 1
-    end
-  end
   object Panel1: TPanel
     Left = 0
     Height = 50
-    Top = 261
-    Width = 589
+    Top = 281
+    Width = 578
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 589
-    TabOrder = 2
+    ClientWidth = 578
+    TabOrder = 0
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 520
+      Left = 509
       Height = 32
       Top = 9
       Width = 53
@@ -142,7 +39,7 @@ object Form1: TForm1
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 430
+      Left = 419
       Height = 34
       Top = 8
       Width = 80
@@ -154,6 +51,120 @@ object Form1: TForm1
       Kind = bkCancel
       ModalResult = 2
       TabOrder = 1
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 281
+    Top = 0
+    Width = 578
+    Align = alClient
+    ClientHeight = 281
+    ClientWidth = 578
+    TabOrder = 1
+    object GroupBox1: TGroupBox
+      AnchorSideLeft.Control = Panel2
+      AnchorSideTop.Control = Owner
+      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Side = asrBottom
+      Left = 16
+      Height = 97
+      Top = 15
+      Width = 546
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 15
+      BorderSpacing.Top = 15
+      BorderSpacing.Right = 15
+      Caption = 'Existing Project:'
+      ClientHeight = 80
+      ClientWidth = 542
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 16
+        Height = 16
+        Top = 18
+        Width = 62
+        Caption = 'Filename:'
+        ParentColor = False
+      end
+      object Label2: TLabel
+        Left = 16
+        Height = 16
+        Top = 50
+        Width = 31
+        Caption = 'Title:'
+        ParentColor = False
+      end
+      object FileNameLabel: TLabel
+        Left = 96
+        Height = 16
+        Top = 18
+        Width = 94
+        Caption = 'FileNameLabel'
+        ParentColor = False
+      end
+      object TitleLabel: TLabel
+        Left = 96
+        Height = 16
+        Top = 50
+        Width = 61
+        Caption = 'TitleLabel'
+        ParentColor = False
+      end
+    end
+    object GroupBox2: TGroupBox
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 16
+      Height = 117
+      Top = 127
+      Width = 546
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 15
+      Caption = 'New Project:'
+      ClientHeight = 100
+      ClientWidth = 542
+      TabOrder = 1
+      object Label3: TLabel
+        Left = 16
+        Height = 16
+        Top = 26
+        Width = 62
+        Caption = 'Filename:'
+        ParentColor = False
+      end
+      object FileNameEdit: TFileNameEdit
+        Left = 96
+        Height = 25
+        Top = 17
+        Width = 408
+        DialogKind = dkSave
+        FilterIndex = 0
+        HideDirectories = False
+        ButtonWidth = 23
+        NumGlyphs = 0
+        Anchors = [akTop, akLeft, akRight]
+        MaxLength = 0
+        TabOrder = 0
+      end
+      object Label4: TLabel
+        Left = 16
+        Height = 16
+        Top = 58
+        Width = 31
+        Caption = 'Title:'
+        ParentColor = False
+      end
+      object TitleEdit: TEdit
+        Left = 96
+        Height = 25
+        Top = 49
+        Width = 408
+        Anchors = [akTop, akLeft, akRight]
+        TabOrder = 1
+      end
     end
   end
 end
