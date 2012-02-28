@@ -78,24 +78,24 @@
     </RunParams>
     <RequiredPackages Count="7">
       <Item1>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Major="1" Minor="3" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item2>
       <Item3>
-        <PackageName Value="virtualtreeview_package"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item3>
       <Item4>
-        <PackageName Value="HtmlComp"/>
+        <PackageName Value="virtualtreeview_package"/>
       </Item4>
       <Item5>
-        <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
+        <PackageName Value="HtmlComp"/>
       </Item5>
       <Item6>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Minor="5" Release="1" Valid="True"/>
+        <PackageName Value="LCLBase"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item6>
       <Item7>
         <PackageName Value="LCL"/>
