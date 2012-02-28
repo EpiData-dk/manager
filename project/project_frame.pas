@@ -597,7 +597,11 @@ var
   S: String;
   T: String;
 begin
-  S := 'EpiData Manager (v' + GetManagerVersion + ') test version';
+  S := 'EpiData Manager (v' + GetManagerVersion + ')'
+    {$IFDEF EPIDATA_TEST_RELEASE}
+    + 'test version'
+    {$ENDIF}
+    ;
 
   if Assigned(EpiDocument) then
   begin
