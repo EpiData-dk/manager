@@ -229,6 +229,7 @@ object MainForm: TMainForm
       end
       object DoubleEntryMenu: TMenuItem
         Caption = 'Double Entry'
+        Enabled = False
         object MenuItem6: TMenuItem
           Action = PrepareDoubleEntryAction
         end

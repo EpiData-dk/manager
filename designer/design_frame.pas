@@ -337,9 +337,13 @@ uses
   managerprocs, copyobject, epiranges, design_types,
   import_structure_form, shortcuts, fpvectorial, fpvutils, fpvtocanvas, FPimage,
   datasetviewer_frame, settings2,
-
-
   Printers;
+
+const
+  PIXELS_PER_MILIMETER = 3.5433;
+  A4_PIXEL_HEIGHT      = trunc(297 * PIXELS_PER_MILIMETER);
+  A4_PIXEL_WIDTH       = trunc(210 * PIXELS_PER_MILIMETER);
+
 
 type
 
@@ -566,21 +570,21 @@ var
 begin
   if not ManagerSettings.ShowA4GuideLines then exit;
 
-{  with TScrollBox(Sender) do
+  with TScrollBox(Sender) do
   begin
     P := GetClientScrollOffset;
     Canvas.Pen.Style := psDot;
     // Vert. line
     Canvas.Line(
-      A4_PIXEL_WIDT, 0 + P.Y,        // X1, Y1
-      A4_PIXEL_WIDT, Height + P.Y    // X2, Y2
+      A4_PIXEL_WIDTH, 0 + P.Y,        // X1, Y1
+      A4_PIXEL_WIDTH, Height + P.Y    // X2, Y2
     );
     // Horz. line
     Canvas.Line(
       0 + P.X, A4_PIXEL_HEIGHT,      // X1, Y1
       Width + P.X, A4_PIXEL_HEIGHT   // X2, Y2
     );
-  end;      }
+  end;
 end;
 
 procedure TDesignFrame.DoExportDataformToSVG;
@@ -599,10 +603,10 @@ var
   FS: Integer;
   FN: String;
   J: Integer;
-
+{
   PIXELS_PER_MILIMETER: double;  // = 3.5433;
   A4_PIXEL_HEIGHT,               // = trunc(297 * PIXELS_PER_MILIMETER);
-  A4_PIXEL_WIDTH:       integer; // = trunc(210 * PIXELS_PER_MILIMETER);
+  A4_PIXEL_WIDTH:       integer; // = trunc(210 * PIXELS_PER_MILIMETER);  }
 
 const
   FieldHeigth =
@@ -643,18 +647,18 @@ begin
   SaveDlg := nil;
   VecDoc  := nil;
   try
-{    SaveDlg := TSaveDialog.Create(Self);
+    SaveDlg := TSaveDialog.Create(Self);
     SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     SaveDlg.Filter := 'Scalable Vector Graphics (*.svg)|*.svg|' + GetEpiDialogFilter([dfAll]);
-    if not SaveDlg.Execute then exit;       }
+    if not SaveDlg.Execute then exit;
 
-    if not PrintDialog1.Execute then exit;
+//    if not PrintDialog1.Execute then exit;
 
-    Printer.BeginDoc;
+//    Printer.BeginDoc;
 
-    PIXELS_PER_MILIMETER := 1 / ((1 / Printer.YDPI) * 25.4001);
+{    PIXELS_PER_MILIMETER := 1 / ((1 / Printer.YDPI) * 25.4001);
     A4_PIXEL_HEIGHT      := trunc(297 * PIXELS_PER_MILIMETER);
-    A4_PIXEL_WIDTH       := trunc(210 * PIXELS_PER_MILIMETER);
+    A4_PIXEL_WIDTH       := trunc(210 * PIXELS_PER_MILIMETER); }
 
     VecDoc := TvVectorialDocument.Create;
     VecDoc.Width := 210;
@@ -663,7 +667,7 @@ begin
     Page.Width := VecDoc.Width;
     Page.Height := VecDoc.Height;
 
-    Printer.PageHeight;
+//    Printer.PageHeight;
     FS := ManagerSettings.FieldFont.Size;
     FN := ManagerSettings.FieldFont.Name;
     if FS = 0 then FS := 10;
@@ -673,17 +677,17 @@ begin
     begin
       F := DataFile.Field[i];
 
-      L := (FieldLeft(F) - Printer.Canvas.TextWidth(F.Question.Text)) * PIXELS_PER_MILIMETER;
+      L := (FieldLeft(F) - Canvas.TextWidth(F.Question.Text)) / PIXELS_PER_MILIMETER;
       T := CanvasTextPosToFPVectorial(
-             FieldTop(F) + (FieldHeigth - Printer.Canvas.TextHeight(F.Question.Text)),
+             FieldTop(F) + (FieldHeigth - Canvas.TextHeight(F.Question.Text)),
              A4_PIXEL_HEIGHT,
-             Printer.Canvas.TextHeight(F.Question.Text)) * PIXELS_PER_MILIMETER;
+             Canvas.TextHeight(F.Question.Text)) / PIXELS_PER_MILIMETER;
       Page.AddText(L, T, 0, FN, FS, F.Question.Text);
 
-      L := FieldLeft(F) * PIXELS_PER_MILIMETER;
-      R := (FieldLeft(F) + (F.Length * Printer.Canvas.TextWidth('W'))) * PIXELS_PER_MILIMETER;
-      T := CanvasCoordsToFPVectorial(FieldTop(F) + (FieldHeigth div 2), A4_PIXEL_HEIGHT) * PIXELS_PER_MILIMETER;
-      B := CanvasCoordsToFPVectorial(FieldTop(F) + FieldHeigth, A4_PIXEL_HEIGHT)* PIXELS_PER_MILIMETER;
+      L := FieldLeft(F) / PIXELS_PER_MILIMETER;
+      R := (FieldLeft(F) + (F.Length * Canvas.TextWidth('W'))) / PIXELS_PER_MILIMETER;
+      T := CanvasCoordsToFPVectorial(FieldTop(F) + (FieldHeigth div 2), A4_PIXEL_HEIGHT) / PIXELS_PER_MILIMETER;
+      B := CanvasCoordsToFPVectorial(FieldTop(F) + FieldHeigth, A4_PIXEL_HEIGHT)/ PIXELS_PER_MILIMETER;
       Page.StartPath(L, T);
       Page.AddLineToPath(L, B);
       Page.AddLineToPath(R, B);
@@ -692,13 +696,13 @@ begin
       Page.EndPath();
     end;
 
-{    HeadingCount := DataFile.Headings.Count;
+    HeadingCount := DataFile.Headings.Count;
     for i := 0 to HeadingCount -1 do
     begin
       H := DataFile.Heading[i];
 
       L := HeadingLeft(H) / PIXELS_PER_MILIMETER;
-      T := CanvasTextPosToFPVectorial(HeadingTop(H), A4_PIXEL_HEIGHT, Printer.Canvas.TextHeight(H.Caption.Text)) / PIXELS_PER_MILIMETER;
+      T := CanvasTextPosToFPVectorial(HeadingTop(H), A4_PIXEL_HEIGHT, Canvas.TextHeight(H.Caption.Text)) / PIXELS_PER_MILIMETER;
 
       Page.AddText(L, T, 0, FN, FS, H.Caption.Text);
     end;
@@ -713,7 +717,7 @@ begin
       R := (S.Left + S.Width)  / PIXELS_PER_MILIMETER;
       T := CanvasCoordsToFPVectorial(S.Top, A4_PIXEL_HEIGHT)  / PIXELS_PER_MILIMETER;
       B := CanvasCoordsToFPVectorial(S.Top + S.Height, A4_PIXEL_HEIGHT)  / PIXELS_PER_MILIMETER;
-      W := Printer.Canvas.TextWidth(S.Caption.Text) / PIXELS_PER_MILIMETER;
+      W := Canvas.TextWidth(S.Caption.Text) / PIXELS_PER_MILIMETER;
 
       Page.StartPath(L, T);
       Page.AddLineToPath(L, B);
@@ -724,18 +728,19 @@ begin
       Page.EndPath();
 
       L := (S.Left + 3) / PIXELS_PER_MILIMETER;
-      T := CanvasTextPosToFPVectorial(S.Top, A4_PIXEL_HEIGHT, Printer.Canvas.TextHeight(S.Caption.Text) div 2) / PIXELS_PER_MILIMETER;
+      T := CanvasTextPosToFPVectorial(S.Top, A4_PIXEL_HEIGHT, Canvas.TextHeight(S.Caption.Text) div 2) / PIXELS_PER_MILIMETER;
       Page.AddText(L, T, 0, FN, FS, S.Caption.Text);
-    end;          }
+    end;
 
-    fpvtocanvas.DrawFPVectorialToCanvas(Page, Printer.Canvas, 0, 12 * Floor(Page.Height), 1, -1);
-    Printer.EndDoc;
-//    VecDoc.WriteToFile(SaveDlg.FileName, vfSVG);
+//    fpvtocanvas.DrawFPVectorialToCanvas(Page, Canvas, 0, 12 * Floor(Page.Height), 1, -1);
+//    Printer.EndDoc;
+    VecDoc.WriteToFile(SaveDlg.FileName, vfSVG);
   finally
     SaveDlg.Free;
     VecDoc.Free;
   end;
 end;
+
 procedure TDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
