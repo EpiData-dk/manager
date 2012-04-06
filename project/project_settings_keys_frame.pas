@@ -202,8 +202,8 @@ begin
   try
     Checker := TEpiIntegrityChecker.Create;
     if not Checker.IndexIntegrity(FEpiDoc.DataFiles[0], FailedRecords, true) then
-      ShowError('Warning: Index not uniquely defined!' + LineEnding +
-                'Use "Integrity Check" to get a list of affected records.',
+      ShowError('Warning: Data do not conform to a Unique Index!' + LineEnding +
+                'Use "Verify Index" in Documentation menu to get a list of affected records.',
                 Self);
   finally
     Checker.Free;

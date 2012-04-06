@@ -111,6 +111,7 @@
         <Filename Value="main.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="main"/>
       </Unit1>
@@ -480,6 +481,7 @@
         <Filename Value="tools/indexintegrity.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="IndexIntegrityForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="indexintegrity"/>
       </Unit58>

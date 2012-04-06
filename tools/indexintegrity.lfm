@@ -1,8 +1,8 @@
 object IndexIntegrityForm: TIndexIntegrityForm
-  Left = 789
+  Left = 605
   Height = 549
-  Top = 350
+  Top = 194
   Width = 759
   Caption = 'IndexIntegrityForm'
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
 end
