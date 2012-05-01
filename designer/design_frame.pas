@@ -1810,8 +1810,10 @@ var
     AField.ObjectData := PtrUInt(NField);
     With NField do
     begin
-      if not ValidateRename(AField.Name, true) then
-        Name := NewFieldName(AField.Name);
+      if not ValidateRename(AField.Name, false) then
+        Name := NewFieldName(AField.Name)
+      else
+        Name := AField.Name;
 
       Question.Assign(AField.Question);
       Top            := Afield.Top + AddTop;
@@ -1900,6 +1902,7 @@ begin
 
       VLSet := DataFile.ValueLabels.NewValueLabelSet(OldSet.LabelType);
       VLSet.Assign(OldSet);
+      VLSet.Name := OldSet.Name;
       OldSet.ObjectData := PtrUInt(VLSet);
     end;
   end;

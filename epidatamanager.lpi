@@ -111,6 +111,7 @@
         <Filename Value="main.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="main"/>
       </Unit1>
@@ -125,6 +126,7 @@
         <Filename Value="designer/design_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DesignFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_frame"/>
       </Unit3>
@@ -267,6 +269,7 @@
         <Filename Value="import/import_structure_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ImportStructureForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="import_structure_form"/>
       </Unit25>
@@ -348,6 +351,7 @@
         <Filename Value="utils/projectfilelist_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectFileListFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="projectfilelist_frame"/>
       </Unit38>
