@@ -17,25 +17,14 @@ type
   TMainForm = class(TForm)
     IntegrityCheckAction: TAction;
     IntegrityMenuItem: TMenuItem;
-    MenuItem10: TMenuItem;
-    MenuItem11: TMenuItem;
-    MenuItem12: TMenuItem;
-    MenuItem13: TMenuItem;
-    MenuItem14: TMenuItem;
-    MenuItem15: TMenuItem;
-    MenuItem16: TMenuItem;
-    MenuItem17: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem8: TMenuItem;
-    MenuItem9: TMenuItem;
-    EnterDataBtn: TButton;
     VerifyDoubleEntryAction: TAction;
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
     ExportMenuItem: TMenuItem;
-    DocumentMenu: TMenuItem;
+    DataSetMenu: TMenuItem;
     DoubleEntryMenu: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
     ProjectPasswordMenuItem: TMenuItem;
     ViewDataSetMenuItem: TMenuItem;
     ValueLabelEditor2MenuItem: TMenuItem;
@@ -63,7 +52,7 @@ type
     EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
-    ExportDataBtn: TButton;
+    UserAccessBtn: TButton;
     GCPBtn: TButton;
     OpenProjectBtn: TButton;
     NewProjectBtn: TButton;
@@ -129,7 +118,6 @@ type
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
     procedure PrepareDoubleEntryActionExecute(Sender: TObject);
     procedure ProjectReportActionExecute(Sender: TObject);
     procedure QuestionListReportActionExecute(Sender: TObject);
@@ -230,7 +218,7 @@ begin
   {$ENDIF}
 
   {$IFDEF EPI_DEBUG}
-  ExportDataBtn.Visible := true;
+  UserAccessBtn.Visible := true;
   {$ENDIF}
 end;
 
@@ -251,7 +239,6 @@ begin
 
   if Local then Doc.Free;
 end;
-
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 var
@@ -475,11 +462,6 @@ begin
       Doc.Free;
     if Assigned(F) then F.free;
   end;
-end;
-
-procedure TMainForm.PageControl1Change(Sender: TObject);
-begin
-
 end;
 
 procedure TMainForm.PrepareDoubleEntryActionExecute(Sender: TObject);
@@ -753,12 +735,8 @@ begin
   // PROJECT:
   ProjectMenu.Visible := Assigned(FActiveFrame);
 
-  // Document menu
-  DocumentMenu.Visible := Assigned(FActiveFrame);
-
-    // TOOLS:
-  ToolsMenu.Visible := Assigned(FActiveFrame);
-
+  // TOOLS:
+  DataSetMenu.Visible := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;

@@ -54,11 +54,11 @@ begin
     if not Checker.IndexIntegrity(EpiDoc.DataFiles[0], FailedRecords) then
     begin
       Res :=
-        MessageDlg('Unique Index Verification',
-                   'Index is not unique:' + LineEnding +
+        MessageDlg('Index Integrity',
+                   'Index integrity check failed:' + LineEnding +
                    IntToStr(Length(FailedRecords)) + ' non-unique records exists.' + LineEnding +
                    LineEnding +
-                   'Add extra field with index information?',
+                   'Add extra field with integrity information?',
                    mtWarning,
                    mbYesNoCancel, 0, mbYes);
 
@@ -66,20 +66,20 @@ begin
       if res = mrYes then
       begin
         DoSend := false;
-        Fld := EpiDoc.DataFiles[0].Fields.FieldByName['_KeyUnique'];
+        Fld := EpiDoc.DataFiles[0].Fields.FieldByName['_Integrity'];
         if not Assigned(Fld) then
         begin
           Fld := EpiDoc.DataFiles[0].MainSection.NewField(ftInteger);
           DoSend := true;
         end;
 
-        Fld.Name := '_KeyUnique';
-        Fld.Question.Text := 'Unique Key for this record ?';
+        Fld.Name := '_Integrity';
+        Fld.Question.Text := 'Index Integrity Check';
         for i := 0 to Length(FailedRecords) -1 do
-          Fld.AsInteger[FailedRecords[i]] := 0;
+          Fld.AsInteger[FailedRecords[i]] := 1;
         for i := 0 to Fld.Size -1 do
           if Fld.IsMissing[i] then
-            Fld.AsInteger[i] := 1;
+            Fld.AsInteger[i] := 0;
 
         if DoSend then
           SendMessage(MainForm.Handle, LM_DESIGNER_ADDFIELD, WParam(Fld), 0);
@@ -99,7 +99,7 @@ begin
         F.Free;
       end;
     end else
-      ShowMessage('No records break the rule of a unique index');
+      ShowMessage('Index Integrity completed successfull.');
   finally
     Checker.Free;
   end;

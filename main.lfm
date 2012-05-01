@@ -1,21 +1,21 @@
 object MainForm: TMainForm
-  Left = 605
+  Left = 300
   Height = 603
-  Top = 42
+  Top = 298
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
-  ClientHeight = 582
+  ClientHeight = 580
   ClientWidth = 910
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '1.1'
+  LCLVersion = '0.9.31'
   object PageControl1: TPageControl
     Left = 0
-    Height = 542
+    Height = 540
     Top = 40
     Width = 910
     Align = alClient
@@ -23,7 +23,6 @@ object MainForm: TMainForm
     ShowHint = True
     ShowTabs = False
     TabOrder = 0
-    OnChange = PageControl1Change
   end
   object ProcessToolPanel: TPanel
     Left = 0
@@ -41,11 +40,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 100
+      Left = 105
       Height = 27
       Hint = 'Open existing project'
       Top = 7
-      Width = 88
+      Width = 94
       Action = OpenProjectAction
       AutoSize = True
       BorderSpacing.Left = 10
@@ -58,41 +57,42 @@ object MainForm: TMainForm
       Height = 27
       Hint = 'New EpiData Project'
       Top = 7
-      Width = 82
+      Width = 87
       Action = NewProjectAction
       AutoSize = True
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
     end
-    object ExportDataBtn: TButton
-      AnchorSideLeft.Control = EnterDataBtn
+    object UserAccessBtn: TButton
+      AnchorSideLeft.Control = OpenProjectBtn
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 281
+      Left = 209
       Height = 27
-      Hint = 'Export for Analysis'
+      Hint = 'Define/Change User names and passwords'
       Top = 7
-      Width = 81
-      Action = ExportAction
+      Width = 141
       AutoSize = True
       BorderSpacing.Left = 10
-      Caption = 'Export Data'
+      Caption = 'User Access Control'
+      OnClick = UserAccessBtnClick
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
+      Visible = False
     end
     object GCPBtn: TButton
-      AnchorSideLeft.Control = ExportDataBtn
+      AnchorSideLeft.Control = UserAccessBtn
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 372
+      Left = 360
       Height = 27
       Hint = 'Good Clinical Practice guideline tools'
       Top = 7
-      Width = 95
+      Width = 103
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Gcp Extension'
@@ -101,22 +101,6 @@ object MainForm: TMainForm
       ShowHint = True
       TabOrder = 3
       Visible = False
-    end
-    object EnterDataBtn: TButton
-      AnchorSideLeft.Control = OpenProjectBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 198
-      Height = 27
-      Top = 7
-      Width = 73
-      Action = StartEntryClientAction
-      AutoSize = True
-      BorderSpacing.Left = 10
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 4
     end
   end
   object MainMenu1: TMainMenu
@@ -200,47 +184,10 @@ object MainForm: TMainForm
         Caption = 'Set Password'
       end
     end
-    object DocumentMenu: TMenuItem
-      Caption = '&Document'
+    object DataSetMenu: TMenuItem
+      Caption = '&Dataset'
       object ViewDataSetMenuItem: TMenuItem
-        Caption = '&Browse Data'
-      end
-      object MenuItem15: TMenuItem
-        Caption = '-'
-      end
-      object MenuItem8: TMenuItem
-        Caption = 'Reports'
-        Hint = 'Compare files entered twice'
-        object MenuItem4: TMenuItem
-          Caption = 'Project Overview'
-        end
-        object MenuItem9: TMenuItem
-          Caption = 'Question List'
-        end
-        object MenuItem10: TMenuItem
-          Caption = 'Valuelabel List'
-        end
-        object MenuItem11: TMenuItem
-          Caption = 'Combined List'
-        end
-        object MenuItem12: TMenuItem
-          Caption = 'Extended List'
-        end
-        object MenuItem13: TMenuItem
-          Caption = '-'
-        end
-        object MenuItem14: TMenuItem
-          Caption = 'Report Generator...'
-        end
-      end
-      object MenuItem16: TMenuItem
-        Caption = '-'
-      end
-      object MenuItem17: TMenuItem
-        Caption = 'Validate Double Entry'
-      end
-      object MenuItem6: TMenuItem
-        Action = IntegrityCheckAction
+        Caption = 'ViewDataSet'
       end
     end
     object ToolsMenu: TMenuItem
@@ -281,11 +228,17 @@ object MainForm: TMainForm
         Action = PackAction
       end
       object DoubleEntryMenu: TMenuItem
-        Action = PrepareDoubleEntryAction
+        Caption = 'Double Entry'
+        Enabled = False
+        object MenuItem6: TMenuItem
+          Action = PrepareDoubleEntryAction
+        end
+        object MenuItem7: TMenuItem
+          Action = VerifyDoubleEntryAction
+        end
       end
       object IntegrityMenuItem: TMenuItem
         Action = IntegrityCheckAction
-        Caption = 'Check Index'
       end
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
@@ -401,15 +354,13 @@ object MainForm: TMainForm
     end
     object StartEntryClientAction: TAction
       Category = 'Tools'
-      Caption = 'Enter Data'
-      Hint = 'Start EpiDataEntry Client'
+      Caption = 'EpiData EntryClient'
       OnExecute = StartEntryClientActionExecute
       OnUpdate = StartEntryClientActionUpdate
     end
     object PackAction: TAction
       Category = 'Tools'
-      Caption = 'Erase Marked Records'
-      Hint = 'Permanently remove records marked for deletion'
+      Caption = 'Pack Datafiles'
       OnExecute = PackActionExecute
     end
     object ReportGeneratorAction: TAction
@@ -449,18 +400,17 @@ object MainForm: TMainForm
     end
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'
-      Caption = 'Prepare Double entry'
+      Caption = 'Prepare...'
       OnExecute = PrepareDoubleEntryActionExecute
     end
     object VerifyDoubleEntryAction: TAction
       Category = 'Tools'
-      Caption = 'Validate Double Entry'
+      Caption = 'Validate...'
       OnExecute = VerifyDoubleEntryActionExecute
     end
     object IntegrityCheckAction: TAction
       Category = 'Tools'
-      Caption = 'Verify Index '
-      Hint = 'Assert Status of Index'
+      Caption = 'Index Integrity Check'
       OnExecute = IntegrityCheckActionExecute
     end
   end
