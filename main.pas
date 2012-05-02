@@ -17,6 +17,9 @@ type
   TMainForm = class(TForm)
     IntegrityCheckAction: TAction;
     IntegrityMenuItem: TMenuItem;
+    ImportDataMenuItem: TMenuItem;
+    AddStructureMenuItem: TMenuItem;
+    EditMenuDivider2: TMenuItem;
     VerifyDoubleEntryAction: TAction;
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
@@ -731,6 +734,8 @@ begin
   PasteAsIntMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsStringMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider1.Visible := Assigned(FActiveFrame);
+  ImportDataMenuItem.Visible := Assigned(FActiveFrame);
+  AddStructureMenuItem.Visible := Assigned(FActiveFrame);
 
   // PROJECT:
   ProjectMenu.Visible := Assigned(FActiveFrame);
@@ -974,7 +979,9 @@ begin
   PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-  ViewDataSetMenuItem.Action              := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
+  ViewDataSetMenuItem.Action    := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
+  ImportDataMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).ImportDataFileAction;
+  AddStructureMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).AddStructureAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;

@@ -783,6 +783,7 @@ begin
   ImpStructurForm := nil;
   try
     Dlg := TOpenDialog.Create(Self);
+    Dlg.Title := 'Add structure from existing file(s)';
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     Dlg.Filter := GetEpiDialogFilter(dfImport + [dfCollection]);
     Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
@@ -835,11 +836,13 @@ begin
   Dlg := nil;
   try
     Dlg := TOpenDialog.Create(Self);
+    Dlg.Title := 'Import data from existing file';
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     Dlg.Filter := GetEpiDialogFilter([dfDTA, dfREC, dfCollection]);
     if not Dlg.Execute then exit;
 
     DeleteAllControls;
+    DataFile.ValueLabels.Clear;
 
     // Prepare screen...
     Screen.Cursor := crHourGlass;
