@@ -395,6 +395,7 @@
         <Filename Value="project/valuelabelseditor_form2.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ValueLabelEditor2"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="valuelabelseditor_form2"/>
       </Unit45>
