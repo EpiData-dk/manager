@@ -277,6 +277,7 @@ type
     // - Mouse events.
     procedure   DesignControlMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure   DesignControlMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure   DesignControlDblClick(Sender: TObject);
     procedure   EnterControl(Sender: TObject);
     procedure   ExitControl(Sender: TObject);
     procedure   DeleteControl(Sender: TObject; ForceDelete: Boolean);
@@ -562,6 +563,11 @@ end;
 procedure TDesignFrame.DeleteControlFastActionExecute(Sender: TObject);
 begin
   PostMessage(Self.Handle, LM_DESIGNER_DEL, WPARAM(Sender), 1);
+end;
+
+procedure TDesignFrame.DesignControlDblClick(Sender: TObject);
+begin
+  ShowForm((Sender as IDesignEpiControl).EpiControl, TControl(Sender).ClientToScreen(Point(0,0)));
 end;
 
 procedure TDesignFrame.DesignBoxPaintA4(Sender: TObject);
@@ -1519,6 +1525,7 @@ begin
     OnMouseDown := @DesignControlMouseDown;
     OnMouseUp   := @DesignControlMouseUp;
     OnStartDock := @DesignControlStartDock;
+    OnDblClick  := @DesignControlDblClick;
     Dock(AParent, Bounds(Pos.X, Pos.Y, Width, Height));
   end;
 
@@ -1559,6 +1566,7 @@ begin
     OnUnDock    := @DockSiteUnDock;
     OnDockOver  := @DockSiteDockOver;
     OnStartDock := @DesignControlStartDock;
+    OnDblClick  := @DesignControlDblClick;
     Dock(FDesignerBox, Bounds(StartPos.X, StartPos.Y, Width, Height));
   end;
 
