@@ -119,6 +119,7 @@
         <Filename Value="project/project_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_frame"/>
       </Unit2>
@@ -146,6 +147,7 @@
         <Filename Value="project/project_settings.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSettingsForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="project_settings"/>
       </Unit6>
@@ -236,6 +238,7 @@
         <Filename Value="designer/design_fieldproperties_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FieldPropertiesFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_fieldproperties_frame"/>
       </Unit20>
@@ -257,6 +260,7 @@
         <Filename Value="designer/design_propertiesbase_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DesignPropertiesFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_propertiesbase_frame"/>
       </Unit23>
@@ -464,29 +468,32 @@
         <Filename Value="designer/datasetviewer_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DataSetViewFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="datasetviewer_frame"/>
       </Unit55>
       <Unit56>
-        <Filename Value="project/project_settings_keys_frame.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="ProjectSettings_KeysFrame"/>
-        <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_settings_keys_frame"/>
-      </Unit56>
-      <Unit57>
         <Filename Value="tools/prepare_double_entry_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="PrepareDoubleEntryForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="prepare_double_entry_form"/>
-      </Unit57>
-      <Unit58>
+      </Unit56>
+      <Unit57>
         <Filename Value="tools/indexintegrity.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="IndexIntegrityForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="indexintegrity"/>
+      </Unit57>
+      <Unit58>
+        <Filename Value="project/project_keyfields_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="KeyFieldsForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="project_keyfields_form"/>
       </Unit58>
     </Units>
   </ProjectOptions>

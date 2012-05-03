@@ -183,14 +183,17 @@ object MainForm: TMainForm
         Visible = False
         OnClick = UserAccessBtnClick
       end
+      object KeyFieldsMenuItem: TMenuItem
+        Caption = 'KeyFields'
+      end
+      object ProjectPasswordMenuItem: TMenuItem
+        Caption = 'Set Password'
+      end
       object MenuItem1: TMenuItem
         Caption = '-'
       end
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
-      end
-      object ProjectPasswordMenuItem: TMenuItem
-        Caption = 'Set Password'
       end
     end
     object DataSetMenu: TMenuItem

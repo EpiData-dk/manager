@@ -426,8 +426,13 @@ begin
       case TEpiCustomChangeEventType(EventType) of
         ecceDestroy:
             begin
+              // 2012-05-03: (Torsten)
+              //   commented out since TEpiCustomList now removes item from it's and unregisters
+              //   owner etc. during a call to Destroy! Dirty trick does not hold any more
+              //   but causes not crash so far... :)
+
               // Dirty trick, since RootOwner does not exists when OnFieldchange is called.
-              TEpiDocument(FField.RootOwner).ProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
+//              TEpiDocument(FField.RootOwner).ProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
               Question.UnRegisterOnChangeHook(@OnQuestionChange);
               exit;
             end;

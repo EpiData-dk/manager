@@ -36,7 +36,8 @@ var
   P_DelDataForm,
   P_ProjectSettings,
   P_StartValueLabelEditor,
-  P_OpenProject:
+  P_OpenProject,
+  P_KeyFields:
     TShortCut;
 
   // Designer Frame

@@ -14,6 +14,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    KeyFieldsAction: TAction;
     ProjectPasswordAction: TAction;
     OpenProjectAction: TAction;
     ValueLabelEditorAction: TAction;
@@ -35,6 +36,7 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure KeyFieldsActionExecute(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure ProjectPasswordActionExecute(Sender: TObject);
@@ -105,7 +107,7 @@ uses
   epiexport, main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2, epidatafilestypes,
   strutils, managerprocs, Menus, LCLType, LCLIntf, project_settings,
-  shortcuts;
+  shortcuts, project_keyfields_form;
 
 type
 
@@ -133,6 +135,15 @@ begin
 
   DoNewDataForm(Df);
   UpdateCaption;
+end;
+
+procedure TProjectFrame.KeyFieldsActionExecute(Sender: TObject);
+var
+  F: TKeyFieldsForm;
+begin
+  F := TKeyFieldsForm.Create(Self, EpiDocument);
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TProjectFrame.EpiDocumentPassWord(Sender: TObject; var Login: string;
@@ -694,6 +705,7 @@ begin
   ProjectSettingsAction.ShortCut  := P_ProjectSettings;
   ValueLabelEditorAction.ShortCut := P_StartValueLabelEditor;
   OpenProjectAction.ShortCut      := P_OpenProject;
+  KeyFieldsAction.ShortCut        := P_KeyFields;
 end;
 
 procedure TProjectFrame.LMDesignerAddField(var Msg: TLMessage);

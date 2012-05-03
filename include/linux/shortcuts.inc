@@ -30,6 +30,7 @@ begin
   P_ProjectSettings            := KeyToShortCut(VK_P, [ssAlt]);
   P_StartValueLabelEditor      := KeyToShortCut(VK_V, [ssAlt]);
   P_OpenProject                := KeyToShortCut(VK_UNKNOWN, []);  // this overlaps with M_OpenProject!?!?!
+  P_KeyFields                  := KeyToShortCut(VK_UNKNOWN, []);
 
   // Designer Frame
   D_NewIntField                := KeyToShortCut(VK_1, []);

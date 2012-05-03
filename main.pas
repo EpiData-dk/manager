@@ -20,6 +20,7 @@ type
     ImportDataMenuItem: TMenuItem;
     AddStructureMenuItem: TMenuItem;
     EditMenuDivider2: TMenuItem;
+    KeyFieldsMenuItem: TMenuItem;
     VerifyDoubleEntryAction: TAction;
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
@@ -738,7 +739,8 @@ begin
   AddStructureMenuItem.Visible := Assigned(FActiveFrame);
 
   // PROJECT:
-  ProjectMenu.Visible := Assigned(FActiveFrame);
+  ProjectMenu.Visible       := Assigned(FActiveFrame);
+  KeyFieldsMenuItem.Visible := Assigned(FActiveFrame);
 
   // TOOLS:
   DataSetMenu.Visible := Assigned(FActiveFrame);
@@ -986,6 +988,7 @@ begin
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
   ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
+  KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
 end;
 
 procedure TMainForm.BeginUpdatingForm;

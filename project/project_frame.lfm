@@ -161,6 +161,11 @@ object ProjectFrame: TProjectFrame
       Caption = 'Set Password'
       OnExecute = ProjectPasswordActionExecute
     end
+    object KeyFieldsAction: TAction
+      Category = 'Project'
+      Caption = 'Key Fields...'
+      OnExecute = KeyFieldsActionExecute
+    end
   end
   object ProjectImageList: TImageList
     left = 384

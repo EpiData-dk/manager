@@ -38,8 +38,8 @@ uses
   settings_export, export_form, export_stata_frame,
   export_customvaluelabel_frame, export_frame_types, export_csv_frame,
   export_customtext_frame, export_spss_frame, export_sas_frame,
-  datasetviewer_frame, project_settings_keys_frame, prepare_double_entry_form,
-  indexintegrity;
+  datasetviewer_frame, prepare_double_entry_form,
+  indexintegrity, project_keyfields_form;
 
 {$R *.res}
 
