@@ -177,8 +177,10 @@ begin
     MessageDlg(Header, 'Password successfully reset!', mtInformation, [mbOK], 0);
 
   if PW = PW2 then
-    EpiDocument.PassWord := PW
-  else
+  begin
+    EpiDocument.PassWord := PW;
+    MessageDlg(Header, 'Password successfully set!', mtInformation, [mbOK], 0);
+  end else
     MessageDlg(Header, 'The two passwords are not identical!' + LineEnding + 'Password NOT set.', mtError, [mbOK], 0);
 end;
 

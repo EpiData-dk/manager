@@ -30,9 +30,12 @@ type
   private
     { private declarations }
     FDataFile: TEpiDataFile;
+    FKeyFields: TEpiFields;
     FShowValueLabels: boolean;
     FSortCol: integer;
     FRecords: TBoundArray;
+    function  GetKeyFields: TEpiFields;
+    procedure SetKeyFields(AValue: TEpiFields);
     procedure  UpdateGrid;
     procedure  GridColumnSort(Sender: TObject; ACol, ARow, BCol,
       BRow: Integer; var Result: integer);
@@ -42,6 +45,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const DataFile: TEpiDataFile);
     procedure   ShowRecords(const Records: TBoundArray);
+    property    KeyFields: TEpiFields read GetKeyFields write SetKeyFields;
   end;
 
 implementation
@@ -88,7 +92,7 @@ end;
 
 procedure TDataSetViewFrame.SortByIndexActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := FDataFile.KeyFields.Count > 0;
+  TAction(Sender).Enabled := FKeyFields.Count > 0;
 end;
 
 procedure TDataSetViewFrame.UpdateGrid;
@@ -139,6 +143,19 @@ begin
   ListGrid.EndUpdate();
 end;
 
+function TDataSetViewFrame.GetKeyFields: TEpiFields;
+begin
+  result := FKeyFields;
+end;
+
+procedure TDataSetViewFrame.SetKeyFields(AValue: TEpiFields);
+begin
+  if Assigned(AValue) then
+    FKeyFields := AValue
+  else
+    FKeyFields := FDataFile.KeyFields;
+end;
+
 procedure TDataSetViewFrame.GridColumnSort(Sender: TObject; ACol, ARow, BCol,
   BRow: Integer; var Result: integer);
 begin
@@ -159,14 +176,14 @@ var
   i: Integer;
 begin
   result := 0;
-  if not FDataFile.KeyFields.Count = 0 then exit;
+  if not FKeyFields.Count = 0 then exit;
 
   ARow := StrToInt(ListGrid.Cells[0, ARow]) - 1;
   BRow := StrToInt(ListGrid.Cells[0, BRow]) - 1;
 
-  for i := 0 to FDataFile.KeyFields.Count - 1 do
+  for i := 0 to FKeyFields.Count - 1 do
   begin
-    result := FDataFile.KeyFields[i].Compare(ARow, BRow);
+    result := FKeyFields[i].Compare(ARow, BRow);
     if result <> 0 then break;
   end;
 end;

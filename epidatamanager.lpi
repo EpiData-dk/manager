@@ -101,7 +101,7 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="59">
+    <Units Count="60">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -181,6 +181,7 @@
         <Filename Value="settings/settings2.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SettingsForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="settings2"/>
       </Unit11>
@@ -495,6 +496,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="project_keyfields_form"/>
       </Unit58>
+      <Unit59>
+        <Filename Value="utils/manager_globals.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="manager_globals"/>
+      </Unit59>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -521,6 +527,7 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
+      <CustomOptions Value="-dVerboseScrollingWinControl"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

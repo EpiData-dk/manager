@@ -1,30 +1,31 @@
 object KeyFieldsForm: TKeyFieldsForm
-  Left = 893
-  Height = 543
-  Top = 306
-  Width = 557
+  Left = 961
+  Height = 507
+  Top = 316
+  Width = 509
   Caption = 'Define Key Fields'
-  ClientHeight = 543
-  ClientWidth = 557
+  ClientHeight = 507
+  ClientWidth = 509
   OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
   LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
-    Height = 50
-    Top = 493
-    Width = 557
+    Height = 43
+    Top = 464
+    Width = 509
     Align = alBottom
-    ClientHeight = 50
-    ClientWidth = 557
+    ClientHeight = 43
+    ClientWidth = 509
     TabOrder = 0
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 471
+      Left = 423
       Height = 30
-      Top = 10
+      Top = 6
       Width = 75
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 10
@@ -38,9 +39,9 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 382
+      Left = 334
       Height = 30
-      Top = 10
+      Top = 6
       Width = 84
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 5
@@ -54,28 +55,45 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 30
-      Top = 10
-      Width = 96
+      Height = 27
+      Top = 8
+      Width = 88
+      AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'List Records'
       OnClick = ShowRecordsBtnClick
       TabOrder = 2
     end
+    object AddIndexFieldBtn: TButton
+      AnchorSideLeft.Control = ShowRecordsBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      Left = 104
+      Height = 27
+      Top = 8
+      Width = 139
+      Action = AddIndexFieldAction
+      AutoSize = True
+      BorderSpacing.Left = 5
+      TabOrder = 3
+    end
   end
-  object Panel2: TPanel
+  object ScrollBox1: TScrollBox
     Left = 0
-    Height = 493
+    Height = 464
     Top = 0
-    Width = 557
+    Width = 509
+    HorzScrollBar.Page = 507
+    VertScrollBar.Page = 462
     Align = alClient
-    ClientHeight = 493
-    ClientWidth = 557
+    ClientHeight = 462
+    ClientWidth = 507
     TabOrder = 1
     object Label1: TLabel
-      AnchorSideLeft.Control = Panel2
+      AnchorSideLeft.Control = ScrollBox1
       AnchorSideBottom.Control = TopBevel
-      Left = 11
+      Left = 10
       Height = 16
       Top = 21
       Width = 161
@@ -86,13 +104,13 @@ object KeyFieldsForm: TKeyFieldsForm
       ParentColor = False
     end
     object TopBevel: TBevel
-      AnchorSideLeft.Control = Panel2
-      AnchorSideRight.Control = Panel2
+      AnchorSideLeft.Control = ScrollBox1
+      AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
-      Left = 11
+      Left = 10
       Height = 5
       Top = 40
-      Width = 540
+      Width = 492
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Right = 5
@@ -100,10 +118,9 @@ object KeyFieldsForm: TKeyFieldsForm
     object RightBevel: TBevel
       AnchorSideTop.Control = TopBevel
       AnchorSideTop.Side = asrBottom
-      AnchorSideBottom.Control = Panel2
       AnchorSideBottom.Side = asrBottom
-      Left = 484
-      Height = 437
+      Left = 437
+      Height = 407
       Top = 50
       Width = 5
       Anchors = [akTop, akRight, akBottom]
@@ -112,23 +129,23 @@ object KeyFieldsForm: TKeyFieldsForm
     end
     object Bevel3: TBevel
       AnchorSideLeft.Control = RightBevel
-      AnchorSideTop.Control = Panel2
+      AnchorSideTop.Control = ScrollBox1
       AnchorSideRight.Control = RightBevel
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = TopBevel
-      Left = 484
-      Height = 33
-      Top = 4
+      Left = 437
+      Height = 34
+      Top = 3
       Width = 5
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Top = 3
       BorderSpacing.Bottom = 3
     end
-    object AddIndexBtn: TSpeedButton
+    object AddIndexComboBtn: TSpeedButton
       AnchorSideLeft.Control = RightBevel
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = TopBevel
-      Left = 494
+      Left = 447
       Height = 22
       Top = 15
       Width = 23
@@ -172,14 +189,14 @@ object KeyFieldsForm: TKeyFieldsForm
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
       NumGlyphs = 0
-      OnClick = AddIndexBtnClick
+      OnClick = AddIndexComboBtnClick
     end
     object RemoveIndexBtn: TSpeedButton
-      AnchorSideLeft.Control = AddIndexBtn
+      AnchorSideLeft.Control = AddIndexComboBtn
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = AddIndexBtn
+      AnchorSideTop.Control = AddIndexComboBtn
       AnchorSideTop.Side = asrCenter
-      Left = 522
+      Left = 475
       Height = 22
       Top = 15
       Width = 23
@@ -225,12 +242,12 @@ object KeyFieldsForm: TKeyFieldsForm
       OnClick = RemoveIndexBtnClick
     end
     object RealTimeStatusChkBox: TCheckBox
-      AnchorSideLeft.Control = Panel2
-      AnchorSideBottom.Control = Panel2
+      AnchorSideLeft.Control = ScrollBox1
+      AnchorSideBottom.Control = ScrollBox1
       AnchorSideBottom.Side = asrBottom
-      Left = 11
+      Left = 10
       Height = 22
-      Top = 465
+      Top = 435
       Width = 236
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
@@ -238,6 +255,15 @@ object KeyFieldsForm: TKeyFieldsForm
       Caption = 'Show index status while selecting'
       OnChange = RealTimeStatusChkBoxChange
       TabOrder = 0
+    end
+  end
+  object ActionList1: TActionList
+    left = 261
+    top = 189
+    object AddIndexFieldAction: TAction
+      Caption = 'AddIndexFieldAction'
+      OnExecute = AddIndexFieldActionExecute
+      OnUpdate = AddIndexFieldActionUpdate
     end
   end
 end

@@ -6,27 +6,33 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Buttons, epiintegritycheck, epidatafiles, epidocument;
+  StdCtrls, Buttons, ActnList, epiintegritycheck, epidatafiles, epidocument;
 
 type
 
   { TKeyFieldsForm }
 
   TKeyFieldsForm = class(TForm)
-    TopBevel: TBevel;
-    RightBevel: TBevel;
+    AddIndexFieldAction: TAction;
+    ActionList1: TActionList;
+    AddIndexComboBtn: TSpeedButton;
     Bevel3: TBevel;
+    AddIndexFieldBtn: TButton;
+    Label1: TLabel;
+    RealTimeStatusChkBox: TCheckBox;
+    RemoveIndexBtn: TSpeedButton;
+    RightBevel: TBevel;
+    ScrollBox1: TScrollBox;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     ShowRecordsBtn: TButton;
-    RealTimeStatusChkBox: TCheckBox;
-    Label1: TLabel;
     Panel1: TPanel;
-    Panel2: TPanel;
-    AddIndexBtn: TSpeedButton;
-    RemoveIndexBtn: TSpeedButton;
-    procedure AddIndexBtnClick(Sender: TObject);
+    TopBevel: TBevel;
+    procedure AddIndexComboBtnClick(Sender: TObject);
+    procedure AddIndexFieldActionExecute(Sender: TObject);
+    procedure AddIndexFieldActionUpdate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
     procedure RealTimeStatusChkBoxChange(Sender: TObject);
     procedure RemoveIndexBtnClick(Sender: TObject);
     procedure ShowRecordsBtnClick(Sender: TObject);
@@ -48,23 +54,65 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; EpiDoc: TEpiDocument);
     destructor Destroy; override;
+    class procedure RestoreDefaultPos;
   end;
-
-var
-  KeyFieldsForm: TKeyFieldsForm;
 
 implementation
 
 {$R *.lfm}
 
 uses
-  types, datasetviewer_frame;
+  types, datasetviewer_frame, settings2, settings2_var,
+  manager_globals, epidatafilestypes, LCLIntf, manager_messages,
+  main, lcltype;
+
+const
+  FormName = 'KeyFieldsForm';
 
 { TKeyFieldsForm }
 
-procedure TKeyFieldsForm.AddIndexBtnClick(Sender: TObject);
+procedure TKeyFieldsForm.AddIndexComboBtnClick(Sender: TObject);
 begin
   DoAddNewKey;
+end;
+
+procedure TKeyFieldsForm.AddIndexFieldActionExecute(Sender: TObject);
+var
+  F: TEpiField;
+  FaildedRecords: TBoundArray;
+  i: Integer;
+begin
+  F := FEpiDoc.DataFiles[0].Fields.FieldByName[IndexIntegrityFieldName];
+  if not Assigned(F) then
+  begin
+    F := FEpiDoc.DataFiles[0].NewField(ftInteger);
+    F.Name := IndexIntegrityFieldName;
+
+    PostMessage(MainForm.Handle, LM_DESIGNER_ADDFIELD, WParam(F), 0);
+  end;
+
+  if not PerformIndexCheck(FaildedRecords) then
+  begin
+    // A SetAll method is missing... :(
+    for i := 0 to F.Size -1 do
+      F.AsInteger[i] := 0;
+
+    // Set only failed records.
+    for i := 0 to Length(FaildedRecords) - 1 do
+      F.AsInteger[FaildedRecords[i]] := 1
+  end;
+
+  AddIndexFieldAction.Update;
+end;
+
+procedure TKeyFieldsForm.AddIndexFieldActionUpdate(Sender: TObject);
+var
+  S: String;
+begin
+  S := 'Add ';
+  if FEpiDoc.DataFiles[0].Fields.ItemExistsByName(IndexIntegrityFieldName) then
+    S := 'Update ';
+  AddIndexFieldAction.Caption := S + 'Index Field';
 end;
 
 procedure TKeyFieldsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -78,6 +126,7 @@ begin
   begin
     Res := MessageDlg('Index Error',
                         'Index integrity check failed.' + LineEnding +
+                        LineEnding +
                         'Are you sure you what to apply index which contains duplicates?',
                         mtWarning, mbYesNoCancel, 0, mbCancel);
 
@@ -98,6 +147,15 @@ begin
       FEpiDoc.DataFiles[0].KeyFields.AddItem(Fl[i]);
     Fl.Free;
   end;
+
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, FormName);
+end;
+
+procedure TKeyFieldsForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, FormName);
 end;
 
 procedure TKeyFieldsForm.RealTimeStatusChkBoxChange(Sender: TObject);
@@ -164,11 +222,11 @@ begin
 
   if FKeyList.Count = 0  then
   begin
-    AddIndexBtn.Anchors := AddIndexBtn.Anchors - [akTop];
-    AddIndexBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
+    AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
+    AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
     RemoveIndexBtn.Enabled := false;
   end else
-    AddIndexBtn.AnchorVerticalCenterTo(TControl(FKeyList.Last));
+    AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FKeyList.Last));
   Cmb.Free;
 
   IndexCheckError;
@@ -196,18 +254,22 @@ begin
            false, FieldList) then
   begin
     F := TForm.Create(Self);
+    F.Caption := 'List of non-unique records:';
     V := TDataSetViewFrame.Create(F, FEpiDoc.DataFiles[0]);
     V.Align := alClient;
     V.Parent := F;
+    V.KeyFields := FieldList;
     V.ShowRecords(FailedRecords);
+    V.SortByIndexAction.Execute;
     F.ShowModal;
     F.Free;
   end;
+  FieldList.Free;
 end;
 
 function TKeyFieldsForm.DoAddNewKey: TComboBox;
 begin
-  result := TComboBox.Create(Panel2);
+  result := TComboBox.Create(ScrollBox1);
 
   with result do
   begin
@@ -221,11 +283,11 @@ begin
     Style := csDropDownList;
     OnSelect  := @ComboSelect;
 
-    Parent := Panel2;
+    Parent := ScrollBox1;
   end;
   FKeyList.Add(Result);
 
-  AddIndexBtn.AnchorVerticalCenterTo(result);
+  AddIndexComboBtn.AnchorVerticalCenterTo(result);
   RemoveIndexBtn.Enabled := true;
 end;
 
@@ -300,6 +362,19 @@ begin
   FHintWindow.Free;
   FIndexChecker.Free;
   inherited Destroy;
+end;
+
+class procedure TKeyFieldsForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 600;
+  Aform.Height := 480;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, FormName);
+  AForm.free;
 end;
 
 end.
