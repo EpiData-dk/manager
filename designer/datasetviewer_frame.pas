@@ -43,8 +43,8 @@ type
     function  GetKeyFields: TEpiFields;
     procedure SetDisplayFields(AValue: TEpiFields);
     procedure SetKeyFields(AValue: TEpiFields);
-    procedure  UpdateGrid;
-    procedure  GridColumnSort(Sender: TObject; ACol, ARow, BCol,
+    procedure UpdateGrid;
+    procedure GridColumnSort(Sender: TObject; ACol, ARow, BCol,
       BRow: Integer; var Result: integer);
     procedure  GridIndexSort(Sender: TObject; ACol, ARow, BCol,
       BRow: Integer; var Result: integer);
@@ -72,7 +72,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, math, settings2, settings2_var;
+  Graphics, math, settings2, settings2_var, manager_globals;
 
 { TDataSetViewFrame }
 
@@ -102,7 +102,8 @@ end;
 
 procedure TDataSetViewFrame.ShowIndexOrAllFieldsActionUpdate(Sender: TObject);
 begin
-  ShowIndexOrAllFieldsAction.Enabled := Assigned(FKeyFields);
+  ShowIndexOrAllFieldsAction.Enabled :=
+    Assigned(FKeyFields) and (FKeyFields.Count > 0);
 end;
 
 procedure TDataSetViewFrame.ShowValuesOrLabelsActionExecute(Sender: TObject);
@@ -130,11 +131,27 @@ var
   i: Integer;
   j: Integer;
   Fields: TEpiFields;
+  F: TEpiField;
+
+  procedure AssignFields(ToFields, FromFields: TEpiFields);
+  var
+    i: integer;
+  begin
+    for i := 0 to FromFields.Count - 1 do
+      ToFields.AddItem(FromFields[i]);
+  end;
+
 begin
+  Fields := TEpiFields.Create(nil);
+
   if FShowAllFields then
-    Fields := FDisplayFields
-  else
-    Fields := FKeyFields;
+    AssignFields(Fields, FDisplayFields)
+  else begin
+    AssignFields(Fields, FKeyFields);
+    F := FDataFile.Fields.FieldByName[IndexIntegrityFieldName];
+    if Assigned(F) then
+      Fields.AddItem(F);
+  end;
 
   ListGrid.BeginUpdate;
 
@@ -179,6 +196,7 @@ begin
   ListGrid.SortColRow(true, Max(FSortCol,0));
   ListGrid.AutoSizeColumns;
   ListGrid.EndUpdate();
+  Fields.Free;
 end;
 
 function TDataSetViewFrame.GetKeyFields: TEpiFields;

@@ -6,8 +6,8 @@ object DataSetViewFrame: TDataSetViewFrame
   ClientHeight = 476
   ClientWidth = 681
   TabOrder = 0
-  DesignLeft = 851
-  DesignTop = 312
+  DesignLeft = 544
+  DesignTop = 249
   object ListGrid: TStringGrid
     Left = 0
     Height = 434
@@ -49,9 +49,9 @@ object DataSetViewFrame: TDataSetViewFrame
     end
     object Button3: TButton
       Left = 304
-      Height = 27
+      Height = 23
       Top = 8
-      Width = 142
+      Width = 138
       Action = ShowIndexOrAllFieldsAction
       AutoSize = True
       TabOrder = 2
