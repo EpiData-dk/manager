@@ -1,7 +1,7 @@
 object KeyFieldsForm: TKeyFieldsForm
-  Left = 961
+  Left = 1007
   Height = 507
-  Top = 316
+  Top = 266
   Width = 509
   Caption = 'Define Key Fields'
   ClientHeight = 507

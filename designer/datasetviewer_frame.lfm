@@ -47,6 +47,15 @@ object DataSetViewFrame: TDataSetViewFrame
       BorderSpacing.Left = 10
       TabOrder = 1
     end
+    object Button3: TButton
+      Left = 304
+      Height = 27
+      Top = 8
+      Width = 142
+      Action = ShowIndexOrAllFieldsAction
+      AutoSize = True
+      TabOrder = 2
+    end
   end
   object ActionList1: TActionList
     left = 298
@@ -59,6 +68,11 @@ object DataSetViewFrame: TDataSetViewFrame
       Caption = 'Sort by Index'
       OnExecute = SortByIndexActionExecute
       OnUpdate = SortByIndexActionUpdate
+    end
+    object ShowIndexOrAllFieldsAction: TAction
+      Caption = 'Show All/Index Fields'
+      OnExecute = ShowIndexOrAllFieldsActionExecute
+      OnUpdate = ShowIndexOrAllFieldsActionUpdate
     end
   end
 end

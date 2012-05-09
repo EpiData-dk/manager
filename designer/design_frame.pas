@@ -446,25 +446,11 @@ begin
 end;
 
 procedure TDesignFrame.ViewDataSetActionExecute(Sender: TObject);
-var
-  F: TForm;
-  V: TDataSetViewFrame;
 begin
-  F := nil;
-  try
-    F := TForm.Create(Self);
-    V := TDataSetViewFrame.Create(F, DataFile);
-    V.Align := alClient;
-    V.Parent := F;
-
-    if ManagerSettings.SaveWindowPositions then
-      LoadFormPosition(F, 'DataSetViewer');
-    F.ShowModal;
-    if ManagerSettings.SaveWindowPositions then
-      SaveFormPosition(F, 'DataSetViewer');
-  finally
-    F.Free;
-  end;
+  ShowDataSetViewerForm(
+    Self,
+    'View Dataset:',
+    DataFile);
 end;
 
 procedure TDesignFrame.ResetMousePos;

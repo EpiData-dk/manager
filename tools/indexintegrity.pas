@@ -42,6 +42,7 @@ var
   Fld: TEpiField;
   i: Integer;
   DoSend: Boolean;
+  FailedValues: TBoundArray;
 begin
   if EpiDoc.DataFiles[0].KeyFields.Count = 0 then
   begin
@@ -51,7 +52,7 @@ begin
 
   try
     Checker := TEpiIntegrityChecker.Create;
-    if not Checker.IndexIntegrity(EpiDoc.DataFiles[0], FailedRecords) then
+    if not Checker.IndexIntegrity(EpiDoc.DataFiles[0], FailedRecords, FailedValues) then
     begin
       Res :=
         MessageDlg('Index Integrity',

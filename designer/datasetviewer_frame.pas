@@ -13,6 +13,8 @@ type
   { TDataSetViewFrame }
 
   TDataSetViewFrame = class(TFrame)
+    ShowIndexOrAllFieldsAction: TAction;
+    Button3: TButton;
     SortByIndexAction: TAction;
     ShowValuesOrLabelsAction: TAction;
     ActionList1: TActionList;
@@ -24,17 +26,22 @@ type
       Index: Integer);
     procedure ListGridPrepareCanvas(sender: TObject; aCol, aRow: Integer;
       aState: TGridDrawState);
+    procedure ShowIndexOrAllFieldsActionExecute(Sender: TObject);
+    procedure ShowIndexOrAllFieldsActionUpdate(Sender: TObject);
     procedure ShowValuesOrLabelsActionExecute(Sender: TObject);
     procedure SortByIndexActionExecute(Sender: TObject);
     procedure SortByIndexActionUpdate(Sender: TObject);
   private
     { private declarations }
     FDataFile: TEpiDataFile;
+    FDisplayFields: TEpiFields;
     FKeyFields: TEpiFields;
     FShowValueLabels: boolean;
+    FShowAllFields: boolean;
     FSortCol: integer;
     FRecords: TBoundArray;
     function  GetKeyFields: TEpiFields;
+    procedure SetDisplayFields(AValue: TEpiFields);
     procedure SetKeyFields(AValue: TEpiFields);
     procedure  UpdateGrid;
     procedure  GridColumnSort(Sender: TObject; ACol, ARow, BCol,
@@ -46,14 +53,26 @@ type
     constructor Create(TheOwner: TComponent; Const DataFile: TEpiDataFile);
     procedure   ShowRecords(const Records: TBoundArray);
     property    KeyFields: TEpiFields read GetKeyFields write SetKeyFields;
+    property    DisplayFields: TEpiFields read FDisplayFields write SetDisplayFields;
   end;
+
+
+procedure ShowDataSetViewerForm(TheOwner: TComponent;
+  const FormCaption: string;
+  Const DataFile: TEpiDataFile;
+  const Records: TBoundArray = nil;
+  const KeyFields: TEpiFields = nil;
+  const DisplayFields: TEpiFields = nil;
+  const SortFieldNo: Integer = 0; // -1 = Index | 0 = Rec no| 1+ = Field...
+  const ShowIndexFields: boolean = false
+  );
 
 implementation
 
 {$R *.lfm}
 
 uses
-  Graphics, math;
+  Graphics, math, settings2, settings2_var;
 
 { TDataSetViewFrame }
 
@@ -75,6 +94,17 @@ begin
     ListGrid.Canvas.Brush.Color := clSkyBlue;
 end;
 
+procedure TDataSetViewFrame.ShowIndexOrAllFieldsActionExecute(Sender: TObject);
+begin
+  FShowAllFields := not FShowAllFields;
+  UpdateGrid;
+end;
+
+procedure TDataSetViewFrame.ShowIndexOrAllFieldsActionUpdate(Sender: TObject);
+begin
+  ShowIndexOrAllFieldsAction.Enabled := Assigned(FKeyFields);
+end;
+
 procedure TDataSetViewFrame.ShowValuesOrLabelsActionExecute(Sender: TObject);
 begin
   FShowValueLabels := not FShowValueLabels;
@@ -92,24 +122,30 @@ end;
 
 procedure TDataSetViewFrame.SortByIndexActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := FKeyFields.Count > 0;
+  TAction(Sender).Enabled := (Assigned(FKeyFields)) and (FKeyFields.Count > 0);
 end;
 
 procedure TDataSetViewFrame.UpdateGrid;
 var
   i: Integer;
   j: Integer;
+  Fields: TEpiFields;
 begin
+  if FShowAllFields then
+    Fields := FDisplayFields
+  else
+    Fields := FKeyFields;
+
   ListGrid.BeginUpdate;
 
-  ListGrid.ColCount := FDataFile.Fields.Count + 1;
+  ListGrid.ColCount := Fields.Count + 1;
   if Length(FRecords) > 0 then
     ListGrid.RowCount := Length(FRecords) + 1
   else
     ListGrid.RowCount := FDataFile.Size + 1;
 
-  for i := 0 to FDataFile.Fields.Count - 1 do
-  with FDataFile.Fields[i] do
+  for i := 0 to Fields.Count - 1 do
+  with Fields[i] do
     ListGrid.Cells[i+1, 0] := Name;
 
   if Length(FRecords) > 0 then
@@ -118,8 +154,8 @@ begin
     begin
       ListGrid.Cells[0, i + 1] := IntToStr(FRecords[i] + 1);
 
-      for j := 0 to FDataFile.Fields.Count - 1 do
-      with FDataFile.Fields[j] do
+      for j := 0 to Fields.Count - 1 do
+      with Fields[j] do
         if (FShowValueLabels) and (Assigned(ValueLabelSet)) and (not IsMissing[FRecords[i]]) then
           ListGrid.Cells[j + 1, i + 1] := ValueLabelSet.ValueLabelString[AsValue[FRecords[i]]]
         else
@@ -130,14 +166,16 @@ begin
     begin
       ListGrid.Cells[0, i + 1] := IntToStr(i + 1);
 
-      for j := 0 to FDataFile.Fields.Count - 1 do
-      with FDataFile.Fields[j] do
+      for j := 0 to Fields.Count - 1 do
+      with Fields[j] do
         if (FShowValueLabels) and (Assigned(ValueLabelSet)) and (not IsMissing[i]) then
           ListGrid.Cells[j + 1, i + 1] := ValueLabelSet.ValueLabelString[AsValue[i]]
         else
           ListGrid.Cells[j + 1, i + 1] := AsString[i];
     end;
   end;
+  if FSortCol > (ListGrid.ColCount - 1) then
+    FSortCol := 0;
   ListGrid.SortColRow(true, Max(FSortCol,0));
   ListGrid.AutoSizeColumns;
   ListGrid.EndUpdate();
@@ -146,6 +184,12 @@ end;
 function TDataSetViewFrame.GetKeyFields: TEpiFields;
 begin
   result := FKeyFields;
+end;
+
+procedure TDataSetViewFrame.SetDisplayFields(AValue: TEpiFields);
+begin
+  if Assigned(AValue) then
+    FDisplayFields := AValue;
 end;
 
 procedure TDataSetViewFrame.SetKeyFields(AValue: TEpiFields);
@@ -196,7 +240,10 @@ var
 begin
   inherited Create(TheOwner);
   FDataFile := DataFile;
+  FKeyFields := FDataFile.KeyFields;
+  FDisplayFields := FDataFile.Fields;
   FShowValueLabels := false;
+  FShowAllFields := true;
   FSortCol := 0;
 
   ListGrid.Align := alClient;
@@ -210,6 +257,48 @@ procedure TDataSetViewFrame.ShowRecords(const Records: TBoundArray);
 begin
   FRecords := Records;
   UpdateGrid;
+end;
+
+procedure ShowDataSetViewerForm(TheOwner: TComponent;
+  const FormCaption: string; const DataFile: TEpiDataFile;
+  const Records: TBoundArray; const KeyFields: TEpiFields;
+  const DisplayFields: TEpiFields; const SortFieldNo: Integer;
+  const ShowIndexFields: boolean);
+const
+  FormName = 'DataSetViewerForm';
+var
+  F: TForm;
+  V: TDataSetViewFrame;
+begin
+  F := TForm.Create(TheOwner);
+  F.Caption := FormCaption;
+
+  V := TDataSetViewFrame.Create(F, DataFile);
+  V.Align := alClient;
+  V.Parent := F;
+  if Assigned(KeyFields) then
+    V.KeyFields := KeyFields;
+  if Assigned(Records) then
+    V.ShowRecords(Records);
+  if Assigned(DisplayFields) then
+    V.DisplayFields := DisplayFields;
+
+  if SortFieldNo = -1 then
+    V.SortByIndexAction.Execute
+  else
+    V.ListGridHeaderClick(nil, true, SortFieldNo);
+
+  if ShowIndexFields then
+    V.FShowAllFields := false;
+
+  V.UpdateGrid;
+
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(F, FormName);
+  F.ShowModal;
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(F, FormName);
+  F.Free;
 end;
 
 end.

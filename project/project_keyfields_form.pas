@@ -48,7 +48,8 @@ type
     procedure ComboSelect(Sender: TObject);
     function  GetFieldList: TEpiFields;
     procedure IndexCheckError;
-    function  PerformIndexCheck(Out FailedRecords: TBoundArray): Boolean;
+    function  PerformIndexCheck(Out FailedRecords: TBoundArray;
+      out FailedValues: TBoundArray): Boolean;
     function  ShowError(Const Msg: string; Const Ctrl: TControl): boolean;
   public
     { public declarations }
@@ -78,28 +79,30 @@ end;
 
 procedure TKeyFieldsForm.AddIndexFieldActionExecute(Sender: TObject);
 var
-  F: TEpiField;
-  FaildedRecords: TBoundArray;
   i: Integer;
+  F: TEpiField;
+  FailedRecords: TBoundArray;
+  FailedValues: TBoundArray;
 begin
   F := FEpiDoc.DataFiles[0].Fields.FieldByName[IndexIntegrityFieldName];
   if not Assigned(F) then
   begin
     F := FEpiDoc.DataFiles[0].NewField(ftInteger);
     F.Name := IndexIntegrityFieldName;
+    F.Question.Text := IndexIntegrityFieldName;
 
     PostMessage(MainForm.Handle, LM_DESIGNER_ADDFIELD, WParam(F), 0);
   end;
 
-  if not PerformIndexCheck(FaildedRecords) then
+  if not PerformIndexCheck(FailedRecords, FailedValues) then
   begin
     // A SetAll method is missing... :(
     for i := 0 to F.Size -1 do
       F.AsInteger[i] := 0;
 
     // Set only failed records.
-    for i := 0 to Length(FaildedRecords) - 1 do
-      F.AsInteger[FaildedRecords[i]] := 1
+    for i := 0 to Length(FailedRecords) - 1 do
+      F.AsInteger[FailedRecords[i]] := FailedValues[i];
   end;
 
   AddIndexFieldAction.Update;
@@ -121,8 +124,9 @@ var
   Res: Integer;
   FL: TEpiFields;
   i: Integer;
+  FailedValues: TBoundArray;
 begin
-  if (ModalResult = mrOK) and (not PerformIndexCheck(FailedRecords)) then
+  if (ModalResult = mrOK) and (not PerformIndexCheck(FailedRecords, FailedValues)) then
   begin
     Res := MessageDlg('Index Error',
                         'Index integrity check failed.' + LineEnding +
@@ -186,10 +190,11 @@ end;
 procedure TKeyFieldsForm.IndexCheckError;
 var
   FailedRecords: TBoundArray;
+  FailedValues: TBoundArray;
 begin
   if not RealTimeStatusChkBox.Checked then exit;
 
-  if not PerformIndexCheck(FailedRecords) then
+  if not PerformIndexCheck(FailedRecords, FailedValues) then
   begin
     ShowError('Warning: Index not uniquely defined!' + LineEnding +
               'Use "List Records" to get a list of affected records (' + IntToStr(Length(FailedRecords)) + ').',
@@ -199,16 +204,19 @@ begin
     ShowRecordsBtn.Enabled := false;
 end;
 
-function TKeyFieldsForm.PerformIndexCheck(out FailedRecords: TBoundArray
-  ): Boolean;
+function TKeyFieldsForm.PerformIndexCheck(out FailedRecords: TBoundArray; out
+  FailedValues: TBoundArray): Boolean;
 var
   FieldList: TEpiFields;
 begin
   FieldList := GetFieldList;
 
   Result :=
-    FIndexChecker.IndexIntegrity(FEpiDoc.DataFiles[0], FailedRecords,
-      false, FieldList);
+    FIndexChecker.IndexIntegrity(FEpiDoc.DataFiles[0],
+      FailedRecords,
+      FailedValues,
+      false,
+      FieldList);
 
   FieldList.Free;
 end;
@@ -240,6 +248,7 @@ var
   F: TForm;
   V: TDataSetViewFrame;
   FailedRecords: TBoundArray;
+  FailedValues: TBoundArray;
 begin
   FieldList := TEpiFields.Create(nil);
   for i := 0 to FKeyList.Count - 1 do
@@ -250,20 +259,17 @@ begin
     FieldList.AddItem(TEpiField(Cmb.Items.Objects[Cmb.ItemIndex]));
   end;
 
-  if not FIndexChecker.IndexIntegrity(FEpiDoc.DataFiles[0], FailedRecords,
+  if not FIndexChecker.IndexIntegrity(FEpiDoc.DataFiles[0], FailedRecords, FailedValues,
            false, FieldList) then
-  begin
-    F := TForm.Create(Self);
-    F.Caption := 'List of non-unique records:';
-    V := TDataSetViewFrame.Create(F, FEpiDoc.DataFiles[0]);
-    V.Align := alClient;
-    V.Parent := F;
-    V.KeyFields := FieldList;
-    V.ShowRecords(FailedRecords);
-    V.SortByIndexAction.Execute;
-    F.ShowModal;
-    F.Free;
-  end;
+    ShowDataSetViewerForm(Self,
+      'List of non-unique records:',
+      FEpiDoc.DataFiles[0],
+      FailedRecords,
+      FieldList,
+      nil,
+      -1,
+      true);
+
   FieldList.Free;
 end;
 
