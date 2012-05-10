@@ -249,9 +249,6 @@ object MainForm: TMainForm
           Action = VerifyDoubleEntryAction
         end
       end
-      object IntegrityMenuItem: TMenuItem
-        Action = IntegrityCheckAction
-      end
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
       end
@@ -419,11 +416,6 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Validate...'
       OnExecute = VerifyDoubleEntryActionExecute
-    end
-    object IntegrityCheckAction: TAction
-      Category = 'Tools'
-      Caption = 'Index Integrity Check'
-      OnExecute = IntegrityCheckActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

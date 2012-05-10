@@ -101,7 +101,7 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="60">
+    <Units Count="59">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -481,26 +481,18 @@
         <UnitName Value="prepare_double_entry_form"/>
       </Unit56>
       <Unit57>
-        <Filename Value="tools/indexintegrity.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="IndexIntegrityForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="indexintegrity"/>
-      </Unit57>
-      <Unit58>
         <Filename Value="project/project_keyfields_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="KeyFieldsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="project_keyfields_form"/>
-      </Unit58>
-      <Unit59>
+      </Unit57>
+      <Unit58>
         <Filename Value="utils/manager_globals.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="manager_globals"/>
-      </Unit59>
+      </Unit58>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

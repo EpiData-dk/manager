@@ -15,8 +15,6 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    IntegrityCheckAction: TAction;
-    IntegrityMenuItem: TMenuItem;
     ImportDataMenuItem: TMenuItem;
     AddStructureMenuItem: TMenuItem;
     EditMenuDivider2: TMenuItem;
@@ -118,7 +116,6 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure IntegrityCheckActionExecute(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
@@ -198,8 +195,7 @@ uses
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
-  epiintegritycheck, datasetviewer_frame, indexintegrity,
-  prepare_double_entry_form;
+  epiintegritycheck, datasetviewer_frame, prepare_double_entry_form;
 
 { TMainForm }
 
@@ -224,24 +220,6 @@ begin
   {$IFDEF EPI_DEBUG}
   UserAccessBtn.Visible := true;
   {$ENDIF}
-end;
-
-procedure TMainForm.IntegrityCheckActionExecute(Sender: TObject);
-var
-  Fn: string;
-  Local: boolean;
-  Doc: TEpiDocument;
-  Checker: TEpiIntegrityChecker;
-  FailedRecords: TBoundArray;
-  F: TForm;
-  V: TDataSetViewFrame;
-begin
-  Doc := ToolsCheckOpenFile(Fn, Local);
-
-  if not Assigned(Doc) then exit;
-  CheckIndexIntegrity(Doc);
-
-  if Local then Doc.Free;
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
