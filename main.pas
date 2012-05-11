@@ -25,8 +25,8 @@ type
     ExportMenuItem: TMenuItem;
     DataSetMenu: TMenuItem;
     DoubleEntryMenu: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
+    PrepareDoubleEntryMenuItem: TMenuItem;
+    ValidatDoubleEntryMenuItem: TMenuItem;
     ProjectPasswordMenuItem: TMenuItem;
     ViewDataSetMenuItem: TMenuItem;
     ValueLabelEditor2MenuItem: TMenuItem;
@@ -131,7 +131,6 @@ type
     procedure StartEntryClientActionUpdate(Sender: TObject);
     procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
-    procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -552,11 +551,6 @@ begin
   RunReport(TReportValueLabelList);
 end;
 
-procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);
-begin
-  //
-end;
-
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
 begin
   OpenURL(ManagerSettings.TutorialURLUTF8);
@@ -715,6 +709,7 @@ begin
   EditMenuDivider1.Visible := Assigned(FActiveFrame);
   ImportDataMenuItem.Visible := Assigned(FActiveFrame);
   AddStructureMenuItem.Visible := Assigned(FActiveFrame);
+  EditMenuDivider2.Visible := Assigned(FActiveFrame);
 
   // PROJECT:
   ProjectMenu.Visible       := Assigned(FActiveFrame);

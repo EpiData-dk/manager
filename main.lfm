@@ -241,11 +241,10 @@ object MainForm: TMainForm
       end
       object DoubleEntryMenu: TMenuItem
         Caption = 'Double Entry'
-        Enabled = False
-        object MenuItem6: TMenuItem
+        object PrepareDoubleEntryMenuItem: TMenuItem
           Action = PrepareDoubleEntryAction
         end
-        object MenuItem7: TMenuItem
+        object ValidatDoubleEntryMenuItem: TMenuItem
           Action = VerifyDoubleEntryAction
         end
       end
@@ -415,7 +414,6 @@ object MainForm: TMainForm
     object VerifyDoubleEntryAction: TAction
       Category = 'Tools'
       Caption = 'Validate...'
-      OnExecute = VerifyDoubleEntryActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

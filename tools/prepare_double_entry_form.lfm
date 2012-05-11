@@ -1,13 +1,13 @@
 object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
-  Left = 503
+  Left = 882
   Height = 331
-  Top = 255
+  Top = 340
   Width = 578
   Caption = 'PrepareDoubleEntryForm'
   ClientHeight = 331
   ClientWidth = 578
   OnCloseQuery = FormCloseQuery
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
     Height = 50

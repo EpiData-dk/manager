@@ -48,8 +48,56 @@ implementation
 
 procedure TPrepareDoubleEntryForm.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
+var
+  NewDoc: TEpiDocument;
+  i: Integer;
+  Res: Integer;
+  FN: TCaption;
 begin
-  //
+  if ModalResult  = mrCancel then exit;
+
+  FN := FileNameEdit.Text;
+  if FileExistsUTF8(FN) then
+  begin
+    case MessageDlg('Warning:',
+      'Warning: File exists. Do you want to overwrite?',
+      mtWarning,
+      mbYesNoCancel,
+      0,
+      mbCancel) of
+
+      mrCancel:
+        begin
+          CanClose := false;
+          Exit;
+        end;
+      mrNo:
+        Exit;
+    end;
+  end;
+
+  NewDoc := nil;
+  try
+    NewDoc := TEpiDocument(FDoc.Clone);
+    if TitleEdit.Text <> '' then
+      NewDoc.Study.Title.Text := TitleEdit.Text;
+
+    for i := 0 to NewDoc.DataFiles.Count - 1 do
+      NewDoc.DataFiles[i].Size := 0;
+
+    NewDoc.SaveToFile(FN);
+  except
+    MessageDlg('Error Saving File!',
+      'This file ' + FN + ' could not be save.',
+      mtError,
+      [mbAbort], 0);
+    CanClose := false;
+    NewDoc.Free;
+    Exit;
+  end;
+  ShowMessage('Double Entry file save successfully:' + LineEnding +
+    FN);
+  NewDoc.Free;
 end;
 
 constructor TPrepareDoubleEntryForm.Create(TheOwner: TComponent; const Doc: TEpiDocument;
