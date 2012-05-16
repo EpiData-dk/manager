@@ -4,9 +4,6 @@ unit manager_globals;
 
 interface
 
-const
-  IndexIntegrityFieldName = '_IndexFail';
-  IndexIntegrityValueLabelSetName = '_label_indexFail';
 
 implementation
 

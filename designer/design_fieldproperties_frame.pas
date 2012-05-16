@@ -1282,6 +1282,7 @@ begin
 
   // Visiblity
   // - basic
+  NameEdit.Enabled                := not IsReservedEpiFieldName(Field.Name);
   LengthEdit.Visible              := Field.FieldType in (IntFieldTypes + FloatFieldTypes + StringFieldTypes);
   LengthLabel.Visible             := LengthEdit.Visible;
   DecimalsEdit.Visible            := Field.FieldType in FloatFieldTypes;

@@ -131,6 +131,7 @@ type
     procedure StartEntryClientActionUpdate(Sender: TObject);
     procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
+    procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
   private
     { private declarations }
@@ -194,7 +195,8 @@ uses
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
-  epiintegritycheck, datasetviewer_frame, prepare_double_entry_form;
+  epitools_integritycheck, datasetviewer_frame, prepare_double_entry_form,
+  validate_double_entry_form;
 
 { TMainForm }
 
@@ -549,6 +551,18 @@ end;
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportValueLabelList);
+end;
+
+procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);
+var
+  Fn: string;
+  Local: boolean;
+  Doc: TEpiDocument;
+begin
+  Doc := ToolsCheckOpenFile(Fn, Local);
+  ValidateDoubleEntry(Doc, Fn);
+  if Local then
+    Doc.Free;
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);

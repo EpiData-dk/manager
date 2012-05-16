@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Buttons, ActnList, epiintegritycheck, epidatafiles, epidocument,
+  StdCtrls, Buttons, ActnList, epitools_integritycheck, epidatafiles, epidocument,
   epivaluelabels;
 
 type
@@ -65,7 +65,7 @@ implementation
 
 uses
   types, datasetviewer_frame, settings2, settings2_var,
-  manager_globals, epidatafilestypes, LCLIntf, manager_messages,
+  epiglobals, epidatafilestypes, LCLIntf, manager_messages,
   main, lcltype;
 
 const
@@ -87,19 +87,19 @@ var
   VL: TEpiValueLabelSet;
   V: TEpiCustomValueLabel;
 begin
-  F := FEpiDoc.DataFiles[0].Fields.FieldByName[IndexIntegrityFieldName];
+  F := FEpiDoc.DataFiles[0].Fields.FieldByName[EpiIndexIntegrityFieldName];
   if not Assigned(F) then
   begin
     F := FEpiDoc.DataFiles[0].NewField(ftInteger);
-    F.Name := IndexIntegrityFieldName;
+    F.Name := EpiIndexIntegrityFieldName;
     F.Question.Text := 'Unique index status';
     F.ShowValueLabel := ManagerSettings.ShowValuelabelText;
 
-    VL := FEpiDoc.ValueLabelSets.GetValueLabelSetByName(IndexIntegrityValueLabelSetName);
+    VL := FEpiDoc.ValueLabelSets.GetValueLabelSetByName(EpiIndexIntegrityValueLabelSetName);
     if not Assigned(VL) then
     begin
       VL := FEpiDoc.ValueLabelSets.NewValueLabelSet(ftInteger);
-      VL.Name := IndexIntegrityValueLabelSetName;
+      VL.Name := EpiIndexIntegrityValueLabelSetName;
 
       V := Vl.NewValueLabel;
       TEpiIntValueLabel(V).Value := 0;
@@ -137,7 +137,7 @@ var
   S: String;
 begin
   S := 'Add ';
-  if FEpiDoc.DataFiles[0].Fields.ItemExistsByName(IndexIntegrityFieldName) then
+  if FEpiDoc.DataFiles[0].Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
     S := 'Update ';
   AddIndexFieldAction.Caption := S + 'Index Field';
 end;
@@ -155,8 +155,8 @@ begin
     Res := MessageDlg('Index Error',
                         'Records with Non-Unique key' + LineEnding +
                         'or missing values in key fields exist.' + LineEnding +
-                        BoolToStr(FEpiDoc.DataFiles[0].Fields.ItemExistsByName(IndexIntegrityFieldName),
-                          'Index status saved in field: '+ IndexIntegrityFieldName + LineEnding, '') +
+                        BoolToStr(FEpiDoc.DataFiles[0].Fields.ItemExistsByName(EpiIndexIntegrityFieldName),
+                          'Index status saved in field: '+ EpiIndexIntegrityFieldName + LineEnding, '') +
                         LineEnding +
                         'Apply Index?',
                         mtWarning, mbYesNoCancel, 0, mbCancel);

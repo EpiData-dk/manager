@@ -72,7 +72,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, math, settings2, settings2_var, manager_globals;
+  Graphics, math, settings2, settings2_var, epiglobals;
 
 { TDataSetViewFrame }
 
@@ -148,7 +148,7 @@ begin
     AssignFields(Fields, FDisplayFields)
   else begin
     AssignFields(Fields, FKeyFields);
-    F := FDataFile.Fields.FieldByName[IndexIntegrityFieldName];
+    F := FDataFile.Fields.FieldByName[EpiIndexIntegrityFieldName];
     if Assigned(F) then
       Fields.AddItem(F);
   end;

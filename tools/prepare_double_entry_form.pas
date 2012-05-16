@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Buttons, EditBtn, epidocument;
+  ExtCtrls, Buttons, EditBtn, epidocument, epidatafiles;
 
 type
 
@@ -44,6 +44,9 @@ implementation
 
 {$R *.lfm}
 
+uses
+  epidatafilestypes;
+
 { TPrepareDoubleEntryForm }
 
 procedure TPrepareDoubleEntryForm.FormCloseQuery(Sender: TObject;
@@ -53,6 +56,11 @@ var
   i: Integer;
   Res: Integer;
   FN: TCaption;
+  F: TEpiField;
+  NewName: String;
+  S: TEpiSection;
+  j: Integer;
+  NewF: TEpiField;
 begin
   if ModalResult  = mrCancel then exit;
 
@@ -83,7 +91,23 @@ begin
       NewDoc.Study.Title.Text := TitleEdit.Text;
 
     for i := 0 to NewDoc.DataFiles.Count - 1 do
-      NewDoc.DataFiles[i].Size := 0;
+    with NewDoc.DataFiles[i] do
+    begin
+      Size := 0;
+
+      // Convert IDNUM fields to Integer!
+      for j := 0 to Fields.Count - 1 do
+      begin
+        if Fields[j].FieldType <> ftAutoInc then continue;
+
+        F := Fields[j];
+        NewF := F.Section.NewField(ftInteger);
+        NewF.Assign(F);
+        NewName := F.Name;
+        F.Free;
+        NewF.Name := NewName;
+      end;
+    end;
 
     NewDoc.SaveToFile(FN);
   except
@@ -120,6 +144,7 @@ var
 begin
   F := TPrepareDoubleEntryForm.Create(nil, Doc, FileName);
   F.ShowModal;
+  F.Free;
 end;
 
 end.

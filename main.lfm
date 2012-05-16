@@ -414,6 +414,7 @@ object MainForm: TMainForm
     object VerifyDoubleEntryAction: TAction
       Category = 'Tools'
       Caption = 'Validate...'
+      OnExecute = VerifyDoubleEntryActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
