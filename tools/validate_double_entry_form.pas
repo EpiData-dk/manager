@@ -6,13 +6,21 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  CheckLst, ExtCtrls, Buttons, epidocument;
+  CheckLst, ExtCtrls, Buttons, ActnList, ComCtrls, epidocument;
 
 type
 
   { TValidateDoubleEntryForm }
 
   TValidateDoubleEntryForm = class(TForm)
+    CFAllAction: TAction;
+    CFTextAction: TAction;
+    CFAutoIncAction: TAction;
+    CFAutoTimeDateAction: TAction;
+    KFAutoIncAction: TAction;
+    KFIndexAction: TAction;
+    KFNoneAction: TAction;
+    ActionList1: TActionList;
     Bevel1: TBevel;
     OkBtn: TBitBtn;
     CancelBtn: TBitBtn;
@@ -47,11 +55,23 @@ type
     RecordCount1: TLabel;
     RecordCount2: TLabel;
     OpenDblEntryFileBtn: TSpeedButton;
+    procedure CFAllActionExecute(Sender: TObject);
+    procedure CFAutoIncActionExecute(Sender: TObject);
+    procedure CFAutoTimeDateActionExecute(Sender: TObject);
+    procedure CFTextActionExecute(Sender: TObject);
+    procedure KFAutoIncActionExecute(Sender: TObject);
+    procedure KFAutoIncActionUpdate(Sender: TObject);
+    procedure KFIndexActionExecute(Sender: TObject);
+    procedure KFIndexActionUpdate(Sender: TObject);
+    procedure KFNoneActionExecute(Sender: TObject);
     procedure OpenDblEntryFileBtnClick(Sender: TObject);
   private
     { private declarations }
     FMainDoc: TEpiDocument;
     FDupDoc: TEpiDocument;
+    FCmpAutoTimeDateSelected: boolean;
+    FCmpAutoIncSelected: boolean;
+    FCmpTextSelected: boolean;
     procedure UpdateKeyFields;
     procedure UpdateCompareFields;
     procedure UpdateMainDocInfo(Const Fn: string);
@@ -68,7 +88,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, epimiscutils, settings2_var;
+  epidatafiles, epidatafilestypes, epimiscutils, settings2_var, epitools_val_dbl_entry;
 
 procedure ValidateDoubleEntry(Doc: TEpiDocument; const Filename: string);
 var
@@ -108,6 +128,92 @@ begin
   end;
 end;
 
+procedure TValidateDoubleEntryForm.KFNoneActionExecute(Sender: TObject);
+begin
+  KFCheckList.CheckAll(cbUnchecked, false, false);
+end;
+
+procedure TValidateDoubleEntryForm.KFIndexActionExecute(Sender: TObject);
+var
+  i: Integer;
+begin
+  KFCheckList.CheckAll(cbUnchecked, false, false);
+
+  KFCheckList.Items.BeginUpdate;
+  for i := 0 to KFCheckList.Count - 1 do
+    if FMainDoc.DataFiles[0].KeyFields.FieldExists(TEpiField(KFCheckList.Items.Objects[i])) then
+      KFCheckList.Checked[i] := true;
+  KFCheckList.Items.EndUpdate;
+end;
+
+procedure TValidateDoubleEntryForm.KFAutoIncActionExecute(Sender: TObject);
+var
+  i: Integer;
+begin
+  KFCheckList.CheckAll(cbUnchecked, false, false);
+
+  KFCheckList.Items.BeginUpdate;
+  for i := 0 to KFCheckList.Count - 1 do
+    if TEpiField(KFCheckList.Items.Objects[i]).FieldType = ftAutoInc then
+      KFCheckList.Checked[i] := true;
+  KFCheckList.Items.EndUpdate;
+end;
+
+procedure TValidateDoubleEntryForm.CFAutoTimeDateActionExecute(Sender: TObject);
+var
+  i: Integer;
+begin
+  FCmpAutoTimeDateSelected := not FCmpAutoTimeDateSelected;
+  for i := 0 to CmpFCheckList.Count - 1 do
+    if TEpiField(CmpFCheckList.Items.Objects[i]).FieldType in AutoUpdateFieldTypes then
+      CmpFCheckList.Checked[i] := FCmpAutoTimeDateSelected;
+end;
+
+procedure TValidateDoubleEntryForm.CFTextActionExecute(Sender: TObject);
+var
+  i: Integer;
+begin
+  FCmpTextSelected := not FCmpTextSelected;
+  for i := 0 to CmpFCheckList.Count - 1 do
+    if TEpiField(CmpFCheckList.Items.Objects[i]).FieldType in AutoUpdateFieldTypes then
+      CmpFCheckList.Checked[i] := FCmpTextSelected;
+end;
+
+procedure TValidateDoubleEntryForm.CFAutoIncActionExecute(Sender: TObject);
+var
+  i: Integer;
+begin
+  FCmpAutoIncSelected := not FCmpAutoIncSelected;
+  for i := 0 to CmpFCheckList.Count - 1 do
+    if TEpiField(CmpFCheckList.Items.Objects[i]).FieldType in AutoUpdateFieldTypes then
+      CmpFCheckList.Checked[i] := FCmpAutoIncSelected;
+end;
+
+procedure TValidateDoubleEntryForm.CFAllActionExecute(Sender: TObject);
+begin
+  CmpFCheckList.CheckAll(cbChecked, false, false);
+end;
+
+procedure TValidateDoubleEntryForm.KFAutoIncActionUpdate(Sender: TObject);
+var
+  Res: Boolean;
+  i: Integer;
+begin
+  Res := false;
+  for i := 0 to FMainDoc.DataFiles[0].Fields.Count - 1 do
+    if FMainDoc.DataFiles[0].Fields[i].FieldType = ftAutoInc then
+    begin
+      Res := true;
+      Break;
+    end;
+  TAction(Sender).Enabled := Res;
+end;
+
+procedure TValidateDoubleEntryForm.KFIndexActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := FMainDoc.DataFiles[0].KeyFields.Count > 0;
+end;
+
 procedure TValidateDoubleEntryForm.UpdateKeyFields;
 var
   MainDF: TEpiDataFile;
@@ -127,6 +233,11 @@ begin
       KFCheckList.AddItem(MainDF.Fields[i].Name, MainDF.Fields[i]);
   end;
   KFCheckList.Items.EndUpdate;
+
+  if (KFIndexAction.Update) and (KFIndexAction.Enabled) then
+    KFIndexAction.Execute
+  else if (KFAutoIncAction.Update) and (KFAutoIncAction.Enabled) then
+    KFAutoIncAction.Execute;
 end;
 
 procedure TValidateDoubleEntryForm.UpdateCompareFields;
@@ -148,6 +259,11 @@ begin
       CmpFCheckList.AddItem(MainDF.Fields[i].Name, MainDF.Fields[i]);
   end;
   CmpFCheckList.Items.EndUpdate;
+
+  CFAllAction.Execute;
+  CFAutoIncAction.Execute;
+  CFAutoTimeDateAction.Execute;
+  CFTextAction.Execute;
 end;
 
 procedure TValidateDoubleEntryForm.UpdateMainDocInfo(const Fn: string);
@@ -181,6 +297,10 @@ constructor TValidateDoubleEntryForm.Create(TheOwner: TComponent;
 begin
   inherited Create(TheOwner);
   FMainDoc := MainDoc;
+  FCmpAutoTimeDateSelected := true;
+  FCmpAutoIncSelected      := true;
+  FCmpTextSelected         := true;
+
   UpdateMainDocInfo(FileName);
   UpdateDupDocInfo('');
 end;

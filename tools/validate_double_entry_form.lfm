@@ -1,11 +1,12 @@
 object ValidateDoubleEntryForm: TValidateDoubleEntryForm
-  Left = 1961
+  Left = 834
   Height = 629
-  Top = 49
+  Top = 249
   Width = 648
   Caption = 'ValidateDoubleEntryForm'
   ClientHeight = 629
   ClientWidth = 648
+  Position = poMainFormCenter
   LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
@@ -316,13 +317,12 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Side = asrBottom
         Left = 5
         Height = 27
-        Hint = 'No sorting (sequential compare)'
         Top = 26
         Width = 46
+        Action = KFNoneAction
         AutoSize = True
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
-        Caption = 'None'
         ParentShowHint = False
         ShowHint = True
         TabOrder = 0
@@ -336,9 +336,11 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Height = 27
         Top = 26
         Width = 46
+        Action = KFIndexAction
         AutoSize = True
         BorderSpacing.Left = 5
-        Caption = 'Index'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 1
       end
       object KFAutoIncBtn: TButton
@@ -350,9 +352,11 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Height = 27
         Top = 26
         Width = 68
+        Action = KFAutoIncAction
         AutoSize = True
         BorderSpacing.Left = 5
-        Caption = 'Auto Inc.'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 2
       end
       object KFCheckList: TCheckListBox
@@ -434,10 +438,12 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Height = 27
         Top = 26
         Width = 112
+        Action = CFAutoTimeDateAction
         AutoSize = True
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
-        Caption = 'Auto Time/Date'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 1
       end
       object CmpFAutoIncBtn: TButton
@@ -448,10 +454,12 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 122
         Height = 27
         Top = 26
-        Width = 64
+        Width = 68
+        Action = CFAutoIncAction
         AutoSize = True
         BorderSpacing.Left = 5
-        Caption = 'Auto Inc'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 2
       end
       object CmpFTextBtn: TButton
@@ -459,13 +467,15 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = CmpFAutoDateTimeBtn
         AnchorSideTop.Side = asrCenter
-        Left = 191
+        Left = 195
         Height = 27
         Top = 26
         Width = 37
+        Action = CFTextAction
         AutoSize = True
         BorderSpacing.Left = 5
-        Caption = 'Text'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 3
       end
       object Label8: TLabel
@@ -485,13 +495,15 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = CmpFAutoDateTimeBtn
         AnchorSideTop.Side = asrCenter
-        Left = 233
+        Left = 237
         Height = 27
         Top = 26
         Width = 27
+        Action = CFAllAction
         AutoSize = True
         BorderSpacing.Left = 5
-        Caption = 'All'
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 4
       end
     end
@@ -544,6 +556,54 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
       Data = {
         0400000002020202
       }
+    end
+  end
+  object ActionList1: TActionList
+    left = 310
+    top = 130
+    object KFNoneAction: TAction
+      Category = 'KeyFields'
+      Caption = 'None'
+      Hint = 'No sorting (sequential compare)'
+      OnExecute = KFNoneActionExecute
+    end
+    object KFIndexAction: TAction
+      Category = 'KeyFields'
+      Caption = 'Index'
+      Hint = 'Select Index as Key Fields'
+      OnExecute = KFIndexActionExecute
+      OnUpdate = KFIndexActionUpdate
+    end
+    object KFAutoIncAction: TAction
+      Category = 'KeyFields'
+      Caption = 'Auto Inc.'
+      Hint = 'Select Auto Increment field(s) as Key Fields'
+      OnExecute = KFAutoIncActionExecute
+      OnUpdate = KFAutoIncActionUpdate
+    end
+    object CFAutoTimeDateAction: TAction
+      Category = 'CompareFields'
+      Caption = 'Auto Time/Date'
+      Hint = 'Select/Deselect all Auto-Time/Date fields'
+      OnExecute = CFAutoTimeDateActionExecute
+    end
+    object CFAutoIncAction: TAction
+      Category = 'CompareFields'
+      Caption = 'Auto Inc.'
+      Hint = 'Select/Deselect all Auto Increment Fields'
+      OnExecute = CFAutoIncActionExecute
+    end
+    object CFTextAction: TAction
+      Category = 'CompareFields'
+      Caption = 'Text'
+      Hint = 'Select/Deselect all Text Fields'
+      OnExecute = CFTextActionExecute
+    end
+    object CFAllAction: TAction
+      Category = 'CompareFields'
+      Caption = 'All'
+      Hint = 'Select all Fields'
+      OnExecute = CFAllActionExecute
     end
   end
 end

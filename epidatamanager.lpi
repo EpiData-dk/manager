@@ -402,6 +402,7 @@
         <Filename Value="reports/staticreports_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="StaticReportsForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="staticreports_form"/>
       </Unit39>
