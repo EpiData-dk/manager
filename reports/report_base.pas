@@ -55,13 +55,18 @@ var
 begin
   CssFile := ExtractFilePath(Application.ExeName) + CssFileName;
   try
+    FS := nil;
+    Ss := nil;
     if not FileExistsUTF8(CssFile) then
     begin
       FStyleSheet := TEpiReportHTMLGenerator.HtmlStyleSheet;
-      Ss := TStringStream.Create(TEpiReportHTMLGenerator.HtmlStyleSheet);
-      Ss.Position := 0;
-      Fs := TFileStream.Create(CssFile, fmCreate);
-      Fs.CopyFrom(Ss, Ss.Size);
+      if DirectoryIsWritable(ExtractFilePath(CssFile)) then
+      begin
+        Ss := TStringStream.Create(TEpiReportHTMLGenerator.HtmlStyleSheet);
+        Ss.Position := 0;
+        Fs := TFileStream.Create(CssFile, fmCreate);
+        Fs.CopyFrom(Ss, Ss.Size);
+      end;
     end else begin
       Fs := TFileStream.Create(CssFile, fmOpenRead);
       Fs.Position := 0;
@@ -87,7 +92,7 @@ var
   Doc: TEpiDocument;
   i: Integer;
 begin
-  inherited Create;
+  Create;
 
   FDocuments := TStringList.Create;
   for i := 0 to FileNames.Count - 1 do
