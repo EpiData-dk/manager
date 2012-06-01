@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="1"/>
-      <RevisionNr Value="1"/>
+      <RevisionNr Value="2"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -56,10 +56,10 @@
 -dEPI_RELEASE"/>
             <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
-              <CompileReasons Run="False" Build="False" Compile="False"/>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
             <ExecuteAfter>
-              <CompileReasons Run="False" Build="False" Compile="False"/>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteAfter>
           </Other>
         </CompilerOptions>
@@ -86,11 +86,11 @@
       </Item2>
       <Item3>
         <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Valid="True" Release="1"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item3>
       <Item4>
         <PackageName Value="epidatacore"/>
-        <MinVersion Minor="5" Valid="True" Release="1"/>
+        <MinVersion Minor="5" Release="1" Valid="True"/>
       </Item4>
       <Item5>
         <PackageName Value="LCL"/>
@@ -393,6 +393,7 @@
         <Filename Value="settings/settings_export.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Settings_ExportFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_export"/>
       </Unit46>
@@ -424,10 +425,10 @@
       </CompilerMessages>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
-        <CompileReasons Run="False" Build="False" Compile="False"/>
+        <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteBefore>
       <ExecuteAfter>
-        <CompileReasons Run="False" Build="False" Compile="False"/>
+        <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteAfter>
     </Other>
   </CompilerOptions>
