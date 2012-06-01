@@ -1502,7 +1502,8 @@ var
 begin
   MainForm.BeginUpdatingForm;
 
-  Result := AClass.Create(AParent);
+  Result := AClass.Create(Self);
+//  Result := AClass.Create(AParent);
   Ctrl := TControlEx(Result);
 
   (Ctrl as IDesignEpiControl).EpiControl := EpiControl;
@@ -2433,7 +2434,7 @@ begin
 
   // Remove from old parent
   // - TComponent
-  OldDockSite.RemoveComponent(Source.Control);
+//  OldDockSite.RemoveComponent(Source.Control);
   // - EpiData Core
   TEpiCustomList(EpiControl.Owner).RemoveItem(EpiControl);
 
@@ -2444,7 +2445,7 @@ begin
   else
     NSection.Headings.AddItem(EpiControl);
   // - TComponent
-  TComponent(Sender).InsertComponent(Source.Control);
+//  TComponent(Sender).InsertComponent(Source.Control);
 end;
 
 procedure TDesignFrame.DockSiteUnDock(Sender: TObject; Client: TControl;
