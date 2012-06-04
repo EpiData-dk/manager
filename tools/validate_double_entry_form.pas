@@ -64,6 +64,7 @@ type
     procedure KFIndexActionExecute(Sender: TObject);
     procedure KFIndexActionUpdate(Sender: TObject);
     procedure KFNoneActionExecute(Sender: TObject);
+    procedure OkBtnClick(Sender: TObject);
     procedure OpenDblEntryFileBtnClick(Sender: TObject);
   private
     { private declarations }
@@ -88,7 +89,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, epidatafilestypes, epimiscutils, settings2_var, epitools_val_dbl_entry;
+  epidatafiles, epidatafilestypes, epimiscutils, settings2_var,
+  epitools_val_dbl_entry, viewer_form, report_double_entry_validation;
 
 procedure ValidateDoubleEntry(Doc: TEpiDocument; const Filename: string);
 var
@@ -131,6 +133,38 @@ end;
 procedure TValidateDoubleEntryForm.KFNoneActionExecute(Sender: TObject);
 begin
   KFCheckList.CheckAll(cbUnchecked, false, false);
+end;
+
+procedure TValidateDoubleEntryForm.OkBtnClick(Sender: TObject);
+var
+  H: THtmlViewerForm;
+  S: TStringList;
+  KeyFields: TEpiFields;
+  R: TReportDoubleEntryValidation;
+  CmpFields: TEpiFields;
+  i: Integer;
+begin
+  S := TStringList.Create;
+  S.AddObject(FileNameLabel1.Caption, FMainDoc);
+  S.AddObject(FileNameLabel2.Caption, FDupDoc);
+  R := TReportDoubleEntryValidation.Create(S);
+
+  KeyFields := TEpiFields.Create(nil);
+  for i := 0 to KFCheckList.Count - 1 do
+    if KFCheckList.Checked[i] then
+      KeyFields.AddItem(TEpiField(KFCheckList.Items.Objects[i]));
+  R.KeyFields := KeyFields;
+
+  CmpFields := TEpiFields.Create(nil);
+  for i := 0 to CmpFCheckList.Count - 1 do
+    if CmpFCheckList.Checked[i] then
+      CmpFields.AddItem(TEpiField(CmpFCheckList.Items.Objects[i]));
+  R.CompareFields := CmpFields;
+
+  H := THtmlViewerForm.Create(nil);
+  H.Caption := 'Report of: ' + R.ReportTitle;
+  H.SetHtml(R.RunReport);
+  H.Show;
 end;
 
 procedure TValidateDoubleEntryForm.KFIndexActionExecute(Sender: TObject);

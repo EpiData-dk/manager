@@ -39,7 +39,7 @@ uses
   export_customvaluelabel_frame, export_frame_types, export_csv_frame,
   export_customtext_frame, export_spss_frame, export_sas_frame,
   datasetviewer_frame, prepare_double_entry_form, project_keyfields_form,
-  manager_globals, validate_double_entry_form;
+  manager_globals, validate_double_entry_form, report_double_entry_validation;
 
 {$R *.res}
 

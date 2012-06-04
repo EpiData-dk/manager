@@ -33,6 +33,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
+      OnClick = OkBtnClick
       TabOrder = 0
     end
     object CancelBtn: TBitBtn
@@ -293,7 +294,6 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00EAC39DFFE6BF96FFE4BB92FFE4BB
           92FFD1A06CF5D09E6DF6CC965FDAC479427EB2673C09FFFFFF00
         }
-        NumGlyphs = 0
         OnClick = OpenDblEntryFileBtnClick
       end
     end

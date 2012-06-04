@@ -196,7 +196,8 @@ uses
   report_fieldlist_extended, report_project_overview,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   epitools_integritycheck, datasetviewer_frame, prepare_double_entry_form,
-  validate_double_entry_form;
+  validate_double_entry_form,
+  report_double_entry_validation;
 
 { TMainForm }
 

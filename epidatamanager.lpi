@@ -61,6 +61,7 @@
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteAfter>
           </Other>
+          <LCLWidgetType Value="win32"/>
         </CompilerOptions>
       </Item2>
       <Item3 Name="Linux i386">
@@ -138,7 +139,7 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="60">
+    <Units Count="61">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -265,6 +266,7 @@
         <Filename Value="designer/design_controls.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DesignControlsForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_controls"/>
       </Unit18>
@@ -541,6 +543,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="validate_double_entry_form"/>
       </Unit59>
+      <Unit60>
+        <Filename Value="reports/report_double_entry_validation.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_double_entry_validation"/>
+      </Unit60>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
