@@ -143,6 +143,7 @@ var
   R: TReportDoubleEntryValidation;
   CmpFields: TEpiFields;
   i: Integer;
+  Options: TEpiToolsDblEntryValidateOptions;
 begin
   S := TStringList.Create;
   S.AddObject(FileNameLabel1.Caption, FMainDoc);
@@ -160,6 +161,13 @@ begin
     if CmpFCheckList.Checked[i] then
       CmpFields.AddItem(TEpiField(CmpFCheckList.Items.Objects[i]));
   R.CompareFields := CmpFields;
+
+  Options := [];
+  if OptionsChkGrp.Checked[0] then Include(Options, devIgnoreDeleted);
+  if OptionsChkGrp.Checked[1] then Include(Options, devCaseSensitiveText);
+  if OptionsChkGrp.Checked[2] then Include(Options, devIgnoreMissingRecords);
+  if OptionsChkGrp.Checked[3] then Include(Options, devAddResultToField);
+  R.DblEntryValidateOptions := Options;
 
   H := THtmlViewerForm.Create(nil);
   H.Caption := 'Report of: ' + R.ReportTitle;
