@@ -30,7 +30,7 @@ implementation
 uses
   epidocument,
   epireport_base, epireport_types, epireport_doubleentry_validate,
-  epireport_htmlgenerator, epireport_filelist;
+  epireport_htmlgenerator, epireport_txtgenerator, epireport_filelist;
 
 resourcestring
   rsReportDoubleEntryValidation = 'Double Entry Validation Report.';

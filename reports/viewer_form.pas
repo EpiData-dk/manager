@@ -64,7 +64,9 @@ end;
 
 procedure THtmlViewerForm.SetHtml(const HtmlString: string);
 begin
+  HTMLViewer1.BeginUpdateBounds;
   HTMLViewer1.LoadFromString(HtmlString);
+  HTMLViewer1.EndUpdateBounds;
 end;
 
 end.
