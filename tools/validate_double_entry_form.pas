@@ -90,7 +90,8 @@ implementation
 
 uses
   epidatafiles, epidatafilestypes, epimiscutils, settings2_var,
-  epitools_val_dbl_entry, viewer_form, report_double_entry_validation;
+  epitools_val_dbl_entry, viewer_form, report_double_entry_validation,
+  main;
 
 procedure ValidateDoubleEntry(Doc: TEpiDocument; const Filename: string);
 var
@@ -137,7 +138,7 @@ end;
 
 procedure TValidateDoubleEntryForm.OkBtnClick(Sender: TObject);
 var
-  H: THtmlViewerForm;
+  H: TReportViewerForm;
   S: TStringList;
   KeyFields: TEpiFields;
   R: TReportDoubleEntryValidation;
@@ -169,10 +170,9 @@ begin
   if OptionsChkGrp.Checked[3] then Include(Options, devAddResultToField);
   R.DblEntryValidateOptions := Options;
 
-  H := THtmlViewerForm.Create(nil);
-  H.Caption := 'Report of: ' + R.ReportTitle;
-  H.SetHtml(R.RunReport);
-  H.Show;
+  ShowReportForm(MainForm,
+    'Report of: ' + R.ReportTitle,
+    R.RunReport);
 end;
 
 procedure TValidateDoubleEntryForm.KFIndexActionExecute(Sender: TObject);

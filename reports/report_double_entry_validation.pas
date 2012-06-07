@@ -20,9 +20,9 @@ type
     function GetTitle: string; override;
   public
     function RunReport: string; override;
-    property    KeyFields: TEpiFields read FKeyFields write FKeyFields;
-    property    CompareFields: TEpiFields read FCompareFields write FCompareFields;
-    property    DblEntryValidateOptions: TEpiToolsDblEntryValidateOptions read FDblEntryValidateOptions write FDblEntryValidateOptions;
+    property KeyFields: TEpiFields read FKeyFields write FKeyFields;
+    property CompareFields: TEpiFields read FCompareFields write FCompareFields;
+    property DblEntryValidateOptions: TEpiToolsDblEntryValidateOptions read FDblEntryValidateOptions write FDblEntryValidateOptions;
   end;
 
 implementation
@@ -48,8 +48,9 @@ var
   i: Integer;
   R: TEpiReportDoubleEntryValidationHtml;
   Rf: TEpiReportFileListHtml;
+  Rt: TEpiReportDoubleEntryValidationTXT;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
+{  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
   Result +=
     '<h3>Report: ' + ReportTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now)  + '</h3>';
 
@@ -70,7 +71,18 @@ begin
   Result += R.ReportText;
   R.Free;
 
-  Result += TEpiReportHTMLGenerator.HtmlFooter;
+  Result += TEpiReportHTMLGenerator.HtmlFooter; }
+
+  Rt := TEpiReportDoubleEntryValidationTXT.Create(
+    TEpiDocument(Documents.Objects[0]),
+    TEpiDocument(Documents.Objects[1])
+  );
+  Rt.CompareFields := FCompareFields;
+  Rt.KeyFields     := FKeyFields;
+  Rt.DblEntryValidateOptions := FDblEntryValidateOptions;
+  Rt.RunReport;
+  Result := Rt.ReportText;
+  Rt.Free;
 end;
 
 end.

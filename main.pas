@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
-  project_frame, LMessages, Htmlview, manager_messages, epidocument, report_base,
+  project_frame, LMessages, manager_messages, epidocument, report_base,
   episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc;
 
 type
@@ -815,7 +815,7 @@ function TMainForm.RunReport(ReportClass: TReportListBaseClass): boolean;
 var
   F: TStaticReportsForm;
   R: TReportListBase;
-  H: THtmlViewerForm;
+  H: TReportViewerForm;
   S: String;
 begin
   R := nil;
@@ -835,10 +835,10 @@ begin
   F.Free;
   if not Assigned(R) then exit;
 
-  H := THtmlViewerForm.Create(Self);
-  H.Caption := 'Report of: ' + R.ReportTitle;
-  H.SetHtml(R.RunReport);
-  H.Show;
+  ShowReportForm(Self,
+    'Report of: ' + R.ReportTitle,
+    R.RunReport,
+    true);
 end;
 
 function TMainForm.CheckEntryClientOpenFile(const FileName: string): boolean;

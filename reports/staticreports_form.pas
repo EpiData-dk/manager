@@ -66,7 +66,7 @@ end;
 function TStaticReportsForm.ShowDialog(out Files: TStrings): boolean;
 var
   Dlg: TOpenDialog;
-  F: THtmlViewerForm;
+  F: TReportViewerForm;
 begin
   // Result = true, is a confirmation that the dialog was execute
   // and the user selected some files

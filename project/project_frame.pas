@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
-  Controls, Dialogs, epidocument, epidatafiles, epicustombase, epiadmin,
-  epivaluelabels, manager_messages, LMessages;
+  Controls, Dialogs, epidocument, epidatafiles, epicustombase,
+  manager_messages, LMessages;
 
 type
 
@@ -104,9 +104,9 @@ implementation
 
 uses
   design_frame, Clipbrd, epimiscutils,
-  epiexport, main, settings2, settings2_var, epistringutils,
-  valuelabelseditor_form2, epidatafilestypes,
-  strutils, managerprocs, Menus, LCLType, LCLIntf, project_settings,
+  main, settings2, settings2_var, epistringutils,
+  valuelabelseditor_form2,
+  managerprocs, Menus, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form;
 
 type
