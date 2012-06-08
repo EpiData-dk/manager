@@ -44,10 +44,10 @@ uses
 constructor TReportGeneratorForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-
+{
   AvailableReportItemList.Items.AddObject('List of Valuelabels', TObject(TEpiReportValueLabelsHtml));
   AvailableReportItemList.Items.AddObject('List of Datasets', TObject(TEpiReportDataSetsGridHtml));
-  AvailableReportItemList.Items.AddObject('List of Fields (simple)', TObject(TEpiReportSimpleFieldListHtml));
+  AvailableReportItemList.Items.AddObject('List of Fields (simple)', TObject(TEpiReportSimpleFieldListHtml));      }
 end;
 
 end.

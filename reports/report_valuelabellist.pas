@@ -11,19 +11,16 @@ type
 
   { TReportValueLabelList }
 
-  TReportValueLabelList = class(TReportListBase)
+  TReportValueLabelList = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-  public
-    function RunReport: string; override;
+    procedure DoRunReport; override;
   end;
 
 implementation
 
 uses
-  epidocument,
-  epireport_base, epireport_valuelabels,
-  epireport_htmlgenerator, epireport_filelist;
+  epidocument, epireport_base, epireport_valuelabels;
 
 resourcestring
   rsReportValueLabelListTitle = 'Report: List of valuelabels.';
@@ -35,34 +32,22 @@ begin
   Result := rsReportValueLabelListTitle;
 end;
 
-function TReportValueLabelList.RunReport: string;
+procedure TReportValueLabelList.DoRunReport;
 var
   Doc: TEpiDocument;
   i: Integer;
-  R: TEpiReportBase;
+  R: TEpiReportValueLabels;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
-  Result +=
-    '<h3>Report: ' + ReportTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now)  + '</h3>';
-
-  R := TEpiReportFileListHtml.Create(Documents);
-  R.RunReport;
-  Result += R.ReportText;
-  R.Free;
+  inherited DoRunReport;
 
   for i := 0 to Documents.Count - 1 do
   begin
-    Result += '<h2>File: ' + Documents[i] + '</h2>';
-    R := TEpiReportValueLabelsHtml.Create(TEpiDocument(Documents.Objects[i]), false);
+    Generator.Heading('File: ' + Documents[i]);
+    R := TEpiReportValueLabels.Create(Generator);
+    R.EpiValueLabels := TEpiDocument(Documents.Objects[i]).ValueLabelSets;
     R.RunReport;
-
-    Result += R.ReportText +
-      '<div style="page-break-after:always;">' + LineEnding ;
-
     R.Free;
   end;
-
-  Result += TEpiReportHTMLGenerator.HtmlFooter;
 end;
 
 end.

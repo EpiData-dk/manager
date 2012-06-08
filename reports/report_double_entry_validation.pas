@@ -11,15 +11,15 @@ type
 
   { TReportDoubleEntryValidation }
 
-  TReportDoubleEntryValidation = class(TReportListBase)
+  TReportDoubleEntryValidation = class(TReportBase)
   private
     FCompareFields: TEpiFields;
     FDblEntryValidateOptions: TEpiToolsDblEntryValidateOptions;
     FKeyFields: TEpiFields;
   protected
     function GetTitle: string; override;
+    procedure DoRunReport; override;
   public
-    function RunReport: string; override;
     property KeyFields: TEpiFields read FKeyFields write FKeyFields;
     property CompareFields: TEpiFields read FCompareFields write FCompareFields;
     property DblEntryValidateOptions: TEpiToolsDblEntryValidateOptions read FDblEntryValidateOptions write FDblEntryValidateOptions;
@@ -29,8 +29,8 @@ implementation
 
 uses
   epidocument,
-  epireport_base, epireport_types, epireport_doubleentry_validate,
-  epireport_htmlgenerator, epireport_txtgenerator, epireport_filelist;
+  epireport_base, epireport_doubleentry_validate,
+  epireport_filelist;
 
 resourcestring
   rsReportDoubleEntryValidation = 'Double Entry Validation Report.';
@@ -42,47 +42,28 @@ begin
   result := rsReportDoubleEntryValidation;
 end;
 
-function TReportDoubleEntryValidation.RunReport: string;
+procedure TReportDoubleEntryValidation.DoRunReport;
 var
   Doc: TEpiDocument;
   i: Integer;
-  R: TEpiReportDoubleEntryValidationHtml;
-  Rf: TEpiReportFileListHtml;
-  Rt: TEpiReportDoubleEntryValidationTXT;
+  R: TEpiReportDoubleEntryValidation;
+  Rf: TEpiReportFileList;
 begin
-{  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
-  Result +=
-    '<h3>Report: ' + ReportTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now)  + '</h3>';
+  inherited DoRunReport;
 
-  Rf := TEpiReportFileListHtml.Create(Documents);
+  Rf := TEpiReportFileList.Create(Generator);
+  Rf.FileList := Documents;
   Rf.RunReport;
-  Result += Rf.ReportText;
   Rf.Free;
 
-  R := TEpiReportDoubleEntryValidationHtml.Create(
-    TEpiDocument(Documents.Objects[0]),
-    TEpiDocument(Documents.Objects[1]),
-    false);
-
+  R := TEpiReportDoubleEntryValidation.Create(Generator);
+  R.MainDF := TEpiDocument(Documents.Objects[0]).DataFiles[0];
+  R.DuplDF := TEpiDocument(Documents.Objects[1]).DataFiles[0];
   R.CompareFields := FCompareFields;
   R.KeyFields     := FKeyFields;
   R.DblEntryValidateOptions := FDblEntryValidateOptions;
   R.RunReport;
-  Result += R.ReportText;
   R.Free;
-
-  Result += TEpiReportHTMLGenerator.HtmlFooter; }
-
-  Rt := TEpiReportDoubleEntryValidationTXT.Create(
-    TEpiDocument(Documents.Objects[0]),
-    TEpiDocument(Documents.Objects[1])
-  );
-  Rt.CompareFields := FCompareFields;
-  Rt.KeyFields     := FKeyFields;
-  Rt.DblEntryValidateOptions := FDblEntryValidateOptions;
-  Rt.RunReport;
-  Result := Rt.ReportText;
-  Rt.Free;
 end;
 
 end.

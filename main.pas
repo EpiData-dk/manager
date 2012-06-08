@@ -152,7 +152,7 @@ type
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(out FileName: string; out LocalDoc: boolean): TEpiDocument;
-    function  RunReport(ReportClass: TReportListBaseClass): boolean;
+    function  RunReport(ReportClass: TReportBaseClass): boolean;
   private
     { Messages }
     procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
@@ -811,10 +811,10 @@ begin
   end;
 end;
 
-function TMainForm.RunReport(ReportClass: TReportListBaseClass): boolean;
+function TMainForm.RunReport(ReportClass: TReportBaseClass): boolean;
 var
   F: TStaticReportsForm;
-  R: TReportListBase;
+  R: TReportBase;
   H: TReportViewerForm;
   S: String;
 begin
@@ -832,13 +832,13 @@ begin
   end;
   if F.ShowModal = mrOK then
     R := F.Report;
-  F.Free;
   if not Assigned(R) then exit;
 
   ShowReportForm(Self,
     'Report of: ' + R.ReportTitle,
     R.RunReport,
-    true);
+    F.RadioGroup1.ItemIndex = 0);
+  F.Free;
 end;
 
 function TMainForm.CheckEntryClientOpenFile(const FileName: string): boolean;

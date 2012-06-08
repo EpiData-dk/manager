@@ -91,7 +91,7 @@ implementation
 uses
   epidatafiles, epidatafilestypes, epimiscutils, settings2_var,
   epitools_val_dbl_entry, viewer_form, report_double_entry_validation,
-  main;
+  main, epireport_generator_txt;
 
 procedure ValidateDoubleEntry(Doc: TEpiDocument; const Filename: string);
 var
@@ -149,7 +149,7 @@ begin
   S := TStringList.Create;
   S.AddObject(FileNameLabel1.Caption, FMainDoc);
   S.AddObject(FileNameLabel2.Caption, FDupDoc);
-  R := TReportDoubleEntryValidation.Create(S);
+  R := TReportDoubleEntryValidation.Create(S, TEpiReportTXTGenerator);
 
   KeyFields := TEpiFields.Create(nil);
   for i := 0 to KFCheckList.Count - 1 do

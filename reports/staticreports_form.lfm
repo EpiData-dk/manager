@@ -8,7 +8,7 @@ object StaticReportsForm: TStaticReportsForm
   ClientWidth = 595
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
     Height = 50
@@ -104,6 +104,43 @@ object StaticReportsForm: TStaticReportsForm
       ModalResult = 2
       OnClick = BitBtn2Click
       TabOrder = 2
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 466
+    Top = 0
+    Width = 595
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 466
+    ClientWidth = 595
+    TabOrder = 1
+    object RadioGroup1: TRadioGroup
+      Left = 5
+      Height = 85
+      Top = 376
+      Width = 585
+      Align = alBottom
+      AutoFill = True
+      BorderSpacing.Around = 5
+      Caption = 'Output Format:'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.TopBottomSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 68
+      ClientWidth = 581
+      ItemIndex = 0
+      Items.Strings = (
+        'Website (HTML)'
+        'Text'
+      )
+      TabOrder = 0
     end
   end
 end

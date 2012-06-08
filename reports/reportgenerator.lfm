@@ -6,7 +6,7 @@ object ReportGeneratorForm: TReportGeneratorForm
   Caption = 'ReportGeneratorForm'
   ClientHeight = 588
   ClientWidth = 662
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
     Height = 50
@@ -94,7 +94,6 @@ object ReportGeneratorForm: TReportGeneratorForm
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
-        NumGlyphs = 0
         ShowCaption = False
       end
       object SpeedButton2: TSpeedButton
@@ -139,7 +138,6 @@ object ReportGeneratorForm: TReportGeneratorForm
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
-        NumGlyphs = 0
         ShowCaption = False
       end
     end

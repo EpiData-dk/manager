@@ -9,21 +9,19 @@ uses
 
 type
 
-  { TReportFieldExtended }
+  { TReportFieldListExtended }
 
-  TReportFieldListExtended = class(TReportListBase)
+  TReportFieldListExtended = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-  public
-    function RunReport: string; override;
+    procedure DoRunReport; override;
   end;
 
 implementation
 
 uses
   epidocument,
-  epireport_base, epireport_types, epireport_fieldlist_extended,
-  epireport_htmlgenerator, epireport_filelist;
+  epireport_base, epireport_fieldlist_extended;
 
 
 resourcestring
@@ -36,34 +34,21 @@ begin
   Result := rsReportFieldListTitleExtended;
 end;
 
-function TReportFieldListExtended.RunReport: string;
+procedure TReportFieldListExtended.DoRunReport;
 var
   Doc: TEpiDocument;
   i: Integer;
-  R: TEpiReportBase;
+  R: TEpiReportExtendedFieldList;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
-  Result +=
-    '<h3>Report: ' + ReportTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now)  + '</h3>';
-
-  R := TEpiReportFileListHtml.Create(Documents);
-  R.RunReport;
-  Result += R.ReportText;
-  R.Free;
+  inherited DoRunReport;
 
   for i := 0 to Documents.Count - 1 do
   begin
-    Result += '<h2>File: ' + Documents[i] + '</h2>';
-    R := TEpiReportExtendedFieldListHtml.Create(TEpiDocument(Documents.Objects[i]), stEntryFlow);
+    Generator.Heading('File: ' + Documents[i]);
+    R := TEpiReportExtendedFieldList.Create(Generator);
     R.RunReport;
-
-    Result += R.ReportText +
-      '<div style="page-break-after:always;">' + LineEnding ;
-
     R.Free;
   end;
-
-  Result += TEpiReportHTMLGenerator.HtmlFooter;
 end;
 
 end.

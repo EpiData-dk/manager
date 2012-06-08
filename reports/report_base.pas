@@ -5,94 +5,81 @@ unit report_base;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, epireport_generator_base;
 
 type
 
   { TReportBase }
   TReportBase = class
   private
-    FStyleSheet: string;
-  protected
-    constructor Create; virtual;
-    function GetTitle: string; virtual; abstract;
-  public
-    property StyleSheet: string read FStyleSheet;
-    property ReportTitle: string read GetTitle;
-  end;
-
-  { TReportListBase }
-
-  TReportListBase = class(TReportBase)
-  private
     FDocuments: TStringList;
+    FGenerator: TEpiReportGeneratorBase;
   protected
-    constructor Create; override;
+    function    GetTitle: string; virtual; abstract;
+    procedure   DoBeginReport; virtual;
+    procedure   DoRunReport; virtual;
+    procedure   DoEndReport; virtual;
+    property    Generator: TEpiReportGeneratorBase read FGenerator;
   public
-    constructor Create(const FileNames: TStringList);
+    constructor Create(const FileNames: TStringList;
+      ReportGeneratorClass: TEpiReportGeneratorBaseClass); virtual;
     destructor  Destroy; override;
-    function    RunReport: string; virtual; abstract;
+    function    RunReport: string;
     property    Documents: TStringList read FDocuments;
+    property    ReportTitle: String read GetTitle;
   end;
-  TReportListBaseClass = class of TReportListBase;
+  TReportBaseClass = class of TReportBase;
+
+  { TReportFileListBase }
+
+  TReportFileListBase = class(TReportBase)
+  protected
+    procedure DoRunReport; override;
+  end;
 
 implementation
 
 uses
-  Forms, FileUtil, epireport_htmlgenerator, epidocument;
+  epidocument, epireport_filelist;
 
-const
-  CssFileName = 'reports.css';
+{ TReportFileListBase }
+
+procedure TReportFileListBase.DoRunReport;
+var
+  R: TEpiReportFileList;
+begin
+  inherited DoRunReport;
+
+  R := TEpiReportFileList.Create(Generator);
+  R.FileList := Documents;
+  R.RunReport;
+  R.Free;
+end;
 
 { TReportBase }
 
-constructor TReportBase.Create;
-var
-  CssFile: String;
-  Fh: THandle;
-  Ss: TStringStream;
-  Fs: TFileStream;
+procedure TReportBase.DoBeginReport;
 begin
-  CssFile := ExtractFilePath(Application.ExeName) + CssFileName;
-  try
-    FS := nil;
-    Ss := nil;
-    if not FileExistsUTF8(CssFile) then
-    begin
-      FStyleSheet := TEpiReportHTMLGenerator.HtmlStyleSheet;
-      if DirectoryIsWritable(ExtractFilePath(CssFile)) then
-      begin
-        Ss := TStringStream.Create(TEpiReportHTMLGenerator.HtmlStyleSheet);
-        Ss.Position := 0;
-        Fs := TFileStream.Create(CssFile, fmCreate);
-        Fs.CopyFrom(Ss, Ss.Size);
-      end;
-    end else begin
-      Fs := TFileStream.Create(CssFile, fmOpenRead);
-      Fs.Position := 0;
-      Ss := TStringStream.Create('');
-      Ss.CopyFrom(Fs, FS.Size);
-      FStyleSheet := Ss.DataString;
-    end;
-  finally
-    Fs.Free;
-    Ss.Free;
-  end;
+  FGenerator.StartReport(GetTitle);
 end;
 
-{ TReportListBase }
-
-constructor TReportListBase.Create;
+procedure TReportBase.DoRunReport;
 begin
-  inherited Create;
+  FGenerator.Section('Report: ' + GetTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now));
 end;
 
-constructor TReportListBase.Create(const FileNames: TStringList);
+procedure TReportBase.DoEndReport;
+begin
+  FGenerator.EndReport;
+end;
+
+constructor TReportBase.Create(const FileNames: TStringList;
+  ReportGeneratorClass: TEpiReportGeneratorBaseClass);
 var
   Doc: TEpiDocument;
   i: Integer;
 begin
-  Create;
+  FGenerator := ReportGeneratorClass.Create;
 
   FDocuments := TStringList.Create;
   for i := 0 to FileNames.Count - 1 do
@@ -110,7 +97,7 @@ begin
   end;
 end;
 
-destructor TReportListBase.Destroy;
+destructor TReportBase.Destroy;
 var
   i: Integer;
 begin
@@ -118,8 +105,20 @@ begin
     FDocuments.Objects[i].Free;
 
   FDocuments.Free;
+  FGenerator.Free;
   inherited Destroy;
 end;
+
+function TReportBase.RunReport: string;
+begin
+  DoBeginReport;
+  DoRunReport;
+  DoEndReport;
+
+  Result := FGenerator.GetReportText;
+end;
+
+{ TReportListBase }
 
 end.
 

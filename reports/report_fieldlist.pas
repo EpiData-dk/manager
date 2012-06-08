@@ -11,20 +11,17 @@ type
 
   { TReportFieldLists }
 
-  TReportFieldLists = class(TReportListBase)
+  TReportFieldLists = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-  public
-    function RunReport: string; override;
+    procedure DoRunReport; override;
   end;
 
 implementation
 
 
 uses
-  epidocument,
-  epireport_base, epireport_types, epireport_fieldlist_simple,
-  epireport_htmlgenerator, epireport_filelist;
+  epidocument, epireport_base, epireport_fieldlist_simple;
 
 
 resourcestring
@@ -37,34 +34,21 @@ begin
   Result := rsReportFieldListTitle;
 end;
 
-function TReportFieldLists.RunReport: string;
+procedure TReportFieldLists.DoRunReport;
 var
   Doc: TEpiDocument;
   i: Integer;
-  R: TEpiReportBase;
+  R: TEpiReportSimpleFieldList;
 begin
-  Result := TEpiReportHTMLGenerator.HtmlHeader(ReportTitle, StyleSheet);
-  Result +=
-    '<h3>Report: ' + ReportTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now)  + '</h3>';
-
-  R := TEpiReportFileListHtml.Create(Documents);
-  R.RunReport;
-  Result += R.ReportText;
-  R.Free;
+  inherited DoRunReport;
 
   for i := 0 to Documents.Count - 1 do
   begin
-    Result += '<h2>File: ' + Documents[i] + '</h2>';
-    R := TEpiReportSimpleFieldListHtml.Create(TEpiDocument(Documents.Objects[i]), stEntryFlow);
+    Generator.Heading('File: ' + Documents[i]);
+    R := TEpiReportSimpleFieldList.Create(Generator);
     R.RunReport;
-
-    Result += R.ReportText +
-      '<div style="page-break-after:always;">' + LineEnding ;
-
     R.Free;
   end;
-
-  Result += TEpiReportHTMLGenerator.HtmlFooter;
 end;
 
 end.

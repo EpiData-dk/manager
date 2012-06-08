@@ -17,6 +17,8 @@ type
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     Panel1: TPanel;
+    Panel2: TPanel;
+    RadioGroup1: TRadioGroup;
     procedure AddFilesBtnClick(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
@@ -25,17 +27,17 @@ type
   private
     { private declarations }
     FProjectList: TProjectFileListFrame;
-    FReport: TReportListBase;
-    FReportClass: TReportListBaseClass;
+    FReport: TReportBase;
+    FReportClass: TReportBaseClass;
     function ShowDialog(out Files: TStrings): boolean;
   protected
     constructor Create(TheOwner: TComponent); override;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; ReportClass: TReportListBaseClass);
+    constructor Create(TheOwner: TComponent; ReportClass: TReportBaseClass);
     procedure   AddInitialDocument(Const FileName: string; Const Doc: TEpiDocument);
     class procedure RestoreDefaultPos;
-    property    Report: TReportListBase read FReport;
+    property    Report: TReportBase read FReport;
   end;
 
 var
@@ -46,7 +48,8 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, settings2, epimiscutils, viewer_form;
+  settings2_var, settings2, epimiscutils, viewer_form,
+  epireport_generator_html, epireport_generator_txt, epireport_generator_base;
 
 { TStaticReportsForm }
 
@@ -94,8 +97,14 @@ begin
 end;
 
 procedure TStaticReportsForm.BitBtn1Click(Sender: TObject);
+var
+  FGeneratorClass: TEpiReportGeneratorBaseClass;
 begin
-  FReport := FReportClass.Create(FProjectList.SelectedList);
+  case RadioGroup1.ItemIndex of
+    0: FGeneratorClass := TEpiReportHTMLGenerator;
+    1: FGeneratorClass := TEpiReportTXTGenerator;
+  end;
+  FReport := FReportClass.Create(FProjectList.SelectedList, FGeneratorClass);
 end;
 
 procedure TStaticReportsForm.BitBtn2Click(Sender: TObject);
@@ -129,20 +138,20 @@ begin
   with FProjectList do
   begin
     Align := alClient;
-    Parent := Self;
+    Parent := Panel2;
   end;
 end;
 
 constructor TStaticReportsForm.Create(TheOwner: TComponent;
-  ReportClass: TReportListBaseClass);
+  ReportClass: TReportBaseClass);
 var
-  FakeReport: TReportListBase;
+  FakeReport: TReportBase;
 begin
   Create(TheOwner);
   FReportClass := ReportClass;
   FReport := nil;
 
-  FakeReport := FReportClass.Create(TStringList.Create);
+  FakeReport := FReportClass.Create(TStringList.Create, TEpiReportTXTGenerator);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
   FakeReport.Free;
 end;
