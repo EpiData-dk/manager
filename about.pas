@@ -20,10 +20,11 @@ type
     CoreVersionLabel: TLabel;
     FPCVersionLabel: TLabel;
     Image1: TImage;
+    CoreRevisionLabel: TLabel;
     Memo1: TMemo;
     Panel1: TPanel;
     PlatformLabel: TLabel;
-    RevisionLabel: TLabel;
+    ManagerRevisionLabel: TLabel;
     VersionLabel: TLabel;
     VersionPage: TTabSheet;
     procedure FormCreate(Sender: TObject);
@@ -88,11 +89,12 @@ procedure TAboutForm.FormCreate(Sender: TObject);
 begin
   AboutPageControl.PageIndex := 0;
 
-  VersionLabel.Caption     := ManagerVersionCaption;
-  CoreVersionLabel.Caption := CoreVersionCaption;
-  RevisionLabel.Caption    := RevisionCaption;
-  FPCVersionLabel.Caption  := FPCCaption;
-  PlatformLabel.Caption    := PlatformCaption;
+  VersionLabel.Caption         := ManagerVersionCaption;
+  ManagerRevisionLabel.Caption := RevisionCaption;
+  CoreVersionLabel.Caption     := CoreVersionCaption;
+  CoreRevisionLabel.Caption    := CoreRevisionCaption;
+  FPCVersionLabel.Caption      := FPCCaption;
+  PlatformLabel.Caption        := PlatformCaption;
 end;
 
 procedure TAboutForm.VersionPageResize(Sender: TObject);
