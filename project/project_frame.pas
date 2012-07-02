@@ -433,7 +433,7 @@ begin
   DoCloseProject;
 
   try
-    Cursor := crHourGlass;
+    Screen.Cursor := crHourGlass;
     Application.ProcessMessages;
 
     St := nil;
@@ -470,7 +470,7 @@ begin
     AddToRecent(Fn);
     UpdateCaption;
   finally
-    Cursor := crDefault;
+    Screen.Cursor := crDefault;
     Application.ProcessMessages;
   end;
 end;

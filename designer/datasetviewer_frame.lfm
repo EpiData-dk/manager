@@ -49,9 +49,9 @@ object DataSetViewFrame: TDataSetViewFrame
     end
     object Button3: TButton
       Left = 304
-      Height = 23
+      Height = 27
       Top = 8
-      Width = 138
+      Width = 142
       Action = ShowIndexOrAllFieldsAction
       AutoSize = True
       TabOrder = 2

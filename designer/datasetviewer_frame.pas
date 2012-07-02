@@ -289,6 +289,7 @@ var
   V: TDataSetViewFrame;
 begin
   F := TForm.Create(TheOwner);
+  F.Position := poMainFormCenter;
   F.Caption := FormCaption;
 
   V := TDataSetViewFrame.Create(F, DataFile);
