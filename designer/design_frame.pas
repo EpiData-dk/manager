@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, types, FileUtil, PrintersDlgs, LResources, Forms, ComCtrls,
   Controls, ActnList, ExtCtrls, StdCtrls, Menus, epidatafiles,
   epidatafilestypes, epicustombase, AVL_Tree, LCLType, LMessages, StdActns,
-  design_controls, epidocument, epivaluelabels, manager_messages, Printer4Lazarus;
+  design_controls, epidocument, epivaluelabels, manager_messages, Printer4Lazarus,
+  design_customdesigner;
 
 type
 
@@ -20,7 +21,7 @@ type
     Shift: TShiftState;
   end;
 
-  TDesignFrame = class(TFrame)
+  TDesignFrame = class(TCustomDesignFrame)
     PrintDialog1: TPrintDialog;
     ViewDataSetAction: TAction;
     PrintDataFormAction: TAction;
@@ -215,7 +216,6 @@ type
     procedure   ViewDataSetActionExecute(Sender: TObject);
   private
     { common private }
-    FDataFile: TEpiDataFile;
     FDesignerBox: TScrollBox;
     FActiveButton: TToolButton;
     FLeftMouseDown:  TPoint;
@@ -314,18 +314,18 @@ type
     procedure   DesignBoxPaintA4(Sender: TObject);
     procedure   DoExportDataformToSVG;
   private
+    FDataFile: TEpiDataFile;
     FModified: Boolean;
     FOnModified: TNotifyEvent;
-    FImportedFileName: string;
     { Property methods }
-    procedure   SetDataFile(const AValue: TEpiDataFile);
+  protected
+    function    GetDataFile: TEpiDataFile; override;
+    procedure   SetDataFile(AValue: TEpiDataFile); override;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent);
-    procedure   UpdateFrame;
-    procedure   RestoreDefaultPos;
-    property    DataFile: TEpiDataFile read FDataFile write SetDataFile;
-    property    ImportedFileName: string read FImportedFileName;
+    constructor Create(TheOwner: TComponent); override;
+    procedure   UpdateFrame; override;
+    procedure   RestoreDefaultPos; override;
   end;
 
 implementation
@@ -731,6 +731,11 @@ begin
     SaveDlg.Free;
     VecDoc.Free;
   end;
+end;
+
+function TDesignFrame.GetDataFile: TEpiDataFile;
+begin
+  result := FDataFile;
 end;
 
 procedure TDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
@@ -2157,7 +2162,7 @@ begin
   PasteControlAction.ShortCut := D_PasteControl;
 end;
 
-procedure TDesignFrame.SetDataFile(const AValue: TEpiDataFile);
+procedure TDesignFrame.SetDataFile(AValue: TEpiDataFile);
 var
   i: Integer;
   TheParent: TWinControl;

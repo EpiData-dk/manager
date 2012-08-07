@@ -510,16 +510,22 @@ begin
   FQuestionLabel.AnchorToNeighbour(akRight, 5, Self);
   FQuestionLabel.AnchorParallel(akBottom, 0, Self);
   FQuestionLabel.ParentFont := false;
+  FQuestionLabel.ControlStyle := FQuestionLabel.ControlStyle + [csNoDesignSelectable];
+  FQuestionLabel.Caption := LeftStr('Q_' + Name, 5);
   FNameLabel := TLabel.Create(Self);
   FNameLabel.Anchors := [];
   FNameLabel.AnchorToNeighbour(akRight, 5, FQuestionLabel);
   FNameLabel.AnchorParallel(akBottom, 0, FQuestionLabel);
   FNameLabel.ParentFont := false;
+  FNameLabel.ControlStyle := FNameLabel.ControlStyle + [csNoDesignSelectable];
+  FNameLabel.Caption := LeftStr('N_' + Name, 5);
   FValueLabelLabel := TLabel.Create(Self);
   FValueLabelLabel.Anchors := [];
   FValueLabelLabel.AnchorToNeighbour(akLeft, 10, Self);
   FValueLabelLabel.AnchorParallel(akBottom, 0, Self);
   FValueLabelLabel.Font.Color := clLime;
+  FValueLabelLabel.ControlStyle := FValueLabelLabel.ControlStyle + [csNoDesignSelectable];
+  FValueLabelLabel.Caption := LeftStr('V_' + Name, 5);
 
   // Standard properties being set for the component.
   DragKind := dkDock;
@@ -972,6 +978,9 @@ begin
   FActiveFrame.ForceShow;
   BringToFront;
 end;
+
+initialization
+  RegisterClasses([TDesignField, TDesignHeading, TDesignSection, TLabel]);
 
 end.
 

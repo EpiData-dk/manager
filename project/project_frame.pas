@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase,
-  manager_messages, LMessages;
+  manager_messages, LMessages, design_customdesigner;
 
 type
 
@@ -48,7 +48,7 @@ type
     { private declarations }
     FFileName: string;
     FFileTimeStamp: longint;
-    FActiveFrame: TFrame;
+    FActiveFrame: TCustomDesignFrame;
     FModified: Boolean;
     FOnModified: TNotifyEvent;
     FrameCount: integer;
@@ -92,7 +92,7 @@ type
     procedure   UpdateFrame;
     procedure   OpenProject(Const AFileName: string);
     property   EpiDocument: TEpiDocument read FEpiDocument;
-    property   ActiveFrame: TFrame read FActiveFrame;
+    property   ActiveFrame: TCustomDesignFrame read FActiveFrame;
     property   ProjectFileName: string read FFileName write FFileName;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
@@ -103,7 +103,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame, Clipbrd, epimiscutils,
+  design_frame, design_runtimedesigner, Clipbrd, epimiscutils,
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
@@ -477,18 +477,19 @@ end;
 
 procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);
 var
-  Frame: TDesignFrame;
+  Frame: TCustomDesignFrame;
 begin
-  Frame := TDesignFrame.Create(Self);
+//  Frame := TDesignFrame.Create(Self);
+  Frame := TRuntimeDesignFrame.Create(Self);
   Frame.Align := alClient;
   Frame.Parent := Self;
   Frame.DataFile := Df;
   FActiveFrame := Frame;
 
-  Frame.OpenProjectToolBtn.Action := OpenProjectAction;
+{  Frame.OpenProjectToolBtn.Action := OpenProjectAction;
   Frame.SaveProjectToolBtn.Action := SaveProjectAction;
   Frame.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
-  Frame.ProjectToolBar.Images := ProjectImageList;
+  Frame.ProjectToolBar.Images := ProjectImageList;     }
 
   {$IFDEF EPI_DEBUG}
 //  AddDebugingContent;

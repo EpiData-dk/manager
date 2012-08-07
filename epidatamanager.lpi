@@ -115,35 +115,38 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="8">
+    <RequiredPackages Count="9">
       <Item1>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="jvRuntimeDesign"/>
       </Item1>
       <Item2>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Major="1" Minor="3" Valid="True"/>
+        <PackageName Value="SynEdit"/>
       </Item2>
       <Item3>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Major="1" Minor="3" Valid="True"/>
       </Item3>
       <Item4>
-        <PackageName Value="fpvectorialpkg"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item4>
       <Item5>
-        <PackageName Value="virtualtreeview_package"/>
+        <PackageName Value="fpvectorialpkg"/>
       </Item5>
       <Item6>
-        <PackageName Value="HtmlComp"/>
+        <PackageName Value="virtualtreeview_package"/>
       </Item6>
       <Item7>
-        <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
+        <PackageName Value="HtmlComp"/>
       </Item7>
       <Item8>
-        <PackageName Value="LCL"/>
+        <PackageName Value="LCLBase"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item8>
+      <Item9>
+        <PackageName Value="LCL"/>
+      </Item9>
     </RequiredPackages>
-    <Units Count="61">
+    <Units Count="63">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -555,6 +558,22 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="viewer_form"/>
       </Unit60>
+      <Unit61>
+        <Filename Value="designer/design_customdesigner.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CustomDesignFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_customdesigner"/>
+      </Unit61>
+      <Unit62>
+        <Filename Value="designer/design_runtimedesigner.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RuntimeDesignFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
+      </Unit62>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

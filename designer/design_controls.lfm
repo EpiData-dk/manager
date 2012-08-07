@@ -16,7 +16,7 @@ object DesignControlsForm: TDesignControlsForm
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   ShowInTaskBar = stAlways
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object OkApplyPanel: TPanel
     Left = 0
     Height = 42

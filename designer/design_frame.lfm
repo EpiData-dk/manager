@@ -1,15 +1,13 @@
-object DesignFrame: TDesignFrame
-  Left = 0
+inherited DesignFrame: TDesignFrame
   Height = 654
-  Top = 0
   Width = 900
   ClientHeight = 654
   ClientWidth = 900
   OnResize = FrameResize
   TabOrder = 0
-  DesignLeft = 340
-  DesignTop = 284
-  object Panel1: TPanel
+  DesignLeft = 944
+  DesignTop = 86
+  object Panel1: TPanel[0]
     Left = 635
     Height = 600
     Top = 28
@@ -24,41 +22,41 @@ object DesignFrame: TDesignFrame
     TabOrder = 0
     object Label1: TLabel
       Left = 11
-      Height = 16
+      Height = 15
       Top = 38
-      Width = 43
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 11
-      Height = 16
+      Height = 15
       Top = 118
-      Width = 43
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label3: TLabel
       Left = 11
-      Height = 16
+      Height = 15
       Top = 198
-      Width = 43
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label4: TLabel
       Left = 11
-      Height = 16
+      Height = 15
       Top = 294
-      Width = 43
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label5: TLabel
       Left = 11
-      Height = 16
+      Height = 15
       Top = 378
-      Width = 43
+      Width = 42
       Caption = 'Label5'
       ParentColor = False
     end
@@ -73,30 +71,30 @@ object DesignFrame: TDesignFrame
     end
     object Label6: TLabel
       Left = 11
-      Height = 16
+      Height = 15
       Top = 454
-      Width = 43
+      Width = 42
       Caption = 'Label6'
       ParentColor = False
     end
     object Label7: TLabel
       Left = 75
-      Height = 16
+      Height = 15
       Top = 77
-      Width = 43
+      Width = 42
       Caption = 'Label7'
       ParentColor = False
     end
     object Label8: TLabel
       Left = 80
-      Height = 16
+      Height = 15
       Top = 162
-      Width = 43
+      Width = 42
       Caption = 'Label8'
       ParentColor = False
     end
   end
-  object Splitter1: TSplitter
+  object Splitter1: TSplitter[1]
     Left = 630
     Height = 600
     Top = 28
@@ -105,7 +103,7 @@ object DesignFrame: TDesignFrame
     Beveled = True
     ResizeAnchor = akRight
   end
-  object StatusBarPanel: TPanel
+  object StatusBarPanel: TPanel[2]
     Left = 0
     Height = 26
     Top = 628
@@ -133,19 +131,19 @@ object DesignFrame: TDesignFrame
       object SectionsLabel: TLabel
         AnchorSideLeft.Control = SectionsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 64
-        Height = 16
+        Left = 63
+        Height = 15
         Top = 4
-        Width = 90
+        Width = 89
         BorderSpacing.Left = 2
         Caption = 'SectionsLabel'
         ParentColor = False
       end
       object SectionsStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 60
+        Width = 59
         Caption = 'Sections:'
         ParentColor = False
       end
@@ -168,9 +166,9 @@ object DesignFrame: TDesignFrame
       TabOrder = 1
       object CurrentSectionLabel: TLabel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 131
+        Width = 130
         Caption = 'CurrentSectionLabel'
         ParentColor = False
       end
@@ -190,19 +188,19 @@ object DesignFrame: TDesignFrame
       object RecordsLabel: TLabel
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 59
-        Height = 16
+        Left = 58
+        Height = 15
         Top = 4
-        Width = 85
+        Width = 84
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         ParentColor = False
       end
       object RecordStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 55
+        Width = 54
         Caption = 'Records:'
         ParentColor = False
       end
@@ -225,19 +223,19 @@ object DesignFrame: TDesignFrame
       object FieldsLabel: TLabel
         AnchorSideLeft.Control = FieldsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 44
-        Height = 16
+        Left = 43
+        Height = 15
         Top = 4
-        Width = 70
+        Width = 69
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         ParentColor = False
       end
       object FieldsStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 40
+        Width = 39
         Caption = 'Fields:'
         ParentColor = False
       end
@@ -263,9 +261,9 @@ object DesignFrame: TDesignFrame
       object FieldNameLabel: TLabel
         AnchorSideLeft.Control = FieldNamePanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 102
+        Width = 101
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         ParentColor = False
@@ -292,9 +290,9 @@ object DesignFrame: TDesignFrame
       object FieldTypeLabel: TLabel
         AnchorSideLeft.Control = FieldTypePanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 91
+        Width = 90
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         ParentColor = False
@@ -321,9 +319,9 @@ object DesignFrame: TDesignFrame
       object DefaultValueLabel: TLabel
         AnchorSideLeft.Control = DefaultValuePanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 116
+        Width = 115
         BorderSpacing.Left = 2
         Caption = 'DefaultValueLabel'
         ParentColor = False
@@ -350,9 +348,9 @@ object DesignFrame: TDesignFrame
       object ValueLabelLabel: TLabel
         AnchorSideLeft.Control = ValueLabelPanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 104
+        Width = 103
         BorderSpacing.Left = 2
         Caption = 'ValueLabelLabel'
         ParentColor = False
@@ -379,9 +377,9 @@ object DesignFrame: TDesignFrame
       object RangeLabel: TLabel
         AnchorSideLeft.Control = RangePanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 75
+        Width = 74
         BorderSpacing.Left = 2
         Caption = 'RangeLabel'
         ParentColor = False
@@ -408,9 +406,9 @@ object DesignFrame: TDesignFrame
       object KeyLabel: TLabel
         AnchorSideLeft.Control = KeyPanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 57
+        Width = 56
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         ParentColor = False
@@ -438,9 +436,9 @@ object DesignFrame: TDesignFrame
       object ExtendedLabel: TLabel
         AnchorSideLeft.Control = ExtendedPanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 105
+        Width = 104
         BorderSpacing.Left = 2
         Caption = 'ExtendedLabel'
         Font.Height = -13
@@ -450,7 +448,7 @@ object DesignFrame: TDesignFrame
       end
     end
   end
-  object ToolBarPanel: TPanel
+  object ToolBarPanel: TPanel[3]
     Left = 0
     Height = 28
     Top = 0
@@ -697,7 +695,7 @@ object DesignFrame: TDesignFrame
       end
     end
   end
-  object DesignerImageList: TImageList
+  object DesignerImageList: TImageList[4]
     Height = 24
     Width = 24
     left = 248
@@ -2146,7 +2144,7 @@ object DesignFrame: TDesignFrame
       FF00FF00FF00FF00FF00FF00FF00
     }
   end
-  object DesignerActionList: TActionList
+  object DesignerActionList: TActionList[5]
     Images = DesignerImageList
     OnUpdate = DesignerActionListUpdate
     left = 248
@@ -2401,7 +2399,7 @@ object DesignFrame: TDesignFrame
       OnExecute = ViewDataSetActionExecute
     end
   end
-  object DesignControlPopUpMenu: TPopupMenu
+  object DesignControlPopUpMenu: TPopupMenu[6]
     Images = DesignerImageList
     left = 248
     top = 224
@@ -2580,7 +2578,7 @@ object DesignFrame: TDesignFrame
       OnClick = DeleteControlActionExecute
     end
   end
-  object DateFieldPopupMenu: TPopupMenu
+  object DateFieldPopupMenu: TPopupMenu[7]
     Images = DesignerImageList
     left = 192
     top = 32
@@ -2831,7 +2829,7 @@ object DesignFrame: TDesignFrame
       OnClick = NewDateFieldMenuClick
     end
   end
-  object OtherFieldsPopup: TPopupMenu
+  object OtherFieldsPopup: TPopupMenu[8]
     Images = DesignerImageList
     left = 248
     top = 104
@@ -3498,7 +3496,7 @@ object DesignFrame: TDesignFrame
       OnClick = NewOtherFieldMenuClick
     end
   end
-  object DockingSitePopUpMenu: TPopupMenu
+  object DockingSitePopUpMenu: TPopupMenu[9]
     Images = DesignerImageList
     left = 440
     top = 304
@@ -3992,7 +3990,7 @@ object DesignFrame: TDesignFrame
       OnClick = PasteAsStringActionExecute
     end
   end
-  object PrintDialog1: TPrintDialog
+  object PrintDialog1: TPrintDialog[10]
     PrintToFile = True
     left = 417
     top = 177
