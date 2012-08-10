@@ -6,8 +6,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
   Constraints.MinHeight = 365
   Constraints.MinWidth = 380
   TabOrder = 0
-  DesignLeft = 1351
-  DesignTop = 278
+  DesignLeft = 1208
+  DesignTop = 287
   object FieldPageControl: TPageControl[0]
     AnchorSideLeft.Control = Owner
     Left = 0
@@ -675,9 +675,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideLeft.Control = JumpScrollBox
             AnchorSideTop.Control = JumpScrollBox
             Left = 10
-            Height = 16
+            Height = 15
             Top = 10
-            Width = 76
+            Width = 75
             BorderSpacing.Left = 10
             BorderSpacing.Top = 10
             Caption = 'Jump Value:'
@@ -690,9 +690,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = GotoResetBevel
             Left = 105
-            Height = 16
+            Height = 15
             Top = 10
-            Width = 72
+            Width = 71
             BorderSpacing.Left = 5
             BorderSpacing.Right = 5
             Caption = 'Go To Field:'
@@ -745,7 +745,6 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
               FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
               FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
             }
-            NumGlyphs = 0
             OnClick = AddJumpBtnClick
           end
           object RemoveJumpBtn: TSpeedButton
@@ -797,7 +796,6 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
               FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
               FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
             }
-            NumGlyphs = 0
             OnClick = RemoveJumpBtnClick
             ShowCaption = False
           end
@@ -861,9 +859,9 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
             AnchorSideTop.Control = JumpValueLabel
             AnchorSideTop.Side = asrCenter
             Left = 250
-            Height = 16
+            Height = 15
             Top = 10
-            Width = 79
+            Width = 78
             BorderSpacing.Left = 5
             Caption = 'Reset Value:'
             ParentColor = False

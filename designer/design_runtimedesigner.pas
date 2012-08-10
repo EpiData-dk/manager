@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, ExtCtrls, StdCtrls,
-  JvDesignSurface, design_customdesigner, epidatafiles;
+  JvDesignSurface, design_customdesigner, epidatafiles, LMessages,
+  manager_messages, epidatafilestypes;
 
 type
 
@@ -44,7 +45,6 @@ type
     HeadingToolButton: TToolButton;
     ImportToolButton: TToolButton;
     IntToolButton: TToolButton;
-    DesignPanel: TJvDesignPanel;
     JvDesignScrollBox1: TJvDesignScrollBox;
     KeyLabel: TLabel;
     KeyPanel: TPanel;
@@ -79,10 +79,18 @@ type
     procedure DeleteAllToolButtonClick(Sender: TObject);
     procedure DeleteToolButtonClick(Sender: TObject);
     procedure DesignPanelGetAddClass(Sender: TObject; var ioClass: string);
-    procedure ToogleBtn(Sender: TObject);
+    procedure FieldBtnClick(Sender: TObject);
+    procedure HeadingBtnClick(Sender: TObject);
+    procedure SectionBtnClick(Sender: TObject);
+    procedure SelecterBtnClick(Sender: TObject);
   private
     FDatafile: TEpiDataFile;
     FActiveButton: TToolButton;
+    FDesignPanel: TJvDesignPanel;
+    FAddClass: string;
+    FLastSelectedFieldType: TEpiFieldType;
+    procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
+    procedure DoToogleBtn(Sender: TObject);
   protected
     function GetDataFile: TEpiDataFile; override;
     procedure SetDataFile(AValue: TEpiDataFile); override;
@@ -97,7 +105,8 @@ implementation
 {$R *.lfm}
 
 uses
-  JvDesignImp, LMessages;
+  JvDesignImp, epicustombase, design_types, design_designpanel,
+  Graphics;
 
 type
 
@@ -115,6 +124,7 @@ type
   public
     constructor Create(ASurface: TJvDesignSurface); override;
   end;
+
 
 { TDesignController }
 
@@ -168,7 +178,30 @@ end;
 
 { TRuntimeDesignFrame }
 
-procedure TRuntimeDesignFrame.ToogleBtn(Sender: TObject);
+procedure TRuntimeDesignFrame.LMDesignerAdd(var Msg: TLMessage);
+var
+  EpiCtrlClass: TEpiCustomControlItemClass;
+  Ctrl: TControl;
+  EpiCtrl: TEpiCustomControlItem;
+  Section: TEpiSection;
+begin
+  Ctrl := TControl(Msg.WParam);
+  EpiCtrlClass := TEpiCustomControlItemClass(Msg.LParam);
+
+  Section := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl);
+
+  if EpiCtrlClass = TEpiHeading then
+    EpiCtrl := Section.NewHeading;
+  if EpiCtrlClass = TEpiField then
+    EpiCtrl := Section.NewField(FLastSelectedFieldType);
+  if EpiCtrlClass = TEpiSection then
+    EpiCtrl := FDatafile.NewSection;
+
+
+  (Ctrl as IDesignEpiControl).EpiControl := EpiCtrl;
+end;
+
+procedure TRuntimeDesignFrame.DoToogleBtn(Sender: TObject);
 begin
   if not (Sender is TToolButton) then exit;
   FActiveButton.Down := false;
@@ -185,26 +218,45 @@ procedure TRuntimeDesignFrame.DesignPanelGetAddClass(Sender: TObject;
 begin
   if FActiveButton = SelectorToolButton then exit;
 
-  case FActiveButton.Tag of
-    1,3,12,4:
-      ioClass := 'TDesignField';
-    5:
-      ioClass := 'TDesignHeading';
-    6:
-      ioClass := 'TDesignSection';
-  end;
+  if FAddClass = 'TDesignField' then
+    FLastSelectedFieldType := TEpiFieldType(FActiveButton.Tag);
 
+  ioClass := FAddClass;
   SelectorToolButton.Click;
+end;
+
+procedure TRuntimeDesignFrame.FieldBtnClick(Sender: TObject);
+begin
+  FAddClass := 'TDesignField';
+  DoToogleBtn(Sender);
+end;
+
+procedure TRuntimeDesignFrame.HeadingBtnClick(Sender: TObject);
+begin
+  FAddClass := 'TDesignHeading';
+  DoToogleBtn(Sender);
+end;
+
+procedure TRuntimeDesignFrame.SectionBtnClick(Sender: TObject);
+begin
+  FAddClass := 'TDesignSection';
+  DoToogleBtn(Sender);
+end;
+
+procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
+begin
+  FAddClass := '';
+  DoToogleBtn(Sender);
 end;
 
 procedure TRuntimeDesignFrame.DeleteToolButtonClick(Sender: TObject);
 begin
-  DesignPanel.Surface.DeleteComponents;
+  FDesignPanel.Surface.DeleteComponents;
 end;
 
 procedure TRuntimeDesignFrame.DeleteAllToolButtonClick(Sender: TObject);
 begin
-  DesignPanel.Surface.Clear;
+  FDesignPanel.Surface.Clear;
 end;
 
 function TRuntimeDesignFrame.GetDataFile: TEpiDataFile;
@@ -215,16 +267,23 @@ end;
 procedure TRuntimeDesignFrame.SetDataFile(AValue: TEpiDataFile);
 begin
   FDatafile := AValue;
+  (FDesignPanel as IDesignEpiControl).EpiControl := FDatafile.MainSection;
 
-  DesignPanel.Active := true;
-  TJvDesignSelector(DesignPanel.Surface.Selector).HandleWidth := 4;
+  FDesignPanel.Active := true;
+  TJvDesignSelector(FDesignPanel.Surface.Selector).HandleWidth := 4;
 end;
 
 constructor TRuntimeDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  FDesignPanel := TDesignPanel.Create(Self);
+  FDesignPanel.OnGetAddClass := @DesignPanelGetAddClass;
+  FDesignPanel.Align := alClient;
+  FDesignPanel.Color := clWhite;
+  FDesignPanel.Parent := Self;
+
   FActiveButton := SelectorToolButton;
-  DesignPanel.Surface.ControllerClass := TDesignController;
+  FDesignPanel.Surface.ControllerClass := TDesignController;
 end;
 
 procedure TRuntimeDesignFrame.UpdateFrame;

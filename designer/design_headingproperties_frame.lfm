@@ -10,9 +10,9 @@ inherited HeadingPropertiesFrame: THeadingPropertiesFrame
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 10
-    Height = 18
+    Height = 15
     Top = 10
-    Width = 44
+    Width = 43
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Name:'
@@ -25,8 +25,8 @@ inherited HeadingPropertiesFrame: THeadingPropertiesFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 10
-    Height = 27
-    Top = 30
+    Height = 25
+    Top = 27
     Width = 380
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
@@ -39,9 +39,9 @@ inherited HeadingPropertiesFrame: THeadingPropertiesFrame
     AnchorSideTop.Control = NameEdit
     AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 18
-    Top = 59
-    Width = 32
+    Height = 15
+    Top = 54
+    Width = 29
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
     Caption = 'Text:'
@@ -54,8 +54,8 @@ inherited HeadingPropertiesFrame: THeadingPropertiesFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 10
-    Height = 27
-    Top = 79
+    Height = 25
+    Top = 71
     Width = 380
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10

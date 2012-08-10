@@ -10,12 +10,14 @@ uses
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 procedure CopyAndBackup(Const AFileName: string);
 procedure LoadIniFile;
+function GetRandomComponentName: string;
+
 
 
 implementation
 
 uses
-  Clipbrd, FileUtil, settings2, settings2_var, forms;
+  Clipbrd, FileUtil, settings2, settings2_var, forms, strutils;
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 var
@@ -65,6 +67,18 @@ begin
   if not DirectoryExistsUTF8(ExtractFilePath(GetAppConfigFileUTF8(false))) then
     ForceDirectoriesUTF8(ExtractFilePath(GetAppConfigFileUTF8(false)));
   ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
+end;
+
+function GetRandomComponentName: string;
+var
+  GUID: TGUID;
+begin
+  // Hack: Create a GUID to use as Component name.
+  //  - the comp. name is not used in other parts of the program anyway,
+  //  - so using GUID is a valid way to create random components names... :)
+  //  - And the chance of creating to equal component name are very-very-very unlikely.
+  CreateGUID(GUID);
+  Result := '_' + StringsReplace(GUIDToString(GUID), ['{','}','-'], ['','',''], [rfReplaceAll]);
 end;
 
 end.

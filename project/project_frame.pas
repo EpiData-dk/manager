@@ -82,7 +82,7 @@ type
   private
     { Messages }
     // Message relaying...
-    procedure LMDesignerAddField(var Msg: TLMessage); message LM_DESIGNER_ADDFIELD;
+    procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -103,7 +103,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame, design_runtimedesigner, Clipbrd, epimiscutils,
+  design_runtimedesigner, Clipbrd, epimiscutils,
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
@@ -125,7 +125,6 @@ type
 procedure TProjectFrame.NewDataFormActionExecute(Sender: TObject);
 var
   Df: TEpiDataFile;
-  Frame: TDesignFrame;
 begin
   inc(FrameCount);
 
@@ -192,7 +191,7 @@ begin
   ProjectSettings.ShowModal;
   ProjectSettings.Free;
 
-  TDesignFrame(ActiveFrame).UpdateFrame;
+//  TDesignFrame(ActiveFrame).UpdateFrame;
   UpdateTimer;
 end;
 
@@ -242,10 +241,12 @@ begin
   end;
 
   // TODO : Must be changed when supporting multiple desinger frames (take only the topmost/first datafile).
-  if (Dlg.FileName = '') and
+  // TODO -cRuntimeDesigner : UnComment
+
+{  if (Dlg.FileName = '') and
      (ProjectFileName = '') and
      (TDesignFrame(ActiveFrame).ImportedFileName <> '') then
-    Dlg.FileName := ChangeFileExt(TDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);
+    Dlg.FileName := ChangeFileExt(TDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);  }
 end;
 
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
@@ -711,7 +712,7 @@ begin
   KeyFieldsAction.ShortCut        := P_KeyFields;
 end;
 
-procedure TProjectFrame.LMDesignerAddField(var Msg: TLMessage);
+procedure TProjectFrame.LMDesignerAdd(var Msg: TLMessage);
 begin
   if Assigned(FActiveFrame) then
   with Msg do
@@ -769,8 +770,9 @@ end;
 procedure TProjectFrame.RestoreDefaultPos;
 begin
 //  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
-  if Assigned(FActiveFrame) then
-    TDesignFrame(FActiveFrame).RestoreDefaultPos;
+  // TODO -cRuntimeDesigner : Uncomment
+{  if Assigned(FActiveFrame) then
+    TDesignFrame(FActiveFrame).RestoreDefaultPos;}
 end;
 
 procedure TProjectFrame.UpdateFrame;
@@ -780,8 +782,9 @@ begin
 //    GetValueLabelsEditor(EpiDocument).UpdateSettings;
 
   // TODO : Update all frames.
-  if Assigned(FActiveFrame) then
-    TDesignFrame(FActiveFrame).UpdateFrame;
+  // TODO -cRuntimeDesigner : Uncomment
+{  if Assigned(FActiveFrame) then
+    TDesignFrame(FActiveFrame).UpdateFrame;}
 end;
 
 procedure TProjectFrame.OpenProject(const AFileName: string);

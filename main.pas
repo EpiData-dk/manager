@@ -160,7 +160,7 @@ type
     procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
     procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
     // Message relaying...
-    procedure LMDesignerAddField(var Msg: TLMessage); message LM_DESIGNER_ADDFIELD;
+    procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
     { Process communication }
     FEpiIPC:  TEpiIPC;
@@ -186,9 +186,9 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, LCLProc, LCLIntf, design_frame,
+  workflow_frame, LCLProc, LCLIntf,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
-  design_controls, valuelabelseditor_form, epimiscutils,
+  valuelabelseditor_form, epimiscutils,
   epicustombase, project_settings, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   strutils, report_fieldlist, report_valuelabellist,
@@ -918,7 +918,7 @@ begin
   UpdateProcessToolbar;
 end;
 
-procedure TMainForm.LMDesignerAddField(var Msg: TLMessage);
+procedure TMainForm.LMDesignerAdd(var Msg: TLMessage);
 begin
   if Assigned(FActiveFrame) then
   with Msg do

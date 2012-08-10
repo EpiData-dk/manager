@@ -5,7 +5,7 @@ unit design_headingproperties_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, design_controls,
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
   epicustombase, design_propertiesbase_frame;
 
 type

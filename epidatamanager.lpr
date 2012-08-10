@@ -12,7 +12,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, fpvectorialpkg, printer4lazarus, virtualtreeview_package,
-  jvRuntimeDesign, main, project_frame, design_frame, workflow_frame,
+  jvRuntimeDesign, main, project_frame, workflow_frame,
   managerprocs, sysutils, about,
 
   // Settings - import order defines order!
@@ -27,8 +27,7 @@ uses
   project_settings, project_settings_interface, project_settings_general_frame,
   project_settings_field_frame, project_settings_study_frame,
   project_settings_study_contentdesc_frame,
-  project_settings_study_ownership_frame, valuelabelseditor_form,
-  design_controls, UniqueInstanceRaw, epidatacore, copyobject,
+  project_settings_study_ownership_frame, valuelabelseditor_form, UniqueInstanceRaw, epidatacore,
   design_fieldproperties_frame, design_sectionproperties_frame,
   design_headingproperties_frame, design_propertiesbase_frame, design_types,
   import_structure_form, manager_messages, toolsform, reportgenerator,
@@ -41,7 +40,8 @@ uses
   export_customtext_frame, export_spss_frame, export_sas_frame,
   datasetviewer_frame, prepare_double_entry_form, project_keyfields_form,
   manager_globals, validate_double_entry_form, report_double_entry_validation,
-  design_customdesigner, design_runtimedesigner;
+  design_customdesigner, design_runtimedesigner, design_control_field, 
+design_control_heading, design_control_section, design_designpanel;
 
 {$R *.res}
 
