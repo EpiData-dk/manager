@@ -5,7 +5,8 @@ unit design_control_heading;
 interface
 
 uses
-  Classes, SysUtils, StdCtrls, epicustombase, epidatafiles, design_types;
+  Classes, SysUtils, StdCtrls, epicustombase, epidatafiles, design_types,
+  Forms, Controls;
 
 type
   { TDesignHeading }
@@ -13,28 +14,29 @@ type
   TDesignHeading = Class(TLabel, IDesignEpiControl)
   private
     FHeading: TEpiHeading;
-    FUpdating: Boolean;
   private
     function GetEpiControl: TEpiCustomControlItem;
     procedure OnHeadingChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure OnCaptionChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure UpdateHint;
-    procedure UpdateControl;
+    procedure UpdateEpiControl;
   protected
-    procedure DoSetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
+    procedure SetParent(NewParent: TWinControl); override;
   public
     constructor Create(AOwner: TComponent); Override;
-    destructor  Destroy; override;
-    property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    destructor Destroy; override;
+    procedure SetBounds(aLeft, aTop, aWidth, aHeight: integer); override;
+    function DesignFrameClass: TCustomFrameClass;
+    property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
 
 
 implementation
 
 uses
-  managerprocs, Controls, settings2_var, LCLIntf, main, manager_messages,
-  LCLType;
+  managerprocs, settings2_var, LCLIntf, main, manager_messages,
+  LCLType, design_properties_headingframe,
+  JvDesignSurface;
 
 { TDesignHeading }
 
@@ -46,19 +48,35 @@ end;
 procedure TDesignHeading.OnHeadingChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
-  if FUpdating then exit;
-end;
+  case TEpiCustomChangeEventType(EventType) of
+    ecceDestroy:
+      begin
+        FHeading.UnRegisterOnChangeHook(@OnHeadingChange);
+        FHeading := nil;
+      end;
+    ecceName: ;
+    ecceAddItem: ;
+    ecceDelItem: ;
+    ecceSetItem: ;
+    ecceSetTop: ;
+    ecceSetLeft: ;
 
-procedure TDesignHeading.OnCaptionChange(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-begin
-
+    ecceUpdate,
+    ecceText:
+      begin
+        Caption := TEpiHeading(Sender).Caption.Text;
+        TJvDesignPanel(Owner).Surface.UpdateDesigner;
+      end;
+  end;
 end;
 
 procedure TDesignHeading.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FHeading := TEpiHeading(AValue);
-  UpdateControl;
+  FHeading.RegisterOnChangeHook(@OnHeadingChange);
+
+  Caption := FHeading.Caption.Text;
+  UpdateEpiControl;
 end;
 
 procedure TDesignHeading.UpdateHint;
@@ -66,27 +84,26 @@ begin
 
 end;
 
-procedure TDesignHeading.UpdateControl;
+procedure TDesignHeading.UpdateEpiControl;
 begin
   if not Assigned(FHeading) then exit;
-  if FUpdating then exit;;
 
-  FUpdating := true;
   with FHeading do
   begin
     BeginUpdate;
     Left := Self.Left;
     Top := Self.Top;
-    Caption.Text := Self.Caption;
     EndUpdate;
   end;
-  FUpdating := false;;
 end;
 
-procedure TDesignHeading.DoSetBounds(ALeft, ATop, AWidth, AHeight: integer);
+procedure TDesignHeading.SetParent(NewParent: TWinControl);
 begin
-  inherited DoSetBounds(ALeft, ATop, AWidth, AHeight);
-  UpdateControl;
+  inherited SetParent(NewParent);
+  if csDestroying in ComponentState then exit;
+
+  if not Assigned(EpiControl) then
+    SendMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Self), LPARAM(TEpiHeading));
 end;
 
 constructor TDesignHeading.Create(AOwner: TComponent);
@@ -100,14 +117,27 @@ begin
   Align := alNone;
   ShowHint := true;
   ParentColor := true;
-  FUpdating := false;;
-
-  PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Self), LPARAM(TEpiHeading));
 end;
 
 destructor TDesignHeading.Destroy;
 begin
+  if Assigned(FHeading) then
+    begin
+      FHeading.UnRegisterOnChangeHook(@OnHeadingChange);
+      FHeading.Free;
+    end;
   inherited Destroy;
+end;
+
+procedure TDesignHeading.SetBounds(aLeft, aTop, aWidth, aHeight: integer);
+begin
+  inherited SetBounds(ALeft, ATop, AWidth, AHeight);
+  UpdateEpiControl;
+end;
+
+function TDesignHeading.DesignFrameClass: TCustomFrameClass;
+begin
+  result := THeadingPropertiesFrame;
 end;
 
 initialization

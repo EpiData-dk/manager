@@ -6,13 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
-  epicustombase, design_propertiesbase_frame;
+  epicustombase, design_types;
 
 type
 
   { THeadingPropertiesFrame }
 
-  THeadingPropertiesFrame = class(TDesignPropertiesFrame)
+  THeadingPropertiesFrame = class(TFrame, IDesignPropertiesFrame)
     NameEdit: TEdit;
     CaptionEdit: TEdit;
     Label10: TLabel;

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JvDesignSurface, design_types, epicustombase,
-  epidatafiles;
+  epidatafiles, forms;
 
 type
   { TDesignPanel }
@@ -17,11 +17,15 @@ type
     function  GetEpiControl: TEpiCustomControlItem;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
   public
+    function DesignFrameClass: TCustomFrameClass;
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
 
 
 implementation
+
+uses
+  design_properties_sectionframe;
 
 { TDesignPanel }
 
@@ -33,6 +37,11 @@ end;
 procedure TDesignPanel.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FSection := TEpiSection(AValue);
+end;
+
+function TDesignPanel.DesignFrameClass: TCustomFrameClass;
+begin
+  result := TSectionPropertiesFrame;
 end;
 
 end.

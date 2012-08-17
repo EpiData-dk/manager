@@ -9,11 +9,12 @@ uses
 
 const
   // Designer messages
-  LM_DESIGNER_DEL      = LM_USER + 1;              // WParam = Control;  LParam: 1=Force Delete, 0=Ask User.
-  LM_DESIGNER_DELALL   = LM_DESIGNER_DEL + 1;
-  LM_DESIGNER_ADD      = LM_DESIGNER_DELALL + 1;   // WParam = DesignControl; LParam = EpiControlClass;
+  LM_DESIGNER_DEL      = LM_USER + 1;                  // WParam = Control;  LParam: 1=Force Delete, 0=Ask User.
+  LM_DESIGNER_DELALL   = LM_DESIGNER_DEL + 1;          // (no params needed)
+  LM_DESIGNER_ADD      = LM_DESIGNER_DELALL + 1;       // WParam = DesignControl; LParam = EpiControlClass;
+  LM_DESIGNER_CONTROLLERNOTIFY = LM_DESIGNER_ADD + 1;  // WParam = ClickedControl
   // Last Designer message... always update when inserting new messages.!
-  LM_DESIGNER_LAST     = LM_DESIGNER_ADD;
+  LM_DESIGNER_LAST     = LM_DESIGNER_CONTROLLERNOTIFY;
 
   // Main messages
   LM_MAIN_OPENPROJECT  = LM_DESIGNER_LAST    + 1;   // WParam = TString object containing the filename. Has been checked for exisistence. (TString object MUST BE FREED at the message handler).

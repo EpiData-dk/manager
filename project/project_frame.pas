@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase,
-  manager_messages, LMessages, design_customdesigner;
+  manager_messages, LMessages;
 
 type
 
@@ -48,7 +48,7 @@ type
     { private declarations }
     FFileName: string;
     FFileTimeStamp: longint;
-    FActiveFrame: TCustomDesignFrame;
+    FActiveFrame: TFrame;
     FModified: Boolean;
     FOnModified: TNotifyEvent;
     FrameCount: integer;
@@ -92,7 +92,7 @@ type
     procedure   UpdateFrame;
     procedure   OpenProject(Const AFileName: string);
     property   EpiDocument: TEpiDocument read FEpiDocument;
-    property   ActiveFrame: TCustomDesignFrame read FActiveFrame;
+    property   ActiveFrame: TFrame read FActiveFrame;
     property   ProjectFileName: string read FFileName write FFileName;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
@@ -478,7 +478,7 @@ end;
 
 procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);
 var
-  Frame: TCustomDesignFrame;
+  Frame: TRuntimeDesignFrame;
 begin
 //  Frame := TDesignFrame.Create(Self);
   Frame := TRuntimeDesignFrame.Create(Self);
@@ -487,6 +487,7 @@ begin
   Frame.DataFile := Df;
   FActiveFrame := Frame;
 
+  // TODO -cRuntimeDesigner : Uncomment!
 {  Frame.OpenProjectToolBtn.Action := OpenProjectAction;
   Frame.SaveProjectToolBtn.Action := SaveProjectAction;
   Frame.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
@@ -507,11 +508,13 @@ begin
   // ValueLabelSEts is incomplete!
   CloseValueLabelEditor2;
   if not Assigned(FEpiDocument) then exit;
-  FreeAndNil(FEpiDocument);
 
   // TODO : Delete ALL dataforms!
   FreeAndNil(FActiveFrame);
+
   FreeAndNil(FBackupTimer);
+  FreeAndNil(FEpiDocument);
+
   if FileExistsUTF8(ProjectFileName + '.bak') then
     DeleteFileUTF8(ProjectFileName + '.bak');
   DataFilesTreeView.Items.Clear;

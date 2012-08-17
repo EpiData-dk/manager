@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TSectionPropertiesFrame }
+  { TSectionPropertiesFrameOld }
 
-  TSectionPropertiesFrame = class(TDesignPropertiesFrame)
+  TSectionPropertiesFrameOld = class(TDesignPropertiesFrame)
     GroupAssignedListBox: TListBox;
     GroupAvailableListBox: TListBox;
     GrpRightsMoveLeft: TSpeedButton;
@@ -54,9 +54,9 @@ implementation
 
 {$R *.lfm}
 
-{ TSectionPropertiesFrame }
+{ TSectionPropertiesFrameOld }
 
-procedure TSectionPropertiesFrame.GrpRightsMoveRightClick(Sender: TObject);
+procedure TSectionPropertiesFrameOld.GrpRightsMoveRightClick(Sender: TObject);
 var
   Grp: TEpiGroup;
   Idx: LongInt;
@@ -69,12 +69,12 @@ begin
   GroupAvailableListBox.Items.Delete(Idx);
 end;
 
-function TSectionPropertiesFrame.GetSection: TEpiSection;
+function TSectionPropertiesFrameOld.GetSection: TEpiSection;
 begin
   result := TEpiSection(EpiControl);
 end;
 
-procedure TSectionPropertiesFrame.GrpRightsMoveLeftClick(Sender: TObject);
+procedure TSectionPropertiesFrameOld.GrpRightsMoveLeftClick(Sender: TObject);
 var
   Idx: LongInt;
   Grp: TEpiGroup;
@@ -87,21 +87,21 @@ begin
   GroupAssignedListBox.Items.Delete(Idx);
 end;
 
-procedure TSectionPropertiesFrame.SetEpiControl(
+procedure TSectionPropertiesFrameOld.SetEpiControl(
   const AValue: TEpiCustomControlItem);
 begin
   inherited SetEpiControl(AValue);
   UpdateFormContent;
 end;
 
-procedure TSectionPropertiesFrame.ShiftToTabSheet(const SheetNo: Byte);
+procedure TSectionPropertiesFrameOld.ShiftToTabSheet(const SheetNo: Byte);
 begin
   if SheetNo = 0 then exit;
   if SheetNo > SectionPageControl.PageCount then exit;
   SectionPageControl.ActivePageIndex := SheetNo - 1;
 end;
 
-procedure TSectionPropertiesFrame.UpdateCaption(const S: String);
+procedure TSectionPropertiesFrameOld.UpdateCaption(const S: String);
 var
   T: String;
 begin
@@ -109,14 +109,14 @@ begin
   inherited UpdateCaption(T);
 end;
 
-constructor TSectionPropertiesFrame.Create(TheOwner: TComponent;
+constructor TSectionPropertiesFrameOld.Create(TheOwner: TComponent;
   AAdmin: TEpiAdmin);
 begin
   inherited Create(TheOwner);
   FAdmin := AAdmin;
 end;
 
-function TSectionPropertiesFrame.ValidateControl: boolean;
+function TSectionPropertiesFrameOld.ValidateControl: boolean;
 
 function DoError(Const Msg: string; Ctrl: TWinControl): boolean;
   var
@@ -165,7 +165,7 @@ begin
   UpdateCaption('');
 end;
 
-procedure TSectionPropertiesFrame.UpdateFormContent;
+procedure TSectionPropertiesFrameOld.UpdateFormContent;
 var
   LocalGroups: TEpiGroups;
   i: Integer;
@@ -204,7 +204,7 @@ begin
   UpdateCaption('');
 end;
 
-procedure TSectionPropertiesFrame.ForceShow;
+procedure TSectionPropertiesFrameOld.ForceShow;
 begin
   inherited ForceShow;
   CaptionEdit.SetFocus;

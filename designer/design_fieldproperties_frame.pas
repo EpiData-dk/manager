@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TFieldPropertiesFrame }
+  { TFieldPropertiesFrameOld }
 
-  TFieldPropertiesFrame = class(TDesignPropertiesFrame)
+  TFieldPropertiesFrameOld = class(TDesignPropertiesFrame)
     AddJumpBtn: TSpeedButton;
     Bevel1: TBevel;
     Bevel2: TBevel;
@@ -209,9 +209,9 @@ type
   end;
   PJumpComponents = ^TJumpComponents;
 
-{ TFieldPropertiesFrame }
+{ TFieldPropertiesFrameOld }
 
-procedure TFieldPropertiesFrame.RangeEditUTF8KeyPress(Sender: TObject;
+procedure TFieldPropertiesFrameOld.RangeEditUTF8KeyPress(Sender: TObject;
   var UTF8Key: TUTF8Char);
 var
   I: integer;
@@ -230,7 +230,7 @@ begin
   end;
 end;
 
-procedure TFieldPropertiesFrame.RemoveJumpBtnClick(Sender: TObject);
+procedure TFieldPropertiesFrameOld.RemoveJumpBtnClick(Sender: TObject);
 var
   Sibling: TControl;
 begin
@@ -249,7 +249,7 @@ begin
     AddJumpBtn.AnchorVerticalCenterTo(TControl(PJumpComponents(FJumpComponentsList.Last)^.GotoCombo));
 end;
 
-procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
+procedure TFieldPropertiesFrameOld.ValueLabelComboBoxChange(Sender: TObject);
 begin
   ValueLabelSettingGrpBox.Enabled :=
     ValueLabelComboBox.ItemIndex <> ValueLabelComboBox.Items.IndexOfObject(FNilValueLabel);
@@ -258,14 +258,14 @@ begin
   UpdateValueLabelWriteTo;
 end;
 
-procedure TFieldPropertiesFrame.InitCombo(Combo: TComboBox);
+procedure TFieldPropertiesFrameOld.InitCombo(Combo: TComboBox);
 begin
   Combo.Items.BeginUpdate;
   Combo.Clear;
 //  Combo.Sorted := true;
 end;
 
-procedure TFieldPropertiesFrame.AddFieldToCombo(AField: TEpiField;
+procedure TFieldPropertiesFrameOld.AddFieldToCombo(AField: TEpiField;
   FieldTypes: TEpiFieldTypes; Combo: TComboBox; AddSelf: boolean);
 begin
   if (not AddSelf) and (AField = Field) then exit;
@@ -277,14 +277,14 @@ begin
     AField);
 end;
 
-procedure TFieldPropertiesFrame.UpdateFieldCombo(Combo: TComboBox;
+procedure TFieldPropertiesFrameOld.UpdateFieldCombo(Combo: TComboBox;
   AField: TEpiField);
 begin
   if Assigned(AField) then
     Combo.ItemIndex := Combo.Items.IndexOfObject(AField);
 end;
 
-procedure TFieldPropertiesFrame.FinishCombo(Combo: TComboBox; NilObject: TObject
+procedure TFieldPropertiesFrameOld.FinishCombo(Combo: TComboBox; NilObject: TObject
   );
 var
   Idx: LongInt;
@@ -294,7 +294,7 @@ begin
   Combo.ItemIndex := Idx;
 end;
 
-function TFieldPropertiesFrame.UpdateValueLabels: boolean;
+function TFieldPropertiesFrameOld.UpdateValueLabels: boolean;
 var
   i: Integer;
   DoAdd: boolean;
@@ -385,14 +385,14 @@ begin
   result := (PreSelectedVLSet <> ValueLabelComboBox.Items.Objects[Idx]);
 end;
 
-function TFieldPropertiesFrame.HasSelectedValueLabel(out
+function TFieldPropertiesFrameOld.HasSelectedValueLabel(out
   ValueLabelSet: TEpiValueLabelSet): boolean;
 begin
   ValueLabelSet := TEpiValueLabelSet(ValueLabelComboBox.Items.Objects[ValueLabelComboBox.ItemIndex]);
   result := ValueLabelSet <> FNilValueLabel;
 end;
 
-procedure TFieldPropertiesFrame.UpdateValueLabelWriteTo;
+procedure TFieldPropertiesFrameOld.UpdateValueLabelWriteTo;
 var
   i: Integer;
   Idx: LongInt;
@@ -404,7 +404,7 @@ begin
   UpdateFieldCombo(ValueLabelWriteToComboBox, Field.ValueLabelWriteField);
 end;
 
-procedure TFieldPropertiesFrame.UpdateComparison;
+procedure TFieldPropertiesFrameOld.UpdateComparison;
 var
   i: Integer;
 begin
@@ -420,19 +420,19 @@ begin
     CompareTypeCombo.ItemIndex := 3;
 end;
 
-function TFieldPropertiesFrame.GetField: TEpiField;
+function TFieldPropertiesFrameOld.GetField: TEpiField;
 begin
   result := TEpiField(EpiControl);
 end;
 
-procedure TFieldPropertiesFrame.ValueLabelSetHook(Sender: TObject;
+procedure TFieldPropertiesFrameOld.ValueLabelSetHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   if (EventGroup = eegCustomBase) and (EventType = Word(ecceName)) then
     UpdateValueLabels;
 end;
 
-procedure TFieldPropertiesFrame.ValueLabelSetsHook(Sender: TObject;
+procedure TFieldPropertiesFrameOld.ValueLabelSetsHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   if (EventGroup = eegCustomBase) and (EventType = Word(ecceDestroy)) then
@@ -459,7 +459,7 @@ begin
 end;
 
 
-procedure TFieldPropertiesFrame.UpdateFieldComboBox(Combo: TComboBox);
+procedure TFieldPropertiesFrameOld.UpdateFieldComboBox(Combo: TComboBox);
 var
   CurrentSelect: TObject;
 begin
@@ -470,7 +470,7 @@ begin
   Combo.ItemIndex := Combo.Items.IndexOfObject(CurrentSelect);
 end;
 
-procedure TFieldPropertiesFrame.AddFieldsToCombo(Combo: TComboBox);
+procedure TFieldPropertiesFrameOld.AddFieldsToCombo(Combo: TComboBox);
 var
   i: Integer;
 begin
@@ -485,7 +485,7 @@ begin
   Combo.Items.EndUpdate;
 end;
 
-procedure TFieldPropertiesFrame.FieldHook(Sender: TObject;
+procedure TFieldPropertiesFrameOld.FieldHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   if (EventGroup = eegCustomBase) and
@@ -501,7 +501,7 @@ begin
   end;
 end;
 
-procedure TFieldPropertiesFrame.JumpValueEditKeyDown(Sender: TObject;
+procedure TFieldPropertiesFrameOld.JumpValueEditKeyDown(Sender: TObject;
   var Key: Word; Shift: TShiftState);
 var
   JVE: TEdit absolute Sender;
@@ -512,7 +512,7 @@ begin
   Key := VK_UNKNOWN;
 end;
 
-function TFieldPropertiesFrame.DoAddNewJump: pointer;
+function TFieldPropertiesFrameOld.DoAddNewJump: pointer;
 var
   JVE: TEdit;     // Jump-to value edit.
   GFC: TComboBox; // Goto field combo
@@ -581,7 +581,7 @@ begin
   Result := JRec;
 end;
 
-function TFieldPropertiesFrame.UpdateJumps: boolean;
+function TFieldPropertiesFrameOld.UpdateJumps: boolean;
 var
   i: Integer;
 begin
@@ -610,7 +610,7 @@ begin
       end;
 end;
 
-procedure TFieldPropertiesFrame.UpdateCalcFields;
+procedure TFieldPropertiesFrameOld.UpdateCalcFields;
 var
   F: TEpiField;
   i: Integer;
@@ -720,13 +720,13 @@ begin
     NoCalcRadio.Checked := true;
 end;
 
-function TFieldPropertiesFrame.CalcFieldComboIsNil(const Combo: TComboBox
+function TFieldPropertiesFrameOld.CalcFieldComboIsNil(const Combo: TComboBox
   ): boolean;
 begin
   result := Combo.ItemIndex = Combo.Items.IndexOfObject(nil);
 end;
 
-procedure TFieldPropertiesFrame.LengthEditEditingDone(Sender: TObject);
+procedure TFieldPropertiesFrameOld.LengthEditEditingDone(Sender: TObject);
 begin
   if ValueLabelComboBox.ItemIndex = -1 then exit;
 
@@ -736,12 +736,12 @@ begin
     ShowHintMsg('', nil);
 end;
 
-procedure TFieldPropertiesFrame.AddJumpBtnClick(Sender: TObject);
+procedure TFieldPropertiesFrameOld.AddJumpBtnClick(Sender: TObject);
 begin
   TEdit(PJumpComponents(DoAddNewJump)^.ValueEdit).SetFocus;
 end;
 
-procedure TFieldPropertiesFrame.AddEditValueLabelBtnClick(Sender: TObject);
+procedure TFieldPropertiesFrameOld.AddEditValueLabelBtnClick(Sender: TObject);
 var
   VLEdit: TFieldValueLabelEditor;
   NewVL: Boolean;
@@ -770,19 +770,19 @@ begin
   VLEDit.Free;
 end;
 
-procedure TFieldPropertiesFrame.ManageValueLabelsBtnClick(Sender: TObject);
+procedure TFieldPropertiesFrameOld.ManageValueLabelsBtnClick(Sender: TObject);
 begin
   ShowValueLabelEditor2(FValueLabelSets);
 end;
 
-procedure TFieldPropertiesFrame.NoCalcRadioChange(Sender: TObject);
+procedure TFieldPropertiesFrameOld.NoCalcRadioChange(Sender: TObject);
 begin
   TimeDiffGrpBox.Enabled      := TimeCalcRadio.Checked;
   CombineDateGrpBox.Enabled   := CombineDateRadio.Checked;
   CombineStringGrpBox.Enabled := CombineStringRadio.Checked;
 end;
 
-procedure TFieldPropertiesFrame.SetEpiControl(
+procedure TFieldPropertiesFrameOld.SetEpiControl(
   const AValue: TEpiCustomControlItem);
 begin
   if Assigned(Field) then
@@ -792,7 +792,7 @@ begin
   AValue.RegisterOnChangeHook(@FieldHook, true);
 end;
 
-procedure TFieldPropertiesFrame.ShiftToTabSheet(const SheetNo: Byte);
+procedure TFieldPropertiesFrameOld.ShiftToTabSheet(const SheetNo: Byte);
 var
   SN: Byte;
   i: Integer;
@@ -802,7 +802,7 @@ begin
   FieldPageControl.ActivePageIndex := SheetNo - 1;
 end;
 
-procedure TFieldPropertiesFrame.UpdateCaption(const S: String);
+procedure TFieldPropertiesFrameOld.UpdateCaption(const S: String);
 var
   T: String;
 begin
@@ -812,7 +812,7 @@ begin
   inherited UpdateCaption(T);
 end;
 
-function TFieldPropertiesFrame.InternalValidate: boolean;
+function TFieldPropertiesFrameOld.InternalValidate: boolean;
 
 function DoError(Const Msg: string; Ctrl: TWinControl): boolean;
   var
@@ -1028,7 +1028,7 @@ begin
   Result := true;
 end;
 
-procedure TFieldPropertiesFrame.InternalApply;
+procedure TFieldPropertiesFrameOld.InternalApply;
 var
   R: TEpiRange;
   S: string;
@@ -1222,7 +1222,7 @@ begin
   UpdateCaption('');
 end;
 
-constructor TFieldPropertiesFrame.Create(TheOwner: TComponent;
+constructor TFieldPropertiesFrameOld.Create(TheOwner: TComponent;
   const AValueLabelSets: TEpiValueLabelSets; const DataFile: TEpiDataFile);
 var
   i: Integer;
@@ -1257,7 +1257,7 @@ begin
   end;
 end;
 
-destructor TFieldPropertiesFrame.Destroy;
+destructor TFieldPropertiesFrameOld.Destroy;
 var
   i: Integer;
 begin
@@ -1270,13 +1270,13 @@ begin
   inherited Destroy;
 end;
 
-function TFieldPropertiesFrame.ValidateControl: boolean;
+function TFieldPropertiesFrameOld.ValidateControl: boolean;
 begin
   result := InternalValidate;
   if Result then InternalApply;
 end;
 
-procedure TFieldPropertiesFrame.UpdateFormContent;
+procedure TFieldPropertiesFrameOld.UpdateFormContent;
 begin
   Caption := 'Field Properties';
 
@@ -1360,7 +1360,7 @@ begin
   UpdateCaption('');
 end;
 
-procedure TFieldPropertiesFrame.ForceShow;
+procedure TFieldPropertiesFrameOld.ForceShow;
 begin
   inherited ForceShow;
   QuestionEdit.SetFocus;
