@@ -161,6 +161,7 @@ type
     procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
     // Message relaying...
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
+    procedure LMDesginerCopy(var Msg: TLMessage); message LM_DESIGNER_COPY;
   private
     { Process communication }
     FEpiIPC:  TEpiIPC;
@@ -919,6 +920,13 @@ begin
 end;
 
 procedure TMainForm.LMDesignerAdd(var Msg: TLMessage);
+begin
+  if Assigned(FActiveFrame) then
+  with Msg do
+    Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
+end;
+
+procedure TMainForm.LMDesginerCopy(var Msg: TLMessage);
 begin
   if Assigned(FActiveFrame) then
   with Msg do

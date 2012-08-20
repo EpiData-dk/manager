@@ -25,6 +25,8 @@ type
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
+    procedure WriteState(Writer: TWriter); override;
+    procedure ReadState(Reader: TReader); override;
     procedure SetBounds(aLeft, aTop, aWidth, aHeight: integer); override;
     function DesignFrameClass: TCustomFrameClass;
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
@@ -36,7 +38,7 @@ implementation
 uses
   managerprocs, settings2_var, LCLIntf, main, manager_messages,
   LCLType, design_properties_headingframe,
-  JvDesignSurface;
+  JvDesignSurface, epistringutils;
 
 { TDesignHeading }
 
@@ -127,6 +129,23 @@ begin
       FHeading.Free;
     end;
   inherited Destroy;
+end;
+
+procedure TDesignHeading.WriteState(Writer: TWriter);
+begin
+  inherited WriteState(Writer);
+  Writer.WriteListEnd;
+  Writer.WriteString(FHeading.Name);
+end;
+
+procedure TDesignHeading.ReadState(Reader: TReader);
+var
+  NewName: String;
+begin
+  inherited ReadState(Reader);
+  NewName := Reader.ReadString;
+
+  PostMessage(MainForm.Handle, LM_DESIGNER_COPY, WPARAM(Self), LPARAM(TString.Create(NewName)));
 end;
 
 procedure TDesignHeading.SetBounds(aLeft, aTop, aWidth, aHeight: integer);

@@ -83,6 +83,7 @@ type
     { Messages }
     // Message relaying...
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
+    procedure LMDesignerCopy(var Msg: TLMessage); message LM_DESIGNER_COPY;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -716,6 +717,13 @@ begin
 end;
 
 procedure TProjectFrame.LMDesignerAdd(var Msg: TLMessage);
+begin
+  if Assigned(FActiveFrame) then
+  with Msg do
+    Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
+end;
+
+procedure TProjectFrame.LMDesignerCopy(var Msg: TLMessage);
 begin
   if Assigned(FActiveFrame) then
   with Msg do

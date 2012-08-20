@@ -28,11 +28,16 @@ type
     procedure UpdateHint;
     procedure UpdateEpiControl;
     procedure UpdateControl;
+    procedure ReadFieldName(Reader: TReader);
+    procedure WriteFieldName(Writer: TWriter);
   protected
     procedure SetParent(NewParent: TWinControl); override;
+    procedure DefineProperties(Filer: TFiler); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure   WriteState(Writer: TWriter); override;
+    procedure   ReadState(Reader: TReader); override;
     function    DesignFrameClass: TCustomFrameClass;
     procedure   SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
@@ -45,9 +50,23 @@ implementation
 
 uses
   managerprocs, Graphics, main, LCLIntf, LCLType, manager_messages,
-  design_properties_fieldframe, JvDesignSurface, epidocument;
+  design_properties_fieldframe, JvDesignSurface, epidocument,
+  epistringutils;
 
 { TDesignField }
+
+procedure TDesignField.ReadFieldName(Reader: TReader);
+var
+  NewName: String;
+begin
+  NewName := Reader.ReadString;
+  PostMessage(MainForm.Handle, LM_DESIGNER_COPY, WPARAM(Self), LPARAM(TString.Create(NewName)));
+end;
+
+procedure TDesignField.WriteFieldName(Writer: TWriter);
+begin
+  Writer.WriteString(FField.Name);
+end;
 
 function TDesignField.GetEpiControl: TEpiCustomControlItem;
 begin
@@ -175,7 +194,7 @@ end;
 procedure TDesignField.SetParent(NewParent: TWinControl);
 begin
   inherited SetParent(NewParent);
-  if csDestroying in ComponentState then exit;
+  if [csDestroying, csLoading] * ComponentState <> [] then exit;
 
   FQuestionLabel.Parent := NewParent;
   FNameLabel.Parent := NewParent;
@@ -183,9 +202,16 @@ begin
 
   // Trick to utilize Parent when adding an EpiControl, but not postponing
   // adding epicontrol too late (using PostMessage)
-  if not Assigned(EpiControl)
+  if (not Assigned(EpiControl))
   then
     SendMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Self), LPARAM(TEpiField));
+end;
+
+procedure TDesignField.DefineProperties(Filer: TFiler);
+begin
+  inherited DefineProperties(Filer);
+
+  Filer.DefineProperty('FieldName', @ReadFieldName, @WriteFieldName, true);
 end;
 
 constructor TDesignField.Create(AOwner: TComponent);
@@ -228,6 +254,18 @@ begin
       FField.Free;
     end;
   inherited Destroy;
+end;
+
+procedure TDesignField.WriteState(Writer: TWriter);
+begin
+  inherited WriteState(Writer);
+end;
+
+procedure TDesignField.ReadState(Reader: TReader);
+var
+  NewName: String;
+begin
+  inherited ReadState(Reader);
 end;
 
 function TDesignField.DesignFrameClass: TCustomFrameClass;

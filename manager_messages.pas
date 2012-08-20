@@ -12,7 +12,8 @@ const
   LM_DESIGNER_DEL      = LM_USER + 1;                  // WParam = Control;  LParam: 1=Force Delete, 0=Ask User.
   LM_DESIGNER_DELALL   = LM_DESIGNER_DEL + 1;          // (no params needed)
   LM_DESIGNER_ADD      = LM_DESIGNER_DELALL + 1;       // WParam = DesignControl; LParam = EpiControlClass;
-  LM_DESIGNER_CONTROLLERNOTIFY = LM_DESIGNER_ADD + 1;  // WParam = ClickedControl
+  LM_DESIGNER_COPY     = LM_DESIGNER_ADD + 1;          // WParam = Control; LParam = TString object containing the Name to copy from (TString object MUST BE FREED at the message handler)
+  LM_DESIGNER_CONTROLLERNOTIFY = LM_DESIGNER_COPY + 1; // WParam = ClickedControl
   // Last Designer message... always update when inserting new messages.!
   LM_DESIGNER_LAST     = LM_DESIGNER_CONTROLLERNOTIFY;
 

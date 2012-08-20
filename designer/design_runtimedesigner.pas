@@ -107,6 +107,7 @@ type
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure EditControlActionExecute(Sender: TObject);
     procedure FieldBtnClick(Sender: TObject);
+    function FieldNamePrefix: string;
     procedure HeadingBtnClick(Sender: TObject);
     procedure JvDesignScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
@@ -125,6 +126,7 @@ type
     procedure GetAddClass(Sender: TObject; var ioClass: string);
     procedure SelectionChange(Sender: TObject);
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
+    procedure LMDesignerCopy(var Msg: TLMessage); message LM_DESIGNER_COPY;
     procedure LMDesignerControlNotify(var Msg: TLMessage); message LM_DESIGNER_CONTROLLERNOTIFY;
     procedure DoToogleBtn(Sender: TObject);
     function DesignPanelAsJvObjectArray: TJvDesignObjectArray;
@@ -145,8 +147,11 @@ implementation
 uses
   JvDesignImp, epicustombase, design_types, design_designpanel,
   Graphics, design_designcontroller, design_designmessenger,
-  main,
-  design_control_section, JvDesignUtils;
+  main, epistringutils, JvDesignUtils, settings2_var,
+  design_control_section,
+  design_control_field,
+  design_control_heading;
+
 
 { TRuntimeDesignFrame }
 
@@ -173,11 +178,53 @@ begin
   if EpiCtrlClass = TEpiField then
     EpiCtrl := Section.NewField(FLastSelectedFieldType);
   if EpiCtrlClass = TEpiSection then
+  begin
     EpiCtrl := FDatafile.NewSection;
+    TEpiSection(EpiCtrl).Fields.OnGetPrefix := @FieldNamePrefix;
+  end;
 
 
   (Ctrl as IDesignEpiControl).EpiControl := EpiCtrl;
 //  Ctrl.PopupMenu := DesignControlPopUpMenu;
+end;
+
+procedure TRuntimeDesignFrame.LMDesignerCopy(var Msg: TLMessage);
+var
+  Ctrl: TControl;
+  EpiName: String;
+  EpiCtrl: TEpiCustomItem;
+  NEpiCtrl: TEpiCustomItem;
+  NOwner: TEpiCustomControlItemList;
+begin
+  Ctrl := TControl(Msg.WParam);
+  EpiName := TString(Msg.LParam).Str;
+
+  if Ctrl is TDesignField then
+  begin
+    EpiCtrl := DataFile.Fields.GetItemByName(EpiName);
+    NOwner  := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).Fields;
+  end;
+  if Ctrl is TDesignHeading then
+  begin
+    EpiCtrl := DataFile.Headings.GetItemByName(EpiName);
+    NOwner  := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).Headings;
+  end;
+  if Ctrl is TDesignSection then
+  begin
+    EpiCtrl := DataFile.Sections.GetItemByName(EpiName);
+    NOwner  := DataFile.Sections;
+  end;
+
+  // At this point an EpiCtrl has been created in "SetParent" of the control.
+  // Free this EpiCtrl and assigne the new.
+  (Ctrl as IDesignEpiControl).EpiControl.Free;
+  NEpiCtrl := TEpiCustomItem(EpiCtrl.Clone(NOwner));
+  NEpiCtrl.Name := NOwner.GetUniqueItemName(TEpiCustomControlItemClass(NEpiCtrl.ClassType));
+  NOwner.AddItem(NEpiCtrl);
+  (Ctrl as IDesignEpiControl).EpiControl := TEpiCustomControlItem(NEpiCtrl);
+
+  // Free the send TString
+  TString(Msg.LParam).Free;
 end;
 
 procedure TRuntimeDesignFrame.LMDesignerControlNotify(var Msg: TLMessage);
@@ -224,6 +271,11 @@ procedure TRuntimeDesignFrame.FieldBtnClick(Sender: TObject);
 begin
   FAddClass := 'TDesignField';
   DoToogleBtn(Sender);
+end;
+
+function TRuntimeDesignFrame.FieldNamePrefix: string;
+begin
+  Result := ManagerSettings.FieldNamePrefix;
 end;
 
 procedure TRuntimeDesignFrame.HeadingBtnClick(Sender: TObject);
@@ -362,6 +414,7 @@ begin
       else
         Selected := FDesignPanel;
 
+      S.Fields.OnGetPrefix := @FieldNamePrefix;
       for j := 0 to S.Fields.Count - 1 do
         begin
           F := S.Field[j];

@@ -22,9 +22,12 @@ type
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
   protected
     procedure SetParent(NewParent: TWinControl); override;
+    procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
+    procedure WriteState(Writer: TWriter); override;
+    procedure ReadState(Reader: TReader); override;
     function DesignFrameClass: TCustomFrameClass;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     property  EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
@@ -34,7 +37,7 @@ implementation
 
 uses
   managerprocs, settings2_var, LCLIntf, LCLType, main, manager_messages,
-  design_properties_sectionframe;
+  design_properties_sectionframe, epistringutils;
 
 { TDesignSection }
 
@@ -100,6 +103,15 @@ begin
     SendMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Self), LPARAM(TEpiSection));
 end;
 
+procedure TDesignSection.GetChildren(Proc: TGetChildProc; Root: TComponent);
+var
+  I : Integer;
+  Control : TControl;
+begin
+  for I := 0 to ControlCount-1 do
+    Proc(Controls[i]);
+end;
+
 constructor TDesignSection.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -119,6 +131,23 @@ begin
       FSection.Free;
     end;
   inherited Destroy;
+end;
+
+procedure TDesignSection.WriteState(Writer: TWriter);
+begin
+  inherited WriteState(Writer);
+  Writer.WriteListEnd;
+  Writer.WriteString(FSection.Name);
+end;
+
+procedure TDesignSection.ReadState(Reader: TReader);
+var
+  NewName: String;
+begin
+  inherited ReadState(Reader);
+  NewName := Reader.ReadString;
+
+  PostMessage(MainForm.Handle, LM_DESIGNER_COPY, WPARAM(Self), LPARAM(TString.Create(NewName)));
 end;
 
 function TDesignSection.DesignFrameClass: TCustomFrameClass;

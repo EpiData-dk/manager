@@ -676,7 +676,7 @@ begin
     Field.Name := NameEdit.Text;
 
   if QuestionEdit.Modified then
-    for i := 0 to FieldCount do
+    for i := 0 to FieldCount - 1 do
       Fields[i].Question.Text := QuestionEdit.Text;
 
   if LengthEdit.Modified then
