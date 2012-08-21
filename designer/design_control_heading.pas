@@ -20,13 +20,9 @@ type
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure UpdateHint;
     procedure UpdateEpiControl;
-  protected
-    procedure SetParent(NewParent: TWinControl); override;
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
-    procedure WriteState(Writer: TWriter); override;
-    procedure ReadState(Reader: TReader); override;
     procedure SetBounds(aLeft, aTop, aWidth, aHeight: integer); override;
     function DesignFrameClass: TCustomFrameClass;
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
@@ -99,15 +95,6 @@ begin
   end;
 end;
 
-procedure TDesignHeading.SetParent(NewParent: TWinControl);
-begin
-  inherited SetParent(NewParent);
-  if csDestroying in ComponentState then exit;
-
-  if not Assigned(EpiControl) then
-    SendMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Self), LPARAM(TEpiHeading));
-end;
-
 constructor TDesignHeading.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -129,23 +116,6 @@ begin
       FHeading.Free;
     end;
   inherited Destroy;
-end;
-
-procedure TDesignHeading.WriteState(Writer: TWriter);
-begin
-  inherited WriteState(Writer);
-  Writer.WriteListEnd;
-  Writer.WriteString(FHeading.Name);
-end;
-
-procedure TDesignHeading.ReadState(Reader: TReader);
-var
-  NewName: String;
-begin
-  inherited ReadState(Reader);
-  NewName := Reader.ReadString;
-
-  PostMessage(MainForm.Handle, LM_DESIGNER_COPY, WPARAM(Self), LPARAM(TString.Create(NewName)));
 end;
 
 procedure TDesignHeading.SetBounds(aLeft, aTop, aWidth, aHeight: integer);

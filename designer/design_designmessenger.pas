@@ -6,13 +6,18 @@ interface
 
 uses
   Classes, SysUtils, JvDesignImp, JvDesignSurface, Controls,
-  LMessages;
+  LMessages, design_runtimedesigner;
 
 type
 
   { TDesignMessenger }
 
   TDesignMessenger = class(TJvDesignDesignerMessenger)
+  private
+    FFrame: TRuntimeDesignFrame;
+  protected
+    procedure SetContainer(AValue: TWinControl); override;
+  public
     function IsDesignMessage(ASender: TControl; var AMessage: TLMessage
        ): Boolean; override;
   end;
@@ -23,6 +28,20 @@ uses
   LCLType;
 
 { TDesignMessenger }
+
+procedure TDesignMessenger.SetContainer(AValue: TWinControl);
+begin
+  inherited SetContainer(AValue);
+
+  while Assigned(AValue) do
+    if AValue is TRuntimeDesignFrame then
+      break
+    else
+      AValue := AValue.Parent;
+
+  if Assigned(AValue) then
+    FFrame := TRuntimeDesignFrame(AValue);
+end;
 
 function TDesignMessenger.IsDesignMessage(ASender: TControl;
   var AMessage: TLMessage): Boolean;
@@ -41,6 +60,7 @@ begin
       Result := inherited IsDesignMessage(ASender, AMessage);
     LM_RBUTTONDOWN:
       begin
+        // Activate pop-ups on right-click.
         P := MousePoint;
         Ctrl := TJvDesignPanel(Container).Surface.FindControl(P.X, P.Y);
 
@@ -51,6 +71,15 @@ begin
         end else
           Result := inherited IsDesignMessage(ASender, AMessage);
       end;
+    LM_KEYFIRST..LM_KEYLAST:
+      begin
+        // Relay to Frame before going further -> this could be
+        // a shortcut we wish to handle.
+        if FFrame.IsShortCut(TLMKey(AMessage)) then
+          Exit(true)
+        else
+          Result := inherited IsDesignMessage(ASender, AMessage);
+      end
   else
     Result := inherited IsDesignMessage(ASender, AMessage);
   end;

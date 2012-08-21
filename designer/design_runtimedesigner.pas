@@ -7,13 +7,15 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, ExtCtrls, StdCtrls,
   JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
-  manager_messages, epidatafilestypes, design_properties_form, types;
+  manager_messages, epidatafilestypes, design_properties_form, types,
+  epicustombase;
 
 type
 
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    ClearSelectionAction: TAction;
     CutControlAction: TAction;
     PasteControlPopupMenuItem: TMenuItem;
     PasteControlAction: TAction;
@@ -101,6 +103,8 @@ type
     TodayDateSubMenu: TMenuItem;
     ValueLabelLabel: TLabel;
     ValueLabelPanel: TPanel;
+    procedure Button1Click(Sender: TObject);
+    procedure ClearSelectionActionExecute(Sender: TObject);
     procedure CopyControlActionExecute(Sender: TObject);
     procedure CutControlActionExecute(Sender: TObject);
     procedure DeleteAllActionExecute(Sender: TObject);
@@ -123,13 +127,13 @@ type
     FLastSelectedFieldType: TEpiFieldType;
     FPropertiesForm: TPropertiesForm;
     FSettingDataFile: boolean;
+    FCreatingControl: boolean;
     procedure GetAddClass(Sender: TObject; var ioClass: string);
     procedure SelectionChange(Sender: TObject);
-    procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
-    procedure LMDesignerCopy(var Msg: TLMessage); message LM_DESIGNER_COPY;
-    procedure LMDesignerControlNotify(var Msg: TLMessage); message LM_DESIGNER_CONTROLLERNOTIFY;
     procedure DoToogleBtn(Sender: TObject);
     function DesignPanelAsJvObjectArray: TJvDesignObjectArray;
+    procedure ApplyCommonCtrlSetting(Ctrl: TControl;
+      EpiCtrl: TEpiCustomControlItem);
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
@@ -137,6 +141,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     procedure   UpdateFrame;
     procedure   RestoreDefaultPos;
+    function    IsShortCut(var Message: TLMKey): boolean;
     property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
   end;
 
@@ -145,97 +150,16 @@ implementation
 {$R *.lfm}
 
 uses
-  JvDesignImp, epicustombase, design_types, design_designpanel,
+  JvDesignImp, design_types, design_designpanel,
   Graphics, design_designcontroller, design_designmessenger,
   main, epistringutils, JvDesignUtils, settings2_var,
+  manager_globals,
   design_control_section,
   design_control_field,
   design_control_heading;
 
 
 { TRuntimeDesignFrame }
-
-procedure TRuntimeDesignFrame.LMDesignerAdd(var Msg: TLMessage);
-var
-  EpiCtrlClass: TEpiCustomControlItemClass;
-  Ctrl: TControl;
-  EpiCtrl: TEpiCustomControlItem;
-  Section: TEpiSection;
-begin
-  Ctrl := TControl(Msg.WParam);
-  EpiCtrlClass := TEpiCustomControlItemClass(Msg.LParam);
-
-  // This method is also called during a "SetDatafile" call, but we do
-  // not wish to create new EpiControls, but let the "SetDatafile" itself assign
-  // EpiControls.
-  if FSettingDataFile then exit;
-
-
-  Section := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl);
-
-  if EpiCtrlClass = TEpiHeading then
-    EpiCtrl := Section.NewHeading;
-  if EpiCtrlClass = TEpiField then
-    EpiCtrl := Section.NewField(FLastSelectedFieldType);
-  if EpiCtrlClass = TEpiSection then
-  begin
-    EpiCtrl := FDatafile.NewSection;
-    TEpiSection(EpiCtrl).Fields.OnGetPrefix := @FieldNamePrefix;
-  end;
-
-
-  (Ctrl as IDesignEpiControl).EpiControl := EpiCtrl;
-//  Ctrl.PopupMenu := DesignControlPopUpMenu;
-end;
-
-procedure TRuntimeDesignFrame.LMDesignerCopy(var Msg: TLMessage);
-var
-  Ctrl: TControl;
-  EpiName: String;
-  EpiCtrl: TEpiCustomItem;
-  NEpiCtrl: TEpiCustomItem;
-  NOwner: TEpiCustomControlItemList;
-begin
-  Ctrl := TControl(Msg.WParam);
-  EpiName := TString(Msg.LParam).Str;
-
-  if Ctrl is TDesignField then
-  begin
-    EpiCtrl := DataFile.Fields.GetItemByName(EpiName);
-    NOwner  := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).Fields;
-  end;
-  if Ctrl is TDesignHeading then
-  begin
-    EpiCtrl := DataFile.Headings.GetItemByName(EpiName);
-    NOwner  := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).Headings;
-  end;
-  if Ctrl is TDesignSection then
-  begin
-    EpiCtrl := DataFile.Sections.GetItemByName(EpiName);
-    NOwner  := DataFile.Sections;
-  end;
-
-  // At this point an EpiCtrl has been created in "SetParent" of the control.
-  // Free this EpiCtrl and assigne the new.
-  (Ctrl as IDesignEpiControl).EpiControl.Free;
-  NEpiCtrl := TEpiCustomItem(EpiCtrl.Clone(NOwner));
-  NEpiCtrl.Name := NOwner.GetUniqueItemName(TEpiCustomControlItemClass(NEpiCtrl.ClassType));
-  NOwner.AddItem(NEpiCtrl);
-  (Ctrl as IDesignEpiControl).EpiControl := TEpiCustomControlItem(NEpiCtrl);
-
-  // Free the send TString
-  TString(Msg.LParam).Free;
-end;
-
-procedure TRuntimeDesignFrame.LMDesignerControlNotify(var Msg: TLMessage);
-var
-  Ctrl: TControl;
-begin
-  Ctrl := TControl(Msg.WParam);
-
-  if (Ctrl is TDesignSection) and (FAddClass = 'TDesignSection') then
-    FAddClass := '';
-end;
 
 procedure TRuntimeDesignFrame.DoToogleBtn(Sender: TObject);
 begin
@@ -255,6 +179,17 @@ begin
   Result[0] := FDesignPanel;
 end;
 
+procedure TRuntimeDesignFrame.ApplyCommonCtrlSetting(Ctrl: TControl; EpiCtrl: TEpiCustomControlItem);
+begin
+  (Ctrl as IDesignEpiControl).EpiControl := EpiCtrl;
+
+  if EpiCtrl is TEpiSection then
+    TEpiSection(EpiCtrl).Fields.OnGetPrefix := @FieldNamePrefix;
+
+  //Ctrl.PopupMenu := DesignControlPopUpMenu;
+end;
+
+
 procedure TRuntimeDesignFrame.GetAddClass(Sender: TObject; var ioClass: string);
 begin
   if FActiveButton = SelectorToolButton then exit;
@@ -263,6 +198,9 @@ begin
     FLastSelectedFieldType := TEpiFieldType(FActiveButton.Tag);
 
   ioClass := FAddClass;
+
+  if ioClass <> '' then
+    FCreatingControl := true;
 
   SelectorToolButton.Click;
 end;
@@ -316,9 +254,31 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);
+var
+  Ctrl: TControl;
+  EpiCtrl: TEpiCustomControlItem;
 begin
   // TODO : Update PropertiesForm.
   Label4.Caption := 'Selection Count: ' + IntToStr(FDesignPanel.Surface.Count);
+
+
+  if (FCreatingControl) and
+     (not FSettingDataFile)
+  then
+    begin
+      Ctrl := FDesignPanel.Surface.Selection[0];
+
+      if Ctrl is TDesignField then
+        EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewField(FLastSelectedFieldType);
+      if Ctrl is TDesignHeading then
+        EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewHeading;
+      if Ctrl is TDesignSection then
+        EpiCtrl := DataFile.NewSection;
+
+      ApplyCommonCtrlSetting(Ctrl, EpiCtrl);
+      FCreatingControl := false;
+    end;
+
 
   if Assigned(FPropertiesForm) and (not FSettingDataFile) then
     if FDesignPanel.Surface.Count = 0 then
@@ -348,11 +308,30 @@ end;
 
 procedure TRuntimeDesignFrame.CopyControlActionExecute(Sender: TObject);
 begin
+  GlobalCopyList.Clear;
   FDesignPanel.Surface.CopyComponents;
+end;
+
+procedure TRuntimeDesignFrame.Button1Click(Sender: TObject);
+var
+  Fs: TFileStream;
+  S: String;
+begin
+  Fs := TFileStream.Create('/tmp/df.xml', fmCreate);
+  S := DataFile.SaveToXml('', 0);
+  Fs.Write(S[1], Length(S));
+  Fs.Free;
+end;
+
+procedure TRuntimeDesignFrame.ClearSelectionActionExecute(Sender: TObject);
+begin
+  FDesignPanel.Surface.ClearSelection;
+  FDesignPanel.Surface.SelectionChange;
 end;
 
 procedure TRuntimeDesignFrame.CutControlActionExecute(Sender: TObject);
 begin
+  GlobalCopyList.Clear;
   FDesignPanel.Surface.CutComponents;
 end;
 
@@ -362,13 +341,6 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.SetDataFile(AValue: TEpiDataFile);
-
-  procedure ApplyCommonCtrlSetting(Ctrl: TControl; EpiCtrl: TEpiCustomControlItem);
-  begin
-    (Ctrl as IDesignEpiControl).EpiControl := EpiCtrl;
-    //Ctrl.PopupMenu := DesignControlPopUpMenu;
-  end;
-
 var
   i: Integer;
   Controller: TDesignController;
@@ -409,12 +381,12 @@ begin
           Surface.AddComponent;
 
           Selected := FDesignPanel.Surface.SelectedContainer;
-          ApplyCommonCtrlSetting(Selected, S);
         end
       else
         Selected := FDesignPanel;
 
-      S.Fields.OnGetPrefix := @FieldNamePrefix;
+      ApplyCommonCtrlSetting(Selected, S);
+
       for j := 0 to S.Fields.Count - 1 do
         begin
           F := S.Field[j];
@@ -472,6 +444,14 @@ end;
 procedure TRuntimeDesignFrame.RestoreDefaultPos;
 begin
   //
+end;
+
+function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;
+begin
+  if ActionList1.IsShortCut(Message) then
+    exit;
+
+  // Else ready for implementing a larger Short-cut editor.
 end;
 
 end.

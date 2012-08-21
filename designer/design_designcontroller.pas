@@ -19,8 +19,6 @@ type
     // for applying a dataframe!
     FDragRect: TRect;
   protected
-    function KeyDown(AKeyCode: Cardinal): Boolean; override;
-    function KeyUp(AKeyCode: Cardinal): Boolean; override;
     function MouseDown(Button: TMouseButton; X, Y: Integer;
        TheMessage: TLMMouse): Boolean; override;
     function MouseMove(X, Y: Integer; TheMessage: TLMMouse): Boolean; override;
@@ -36,33 +34,10 @@ type
 implementation
 
 uses
-  LCLIntf, LCLType, design_control_section, manager_messages;
+  LCLIntf, LCLType, design_control_section, manager_messages,
+  main;
 
 { TDesignController }
-
-function TDesignController.KeyDown(AKeyCode: Cardinal): Boolean;
-begin
-  Result := inherited KeyDown(AKeyCode);
-  if Result then exit;
-
-  if AKeyCode = VK_RETURN then
-  begin
-    // TODO : Relay VK_ENTER message to RunTimeFrame.
-  end;
-end;
-
-function TDesignController.KeyUp(AKeyCode: Cardinal): Boolean;
-begin
-  case AKeyCode of
-    VK_ESCAPE:
-      begin
-        Surface.ClearSelection;
-        Surface.SelectionChange;
-      end
-  else
-    Result := inherited KeyUp(AKeyCode);
-  end;
-end;
 
 function TDesignController.MouseDown(Button: TMouseButton; X, Y: Integer;
   TheMessage: TLMMouse): Boolean;
@@ -103,25 +78,8 @@ end;
 
 function TDesignController.MouseUp(Button: TMouseButton; X, Y: Integer;
   TheMessage: TLMMouse): Boolean;
-var
-  LateSelectContainer: Boolean;
 begin
-{  LateSelectContainer := false;
-
-  if (Clicked = Surface.Container) and
-     (DragMode = dmSelect)
-  then
-    LateSelectContainer := true;
- }
   Result := inherited MouseUp(Button, X, Y, TheMessage);
-
-  {if LateSelectContainer and
-     (Surface.Count = 0)
-  then
-  begin
-    Surface.Select(Surface.Container);
-    Surface.SelectionChange;
-  end;}
 
   if Assigned(FFrame) then
     FFrame.Label1.Caption := 'Mouse (1): X = ' + IntToStr(X) + ' | Y = ' + IntToStr(Y);

@@ -602,6 +602,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Top = 470
       Width = 115
       Caption = 'Save DF As XML'
+      OnClick = Button1Click
       TabOrder = 0
     end
     object Label6: TLabel
@@ -2106,6 +2107,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Edit...'
       ImageIndex = 10
       OnExecute = EditControlActionExecute
+      ShortCut = 13
     end
     object DeleteControlAction: TAction
       Caption = 'Delete'
@@ -2123,16 +2125,25 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Caption = 'Copy'
       Hint = 'Copy'
       OnExecute = CopyControlActionExecute
+      ShortCut = 16451
     end
     object PasteControlAction: TAction
       Caption = 'Paste'
       Hint = 'Paste'
       OnExecute = PasteControlActionExecute
+      ShortCut = 16470
     end
     object CutControlAction: TAction
       Caption = 'Cut'
       Hint = 'Cut'
       OnExecute = CutControlActionExecute
+      ShortCut = 16472
+    end
+    object ClearSelectionAction: TAction
+      Caption = 'Clear Selection'
+      Hint = 'Clear Selected Controls'
+      OnExecute = ClearSelectionActionExecute
+      ShortCut = 27
     end
   end
   object OtherFieldsPopup: TPopupMenu

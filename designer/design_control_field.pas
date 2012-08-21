@@ -16,7 +16,6 @@ type
     FWidth: Integer;
     FHeight: Integer;
     FInitialized: boolean;
-    FUpdating: boolean;
     FProjectSettings: TEpiProjectSettings;
     FNameLabel: TLabel;
     FQuestionLabel: TLabel;
@@ -28,16 +27,14 @@ type
     procedure UpdateHint;
     procedure UpdateEpiControl;
     procedure UpdateControl;
-    procedure ReadFieldName(Reader: TReader);
-    procedure WriteFieldName(Writer: TWriter);
+    procedure ReadField(Stream: TStream);
+    procedure WriteField(Stream: TStream);
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure DefineProperties(Filer: TFiler); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
-    procedure   WriteState(Writer: TWriter); override;
-    procedure   ReadState(Reader: TReader); override;
     function    DesignFrameClass: TCustomFrameClass;
     procedure   SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
@@ -51,21 +48,35 @@ implementation
 uses
   managerprocs, Graphics, main, LCLIntf, LCLType, manager_messages,
   design_properties_fieldframe, JvDesignSurface, epidocument,
-  epistringutils;
+  epistringutils, manager_globals;
 
 { TDesignField }
 
-procedure TDesignField.ReadFieldName(Reader: TReader);
+procedure TDesignField.ReadField(Stream: TStream);
 var
-  NewName: String;
+  CopyField: TEpiField;
+  Section: TEpiSection;
 begin
-  NewName := Reader.ReadString;
-  PostMessage(MainForm.Handle, LM_DESIGNER_COPY, WPARAM(Self), LPARAM(TString.Create(NewName)));
+  Stream.Read(CopyField, SizeOf(Pointer));
+  Stream.Read(Section, SizeOf(Pointer));
+
+  if not Section.ValidateRename(CopyField.Name, false)
+  then
+    CopyField.Name := Section.Fields.GetUniqueItemName(TEpiCustomItemClass(CopyField.ClassType));
+
+  Section.Fields.AddItem(CopyField);
+  SetEpiControl(CopyField);
 end;
 
-procedure TDesignField.WriteFieldName(Writer: TWriter);
+procedure TDesignField.WriteField(Stream: TStream);
+var
+  CopyField: TEpiField;
 begin
-  Writer.WriteString(FField.Name);
+  CopyField := TEpiField(FField.Clone(nil));
+  GlobalCopyList.Add(CopyField);
+
+  Stream.Write(CopyField, Sizeof(Pointer));
+  Stream.Write(FField.Section, Sizeof(Pointer));
 end;
 
 function TDesignField.GetEpiControl: TEpiCustomControlItem;
@@ -159,9 +170,7 @@ end;
 procedure TDesignField.UpdateEpiControl;
 begin
   if not Assigned(FField) then exit;
-  if FUpdating then exit;;
 
-  FUpdating := true;
   with FField do
   begin
     BeginUpdate;
@@ -169,7 +178,6 @@ begin
     Top := Self.Top;
     EndUpdate;
   end;
-  FUpdating := false;;
 end;
 
 procedure TDesignField.UpdateControl;
@@ -199,19 +207,12 @@ begin
   FQuestionLabel.Parent := NewParent;
   FNameLabel.Parent := NewParent;
   FValueLabelLabel.Parent := NewParent;
-
-  // Trick to utilize Parent when adding an EpiControl, but not postponing
-  // adding epicontrol too late (using PostMessage)
-  if (not Assigned(EpiControl))
-  then
-    SendMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Self), LPARAM(TEpiField));
 end;
 
 procedure TDesignField.DefineProperties(Filer: TFiler);
 begin
   inherited DefineProperties(Filer);
-
-  Filer.DefineProperty('FieldName', @ReadFieldName, @WriteFieldName, true);
+  Filer.DefineBinaryProperty('EpiField', @ReadField, @WriteField, Assigned(FField));
 end;
 
 constructor TDesignField.Create(AOwner: TComponent);
@@ -256,18 +257,6 @@ begin
   inherited Destroy;
 end;
 
-procedure TDesignField.WriteState(Writer: TWriter);
-begin
-  inherited WriteState(Writer);
-end;
-
-procedure TDesignField.ReadState(Reader: TReader);
-var
-  NewName: String;
-begin
-  inherited ReadState(Reader);
-end;
-
 function TDesignField.DesignFrameClass: TCustomFrameClass;
 begin
   result := TFieldPropertiesFrame;
@@ -279,7 +268,10 @@ var
   SideBuf: Integer;
   Cv: TCanvas;
 begin
-  if (Parent = nil) or (FField = nil) then
+  if (Parent = nil) or
+     (FField = nil) or
+     (GetParentForm(Self) = nil)
+  then
   begin
     inherited SetBounds(ALeft, ATop, AWidth, AHeight);
     Exit;
