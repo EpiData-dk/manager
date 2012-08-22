@@ -15,6 +15,7 @@ type
     function DesignFrameClass: TCustomFrameClass;
     function GetEpiControl: TEpiCustomControlItem;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure FixupCopyControl;
     property  EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
 

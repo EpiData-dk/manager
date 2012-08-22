@@ -246,7 +246,6 @@ begin
   else
     NameEdit.Enabled              := (not IsReservedEpiFieldName(Field.Name));
 
-  // TODO : Length edit must not be visible if both float and int/string are present.
   LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes);
   if FieldsHaveFieldTypes(FloatFieldTypes) and FieldsHaveFieldTypes(IntFieldTypes + StringFieldTypes)
   then

@@ -58,19 +58,6 @@ begin
   case AMessage.Msg of
     LM_MOUSEWHEEL:
       Result := inherited IsDesignMessage(ASender, AMessage);
-    LM_RBUTTONDOWN:
-      begin
-        // Activate pop-ups on right-click.
-        P := MousePoint;
-        Ctrl := TJvDesignPanel(Container).Surface.FindControl(P.X, P.Y);
-
-        if Assigned(Ctrl.PopupMenu) then
-        begin
-          Ctrl.PopupMenu.PopUp;
-          Result := true;
-        end else
-          Result := inherited IsDesignMessage(ASender, AMessage);
-      end;
     CN_KEYDOWN,
     CN_SYSKEYDOWN:
       begin
@@ -81,13 +68,11 @@ begin
         else
           Result := inherited IsDesignMessage(ASender, AMessage);
       end;
-//    LM_KEYFIRST..LM_KEYLAST:
-      // All LM_<keys> should not be processed... all shortcuts, etc. should
-      // have been taken care of with CN_<keys>
-//      Result := false;    }
   else
     Result := inherited IsDesignMessage(ASender, AMessage);
   end;
+  if Result then
+    AMessage.Result := 1;
 end;
 
 end.

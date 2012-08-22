@@ -32,11 +32,13 @@ type
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure DefineProperties(Filer: TFiler); override;
+    procedure DoFixupCopyControl;
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
     function    DesignFrameClass: TCustomFrameClass;
     procedure   SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
+    procedure   FixupCopyControl;
     property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
     property    NameLabel: TLabel read FNameLabel;
     property    QuestionLabel: TLabel read FQuestionLabel;
@@ -50,27 +52,36 @@ uses
   design_properties_fieldframe, JvDesignSurface, epidocument,
   epistringutils, manager_globals;
 
+type
+
+  { Tmylabel }
+
+  Tmylabel = class(TLabel)
+  public
+    procedure WriteState(Writer: TWriter); override;
+    procedure SetParent(NewParent: TWinControl); override;
+  end;
+
+{ Tmylabel }
+
+procedure Tmylabel.WriteState(Writer: TWriter);
+begin
+  inherited WriteState(Writer);
+end;
+
+procedure Tmylabel.SetParent(NewParent: TWinControl);
+begin
+  inherited SetParent(NewParent);
+end;
+
 { TDesignField }
 
 procedure TDesignField.ReadField(Stream: TStream);
 var
   CopyField: TEpiField;
-  Section: TEpiSection;
 begin
   Stream.Read(CopyField, SizeOf(Pointer));
-  Stream.Read(Section, SizeOf(Pointer));
-
-  CopyField := TEpiField(CopyField.Clone(nil));
-
-  if not Section.ValidateRename(CopyField.Name, false)
-  then
-    CopyField.Name := Section.Fields.GetUniqueItemName(TEpiCustomItemClass(CopyField.ClassType));
-
-  if Parent <> nil then
-    Section := TEpiSection((Parent as IDesignEpiControl).EpiControl);
-
-  Section.Fields.AddItem(CopyField);
-  SetEpiControl(CopyField);
+  FField := TEpiField(CopyField.Clone(nil));
 end;
 
 procedure TDesignField.WriteField(Stream: TStream);
@@ -79,9 +90,7 @@ var
 begin
   CopyField := TEpiField(FField.Clone(nil));
   GlobalCopyList.Add(CopyField);
-
   Stream.Write(CopyField, Sizeof(Pointer));
-  Stream.Write(FField.Section, Sizeof(Pointer));
 end;
 
 function TDesignField.GetEpiControl: TEpiCustomControlItem;
@@ -205,19 +214,43 @@ begin
 end;
 
 procedure TDesignField.SetParent(NewParent: TWinControl);
+var
+  Fixup: Boolean;
 begin
+  Fixup := false;
+  if (Parent = nil) and
+     (NewParent <> nil) and
+     (FField <> nil)
+  then
+    Fixup := true;
+
   inherited SetParent(NewParent);
-  if [csDestroying, csLoading] * ComponentState <> [] then exit;
+  if [csDestroying{, csLoading}] * ComponentState <> [] then exit;
 
   FQuestionLabel.Parent := NewParent;
   FNameLabel.Parent := NewParent;
   FValueLabelLabel.Parent := NewParent;
+
+  if Fixup then
+    DoFixupCopyControl;
 end;
 
 procedure TDesignField.DefineProperties(Filer: TFiler);
 begin
   inherited DefineProperties(Filer);
   Filer.DefineBinaryProperty('EpiField', @ReadField, @WriteField, Assigned(FField));
+end;
+
+procedure TDesignField.DoFixupCopyControl;
+var
+  Section: TEpiSection;
+begin
+  Section := TEpiSection((Parent as IDesignEpiControl).EpiControl);
+  if not Section.Fields.ValidateRename(FField.Name, false) then
+    FField.Name := Section.Fields.GetUniqueItemName(TEpiField);
+  Section.Fields.AddItem(FField);
+
+  SetEpiControl(FField);
 end;
 
 constructor TDesignField.Create(AOwner: TComponent);
@@ -230,18 +263,21 @@ begin
   FQuestionLabel.AnchorParallel(akBottom, 0, Self);
   FQuestionLabel.ParentFont := false;
   FQuestionLabel.ControlStyle := FQuestionLabel.ControlStyle + [csNoDesignSelectable];
-  FNameLabel := TLabel.Create(Self);
+  FQuestionLabel.SetSubComponent(true);
+  FNameLabel := Tmylabel.Create(Self);
   FNameLabel.Anchors := [];
   FNameLabel.AnchorToNeighbour(akRight, 5, FQuestionLabel);
   FNameLabel.AnchorParallel(akBottom, 0, FQuestionLabel);
   FNameLabel.ParentFont := false;
   FNameLabel.ControlStyle := FNameLabel.ControlStyle + [csNoDesignSelectable];
+  FNameLabel.SetSubComponent(true);
   FValueLabelLabel := TLabel.Create(Self);
   FValueLabelLabel.Anchors := [];
   FValueLabelLabel.AnchorToNeighbour(akLeft, 10, Self);
   FValueLabelLabel.AnchorParallel(akBottom, 0, Self);
   FValueLabelLabel.Font.Color := clLime;
   FValueLabelLabel.ControlStyle := FValueLabelLabel.ControlStyle + [csNoDesignSelectable];
+  FValueLabelLabel.SetSubComponent(true);
 
   // Standard properties being set for the component.
   AutoSize := false;
@@ -268,6 +304,21 @@ begin
 end;
 
 procedure TDesignField.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
+
+  function Surface: TJvDesignSurface;
+  var
+    CurrControl: TControl;
+  begin
+    CurrControl := Self;
+    while Assigned(CurrControl) and
+          (not (CurrControl is TJvDesignPanel))
+    do
+      CurrControl := CurrControl.Parent;
+
+    if Assigned(CurrControl) then
+      result := TJvDesignPanel(CurrControl).Surface;
+  end;
+
 var
   S: Char;
   SideBuf: Integer;
@@ -304,11 +355,16 @@ begin
   UpdateEpiControl;
 
   // Update DesignerSurface selection.
-  TJvDesignPanel(Owner).Surface.UpdateDesigner;
+  Surface.UpdateDesigner;
+end;
+
+procedure TDesignField.FixupCopyControl;
+begin
+  DoFixupCopyControl;
 end;
 
 initialization
-  RegisterClasses([TDesignField, TLabel]);
+  RegisterClasses([TDesignField]);
 
 end.
 

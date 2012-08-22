@@ -15,8 +15,12 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    PasteAsHeadingMenuItem: TMenuItem;
+    PopupMenuDivider3: TMenuItem;
+    PasteAsHeadingAction: TAction;
     ClearSelectionAction: TAction;
     CutControlAction: TAction;
+    OpenProjectToolBtn: TToolButton;
     PasteControlPopupMenuItem: TMenuItem;
     PasteControlAction: TAction;
     CopyControlAction: TAction;
@@ -85,11 +89,15 @@ type
     PasteControPopupMenuItem: TMenuItem;
     PopupMenuDivider1: TMenuItem;
     PopupMenuDivider2: TMenuItem;
+    ProjectDivider1: TToolButton;
+    ProjectToolBar: TToolBar;
     RangeLabel: TLabel;
     RangePanel: TPanel;
     RecordsLabel: TLabel;
     RecordsPanel: TPanel;
     RecordStaticLabel: TLabel;
+    SaveProjectAsToolBtn: TToolButton;
+    SaveProjectToolBtn: TToolButton;
     SectionsLabel: TLabel;
     SectionsPanel: TPanel;
     SectionsStaticLabel: TLabel;
@@ -109,6 +117,8 @@ type
     procedure CutControlActionExecute(Sender: TObject);
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
+    procedure DesignControlPopUpMenuClose(Sender: TObject);
+    procedure DesignControlPopUpMenuPopup(Sender: TObject);
     procedure EditControlActionExecute(Sender: TObject);
     procedure FieldBtnClick(Sender: TObject);
     function FieldNamePrefix: string;
@@ -116,14 +126,17 @@ type
     procedure JvDesignScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PasteControlActionExecute(Sender: TObject);
+    procedure PasteAsHeadingActionExecute(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
     procedure SelecterBtnClick(Sender: TObject);
     procedure TestToolButtonClick(Sender: TObject);
   private
+    FPopUpPoint: TPoint;
     FDatafile: TEpiDataFile;
     FActiveButton: TToolButton;
     FDesignPanel: TJvDesignPanel;
     FAddClass: string;
+    FImportedFileName: string;
     FLastSelectedFieldType: TEpiFieldType;
     FPropertiesForm: TPropertiesForm;
     FSettingDataFile: boolean;
@@ -134,6 +147,8 @@ type
     function DesignPanelAsJvObjectArray: TJvDesignObjectArray;
     procedure ApplyCommonCtrlSetting(Ctrl: TControl;
       EpiCtrl: TEpiCustomControlItem);
+    procedure SectionsChangeEvent(Sender: TObject; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
@@ -143,6 +158,7 @@ type
     procedure   RestoreDefaultPos;
     function    IsShortCut(var Message: TLMKey): boolean;
     property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
+    property ImportedFileName: string read FImportedFileName;
   end;
 
 implementation
@@ -153,7 +169,7 @@ uses
   JvDesignImp, design_types, design_designpanel,
   Graphics, design_designcontroller, design_designmessenger,
   main, epistringutils, JvDesignUtils, settings2_var,
-  manager_globals,
+  manager_globals, managerprocs,
   design_control_section,
   design_control_field,
   design_control_heading;
@@ -182,17 +198,19 @@ end;
 procedure TRuntimeDesignFrame.ApplyCommonCtrlSetting(Ctrl: TControl; EpiCtrl: TEpiCustomControlItem);
 begin
   (Ctrl as IDesignEpiControl).EpiControl := EpiCtrl;
-
-  if EpiCtrl is TEpiSection then
-    TEpiSection(EpiCtrl).Fields.OnGetPrefix := @FieldNamePrefix;
-
-  //Ctrl.PopupMenu := DesignControlPopUpMenu;
+  Ctrl.PopupMenu := DesignControlPopUpMenu;
 end;
 
 
 procedure TRuntimeDesignFrame.GetAddClass(Sender: TObject; var ioClass: string);
 begin
-  if FActiveButton = SelectorToolButton then exit;
+//  if FActiveButton = SelectorToolButton then exit;
+
+  // Disallow Section-in-Section
+  if (TDesignController(TJvDesignSurface(Sender).Controller).Clicked is TDesignSection) and
+     (FActiveButton = SectionToolButton)
+  then
+    FAddClass := '';
 
   if FAddClass = 'TDesignField' then
     FLastSelectedFieldType := TEpiFieldType(FActiveButton.Tag);
@@ -236,10 +254,75 @@ begin
   FDesignPanel.Surface.PasteComponents;
 end;
 
+procedure TRuntimeDesignFrame.PasteAsHeadingActionExecute(Sender: TObject);
+var
+  Cbl: TStringList;
+  P: TPoint;
+  Controller: TDesignController;
+  Surface: TJvDesignSurface;
+  i: Integer;
+  L: TDesignHeading;
+begin
+  Cbl := TStringList.Create;
+
+  if (FPopUpPoint.X = -1) and
+     (FPopUpPoint.Y = -1)
+  then
+    P := Point(0,0)
+  else
+    P := FDesignPanel.ScreenToClient(FPopUpPoint);
+
+  Controller := TDesignController(FDesignPanel.Surface.Controller);
+  Surface    := FDesignPanel.Surface;
+
+  try
+    ReadClipBoard(Cbl);
+    for i := 0 to Cbl.Count -1 do
+      begin
+        if Trim(Cbl[i]) = '' then continue;
+
+        FCreatingControl := true;
+        Controller.SetDragRect(Rect(P.X, P.Y, 0, 0));
+        Surface.AddClass := 'TDesignHeading';
+        Surface.AddComponent;
+
+        L := TDesignHeading(Surface.Selection[0]);
+        TEpiHeading(L.EpiControl).Caption.Text := Cbl[i];
+
+        Inc(P.Y, ManagerSettings.SpaceBtwLabelLabel + L.Height);
+      end;
+  finally
+    Cbl.Free;
+    Controller.ClearDragRect;
+  end;
+end;
+
 procedure TRuntimeDesignFrame.SectionBtnClick(Sender: TObject);
 begin
   FAddClass := 'TDesignSection';
   DoToogleBtn(Sender);
+end;
+
+procedure TRuntimeDesignFrame.SectionsChangeEvent(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if not (EventGroup = eegCustomBase) then exit;
+
+  case TEpiCustomChangeEventType(EventType) of
+    ecceDestroy: ;
+    ecceUpdate: ;
+    ecceName: ;
+    ecceSetItem,
+    ecceAddItem:
+      begin
+        // New section was added!
+        TEpiSection(Data).Fields.OnGetPrefix := @FieldNamePrefix;
+      end;
+    ecceDelItem: ;
+    ecceSetTop: ;
+    ecceSetLeft: ;
+    ecceText: ;
+  end;
 end;
 
 procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
@@ -258,9 +341,7 @@ var
   Ctrl: TControl;
   EpiCtrl: TEpiCustomControlItem;
 begin
-  // TODO : Update PropertiesForm.
   Label4.Caption := 'Selection Count: ' + IntToStr(FDesignPanel.Surface.Count);
-
 
   if (FCreatingControl) and
      (not FSettingDataFile)
@@ -301,6 +382,22 @@ begin
   FDesignPanel.Surface.DeleteComponents;
 end;
 
+procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
+begin
+  FPopUpPoint := Point(0,0);
+end;
+
+procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
+var
+  P: TPoint;
+begin
+  FPopUpPoint := TPopupMenu(Sender).PopupPoint;
+
+  P := FDesignPanel.ScreenToClient(FPopUpPoint);
+  FDesignPanel.Surface.Select(FDesignPanel.Surface.FindControl(P.X, P.Y));
+  FDesignPanel.Surface.UpdateDesigner;
+end;
+
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
 begin
   FDesignPanel.Surface.Clear;
@@ -308,7 +405,7 @@ end;
 
 procedure TRuntimeDesignFrame.CopyControlActionExecute(Sender: TObject);
 begin
-  GlobalCopyList.Clear;
+  GlobalCopyListClear;
   FDesignPanel.Surface.CopyComponents;
 end;
 
@@ -331,7 +428,7 @@ end;
 
 procedure TRuntimeDesignFrame.CutControlActionExecute(Sender: TObject);
 begin
-  GlobalCopyList.Clear;
+  GlobalCopyListClear;
   FDesignPanel.Surface.CutComponents;
 end;
 
@@ -353,11 +450,12 @@ var
   P: TPoint;
 begin
   FDatafile := AValue;
+  FDatafile.Sections.RegisterOnChangeHook(@SectionsChangeEvent, true);
+  FDatafile.MainSection.Fields.OnGetPrefix := @FieldNamePrefix;
   (FDesignPanel as IDesignEpiControl).EpiControl := FDatafile.MainSection;
 
   FDesignPanel.Active := true;
   TJvDesignSelector(FDesignPanel.Surface.Selector).HandleWidth := 4;
-
 
   Controller := TDesignController(FDesignPanel.Surface.Controller);
   Surface    := FDesignPanel.Surface;
@@ -410,7 +508,7 @@ begin
   end;
   MainForm.EndUpdatingForm;
 
-  Controller.SetDragRect(Rect(0,0,0,0));
+  Controller.ClearDragRect;
   Surface.Select(FDesignPanel);
   FSettingDataFile := false;
 end;
@@ -448,11 +546,11 @@ end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;
 begin
-  ActionList1.State := asNormal;
+//  ActionList1.State := asNormal;
 
   result := ActionList1.IsShortCut(Message);
 
-  ActionList1.State := asSuspended;
+//  ActionList1.State := asSuspended;
   // Else ready for implementing a larger Short-cut editor.
 end;
 

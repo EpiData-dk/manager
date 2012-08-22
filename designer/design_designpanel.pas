@@ -18,6 +18,7 @@ type
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
   public
     function DesignFrameClass: TCustomFrameClass;
+    procedure FixupCopyControl;
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
 
@@ -42,6 +43,11 @@ end;
 function TDesignPanel.DesignFrameClass: TCustomFrameClass;
 begin
   result := TSectionPropertiesFrame;
+end;
+
+procedure TDesignPanel.FixupCopyControl;
+begin
+  // Do nothing...
 end;
 
 end.

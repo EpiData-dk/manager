@@ -23,7 +23,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     TabOrder = 0
     Transparent = True
     object SelectorToolButton: TToolButton
-      Left = 2
+      Left = 82
       Top = 1
       Caption = 'SelectorToolButton'
       Down = True
@@ -31,7 +31,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnClick = SelecterBtnClick
     end
     object Divider1: TToolButton
-      Left = 30
+      Left = 110
       Top = 1
       Width = 5
       Caption = 'Divider1'
@@ -39,7 +39,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object IntToolButton: TToolButton
       Tag = 1
-      Left = 35
+      Left = 115
       Hint = 'New Integer Field'
       Top = 1
       Caption = 'New Integer Field'
@@ -50,7 +50,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object FloatToolButton: TToolButton
       Tag = 3
-      Left = 63
+      Left = 143
       Hint = 'New Float Field'
       Top = 1
       Caption = 'New Float Field'
@@ -61,7 +61,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object StringToolButton: TToolButton
       Tag = 12
-      Left = 91
+      Left = 171
       Hint = 'New String Field'
       Top = 1
       Caption = 'New String Field'
@@ -72,7 +72,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object DateToolButton: TToolButton
       Tag = 4
-      Left = 119
+      Left = 199
       Hint = 'New DMY Field'
       Top = 1
       Caption = 'New DMY Field'
@@ -82,7 +82,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object OtherToolButton: TToolButton
-      Left = 147
+      Left = 227
       Hint = 'Other Field Types...'
       Top = 1
       Caption = 'OtherToolButton'
@@ -92,7 +92,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider2: TToolButton
-      Left = 175
+      Left = 255
       Top = 1
       Width = 5
       Caption = 'Divider2'
@@ -100,7 +100,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object HeadingToolButton: TToolButton
       Tag = 5
-      Left = 180
+      Left = 260
       Hint = 'New Heading'
       Top = 1
       Caption = 'New Heading'
@@ -110,7 +110,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider3: TToolButton
-      Left = 208
+      Left = 288
       Top = 1
       Width = 5
       Caption = 'Divider3'
@@ -118,7 +118,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object SectionToolButton: TToolButton
       Tag = 6
-      Left = 213
+      Left = 293
       Hint = 'New Section'
       Top = 1
       Caption = 'New Section'
@@ -128,74 +128,110 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider4: TToolButton
-      Left = 241
+      Left = 321
       Top = 1
       Width = 5
       Caption = 'Divider4'
       Style = tbsDivider
     end
     object EditToolButton: TToolButton
-      Left = 246
+      Left = 326
       Top = 1
       Action = EditControlAction
       ParentShowHint = False
       ShowHint = True
     end
     object DeleteToolButton: TToolButton
-      Left = 274
+      Left = 354
       Top = 1
       Action = DeleteControlAction
       ParentShowHint = False
       ShowHint = True
     end
     object DeleteAllToolButton: TToolButton
-      Left = 302
+      Left = 382
       Top = 1
       Action = DeleteAllAction
       ParentShowHint = False
       ShowHint = True
     end
     object Divider5: TToolButton
-      Left = 330
+      Left = 410
       Top = 1
       Width = 5
       Caption = 'Divider5'
       Style = tbsDivider
     end
     object LoadToolButton: TToolButton
-      Left = 335
+      Left = 415
       Top = 1
       ImageIndex = 12
       ParentShowHint = False
       ShowHint = True
     end
     object ImportToolButton: TToolButton
-      Left = 363
+      Left = 443
       Top = 1
       ImageIndex = 13
       ParentShowHint = False
       ShowHint = True
     end
     object ExportToolButton: TToolButton
-      Left = 391
+      Left = 471
       Top = 1
       ImageIndex = 19
       ParentShowHint = False
       ShowHint = True
     end
     object Divider6: TToolButton
-      Left = 419
+      Left = 499
       Top = 1
       Width = 5
       Caption = 'Divider6'
       Style = tbsDivider
     end
     object TestToolButton: TToolButton
-      Left = 424
+      Left = 504
       Top = 1
       Caption = 'TestToolButton'
       ImageIndex = 0
       OnClick = TestToolButtonClick
+    end
+    object ProjectToolBar: TToolBar
+      Left = 2
+      Height = 24
+      Top = 1
+      Width = 80
+      Align = alNone
+      ButtonHeight = 24
+      ButtonWidth = 24
+      Caption = 'ProjectToolBar'
+      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+      EdgeInner = esNone
+      EdgeOuter = esRaised
+      TabOrder = 0
+      object OpenProjectToolBtn: TToolButton
+        Left = 2
+        Top = 1
+        Caption = 'OpenProjectToolBtn'
+      end
+      object ProjectDivider1: TToolButton
+        Left = 26
+        Top = 1
+        Width = 5
+        Caption = 'ProjectDivider1'
+        Style = tbsDivider
+      end
+      object SaveProjectToolBtn: TToolButton
+        Left = 31
+        Top = 1
+        Caption = 'SaveProjectToolBtn'
+      end
+      object SaveProjectAsToolBtn: TToolButton
+        Left = 55
+        Top = 1
+        Caption = 'SaveProjectAsToolBtn'
+      end
     end
   end
   object StatusBarPanel: TPanel
@@ -2100,10 +2136,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   end
   object ActionList1: TActionList
     Images = DesignerImageList
-    State = asSuspended
     left = 344
     top = 238
     object EditControlAction: TAction
+      Category = 'Edit'
       Caption = 'Edit'
       Hint = 'Edit...'
       ImageIndex = 10
@@ -2111,6 +2147,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShortCut = 13
     end
     object DeleteControlAction: TAction
+      Category = 'Edit'
       Caption = 'Delete'
       Hint = 'Delete Selected'
       ImageIndex = 11
@@ -2118,34 +2155,46 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShortCut = 46
     end
     object DeleteAllAction: TAction
+      Category = 'Edit'
       Caption = 'Delete All'
       Hint = 'Delete All'
       ImageIndex = 16
       OnExecute = DeleteAllActionExecute
     end
     object CopyControlAction: TAction
+      Category = 'Edit'
       Caption = 'Copy'
       Hint = 'Copy'
       OnExecute = CopyControlActionExecute
       ShortCut = 16451
     end
     object PasteControlAction: TAction
+      Category = 'Edit'
       Caption = 'Paste'
       Hint = 'Paste'
       OnExecute = PasteControlActionExecute
       ShortCut = 16470
     end
     object CutControlAction: TAction
+      Category = 'Edit'
       Caption = 'Cut'
       Hint = 'Cut'
       OnExecute = CutControlActionExecute
       ShortCut = 16472
     end
     object ClearSelectionAction: TAction
+      Category = 'Edit'
       Caption = 'Clear Selection'
       Hint = 'Clear Selected Controls'
       OnExecute = ClearSelectionActionExecute
       ShortCut = 27
+    end
+    object PasteAsHeadingAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste As Headings'
+      Hint = 'Paste As Headings...'
+      ImageIndex = 8
+      OnExecute = PasteAsHeadingActionExecute
     end
   end
   object OtherFieldsPopup: TPopupMenu
@@ -2809,6 +2858,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   end
   object DesignControlPopUpMenu: TPopupMenu
     Images = DesignerImageList
+    OnPopup = DesignControlPopUpMenuPopup
+    OnClose = DesignControlPopUpMenuClose
     left = 232
     top = 304
     object EditPopupMenuItem: TMenuItem
@@ -2890,7 +2941,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         0000000000000000000000000000000000000000000000000000
       }
       GlyphShowMode = gsmSystem
-      OnClick = EditControlActionExecute
     end
     object PopupMenuDivider1: TMenuItem
       Caption = '-'
@@ -2905,6 +2955,12 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Action = PasteControlAction
     end
     object PopupMenuDivider2: TMenuItem
+      Caption = '-'
+    end
+    object PasteAsHeadingMenuItem: TMenuItem
+      Action = PasteAsHeadingAction
+    end
+    object PopupMenuDivider3: TMenuItem
       Caption = '-'
     end
     object DeletePopupMenuItem: TMenuItem

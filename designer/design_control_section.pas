@@ -14,33 +14,57 @@ type
   TDesignSection = Class(TGroupBox, IDesignEpiControl)
   private
     FSection: TEpiSection;
-  private
     procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure UpdateHint;
     procedure UpdateEpiControl;
     function  GetEpiControl: TEpiCustomControlItem;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure ReadSection(Stream: TStream);
+    procedure WriteSection(Stream: TStream);
   protected
     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
+    procedure DefineProperties(Filer: TFiler); override;
+    procedure SetParent(NewParent: TWinControl); override;
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
     function DesignFrameClass: TCustomFrameClass;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
+    procedure FixupCopyControl;
     property  EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
 
 implementation
 
 uses
-  managerprocs, settings2_var, LCLIntf, LCLType, main, manager_messages,
-  design_properties_sectionframe, epistringutils;
+  settings2_var,
+  design_properties_sectionframe, epistringutils,
+  manager_globals;
 
 { TDesignSection }
 
 function TDesignSection.GetEpiControl: TEpiCustomControlItem;
 begin
   Result := FSection;
+end;
+
+procedure TDesignSection.ReadSection(Stream: TStream);
+var
+  CopySection: TEpiSection;
+begin
+  Stream.Read(CopySection, SizeOf(Pointer));
+  FSection := TEpiSection(CopySection.Clone(nil));
+end;
+
+procedure TDesignSection.WriteSection(Stream: TStream);
+var
+  CopySection: TEpiSection;
+begin
+  CopySection := TEpiSection(FSection.Clone(nil));
+  CopySection.Fields.ClearAndFree;
+  CopySection.Headings.ClearAndFree;
+  GlobalCopyList.Add(CopySection);
+  Stream.Write(CopySection, Sizeof(Pointer));
 end;
 
 procedure TDesignSection.OnChange(Sender: TObject; EventGroup: TEpiEventGroup;
@@ -97,14 +121,50 @@ var
   Control : TControl;
 begin
   for I := 0 to ControlCount-1 do
-    Proc(Controls[i]);
+    if Supports(Controls[i], IDesignEpiControl) then
+      Proc(Controls[i]);
+end;
+
+procedure TDesignSection.DefineProperties(Filer: TFiler);
+begin
+  inherited DefineProperties(Filer);
+  Filer.DefineBinaryProperty('EpiSection', @ReadSection, @WriteSection, Assigned(FSection));
+end;
+
+procedure TDesignSection.SetParent(NewParent: TWinControl);
+var
+  FixupEpiControl: Boolean;
+  DataFile: TEpiDataFile;
+  i: Integer;
+begin
+  FixupEpiControl := false;
+  if (Parent = nil) and
+     (NewParent <> nil) and
+     (FSection <> nil)
+  then
+    FixupEpiControl := true;
+
+  inherited SetParent(NewParent);
+  if [csDestroying, csLoading] * ComponentState <> [] then exit;
+
+  if FixupEpiControl then
+    begin
+      DataFile := TEpiSection((NewParent as IDesignEpiControl).EpiControl).DataFile;
+      if not Datafile.ValidateRename(FSection.Name) then
+        FSection.Name := DataFile.Sections.GetUniqueItemName(TEpiSection);
+      DataFile.Sections.AddItem(FSection);
+
+      for i := 0 to ControlCount - 1 do
+        if Supports(Controls[i], IDesignEpiControl) then
+          (Controls[i] as IDesignEpiControl).FixupCopyControl;
+
+      SetEpiControl(FSection);
+    end;
 end;
 
 constructor TDesignSection.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  Name := GetRandomComponentName;
-
   ShowHint := true;
   ParentColor := true;
   Font := ManagerSettings.SectionFont;
@@ -130,6 +190,11 @@ procedure TDesignSection.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
 begin
   inherited SetBounds(ALeft, ATop, AWidth, AHeight);
   UpdateEpiControl;
+end;
+
+procedure TDesignSection.FixupCopyControl;
+begin
+  // Do nothing - untill we decide to implement Section-in-Section.
 end;
 
 initialization

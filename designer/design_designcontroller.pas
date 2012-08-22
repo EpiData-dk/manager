@@ -29,6 +29,8 @@ type
   public
     constructor Create(ASurface: TJvDesignSurface); override;
     procedure SetDragRect(ARect: TRect);
+    procedure ClearDragRect;
+    property Clicked;
   end;
 
 
@@ -46,7 +48,7 @@ var
 begin
   // Catch all predefined Key-Up shortcuts and ignore them.
   // They should have own implementations by epidata, processed
-  // with on KeyDown events.
+  // on KeyDown events.
   Shift := GetKeyShiftState;
 
   // Cut, Copy, Paste!
@@ -80,15 +82,6 @@ begin
 
   if Assigned(FFrame) then
     FFrame.Label2.Caption := 'Mouse (2): X = ' + IntToStr(TheMessage.XPos) + ' | Y = ' + IntToStr(TheMessage.YPos);
-
-  if (Clicked <> nil) and (Clicked <> Surface.Container) then
-  begin
-    // TODO : Relay message than a control was clicked - what about SelectionChange?
-
-    // Heads up on creating new control!
-    if (Clicked is TDesignSection) and (DragMode = dmCreate) then
-      SendMessage(FFrame.Handle, LM_DESIGNER_CONTROLLERNOTIFY, WPARAM(Clicked), 0);
-  end;
 end;
 
 function TDesignController.MouseMove(X, Y: Integer; TheMessage: TLMMouse
@@ -98,9 +91,6 @@ begin
 
   if Assigned(FFrame) then
     FFrame.Label1.Caption := 'Mouse (1): X = ' + IntToStr(X) + ' | Y = ' + IntToStr(Y);
-
-//  if Assigned(FFrame) then
-//    FFrame.Label2.Caption := 'Mouse (2): X = ' + IntToStr(TheMessage.XPos) + ' | Y = ' + IntToStr(TheMessage.YPos);
 end;
 
 function TDesignController.MouseUp(Button: TMouseButton; X, Y: Integer;
@@ -150,6 +140,11 @@ end;
 procedure TDesignController.SetDragRect(ARect: TRect);
 begin
   FDragRect := ARect;
+end;
+
+procedure TDesignController.ClearDragRect;
+begin
+  SetDragRect(Rect(0,0,0,0));
 end;
 
 end.

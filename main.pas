@@ -197,7 +197,7 @@ uses
   report_fieldlist_extended, report_project_overview,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   epitools_integritycheck, datasetviewer_frame, prepare_double_entry_form,
-  validate_double_entry_form,
+  validate_double_entry_form, design_runtimedesigner,
   report_double_entry_validation;
 
 { TMainForm }
@@ -973,8 +973,8 @@ begin
   SaveProjectMenuItem.Action   := FActiveFrame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
 
-{  PasteAsHeadingMenuItem.Action := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
-  PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
+  PasteAsHeadingMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
+{  PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
   ViewDataSetMenuItem.Action    := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;

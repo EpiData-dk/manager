@@ -242,12 +242,10 @@ begin
   end;
 
   // TODO : Must be changed when supporting multiple desinger frames (take only the topmost/first datafile).
-  // TODO -cRuntimeDesigner : UnComment
-
-{  if (Dlg.FileName = '') and
+  if (Dlg.FileName = '') and
      (ProjectFileName = '') and
-     (TDesignFrame(ActiveFrame).ImportedFileName <> '') then
-    Dlg.FileName := ChangeFileExt(TDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);  }
+     (TRuntimeDesignFrame(ActiveFrame).ImportedFileName <> '') then
+    Dlg.FileName := ChangeFileExt(TRuntimeDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);
 end;
 
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
@@ -481,18 +479,16 @@ procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);
 var
   Frame: TRuntimeDesignFrame;
 begin
-//  Frame := TDesignFrame.Create(Self);
   Frame := TRuntimeDesignFrame.Create(Self);
   Frame.Align := alClient;
   Frame.Parent := Self;
   Frame.DataFile := Df;
   FActiveFrame := Frame;
 
-  // TODO -cRuntimeDesigner : Uncomment!
-{  Frame.OpenProjectToolBtn.Action := OpenProjectAction;
+  Frame.OpenProjectToolBtn.Action := OpenProjectAction;
   Frame.SaveProjectToolBtn.Action := SaveProjectAction;
   Frame.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
-  Frame.ProjectToolBar.Images := ProjectImageList;     }
+  Frame.ProjectToolBar.Images := ProjectImageList;
 
   {$IFDEF EPI_DEBUG}
 //  AddDebugingContent;
@@ -781,9 +777,8 @@ end;
 procedure TProjectFrame.RestoreDefaultPos;
 begin
 //  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
-  // TODO -cRuntimeDesigner : Uncomment
-{  if Assigned(FActiveFrame) then
-    TDesignFrame(FActiveFrame).RestoreDefaultPos;}
+  if Assigned(FActiveFrame) then
+    TRuntimeDesignFrame(FActiveFrame).RestoreDefaultPos;
 end;
 
 procedure TProjectFrame.UpdateFrame;
@@ -793,9 +788,8 @@ begin
 //    GetValueLabelsEditor(EpiDocument).UpdateSettings;
 
   // TODO : Update all frames.
-  // TODO -cRuntimeDesigner : Uncomment
-{  if Assigned(FActiveFrame) then
-    TDesignFrame(FActiveFrame).UpdateFrame;}
+  if Assigned(FActiveFrame) then
+    TRuntimeDesignFrame(FActiveFrame).UpdateFrame;
 end;
 
 procedure TProjectFrame.OpenProject(const AFileName: string);

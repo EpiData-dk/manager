@@ -145,7 +145,6 @@ begin
   for i := Low(Objects) to High(Objects) do
     EpiCtrlItemArray[i] := (Objects[i] as IDesignEpiControl).EpiControl;
 
-  // TODO: Assign new Frame and send SetControls(EpiCtrlItemArray);
   if Assigned(FFrame) then
     (FFrame as IDesignPropertiesFrame).SetEpiControls(EpiCtrlItemArray);
 end;
