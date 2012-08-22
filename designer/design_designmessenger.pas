@@ -71,7 +71,8 @@ begin
         end else
           Result := inherited IsDesignMessage(ASender, AMessage);
       end;
-    LM_KEYFIRST..LM_KEYLAST:
+    CN_KEYDOWN,
+    CN_SYSKEYDOWN:
       begin
         // Relay to Frame before going further -> this could be
         // a shortcut we wish to handle.
@@ -79,7 +80,11 @@ begin
           Exit(true)
         else
           Result := inherited IsDesignMessage(ASender, AMessage);
-      end
+      end;
+//    LM_KEYFIRST..LM_KEYLAST:
+      // All LM_<keys> should not be processed... all shortcuts, etc. should
+      // have been taken care of with CN_<keys>
+//      Result := false;    }
   else
     Result := inherited IsDesignMessage(ASender, AMessage);
   end;

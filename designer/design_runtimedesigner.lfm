@@ -2100,6 +2100,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   end
   object ActionList1: TActionList
     Images = DesignerImageList
+    State = asSuspended
     left = 344
     top = 238
     object EditControlAction: TAction
@@ -2114,6 +2115,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Delete Selected'
       ImageIndex = 11
       OnExecute = DeleteControlActionExecute
+      ShortCut = 46
     end
     object DeleteAllAction: TAction
       Caption = 'Delete All'

@@ -19,6 +19,7 @@ type
     // for applying a dataframe!
     FDragRect: TRect;
   protected
+    function KeyUp(AKeyCode: Cardinal): Boolean; override;
     function MouseDown(Button: TMouseButton; X, Y: Integer;
        TheMessage: TLMMouse): Boolean; override;
     function MouseMove(X, Y: Integer; TheMessage: TLMMouse): Boolean; override;
@@ -38,6 +39,32 @@ uses
   main;
 
 { TDesignController }
+
+function TDesignController.KeyUp(AKeyCode: Cardinal): Boolean;
+var
+  Shift: TShiftState;
+begin
+  // Catch all predefined Key-Up shortcuts and ignore them.
+  // They should have own implementations by epidata, processed
+  // with on KeyDown events.
+  Shift := GetKeyShiftState;
+
+  // Cut, Copy, Paste!
+  if (ssCtrl in Shift) and
+     (AKeyCode in [VK_C, VK_X, VK_V])
+  then
+    Result := true;
+
+  if (([ssCtrl, ssShift] * Shift) = []) and
+     (AKeyCode in [VK_ESCAPE, VK_DELETE])
+  then
+    Result := true;
+
+  if result then
+    Exit
+  else
+    Result := inherited KeyUp(AKeyCode);
+end;
 
 function TDesignController.MouseDown(Button: TMouseButton; X, Y: Integer;
   TheMessage: TLMMouse): Boolean;

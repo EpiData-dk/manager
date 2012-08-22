@@ -60,9 +60,14 @@ begin
   Stream.Read(CopyField, SizeOf(Pointer));
   Stream.Read(Section, SizeOf(Pointer));
 
+  CopyField := TEpiField(CopyField.Clone(nil));
+
   if not Section.ValidateRename(CopyField.Name, false)
   then
     CopyField.Name := Section.Fields.GetUniqueItemName(TEpiCustomItemClass(CopyField.ClassType));
+
+  if Parent <> nil then
+    Section := TEpiSection((Parent as IDesignEpiControl).EpiControl);
 
   Section.Fields.AddItem(CopyField);
   SetEpiControl(CopyField);

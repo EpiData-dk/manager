@@ -448,9 +448,11 @@ end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;
 begin
-  if ActionList1.IsShortCut(Message) then
-    exit;
+  ActionList1.State := asNormal;
 
+  result := ActionList1.IsShortCut(Message);
+
+  ActionList1.State := asSuspended;
   // Else ready for implementing a larger Short-cut editor.
 end;
 
