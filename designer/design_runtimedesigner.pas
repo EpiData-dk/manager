@@ -15,6 +15,15 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    SelectNextAction: TAction;
+    PasteAsDateMenuItem: TMenuItem;
+    PasteAsFloatMenuItem: TMenuItem;
+    PasteAsStringMenuItem: TMenuItem;
+    PasteAsDateAction: TAction;
+    PasteAsStringAction: TAction;
+    PasteAsFloatAction: TAction;
+    PasteAsIntMenuItem: TMenuItem;
+    PasteAsIntAction: TAction;
     PasteAsHeadingMenuItem: TMenuItem;
     PopupMenuDivider3: TMenuItem;
     PasteAsHeadingAction: TAction;
@@ -125,10 +134,15 @@ type
     procedure HeadingBtnClick(Sender: TObject);
     procedure JvDesignScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure PasteAsDateActionExecute(Sender: TObject);
+    procedure PasteAsFloatActionExecute(Sender: TObject);
+    procedure PasteAsIntActionExecute(Sender: TObject);
+    procedure PasteAsStringActionExecute(Sender: TObject);
     procedure PasteControlActionExecute(Sender: TObject);
     procedure PasteAsHeadingActionExecute(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
     procedure SelecterBtnClick(Sender: TObject);
+    procedure SelectNextActionExecute(Sender: TObject);
     procedure TestToolButtonClick(Sender: TObject);
   private
     FPopUpPoint: TPoint;
@@ -141,6 +155,9 @@ type
     FPropertiesForm: TPropertiesForm;
     FSettingDataFile: boolean;
     FCreatingControl: boolean;
+    procedure PasteAsField(Ft: TEpiFieldType);
+    function ControlFromEpiControl(EpiCtrl: TEpiCustomControlItem): TControl;
+    function FindNewPostion(NewControl: TControlClass): TPoint;
     procedure GetAddClass(Sender: TObject; var ioClass: string);
     procedure SelectionChange(Sender: TObject);
     procedure DoToogleBtn(Sender: TObject);
@@ -249,6 +266,125 @@ begin
   Handled := true;
 end;
 
+procedure TRuntimeDesignFrame.PasteAsDateActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftDMYDate);
+end;
+
+procedure TRuntimeDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftFloat);
+end;
+
+procedure TRuntimeDesignFrame.PasteAsIntActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftInteger);
+end;
+
+procedure TRuntimeDesignFrame.PasteAsStringActionExecute(Sender: TObject);
+begin
+  PasteAsField(ftString);
+end;
+
+procedure TRuntimeDesignFrame.PasteAsField(Ft: TEpiFieldType);
+var
+  Cbl: TStringList;
+  P: TPoint;
+  Controller: TDesignController;
+  Surface: TJvDesignSurface;
+  i: Integer;
+  F: TDesignField;
+begin
+  Cbl := TStringList.Create;
+
+  if (FPopUpPoint.X = -1) and
+     (FPopUpPoint.Y = -1)
+  then
+    P := FindNewPostion(TDesignField)
+  else
+    P := FDesignPanel.ScreenToClient(FPopUpPoint);
+
+  Controller := TDesignController(FDesignPanel.Surface.Controller);
+  Surface    := FDesignPanel.Surface;
+
+  FLastSelectedFieldType := Ft;
+
+  try
+    ReadClipBoard(Cbl);
+    for i := 0 to Cbl.Count -1 do
+      begin
+        if Trim(Cbl[i]) = '' then continue;
+
+        FCreatingControl := true;
+        Controller.SetDragRect(Rect(P.X, P.Y, 0, 0));
+        Surface.AddClass := 'TDesignField';
+        Surface.AddComponent;
+
+        F := TDesignField(Surface.Selection[0]);
+        TEpiField(F.EpiControl).Question.Text := Cbl[i];
+
+        Inc(P.Y, ManagerSettings.SpaceBtwFieldField + F.Height);
+      end;
+  finally
+    Cbl.Free;
+    Controller.ClearDragRect;
+  end;
+end;
+
+function TRuntimeDesignFrame.ControlFromEpiControl(
+  EpiCtrl: TEpiCustomControlItem): TControl;
+
+
+  function RecursiveFindControl(WinControl: TWinControl): TControl;
+  var
+    i: Integer;
+  begin
+    for i := 0 to WinControl.ControlCount - 1 do
+    with WinControl do
+      begin
+        if Supports(Controls[i], IDesignEpiControl) and
+           ((Controls[i] as IDesignEpiControl).EpiControl = EpiCtrl)
+        then
+          Exit(Controls[i]);
+
+        if (Controls[i].InheritsFrom(TWinControl)) then
+          Result := RecursiveFindControl(TWinControl(Controls[i]));
+
+        if Assigned(Result) then
+          Exit;
+      end;
+
+    Result := nil;
+  end;
+
+begin
+  // TODO : Implement
+  Result := RecursiveFindControl(JvDesignScrollBox1);
+end;
+
+function TRuntimeDesignFrame.FindNewPostion(NewControl: TControlClass): TPoint;
+var
+  CI: TEpiCustomControlItem;
+  Dist: Integer;
+begin
+  CI := DataFile.ControlItem[DataFile.ControlItems.Count-1];
+  if (CI is TEpiSection) then
+    if CI = DataFile.MainSection then
+      Result := Point(ManagerSettings.DefaultRightPosition, 20)
+    else
+      Result := Point(CI.Left, CI.Top + TEpiSection(CI).Height)
+  else
+    Result := Point(CI.Left, CI.Top + ControlFromEpiControl(CI).Height);
+
+  Dist := ManagerSettings.SpaceBtwFieldLabel;
+  if (NewControl = TDesignField) and (CI is TEpiField) then
+    Dist := ManagerSettings.SpaceBtwFieldField;
+  if (NewControl = TDesignHeading) and (CI is TEpiHeading) then
+    Dist := ManagerSettings.SpaceBtwLabelLabel;
+
+  Inc(Result.Y, Dist);
+end;
+
 procedure TRuntimeDesignFrame.PasteControlActionExecute(Sender: TObject);
 begin
   FDesignPanel.Surface.PasteComponents;
@@ -268,7 +404,7 @@ begin
   if (FPopUpPoint.X = -1) and
      (FPopUpPoint.Y = -1)
   then
-    P := Point(0,0)
+    P := FindNewPostion(TDesignHeading)
   else
     P := FDesignPanel.ScreenToClient(FPopUpPoint);
 
@@ -331,6 +467,19 @@ begin
   DoToogleBtn(Sender);
 end;
 
+procedure TRuntimeDesignFrame.SelectNextActionExecute(Sender: TObject);
+var
+  EpiCtrl: TEpiCustomControlItem;
+  Idx: Integer;
+begin
+  // TODO : Make generic for up/down.
+  EpiCtrl := (FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl;
+  Idx := DataFile.ControlItems.IndexOf(EpiCtrl) +1;
+  EpiCtrl := DataFile.ControlItem[Idx];
+  FDesignPanel.Surface.Select(ControlFromEpiControl(EpiCtrl));
+  FDesignPanel.Surface.UpdateDesigner;
+end;
+
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
   FPropertiesForm.Show;
@@ -350,7 +499,23 @@ begin
       Ctrl := FDesignPanel.Surface.Selection[0];
 
       if Ctrl is TDesignField then
-        EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewField(FLastSelectedFieldType);
+        begin
+          EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewField(FLastSelectedFieldType);
+          case FLastSelectedFieldType of
+            ftInteger,
+            ftAutoInc:
+              TEpiField(EpiCtrl).Length := ManagerSettings.IntFieldLength;
+            ftFloat:
+              begin
+                TEpiField(EpiCtrl).Length := ManagerSettings.FloatIntLength +
+                                             ManagerSettings.FloatDecimalLength + 1;
+                TEpiField(EpiCtrl).Decimals := ManagerSettings.FloatDecimalLength;
+              end;
+            ftString,
+            ftUpperString:
+              TEpiField(EpiCtrl).Length := ManagerSettings.StringFieldLength;
+          end;
+        end;
       if Ctrl is TDesignHeading then
         EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewHeading;
       if Ctrl is TDesignSection then
@@ -384,7 +549,7 @@ end;
 
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
 begin
-  FPopUpPoint := Point(0,0);
+  FPopUpPoint := Point(-1,-1);
 end;
 
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
@@ -531,6 +696,7 @@ begin
   FPropertiesForm := TPropertiesForm.Create(Self);
   FPropertiesForm.UpdateSelection(nil);
 
+  FPopUpPoint := Point(-1, -1);
   FSettingDataFile := false;
 end;
 
