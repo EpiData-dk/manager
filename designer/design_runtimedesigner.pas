@@ -8,13 +8,14 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, ExtCtrls, StdCtrls,
   JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
   manager_messages, epidatafilestypes, design_properties_form, types,
-  epicustombase;
+  epicustombase, epidocument, epivaluelabels;
 
 type
 
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    ImportStructureAction: TAction;
     SelectNextAction: TAction;
     PasteAsDateMenuItem: TMenuItem;
     PasteAsFloatMenuItem: TMenuItem;
@@ -118,20 +119,22 @@ type
     TestToolButton: TToolButton;
     TimeSubMenu: TMenuItem;
     TodayDateSubMenu: TMenuItem;
+    ToolButton1: TToolButton;
     ValueLabelLabel: TLabel;
     ValueLabelPanel: TPanel;
     procedure Button1Click(Sender: TObject);
     procedure ClearSelectionActionExecute(Sender: TObject);
     procedure CopyControlActionExecute(Sender: TObject);
+    procedure CutCopyControlUpdate(Sender: TObject);
     procedure CutControlActionExecute(Sender: TObject);
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
-    procedure DesignControlPopUpMenuClose(Sender: TObject);
     procedure DesignControlPopUpMenuPopup(Sender: TObject);
     procedure EditControlActionExecute(Sender: TObject);
     procedure FieldBtnClick(Sender: TObject);
     function FieldNamePrefix: string;
     procedure HeadingBtnClick(Sender: TObject);
+    procedure ImportStructureActionExecute(Sender: TObject);
     procedure JvDesignScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure PasteAsDateActionExecute(Sender: TObject);
@@ -141,6 +144,7 @@ type
     procedure PasteAsUpdate(Sender: TObject);
     procedure PasteControlActionExecute(Sender: TObject);
     procedure PasteAsHeadingActionExecute(Sender: TObject);
+    procedure PasteControlActionUpdate(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
     procedure SelecterBtnClick(Sender: TObject);
     procedure SelectNextActionExecute(Sender: TObject);
@@ -169,6 +173,7 @@ type
     procedure SectionsChangeEvent(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     function ClipBoardHasText: boolean;
+    procedure PasteEpiDoc(const ImportDoc: TEpiDocument; RenameVL, RenameFields: boolean);
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
@@ -190,6 +195,7 @@ uses
   Graphics, design_designcontroller, design_designmessenger,
   main, epistringutils, JvDesignUtils, settings2_var,
   manager_globals, managerprocs, Clipbrd, math,
+  Dialogs, import_structure_form, epimiscutils,
   design_control_section,
   design_control_field,
   design_control_heading;
@@ -260,6 +266,44 @@ begin
   DoToogleBtn(Sender);
 end;
 
+procedure TRuntimeDesignFrame.ImportStructureActionExecute(Sender: TObject);
+var
+  Dlg: TOpenDialog;
+  ImpStructurForm: TImportStructureForm;
+  i: Integer;
+begin
+  Dlg := nil;
+  ImpStructurForm := nil;
+  try
+    Dlg := TOpenDialog.Create(Self);
+    Dlg.Title := 'Add structure from existing file(s)';
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    Dlg.Filter := GetEpiDialogFilter(dfImport + [dfCollection]);
+    Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
+    if not Dlg.Execute then exit;
+
+    ImpStructurForm := TImportStructureForm.Create(JvDesignScrollBox1, Dlg.Files);
+    if ImpStructurForm.ShowModal = mrCancel then exit;
+
+    // Prepare screen...
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
+    MainForm.BeginUpdatingForm;
+
+    for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
+      PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
+        ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex=1, ImpStructurForm.FieldsRenameGrpBox.ItemIndex=1);
+
+  finally
+    MainForm.EndUpdatingForm;
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+
+    Dlg.Free;
+    ImpStructurForm.Free;
+  end;
+end;
+
 procedure TRuntimeDesignFrame.JvDesignScrollBox1MouseWheel(Sender: TObject;
   Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
   var Handled: Boolean);
@@ -291,7 +335,10 @@ end;
 
 procedure TRuntimeDesignFrame.PasteAsUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := ClipBoardHasText;
+  TAction(Sender).Enabled :=
+    (ClipBoardHasText) and
+    (FDesignPanel.Surface.Count = 1) and
+    (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle);
 end;
 
 procedure TRuntimeDesignFrame.PasteAsField(Ft: TEpiFieldType);
@@ -417,13 +464,12 @@ var
   end;
 
 begin
-  MainForm.BeginUpdatingForm;
-
   if ClipBoardHasText then
     PasteAsHeadingAction.Execute
   else
   with FDesignPanel.Surface do
     begin
+      MainForm.BeginUpdatingForm;
       P := SelectedContainer.ScreenToClient(FPopUpPoint);
       PasteComponents;
 
@@ -435,10 +481,11 @@ begin
           OffsetRect(R, P.X, P.Y);
           Selection[i].BoundsRect := R;
         end;
+
+      MainForm.EndUpdatingForm;
     end;
 
   FPopUpPoint := Point(-1, -1);
-  MainForm.EndUpdatingForm;
 end;
 
 procedure TRuntimeDesignFrame.PasteAsHeadingActionExecute(Sender: TObject);
@@ -487,6 +534,14 @@ begin
   end;
 end;
 
+procedure TRuntimeDesignFrame.PasteControlActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled :=
+    (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) and
+    (FDesignPanel.Surface.Count = 1) and
+    (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle);
+end;
+
 procedure TRuntimeDesignFrame.SectionBtnClick(Sender: TObject);
 begin
   FAddClass := 'TDesignSection';
@@ -520,6 +575,34 @@ begin
   FCheckingClipBoard := true;
   result := Clipboard.HasFormat(CF_Text);
   FCheckingClipBoard := false;
+end;
+
+procedure TRuntimeDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument;
+  RenameVL, RenameFields: boolean);
+var
+  i: Integer;
+  VLSet: TEpiValueLabelSet;
+  VLSetOld: TEpiValueLabelSet;
+begin
+  for i := 0 to ImportDoc.ValueLabelSets.Count - 1 do
+  begin
+    VLSetOld := ImportDoc.ValueLabelSets[i];
+    VLSet  := DataFile.ValueLabels.GetValueLabelSetByName(VLSetOld.Name);
+
+    // Rename vs. Keep options.
+    if (not RenameVL) and
+       Assigned(VLSet) and
+       (VLSet.LabelType = VLSetOld.LabelType) then
+    begin
+      // Old set must carry a pointer to "new" set, else field copy will fail.
+      VLSetOld.ObjectData := PtrUInt(VLSet);
+      continue;
+    end;
+
+    VLSet := TEpiValueLabelSet(VLSetOld.Clone(nil));
+    DataFile.ValueLabels.AddItem(VLSet);
+    VLSetOld.ObjectData := PtrUInt(VLSet);
+  end;
 end;
 
 procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
@@ -557,6 +640,7 @@ begin
      (not FSettingDataFile)
   then
     begin
+      MainForm.BeginUpdatingForm;
       Ctrl := FDesignPanel.Surface.Selection[0];
 
       if Ctrl is TDesignField then
@@ -578,12 +662,17 @@ begin
           end;
         end;
       if Ctrl is TDesignHeading then
-        EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewHeading;
+        begin
+          EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewHeading;
+          TEpiHeading(EpiCtrl).Caption.Text := '(untitled)';
+        end;
       if Ctrl is TDesignSection then
         EpiCtrl := DataFile.NewSection;
 
       ApplyCommonCtrlSetting(Ctrl, EpiCtrl);
       FCreatingControl := false;
+
+      MainForm.EndUpdatingForm;
     end;
 
 
@@ -608,21 +697,25 @@ begin
   FDesignPanel.Surface.DeleteComponents;
 end;
 
-procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
-begin
-  if not FCheckingClipBoard then
-    FPopUpPoint := Point(-1,-1);
-end;
-
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
 var
   P: TPoint;
+  Ctrl: TControl;
 begin
   FPopUpPoint := TPopupMenu(Sender).PopupPoint;
 
   P := FDesignPanel.ScreenToClient(FPopUpPoint);
-  FDesignPanel.Surface.Select(FDesignPanel.Surface.FindControl(P.X, P.Y));
-  FDesignPanel.Surface.UpdateDesigner;
+  with FDesignPanel.Surface do
+  begin
+    Ctrl := FindControl(P.X, P.Y);
+
+    if not Selector.IsSelected(Ctrl) then
+    begin
+      Select(Ctrl);
+      SelectionChange;
+      UpdateDesigner;
+    end;
+  end;
 end;
 
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
@@ -634,6 +727,13 @@ procedure TRuntimeDesignFrame.CopyControlActionExecute(Sender: TObject);
 begin
   GlobalCopyListClear;
   FDesignPanel.Surface.CopyComponents;
+end;
+
+procedure TRuntimeDesignFrame.CutCopyControlUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled :=
+    (FDesignPanel.Surface.Count > 0) and
+    (not FDesignPanel.Surface.Selector.IsSelected(FDesignPanel));
 end;
 
 procedure TRuntimeDesignFrame.Button1Click(Sender: TObject);
