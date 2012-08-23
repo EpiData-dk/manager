@@ -138,6 +138,7 @@ type
     procedure PasteAsFloatActionExecute(Sender: TObject);
     procedure PasteAsIntActionExecute(Sender: TObject);
     procedure PasteAsStringActionExecute(Sender: TObject);
+    procedure PasteAsUpdate(Sender: TObject);
     procedure PasteControlActionExecute(Sender: TObject);
     procedure PasteAsHeadingActionExecute(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
@@ -155,6 +156,7 @@ type
     FPropertiesForm: TPropertiesForm;
     FSettingDataFile: boolean;
     FCreatingControl: boolean;
+    FCheckingClipBoard: boolean;
     procedure PasteAsField(Ft: TEpiFieldType);
     function ControlFromEpiControl(EpiCtrl: TEpiCustomControlItem): TControl;
     function FindNewPostion(NewControl: TControlClass): TPoint;
@@ -166,6 +168,7 @@ type
       EpiCtrl: TEpiCustomControlItem);
     procedure SectionsChangeEvent(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
+    function ClipBoardHasText: boolean;
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
@@ -186,7 +189,7 @@ uses
   JvDesignImp, design_types, design_designpanel,
   Graphics, design_designcontroller, design_designmessenger,
   main, epistringutils, JvDesignUtils, settings2_var,
-  manager_globals, managerprocs,
+  manager_globals, managerprocs, Clipbrd, math,
   design_control_section,
   design_control_field,
   design_control_heading;
@@ -286,6 +289,11 @@ begin
   PasteAsField(ftString);
 end;
 
+procedure TRuntimeDesignFrame.PasteAsUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := ClipBoardHasText;
+end;
+
 procedure TRuntimeDesignFrame.PasteAsField(Ft: TEpiFieldType);
 var
   Cbl: TStringList;
@@ -310,6 +318,7 @@ begin
   FLastSelectedFieldType := Ft;
 
   try
+    MainForm.BeginUpdatingForm;
     ReadClipBoard(Cbl);
     for i := 0 to Cbl.Count -1 do
       begin
@@ -328,6 +337,8 @@ begin
   finally
     Cbl.Free;
     Controller.ClearDragRect;
+    FPopUpPoint := Point(-1, -1);
+    MainForm.EndUpdatingForm;
   end;
 end;
 
@@ -386,8 +397,48 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.PasteControlActionExecute(Sender: TObject);
+var
+  P: TPoint;
+  R: TRect;
+  i: Integer;
+  O: TPoint;
+
+  function TopLeftSelectionPoint: TPoint;
+  var
+    i: integer;
+  begin
+    Result.X := MaxInt;
+    Result.Y := MaxInt;
+    for i := 0 to FDesignPanel.Surface.Count - 1 do
+    begin
+      Result.X := Min(Result.X, FDesignPanel.Surface.Selection[i].Left);
+      Result.Y := Min(Result.Y, FDesignPanel.Surface.Selection[i].Top);
+    end;
+  end;
+
 begin
-  FDesignPanel.Surface.PasteComponents;
+  MainForm.BeginUpdatingForm;
+
+  if ClipBoardHasText then
+    PasteAsHeadingAction.Execute
+  else
+  with FDesignPanel.Surface do
+    begin
+      P := SelectedContainer.ScreenToClient(FPopUpPoint);
+      PasteComponents;
+
+      O := TopLeftSelectionPoint;
+      P := Point(P.X - O.X, P.Y - O.Y);
+      for i := 0 to Count - 1 do
+        begin
+          R := Selection[i].BoundsRect;
+          OffsetRect(R, P.X, P.Y);
+          Selection[i].BoundsRect := R;
+        end;
+    end;
+
+  FPopUpPoint := Point(-1, -1);
+  MainForm.EndUpdatingForm;
 end;
 
 procedure TRuntimeDesignFrame.PasteAsHeadingActionExecute(Sender: TObject);
@@ -412,6 +463,7 @@ begin
   Surface    := FDesignPanel.Surface;
 
   try
+//    MainForm.BeginUpdatingForm;
     ReadClipBoard(Cbl);
     for i := 0 to Cbl.Count -1 do
       begin
@@ -428,8 +480,10 @@ begin
         Inc(P.Y, ManagerSettings.SpaceBtwLabelLabel + L.Height);
       end;
   finally
+//    MainForm.EndUpdatingForm;
     Cbl.Free;
     Controller.ClearDragRect;
+    FPopUpPoint := Point(-1, -1);
   end;
 end;
 
@@ -459,6 +513,13 @@ begin
     ecceSetLeft: ;
     ecceText: ;
   end;
+end;
+
+function TRuntimeDesignFrame.ClipBoardHasText: boolean;
+begin
+  FCheckingClipBoard := true;
+  result := Clipboard.HasFormat(CF_Text);
+  FCheckingClipBoard := false;
 end;
 
 procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
@@ -549,7 +610,8 @@ end;
 
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
 begin
-  FPopUpPoint := Point(-1,-1);
+  if not FCheckingClipBoard then
+    FPopUpPoint := Point(-1,-1);
 end;
 
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);

@@ -96,7 +96,13 @@ end;
 function TDesignController.MouseUp(Button: TMouseButton; X, Y: Integer;
   TheMessage: TLMMouse): Boolean;
 begin
+  if DragMode = dmMove then
+    MainForm.BeginUpdatingForm;
+
   Result := inherited MouseUp(Button, X, Y, TheMessage);
+
+  if DragMode = dmMove then
+    MainForm.EndUpdatingForm;
 
   if Assigned(FFrame) then
     FFrame.Label1.Caption := 'Mouse (1): X = ' + IntToStr(X) + ' | Y = ' + IntToStr(Y);

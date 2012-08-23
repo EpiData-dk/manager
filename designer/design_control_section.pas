@@ -144,6 +144,11 @@ begin
   then
     FixupEpiControl := true;
 
+  // On Pasting we could recieve a NewParent = TDesignSection
+  // => not allowed, try with the NewParent.Parent!
+  if (NewParent is TDesignSection) then
+    NewParent := NewParent.Parent;
+
   inherited SetParent(NewParent);
   if [csDestroying, csLoading] * ComponentState <> [] then exit;
 
