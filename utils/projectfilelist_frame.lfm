@@ -6,8 +6,8 @@ object ProjectFileListFrame: TProjectFileListFrame
   ClientHeight = 553
   ClientWidth = 764
   TabOrder = 0
-  DesignLeft = 834
-  DesignTop = 302
+  DesignLeft = 598
+  DesignTop = 215
   object ErrorListBox: TListBox
     Left = 0
     Height = 107
@@ -15,7 +15,7 @@ object ProjectFileListFrame: TProjectFileListFrame
     Width = 764
     Align = alBottom
     ItemHeight = 0
-    ScrollWidth = 760
+    ScrollWidth = 762
     TabOrder = 0
     TopIndex = -1
     Visible = False
@@ -31,37 +31,30 @@ object ProjectFileListFrame: TProjectFileListFrame
       item
         ReadOnly = True
         Title.Caption = 'Filename'
-        Title.PrefixOption = poNone
       end    
       item
         ButtonStyle = cbsCheckboxColumn
         Title.Caption = 'Include'
-        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Created'
-        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Last edited'
-        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Name'
-        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Sections'
-        Title.PrefixOption = poNone
       end    
       item
         ReadOnly = True
         Title.Caption = 'Fields'
-        Title.PrefixOption = poNone
       end>
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goTabs, goSmoothScroll, goFixedRowNumbering]
     RowCount = 1

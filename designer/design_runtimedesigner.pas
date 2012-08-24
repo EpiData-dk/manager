@@ -174,6 +174,11 @@ type
       EventType: Word; Data: Pointer);
     function ClipBoardHasText: boolean;
     procedure PasteEpiDoc(const ImportDoc: TEpiDocument; RenameVL, RenameFields: boolean);
+  private
+    { Design Controls with EpiControls }
+    function NewDesignHeading(TopLeft: TPoint; Heading: TEpiHeading = nil): TControl;
+    function NewDesignField(TopLeft: TPoint; Field: TEpiField = nil): TControl;
+    function NewDesignSection(ARect: TRect; Section: TEpiSection = nil): TWinControl;
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
@@ -359,11 +364,7 @@ begin
   else
     P := FDesignPanel.ScreenToClient(FPopUpPoint);
 
-  Controller := TDesignController(FDesignPanel.Surface.Controller);
-  Surface    := FDesignPanel.Surface;
-
   FLastSelectedFieldType := Ft;
-
   try
     MainForm.BeginUpdatingForm;
     ReadClipBoard(Cbl);
@@ -371,19 +372,13 @@ begin
       begin
         if Trim(Cbl[i]) = '' then continue;
 
-        FCreatingControl := true;
-        Controller.SetDragRect(Rect(P.X, P.Y, 0, 0));
-        Surface.AddClass := 'TDesignField';
-        Surface.AddComponent;
-
-        F := TDesignField(Surface.Selection[0]);
+        F := TDesignField(NewDesignField(P));
         TEpiField(F.EpiControl).Question.Text := Cbl[i];
 
         Inc(P.Y, ManagerSettings.SpaceBtwFieldField + F.Height);
       end;
   finally
     Cbl.Free;
-    Controller.ClearDragRect;
     FPopUpPoint := Point(-1, -1);
     MainForm.EndUpdatingForm;
   end;
@@ -416,7 +411,6 @@ function TRuntimeDesignFrame.ControlFromEpiControl(
   end;
 
 begin
-  // TODO : Implement
   Result := RecursiveFindControl(JvDesignScrollBox1);
 end;
 
@@ -505,10 +499,6 @@ begin
     P := FindNewPostion(TDesignHeading)
   else
     P := FDesignPanel.ScreenToClient(FPopUpPoint);
-
-  Controller := TDesignController(FDesignPanel.Surface.Controller);
-  Surface    := FDesignPanel.Surface;
-
   try
 //    MainForm.BeginUpdatingForm;
     ReadClipBoard(Cbl);
@@ -516,12 +506,7 @@ begin
       begin
         if Trim(Cbl[i]) = '' then continue;
 
-        FCreatingControl := true;
-        Controller.SetDragRect(Rect(P.X, P.Y, 0, 0));
-        Surface.AddClass := 'TDesignHeading';
-        Surface.AddComponent;
-
-        L := TDesignHeading(Surface.Selection[0]);
+        L := TDesignHeading(NewDesignHeading(P));
         TEpiHeading(L.EpiControl).Caption.Text := Cbl[i];
 
         Inc(P.Y, ManagerSettings.SpaceBtwLabelLabel + L.Height);
@@ -529,7 +514,6 @@ begin
   finally
 //    MainForm.EndUpdatingForm;
     Cbl.Free;
-    Controller.ClearDragRect;
     FPopUpPoint := Point(-1, -1);
   end;
 end;
@@ -583,6 +567,12 @@ var
   i: Integer;
   VLSet: TEpiValueLabelSet;
   VLSetOld: TEpiValueLabelSet;
+  NSection: TEpiSection;
+  P: TPoint;
+  Selected: TWinControl;
+  C: TEpiCustomControlItem;
+  j: Integer;
+  Pt: TPoint;
 begin
   for i := 0 to ImportDoc.ValueLabelSets.Count - 1 do
   begin
@@ -594,7 +584,8 @@ begin
        Assigned(VLSet) and
        (VLSet.LabelType = VLSetOld.LabelType) then
     begin
-      // Old set must carry a pointer to "new" set, else field copy will fail.
+      // Old set must carry a pointer to "new" set, else new fields can't find
+      // old VLSets.
       VLSetOld.ObjectData := PtrUInt(VLSet);
       continue;
     end;
@@ -602,6 +593,107 @@ begin
     VLSet := TEpiValueLabelSet(VLSetOld.Clone(nil));
     DataFile.ValueLabels.AddItem(VLSet);
     VLSetOld.ObjectData := PtrUInt(VLSet);
+  end;
+
+  P := FindNewPostion(TDesignField);
+
+  with ImportDoc.DataFiles[0] do
+  for i := 0 to Sections.Count -1 do
+    begin
+      // This copies Fields and Sections.
+      NSection := Section[i];
+
+      if (NSection <> MainSection) then
+      begin
+        NSection := TEpiSection(Section[i].Clone(nil));
+        DataFile.Sections.AddItem(NSection);
+        with NSection do
+          Selected := NewDesignSection(Bounds(Left, Top + P.Y, Width, Height), NSection)
+      end else
+        Selected := FDesignPanel;
+
+      for j := 0 to NSection.Fields.Count - 1 do
+      begin
+        C := NSection.Field[j];
+        Pt := DesignClientToParent(Point(C.Left, C.Top), Selected, FDesignPanel);
+        NewDesignField(Pt, TEpiField(C));
+      end;
+    end;
+end;
+
+function TRuntimeDesignFrame.NewDesignHeading(TopLeft: TPoint;
+  Heading: TEpiHeading): TControl;
+var
+  Controller: TDesignController;
+  Surface: TJvDesignSurface;
+begin
+  Controller := TDesignController(FDesignPanel.Surface.Controller);
+  Surface    := FDesignPanel.Surface;
+
+  try
+    FCreatingControl := not Assigned(Heading);
+    Controller.SetDragRect(Rect(TopLeft.X, TopLeft.Y, 0, 0));
+    Surface.AddClass := 'TDesignHeading';
+    Surface.AddComponent;
+
+    Result := TDesignHeading(Surface.Selection[0]);
+    Result.PopupMenu := DesignControlPopUpMenu;
+
+    if Assigned(Heading) then
+      TDesignHeading(Result).EpiControl := Heading;
+  finally
+    Controller.ClearDragRect;
+  end;
+end;
+
+function TRuntimeDesignFrame.NewDesignField(TopLeft: TPoint; Field: TEpiField
+  ): TControl;
+var
+  Controller: TDesignController;
+  Surface: TJvDesignSurface;
+begin
+  Controller := TDesignController(FDesignPanel.Surface.Controller);
+  Surface    := FDesignPanel.Surface;
+
+  try
+    FCreatingControl := not Assigned(Field);
+    Controller.SetDragRect(Rect(TopLeft.X, TopLeft.Y, 0, 0));
+    Surface.AddClass := 'TDesignField';
+    Surface.AddComponent;
+
+    Result := TDesignField(Surface.Selection[0]);
+    Result.PopupMenu := DesignControlPopUpMenu;
+
+    if Assigned(Field) then
+      TDesignField(Result).EpiControl := Field;
+  finally
+    Controller.ClearDragRect;
+  end;
+end;
+
+function TRuntimeDesignFrame.NewDesignSection(ARect: TRect; Section: TEpiSection
+  ): TWinControl;
+var
+  Controller: TDesignController;
+  Surface: TJvDesignSurface;
+begin
+  Controller := TDesignController(FDesignPanel.Surface.Controller);
+  Surface    := FDesignPanel.Surface;
+
+  try
+    Surface.Select(FDesignPanel);
+    FCreatingControl := not Assigned(Section);
+    Controller.SetDragRect(ARect);
+    Surface.AddClass := 'TDesignSection';
+    Surface.AddComponent;
+
+    Result := TDesignSection(Surface.Selection[0]);
+    Result.PopupMenu := DesignControlPopUpMenu;
+
+    if Assigned(Section) then
+      TDesignSection(Result).EpiControl := Section;
+  finally
+    Controller.ClearDragRect;
   end;
 end;
 
@@ -621,6 +713,7 @@ begin
   Idx := DataFile.ControlItems.IndexOf(EpiCtrl) +1;
   EpiCtrl := DataFile.ControlItem[Idx];
   FDesignPanel.Surface.Select(ControlFromEpiControl(EpiCtrl));
+  FDesignPanel.Surface.SelectionChange;
   FDesignPanel.Surface.UpdateDesigner;
 end;
 
@@ -676,11 +769,11 @@ begin
     end;
 
 
-  if Assigned(FPropertiesForm) and (not FSettingDataFile) then
+{  if Assigned(FPropertiesForm) and (not FSettingDataFile) then
     if FDesignPanel.Surface.Count = 0 then
       FPropertiesForm.UpdateSelection(DesignPanelAsJvObjectArray)
     else
-      FPropertiesForm.UpdateSelection(FDesignPanel.Surface.Selected);
+      FPropertiesForm.UpdateSelection(FDesignPanel.Surface.Selected);  }
 end;
 
 procedure TRuntimeDesignFrame.EditControlActionExecute(Sender: TObject);
@@ -796,17 +889,7 @@ begin
       S := Section[i];
 
       if S <> MainSection then
-        begin
-          Surface.Select(FDesignPanel);
-
-          with Section[i] do
-            Controller.SetDragRect(Bounds(Left, Top, Width, Height));
-
-          Surface.AddClass := 'TDesignSection';
-          Surface.AddComponent;
-
-          Selected := FDesignPanel.Surface.SelectedContainer;
-        end
+        Selected := NewDesignSection(Bounds(S.Left, S.Top, S.Width, S.Height), S)
       else
         Selected := FDesignPanel;
 
@@ -816,20 +899,14 @@ begin
         begin
           F := S.Field[j];
           P := DesignClientToParent(Point(F.Left, F.Top), Selected, FDesignPanel);
-          Controller.SetDragRect(Rect(P.X, P.Y, 0, 0));
-          Surface.AddClass := 'TDesignField';
-          Surface.AddComponent;
-          ApplyCommonCtrlSetting(Surface.Selection[0], F);
+          NewDesignField(P, F);
         end;
 
       for j := 0 to S.Headings.Count - 1 do
         begin
           H := S.Heading[j];
           P := DesignClientToParent(Point(H.Left, H.Top), Selected, FDesignPanel);
-          Controller.SetDragRect(Rect(P.X, P.Y, 0, 0));
-          Surface.AddClass := 'TDesignHeading';
-          Surface.AddComponent;
-          ApplyCommonCtrlSetting(Surface.Selection[0], H);
+          NewDesignHeading(P, H);
         end;
     end;
   end;

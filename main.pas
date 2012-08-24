@@ -978,8 +978,8 @@ begin
   PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
 {  ViewDataSetMenuItem.Action    := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
-  ImportDataMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).ImportDataFileAction;
-  AddStructureMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).AddStructureAction;}
+  ImportDataMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).ImportDataFileAction;}
+  AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportStructureAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
