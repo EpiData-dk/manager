@@ -176,8 +176,10 @@ type
     procedure PasteEpiDoc(const ImportDoc: TEpiDocument; RenameVL, RenameFields: boolean);
   private
     { Design Controls with EpiControls }
-    function NewDesignHeading(TopLeft: TPoint; Heading: TEpiHeading = nil): TControl;
-    function NewDesignField(TopLeft: TPoint; Field: TEpiField = nil): TControl;
+    function NewDesignHeading(TopLeft: TPoint; Heading: TEpiHeading = nil;
+      AParent: TWinControl = nil): TControl;
+    function NewDesignField(TopLeft: TPoint; Field: TEpiField = nil;
+      AParent: TWinControl = nil): TControl;
     function NewDesignSection(ARect: TRect; Section: TEpiSection = nil): TWinControl;
   protected
     function GetDataFile: TEpiDataFile;
@@ -572,57 +574,144 @@ var
   Selected: TWinControl;
   C: TEpiCustomControlItem;
   j: Integer;
-  Pt: TPoint;
-begin
-  for i := 0 to ImportDoc.ValueLabelSets.Count - 1 do
-  begin
-    VLSetOld := ImportDoc.ValueLabelSets[i];
-    VLSet  := DataFile.ValueLabels.GetValueLabelSetByName(VLSetOld.Name);
 
-    // Rename vs. Keep options.
-    if (not RenameVL) and
-       Assigned(VLSet) and
-       (VLSet.LabelType = VLSetOld.LabelType) then
+  function NewFieldName(Const OldName: string): string;
+  var
+    i: integer;
+  begin
+    Result := OldName;
+    if DataFile.ValidateRename(OldName) then exit;
+
+    i := 0;
+    repeat
+      inc(i);
+      Result := OldName + IntToStr(i);
+    until DataFile.ValidateRename(Result);
+  end;
+
+  procedure AssignField(F: TEpiField; S: TEpiSection = nil; AParent: TWinControl = nil);
+  begin
+    if (DataFile.Fields.ItemExistsByName(F.Name)) and
+       (not RenameFields) and
+       (F.FieldType = DataFile.Fields.FieldByName[F.Name].FieldType)
+    then
+      // Keep first, drop rest - strategy!
+      Exit;
+
+    // Rename if already present.
+    if DataFile.Fields.ItemExistsByName(F.Name)
+    then
+      F.Name := NewFieldName(F.Name);
+
+    if Assigned(S) then
     begin
-      // Old set must carry a pointer to "new" set, else new fields can't find
-      // old VLSets.
-      VLSetOld.ObjectData := PtrUInt(VLSet);
-      continue;
+      // Remove from old section...
+      F.Section.Fields.RemoveItem(F);
+      // Insert into new...
+      S.Fields.AddItem(F);
     end;
 
-    VLSet := TEpiValueLabelSet(VLSetOld.Clone(nil));
+    if (Assigned(F.ValueLabelSet)) and
+       (F.ValueLabelSet.ObjectData <> 0)
+    then
+      F.ValueLabelSet := TEpiValueLabelSet(F.ValueLabelSet.ObjectData);
+
+    NewDesignField(Point(F.Left, F.Top + P.Y), F, AParent);
+  end;
+
+  procedure AssignHeading(H: TEpiHeading; S: TEpiSection = nil; AParent: TWinControl = nil);
+  begin
+    // Rename if already present.
+    if DataFile.Headings.ItemExistsByName(H.Name)
+    then
+      H.Name := DataFile.Headings.GetUniqueItemName(TEpiHeading);
+
+    if Assigned(S) then
+    begin
+      // Remove from old section...
+      H.Section.Headings.RemoveItem(H);
+      // Insert into new...
+      S.Headings.AddItem(H);
+    end;
+
+    NewDesignHeading(Point(H.Left, H.Top + P.Y), H, AParent);
+  end;
+
+  procedure AssignSection(S: TEpiSection);
+  var
+    i: integer;
+    WinCtrl: TWinControl;
+    OldPY: LongInt;
+  begin
+    // Rename if already present.
+    if DataFile.Sections.ItemExistsByName(S.Name)
+    then
+      S.Name := DataFile.Sections.GetUniqueItemName(TEpiSection);
+
+    S.DataFile.Sections.RemoveItem(S);
+    DataFile.Sections.AddItem(S);
+
+    WinCtrl := NewDesignSection(Bounds(S.Left, S.Top + P.Y, S.Width, S.Height), S);
+
+    OldPY := P.Y;
+    P.Y := 0;
+
+    for i := 0 to S.Fields.Count - 1 do
+      AssignField(S.Fields[i], nil, WinCtrl);
+
+    for i := 0 to S.Headings.Count - 1 do
+      AssignHeading(S.Heading[i], nil, WinCtrl);
+
+    P.Y := OldPY;
+  end;
+
+begin
+  ImportDoc.BeginUpdate;
+  DataFile.BeginUpdate;
+
+  for i := 0 to ImportDoc.ValueLabelSets.Count - 1 do
+  begin
+    VLSet := ImportDoc.ValueLabelSets[i];
+    if (DataFile.ValueLabels.ItemExistsByName(VLSet.Name)) and
+       (not RenameVL) and
+       (VLSet.LabelType = DataFile.ValueLabels.GetValueLabelSetByName(VLSet.Name).LabelType)
+    then
+      begin
+        VLSet.ObjectData := PtrUInt(DataFile.ValueLabels.GetValueLabelSetByName(VLSet.Name));
+        Continue;
+      end;
+
+    // TODO : Remove from Old EpiDocument?
     DataFile.ValueLabels.AddItem(VLSet);
-    VLSetOld.ObjectData := PtrUInt(VLSet);
   end;
 
   P := FindNewPostion(TDesignField);
+  // 1 Item = MainSection...
+  if DataFile.ControlItems.Count = 1 then
+    P.Y := 0;
 
+  // Add all fields/headings belonging to ImportDoc to our DF.
   with ImportDoc.DataFiles[0] do
-  for i := 0 to Sections.Count -1 do
-    begin
-      // This copies Fields and Sections.
-      NSection := Section[i];
+  begin
+    for i := MainSection.Fields.Count -1 downto 0 do
+      AssignField(MainSection.Field[i], DataFile.MainSection, FDesignPanel);
 
-      if (NSection <> MainSection) then
-      begin
-        NSection := TEpiSection(Section[i].Clone(nil));
-        DataFile.Sections.AddItem(NSection);
-        with NSection do
-          Selected := NewDesignSection(Bounds(Left, Top + P.Y, Width, Height), NSection)
-      end else
-        Selected := FDesignPanel;
 
-      for j := 0 to NSection.Fields.Count - 1 do
-      begin
-        C := NSection.Field[j];
-        Pt := DesignClientToParent(Point(C.Left, C.Top), Selected, FDesignPanel);
-        NewDesignField(Pt, TEpiField(C));
-      end;
-    end;
+    for i := MainSection.Headings.Count -1 downto 0 do
+      AssignHeading(MainSection.Heading[i], DataFile.MainSection, FDesignPanel);
+
+
+    for i := Sections.Count - 1 downto 0 do
+    if Section[i] <> MainSection then
+      AssignSection(Section[i]);
+  end;
+
+  DataFile.EndUpdate;
+  ImportDoc.EndUpdate;
 end;
 
 function TRuntimeDesignFrame.NewDesignHeading(TopLeft: TPoint;
-  Heading: TEpiHeading): TControl;
+  Heading: TEpiHeading; AParent: TWinControl): TControl;
 var
   Controller: TDesignController;
   Surface: TJvDesignSurface;
@@ -631,6 +720,9 @@ begin
   Surface    := FDesignPanel.Surface;
 
   try
+    if Assigned(Parent) then
+      TopLeft := DesignClientToParent(TopLeft, AParent, FDesignPanel);
+
     FCreatingControl := not Assigned(Heading);
     Controller.SetDragRect(Rect(TopLeft.X, TopLeft.Y, 0, 0));
     Surface.AddClass := 'TDesignHeading';
@@ -646,8 +738,8 @@ begin
   end;
 end;
 
-function TRuntimeDesignFrame.NewDesignField(TopLeft: TPoint; Field: TEpiField
-  ): TControl;
+function TRuntimeDesignFrame.NewDesignField(TopLeft: TPoint; Field: TEpiField;
+  AParent: TWinControl): TControl;
 var
   Controller: TDesignController;
   Surface: TJvDesignSurface;
@@ -656,6 +748,9 @@ begin
   Surface    := FDesignPanel.Surface;
 
   try
+    if Assigned(Parent) then
+      TopLeft := DesignClientToParent(TopLeft, AParent, FDesignPanel);
+
     FCreatingControl := not Assigned(Field);
     Controller.SetDragRect(Rect(TopLeft.X, TopLeft.Y, 0, 0));
     Surface.AddClass := 'TDesignField';
@@ -769,11 +864,11 @@ begin
     end;
 
 
-{  if Assigned(FPropertiesForm) and (not FSettingDataFile) then
+  if Assigned(FPropertiesForm) and (not FSettingDataFile) then
     if FDesignPanel.Surface.Count = 0 then
       FPropertiesForm.UpdateSelection(DesignPanelAsJvObjectArray)
     else
-      FPropertiesForm.UpdateSelection(FDesignPanel.Surface.Selected);  }
+      FPropertiesForm.UpdateSelection(FDesignPanel.Surface.Selected);
 end;
 
 procedure TRuntimeDesignFrame.EditControlActionExecute(Sender: TObject);
@@ -898,15 +993,13 @@ begin
       for j := 0 to S.Fields.Count - 1 do
         begin
           F := S.Field[j];
-          P := DesignClientToParent(Point(F.Left, F.Top), Selected, FDesignPanel);
-          NewDesignField(P, F);
+          NewDesignField(Point(F.Left, F.Top), F, Selected);
         end;
 
       for j := 0 to S.Headings.Count - 1 do
         begin
           H := S.Heading[j];
-          P := DesignClientToParent(Point(H.Left, H.Top), Selected, FDesignPanel);
-          NewDesignHeading(P, H);
+          NewDesignHeading(Point(H.Left, H.Top), H, Selected);
         end;
     end;
   end;

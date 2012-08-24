@@ -108,11 +108,11 @@ var
   end;
 
 begin
-  if Assigned(FFrame) then
+{  if Assigned(FFrame) then
   begin
     if not (FFrame as IDesignPropertiesFrame).ApplyChanges then
       Exit;
-  end;
+  end;}
 
 
   if Length(Objects) = 0 then
