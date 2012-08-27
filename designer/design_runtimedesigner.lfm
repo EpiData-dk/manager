@@ -2247,6 +2247,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ImageIndex = 13
       OnExecute = ImportStructureActionExecute
     end
+    object UndoAction: TAction
+      Caption = 'Undo'
+      OnExecute = UndoActionExecute
+      ShortCut = 16474
+    end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList

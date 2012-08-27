@@ -45,7 +45,7 @@ uses
   design_properties_form, design_designcontroller,
   design_fieldproperties_frame,
 design_properties_fieldframe, design_properties_sectionframe, 
-design_designmessenger;
+design_designmessenger, design_commander;
 
 {$R *.res}
 

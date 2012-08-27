@@ -50,29 +50,29 @@ implementation
 uses
   managerprocs, Graphics, main, LCLIntf, LCLType, manager_messages,
   design_properties_fieldframe, JvDesignSurface, epidocument,
-  epistringutils, manager_globals;
+  epistringutils, manager_globals, design_commander;
 
 type
+  { TMoveCommand }
 
-  { Tmylabel }
-
-  Tmylabel = class(TLabel)
+  TMoveCommand = class(TCustomCommand)
+  private
+    FControl: TControl;
+    FRect: TRect;
   public
-    procedure WriteState(Writer: TWriter); override;
-    procedure SetParent(NewParent: TWinControl); override;
+    procedure Execute; override;
+    property Control: TControl read FControl write FControl;
+    property Rect: TRect read FRect write FRect ;
   end;
 
-{ Tmylabel }
+  { TMoveCommand }
 
-procedure Tmylabel.WriteState(Writer: TWriter);
-begin
-  inherited WriteState(Writer);
-end;
+  procedure TMoveCommand.Execute;
+  begin
+    FControl.BoundsRect := FRect;
+  end;
 
-procedure Tmylabel.SetParent(NewParent: TWinControl);
-begin
-  inherited SetParent(NewParent);
-end;
+
 
 { TDesignField }
 
@@ -264,7 +264,7 @@ begin
   FQuestionLabel.ParentFont := false;
   FQuestionLabel.ControlStyle := FQuestionLabel.ControlStyle + [csNoDesignSelectable];
   FQuestionLabel.SetSubComponent(true);
-  FNameLabel := Tmylabel.Create(Self);
+  FNameLabel := TLabel.Create(Self);
   FNameLabel.Anchors := [];
   FNameLabel.AnchorToNeighbour(akRight, 5, FQuestionLabel);
   FNameLabel.AnchorParallel(akBottom, 0, FQuestionLabel);
@@ -323,6 +323,7 @@ var
   S: Char;
   SideBuf: Integer;
   Cv: TCanvas;
+  Cmd: TMoveCommand;
 begin
   if (Parent = nil) or
      (FField = nil) or

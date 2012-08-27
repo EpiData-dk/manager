@@ -146,7 +146,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="68">
+    <Units Count="69">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -599,6 +599,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_designmessenger"/>
       </Unit67>
+      <Unit68>
+        <Filename Value="designer/design_commander.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="design_commander"/>
+      </Unit68>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -38,7 +38,7 @@ implementation
 
 uses
   LCLIntf, LCLType, design_control_section, manager_messages,
-  main;
+  main, manager_globals;
 
 { TDesignController }
 
@@ -97,7 +97,10 @@ function TDesignController.MouseUp(Button: TMouseButton; X, Y: Integer;
   TheMessage: TLMMouse): Boolean;
 begin
   if DragMode = dmMove then
+  begin
     MainForm.BeginUpdatingForm;
+//    GlobalCommandList;
+  end;
 
   Result := inherited MouseUp(Button, X, Y, TheMessage);
 

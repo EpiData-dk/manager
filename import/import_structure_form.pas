@@ -27,10 +27,18 @@ type
     FieldsRenameGrpBox: TRadioGroup;
     ValueLabelsRenameGrpBox: TRadioGroup;
     procedure CancelActionExecute(Sender: TObject);
+    procedure DocListHook(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure OkActionExecute(Sender: TObject);
     procedure AddFilesActionExecute(Sender: TObject);
+  private
+    { Data Import }
+    FImportDataSelectedIndex: integer;
+    FDataCol: TGridColumn;
+    FImportData: boolean;
+    FOldCheckBoxToggle: TToggledCheckboxEvent;
+    FOldColRowMoved: TGridOperationEvent;
   private
     { private declarations }
     FSelectedDocuments: TStringList;
@@ -39,16 +47,22 @@ type
     DataFile: TEpiDatafile;
     FDesignerBox: TScrollBox;
     FProjectList: TProjectFileListFrame;
+    procedure ImportDataCheckBoxToogle(sender: TObject; aCol, aRow: Integer;
+      aState: TCheckboxState);
+    procedure ImportDataColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
+      tIndex: Integer);
     procedure ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure BeforeLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
     procedure AfterLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
+    procedure SetImportData(AValue: boolean);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Files: TStrings);
     destructor Destroy; override;
     class procedure RestoreDefaultPos;
     property    SelectedDocuments: TStringList read FSelectedDocuments;
+    property    ImportData: boolean read FImportData write SetImportData;
   end; 
 
 implementation
@@ -238,9 +252,20 @@ begin
   DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
 end;
 
+procedure TImportStructureForm.SetImportData(AValue: boolean);
+begin
+  if FImportData = AValue then Exit;
+  FImportData := AValue;
+end;
+
 procedure TImportStructureForm.CancelActionExecute(Sender: TObject);
 begin
   ModalResult := mrCancel;
+end;
+
+procedure TImportStructureForm.DocListHook(Sender: TObject);
+begin
+  TStringGrid(FDataCol.Grid).Cells[FDataCol.Index+1, TStringGrid(FDataCol.Grid).RowCount-1] := '0';
 end;
 
 procedure TImportStructureForm.FormCloseQuery(Sender: TObject;
@@ -255,6 +280,79 @@ procedure TImportStructureForm.FormShow(Sender: TObject);
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'ImportStructureForm');
+
+{  if ImportData then
+  begin
+    FOldCheckBoxToggle := FProjectList.StructureGrid.OnCheckboxToggled;
+    FProjectList.StructureGrid.OnCheckboxToggled := @ImportDataCheckBoxToogle;
+
+    FOldColRowMoved := FProjectList.StructureGrid.OnColRowMoved;
+    FProjectList.StructureGrid.OnColRowMoved := @ImportDataColRowMoved;
+    FImportDataSelectedIndex := -1;
+  end else  }
+    FDataCol.Visible := false;
+end;
+
+procedure TImportStructureForm.ImportDataColRowMoved(Sender: TObject;
+  IsColumn: Boolean; sIndex, tIndex: Integer);
+begin
+  // Always send event on to others!
+  if Assigned(FOldColRowMoved) then
+    FOldColRowMoved(Sender, IsColumn, sIndex, tIndex);
+
+  if IsColumn then exit;
+  if FImportDataSelectedIndex = -1 then exit;
+
+  if sIndex = FImportDataSelectedIndex then
+  begin
+    FImportDataSelectedIndex := tIndex;
+    Exit;
+  end;
+
+  if (
+      (sIndex > FImportDataSelectedIndex) and
+      (tIndex > FImportDataSelectedIndex)
+     ) or (
+      (sIndex < FImportDataSelectedIndex) and
+      (tIndex < FImportDataSelectedIndex)
+     )
+  then
+    // Row moved happend above or below index => do nothing.
+    Exit;
+
+  if sIndex > tIndex then
+    // Row moved below data index => increase value.
+    Inc(FImportDataSelectedIndex)
+  else
+    // Row moved above data index => decrease value.
+    Dec(FImportDataSelectedIndex);
+end;
+
+procedure TImportStructureForm.ImportDataCheckBoxToogle(sender: TObject; aCol,
+  aRow: Integer; aState: TCheckboxState);
+begin
+  // Always send event on to others!
+  if Assigned(FOldCheckBoxToggle) then
+    FOldCheckBoxToggle(sender, aCol, aRow, aState);
+
+  // Exit if this check-toggle does not apply to use.
+  if FDataCol.Index <> (aCol - 1) then exit;
+
+  if (aRow = FImportDataSelectedIndex) and
+     (aState = cbUnchecked)
+  then
+  begin
+    FImportDataSelectedIndex := -1;
+    Exit;
+  end;
+
+  if (aState = cbChecked) then
+  begin
+    if FImportDataSelectedIndex <> -1 then
+      TStringGRid(FDataCol.Grid).Cells[FDataCol.Index+1, FImportDataSelectedIndex] := '0';
+
+    FImportDataSelectedIndex := aRow;
+  end;
 end;
 
 constructor TImportStructureForm.Create(TheOwner: TComponent;
@@ -267,12 +365,18 @@ begin
     FProjectList.OnBeforeImportFile := @BeforeLoad;
     FProjectList.OnAfterImportFile  := @AfterLoad;
 
+    FDataCol := StructureGrid.Columns.Add;
+    FDataCol.Title.Caption := 'Data';
+    FDataCol.ButtonStyle := cbsCheckboxColumn;
+
     FProjectList.Align := alClient;
     FProjectList.Parent := Self;
   end;
 
   if TheOwner is TScrollBox then
     FDesignerBox := TScrollBox(TheOwner);
+
+  FProjectList.DocList.OnChange := @DocListHook;
 
   FProjectList.AddFiles(Files);
 end;

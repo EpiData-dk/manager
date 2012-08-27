@@ -1,7 +1,7 @@
 object ImportStructureForm: TImportStructureForm
-  Left = 664
+  Left = 639
   Height = 679
-  Top = 224
+  Top = 133
   Width = 677
   Caption = 'Import Structure From...'
   ClientHeight = 679
@@ -9,7 +9,7 @@ object ImportStructureForm: TImportStructureForm
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object OkApplyPanel: TPanel
     Left = 0
     Height = 42
@@ -122,7 +122,7 @@ object ImportStructureForm: TImportStructureForm
       AnchorSideRight.Side = asrBottom
       Left = 294
       Height = 93
-      Top = 32
+      Top = 31
       Width = 270
       AutoFill = True
       BorderSpacing.Left = 10
@@ -150,9 +150,9 @@ object ImportStructureForm: TImportStructureForm
       AnchorSideLeft.Control = OptionsPanel
       AnchorSideTop.Control = OptionsPanel
       Left = 11
-      Height = 16
+      Height = 15
       Top = 6
-      Width = 160
+      Width = 159
       BorderSpacing.Left = 10
       BorderSpacing.Top = 5
       Caption = 'Import structure options:'
@@ -164,7 +164,7 @@ object ImportStructureForm: TImportStructureForm
       AnchorSideTop.Side = asrBottom
       Left = 11
       Height = 93
-      Top = 32
+      Top = 31
       Width = 273
       AutoFill = True
       BorderSpacing.Left = 10

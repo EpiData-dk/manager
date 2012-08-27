@@ -15,6 +15,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    UndoAction: TAction;
     ImportStructureAction: TAction;
     SelectNextAction: TAction;
     PasteAsDateMenuItem: TMenuItem;
@@ -149,6 +150,7 @@ type
     procedure SelecterBtnClick(Sender: TObject);
     procedure SelectNextActionExecute(Sender: TObject);
     procedure TestToolButtonClick(Sender: TObject);
+    procedure UndoActionExecute(Sender: TObject);
   private
     FPopUpPoint: TPoint;
     FDatafile: TEpiDataFile;
@@ -173,6 +175,8 @@ type
     procedure SectionsChangeEvent(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     function ClipBoardHasText: boolean;
+  private
+    { Import }
     procedure PasteEpiDoc(const ImportDoc: TEpiDocument; RenameVL, RenameFields: boolean);
   private
     { Design Controls with EpiControls }
@@ -290,6 +294,7 @@ begin
     if not Dlg.Execute then exit;
 
     ImpStructurForm := TImportStructureForm.Create(JvDesignScrollBox1, Dlg.Files);
+    ImpStructurForm.ImportData := (DataFile.Size = 0);
     if ImpStructurForm.ShowModal = mrCancel then exit;
 
     // Prepare screen...
@@ -301,6 +306,8 @@ begin
       PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
         ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex=1, ImpStructurForm.FieldsRenameGrpBox.ItemIndex=1);
 
+    FDesignPanel.Surface.Select(FDesignPanel);
+    FDesignPanel.Surface.UpdateDesigner;
   finally
     MainForm.EndUpdatingForm;
     Screen.Cursor := crDefault;
@@ -528,6 +535,7 @@ begin
     (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle);
 end;
 
+
 procedure TRuntimeDesignFrame.SectionBtnClick(Sender: TObject);
 begin
   FAddClass := 'TDesignSection';
@@ -653,6 +661,7 @@ var
 
     WinCtrl := NewDesignSection(Bounds(S.Left, S.Top + P.Y, S.Width, S.Height), S);
 
+    // Do not off-set within sections.
     OldPY := P.Y;
     P.Y := 0;
 
@@ -815,6 +824,11 @@ end;
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
   FPropertiesForm.Show;
+end;
+
+procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
+begin
+  GlobalCommandList.Undo;
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);

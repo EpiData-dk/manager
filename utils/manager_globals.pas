@@ -5,12 +5,14 @@ unit manager_globals;
 interface
 
 uses
-  Classes, sysutils;
+  Classes, sysutils, design_commander;
 
 
 
 function GlobalCopyList: TFPList;
 function GlobalCopyListClear: TFPList;
+
+function GlobalCommandList: TCommandList;
 
 implementation
 
@@ -19,6 +21,7 @@ uses
 
 var
   FGlobalCopyList: TFPList = nil;
+  FGlobalCommandList: TCommandList = nil;
 
 function GlobalCopyList: TFPList;
 begin
@@ -38,6 +41,14 @@ begin
   result := GlobalCopyList;
   Result.ForEachCall(@FreeCopyList, nil);
   Result.Clear;
+end;
+
+function GlobalCommandList: TCommandList;
+begin
+  if not Assigned(FGlobalCommandList) then
+    FGlobalCommandList := TCommandList.Create;
+
+  result := FGlobalCommandList;
 end;
 
 procedure FinishGlobals;
