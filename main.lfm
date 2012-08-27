@@ -155,9 +155,6 @@ object MainForm: TMainForm
       object EditMenuDivider1: TMenuItem
         Caption = '-'
       end
-      object ImportDataMenuItem: TMenuItem
-        Caption = 'ImportData'
-      end
       object AddStructureMenuItem: TMenuItem
         Caption = 'AddStructure'
       end

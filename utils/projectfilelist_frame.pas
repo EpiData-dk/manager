@@ -117,10 +117,10 @@ begin
       DataFile := Doc.DataFiles.NewDataFile;
       DoBeforeImportFile(Doc, FileName);
       if (ext = '.dta') then
-        Importer.ImportStata(FileName, Doc, DataFile, false)
+        Importer.ImportStata(FileName, Doc, DataFile, true)
       else begin
         Importer.OnRequestPassword := @RecImportPassword;
-        Importer.ImportRec(FileName , DataFile, false);
+        Importer.ImportRec(FileName , DataFile, true);
       end;
       DoAfterImportFile(Doc, FileName);
     end

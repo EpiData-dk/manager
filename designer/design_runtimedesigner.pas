@@ -15,8 +15,21 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    DeleteControlFastAction: TAction;
+    NewHeadingFastAction: TAction;
+    NewHeadingAction: TAction;
+    NewDateFieldFastAction: TAction;
+    NewDateFieldAction: TAction;
+    NewStringFieldFastAction: TAction;
+    NewStringFieldAction: TAction;
+    NewFloatFieldFastAction: TAction;
+    NewFloatFieldAction: TAction;
+    NewIntFieldFastAction: TAction;
+    NewIntFieldAction: TAction;
+    PrintDataFormAction: TAction;
+    ViewDatasetAction: TAction;
     UndoAction: TAction;
-    ImportStructureAction: TAction;
+    ImportAction: TAction;
     SelectNextAction: TAction;
     PasteAsDateMenuItem: TMenuItem;
     PasteAsFloatMenuItem: TMenuItem;
@@ -41,7 +54,7 @@ type
     DeletePopupMenuItem: TMenuItem;
     DesignControlPopUpMenu: TPopupMenu;
     EditControlAction: TAction;
-    ActionList1: TActionList;
+    DesignerActionList: TActionList;
     Button1: TButton;
     CurrentSectionLabel: TLabel;
     CurrentSectionPanel: TPanel;
@@ -85,7 +98,6 @@ type
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
-    LoadToolButton: TToolButton;
     NewAutoIncMenu: TMenuItem;
     NewBooleanMenu: TMenuItem;
     NewDMYTodayFieldMenu: TMenuItem;
@@ -135,9 +147,19 @@ type
     procedure FieldBtnClick(Sender: TObject);
     function FieldNamePrefix: string;
     procedure HeadingBtnClick(Sender: TObject);
-    procedure ImportStructureActionExecute(Sender: TObject);
+    procedure ImportActionExecute(Sender: TObject);
     procedure JvDesignScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+    procedure NewDateFieldActionExecute(Sender: TObject);
+    procedure NewDateFieldFastActionExecute(Sender: TObject);
+    procedure NewFloatFieldActionExecute(Sender: TObject);
+    procedure NewFloatFieldFastActionExecute(Sender: TObject);
+    procedure NewHeadingActionExecute(Sender: TObject);
+    procedure NewHeadingFastActionExecute(Sender: TObject);
+    procedure NewIntFieldActionExecute(Sender: TObject);
+    procedure NewIntFieldFastActionExecute(Sender: TObject);
+    procedure NewStringFieldActionExecute(Sender: TObject);
+    procedure NewStringFieldFastActionExecute(Sender: TObject);
     procedure PasteAsDateActionExecute(Sender: TObject);
     procedure PasteAsFloatActionExecute(Sender: TObject);
     procedure PasteAsIntActionExecute(Sender: TObject);
@@ -146,11 +168,13 @@ type
     procedure PasteControlActionExecute(Sender: TObject);
     procedure PasteAsHeadingActionExecute(Sender: TObject);
     procedure PasteControlActionUpdate(Sender: TObject);
+    procedure PrintDataFormActionExecute(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
     procedure SelecterBtnClick(Sender: TObject);
     procedure SelectNextActionExecute(Sender: TObject);
     procedure TestToolButtonClick(Sender: TObject);
     procedure UndoActionExecute(Sender: TObject);
+    procedure ViewDatasetActionExecute(Sender: TObject);
   private
     FPopUpPoint: TPoint;
     FDatafile: TEpiDataFile;
@@ -177,7 +201,12 @@ type
     function ClipBoardHasText: boolean;
   private
     { Import }
-    procedure PasteEpiDoc(const ImportDoc: TEpiDocument; RenameVL, RenameFields: boolean);
+    procedure PasteEpiDoc(const ImportDoc: TEpiDocument;
+      RenameVL, RenameFields: boolean;
+      ImportData: boolean);
+  private
+    { Print }
+    procedure DoPrintDataForm;
   private
     { Design Controls with EpiControls }
     function NewDesignHeading(TopLeft: TPoint; Heading: TEpiHeading = nil;
@@ -185,6 +214,13 @@ type
     function NewDesignField(TopLeft: TPoint; Field: TEpiField = nil;
       AParent: TWinControl = nil): TControl;
     function NewDesignSection(ARect: TRect; Section: TEpiSection = nil): TWinControl;
+    { Design control via shortcuts }
+    function NewShortCutDesignField(Ft: TEpiFieldType;
+      ShowPropertiesForm: boolean): TControl;
+    function NewShortCutDesignHeading(ShowPropertiesForm: boolean): TControl;
+  private
+    { Other }
+    procedure UpdateShortcuts;
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
@@ -207,6 +243,8 @@ uses
   main, epistringutils, JvDesignUtils, settings2_var,
   manager_globals, managerprocs, Clipbrd, math,
   Dialogs, import_structure_form, epimiscutils,
+  datasetviewer_frame, fpvectorial, fpvutils, FPimage,
+  LCLMessageGlue, LCLType, shortcuts,
   design_control_section,
   design_control_field,
   design_control_heading;
@@ -277,7 +315,7 @@ begin
   DoToogleBtn(Sender);
 end;
 
-procedure TRuntimeDesignFrame.ImportStructureActionExecute(Sender: TObject);
+procedure TRuntimeDesignFrame.ImportActionExecute(Sender: TObject);
 var
   Dlg: TOpenDialog;
   ImpStructurForm: TImportStructureForm;
@@ -304,7 +342,10 @@ begin
 
     for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
       PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
-        ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex=1, ImpStructurForm.FieldsRenameGrpBox.ItemIndex=1);
+        ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex = 1,
+        ImpStructurForm.FieldsRenameGrpBox.ItemIndex = 1,
+        ImpStructurForm.ImportDataIndex = i
+      );
 
     FDesignPanel.Surface.Select(FDesignPanel);
     FDesignPanel.Surface.UpdateDesigner;
@@ -325,6 +366,56 @@ begin
   with JvDesignScrollBox1.VertScrollBar do
     Position := Position - WheelDelta;
   Handled := true;
+end;
+
+procedure TRuntimeDesignFrame.NewDateFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftDMYDate, true);
+end;
+
+procedure TRuntimeDesignFrame.NewDateFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftDMYDate, false);
+end;
+
+procedure TRuntimeDesignFrame.NewFloatFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftFloat, true);
+end;
+
+procedure TRuntimeDesignFrame.NewFloatFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftFloat, false);
+end;
+
+procedure TRuntimeDesignFrame.NewHeadingActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignHeading(true);
+end;
+
+procedure TRuntimeDesignFrame.NewHeadingFastActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignHeading(false);
+end;
+
+procedure TRuntimeDesignFrame.NewIntFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftInteger, true);
+end;
+
+procedure TRuntimeDesignFrame.NewIntFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftInteger, false);
+end;
+
+procedure TRuntimeDesignFrame.NewStringFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftString, true);
+end;
+
+procedure TRuntimeDesignFrame.NewStringFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftString, false);
 end;
 
 procedure TRuntimeDesignFrame.PasteAsDateActionExecute(Sender: TObject);
@@ -468,7 +559,14 @@ var
 
 begin
   if ClipBoardHasText then
-    PasteAsHeadingAction.Execute
+  begin
+    case ManagerSettings.PasteSpecialType of
+      0: PasteAsHeadingAction.Execute;
+      1: PasteAsField(ftInteger);
+      2: PasteAsField(ftFloat);
+      3: PasteAsField(ftString);
+    end;
+  end
   else
   with FDesignPanel.Surface do
     begin
@@ -535,6 +633,11 @@ begin
     (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle);
 end;
 
+procedure TRuntimeDesignFrame.PrintDataFormActionExecute(Sender: TObject);
+begin
+  DoPrintDataForm;
+end;
+
 
 procedure TRuntimeDesignFrame.SectionBtnClick(Sender: TObject);
 begin
@@ -572,7 +675,7 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument;
-  RenameVL, RenameFields: boolean);
+  RenameVL, RenameFields: boolean; ImportData: boolean);
 var
   i: Integer;
   VLSet: TEpiValueLabelSet;
@@ -606,13 +709,16 @@ var
       // Keep first, drop rest - strategy!
       Exit;
 
-    // Rename if already present.
-    if DataFile.Fields.ItemExistsByName(F.Name)
-    then
-      F.Name := NewFieldName(F.Name);
+    if not ImportData then
+      F.ResetData;
 
     if Assigned(S) then
     begin
+      // Rename if already present.
+      if (not S.ValidateRename(F.Name, false))
+      then
+        F.Name := NewFieldName(F.Name);
+
       // Remove from old section...
       F.Section.Fields.RemoveItem(F);
       // Insert into new...
@@ -629,13 +735,13 @@ var
 
   procedure AssignHeading(H: TEpiHeading; S: TEpiSection = nil; AParent: TWinControl = nil);
   begin
-    // Rename if already present.
-    if DataFile.Headings.ItemExistsByName(H.Name)
-    then
-      H.Name := DataFile.Headings.GetUniqueItemName(TEpiHeading);
-
     if Assigned(S) then
     begin
+      // Rename if already present.
+      if (not S.ValidateRename(H.Name, false))
+      then
+        H.Name := DataFile.Headings.GetUniqueItemName(TEpiHeading);
+
       // Remove from old section...
       H.Section.Headings.RemoveItem(H);
       // Insert into new...
@@ -652,7 +758,7 @@ var
     OldPY: LongInt;
   begin
     // Rename if already present.
-    if DataFile.Sections.ItemExistsByName(S.Name)
+    if (not DataFile.Sections.ValidateRename(S.Name, false))
     then
       S.Name := DataFile.Sections.GetUniqueItemName(TEpiSection);
 
@@ -678,6 +784,10 @@ begin
   ImportDoc.BeginUpdate;
   DataFile.BeginUpdate;
 
+  // Assume only one ImportDoc has ImportData=true
+  if ImportData then
+    DataFile.Size := ImportDoc.DataFiles[0].Size;
+
   for i := 0 to ImportDoc.ValueLabelSets.Count - 1 do
   begin
     VLSet := ImportDoc.ValueLabelSets[i];
@@ -702,6 +812,8 @@ begin
   // Add all fields/headings belonging to ImportDoc to our DF.
   with ImportDoc.DataFiles[0] do
   begin
+    FDesignPanel.Surface.Select(FDesignPanel);
+
     for i := MainSection.Fields.Count -1 downto 0 do
       AssignField(MainSection.Field[i], DataFile.MainSection, FDesignPanel);
 
@@ -717,6 +829,161 @@ begin
 
   DataFile.EndUpdate;
   ImportDoc.EndUpdate;
+end;
+
+procedure TRuntimeDesignFrame.DoPrintDataForm;
+var
+  FieldCount: Integer;
+  VecDoc: TvVectorialDocument;
+  Page: TvVectorialPage;
+  F: TEpiField;
+  i: Integer;
+  L, R, T, B, W: Double;
+  SectionCount: Integer;
+  S: TEpiSection;
+  HeadingCount: Integer;
+  H: TEpiHeading;
+  SaveDlg: TSaveDialog;
+  FS: Integer;
+  FN: String;
+  J: Integer;
+
+const
+  PIXELS_PER_MILIMETER = 3.5433;
+  A4_PIXEL_HEIGHT      = trunc(297 * PIXELS_PER_MILIMETER);
+  A4_PIXEL_WIDTH       = trunc(210 * PIXELS_PER_MILIMETER);
+
+const
+  FieldHeigth =
+    {$IFDEF WINDOWS}
+      21
+    {$ELSE}
+      {$IFDEF DARWIN}
+      22
+      {$ELSE}
+        {$IFDEF LINUX}
+      27
+        {$ENDIF}
+    {$ENDIF}
+  {$ENDIF};
+
+
+  function FieldTop(F: TEpiField): integer; inline;
+  begin
+    Result := F.Top + F.Section.Top;
+  end;
+
+  function FieldLeft(F: TEpiField): integer; inline;
+  begin
+    Result := F.Left + F.Section.Left;
+  end;
+
+  function HeadingTop(H: TEpiHeading): integer; inline;
+  begin
+    Result := H.Top + H.Section.Top;
+  end;
+
+  function HeadingLeft(H: TEpiHeading): integer; inline;
+  begin
+    Result := H.Left + H.Section.Left;
+  end;
+
+begin
+  SaveDlg := nil;
+  VecDoc  := nil;
+  try
+    SaveDlg := TSaveDialog.Create(Self);
+    SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    SaveDlg.Filter := 'Scalable Vector Graphics (*.svg)|*.svg|' + GetEpiDialogFilter([dfAll]);
+    if not SaveDlg.Execute then exit;
+
+//    if not PrintDialog1.Execute then exit;
+
+//    Printer.BeginDoc;
+
+{    PIXELS_PER_MILIMETER := 1 / ((1 / Printer.YDPI) * 25.4001);
+    A4_PIXEL_HEIGHT      := trunc(297 * PIXELS_PER_MILIMETER);
+    A4_PIXEL_WIDTH       := trunc(210 * PIXELS_PER_MILIMETER); }
+
+    VecDoc := TvVectorialDocument.Create;
+    VecDoc.Width := 210;
+    VecDoc.Height := 297;
+    Page := VecDoc.AddPage();
+    Page.Width := VecDoc.Width;
+    Page.Height := VecDoc.Height;
+
+//    Printer.PageHeight;
+    FS := ManagerSettings.FieldFont.Size;
+    FN := ManagerSettings.FieldFont.Name;
+    if FS = 0 then FS := 10;
+
+    FieldCount := DataFile.Fields.Count;
+    for i := 0 to FieldCount -1 do
+    begin
+      F := DataFile.Field[i];
+
+      L := (FieldLeft(F) - Canvas.TextWidth(F.Question.Text)) / PIXELS_PER_MILIMETER;
+      T := CanvasTextPosToFPVectorial(
+             FieldTop(F) + (FieldHeigth - Canvas.TextHeight(F.Question.Text)),
+             A4_PIXEL_HEIGHT,
+             Canvas.TextHeight(F.Question.Text)) / PIXELS_PER_MILIMETER;
+      Page.AddText(L, T, 0, FN, FS, F.Question.Text);
+
+      L := FieldLeft(F) / PIXELS_PER_MILIMETER;
+      R := (FieldLeft(F) + (F.Length * Canvas.TextWidth('W'))) / PIXELS_PER_MILIMETER;
+      T := CanvasCoordsToFPVectorial(FieldTop(F) + (FieldHeigth div 2), A4_PIXEL_HEIGHT) / PIXELS_PER_MILIMETER;
+      B := CanvasCoordsToFPVectorial(FieldTop(F) + FieldHeigth, A4_PIXEL_HEIGHT)/ PIXELS_PER_MILIMETER;
+      Page.StartPath(L, T);
+      Page.AddLineToPath(L, B);
+      Page.AddLineToPath(R, B);
+      Page.AddLineToPath(R, T);
+      Page.AddLineToPath(L, T, FPColor($FF, $FF, $FF, $FF));
+      Page.EndPath();
+    end;
+
+    HeadingCount := DataFile.Headings.Count;
+    for i := 0 to HeadingCount -1 do
+    begin
+      H := DataFile.Heading[i];
+
+      L := HeadingLeft(H) / PIXELS_PER_MILIMETER;
+      T := CanvasTextPosToFPVectorial(HeadingTop(H), A4_PIXEL_HEIGHT, Canvas.TextHeight(H.Caption.Text)) / PIXELS_PER_MILIMETER;
+
+      Page.AddText(L, T, 0, FN, FS, H.Caption.Text);
+    end;
+
+    SectionCount := DataFile.Sections.Count;
+    for i := 0 to SectionCount - 1 do
+    begin
+      S := DataFile.Section[i];
+      if S = DataFile.MainSection then continue;
+
+      L := S.Left / PIXELS_PER_MILIMETER;
+      R := (S.Left + S.Width)  / PIXELS_PER_MILIMETER;
+      T := CanvasCoordsToFPVectorial(S.Top, A4_PIXEL_HEIGHT)  / PIXELS_PER_MILIMETER;
+      B := CanvasCoordsToFPVectorial(S.Top + S.Height, A4_PIXEL_HEIGHT)  / PIXELS_PER_MILIMETER;
+      W := Canvas.TextWidth(S.Caption.Text) / PIXELS_PER_MILIMETER;
+
+      Page.StartPath(L, T);
+      Page.AddLineToPath(L, B);
+      Page.AddLineToPath(R, B);
+      Page.AddLineToPath(R, T);
+      Page.AddLineToPath(Min(L + W, R), T);
+      Page.AddLineToPath(L, T, FPColor($FF, $FF, $FF, $FF));
+      Page.EndPath();
+
+      L := (S.Left + 3) / PIXELS_PER_MILIMETER;
+      T := CanvasTextPosToFPVectorial(S.Top, A4_PIXEL_HEIGHT, Canvas.TextHeight(S.Caption.Text) div 2) / PIXELS_PER_MILIMETER;
+      Page.AddText(L, T, 0, FN, FS, S.Caption.Text);
+    end;
+
+//    fpvtocanvas.DrawFPVectorialToCanvas(Page, Canvas, 0, 12 * Floor(Page.Height), 1, -1);
+//    Printer.EndDoc;
+    VecDoc.WriteToFile(SaveDlg.FileName, vfSVG);
+  finally
+    SaveDlg.Free;
+    VecDoc.Free;
+  end;
 end;
 
 function TRuntimeDesignFrame.NewDesignHeading(TopLeft: TPoint;
@@ -801,6 +1068,69 @@ begin
   end;
 end;
 
+function TRuntimeDesignFrame.NewShortCutDesignField(Ft: TEpiFieldType;
+  ShowPropertiesForm: boolean): TControl;
+var
+  P: TPoint;
+  KeyCode: Word;
+begin
+  P := FindNewPostion(TDesignField);
+  FLastSelectedFieldType := ft;
+  Result := NewDesignField(P, nil, FDesignPanel.Surface.SelectedContainer);
+
+  if ShowPropertiesForm then
+  begin
+    KeyCode := VK_RETURN;
+    LCLSendKeyDownEvent(Result, KeyCode, 0, true, false);
+  end;
+end;
+
+function TRuntimeDesignFrame.NewShortCutDesignHeading(
+  ShowPropertiesForm: boolean): TControl;
+var
+  P: TPoint;
+  KeyCode: Word;
+begin
+  P := FindNewPostion(TDesignHeading);
+  Result := NewDesignHeading(P, nil, FDesignPanel.Surface.SelectedContainer);
+
+  if ShowPropertiesForm then
+  begin
+    KeyCode := VK_RETURN;
+    LCLSendKeyDownEvent(Result, KeyCode, 0, true, false);
+  end;
+end;
+
+procedure TRuntimeDesignFrame.UpdateShortcuts;
+begin
+  NewIntFieldAction.ShortCut           := D_NewIntField;
+  NewIntFieldFastAction.ShortCut       := D_NewIntField_Fast;
+  NewFloatFieldAction.ShortCut         := D_NewFloatField;
+  NewFloatFieldFastAction.ShortCut     := D_NewFloatField_Fast;
+  NewStringFieldAction.ShortCut        := D_NewStringField;
+  NewStringFieldFastAction.ShortCut    := D_NewStringField_Fast;
+  NewDateFieldAction.ShortCut          := D_NewDateField;
+  NewDateFieldFastAction.ShortCut      := D_NewDateField_Fast;
+  NewHeadingAction.ShortCut            := D_NewHeading;
+  NewHeadingFastAction.ShortCut        := D_NewHeading_Fast;
+
+//  NewSectionAction.ShortCut            := D_NewSection;
+  EditControlAction.ShortCut           := D_EditControl;
+  DeleteControlAction.ShortCut         := D_DeleteControl;
+  DeleteControlFastAction.ShortCut     := D_DeleteControl_Fast;
+  DeleteAllAction.ShortCut             := D_DeleteAllControl;
+  ImportAction.ShortCut                := D_ImportData;
+  CopyControlAction.ShortCut           := D_CopyControl;
+  PasteControlAction.ShortCut          := D_PasteControl;
+
+{  MoveHomeAction.ShortCut              := D_MoveTop;
+  MovePgUpAction.ShortCut              := D_MoveSideUp;
+  MoveUpAction.ShortCut                := D_MoveControlUp;
+  MoveDownAction.ShortCut              := D_MoveControlDown;
+  MovePgDnAction.ShortCut              := D_MoveSideDown;
+  MoveEndAction.ShortCut               := D_MoveBottom;   }
+end;
+
 procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
 begin
   FAddClass := '';
@@ -829,6 +1159,14 @@ end;
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
 begin
   GlobalCommandList.Undo;
+end;
+
+procedure TRuntimeDesignFrame.ViewDatasetActionExecute(Sender: TObject);
+begin
+  ShowDataSetViewerForm(
+    Self,
+    'View Dataset:',
+    DataFile);
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);
@@ -1042,13 +1380,15 @@ begin
   FPropertiesForm := TPropertiesForm.Create(Self);
   FPropertiesForm.UpdateSelection(nil);
 
+  UpdateFrame;
+
   FPopUpPoint := Point(-1, -1);
   FSettingDataFile := false;
 end;
 
 procedure TRuntimeDesignFrame.UpdateFrame;
 begin
-  //
+  UpdateShortcuts;
 end;
 
 procedure TRuntimeDesignFrame.RestoreDefaultPos;
@@ -1058,11 +1398,8 @@ end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;
 begin
-//  ActionList1.State := asNormal;
+  result := DesignerActionList.IsShortCut(Message);
 
-  result := ActionList1.IsShortCut(Message);
-
-//  ActionList1.State := asSuspended;
   // Else ready for implementing a larger Short-cut editor.
 end;
 

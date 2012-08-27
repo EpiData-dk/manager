@@ -15,7 +15,6 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    ImportDataMenuItem: TMenuItem;
     AddStructureMenuItem: TMenuItem;
     EditMenuDivider2: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
@@ -723,7 +722,6 @@ begin
   PasteAsIntMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsStringMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider1.Visible := Assigned(FActiveFrame);
-  ImportDataMenuItem.Visible := Assigned(FActiveFrame);
   AddStructureMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider2.Visible := Assigned(FActiveFrame);
 
@@ -977,9 +975,8 @@ begin
   PasteAsIntMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-{  ViewDataSetMenuItem.Action    := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
-  ImportDataMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).ImportDataFileAction;}
-  AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportStructureAction;
+  ViewDataSetMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
+  AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;

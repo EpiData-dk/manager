@@ -63,6 +63,7 @@ type
     class procedure RestoreDefaultPos;
     property    SelectedDocuments: TStringList read FSelectedDocuments;
     property    ImportData: boolean read FImportData write SetImportData;
+    property    ImportDataIndex: Integer read FImportDataSelectedIndex;
   end; 
 
 implementation
@@ -78,8 +79,25 @@ uses
 procedure TImportStructureForm.OkActionExecute(Sender: TObject);
 var
   i: Integer;
+  DataIndex: Integer;
 begin
+  DataIndex := -1;
+
   FSelectedDocuments := FProjectList.SelectedList;
+
+  if FImportDataSelectedIndex <> -1 then
+  begin
+    for i := 1 to FProjectList.StructureGrid.RowCount - 1 do
+      if (FProjectList.StructureGrid.Cells[2, i] <> '0') then
+        if (FProjectList.StructureGrid.Cells[FDataCol.Index + 1, i] = '1') then
+        begin
+          Inc(DataIndex);
+          Break;
+        end else
+          Inc(DataIndex);
+  end;
+
+  FImportDataSelectedIndex := DataIndex;
 
   ModalResult := mrOk;
 end;
@@ -244,6 +262,7 @@ procedure TImportStructureForm.AfterLoad(Sender: TObject; Doc: TEpiDocument;
   const FN: string);
 var
   Ext: String;
+  i: Integer;
 begin
   Ext := ExtractFileExt(FN);
   if (Ext = '.epx') or (Ext = '.epz') then exit;
@@ -281,7 +300,7 @@ begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'ImportStructureForm');
 
-{  if ImportData then
+  if ImportData then
   begin
     FOldCheckBoxToggle := FProjectList.StructureGrid.OnCheckboxToggled;
     FProjectList.StructureGrid.OnCheckboxToggled := @ImportDataCheckBoxToogle;
@@ -289,7 +308,7 @@ begin
     FOldColRowMoved := FProjectList.StructureGrid.OnColRowMoved;
     FProjectList.StructureGrid.OnColRowMoved := @ImportDataColRowMoved;
     FImportDataSelectedIndex := -1;
-  end else  }
+  end else
     FDataCol.Visible := false;
 end;
 
