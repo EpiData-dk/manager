@@ -64,7 +64,7 @@ begin
         // Relay to Frame before going further -> this could be
         // a shortcut we wish to handle.
         if FFrame.IsShortCut(TLMKey(AMessage)) then
-          Exit(true)
+          result := true
         else
           Result := inherited IsDesignMessage(ASender, AMessage);
       end;

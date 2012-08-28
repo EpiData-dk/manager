@@ -6,7 +6,7 @@ unit design_types;
 interface
 
 uses
-  Classes, SysUtils, epicustombase, AVL_Tree, Controls, Forms;
+  Classes, SysUtils, epicustombase, Controls, Forms;
 
 type
   { IDesignEpiControl }
@@ -27,6 +27,8 @@ type
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     function  ApplyChanges: boolean;
   end;
+
+  TDesignSelectAction = (dsaHome, dsaPgUp, dsaPrior, dsaNext, dsaPgDn, dsaEnd);
 
 implementation
 

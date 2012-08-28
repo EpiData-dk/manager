@@ -8,13 +8,18 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, ExtCtrls, StdCtrls,
   JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
   manager_messages, epidatafilestypes, design_properties_form, types,
-  epicustombase, epidocument, epivaluelabels;
+  epicustombase, epidocument, epivaluelabels, design_types;
 
 type
 
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    SelectLastAction: TAction;
+    SelectFirstAction: TAction;
+    SelectPgUpAction: TAction;
+    SelectPriorAction: TAction;
+    SelectPgDnAction: TAction;
     DeleteControlFastAction: TAction;
     NewHeadingFastAction: TAction;
     NewHeadingAction: TAction;
@@ -143,6 +148,10 @@ type
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DesignControlPopUpMenuPopup(Sender: TObject);
+    procedure DesignerActionListExecute(AAction: TBasicAction;
+      var Handled: Boolean);
+    procedure DesignerActionListUpdate(AAction: TBasicAction;
+      var Handled: Boolean);
     procedure EditControlActionExecute(Sender: TObject);
     procedure FieldBtnClick(Sender: TObject);
     function FieldNamePrefix: string;
@@ -171,7 +180,12 @@ type
     procedure PrintDataFormActionExecute(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
     procedure SelecterBtnClick(Sender: TObject);
+    procedure SelectFirstActionExecute(Sender: TObject);
+    procedure SelectLastActionExecute(Sender: TObject);
     procedure SelectNextActionExecute(Sender: TObject);
+    procedure SelectPgDnActionExecute(Sender: TObject);
+    procedure SelectPgUpActionExecute(Sender: TObject);
+    procedure SelectPriorActionExecute(Sender: TObject);
     procedure TestToolButtonClick(Sender: TObject);
     procedure UndoActionExecute(Sender: TObject);
     procedure ViewDatasetActionExecute(Sender: TObject);
@@ -221,6 +235,9 @@ type
   private
     { Other }
     procedure UpdateShortcuts;
+    procedure SelectControl(AAction: TDesignSelectAction);
+    procedure UpdateStatusbar(ControlList: TJvDesignObjectArray);
+    procedure UpdateStatusbarSizes;
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
@@ -238,7 +255,7 @@ implementation
 {$R *.lfm}
 
 uses
-  JvDesignImp, design_types, design_designpanel,
+  JvDesignImp, design_designpanel,
   Graphics, design_designcontroller, design_designmessenger,
   main, epistringutils, JvDesignUtils, settings2_var,
   manager_globals, managerprocs, Clipbrd, math,
@@ -1123,12 +1140,192 @@ begin
   CopyControlAction.ShortCut           := D_CopyControl;
   PasteControlAction.ShortCut          := D_PasteControl;
 
-{  MoveHomeAction.ShortCut              := D_MoveTop;
-  MovePgUpAction.ShortCut              := D_MoveSideUp;
-  MoveUpAction.ShortCut                := D_MoveControlUp;
-  MoveDownAction.ShortCut              := D_MoveControlDown;
-  MovePgDnAction.ShortCut              := D_MoveSideDown;
-  MoveEndAction.ShortCut               := D_MoveBottom;   }
+  SelectFirstAction.ShortCut           := D_MoveTop;
+  SelectPgUpAction.ShortCut            := D_MoveSideUp;
+  SelectPriorAction.ShortCut           := D_MoveControlUp;
+  SelectNextAction.ShortCut            := D_MoveControlDown;
+  SelectPgDnAction.ShortCut            := D_MoveSideDown;
+  SelectLastAction.ShortCut            := D_MoveBottom;
+end;
+
+procedure TRuntimeDesignFrame.SelectControl(AAction: TDesignSelectAction);
+var
+  EpiCtrl: TEpiCustomControlItem;
+  Idx: Integer;
+  Surface: TJvDesignSurface;
+  CTop: Integer;
+  CBot: TScrollBarInc;
+  Ctrl: TControl;
+  SPage: TScrollBarInc;
+  SPos: Integer;
+
+  function RelativeTop(Ctrl: TControl): integer;
+  begin
+    Result := FDesignPanel.ScreenToControl(Ctrl.ControlToScreen(Point(0,0))).Y;
+  end;
+
+begin
+  Surface := FDesignPanel.Surface;
+  if Surface.Count = 0 then
+    EpiCtrl := (FDesignPanel as IDesignEpiControl).EpiControl
+  else
+    EpiCtrl := (Surface.Selection[0] as IDesignEpiControl).EpiControl;
+  Idx := DataFile.ControlItems.IndexOf(EpiCtrl);
+
+  case AAction of
+    dsaHome:
+      if DataFile.ControlItems.Count = 1 then
+        Idx := 0
+      else
+        Idx := 1;
+    dsaPgUp:
+      begin
+        CBot := JvDesignScrollBox1.VertScrollBar.Position + JvDesignScrollBox1.VertScrollBar.Page;
+        for Idx := DataFile.ControlItems.Count - 1 downto 0 do
+        begin
+          Ctrl := ControlFromEpiControl(DataFile.ControlItem[Idx]);
+          if (RelativeTop(Ctrl) + Ctrl.Height) < CBot then
+            Break;
+        end;
+      end;
+    dsaPrior:
+      Idx := Max(0, Idx-1);
+    dsaNext:
+      Idx := Min(DataFile.ControlItems.Count - 1, Idx +1);
+    dsaPgDn:
+      begin
+        CTop := JvDesignScrollBox1.VertScrollBar.Position;
+        for Idx := 0 to DataFile.ControlItems.Count - 1 do
+          if RelativeTop(ControlFromEpiControl(DataFile.ControlItem[Idx])) > CTop then
+            Break;
+      end;
+    dsaEnd:
+      Idx := DataFile.ControlItems.Count - 1;
+  end;
+
+  EpiCtrl := DataFile.ControlItem[Idx];
+  Ctrl := ControlFromEpiControl(EpiCtrl);
+  FDesignPanel.Surface.Select(Ctrl);
+  FDesignPanel.Surface.SelectionChange;
+  FDesignPanel.Surface.UpdateDesigner;
+
+  // TODO : Selected control within visual area!
+  CTop := RelativeTop(Ctrl);
+  CBot := CTop + Ctrl.Height;
+  SPos := JvDesignScrollBox1.VertScrollBar.Position;
+  SPage := JvDesignScrollBox1.VertScrollBar.Page;
+  case AAction of
+    dsaPrior:
+      begin
+        if (CBot < SPos) or
+           (CTop > (SPos + SPage))
+        then
+          // Out of bounds completely => Center view.
+        begin
+          JvDesignScrollBox1.VertScrollBar.Position := CTop - (SPage div 2);
+          Exit;
+        end;
+
+        if (CTop < (SPos + (SPage div 4))) then
+        begin
+          JvDesignScrollBox1.VertScrollBar.Position := CTop - (SPage div 4);
+          Exit;
+        end;
+      end;
+    dsaNext:
+      begin
+        if (CBot < SPos) or
+           (CTop > (SPos + SPage))
+        then
+          // Out of bounds completely => Center view.
+        begin
+          JvDesignScrollBox1.VertScrollBar.Position := CTop - (SPage div 2);
+          Exit;
+        end;
+
+        if (CBot > ((SPos + SPage) - (SPage div 4))) then
+        begin
+          JvDesignScrollBox1.VertScrollBar.Position := (CBot - SPage) + (SPage div 4);
+          Exit;
+        end;
+      end;
+  end;
+end;
+
+procedure TRuntimeDesignFrame.UpdateStatusbar(ControlList: TJvDesignObjectArray
+  );
+var
+  EpiCtrl: TEpiCustomControlItem;
+begin
+  // New "statusbar"
+  RecordsLabel.Caption := IntToStr(DataFile.Size);
+  SectionsLabel.Caption := IntToStr(DataFile.Sections.Count);
+
+  // TODO : Better statusbar with multiple selected controls!
+  if Length(ControlList) = 1 then
+    EpiCtrl := (ControlList[0] as IDesignEpiControl).EpiControl
+  else
+    EpiCtrl := nil;
+
+
+  if Assigned(EpiCtrl) then
+    if (EpiCtrl is TEpiSection) then
+      CurrentSectionLabel.Caption := TEpiSection(EpiCtrl).Caption.Text
+    else
+      CurrentSectionLabel.Caption := TEpiSection(EpiCtrl.Owner.Owner).Caption.Text
+  else
+    CurrentSectionLabel.Caption := 'N/A';
+
+  FieldsLabel.Caption := IntToStr(DataFile.Fields.Count);
+
+  if Assigned(EpiCtrl) then
+    FieldNameLabel.Caption := EpiCtrl.Name
+  else
+    FieldNameLabel.Caption := 'N/A';
+
+  if EpiCtrl is TEpiField then
+  with TEpiField(EpiCtrl) do
+  begin
+    FieldTypeLabel.Caption    := EpiTypeNames[FieldType];
+    DefaultValueLabel.Caption := BoolToStr(HasDefaultValue, DefaultValueAsString, '');
+    if Assigned(ValueLabelSet) then
+      ValueLabelLabel.Caption := ValueLabelSet.Name
+    else
+      ValueLabelLabel.Caption := '';
+    RangeLabel.Caption        := BoolToStr(Assigned(Ranges), 'Range', '');
+    KeyLabel.Caption          := BoolToStr(DataFile.KeyFields.ItemExistsByName(Name), 'Key', '');
+    ExtendedLabel.Caption     := BoolToStr(Assigned(Jumps),       'J', ' ') +
+                                 BoolToStr(RepeatValue,           'R', ' ') +
+                                 BoolToStr(EntryMode=emMustEnter, 'M', '')  +
+                                 BoolToStr(EntryMode=emNoEnter,   'N', '')  +
+                                 BoolToStr(EntryMode=emDefault,   ' ', '')  +
+                                 BoolToStr(ConfirmEntry,          'F', ' ') +
+                                 BoolToStr(Assigned(Calculation), 'C', ' ');
+  end else begin
+    FieldTypeLabel.Caption    := '';
+    DefaultValueLabel.Caption := '';
+    ValueLabelLabel.Caption   := '';
+    RangeLabel.Caption        := '';
+    KeyLabel.Caption          := '';
+    ExtendedLabel.Caption     := '';
+  end;
+
+  UpdateStatusbarSizes;
+end;
+
+procedure TRuntimeDesignFrame.UpdateStatusbarSizes;
+const
+  PanelBorder = 2;
+
+  function TW(Lbl: TLabel): Integer;
+  begin
+    Result := StatusBarPanel.Canvas.TextWidth(Lbl.Caption);
+  end;
+
+begin
+  RecordsPanel.Width  := RecordsLabel.Left + TW(RecordsLabel) + PanelBorder;
+  SectionsPanel.Width := SectionsLabel.Left + TW(SectionsLabel) + PanelBorder;
+  FieldsPanel.Width   := FieldsLabel.Left + TW(FieldsLabel) + PanelBorder;
 end;
 
 procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
@@ -1137,18 +1334,46 @@ begin
   DoToogleBtn(Sender);
 end;
 
-procedure TRuntimeDesignFrame.SelectNextActionExecute(Sender: TObject);
-var
-  EpiCtrl: TEpiCustomControlItem;
-  Idx: Integer;
+procedure TRuntimeDesignFrame.SelectFirstActionExecute(Sender: TObject);
 begin
-  // TODO : Make generic for up/down.
-  EpiCtrl := (FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl;
-  Idx := DataFile.ControlItems.IndexOf(EpiCtrl) +1;
-  EpiCtrl := DataFile.ControlItem[Idx];
-  FDesignPanel.Surface.Select(ControlFromEpiControl(EpiCtrl));
-  FDesignPanel.Surface.SelectionChange;
-  FDesignPanel.Surface.UpdateDesigner;
+  with JvDesignScrollBox1.VertScrollBar do
+    Position := 0;
+
+  SelectControl(dsaHome);
+end;
+
+procedure TRuntimeDesignFrame.SelectLastActionExecute(Sender: TObject);
+begin
+  with JvDesignScrollBox1.VertScrollBar do
+    Position := Range;
+
+  SelectControl(dsaEnd);
+end;
+
+procedure TRuntimeDesignFrame.SelectNextActionExecute(Sender: TObject);
+begin
+  SelectControl(dsaNext);
+end;
+
+procedure TRuntimeDesignFrame.SelectPgDnActionExecute(Sender: TObject);
+begin
+  with JvDesignScrollBox1.VertScrollBar do
+    Position := Position + Page;
+
+  SelectControl(dsaPgDn);
+end;
+
+procedure TRuntimeDesignFrame.SelectPgUpActionExecute(Sender: TObject);
+begin
+  with JvDesignScrollBox1.VertScrollBar do
+    Position := Position - Page;
+
+  SelectControl(dsaPgUp);
+end;
+
+procedure TRuntimeDesignFrame.SelectPriorActionExecute(Sender: TObject);
+begin
+  SelectControl(dsaPrior);
 end;
 
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
@@ -1173,6 +1398,7 @@ procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);
 var
   Ctrl: TControl;
   EpiCtrl: TEpiCustomControlItem;
+  Selection: TJvDesignObjectArray;
 begin
   Label4.Caption := 'Selection Count: ' + IntToStr(FDesignPanel.Surface.Count);
 
@@ -1215,12 +1441,15 @@ begin
       MainForm.EndUpdatingForm;
     end;
 
+  if FDesignPanel.Surface.Count = 0 then
+    Selection := DesignPanelAsJvObjectArray
+  else
+    Selection := FDesignPanel.Surface.Selected;
 
   if Assigned(FPropertiesForm) and (not FSettingDataFile) then
-    if FDesignPanel.Surface.Count = 0 then
-      FPropertiesForm.UpdateSelection(DesignPanelAsJvObjectArray)
-    else
-      FPropertiesForm.UpdateSelection(FDesignPanel.Surface.Selected);
+    FPropertiesForm.UpdateSelection(Selection);
+
+  UpdateStatusbar(Selection);
 end;
 
 procedure TRuntimeDesignFrame.EditControlActionExecute(Sender: TObject);
@@ -1256,6 +1485,19 @@ begin
       UpdateDesigner;
     end;
   end;
+end;
+
+procedure TRuntimeDesignFrame.DesignerActionListExecute(AAction: TBasicAction;
+  var Handled: Boolean);
+begin
+  if Screen.ActiveCustomForm <> MainForm then
+    Handled := true;
+end;
+
+procedure TRuntimeDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
+  var Handled: Boolean);
+begin
+  //
 end;
 
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
@@ -1398,7 +1640,10 @@ end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;
 begin
-  result := DesignerActionList.IsShortCut(Message);
+  result :=
+    // Only execute our actionlist if mainform is active!
+    (Screen.ActiveCustomForm = MainForm) and
+    (DesignerActionList.IsShortCut(Message));
 
   // Else ready for implementing a larger Short-cut editor.
 end;

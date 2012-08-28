@@ -26,7 +26,7 @@ object ProjectFileListFrame: TProjectFileListFrame
     Top = 0
     Width = 764
     Align = alClient
-    ColCount = 8
+    ColCount = 9
     Columns = <    
       item
         ReadOnly = True
@@ -55,6 +55,10 @@ object ProjectFileListFrame: TProjectFileListFrame
       item
         ReadOnly = True
         Title.Caption = 'Fields'
+      end    
+      item
+        ReadOnly = True
+        Title.Caption = 'Records'
       end>
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goTabs, goSmoothScroll, goFixedRowNumbering]
     RowCount = 1

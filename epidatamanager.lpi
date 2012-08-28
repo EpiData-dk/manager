@@ -53,7 +53,8 @@
               <UseMsgFile Value="True"/>
             </CompilerMessages>
             <CustomOptions Value="-dEPI_DEBUG1
--dEPI_RELEASE"/>
+-dEPI_RELEASE
+-vv"/>
             <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
