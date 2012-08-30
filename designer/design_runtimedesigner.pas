@@ -1490,14 +1490,17 @@ end;
 procedure TRuntimeDesignFrame.DesignerActionListExecute(AAction: TBasicAction;
   var Handled: Boolean);
 begin
-  if Screen.ActiveCustomForm <> MainForm then
-    Handled := true;
+//  if Screen.ActiveCustomForm <> MainForm then
+//    Handled := true;
 end;
 
 procedure TRuntimeDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
-  //
+  if Screen.ActiveCustomForm <> MainForm then
+    DesignerActionList.State := asSuspended
+  else
+    DesignerActionList.State := asNormal;
 end;
 
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);

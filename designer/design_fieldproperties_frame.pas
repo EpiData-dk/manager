@@ -710,7 +710,7 @@ begin
   FinishCombo(Field2Combo, nil);
   FinishCombo(Field3Combo, nil);
 
-  if Assigned(Field.Calculation) then
+   if Assigned(Field.Calculation) then
     case Field.Calculation.CalcType of
       ctTimeDiff:      UpdateTimeCalc(TEpiTimeCalc(Field.Calculation));
       ctCombineDate:   UpdateDateCalc(TEpiCombineDateCalc(Field.Calculation));

@@ -31,9 +31,9 @@ uses
 
 procedure TPropertiesForm.FormDeactivate(Sender: TObject);
 begin
-  if Assigned(FFrame) then
+{  if Assigned(FFrame) then
     if not (FFrame as IDesignPropertiesFrame).ApplyChanges then
-      Self.SetFocus;
+      Self.SetFocus;  }
 end;
 
 procedure TPropertiesForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
