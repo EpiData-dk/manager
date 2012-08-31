@@ -6,17 +6,17 @@ inherited FieldPropertiesFrameOld: TFieldPropertiesFrameOld
   Constraints.MinHeight = 365
   Constraints.MinWidth = 380
   TabOrder = 0
-  DesignLeft = 1968
-  DesignTop = 88
+  DesignLeft = 1123
+  DesignTop = 202
   object FieldPageControl: TPageControl[0]
     AnchorSideLeft.Control = Owner
     Left = 0
     Height = 506
     Top = 0
     Width = 446
-    ActivePage = FieldAdvancedSheet
+    ActivePage = FieldBasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
@@ -588,8 +588,8 @@ inherited FieldPropertiesFrameOld: TFieldPropertiesFrameOld
           AnchorSideTop.Control = CompareGroupBox
           AnchorSideTop.Side = asrCenter
           Left = 103
-          Height = 25
-          Top = 10
+          Height = 29
+          Top = 8
           Width = 72
           BorderSpacing.Left = 2
           ItemHeight = 0

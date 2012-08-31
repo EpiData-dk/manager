@@ -124,6 +124,8 @@ type
     ToEdit: TEdit;
     TopBevel: TBevel;
     UpdateModeRadioGrp: TRadioGroup;
+    UseJumpsCombo: TComboBox;
+    UseJumpsLabel: TLabel;
     ValueLabelComboBox: TComboBox;
     ValueLabelGrpBox: TGroupBox;
     ValueLabelSettingGrpBox: TGroupBox;
@@ -134,6 +136,7 @@ type
     procedure AddJumpBtnClick(Sender: TObject);
     procedure ManageValueLabelsBtnClick(Sender: TObject);
     procedure RemoveJumpBtnClick(Sender: TObject);
+    procedure UseJumpsComboSelect(Sender: TObject);
   private
     { Hooks }
     procedure RegisterValueLabelHook;
@@ -166,6 +169,9 @@ type
     procedure AddFieldToCombo(AField: TEpiField; FieldTypes: TEpiFieldTypes;
       Combo: TComboBox; AddSelf: boolean = false);
     procedure FinishCombo(Combo: TComboBox; IndexObject: TObject);
+    function ComboIgnoreSelected(Combo: TComboBox): boolean;
+    function ComboNoneSelected(Const Combo: TComboBox): boolean;
+    function ComboSelectedObject(Combo: TComboBox): TObject;
   private
     { ValueLabels }
     procedure AddValueLabels;
@@ -177,13 +183,15 @@ type
   private
     { Jumps }
     FJumpComponentsList: TList;
-    procedure UpdateJumps;
+    procedure ClearJumps;
+    procedure UpdateJumps; overload;
+    procedure UpdateJumps(Jumps: TEpiJumps); overload;
     function  DoAddNewJump: pointer;
     procedure AddFieldsToCombo(Combo: TComboBox);
+
   private
     { Calculation }
     procedure UpdateCalcFields;
-    function  CalcFieldComboIsNil(Const Combo: TComboBox): boolean;
   private
     { private declarations }
     FFields: TEpiCustomControlItemArray;
@@ -253,6 +261,24 @@ procedure TFieldPropertiesFrame.FinishCombo(Combo: TComboBox;
 begin
   Combo.Items.EndUpdate;
   Combo.ItemIndex := Combo.Items.IndexOfObject(IndexObject);
+end;
+
+function TFieldPropertiesFrame.ComboIgnoreSelected(Combo: TComboBox): boolean;
+begin
+  result := (Combo.ItemIndex = Combo.Items.IndexOfObject(FIgnoreObject));
+end;
+
+function TFieldPropertiesFrame.ComboNoneSelected(const Combo: TComboBox
+  ): boolean;
+begin
+  result := (Combo.ItemIndex = Combo.Items.IndexOfObject(FNoneObject));
+end;
+
+function TFieldPropertiesFrame.ComboSelectedObject(Combo: TComboBox): TObject;
+begin
+  Result := nil;
+  if Combo.ItemIndex > -1 then
+    result := Combo.Items.Objects[Combo.ItemIndex];
 end;
 
 procedure TFieldPropertiesFrame.AddValueLabels;
@@ -343,16 +369,13 @@ begin
     CompareTypeCombo.ItemIndex := -1;
 end;
 
-procedure TFieldPropertiesFrame.UpdateJumps;
-var
-  F: TEpiField;
-  Jmp: TEpiJumps;
-  i: Integer;
-  j: Integer;
+procedure TFieldPropertiesFrame.ClearJumps;
 begin
   // Clear all previous visual controls
+  // - remove akTop, since AnchorVertical uses akTop and not akBottom.
+  AddJumpBtn.Anchors := AddJumpBtn.Anchors - [akTop];
   AddJumpBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
-  RemoveJumpBtn.Enabled := Assigned(Field.Jumps);
+  RemoveJumpBtn.Enabled := False;
   while FJumpComponentsList.Count > 0 do
   with PJumpComponents(FJumpComponentsList.Last)^ do
   begin
@@ -361,8 +384,23 @@ begin
     TObject(ResetCombo).Free;
     FJumpComponentsList.Delete(FJumpComponentsList.Count-1);
   end;
+end;
 
+procedure TFieldPropertiesFrame.UpdateJumps;
+var
+  F: TEpiField;
+  Jmp: TEpiJumps;
+  i: Integer;
+  j: Integer;
+  SelectIgnoreCombo: Boolean;
+begin
+  InitCombo(UseJumpsCombo);
+  SelectIgnoreCombo := false;
   Jmp := Field.Jumps;
+
+  if Assigned(Jmp) then
+    AddFieldToCombo(Field, AllFieldTypes, UseJumpsCombo, True);
+
   for i := 1 to FieldCount - 1 do
   begin
     F := Fields[i];
@@ -371,14 +409,14 @@ begin
        or
        ((not Assigned(Jmp)) and Assigned(F.Jumps))
     then
-      // TODO : Set a check in Original state
-      Exit;
+      SelectIgnoreCombo := true;
 
     if (Assigned(Jmp) and Assigned(F.Jumps)) then
     begin
+      AddFieldToCombo(F, AllFieldTypes, UseJumpsCombo, True);
+
       if (Jmp.Count <> F.Jumps.Count) then
-        // TODO : Set a check in Original state
-        Exit;
+        SelectIgnoreCombo := true;
 
       for j := 0 to Jmp.Count - 1 do
       begin
@@ -390,25 +428,38 @@ begin
            or
            (Jmp[j].JumpToField <> F.Jumps[j].JumpToField)
         then
-          // TODO : Set a check in Original state
-          Exit;
+          SelectIgnoreCombo := true;
       end;
     end;
   end;
+  if SelectIgnoreCombo then
+  begin
+    FinishCombo(UseJumpsCombo, FIgnoreObject);
+    Jmp := nil;
+  end else
+    FinishCombo(UseJumpsCombo, Field);
 
-  if not Assigned(Jmp) then exit;
+  UpdateJumps(Jmp);
+end;
 
-  for i := 0 to Field.Jumps.Count -1 do
-    with PJumpComponents(DoAddNewJump)^ do
-      with Field.Jumps[i] do
-      begin
-        TEdit(ValueEdit).Text            := JumpValueAsString;
-        if JumpType = jtToField then
-          TComboBox(GotoCombo).ItemIndex := TComboBox(GotoCombo).Items.IndexOfObject(JumpToField)
-        else
-          TComboBox(GotoCombo).ItemIndex := TComboBox(GotoCombo).Items.IndexOfObject(TObject(PtrInt(JumpType)));
-        TComboBox(ResetCombo).ItemIndex  := TComboBox(ResetCombo).Items.IndexOfObject(TObject(PtrInt(ResetType)));
-      end;
+procedure TFieldPropertiesFrame.UpdateJumps(Jumps: TEpiJumps);
+var
+  i: Integer;
+begin
+  ClearJumps;
+
+  if Assigned(Jumps) then
+    for i := 0 to Jumps.Count -1 do
+      with PJumpComponents(DoAddNewJump)^ do
+        with Jumps[i] do
+        begin
+          TEdit(ValueEdit).Text            := JumpValueAsString;
+          if JumpType = jtToField then
+            TComboBox(GotoCombo).ItemIndex := TComboBox(GotoCombo).Items.IndexOfObject(JumpToField)
+          else
+            TComboBox(GotoCombo).ItemIndex := TComboBox(GotoCombo).Items.IndexOfObject(TObject(PtrInt(JumpType)));
+          TComboBox(ResetCombo).ItemIndex  := TComboBox(ResetCombo).Items.IndexOfObject(TObject(PtrInt(ResetType)));
+        end;
 end;
 
 function TFieldPropertiesFrame.DoAddNewJump: pointer;
@@ -654,15 +705,14 @@ begin
     end;
 end;
 
-function TFieldPropertiesFrame.CalcFieldComboIsNil(const Combo: TComboBox
-  ): boolean;
-begin
-  result := Combo.ItemIndex = Combo.Items.IndexOfObject(nil);
-end;
-
 procedure TFieldPropertiesFrame.AddJumpBtnClick(Sender: TObject);
 begin
   TEdit(PJumpComponents(DoAddNewJump)^.ValueEdit).SetFocus;
+
+  if ManyFields and
+     (ComboIgnoreSelected(UseJumpsCombo))
+  then
+    UseJumpsCombo.ItemIndex := UseJumpsCombo.Items.IndexOfObject(FNoneObject);
 end;
 
 procedure TFieldPropertiesFrame.ManageValueLabelsBtnClick(Sender: TObject);
@@ -721,6 +771,22 @@ begin
     RemoveJumpBtn.Enabled := false;
   end else
     AddJumpBtn.AnchorVerticalCenterTo(TControl(PJumpComponents(FJumpComponentsList.Last)^.GotoCombo));
+end;
+
+procedure TFieldPropertiesFrame.UseJumpsComboSelect(Sender: TObject);
+var
+  F: TEpiField;
+begin
+  if ComboIgnoreSelected(UseJumpsCombo) or
+     ComboNoneSelected(UseJumpsCombo)
+  then
+  begin
+    ClearJumps;
+    Exit;
+  end;
+
+  F := TEpiField(ComboSelectedObject(UseJumpsCombo));
+  UpdateJumps(F.Jumps);
 end;
 
 procedure TFieldPropertiesFrame.RegisterValueLabelHook;
@@ -902,6 +968,8 @@ begin
 
   // - jumps
   JumpSheet.TabVisible            := FieldsMustHaveFieldTypes(JumpsFieldTypes) and FieldsHaveSameFieldType;
+  UseJumpsCombo.Visible           := ManyFields;
+  UseJumpsLabel.Visible           := ManyFields;
 
   // - calc
   OriginalStateRadio.Visible      := ManyFields;
@@ -1101,6 +1169,10 @@ var
 begin
   result := false;
 
+  // *******
+  // BASIC
+  // *******
+
   // Safely assume only one field preset if NameEdit.modified.
   if NameEdit.Modified and
      (not Field.ValidateRename(NameEdit.Text, false)) then
@@ -1129,81 +1201,88 @@ begin
     end;
 
   // Safely assume that From/To Edits are only visible if all fields have same type.
-  if ((FromEdit.Text <> '') and (ToEdit.Text = '')) then
+  if FromEdit.Modified or ToEdit.Modified then
   begin
-    DoError('No "To" entered', ToEdit);
-    Exit;
-  end;
+    if ((FromEdit.Text <> '') and (ToEdit.Text = '')) then
+    begin
+      DoError('No "To" entered', ToEdit);
+      Exit;
+    end;
 
-  if ((FromEdit.Text = '') and (ToEdit.Text <> '')) then
-  begin
-    DoError('No "From" entered', FromEdit);
-    Exit;
-  end;
+    if ((FromEdit.Text = '') and (ToEdit.Text <> '')) then
+    begin
+      DoError('No "From" entered', FromEdit);
+      Exit;
+    end;
 
-  if ((FromEdit.Text <> '') and (ToEdit.Text <> '')) then
-  begin
-    Case Field.FieldType of
-      ftInteger:
-        begin
-          if not TryStrToInt64(FromEdit.Text, I64) then
+    if ((FromEdit.Text <> '') and (ToEdit.Text <> '')) then
+    begin
+      Case Field.FieldType of
+        ftInteger:
           begin
-            DoError(Format('Not a valid integer: %s', [FromEdit.Text]), FromEdit);
-            Exit;
-          end;
+            if not TryStrToInt64(FromEdit.Text, I64) then
+            begin
+              DoError(Format('Not a valid integer: %s', [FromEdit.Text]), FromEdit);
+              Exit;
+            end;
 
-          if not TryStrToInt64(ToEdit.Text, I64) then
-          begin
-            DoError(Format('Not a valid integer: %s', [ToEdit.Text]), ToEdit);
-            Exit;
+            if not TryStrToInt64(ToEdit.Text, I64) then
+            begin
+              DoError(Format('Not a valid integer: %s', [ToEdit.Text]), ToEdit);
+              Exit;
+            end;
           end;
-        end;
-      ftFloat:
-        begin
-          if not TryStrToFloat(FromEdit.Text, F) then
+        ftFloat:
           begin
-            DoError(Format('Not a valid float: %s', [FromEdit.Text]), FromEdit);
-            Exit;
-          end;
+            if not TryStrToFloat(FromEdit.Text, F) then
+            begin
+              DoError(Format('Not a valid float: %s', [FromEdit.Text]), FromEdit);
+              Exit;
+            end;
 
-          if not TryStrToFloat(ToEdit.Text, F) then
-          begin
-            DoError(Format('Not a valid float: %s', [ToEdit.Text]), ToEdit);
-            Exit;
+            if not TryStrToFloat(ToEdit.Text, F) then
+            begin
+              DoError(Format('Not a valid float: %s', [ToEdit.Text]), ToEdit);
+              Exit;
+            end;
           end;
-        end;
-      ftTime:
-        begin
-          if not EpiStrToTime(FromEdit.Text, TimeSeparator, W1, W2, W3, S) then
+        ftTime:
           begin
-            DoError(S, FromEdit);
-            Exit;
-          end;
+            if not EpiStrToTime(FromEdit.Text, TimeSeparator, W1, W2, W3, S) then
+            begin
+              DoError(S, FromEdit);
+              Exit;
+            end;
 
-          if not EpiStrToTime(ToEdit.Text, TimeSeparator, W1, W2, W3, S) then
-          begin
-            DoError(S, ToEdit);
-            Exit;
+            if not EpiStrToTime(ToEdit.Text, TimeSeparator, W1, W2, W3, S) then
+            begin
+              DoError(S, ToEdit);
+              Exit;
+            end;
           end;
-        end;
-      ftDMYDate,
-      ftMDYDate,
-      ftYMDDate:
-        begin
-          if not EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, W1, W2, W3, S) then
+        ftDMYDate,
+        ftMDYDate,
+        ftYMDDate:
           begin
-            DoError(S, FromEdit);
-            Exit;
-          end;
+            if not EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, W1, W2, W3, S) then
+            begin
+              DoError(S, FromEdit);
+              Exit;
+            end;
 
-          if not EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, W1, W2, W3, S) then
-          begin
-            DoError(S, ToEdit);
-            Exit;
+            if not EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, W1, W2, W3, S) then
+            begin
+              DoError(S, ToEdit);
+              Exit;
+            end;
           end;
-        end;
+      end;
     end;
   end;
+
+  // *******
+  // Extended
+  // *******
 
   if DefaultValueEdit.Modified and
      (DefaultValueEdit.Text <> '')
@@ -1226,8 +1305,10 @@ begin
         Exit(DoError(S, DefaultValueEdit));
     end;
 
+  // *******
   // Jumps
-{  for I := 0 to FJumpComponentsList.Count - 1 do
+  // *******
+  for I := 0 to FJumpComponentsList.Count - 1 do
   begin
     with PJumpComponents(FJumpComponentsList[I])^ do
     begin
@@ -1246,9 +1327,11 @@ begin
       if TComboBox(GotoCombo).ItemIndex = -1 then
         Exit(DoError('Invalid "Go To" selection"', TComboBox(GotoCombo)));
     end;
-  end;       }
+  end;
 
+  // *******
   // Calculate
+  // *******
   if not (
       (NoCalcRadio.Checked) or
       (OriginalStateRadio.Checked)
@@ -1257,41 +1340,41 @@ begin
   begin
     if TimeCalcRadio.Checked then
     begin
-      if CalcFieldComboIsNil(TimeResultCombo) then
+      if ComboNoneSelected(TimeResultCombo) then
         Exit(DoError('No result field assigned!', TimeResultCombo));
 
-      if CalcFieldComboIsNil(StartDateCombo) and
-         CalcFieldComboIsNil(StartTimeCombo) then
+      if ComboNoneSelected(StartDateCombo) and
+         ComboNoneSelected(StartTimeCombo) then
         Exit(DoError('No start date or time assigned!', StartDateCombo));
 
-      if CalcFieldComboIsNil(EndDateCombo) and
-         CalcFieldComboIsNil(EndTimeCombo) then
+      if ComboNoneSelected(EndDateCombo) and
+         ComboNoneSelected(EndTimeCombo) then
         Exit(DoError('No end date or time assigned!', EndDateCombo));
     end;
 
     if CombineDateRadio.Checked then
     begin
-      if CalcFieldComboIsNil(DateResultCombo) then
+      if ComboNoneSelected(DateResultCombo) then
         Exit(DoError('No result field assigned!', DateResultCombo));
 
-      if CalcFieldComboIsNil(DayCombo) then
+      if ComboNoneSelected(DayCombo) then
         Exit(DoError('No day field assigned!', DayCombo));
 
-      if CalcFieldComboIsNil(MonthCombo) then
+      if ComboNoneSelected(MonthCombo) then
         Exit(DoError('No month field assigned!', MonthCombo));
 
-      if CalcFieldComboIsNil(YearCombo) then
+      if ComboNoneSelected(YearCombo) then
         Exit(DoError('No year field assigned!', YearCombo));
     end;
 
     if CombineStringRadio.Checked then
     begin
-      if CalcFieldComboIsNil(StringResultCombo) then
+      if ComboNoneSelected(StringResultCombo) then
         Exit(DoError('No result field assigned!', StringResultCombo));
 
-      if CalcFieldComboIsNil(Field1Combo) and
-         CalcFieldComboIsNil(Field2Combo) and
-         CalcFieldComboIsNil(Field3Combo) then
+      if ComboNoneSelected(Field1Combo) and
+         ComboNoneSelected(Field2Combo) and
+         ComboNoneSelected(Field3Combo) then
         Exit(DoError('At least one field must be assigned!', Field1Combo));
     end;
   end;
@@ -1302,27 +1385,35 @@ procedure TFieldPropertiesFrame.InternalApplyChanges;
 var
   i: Integer;
   L: Cardinal;
+  R: TEpiRange;
+  S: string;
+  NJump: TEpiJump;
+  j: Integer;
 begin
   // ---------
   // BASIC
   // ---------
 
 
-  // Only one field can ever edit the name!
+  // Name
   if NameEdit.Modified then
     Field.Name := NameEdit.Text;
 
+  // Question
   if QuestionEdit.Modified then
     for i := 0 to FieldCount - 1 do
       Fields[i].Question.Text := QuestionEdit.Text;
 
+  // Length
   if LengthEdit.Modified then
-    for i := 0 to FieldCount - 1 do
-      if Fields[i].FieldType = ftFloat then
+    if Fields[i].FieldType = ftFloat then
+      for i := 0 to FieldCount - 1 do
         Fields[i].Length := StrToInt(LengthEdit.Text) + TEpiField(FFields[i]).Decimals + 1
-      else
+    else
+      for i := 0 to FieldCount - 1 do
         Fields[i].Length := StrToInt(LengthEdit.Text);
 
+  // Decimal
   if DecimalsEdit.Modified then
     for i := 0 to FieldCount - 1 do
     begin
@@ -1331,11 +1422,161 @@ begin
       Fields[i].Length := L + Fields[i].Decimals + 1;
     end;
 
+  // Valuelabels
+  if not ComboIgnoreSelected(ValueLabelComboBox) then
+    for i := 0 to FieldCount -1 do
+      Fields[i].ValueLabelSet := TEpiValueLabelSet(ComboSelectedObject(ValueLabelComboBox));
+
+  // Range
+  if FromEdit.Modified or ToEdit.Modified then
+  begin
+    for i := 0 to FieldCount do
+    begin
+      if Assigned(Fields[i].Ranges) then
+        R := Fields[i].Ranges[0]
+      else begin
+        Fields[i].Ranges := TEpiRanges.Create(Fields[i]);
+        Fields[i].Ranges.ItemOwner := true;
+        R := Fields[i].Ranges.NewRange;
+      end;
+      Case Field.FieldType of
+        ftInteger:
+          begin
+            R.AsInteger[true]  := StrToInt64(FromEdit.Text);
+            R.AsInteger[false] := StrToInt64(ToEdit.Text);
+          end;
+        ftFloat:
+          begin
+            R.AsFloat[true]  := StrToFloat(FromEdit.Text);
+            R.AsFloat[false] := StrToFloat(ToEdit.Text);
+          end;
+        ftTime:
+          begin
+            R.AsTime[true]  := EpiStrToTime(FromEdit.Text, TimeSeparator, S);
+            R.AsTime[false] := EpiStrToTime(ToEdit.Text, TimeSeparator, S);
+          end;
+        ftDMYDate,
+        ftMDYDate,
+        ftYMDDate:
+          begin
+            R.AsDate[true]  := Trunc(EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, S));
+            R.AsDate[false] := Trunc(EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, S));
+          end;
+      end;
+    end;
+  end;
+
+  // Updatemode
+  if (Field is TEpiCustomAutoField) and
+     (UpdateModeRadioGrp.ItemIndex <> -1)
+  then
+    for i := 0 to FieldCount - 1 do
+      TEpiCustomAutoField(Fields[i]).AutoMode := TEpiAutoUpdateMode(PtrUInt(UpdateModeRadioGrp.Items.Objects[UpdateModeRadioGrp.ItemIndex]));
+
   // ---------
   // EXTENDED
   // ---------
-  for i := 0 to FieldCount - 1 do
-    Fields[i].ConfirmEntry := ConfirmEntryChkBox.Checked;
+  // Entrymode
+  if (EntryRadioGroup.ItemIndex <> -1)
+  then
+    for i := 0 to FieldCount - 1 do
+      Fields[i].EntryMode := TEpiEntryMode(PtrUInt(EntryRadioGroup.Items.Objects[EntryRadioGroup.ItemIndex]));
+
+  // Confirm Entry
+  if ConfirmEntryChkBox.State <> cbGrayed then
+    for i := 0 to FieldCount - 1 do
+      Fields[i].ConfirmEntry := ConfirmEntryChkBox.Checked;
+
+  // Repeat
+  if RepeatValueChkBox.State <> cbGrayed then
+    for i := 0 to FieldCount - 1 do
+      Fields[i].RepeatValue := RepeatValueChkBox.Checked;
+
+  // Defaultvalue
+  if DefaultValueEdit.Modified then
+    for i := 0 to FieldCount - 1 do
+      Fields[i].DefaultValueAsString := DefaultValueEdit.Text;
+
+  // Show valuelabel
+  if ShowValueLabelChkBox.State <> cbGrayed then
+    for i := 0 to FieldCount - 1 do
+      Fields[i].ShowValueLabel := ShowValueLabelChkBox.Checked;
+
+  // Forcepicklist
+  if ForcePickListChkBox.State <> cbGrayed then
+    for i := 0 to FieldCount - 1 do
+      Fields[i].ForcePickList := ForcePickListChkBox.Checked;
+
+  // WriteValueLabels
+  if not ComboIgnoreSelected(ValueLabelWriteToComboBox) then
+    for i := 0 to FieldCount -1 do
+      Fields[i].ValueLabelWriteField := TEpiField(ComboSelectedObject(ValueLabelWriteToComboBox));
+
+  // Comparison
+  if CompareGroupBox.Visible and
+     (not ComboIgnoreSelected(CompareToCombo))
+  then
+  begin
+    if ComboNoneSelected(CompareToCombo) then
+    begin
+      for i := 0 to FieldCount - 1 do
+      begin
+        // Just call Free, if Obj.=nil nothing happens anyway.
+        Fields[i].Comparison.Free;
+        Fields[i].Comparison := nil;
+      end;
+    end else begin
+      for i := 0 to FieldCount -1 do
+      begin
+        Fields[i].Comparison.Free;
+        Fields[i].Comparison := TEpiComparison.Create(Fields[i]);
+        Fields[i].Comparison.CompareType := TEpiComparisonType(CompareTypeCombo.ItemIndex);
+        Fields[i].Comparison.CompareField := TEpiField(ComboSelectedObject(CompareToCombo));
+      end;
+    end;
+  end;
+
+  // Jumps
+  if (not ComboIgnoreSelected(UseJumpsCombo)) then
+  begin
+    if ComboNoneSelected(UseJumpsCombo) then
+    begin
+      for i := 0 to FieldCount -1  do
+      begin
+        Fields[i].Jumps.Free;
+        Fields[i].Jumps := nil;
+      end;
+    end else begin
+      for i := 0 to FieldCount -1  do
+      begin
+        Fields[i].Jumps := TEpiJumps.Create(Fields[i]);
+        Fields[i].Jumps.ItemOwner := true;
+
+        for j := 0 to FJumpComponentsList.Count - 1 do
+        with Fields[i].Jumps do
+        begin
+          NJump := NewJump;
+          with PJumpComponents(FJumpComponentsList[j])^ do
+          begin
+            if TComboBox(GotoCombo).ItemIndex <= 2 then
+              NJump.JumpType := TEpiJumpType(PtrInt(ComboSelectedObject(TComboBox(GotoCombo))))
+            else begin
+              NJump.JumpType := jtToField;
+              NJump.JumpToField := TEpiField(ComboSelectedObject(TComboBox(GotoCombo)))
+            end;
+            NJump.ResetType := TEpiJumpResetType(PtrInt(ComboSelectedObject(TComboBox(ResetCombo))));
+            Case Field.FieldType of
+              ftBoolean:     TEpiBoolJump(NJump).JumpValue   := StrToInt(TEdit(ValueEdit).Text);
+              ftInteger:     TEpiIntJump(NJump).JumpValue    := StrToInt(TEdit(ValueEdit).Text);
+              ftFloat:       TEpiFloatJump(NJump).JumpValue  := StrToFloat(TEdit(ValueEdit).Text);
+              ftString,
+              ftUpperString: TEpiStringJump(NJump).JumpValue := TEdit(ValueEdit).Text;
+            end; // Case Field.Fieldtype
+          end; // with PJumpComponents(FJumpComponentsList[i])^ do
+        end; // with Field.Jumps do
+      end; // for i := 0 to FieldCount -1  do
+    end; // if ComboNoneSelected(UseJumpsCombo) then > ELSE
+  end; // if (not ComboIgnoreSelected(UseJumpsCombo)) then
 end;
 
 procedure TFieldPropertiesFrame.EditUTF8KeyPress(Sender: TObject;
@@ -1400,10 +1641,10 @@ begin
   UnRegisterValueLabelHook;
 
   FFields := EpiControls;
+  if not Assigned(FFields[0]) then exit;
+
   FDataFile := Field.DataFile;
   FValueLabels := FDataFile.ValueLabels;
-
-  if not Assigned(FFields[0]) then exit;
 
   RegisterValueLabelHook;
 
@@ -1413,10 +1654,9 @@ end;
 
 function TFieldPropertiesFrame.ApplyChanges: boolean;
 begin
-{  result := ValidateChanges;
-  if Result then
+  result := ValidateChanges;
+{  if Result then
     InternalApplyChanges;}
-  Result := true;
 end;
 
 end.
