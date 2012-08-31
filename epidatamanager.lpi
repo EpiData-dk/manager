@@ -52,9 +52,6 @@
             <CompilerMessages>
               <UseMsgFile Value="True"/>
             </CompilerMessages>
-            <CustomOptions Value="-dEPI_DEBUG1
--dEPI_RELEASE
--vv"/>
             <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
@@ -92,7 +89,6 @@
             <CompilerMessages>
               <UseMsgFile Value="True"/>
             </CompilerMessages>
-            <CustomOptions Value="-dVerboseScrollingWinControl"/>
             <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
@@ -273,12 +269,12 @@
         <UnitName Value="design_properties_headingframe"/>
       </Unit17>
       <Unit18>
-        <Filename Value="designer/design_propertiesbase_frame.pas"/>
+        <Filename Value="designer/design_properties_baseframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DesignPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_propertiesbase_frame"/>
+        <UnitName Value="design_properties_baseframe"/>
       </Unit18>
       <Unit19>
         <Filename Value="designer/design_types.pas"/>
@@ -564,38 +560,37 @@
         <UnitName Value="design_designcontroller"/>
       </Unit62>
       <Unit63>
-        <Filename Value="designer/design_fieldproperties_frame.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FieldPropertiesFrameOld"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_fieldproperties_frame"/>
-      </Unit63>
-      <Unit64>
         <Filename Value="designer/design_properties_fieldframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_properties_fieldframe"/>
-      </Unit64>
-      <Unit65>
+      </Unit63>
+      <Unit64>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SectionPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_properties_sectionframe"/>
-      </Unit65>
-      <Unit66>
+      </Unit64>
+      <Unit65>
         <Filename Value="designer/design_designmessenger.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_designmessenger"/>
-      </Unit66>
-      <Unit67>
+      </Unit65>
+      <Unit66>
         <Filename Value="designer/design_commander.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_commander"/>
+      </Unit66>
+      <Unit67>
+        <Filename Value="designer/design_properties_emptyframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="EmptyPropertiesFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_properties_emptyframe"/>
       </Unit67>
     </Units>
   </ProjectOptions>
@@ -623,7 +618,6 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dVerboseScrollingWinControl"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

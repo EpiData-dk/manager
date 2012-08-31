@@ -5,35 +5,44 @@ unit design_properties_form;
 interface
 
 uses
-  Classes, SysUtils, Forms, JvDesignSurface;
+  Classes, SysUtils, Forms, JvDesignSurface, design_types;
 
 type
 
   { TPropertiesForm }
 
   TPropertiesForm = class(TForm)
-    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   private
     FFrame: TCustomFrame;
+    FOnShowHintMsg: TDesignFrameShowHintEvent;
     procedure ShowEmptyPage;
     procedure FormDeactivate(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
+    procedure ApplyClick(Sender: TObject);
+    procedure CancelClick(Sender: TObject);
+    procedure ResetClick(Sender: TObject);
   public
     constructor Create(TheOwner: TComponent); override;
     procedure UpdateSelection(Objects: TJvDesignObjectArray);
+    procedure RestoreDefaultPos;
+    function ValidateControls: boolean;
+    property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
   end;
 
 implementation
 
 uses
-  Buttons, ExtCtrls, Controls, epicustombase, design_types;
+  Buttons, ExtCtrls, Controls, epicustombase,
+  design_properties_baseframe, Graphics, design_properties_emptyframe,
+  settings2, settings2_var;
 
 { TPropertiesForm }
 
 procedure TPropertiesForm.FormDeactivate(Sender: TObject);
 begin
-{  if Assigned(FFrame) then
-    if not (FFrame as IDesignPropertiesFrame).ApplyChanges then
-      Self.SetFocus;  }
+  if not ValidateControls then
+    Self.SetFocus;
 end;
 
 procedure TPropertiesForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
@@ -41,11 +50,46 @@ procedure TPropertiesForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
 begin
   if Assigned(FFrame) then
     CanClose := (FFrame as IDesignPropertiesFrame).ApplyChanges;
+
+  if CanClose and
+     ManagerSettings.SaveWindowPositions
+  then
+    SaveFormPosition(Self, 'ControlsForm');
+end;
+
+procedure TPropertiesForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'ControlsForm');
+end;
+
+procedure TPropertiesForm.ApplyClick(Sender: TObject);
+begin
+  ValidateControls;
+end;
+
+procedure TPropertiesForm.CancelClick(Sender: TObject);
+begin
+  if assigned(FFrame) then
+    (FFrame as IDesignPropertiesFrame).ResetControls;
+  Close;
+end;
+
+procedure TPropertiesForm.ResetClick(Sender: TObject);
+begin
+  if assigned(FFrame) then
+    (FFrame as IDesignPropertiesFrame).ResetControls;
 end;
 
 procedure TPropertiesForm.ShowEmptyPage;
 begin
-  // TODO: Show an empty page.
+  if Assigned(FFrame) then
+    FFrame.Free;
+
+  FFrame := TEmptyPropertiesFrame.Create(Self);
+  FFrame.Align := alClient;
+  FFrame.Parent := Self;
+  TDesignPropertiesFrame(FFrame).OnShowHintMsg := OnShowHintMsg;
 end;
 
 constructor TPropertiesForm.Create(TheOwner: TComponent);
@@ -53,10 +97,13 @@ var
   P: TPanel;
   Btn: TBitBtn;
   CloseBtn: TBitBtn;
+  ApplyBtn: TBitBtn;
 begin
   inherited CreateNew(TheOwner);
 
   BeginFormUpdate;
+
+  Color := clSkyBlue;
 
   P := TPanel.Create(Self);
   P.Align := alBottom;
@@ -78,16 +125,29 @@ begin
   Btn.AnchorToNeighbour(akRight, 10, CloseBtn);
   Btn.AutoSize := true;
   Btn.Parent := P;
+  Btn.OnClick := @CancelClick;
+
+  ApplyBtn := TBitBtn.Create(Self);
+  ApplyBtn.Kind := bkRetry;
+  ApplyBtn.Anchors := [];
+  ApplyBtn.Caption := 'Apply';
+  ApplyBtn.AnchorVerticalCenterTo(P);
+  ApplyBtn.AnchorParallel(akLeft, 10, P);
+  ApplyBtn.AutoSize := true;
+  ApplyBtn.Parent := P;
+  ApplyBtn.OnClick := @ApplyClick;
 
   Btn := TBitBtn.Create(Self);
-  Btn.Kind := bkRetry;
+  Btn.Kind := bkCustom;
   Btn.Anchors := [];
-  Btn.Caption := 'Apply';
+  Btn.Caption := 'Reset';
   Btn.AnchorVerticalCenterTo(P);
-  Btn.AnchorParallel(akLeft, 10, P);
+  Btn.AnchorToNeighbour(akLeft, 10, ApplyBtn);
   Btn.AutoSize := true;
   Btn.Parent := P;
+  Btn.OnClick := @ResetClick;
 
+  OnShow := @FormShow;
   OnDeactivate := @FormDeactivate;
   OnCloseQuery := @FormCloseQuery;
 
@@ -105,15 +165,11 @@ var
     FFrame := FrameClass.Create(Self);
     FFrame.Align := alClient;
     FFrame.Parent := Self;
+    TDesignPropertiesFrame(FFrame).OnShowHintMsg := OnShowHintMsg;
   end;
 
 begin
-{  if Assigned(FFrame) then
-  begin
-    if not (FFrame as IDesignPropertiesFrame).ApplyChanges then
-      Exit;
-  end;}
-
+  if not ValidateControls then exit;
 
   if Length(Objects) = 0 then
   begin
@@ -147,6 +203,23 @@ begin
 
   if Assigned(FFrame) then
     (FFrame as IDesignPropertiesFrame).SetEpiControls(EpiCtrlItemArray);
+end;
+
+procedure TPropertiesForm.RestoreDefaultPos;
+begin
+  BeginFormUpdate;
+  SetBounds(300, 20, 500, 500);
+  EndFormUpdate;
+  SaveFormPosition(Self, 'ControlsForm');
+end;
+
+function TPropertiesForm.ValidateControls: boolean;
+begin
+  result := true;
+
+  if Assigned(FFrame)
+  then
+    Result := (FFrame as IDesignPropertiesFrame).ApplyChanges;
 end;
 
 end.

@@ -6,13 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
-  epicustombase, design_types;
+  epicustombase, design_types, design_properties_baseframe;
 
 type
 
   { THeadingPropertiesFrame }
 
-  THeadingPropertiesFrame = class(TFrame, IDesignPropertiesFrame)
+  THeadingPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
     NameEdit: TEdit;
     CaptionEdit: TEdit;
     Label10: TLabel;
@@ -25,6 +25,7 @@ type
   public
     { public declarations }
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
+    procedure ResetControls;
     function ApplyChanges: boolean;
   end;
 
@@ -69,6 +70,11 @@ begin
   UpdateContent;
 end;
 
+procedure THeadingPropertiesFrame.ResetControls;
+begin
+  UpdateContent;
+end;
+
 function THeadingPropertiesFrame.ApplyChanges: boolean;
 var
   i: Integer;
@@ -79,7 +85,7 @@ begin
     if not TEpiHeading(FHeadings[0]).ValidateRename(NameEdit.Text, false)
     then
       begin
-        //ShowHintMsg('Name already exists or invalid identifier', NameEdit);
+        ShowHintMsg('Name already exists or invalid identifier', NameEdit);
         Exit;
       end;
 
@@ -87,7 +93,7 @@ begin
      (UTF8Length(CaptionEdit.Text) = 0)
   then
     begin
-      //ShowHintMsg('Empty heading not allowed...', CaptionEdit);
+      ShowHintMsg('Empty heading not allowed...', CaptionEdit);
       Exit;
     end;
 
@@ -100,6 +106,7 @@ begin
     for i := Low(FHeadings) to High(FHeadings) do
       TEpiHeading(FHeadings[i]).Caption.Text := CaptionEdit.Text;
 
+  ShowHintMsg('', nil);
   result := true;
 end;
 

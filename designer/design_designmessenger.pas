@@ -68,6 +68,16 @@ begin
         else
           Result := inherited IsDesignMessage(ASender, AMessage);
       end;
+    LM_LBUTTONDOWN, LM_LBUTTONUP,
+    LM_RBUTTONDOWN, LM_RBUTTONUP:
+      begin
+        if not FFrame.ValidateControls then
+          // We do not process with sending MouseDown/Up message, since a control cannot be validated!
+          // -> proceeding may allow additional controls to be created etc.
+          Result := true
+        else
+          Result := inherited IsDesignMessage(ASender, AMessage);
+      end
   else
     Result := inherited IsDesignMessage(ASender, AMessage);
   end;

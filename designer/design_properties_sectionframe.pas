@@ -6,13 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, Buttons,
-  epicustombase, design_types;
+  epicustombase, design_types, design_properties_baseframe;
 
 type
 
   { TSectionPropertiesFrame }
 
-  TSectionPropertiesFrame = class(TFrame, IDesignPropertiesFrame)
+  TSectionPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
     CaptionEdit: TEdit;
     GroupAssignedListBox: TListBox;
     GroupAvailableListBox: TListBox;
@@ -35,6 +35,7 @@ type
   public
     { public declarations }
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
+    procedure ResetControls;
     function ApplyChanges: boolean;
   end;
 
@@ -85,6 +86,11 @@ begin
   UpdateContent;
 end;
 
+procedure TSectionPropertiesFrame.ResetControls;
+begin
+  UpdateContent;
+end;
+
 function TSectionPropertiesFrame.ApplyChanges: boolean;
 var
   i: Integer;
@@ -95,7 +101,7 @@ begin
     if not FSections[0].ValidateRename(NameEdit.Text, false)
     then
       begin
-        //ShowHintMsg('Name already exists or invalid identifier', NameEdit);
+        ShowHintMsg('Name already exists or invalid identifier', NameEdit);
         Exit;
       end;
 
@@ -103,6 +109,7 @@ begin
     for i := Low(FSections) to High(FSections) do
       TEpiSection(FSections[i]).Caption.Text := CaptionEdit.Text;
 
+  ShowHintMsg('', nil);
   Result := true;
 end;
 

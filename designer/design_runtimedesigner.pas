@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, ExtCtrls, StdCtrls,
-  JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
+  JvDesignSurface, epidatafiles, LMessages, ActnList, Menus, Buttons,
   manager_messages, epidatafilestypes, design_properties_form, types,
   epicustombase, epidocument, epivaluelabels, design_types;
 
@@ -15,6 +15,8 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    NewTimeFieldFastAction: TAction;
+    NewTimeFieldAction: TAction;
     SelectLastAction: TAction;
     SelectFirstAction: TAction;
     SelectPgUpAction: TAction;
@@ -32,6 +34,7 @@ type
     NewIntFieldFastAction: TAction;
     NewIntFieldAction: TAction;
     PrintDataFormAction: TAction;
+    ToolButton2: TToolButton;
     ViewDatasetAction: TAction;
     UndoAction: TAction;
     ImportAction: TAction;
@@ -107,7 +110,6 @@ type
     NewBooleanMenu: TMenuItem;
     NewDMYTodayFieldMenu: TMenuItem;
     NewMDYTodayFieldMenu: TMenuItem;
-    NewTimeFieldMenu: TMenuItem;
     NewTimeNowFieldMenu: TMenuItem;
     NewUpperCaseMenu: TMenuItem;
     NewYMDTodayFieldMenu: TMenuItem;
@@ -147,9 +149,8 @@ type
     procedure CutControlActionExecute(Sender: TObject);
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
+    procedure DeleteControlFastActionExecute(Sender: TObject);
     procedure DesignControlPopUpMenuPopup(Sender: TObject);
-    procedure DesignerActionListExecute(AAction: TBasicAction;
-      var Handled: Boolean);
     procedure DesignerActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
     procedure EditControlActionExecute(Sender: TObject);
@@ -167,6 +168,7 @@ type
     procedure NewHeadingFastActionExecute(Sender: TObject);
     procedure NewIntFieldActionExecute(Sender: TObject);
     procedure NewIntFieldFastActionExecute(Sender: TObject);
+    procedure NewOtherFieldClick(Sender: TObject);
     procedure NewStringFieldActionExecute(Sender: TObject);
     procedure NewStringFieldFastActionExecute(Sender: TObject);
     procedure PasteAsDateActionExecute(Sender: TObject);
@@ -233,11 +235,16 @@ type
       ShowPropertiesForm: boolean): TControl;
     function NewShortCutDesignHeading(ShowPropertiesForm: boolean): TControl;
   private
+    { Hint }
+    FHintWindow: THintWindow;
+    procedure ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
+  private
     { Other }
     procedure UpdateShortcuts;
     procedure SelectControl(AAction: TDesignSelectAction);
     procedure UpdateStatusbar(ControlList: TJvDesignObjectArray);
     procedure UpdateStatusbarSizes;
+    procedure DeleteControls(ForceDelete: boolean);
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
@@ -246,6 +253,7 @@ type
     procedure   UpdateFrame;
     procedure   RestoreDefaultPos;
     function    IsShortCut(var Message: TLMKey): boolean;
+    function ValidateControls: boolean;
     property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
     property ImportedFileName: string read FImportedFileName;
   end;
@@ -261,7 +269,7 @@ uses
   manager_globals, managerprocs, Clipbrd, math,
   Dialogs, import_structure_form, epimiscutils,
   datasetviewer_frame, fpvectorial, fpvutils, FPimage,
-  LCLMessageGlue, LCLType, shortcuts,
+  LCLMessageGlue, LCLType, shortcuts, settings2,
   design_control_section,
   design_control_field,
   design_control_heading;
@@ -295,9 +303,9 @@ end;
 
 
 procedure TRuntimeDesignFrame.GetAddClass(Sender: TObject; var ioClass: string);
+var
+  Key: Word;
 begin
-//  if FActiveButton = SelectorToolButton then exit;
-
   // Disallow Section-in-Section
   if (TDesignController(TJvDesignSurface(Sender).Controller).Clicked is TDesignSection) and
      (FActiveButton = SectionToolButton)
@@ -310,7 +318,11 @@ begin
   ioClass := FAddClass;
 
   if ioClass <> '' then
+  begin
     FCreatingControl := true;
+    Key := VK_RETURN;
+    LCLSendKeyDownEvent(FDesignPanel, Key, 0, true, false);
+  end;
 
   SelectorToolButton.Click;
 end;
@@ -423,6 +435,14 @@ end;
 procedure TRuntimeDesignFrame.NewIntFieldFastActionExecute(Sender: TObject);
 begin
   NewShortCutDesignField(ftInteger, false);
+end;
+
+procedure TRuntimeDesignFrame.NewOtherFieldClick(Sender: TObject);
+begin
+  FAddClass := 'TDesignField';
+  OtherToolButton.Tag := TMenuItem(Sender).Tag;
+  OtherToolButton.ImageIndex := TMenuItem(Sender).ImageIndex;
+  DoToogleBtn(OtherToolButton);
 end;
 
 procedure TRuntimeDesignFrame.NewStringFieldActionExecute(Sender: TObject);
@@ -817,7 +837,6 @@ begin
         Continue;
       end;
 
-    // TODO : Remove from Old EpiDocument?
     DataFile.ValueLabels.AddItem(VLSet);
   end;
 
@@ -1118,6 +1137,24 @@ begin
   end;
 end;
 
+procedure TRuntimeDesignFrame.ShowHintMsg(Sender: TObject; Ctrl: TControl;
+  const Msg: string);
+var
+  R: TRect;
+  P: TPoint;
+begin
+  if (Msg = '') and (Ctrl = nil) then
+  begin
+    FHintWindow.Hide;
+    Exit;
+  end;
+
+  R := FHintWindow.CalcHintRect(0, Msg, nil);
+  P := Ctrl.ClientToScreen(Point(0, Ctrl.Height + 2));
+  OffsetRect(R, P.X, P.Y);
+  FHintWindow.ActivateHint(R, Msg);
+end;
+
 procedure TRuntimeDesignFrame.UpdateShortcuts;
 begin
   NewIntFieldAction.ShortCut           := D_NewIntField;
@@ -1209,7 +1246,6 @@ begin
   FDesignPanel.Surface.SelectionChange;
   FDesignPanel.Surface.UpdateDesigner;
 
-  // TODO : Selected control within visual area!
   CTop := RelativeTop(Ctrl);
   CBot := CTop + Ctrl.Height;
   SPos := JvDesignScrollBox1.VertScrollBar.Position;
@@ -1326,6 +1362,64 @@ begin
   RecordsPanel.Width  := RecordsLabel.Left + TW(RecordsLabel) + PanelBorder;
   SectionsPanel.Width := SectionsLabel.Left + TW(SectionsLabel) + PanelBorder;
   FieldsPanel.Width   := FieldsLabel.Left + TW(FieldsLabel) + PanelBorder;
+end;
+
+procedure TRuntimeDesignFrame.DeleteControls(ForceDelete: boolean);
+var
+  EpiCtrl: TEpiCustomControlItem;
+  i: Integer;
+  S: String;
+begin
+  if FDesignPanel.Surface.Selector.IsSelected(FDesignPanel)
+  then
+    FDesignPanel.Surface.Selector.RemoveFromSelection(FDesignPanel);
+
+
+  if (not ForceDelete) and
+     (FDesignPanel.Surface.Count >= 1)
+  then
+  begin
+    if FDesignPanel.Surface.Count > 1 then
+    begin
+      EpiCtrl := nil;
+      for i := 0 to FDesignPanel.Surface.Count - 1 do
+        if not ((FDesignPanel.Surface.Selection[i] as IDesignEpiControl).EpiControl is TEpiHeading) then
+        begin
+          EpiCtrl := (FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl;
+          Break;
+        end;
+
+      if MessageDlg('Warning', 'Are you sure you want to delete?' + LineEnding +
+                    'Number of selected controls: ' + IntToStr(FDesignPanel.Surface.Count),
+                    mtWarning, mbYesNo, 0, mbNo) = mrNo
+      then
+        Exit;
+    end else begin
+      EpiCtrl := (FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl;
+      if EpiCtrl is TEpiSection then
+        S := 'Section: ';
+      if EpiCtrl is TEpiField then
+        S := 'Field: ';
+      if EpiCtrl is TEpiHeading then
+        S := 'Heading: ';
+      S += EpiCtrl.Name;
+
+      if MessageDlg('Warning', 'Are you sure you want to delete?' + LineEnding +
+                    S, mtWarning, mbYesNo, 0, mbNo) = mrNo
+      then
+        Exit;
+    end;  // if FDesignPanel.Surface.Count > 1 then
+
+
+    if (DataFile.Size > 0) and
+       ((EpiCtrl is TEpiField) or
+         ((EpiCtrl is TEpiSection) and (TEpiSection(EpiCtrl).Fields.Count > 0))) and
+       (MessageDlg('Warning', 'Field(s) contains data.' + LineEnding +
+        'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
+      exit;
+  end;
+
+  FDesignPanel.Surface.DeleteComponents;
 end;
 
 procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
@@ -1460,10 +1554,12 @@ end;
 
 procedure TRuntimeDesignFrame.DeleteControlActionExecute(Sender: TObject);
 begin
-  if FDesignPanel.Surface.Selector.IsSelected(FDesignPanel)
-  then
-    FDesignPanel.Surface.Selector.RemoveFromSelection(FDesignPanel);
-  FDesignPanel.Surface.DeleteComponents;
+  DeleteControls(false);
+end;
+
+procedure TRuntimeDesignFrame.DeleteControlFastActionExecute(Sender: TObject);
+begin
+  DeleteControls(true);
 end;
 
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
@@ -1487,13 +1583,6 @@ begin
   end;
 end;
 
-procedure TRuntimeDesignFrame.DesignerActionListExecute(AAction: TBasicAction;
-  var Handled: Boolean);
-begin
-//  if Screen.ActiveCustomForm <> MainForm then
-//    Handled := true;
-end;
-
 procedure TRuntimeDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
@@ -1505,6 +1594,11 @@ end;
 
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
 begin
+  {$IFNDEF EPI_DEBUG}
+  if MessageDlg('Warning', 'Are you sure you want to clear dataform?',
+    mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+  {$ENDIF}
+
   FDesignPanel.Surface.Clear;
 end;
 
@@ -1622,8 +1716,14 @@ begin
   FDesignPanel.Surface.ControllerClass := TDesignController;
   FDesignPanel.Surface.MessengerClass := TDesignMessenger;
 
+  FHintWindow := THintWindow.Create(Self);
+  FHintWindow.AutoHide := true;
+  FHintWindow.HideInterval := 5 * 1000;
+
   FPropertiesForm := TPropertiesForm.Create(Self);
+  FPropertiesForm.OnShowHintMsg := @ShowHintMsg;
   FPropertiesForm.UpdateSelection(nil);
+
 
   UpdateFrame;
 
@@ -1637,8 +1737,20 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.RestoreDefaultPos;
+var
+  Aform: TForm;
 begin
-  //
+  if Assigned(FPropertiesForm) then
+    FPropertiesForm.RestoreDefaultPos;
+  TImportStructureForm.RestoreDefaultPos;
+
+  Aform := TForm.Create(nil);
+  Aform.Width := 600;
+  Aform.Height := 600;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, 'DataSetViewer');
+  AForm.free;
 end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;
@@ -1649,6 +1761,14 @@ begin
     (DesignerActionList.IsShortCut(Message));
 
   // Else ready for implementing a larger Short-cut editor.
+end;
+
+function TRuntimeDesignFrame.ValidateControls: boolean;
+begin
+  Result := true;
+
+  if Assigned(FPropertiesForm) then
+     result := FPropertiesForm.ValidateControls;
 end;
 
 end.

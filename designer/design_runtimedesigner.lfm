@@ -82,7 +82,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object OtherToolButton: TToolButton
-      Left = 233
+      Left = 257
       Hint = 'Other Field Types...'
       Top = 1
       Caption = 'OtherToolButton'
@@ -92,7 +92,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider2: TToolButton
-      Left = 261
+      Left = 285
       Top = 1
       Width = 5
       Caption = 'Divider2'
@@ -100,7 +100,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object HeadingToolButton: TToolButton
       Tag = 5
-      Left = 266
+      Left = 290
       Hint = 'New Heading'
       Top = 1
       Caption = 'New Heading'
@@ -110,7 +110,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider3: TToolButton
-      Left = 294
+      Left = 318
       Top = 1
       Width = 5
       Caption = 'Divider3'
@@ -118,7 +118,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object SectionToolButton: TToolButton
       Tag = 6
-      Left = 299
+      Left = 323
       Hint = 'New Section'
       Top = 1
       Caption = 'New Section'
@@ -128,63 +128,63 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider4: TToolButton
-      Left = 327
+      Left = 351
       Top = 1
       Width = 5
       Caption = 'Divider4'
       Style = tbsDivider
     end
     object EditToolButton: TToolButton
-      Left = 332
+      Left = 356
       Top = 1
       Action = EditControlAction
       ParentShowHint = False
       ShowHint = True
     end
     object DeleteToolButton: TToolButton
-      Left = 360
+      Left = 384
       Top = 1
       Action = DeleteControlAction
       ParentShowHint = False
       ShowHint = True
     end
     object DeleteAllToolButton: TToolButton
-      Left = 388
+      Left = 412
       Top = 1
       Action = DeleteAllAction
       ParentShowHint = False
       ShowHint = True
     end
     object Divider5: TToolButton
-      Left = 416
+      Left = 440
       Top = 1
       Width = 5
       Caption = 'Divider5'
       Style = tbsDivider
     end
     object ImportToolButton: TToolButton
-      Left = 421
+      Left = 445
       Top = 1
       Action = ImportAction
       ParentShowHint = False
       ShowHint = True
     end
     object ExportToolButton: TToolButton
-      Left = 449
+      Left = 473
       Top = 1
       ImageIndex = 19
       ParentShowHint = False
       ShowHint = True
     end
     object Divider6: TToolButton
-      Left = 477
+      Left = 501
       Top = 1
       Width = 5
       Caption = 'Divider6'
       Style = tbsDivider
     end
     object TestToolButton: TToolButton
-      Left = 482
+      Left = 506
       Top = 1
       Caption = 'TestToolButton'
       ImageIndex = 0
@@ -231,6 +231,14 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Caption = 'ToolButton1'
         Style = tbsDivider
       end
+    end
+    object ToolButton2: TToolButton
+      Tag = 10
+      Left = 233
+      Top = 1
+      Caption = 'ToolButton2'
+      ImageIndex = 15
+      OnClick = FieldBtnClick
     end
   end
   object StatusBarPanel: TPanel
@@ -591,6 +599,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     ClientWidth = 263
     ParentColor = False
     TabOrder = 2
+    Visible = False
     object Label1: TLabel
       Left = 11
       Height = 15
@@ -672,6 +681,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     Width = 5
     Align = alRight
     ResizeAnchor = akRight
+    Visible = False
   end
   object JvDesignScrollBox1: TJvDesignScrollBox
     Left = 0
@@ -2135,7 +2145,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   end
   object DesignerActionList: TActionList
     Images = DesignerImageList
-    OnExecute = DesignerActionListExecute
     OnUpdate = DesignerActionListUpdate
     left = 344
     top = 240
@@ -2312,6 +2321,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Category = 'Edit'
       Caption = 'DeleteControlFastAction'
       ImageIndex = 11
+      OnExecute = DeleteControlFastActionExecute
     end
     object SelectPgDnAction: TAction
       Category = 'Select'
@@ -2338,10 +2348,20 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Caption = 'SelectLastAction'
       OnExecute = SelectLastActionExecute
     end
+    object NewTimeFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewTimeFieldAction'
+      ImageIndex = 15
+    end
+    object NewTimeFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewTimeFieldFastAction'
+      ImageIndex = 15
+    end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList
-    left = 152
+    left = 232
     top = 96
     object TodayDateSubMenu: TMenuItem
       Caption = 'Auto Date...'
@@ -2426,6 +2446,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
           0000000000000000000000000000000000000000000000000000
         }
         ImageIndex = 4
+        OnClick = NewOtherFieldClick
       end
       object NewMDYTodayFieldMenu: TMenuItem
         Tag = 8
@@ -2507,6 +2528,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
           0000000000000000000000000000000000000000000000000000
         }
         ImageIndex = 5
+        OnClick = NewOtherFieldClick
       end
       object NewYMDTodayFieldMenu: TMenuItem
         Tag = 9
@@ -2588,91 +2610,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
           0000000000000000000000000000000000000000000000000000
         }
         ImageIndex = 6
+        OnClick = NewOtherFieldClick
       end
     end
     object TimeSubMenu: TMenuItem
-      Caption = 'Time...'
-      object NewTimeFieldMenu: TMenuItem
-        Tag = 10
-        Caption = 'Time'
-        Bitmap.Data = {
-          36090000424D3609000000000000360000002800000018000000180000000100
-          2000000000000009000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF000000FFFFFF
-          FF0000000000000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00000000000000000000000000000000FF000000FF0000
-          0000000000FF000000FF0000000000000000000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00000000FF000000FF000000FF000000FF000000FF0000
-          00FF0000000000000000FFFFFF00FFFFFF00000000FF000000FFFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF0000000000000000FFFFFFFF00000000FF000000FFFFFF
-          FF0000000000000000FF0000000000000000000000FF000000FFFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF0000000000000000FF00000000000000FF000000FFFFFF
-          FF0000000000000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF000000FF000000FFFFFF
-          FF0000000000000000FF000000000000000000000000FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF000000FF000000FFFFFF
-          FF0000000000000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF000000FFFFFF
-          FF00FFFFFF00000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF00000000FF000000FF000000FF000000FF000000FF000000FFFFFFFF000000
-          00FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF0000000000000000FF000000FF000000000000000000000000FFFFFF000000
-          0000000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF00FFFFFF00000000FF000000FF0000000000000000FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF00FFFFFF00FFFFFF0000000000000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFFFF000000
-          00FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF0000000000000000FF000000FF000000FF00000000FFFF
-          FF00000000FF000000FFFFFFFF00FFFFFF00000000FF000000FFFFFFFF000000
-          00FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF000000000000000000000000FF000000FF00000000FFFF
-          FF0000000000000000FF000000FF00000000000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF0000000000000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
-        ImageIndex = 15
-      end
+      Caption = 'Auto Time...'
       object NewTimeNowFieldMenu: TMenuItem
         Tag = 11
         Caption = 'Time (Auto)'
@@ -2753,6 +2695,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
         ImageIndex = 15
+        OnClick = NewOtherFieldClick
       end
     end
     object NewBooleanMenu: TMenuItem
@@ -2834,6 +2777,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         00FF00000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
       ImageIndex = 17
+      OnClick = NewOtherFieldClick
     end
     object NewUpperCaseMenu: TMenuItem
       Tag = 13
@@ -2915,6 +2859,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
       ImageIndex = 3
+      OnClick = NewOtherFieldClick
     end
     object NewAutoIncMenu: TMenuItem
       Tag = 2
@@ -2996,6 +2941,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         0000000000000000000000000000000000000000000000000000
       }
       ImageIndex = 1
+      OnClick = NewOtherFieldClick
     end
   end
   object DesignControlPopUpMenu: TPopupMenu

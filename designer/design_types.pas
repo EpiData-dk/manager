@@ -25,6 +25,7 @@ type
 
   IDesignPropertiesFrame = interface ['IDesignPropertiesFrame']
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
+    procedure ResetControls;
     function  ApplyChanges: boolean;
   end;
 

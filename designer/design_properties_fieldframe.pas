@@ -7,13 +7,14 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, ExtCtrls,
   Buttons, JvDesignSurface, design_types, epidatafilestypes,
-  epicustombase, epidatafiles, epivaluelabels, LCLType;
+  epicustombase, epidatafiles, epivaluelabels, LCLType,
+  design_properties_baseframe;
 
 type
 
   { TFieldPropertiesFrame }
 
-  TFieldPropertiesFrame = class(TFrame, IDesignPropertiesFrame)
+  TFieldPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
     AddEditValueLabelBtn: TButton;
     AddJumpBtn: TSpeedButton;
     AsDaysRadio: TRadioButton;
@@ -108,7 +109,7 @@ type
     PlusLabelCrDate2: TLabel;
     QuestionEdit: TEdit;
     QuestionLabel: TLabel;
-    OriginalStateRadio: TRadioButton;
+    CalcUnchangedRadioBtn: TRadioButton;
     RangesGrpBox: TGroupBox;
     RemoveJumpBtn: TSpeedButton;
     RepeatValueChkBox: TCheckBox;
@@ -134,6 +135,7 @@ type
     YearCombo: TComboBox;
     procedure AddEditValueLabelBtnClick(Sender: TObject);
     procedure AddJumpBtnClick(Sender: TObject);
+    procedure CalcRadioChange(Sender: TObject);
     procedure ManageValueLabelsBtnClick(Sender: TObject);
     procedure RemoveJumpBtnClick(Sender: TObject);
     procedure UseJumpsComboSelect(Sender: TObject);
@@ -195,6 +197,8 @@ type
   private
     { private declarations }
     FFields: TEpiCustomControlItemArray;
+    function DoError(Const Msg: string; Ctrl: TWinControl): boolean;
+    procedure DoWarning(Const Msg: string; Ctrl: TWinControl);
     procedure UpdateVisibility;
     procedure UpdateContent;
     function  ValidateChanges: boolean;
@@ -204,6 +208,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+    procedure  ResetControls;
     procedure   SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     function    ApplyChanges: boolean;
   end;
@@ -261,6 +266,8 @@ procedure TFieldPropertiesFrame.FinishCombo(Combo: TComboBox;
 begin
   Combo.Items.EndUpdate;
   Combo.ItemIndex := Combo.Items.IndexOfObject(IndexObject);
+  if Combo.ItemIndex = -1 then
+    Combo.ItemIndex := Combo.Items.IndexOfObject(FNoneObject);
 end;
 
 function TFieldPropertiesFrame.ComboIgnoreSelected(Combo: TComboBox): boolean;
@@ -683,13 +690,13 @@ begin
         (C.ClassType <> Fields[i].Calculation.ClassType))
     then
     begin
-      OriginalStateRadio.Checked := true;
+      CalcUnchangedRadioBtn.Checked := true;
       Break;
     end;
   end;
 
   // Then fill content!
-  if (not OriginalStateRadio.Checked) and
+  if (not CalcUnchangedRadioBtn.Checked) and
      (Assigned(C))
   then
     for i := 0 to FieldCount -1 do
@@ -705,6 +712,25 @@ begin
     end;
 end;
 
+function TFieldPropertiesFrame.DoError(const Msg: string; Ctrl: TWinControl
+  ): boolean;
+begin
+  DoWarning(Msg, Ctrl);
+  Ctrl.SetFocus;
+  Result := false;
+end;
+
+procedure TFieldPropertiesFrame.DoWarning(const Msg: string; Ctrl: TWinControl);
+var
+  P: TWinControl;
+begin
+  P := Ctrl.Parent;
+  while not (P is TTabSheet) do
+    P := P.Parent;
+  TPageControl(P.Parent).ActivePage := TTabSheet(P);
+  ShowHintMsg(Msg, Ctrl);
+end;
+
 procedure TFieldPropertiesFrame.AddJumpBtnClick(Sender: TObject);
 begin
   TEdit(PJumpComponents(DoAddNewJump)^.ValueEdit).SetFocus;
@@ -713,6 +739,13 @@ begin
      (ComboIgnoreSelected(UseJumpsCombo))
   then
     UseJumpsCombo.ItemIndex := UseJumpsCombo.Items.IndexOfObject(FNoneObject);
+end;
+
+procedure TFieldPropertiesFrame.CalcRadioChange(Sender: TObject);
+begin
+  TimeDiffGrpBox.Enabled      := TimeCalcRadio.Checked;
+  CombineDateGrpBox.Enabled   := CombineDateRadio.Checked;
+  CombineStringGrpBox.Enabled := CombineStringRadio.Checked;
 end;
 
 procedure TFieldPropertiesFrame.ManageValueLabelsBtnClick(Sender: TObject);
@@ -745,13 +778,9 @@ begin
   end;
 
   if VLEdit.ShowModal = mrOK then
-  begin
-//    UpdateValueLabels;
-    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(VLEdit.ValueLabelSet);
-  end else begin
-    if NewVL then
-      VLEdit.ValueLabelSet.Free;
-  end;
+    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(VLEdit.ValueLabelSet)
+  else if NewVL then
+    VLEdit.ValueLabelSet.Free;
 
   VLEDit.Free;
 end;
@@ -846,9 +875,7 @@ begin
           ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FNoneObject);
           ValueLabelComboBox.Items.Delete(Idx);
 
-{          ShowHintMsg(
-            Format('Warning: Valuelabels changed for field "%s"', [TEpiField(EpiControl).Name]),
-            GetValueLabelsEditor(TEpiDocument(FValueLabelSets.RootOwner)).ToolBar1);  }
+          DoWarning('Warning: Valuelabels changed!', ValueLabelComboBox);
         end;
         ValueLabelComboBox.Items.EndUpdate;
       end;
@@ -972,7 +999,7 @@ begin
   UseJumpsLabel.Visible           := ManyFields;
 
   // - calc
-  OriginalStateRadio.Visible      := ManyFields;
+  CalcUnchangedRadioBtn.Visible      := ManyFields;
   CalcTabSheet.TabVisible         := (not FieldsMustHaveFieldTypes(AutoFieldTypes));
 
   // - notes
@@ -984,7 +1011,7 @@ var
   F: TEpiField;
   i: Integer;
 
-  function ClearOrLeaveEdit(Edit: TEdit; Const NewText: string): boolean;
+  function ClearOrLeaveEdit(Edit: TCustomEdit; Const NewText: string): boolean;
   begin
     result := false;
     if NewText <> Edit.Text then
@@ -1143,23 +1170,18 @@ begin
   // Calculations
   // --------
   UpdateCalcFields;
+
+  // ---------
+  // Notes
+  // --------
+  NotesMemo.Clear;
+  NotesMemo.Text := Field.Notes.Text;
+  for i := 1 to FieldCount - 1 do
+    if ClearOrLeaveEdit(NotesMemo, Fields[i].Notes.Text)
+    then break;
 end;
 
 function TFieldPropertiesFrame.ValidateChanges: boolean;
-
-  function DoError(Const Msg: string; Ctrl: TWinControl): boolean;
-  var
-    P: TWinControl;
-  begin
-    P := Ctrl.Parent;
-    while not (P is TTabSheet) do
-      P := P.Parent;
-    TPageControl(P.Parent).ActivePage := TTabSheet(P);
-    Ctrl.SetFocus;
-//    ShowHintMsg(Msg, Ctrl);
-    Result := false;
-  end;
-
 var
   I: integer;
   I64: int64;
@@ -1187,7 +1209,7 @@ begin
        (I <= 0)
     then
     begin
-      // TODO : ErrorMessage
+      DoError('Invalid length', LengthEdit);
       Exit;
     end;
 
@@ -1334,7 +1356,7 @@ begin
   // *******
   if not (
       (NoCalcRadio.Checked) or
-      (OriginalStateRadio.Checked)
+      (CalcUnchangedRadioBtn.Checked)
      )
   then
   begin
@@ -1378,22 +1400,23 @@ begin
         Exit(DoError('At least one field must be assigned!', Field1Combo));
     end;
   end;
+
+  ShowHintMsg('', nil);
   result := true;
 end;
 
 procedure TFieldPropertiesFrame.InternalApplyChanges;
 var
-  i: Integer;
+  i, j: Integer;
   L: Cardinal;
   R: TEpiRange;
   S: string;
   NJump: TEpiJump;
-  j: Integer;
+  Calc: TEpiCalculation;
 begin
   // ---------
   // BASIC
   // ---------
-
 
   // Name
   if NameEdit.Modified then
@@ -1406,7 +1429,7 @@ begin
 
   // Length
   if LengthEdit.Modified then
-    if Fields[i].FieldType = ftFloat then
+    if Field.FieldType = ftFloat then
       for i := 0 to FieldCount - 1 do
         Fields[i].Length := StrToInt(LengthEdit.Text) + TEpiField(FFields[i]).Decimals + 1
     else
@@ -1539,7 +1562,7 @@ begin
   // Jumps
   if (not ComboIgnoreSelected(UseJumpsCombo)) then
   begin
-    if ComboNoneSelected(UseJumpsCombo) then
+    if (FJumpComponentsList.Count = 0) then
     begin
       for i := 0 to FieldCount -1  do
       begin
@@ -1549,6 +1572,7 @@ begin
     end else begin
       for i := 0 to FieldCount -1  do
       begin
+        Fields[i].Jumps.Free;
         Fields[i].Jumps := TEpiJumps.Create(Fields[i]);
         Fields[i].Jumps.ItemOwner := true;
 
@@ -1577,6 +1601,82 @@ begin
       end; // for i := 0 to FieldCount -1  do
     end; // if ComboNoneSelected(UseJumpsCombo) then > ELSE
   end; // if (not ComboIgnoreSelected(UseJumpsCombo)) then
+
+  // Calculate
+  if not (CalcUnchangedRadioBtn.Checked) then
+  begin
+    if NoCalcRadio.Checked then
+    begin
+      for i := 0 to FieldCount - 1 do
+      begin
+        Fields[i].Calculation.Free;
+        Fields[i].Calculation := nil;
+      end;
+    end else begin
+      for i := 0 to FieldCount - 1 do
+      begin
+        if TimeCalcRadio.Checked then
+        begin
+          Calc := TEpiTimeCalc.Create(Field);
+          with TEpiTimeCalc(Calc) do
+          begin
+            ResultField := TEpiField(ComboSelectedObject(TimeResultCombo));
+
+            if not ComboNoneSelected(StartDateCombo) then
+              StartDate := TEpiDateField(ComboSelectedObject(StartDateCombo));
+            if not ComboNoneSelected(StartTimeCombo) then
+              StartTime := TEpiDateTimeField(ComboSelectedObject(StartTimeCombo));
+
+            if not ComboNoneSelected(EndDateCombo) then
+              EndDate := TEpiDateField(ComboSelectedObject(EndDateCombo));
+            if not ComboNoneSelected(EndTimeCombo) then
+              EndTime := TEpiDateTimeField(ComboSelectedObject(EndTimeCombo));
+
+            if AsYearRadio.Checked  then TimeCalcType := ctAsYear;
+            if AsMonthRadio.Checked then TimeCalcType := ctAsMonths;
+            if AsWeeksRadio.Checked then TimeCalcType := ctAsWeeks;
+            if AsDaysRadio.Checked  then TimeCalcType := ctAsDays;
+            if AsTimeRadio.Checked  then TimeCalcType := ctAsDayFraction;
+          end;
+        end;
+        if CombineDateRadio.Checked then
+        begin
+          Calc := TEpiCombineDateCalc.Create(Field);
+          with TEpiCombineDateCalc(Calc) do
+          begin
+            ResultField := TEpiField(ComboSelectedObject(DateResultCombo));
+
+            Day   := TEpiIntField(ComboSelectedObject(DayCombo));
+            Month := TEpiIntField(ComboSelectedObject(MonthCombo));
+            Year  := TEpiIntField(ComboSelectedObject(YearCombo));
+          end;
+        end;
+        if CombineStringRadio.Checked then
+        begin
+          Calc := TEpiCombineStringCalc.Create(Field);
+          with TEpiCombineStringCalc(Calc) do
+          begin
+            ResultField := TEpiField(ComboSelectedObject(StringResultCombo));
+
+            if not ComboNoneSelected(Field1Combo) then
+              Field1 := TEpiField(ComboSelectedObject(Field1Combo));
+            if not ComboNoneSelected(Field2Combo) then
+              Field2 := TEpiField(ComboSelectedObject(Field2Combo));
+            if not ComboNoneSelected(Field3Combo) then
+              Field3 := TEpiField(ComboSelectedObject(Field3Combo));
+            Delim1 := Delim1Edit.Text;
+            Delim2 := Delim2Edit.Text;
+          end;
+        end;
+        Fields[i].Calculation := Calc;
+      end;
+    end;
+  end;
+
+  // Notes
+  if NotesMemo.Modified then
+    for i := 0 to FieldCount - 1 do
+      Fields[i].Notes.Text := NotesMemo.Text;
 end;
 
 procedure TFieldPropertiesFrame.EditUTF8KeyPress(Sender: TObject;
@@ -1635,6 +1735,11 @@ begin
   inherited Destroy;
 end;
 
+procedure TFieldPropertiesFrame.ResetControls;
+begin
+  UpdateContent;
+end;
+
 procedure TFieldPropertiesFrame.SetEpiControls(
   EpiControls: TEpiCustomControlItemArray);
 begin
@@ -1655,8 +1760,8 @@ end;
 function TFieldPropertiesFrame.ApplyChanges: boolean;
 begin
   result := ValidateChanges;
-{  if Result then
-    InternalApplyChanges;}
+  if Result then
+    InternalApplyChanges;
 end;
 
 end.

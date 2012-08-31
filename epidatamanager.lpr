@@ -29,7 +29,7 @@ uses
   project_settings_study_contentdesc_frame,
   project_settings_study_ownership_frame, valuelabelseditor_form,
   UniqueInstanceRaw, epidatacore, design_properties_headingframe,
-  design_propertiesbase_frame, design_types, import_structure_form,
+  design_properties_baseframe, design_types, import_structure_form,
   manager_messages, toolsform, reportgenerator, report_fieldlist, viewer_form,
   report_valuelabellist, report_combinedlist, report_base,
   projectfilelist_frame, staticreports_form, report_fieldlist_extended,
@@ -42,9 +42,8 @@ uses
   report_double_entry_validation, design_runtimedesigner, design_control_field,
   design_control_heading, design_control_section, design_designpanel,
   design_properties_form, design_designcontroller,
-  design_fieldproperties_frame,
 design_properties_fieldframe, design_properties_sectionframe, 
-design_designmessenger, design_commander;
+design_designmessenger, design_commander, design_properties_emptyframe;
 
 {$R *.res}
 
