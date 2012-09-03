@@ -139,6 +139,7 @@ type
     procedure ManageValueLabelsBtnClick(Sender: TObject);
     procedure RemoveJumpBtnClick(Sender: TObject);
     procedure UseJumpsComboSelect(Sender: TObject);
+    procedure ValueLabelComboBoxChange(Sender: TObject);
   private
     { Hooks }
     procedure RegisterValueLabelHook;
@@ -778,7 +779,10 @@ begin
   end;
 
   if VLEdit.ShowModal = mrOK then
-    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(VLEdit.ValueLabelSet)
+  begin
+    ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(VLEdit.ValueLabelSet);
+    ValueLabelComboBoxChange(ValueLabelComboBox);
+  end
   else if NewVL then
     VLEdit.ValueLabelSet.Free;
 
@@ -816,6 +820,13 @@ begin
 
   F := TEpiField(ComboSelectedObject(UseJumpsCombo));
   UpdateJumps(F.Jumps);
+end;
+
+procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
+begin
+  ValueLabelSettingGrpBox.Enabled :=
+    (not ComboIgnoreSelected(ValueLabelComboBox)) and
+    (not ComboNoneSelected(ValueLabelComboBox));
 end;
 
 procedure TFieldPropertiesFrame.RegisterValueLabelHook;

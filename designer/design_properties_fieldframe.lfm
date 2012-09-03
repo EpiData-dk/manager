@@ -1,14 +1,12 @@
-object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 0
+inherited FieldPropertiesFrame: TFieldPropertiesFrame
   Height = 609
-  Top = 0
   Width = 572
   ClientHeight = 609
   ClientWidth = 572
   TabOrder = 0
   DesignLeft = 663
   DesignTop = 151
-  object FieldPageControl: TPageControl
+  object FieldPageControl: TPageControl[0]
     AnchorSideLeft.Control = Owner
     Left = 0
     Height = 609
@@ -316,6 +314,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           BorderSpacing.Top = 2
           BorderSpacing.Right = 5
           ItemHeight = 0
+          OnChange = ValueLabelComboBoxChange
           ParentShowHint = False
           ShowHint = True
           Style = csDropDownList
@@ -369,7 +368,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 86
         Top = 10
-        Width = 775
+        Width = 546
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
         BorderSpacing.Left = 10
@@ -385,14 +384,14 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
         ClientHeight = 69
-        ClientWidth = 771
+        ClientWidth = 542
         TabOrder = 0
         object ConfirmEntryChkBox: TCheckBox
           AnchorSideLeft.Control = FieldAdvancedSheet
           AnchorSideTop.Control = EntryRadioGroup
           AnchorSideRight.Control = EntryRadioGroup
           AnchorSideRight.Side = asrBottom
-          Left = 624
+          Left = 395
           Height = 22
           Top = 10
           Width = 141
@@ -412,14 +411,14 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 62
         Top = 106
-        Width = 775
+        Width = 546
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Automatic Values:'
         ClientHeight = 45
-        ClientWidth = 771
+        ClientWidth = 542
         TabOrder = 1
         object RepeatValueChkBox: TCheckBox
           AnchorSideLeft.Control = AutoValuesGrpBox
@@ -461,7 +460,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 267
           Height = 25
           Top = 10
-          Width = 494
+          Width = 265
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 7
@@ -478,14 +477,14 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 134
         Top = 178
-        Width = 775
+        Width = 546
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Valuelabel Setting:'
         ClientHeight = 117
-        ClientWidth = 771
+        ClientWidth = 542
         TabOrder = 2
         object ValueLabelWriteToLabel: TLabel
           AnchorSideLeft.Control = ValueLabelSettingGrpBox
@@ -521,7 +520,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 29
           Top = 76
-          Width = 751
+          Width = 522
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 2
@@ -555,14 +554,14 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 62
         Top = 322
-        Width = 775
+        Width = 546
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Comparison:'
         ClientHeight = 45
-        ClientWidth = 771
+        ClientWidth = 542
         TabOrder = 3
         object Label25: TLabel
           AnchorSideLeft.Control = CompareGroupBox
@@ -619,7 +618,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 214
           Height = 29
           Top = 8
-          Width = 552
+          Width = 323
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 5
