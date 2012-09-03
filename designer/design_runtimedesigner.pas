@@ -215,6 +215,7 @@ type
     procedure SectionsChangeEvent(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     function ClipBoardHasText: boolean;
+    procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
     { Import }
     procedure PasteEpiDoc(const ImportDoc: TEpiDocument;
@@ -252,6 +253,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     procedure   UpdateFrame;
     procedure   RestoreDefaultPos;
+    procedure   ShowPropertiesForm;
     function    IsShortCut(var Message: TLMKey): boolean;
     function ValidateControls: boolean;
     property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
@@ -318,11 +320,7 @@ begin
   ioClass := FAddClass;
 
   if ioClass <> '' then
-  begin
     FCreatingControl := true;
-    Key := VK_RETURN;
-    LCLSendKeyDownEvent(FDesignPanel, Key, 0, true, false);
-  end;
 
   SelectorToolButton.Click;
 end;
@@ -612,7 +610,10 @@ begin
       PasteComponents;
 
       O := TopLeftSelectionPoint;
-      P := Point(P.X - O.X, P.Y - O.Y);
+      if (FPopUpPoint.X <> -1) or (FPopUpPoint.Y <> -1) then
+        P := Point(P.X - O.X, P.Y - O.Y)
+      else
+        P := Point(0, 0);
       for i := 0 to Count - 1 do
         begin
           R := Selection[i].BoundsRect;
@@ -666,8 +667,13 @@ procedure TRuntimeDesignFrame.PasteControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
     (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) and
-    (FDesignPanel.Surface.Count = 1) and
-    (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle);
+     (
+      ((FDesignPanel.Surface.Count = 1) and
+       (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle)
+      )
+     or
+      (FDesignPanel.Surface.Count = 0)
+     );
 end;
 
 procedure TRuntimeDesignFrame.PrintDataFormActionExecute(Sender: TObject);
@@ -709,6 +715,11 @@ begin
   FCheckingClipBoard := true;
   result := Clipboard.HasFormat(CF_Text);
   FCheckingClipBoard := false;
+end;
+
+procedure TRuntimeDesignFrame.LMDesignerAdd(var Msg: TLMessage);
+begin
+  NewDesignField(FindNewPostion(TDesignField), TEpiField(Msg.WParam), FDesignPanel);
 end;
 
 procedure TRuntimeDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument;
@@ -1724,6 +1735,10 @@ begin
   FPropertiesForm.OnShowHintMsg := @ShowHintMsg;
   FPropertiesForm.UpdateSelection(nil);
 
+  {$IFNDEF EPI_DEBUG}
+  Panel1.Visible := false;
+  Splitter1.Visible := false;
+  {$ENDIF}
 
   UpdateFrame;
 
@@ -1751,6 +1766,14 @@ begin
   Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
   SaveFormPosition(Aform, 'DataSetViewer');
   AForm.free;
+end;
+
+procedure TRuntimeDesignFrame.ShowPropertiesForm;
+begin
+  if not Assigned(FPropertiesForm) then exit;
+
+  FPropertiesForm.Show;
+  FPropertiesForm.SetFocus;
 end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;

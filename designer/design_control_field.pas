@@ -107,12 +107,13 @@ begin
       efceSetLength:
         SetBounds(Left, Top, 0, 0);
       efceSetLeft,
-      efceSetTop:
-        ;
+      efceSetTop: ;
       efceShowValueLabel: ;
+      efceValueLabelSet:
+        UpdateControl;
     end;
 
-  if EventGroup= eegCustomBase then
+  if EventGroup = eegCustomBase then
     case TEpiCustomChangeEventType(EventType) of
       ecceDestroy:
         begin
@@ -205,7 +206,9 @@ begin
     FNameLabel.Caption := '';
   FQuestionLabel.Caption := FField.Question.Text;
   if Assigned(FField.ValueLabelSet) then
-    FValueLabelLabel.Caption := FField.ValueLabelSet.Name;
+    FValueLabelLabel.Caption := FField.ValueLabelSet.Name
+  else
+    FValueLabelLabel.Caption := '';
 
   if not FProjectSettings.ShowFieldBorders then
     BorderStyle := bsNone

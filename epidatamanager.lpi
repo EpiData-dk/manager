@@ -399,6 +399,7 @@
         <Filename Value="project/valuelabelgrid_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ValueLabelGridFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="valuelabelgrid_frame"/>
       </Unit38>
@@ -618,6 +619,7 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
+      <CustomOptions Value="-dEPI_DEBUG"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

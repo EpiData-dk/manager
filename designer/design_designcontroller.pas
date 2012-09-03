@@ -104,8 +104,15 @@ begin
 
   Result := inherited MouseUp(Button, X, Y, TheMessage);
 
-  if DragMode = dmMove then
-    MainForm.EndUpdatingForm;
+  case DragMode of
+    dmNone: ;
+    dmMove:
+      MainForm.EndUpdatingForm;
+    dmResize: ;
+    dmSelect: ;
+    dmCreate:
+      FFrame.ShowPropertiesForm;
+  end;
 
   if Assigned(FFrame) then
     FFrame.Label1.Caption := 'Mouse (1): X = ' + IntToStr(X) + ' | Y = ' + IntToStr(Y);

@@ -72,7 +72,7 @@ begin
     LM_RBUTTONDOWN, LM_RBUTTONUP:
       begin
         if not FFrame.ValidateControls then
-          // We do not process with sending MouseDown/Up message, since a control cannot be validated!
+          // We do not proceed with sending MouseDown/Up message, since a control cannot be validated!
           // -> proceeding may allow additional controls to be created etc.
           Result := true
         else

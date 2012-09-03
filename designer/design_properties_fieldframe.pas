@@ -893,7 +893,8 @@ begin
         begin
           S := string(data^);
           Idx := ValueLabelComboBox.Items.IndexOf(S);
-          ValueLabelComboBox.Items.Strings[Idx] := TEpiValueLabelSet(Sender).Name;
+          if Idx > -1 then
+            ValueLabelComboBox.Items.Strings[Idx] := TEpiValueLabelSet(Sender).Name;
         end;
       ecceAddItem: ;
       ecceDelItem: ;
@@ -1759,6 +1760,11 @@ end;
 
 function TFieldPropertiesFrame.ApplyChanges: boolean;
 begin
+  if (Length(FFields) > 0) and
+     (not Assigned(FFields[0]))
+  then
+    Exit(true);
+
   result := ValidateChanges;
   if Result then
     InternalApplyChanges;

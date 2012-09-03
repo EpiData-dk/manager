@@ -64,7 +64,7 @@ type
     procedure DoOpenProject(Const AFileName: string);
     procedure DoNewDataForm(Df: TEpiDataFile);
     procedure DoCloseProject;
-    {$IFDEF EPI_DEBUG}
+    {$IFDEF EPI_DEBUG_CONTENT}
     procedure AddDebugingContent;
     {$ENDIF}
     procedure EpiDocumentModified(Sender: TObject);
@@ -83,7 +83,6 @@ type
     { Messages }
     // Message relaying...
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
-    procedure LMDesignerCopy(var Msg: TLMessage); message LM_DESIGNER_COPY;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -519,7 +518,7 @@ begin
   Modified := false;
 end;
 
-{$IFDEF EPI_DEBUG}
+{$IFDEF EPI_DEBUG_CONTENT}
 procedure TProjectFrame.AddDebugingContent;
 var
   i: Integer;
@@ -713,13 +712,6 @@ begin
 end;
 
 procedure TProjectFrame.LMDesignerAdd(var Msg: TLMessage);
-begin
-  if Assigned(FActiveFrame) then
-  with Msg do
-    Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
-end;
-
-procedure TProjectFrame.LMDesignerCopy(var Msg: TLMessage);
 begin
   if Assigned(FActiveFrame) then
   with Msg do

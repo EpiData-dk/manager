@@ -1,11 +1,11 @@
 object ValueLabelEditor2: TValueLabelEditor2
   Left = 619
-  Height = 464
+  Height = 627
   Top = 208
-  Width = 625
+  Width = 818
   Caption = 'Valuelabel Editor'
-  ClientHeight = 464
-  ClientWidth = 625
+  ClientHeight = 627
+  ClientWidth = 818
   KeyPreview = True
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -13,12 +13,12 @@ object ValueLabelEditor2: TValueLabelEditor2
   LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
-    Height = 414
+    Height = 577
     Top = 0
     Width = 210
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 414
+    ClientHeight = 577
     ClientWidth = 210
     TabOrder = 0
     object ToolBar1: TToolBar
@@ -48,7 +48,7 @@ object ValueLabelEditor2: TValueLabelEditor2
     end
     object VLSetsTree: TVirtualStringTree
       Left = 0
-      Height = 388
+      Height = 551
       Top = 26
       Width = 210
       Align = alClient
@@ -72,7 +72,7 @@ object ValueLabelEditor2: TValueLabelEditor2
   end
   object Splitter1: TSplitter
     Left = 210
-    Height = 414
+    Height = 577
     Top = 0
     Width = 5
     AutoSnap = False
@@ -81,18 +81,18 @@ object ValueLabelEditor2: TValueLabelEditor2
   object Panel2: TPanel
     Left = 0
     Height = 50
-    Top = 414
-    Width = 625
+    Top = 577
+    Width = 818
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 625
+    ClientWidth = 818
     TabOrder = 2
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel2
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel2
       AnchorSideRight.Side = asrBottom
-      Left = 542
+      Left = 735
       Height = 34
       Top = 8
       Width = 72

@@ -82,7 +82,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object OtherToolButton: TToolButton
-      Left = 257
+      Left = 261
       Hint = 'Other Field Types...'
       Top = 1
       Caption = 'OtherToolButton'
@@ -92,7 +92,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider2: TToolButton
-      Left = 285
+      Left = 289
       Top = 1
       Width = 5
       Caption = 'Divider2'
@@ -100,7 +100,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object HeadingToolButton: TToolButton
       Tag = 5
-      Left = 290
+      Left = 294
       Hint = 'New Heading'
       Top = 1
       Caption = 'New Heading'
@@ -110,7 +110,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider3: TToolButton
-      Left = 318
+      Left = 322
       Top = 1
       Width = 5
       Caption = 'Divider3'
@@ -118,7 +118,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object SectionToolButton: TToolButton
       Tag = 6
-      Left = 323
+      Left = 327
       Hint = 'New Section'
       Top = 1
       Caption = 'New Section'
@@ -128,63 +128,63 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ShowHint = True
     end
     object Divider4: TToolButton
-      Left = 351
+      Left = 355
       Top = 1
       Width = 5
       Caption = 'Divider4'
       Style = tbsDivider
     end
     object EditToolButton: TToolButton
-      Left = 356
+      Left = 360
       Top = 1
       Action = EditControlAction
       ParentShowHint = False
       ShowHint = True
     end
     object DeleteToolButton: TToolButton
-      Left = 384
+      Left = 388
       Top = 1
       Action = DeleteControlAction
       ParentShowHint = False
       ShowHint = True
     end
     object DeleteAllToolButton: TToolButton
-      Left = 412
+      Left = 416
       Top = 1
       Action = DeleteAllAction
       ParentShowHint = False
       ShowHint = True
     end
     object Divider5: TToolButton
-      Left = 440
+      Left = 444
       Top = 1
       Width = 5
       Caption = 'Divider5'
       Style = tbsDivider
     end
     object ImportToolButton: TToolButton
-      Left = 445
+      Left = 449
       Top = 1
       Action = ImportAction
       ParentShowHint = False
       ShowHint = True
     end
     object ExportToolButton: TToolButton
-      Left = 473
+      Left = 477
       Top = 1
       ImageIndex = 19
       ParentShowHint = False
       ShowHint = True
     end
     object Divider6: TToolButton
-      Left = 501
+      Left = 505
       Top = 1
       Width = 5
       Caption = 'Divider6'
       Style = tbsDivider
     end
     object TestToolButton: TToolButton
-      Left = 506
+      Left = 510
       Top = 1
       Caption = 'TestToolButton'
       ImageIndex = 0
@@ -599,7 +599,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     ClientWidth = 263
     ParentColor = False
     TabOrder = 2
-    Visible = False
     object Label1: TLabel
       Left = 11
       Height = 15
@@ -681,7 +680,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     Width = 5
     Align = alRight
     ResizeAnchor = akRight
-    Visible = False
   end
   object JvDesignScrollBox1: TJvDesignScrollBox
     Left = 0
