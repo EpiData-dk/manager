@@ -57,7 +57,9 @@ var
 begin
   case AMessage.Msg of
     LM_MOUSEWHEEL:
-      Result := inherited IsDesignMessage(ASender, AMessage);
+      // Handle MouseWheel, since on (especially) windows this is not handle
+      // correctly using normal message chain.
+      FFrame.JvDesignScrollBox1.WindowProc(AMessage);
     CN_KEYDOWN,
     CN_SYSKEYDOWN:
       begin

@@ -5,7 +5,7 @@ unit design_properties_form;
 interface
 
 uses
-  Classes, SysUtils, Forms, JvDesignSurface, design_types;
+  Classes, SysUtils, Forms, JvDesignSurface, design_types, epicustombase;
 
 type
 
@@ -13,8 +13,11 @@ type
 
   TPropertiesForm = class(TForm)
   private
+    EpiCtrlItemArray: TEpiCustomControlItemArray;
     FFrame: TCustomFrame;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
+    procedure EpiCtrlChangeHook(Sender: TObject; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
     procedure ShowEmptyPage;
     procedure FormDeactivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -22,18 +25,22 @@ type
     procedure ApplyClick(Sender: TObject);
     procedure CancelClick(Sender: TObject);
     procedure ResetClick(Sender: TObject);
+    procedure RegisterHooks;
+    procedure UnregisterHooks;
+    function EpiCtrlIsEmpty: boolean;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     procedure UpdateSelection(Objects: TJvDesignObjectArray);
     procedure RestoreDefaultPos;
-    function ValidateControls: boolean;
+    function  ValidateControls: boolean;
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
   end;
 
 implementation
 
 uses
-  Buttons, ExtCtrls, Controls, epicustombase,
+  Buttons, ExtCtrls, Controls,
   design_properties_baseframe, Graphics, design_properties_emptyframe,
   settings2, settings2_var;
 
@@ -79,6 +86,53 @@ procedure TPropertiesForm.ResetClick(Sender: TObject);
 begin
   if assigned(FFrame) then
     (FFrame as IDesignPropertiesFrame).ResetControls;
+end;
+
+procedure TPropertiesForm.RegisterHooks;
+var
+  i: Integer;
+begin
+  for i := 0 to Length(EpiCtrlItemArray) - 1 do
+    if Assigned(EpiCtrlItemArray[i]) then
+       EpiCtrlItemArray[i].RegisterOnChangeHook(@EpiCtrlChangeHook, true);
+end;
+
+procedure TPropertiesForm.UnregisterHooks;
+var
+  i: Integer;
+begin
+  for i := 0 to Length(EpiCtrlItemArray) - 1 do
+    if Assigned(EpiCtrlItemArray[i]) then
+       EpiCtrlItemArray[i].UnRegisterOnChangeHook(@EpiCtrlChangeHook);
+end;
+
+function TPropertiesForm.EpiCtrlIsEmpty: boolean;
+var
+  i: Integer;
+begin
+  result := false;
+
+  for i := 0 to Length(EpiCtrlItemArray) - 1 do
+    if Assigned(EpiCtrlItemArray[i]) then
+      exit;
+
+  result := true;
+end;
+
+procedure TPropertiesForm.EpiCtrlChangeHook(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+var
+  i: Integer;
+begin
+  if EventGroup <> eegCustomBase then exit;
+  if TEpiCustomChangeEventType(EventType) <> ecceDestroy then exit;
+
+  for i := 0 to Length(EpiCtrlItemArray) - 1 do
+    if Sender = EpiCtrlItemArray[i] then
+    begin
+      EpiCtrlItemArray[i] := nil;
+      break;
+    end;
 end;
 
 procedure TPropertiesForm.ShowEmptyPage;
@@ -154,11 +208,16 @@ begin
   EndFormUpdate;
 end;
 
+destructor TPropertiesForm.Destroy;
+begin
+  UnregisterHooks;
+  inherited Destroy;
+end;
+
 procedure TPropertiesForm.UpdateSelection(Objects: TJvDesignObjectArray);
 var
   AClassType: TClass;
   i: Integer;
-  EpiCtrlItemArray: TEpiCustomControlItemArray;
 
   procedure NewFrame(FrameClass: TCustomFrameClass);
   begin
@@ -197,9 +256,13 @@ begin
     NewFrame((Objects[0] as IDesignEpiControl).DesignFrameClass);
   end;
 
+  UnregisterHooks;
+
   SetLength(EpiCtrlItemArray, Length(Objects));
   for i := Low(Objects) to High(Objects) do
     EpiCtrlItemArray[i] := (Objects[i] as IDesignEpiControl).EpiControl;
+
+  RegisterHooks;
 
   if Assigned(FFrame) then
     (FFrame as IDesignPropertiesFrame).SetEpiControls(EpiCtrlItemArray);
@@ -217,7 +280,8 @@ function TPropertiesForm.ValidateControls: boolean;
 begin
   result := true;
 
-  if Assigned(FFrame)
+  if Assigned(FFrame) and
+     (not EpiCtrlIsEmpty)
   then
     Result := (FFrame as IDesignPropertiesFrame).ApplyChanges;
 end;

@@ -108,7 +108,8 @@ begin
         SetBounds(Left, Top, 0, 0);
       efceSetLeft,
       efceSetTop: ;
-      efceShowValueLabel: ;
+      efceShowValueLabel:
+        UpdateControl;
       efceValueLabelSet:
         UpdateControl;
     end;
@@ -205,7 +206,9 @@ begin
   else
     FNameLabel.Caption := '';
   FQuestionLabel.Caption := FField.Question.Text;
-  if Assigned(FField.ValueLabelSet) then
+  if Assigned(FField.ValueLabelSet) and
+     (FField.ShowValueLabel)
+  then
     FValueLabelLabel.Caption := FField.ValueLabelSet.Name
   else
     FValueLabelLabel.Caption := '';
@@ -298,6 +301,9 @@ begin
       FField.UnRegisterOnChangeHook(@OnFieldChange);
       FField.Free;
     end;
+  FNameLabel.Anchors       := [];
+  FQuestionLabel.Anchors   := [];
+  FValueLabelLabel.Anchors := [];
   inherited Destroy;
 end;
 
