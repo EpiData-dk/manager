@@ -69,6 +69,11 @@ uses
   project_settings_study_contentdesc_frame, project_settings_study_frame,
   project_settings_study_ownership_frame;
 
+function GetIniFile(Const FileName: String): TIniFile;
+begin
+  result := TIniFile.Create(UTF8ToSys(FileName));
+end;
+
 function GetManagerVersion: String;
 begin
   result := GetEpiVersionInfo(ManagerVersion);
@@ -76,16 +81,15 @@ end;
 
 function SaveSettingToIni(Const FileName: string): boolean;
 var
-  Ini: TIniFile;
   Sec: string;
   i: Integer;
+  Ini: TIniFile;
 begin
   Result := false;
 
   try
-    Ini := TIniFile.Create(UTF8ToSys(FileName));
-    With Ini do
-    with ManagerSettings do
+    Ini := GetIniFile(FileName);
+    with Ini, ManagerSettings do
     begin
       {  // Visual design:
         DefaultRightPostion:   Integer;
@@ -205,12 +209,12 @@ begin
       WriteString(Sec, 'OwnRights', OwnRights);
       WriteString(Sec, 'OwnPublisher', OwnPublisher);
       WriteString(Sec, 'OwnFunding', OwnFunding);
+
+      for i := 0 to RecentFiles.Count - 1 do
+        WriteString('recent', 'file'+inttostr(i), RecentFiles[i]);
     end;
 
     // Read recent files.
-    for i := 0 to RecentFiles.Count - 1 do
-      Ini.WriteString('recent', 'file'+inttostr(i), RecentFiles[i]);
-
     Result := true;
   finally
     Ini.Free;
@@ -219,10 +223,10 @@ end;
 
 function LoadSettingsFromIni(Const FileName: string): boolean;
 var
-  Ini: TIniFile;
   Sec: String;
   i: Integer;
   S: String;
+  Ini: TIniFile;
 begin
   Result := false;
   ManagerSettings.IniFileName := FileName;
@@ -230,9 +234,8 @@ begin
   if not FileExistsUTF8(FileName) then exit;
 
   try
-    Ini := TIniFile.Create(UTF8ToSys(FileName));
-    With Ini do
-    with ManagerSettings do
+    Ini := GetIniFile(FileName);
+    with Ini, ManagerSettings do
     begin
       {  // Visual design:
         DefaultRightPostion:   Integer;
@@ -376,8 +379,8 @@ begin
   if ManagerSettings.IniFileName = '' then exit;
 
   try
-    Ini := TIniFile.Create(ManagerSettings.IniFileName);
-    With Ini, AForm do
+    Ini := GetIniFile(ManagerSettings.IniFileName);
+    with Ini, AForm do
     begin
       WriteInteger(SectionName, 'Top', Top);
       WriteInteger(SectionName, 'Left', Left);
@@ -396,9 +399,8 @@ begin
   if ManagerSettings.IniFileName = '' then exit;
 
   try
-    Ini := TIniFile.Create(ManagerSettings.IniFileName);
-    With Ini do
-    with AForm do
+    Ini := GetIniFile(ManagerSettings.IniFileName);
+    with Ini, AForm do
     begin
       Top     := ReadInteger(SectionName, 'Top', Top);
       Left    := ReadInteger(SectionName, 'Left', Left);
