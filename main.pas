@@ -18,6 +18,9 @@ type
     AddStructureMenuItem: TMenuItem;
     EditMenuDivider2: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
+    EditMenuDivider0: TMenuItem;
+    RedoMenuItem: TMenuItem;
+    UndoMenuItem: TMenuItem;
     VerifyDoubleEntryAction: TAction;
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
@@ -723,6 +726,9 @@ begin
   EditMenuDivider1.Visible := Assigned(FActiveFrame);
   AddStructureMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider2.Visible := Assigned(FActiveFrame);
+  UndoMenuItem.Visible := Assigned(FActiveFrame);
+  RedoMenuItem.Visible := Assigned(FActiveFrame);
+  EditMenuDivider0.Visible := Assigned(FActiveFrame);
 
   // PROJECT:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
@@ -969,6 +975,8 @@ begin
   PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
   ViewDataSetMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
   AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
+  UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;
+  RedoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RedoAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;

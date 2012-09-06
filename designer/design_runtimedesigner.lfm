@@ -681,17 +681,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     Align = alRight
     ResizeAnchor = akRight
   end
-  object JvDesignScrollBox1: TJvDesignScrollBox
-    Left = 0
-    Height = 511
-    Top = 26
-    Width = 715
-    HorzScrollBar.Page = 713
-    VertScrollBar.Page = 509
-    Align = alClient
-    TabOrder = 4
-    OnMouseWheel = JvDesignScrollBox1MouseWheel
-  end
   object DesignerImageList: TImageList
     Height = 24
     Width = 24
@@ -2243,18 +2232,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ImageIndex = 13
       OnExecute = ImportActionExecute
     end
-    object UndoAction: TAction
-      Caption = 'Undo'
-      OnExecute = UndoActionExecute
-    end
-    object ViewDatasetAction: TAction
-      Caption = 'View Dataset'
-      OnExecute = ViewDatasetActionExecute
-    end
-    object PrintDataFormAction: TAction
-      Caption = 'PrintDataFormAction'
-      OnExecute = PrintDataFormActionExecute
-    end
     object NewIntFieldAction: TAction
       Category = 'NewControls'
       Caption = 'Int Field'
@@ -2355,6 +2332,28 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Category = 'NewControls'
       Caption = 'NewTimeFieldFastAction'
       ImageIndex = 15
+    end
+    object UndoAction: TAction
+      Category = 'Edit'
+      Caption = 'Undo'
+      Hint = 'Undo last action'
+      OnExecute = UndoActionExecute
+      OnUpdate = UndoActionUpdate
+    end
+    object RedoAction: TAction
+      Category = 'Edit'
+      Caption = 'Redo'
+      Hint = 'Redo last action'
+      OnExecute = RedoActionExecute
+      OnUpdate = RedoActionUpdate
+    end
+    object ViewDatasetAction: TAction
+      Caption = 'View Dataset'
+      OnExecute = ViewDatasetActionExecute
+    end
+    object PrintDataFormAction: TAction
+      Caption = 'PrintDataFormAction'
+      OnExecute = PrintDataFormActionExecute
     end
   end
   object OtherFieldsPopup: TPopupMenu

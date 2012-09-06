@@ -12,7 +12,7 @@ uses
 function GlobalCopyList: TFPList;
 function GlobalCopyListClear: TFPList;
 
-function GlobalCommandList: TCommandList;
+function GlobalCommandList: TCommander;
 
 implementation
 
@@ -21,7 +21,7 @@ uses
 
 var
   FGlobalCopyList: TFPList = nil;
-  FGlobalCommandList: TCommandList = nil;
+  FGlobalCommandList: TCommander = nil;
 
 function GlobalCopyList: TFPList;
 begin
@@ -43,10 +43,10 @@ begin
   Result.Clear;
 end;
 
-function GlobalCommandList: TCommandList;
+function GlobalCommandList: TCommander;
 begin
   if not Assigned(FGlobalCommandList) then
-    FGlobalCommandList := TCommandList.Create;
+    FGlobalCommandList := TCommander.Create;
 
   result := FGlobalCommandList;
 end;

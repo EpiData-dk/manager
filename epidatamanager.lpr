@@ -43,7 +43,8 @@ uses
   design_control_heading, design_control_section, design_designpanel,
   design_properties_form, design_designcontroller,
 design_properties_fieldframe, design_properties_sectionframe, 
-design_designmessenger, design_commander, design_properties_emptyframe;
+design_designmessenger, design_commander, design_properties_emptyframe, 
+design_designmover, design_designsizer;
 
 {$R *.res}
 

@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="3"/>
-      <BuildNr Value="3"/>
+      <BuildNr Value="4"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -143,7 +143,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="68">
+    <Units Count="70">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -593,6 +593,16 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_properties_emptyframe"/>
       </Unit67>
+      <Unit68>
+        <Filename Value="designer/design_designmover.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designmover"/>
+      </Unit68>
+      <Unit69>
+        <Filename Value="designer/design_designsizer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designsizer"/>
+      </Unit69>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

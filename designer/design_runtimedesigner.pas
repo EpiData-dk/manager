@@ -15,6 +15,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    RedoAction: TAction;
     NewTimeFieldFastAction: TAction;
     NewTimeFieldAction: TAction;
     SelectLastAction: TAction;
@@ -95,7 +96,6 @@ type
     HeadingToolButton: TToolButton;
     ImportToolButton: TToolButton;
     IntToolButton: TToolButton;
-    JvDesignScrollBox1: TJvDesignScrollBox;
     KeyLabel: TLabel;
     KeyPanel: TPanel;
     Label1: TLabel;
@@ -158,8 +158,6 @@ type
     function FieldNamePrefix: string;
     procedure HeadingBtnClick(Sender: TObject);
     procedure ImportActionExecute(Sender: TObject);
-    procedure JvDesignScrollBox1MouseWheel(Sender: TObject; Shift: TShiftState;
-      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
     procedure NewDateFieldActionExecute(Sender: TObject);
     procedure NewDateFieldFastActionExecute(Sender: TObject);
     procedure NewFloatFieldActionExecute(Sender: TObject);
@@ -180,6 +178,8 @@ type
     procedure PasteAsHeadingActionExecute(Sender: TObject);
     procedure PasteControlActionUpdate(Sender: TObject);
     procedure PrintDataFormActionExecute(Sender: TObject);
+    procedure RedoActionExecute(Sender: TObject);
+    procedure RedoActionUpdate(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
     procedure SelecterBtnClick(Sender: TObject);
     procedure SelectFirstActionExecute(Sender: TObject);
@@ -190,12 +190,12 @@ type
     procedure SelectPriorActionExecute(Sender: TObject);
     procedure TestToolButtonClick(Sender: TObject);
     procedure UndoActionExecute(Sender: TObject);
+    procedure UndoActionUpdate(Sender: TObject);
     procedure ViewDatasetActionExecute(Sender: TObject);
   private
     FPopUpPoint: TPoint;
     FDatafile: TEpiDataFile;
     FActiveButton: TToolButton;
-    FDesignPanel: TJvDesignPanel;
     FAddClass: string;
     FImportedFileName: string;
     FLastSelectedFieldType: TEpiFieldType;
@@ -216,6 +216,12 @@ type
       EventType: Word; Data: Pointer);
     function ClipBoardHasText: boolean;
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
+  private
+    { Designer Panel/ScrollBox }
+    FDesignPanel: TJvDesignPanel;
+    FDesignScrollBox: TJvDesignScrollBox;
+    procedure DesignScrollBoxMouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
   private
     { Import }
     procedure PasteEpiDoc(const ImportDoc: TEpiDocument;
@@ -258,6 +264,8 @@ type
     function ValidateControls: boolean;
     property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
     property ImportedFileName: string read FImportedFileName;
+    property DesignPanel: TJvDesignPanel read FDesignPanel;
+    property DesignScrollBar: TJvDesignScrollBox read FDesignScrollBox;
   end;
 
 implementation
@@ -358,7 +366,7 @@ begin
     Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
     if not Dlg.Execute then exit;
 
-    ImpStructurForm := TImportStructureForm.Create(JvDesignScrollBox1, Dlg.Files);
+    ImpStructurForm := TImportStructureForm.Create(FDesignScrollBox, Dlg.Files);
     ImpStructurForm.ImportData := (DataFile.Size = 0);
     if ImpStructurForm.ShowModal = mrCancel then exit;
 
@@ -386,11 +394,11 @@ begin
   end;
 end;
 
-procedure TRuntimeDesignFrame.JvDesignScrollBox1MouseWheel(Sender: TObject;
+procedure TRuntimeDesignFrame.DesignScrollBoxMouseWheel(Sender: TObject;
   Shift: TShiftState; WheelDelta: Integer; MousePos: TPoint;
   var Handled: Boolean);
 begin
-  with JvDesignScrollBox1.VertScrollBar do
+  with FDesignScrollBox.VertScrollBar do
     Position := Position - WheelDelta;
   Handled := true;
 end;
@@ -546,7 +554,7 @@ function TRuntimeDesignFrame.ControlFromEpiControl(
   end;
 
 begin
-  Result := RecursiveFindControl(JvDesignScrollBox1);
+  Result := RecursiveFindControl(FDesignScrollBox);
 end;
 
 function TRuntimeDesignFrame.FindNewPostion(NewControl: TControlClass): TPoint;
@@ -679,6 +687,16 @@ end;
 procedure TRuntimeDesignFrame.PrintDataFormActionExecute(Sender: TObject);
 begin
   DoPrintDataForm;
+end;
+
+procedure TRuntimeDesignFrame.RedoActionExecute(Sender: TObject);
+begin
+  GlobalCommandList.ReDo;
+end;
+
+procedure TRuntimeDesignFrame.RedoActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := GlobalCommandList.CanRedo;
 end;
 
 
@@ -1194,6 +1212,9 @@ begin
   SelectNextAction.ShortCut            := D_MoveControlDown;
   SelectPgDnAction.ShortCut            := D_MoveSideDown;
   SelectLastAction.ShortCut            := D_MoveBottom;
+
+  UndoAction.ShortCut                  := D_Undo;
+  RedoAction.ShortCut                  := D_Redo;
 end;
 
 procedure TRuntimeDesignFrame.SelectControl(AAction: TDesignSelectAction);
@@ -1228,7 +1249,7 @@ begin
         Idx := 1;
     dsaPgUp:
       begin
-        CBot := JvDesignScrollBox1.VertScrollBar.Position + JvDesignScrollBox1.VertScrollBar.Page;
+        CBot := FDesignScrollBox.VertScrollBar.Position + FDesignScrollBox.VertScrollBar.Page;
         for Idx := DataFile.ControlItems.Count - 1 downto 0 do
         begin
           Ctrl := ControlFromEpiControl(DataFile.ControlItem[Idx]);
@@ -1242,7 +1263,7 @@ begin
       Idx := Min(DataFile.ControlItems.Count - 1, Idx +1);
     dsaPgDn:
       begin
-        CTop := JvDesignScrollBox1.VertScrollBar.Position;
+        CTop := FDesignScrollBox.VertScrollBar.Position;
         for Idx := 0 to DataFile.ControlItems.Count - 1 do
           if RelativeTop(ControlFromEpiControl(DataFile.ControlItem[Idx])) > CTop then
             Break;
@@ -1259,8 +1280,8 @@ begin
 
   CTop := RelativeTop(Ctrl);
   CBot := CTop + Ctrl.Height;
-  SPos := JvDesignScrollBox1.VertScrollBar.Position;
-  SPage := JvDesignScrollBox1.VertScrollBar.Page;
+  SPos := FDesignScrollBox.VertScrollBar.Position;
+  SPage := FDesignScrollBox.VertScrollBar.Page;
   case AAction of
     dsaPrior:
       begin
@@ -1269,13 +1290,13 @@ begin
         then
           // Out of bounds completely => Center view.
         begin
-          JvDesignScrollBox1.VertScrollBar.Position := CTop - (SPage div 2);
+          FDesignScrollBox.VertScrollBar.Position := CTop - (SPage div 2);
           Exit;
         end;
 
         if (CTop < (SPos + (SPage div 4))) then
         begin
-          JvDesignScrollBox1.VertScrollBar.Position := CTop - (SPage div 4);
+          FDesignScrollBox.VertScrollBar.Position := CTop - (SPage div 4);
           Exit;
         end;
       end;
@@ -1286,13 +1307,13 @@ begin
         then
           // Out of bounds completely => Center view.
         begin
-          JvDesignScrollBox1.VertScrollBar.Position := CTop - (SPage div 2);
+          FDesignScrollBox.VertScrollBar.Position := CTop - (SPage div 2);
           Exit;
         end;
 
         if (CBot > ((SPos + SPage) - (SPage div 4))) then
         begin
-          JvDesignScrollBox1.VertScrollBar.Position := (CBot - SPage) + (SPage div 4);
+          FDesignScrollBox.VertScrollBar.Position := (CBot - SPage) + (SPage div 4);
           Exit;
         end;
       end;
@@ -1441,7 +1462,7 @@ end;
 
 procedure TRuntimeDesignFrame.SelectFirstActionExecute(Sender: TObject);
 begin
-  with JvDesignScrollBox1.VertScrollBar do
+  with FDesignScrollBox.VertScrollBar do
     Position := 0;
 
   SelectControl(dsaHome);
@@ -1449,7 +1470,7 @@ end;
 
 procedure TRuntimeDesignFrame.SelectLastActionExecute(Sender: TObject);
 begin
-  with JvDesignScrollBox1.VertScrollBar do
+  with FDesignScrollBox.VertScrollBar do
     Position := Range;
 
   SelectControl(dsaEnd);
@@ -1462,7 +1483,7 @@ end;
 
 procedure TRuntimeDesignFrame.SelectPgDnActionExecute(Sender: TObject);
 begin
-  with JvDesignScrollBox1.VertScrollBar do
+  with FDesignScrollBox.VertScrollBar do
     Position := Position + Page;
 
   SelectControl(dsaPgDn);
@@ -1470,7 +1491,7 @@ end;
 
 procedure TRuntimeDesignFrame.SelectPgUpActionExecute(Sender: TObject);
 begin
-  with JvDesignScrollBox1.VertScrollBar do
+  with FDesignScrollBox.VertScrollBar do
     Position := Position - Page;
 
   SelectControl(dsaPgUp);
@@ -1489,6 +1510,11 @@ end;
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
 begin
   GlobalCommandList.Undo;
+end;
+
+procedure TRuntimeDesignFrame.UndoActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := GlobalCommandList.CanUndo;
 end;
 
 procedure TRuntimeDesignFrame.ViewDatasetActionExecute(Sender: TObject);
@@ -1717,15 +1743,21 @@ var
   ScrollBox: TJvDesignScrollBox;
 begin
   inherited Create(TheOwner);
+  FDesignScrollBox := TJvDesignScrollBox.Create(self);
+  FDesignScrollBox.Align := alClient;
+  FDesignScrollBox.OnMouseWheel := @DesignScrollBoxMouseWheel;
+  FDesignScrollBox.Parent := Self;
+
   FDesignPanel := TDesignPanel.Create(Self);
   FDesignPanel.OnGetAddClass := @GetAddClass;
   FDesignPanel.OnSelectionChange := @SelectionChange;
   FDesignPanel.Align := alClient;
   FDesignPanel.Color := clWhite;
-  FDesignPanel.Parent := JvDesignScrollBox1;
-  FActiveButton := SelectorToolButton;
+  FDesignPanel.Parent := FDesignScrollBox;
   FDesignPanel.Surface.ControllerClass := TDesignController;
   FDesignPanel.Surface.MessengerClass := TDesignMessenger;
+
+  FActiveButton := SelectorToolButton;
 
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.AutoHide := true;
@@ -1736,6 +1768,7 @@ begin
   FPropertiesForm.UpdateSelection(nil);
 
   {$IFNDEF EPI_DEBUG}
+  TestToolButton.Visible := false;
   Panel1.Visible := false;
   Splitter1.Visible := false;
   {$ENDIF}

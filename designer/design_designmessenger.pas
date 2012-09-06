@@ -60,7 +60,7 @@ begin
       // Handle MouseWheel, since on (especially) windows this is not handle
       // correctly using normal message chain.
       // See also design_designpanel.pas!
-      FFrame.JvDesignScrollBox1.WindowProc(AMessage);
+      FFrame.DesignScrollBar.WindowProc(AMessage);
     CN_KEYDOWN,
     CN_SYSKEYDOWN:
       begin

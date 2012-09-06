@@ -50,29 +50,7 @@ implementation
 uses
   managerprocs, Graphics, main, LCLIntf, LCLType, manager_messages,
   design_properties_fieldframe, JvDesignSurface, epidocument,
-  epistringutils, manager_globals, design_commander;
-
-type
-  { TMoveCommand }
-
-  TMoveCommand = class(TCustomCommand)
-  private
-    FControl: TControl;
-    FRect: TRect;
-  public
-    procedure Execute; override;
-    property Control: TControl read FControl write FControl;
-    property Rect: TRect read FRect write FRect ;
-  end;
-
-  { TMoveCommand }
-
-  procedure TMoveCommand.Execute;
-  begin
-    FControl.BoundsRect := FRect;
-  end;
-
-
+  epistringutils, manager_globals;
 
 { TDesignField }
 
@@ -332,7 +310,6 @@ var
   S: Char;
   SideBuf: Integer;
   Cv: TCanvas;
-  Cmd: TMoveCommand;
 begin
   if (Parent = nil) or
      (FField = nil) or

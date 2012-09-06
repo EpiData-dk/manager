@@ -19,6 +19,8 @@ type
     // for applying a dataframe!
     FDragRect: TRect;
   protected
+    function DoCreateMouseTool(ADragMode: TJvDesignDragMode
+       ): TJvDesignCustomMouseTool; override;
     function KeyUp(AKeyCode: Cardinal): Boolean; override;
     function MouseDown(Button: TMouseButton; X, Y: Integer;
        TheMessage: TLMMouse): Boolean; override;
@@ -38,9 +40,25 @@ implementation
 
 uses
   LCLIntf, LCLType, design_control_section, manager_messages,
-  main, manager_globals;
+  main, manager_globals, design_designmover, design_designsizer;
 
 { TDesignController }
+
+function TDesignController.DoCreateMouseTool(ADragMode: TJvDesignDragMode
+  ): TJvDesignCustomMouseTool;
+begin
+  case ADragMode of
+//    dmNone: ;
+    dmMove:
+      result := TDesignMover.Create(Surface);
+    dmResize:
+      result := TDesignSizer.CreateSizer(Surface, HandleID);
+//    dmSelect: ;
+//    dmCreate: ;
+  else
+    Result := inherited DoCreateMouseTool(ADragMode);
+  end;
+end;
 
 function TDesignController.KeyUp(AKeyCode: Cardinal): Boolean;
 var

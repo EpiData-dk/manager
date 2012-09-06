@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 300
+  Left = 415
   Height = 603
-  Top = 246
+  Top = 122
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -140,6 +140,15 @@ object MainForm: TMainForm
     end
     object EditMenuItem: TMenuItem
       Caption = '&Edit'
+      object UndoMenuItem: TMenuItem
+        Caption = 'Undo'
+      end
+      object RedoMenuItem: TMenuItem
+        Caption = 'Redo'
+      end
+      object EditMenuDivider0: TMenuItem
+        Caption = '-'
+      end
       object PasteAsHeadingMenuItem: TMenuItem
         Caption = 'HeadingPaste'
       end
