@@ -36,7 +36,6 @@ end;
 
 procedure TReportFieldListExtended.DoRunReport;
 var
-  Doc: TEpiDocument;
   i: Integer;
   R: TEpiReportExtendedFieldList;
 begin
@@ -46,6 +45,7 @@ begin
   begin
     Generator.Heading('File: ' + Documents[i]);
     R := TEpiReportExtendedFieldList.Create(Generator);
+    R.EpiDataFiles := TEpiDocument(Documents.Objects[i]).DataFiles;
     R.RunReport;
     R.Free;
   end;
