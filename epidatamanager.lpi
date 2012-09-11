@@ -422,6 +422,7 @@
         <Filename Value="export/export_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="export_form"/>
       </Unit41>

@@ -37,6 +37,7 @@ type
     AllRecordRBtn: TRadioButton;
     RangeRBtn: TRadioButton;
     BasicSheet: TTabSheet;
+    procedure FormShow(Sender: TObject);
     procedure FromRecordEditClick(Sender: TObject);
     procedure NoneBitBtnClick(Sender: TObject);
     procedure ExportTypeComboSelect(Sender: TObject);
@@ -135,6 +136,8 @@ var
   Ext: String;
   P: SizeInt;
 begin
+  if not (Showing) then exit;
+
   if Assigned(FActiveSheet) then FActiveSheet.TabVisible := false;
 
   Frame := PFrameRec(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex])^.Frame;
@@ -171,6 +174,12 @@ end;
 procedure TExportForm.FromRecordEditClick(Sender: TObject);
 begin
   RangeRBtn.Checked := true;
+end;
+
+procedure TExportForm.FormShow(Sender: TObject);
+begin
+  // Forces a change of filename extension and frame!
+  ExportTypeComboSelect(ExportTypeCombo);
 end;
 
 procedure TExportForm.FieldsChkListBoxMouseMove(Sender: TObject;
@@ -263,8 +272,6 @@ begin
     3: S := 'SAS';
   end;
   ExportTypeCombo.ItemIndex := ExportTypeCombo.Items.IndexOf(S);
-  // Forces a change of filename extension and frame!
-  ExportTypeComboSelect(ExportTypeCombo);
   // Encoding:
   EncodingCmbBox.ItemIndex := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ManagerSettings.ExportEncoding)));
   // Export Deleted:

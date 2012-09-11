@@ -25,7 +25,7 @@ type
 implementation
 
 uses
-  LCLType;
+  LCLType, Forms;
 
 { TDesignMessenger }
 
@@ -78,8 +78,10 @@ begin
           // We do not proceed with sending MouseDown/Up message, since a control cannot be validated!
           // -> proceeding may allow additional controls to be created etc.
           Result := true
-        else
+        else begin
+          GetParentForm(FFrame).BringToFront;
           Result := inherited IsDesignMessage(ASender, AMessage);
+        end;
       end
   else
     Result := inherited IsDesignMessage(ASender, AMessage);
