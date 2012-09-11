@@ -143,7 +143,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="70">
+    <Units Count="71">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -603,6 +603,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_designsizer"/>
       </Unit69>
+      <Unit70>
+        <Filename Value="designer/design_designbander.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designbander"/>
+      </Unit70>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

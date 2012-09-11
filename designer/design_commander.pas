@@ -11,7 +11,7 @@ type
 
   { TCustomCommand }
 
-  TCustomCommand = class
+  TCustomCommand = class(TComponent)
   public
     procedure Undo; virtual; abstract;
     procedure ReDo; virtual; abstract;
@@ -21,15 +21,20 @@ type
 
   TCustomCommandList = class(TCustomCommand)
   private
+    FFreeOnEmpty: boolean;
     FList: TFPList;
+    procedure SetFreeOnEmpty(AValue: boolean);
   protected
     procedure FreeCommand(data, arg: pointer);
+    procedure Notification(AComponent: TComponent; Operation: TOperation);
+       override;
   public
     constructor Create; virtual;
     destructor Destroy; override;
     procedure AddCommand(Command: TCustomCommand); virtual;
     procedure Undo; override;
     procedure ReDo; override;
+    property  FreeOnEmpty: boolean read FFreeOnEmpty write SetFreeOnEmpty;
   end;
 
   { TCommander }
@@ -39,6 +44,9 @@ type
     FRedoList: TFPList;
     function GetCanRedo: boolean;
     function GetCanUndo: boolean;
+  protected
+    procedure Notification(AComponent: TComponent; Operation: TOperation);
+       override;
   public
     constructor Create; override;
     destructor Destroy; override;
@@ -53,14 +61,38 @@ implementation
 
 { TCustomCommandList }
 
+procedure TCustomCommandList.SetFreeOnEmpty(AValue: boolean);
+begin
+  if FFreeOnEmpty = AValue then Exit;
+  FFreeOnEmpty := AValue;
+end;
+
 procedure TCustomCommandList.FreeCommand(data, arg: pointer);
 begin
-  TCustomCommand(data).Free;
+  with TCustomCommand(data) do
+  begin
+    RemoveFreeNotification(Self);
+    Free;
+  end;
+end;
+
+procedure TCustomCommandList.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited Notification(AComponent, Operation);
+  if csDestroying in ComponentState then exit;
+
+  if FList.IndexOf(AComponent) > -1 then
+    FList.Remove(AComponent);
+
+  if FreeOnEmpty and (FList.Count = 0) then
+    Free;
 end;
 
 constructor TCustomCommandList.Create;
 begin
   FList := TFPList.Create;
+  FFreeOnEmpty := false;
 end;
 
 destructor TCustomCommandList.Destroy;
@@ -71,6 +103,7 @@ end;
 
 procedure TCustomCommandList.AddCommand(Command: TCustomCommand);
 begin
+  Command.FreeNotification(Self);
   FList.Add(Command);
 end;
 
@@ -100,6 +133,16 @@ end;
 function TCommander.GetCanUndo: boolean;
 begin
   result := FList.Count > 0;
+end;
+
+procedure TCommander.Notification(AComponent: TComponent; Operation: TOperation
+  );
+begin
+  inherited Notification(AComponent, Operation);
+  if csDestroying in ComponentState then exit;
+
+  if FRedoList.IndexOf(AComponent) > -1 then
+    FRedoList.Remove(AComponent);
 end;
 
 constructor TCommander.Create;

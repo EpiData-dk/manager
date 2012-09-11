@@ -5,21 +5,36 @@ unit design_designsizer;
 interface
 
 uses
-  Classes, SysUtils, types, JvDesignImp;
+  Classes, SysUtils, types, JvDesignImp, JvDesignSurface, Controls;
 
 type
 
   { TDesignSizer }
 
   TDesignSizer = class(TJvDesignSizer)
+  {$IFDEF DARWIN}
+  private
+    FOldPaint: TNotifyEvent;
+    FDesignPanel: TJvDesignPanel;
+    procedure ApplyDarwinHack;
+    procedure RemoveDarwinHack;
+    procedure SizerPaint(Sender: TObject);
+  protected
+    function GetClient: TControl; override;
+    procedure PaintDragRect; override;
+  {$ENDIF}
   protected
     procedure ApplyDragRect; override;
+  public
+    constructor CreateSizer(AOwner: TJvDesignSurface;
+       AHandle: TJvDesignHandleId); override;
+    destructor Destroy; override;
   end;
 
 implementation
 
 uses
-   manager_globals, design_commander, Controls, JvDesignSurface;
+   manager_globals, design_commander, Graphics;
 
 type
   { TSizeCommand }
@@ -67,6 +82,56 @@ end;
 
 { TDesignSizer }
 
+{$IFDEF DARWIN}
+procedure TDesignSizer.ApplyDarwinHack;
+var
+  WinCtrl: TWinControl;
+begin
+  WinCtrl := Surface.Container;
+  while Assigned(WinCtrl) do
+    if WinCtrl is TJvDesignPanel then
+      break
+    else
+      WinCtrl := WinCtrl.Parent;
+
+  if Assigned(WinCtrl) then
+  begin
+    FDesignPanel := TJvDesignPanel(WinCtrl);
+    FOldPaint := FDesignPanel.OnPaint;
+    FDesignPanel.OnPaint := @SizerPaint;
+  end;
+end;
+
+procedure TDesignSizer.RemoveDarwinHack;
+begin
+  FDesignPanel.OnPaint := FOldPaint;
+end;
+
+procedure TDesignSizer.SizerPaint(Sender: TObject);
+begin
+  if Assigned(FOldPaint) then FOldPaint(Sender);
+
+  with FDesignPanel.Canvas do
+  begin
+    Pen.Style := psDash;
+    Pen.Color := clBlack;
+    Brush.Style := bsClear;
+
+    Rectangle(FDragRect);
+  end;
+end;
+
+function TDesignSizer.GetClient: TControl;
+begin
+  Result := FDesignPanel;
+end;
+
+procedure TDesignSizer.PaintDragRect;
+begin
+  FDesignPanel.Invalidate;
+end;
+{$ENDIF}
+
 procedure TDesignSizer.ApplyDragRect;
 var
   Cmd: TSizeCommand;
@@ -84,6 +149,23 @@ begin
     GlobalCommandList.AddCommand(Cmd)
   else
     Cmd.Free;
+end;
+
+constructor TDesignSizer.CreateSizer(AOwner: TJvDesignSurface;
+  AHandle: TJvDesignHandleId);
+begin
+  inherited CreateSizer(AOwner, AHandle);
+  {$IFDEF DARWIN}
+  ApplyDarwinHack;
+  {$ENDIF}
+end;
+
+destructor TDesignSizer.Destroy;
+begin
+  {$IFDEF DARWIN}
+  RemoveDarwinHack;
+  {$ENDIF}
+  inherited Destroy;
 end;
 
 end.

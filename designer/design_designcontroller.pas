@@ -40,7 +40,8 @@ implementation
 
 uses
   LCLIntf, LCLType, design_control_section, manager_messages,
-  main, manager_globals, design_designmover, design_designsizer;
+  main, manager_globals, design_designmover, design_designsizer,
+  design_designbander;
 
 { TDesignController }
 
@@ -53,8 +54,9 @@ begin
       result := TDesignMover.Create(Surface);
     dmResize:
       result := TDesignSizer.CreateSizer(Surface, HandleID);
-//    dmSelect: ;
-//    dmCreate: ;
+    dmSelect,
+    dmCreate:
+      result := TDesignBander.Create(Surface);
   else
     Result := inherited DoCreateMouseTool(ADragMode);
   end;
