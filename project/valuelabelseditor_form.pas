@@ -127,7 +127,7 @@ implementation
 
 uses
   project_frame, math, LCLType, main, settings2, settings2_var, LCLProc,
-  design_controls, epidatafiles, shortcuts;
+  epidatafiles, shortcuts;
 
 var
   TheValueLabelEditor: TValueLabelEditor = nil;

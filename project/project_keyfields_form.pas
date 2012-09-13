@@ -115,7 +115,7 @@ begin
     end;
     F.ValueLabelSet := VL;
 
-    PostMessage(MainForm.Handle, LM_DESIGNER_ADDFIELD, WParam(F), 0);
+    PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WParam(F), 0);
   end;
 
   if not PerformIndexCheck(FailedRecords, FailedValues) then

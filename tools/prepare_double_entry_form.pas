@@ -100,6 +100,7 @@ begin
       begin
         if Fields[j].FieldType <> ftAutoInc then continue;
 
+        // TODO -cRuntimeDesigner: Check up on workign after rewriting TEpiCustomBase.Assign.
         F := Fields[j];
         NewF := F.Section.NewField(ftInteger);
         NewF.Assign(F);

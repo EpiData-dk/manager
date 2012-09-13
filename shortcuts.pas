@@ -61,7 +61,9 @@ var
   D_PasteAs,
   D_CopyControl,
   D_PasteControl,
-  D_ViewDataSet:
+  D_ViewDataSet,
+  D_Undo,
+  D_Redo:
     TShortCut;
 
 

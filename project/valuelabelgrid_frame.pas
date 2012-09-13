@@ -41,6 +41,7 @@ type
     procedure EventHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
     function  ValueLabelFromNode(Node: PVirtualNode): TEpiCustomValueLabel;
+    procedure NodeError(Node: PVirtualNode; Column: TColumnIndex; Const Msg: string);
     procedure DoShowHintMsg(Ctrl: TControl; Const Msg: String); overload;
     procedure DoShowHintMsg(R: TRect; Const Msg: string); overload;
   public
@@ -58,7 +59,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Dialogs, LCLProc, epimiscutils;
+  Graphics, Dialogs, LCLProc, epimiscutils, Math;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -69,8 +70,10 @@ type
     procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FEditor: TValueLabelGridFrame;
+    FInitialText: string;
   public
     constructor Create; override;
+    function BeginEdit: Boolean; override; stdcall;
     function EndEdit: Boolean; override; stdcall;
     property Editor: TValueLabelGridFrame read FEditor write FEditor;
   end;
@@ -89,6 +92,12 @@ begin
   Edit.OnKeyDown  := @KeyDown;
 end;
 
+function TValidatedStringEditLink.BeginEdit: Boolean; stdcall;
+begin
+  Result := inherited BeginEdit;
+  FInitialText := Edit.Text;
+end;
+
 function TValidatedStringEditLink.EndEdit: Boolean; stdcall;
 var
   I: integer;
@@ -98,6 +107,7 @@ begin
 
   if (result) and (FColumn = 0) then
   begin
+    // Type check
     case Editor.FValueLabelSet.LabelType of
       ftInteger:
         result := TryStrToInt(Edit.Text, I);
@@ -105,11 +115,21 @@ begin
         result := TryStrToFloat(Edit.Text, F);
     end;
     if not Result then
+      FEditor.DoShowHintMsg(Edit, '"' + Edit.Text + '" is not a valid ' + LowerCase(EpiTypeNames[Editor.FValueLabelSet.LabelType]));
+
+    // Check for existing value
+    if Result and
+       (Edit.Text <> FInitialText) and
+       (Editor.FValueLabelSet.ValueLabelExists[Edit.Text])
+    then
     begin
-      FEditor.DoShowHintMsg(Edit, Edit.Text + ' is not a valid ' + LowerCase(EpiTypeNames[Editor.FValueLabelSet.LabelType]));
-      FTree.CancelEditNode;
+      FEditor.DoShowHintMsg(Edit, 'Value "' + Edit.Text + '" already exists!');
+      Result := false;
     end;
   end;
+
+  if Result then
+    FInitialText := '';
 
   Result := Result and inherited;
 end;
@@ -177,8 +197,13 @@ begin
           V2 := StrToFloat(ValueLabelFromNode(Last).ValueAsString);
           V1 := StrToFloat(ValueLabelFromNode(VLG.GetPrevious(Last)).ValueAsString);
           VLG.Text[Node, 0] := FloatToStr(V2 + (V2 - V1));
-        end else
-          VLG.Text[Node, 0] := FloatToStr(StrToFloat(ValueLabelFromNode(Last).ValueAsString) * 2);
+        end else begin
+          V1 := StrToFloat(ValueLabelFromNode(Last).ValueAsString) * 2;
+          if SameValue(V1, 0) then
+            VLG.Text[Node, 0] := '1'
+          else
+            VLG.Text[Node, 0] := FloatToStr(V1);
+        end;
       end;
     end
     else
@@ -301,6 +326,7 @@ var
   VL: TEpiCustomValueLabel;
 begin
   VL := ValueLabelFromNode(Node);
+
   with VL do
   begin
     case Column of
@@ -381,6 +407,18 @@ function TValueLabelGridFrame.ValueLabelFromNode(Node: PVirtualNode
   ): TEpiCustomValueLabel;
 begin
   Result := FValueLabelSet[Node^.Index];
+end;
+
+procedure TValueLabelGridFrame.NodeError(Node: PVirtualNode;
+  Column: TColumnIndex; const Msg: string);
+var
+  R: TRect;
+begin
+  R := VLG.GetDisplayRect(Node, Column, true);
+  OffsetRect(R, 0, R.Bottom - R.Top);
+  DoShowHintMsg(R, Msg);
+  VLG.Selected[Node] := true;
+  VLG.EditNode(Node, Column);
 end;
 
 procedure TValueLabelGridFrame.DoShowHintMsg(Ctrl: TControl; const Msg: String);
@@ -482,18 +520,6 @@ function TValueLabelGridFrame.ValidateGridEntries: boolean;
 var
   VL: TEpiCustomValueLabel;
   Node: PVirtualNode;
-
-  procedure NodeError(Node: PVirtualNode; Column: TColumnIndex; Const Msg: string);
-  var
-    R: TRect;
-  begin
-    R := VLG.GetDisplayRect(Node, Column, true);
-    OffsetRect(R, 0, R.Bottom - R.Top);
-    DoShowHintMsg(R, Msg);
-    VLG.Selected[Node] := true;
-    VLG.EditNode(Node, Column);
-  end;
-
 begin
   if not Assigned(FValueLabelSet) then exit(true);
 

@@ -1,120 +1,256 @@
-object DesignFrame: TDesignFrame
+object RuntimeDesignFrame: TRuntimeDesignFrame
   Left = 0
-  Height = 654
+  Height = 563
   Top = 0
-  Width = 900
-  ClientHeight = 654
-  ClientWidth = 900
-  OnResize = FrameResize
+  Width = 985
+  ClientHeight = 563
+  ClientWidth = 985
   TabOrder = 0
-  DesignLeft = 340
-  DesignTop = 284
-  object Panel1: TPanel
-    Left = 635
-    Height = 600
-    Top = 28
-    Width = 265
-    Align = alRight
-    BevelInner = bvLowered
-    BorderWidth = 3
-    BorderStyle = bsSingle
-    ClientHeight = 598
-    ClientWidth = 263
-    ParentColor = False
+  DesignLeft = 570
+  DesignTop = 242
+  object DesignerToolBar: TToolBar
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 985
+    ButtonHeight = 24
+    ButtonWidth = 24
+    Caption = 'DesignerToolBar'
+    EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
+    EdgeInner = esNone
+    EdgeOuter = esRaised
+    Images = DesignerImageList
     TabOrder = 0
-    object Label1: TLabel
-      Left = 11
-      Height = 16
-      Top = 38
-      Width = 43
-      Caption = 'Label1'
-      ParentColor = False
+    Transparent = True
+    object SelectorToolButton: TToolButton
+      Left = 88
+      Top = 1
+      Caption = 'SelectorToolButton'
+      Down = True
+      ImageIndex = 0
+      OnClick = SelecterBtnClick
     end
-    object Label2: TLabel
-      Left = 11
-      Height = 16
-      Top = 118
-      Width = 43
-      Caption = 'Label1'
-      ParentColor = False
+    object Divider1: TToolButton
+      Left = 116
+      Top = 1
+      Width = 5
+      Caption = 'Divider1'
+      Style = tbsDivider
     end
-    object Label3: TLabel
-      Left = 11
-      Height = 16
-      Top = 198
-      Width = 43
-      Caption = 'Label1'
-      ParentColor = False
+    object IntToolButton: TToolButton
+      Tag = 1
+      Left = 121
+      Hint = 'New Integer Field'
+      Top = 1
+      Caption = 'New Integer Field'
+      ImageIndex = 1
+      OnClick = FieldBtnClick
+      ParentShowHint = False
+      ShowHint = True
     end
-    object Label4: TLabel
-      Left = 11
-      Height = 16
-      Top = 294
-      Width = 43
-      Caption = 'Label1'
-      ParentColor = False
+    object FloatToolButton: TToolButton
+      Tag = 3
+      Left = 149
+      Hint = 'New Float Field'
+      Top = 1
+      Caption = 'New Float Field'
+      ImageIndex = 2
+      OnClick = FieldBtnClick
+      ParentShowHint = False
+      ShowHint = True
     end
-    object Label5: TLabel
-      Left = 11
-      Height = 16
-      Top = 378
-      Width = 43
-      Caption = 'Label5'
-      ParentColor = False
+    object StringToolButton: TToolButton
+      Tag = 12
+      Left = 177
+      Hint = 'New String Field'
+      Top = 1
+      Caption = 'New String Field'
+      ImageIndex = 3
+      OnClick = FieldBtnClick
+      ParentShowHint = False
+      ShowHint = True
     end
-    object Button1: TButton
-      Left = 124
-      Height = 25
-      Top = 470
-      Width = 115
-      Caption = 'Save DF As XML'
-      OnClick = Button1Click
+    object DateToolButton: TToolButton
+      Tag = 4
+      Left = 205
+      Hint = 'New DMY Field'
+      Top = 1
+      Caption = 'New DMY Field'
+      ImageIndex = 4
+      OnClick = FieldBtnClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object OtherToolButton: TToolButton
+      Left = 261
+      Hint = 'Other Field Types...'
+      Top = 1
+      Caption = 'OtherToolButton'
+      DropdownMenu = OtherFieldsPopup
+      ImageIndex = 7
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object Divider2: TToolButton
+      Left = 289
+      Top = 1
+      Width = 5
+      Caption = 'Divider2'
+      Style = tbsDivider
+    end
+    object HeadingToolButton: TToolButton
+      Tag = 5
+      Left = 294
+      Hint = 'New Heading'
+      Top = 1
+      Caption = 'New Heading'
+      ImageIndex = 8
+      OnClick = HeadingBtnClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object Divider3: TToolButton
+      Left = 322
+      Top = 1
+      Width = 5
+      Caption = 'Divider3'
+      Style = tbsDivider
+    end
+    object SectionToolButton: TToolButton
+      Tag = 6
+      Left = 327
+      Hint = 'New Section'
+      Top = 1
+      Caption = 'New Section'
+      ImageIndex = 9
+      OnClick = SectionBtnClick
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object Divider4: TToolButton
+      Left = 355
+      Top = 1
+      Width = 5
+      Caption = 'Divider4'
+      Style = tbsDivider
+    end
+    object EditToolButton: TToolButton
+      Left = 360
+      Top = 1
+      Action = EditControlAction
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object DeleteToolButton: TToolButton
+      Left = 388
+      Top = 1
+      Action = DeleteControlAction
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object DeleteAllToolButton: TToolButton
+      Left = 416
+      Top = 1
+      Action = DeleteAllAction
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object Divider5: TToolButton
+      Left = 444
+      Top = 1
+      Width = 5
+      Caption = 'Divider5'
+      Style = tbsDivider
+    end
+    object ImportToolButton: TToolButton
+      Left = 449
+      Top = 1
+      Action = ImportAction
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object ExportToolButton: TToolButton
+      Left = 477
+      Top = 1
+      ImageIndex = 19
+      ParentShowHint = False
+      ShowHint = True
+    end
+    object Divider6: TToolButton
+      Left = 505
+      Top = 1
+      Width = 5
+      Caption = 'Divider6'
+      Style = tbsDivider
+    end
+    object TestToolButton: TToolButton
+      Left = 510
+      Top = 1
+      Caption = 'TestToolButton'
+      ImageIndex = 0
+      OnClick = TestToolButtonClick
+    end
+    object ProjectToolBar: TToolBar
+      Left = 2
+      Height = 24
+      Top = 1
+      Width = 86
+      Align = alNone
+      ButtonHeight = 24
+      ButtonWidth = 24
+      Caption = 'ProjectToolBar'
+      EdgeInner = esNone
+      EdgeOuter = esRaised
       TabOrder = 0
+      object OpenProjectToolBtn: TToolButton
+        Left = 1
+        Top = 1
+        Caption = 'OpenProjectToolBtn'
+      end
+      object ProjectDivider1: TToolButton
+        Left = 25
+        Top = 1
+        Width = 5
+        Caption = 'ProjectDivider1'
+        Style = tbsDivider
+      end
+      object SaveProjectToolBtn: TToolButton
+        Left = 30
+        Top = 1
+        Caption = 'SaveProjectToolBtn'
+      end
+      object SaveProjectAsToolBtn: TToolButton
+        Left = 54
+        Top = 1
+        Caption = 'SaveProjectAsToolBtn'
+      end
+      object ToolButton1: TToolButton
+        Left = 78
+        Top = 1
+        Width = 5
+        Caption = 'ToolButton1'
+        Style = tbsDivider
+      end
     end
-    object Label6: TLabel
-      Left = 11
-      Height = 16
-      Top = 454
-      Width = 43
-      Caption = 'Label6'
-      ParentColor = False
+    object ToolButton2: TToolButton
+      Tag = 10
+      Left = 233
+      Top = 1
+      Caption = 'ToolButton2'
+      ImageIndex = 15
+      OnClick = FieldBtnClick
     end
-    object Label7: TLabel
-      Left = 75
-      Height = 16
-      Top = 77
-      Width = 43
-      Caption = 'Label7'
-      ParentColor = False
-    end
-    object Label8: TLabel
-      Left = 80
-      Height = 16
-      Top = 162
-      Width = 43
-      Caption = 'Label8'
-      ParentColor = False
-    end
-  end
-  object Splitter1: TSplitter
-    Left = 630
-    Height = 600
-    Top = 28
-    Width = 5
-    Align = alRight
-    Beveled = True
-    ResizeAnchor = akRight
   end
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
-    Top = 628
-    Width = 900
+    Top = 537
+    Width = 985
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 26
-    ClientWidth = 900
-    TabOrder = 2
+    ClientWidth = 985
+    TabOrder = 1
     object SectionsPanel: TPanel
       AnchorSideLeft.Control = RecordsPanel
       AnchorSideLeft.Side = asrBottom
@@ -133,19 +269,19 @@ object DesignFrame: TDesignFrame
       object SectionsLabel: TLabel
         AnchorSideLeft.Control = SectionsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 64
-        Height = 16
+        Left = 63
+        Height = 15
         Top = 4
-        Width = 90
+        Width = 89
         BorderSpacing.Left = 2
         Caption = 'SectionsLabel'
         ParentColor = False
       end
       object SectionsStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 60
+        Width = 59
         Caption = 'Sections:'
         ParentColor = False
       end
@@ -168,9 +304,9 @@ object DesignFrame: TDesignFrame
       TabOrder = 1
       object CurrentSectionLabel: TLabel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 131
+        Width = 130
         Caption = 'CurrentSectionLabel'
         ParentColor = False
       end
@@ -190,19 +326,19 @@ object DesignFrame: TDesignFrame
       object RecordsLabel: TLabel
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 59
-        Height = 16
+        Left = 58
+        Height = 15
         Top = 4
-        Width = 85
+        Width = 84
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         ParentColor = False
       end
       object RecordStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 55
+        Width = 54
         Caption = 'Records:'
         ParentColor = False
       end
@@ -225,19 +361,19 @@ object DesignFrame: TDesignFrame
       object FieldsLabel: TLabel
         AnchorSideLeft.Control = FieldsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 44
-        Height = 16
+        Left = 43
+        Height = 15
         Top = 4
-        Width = 70
+        Width = 69
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         ParentColor = False
       end
       object FieldsStaticLabel: TLabel
         Left = 2
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 40
+        Width = 39
         Caption = 'Fields:'
         ParentColor = False
       end
@@ -249,23 +385,23 @@ object DesignFrame: TDesignFrame
       Left = 377
       Height = 24
       Top = 2
-      Width = 141
+      Width = 226
       Alignment = taLeftJustify
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 2
       BorderSpacing.Right = 2
       BevelOuter = bvLowered
       ClientHeight = 24
-      ClientWidth = 141
+      ClientWidth = 226
       Color = clWhite
       ParentColor = False
       TabOrder = 4
       object FieldNameLabel: TLabel
         AnchorSideLeft.Control = FieldNamePanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 102
+        Width = 101
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         ParentColor = False
@@ -275,7 +411,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = FieldNamePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = DefaultValuePanel
-      Left = 520
+      Left = 605
       Height = 24
       Top = 2
       Width = 88
@@ -292,9 +428,9 @@ object DesignFrame: TDesignFrame
       object FieldTypeLabel: TLabel
         AnchorSideLeft.Control = FieldTypePanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 91
+        Width = 90
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         ParentColor = False
@@ -304,7 +440,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = FieldTypePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = ValueLabelPanel
-      Left = 610
+      Left = 695
       Height = 24
       Top = 2
       Width = 55
@@ -321,9 +457,9 @@ object DesignFrame: TDesignFrame
       object DefaultValueLabel: TLabel
         AnchorSideLeft.Control = DefaultValuePanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 116
+        Width = 115
         BorderSpacing.Left = 2
         Caption = 'DefaultValueLabel'
         ParentColor = False
@@ -333,7 +469,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = DefaultValuePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = RangePanel
-      Left = 667
+      Left = 752
       Height = 24
       Top = 2
       Width = 80
@@ -350,9 +486,9 @@ object DesignFrame: TDesignFrame
       object ValueLabelLabel: TLabel
         AnchorSideLeft.Control = ValueLabelPanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 104
+        Width = 103
         BorderSpacing.Left = 2
         Caption = 'ValueLabelLabel'
         ParentColor = False
@@ -362,7 +498,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = ValueLabelPanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = KeyPanel
-      Left = 749
+      Left = 834
       Height = 24
       Top = 2
       Width = 60
@@ -379,9 +515,9 @@ object DesignFrame: TDesignFrame
       object RangeLabel: TLabel
         AnchorSideLeft.Control = RangePanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 75
+        Width = 74
         BorderSpacing.Left = 2
         Caption = 'RangeLabel'
         ParentColor = False
@@ -391,7 +527,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Control = RangePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = ExtendedPanel
-      Left = 811
+      Left = 896
       Height = 24
       Top = 2
       Width = 35
@@ -408,9 +544,9 @@ object DesignFrame: TDesignFrame
       object KeyLabel: TLabel
         AnchorSideLeft.Control = KeyPanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 57
+        Width = 56
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         ParentColor = False
@@ -421,7 +557,7 @@ object DesignFrame: TDesignFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = StatusBarPanel
       AnchorSideRight.Side = asrBottom
-      Left = 848
+      Left = 933
       Height = 24
       Top = 2
       Width = 50
@@ -438,9 +574,9 @@ object DesignFrame: TDesignFrame
       object ExtendedLabel: TLabel
         AnchorSideLeft.Control = ExtendedPanel
         Left = 3
-        Height = 16
+        Height = 15
         Top = 4
-        Width = 105
+        Width = 104
         BorderSpacing.Left = 2
         Caption = 'ExtendedLabel'
         Font.Height = -13
@@ -450,258 +586,106 @@ object DesignFrame: TDesignFrame
       end
     end
   end
-  object ToolBarPanel: TPanel
-    Left = 0
-    Height = 28
-    Top = 0
-    Width = 900
-    Align = alTop
-    BevelOuter = bvNone
-    ClientHeight = 28
-    ClientWidth = 900
-    TabOrder = 3
-    object DesignerToolBar: TToolBar
-      AnchorSideRight.Control = ToolBarPanel
-      AnchorSideRight.Side = asrBottom
-      Left = 80
-      Height = 26
-      Top = 0
-      Width = 820
-      Align = alNone
-      Anchors = [akTop, akLeft, akRight]
-      ButtonHeight = 24
-      ButtonWidth = 24
-      Caption = 'DesignerToolBar'
-      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
-      EdgeInner = esNone
-      EdgeOuter = esRaised
-      Images = DesignerImageList
+  object Panel1: TPanel
+    Left = 720
+    Height = 511
+    Top = 26
+    Width = 265
+    Align = alRight
+    BevelInner = bvLowered
+    BorderWidth = 3
+    BorderStyle = bsSingle
+    ClientHeight = 509
+    ClientWidth = 263
+    ParentColor = False
+    TabOrder = 2
+    object Label1: TLabel
+      Left = 11
+      Height = 15
+      Top = 38
+      Width = 42
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 11
+      Height = 15
+      Top = 118
+      Width = 42
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 11
+      Height = 15
+      Top = 198
+      Width = 42
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 11
+      Height = 15
+      Top = 294
+      Width = 42
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 11
+      Height = 15
+      Top = 378
+      Width = 42
+      Caption = 'Label5'
+      ParentColor = False
+    end
+    object Button1: TButton
+      Left = 124
+      Height = 25
+      Top = 470
+      Width = 115
+      Caption = 'Save DF As XML'
+      OnClick = Button1Click
       TabOrder = 0
-      Transparent = True
-      object SelectorToolButton: TToolButton
-        Left = 2
-        Top = 1
-        Caption = 'SelectorToolButton'
-        Down = True
-        ImageIndex = 0
-        OnClick = ToggleToolBtn
-      end
-      object Divider1: TToolButton
-        Left = 30
-        Top = 1
-        Width = 5
-        Caption = 'Divider1'
-        Style = tbsDivider
-      end
-      object IntToolButton: TToolButton
-        Tag = 1
-        Left = 35
-        Hint = 'New Integer Field'
-        Top = 1
-        Caption = 'New Integer Field'
-        ImageIndex = 1
-        OnClick = ToggleToolBtn
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object FloatToolButton: TToolButton
-        Tag = 3
-        Left = 63
-        Hint = 'New Float Field'
-        Top = 1
-        Caption = 'New Float Field'
-        ImageIndex = 2
-        OnClick = ToggleToolBtn
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object StringToolButton: TToolButton
-        Tag = 12
-        Left = 91
-        Hint = 'New String Field'
-        Top = 1
-        Caption = 'New String Field'
-        ImageIndex = 3
-        OnClick = ToggleToolBtn
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object DateToolButton: TToolButton
-        Tag = 4
-        Left = 119
-        Hint = 'New DMY Field'
-        Top = 1
-        Caption = 'New DMY Field'
-        ImageIndex = 4
-        OnClick = ToggleToolBtn
-        ParentShowHint = False
-        PopupMenu = DateFieldPopupMenu
-        ShowHint = True
-      end
-      object OtherToolButton: TToolButton
-        Left = 147
-        Hint = 'Other Field Types...'
-        Top = 1
-        Caption = 'OtherToolButton'
-        DropdownMenu = OtherFieldsPopup
-        ImageIndex = 7
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object Divider2: TToolButton
-        Left = 175
-        Top = 1
-        Width = 5
-        Caption = 'Divider2'
-        Style = tbsDivider
-      end
-      object HeadingToolButton: TToolButton
-        Tag = 5
-        Left = 180
-        Hint = 'New Heading'
-        Top = 1
-        Caption = 'New Heading'
-        ImageIndex = 8
-        OnClick = ToggleToolBtn
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object Divider3: TToolButton
-        Left = 236
-        Top = 1
-        Width = 5
-        Caption = 'Divider3'
-        Style = tbsDivider
-      end
-      object SectionToolButton: TToolButton
-        Tag = 6
-        Left = 241
-        Hint = 'New Section'
-        Top = 1
-        Caption = 'New Section'
-        ImageIndex = 9
-        OnClick = ToggleToolBtn
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object Divider4: TToolButton
-        Left = 269
-        Top = 1
-        Width = 5
-        Caption = 'Divider4'
-        Style = tbsDivider
-      end
-      object EditToolButton: TToolButton
-        Left = 274
-        Top = 1
-        Action = EditControlAction
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object DeleteToolButton: TToolButton
-        Left = 302
-        Top = 1
-        Action = DeleteControlAction
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object DeleteAllToolButton: TToolButton
-        Left = 330
-        Top = 1
-        Action = DeleteAllControlsAction
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object Divider5: TToolButton
-        Left = 358
-        Top = 1
-        Width = 5
-        Caption = 'Divider5'
-        Style = tbsDivider
-      end
-      object LoadToolButton: TToolButton
-        Left = 363
-        Top = 1
-        Action = ImportDataFileAction
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object ImportToolButton: TToolButton
-        Left = 391
-        Top = 1
-        Action = AddStructureAction
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object ExportToolButton: TToolButton
-        Left = 419
-        Top = 1
-        Action = PrintDataFormAction
-        ParentShowHint = False
-        ShowHint = True
-      end
-      object Divider6: TToolButton
-        Left = 447
-        Top = 1
-        Width = 5
-        Caption = 'Divider6'
-        Style = tbsDivider
-      end
-      object TestToolButton: TToolButton
-        Left = 452
-        Top = 1
-        Caption = 'TestToolButton'
-        ImageIndex = 0
-        OnClick = TestToolButtonClick
-      end
-      object ToolButton1: TToolButton
-        Left = 208
-        Top = 1
-        Action = MoreSpaceAction
-      end
     end
-    object ProjectToolBar: TToolBar
-      Left = 0
-      Height = 26
-      Top = 0
-      Width = 80
-      Align = alNone
-      ButtonHeight = 24
-      ButtonWidth = 24
-      Caption = 'ProjectToolBar'
-      EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
-      EdgeInner = esNone
-      EdgeOuter = esRaised
-      TabOrder = 1
-      object OpenProjectToolBtn: TToolButton
-        Left = 2
-        Top = 1
-        Caption = 'OpenProjectToolBtn'
-      end
-      object ProjectDivider1: TToolButton
-        Left = 26
-        Top = 1
-        Width = 5
-        Caption = 'ProjectDivider1'
-        Style = tbsDivider
-      end
-      object SaveProjectToolBtn: TToolButton
-        Left = 31
-        Top = 1
-        Caption = 'SaveProjectToolBtn'
-      end
-      object SaveProjectAsToolBtn: TToolButton
-        Left = 55
-        Top = 1
-        Caption = 'SaveProjectAsToolBtn'
-      end
+    object Label6: TLabel
+      Left = 11
+      Height = 15
+      Top = 454
+      Width = 42
+      Caption = 'Label6'
+      ParentColor = False
     end
+    object Label7: TLabel
+      Left = 75
+      Height = 15
+      Top = 77
+      Width = 42
+      Caption = 'Label7'
+      ParentColor = False
+    end
+    object Label8: TLabel
+      Left = 80
+      Height = 15
+      Top = 162
+      Width = 42
+      Caption = 'Label8'
+      ParentColor = False
+    end
+  end
+  object Splitter1: TSplitter
+    Left = 715
+    Height = 511
+    Top = 26
+    Width = 5
+    Align = alRight
+    ResizeAnchor = akRight
   end
   object DesignerImageList: TImageList
     Height = 24
     Width = 24
-    left = 248
-    top = 464
+    left = 276
+    top = 492
     Bitmap = {
       4C69140000001800000018000000000000010000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2149,692 +2133,233 @@ object DesignFrame: TDesignFrame
   object DesignerActionList: TActionList
     Images = DesignerImageList
     OnUpdate = DesignerActionListUpdate
-    left = 248
-    top = 352
+    left = 344
+    top = 240
     object EditControlAction: TAction
       Category = 'Edit'
       Caption = 'Edit'
       Hint = 'Edit...'
       ImageIndex = 10
       OnExecute = EditControlActionExecute
-      OnUpdate = ControlActionUpdate
     end
     object DeleteControlAction: TAction
       Category = 'Edit'
       Caption = 'Delete'
-      Hint = 'Delete...'
+      Hint = 'Delete Selected'
       ImageIndex = 11
       OnExecute = DeleteControlActionExecute
-      OnUpdate = DeleteControlActionUpdate
+      OnUpdate = CutCopyControlUpdate
     end
-    object ImportDataFileAction: TAction
-      Category = 'File'
-      Caption = 'Import Data'
-      Hint = 'Import Datafile'
-      ImageIndex = 12
-      OnExecute = ImportDataFileActionExecute
-    end
-    object AddStructureAction: TAction
-      Category = 'File'
-      Caption = 'Add Structure'
-      Hint = 'Add structure from file...'
-      ImageIndex = 13
-      OnExecute = AddStructureActionExecute
-    end
-    object ExportDataformAction: TAction
-      Category = 'File'
-      Caption = 'ExportDataformAction'
-      ImageIndex = 14
-    end
-    object MoveHomeAction: TAction
-      Category = 'Move'
-      Caption = 'MoveHomeAction'
-      OnExecute = MoveHomeActionExecute
-      OnUpdate = ControlActionUpdate
-    end
-    object MovePgUpAction: TAction
-      Category = 'Move'
-      Caption = 'MovePgUpAction'
-      OnExecute = MovePgUpActionExecute
-      OnUpdate = ControlActionUpdate
-    end
-    object MoveUpAction: TAction
-      Category = 'Move'
-      Caption = 'MoveUpAction'
-      OnExecute = MoveUpActionExecute
-      OnUpdate = ControlActionUpdate
-    end
-    object MoveDownAction: TAction
-      Category = 'Move'
-      Caption = 'MoveDownAction'
-      OnExecute = MoveDownActionExecute
-      OnUpdate = ControlActionUpdate
-    end
-    object MovePgDnAction: TAction
-      Category = 'Move'
-      Caption = 'MovePgDnAction'
-      OnExecute = MovePgDnActionExecute
-      OnUpdate = ControlActionUpdate
-    end
-    object MoveEndAction: TAction
-      Category = 'Move'
-      Caption = 'MoveEndAction'
-      OnExecute = MoveEndActionExecute
-      OnUpdate = ControlActionUpdate
-    end
-    object NewIntFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New Integer Field'
-      Hint = 'New Integer Field'
-      ImageIndex = 1
-      OnExecute = NewIntFieldActionExecute
-    end
-    object NewIntFieldFastAction: TAction
-      Category = 'Controls'
-      Caption = 'New Integer Field'
-      Hint = 'New Integer Field'
-      ImageIndex = 1
-      OnExecute = NewIntFieldFastActionExecute
-    end
-    object NewFloatFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New Float Field'
-      Hint = 'New Float Field'
-      ImageIndex = 2
-      OnExecute = NewFloatFieldActionExecute
-    end
-    object NewFloatFieldFastAction: TAction
-      Category = 'Controls'
-      Caption = 'New Float Field'
-      ImageIndex = 2
-      OnExecute = NewFloatFieldFastActionExecute
-    end
-    object NewStringFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New String Field'
-      Hint = 'New String Field'
-      ImageIndex = 3
-      OnExecute = NewStringFieldActionExecute
-    end
-    object NewStringFieldFastAction: TAction
-      Category = 'Controls'
-      Caption = 'New String Field'
-      Hint = 'New String Field'
-      ImageIndex = 3
-      OnExecute = NewStringFieldFastActionExecute
-    end
-    object NewDMYFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New DMY Field'
-      Hint = 'New DMY Field'
-      ImageIndex = 4
-      OnExecute = NewDMYFieldActionExecute
-    end
-    object NewDMYFieldFastAction: TAction
-      Category = 'Controls'
-      Caption = 'New DMY Field'
-      Hint = 'New DMY Field'
-      ImageIndex = 4
-      OnExecute = NewDMYFieldFastActionExecute
-    end
-    object NewMDYFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New MDY Field'
-      Hint = 'New MDY Field'
-      ImageIndex = 5
-      OnExecute = NewMDYFieldActionExecute
-    end
-    object NewMDYFieldFastAction: TAction
-      Category = 'Controls'
-      Caption = 'New MDY Field'
-      Hint = 'New MDY Field'
-      ImageIndex = 5
-      OnExecute = NewMDYFieldFastActionExecute
-    end
-    object NewYMDFieldAction: TAction
-      Category = 'Controls'
-      Caption = 'New YMD Field'
-      Hint = 'New YMD Field'
-      ImageIndex = 6
-      OnExecute = NewYMDFieldActionExecute
-    end
-    object NewYMDFieldFastAction: TAction
-      Category = 'Controls'
-      Caption = 'New YMD Field'
-      Hint = 'New YMD Field'
-      ImageIndex = 6
-      OnExecute = NewYMDFieldFastActionExecute
-    end
-    object NewHeadingAction: TAction
-      Category = 'Controls'
-      Caption = 'New Heading'
-      Hint = 'New Heading'
-      ImageIndex = 8
-      OnExecute = NewHeadingActionExecute
-    end
-    object NewHeadingFastAction: TAction
-      Category = 'Controls'
-      Caption = 'New Heading'
-      Hint = 'New Heading'
-      ImageIndex = 8
-      OnExecute = NewHeadingFastActionExecute
-    end
-    object NewSectionAction: TAction
-      Category = 'Controls'
-      Caption = 'New Section'
-      Hint = 'New Section'
-      ImageIndex = 9
-      OnExecute = NewSectionActionExecute
-    end
-    object DeleteControlFastAction: TAction
+    object DeleteAllAction: TAction
       Category = 'Edit'
-      Caption = 'Delete'
-      Hint = 'Delete...'
-      ImageIndex = 11
-      OnExecute = DeleteControlFastActionExecute
-      OnUpdate = DeleteControlActionUpdate
-    end
-    object DeleteAllControlsAction: TAction
-      Category = 'Edit'
-      Caption = 'Erase All'
-      Hint = 'Erase All'
+      Caption = 'Delete All'
+      Hint = 'Delete All'
       ImageIndex = 16
-      OnExecute = DeleteAllControlsActionExecute
-    end
-    object PasteAsHeadingAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As Headings'
-      Hint = 'Paste As Headings...'
-      ImageIndex = 8
-      OnExecute = PasteAsHeadingActionExecute
-    end
-    object PasteAsIntAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As Integer'
-      Hint = 'Paste As Integer...'
-      ImageIndex = 1
-      OnExecute = PasteAsIntActionExecute
-    end
-    object PasteAsFloatAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As Float'
-      Hint = 'Paste As Float...'
-      ImageIndex = 2
-      OnExecute = PasteAsFloatActionExecute
-    end
-    object PasteAsStringAction: TAction
-      Category = 'Edit'
-      Caption = 'Paste As String'
-      Hint = 'Paste As String...'
-      ImageIndex = 3
-      OnExecute = PasteAsStringActionExecute
+      OnExecute = DeleteAllActionExecute
     end
     object CopyControlAction: TAction
       Category = 'Edit'
       Caption = 'Copy'
+      Hint = 'Copy'
       OnExecute = CopyControlActionExecute
-      OnUpdate = CopyControlActionUpdate
+      OnUpdate = CutCopyControlUpdate
     end
     object PasteControlAction: TAction
       Category = 'Edit'
-      Caption = 'Paste Control'
+      Caption = 'Paste'
+      Hint = 'Paste'
       OnExecute = PasteControlActionExecute
       OnUpdate = PasteControlActionUpdate
     end
-    object MoreSpaceAction: TAction
-      Category = 'Controls'
-      Caption = 'Expand space'
-      Hint = 'Add space...'
-      ImageIndex = 18
-      OnExecute = MoreSpaceActionExecute
+    object CutControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Cut'
+      Hint = 'Cut'
+      OnExecute = CutControlActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object ClearSelectionAction: TAction
+      Category = 'Edit'
+      Caption = 'Clear Selection'
+      Hint = 'Clear Selected Controls'
+      OnExecute = ClearSelectionActionExecute
+    end
+    object PasteAsHeadingAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As Headings'
+      Hint = 'Paste As Headings...'
+      ImageIndex = 8
+      OnExecute = PasteAsHeadingActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object PasteAsIntAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As Integer'
+      ImageIndex = 1
+      OnExecute = PasteAsIntActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object PasteAsFloatAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As Float'
+      ImageIndex = 2
+      OnExecute = PasteAsFloatActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object PasteAsStringAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As String'
+      ImageIndex = 3
+      OnExecute = PasteAsStringActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object PasteAsDateAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As Date'
+      ImageIndex = 4
+      OnExecute = PasteAsDateActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object SelectNextAction: TAction
+      Category = 'Select'
+      Caption = 'Select Next'
+      Hint = 'Select Next Control'
+      OnExecute = SelectNextActionExecute
+    end
+    object ImportAction: TAction
+      Caption = 'Import...'
+      Hint = 'Import data and structure from files'
+      ImageIndex = 13
+      OnExecute = ImportActionExecute
+    end
+    object NewIntFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'Int Field'
+      ImageIndex = 1
+      OnExecute = NewIntFieldActionExecute
+    end
+    object NewIntFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewIntFieldFastAction'
+      ImageIndex = 1
+      OnExecute = NewIntFieldFastActionExecute
+    end
+    object NewFloatFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewFloatFieldAction'
+      ImageIndex = 2
+      OnExecute = NewFloatFieldActionExecute
+    end
+    object NewFloatFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewFloatFieldFastAction'
+      ImageIndex = 2
+      OnExecute = NewFloatFieldFastActionExecute
+    end
+    object NewStringFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewStringFieldAction'
+      ImageIndex = 3
+      OnExecute = NewStringFieldActionExecute
+    end
+    object NewStringFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewStringFieldFastAction'
+      ImageIndex = 3
+      OnExecute = NewStringFieldFastActionExecute
+    end
+    object NewDateFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewDateFieldAction'
+      ImageIndex = 4
+      OnExecute = NewDateFieldActionExecute
+    end
+    object NewDateFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewDateFieldFastAction'
+      ImageIndex = 4
+      OnExecute = NewDateFieldFastActionExecute
+    end
+    object NewHeadingAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewHeadingAction'
+      ImageIndex = 8
+      OnExecute = NewHeadingActionExecute
+    end
+    object NewHeadingFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewHeadingFastAction'
+      ImageIndex = 8
+      OnExecute = NewHeadingFastActionExecute
+    end
+    object DeleteControlFastAction: TAction
+      Category = 'Edit'
+      Caption = 'DeleteControlFastAction'
+      ImageIndex = 11
+      OnExecute = DeleteControlFastActionExecute
+    end
+    object SelectPgDnAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPgDnAction'
+      OnExecute = SelectPgDnActionExecute
+    end
+    object SelectPriorAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPriorAction'
+      OnExecute = SelectPriorActionExecute
+    end
+    object SelectPgUpAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPgUpAction'
+      OnExecute = SelectPgUpActionExecute
+    end
+    object SelectFirstAction: TAction
+      Category = 'Select'
+      Caption = 'SelectFirstAction'
+      OnExecute = SelectFirstActionExecute
+    end
+    object SelectLastAction: TAction
+      Category = 'Select'
+      Caption = 'SelectLastAction'
+      OnExecute = SelectLastActionExecute
+    end
+    object NewTimeFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewTimeFieldAction'
+      ImageIndex = 15
+    end
+    object NewTimeFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewTimeFieldFastAction'
+      ImageIndex = 15
+    end
+    object UndoAction: TAction
+      Category = 'Edit'
+      Caption = 'Undo'
+      Hint = 'Undo last action'
+      OnExecute = UndoActionExecute
+      OnUpdate = UndoActionUpdate
+    end
+    object RedoAction: TAction
+      Category = 'Edit'
+      Caption = 'Redo'
+      Hint = 'Redo last action'
+      OnExecute = RedoActionExecute
+      OnUpdate = RedoActionUpdate
+    end
+    object ViewDatasetAction: TAction
+      Caption = 'View Dataset'
+      OnExecute = ViewDatasetActionExecute
     end
     object PrintDataFormAction: TAction
-      Category = 'File'
-      Caption = 'Export to SVG'
-      Hint = 'Export to SVG'
-      ImageIndex = 19
+      Caption = 'PrintDataFormAction'
       OnExecute = PrintDataFormActionExecute
-    end
-    object ViewDataSetAction: TAction
-      Category = 'DataSet'
-      Caption = 'View DataSet'
-      OnExecute = ViewDataSetActionExecute
-    end
-  end
-  object DesignControlPopUpMenu: TPopupMenu
-    Images = DesignerImageList
-    left = 248
-    top = 224
-    object EditPopupMenuItem: TMenuItem
-      Action = EditControlAction
-      Bitmap.Data = {
-        36090000424D3609000000000000360000002800000018000000180000000100
-        2000000000000009000064000000640000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF001340
-        58FF15425EFF25699CFF2C76B4FF3B8BBAADFFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF001242
-        59FF5D9CD4FFA6CFF5FFA9CFECFF488BC1FF2C76B4FFFFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF001E6D
-        93FFCBE3F9FF61AAECFF4098E8FF1567C2FF1660AAFF2C76B4FFFFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF001E6D
-        93FFC8E1F2FFD1E7FAFF347DB5FF3199C3FF6DC4DCFF4A9CCFFF3483C7FFFFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF002063
-        98202689B9FFB0CBE1FF67A9C8FF60DCF5FF44D6F4FF8EEEFAFF5DB4E6FF3B8F
-        D9FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF002689B9FFBEE6F2FFB3F4FCFF60DCF5FF44D6F4FF8EEEFAFF5DB4
-        E6FF3B8FD9FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF002790BFFFC3EDF8FFB3F4FCFF60DCF5FF44D6F4FF8EEE
-        FAFF5DB4E6FF3B8FD9FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF002FBAE4FFC3EDF8FFB3F4FCFF60DCF5FF44D6
-        F4FF8EEEFAFF5DB4E6FF3B8FD9FFFFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002FBAE4FFC3EDF8FFB3F4FCFF60DC
-        F5FF44D6F4FF8EEEFAFF5DB4E6FF3B8FD9FFFFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002FBAE4FFC3EDF8FFB3F4
-        FCFF68D9F5FF6FCFF3FF599DD0FF73ABDDFF4F91C9FFFFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002FBAE4FFC3ED
-        F8FFA8E2F8FF6CAEDDFFA5CFF4FFA5CFF4FFBDDBF7FF5393CBF7000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002FBA
-        E4FFA7D4F4FFC5E1F8FFCCE3F9FFCCE3F9FFBDDBF7FF4F90C9FD000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF0050A8D9FF6AA5D8FFC9E1F7FFCBE3F8FF4295CAFF3182C2AE000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF002FBAE4094FAADBEA5093CAFD4E90C8FF2F9DD2DF35A4DE19000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000
-      }
-      GlyphShowMode = gsmSystem
-      OnClick = EditControlActionExecute
-    end
-    object PopupMenuDivider1: TMenuItem
-      Caption = '-'
-    end
-    object CopyControlPopupMenuItem: TMenuItem
-      Action = CopyControlAction
-    end
-    object PasteControPopupMenuItem: TMenuItem
-      Action = PasteControlAction
-    end
-    object PopupMenuDivider2: TMenuItem
-      Caption = '-'
-    end
-    object DeletePopupMenuItem: TMenuItem
-      Action = DeleteControlAction
-      Bitmap.Data = {
-        36090000424D3609000000000000360000002800000018000000180000000100
-        2000000000000009000064000000640000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF008989
-        89FF898989FFFFFFFF00898989FF898989FFFFFFFF00898989FF898989FFFFFF
-        FF00898989FF898989FFFFFFFF00898989FF898989FFFFFFFF00000000000000
-        00000000000000000000000000000000000000000000000000001313FFFF0809
-        FFFF0303FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF007A7BFFFF898989FFFFFFFF00000000000000
-        00000000000000000000000000000000000000000000000000001413FFFF0809
-        FFFF0302FFFF0D0EFFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF006F70FFFF7A7AFFFFFFFFFF00FFFFFF00000000000000
-        00000000000000000000000000000000000000000000000000001414FFFF0909
-        FFFF0202FFFF0E0DFFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF006464FFFF6F70FFFF7B7BFFFF898989FFFFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF000909
-        FFFF0202FFFF0D0DFFFF1818FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF006465FFFF6F6FFFFFFFFFFF00898989FFFFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF008989
-        89FF0202FFFF0D0DFFFF1817FFFF2223FFFFFFFFFF00FFFFFF00FFFFFF00FFFF
-        FF005A5AFFFF6464FFFF6F70FFFFFFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF008989
-        89FFFFFFFF000D0DFFFF1817FFFF2223FFFF2E2EFFFFFFFFFF00FFFFFF004E4F
-        FFFF595AFFFF6464FFFFFFFFFF00FFFFFF00898989FFFFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF001717FFFF2222FFFF2D2DFFFF3938FFFF4343FFFF4E4E
-        FFFF5959FFFFFFFFFF00FFFFFF00FFFFFF00898989FFFFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF008989
-        89FFFFFFFF00FFFFFF00FFFFFF002222FFFF2D2EFFFF3838FFFF4343FFFF4E4D
-        FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF008989
-        89FFFFFFFF00FFFFFF00FFFFFF002222FFFF2D2DFFFF3738FFFF4242FFFF4E4E
-        FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00898989FFFFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF000C0CFFFF1717FFFF2222FFFF2C2DFFFF3737FFFF4343FFFF4E4D
-        FFFF5859FFFFFFFFFF00FFFFFF00FFFFFF00898989FFFFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF000B0A
-        FFFF0101FFFF0B0BFFFF1617FFFF2222FFFF2C2DFFFFFFFFFF00FFFFFF00FFFF
-        FF005858FFFF6363FFFF6E6EFFFFFFFFFF00FFFFFF00FFFFFF00000000000000
-        00000000000000000000000000000000000000000000000000001616FFFF0A0B
-        FFFF0000FFFF0B0BFFFF1616FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF006E6EFFFF7979FFFF8384FFFF7878FFFF000000000000
-        00000000000000000000000000000000000000000000000000001615FFFF0A0A
-        FFFF0000FFFFFFFFFF00898989FF898989FFFFFFFF00898989FF898989FFFFFF
-        FF00898989FF898989FFFFFFFF00898989FF898989FFFFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
-        0000000000000000000000000000000000000000000000000000
-      }
-      GlyphShowMode = gsmSystem
-      OnClick = DeleteControlActionExecute
-    end
-  end
-  object DateFieldPopupMenu: TPopupMenu
-    Images = DesignerImageList
-    left = 192
-    top = 32
-    object NewDMYFieldMenu: TMenuItem
-      Tag = 4
-      Caption = 'DMY Date'
-      Bitmap.Data = {
-        36090000424D3609000000000000360000002800000018000000180000000100
-        2000000000000009000064000000640000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000010000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000003
-        07FA000307630000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000003
-        0711000307CC0003072000000000000000000000000000000000000000000003
-        077D000307F4000307AC000307E90003072000000000000307E60003071D0003
-        0701000307E30003072A0000000000030701000307E300030729000000000000
-        00000003074D000307C300030703000000000000000000000000000000000003
-        07F3000307370003071E000307DA0003076000000000000307B30003074F0000
-        0000000307900003077F0000000000000000000307900003077C000000000000
-        000000030768000307F50003077E000000000000000000000000000000000003
-        07EA00030714000000000003076C000307A00000000000030780000307850000
-        00000003073C000307D700000000000000000003073D000307CF000000000000
-        0000000307A800030767000307CE000307390000000000000000000000000003
-        07910003079E0003070D00030778000307E0000000000003074D000307E50003
-        072900030741000307FC0003077F0003071200030744000307F7000000000000
-        0000000307E7000307200003072D000307D60003070E00000000000000000003
-        070A000307A8000307F600030784000307E8000307200003071A000307EB0003
-        0795000307F5000307910003073D000307D2000307F50003078B000000000003
-        0728000307E000000000000000000003076F000307A400000000000000000000
-        0000000000000000000000000000000307A90003076000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        000000000000000000000000000000030769000307A000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        000000000000000000000000000000030728000307E000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000
-      }
-      ImageIndex = 4
-      OnClick = NewDateFieldMenuClick
-    end
-    object NewMDYFieldMenu: TMenuItem
-      Tag = 5
-      Caption = 'MDY Date'
-      Bitmap.Data = {
-        36090000424D3609000000000000360000002800000018000000180000000100
-        2000000000000009000064000000640000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000010000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000003
-        07FA000307630000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000003
-        0711000307CC0003072000000000000000000000000000000000000000000003
-        07E60003071D00030701000307E30003072A0000000000030701000307E30003
-        0729000000000003077D000307F4000307AC000307E900030720000000000000
-        00000003074D000307C300030703000000000000000000000000000000000003
-        07B30003074F00000000000307900003077F0000000000000000000307900003
-        077C00000000000307F3000307370003071E000307DA00030760000000000000
-        000000030768000307F50003077E000000000000000000000000000000000003
-        078000030785000000000003073C000307D700000000000000000003073D0003
-        07CF00000000000307EA00030714000000000003076C000307A0000000000000
-        0000000307A800030767000307CE000307390000000000000000000000000003
-        074D000307E50003072900030741000307FC0003077F00030712000307440003
-        07F700000000000307910003079E0003070D00030778000307E0000000000000
-        0000000307E7000307200003072D000307D60003070E00000000000000000003
-        071A000307EB00030795000307F5000307910003073D000307D2000307F50003
-        078B000000000003070A000307A8000307F600030784000307E8000307200003
-        0728000307E000000000000000000003076F000307A400000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        00000000000000000000000000000000000000000000000307A9000307600000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000030769000307A00000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000030728000307E00000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000
-      }
-      ImageIndex = 5
-      OnClick = NewDateFieldMenuClick
-    end
-    object NewYMDFieldMenu: TMenuItem
-      Tag = 6
-      Caption = 'YMD Date'
-      Bitmap.Data = {
-        36090000424D3609000000000000360000002800000018000000180000000100
-        2000000000000009000064000000640000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000010000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000003
-        07FA000307630000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000003
-        0711000307CC0003072000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        00000003074D000307C3000307030000000000000000000307E60003071D0003
-        0701000307E30003072A0000000000030701000307E300030729000000000003
-        077D000307F4000307AC000307E9000307200000000000000000000000000000
-        000000030768000307F50003077E0000000000000000000307B30003074F0000
-        0000000307900003077F0000000000000000000307900003077C000000000003
-        07F3000307370003071E000307DA000307600000000000000000000000000000
-        0000000307A800030767000307CE000307390000000000030780000307850000
-        00000003073C000307D700000000000000000003073D000307CF000000000003
-        07EA00030714000000000003076C000307A00000000000000000000000000000
-        0000000307E7000307200003072D000307D60003070E0003074D000307E50003
-        072900030741000307FC0003077F0003071200030744000307F7000000000003
-        07910003079E0003070D00030778000307E00000000000000000000000000003
-        0728000307E000000000000000000003076F000307A40003071A000307EB0003
-        0795000307F5000307910003073D000307D2000307F50003078B000000000003
-        070A000307A8000307F600030784000307E80003072000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000307A90003076000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        000000000000000000000000000000030769000307A000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        000000000000000000000000000000030728000307E000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000000000000000
-        0000000000000000000000000000000000000000000000000000
-      }
-      ImageIndex = 6
-      OnClick = NewDateFieldMenuClick
     end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList
-    left = 248
-    top = 104
+    left = 232
+    top = 96
     object TodayDateSubMenu: TMenuItem
       Caption = 'Auto Date...'
       Hint = 'Today Fields'
@@ -2918,7 +2443,7 @@ object DesignFrame: TDesignFrame
           0000000000000000000000000000000000000000000000000000
         }
         ImageIndex = 4
-        OnClick = NewOtherFieldMenuClick
+        OnClick = NewOtherFieldClick
       end
       object NewMDYTodayFieldMenu: TMenuItem
         Tag = 8
@@ -3000,7 +2525,7 @@ object DesignFrame: TDesignFrame
           0000000000000000000000000000000000000000000000000000
         }
         ImageIndex = 5
-        OnClick = NewOtherFieldMenuClick
+        OnClick = NewOtherFieldClick
       end
       object NewYMDTodayFieldMenu: TMenuItem
         Tag = 9
@@ -3082,93 +2607,11 @@ object DesignFrame: TDesignFrame
           0000000000000000000000000000000000000000000000000000
         }
         ImageIndex = 6
-        OnClick = NewOtherFieldMenuClick
+        OnClick = NewOtherFieldClick
       end
     end
     object TimeSubMenu: TMenuItem
-      Caption = 'Time...'
-      object NewTimeFieldMenu: TMenuItem
-        Tag = 10
-        Caption = 'Time'
-        Bitmap.Data = {
-          36090000424D3609000000000000360000002800000018000000180000000100
-          2000000000000009000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF000000FFFFFF
-          FF0000000000000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00000000000000000000000000000000FF000000FF0000
-          0000000000FF000000FF0000000000000000000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00000000FF000000FF000000FF000000FF000000FF0000
-          00FF0000000000000000FFFFFF00FFFFFF00000000FF000000FFFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF0000000000000000FFFFFFFF00000000FF000000FFFFFF
-          FF0000000000000000FF0000000000000000000000FF000000FFFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF0000000000000000FF00000000000000FF000000FFFFFF
-          FF0000000000000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF000000FF000000FFFFFF
-          FF0000000000000000FF000000000000000000000000FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000FF000000FF000000FFFFFF
-          FF0000000000000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF000000FFFFFF
-          FF00FFFFFF00000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF00000000FF000000FF000000FF000000FF000000FF000000FFFFFFFF000000
-          00FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF0000000000000000FF000000FF000000000000000000000000FFFFFF000000
-          0000000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF00FFFFFF00000000FF000000FF0000000000000000FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF00FFFFFF00FFFFFF0000000000000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFFFF000000
-          00FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF0000000000000000FF000000FF000000FF00000000FFFF
-          FF00000000FF000000FFFFFFFF00FFFFFF00000000FF000000FFFFFFFF000000
-          00FF000000FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF000000000000000000000000FF000000FF00000000FFFF
-          FF0000000000000000FF000000FF00000000000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0000000000000000FF00000000FFFF
-          FF0000000000000000FF000000FF000000FF000000FF00000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
-        ImageIndex = 15
-        OnClick = NewOtherFieldMenuClick
-      end
+      Caption = 'Auto Time...'
       object NewTimeNowFieldMenu: TMenuItem
         Tag = 11
         Caption = 'Time (Auto)'
@@ -3249,7 +2692,7 @@ object DesignFrame: TDesignFrame
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
         ImageIndex = 15
-        OnClick = NewOtherFieldMenuClick
+        OnClick = NewOtherFieldClick
       end
     end
     object NewBooleanMenu: TMenuItem
@@ -3331,7 +2774,7 @@ object DesignFrame: TDesignFrame
         00FF00000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
       ImageIndex = 17
-      OnClick = NewOtherFieldMenuClick
+      OnClick = NewOtherFieldClick
     end
     object NewUpperCaseMenu: TMenuItem
       Tag = 13
@@ -3413,7 +2856,7 @@ object DesignFrame: TDesignFrame
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
       ImageIndex = 3
-      OnClick = NewOtherFieldMenuClick
+      OnClick = NewOtherFieldClick
     end
     object NewAutoIncMenu: TMenuItem
       Tag = 2
@@ -3495,180 +2938,107 @@ object DesignFrame: TDesignFrame
         0000000000000000000000000000000000000000000000000000
       }
       ImageIndex = 1
-      OnClick = NewOtherFieldMenuClick
+      OnClick = NewOtherFieldClick
     end
   end
-  object DockingSitePopUpMenu: TPopupMenu
+  object DesignControlPopUpMenu: TPopupMenu
     Images = DesignerImageList
-    left = 440
+    OnPopup = DesignControlPopUpMenuPopup
+    left = 232
     top = 304
-    object DockingSitePopUpMenuEditItem: TMenuItem
+    object EditPopupMenuItem: TMenuItem
       Action = EditControlAction
       Bitmap.Data = {
         36090000424D3609000000000000360000002800000018000000180000000100
-        2000000000000009000064000000640000000000000000000000FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00134058FF15425EFF25699CFF2C76B4FF3B8B
-        BAFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00124259FF5D9CD4FFA6CFF5FFA9CFECFF488B
-        C1FF2C76B4FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF001E6D93FFCBE3F9FF61AAECFF4098E8FF1567
-        C2FFFF00FF002C76B4FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF001E6D93FFC8E1F2FFD1E7FAFF347DB5FF3199
-        C3FF6DC4DCFF4A9CCFFF3483C7FFFF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF002689B9FFB0CBE1FF67A9C8FF60DC
-        F5FF44D6F4FF8EEEFAFF5DB4E6FF3B8FD9FFFF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF002689B9FFBEE6F2FFB3F4
-        FCFF60DCF5FF44D6F4FF8EEEFAFF5DB4E6FF3B8FD9FFFF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF002790BFFFC3ED
-        F8FFB3F4FCFF60DCF5FF44D6F4FF8EEEFAFF5DB4E6FF3B8FD9FFFF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF002FBA
-        E4FFC3EDF8FFB3F4FCFF60DCF5FF44D6F4FF8EEEFAFF5DB4E6FF3B8FD9FFFF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF002FBAE4FFC3EDF8FFB3F4FCFF60DCF5FF44D6F4FF8EEEFAFF5DB4E6FF3B8F
-        D9FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF002FBAE4FFC3EDF8FFB3F4FCFF68D9F5FF6FCFF3FF599DD0FF73AB
-        DDFF4F91C9FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF002FBAE4FFC3EDF8FFA8E2F8FF6CAEDDFFA5CFF4FFA5CF
-        F4FFBDDBF7FF5393CBFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF002FBAE4FFA7D4F4FFC5E1F8FFCCE3F9FFCCE3
-        F9FFBDDBF7FF4F90C9FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF0050A8D9FF6AA5D8FFC9E1F7FFCBE3
-        F8FF4295CAFF3182C2FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF004FAADBFF5093CAFF4E90
-        C8FF2F9DD2FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+        2000000000000009000064000000640000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF001340
+        58FF15425EFF25699CFF2C76B4FF3B8BBAADFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF001242
+        59FF5D9CD4FFA6CFF5FFA9CFECFF488BC1FF2C76B4FFFFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF001E6D
+        93FFCBE3F9FF61AAECFF4098E8FF1567C2FF1660AAFF2C76B4FFFFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF001E6D
+        93FFC8E1F2FFD1E7FAFF347DB5FF3199C3FF6DC4DCFF4A9CCFFF3483C7FFFFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF002063
+        98202689B9FFB0CBE1FF67A9C8FF60DCF5FF44D6F4FF8EEEFAFF5DB4E6FF3B8F
+        D9FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF002689B9FFBEE6F2FFB3F4FCFF60DCF5FF44D6F4FF8EEEFAFF5DB4
+        E6FF3B8FD9FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF002790BFFFC3EDF8FFB3F4FCFF60DCF5FF44D6F4FF8EEE
+        FAFF5DB4E6FF3B8FD9FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF002FBAE4FFC3EDF8FFB3F4FCFF60DCF5FF44D6
+        F4FF8EEEFAFF5DB4E6FF3B8FD9FFFFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002FBAE4FFC3EDF8FFB3F4FCFF60DC
+        F5FF44D6F4FF8EEEFAFF5DB4E6FF3B8FD9FFFFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002FBAE4FFC3EDF8FFB3F4
+        FCFF68D9F5FF6FCFF3FF599DD0FF73ABDDFF4F91C9FFFFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002FBAE4FFC3ED
+        F8FFA8E2F8FF6CAEDDFFA5CFF4FFA5CFF4FFBDDBF7FF5393CBF7000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002FBA
+        E4FFA7D4F4FFC5E1F8FFCCE3F9FFCCE3F9FFBDDBF7FF4F90C9FD000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF0050A8D9FF6AA5D8FFC9E1F7FFCBE3F8FF4295CAFF3182C2AE000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF002FBAE4094FAADBEA5093CAFD4E90C8FF2F9DD2DF35A4DE19000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000
       }
-      OnClick = EditControlActionExecute
+      GlyphShowMode = gsmSystem
     end
-    object CopyControlMenuItem: TMenuItem
+    object PopupMenuDivider1: TMenuItem
+      Caption = '-'
+    end
+    object PasteControlPopupMenuItem: TMenuItem
+      Action = CutControlAction
+    end
+    object CopyControlPopupMenuItem: TMenuItem
       Action = CopyControlAction
     end
-    object PasteControlMenuItem: TMenuItem
+    object PasteControPopupMenuItem: TMenuItem
       Action = PasteControlAction
     end
-    object DockingSitePopUpMenuDeleteItem: TMenuItem
-      Action = DeleteControlAction
-      Bitmap.Data = {
-        36090000424D3609000000000000360000002800000018000000180000000100
-        2000000000000009000064000000640000000000000000000000FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00898989FF898989FFFF00FF00898989FF8989
-        89FFFF00FF00898989FF898989FFFF00FF00898989FF898989FFFF00FF008989
-        89FF898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF001313FFFF0809FFFF0303FFFFFF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF007A7B
-        FFFF898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF001413FFFF0809FFFF0302FFFF0D0EFFFFFF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF006F70FFFF7A7A
-        FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF001414FFFF0909FFFF0202FFFF0E0DFFFFFF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF006464FFFF6F70FFFF7B7B
-        FFFF898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF000909FFFF0202FFFF0D0DFFFF1818FFFFFF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF006465FFFF6F6FFFFFFF00
-        FF00898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00898989FF0202FFFF0D0DFFFF1817FFFF2223
-        FFFFFF00FF00FF00FF00FF00FF00FF00FF005A5AFFFF6464FFFF6F70FFFFFF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00898989FFFF00FF000D0DFFFF1817FFFF2223
-        FFFFFF00FF00FF00FF00FF00FF004E4FFFFF595AFFFF6464FFFFFF00FF00FF00
-        FF00898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF001717FFFF2222
-        FFFF2D2DFFFF3938FFFF4343FFFF4E4EFFFF5959FFFFFF00FF00FF00FF00FF00
-        FF00898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00898989FFFF00FF00FF00FF00FF00FF00FF00
-        FF002D2EFFFFFF00FF00FF00FF004E4DFFFFFF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00898989FFFF00FF00FF00FF00FF00FF002222
-        FFFF2D2DFFFF3738FFFF4242FFFF4E4EFFFFFF00FF00FF00FF00FF00FF00FF00
-        FF00898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF000C0CFFFF1717FFFF2222
-        FFFF2C2DFFFF3737FFFF4343FFFF4E4DFFFF5859FFFFFF00FF00FF00FF00FF00
-        FF00898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF000B0AFFFF0101FFFF0B0BFFFF1617FFFF2222
-        FFFF2C2DFFFFFF00FF00FF00FF00FF00FF005858FFFF6363FFFF6E6EFFFFFF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF001616FFFF0A0BFFFF0000FFFF0B0BFFFF1616FFFFFF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF006E6EFFFF7979
-        FFFF8384FFFF7878FFFFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF001615FFFF0A0AFFFF0000FFFFFF00FF00898989FF8989
-        89FFFF00FF00898989FF898989FFFF00FF00898989FF898989FFFF00FF008989
-        89FF898989FFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-        FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
-      }
-      OnClick = DeleteControlActionExecute
-    end
-    object DockingSitePopUpMenuDivider1: TMenuItem
+    object PopupMenuDivider2: TMenuItem
       Caption = '-'
     end
     object PasteAsHeadingMenuItem: TMenuItem
@@ -3749,7 +3119,6 @@ object DesignFrame: TDesignFrame
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      OnClick = PasteAsHeadingActionExecute
     end
     object PasteAsIntMenuItem: TMenuItem
       Action = PasteAsIntAction
@@ -3829,7 +3198,6 @@ object DesignFrame: TDesignFrame
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000
       }
-      OnClick = PasteAsIntActionExecute
     end
     object PasteAsFloatMenuItem: TMenuItem
       Action = PasteAsFloatAction
@@ -3909,7 +3277,6 @@ object DesignFrame: TDesignFrame
         0000000000000000000000000000000000000000000000000000000000000000
         0000000000000000000000000000000000000000000000000000
       }
-      OnClick = PasteAsFloatActionExecute
     end
     object PasteAsStringMenuItem: TMenuItem
       Action = PasteAsStringAction
@@ -3989,12 +3356,169 @@ object DesignFrame: TDesignFrame
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      OnClick = PasteAsStringActionExecute
     end
-  end
-  object PrintDialog1: TPrintDialog
-    PrintToFile = True
-    left = 417
-    top = 177
+    object PasteAsDateMenuItem: TMenuItem
+      Action = PasteAsDateAction
+      Bitmap.Data = {
+        36090000424D3609000000000000360000002800000018000000180000000100
+        2000000000000009000064000000640000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000010000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000003
+        07FA000307630000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000003
+        0711000307CC0003072000000000000000000000000000000000000000000003
+        077D000307F4000307AC000307E90003072000000000000307E60003071D0003
+        0701000307E30003072A0000000000030701000307E300030729000000000000
+        00000003074D000307C300030703000000000000000000000000000000000003
+        07F3000307370003071E000307DA0003076000000000000307B30003074F0000
+        0000000307900003077F0000000000000000000307900003077C000000000000
+        000000030768000307F50003077E000000000000000000000000000000000003
+        07EA00030714000000000003076C000307A00000000000030780000307850000
+        00000003073C000307D700000000000000000003073D000307CF000000000000
+        0000000307A800030767000307CE000307390000000000000000000000000003
+        07910003079E0003070D00030778000307E0000000000003074D000307E50003
+        072900030741000307FC0003077F0003071200030744000307F7000000000000
+        0000000307E7000307200003072D000307D60003070E00000000000000000003
+        070A000307A8000307F600030784000307E8000307200003071A000307EB0003
+        0795000307F5000307910003073D000307D2000307F50003078B000000000003
+        0728000307E000000000000000000003076F000307A400000000000000000000
+        0000000000000000000000000000000307A90003076000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000000000000030769000307A000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        000000000000000000000000000000030728000307E000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000
+      }
+    end
+    object PopupMenuDivider3: TMenuItem
+      Caption = '-'
+    end
+    object DeletePopupMenuItem: TMenuItem
+      Action = DeleteControlAction
+      Bitmap.Data = {
+        36090000424D3609000000000000360000002800000018000000180000000100
+        2000000000000009000064000000640000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF008989
+        89FF898989FFFFFFFF00898989FF898989FFFFFFFF00898989FF898989FFFFFF
+        FF00898989FF898989FFFFFFFF00898989FF898989FFFFFFFF00000000000000
+        00000000000000000000000000000000000000000000000000001313FFFF0809
+        FFFF0303FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF007A7BFFFF898989FFFFFFFF00000000000000
+        00000000000000000000000000000000000000000000000000001413FFFF0809
+        FFFF0302FFFF0D0EFFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF006F70FFFF7A7AFFFFFFFFFF00FFFFFF00000000000000
+        00000000000000000000000000000000000000000000000000001414FFFF0909
+        FFFF0202FFFF0E0DFFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF006464FFFF6F70FFFF7B7BFFFF898989FFFFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF000909
+        FFFF0202FFFF0D0DFFFF1818FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF006465FFFF6F6FFFFFFFFFFF00898989FFFFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF008989
+        89FF0202FFFF0D0DFFFF1817FFFF2223FFFFFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF005A5AFFFF6464FFFF6F70FFFFFFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF008989
+        89FFFFFFFF000D0DFFFF1817FFFF2223FFFF2E2EFFFFFFFFFF00FFFFFF004E4F
+        FFFF595AFFFF6464FFFFFFFFFF00FFFFFF00898989FFFFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF001717FFFF2222FFFF2D2DFFFF3938FFFF4343FFFF4E4E
+        FFFF5959FFFFFFFFFF00FFFFFF00FFFFFF00898989FFFFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF008989
+        89FFFFFFFF00FFFFFF00FFFFFF002222FFFF2D2EFFFF3838FFFF4343FFFF4E4D
+        FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF008989
+        89FFFFFFFF00FFFFFF00FFFFFF002222FFFF2D2DFFFF3738FFFF4242FFFF4E4E
+        FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00898989FFFFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF000C0CFFFF1717FFFF2222FFFF2C2DFFFF3737FFFF4343FFFF4E4D
+        FFFF5859FFFFFFFFFF00FFFFFF00FFFFFF00898989FFFFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF000B0A
+        FFFF0101FFFF0B0BFFFF1617FFFF2222FFFF2C2DFFFFFFFFFF00FFFFFF00FFFF
+        FF005858FFFF6363FFFF6E6EFFFFFFFFFF00FFFFFF00FFFFFF00000000000000
+        00000000000000000000000000000000000000000000000000001616FFFF0A0B
+        FFFF0000FFFF0B0BFFFF1616FFFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF006E6EFFFF7979FFFF8384FFFF7878FFFF000000000000
+        00000000000000000000000000000000000000000000000000001615FFFF0A0A
+        FFFF0000FFFFFFFFFF00898989FF898989FFFFFFFF00898989FF898989FFFFFF
+        FF00898989FF898989FFFFFFFF00898989FF898989FFFFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00000000000000
+        0000000000000000000000000000000000000000000000000000
+      }
+      GlyphShowMode = gsmSystem
+      OnClick = DeleteControlActionExecute
+    end
   end
 end

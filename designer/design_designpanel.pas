@@ -1,0 +1,110 @@
+unit design_designpanel;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils, JvDesignSurface, design_types, epicustombase,
+  epidatafiles, forms, Controls;
+
+type
+  { TDesignPanel }
+
+  {
+    The whole IFDEF Windows is because WM_MOUSEWHEEL does not work properly with our
+    constuction of Panel within scroolbox! Hence, intercept mousewheel message and
+    scroll correctly!
+  }
+
+  TDesignPanel = class(TJvDesignPanel, IDesignEpiControl)
+  private
+    FSection: TEpiSection;
+    function  GetEpiControl: TEpiCustomControlItem;
+    procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+  {$IFDEF MSWINDOWS}
+  protected
+    procedure CreateWnd; override;
+  {$ENDIF}
+  public
+    function DesignFrameClass: TCustomFrameClass;
+    procedure FixupCopyControl;
+    property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+  end;
+
+
+implementation
+
+uses
+  {$IFDEF MSWINDOWS}
+  windows, win32proc, Win32Int, LMessages, LCLMessageGlue,
+  {$ENDIF}
+  design_properties_sectionframe;
+
+{$IFDEF MSWINDOWS}
+var
+  PrevWndProc: WNDPROC;
+{$ENDIF}
+
+{ TDesignPanel }
+
+function TDesignPanel.GetEpiControl: TEpiCustomControlItem;
+begin
+  result := FSection;
+end;
+
+procedure TDesignPanel.SetEpiControl(const AValue: TEpiCustomControlItem);
+begin
+  FSection := TEpiSection(AValue);
+end;
+
+{$IFDEF MSWINDOWS}
+function WndCallback(Ahwnd: HWND; uMsg: UINT; wParam: WParam; lParam: LParam):LRESULT; stdcall;
+var
+  W: TWinControl;
+  P: TPoint;
+  Msg: TLMMouseEvent;
+begin
+  if uMsg=WM_MOUSEWHEEL then
+  begin
+    Ahwnd := windows.GetParent(Ahwnd);
+    W := GetWin32WindowInfo(Ahwnd)^.WinControl;
+
+    P := Classes.Point(GET_X_LPARAM(LParam), GET_Y_LPARAM(LParam));
+    Windows.ScreenToClient(Ahwnd, P);
+    with Msg do
+    begin
+      Msg := LM_MOUSEWHEEL;
+      X := P.X;
+      Y := P.Y;
+      Button := LOWORD(Integer(WParam));
+      WheelDelta := SmallInt(HIWORD(Integer(WParam)));
+      State := KeysToShiftState(Button);
+      Result := 0;
+      UserData := Pointer(GetWindowLong(Ahwnd, GWL_USERDATA));
+    end;
+    DeliverMessage(W, Msg);
+    Exit;
+  end;
+  result:=CallWindowProc(PrevWndProc, Ahwnd, uMsg, WParam, LParam);
+end;
+
+procedure TDesignPanel.CreateWnd;
+begin
+  inherited CreateWnd;
+  PrevWndProc := Windows.WNDPROC(SetWindowLong(Self.Handle, GWL_WNDPROC, PtrInt(@WndCallback)));
+end;
+{$ENDIF}
+
+function TDesignPanel.DesignFrameClass: TCustomFrameClass;
+begin
+  result := TSectionPropertiesFrame;
+end;
+
+procedure TDesignPanel.FixupCopyControl;
+begin
+  // Do nothing...
+end;
+
+end.
+

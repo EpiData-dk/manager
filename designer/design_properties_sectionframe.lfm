@@ -1,18 +1,16 @@
 inherited SectionPropertiesFrame: TSectionPropertiesFrame
-  Height = 674
-  Width = 886
-  ClientHeight = 674
-  ClientWidth = 886
-  Constraints.MinHeight = 160
-  Constraints.MinWidth = 380
+  Height = 509
+  Width = 588
+  ClientHeight = 509
+  ClientWidth = 588
   TabOrder = 0
-  DesignLeft = 760
-  DesignTop = 359
+  DesignLeft = 885
+  DesignTop = 340
   object SectionPageControl: TPageControl[0]
     Left = 0
-    Height = 674
+    Height = 509
     Top = 0
-    Width = 886
+    Width = 588
     ActivePage = SectionBasicSheet
     Align = alClient
     ShowTabs = False
@@ -20,23 +18,23 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
     TabOrder = 0
     object SectionBasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 668
-      ClientWidth = 880
+      ClientHeight = 503
+      ClientWidth = 582
       object SectionGroupAccessGroupBox: TGroupBox
         AnchorSideLeft.Control = NameEdit
-        AnchorSideTop.Control = HeightEdit
+        AnchorSideTop.Control = CaptionEdit
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = NameEdit
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 170
-        Top = 225
-        Width = 860
+        Top = 101
+        Width = 562
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
         Caption = 'Groups access:'
-        ClientHeight = 151
-        ClientWidth = 856
+        ClientHeight = 153
+        ClientWidth = 558
         TabOrder = 1
         object GroupAvailableListBox: TListBox
           AnchorSideTop.Control = Label5
@@ -45,14 +43,15 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideBottom.Control = SectionGroupAccessGroupBox
           AnchorSideBottom.Side = asrBottom
           Left = 6
-          Height = 121
-          Top = 25
-          Width = 406
+          Height = 126
+          Top = 22
+          Width = 257
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 2
           BorderSpacing.Right = 5
           BorderSpacing.Bottom = 5
           ItemHeight = 0
+          ScrollWidth = 255
           Sorted = True
           TabOrder = 0
           TopIndex = -1
@@ -64,15 +63,16 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = SectionGroupAccessGroupBox
           AnchorSideBottom.Side = asrBottom
-          Left = 447
-          Height = 121
-          Top = 25
-          Width = 402
+          Left = 298
+          Height = 126
+          Top = 22
+          Width = 253
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 7
           BorderSpacing.Top = 2
           BorderSpacing.Bottom = 5
           ItemHeight = 0
+          ScrollWidth = 251
           Sorted = True
           TabOrder = 1
           TopIndex = -1
@@ -80,9 +80,9 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         object Label5: TLabel
           AnchorSideTop.Control = SectionGroupAccessGroupBox
           Left = 6
-          Height = 18
+          Height = 15
           Top = 5
-          Width = 65
+          Width = 60
           BorderSpacing.Top = 5
           Caption = 'Available:'
           ParentColor = False
@@ -91,7 +91,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideLeft.Control = GroupAvailableListBox
           AnchorSideLeft.Side = asrBottom
           AnchorSideRight.Control = GroupAssignedListBox
-          Left = 417
+          Left = 268
           Height = 22
           Top = 87
           Width = 23
@@ -132,16 +132,14 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
             FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
             FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
           }
-          NumGlyphs = 0
-          OnClick = GrpRightsMoveLeftClick
         end
         object Label6: TLabel
           AnchorSideLeft.Control = GroupAssignedListBox
           AnchorSideTop.Control = SectionGroupAccessGroupBox
-          Left = 447
-          Height = 18
+          Left = 298
+          Height = 15
           Top = 5
-          Width = 64
+          Width = 62
           BorderSpacing.Top = 5
           Caption = 'Assigned:'
           ParentColor = False
@@ -150,7 +148,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideLeft.Control = GroupAvailableListBox
           AnchorSideLeft.Side = asrBottom
           AnchorSideRight.Control = GroupAvailableListBox
-          Left = 417
+          Left = 268
           Height = 22
           Top = 55
           Width = 23
@@ -191,8 +189,6 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
             FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
             FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
           }
-          NumGlyphs = 0
-          OnClick = GrpRightsMoveRightClick
         end
       end
       object NameEdit: TEdit
@@ -202,9 +198,9 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         AnchorSideRight.Control = SectionBasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
-        Height = 27
-        Top = 30
-        Width = 860
+        Height = 25
+        Top = 27
+        Width = 562
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -215,9 +211,9 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         AnchorSideLeft.Control = NameEdit
         AnchorSideTop.Control = SectionBasicSheet
         Left = 10
-        Height = 18
+        Height = 15
         Top = 10
-        Width = 44
+        Width = 43
         BorderSpacing.Top = 10
         Caption = 'Name:'
         ParentColor = False
@@ -229,9 +225,9 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         AnchorSideRight.Control = SectionBasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
-        Height = 27
-        Top = 79
-        Width = 860
+        Height = 25
+        Top = 71
+        Width = 562
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -243,70 +239,12 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
         AnchorSideTop.Control = NameEdit
         AnchorSideTop.Side = asrBottom
         Left = 10
-        Height = 18
-        Top = 59
-        Width = 55
+        Height = 15
+        Top = 54
+        Width = 53
         BorderSpacing.Top = 2
         Caption = 'Caption:'
         ParentColor = False
-      end
-      object Label7: TLabel
-        AnchorSideLeft.Control = SectionBasicSheet
-        AnchorSideTop.Control = CaptionEdit
-        AnchorSideTop.Side = asrBottom
-        Left = 10
-        Height = 18
-        Top = 116
-        Width = 43
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 10
-        Caption = 'Width:'
-        ParentColor = False
-      end
-      object WidthEdit: TEdit
-        AnchorSideLeft.Control = SectionBasicSheet
-        AnchorSideTop.Control = Label7
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = SectionBasicSheet
-        AnchorSideRight.Side = asrBottom
-        Left = 10
-        Height = 27
-        Top = 136
-        Width = 860
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 2
-        BorderSpacing.Right = 10
-        TabOrder = 3
-      end
-      object Label8: TLabel
-        AnchorSideLeft.Control = SectionBasicSheet
-        AnchorSideTop.Control = WidthEdit
-        AnchorSideTop.Side = asrBottom
-        Left = 10
-        Height = 18
-        Top = 173
-        Width = 48
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 10
-        Caption = 'Height:'
-        ParentColor = False
-      end
-      object HeightEdit: TEdit
-        AnchorSideLeft.Control = SectionBasicSheet
-        AnchorSideTop.Control = Label8
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = SectionBasicSheet
-        AnchorSideRight.Side = asrBottom
-        Left = 10
-        Height = 27
-        Top = 193
-        Width = 860
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 2
-        BorderSpacing.Right = 10
-        TabOrder = 4
       end
     end
   end

@@ -92,6 +92,7 @@ begin
       Cells[5, Idx] := Caption.Text;                                         // Info
       Cells[6, Idx] := IntToStr(Sections.Count);                          // Sections
       Cells[7, Idx] := IntToStr(Fields.Count);                            // Fields
+      Cells[8, Idx] := IntToStr(Size);
     end;
   end;
   FDocList.AddObject(FileName, Doc);
@@ -117,16 +118,17 @@ begin
       DataFile := Doc.DataFiles.NewDataFile;
       DoBeforeImportFile(Doc, FileName);
       if (ext = '.dta') then
-        Importer.ImportStata(FileName, Doc, DataFile, false)
+        Importer.ImportStata(FileName, Doc, DataFile, true)
       else begin
         Importer.OnRequestPassword := @RecImportPassword;
-        Importer.ImportRec(FileName , DataFile, false);
+        Importer.ImportRec(FileName , DataFile, true);
       end;
       DoAfterImportFile(Doc, FileName);
     end
     else if ext = '.epx' then
     begin
       DoBeforeImportFile(Doc, FileName);
+      Doc.OnPassword := @RecImportPassword;
       Doc.LoadFromFile(FileName);
       DoAfterImportFile(Doc, FileName);
     end
@@ -136,6 +138,7 @@ begin
       ZipFileToStream(St, FileName);
       DoBeforeImportFile(Doc, FileName);
       St.Position := 0;
+      Doc.OnPassword := @RecImportPassword;
       Doc.LoadFromStream(St);
       DoAfterImportFile(Doc, FileName);
       St.Free;
@@ -144,7 +147,10 @@ begin
     AddDocumentToGrid(FileName, Doc);
   except
     on E: Exception do
-      ReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
+      begin
+        ReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
+        Doc.Free;
+      end;
   end;
   Importer.Free;
   FCurrentFile := '';

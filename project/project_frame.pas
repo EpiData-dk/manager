@@ -64,7 +64,7 @@ type
     procedure DoOpenProject(Const AFileName: string);
     procedure DoNewDataForm(Df: TEpiDataFile);
     procedure DoCloseProject;
-    {$IFDEF EPI_DEBUG}
+    {$IFDEF EPI_DEBUG_CONTENT}
     procedure AddDebugingContent;
     {$ENDIF}
     procedure EpiDocumentModified(Sender: TObject);
@@ -82,7 +82,7 @@ type
   private
     { Messages }
     // Message relaying...
-    procedure LMDesignerAddField(var Msg: TLMessage); message LM_DESIGNER_ADDFIELD;
+    procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -103,7 +103,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_frame, Clipbrd, epimiscutils,
+  design_runtimedesigner, Clipbrd, epimiscutils,
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
@@ -125,7 +125,6 @@ type
 procedure TProjectFrame.NewDataFormActionExecute(Sender: TObject);
 var
   Df: TEpiDataFile;
-  Frame: TDesignFrame;
 begin
   inc(FrameCount);
 
@@ -192,7 +191,7 @@ begin
   ProjectSettings.ShowModal;
   ProjectSettings.Free;
 
-  TDesignFrame(ActiveFrame).UpdateFrame;
+//  TDesignFrame(ActiveFrame).UpdateFrame;
   UpdateTimer;
 end;
 
@@ -244,8 +243,8 @@ begin
   // TODO : Must be changed when supporting multiple desinger frames (take only the topmost/first datafile).
   if (Dlg.FileName = '') and
      (ProjectFileName = '') and
-     (TDesignFrame(ActiveFrame).ImportedFileName <> '') then
-    Dlg.FileName := ChangeFileExt(TDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);
+     (TRuntimeDesignFrame(ActiveFrame).ImportedFileName <> '') then
+    Dlg.FileName := ChangeFileExt(TRuntimeDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);
 end;
 
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
@@ -477,9 +476,9 @@ end;
 
 procedure TProjectFrame.DoNewDataForm(Df: TEpiDataFile);
 var
-  Frame: TDesignFrame;
+  Frame: TRuntimeDesignFrame;
 begin
-  Frame := TDesignFrame.Create(Self);
+  Frame := TRuntimeDesignFrame.Create(Self);
   Frame.Align := alClient;
   Frame.Parent := Self;
   Frame.DataFile := Df;
@@ -505,11 +504,13 @@ begin
   // ValueLabelSEts is incomplete!
   CloseValueLabelEditor2;
   if not Assigned(FEpiDocument) then exit;
-  FreeAndNil(FEpiDocument);
 
   // TODO : Delete ALL dataforms!
   FreeAndNil(FActiveFrame);
+
   FreeAndNil(FBackupTimer);
+  FreeAndNil(FEpiDocument);
+
   if FileExistsUTF8(ProjectFileName + '.bak') then
     DeleteFileUTF8(ProjectFileName + '.bak');
   DataFilesTreeView.Items.Clear;
@@ -517,7 +518,7 @@ begin
   Modified := false;
 end;
 
-{$IFDEF EPI_DEBUG}
+{$IFDEF EPI_DEBUG_CONTENT}
 procedure TProjectFrame.AddDebugingContent;
 var
   i: Integer;
@@ -710,7 +711,7 @@ begin
   KeyFieldsAction.ShortCut        := P_KeyFields;
 end;
 
-procedure TProjectFrame.LMDesignerAddField(var Msg: TLMessage);
+procedure TProjectFrame.LMDesignerAdd(var Msg: TLMessage);
 begin
   if Assigned(FActiveFrame) then
   with Msg do
@@ -769,7 +770,7 @@ procedure TProjectFrame.RestoreDefaultPos;
 begin
 //  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
   if Assigned(FActiveFrame) then
-    TDesignFrame(FActiveFrame).RestoreDefaultPos;
+    TRuntimeDesignFrame(FActiveFrame).RestoreDefaultPos;
 end;
 
 procedure TProjectFrame.UpdateFrame;
@@ -780,7 +781,7 @@ begin
 
   // TODO : Update all frames.
   if Assigned(FActiveFrame) then
-    TDesignFrame(FActiveFrame).UpdateFrame;
+    TRuntimeDesignFrame(FActiveFrame).UpdateFrame;
 end;
 
 procedure TProjectFrame.OpenProject(const AFileName: string);

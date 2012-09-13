@@ -15,10 +15,12 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
-    ImportDataMenuItem: TMenuItem;
     AddStructureMenuItem: TMenuItem;
     EditMenuDivider2: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
+    EditMenuDivider0: TMenuItem;
+    RedoMenuItem: TMenuItem;
+    UndoMenuItem: TMenuItem;
     VerifyDoubleEntryAction: TAction;
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
@@ -160,7 +162,7 @@ type
     procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
     procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
     // Message relaying...
-    procedure LMDesignerAddField(var Msg: TLMessage); message LM_DESIGNER_ADDFIELD;
+    procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
     { Process communication }
     FEpiIPC:  TEpiIPC;
@@ -186,9 +188,9 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, LCLProc, LCLIntf, design_frame,
+  workflow_frame, LCLProc, LCLIntf,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
-  design_controls, valuelabelseditor_form, epimiscutils,
+  valuelabelseditor_form, epimiscutils,
   epicustombase, project_settings, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   strutils, report_fieldlist, report_valuelabellist,
@@ -196,7 +198,7 @@ uses
   report_fieldlist_extended, report_project_overview,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   epitools_integritycheck, datasetviewer_frame, prepare_double_entry_form,
-  validate_double_entry_form,
+  validate_double_entry_form, design_runtimedesigner,
   report_double_entry_validation;
 
 { TMainForm }
@@ -722,9 +724,11 @@ begin
   PasteAsIntMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsStringMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider1.Visible := Assigned(FActiveFrame);
-  ImportDataMenuItem.Visible := Assigned(FActiveFrame);
   AddStructureMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider2.Visible := Assigned(FActiveFrame);
+  UndoMenuItem.Visible := Assigned(FActiveFrame);
+  RedoMenuItem.Visible := Assigned(FActiveFrame);
+  EditMenuDivider0.Visible := Assigned(FActiveFrame);
 
   // PROJECT:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
@@ -918,7 +922,7 @@ begin
   UpdateProcessToolbar;
 end;
 
-procedure TMainForm.LMDesignerAddField(var Msg: TLMessage);
+procedure TMainForm.LMDesignerAdd(var Msg: TLMessage);
 begin
   if Assigned(FActiveFrame) then
   with Msg do
@@ -965,13 +969,14 @@ begin
   SaveProjectMenuItem.Action   := FActiveFrame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
 
-  PasteAsHeadingMenuItem.Action := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
-  PasteAsIntMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
-  PasteAsFloatMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
-  PasteAsStringMenuItem.Action  := TDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-  ViewDataSetMenuItem.Action    := TDesignFrame(FActiveFrame.ActiveFrame).ViewDataSetAction;
-  ImportDataMenuItem.Action     := TDesignFrame(FActiveFrame.ActiveFrame).ImportDataFileAction;
-  AddStructureMenuItem.Action   := TDesignFrame(FActiveFrame.ActiveFrame).AddStructureAction;
+  PasteAsHeadingMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
+  PasteAsIntMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
+  PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
+  PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
+  ViewDataSetMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
+  AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
+  UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;
+  RedoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RedoAction;
 
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
