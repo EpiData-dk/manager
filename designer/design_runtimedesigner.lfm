@@ -173,6 +173,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 477
       Top = 1
       ImageIndex = 19
+      OnClick = ExportToolButtonClick
       ParentShowHint = False
       ShowHint = True
     end
@@ -3520,5 +3521,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       GlyphShowMode = gsmSystem
       OnClick = DeleteControlActionExecute
     end
+  end
+  object PrintDialog1: TPrintDialog
+    left = 156
+    top = 178
   end
 end

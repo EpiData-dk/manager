@@ -5,9 +5,9 @@ unit design_runtimedesigner;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, ExtCtrls, StdCtrls,
-  JvDesignSurface, epidatafiles, LMessages, ActnList, Menus, Buttons,
-  manager_messages, epidatafilestypes, design_properties_form, types,
+  Classes, SysUtils, FileUtil, PrintersDlgs, Forms, Controls, ComCtrls,
+  ExtCtrls, StdCtrls, JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
+  Buttons, manager_messages, epidatafilestypes, design_properties_form, types,
   epicustombase, epidocument, epivaluelabels, design_types;
 
 type
@@ -15,6 +15,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    PrintDialog1: TPrintDialog;
     RedoAction: TAction;
     NewTimeFieldFastAction: TAction;
     NewTimeFieldAction: TAction;
@@ -154,6 +155,7 @@ type
     procedure DesignerActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
     procedure EditControlActionExecute(Sender: TObject);
+    procedure ExportToolButtonClick(Sender: TObject);
     procedure FieldBtnClick(Sender: TObject);
     function FieldNamePrefix: string;
     procedure HeadingBtnClick(Sender: TObject);
@@ -280,6 +282,7 @@ uses
   Dialogs, import_structure_form, epimiscutils,
   datasetviewer_frame, fpvectorial, fpvutils, FPimage,
   LCLMessageGlue, LCLType, shortcuts, settings2,
+  Printers, OSPrinters, strutils,
   design_control_section,
   design_control_field,
   design_control_heading;
@@ -898,157 +901,198 @@ end;
 
 procedure TRuntimeDesignFrame.DoPrintDataForm;
 var
-  FieldCount: Integer;
-  VecDoc: TvVectorialDocument;
-  Page: TvVectorialPage;
-  F: TEpiField;
+  ppix: Integer;
+  ppiy: Integer;
+  ppmmx: Int64;
+  ppmmy: Int64;
+  ChangePage: Boolean;
+  CurField: Integer;
+  LeftMarg: Integer;
+  TopMarg: Integer;
+  BotMarg: Integer;
+  pClientHeight: Integer;
+  aQTop: Integer;
+  aQBot: Integer;
+  aFTop: Integer;
+  aFBot: Integer;
+  aLeft: Integer;
+  xscale: Extended;
+  yscale: Extended;
+  ARect: TRect;
+  CI: TEpiCustomControlItem;
+  ARight: Integer;
+  ATop: Integer;
+  ABot: Integer;
   i: Integer;
-  L, R, T, B, W: Double;
-  SectionCount: Integer;
-  S: TEpiSection;
-  HeadingCount: Integer;
-  H: TEpiHeading;
-  SaveDlg: TSaveDialog;
-  FS: Integer;
-  FN: String;
-  J: Integer;
+  S: String;
 
-const
-  PIXELS_PER_MILIMETER = 3.5433;
-  A4_PIXEL_HEIGHT      = trunc(297 * PIXELS_PER_MILIMETER);
-  A4_PIXEL_WIDTH       = trunc(210 * PIXELS_PER_MILIMETER);
-
-const
-  FieldHeigth =
-    {$IFDEF WINDOWS}
-      21
-    {$ELSE}
-      {$IFDEF DARWIN}
-      22
-      {$ELSE}
-        {$IFDEF LINUX}
-      27
-        {$ENDIF}
-    {$ENDIF}
-  {$ENDIF};
-
-
-  function FieldTop(F: TEpiField): integer; inline;
+  procedure SetFont(Const AFont: TFont);
   begin
-    Result := F.Top + F.Section.Top;
-  end;
-
-  function FieldLeft(F: TEpiField): integer; inline;
-  begin
-    Result := F.Left + F.Section.Left;
-  end;
-
-  function HeadingTop(H: TEpiHeading): integer; inline;
-  begin
-    Result := H.Top + H.Section.Top;
-  end;
-
-  function HeadingLeft(H: TEpiHeading): integer; inline;
-  begin
-    Result := H.Left + H.Section.Left;
+    printer.canvas.Font.PixelsPerInch  := ppix;
+    Printer.Canvas.Font.Name           := AFont.Name;
+    Printer.Canvas.Font.Size           := AFont.Size;
+    Printer.Canvas.Font.Style          := AFont.Style;
+    printer.canvas.Font.PixelsPerInch  := ppix;
   end;
 
 begin
-  SaveDlg := nil;
-  VecDoc  := nil;
-  try
-    SaveDlg := TSaveDialog.Create(Self);
-    SaveDlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-    SaveDlg.Filter := 'Scalable Vector Graphics (*.svg)|*.svg|' + GetEpiDialogFilter([dfAll]);
-    if not SaveDlg.Execute then exit;
+  IF NOT PrintDialog1.Execute THEN Exit;
+  WITH Printer DO
+    BEGIN
+      FileName := '/tmp/tmp.ps';
+      Title    := 'EpiData Manager - ';
+      ppix     := XDPI;                    //pixels pr inch X
+      ppiy     := YDPI;                    //pixels pr inch Y
+      ppmmx    := Round(ppix/25.4);        //pixels pr mm X
+      ppmmy    := Round(ppiy/25.4);        //pixels pr mm Y
+      LeftMarg := ppmmx*10;                //Sets left margin to 1 cm
+      TopMarg  := ppmmy*5;                 //Sets top margin to 0,5 cm
+      BotMarg  := PageHeight-ppmmy*5;      //Sets bottom margin to 0,5 cm
+      pClientHeight := BotMarg - TopMarg;
 
-//    if not PrintDialog1.Execute then exit;
+      xscale := ppix / GetParentForm(Self).PixelsPerInch;
+      yscale := ppiy / GetParentForm(Self).PixelsPerInch;
 
-//    Printer.BeginDoc;
+      ChangePage := False;
+      BeginDoc;
 
-{    PIXELS_PER_MILIMETER := 1 / ((1 / Printer.YDPI) * 25.4001);
-    A4_PIXEL_HEIGHT      := trunc(297 * PIXELS_PER_MILIMETER);
-    A4_PIXEL_WIDTH       := trunc(210 * PIXELS_PER_MILIMETER); }
+      for i := 0 to DataFile.ControlItems.Count - 1 do
+      begin
+        CI := DataFile.ControlItem[i];
 
-    VecDoc := TvVectorialDocument.Create;
-    VecDoc.Width := 210;
-    VecDoc.Height := 297;
-    Page := VecDoc.AddPage();
-    Page.Width := VecDoc.Width;
-    Page.Height := VecDoc.Height;
+        ATop := (Round(CI.Top * yscale) - (PageNumber - 1) * pClientHeight) + TopMarg;
+        ALeft := Round(CI.Left * xscale) + LeftMarg;
 
-//    Printer.PageHeight;
-    FS := ManagerSettings.FieldFont.Size;
-    FN := ManagerSettings.FieldFont.Name;
-    if FS = 0 then FS := 10;
+        if (CI is TEpiSection) then
+        begin
+          SetFont(ManagerSettings.SectionFont);
+          ABot := ATop + Round(TEpiSection(CI).Height * yscale);
+        end;
+        if (CI is TEpiHeading) then
+        begin
+          SetFont(ManagerSettings.HeadingFont);
+          ABot := ATop + Canvas.TextHeight(TEpiHeading(CI).Caption.Text);
+        end;
+        if (CI is TEpiField) then
+        begin
+          SetFont(ManagerSettings.FieldFont);
+          ABot := ATop + Canvas.TextHeight(TEpiField(CI).Name);
+        end;
 
-    FieldCount := DataFile.Fields.Count;
-    for i := 0 to FieldCount -1 do
-    begin
-      F := DataFile.Field[i];
+        // Check if we need to create a new page
+        if ABot > BotMarg then
+          NewPage;
 
-      L := (FieldLeft(F) - Canvas.TextWidth(F.Question.Text)) / PIXELS_PER_MILIMETER;
-      T := CanvasTextPosToFPVectorial(
-             FieldTop(F) + (FieldHeigth - Canvas.TextHeight(F.Question.Text)),
-             A4_PIXEL_HEIGHT,
-             Canvas.TextHeight(F.Question.Text)) / PIXELS_PER_MILIMETER;
-      Page.AddText(L, T, 0, FN, FS, F.Question.Text);
+        if CI is TEpiHeading then
+        begin
+          Canvas.TextOut(aLeft, ATop, TEpiHeading(CI).Caption.Text);
+        end;
 
-      L := FieldLeft(F) / PIXELS_PER_MILIMETER;
-      R := (FieldLeft(F) + (F.Length * Canvas.TextWidth('W'))) / PIXELS_PER_MILIMETER;
-      T := CanvasCoordsToFPVectorial(FieldTop(F) + (FieldHeigth div 2), A4_PIXEL_HEIGHT) / PIXELS_PER_MILIMETER;
-      B := CanvasCoordsToFPVectorial(FieldTop(F) + FieldHeigth, A4_PIXEL_HEIGHT)/ PIXELS_PER_MILIMETER;
-      Page.StartPath(L, T);
-      Page.AddLineToPath(L, B);
-      Page.AddLineToPath(R, B);
-      Page.AddLineToPath(R, T);
-      Page.AddLineToPath(L, T, FPColor($FF, $FF, $FF, $FF));
-      Page.EndPath();
-    end;
+        if CI is TEpiField then
+        with TEpiField(CI) do
+        begin
+          // Draw box
+          S := DupeString('W', Length);
+          ARight := ALeft + Round(Canvas.TextWidth(S));
 
-    HeadingCount := DataFile.Headings.Count;
-    for i := 0 to HeadingCount -1 do
-    begin
-      H := DataFile.Heading[i];
+          Canvas.MoveTo(ALeft, Atop);
+          Canvas.LineTo(ALeft, ABot);
+          Canvas.LineTo(ARight, ABot);
+          Canvas.LineTo(ARight, ATop);
+          Canvas.TextOut(ALeft, ATop, S);
 
-      L := HeadingLeft(H) / PIXELS_PER_MILIMETER;
-      T := CanvasTextPosToFPVectorial(HeadingTop(H), A4_PIXEL_HEIGHT, Canvas.TextHeight(H.Caption.Text)) / PIXELS_PER_MILIMETER;
+          IF trim(Question.Text)<>'' THEN
+          BEGIN
+            aLeft := ALEft - Round(5 * xscale) - Canvas.TextWidth(Question.Text);
+            Canvas.TextOut(aLeft, ATop, Question.Text);
+          END;
 
-      Page.AddText(L, T, 0, FN, FS, H.Caption.Text);
-    end;
+          IF TEpiDocument(DataFile.RootOwner).ProjectSettings.ShowFieldNames then
+          begin
+            ALeft := ALeft - Round(5 * xscale) - Canvas.TextWidth(Name);
+            Canvas.TextOut(aLeft, ATop, Name);
+          end;
 
-    SectionCount := DataFile.Sections.Count;
-    for i := 0 to SectionCount - 1 do
-    begin
-      S := DataFile.Section[i];
-      if S = DataFile.MainSection then continue;
+          {          ARect.Top    := Round(Top * yscale) - ((PageNumber - 1) * pClientHeight) + topMarg;
+          ARect.Bottom := ARect.Top+Printer.Canvas.TextHeight(Name+'Xp_');
+          ARect.Left   := Round(Left*xscale)+LeftMarg;
+          ARect.Right  := ARect.Left+Round(xscale*Length)-4;
+          ARect.Top    := ARect.Top+((ARect.Bottom-ARect.Top) DIV 2);
+          Canvas.MoveTo(ARect.Left,ARect.top);
+          Canvas.LineTo(ARect.Left,ARect.Bottom);
+          Canvas.LineTo(ARect.Right,ARect.Bottom);
+          Canvas.LineTo(ARect.Right,ARect.top);  }
+        end;
+      end;
 
-      L := S.Left / PIXELS_PER_MILIMETER;
-      R := (S.Left + S.Width)  / PIXELS_PER_MILIMETER;
-      T := CanvasCoordsToFPVectorial(S.Top, A4_PIXEL_HEIGHT)  / PIXELS_PER_MILIMETER;
-      B := CanvasCoordsToFPVectorial(S.Top + S.Height, A4_PIXEL_HEIGHT)  / PIXELS_PER_MILIMETER;
-      W := Canvas.TextWidth(S.Caption.Text) / PIXELS_PER_MILIMETER;
 
-      Page.StartPath(L, T);
-      Page.AddLineToPath(L, B);
-      Page.AddLineToPath(R, B);
-      Page.AddLineToPath(R, T);
-      Page.AddLineToPath(Min(L + W, R), T);
-      Page.AddLineToPath(L, T, FPColor($FF, $FF, $FF, $FF));
-      Page.EndPath();
 
-      L := (S.Left + 3) / PIXELS_PER_MILIMETER;
-      T := CanvasTextPosToFPVectorial(S.Top, A4_PIXEL_HEIGHT, Canvas.TextHeight(S.Caption.Text) div 2) / PIXELS_PER_MILIMETER;
-      Page.AddText(L, T, 0, FN, FS, S.Caption.Text);
-    end;
 
-//    fpvtocanvas.DrawFPVectorialToCanvas(Page, Canvas, 0, 12 * Floor(Page.Height), 1, -1);
-//    Printer.EndDoc;
-    VecDoc.WriteToFile(SaveDlg.FileName, vfSVG);
-  finally
-    SaveDlg.Free;
-    VecDoc.Free;
-  end;
+{      FOR CurField := 0 TO DataFile.Fields.Count - 1 DO
+        BEGIN
+          WITH DataFile.Fields[CurField] DO
+            BEGIN
+              SetFont(ManagerSettings.FieldFont);
+              {Check if fields fits in the page}
+              IF trim(Question.Text)<>'' THEN
+                BEGIN
+                  {Check if question fits the page}
+                  aQTop := Round((Top - 2) * yscale) - ((PageNumber - 1) * pClientHeight);
+                  aQTop := aQTop + TopMarg;
+                  aQBot := aQTop + Canvas.TextHeight(Question.Text);
+                  IF aQBot>BotMarg THEN ChangePage:=True;
+                END;
+              IF Length>0 THEN
+                BEGIN
+                  {Check if field fits the page}
+                  aFTop := Round(Top*yscale)-((PageNumber-1)*pClientHeight)+TopMarg;
+                  aFBot := aFTop+Round(2*yscale)+Canvas.TextHeight(Name);
+                  IF aFBot>BotMarg THEN ChangePage:=True;
+                END;
+              IF ChangePage THEN
+                BEGIN
+                  NewPage;
+                  ChangePage:=False;
+                END;
+              {Print the question and the field}
+              IF trim(Question.Text)<>'' THEN
+                BEGIN
+                  aQTop:=Round((Top-2)*yscale)-((PageNumber-1)*pClientHeight)+TopMarg;
+                  aLeft:=Round(Length*xscale)+LeftMarg;
+                  Canvas.TextOut(aLeft,aQTop,Question.Text);
+                END;
+              IF Length>0 THEN
+                BEGIN
+{                  ARect.Top:=(FFieldTop-2-((PageNumber-1)*pClientHeight))*yscale;
+                  ARect.Top:=ARect.Top+TopMarg;
+                  ARect.Bottom:=aFTop+Canvas.TextHeight(FFieldText+'X')+(3*yscale);
+                  ARect.Left:=((FFieldLeft-2)*xscale)+LeftMarg;
+                  ARect.Right:=ARect.Left+(xscale*(FFieldWidth+2));
+}
+                  IF trim(Name)<>'' THEN
+                    BEGIN
+                      ARect.Top:=Round(Top*yscale)-((PageNumber-1)*pClientHeight)+TopMarg;
+                      //ARect.Bottom:=ARect.Top+Printer.Canvas.TextHeight(FFieldText+'X');
+                      ARect.Left:=Round(Left*xscale)+LeftMarg;
+                      //ARect.Right:=ARect.Left+Round((xscale*FFieldWidth));
+                      Canvas.TextOut(ARect.Left,ARect.Top,Name);
+                    END;
+
+                  ARect.Top:=Round(Top*yscale)-((PageNumber-1)*pClientHeight)+topMarg;
+                  ARect.Bottom:=ARect.Top+Printer.Canvas.TextHeight(Name+'Xp_');
+                  ARect.Left:=Round(Left*xscale)+LeftMarg;
+                  ARect.Right:=ARect.Left+Round(xscale*Length)-4;
+                  ARect.Top:=ARect.Top+((ARect.Bottom-ARect.Top) DIV 2);
+                  Canvas.MoveTo(ARect.Left,ARect.top);
+                  Canvas.LineTo(ARect.Left,ARect.Bottom);
+                  Canvas.LineTo(ARect.Right,ARect.Bottom);
+                  Canvas.LineTo(ARect.Right,ARect.top);
+
+                END;
+            END;  //with PeField
+        END;  //for   }
+      EndDoc;
+    END;  //with printer
 end;
 
 function TRuntimeDesignFrame.NewDesignHeading(TopLeft: TPoint;
@@ -1587,6 +1631,11 @@ procedure TRuntimeDesignFrame.EditControlActionExecute(Sender: TObject);
 begin
   FPropertiesForm.Show;
   FPropertiesForm.SetFocus;
+end;
+
+procedure TRuntimeDesignFrame.ExportToolButtonClick(Sender: TObject);
+begin
+  DoPrintDataForm;
 end;
 
 procedure TRuntimeDesignFrame.DeleteControlActionExecute(Sender: TObject);
