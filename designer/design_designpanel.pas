@@ -28,6 +28,7 @@ type
   {$ENDIF}
   public
     function DesignFrameClass: TCustomFrameClass;
+    procedure UpdateControl;
     procedure FixupCopyControl;
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
@@ -99,6 +100,11 @@ end;
 function TDesignPanel.DesignFrameClass: TCustomFrameClass;
 begin
   result := TSectionPropertiesFrame;
+end;
+
+procedure TDesignPanel.UpdateControl;
+begin
+  // Do nothing
 end;
 
 procedure TDesignPanel.FixupCopyControl;

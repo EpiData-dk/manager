@@ -26,7 +26,6 @@ type
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure UpdateHint;
     procedure UpdateEpiControl;
-    procedure UpdateControl;
     procedure ReadField(Stream: TStream);
     procedure WriteField(Stream: TStream);
   protected
@@ -36,6 +35,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor  Destroy; override;
+    procedure   UpdateControl;
     function    DesignFrameClass: TCustomFrameClass;
     procedure   SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     procedure   FixupCopyControl;
@@ -50,7 +50,7 @@ implementation
 uses
   managerprocs, Graphics, main, LCLIntf, LCLType, manager_messages,
   design_properties_fieldframe, JvDesignSurface, epidocument,
-  epistringutils, manager_globals;
+  epistringutils, manager_globals, settings2_var;
 
 { TDesignField }
 
@@ -176,6 +176,10 @@ end;
 
 procedure TDesignField.UpdateControl;
 begin
+  FNameLabel.Font.Assign(ManagerSettings.FieldFont);
+  FQuestionLabel.Font.Assign(ManagerSettings.FieldFont);
+  Font.Assign(ManagerSettings.FieldFont);
+
   SetBounds(Left, Top, 0, 0);
 
   // Change caption, since Visible does not work when csDesigning.
@@ -183,6 +187,7 @@ begin
     FNameLabel.Caption := FField.Name
   else
     FNameLabel.Caption := '';
+
   FQuestionLabel.Caption := FField.Question.Text;
   if Assigned(FField.ValueLabelSet) and
      (FField.ShowValueLabel)

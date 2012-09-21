@@ -16,6 +16,7 @@ type
     function GetEpiControl: TEpiCustomControlItem;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure FixupCopyControl;
+    procedure UpdateControl;
     property  EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
   end;
 

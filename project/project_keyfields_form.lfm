@@ -55,9 +55,9 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 27
-      Top = 8
-      Width = 88
+      Height = 23
+      Top = 10
+      Width = 84
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'List Records'
@@ -69,10 +69,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
-      Left = 104
-      Height = 27
-      Top = 8
-      Width = 139
+      Left = 100
+      Height = 23
+      Top = 10
+      Width = 135
       Action = AddIndexFieldAction
       AutoSize = True
       BorderSpacing.Left = 5
@@ -84,11 +84,11 @@ object KeyFieldsForm: TKeyFieldsForm
     Height = 464
     Top = 0
     Width = 509
-    HorzScrollBar.Page = 507
-    VertScrollBar.Page = 462
+    HorzScrollBar.Page = 505
+    VertScrollBar.Page = 460
     Align = alClient
-    ClientHeight = 462
-    ClientWidth = 507
+    ClientHeight = 460
+    ClientWidth = 505
     TabOrder = 1
     object Label1: TLabel
       AnchorSideLeft.Control = ScrollBox1
@@ -110,7 +110,7 @@ object KeyFieldsForm: TKeyFieldsForm
       Left = 10
       Height = 5
       Top = 40
-      Width = 492
+      Width = 490
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Right = 5
@@ -119,8 +119,8 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = TopBevel
       AnchorSideTop.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 437
-      Height = 407
+      Left = 435
+      Height = 405
       Top = 50
       Width = 5
       Anchors = [akTop, akRight, akBottom]
@@ -133,7 +133,7 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideRight.Control = RightBevel
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = TopBevel
-      Left = 437
+      Left = 435
       Height = 34
       Top = 3
       Width = 5
@@ -145,7 +145,7 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideLeft.Control = RightBevel
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = TopBevel
-      Left = 447
+      Left = 445
       Height = 22
       Top = 15
       Width = 23
@@ -196,7 +196,7 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = AddIndexComboBtn
       AnchorSideTop.Side = asrCenter
-      Left = 475
+      Left = 473
       Height = 22
       Top = 15
       Width = 23
@@ -246,9 +246,9 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideBottom.Control = ScrollBox1
       AnchorSideBottom.Side = asrBottom
       Left = 10
-      Height = 22
-      Top = 435
-      Width = 236
+      Height = 18
+      Top = 437
+      Width = 232
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Bottom = 5

@@ -29,6 +29,7 @@ type
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
+    procedure UpdateControl;
     procedure SetBounds(aLeft, aTop, aWidth, aHeight: integer); override;
     procedure FixupCopyControl;
     function DesignFrameClass: TCustomFrameClass;
@@ -177,7 +178,7 @@ begin
 
   // Standard properties being set for the component.
   ParentFont := false;
-  Font := ManagerSettings.HeadingFont;
+  Font.Assign(ManagerSettings.HeadingFont);
   Align := alNone;
   ShowHint := true;
   ParentColor := true;
@@ -191,6 +192,11 @@ begin
       FHeading.Free;
     end;
   inherited Destroy;
+end;
+
+procedure TDesignHeading.UpdateControl;
+begin
+  Font.Assign(ManagerSettings.HeadingFont);
 end;
 
 procedure TDesignHeading.SetBounds(aLeft, aTop, aWidth, aHeight: integer);

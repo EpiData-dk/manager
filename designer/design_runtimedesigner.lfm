@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 563
   ClientWidth = 985
   TabOrder = 0
-  DesignLeft = 570
-  DesignTop = 242
+  DesignLeft = 493
+  DesignTop = 204
   object DesignerToolBar: TToolBar
     Left = 0
     Height = 26

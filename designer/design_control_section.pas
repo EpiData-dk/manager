@@ -28,7 +28,8 @@ type
   public
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
-    function DesignFrameClass: TCustomFrameClass;
+    function  DesignFrameClass: TCustomFrameClass;
+    procedure UpdateControl;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     procedure FixupCopyControl;
     property  EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
@@ -84,7 +85,10 @@ begin
     ecceSetLeft: ;
     ecceUpdate,
     ecceText:
-      Caption := TEpiSection(Sender).Caption.Text;
+      begin
+        Caption := TEpiSection(Sender).Caption.Text;
+        UpdateControl;
+      end;
   end;
 end;
 
@@ -172,7 +176,7 @@ begin
   inherited Create(AOwner);
   ShowHint := true;
   ParentColor := true;
-  Font := ManagerSettings.SectionFont;
+  Font.Assign(ManagerSettings.SectionFont);
   Caption := '';
 end;
 
@@ -189,6 +193,11 @@ end;
 function TDesignSection.DesignFrameClass: TCustomFrameClass;
 begin
   result := TSectionPropertiesFrame;
+end;
+
+procedure TDesignSection.UpdateControl;
+begin
+  Font.Assign(ManagerSettings.SectionFont);
 end;
 
 procedure TDesignSection.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
