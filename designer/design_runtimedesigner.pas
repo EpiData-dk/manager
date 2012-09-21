@@ -951,7 +951,7 @@ begin
   IF NOT PrintDialog1.Execute THEN Exit;
   WITH Printer DO
   BEGIN
-    FileName := '/tmp/tmp.ps';
+//    FileName := '/tmp/tmp.ps';
     Title    := 'EpiData Manager - ';
     ppix     := XDPI;                    //pixels pr inch X
     ppiy     := YDPI;                    //pixels pr inch Y
