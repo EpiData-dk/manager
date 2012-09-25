@@ -533,12 +533,13 @@ begin
   AForm.free;
 end;
 
-initialization
+{$I initfont.inc}
 
+initialization
 begin
-  ManagerSettings.FieldFont := TFont.Create;
-  ManagerSettings.HeadingFont := TFont.Create;
-  ManagerSettings.SectionFont := TFont.Create;
+  InitFont(ManagerSettings.FieldFont);
+  InitFont(ManagerSettings.HeadingFont);
+  InitFont(ManagerSettings.SectionFont);
 
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
   if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then

@@ -952,14 +952,14 @@ begin
   WITH Printer DO
   BEGIN
 //    FileName := '/tmp/tmp.ps';
-    Title    := 'EpiData Manager - ';
+    Title    := 'EpiData Manager - ' + TEpiDocument(DataFile.RootOwner).Study.Title.Text;
     ppix     := XDPI;                    //pixels pr inch X
     ppiy     := YDPI;                    //pixels pr inch Y
     ppmmx    := Round(ppix/25.4);        //pixels pr mm X
     ppmmy    := Round(ppiy/25.4);        //pixels pr mm Y
-    LeftMarg := 0; //ppmmx*10;                //Sets left margin to 1 cm
-    TopMarg  := 0; //ppmmy*5;                 //Sets top margin to 0,5 cm
-    BotMarg  := PageHeight-ppmmy*5;      //Sets bottom margin to 0,5 cm
+    LeftMarg := 0;                       //Sets left margin to 0 cm
+    TopMarg  := 0;                       //Sets top margin to 0 cm
+    BotMarg  := PageHeight;              //Sets bottom margin to 0 cm
     pClientHeight := BotMarg - TopMarg;
 
     xscale := ppix / GetParentForm(Self).PixelsPerInch;
@@ -967,10 +967,15 @@ begin
 
     BeginDoc;
 
-    for i := 0 to DataFile.ControlItems.Count - 1 do
+    i := 0;
+    while i < DataFile.ControlItems.Count - 1 do
     begin
       CI := DataFile.ControlItem[i];
-      if CI = DataFile.MainSection then continue;
+      if CI = DataFile.MainSection then
+      begin
+        inc(i);
+        continue;
+      end;
 
       ATop := (Round(ControlItemTop(CI) * yscale) - (PageNumber - 1) * pClientHeight) + TopMarg;
       ALeft := Round(ControlItemLeft(CI) * xscale) + LeftMarg;
@@ -988,12 +993,15 @@ begin
       if (CI is TEpiField) then
       begin
         SetFont(ManagerSettings.FieldFont);
-        ABot := ATop + Canvas.TextHeight(TEpiField(CI).Name);
+        ABot := ATop + Round(ControlFromEpiControl(CI).Height * yscale);  // Canvas.TextHeight(TEpiField(CI).Name);
       end;
 
       // Check if we need to create a new page
-      if ABot > BotMarg then
+      if ATop > BotMarg then
+      begin
         NewPage;
+        Continue;
+      end;
 
       if CI is TEpiSection then
       with TEpiSection(CI) do
@@ -1005,18 +1013,19 @@ begin
         if Caption.Text <> '' then
         begin
           Sz := Canvas.TextExtent(Caption.Text);
-          Canvas.TextOut(ALeft + Round(5 * xscale), ATop, Caption.Text);
+          Canvas.TextOut(ALeft + Round(10 * xscale), ATop, Caption.Text);
         end;
 
-        ATop := Atop + (Sz.cy div 2);
+        ATop := ATop + Round(Sz.cy * (2 / 3));
 
         // Draw box
-        Canvas.MoveTo(ALeft, ATop);
+        Canvas.MoveTo(ALeft + Round(5 * xscale), ATop);
+        Canvas.LineTo(ALeft, ATop);
         Canvas.LineTo(ALeft, ABot);
         Canvas.LineTo(ARight, ABot);
         Canvas.LineTo(ARight, ATop);
         // .. line to caption text
-        Canvas.LineTo(ALeft + Sz.cx + Round(10 * xscale), Atop);
+        Canvas.LineTo(ALeft + Sz.cx + Round(15 * xscale), Atop);
       end;
 
       if CI is TEpiHeading then
@@ -1028,10 +1037,10 @@ begin
       with TEpiField(CI) do
       begin
         // Draw box
-        S := DupeString('W', Length);
-        ARight := ALeft + Round(Canvas.TextWidth(S));
+        ARight := ALeft + Round(ControlFromEpiControl(CI).Width * xscale);
+        ATop := ABot - ((ABot - ATop) div 2);
 
-        Canvas.MoveTo(ALeft, Atop);
+        Canvas.MoveTo(ALeft, ATop);
         Canvas.LineTo(ALeft, ABot);
         Canvas.LineTo(ARight, ABot);
         Canvas.LineTo(ARight, ATop);
@@ -1039,15 +1048,19 @@ begin
         IF trim(Question.Text)<>'' THEN
         BEGIN
           aLeft := ALeft - Round(5 * xscale) - Canvas.TextWidth(Question.Text);
+          ATop := ABot - Canvas.TextHeight(Question.Text);
           Canvas.TextOut(aLeft, ATop, Question.Text);
         END;
 
         IF TEpiDocument(DataFile.RootOwner).ProjectSettings.ShowFieldNames then
         begin
           ALeft := ALeft - Round(5 * xscale) - Canvas.TextWidth(Name);
+          ATop := ABot - Canvas.TextHeight(Question.Text);
           Canvas.TextOut(aLeft, ATop, Name);
         end;
       end;
+
+      Inc(i);
     end;
 
     EndDoc;
@@ -1663,6 +1676,15 @@ begin
   with FDesignPanel.Surface do
   begin
     Ctrl := FindControl(P.X, P.Y);
+
+    if (csNoDesignSelectable in Ctrl.ControlStyle)
+    then
+      if (Assigned(Ctrl.Parent)) and
+         (Supports(Ctrl.Parent, IDesignEpiControl))
+      then
+        Ctrl := Ctrl.Parent
+      else
+        Exit;
 
     if not Selector.IsSelected(Ctrl) then
     begin

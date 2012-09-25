@@ -143,7 +143,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="71">
+    <Units Count="72">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -609,6 +609,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_designbander"/>
       </Unit70>
+      <Unit71>
+        <Filename Value="include/win32/initfont.inc"/>
+        <IsPartOfProject Value="True"/>
+      </Unit71>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

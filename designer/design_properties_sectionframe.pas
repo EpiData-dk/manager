@@ -50,7 +50,9 @@ uses
 
 procedure TSectionPropertiesFrame.UpdateVisibility;
 begin
-  NameEdit.Enabled := Length(FSections) = 1;
+  NameEdit.Enabled :=
+    (Length(FSections) = 1) and
+    (FSections[0].Name <> 'MAIN');
 
   {$IFNDEF EPI_DEBUG}
   SectionGroupAccessGroupBox.Visible := false;
