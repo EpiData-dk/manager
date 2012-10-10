@@ -166,6 +166,11 @@ object ProjectFrame: TProjectFrame
       Caption = 'Key Fields...'
       OnExecute = KeyFieldsActionExecute
     end
+    object StudyInformationAction: TAction
+      Category = 'Project'
+      Caption = 'Study Information...'
+      OnExecute = StudyInformationActionExecute
+    end
   end
   object ProjectImageList: TImageList
     left = 384

@@ -1,14 +1,12 @@
-object HeadingPropertiesFrame: THeadingPropertiesFrame
-  Left = 0
+inherited HeadingPropertiesFrame: THeadingPropertiesFrame
   Height = 132
-  Top = 0
   Width = 400
   ClientHeight = 132
   ClientWidth = 400
   TabOrder = 0
   DesignLeft = 920
   DesignTop = 412
-  object Label9: TLabel
+  object Label9: TLabel[0]
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 10
@@ -20,7 +18,7 @@ object HeadingPropertiesFrame: THeadingPropertiesFrame
     Caption = 'Name:'
     ParentColor = False
   end
-  object NameEdit: TEdit
+  object NameEdit: TEdit[1]
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Label9
     AnchorSideTop.Side = asrBottom
@@ -36,7 +34,7 @@ object HeadingPropertiesFrame: THeadingPropertiesFrame
     BorderSpacing.Right = 10
     TabOrder = 0
   end
-  object Label10: TLabel
+  object Label10: TLabel[2]
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = NameEdit
     AnchorSideTop.Side = asrBottom
@@ -49,7 +47,7 @@ object HeadingPropertiesFrame: THeadingPropertiesFrame
     Caption = 'Text:'
     ParentColor = False
   end
-  object CaptionEdit: TEdit
+  object CaptionEdit: TEdit[3]
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Label10
     AnchorSideTop.Side = asrBottom

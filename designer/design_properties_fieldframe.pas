@@ -202,6 +202,7 @@ type
     procedure DoWarning(Const Msg: string; Ctrl: TWinControl);
     procedure UpdateVisibility;
     procedure UpdateContent;
+    procedure DoUpdateCaption;
     function  ValidateChanges: boolean;
     procedure InternalApplyChanges;
     procedure EditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
@@ -209,9 +210,10 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
-    procedure  ResetControls;
-    procedure   SetEpiControls(EpiControls: TEpiCustomControlItemArray);
-    function    ApplyChanges: boolean;
+    procedure FocusOnNewControl;
+    procedure ResetControls;
+    procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
+    function ApplyChanges: boolean;
   end;
 
 implementation
@@ -1193,6 +1195,19 @@ begin
     then break;
 end;
 
+procedure TFieldPropertiesFrame.DoUpdateCaption;
+var
+  S: String;
+  i: Integer;
+begin
+  S := Field.Name;
+  for i := 1 to FieldCount - 1 do
+    S := S + ', ' + Fields[i].Name;
+
+  S := EpiCutString(S, 20);
+  UpdateCaption('Field Properties: ' + S);
+end;
+
 function TFieldPropertiesFrame.ValidateChanges: boolean;
 var
   I: integer;
@@ -1714,6 +1729,7 @@ constructor TFieldPropertiesFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FieldPageControl.ActivePage := FieldBasicSheet;
+  QuestionEdit.SetFocus;
 
   FNoneObject   := nil; //TObject.Create;
   FIgnoreObject := TObject.Create;
@@ -1747,6 +1763,12 @@ begin
   inherited Destroy;
 end;
 
+procedure TFieldPropertiesFrame.FocusOnNewControl;
+begin
+  FieldPageControl.ActivePage := FieldBasicSheet;
+  QuestionEdit.SetFocus;
+end;
+
 procedure TFieldPropertiesFrame.ResetControls;
 begin
   UpdateContent;
@@ -1767,6 +1789,7 @@ begin
 
   UpdateVisibility;
   UpdateContent;
+  DoUpdateCaption;
 end;
 
 function TFieldPropertiesFrame.ApplyChanges: boolean;
@@ -1779,6 +1802,8 @@ begin
   result := ValidateChanges;
   if Result then
     InternalApplyChanges;
+
+  DoUpdateCaption;
 end;
 
 end.

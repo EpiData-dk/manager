@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 415
+  Left = 527
   Height = 603
-  Top = 122
+  Top = 268
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -149,6 +149,18 @@ object MainForm: TMainForm
       object EditMenuDivider0: TMenuItem
         Caption = '-'
       end
+      object CutMenuItem: TMenuItem
+        Caption = 'Cut'
+      end
+      object CopyMenuItem: TMenuItem
+        Caption = 'Copy'
+      end
+      object PasteMenuItem: TMenuItem
+        Caption = 'Paste'
+      end
+      object EditMenuDivider4: TMenuItem
+        Caption = '-'
+      end
       object PasteAsHeadingMenuItem: TMenuItem
         Caption = 'HeadingPaste'
       end
@@ -161,13 +173,13 @@ object MainForm: TMainForm
       object PasteAsStringMenuItem: TMenuItem
         Caption = 'StringPaste'
       end
-      object EditMenuDivider1: TMenuItem
+      object EditMenuDivider7: TMenuItem
         Caption = '-'
       end
       object AddStructureMenuItem: TMenuItem
         Caption = 'AddStructure'
       end
-      object EditMenuDivider2: TMenuItem
+      object EditMenuDivider10: TMenuItem
         Caption = '-'
       end
       object SettingsMenuItem: TMenuItem
@@ -194,6 +206,9 @@ object MainForm: TMainForm
       end
       object ProjectPasswordMenuItem: TMenuItem
         Caption = 'Set Password'
+      end
+      object StudyInfoMenuItem: TMenuItem
+        Caption = 'StudyInfo'
       end
       object MenuItem1: TMenuItem
         Caption = '-'

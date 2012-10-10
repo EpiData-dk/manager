@@ -378,6 +378,7 @@ constructor TImportStructureForm.Create(TheOwner: TComponent;
   const Files: TStrings);
 begin
   inherited Create(TheOwner);
+
   FProjectList := TProjectFileListFrame.Create(Self);
   with FProjectList do
   begin

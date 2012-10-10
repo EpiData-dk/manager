@@ -44,10 +44,13 @@ procedure LoadFormPosition(AForm: TForm; Const SectionName: string);
 
 procedure AddToRecent(Const AFilename: string);
 
-const
+{const
   ManagerVersion: TEpiVersionInfo = (
     {$I epidatamanager.version.inc}
   );
+}
+
+procedure InitFont(Font: TFont);
 
 implementation
 
@@ -56,6 +59,8 @@ implementation
 uses
   settings2_interface, settings2_var, epidatafilestypes,
   IniFiles, strutils, epieximtypes, epiexportsettings,
+  main,
+
   // settings
   settings_advanced_frame, settings_fielddefinitions_frame,
   settings_general_frame, settings_visualdesign_frame,
@@ -76,7 +81,7 @@ end;
 
 function GetManagerVersion: String;
 begin
-  result := GetEpiVersionInfo(ManagerVersion);
+  Result := GetEpiVersionInfo(HINSTANCE);
 end;
 
 function SaveSettingToIni(Const FileName: string): boolean;
@@ -227,6 +232,16 @@ var
   i: Integer;
   S: String;
   Ini: TIniFile;
+
+  procedure CorrectFont(F: TFont);
+  begin
+    if (F.Name = '') or
+       (LowerCase(F.Name) = 'default') or
+       (F.Size = 0)
+    then
+      InitFont(F);
+  end;
+
 begin
   Result := false;
   ManagerSettings.IniFileName := FileName;
@@ -317,14 +332,17 @@ begin
       FieldFont.Size   := ReadInteger(sec, 'FieldFontSize', FieldFont.Size);
       FieldFont.Style  := TFontStyles(ReadInteger(sec, 'FieldFontStyle', Integer(FieldFont.Style)));
       FieldFont.Color  := ReadInteger(sec, 'FieldFontColour', FieldFont.Color);
+      CorrectFont(FieldFont);
       HeadingFont.Name   := ReadString(sec, 'HeadingFontName', HeadingFont.Name);
       HeadingFont.Size   := ReadInteger(sec, 'HeadingFontSize', HeadingFont.Size);
       HeadingFont.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle', Integer(HeadingFont.Style)));
       HeadingFont.Color  := ReadInteger(sec, 'HeadingFontColour', HeadingFont.Color);
+      CorrectFont(HeadingFont);
       SectionFont.Name   := ReadString(sec, 'SectionFontName', SectionFont.Name);
       SectionFont.Size   := ReadInteger(sec, 'SectionFontSize', SectionFont.Size);
       SectionFont.Style  := TFontStyles(ReadInteger(sec, 'SectionFontStyle', Integer(SectionFont.Style)));
       SectionFont.Color  := ReadInteger(sec, 'SectionFontColour', SectionFont.Color);
+      CorrectFont(SectionFont);
 
       // Project Defaults
       // - general:
@@ -537,9 +555,12 @@ end;
 
 initialization
 begin
-  InitFont(ManagerSettings.FieldFont);
-  InitFont(ManagerSettings.HeadingFont);
-  InitFont(ManagerSettings.SectionFont);
+  ManagerSettings.FieldFont := TFont.Create;
+  ManagerSettings.HeadingFont := TFont.Create;
+  ManagerSettings.SectionFont := TFont.Create;
+//  InitFont(ManagerSettings.FieldFont);
+//  InitFont(ManagerSettings.HeadingFont);
+//  InitFont(ManagerSettings.SectionFont);
 
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
   if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then

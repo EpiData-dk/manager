@@ -131,7 +131,7 @@ begin
     dmResize: ;
     dmSelect: ;
     dmCreate:
-      FFrame.ShowPropertiesForm;
+      FFrame.ShowPropertiesForm(true);
   end;
 
   if Assigned(FFrame) then

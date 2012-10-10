@@ -1,7 +1,7 @@
 object ImportStructureForm: TImportStructureForm
-  Left = 639
+  Left = 609
   Height = 679
-  Top = 133
+  Top = 192
   Width = 677
   Caption = 'Import Structure From...'
   ClientHeight = 679
@@ -48,6 +48,7 @@ object ImportStructureForm: TImportStructureForm
       Anchors = [akRight, akBottom]
       AutoSize = True
       BorderSpacing.Right = 10
+      Cancel = True
       Kind = bkCancel
       ModalResult = 2
       TabOrder = 1

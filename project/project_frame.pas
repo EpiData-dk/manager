@@ -14,6 +14,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    StudyInformationAction: TAction;
     KeyFieldsAction: TAction;
     ProjectPasswordAction: TAction;
     OpenProjectAction: TAction;
@@ -43,6 +44,7 @@ type
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
+    procedure StudyInformationActionExecute(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
   private
     { private declarations }
@@ -107,7 +109,7 @@ uses
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
-  shortcuts, project_keyfields_form;
+  shortcuts, project_keyfields_form, project_studyunit_form;
 
 type
 
@@ -283,6 +285,15 @@ begin
 
   EpiDocument.Modified := false;
   UpdateCaption;
+end;
+
+procedure TProjectFrame.StudyInformationActionExecute(Sender: TObject);
+var
+  F: TStudyUnitForm;
+begin
+  F := TStudyUnitForm.Create(Self, EpiDocument.Study);
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
@@ -769,6 +780,9 @@ end;
 procedure TProjectFrame.RestoreDefaultPos;
 begin
 //  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
+  TProjectSettingsForm.RestoreDefaultPos;
+  TStudyUnitForm.RestoreDefaultPos;
+
   if Assigned(FActiveFrame) then
     TRuntimeDesignFrame(FActiveFrame).RestoreDefaultPos;
 end;

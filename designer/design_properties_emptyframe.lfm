@@ -1,7 +1,5 @@
-object EmptyPropertiesFrame: TEmptyPropertiesFrame
-  Left = 0
+inherited EmptyPropertiesFrame: TEmptyPropertiesFrame
   Height = 316
-  Top = 0
   Width = 395
   ClientHeight = 316
   ClientWidth = 395
@@ -9,7 +7,7 @@ object EmptyPropertiesFrame: TEmptyPropertiesFrame
   TabOrder = 0
   DesignLeft = 575
   DesignTop = 351
-  object Label1: TLabel
+  object Label1: TLabel[0]
     Left = 80
     Height = 15
     Top = 144

@@ -1,6 +1,5 @@
-procedure InitFont(Out Font: TFont);
+procedure InitFont(Font: TFont);
 begin
-  Font := TFont.Create;
   Font.Name := 'Sans';
   Font.Size := 10;
   Font.Style := [];

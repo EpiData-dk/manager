@@ -83,7 +83,7 @@ begin
     FieldNameCase := TEpiStataFieldNamingCase(PtrUInt(FieldNamingRGrp.Items.Objects[FieldNamingRGrp.ItemIndex]));
     with ExportLines do
     begin
-      Add('Exported from EpiData Manager ' + GetEpiVersionInfo(ManagerVersion));
+      Add('Exported from EpiData Manager ' + GetEpiVersionInfo(HINSTANCE));
       Add('On: ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now));
       Add('Title: ' + Doc.Study.Title.Text);
       Add('Version: ' + Doc.Study.Version);

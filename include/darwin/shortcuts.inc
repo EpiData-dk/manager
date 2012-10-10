@@ -23,9 +23,6 @@ begin
   M_ProjectOverviewReport:= KeyToShortCut(VK_UNKNOWN, []);
 
   // Project Frame
-{  SaveProjectAction.ShortCut := ShortCut(VK_S, [ssMeta]);
-  SaveProjectAsAction.ShortCut := ShortCut(VK_S, [ssShift, ssMeta]);}
-
   P_SaveProject                := KeyToShortCut(VK_S, [ssMeta]);
   P_SaveProjectAs              := KeyToShortCut(VK_S, [ssMeta, ssShift]);
   P_NewDataForm                := KeyToShortCut(VK_UNKNOWN, []);
@@ -33,6 +30,7 @@ begin
   P_ProjectSettings            := KeyToShortCut(VK_P, [ssMeta, ssShift]);
   P_StartValueLabelEditor      := KeyToShortCut(VK_V, [ssMeta]);
   P_OpenProject                := KeyToShortCut(VK_UNKNOWN, []);  // this overlaps with M_OpenProject!?!?!
+  P_KeyFields                  := KeyToShortCut(VK_UNKNOWN, []);
 
   // Designer Frame
   D_NewIntField                := KeyToShortCut(VK_1, []);
@@ -50,7 +48,6 @@ begin
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
   D_DeleteControl_Fast         := KeyToShortCut(VK_BACK, [ssMeta]);
   D_ImportData                 := KeyToShortCut(VK_UNKNOWN, []);
-  D_AddStructure               := KeyToShortCut(VK_UNKNOWN, []);
   D_MoveTop                    := KeyToShortCut(VK_UP, [ssMeta]);
   D_MoveSideUp                 := KeyToShortCut(VK_UP, [ssAlt]);
   D_MoveControlUp              := KeyToShortCut(VK_UP, []);
@@ -59,9 +56,12 @@ begin
   D_MoveBottom                 := KeyToShortCut(VK_DOWN, [ssMeta]);
   D_DeleteAllControl           := KeyToShortCut(VK_UNKNOWN, []);
   D_PasteAs                    := KeyToShortCut(VK_G, [ssMeta]);
+  D_CutControl                 := KeyToShortCut(VK_X, [ssMeta]);
   D_CopyControl                := KeyToShortCut(VK_C, [ssMeta]);
   D_PasteControl               := KeyToShortCut(VK_V, [ssMeta]);
   D_ViewDataSet                := KeyToShortCut(VK_UNKNOWN, []);
+  D_Undo                       := KeyToShortCut(VK_Z, [ssCtrl]);
+  D_Redo                       := KeyToShortCut(VK_Z, [ssCtrl, ssShift]);
 
   // ValueLabel Editor
   // - tree actions

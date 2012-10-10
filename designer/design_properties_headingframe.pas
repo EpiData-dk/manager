@@ -22,8 +22,10 @@ type
     FHeadings: TEpiCustomControlItemArray;
     procedure UpdateVisibility;
     procedure UpdateContent;
+    procedure DoUpdateCaption;
   public
     { public declarations }
+    procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     procedure ResetControls;
     function ApplyChanges: boolean;
@@ -34,7 +36,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, LazUTF8, LCLIntf, LMessages;
+  epidatafiles, LazUTF8, epistringutils;
 
 { THeadingPropertiesFrame }
 
@@ -59,6 +61,24 @@ begin
       end;
 end;
 
+procedure THeadingPropertiesFrame.DoUpdateCaption;
+var
+  S: String;
+  i: Integer;
+begin
+  S := FHeadings[0].Name;
+  for i := 1 to High(FHeadings) do
+    S := S + ', ' + FHeadings[i].Name;
+
+  S := EpiCutString(S, 20);
+  UpdateCaption('Heaing Properties: ' + S);
+end;
+
+procedure THeadingPropertiesFrame.FocusOnNewControl;
+begin
+  CaptionEdit.SetFocus;
+end;
+
 procedure THeadingPropertiesFrame.SetEpiControls(
   EpiControls: TEpiCustomControlItemArray);
 begin
@@ -68,6 +88,7 @@ begin
 
   UpdateVisibility;
   UpdateContent;
+  DoUpdateCaption;
 end;
 
 procedure THeadingPropertiesFrame.ResetControls;
@@ -108,6 +129,8 @@ begin
 
   ShowHintMsg('', nil);
   result := true;
+
+  DoUpdateCaption;
 end;
 
 end.

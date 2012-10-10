@@ -24,7 +24,10 @@ type
 
   TEpiCustomControlItemArray = array of TEpiCustomControlItem;
 
+  { IDesignPropertiesFrame }
+
   IDesignPropertiesFrame = interface ['IDesignPropertiesFrame']
+    procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     procedure ResetControls;
     function  ApplyChanges: boolean;

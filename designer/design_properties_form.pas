@@ -16,6 +16,7 @@ type
     EpiCtrlItemArray: TEpiCustomControlItemArray;
     FFrame: TCustomFrame;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
+    procedure UpdateCaption(const S: string);
     procedure EpiCtrlChangeHook(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure ShowEmptyPage;
@@ -33,6 +34,7 @@ type
     destructor Destroy; override;
     procedure UpdateSelection(Objects: TJvDesignObjectArray);
     procedure RestoreDefaultPos;
+    procedure SetFocusOnNew;
     function  ValidateControls: boolean;
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
   end;
@@ -119,6 +121,11 @@ begin
   result := true;
 end;
 
+procedure TPropertiesForm.UpdateCaption(const S: string);
+begin
+  Caption := S;
+end;
+
 procedure TPropertiesForm.EpiCtrlChangeHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 var
@@ -141,9 +148,10 @@ begin
     FFrame.Free;
 
   FFrame := TEmptyPropertiesFrame.Create(Self);
+  TDesignPropertiesFrame(FFrame).OnShowHintMsg := OnShowHintMsg;
+  TDesignPropertiesFrame(FFrame).OnUpdateCaption := @UpdateCaption;
   FFrame.Align := alClient;
   FFrame.Parent := Self;
-  TDesignPropertiesFrame(FFrame).OnShowHintMsg := OnShowHintMsg;
 end;
 
 constructor TPropertiesForm.Create(TheOwner: TComponent);
@@ -225,6 +233,7 @@ var
     FFrame.Align := alClient;
     FFrame.Parent := Self;
     TDesignPropertiesFrame(FFrame).OnShowHintMsg := OnShowHintMsg;
+    TDesignPropertiesFrame(FFrame).OnUpdateCaption := @UpdateCaption;
   end;
 
 begin
@@ -274,6 +283,11 @@ begin
   SetBounds(300, 20, 500, 500);
   EndFormUpdate;
   SaveFormPosition(Self, 'ControlsForm');
+end;
+
+procedure TPropertiesForm.SetFocusOnNew;
+begin
+  (FFrame as IDesignPropertiesFrame).FocusOnNewControl;
 end;
 
 function TPropertiesForm.ValidateControls: boolean;

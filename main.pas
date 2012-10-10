@@ -16,9 +16,14 @@ type
 
   TMainForm = class(TForm)
     AddStructureMenuItem: TMenuItem;
-    EditMenuDivider2: TMenuItem;
+    EditMenuDivider10: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
     EditMenuDivider0: TMenuItem;
+    StudyInfoMenuItem: TMenuItem;
+    PasteMenuItem: TMenuItem;
+    CopyMenuItem: TMenuItem;
+    CutMenuItem: TMenuItem;
+    EditMenuDivider4: TMenuItem;
     RedoMenuItem: TMenuItem;
     UndoMenuItem: TMenuItem;
     VerifyDoubleEntryAction: TAction;
@@ -86,7 +91,7 @@ type
     FileExitMenuItem: TMenuItem;
     HelpMenu: TMenuItem;
     FileMenuDivider2: TMenuItem;
-    EditMenuDivider1: TMenuItem;
+    EditMenuDivider7: TMenuItem;
     ProjectPropertiesMenuItem: TMenuItem;
     ProjectMenu: TMenuItem;
     PasteAsFloatMenuItem: TMenuItem;
@@ -306,6 +311,7 @@ end;
 
 procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
 var
+  ManagerVersion: TEpiVersionInfo;
   Stable: TEpiVersionInfo;
   Test: TEpiVersionInfo;
   Response: string;
@@ -316,6 +322,7 @@ var
   TestScore: Integer;
   S: String;
 begin
+  ManagerVersion := GetEpiVersion(HINSTANCE);
   if not CheckVersionOnline('epidatamanager', Stable, Test, Response) then
   begin
     ShowMessage(
@@ -719,20 +726,28 @@ begin
   SaveProjectAsMenuItem.Visible := Assigned(FActiveFrame);
 
   // EDIT:
+  UndoMenuItem.Visible := Assigned(FActiveFrame);
+  RedoMenuItem.Visible := Assigned(FActiveFrame);
+  EditMenuDivider0.Visible := Assigned(FActiveFrame);
+  // -
+  CutMenuItem.Visible :=  Assigned(FActiveFrame);
+  CopyMenuItem.Visible := Assigned(FActiveFrame);
+  PasteMenuItem.Visible := Assigned(FActiveFrame);
+  EditMenuDivider4.Visible := Assigned(FActiveFrame);
+  // -
   PasteAsFloatMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsHeadingMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsIntMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsStringMenuItem.Visible := Assigned(FActiveFrame);
-  EditMenuDivider1.Visible := Assigned(FActiveFrame);
+  EditMenuDivider7.Visible := Assigned(FActiveFrame);
+  // -
   AddStructureMenuItem.Visible := Assigned(FActiveFrame);
-  EditMenuDivider2.Visible := Assigned(FActiveFrame);
-  UndoMenuItem.Visible := Assigned(FActiveFrame);
-  RedoMenuItem.Visible := Assigned(FActiveFrame);
-  EditMenuDivider0.Visible := Assigned(FActiveFrame);
+  EditMenuDivider10.Visible := Assigned(FActiveFrame);
 
   // PROJECT:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
   KeyFieldsMenuItem.Visible := Assigned(FActiveFrame);
+  StudyInfoMenuItem.Visible := Assigned(FActiveFrame);
 
   // TOOLS:
   DataSetMenu.Visible := Assigned(FActiveFrame);
@@ -969,19 +984,30 @@ begin
   SaveProjectMenuItem.Action   := FActiveFrame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
 
+  // Edit
+  UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;
+  RedoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RedoAction;
+  // -
+  CutMenuItem.Action            := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).CutControlAction;
+  CopyMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).CopyControlAction;
+  PasteMenuItem.Action          := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteControlAction;
+  // -
   PasteAsHeadingMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
   PasteAsIntMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-  ViewDataSetMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
+  // -
   AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
-  UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;
-  RedoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RedoAction;
 
+  // Project
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
   ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
   KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
+  StudyInfoMenuItem.Action         := FActiveFrame.StudyInformationAction;
+
+  // DataSet
+  ViewDataSetMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
 end;
 
 procedure TMainForm.BeginUpdatingForm;
@@ -1008,7 +1034,6 @@ begin
     FActiveFrame.RestoreDefaultPos;
 
   TSettingsForm.RestoreDefaultPos;
-  TProjectSettingsForm.RestoreDefaultPos;
 
   BeginFormUpdate;
   Width := 700;

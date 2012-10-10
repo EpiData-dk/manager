@@ -17,8 +17,11 @@ type
     procedure FrameResize(Sender: TObject);
   private
     { private declarations }
+  protected
+    procedure SetParent(AParent: TWinControl); override;
   public
     { public declarations }
+    procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     procedure ResetControls;
     function  ApplyChanges: boolean;
@@ -42,9 +45,20 @@ begin
     SetBounds(L, T, Width, Height);
 end;
 
+procedure TEmptyPropertiesFrame.SetParent(AParent: TWinControl);
+begin
+  inherited SetParent(AParent);
+  UpdateCaption('Common Properties');
+end;
+
+procedure TEmptyPropertiesFrame.FocusOnNewControl;
+begin
+  // Do nothing.
+end;
+
 procedure TEmptyPropertiesFrame.SetEpiControls(EpiControls: TEpiCustomControlItemArray);
 begin
-  // Do nothing
+  // Do nothing.
 end;
 
 procedure TEmptyPropertiesFrame.ResetControls;

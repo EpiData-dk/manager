@@ -31,9 +31,10 @@ type
     FSections: TEpiCustomControlItemArray;
     procedure UpdateVisibility;
     procedure UpdateContent;
-
+    procedure DoUpdateCaption;
   public
     { public declarations }
+    procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     procedure ResetControls;
     function ApplyChanges: boolean;
@@ -44,7 +45,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, LazUTF8;
+  epidatafiles, LazUTF8, epistringutils;
 
 { TSectionPropertiesFrame }
 
@@ -77,6 +78,24 @@ begin
       end;
 end;
 
+procedure TSectionPropertiesFrame.DoUpdateCaption;
+var
+  S: String;
+  i: Integer;
+begin
+  S := FSections[0].Name;
+  for i := 1 to High(FSections) do
+    S := S + ', ' + FSections[i].Name;
+
+  S := EpiCutString(S, 20);
+  UpdateCaption('Sections Properties: ' + S);
+end;
+
+procedure TSectionPropertiesFrame.FocusOnNewControl;
+begin
+  CaptionEdit.SetFocus;
+end;
+
 procedure TSectionPropertiesFrame.SetEpiControls(
   EpiControls: TEpiCustomControlItemArray);
 begin
@@ -86,6 +105,7 @@ begin
 
   UpdateVisibility;
   UpdateContent;
+  DoUpdateCaption;
 end;
 
 procedure TSectionPropertiesFrame.ResetControls;
@@ -113,6 +133,8 @@ begin
 
   ShowHintMsg('', nil);
   Result := true;
+
+  DoUpdateCaption;
 end;
 
 end.

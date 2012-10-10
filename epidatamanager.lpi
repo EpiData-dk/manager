@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="3"/>
-      <BuildNr Value="5"/>
+      <BuildNr Value="6"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -143,7 +143,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="72">
+    <Units Count="73">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -298,6 +298,7 @@
         <Filename Value="project/project_settings_study_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Projectsettings_StudyFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_study_frame"/>
       </Unit22>
@@ -305,6 +306,7 @@
         <Filename Value="project/project_settings_study_contentdesc_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSetting_ContentDescFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_study_contentdesc_frame"/>
       </Unit23>
@@ -312,6 +314,7 @@
         <Filename Value="project/project_settings_study_ownership_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSetting_OwnershipFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_study_ownership_frame"/>
       </Unit24>
@@ -591,6 +594,7 @@
         <Filename Value="designer/design_properties_emptyframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="EmptyPropertiesFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="design_properties_emptyframe"/>
       </Unit67>
@@ -613,6 +617,14 @@
         <Filename Value="include/win32/initfont.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit71>
+      <Unit72>
+        <Filename Value="project/project_studyunit_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="StudyUnitForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="project_studyunit_form"/>
+      </Unit72>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -639,7 +651,7 @@
       <CompilerMessages>
         <UseMsgFile Value="True"/>
       </CompilerMessages>
-      <CustomOptions Value="-dEPI_DEBUG"/>
+      <CustomOptions Value="-dEPI_DEBUG1"/>
       <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>

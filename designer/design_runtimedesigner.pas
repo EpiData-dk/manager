@@ -263,7 +263,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     procedure   UpdateFrame;
     procedure   RestoreDefaultPos;
-    procedure   ShowPropertiesForm;
+    procedure   ShowPropertiesForm(NewControl: boolean);
     function    IsShortCut(var Message: TLMKey): boolean;
     function ValidateControls: boolean;
     property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
@@ -490,8 +490,13 @@ procedure TRuntimeDesignFrame.PasteAsUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
     (ClipBoardHasText) and
-    (FDesignPanel.Surface.Count = 1) and
-    (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle);
+     (
+      ((FDesignPanel.Surface.Count = 1) and
+       (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle)
+      )
+     or
+      (FDesignPanel.Surface.Count = 0)
+     );
 end;
 
 procedure TRuntimeDesignFrame.PasteAsField(Ft: TEpiFieldType);
@@ -1196,8 +1201,9 @@ begin
 
   if ShowPropertiesForm then
   begin
-    KeyCode := VK_RETURN;
-    LCLSendKeyDownEvent(Result, KeyCode, 0, true, false);
+    Self.ShowPropertiesForm(true);
+    //KeyCode := VK_RETURN;
+    //LCLSendKeyDownEvent(Result, KeyCode, 0, true, false);
   end;
 end;
 
@@ -1212,8 +1218,9 @@ begin
 
   if ShowPropertiesForm then
   begin
-    KeyCode := VK_RETURN;
-    LCLSendKeyDownEvent(Result, KeyCode, 0, true, false);
+    Self.ShowPropertiesForm(true);
+//    KeyCode := VK_RETURN;
+//    LCLSendKeyDownEvent(Result, KeyCode, 0, true, false);
   end;
 end;
 
@@ -1254,6 +1261,7 @@ begin
   DeleteControlFastAction.ShortCut     := D_DeleteControl_Fast;
   DeleteAllAction.ShortCut             := D_DeleteAllControl;
   ImportAction.ShortCut                := D_ImportData;
+  CutControlAction.ShortCut            := D_CutControl;
   CopyControlAction.ShortCut           := D_CopyControl;
   PasteControlAction.ShortCut          := D_PasteControl;
 
@@ -1319,9 +1327,13 @@ begin
         end;
       end;
     dsaPrior:
-      Idx := Max(0, Idx-1);
+      Idx := ifthen((Idx - 1) >= 0,                    // if
+                    Idx - 1,                           //then
+                    DataFile.ControlItems.Count - 1);  //else
     dsaNext:
-      Idx := Min(DataFile.ControlItems.Count - 1, Idx +1);
+      Idx := ifthen((Idx + 1) <= DataFile.ControlItems.Count - 1,  // if
+                    Idx + 1,                                       // then
+                    0);                                            // else       //Min(DataFile.ControlItems.Count - 1, Idx +1);
     dsaPgDn:
       begin
         CTop := FDesignScrollBox.VertScrollBar.Position;
@@ -1646,8 +1658,7 @@ end;
 
 procedure TRuntimeDesignFrame.EditControlActionExecute(Sender: TObject);
 begin
-  FPropertiesForm.Show;
-  FPropertiesForm.SetFocus;
+  ShowPropertiesForm(False);
 end;
 
 procedure TRuntimeDesignFrame.ExportToolButtonClick(Sender: TObject);
@@ -1878,12 +1889,14 @@ begin
   AForm.free;
 end;
 
-procedure TRuntimeDesignFrame.ShowPropertiesForm;
+procedure TRuntimeDesignFrame.ShowPropertiesForm(NewControl: boolean);
 begin
   if not Assigned(FPropertiesForm) then exit;
 
   FPropertiesForm.Show;
   FPropertiesForm.SetFocus;
+  if NewControl then
+    FPropertiesForm.SetFocusOnNew;
 end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;

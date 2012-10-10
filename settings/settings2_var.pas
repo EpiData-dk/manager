@@ -124,7 +124,7 @@ var
     SaveType:              0;     // epx format.
 
     // Visual design:
-    DefaultRightPosition:  200;
+    DefaultRightPosition:  400;
     DefaultLabelPosition:  20;
     SnapFields:            true;
     SnappingThresHold:     10;

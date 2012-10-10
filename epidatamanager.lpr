@@ -44,7 +44,8 @@ uses
   design_properties_form, design_designcontroller,
 design_properties_fieldframe, design_properties_sectionframe, 
 design_designmessenger, design_commander, design_properties_emptyframe, 
-design_designmover, design_designsizer, design_designbander;
+design_designmover, design_designsizer, design_designbander, 
+project_studyunit_form;
 
 {$R *.res}
 
