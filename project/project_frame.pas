@@ -171,16 +171,19 @@ begin
   PW2 := '';
   Header := 'Set Project Password';
 
-  PW := PasswordBox(Header, 'Enter New Project Password' + LineEnding + '(Press enter to clear):');
+  if not InputQuery(Header, 'Enter New Project Password' + LineEnding + '(Press enter to clear):', True, PW)
+  then
+    Exit;
   if PW <> '' then
-    PW2 := PasswordBox(Header, 'Re-enter Password:')
-  else
-    MessageDlg(Header, 'Password successfully reset!', mtInformation, [mbOK], 0);
+    PW2 := PasswordBox(Header, 'Re-enter Password:');
 
   if PW = PW2 then
   begin
     EpiDocument.PassWord := PW;
-    MessageDlg(Header, 'Password successfully set!', mtInformation, [mbOK], 0);
+    if PW <> '' then
+      MessageDlg(Header, 'Password successfully set!', mtInformation, [mbOK], 0)
+    else
+      MessageDlg(Header, 'Password successfully reset!', mtInformation, [mbOK], 0);
   end else
     MessageDlg(Header, 'The two passwords are not identical!' + LineEnding + 'Password NOT set.', mtError, [mbOK], 0);
 end;
@@ -193,7 +196,7 @@ begin
   ProjectSettings.ShowModal;
   ProjectSettings.Free;
 
-//  TDesignFrame(ActiveFrame).UpdateFrame;
+  TRuntimeDesignFrame(ActiveFrame).UpdateFrame;
   UpdateTimer;
 end;
 
