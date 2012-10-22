@@ -87,13 +87,13 @@ begin
     DeliverMessage(W, Msg);
     Exit;
   end;
-  result:=CallWindowProc(PrevWndProc, Ahwnd, uMsg, WParam, LParam);
+  result := CallWindowProc(PrevWndProc, Ahwnd, uMsg, WParam, LParam);
 end;
 
 procedure TDesignPanel.CreateWnd;
 begin
   inherited CreateWnd;
-  PrevWndProc := Windows.WNDPROC(SetWindowLong(Self.Handle, GWL_WNDPROC, PtrInt(@WndCallback)));
+  PrevWndProc := Windows.WNDPROC(SetWindowLongPtr(Self.Handle, GWL_WNDPROC, PtrInt(@WndCallback)));
 end;
 {$ENDIF}
 
