@@ -378,19 +378,22 @@ begin
     // Prepare screen...
     Screen.Cursor := crHourGlass;
     Application.ProcessMessages;
-    MainForm.BeginUpdatingForm;
+    try
+      MainForm.BeginUpdatingForm;
 
-    for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
-      PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
-        ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex = 1,
-        ImpStructurForm.FieldsRenameGrpBox.ItemIndex = 1,
-        ImpStructurForm.ImportDataIndex = i
-      );
+      for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
+        PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
+          ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex = 1,
+          ImpStructurForm.FieldsRenameGrpBox.ItemIndex = 1,
+          ImpStructurForm.ImportDataIndex = i
+        );
 
-    FDesignPanel.Surface.Select(FDesignPanel);
-    FDesignPanel.Surface.UpdateDesigner;
+      FDesignPanel.Surface.Select(FDesignPanel);
+      FDesignPanel.Surface.UpdateDesigner;
+    finally
+      MainForm.EndUpdatingForm;
+    end;
   finally
-    MainForm.EndUpdatingForm;
     Screen.Cursor := crDefault;
     Application.ProcessMessages;
 
@@ -805,6 +808,9 @@ var
        (F.ValueLabelSet.ObjectData <> 0)
     then
       F.ValueLabelSet := TEpiValueLabelSet(F.ValueLabelSet.ObjectData);
+
+    // Need to correct ShowValueLabel setting to match that of the setup.
+    F.ShowValueLabel := ManagerSettings.ShowValuelabelText;
 
     NewDesignField(Point(F.Left, F.Top + P.Y), F, AParent);
   end;

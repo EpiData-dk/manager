@@ -223,7 +223,7 @@ implementation
 uses
   epimiscutils, typinfo, epiranges, epiconvertutils,
   epistringutils, LazUTF8, field_valuelabelseditor_form,
-  valuelabelseditor_form2;
+  valuelabelseditor_form2, math;
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';
@@ -295,6 +295,12 @@ procedure TFieldPropertiesFrame.AddValueLabels;
 var
   VL: TEpiValueLabelSet;
   i: Integer;
+  DoAdd: Boolean;
+  IntL: Integer;
+  DecL: Integer;
+  S: String;
+  l: SizeInt;
+  j: Integer;
 begin
   if not ValueLabelComboBox.Visible then exit;
 
@@ -304,9 +310,48 @@ begin
   begin
     VL := ValueLabels[i];
 
-    // Only support same types.
+//    VL := FValueLabelSets[i];
+    case VL.LabelType of
+      ftInteger:
+        begin
+          DoAdd := Field.FieldType in [ftInteger, ftFloat];
+          if Field.FieldType = ftFloat then
+            DoAdd := DoAdd and (VL.MaxValueLength <= StrToIntDef(LengthEdit.Text, (Field.Length - Field.Decimals - 1)))
+          else
+            DoAdd := DoAdd and (VL.MaxValueLength <= StrToIntDef(LengthEdit.Text, Field.Length));
+        end;
+      ftFloat:
+        begin
+          DoAdd := Field.FieldType = ftFloat;
+
+          if DoAdd then
+          begin
+            IntL := 0;
+            DecL := 0;
+            for j := 0 to VL.Count - 1 do
+            begin
+              S := VL[j].ValueAsString;
+              l := Pos(DecimalSeparator, S);
+              if l = 0 then
+                IntL := Length(S)
+              else
+                IntL := Max(IntL, l - 1);
+              DecL := Max(DecL, Length(S) - (IntL+1));
+            end;
+          end;
+          DoAdd := DoAdd and
+            (IntL <= StrToIntDef(LengthEdit.Text, Field.Length - Field.Decimals - 1)) and
+            (DecL <= StrToIntDef(DecimalsEdit.Text, Field.Decimals));
+        end;
+      ftString:  DoAdd := Field.FieldType in [ftString, ftUpperString];
+    end;
+
+    if DoAdd then
+      ValueLabelComboBox.AddItem(VL.Name, VL);
+
+{    // Only support same types.
     if VL.LabelType <> Field.FieldType then continue;
-    ValueLabelComboBox.Items.AddObject(VL.Name, VL);
+    ValueLabelComboBox.Items.AddObject(VL.Name, VL);}
   end;
   FinishCombo(ValueLabelComboBox, FNoneObject);
 end;

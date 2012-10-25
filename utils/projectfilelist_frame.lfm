@@ -26,40 +26,7 @@ object ProjectFileListFrame: TProjectFileListFrame
     Top = 0
     Width = 764
     Align = alClient
-    ColCount = 9
-    Columns = <    
-      item
-        ReadOnly = True
-        Title.Caption = 'Filename'
-      end    
-      item
-        ButtonStyle = cbsCheckboxColumn
-        Title.Caption = 'Include'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Created'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Last edited'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Name'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Sections'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Fields'
-      end    
-      item
-        ReadOnly = True
-        Title.Caption = 'Records'
-      end>
+    ColCount = 1
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goTabs, goSmoothScroll, goFixedRowNumbering]
     RowCount = 1
     TabOrder = 1

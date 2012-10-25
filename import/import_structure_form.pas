@@ -302,14 +302,20 @@ begin
 
   if ImportData then
   begin
+    Caption := 'Add structure/Import Data';
+
     FOldCheckBoxToggle := FProjectList.StructureGrid.OnCheckboxToggled;
     FProjectList.StructureGrid.OnCheckboxToggled := @ImportDataCheckBoxToogle;
 
     FOldColRowMoved := FProjectList.StructureGrid.OnColRowMoved;
     FProjectList.StructureGrid.OnColRowMoved := @ImportDataColRowMoved;
     FImportDataSelectedIndex := -1;
-  end else
-    FDataCol.Visible := false;
+  end else begin
+    Caption := 'Add structure';
+
+    FDataCol.ReadOnly := true;
+    FDataCol.Color := clSilver;
+  end;
 end;
 
 procedure TImportStructureForm.ImportDataColRowMoved(Sender: TObject;
@@ -382,15 +388,17 @@ begin
   FProjectList := TProjectFileListFrame.Create(Self);
   with FProjectList do
   begin
-    FProjectList.OnBeforeImportFile := @BeforeLoad;
-    FProjectList.OnAfterImportFile  := @AfterLoad;
+    OnBeforeImportFile := @BeforeLoad;
+    OnAfterImportFile  := @AfterLoad;
 
-    FDataCol := StructureGrid.Columns.Add;
+    StructureGrid.Columns[1].Title.Caption := 'Structure';
+
+    FDataCol := TGridColumn(StructureGrid.Columns.Insert(2));
     FDataCol.Title.Caption := 'Data';
     FDataCol.ButtonStyle := cbsCheckboxColumn;
 
-    FProjectList.Align := alClient;
-    FProjectList.Parent := Self;
+    Align := alClient;
+    Parent := Self;
   end;
 
   if TheOwner is TScrollBox then

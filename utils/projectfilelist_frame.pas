@@ -47,7 +47,26 @@ type
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
     property    SelectedList: TStringList read GetSelectedList;
     property    DocList: TStringList read FDocList;
-  end; 
+  private
+    { columns }
+    FCreatedCol: TGridColumn;
+    FFieldsCol: TGridColumn;
+    FFileNameCol: TGridColumn;
+    FIncludeCol: TGridColumn;
+    FLastEditCol: TGridColumn;
+    FNameCol: TGridColumn;
+    FRecordsCol: TGridColumn;
+    FSectionsCol: TGridColumn;
+  public
+    property FileNameCol: TGridColumn read FFileNameCol;
+    property IncludeCol:  TGridColumn read FIncludeCol;
+    property CreatedCol:  TGridColumn read FCreatedCol;
+    property LastEditCol: TGridColumn read FLastEditCol;
+    property NameCol:     TGridColumn read FNameCol;
+    property SectionsCol: TGridColumn read FSectionsCol;
+    property FieldsCol:   TGridColumn read FFieldsCol;
+    property RecordsCol:  TGridColumn read FRecordsCol;
+  end;
 
 implementation
 
@@ -77,22 +96,23 @@ begin
   begin
     Idx := RowCount;
     RowCount := RowCount + 1;
-    Cells[1, Idx] := ExtractFileName(FileName);                           // Filename column.
-    Cells[2, Idx] := '1';                                                 // Include row.
+
+    Cells[FileNameCol.Index + 1, Idx] := ExtractFileName(FileName);                           // Filename column.
+    Cells[IncludeCol.Index + 1, Idx]  := '1';                                                 // Include row.
     if (ext = '.epx') or (ext ='.epz') then
     begin
-      Cells[3, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.Created);                      // Created
-      Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.ModifiedDate);                 // Edited
+      Cells[CreatedCol.Index + 1, Idx]  := DateToStr(Doc.Study.Created); //FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.Created);                      // Created
+      Cells[LastEditCol.Index + 1, Idx] := DateToStr(Doc.Study.ModifiedDate); //FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.ModifiedDate);                 // Edited
     end else begin
-      Cells[3, Idx] := 'N/A';                                             // Created
-      Cells[4, Idx] := FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
+      Cells[CreatedCol.Index + 1, Idx]  := 'N/A';                                                                          // Created
+      Cells[LastEditCol.Index + 1, Idx] := DateToStr(FileDateToDateTime(FileAgeUTF8(FileName)));// FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
     end;
     with Doc.DataFiles[0] do
     begin
-      Cells[5, Idx] := Caption.Text;                                         // Info
-      Cells[6, Idx] := IntToStr(Sections.Count);                          // Sections
-      Cells[7, Idx] := IntToStr(Fields.Count);                            // Fields
-      Cells[8, Idx] := IntToStr(Size);
+      Cells[NameCol.Index + 1, Idx]     := Caption.Text;                                      // Info
+      Cells[SectionsCol.Index + 1, Idx] := IntToStr(Sections.Count);                          // Sections
+      Cells[FieldsCol.Index + 1, Idx]   := IntToStr(Fields.Count);                            // Fields
+      Cells[RecordsCol.Index + 1, Idx]  := IntToStr(Size);                                    // Records
     end;
   end;
   FDocList.AddObject(FileName, Doc);
@@ -163,7 +183,7 @@ begin
   Result := TStringList.Create;
 
   for i := 1 to StructureGrid.RowCount - 1 do
-    if StructureGrid.Cells[2, i] <> '0' then
+    if StructureGrid.Cells[IncludeCol.Index + 1, i] <> '0' then
       Result.AddObject(FDocList[i - 1], FDocList.Objects[i - 1]);
 end;
 
@@ -222,6 +242,39 @@ constructor TProjectFileListFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FDocList := TStringList.Create;
+
+  // Preserve ADD order!
+  FFileNameCol := StructureGrid.Columns.Add;
+  FFileNameCol.Title.Caption := 'Filename';
+  FFileNameCol.ReadOnly := true;
+
+  FIncludeCol := StructureGrid.Columns.Add;
+  FIncludeCol.Title.Caption := 'Include';
+  FIncludeCol.ButtonStyle := cbsCheckboxColumn;
+
+  FFieldsCol := StructureGrid.Columns.Add;
+  FFieldsCol.Title.Caption := 'Fields';
+  FFieldsCol.ReadOnly := true;
+
+  FSectionsCol := StructureGrid.Columns.Add;
+  FSectionsCol.Title.Caption := 'Sections';
+  FSectionsCol.ReadOnly := true;
+
+  FRecordsCol := StructureGrid.Columns.Add;
+  FRecordsCol.Title.Caption := 'Records';
+  FRecordsCol.ReadOnly := true;
+
+  FCreatedCol := StructureGrid.Columns.Add;
+  FCreatedCol.Title.Caption := 'Created';
+  FCreatedCol.ReadOnly := true;
+
+  FLastEditCol := StructureGrid.Columns.Add;
+  FLastEditCol.Title.Caption := 'Last edited';
+  FLastEditCol.ReadOnly := true;
+
+  FNameCol := StructureGrid.Columns.Add;
+  FNameCol.Title.Caption := 'Project Title';
+  FNameCol.ReadOnly := true;
 end;
 
 destructor TProjectFileListFrame.Destroy;
