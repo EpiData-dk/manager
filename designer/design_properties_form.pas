@@ -44,7 +44,7 @@ implementation
 uses
   Buttons, ExtCtrls, Controls,
   design_properties_baseframe, Graphics, design_properties_emptyframe,
-  settings2, settings2_var;
+  settings2, settings2_var, main;
 
 { TPropertiesForm }
 
@@ -57,8 +57,8 @@ end;
 procedure TPropertiesForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
   );
 begin
-  if Assigned(FFrame) then
-    CanClose := (FFrame as IDesignPropertiesFrame).ApplyChanges;
+//  if Assigned(FFrame) then
+  CanClose := ValidateControls;// (FFrame as IDesignPropertiesFrame).ApplyChanges;
 
   if CanClose and
      ManagerSettings.SaveWindowPositions
@@ -74,7 +74,8 @@ end;
 
 procedure TPropertiesForm.ApplyClick(Sender: TObject);
 begin
-  ValidateControls;
+  if ValidateControls then
+    MainForm.SetFocus;
 end;
 
 procedure TPropertiesForm.CancelClick(Sender: TObject);
@@ -213,6 +214,8 @@ begin
   OnDeactivate := @FormDeactivate;
   OnCloseQuery := @FormCloseQuery;
 
+  DefaultControl := ApplyBtn;
+  KeyPreview := true;
   EndFormUpdate;
 end;
 

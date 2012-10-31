@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, ExtCtrls,
   Buttons, JvDesignSurface, design_types, epidatafilestypes,
-  epicustombase, epidatafiles, epivaluelabels, LCLType,
+  epicustombase, epidatafiles, epivaluelabels, LCLType, ActnList,
   design_properties_baseframe;
 
 type
@@ -15,6 +15,8 @@ type
   { TFieldPropertiesFrame }
 
   TFieldPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
+    AddValueLabelPlusAction: TAction;
+    ActionList1: TActionList;
     AddEditValueLabelBtn: TButton;
     AddJumpBtn: TSpeedButton;
     AsDaysRadio: TRadioButton;
@@ -135,6 +137,7 @@ type
     YearCombo: TComboBox;
     procedure AddEditValueLabelBtnClick(Sender: TObject);
     procedure AddJumpBtnClick(Sender: TObject);
+    procedure AddValueLabelPlusActionExecute(Sender: TObject);
     procedure CalcRadioChange(Sender: TObject);
     procedure ManageValueLabelsBtnClick(Sender: TObject);
     procedure RemoveJumpBtnClick(Sender: TObject);
@@ -787,6 +790,11 @@ begin
      (ComboIgnoreSelected(UseJumpsCombo))
   then
     UseJumpsCombo.ItemIndex := UseJumpsCombo.Items.IndexOfObject(FNoneObject);
+end;
+
+procedure TFieldPropertiesFrame.AddValueLabelPlusActionExecute(Sender: TObject);
+begin
+  AddEditValueLabelBtn.Click;
 end;
 
 procedure TFieldPropertiesFrame.CalcRadioChange(Sender: TObject);

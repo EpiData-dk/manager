@@ -4,8 +4,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
   ClientHeight = 609
   ClientWidth = 572
   TabOrder = 0
-  DesignLeft = 663
-  DesignTop = 151
+  DesignLeft = 635
+  DesignTop = 265
   object FieldPageControl: TPageControl[0]
     AnchorSideLeft.Control = Owner
     Left = 0
@@ -329,6 +329,7 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideBottom.Side = asrBottom
           Left = 441
           Height = 27
+          Hint = 'Edit Valuelabel'
           Top = 12
           Width = 23
           Anchors = [akTop, akRight]
@@ -336,6 +337,8 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
           BorderSpacing.Right = 5
           Caption = '+'
           OnClick = AddEditValueLabelBtnClick
+          ParentShowHint = False
+          ShowHint = True
           TabOrder = 1
         end
         object ManageValueLabelsBtn: TButton
@@ -1781,6 +1784,15 @@ inherited FieldPropertiesFrame: TFieldPropertiesFrame
         Caption = 'Notes with definitions or help to show during entry:'
         ParentColor = False
       end
+    end
+  end
+  object ActionList1: TActionList[1]
+    left = 206
+    top = 451
+    object AddValueLabelPlusAction: TAction
+      Caption = 'AddValueLabelPlusAction'
+      OnExecute = AddValueLabelPlusActionExecute
+      ShortCut = 107
     end
   end
 end

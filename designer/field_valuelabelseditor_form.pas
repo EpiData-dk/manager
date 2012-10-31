@@ -103,11 +103,11 @@ end;
 
 procedure TFieldValueLabelEditor.FormShow(Sender: TObject);
 begin
-  if FGridFrame.ValueLabelSet.Name <> '' then // assume existing VL set.
+  if FGridFrame.ValueLabelSet.Count > 0 then // assume existing VL set.
   begin
     ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
     FGridFrame.VLG.SetFocus;
-    CancelBtn.Enabled := false
+    CancelBtn.Enabled := false;
   end else begin
     FGridFrame.NewLineBtn.Click;
     ValueLabelNameEdit.SetFocus;

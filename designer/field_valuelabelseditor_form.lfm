@@ -10,7 +10,7 @@ object FieldValueLabelEditor: TFieldValueLabelEditor
   OnCloseQuery = FormCloseQuery
   OnKeyDown = FormKeyDown
   OnShow = FormShow
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object Panel3: TPanel
     Left = 0
     Height = 37
@@ -27,9 +27,9 @@ object FieldValueLabelEditor: TFieldValueLabelEditor
       AnchorSideBottom.Control = ValueLabelNameEdit
       AnchorSideBottom.Side = asrBottom
       Left = 11
-      Height = 16
-      Top = 10
-      Width = 113
+      Height = 15
+      Top = 11
+      Width = 112
       BorderSpacing.Left = 10
       Caption = 'Valuelabel Name:'
       ParentColor = False
@@ -41,10 +41,10 @@ object FieldValueLabelEditor: TFieldValueLabelEditor
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel3
       AnchorSideRight.Side = asrBottom
-      Left = 129
+      Left = 128
       Height = 25
       Top = 6
-      Width = 436
+      Width = 437
       Anchors = [akTop, akLeft, akRight]
       AutoSelect = False
       BorderSpacing.Left = 5

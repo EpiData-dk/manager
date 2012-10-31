@@ -437,6 +437,7 @@
         <Filename Value="designer/field_valuelabelseditor_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FieldValueLabelEditor"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="field_valuelabelseditor_form"/>
       </Unit37>
