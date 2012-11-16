@@ -1,7 +1,7 @@
 object ValidateDoubleEntryForm: TValidateDoubleEntryForm
-  Left = 834
+  Left = 754
   Height = 629
-  Top = 249
+  Top = 257
   Width = 648
   Caption = 'ValidateDoubleEntryForm'
   ClientHeight = 629
@@ -84,8 +84,8 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Control = GroupBox1
         AnchorSideTop.Control = GroupBox1
         Left = 15
-        Height = 16
-        Top = 6
+        Height = 15
+        Top = 7
         Width = 62
         Anchors = [akLeft]
         BorderSpacing.Left = 15
@@ -98,9 +98,9 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Control = Label1
         AnchorSideTop.Side = asrBottom
         Left = 15
-        Height = 16
-        Top = 27
-        Width = 79
+        Height = 15
+        Top = 28
+        Width = 78
         Anchors = [akLeft]
         BorderSpacing.Top = 10
         Caption = 'Project Title:'
@@ -111,8 +111,8 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Control = Label2
         AnchorSideTop.Side = asrBottom
         Left = 15
-        Height = 16
-        Top = 47
+        Height = 15
+        Top = 48
         Width = 55
         Anchors = [akLeft]
         BorderSpacing.Top = 10
@@ -124,9 +124,9 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Label1
         AnchorSideTop.Side = asrCenter
-        Left = 144
-        Height = 16
-        Top = 6
+        Left = 143
+        Height = 15
+        Top = 7
         Width = 60
         BorderSpacing.Left = 50
         Caption = 'FileName'
@@ -136,10 +136,10 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Control = FileNameLabel1
         AnchorSideTop.Control = Label2
         AnchorSideTop.Side = asrCenter
-        Left = 144
-        Height = 16
-        Top = 27
-        Width = 75
+        Left = 143
+        Height = 15
+        Top = 28
+        Width = 74
         Caption = 'Project Title'
         ParentColor = False
       end
@@ -147,9 +147,9 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Control = FileNameLabel1
         AnchorSideTop.Control = Label3
         AnchorSideTop.Side = asrCenter
-        Left = 144
-        Height = 16
-        Top = 47
+        Left = 143
+        Height = 15
+        Top = 48
         Width = 86
         Caption = 'Record Count'
         ParentColor = False
@@ -177,8 +177,8 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Control = GroupBox2
         AnchorSideTop.Control = GroupBox2
         Left = 15
-        Height = 16
-        Top = 6
+        Height = 15
+        Top = 7
         Width = 62
         Anchors = [akLeft]
         BorderSpacing.Left = 15
@@ -191,9 +191,9 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Control = Label4
         AnchorSideTop.Side = asrBottom
         Left = 15
-        Height = 16
-        Top = 27
-        Width = 79
+        Height = 15
+        Top = 28
+        Width = 78
         Anchors = [akLeft]
         BorderSpacing.Top = 10
         Caption = 'Project Title:'
@@ -204,8 +204,8 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Control = Label5
         AnchorSideTop.Side = asrBottom
         Left = 15
-        Height = 16
-        Top = 47
+        Height = 15
+        Top = 48
         Width = 55
         Anchors = [akLeft]
         BorderSpacing.Top = 10
@@ -217,9 +217,9 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = Label4
         AnchorSideTop.Side = asrCenter
-        Left = 144
-        Height = 16
-        Top = 6
+        Left = 143
+        Height = 15
+        Top = 7
         Width = 60
         BorderSpacing.Left = 50
         Caption = 'FileName'
@@ -229,10 +229,10 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Control = FileNameLabel2
         AnchorSideTop.Control = Label5
         AnchorSideTop.Side = asrCenter
-        Left = 144
-        Height = 16
-        Top = 27
-        Width = 75
+        Left = 143
+        Height = 15
+        Top = 28
+        Width = 74
         Caption = 'Project Title'
         ParentColor = False
       end
@@ -240,9 +240,9 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Control = FileNameLabel2
         AnchorSideTop.Control = Label6
         AnchorSideTop.Side = asrCenter
-        Left = 144
-        Height = 16
-        Top = 47
+        Left = 143
+        Height = 15
+        Top = 48
         Width = 86
         Caption = 'Record Count'
         ParentColor = False
@@ -317,7 +317,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Side = asrBottom
         Left = 5
         Height = 27
-        Top = 26
+        Top = 25
         Width = 46
         Action = KFNoneAction
         AutoSize = True
@@ -334,7 +334,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Side = asrCenter
         Left = 56
         Height = 27
-        Top = 26
+        Top = 25
         Width = 46
         Action = KFIndexAction
         AutoSize = True
@@ -350,7 +350,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Side = asrCenter
         Left = 107
         Height = 27
-        Top = 26
+        Top = 25
         Width = 68
         Action = KFAutoIncAction
         AutoSize = True
@@ -368,8 +368,8 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideBottom.Control = GroupBox3
         AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 161
-        Top = 58
+        Height = 162
+        Top = 57
         Width = 297
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 5
@@ -384,12 +384,12 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Control = GroupBox3
         AnchorSideTop.Control = GroupBox3
         Left = 5
-        Height = 16
+        Height = 15
         Top = 5
-        Width = 173
+        Width = 202
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
-        Caption = 'Key Fields (sorting of data):'
+        Caption = 'Fields used to combine records:'
         ParentColor = False
       end
     end
@@ -418,8 +418,8 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideBottom.Control = GroupBox4
         AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 161
-        Top = 58
+        Height = 162
+        Top = 57
         Width = 296
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 5
@@ -436,7 +436,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Side = asrBottom
         Left = 5
         Height = 27
-        Top = 26
+        Top = 25
         Width = 112
         Action = CFAutoTimeDateAction
         AutoSize = True
@@ -453,7 +453,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Side = asrCenter
         Left = 122
         Height = 27
-        Top = 26
+        Top = 25
         Width = 68
         Action = CFAutoIncAction
         AutoSize = True
@@ -469,7 +469,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Side = asrCenter
         Left = 195
         Height = 27
-        Top = 26
+        Top = 25
         Width = 37
         Action = CFTextAction
         AutoSize = True
@@ -482,9 +482,9 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideLeft.Control = GroupBox4
         AnchorSideTop.Control = GroupBox4
         Left = 5
-        Height = 16
+        Height = 15
         Top = 5
-        Width = 215
+        Width = 214
         BorderSpacing.Left = 5
         BorderSpacing.Top = 5
         Caption = 'Data comparison based on fields:'
@@ -497,7 +497,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         AnchorSideTop.Side = asrCenter
         Left = 237
         Height = 27
-        Top = 26
+        Top = 25
         Width = 27
         Action = CFAllAction
         AutoSize = True

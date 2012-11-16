@@ -572,7 +572,11 @@ begin
   Doc := ToolsCheckOpenFile(Fn, Local);
   ValidateDoubleEntry(Doc, Fn);
   if Local then
+  begin
+    if Doc.Modified then
+      Doc.SaveToFile(Fn);
     Doc.Free;
+  end;
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);

@@ -47,7 +47,7 @@ begin
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
   D_DeleteControl_Fast         := KeyToShortCut(VK_BACK, [ssMeta]);
-  D_ImportData                 := KeyToShortCut(VK_UNKNOWN, []);
+  D_ImportData                 := KeyToShortCut(VK_I, [ssMeta]);
   D_MoveTop                    := KeyToShortCut(VK_UP, [ssMeta]);
   D_MoveSideUp                 := KeyToShortCut(VK_UP, [ssAlt]);
   D_MoveControlUp              := KeyToShortCut(VK_UP, []);
@@ -60,8 +60,8 @@ begin
   D_CopyControl                := KeyToShortCut(VK_C, [ssMeta]);
   D_PasteControl               := KeyToShortCut(VK_V, [ssMeta]);
   D_ViewDataSet                := KeyToShortCut(VK_UNKNOWN, []);
-  D_Undo                       := KeyToShortCut(VK_Z, [ssCtrl]);
-  D_Redo                       := KeyToShortCut(VK_Z, [ssCtrl, ssShift]);
+  D_Undo                       := KeyToShortCut(VK_Z, [ssMeta]);
+  D_Redo                       := KeyToShortCut(VK_Z, [ssMeta, ssShift]);
 
   // ValueLabel Editor
   // - tree actions

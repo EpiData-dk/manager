@@ -61,7 +61,7 @@ begin
   // TODO : Settings can be loaded from commandline?
   if LoadSettingsFromIni(GetAppConfigFileUTF8(false)) then exit;
 
-  // Todo - this is not optimal on Non-windows OS's. Do some checks for writeability first.
+  // TODO : This is not optimal on Non-windows OS's. Do some checks for writeability first.
   if LoadSettingsFromIni(ExtractFilePath(Application.ExeName) + IniName) then exit;
 
   if not DirectoryExistsUTF8(ExtractFilePath(GetAppConfigFileUTF8(false))) then

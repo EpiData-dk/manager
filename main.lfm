@@ -40,11 +40,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 105
+      Left = 104
       Height = 27
       Hint = 'Open existing project'
       Top = 7
-      Width = 94
+      Width = 93
       Action = OpenProjectAction
       AutoSize = True
       BorderSpacing.Left = 10
@@ -57,7 +57,7 @@ object MainForm: TMainForm
       Height = 27
       Hint = 'New EpiData Project'
       Top = 7
-      Width = 87
+      Width = 86
       Action = NewProjectAction
       AutoSize = True
       ParentShowHint = False
@@ -69,11 +69,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 209
+      Left = 207
       Height = 27
       Hint = 'Define/Change User names and passwords'
       Top = 7
-      Width = 141
+      Width = 140
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'User Access Control'
@@ -88,7 +88,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 360
+      Left = 357
       Height = 27
       Hint = 'Good Clinical Practice guideline tools'
       Top = 7

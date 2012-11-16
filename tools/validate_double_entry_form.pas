@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  CheckLst, ExtCtrls, Buttons, ActnList, ComCtrls, epidocument;
+  CheckLst, ExtCtrls, Buttons, ActnList, ComCtrls, epidocument, epicustombase;
 
 type
 
@@ -73,6 +73,9 @@ type
     FCmpAutoTimeDateSelected: boolean;
     FCmpAutoIncSelected: boolean;
     FCmpTextSelected: boolean;
+    procedure AddFieldHook(Sender: TObject; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+    procedure ShowMainEmpty(Data: PtrInt);
     procedure UpdateKeyFields;
     procedure UpdateCompareFields;
     procedure UpdateMainDocInfo(Const Fn: string);
@@ -80,6 +83,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; MainDoc: TEpiDocument; Const FileName: string);
+    destructor Destroy; override;
   end;
 
 procedure ValidateDoubleEntry(Doc: TEpiDocument; Const Filename: string);
@@ -91,7 +95,8 @@ implementation
 uses
   epidatafiles, epidatafilestypes, epimiscutils, settings2_var,
   epitools_val_dbl_entry, viewer_form, report_double_entry_validation,
-  main, epireport_generator_txt;
+  main, epireport_generator_txt, manager_messages, epiglobals,
+  LCLIntf, LCLType;
 
 procedure ValidateDoubleEntry(Doc: TEpiDocument; const Filename: string);
 var
@@ -129,6 +134,18 @@ begin
   finally
     Dlg.Free;
   end;
+end;
+
+procedure TValidateDoubleEntryForm.ShowMainEmpty(Data: PtrInt);
+var
+  S: String;
+begin
+  S := 'Main Project File ';
+  if Data = 1 then
+    S := 'Dublicate Entry File ';
+
+  MessageDlg('Warning', S + 'contains NO DATA',
+             mtWarning, [mbOK], 0, mbOK);
 end;
 
 procedure TValidateDoubleEntryForm.KFNoneActionExecute(Sender: TObject);
@@ -236,6 +253,31 @@ begin
   CmpFCheckList.CheckAll(cbChecked, false, false);
 end;
 
+procedure TValidateDoubleEntryForm.AddFieldHook(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if (EventGroup <> eegCustomBase) then exit;
+
+  case TEpiCustomChangeEventType(EventType) of
+    ecceDestroy: ;
+    ecceUpdate: ;
+    ecceName:
+      begin
+        if TEpiField(Sender).Name = EpiDoubleEntryFieldName then
+          PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Sender), 0);
+        TEpiField(Sender).UnRegisterOnChangeHook(@AddFieldHook);
+      end;
+    ecceAddItem:
+      TEpiField(Data).RegisterOnChangeHook(@AddFieldHook, true);
+    ecceDelItem:
+      TEpiField(Data).UnRegisterOnChangeHook(@AddFieldHook);
+    ecceSetItem: ;
+    ecceSetTop: ;
+    ecceSetLeft: ;
+    ecceText: ;
+  end;
+end;
+
 procedure TValidateDoubleEntryForm.KFAutoIncActionUpdate(Sender: TObject);
 var
   Res: Boolean;
@@ -316,18 +358,30 @@ begin
     ProjectTitle1.Caption := FMainDoc.Study.Title.Text;
     RecordCount1.Caption := IntToSTr(FMainDoc.DataFiles[0].Size);
   end;
+
+  if FMainDoc.DataFiles[0].Size = 0 then
+    Application.QueueAsyncCall(@ShowMainEmpty, 0);
 end;
 
 procedure TValidateDoubleEntryForm.UpdateDupDocInfo(const Fn: string);
 begin
   if FN <> '' then
-    FileNameLabel2.Caption := Fn
-  else
-    FileNameLabel2.Caption := '[none]';
+  begin
+    FileNameLabel2.Font.Color := clDefault;
+    FileNameLabel2.Caption := Fn;
+    OkBtn.Enabled := True;
+  end else begin
+    FileNameLabel2.Font.Color := clRed;
+    FileNameLabel2.Caption := '[Please open file. Click folder icon on right ->]';
+    OkBtn.Enabled := False;
+  end;
+
   if Assigned(FDupDoc) then
   begin
     ProjectTitle2.Caption := FDupDoc.Study.Title.Text;
     RecordCount2.Caption := IntToSTr(FDupDoc.DataFiles[0].Size);
+    if FDupDoc.DataFiles[0].Size = 0 then
+      Application.QueueAsyncCall(@ShowMainEmpty, 1);
   end else begin
     ProjectTitle2.Caption := '';
     RecordCount2.Caption := '';
@@ -345,6 +399,14 @@ begin
 
   UpdateMainDocInfo(FileName);
   UpdateDupDocInfo('');
+
+  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
+end;
+
+destructor TValidateDoubleEntryForm.Destroy;
+begin
+  FMainDoc.DataFiles[0].Fields.UnRegisterOnChangeHook(@AddFieldHook);
+  inherited Destroy;
 end;
 
 end.

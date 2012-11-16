@@ -326,10 +326,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object RecordsLabel: TLabel
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 58
+        Left = 59
         Height = 15
         Top = 4
-        Width = 84
+        Width = 85
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         ParentColor = False
@@ -338,7 +338,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 54
+        Width = 55
         Caption = 'Records:'
         ParentColor = False
       end
@@ -361,10 +361,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object FieldsLabel: TLabel
         AnchorSideLeft.Control = FieldsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 43
+        Left = 44
         Height = 15
         Top = 4
-        Width = 69
+        Width = 70
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         ParentColor = False
@@ -373,7 +373,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 39
+        Width = 40
         Caption = 'Fields:'
         ParentColor = False
       end
@@ -401,7 +401,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 101
+        Width = 102
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         ParentColor = False
@@ -430,7 +430,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 90
+        Width = 91
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         ParentColor = False
@@ -546,7 +546,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 56
+        Width = 57
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         ParentColor = False
