@@ -60,6 +60,8 @@ var
 begin
   Stream.Read(CopyField, SizeOf(Pointer));
   FField := TEpiField(CopyField.Clone(nil));
+  // Manually add ValueLabelSet, this is not done in cloning.
+  FField.ValueLabelSet := CopyField.ValueLabelSet;
 end;
 
 procedure TDesignField.WriteField(Stream: TStream);
@@ -67,6 +69,8 @@ var
   CopyField: TEpiField;
 begin
   CopyField := TEpiField(FField.Clone(nil));
+  // Manually add ValueLabelSet, this is not done in cloning.
+  CopyField.ValueLabelSet := FField.ValueLabelSet;
   GlobalCopyList.Add(CopyField);
   Stream.Write(CopyField, Sizeof(Pointer));
 end;
