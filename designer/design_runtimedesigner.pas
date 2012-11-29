@@ -217,6 +217,7 @@ type
     procedure SectionsChangeEvent(Sender: TObject; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     function ClipBoardHasText: boolean;
+    function ClipBoardHasComponent: boolean;
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
     { Designer Panel/ScrollBox }
@@ -614,6 +615,30 @@ var
   end;
 
 begin
+  // Pasting components have precedence over text-pasting.
+  if ClipBoardHasComponent then
+  begin
+    with FDesignPanel.Surface do
+      begin
+        MainForm.BeginUpdatingForm;
+        P := SelectedContainer.ScreenToClient(FPopUpPoint);
+        PasteComponents;
+
+        O := TopLeftSelectionPoint;
+        if (FPopUpPoint.X <> -1) or (FPopUpPoint.Y <> -1) then
+          P := Point(P.X - O.X, P.Y - O.Y)
+        else
+          P := Point(0, 0);
+        for i := 0 to Count - 1 do
+          begin
+            R := Selection[i].BoundsRect;
+            OffsetRect(R, P.X, P.Y);
+            Selection[i].BoundsRect := R;
+          end;
+
+        MainForm.EndUpdatingForm;
+      end;
+  end else
   if ClipBoardHasText then
   begin
     case ManagerSettings.PasteSpecialType of
@@ -622,28 +647,7 @@ begin
       2: PasteAsField(ftFloat);
       3: PasteAsField(ftString);
     end;
-  end
-  else
-  with FDesignPanel.Surface do
-    begin
-      MainForm.BeginUpdatingForm;
-      P := SelectedContainer.ScreenToClient(FPopUpPoint);
-      PasteComponents;
-
-      O := TopLeftSelectionPoint;
-      if (FPopUpPoint.X <> -1) or (FPopUpPoint.Y <> -1) then
-        P := Point(P.X - O.X, P.Y - O.Y)
-      else
-        P := Point(0, 0);
-      for i := 0 to Count - 1 do
-        begin
-          R := Selection[i].BoundsRect;
-          OffsetRect(R, P.X, P.Y);
-          Selection[i].BoundsRect := R;
-        end;
-
-      MainForm.EndUpdatingForm;
-    end;
+  end;
 
   FPopUpPoint := Point(-1, -1);
 end;
@@ -745,6 +749,13 @@ function TRuntimeDesignFrame.ClipBoardHasText: boolean;
 begin
   FCheckingClipBoard := true;
   result := Clipboard.HasFormat(CF_Text);
+  FCheckingClipBoard := false;
+end;
+
+function TRuntimeDesignFrame.ClipBoardHasComponent: boolean;
+begin
+  FCheckingClipBoard := true;
+  result := Clipboard.HasFormat(CF_Component);
   FCheckingClipBoard := false;
 end;
 
