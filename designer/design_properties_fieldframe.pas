@@ -1533,7 +1533,7 @@ begin
   // Range
   if FromEdit.Modified or ToEdit.Modified then
   begin
-    for i := 0 to FieldCount do
+    for i := 0 to FieldCount -1 do
     begin
       if Assigned(Fields[i].Ranges) then
         R := Fields[i].Ranges[0]
