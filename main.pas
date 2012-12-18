@@ -501,7 +501,7 @@ end;
 
 procedure TMainForm.ShortCutKeysMenuItemClick(Sender: TObject);
 begin
-  OpenURL('http://www.epidata.org/dokuwiki/doku.php/documentation:program_keys');
+  OpenURL('http://epidata.info/dokuwiki/doku.php?id=documentation:keyboard_shortcuts');
 end;
 
 procedure TMainForm.ShortIntroMenuItemClick(Sender: TObject);
@@ -1021,7 +1021,7 @@ end;
 
 procedure TMainForm.EndUpdatingForm;
 begin
-  EndFormUpdate;
+    EndFormUpdate;
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);
