@@ -204,7 +204,7 @@ uses
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   epitools_integritycheck, datasetviewer_frame, prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  report_double_entry_validation;
+  report_double_entry_validation, managerprocs;
 
 { TMainForm }
 
@@ -820,15 +820,9 @@ begin
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     if not Dlg.Execute then exit;
 
-    St := TMemoryStream.Create;
-    if ExtractFileExt(UTF8ToSys(Dlg.FileName)) = '.epz' then
-      ZipFileToStream(St, Dlg.FileName)
-    else
-      St.LoadFromFile(Dlg.FileName);
 
-    St.Position := 0;
-    Result := TEpiDocument.Create(ManagerSettings.StudyLang);
-    Result.LoadFromStream(St);
+    Result := TOpenEpiDoc.OpenDoc(Dlg.FileName, ManagerSettings.StudyLang);
+
     LocalDoc := true;
     FileName := Dlg.FileName;
   end;
