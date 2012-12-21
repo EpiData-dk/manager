@@ -52,11 +52,18 @@ project_studyunit_form;
 function EpiDataApplicationName: string;
 begin
   result := 'epidatamanager';
+//  result := '';
+end;
+
+function EpiDataVendorName: string;
+begin
+  result := 'epidata';
 end;
 
 begin
   Application.Title := 'EpiData Manager';
   OnGetApplicationName := @EpiDataApplicationName;
+  OnGetVendorName := @EpiDataVendorName;
   // Load ini before anything else - it contains start-up info.
   LoadIniFile;
   {$IFNDEF EPI_DEBUG}

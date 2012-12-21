@@ -36,8 +36,11 @@ type
   {$I epidatamanager.revision.inc}
 
 function GetManagerVersion: String;
+
 function SaveSettingToIni(Const FileName: string): boolean;
 function LoadSettingsFromIni(Const FileName: string): boolean;
+function SaveRecentFilesToIni(Const FileName: string): boolean;
+function LoadRecentFilesIni(Const FileName: string): boolean;
 
 procedure SaveFormPosition(Const AForm: TForm; Const SectionName: string);
 procedure LoadFormPosition(AForm: TForm; Const SectionName: string);
@@ -73,6 +76,10 @@ uses
   project_settings_field_frame, project_settings_general_frame,
   project_settings_study_contentdesc_frame, project_settings_study_frame,
   project_settings_study_ownership_frame;
+
+const
+  RecentIniFileName: string = '';
+
 
 function GetIniFile(Const FileName: String): TIniFile;
 begin
@@ -390,6 +397,59 @@ begin
   Result := true;
 end;
 
+function SaveRecentFilesToIni(const FileName: string): boolean;
+var
+  Ini: TIniFile;
+  Fn: String;
+  i: Integer;
+begin
+  Result := false;
+
+  Fn := FileName;
+  if (RecentIniFileName <> '') and
+     (FileName = '')
+  then
+    Fn := RecentIniFileName;
+
+  try
+    Ini := GetIniFile(Fn);
+
+    for i := 0 to RecentFiles.Count - 1 do
+      Ini.WriteString('Files', 'file'+inttostr(i), RecentFiles[i]);
+  finally
+    Ini.Free;
+  end;
+end;
+
+function LoadRecentFilesIni(const FileName: string): boolean;
+var
+  Ini: TIniFile;
+  Sec: String;
+  i: Integer;
+  S: String;
+begin
+  Result := false;
+
+  // trick - store filename in const :)
+  // and use in save recent.
+  if RecentIniFileName = '' then RecentIniFileName := FileName;
+
+  try
+    Ini := GetIniFile(FileName);
+
+    // Read recent files.
+    Sec := 'Files';
+    for i := 0 to 9 do
+    begin
+      S := Ini.ReadString(sec, 'file'+inttostr(i), '');
+      if S <> '' then
+        RecentFiles.Add(S);
+    end;
+  finally
+    Ini.Free;
+  end;
+end;
+
 procedure SaveFormPosition(const AForm: TForm; const SectionName: string);
 var
   Ini: TIniFile;
@@ -441,7 +501,8 @@ begin
     RecentFiles.Insert(0, AFilename);
   if RecentFiles.Count > 10 then
     RecentFiles.Delete(10);
-  SaveSettingToIni(ManagerSettings.IniFileName);
+
+  SaveRecentFilesToIni('');
 end;
 
 { TSettingsForm }
