@@ -96,7 +96,7 @@ uses
   epidatafiles, epidatafilestypes, epimiscutils, settings2_var,
   epitools_val_dbl_entry, viewer_form, report_double_entry_validation,
   main, epireport_generator_txt, manager_messages, epiglobals,
-  LCLIntf, LCLType;
+  LCLIntf, LCLType, managerprocs;
 
 procedure ValidateDoubleEntry(Doc: TEpiDocument; const Filename: string);
 var
@@ -125,8 +125,7 @@ begin
   try
     if not Dlg.Execute then exit;
 
-    FDupDoc := TEpiDocument.Create(ManagerSettings.StudyLang);
-    FDupDoc.LoadFromFile(Dlg.FileName);
+    FDupDoc := TOpenEpiDoc.OpenDoc(Dlg.FileName, ManagerSettings.StudyLang);
 
     UpdateDupDocInfo(Dlg.FileName);
     UpdateKeyFields;

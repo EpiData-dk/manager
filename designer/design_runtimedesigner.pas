@@ -631,7 +631,7 @@ begin
         if (FPopUpPoint.X <> -1) or (FPopUpPoint.Y <> -1) then
           P := Point(P.X - O.X, P.Y - O.Y)
         else
-          P := Point(0, 0);
+          P := Point(20, 20);
         for i := 0 to Count - 1 do
           begin
             R := Selection[i].BoundsRect;
@@ -694,14 +694,14 @@ end;
 procedure TRuntimeDesignFrame.PasteControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) and
+    (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) {and
      (
       ((FDesignPanel.Surface.Count = 1) and
        (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle)
       )
      or
       (FDesignPanel.Surface.Count = 0)
-     );
+     )};
 end;
 
 procedure TRuntimeDesignFrame.PrintDataFormActionExecute(Sender: TObject);

@@ -73,7 +73,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epimiscutils, Dialogs;
+  epiimport, LCLProc, epimiscutils, Dialogs, managerprocs;
 
 { TProjectFileListFrame }
 
@@ -145,23 +145,11 @@ begin
       end;
       DoAfterImportFile(Doc, FileName);
     end
-    else if ext = '.epx' then
+    else if (ext = '.epx') or (ext = '.epz') then
     begin
       DoBeforeImportFile(Doc, FileName);
-      Doc.OnPassword := @RecImportPassword;
-      Doc.LoadFromFile(FileName);
+      TOpenEpiDoc.OpenDoc(Doc, FileName);
       DoAfterImportFile(Doc, FileName);
-    end
-    else if ext = '.epz' then
-    begin
-      St := TMemoryStream.Create;
-      ZipFileToStream(St, FileName);
-      DoBeforeImportFile(Doc, FileName);
-      St.Position := 0;
-      Doc.OnPassword := @RecImportPassword;
-      Doc.LoadFromStream(St);
-      DoAfterImportFile(Doc, FileName);
-      St.Free;
     end;
 
     AddDocumentToGrid(FileName, Doc);

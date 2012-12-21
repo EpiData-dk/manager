@@ -61,8 +61,6 @@ type
     function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
     procedure AddToRecent(Const AFileName: string);
     procedure DoSaveProject(AFileName: string);
-    procedure EpiDocumentPassWord(Sender: TObject; var Login: string;
-      var Password: string);
     procedure DoOpenProject(Const AFileName: string);
     procedure DoNewDataForm(Df: TEpiDataFile);
     procedure DoCloseProject;
@@ -145,15 +143,6 @@ begin
   F := TKeyFieldsForm.Create(Self, EpiDocument);
   F.ShowModal;
   F.Free;
-end;
-
-procedure TProjectFrame.EpiDocumentPassWord(Sender: TObject; var Login: string;
-  var Password: string);
-begin
-  PassWord :=
-    PasswordBox('Project Password',
-                'Project data is password protected.' + LineEnding +
-                'Please enter password:');
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -451,16 +440,7 @@ begin
 
     St := nil;
     try
-      St := TMemoryStream.Create;
-      if ExtractFileExt(UTF8ToSys(Fn)) = '.epz' then
-        ZipFileToStream(St, Fn)
-      else
-        St.LoadFromFile(UTF8ToSys(Fn));
-
-      St.Position := 0;
-      FEpiDocument := DoCreateNewDocument;
-      FEpiDocument.OnPassword  := @EpiDocumentPassWord;
-      FEpiDocument.LoadFromStream(St);
+      FEpiDocument := TOpenEpiDoc.OpenDoc(DoCreateNewDocument, Fn);
       FFileName := AFileName;
       DoNewDataForm(FEpiDocument.DataFiles[0]);
       St.Free;

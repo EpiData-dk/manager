@@ -40,7 +40,7 @@ type
 implementation
 
 uses
-  epidocument, epireport_filelist;
+  epidocument, epireport_filelist, managerprocs;
 
 { TReportFileListBase }
 
@@ -91,8 +91,7 @@ begin
       Continue;
     end;
 
-    Doc := TEpiDocument.Create('');
-    Doc.LoadFromFile(FileNames[i]);
+    Doc := TOpenEpiDoc.OpenDoc(FileNames[i], '');
     FDocuments.AddObject(FileNames[i], Doc);
   end;
 end;

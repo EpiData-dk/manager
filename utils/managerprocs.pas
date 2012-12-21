@@ -5,7 +5,24 @@ unit managerprocs;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, SysUtils, dialogs, epidocument;
+
+type
+
+  { TOpenEpiDoc }
+
+  TOpenEpiDoc = class
+  private
+    constructor Create;
+    procedure EpiDocumentPassWord(Sender: TObject; var Login: string;
+      var Password: string);
+  public
+    class function OpenDoc(const FileName, Lang: string): TEpiDocument; overload;
+    class function OpenDoc(Doc: TEpiDocument; const FileName: string): TEpiDocument;
+  end;
+
+
+
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 procedure CopyAndBackup(Const AFileName: string);
@@ -17,7 +34,8 @@ function GetRandomComponentName: string;
 implementation
 
 uses
-  Clipbrd, FileUtil, settings2, settings2_var, forms, strutils;
+  Clipbrd, FileUtil, settings2, settings2_var, forms, strutils,
+  epimiscutils;
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 var
@@ -56,17 +74,25 @@ procedure LoadIniFile;
 const
   IniName = 'epidatamanager.ini';
 var
+  Fn: String;
   S: String;
 begin
+  Fn := GetAppConfigFileUTF8(false, true, true);
+
   // TODO : Settings can be loaded from commandline?
-  if LoadSettingsFromIni(GetAppConfigFileUTF8(false)) then exit;
+  if LoadSettingsFromIni(Fn) then exit;
 
-  // TODO : This is not optimal on Non-windows OS's. Do some checks for writeability first.
-  if LoadSettingsFromIni(ExtractFilePath(Application.ExeName) + IniName) then exit;
+  // TODO : This is not optimal on Non-windows OS'Fn. Do some checks for writeability first.
+  S := ExtractFilePath(Application.ExeName) + IniName;
+  if (not FileIsReadOnlyUTF8(S)) and
+     LoadSettingsFromIni(S)
+  then
+    Exit;
 
-  if not DirectoryExistsUTF8(ExtractFilePath(GetAppConfigFileUTF8(false))) then
-    ForceDirectoriesUTF8(ExtractFilePath(GetAppConfigFileUTF8(false)));
-  ManagerSettings.IniFileName := GetAppConfigFileUTF8(false);
+  ManagerSettings.IniFileName := Fn;
+
+  FN := ExpandFileNameUTF8(GetAppConfigDirUTF8(False) + '..' + PathDelim + 'epidatarecentfiles.ini');
+  LoadRecentFilesIni(Fn);
 end;
 
 function GetRandomComponentName: string;
@@ -79,6 +105,49 @@ begin
   //  - And the chance of creating to equal component name are very-very-very unlikely.
   CreateGUID(GUID);
   Result := '_' + StringsReplace(GUIDToString(GUID), ['{','}','-'], ['','',''], [rfReplaceAll]);
+end;
+
+{ TOpenEpiDoc }
+
+constructor TOpenEpiDoc.Create;
+begin
+
+end;
+
+procedure TOpenEpiDoc.EpiDocumentPassWord(Sender: TObject; var Login: string;
+  var Password: string);
+begin
+  Password :=
+    PasswordBox('Project Password',
+                'Project data is password protected.' + LineEnding +
+                'Please enter password:');
+end;
+
+class function TOpenEpiDoc.OpenDoc(const FileName, Lang: string): TEpiDocument;
+begin
+  result := OpenDoc(TEpiDocument.Create(Lang), FileName);
+end;
+
+class function TOpenEpiDoc.OpenDoc(Doc: TEpiDocument; const FileName: string): TEpiDocument;
+var
+  Tmp: TOpenEpiDoc;
+  St: TMemoryStream;
+begin
+  Tmp := TOpenEpiDoc.Create;
+
+  St := TMemoryStream.Create;
+  if ExtractFileExt(UTF8ToSys(FileName)) = '.epz' then
+    ZipFileToStream(St, FileName)
+  else
+    St.LoadFromFile(UTF8ToSys(FileName));
+  St.Position := 0;
+
+  result := Doc;
+  result.OnPassword := @Tmp.EpiDocumentPassWord;
+  result.LoadFromStream(St);
+
+  St.Free;
+  Tmp.Free;
 end;
 
 end.

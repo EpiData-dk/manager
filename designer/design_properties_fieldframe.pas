@@ -1801,6 +1801,7 @@ begin
   begin
     BeginUpdate;
     AddObject('On new record', TObject(umCreated));
+    AddObject('On first save', TObject(umFirstSave));
     AddObject('On save/update record', TObject(umUpdated));
     EndUpdate;
   end;
