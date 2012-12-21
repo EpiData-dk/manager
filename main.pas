@@ -204,7 +204,7 @@ uses
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   epitools_integritycheck, datasetviewer_frame, prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  report_double_entry_validation, managerprocs;
+  report_double_entry_validation, managerprocs, process;
 
 { TMainForm }
 
@@ -529,11 +529,38 @@ var
   Path: String;
   Ext: String;
   Entry: TProcessUTF8;
+  Param: String;
+  Res: TModalResult;
 begin
+  if Assigned(FActiveFrame) and
+     Assigned(FActiveFrame.EpiDocument) and
+     (FActiveFrame.ProjectFileName <> '')
+  then
+  begin
+    Res := MessageDlg(
+      'Warning',
+      'You are about to open EntryClient. Do you wish to close current project and open it in EntryClient?',
+      mtWarning,
+      mbYesNoCancel,
+      0,
+      mbCancel
+    );
+
+    if Res = mrCancel then exit;
+    if Res = mrYes then
+    begin
+      Param := FActiveFrame.ProjectFileName;
+      if not DoCloseProject then exit;
+    end
+    else
+      Param := '';
+  end;
+
   Path := ManagerSettings.EntryClientDirUTF8 + PathDelim;
   Ext := ExtractFileExt(Application.ExeName);
   Entry := TProcessUTF8.Create(nil);
-  Entry.CommandLine := Path + 'epidataentryclient' + ext;
+  Entry.Executable := Path + 'epidataentryclient' + ext;
+  Entry.Parameters.Add(Param);
   Entry.Execute;
   Entry.Free;
 end;
