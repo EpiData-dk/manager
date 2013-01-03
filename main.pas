@@ -557,6 +557,16 @@ begin
   end;
 
   Path := ManagerSettings.EntryClientDirUTF8 + PathDelim;
+  {$IFDEF DARWIN}
+  // debugging path
+  if DirectoryExistsUTF8(Path + 'epidataentryclient.app') then
+    Path += 'epidataentryclient.app'
+  // Installation path (hopefully)
+  else if DirectoryExistsUTF8(Path + 'EpiData EntryClient.app') then
+    Path += 'epidataentryclient.app';
+  Path += '/Contents/MacOS/';
+  {$ENDIF}
+
   Ext := ExtractFileExt(Application.ExeName);
   Entry := TProcessUTF8.Create(nil);
   Entry.Executable := Path + 'epidataentryclient' + ext;
