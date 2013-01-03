@@ -581,12 +581,16 @@ var
   Ext: String;
 begin
   Path := ManagerSettings.EntryClientDirUTF8 + PathDelim;
+  {$IFDEF DARWIN}
+  // debugging path
+  if DirectoryExistsUTF8(Path + 'epidataentryclient.app') then
+    Path += 'epidataentryclient.app'
+  // Installation path (hopefully)
+  else if DirectoryExistsUTF8(Path + 'EpiData EntryClient.app') then
+    Path += 'epidataentryclient.app';
+  Path += '/Contents/MacOS/';
+  {$ENDIF}
   Ext := ExtractFileExt(Application.ExeName);
-{  showmessage(
-    'Path: ' + Path + LineEnding +
-    'Ext: ' + Ext + LineEnding +
-    'File: ' + Path + 'epidataentryclient' + Ext
-    );}
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
 end;
 
