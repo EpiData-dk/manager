@@ -563,7 +563,7 @@ begin
     Path += 'epidataentryclient.app'
   // Installation path (hopefully)
   else if DirectoryExistsUTF8(Path + 'EpiData EntryClient.app') then
-    Path += 'epidataentryclient.app';
+    Path += 'EpiData EntryClient.app';
   Path += '/Contents/MacOS/';
   {$ENDIF}
 
@@ -587,7 +587,7 @@ begin
     Path += 'epidataentryclient.app'
   // Installation path (hopefully)
   else if DirectoryExistsUTF8(Path + 'EpiData EntryClient.app') then
-    Path += 'epidataentryclient.app';
+    Path += 'EpiData EntryClient.app';
   Path += '/Contents/MacOS/';
   {$ENDIF}
   Ext := ExtractFileExt(Application.ExeName);
