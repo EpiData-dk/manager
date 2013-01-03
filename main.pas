@@ -629,7 +629,7 @@ end;
 
 procedure TMainForm.OpenTutorialMenuItemClick(Sender: TObject);
 begin
-  OpenURL(ManagerSettings.TutorialDirUTF8 + DirectorySeparator + TMenuItem(Sender).Caption + '.pdf');
+  OpenDocument(ManagerSettings.TutorialDirUTF8 + DirectorySeparator + TMenuItem(Sender).Caption + '.pdf');
 end;
 
 procedure TMainForm.LoadTutorials;
