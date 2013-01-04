@@ -557,6 +557,16 @@ begin
   end;
 
   Path := ManagerSettings.EntryClientDirUTF8 + PathDelim;
+  {$IFDEF DARWIN}
+  // debugging path
+  if DirectoryExistsUTF8(Path + 'epidataentryclient.app') then
+    Path += 'epidataentryclient.app'
+  // Installation path (hopefully)
+  else if DirectoryExistsUTF8(Path + 'EpiData EntryClient.app') then
+    Path += 'EpiData EntryClient.app';
+  Path += '/Contents/MacOS/';
+  {$ENDIF}
+
   Ext := ExtractFileExt(Application.ExeName);
   Entry := TProcessUTF8.Create(nil);
   Entry.Executable := Path + 'epidataentryclient' + ext;
@@ -571,12 +581,16 @@ var
   Ext: String;
 begin
   Path := ManagerSettings.EntryClientDirUTF8 + PathDelim;
+  {$IFDEF DARWIN}
+  // debugging path
+  if DirectoryExistsUTF8(Path + 'epidataentryclient.app') then
+    Path += 'epidataentryclient.app'
+  // Installation path (hopefully)
+  else if DirectoryExistsUTF8(Path + 'EpiData EntryClient.app') then
+    Path += 'EpiData EntryClient.app';
+  Path += '/Contents/MacOS/';
+  {$ENDIF}
   Ext := ExtractFileExt(Application.ExeName);
-{  showmessage(
-    'Path: ' + Path + LineEnding +
-    'Ext: ' + Ext + LineEnding +
-    'File: ' + Path + 'epidataentryclient' + Ext
-    );}
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
 end;
 
@@ -629,7 +643,7 @@ end;
 
 procedure TMainForm.OpenTutorialMenuItemClick(Sender: TObject);
 begin
-  OpenURL(ManagerSettings.TutorialDirUTF8 + DirectorySeparator + TMenuItem(Sender).Caption + '.pdf');
+  OpenDocument(ManagerSettings.TutorialDirUTF8 + DirectorySeparator + TMenuItem(Sender).Caption + '.pdf');
 end;
 
 procedure TMainForm.LoadTutorials;
