@@ -1637,8 +1637,7 @@ begin
         begin
           EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewField(FLastSelectedFieldType);
           case FLastSelectedFieldType of
-            ftInteger,
-            ftAutoInc:
+            ftInteger:
               TEpiField(EpiCtrl).Length := ManagerSettings.IntFieldLength;
             ftFloat:
               begin
