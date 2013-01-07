@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, epicustombase, epidatafiles, epidatafilestypes,
-  Controls, StdCtrls, design_types, Forms, episettings;
+  Controls, StdCtrls, design_types, Forms, episettings, epivaluelabels;
 
 type
   { TDesignField }
@@ -22,10 +22,12 @@ type
     FValueLabelLabel: TLabel;
     function  GetEpiControl: TEpiCustomControlItem;
     procedure OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnValueLabelSetChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnProjectSettingsChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure UpdateHint;
     procedure UpdateEpiControl;
+    procedure UpdateValueLabelConnection(Const OldVLSet, NewVLSet: TEpiValueLabelSet);
     procedure ReadField(Stream: TStream);
     procedure WriteField(Stream: TStream);
   protected
@@ -93,7 +95,10 @@ begin
       efceShowValueLabel:
         UpdateControl;
       efceValueLabelSet:
-        UpdateControl;
+        begin
+          UpdateValueLabelConnection(TEpiValueLabelSet(Data), FField.ValueLabelSet);
+          UpdateControl;
+        end;
     end;
 
   if EventGroup = eegCustomBase then
@@ -116,6 +121,14 @@ begin
       ecceText:
         FQuestionLabel.Caption := TEpiField(Sender).Question.Text;
     end;
+end;
+
+procedure TDesignField.OnValueLabelSetChange(Sender: TObject;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if (EventGroup = eegCustomBase) and (TEpiCustomChangeEventType(EventType) = ecceDestroy) then exit;
+
+  UpdateControl;
 end;
 
 procedure TDesignField.OnProjectSettingsChange(Sender: TObject;
@@ -156,6 +169,8 @@ begin
   FProjectSettings := TEpiDocument(FField.RootOwner).ProjectSettings;
   FProjectSettings.RegisterOnChangeHook(@OnProjectSettingsChange);
 
+  UpdateValueLabelConnection(nil, FField.ValueLabelSet);
+
   UpdateEpiControl;
   UpdateControl;
 end;
@@ -176,6 +191,16 @@ begin
     Top := Self.Top;
     EndUpdate;
   end;
+end;
+
+procedure TDesignField.UpdateValueLabelConnection(const OldVLSet,
+  NewVLSet: TEpiValueLabelSet);
+begin
+  if Assigned(OldVLSet) then
+    OldVLSet.UnRegisterOnChangeHook(@OnValueLabelSetChange);
+
+  if Assigned(NewVLSet) then
+    FField.ValueLabelSet.RegisterOnChangeHook(@OnValueLabelSetChange);
 end;
 
 procedure TDesignField.UpdateControl;
@@ -285,6 +310,7 @@ destructor TDesignField.Destroy;
 begin
   if Assigned(FField) then
     begin
+      UpdateValueLabelConnection(FField.ValueLabelSet, nil);
       FField.UnRegisterOnChangeHook(@OnFieldChange);
       FField.Free;
     end;
