@@ -531,10 +531,11 @@ var
   Entry: TProcessUTF8;
   Param: String;
   Res: TModalResult;
+  CanClose: boolean;
 begin
   if Assigned(FActiveFrame) and
-     Assigned(FActiveFrame.EpiDocument) and
-     (FActiveFrame.ProjectFileName <> '')
+     Assigned(FActiveFrame.EpiDocument) {and
+     (FActiveFrame.ProjectFileName <> '')}
   then
   begin
     Res := MessageDlg(
@@ -549,6 +550,8 @@ begin
     if Res = mrCancel then exit;
     if Res = mrYes then
     begin
+      CanClose := true;
+      FActiveFrame.CloseQuery(CanClose);
       Param := FActiveFrame.ProjectFileName;
       if not DoCloseProject then exit;
     end
