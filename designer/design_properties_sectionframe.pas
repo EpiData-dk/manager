@@ -54,6 +54,7 @@ begin
   NameEdit.Enabled :=
     (Length(FSections) = 1) and
     (FSections[0].Name <> 'MAIN');
+  CaptionEdit.Enabled := NameEdit.Enabled;
 
   {$IFNDEF EPI_DEBUG}
   SectionGroupAccessGroupBox.Visible := false;
