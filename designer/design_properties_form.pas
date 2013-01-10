@@ -167,6 +167,10 @@ begin
   BeginFormUpdate;
 
   Color := clSkyBlue;
+  Top := 50;
+  Left := 50;
+  Width := 400;
+  Height := 600;
 
   P := TPanel.Create(Self);
   P.Align := alBottom;
