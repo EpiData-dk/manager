@@ -1649,6 +1649,7 @@ begin
             ftUpperString:
               TEpiField(EpiCtrl).Length := ManagerSettings.StringFieldLength;
           end;
+          TEpiField(EpiCtrl).ShowValueLabel := ManagerSettings.ShowValuelabelText;
         end;
       if Ctrl is TDesignHeading then
         begin
