@@ -278,6 +278,7 @@
         <Filename Value="settings/settings_advanced_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Settings_PathsFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_advanced_frame"/>
       </Unit13>
@@ -360,6 +361,7 @@
         <Filename Value="settings/settings_general_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Settings_GeneralFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_general_frame"/>
       </Unit25>
@@ -457,6 +459,7 @@
         <Filename Value="settings/settings_export.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Settings_ExportFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="settings_export"/>
       </Unit40>

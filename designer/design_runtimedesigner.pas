@@ -31,6 +31,10 @@ type
     HeadingToolButton: TToolButton;
     ImportToolButton: TToolButton;
     IntToolButton: TToolButton;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
     OpenProjectToolBtn: TToolButton;
     OtherToolButton: TToolButton;
     ToolBarPanel: TPanel;
@@ -174,6 +178,8 @@ type
     procedure NewOtherFieldClick(Sender: TObject);
     procedure NewStringFieldActionExecute(Sender: TObject);
     procedure NewStringFieldFastActionExecute(Sender: TObject);
+    procedure NewTimeFieldActionExecute(Sender: TObject);
+    procedure NewTimeFieldFastActionExecute(Sender: TObject);
     procedure PasteAsDateActionExecute(Sender: TObject);
     procedure PasteAsFloatActionExecute(Sender: TObject);
     procedure PasteAsIntActionExecute(Sender: TObject);
@@ -256,6 +262,7 @@ type
     { Other }
     procedure UpdateShortcuts;
     procedure UpdateControls;
+    procedure UpdateInterface;
     procedure SelectControl(AAction: TDesignSelectAction);
     procedure UpdateStatusbar(ControlList: TJvDesignObjectArray);
     procedure UpdateStatusbarSizes;
@@ -471,6 +478,16 @@ end;
 procedure TRuntimeDesignFrame.NewStringFieldFastActionExecute(Sender: TObject);
 begin
   NewShortCutDesignField(ftString, false);
+end;
+
+procedure TRuntimeDesignFrame.NewTimeFieldActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftTime, true);
+end;
+
+procedure TRuntimeDesignFrame.NewTimeFieldFastActionExecute(Sender: TObject);
+begin
+  NewShortCutDesignField(ftTime, false);
 end;
 
 procedure TRuntimeDesignFrame.PasteAsDateActionExecute(Sender: TObject);
@@ -1272,10 +1289,12 @@ begin
   NewStringFieldFastAction.ShortCut    := D_NewStringField_Fast;
   NewDateFieldAction.ShortCut          := D_NewDateField;
   NewDateFieldFastAction.ShortCut      := D_NewDateField_Fast;
+  NewTimeFieldAction.ShortCut          := D_NewTimeField;
+  NewTimeFieldFastAction.ShortCut      := D_NewTimeField_Fast;
   NewHeadingAction.ShortCut            := D_NewHeading;
   NewHeadingFastAction.ShortCut        := D_NewHeading_Fast;
-
 //  NewSectionAction.ShortCut            := D_NewSection;
+
   EditControlAction.ShortCut           := D_EditControl;
   DeleteControlAction.ShortCut         := D_DeleteControl;
   DeleteControlFastAction.ShortCut     := D_DeleteControl_Fast;
@@ -1304,6 +1323,15 @@ begin
 
   for i := 0 to DataFile.ControlItems.Count - 1 do
     (ControlFromEpiControl(DataFile.ControlItem[i]) as IDesignEpiControl).UpdateControl;
+end;
+
+procedure TRuntimeDesignFrame.UpdateInterface;
+begin
+  with DateToolButton do
+  begin
+    Tag := Ord(ManagerSettings.DefaultDateType);
+    ImageIndex := Tag;
+  end;
 end;
 
 procedure TRuntimeDesignFrame.SelectControl(AAction: TDesignSelectAction);
@@ -1890,6 +1918,7 @@ procedure TRuntimeDesignFrame.UpdateFrame;
 begin
   UpdateShortcuts;
   UpdateControls;
+  UpdateInterface;
 end;
 
 procedure TRuntimeDesignFrame.RestoreDefaultPos;
