@@ -61,7 +61,8 @@ begin
   begin
     FProjectList.AddFiles(Files);
     Files.Free;
-  end else
+  end;
+  if FProjectList.DocList.Count = 0 then
     Close;
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'StaticReportsForm');

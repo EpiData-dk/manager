@@ -221,9 +221,6 @@ begin
       WriteString(Sec, 'OwnRights', OwnRights);
       WriteString(Sec, 'OwnPublisher', OwnPublisher);
       WriteString(Sec, 'OwnFunding', OwnFunding);
-
-      for i := 0 to RecentFiles.Count - 1 do
-        WriteString('recent', 'file'+inttostr(i), RecentFiles[i]);
     end;
 
     // Read recent files.
@@ -381,15 +378,6 @@ begin
       OwnRights             := ReadString(Sec, 'OwnRights', OwnRights);
       OwnPublisher          := ReadString(Sec, 'OwnPublisher', OwnPublisher);
       OwnFunding            := ReadString(Sec, 'OwnFunding', OwnFunding);
-    end;
-
-    // Read recent files.
-    Sec := 'recent';
-    for i := 0 to 9 do
-    begin
-      S := Ini.ReadString(sec, 'file'+inttostr(i), '');
-      if S > '' then
-        RecentFiles.Add(S);
     end;
   finally
     Ini.Free;
