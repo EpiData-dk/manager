@@ -1,11 +1,11 @@
 object SettingsForm: TSettingsForm
   Left = 475
-  Height = 363
+  Height = 443
   Top = 313
   Width = 611
   ActiveControl = SettingsView
   Caption = 'Settings'
-  ClientHeight = 363
+  ClientHeight = 443
   ClientWidth = 611
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
@@ -15,7 +15,7 @@ object SettingsForm: TSettingsForm
     AnchorSideTop.Side = asrCenter
     Left = 0
     Height = 50
-    Top = 313
+    Top = 393
     Width = 611
     Align = alBottom
     ClientHeight = 50
@@ -25,10 +25,10 @@ object SettingsForm: TSettingsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn2
-      Left = 457
+      Left = 460
       Height = 34
       Top = 8
-      Width = 80
+      Width = 79
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -43,10 +43,10 @@ object SettingsForm: TSettingsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 547
+      Left = 549
       Height = 32
       Top = 9
-      Width = 53
+      Width = 51
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -59,11 +59,11 @@ object SettingsForm: TSettingsForm
   end
   object SettingsView: TTreeView
     Left = 0
-    Height = 313
+    Height = 393
     Top = 0
     Width = 195
     Align = alLeft
-    DefaultItemHeight = 18
+    DefaultItemHeight = 16
     ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 1
@@ -93,7 +93,7 @@ object SettingsForm: TSettingsForm
   end
   object Splitter1: TSplitter
     Left = 195
-    Height = 313
+    Height = 393
     Top = 0
     Width = 5
   end

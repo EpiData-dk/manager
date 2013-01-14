@@ -105,7 +105,10 @@ begin
       Cells[LastEditCol.Index + 1, Idx] := DateToStr(Doc.Study.ModifiedDate); //FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.ModifiedDate);                 // Edited
     end else begin
       Cells[CreatedCol.Index + 1, Idx]  := 'N/A';                                                                          // Created
-      Cells[LastEditCol.Index + 1, Idx] := DateToStr(FileDateToDateTime(FileAgeUTF8(FileName)));// FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
+      if FileExistsUTF8(FileName) then
+        Cells[LastEditCol.Index + 1, Idx] := DateToStr(FileDateToDateTime(FileAgeUTF8(FileName))) // FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
+      else
+        Cells[LastEditCol.Index + 1, Idx] := 'N/A';
     end;
     with Doc.DataFiles[0] do
     begin

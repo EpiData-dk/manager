@@ -464,9 +464,12 @@ var
   Doc: TEpiDocument;
 begin
   Doc := ToolsCheckOpenFile(Fn, Local);
-  PrepareDoubleEntry(Doc, Fn);
-  if Local then
-    Doc.Free;
+  if Assigned(Doc) then
+  begin
+    PrepareDoubleEntry(Doc, Fn);
+    if Local then
+      Doc.Free;
+  end;
 end;
 
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
@@ -614,12 +617,15 @@ var
   Doc: TEpiDocument;
 begin
   Doc := ToolsCheckOpenFile(Fn, Local);
-  ValidateDoubleEntry(Doc, Fn);
-  if Local then
+  if Assigned(Doc) then
   begin
-    if Doc.Modified then
-      Doc.SaveToFile(Fn);
-    Doc.Free;
+    ValidateDoubleEntry(Doc, Fn);
+    if Local then
+    begin
+      if Doc.Modified then
+        Doc.SaveToFile(Fn);
+      Doc.Free;
+    end;
   end;
 end;
 

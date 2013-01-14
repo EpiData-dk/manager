@@ -311,6 +311,7 @@ begin
   if Assigned(FField) then
     begin
       UpdateValueLabelConnection(FField.ValueLabelSet, nil);
+      FProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
       FField.UnRegisterOnChangeHook(@OnFieldChange);
       FField.Free;
     end;

@@ -389,7 +389,9 @@ begin
       Fs.CopyFrom(Ms, Ms.Size);
     end;
     FFileTimeStamp := FileAgeUTF8(AFileName);
-    AddToRecent(AFileName);
+    // Do not add backupfiles to Recent list!
+    if ExtractFileExt(AFileName) <> '.bak' then
+      AddToRecent(AFileName);
   finally
     ActiveFrame.Cursor := crDefault;
     Application.ProcessMessages;

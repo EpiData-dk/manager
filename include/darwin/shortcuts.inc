@@ -41,9 +41,11 @@ begin
   D_NewStringField_Fast        := KeyToShortCut(VK_3, [ssShift]);
   D_NewDateField               := KeyToShortCut(VK_4, []);
   D_NewDateField_Fast          := KeyToShortCut(VK_4, [ssShift]);
-  D_NewHeading                 := KeyToShortCut(VK_5, []);
-  D_NewHeading_Fast            := KeyToShortCut(VK_5, [ssShift]);
-  D_NewSection                 := KeyToShortCut(VK_6, []);
+  D_NewTimeField               := KeyToShortCut(VK_5, []);
+  D_NewTimeField_Fast          := KeyToShortCut(VK_5, [ssShift]);
+  D_NewHeading                 := KeyToShortCut(VK_6, []);
+  D_NewHeading_Fast            := KeyToShortCut(VK_6, [ssShift]);
+  D_NewSection                 := KeyToShortCut(VK_UNKNOWN, []);
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
   D_DeleteControl_Fast         := KeyToShortCut(VK_BACK, [ssMeta]);
