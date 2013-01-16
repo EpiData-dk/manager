@@ -57,6 +57,7 @@ var
   D_MoveControlDown,
   D_MoveSideDown,
   D_MoveBottom,
+  D_SelectAll,
   D_DeleteAllControl,
   D_PasteAs,
   D_CutControl,

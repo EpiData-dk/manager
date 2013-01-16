@@ -839,12 +839,16 @@ end;
 
 procedure TMainForm.UpdateSettings;
 begin
+  BeginUpdatingForm;
+
   LoadTutorials;
   UpdateProcessToolbar;
   UpdateShortCuts;
 
   if Assigned(FActiveFrame) then
     TProjectFrame(FActiveFrame).UpdateFrame;
+
+  EndUpdatingForm;
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
@@ -1065,7 +1069,7 @@ end;
 
 procedure TMainForm.EndUpdatingForm;
 begin
-    EndFormUpdate;
+  EndFormUpdate;
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);

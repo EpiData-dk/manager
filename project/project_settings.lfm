@@ -23,10 +23,10 @@ object ProjectSettingsForm: TProjectSettingsForm
     ClientWidth = 627
     TabOrder = 0
     object BitBtn1: TBitBtn
-      Left = 450
+      Left = 451
       Height = 34
       Top = 10
-      Width = 80
+      Width = 79
       Anchors = [akTop, akRight]
       AutoSize = True
       Cancel = True
@@ -36,10 +36,10 @@ object ProjectSettingsForm: TProjectSettingsForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 565
+      Left = 567
       Height = 32
       Top = 10
-      Width = 53
+      Width = 51
       Anchors = [akTop, akRight]
       AutoSize = True
       Caption = '&OK'
@@ -56,7 +56,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 172
     Align = alLeft
     Constraints.MinWidth = 100
-    DefaultItemHeight = 18
+    DefaultItemHeight = 16
     ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 1
