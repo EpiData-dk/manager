@@ -159,6 +159,7 @@ type
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DeleteControlFastActionExecute(Sender: TObject);
+    procedure DesignControlPopUpMenuClose(Sender: TObject);
     procedure DesignControlPopUpMenuPopup(Sender: TObject);
     procedure DesignerActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
@@ -260,6 +261,14 @@ type
     { Hint }
     FHintWindow: THintWindow;
     procedure ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
+  private
+    { Select popup-submenu }
+    procedure SelectAllFieldsType(Sender: TObject);
+    procedure SelectAllFieldsLength(Sender: TObject);
+    procedure SelectAllFieldsValueLabel(Sender: TObject);
+    procedure SelectAllFieldsRange(Sender: TObject);
+    procedure SelectAllFieldsDefaultValue(Sender: TObject);
+    procedure SelectAllFieldsRepeat(Sender: TObject);
   private
     { Other }
     procedure UpdateShortcuts;
@@ -1298,6 +1307,55 @@ begin
   FHintWindow.ActivateHint(R, Msg);
 end;
 
+procedure TRuntimeDesignFrame.SelectAllFieldsType(Sender: TObject);
+var
+  OrgField: TEpiField;
+  i: Integer;
+  CmpField: TEpiField;
+  Selector: TJvDesignCustomSelector;
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  OrgField := TEpiField(TMenu(Sender).Tag);
+
+  Selector := DesignPanel.Surface.Selector;
+  Selector.ClearSelection;
+
+  for i := 0 to FDatafile.Fields.Count -1 do
+  begin
+    CmpField := FDatafile.Fields[i];
+
+    if CmpField.FieldType = OrgField.FieldType then
+      Selector.AddToSelection(ControlFromEpiControl(CmpField));
+  end;
+  DesignPanel.Surface.SelectionChange;
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsLength(Sender: TObject);
+begin
+  //
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsValueLabel(Sender: TObject);
+begin
+  //
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsRange(Sender: TObject);
+begin
+  //
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsDefaultValue(Sender: TObject);
+begin
+  //
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsRepeat(Sender: TObject);
+begin
+  //
+end;
+
 procedure TRuntimeDesignFrame.UpdateShortcuts;
 begin
   NewIntFieldAction.ShortCut           := D_NewIntField;
@@ -1744,10 +1802,18 @@ begin
   DeleteControls(true);
 end;
 
+procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
+begin
+  DesignControlPopUpMenu.Items.Find('Select...').Free;
+end;
+
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
 var
   P: TPoint;
   Ctrl: TControl;
+  SubMenu: TMenuItem;
+  MI: TMenuItem;
+  EpiCtrl: TEpiCustomControlItem;
 begin
   FPopUpPoint := TPopupMenu(Sender).PopupPoint;
 
@@ -1770,6 +1836,78 @@ begin
       Select(Ctrl);
       SelectionChange;
       UpdateDesigner;
+    end;
+
+    if (Selector.Count = 1) and
+       (Supports(Ctrl, IDesignEpiControl))
+    then
+    begin;
+      EpiCtrl := (Ctrl as IDesignEpiControl).EpiControl;
+
+      // Create submenu for selected component.
+      SubMenu := TMenuItem.Create(DesignControlPopUpMenu);
+      SubMenu.Caption := 'Select...';
+
+      // Create Field select menu.
+      if EpiCtrl is TEpiField then
+      with TEpiField(EpiCtrl) do
+      begin
+        MI := TMenuItem.Create(SubMenu);
+        MI.Caption := 'All ' + EpiTypeNames[FieldType] + ' fields';
+        MI.OnClick := @SelectAllFieldsType;
+        MI.Tag := PtrInt(EpiCtrl);
+        SubMenu.Add(MI);
+
+        SubMenu.AddSeparator;
+
+        if FieldType in IntFieldTypes + FloatFieldTypes + StringFieldTypes then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. length: ' + IntToStr(Length);
+          MI.OnClick := @SelectAllFieldsLength;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+
+        if Assigned(ValueLabelSet) then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. Valuelabelset: ' + ValueLabelSet.Name;
+          MI.OnClick := @SelectAllFieldsValueLabel;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+
+        if Assigned(Ranges) then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. Range: ' + Ranges[0].AsString[true] + ' - ' + Ranges[0].AsString[false];
+          MI.OnClick := @SelectAllFieldsRange;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+
+        if DefaultValueAsString <> '' then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. Default value: ' + DefaultValueAsString;
+          MI.OnClick := @SelectAllFieldsDefaultValue;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+
+        if RepeatValue then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. Repeat Value';
+          MI.OnClick := @SelectAllFieldsRepeat;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+      end;
+      if SubMenu.Count = 2 then
+        SubMenu.Items[1].Free;
+      DesignControlPopUpMenu.Items.Add(SubMenu);
     end;
   end;
 end;
