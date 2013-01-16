@@ -169,6 +169,8 @@ begin
   FProjectSettings := TEpiDocument(FField.RootOwner).ProjectSettings;
   FProjectSettings.RegisterOnChangeHook(@OnProjectSettingsChange);
 
+  FField.AddCustomData(DesignControlCustomDataKey, Self);
+
   UpdateValueLabelConnection(nil, FField.ValueLabelSet);
 
   UpdateEpiControl;

@@ -311,7 +311,6 @@ uses
   design_control_field,
   design_control_heading;
 
-
 { TRuntimeDesignFrame }
 
 procedure TRuntimeDesignFrame.DoToogleBtn(Sender: TObject);
@@ -574,32 +573,8 @@ end;
 
 function TRuntimeDesignFrame.ControlFromEpiControl(
   EpiCtrl: TEpiCustomControlItem): TControl;
-
-
-  function RecursiveFindControl(WinControl: TWinControl): TControl;
-  var
-    i: Integer;
-  begin
-    for i := 0 to WinControl.ControlCount - 1 do
-    with WinControl do
-      begin
-        if Supports(Controls[i], IDesignEpiControl) and
-           ((Controls[i] as IDesignEpiControl).EpiControl = EpiCtrl)
-        then
-          Exit(Controls[i]);
-
-        if (Controls[i].InheritsFrom(TWinControl)) then
-          Result := RecursiveFindControl(TWinControl(Controls[i]));
-
-        if Assigned(Result) then
-          Exit;
-      end;
-
-    Result := nil;
-  end;
-
 begin
-  Result := RecursiveFindControl(FDesignScrollBox);
+  Result := TControl(EpiCtrl.FindCustomData(DesignControlCustomDataKey));
 end;
 
 function TRuntimeDesignFrame.FindNewPostion(NewControl: TControlClass): TPoint;
@@ -814,6 +789,8 @@ end;
 
 procedure TRuntimeDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument;
   RenameVL, RenameFields: boolean; ImportData: boolean);
+Const
+  PasteEpiDocCustomDataKey = 'pasteepidoc-valuelabelset';
 var
   i: Integer;
   VLSet: TEpiValueLabelSet;
@@ -823,6 +800,7 @@ var
   Selected: TWinControl;
   C: TEpiCustomControlItem;
   j: Integer;
+
 
   function NewFieldName(Const OldName: string): string;
   var
@@ -864,9 +842,9 @@ var
     end;
 
     if (Assigned(F.ValueLabelSet)) and
-       (F.ValueLabelSet.ObjectData <> 0)
+       (Assigned(F.ValueLabelSet.FindCustomData(PasteEpiDocCustomDataKey)))
     then
-      F.ValueLabelSet := TEpiValueLabelSet(F.ValueLabelSet.ObjectData);
+      F.ValueLabelSet := TEpiValueLabelSet(F.ValueLabelSet.RemoveCustomData(PasteEpiDocCustomDataKey));
 
     // Need to correct ShowValueLabel setting to match that of the setup.
     F.ShowValueLabel := ManagerSettings.ShowValuelabelText;
@@ -937,7 +915,7 @@ begin
        (VLSet.LabelType = DataFile.ValueLabels.GetValueLabelSetByName(VLSet.Name).LabelType)
     then
       begin
-        VLSet.ObjectData := PtrUInt(DataFile.ValueLabels.GetValueLabelSetByName(VLSet.Name));
+        VLSet.AddCustomData(PasteEpiDocCustomDataKey, DataFile.ValueLabels.GetValueLabelSetByName(VLSet.Name));
         Continue;
       end;
 

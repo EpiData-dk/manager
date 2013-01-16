@@ -96,6 +96,7 @@ procedure TDesignSection.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FSection := TEpiSection(Avalue);
   FSection.RegisterOnChangeHook(@OnChange);
+  FSection.AddCustomData(DesignControlCustomDataKey, self);
   UpdateEpiControl;
 end;
 
