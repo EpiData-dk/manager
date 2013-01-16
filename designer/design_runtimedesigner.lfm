@@ -2394,6 +2394,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ImageIndex = 19
       OnExecute = PrintDataFormActionExecute
     end
+    object SelectAllAction: TAction
+      Category = 'Select'
+      Caption = 'SelectAllAction'
+      OnExecute = SelectAllActionExecute
+    end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList

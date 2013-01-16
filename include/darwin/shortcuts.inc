@@ -46,6 +46,7 @@ begin
   D_NewHeading                 := KeyToShortCut(VK_6, []);
   D_NewHeading_Fast            := KeyToShortCut(VK_6, [ssShift]);
   D_NewSection                 := KeyToShortCut(VK_UNKNOWN, []);
+  D_SelectAll                  := KeyToShortCut(VK_A, [ssMeta]);
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
   D_DeleteControl_Fast         := KeyToShortCut(VK_BACK, [ssMeta]);

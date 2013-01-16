@@ -15,6 +15,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    SelectAllAction: TAction;
     DateToolButton: TToolButton;
     DeleteAllToolButton: TToolButton;
     DeleteToolButton: TToolButton;
@@ -192,6 +193,7 @@ type
     procedure RedoActionExecute(Sender: TObject);
     procedure RedoActionUpdate(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
+    procedure SelectAllActionExecute(Sender: TObject);
     procedure SelecterBtnClick(Sender: TObject);
     procedure SelectFirstActionExecute(Sender: TObject);
     procedure SelectLastActionExecute(Sender: TObject);
@@ -741,6 +743,23 @@ procedure TRuntimeDesignFrame.SectionBtnClick(Sender: TObject);
 begin
   FAddClass := 'TDesignSection';
   DoToogleBtn(Sender);
+end;
+
+procedure TRuntimeDesignFrame.SelectAllActionExecute(Sender: TObject);
+var
+  i: Integer;
+  ctrl: TControl;
+begin
+  With FDesignPanel.Surface do
+  begin
+    ClearSelection;
+    DisableAutoSizing;
+    for i := 0 to FDesignPanel.ControlCount - 1 do
+      if Supports(FDesignPanel.Controls[i], IDesignEpiControl) then
+        Selector.AddToSelection(FDesignPanel.Controls[i]);
+    EnableAutoSizing;
+    SelectionChange;
+  end;
 end;
 
 procedure TRuntimeDesignFrame.SectionsChangeEvent(Sender: TObject;
@@ -1310,6 +1329,7 @@ begin
   SelectNextAction.ShortCut            := D_MoveControlDown;
   SelectPgDnAction.ShortCut            := D_MoveSideDown;
   SelectLastAction.ShortCut            := D_MoveBottom;
+  SelectAllAction.ShortCut             := D_SelectAll;
 
   UndoAction.ShortCut                  := D_Undo;
   RedoAction.ShortCut                  := D_Redo;
