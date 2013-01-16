@@ -130,6 +130,7 @@ procedure TDesignHeading.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FHeading := TEpiHeading(AValue);
   FHeading.RegisterOnChangeHook(@OnHeadingChange);
+  FHeading.AddCustomData(DesignControlCustomDataKey, Self);
 
   Caption := FHeading.Caption.Text;
   UpdateEpiControl;
