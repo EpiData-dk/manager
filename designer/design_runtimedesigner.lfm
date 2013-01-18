@@ -36,19 +36,19 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object SectionsLabel: TLabel
         AnchorSideLeft.Control = SectionsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 63
-        Height = 15
+        Left = 62
+        Height = 14
         Top = 4
-        Width = 89
+        Width = 87
         BorderSpacing.Left = 2
         Caption = 'SectionsLabel'
         ParentColor = False
       end
       object SectionsStaticLabel: TLabel
         Left = 2
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 59
+        Width = 58
         Caption = 'Sections:'
         ParentColor = False
       end
@@ -71,9 +71,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       TabOrder = 1
       object CurrentSectionLabel: TLabel
         Left = 3
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 130
+        Width = 127
         Caption = 'CurrentSectionLabel'
         ParentColor = False
       end
@@ -94,16 +94,16 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
         Left = 59
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 85
+        Width = 84
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         ParentColor = False
       end
       object RecordStaticLabel: TLabel
         Left = 2
-        Height = 15
+        Height = 14
         Top = 4
         Width = 55
         Caption = 'Records:'
@@ -129,16 +129,16 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         AnchorSideLeft.Control = FieldsStaticLabel
         AnchorSideLeft.Side = asrBottom
         Left = 44
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 70
+        Width = 69
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         ParentColor = False
       end
       object FieldsStaticLabel: TLabel
         Left = 2
-        Height = 15
+        Height = 14
         Top = 4
         Width = 40
         Caption = 'Fields:'
@@ -166,9 +166,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object FieldNameLabel: TLabel
         AnchorSideLeft.Control = FieldNamePanel
         Left = 3
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 102
+        Width = 98
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         ParentColor = False
@@ -195,9 +195,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object FieldTypeLabel: TLabel
         AnchorSideLeft.Control = FieldTypePanel
         Left = 3
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 91
+        Width = 89
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         ParentColor = False
@@ -224,9 +224,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object DefaultValueLabel: TLabel
         AnchorSideLeft.Control = DefaultValuePanel
         Left = 3
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 115
+        Width = 113
         BorderSpacing.Left = 2
         Caption = 'DefaultValueLabel'
         ParentColor = False
@@ -253,9 +253,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object ValueLabelLabel: TLabel
         AnchorSideLeft.Control = ValueLabelPanel
         Left = 3
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 103
+        Width = 101
         BorderSpacing.Left = 2
         Caption = 'ValueLabelLabel'
         ParentColor = False
@@ -282,9 +282,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object RangeLabel: TLabel
         AnchorSideLeft.Control = RangePanel
         Left = 3
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 74
+        Width = 73
         BorderSpacing.Left = 2
         Caption = 'RangeLabel'
         ParentColor = False
@@ -311,9 +311,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object KeyLabel: TLabel
         AnchorSideLeft.Control = KeyPanel
         Left = 3
-        Height = 15
+        Height = 14
         Top = 4
-        Width = 57
+        Width = 54
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         ParentColor = False
@@ -368,41 +368,41 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     TabOrder = 1
     object Label1: TLabel
       Left = 11
-      Height = 15
+      Height = 14
       Top = 38
-      Width = 42
+      Width = 41
       Caption = 'Label1'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 11
-      Height = 15
+      Height = 14
       Top = 118
-      Width = 42
+      Width = 41
       Caption = 'Label1'
       ParentColor = False
     end
     object Label3: TLabel
       Left = 11
-      Height = 15
+      Height = 14
       Top = 198
-      Width = 42
+      Width = 41
       Caption = 'Label1'
       ParentColor = False
     end
     object Label4: TLabel
       Left = 11
-      Height = 15
+      Height = 14
       Top = 294
-      Width = 42
+      Width = 41
       Caption = 'Label1'
       ParentColor = False
     end
     object Label5: TLabel
       Left = 11
-      Height = 15
+      Height = 14
       Top = 378
-      Width = 42
+      Width = 41
       Caption = 'Label5'
       ParentColor = False
     end
@@ -417,25 +417,25 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object Label6: TLabel
       Left = 11
-      Height = 15
+      Height = 14
       Top = 454
-      Width = 42
+      Width = 41
       Caption = 'Label6'
       ParentColor = False
     end
     object Label7: TLabel
       Left = 75
-      Height = 15
+      Height = 14
       Top = 77
-      Width = 42
+      Width = 41
       Caption = 'Label7'
       ParentColor = False
     end
     object Label8: TLabel
       Left = 80
-      Height = 15
+      Height = 14
       Top = 162
-      Width = 42
+      Width = 41
       Caption = 'Label8'
       ParentColor = False
     end
@@ -2398,6 +2398,30 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Category = 'Select'
       Caption = 'SelectAllAction'
       OnExecute = SelectAllActionExecute
+    end
+    object AlignLeftAction: TAction
+      Category = 'Align'
+      Caption = 'Align Left'
+      OnExecute = AlignLeftActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignBottomAction: TAction
+      Category = 'Align'
+      Caption = 'Align Bottom'
+      OnExecute = AlignBottomActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignTopAction: TAction
+      Category = 'Align'
+      Caption = 'Align Top'
+      OnExecute = AlignTopActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignRightAction: TAction
+      Category = 'Align'
+      Caption = 'Align Right'
+      OnExecute = AlignRightActionExecute
+      OnUpdate = CutCopyControlUpdate
     end
   end
   object OtherFieldsPopup: TPopupMenu

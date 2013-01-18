@@ -15,6 +15,10 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    AlignRightAction: TAction;
+    AlignTopAction: TAction;
+    AlignBottomAction: TAction;
+    AlignLeftAction: TAction;
     SelectAllAction: TAction;
     DateToolButton: TToolButton;
     DeleteAllToolButton: TToolButton;
@@ -151,6 +155,10 @@ type
     TodayDateSubMenu: TMenuItem;
     ValueLabelLabel: TLabel;
     ValueLabelPanel: TPanel;
+    procedure AlignBottomActionExecute(Sender: TObject);
+    procedure AlignLeftActionExecute(Sender: TObject);
+    procedure AlignRightActionExecute(Sender: TObject);
+    procedure AlignTopActionExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure ClearSelectionActionExecute(Sender: TObject);
     procedure CopyControlActionExecute(Sender: TObject);
@@ -264,11 +272,15 @@ type
   private
     { Select popup-submenu }
     procedure SelectAllFieldsType(Sender: TObject);
+    procedure SelectAllFieldsTypeInSection(Sender: TObject);
     procedure SelectAllFieldsLength(Sender: TObject);
     procedure SelectAllFieldsValueLabel(Sender: TObject);
     procedure SelectAllFieldsRange(Sender: TObject);
     procedure SelectAllFieldsDefaultValue(Sender: TObject);
     procedure SelectAllFieldsRepeat(Sender: TObject);
+  private
+    { Align }
+    procedure AlignControls(Const Side: TAlign);
   private
     { Other }
     procedure UpdateShortcuts;
@@ -309,7 +321,8 @@ uses
   Printers, OSPrinters, strutils,
   design_control_section,
   design_control_field,
-  design_control_heading;
+  design_control_heading,
+  align_form;
 
 { TRuntimeDesignFrame }
 
@@ -1309,6 +1322,30 @@ begin
   DesignPanel.Surface.SelectionChange;
 end;
 
+procedure TRuntimeDesignFrame.SelectAllFieldsTypeInSection(Sender: TObject);
+var
+  OrgField: TEpiField;
+  Selector: TJvDesignCustomSelector;
+  CmpField: TEpiField;
+  i: Integer;
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  OrgField := TEpiField(TMenu(Sender).Tag);
+
+  Selector := DesignPanel.Surface.Selector;
+  Selector.ClearSelection;
+
+  for i := 0 to OrgField.Section.Fields.Count -1 do
+  begin
+    CmpField := OrgField.Section.Fields[i];
+
+    if CmpField.FieldType = OrgField.FieldType then
+      Selector.AddToSelection(ControlFromEpiControl(CmpField));
+  end;
+  DesignPanel.Surface.SelectionChange;
+end;
+
 procedure TRuntimeDesignFrame.SelectAllFieldsLength(Sender: TObject);
 begin
   //
@@ -1332,6 +1369,44 @@ end;
 procedure TRuntimeDesignFrame.SelectAllFieldsRepeat(Sender: TObject);
 begin
   //
+end;
+
+procedure TRuntimeDesignFrame.AlignControls(const Side: TAlign);
+var
+  Objs: TJvDesignObjectArray;
+  L: Integer;
+  AlignVal: Integer;
+  i: Integer;
+begin
+  Objs := DesignPanel.Surface.Selected;
+  L := Length(Objs);
+
+  case Side of
+    alRight,
+    alBottom: AlignVal := 0;
+    alTop,
+    alLeft:   AlignVal := MaxInt;
+  end;
+
+  for i := 0 to L - 1 do
+  with TControl(Objs[i]) do
+    case Side of
+      alTop:    AlignVal := Min(AlignVal, Top);
+      alBottom: AlignVal := Max(AlignVal, Top + Height);
+      alLeft:   AlignVal := Min(AlignVal, Left);
+      alRight:  AlignVal := Max(AlignVal, Left + Width);
+    end;
+
+  DisableAutoSizing;
+  for i := 0 to L - 1 do
+  with TControl(Objs[i]) do
+    case Side of
+      alTop:    Top := AlignVal;
+      alBottom: Top := AlignVal - Height;
+      alLeft:   Left := AlignVal;
+      alRight:  Left := AlignVal - Width;
+    end;
+  EnableAutoSizing;
 end;
 
 procedure TRuntimeDesignFrame.UpdateShortcuts;
@@ -1367,8 +1442,15 @@ begin
   SelectLastAction.ShortCut            := D_MoveBottom;
   SelectAllAction.ShortCut             := D_SelectAll;
 
+  // Align
+  AlignLeftAction.ShortCut             := D_AlignLeft;
+  AlignRightAction.ShortCut            := D_AlignRight;
+  AlignTopAction.ShortCut              := D_AlignTop;
+  AlignBottomAction.ShortCut           := D_AlignBottom;
+
   UndoAction.ShortCut                  := D_Undo;
   RedoAction.ShortCut                  := D_Redo;
+  PrintDataFormAction.ShortCut         := D_PrintDataForm;
 end;
 
 procedure TRuntimeDesignFrame.UpdateControls;
@@ -1681,7 +1763,7 @@ end;
 
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
-  FPropertiesForm.Show;
+  ShowAlignmentForm(Self);
 end;
 
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
@@ -1836,6 +1918,12 @@ begin
         MI.Tag := PtrInt(EpiCtrl);
         SubMenu.Add(MI);
 
+        MI := TMenuItem.Create(SubMenu);
+        MI.Caption := 'All ' + EpiTypeNames[FieldType] + ' fields in section ' + Section.Caption.Text;
+        MI.OnClick := @SelectAllFieldsTypeInSection;
+        MI.Tag := PtrInt(EpiCtrl);
+        SubMenu.Add(MI);
+
         SubMenu.AddSeparator;
 
         if FieldType in IntFieldTypes + FloatFieldTypes + StringFieldTypes then
@@ -1931,6 +2019,26 @@ begin
   S := DataFile.SaveToXml('', 0);
   Fs.Write(S[1], Length(S));
   Fs.Free;
+end;
+
+procedure TRuntimeDesignFrame.AlignLeftActionExecute(Sender: TObject);
+begin
+  AlignControls(alLeft);
+end;
+
+procedure TRuntimeDesignFrame.AlignRightActionExecute(Sender: TObject);
+begin
+  AlignControls(alRight);
+end;
+
+procedure TRuntimeDesignFrame.AlignTopActionExecute(Sender: TObject);
+begin
+  AlignControls(alTop);
+end;
+
+procedure TRuntimeDesignFrame.AlignBottomActionExecute(Sender: TObject);
+begin
+  AlignControls(alBottom);
 end;
 
 procedure TRuntimeDesignFrame.ClearSelectionActionExecute(Sender: TObject);

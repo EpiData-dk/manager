@@ -1,11 +1,11 @@
 object MainForm: TMainForm
-  Left = 527
+  Left = 296
   Height = 603
-  Top = 268
+  Top = 287
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
-  ClientHeight = 580
+  ClientHeight = 581
   ClientWidth = 910
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
@@ -15,7 +15,7 @@ object MainForm: TMainForm
   LCLVersion = '1.1'
   object PageControl1: TPageControl
     Left = 0
-    Height = 540
+    Height = 541
     Top = 40
     Width = 910
     Align = alClient
@@ -41,7 +41,7 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 104
-      Height = 27
+      Height = 26
       Hint = 'Open existing project'
       Top = 7
       Width = 93
@@ -54,7 +54,7 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 8
-      Height = 27
+      Height = 26
       Hint = 'New EpiData Project'
       Top = 7
       Width = 86
@@ -70,10 +70,10 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 207
-      Height = 27
+      Height = 26
       Hint = 'Define/Change User names and passwords'
       Top = 7
-      Width = 140
+      Width = 138
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'User Access Control'
@@ -88,11 +88,11 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 357
-      Height = 27
+      Left = 355
+      Height = 26
       Hint = 'Good Clinical Practice guideline tools'
       Top = 7
-      Width = 103
+      Width = 101
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Gcp Extension'
@@ -132,6 +132,12 @@ object MainForm: TMainForm
         Action = CloseProjectAction
       end
       object FileMenuDivider2: TMenuItem
+        Caption = '-'
+      end
+      object PrintDataFormMenuItem: TMenuItem
+        Caption = 'Print'
+      end
+      object FileMenuDivider3: TMenuItem
         Caption = '-'
       end
       object FileExitMenuItem: TMenuItem
@@ -221,6 +227,27 @@ object MainForm: TMainForm
       Caption = '&Dataset'
       object ViewDataSetMenuItem: TMenuItem
         Caption = 'ViewDataSet'
+      end
+    end
+    object AlignMenu: TMenuItem
+      Caption = 'Align'
+      object AlignLeftMenuItem: TMenuItem
+        Caption = 'AlLeft'
+      end
+      object AlignRightMenuItem: TMenuItem
+        Caption = 'AlRight'
+      end
+      object AlignTopMenuItem: TMenuItem
+        Caption = 'AlTop'
+      end
+      object AlignBottomMenuItem: TMenuItem
+        Caption = 'AlBot'
+      end
+    end
+    object SelectMenu: TMenuItem
+      Caption = 'Select'
+      object MenuItem8: TMenuItem
+        Caption = 'New Item72'
       end
     end
     object ToolsMenu: TMenuItem
