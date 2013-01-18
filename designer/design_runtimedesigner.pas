@@ -15,6 +15,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    ShowAlignFormAction: TAction;
     AlignRightAction: TAction;
     AlignTopAction: TAction;
     AlignBottomAction: TAction;
@@ -76,6 +77,7 @@ type
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
     ViewDatasetAction: TAction;
     UndoAction: TAction;
     ImportAction: TAction;
@@ -210,6 +212,7 @@ type
     procedure SelectPgDnActionExecute(Sender: TObject);
     procedure SelectPgUpActionExecute(Sender: TObject);
     procedure SelectPriorActionExecute(Sender: TObject);
+    procedure ShowAlignFormActionExecute(Sender: TObject);
     procedure TestToolButtonClick(Sender: TObject);
     procedure UndoActionExecute(Sender: TObject);
     procedure UndoActionUpdate(Sender: TObject);
@@ -278,9 +281,13 @@ type
     procedure SelectAllFieldsRange(Sender: TObject);
     procedure SelectAllFieldsDefaultValue(Sender: TObject);
     procedure SelectAllFieldsRepeat(Sender: TObject);
-  private
     { Align }
-    procedure AlignControls(Const Side: TAlign);
+  private
+    procedure DoAlignControls(Const AAlignMent: TDesignControlsAlignment;
+      Const FixedDist: integer);
+  public
+    procedure AlignControls(Const AAlignMent: TDesignControlsAlignment;
+      Const FixedDist: integer = -1);
   private
     { Other }
     procedure UpdateShortcuts;
@@ -1371,42 +1378,144 @@ begin
   //
 end;
 
-procedure TRuntimeDesignFrame.AlignControls(const Side: TAlign);
+procedure TRuntimeDesignFrame.DoAlignControls(
+  const AAlignMent: TDesignControlsAlignment; const FixedDist: integer);
 var
   Objs: TJvDesignObjectArray;
   L: Integer;
   AlignVal: Integer;
   i: Integer;
+  ALeft: Integer;
+  ATop: Integer;
+  ABot: Integer;
+  ARight: Integer;
+  ATotRight: Integer;
+  ACenterHorz: Integer;
+  ACenterVert: Integer;
+  ATotalCtrlHeight: Integer;
+  ATotalCtrlWidth: Integer;
+  AEvenDistHorz: Integer;
+  AEvenDistVert: Integer;
+  LastBot: Integer;
+  LastRight: Integer;
+
+  procedure SortTop(var List: TJvDesignObjectArray);
+  var
+    n: Integer;
+    newn: Integer;
+    i: integer;
+    Tmp: TObject;
+  begin
+    n := Length(List);
+    repeat
+      newn := 0;
+      for i := 1 to n-1 do
+        if TControl(List[i-1]).Top > TControl(List[i]).Top then
+        begin
+          Tmp := List[i];
+          List[i] := List[i-1];
+          List[i-1] := Tmp;
+          newn := i;
+        end;
+      n := newn;
+    until (n = 0);
+  end;
+
+  procedure SortLeft(var List: TJvDesignObjectArray);
+  var
+    n: Integer;
+    newn: Integer;
+    i: integer;
+    Tmp: TObject;
+  begin
+    n := Length(List);
+    repeat
+      newn := 0;
+      for i := 1 to n-1 do
+        if TControl(List[i-1]).Left > TControl(List[i]).Left then
+        begin
+          Tmp := List[i];
+          List[i] := List[i-1];
+          List[i-1] := Tmp;
+          newn := i;
+        end;
+      n := newn;
+    until (n = 0);
+  end;
+
 begin
   Objs := DesignPanel.Surface.Selected;
   L := Length(Objs);
 
-  case Side of
-    alRight,
-    alBottom: AlignVal := 0;
-    alTop,
-    alLeft:   AlignVal := MaxInt;
-  end;
+  ALeft  := MaxInt;
+  ATop   := MaxInt;
+  ABot   := 0;
+  ARight := 0;
+  ATotRight := 0;
+  ATotalCtrlHeight := 0;
+  ATotalCtrlWidth  := 0;
 
   for i := 0 to L - 1 do
   with TControl(Objs[i]) do
-    case Side of
-      alTop:    AlignVal := Min(AlignVal, Top);
-      alBottom: AlignVal := Max(AlignVal, Top + Height);
-      alLeft:   AlignVal := Min(AlignVal, Left);
-      alRight:  AlignVal := Max(AlignVal, Left + Width);
+  begin
+    ALeft  := Min(ALeft, Left);
+    ARight := Max(ARight, Left + Width);
+    ATotRight := Max(ARight, Left + (TControl(Objs[i]) as IDesignEpiControl).TotalWidth);
+    ATop   := Min(ATop, Top);
+    ABot   := Max(ABot, Top + Height);
+    ATotalCtrlHeight += Height;
+    ATotalCtrlWidth  += (TControl(Objs[i]) as IDesignEpiControl).TotalWidth;
+  end;
+
+  ACenterVert := ALeft + ((ARight - ALeft) div 2);
+  ACenterHorz := ATop  + ((ABot - ATop) div 2);
+  if L > 1 then
+  begin
+    AEvenDistHorz := Max(1,
+      ((ATotRight - ALeft) - ATotalCtrlWidth) div (L - 1));
+    AEvenDistVert := Max(1,
+      ((ABot - ATop) - ATotalCtrlHeight) div (L - 1));
+  end;
+
+  if AAlignMent in [dcaEvenHorz, dcaFixedHorz] then
+    SortLeft(Objs);
+  if AAlignMent in [dcaEvenVert, dcaFixedVert] then
+    SortTop(Objs);
+
+  if L > 0 then
+    Case AAlignMent of
+      dcaEvenVert:   LastBot  := TControl(Objs[0]).Top - AEvenDistVert;
+      dcaEvenHorz:   LastRight  := TControl(Objs[0]).Left - AEvenDistHorz;
+      dcaFixedVert:  LastBot  := TControl(Objs[0]).Top - FixedDist;
+      dcaFixedHorz:  LastRight  := TControl(Objs[0]).Left - FixedDist;
     end;
 
   DisableAutoSizing;
   for i := 0 to L - 1 do
   with TControl(Objs[i]) do
-    case Side of
-      alTop:    Top := AlignVal;
-      alBottom: Top := AlignVal - Height;
-      alLeft:   Left := AlignVal;
-      alRight:  Left := AlignVal - Width;
+  begin
+    case AAlignMent of
+      dcaLeftMost:   Left := ALeft;
+      dcaRightMost:  Left := ARight - Width;
+      dcaTopMost:    Top  := ATop;
+      dcaBottomMost: Top  := ABot - Height;
+      dcaCenterVert: Left := ACenterVert - (Width div 2);
+      dcaCenterHorz: Top  := ACenterHorz - (Height div 2);
+      dcaEvenVert:   Top  := LastBot + AEvenDistVert;
+      dcaEvenHorz:   Left := LastRight + AEvenDistHorz;
+      dcaFixedVert:  Top  := LastBot + FixedDist;
+      dcaFixedHorz:  Left := LastRight + FixedDist;
     end;
+    LastBot   := Top + Height;
+    LastRight := Left + (TControl(Objs[i]) as IDesignEpiControl).TotalWidth;
+  end;
   EnableAutoSizing;
+end;
+
+procedure TRuntimeDesignFrame.AlignControls(
+  const AAlignMent: TDesignControlsAlignment; const FixedDist: integer);
+begin
+  DoAlignControls(AAlignMent, FixedDist);
 end;
 
 procedure TRuntimeDesignFrame.UpdateShortcuts;
@@ -1761,9 +1870,14 @@ begin
   SelectControl(dsaPrior);
 end;
 
-procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
+procedure TRuntimeDesignFrame.ShowAlignFormActionExecute(Sender: TObject);
 begin
   ShowAlignmentForm(Self);
+end;
+
+procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
+begin
+//  ShowAlignmentForm(Self);
 end;
 
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
@@ -2023,22 +2137,22 @@ end;
 
 procedure TRuntimeDesignFrame.AlignLeftActionExecute(Sender: TObject);
 begin
-  AlignControls(alLeft);
+  AlignControls(dcaLeftMost);
 end;
 
 procedure TRuntimeDesignFrame.AlignRightActionExecute(Sender: TObject);
 begin
-  AlignControls(alRight);
+  AlignControls(dcaRightMost);
 end;
 
 procedure TRuntimeDesignFrame.AlignTopActionExecute(Sender: TObject);
 begin
-  AlignControls(alTop);
+  AlignControls(dcaTopMost);
 end;
 
 procedure TRuntimeDesignFrame.AlignBottomActionExecute(Sender: TObject);
 begin
-  AlignControls(alBottom);
+  AlignControls(dcaBottomMost);
 end;
 
 procedure TRuntimeDesignFrame.ClearSelectionActionExecute(Sender: TObject);

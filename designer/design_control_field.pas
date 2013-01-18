@@ -21,6 +21,7 @@ type
     FQuestionLabel: TLabel;
     FValueLabelLabel: TLabel;
     function  GetEpiControl: TEpiCustomControlItem;
+    function  GetTotalWidth: Integer;
     procedure OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnValueLabelSetChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnProjectSettingsChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
@@ -42,6 +43,7 @@ type
     procedure   SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     procedure   FixupCopyControl;
     property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    property    TotalWidth: Integer read GetTotalWidth;
     property    NameLabel: TLabel read FNameLabel;
     property    QuestionLabel: TLabel read FQuestionLabel;
   end;
@@ -80,6 +82,13 @@ end;
 function TDesignField.GetEpiControl: TEpiCustomControlItem;
 begin
   Result := FField;
+end;
+
+function TDesignField.GetTotalWidth: Integer;
+begin
+  Result :=
+    (FValueLabelLabel.Left + FValueLabelLabel.Width) -
+    FNameLabel.Left;
 end;
 
 procedure TDesignField.OnFieldChange(Sender: TObject;

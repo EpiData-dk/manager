@@ -10,34 +10,31 @@ uses
 
 type
 
-  TControlsAlignment = (
-    caLeftMost,
-    caRightMost,
-    caTopMost,
-    caBottomMost,
-    caCenterVert,
-    caCenterHorz,
-    caEvenVert,
-    caEvenHorz,
-    caFixedVert,
-    caFixedHorz
-  );
-
   { TAlignmentForm }
 
   TAlignmentForm = class(TForm)
-    BitBtn1: TBitBtn;
-    BitBtn10: TBitBtn;
-    BitBtn2: TBitBtn;
-    BitBtn3: TBitBtn;
-    BitBtn4: TBitBtn;
-    BitBtn5: TBitBtn;
-    BitBtn6: TBitBtn;
-    BitBtn7: TBitBtn;
-    BitBtn8: TBitBtn;
-    BitBtn9: TBitBtn;
+    TopAlignBtn: TBitBtn;
+    FixedDistHorzBtn: TBitBtn;
+    LeftAlignBtn: TBitBtn;
+    RightAlignBtn: TBitBtn;
+    BottomAlignBtn: TBitBtn;
+    EvenDistVertBtn: TBitBtn;
+    EvenDistHorzBtn: TBitBtn;
+    CenterVertBtn: TBitBtn;
+    CenterHorzBtn: TBitBtn;
+    FixedDistVertBtn: TBitBtn;
     SpinEdit1: TSpinEdit;
     SpinEdit2: TSpinEdit;
+    procedure BottomAlignBtnClick(Sender: TObject);
+    procedure CenterVertBtnClick(Sender: TObject);
+    procedure CenterHorzBtnClick(Sender: TObject);
+    procedure EvenDistVertBtnClick(Sender: TObject);
+    procedure EvenDistHorzBtnClick(Sender: TObject);
+    procedure FixedDistVertBtnClick(Sender: TObject);
+    procedure FixedDistHorzBtnClick(Sender: TObject);
+    procedure LeftAlignBtnClick(Sender: TObject);
+    procedure RightAlignBtnClick(Sender: TObject);
+    procedure TopAlignBtnClick(Sender: TObject);
   private
     FDesignFrame: TRuntimeDesignFrame;
     { private declarations }
@@ -52,6 +49,9 @@ function AlignmentFormIsVisible: boolean;
 implementation
 
 {$R *.lfm}
+
+uses
+  design_types;
 
 var
   AlignForm: TAlignmentForm;
@@ -70,6 +70,58 @@ begin
   if not Assigned(AlignForm) then exit(false);
 
   result := AlignForm.Visible;
+end;
+
+{ TAlignmentForm }
+
+procedure TAlignmentForm.EvenDistVertBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaEvenVert);
+end;
+
+procedure TAlignmentForm.EvenDistHorzBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaEvenHorz);
+end;
+
+procedure TAlignmentForm.FixedDistVertBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaFixedVert, SpinEdit1.Value);
+end;
+
+procedure TAlignmentForm.FixedDistHorzBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaFixedHorz, SpinEdit2.Value);
+end;
+
+procedure TAlignmentForm.BottomAlignBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaBottomMost);
+end;
+
+procedure TAlignmentForm.CenterVertBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaCenterVert);
+end;
+
+procedure TAlignmentForm.CenterHorzBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaCenterHorz);
+end;
+
+procedure TAlignmentForm.LeftAlignBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaLeftMost);
+end;
+
+procedure TAlignmentForm.RightAlignBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaRightMost);
+end;
+
+procedure TAlignmentForm.TopAlignBtnClick(Sender: TObject);
+begin
+  DesignFrame.AlignControls(dcaTopMost);
 end;
 
 
