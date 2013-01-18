@@ -181,7 +181,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="73">
+    <Units Count="74">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -669,6 +669,14 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="project_studyunit_form"/>
       </Unit72>
+      <Unit73>
+        <Filename Value="designer/align/align_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AlignmentForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="align_form"/>
+      </Unit73>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -678,7 +686,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import;tools;reports;export"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;project/structure;import;tools;reports;export;designer/align"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>
