@@ -24,10 +24,13 @@ type
     AlignLeftMenuItem: TMenuItem;
     AlignRightMenuItem: TMenuItem;
     AlignTopMenuItem: TMenuItem;
+    SelectAllBoolMenuItem: TMenuItem;
+    SelectAllStringMenuItem: TMenuItem;
+    SelectAllFloatMenuItem: TMenuItem;
     PrintDataFormMenuItem: TMenuItem;
     FileMenuDivider3: TMenuItem;
     SelectMenu: TMenuItem;
-    MenuItem8: TMenuItem;
+    SelectAllIntsMenuItem: TMenuItem;
     StudyInfoMenuItem: TMenuItem;
     PasteMenuItem: TMenuItem;
     CopyMenuItem: TMenuItem;
@@ -1085,6 +1088,10 @@ begin
   AlignBottomMenuItem.Action       := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignBottomAction;
 
   // Select
+  SelectAllIntsMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllIntsAction;
+  SelectAllFloatMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllFloatsAction;
+  SelectAllStringMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllStringsAction;
+  SelectAllBoolMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllBoolsAction;
 
 
   // DataSet

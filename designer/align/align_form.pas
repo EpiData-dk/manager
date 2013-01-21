@@ -13,6 +13,10 @@ type
   { TAlignmentForm }
 
   TAlignmentForm = class(TForm)
+    SidesgrpBox: TGroupBox;
+    CenterGrpBox: TGroupBox;
+    EvenDistGrpBox: TGroupBox;
+    FixedDistGrpBox: TGroupBox;
     TopAlignBtn: TBitBtn;
     FixedDistHorzBtn: TBitBtn;
     LeftAlignBtn: TBitBtn;

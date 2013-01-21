@@ -49,6 +49,15 @@ type
     dcaFixedHorz
   );
 
+  TDesignSelectType = (
+    dstType,
+    dstLength,
+    dstValueLabel,
+    dstRange,
+    dstDefaultValue,
+    dstRepeat
+  );
+
 implementation
 
 end.
