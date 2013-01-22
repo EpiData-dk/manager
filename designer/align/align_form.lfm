@@ -1,7 +1,7 @@
 object AlignmentForm: TAlignmentForm
-  Left = 1098
+  Left = 938
   Height = 230
-  Top = 326
+  Top = 351
   Width = 300
   Caption = 'Alignment'
   ChildSizing.LeftRightSpacing = 5
@@ -28,9 +28,12 @@ object AlignmentForm: TAlignmentForm
     Caption = 'Sides:'
     ChildSizing.VerticalSpacing = 5
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
+    ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
+    ChildSizing.ShrinkHorizontal = crsHomogenousSpaceResize
+    ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 36
+    ClientHeight = 35
     ClientWidth = 286
     ParentShowHint = False
     ShowHint = True
@@ -39,7 +42,7 @@ object AlignmentForm: TAlignmentForm
       Left = 33
       Height = 28
       Hint = 'Align Left'
-      Top = 0
+      Top = 4
       Width = 28
       AutoSize = True
       BorderSpacing.Left = 5
@@ -89,7 +92,7 @@ object AlignmentForm: TAlignmentForm
       Left = 94
       Height = 28
       Hint = 'Align Top'
-      Top = 0
+      Top = 4
       Width = 28
       AutoSize = True
       Glyph.Data = {
@@ -138,7 +141,7 @@ object AlignmentForm: TAlignmentForm
       Left = 155
       Height = 28
       Hint = 'Align Bottom'
-      Top = 0
+      Top = 4
       Width = 28
       AutoSize = True
       Glyph.Data = {
@@ -188,7 +191,7 @@ object AlignmentForm: TAlignmentForm
       Left = 216
       Height = 28
       Hint = 'Align Right'
-      Top = 0
+      Top = 4
       Width = 28
       AutoSize = True
       BorderSpacing.Right = 5
@@ -243,10 +246,12 @@ object AlignmentForm: TAlignmentForm
     Width = 290
     Caption = 'Center:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
+    ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
     ChildSizing.ShrinkHorizontal = crsHomogenousSpaceResize
+    ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 36
+    ClientHeight = 35
     ClientWidth = 286
     ParentShowHint = False
     ShowHint = True
@@ -255,7 +260,7 @@ object AlignmentForm: TAlignmentForm
       Left = 77
       Height = 28
       Hint = 'Center Vertical'
-      Top = 0
+      Top = 4
       Width = 28
       AutoSize = True
       Glyph.Data = {
@@ -302,7 +307,7 @@ object AlignmentForm: TAlignmentForm
       Left = 182
       Height = 28
       Hint = 'Center Horizontal'
-      Top = 0
+      Top = 4
       Width = 28
       AutoSize = True
       Glyph.Data = {
@@ -354,10 +359,12 @@ object AlignmentForm: TAlignmentForm
     Width = 290
     Caption = 'Even distance:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
+    ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
     ChildSizing.ShrinkHorizontal = crsHomogenousSpaceResize
+    ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 36
+    ClientHeight = 35
     ClientWidth = 286
     ParentShowHint = False
     ShowHint = True
@@ -366,7 +373,7 @@ object AlignmentForm: TAlignmentForm
       Left = 77
       Height = 28
       Hint = 'Even vertical distance between controls'
-      Top = 0
+      Top = 4
       Width = 28
       AutoSize = True
       Glyph.Data = {
@@ -413,7 +420,7 @@ object AlignmentForm: TAlignmentForm
       Left = 182
       Height = 28
       Hint = 'Even horizontal distance between controls'
-      Top = 0
+      Top = 4
       Width = 28
       AutoSize = True
       Glyph.Data = {
@@ -465,10 +472,12 @@ object AlignmentForm: TAlignmentForm
     Width = 290
     Caption = 'Fixed distance:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
+    ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
     ChildSizing.ShrinkHorizontal = crsHomogenousSpaceResize
+    ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 33
+    ClientHeight = 32
     ClientWidth = 286
     ParentShowHint = False
     ShowHint = True
@@ -477,7 +486,7 @@ object AlignmentForm: TAlignmentForm
       Left = 77
       Height = 28
       Hint = 'Fixed vertical distance between controls'
-      Top = 0
+      Top = 2
       Width = 28
       AutoSize = True
       Glyph.Data = {
@@ -526,7 +535,7 @@ object AlignmentForm: TAlignmentForm
       Left = 182
       Height = 28
       Hint = 'Fixed horizontal distance between controls'
-      Top = 0
+      Top = 2
       Width = 28
       AutoSize = True
       Glyph.Data = {
@@ -579,8 +588,8 @@ object AlignmentForm: TAlignmentForm
       AnchorSideBottom.Control = FixedDistVertBtn
       AnchorSideBottom.Side = asrBottom
       Left = 110
-      Height = 24
-      Top = 4
+      Height = 25
+      Top = 5
       Width = 50
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5
@@ -594,8 +603,8 @@ object AlignmentForm: TAlignmentForm
       AnchorSideBottom.Control = FixedDistHorzBtn
       AnchorSideBottom.Side = asrBottom
       Left = 215
-      Height = 24
-      Top = 4
+      Height = 25
+      Top = 5
       Width = 50
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5

@@ -1475,7 +1475,12 @@ var
     repeat
       newn := 0;
       for i := 1 to n-1 do
-        if TControl(List[i-1]).Top > TControl(List[i]).Top then
+        if (TControl(List[i-1]).Top > TControl(List[i]).Top) or
+           (
+            (TControl(List[i-1]).Top = TControl(List[i]).Top) and
+            (TControl(List[i-1]).Left > TControl(List[i]).Left)
+           )
+        then
         begin
           Tmp := List[i];
           List[i] := List[i-1];
@@ -1497,7 +1502,12 @@ var
     repeat
       newn := 0;
       for i := 1 to n-1 do
-        if TControl(List[i-1]).Left > TControl(List[i]).Left then
+        if (TControl(List[i-1]).Left > TControl(List[i]).Left) or
+           (
+            (TControl(List[i-1]).Left = TControl(List[i]).Left) and
+            (TControl(List[i-1]).Top > TControl(List[i]).Top)
+           )
+        then
         begin
           Tmp := List[i];
           List[i] := List[i-1];
