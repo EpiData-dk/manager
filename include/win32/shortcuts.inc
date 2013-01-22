@@ -47,6 +47,14 @@ begin
   D_NewHeading_Fast            := KeyToShortCut(VK_6, [ssShift]);
   D_NewSection                 := KeyToShortCut(VK_UNKNOWN, []);
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
+  D_SelectAll                  := KeyToShortCut(VK_A, [ssCtrl]);
+
+  // - align
+  D_AlignLeft                  := KeyToShortCut(VK_LEFT, [ssCtrl, ssShift]);
+  D_AlignRight                 := KeyToShortCut(VK_RIGHT, [ssCtrl, ssShift]);
+  D_AlignTop                   := KeyToShortCut(VK_UP, [ssCtrl, ssShift]);
+  D_AlignBottom                := KeyToShortCut(VK_DOWN, [ssCtrl, ssShift]);
+
   D_DeleteControl              := KeyToShortCut(VK_DELETE, []);
   D_DeleteControl_Fast         := KeyToShortCut(VK_DELETE, [ssShift]);
   D_ImportData                 := KeyToShortCut(VK_I, [ssCtrl]);
@@ -64,6 +72,7 @@ begin
   D_ViewDataSet                := KeyToShortCut(VK_UNKNOWN, []);
   D_Undo                       := KeyToShortCut(VK_Z, [ssCtrl]);
   D_Redo                       := KeyToShortCut(VK_Z, [ssCtrl, ssShift]);
+  D_PrintDataForm              := KeyToShortCut(VK_P, [ssCtrl]);
 
   // ValueLabel Editor
   // - tree actions

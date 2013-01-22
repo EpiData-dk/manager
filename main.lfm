@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 527
+  Left = 241
   Height = 603
-  Top = 268
+  Top = 287
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -134,6 +134,12 @@ object MainForm: TMainForm
       object FileMenuDivider2: TMenuItem
         Caption = '-'
       end
+      object PrintDataFormMenuItem: TMenuItem
+        Caption = 'Print'
+      end
+      object FileMenuDivider3: TMenuItem
+        Caption = '-'
+      end
       object FileExitMenuItem: TMenuItem
         Action = FileExitAction
       end
@@ -221,6 +227,36 @@ object MainForm: TMainForm
       Caption = '&Dataset'
       object ViewDataSetMenuItem: TMenuItem
         Caption = 'ViewDataSet'
+      end
+    end
+    object AlignMenu: TMenuItem
+      Caption = 'Align'
+      object AlignLeftMenuItem: TMenuItem
+        Caption = 'AlLeft'
+      end
+      object AlignRightMenuItem: TMenuItem
+        Caption = 'AlRight'
+      end
+      object AlignTopMenuItem: TMenuItem
+        Caption = 'AlTop'
+      end
+      object AlignBottomMenuItem: TMenuItem
+        Caption = 'AlBot'
+      end
+    end
+    object SelectMenu: TMenuItem
+      Caption = 'Select'
+      object SelectAllIntsMenuItem: TMenuItem
+        Caption = 'AllInts'
+      end
+      object SelectAllFloatMenuItem: TMenuItem
+        Caption = 'AllFloats'
+      end
+      object SelectAllStringMenuItem: TMenuItem
+        Caption = 'AllStrings'
+      end
+      object SelectAllBoolMenuItem: TMenuItem
+        Caption = 'AllBools'
       end
     end
     object ToolsMenu: TMenuItem

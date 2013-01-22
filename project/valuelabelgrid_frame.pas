@@ -59,7 +59,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Dialogs, LCLProc, epimiscutils, Math;
+  Graphics, Dialogs, LCLProc, epimiscutils, Math, LCLIntf, LMessages;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -269,11 +269,6 @@ begin
   Node^.CheckType := ctCheckBox;
   if ValueLabelFromNode(Node).IsMissingValue then
     Node^.CheckState := csCheckedNormal;
-
-{  if not Assigned(ValueLabelFromNode(Node)) then
-  begin
-    Pointer(Sender.GetNodeData(Node)^) := FValueLabelSet[Node^.Index];
-  end;}
 end;
 
 procedure TValueLabelGridFrame.VLGKeyDown(Sender: TObject; var Key: Word;
@@ -284,12 +279,6 @@ begin
   case Key of
     VK_RETURN:
       begin
-{        if ssCtrl in Shift then
-        begin
-          DoAddLine;
-          Key := VK_UNKNOWN;
-        end;}
-
         if (Shift = []) then
         begin
           if not Assigned(VLG.FocusedNode) then
@@ -344,6 +333,10 @@ end;
 
 procedure TValueLabelGridFrame.VLGUTF8KeyPress(Sender: TObject;
   var UTF8Key: TUTF8Char);
+var
+  Len: integer;
+  CharCode: Word;
+  Msg: TLMKeyDown;
 begin
   if UTF8Key = Char(VK_SPACE) then exit;
   if UTF8Key = Char(VK_RETURN) then exit;

@@ -27,6 +27,7 @@ type
     { private declarations }
     FEpiDocument: TEpiCustomBase;
     FActiveFrame: TFrame;
+    function ApplySettingForCurrentFrame: boolean;
   protected
     constructor Create(TheOwner: TComponent); override;
   public
@@ -43,7 +44,8 @@ uses
   project_settings_field_frame, project_settings_interface,
   project_settings_general_frame, settings2, settings2_var,
   project_settings_study_frame, project_settings_study_contentdesc_frame,
-  project_settings_study_ownership_frame;
+  project_settings_study_ownership_frame,
+  main;
 
 { TProjectSettingsForm }
 
@@ -61,7 +63,7 @@ var
 begin
   if ModalResult = mrCancel then exit;
 
-  CanClose := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
+  CanClose := ApplySettingForCurrentFrame;
   if CanClose and ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, 'ProjectSettings');
 end;
@@ -86,10 +88,21 @@ begin
   if csDestroying in ComponentState then exit;
 
   FActiveFrame := TFrame(Node.Data);
-  AllowChange := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
+  AllowChange := ApplySettingForCurrentFrame;
   if not AllowChange then exit;
 
   FActiveFrame.Hide;
+end;
+
+function TProjectSettingsForm.ApplySettingForCurrentFrame: boolean;
+begin
+  Mainform.Cursor := crHourGlass;
+  Application.ProcessMessages;
+  MainForm.BeginUpdatingForm;
+  Result := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
+  MainForm.EndUpdatingForm;
+  MainForm.Cursor := crDefault;
+  Application.ProcessMessages;
 end;
 
 constructor TProjectSettingsForm.Create(TheOwner: TComponent);

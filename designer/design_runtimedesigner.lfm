@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 582
   ClientWidth = 812
   TabOrder = 0
-  DesignLeft = 480
-  DesignTop = 204
+  DesignLeft = 604
+  DesignTop = 289
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
@@ -36,19 +36,19 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object SectionsLabel: TLabel
         AnchorSideLeft.Control = SectionsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 62
-        Height = 14
+        Left = 63
+        Height = 15
         Top = 4
-        Width = 87
+        Width = 89
         BorderSpacing.Left = 2
         Caption = 'SectionsLabel'
         ParentColor = False
       end
       object SectionsStaticLabel: TLabel
         Left = 2
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 58
+        Width = 59
         Caption = 'Sections:'
         ParentColor = False
       end
@@ -71,9 +71,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       TabOrder = 1
       object CurrentSectionLabel: TLabel
         Left = 3
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 127
+        Width = 130
         Caption = 'CurrentSectionLabel'
         ParentColor = False
       end
@@ -94,16 +94,16 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
         Left = 59
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 84
+        Width = 85
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         ParentColor = False
       end
       object RecordStaticLabel: TLabel
         Left = 2
-        Height = 14
+        Height = 15
         Top = 4
         Width = 55
         Caption = 'Records:'
@@ -129,16 +129,16 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         AnchorSideLeft.Control = FieldsStaticLabel
         AnchorSideLeft.Side = asrBottom
         Left = 44
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 69
+        Width = 70
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         ParentColor = False
       end
       object FieldsStaticLabel: TLabel
         Left = 2
-        Height = 14
+        Height = 15
         Top = 4
         Width = 40
         Caption = 'Fields:'
@@ -166,9 +166,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object FieldNameLabel: TLabel
         AnchorSideLeft.Control = FieldNamePanel
         Left = 3
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 98
+        Width = 102
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         ParentColor = False
@@ -195,9 +195,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object FieldTypeLabel: TLabel
         AnchorSideLeft.Control = FieldTypePanel
         Left = 3
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 89
+        Width = 91
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         ParentColor = False
@@ -224,9 +224,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object DefaultValueLabel: TLabel
         AnchorSideLeft.Control = DefaultValuePanel
         Left = 3
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 113
+        Width = 115
         BorderSpacing.Left = 2
         Caption = 'DefaultValueLabel'
         ParentColor = False
@@ -253,9 +253,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object ValueLabelLabel: TLabel
         AnchorSideLeft.Control = ValueLabelPanel
         Left = 3
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 101
+        Width = 103
         BorderSpacing.Left = 2
         Caption = 'ValueLabelLabel'
         ParentColor = False
@@ -282,9 +282,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object RangeLabel: TLabel
         AnchorSideLeft.Control = RangePanel
         Left = 3
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 73
+        Width = 74
         BorderSpacing.Left = 2
         Caption = 'RangeLabel'
         ParentColor = False
@@ -311,9 +311,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object KeyLabel: TLabel
         AnchorSideLeft.Control = KeyPanel
         Left = 3
-        Height = 14
+        Height = 15
         Top = 4
-        Width = 54
+        Width = 57
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         ParentColor = False
@@ -368,41 +368,41 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     TabOrder = 1
     object Label1: TLabel
       Left = 11
-      Height = 14
+      Height = 15
       Top = 38
-      Width = 41
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label2: TLabel
       Left = 11
-      Height = 14
+      Height = 15
       Top = 118
-      Width = 41
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label3: TLabel
       Left = 11
-      Height = 14
+      Height = 15
       Top = 198
-      Width = 41
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label4: TLabel
       Left = 11
-      Height = 14
+      Height = 15
       Top = 294
-      Width = 41
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label5: TLabel
       Left = 11
-      Height = 14
+      Height = 15
       Top = 378
-      Width = 41
+      Width = 42
       Caption = 'Label5'
       ParentColor = False
     end
@@ -417,25 +417,25 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object Label6: TLabel
       Left = 11
-      Height = 14
+      Height = 15
       Top = 454
-      Width = 41
+      Width = 42
       Caption = 'Label6'
       ParentColor = False
     end
     object Label7: TLabel
       Left = 75
-      Height = 14
+      Height = 15
       Top = 77
-      Width = 41
+      Width = 42
       Caption = 'Label7'
       ParentColor = False
     end
     object Label8: TLabel
       Left = 80
-      Height = 14
+      Height = 15
       Top = 162
-      Width = 41
+      Width = 42
       Caption = 'Label8'
       ParentColor = False
     end
@@ -619,14 +619,14 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Style = tbsDivider
       end
       object Divider6: TToolButton
-        Left = 428
+        Left = 456
         Top = 1
         Width = 5
         Caption = 'Divider6'
         Style = tbsDivider
       end
       object TestToolButton: TToolButton
-        Left = 433
+        Left = 461
         Top = 1
         Caption = 'TestToolButton'
         ImageIndex = 0
@@ -667,6 +667,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Width = 5
         Caption = 'ToolButton3'
         Style = tbsDivider
+      end
+      object ToolButton5: TToolButton
+        Left = 428
+        Top = 1
+        Action = ShowAlignFormAction
       end
     end
     object ProjectToolBar: TToolBar
@@ -722,7 +727,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     left = 312
     top = 368
     Bitmap = {
-      4C69140000001800000018000000000000010000000000000000000000000000
+      4C69150000001800000018000000000000010000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -2162,7 +2167,79 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00FFFFFF00
+      FF00FFFFFF00FFFFFF00FFFFFF00A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4
+      A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A4A4FFE7B48DFFE6B38CFFE6B38CFFE5AF88FFE2A8
+      80FFDE9F76FFDA956CFFD78E64FFA4A4A4FFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A4A4FFE7B48DFFECC8ACFFEBC3A4FFEABEA0FFE7B7
+      98FFE4AF90FFE2AA8BFFD99169FFA4A4A4FFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A4A4FFE7B48DFFECC7AAFFEBC0A1FFE7BA9BFFE5B1
+      92FFE2AA8BFFE0A687FFD88E66FFA4A4A4FFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A4A4FFE7B48DFFEBC5A7FFE9BB9DFFE5B495FFE2AC
+      8DFFE0A584FFDFA384FFD88E66FFA4A4A4FFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A4A4FFE7B48DFFEBC5A7FFE9BB9DFFE5B495FFE2AC
+      8DFFE0A584FFDFA384FFD88E66FFA4A4A4FFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A4A4FFE6B089FFE2A880FFDD9F76FFD9966CFFD78C
+      63FFD3855AFFD28358FFD48358FFA4A4A4FFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4
+      A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A4A4FFA4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000DFDFDFFFA4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
+      A000A4A0A000A4A0A000A4A0A000
     }
   end
   object DesignerActionList: TActionList
@@ -2393,6 +2470,62 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Print Dataform'
       ImageIndex = 19
       OnExecute = PrintDataFormActionExecute
+    end
+    object SelectAllAction: TAction
+      Category = 'Select'
+      Caption = 'SelectAllAction'
+      OnExecute = SelectAllActionExecute
+    end
+    object AlignLeftAction: TAction
+      Category = 'Align'
+      Caption = 'Align Left'
+      OnExecute = AlignLeftActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignBottomAction: TAction
+      Category = 'Align'
+      Caption = 'Align Bottom'
+      OnExecute = AlignBottomActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignTopAction: TAction
+      Category = 'Align'
+      Caption = 'Align Top'
+      OnExecute = AlignTopActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignRightAction: TAction
+      Category = 'Align'
+      Caption = 'Align Right'
+      OnExecute = AlignRightActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object ShowAlignFormAction: TAction
+      Category = 'Align'
+      Caption = 'Alignment...'
+      Hint = 'Alignment...'
+      ImageIndex = 20
+      OnExecute = ShowAlignFormActionExecute
+    end
+    object SelectAllIntsAction: TAction
+      Category = 'Select'
+      Caption = 'Select All Integer Fields'
+      OnExecute = SelectAllIntsActionExecute
+    end
+    object SelectAllFloatsAction: TAction
+      Category = 'Select'
+      Caption = 'Select All Float Fields'
+      OnExecute = SelectAllFloatsActionExecute
+    end
+    object SelectAllStringsAction: TAction
+      Category = 'Select'
+      Caption = 'Select All String Fields'
+      OnExecute = SelectAllStringsActionExecute
+    end
+    object SelectAllBoolsAction: TAction
+      Category = 'Select'
+      Caption = 'Select All Boolean Fields'
+      OnExecute = SelectAllBoolsActionExecute
     end
   end
   object OtherFieldsPopup: TPopupMenu
@@ -3232,6 +3365,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   object DesignControlPopUpMenu: TPopupMenu
     Images = DesignerImageList
     OnPopup = DesignControlPopUpMenuPopup
+    OnClose = DesignControlPopUpMenuClose
     left = 232
     top = 304
     object EditPopupMenuItem: TMenuItem

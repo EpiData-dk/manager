@@ -41,6 +41,7 @@ var
     TShortCut;
 
   // Designer Frame
+  // - new controls
   D_NewIntField, D_NewIntField_Fast,
   D_NewFloatField, D_NewFloatField_Fast,
   D_NewStringField, D_NewStringField_Fast,
@@ -48,6 +49,7 @@ var
   D_NewTimeField, D_NewTimeField_Fast,
   D_NewHeading, D_NewHeading_Fast,
   D_NewSection,
+
   D_EditControl,
   D_DeleteControl, D_DeleteControl_Fast,
   D_ImportData,
@@ -57,12 +59,20 @@ var
   D_MoveControlDown,
   D_MoveSideDown,
   D_MoveBottom,
+  D_SelectAll,
+  // Align
+  D_AlignLeft,
+  D_AlignRight,
+  D_AlignTop,
+  D_AlignBottom,
+  // Edit?
   D_DeleteAllControl,
   D_PasteAs,
   D_CutControl,
   D_CopyControl,
   D_PasteControl,
   D_ViewDataSet,
+  D_PrintDataForm,
   D_Undo,
   D_Redo:
     TShortCut;

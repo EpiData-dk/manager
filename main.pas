@@ -19,6 +19,18 @@ type
     EditMenuDivider10: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
     EditMenuDivider0: TMenuItem;
+    AlignMenu: TMenuItem;
+    AlignBottomMenuItem: TMenuItem;
+    AlignLeftMenuItem: TMenuItem;
+    AlignRightMenuItem: TMenuItem;
+    AlignTopMenuItem: TMenuItem;
+    SelectAllBoolMenuItem: TMenuItem;
+    SelectAllStringMenuItem: TMenuItem;
+    SelectAllFloatMenuItem: TMenuItem;
+    PrintDataFormMenuItem: TMenuItem;
+    FileMenuDivider3: TMenuItem;
+    SelectMenu: TMenuItem;
+    SelectAllIntsMenuItem: TMenuItem;
     StudyInfoMenuItem: TMenuItem;
     PasteMenuItem: TMenuItem;
     CopyMenuItem: TMenuItem;
@@ -763,12 +775,13 @@ begin
                    [mbOK], 0);
         DoCloseProject;
       end;
-  else
-    begin
-      ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
-                  'An unknown error occured.');
-      DoCloseProject;
-    end;
+    on E: Exception do
+      begin
+        ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
+                    'An error occured:' + LineEnding +
+                    E.Message);
+        DoCloseProject;
+      end;
   end;
 end;
 
@@ -778,6 +791,8 @@ begin
   CloseProjectAction.Enabled := Assigned(FActiveFrame);
   SaveProjectMenuItem.Visible := Assigned(FActiveFrame);
   SaveProjectAsMenuItem.Visible := Assigned(FActiveFrame);
+  PrintDataFormMenuItem.Visible := Assigned(FActiveFrame);
+  FileMenuDivider3.Visible := PrintDataFormMenuItem.Visible;
 
   // EDIT:
   UndoMenuItem.Visible := Assigned(FActiveFrame);
@@ -803,8 +818,14 @@ begin
   KeyFieldsMenuItem.Visible := Assigned(FActiveFrame);
   StudyInfoMenuItem.Visible := Assigned(FActiveFrame);
 
+  // ALIGN
+  AlignMenu.Visible         := Assigned(FActiveFrame);
+
+  // SELECT
+  SelectMenu.Visible        := Assigned(FActiveFrame);
+
   // TOOLS:
-  DataSetMenu.Visible := Assigned(FActiveFrame);
+  DataSetMenu.Visible       := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;
@@ -839,12 +860,16 @@ end;
 
 procedure TMainForm.UpdateSettings;
 begin
+  BeginUpdatingForm;
+
   LoadTutorials;
   UpdateProcessToolbar;
   UpdateShortCuts;
 
   if Assigned(FActiveFrame) then
     TProjectFrame(FActiveFrame).UpdateFrame;
+
+  EndUpdatingForm;
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
@@ -1029,8 +1054,10 @@ begin
   if Not Assigned(FActiveFrame) then exit;
 
   UpdateMainMenu;
+  // File
   SaveProjectMenuItem.Action   := FActiveFrame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
+  PrintDataFormMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PrintDataFormAction;
 
   // Edit
   UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;
@@ -1054,6 +1081,19 @@ begin
   KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
   StudyInfoMenuItem.Action         := FActiveFrame.StudyInformationAction;
 
+  // Align
+  AlignLeftMenuItem.Action         := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignLeftAction;
+  AlignRightMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignRightAction;
+  AlignTopMenuItem.Action          := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignTopAction;
+  AlignBottomMenuItem.Action       := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignBottomAction;
+
+  // Select
+  SelectAllIntsMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllIntsAction;
+  SelectAllFloatMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllFloatsAction;
+  SelectAllStringMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllStringsAction;
+  SelectAllBoolMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllBoolsAction;
+
+
   // DataSet
   ViewDataSetMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
 end;
@@ -1065,7 +1105,7 @@ end;
 
 procedure TMainForm.EndUpdatingForm;
 begin
-    EndFormUpdate;
+  EndFormUpdate;
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);

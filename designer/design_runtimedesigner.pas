@@ -15,6 +15,16 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    SelectAllBoolsAction: TAction;
+    SelectAllStringsAction: TAction;
+    SelectAllFloatsAction: TAction;
+    SelectAllIntsAction: TAction;
+    ShowAlignFormAction: TAction;
+    AlignRightAction: TAction;
+    AlignTopAction: TAction;
+    AlignBottomAction: TAction;
+    AlignLeftAction: TAction;
+    SelectAllAction: TAction;
     DateToolButton: TToolButton;
     DeleteAllToolButton: TToolButton;
     DeleteToolButton: TToolButton;
@@ -71,6 +81,7 @@ type
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
+    ToolButton5: TToolButton;
     ViewDatasetAction: TAction;
     UndoAction: TAction;
     ImportAction: TAction;
@@ -150,6 +161,10 @@ type
     TodayDateSubMenu: TMenuItem;
     ValueLabelLabel: TLabel;
     ValueLabelPanel: TPanel;
+    procedure AlignBottomActionExecute(Sender: TObject);
+    procedure AlignLeftActionExecute(Sender: TObject);
+    procedure AlignRightActionExecute(Sender: TObject);
+    procedure AlignTopActionExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure ClearSelectionActionExecute(Sender: TObject);
     procedure CopyControlActionExecute(Sender: TObject);
@@ -158,6 +173,7 @@ type
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DeleteControlFastActionExecute(Sender: TObject);
+    procedure DesignControlPopUpMenuClose(Sender: TObject);
     procedure DesignControlPopUpMenuPopup(Sender: TObject);
     procedure DesignerActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
@@ -192,6 +208,11 @@ type
     procedure RedoActionExecute(Sender: TObject);
     procedure RedoActionUpdate(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
+    procedure SelectAllActionExecute(Sender: TObject);
+    procedure SelectAllBoolsActionExecute(Sender: TObject);
+    procedure SelectAllFloatsActionExecute(Sender: TObject);
+    procedure SelectAllIntsActionExecute(Sender: TObject);
+    procedure SelectAllStringsActionExecute(Sender: TObject);
     procedure SelecterBtnClick(Sender: TObject);
     procedure SelectFirstActionExecute(Sender: TObject);
     procedure SelectLastActionExecute(Sender: TObject);
@@ -199,6 +220,7 @@ type
     procedure SelectPgDnActionExecute(Sender: TObject);
     procedure SelectPgUpActionExecute(Sender: TObject);
     procedure SelectPriorActionExecute(Sender: TObject);
+    procedure ShowAlignFormActionExecute(Sender: TObject);
     procedure TestToolButtonClick(Sender: TObject);
     procedure UndoActionExecute(Sender: TObject);
     procedure UndoActionUpdate(Sender: TObject);
@@ -259,6 +281,24 @@ type
     FHintWindow: THintWindow;
     procedure ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
   private
+    { Select popup-submenu }
+    procedure DoSelectFields(Const Field: TEpiField;
+      Const SelectType: TDesignSelectType; Const Section: TEpiSection = nil);
+    procedure SelectAllFieldsType(Sender: TObject);
+    procedure SelectAllFieldsTypeInSection(Sender: TObject);
+    procedure SelectAllFieldsLength(Sender: TObject);
+    procedure SelectAllFieldsValueLabel(Sender: TObject);
+    procedure SelectAllFieldsRange(Sender: TObject);
+    procedure SelectAllFieldsDefaultValue(Sender: TObject);
+    procedure SelectAllFieldsRepeat(Sender: TObject);
+    { Align }
+  private
+    procedure DoAlignControls(Const AAlignMent: TDesignControlsAlignment;
+      Const FixedDist: integer);
+  public
+    procedure AlignControls(Const AAlignMent: TDesignControlsAlignment;
+      Const FixedDist: integer = -1);
+  private
     { Other }
     procedure UpdateShortcuts;
     procedure UpdateControls;
@@ -298,8 +338,8 @@ uses
   Printers, OSPrinters, strutils,
   design_control_section,
   design_control_field,
-  design_control_heading;
-
+  design_control_heading,
+  align_form;
 
 { TRuntimeDesignFrame }
 
@@ -563,32 +603,8 @@ end;
 
 function TRuntimeDesignFrame.ControlFromEpiControl(
   EpiCtrl: TEpiCustomControlItem): TControl;
-
-
-  function RecursiveFindControl(WinControl: TWinControl): TControl;
-  var
-    i: Integer;
-  begin
-    for i := 0 to WinControl.ControlCount - 1 do
-    with WinControl do
-      begin
-        if Supports(Controls[i], IDesignEpiControl) and
-           ((Controls[i] as IDesignEpiControl).EpiControl = EpiCtrl)
-        then
-          Exit(Controls[i]);
-
-        if (Controls[i].InheritsFrom(TWinControl)) then
-          Result := RecursiveFindControl(TWinControl(Controls[i]));
-
-        if Assigned(Result) then
-          Exit;
-      end;
-
-    Result := nil;
-  end;
-
 begin
-  Result := RecursiveFindControl(FDesignScrollBox);
+  Result := TControl(EpiCtrl.FindCustomData(DesignControlCustomDataKey));
 end;
 
 function TRuntimeDesignFrame.FindNewPostion(NewControl: TControlClass): TPoint;
@@ -743,6 +759,59 @@ begin
   DoToogleBtn(Sender);
 end;
 
+procedure TRuntimeDesignFrame.SelectAllActionExecute(Sender: TObject);
+var
+  i: Integer;
+  ctrl: TControl;
+begin
+  With FDesignPanel.Surface do
+  begin
+    ClearSelection;
+    DisableAutoSizing;
+    for i := 0 to FDesignPanel.ControlCount - 1 do
+      if Supports(FDesignPanel.Controls[i], IDesignEpiControl) then
+        Selector.AddToSelection(FDesignPanel.Controls[i]);
+    EnableAutoSizing;
+    SelectionChange;
+  end;
+end;
+
+procedure TRuntimeDesignFrame.SelectAllBoolsActionExecute(Sender: TObject);
+var
+  F: TEpiField;
+begin
+  F := TEpiField.CreateField(nil, ftBoolean);
+  DoSelectFields(F, dstType);
+  F.Free;
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFloatsActionExecute(Sender: TObject);
+var
+  F: TEpiField;
+begin
+  F := TEpiField.CreateField(nil, ftFloat);
+  DoSelectFields(F, dstType);
+  F.Free;
+end;
+
+procedure TRuntimeDesignFrame.SelectAllIntsActionExecute(Sender: TObject);
+var
+  F: TEpiField;
+begin
+  F := TEpiField.CreateField(nil, ftInteger);
+  DoSelectFields(F, dstType);
+  F.Free;
+end;
+
+procedure TRuntimeDesignFrame.SelectAllStringsActionExecute(Sender: TObject);
+var
+  F: TEpiField;
+begin
+  F := TEpiField.CreateField(nil, ftString);
+  DoSelectFields(F, dstType);
+  F.Free;
+end;
+
 procedure TRuntimeDesignFrame.SectionsChangeEvent(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
@@ -786,6 +855,8 @@ end;
 
 procedure TRuntimeDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument;
   RenameVL, RenameFields: boolean; ImportData: boolean);
+Const
+  PasteEpiDocCustomDataKey = 'pasteepidoc-valuelabelset';
 var
   i: Integer;
   VLSet: TEpiValueLabelSet;
@@ -795,6 +866,7 @@ var
   Selected: TWinControl;
   C: TEpiCustomControlItem;
   j: Integer;
+
 
   function NewFieldName(Const OldName: string): string;
   var
@@ -836,9 +908,9 @@ var
     end;
 
     if (Assigned(F.ValueLabelSet)) and
-       (F.ValueLabelSet.ObjectData <> 0)
+       (Assigned(F.ValueLabelSet.FindCustomData(PasteEpiDocCustomDataKey)))
     then
-      F.ValueLabelSet := TEpiValueLabelSet(F.ValueLabelSet.ObjectData);
+      F.ValueLabelSet := TEpiValueLabelSet(F.ValueLabelSet.RemoveCustomData(PasteEpiDocCustomDataKey));
 
     // Need to correct ShowValueLabel setting to match that of the setup.
     F.ShowValueLabel := ManagerSettings.ShowValuelabelText;
@@ -909,7 +981,7 @@ begin
        (VLSet.LabelType = DataFile.ValueLabels.GetValueLabelSetByName(VLSet.Name).LabelType)
     then
       begin
-        VLSet.ObjectData := PtrUInt(DataFile.ValueLabels.GetValueLabelSetByName(VLSet.Name));
+        VLSet.AddCustomData(PasteEpiDocCustomDataKey, DataFile.ValueLabels.GetValueLabelSetByName(VLSet.Name));
         Continue;
       end;
 
@@ -1279,6 +1351,248 @@ begin
   FHintWindow.ActivateHint(R, Msg);
 end;
 
+procedure TRuntimeDesignFrame.DoSelectFields(const Field: TEpiField;
+  const SelectType: TDesignSelectType; const Section: TEpiSection);
+var
+  i: Integer;
+  CmpField: TEpiField;
+  Selector: TJvDesignCustomSelector;
+begin
+  Selector := DesignPanel.Surface.Selector;
+  Selector.ClearSelection;
+
+  for i := 0 to FDatafile.Fields.Count -1 do
+  begin
+    CmpField := FDatafile.Fields[i];
+
+    if not (CmpField.FieldType = Field.FieldType)  then continue;
+    if Assigned(Section) and (CmpField.Section <> Section) then continue;
+
+    case SelectType of
+      dstType: // Do nothing - already checked
+        ;
+      dstLength:
+        if Field.Length <> CmpField.Length then continue;
+      dstValueLabel:
+        if Field.ValueLabelSet <> CmpField.ValueLabelSet then continue;
+      dstRange:
+        begin
+          if not Assigned(CmpField.Ranges) then continue;
+          if (Field.Ranges[0].AsString[false] <> CmpField.Ranges[0].AsString[false]) or
+             (Field.Ranges[0].AsString[true] <> CmpField.Ranges[0].AsString[true])
+          then
+            continue;
+        end;
+      dstDefaultValue:
+        if Field.DefaultValueAsString <> CmpField.DefaultValueAsString then continue;
+      dstRepeat:
+        if Field.RepeatValue <> CmpField.RepeatValue then continue;
+    end;
+
+    Selector.AddToSelection(ControlFromEpiControl(CmpField));
+  end;
+  DesignPanel.Surface.SelectionChange;
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsType(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  DoSelectFields(TEpiField(TMenu(Sender).Tag), dstType);
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsTypeInSection(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  DoSelectFields(TEpiField(TMenu(Sender).Tag), dstType, TEpiField(TMenu(Sender).Tag).Section);
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsLength(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  DoSelectFields(TEpiField(TMenu(Sender).Tag), dstLength);
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsValueLabel(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  DoSelectFields(TEpiField(TMenu(Sender).Tag), dstValueLabel);
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsRange(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  DoSelectFields(TEpiField(TMenu(Sender).Tag), dstRange);
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsDefaultValue(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  DoSelectFields(TEpiField(TMenu(Sender).Tag), dstDefaultValue);
+end;
+
+procedure TRuntimeDesignFrame.SelectAllFieldsRepeat(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then exit;
+
+  DoSelectFields(TEpiField(TMenu(Sender).Tag), dstRepeat);
+end;
+
+procedure TRuntimeDesignFrame.DoAlignControls(
+  const AAlignMent: TDesignControlsAlignment; const FixedDist: integer);
+var
+  Objs: TJvDesignObjectArray;
+  L: Integer;
+  AlignVal: Integer;
+  i: Integer;
+  ALeft: Integer;
+  ATop: Integer;
+  ABot: Integer;
+  ARight: Integer;
+  ATotRight: Integer;
+  ACenterHorz: Integer;
+  ACenterVert: Integer;
+  ATotalCtrlHeight: Integer;
+  ATotalCtrlWidth: Integer;
+  AEvenDistHorz: Integer;
+  AEvenDistVert: Integer;
+  LastBot: Integer;
+  LastRight: Integer;
+
+  procedure SortTop(var List: TJvDesignObjectArray);
+  var
+    n: Integer;
+    newn: Integer;
+    i: integer;
+    Tmp: TObject;
+  begin
+    n := Length(List);
+    repeat
+      newn := 0;
+      for i := 1 to n-1 do
+        if (TControl(List[i-1]).Top > TControl(List[i]).Top) or
+           (
+            (TControl(List[i-1]).Top = TControl(List[i]).Top) and
+            (TControl(List[i-1]).Left > TControl(List[i]).Left)
+           )
+        then
+        begin
+          Tmp := List[i];
+          List[i] := List[i-1];
+          List[i-1] := Tmp;
+          newn := i;
+        end;
+      n := newn;
+    until (n = 0);
+  end;
+
+  procedure SortLeft(var List: TJvDesignObjectArray);
+  var
+    n: Integer;
+    newn: Integer;
+    i: integer;
+    Tmp: TObject;
+  begin
+    n := Length(List);
+    repeat
+      newn := 0;
+      for i := 1 to n-1 do
+        if (TControl(List[i-1]).Left > TControl(List[i]).Left) or
+           (
+            (TControl(List[i-1]).Left = TControl(List[i]).Left) and
+            (TControl(List[i-1]).Top > TControl(List[i]).Top)
+           )
+        then
+        begin
+          Tmp := List[i];
+          List[i] := List[i-1];
+          List[i-1] := Tmp;
+          newn := i;
+        end;
+      n := newn;
+    until (n = 0);
+  end;
+
+begin
+  Objs := DesignPanel.Surface.Selected;
+  L := Length(Objs);
+
+  ALeft  := MaxInt;
+  ATop   := MaxInt;
+  ABot   := 0;
+  ARight := 0;
+  ATotRight := 0;
+  ATotalCtrlHeight := 0;
+  ATotalCtrlWidth  := 0;
+
+  for i := 0 to L - 1 do
+  with TControl(Objs[i]) do
+  begin
+    ALeft  := Min(ALeft, Left);
+    ARight := Max(ARight, Left + Width);
+    ATotRight := Max(ARight, Left + (TControl(Objs[i]) as IDesignEpiControl).TotalWidth);
+    ATop   := Min(ATop, Top);
+    ABot   := Max(ABot, Top + Height);
+    ATotalCtrlHeight += Height;
+    ATotalCtrlWidth  += (TControl(Objs[i]) as IDesignEpiControl).TotalWidth;
+  end;
+
+  ACenterVert := ALeft + ((ARight - ALeft) div 2);
+  ACenterHorz := ATop  + ((ABot - ATop) div 2);
+  if L > 1 then
+  begin
+    AEvenDistHorz := Max(1,
+      ((ATotRight - ALeft) - ATotalCtrlWidth) div (L - 1));
+    AEvenDistVert := Max(1,
+      ((ABot - ATop) - ATotalCtrlHeight) div (L - 1));
+  end;
+
+  if AAlignMent in [dcaEvenHorz, dcaFixedHorz] then
+    SortLeft(Objs);
+  if AAlignMent in [dcaEvenVert, dcaFixedVert] then
+    SortTop(Objs);
+
+  if L > 0 then
+    Case AAlignMent of
+      dcaEvenVert:   LastBot  := TControl(Objs[0]).Top - AEvenDistVert;
+      dcaEvenHorz:   LastRight  := TControl(Objs[0]).Left - AEvenDistHorz;
+      dcaFixedVert:  LastBot  := TControl(Objs[0]).Top - FixedDist;
+      dcaFixedHorz:  LastRight  := TControl(Objs[0]).Left - FixedDist;
+    end;
+
+  DisableAutoSizing;
+  for i := 0 to L - 1 do
+  with TControl(Objs[i]) do
+  begin
+    case AAlignMent of
+      dcaLeftMost:   Left := ALeft;
+      dcaRightMost:  Left := ARight - Width;
+      dcaTopMost:    Top  := ATop;
+      dcaBottomMost: Top  := ABot - Height;
+      dcaCenterVert: Left := ACenterVert - (Width div 2);
+      dcaCenterHorz: Top  := ACenterHorz - (Height div 2);
+      dcaEvenVert:   Top  := LastBot + AEvenDistVert;
+      dcaEvenHorz:   Left := LastRight + AEvenDistHorz;
+      dcaFixedVert:  Top  := LastBot + FixedDist;
+      dcaFixedHorz:  Left := LastRight + FixedDist;
+    end;
+    LastBot   := Top + Height;
+    LastRight := Left + (TControl(Objs[i]) as IDesignEpiControl).TotalWidth;
+  end;
+  EnableAutoSizing;
+end;
+
+procedure TRuntimeDesignFrame.AlignControls(
+  const AAlignMent: TDesignControlsAlignment; const FixedDist: integer);
+begin
+  DoAlignControls(AAlignMent, FixedDist);
+end;
+
 procedure TRuntimeDesignFrame.UpdateShortcuts;
 begin
   NewIntFieldAction.ShortCut           := D_NewIntField;
@@ -1310,9 +1624,17 @@ begin
   SelectNextAction.ShortCut            := D_MoveControlDown;
   SelectPgDnAction.ShortCut            := D_MoveSideDown;
   SelectLastAction.ShortCut            := D_MoveBottom;
+  SelectAllAction.ShortCut             := D_SelectAll;
+
+  // Align
+  AlignLeftAction.ShortCut             := D_AlignLeft;
+  AlignRightAction.ShortCut            := D_AlignRight;
+  AlignTopAction.ShortCut              := D_AlignTop;
+  AlignBottomAction.ShortCut           := D_AlignBottom;
 
   UndoAction.ShortCut                  := D_Undo;
   RedoAction.ShortCut                  := D_Redo;
+  PrintDataFormAction.ShortCut         := D_PrintDataForm;
 end;
 
 procedure TRuntimeDesignFrame.UpdateControls;
@@ -1623,9 +1945,14 @@ begin
   SelectControl(dsaPrior);
 end;
 
+procedure TRuntimeDesignFrame.ShowAlignFormActionExecute(Sender: TObject);
+begin
+  ShowAlignmentForm(Self);
+end;
+
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
-  FPropertiesForm.Show;
+//  ShowAlignmentForm(Self);
 end;
 
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
@@ -1724,10 +2051,18 @@ begin
   DeleteControls(true);
 end;
 
+procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
+begin
+  DesignControlPopUpMenu.Items.Find('Select...').Free;
+end;
+
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
 var
   P: TPoint;
   Ctrl: TControl;
+  SubMenu: TMenuItem;
+  MI: TMenuItem;
+  EpiCtrl: TEpiCustomControlItem;
 begin
   FPopUpPoint := TPopupMenu(Sender).PopupPoint;
 
@@ -1750,6 +2085,84 @@ begin
       Select(Ctrl);
       SelectionChange;
       UpdateDesigner;
+    end;
+
+    if (Selector.Count = 1) and
+       (Supports(Ctrl, IDesignEpiControl))
+    then
+    begin;
+      EpiCtrl := (Ctrl as IDesignEpiControl).EpiControl;
+
+      // Create submenu for selected component.
+      SubMenu := TMenuItem.Create(DesignControlPopUpMenu);
+      SubMenu.Caption := 'Select...';
+
+      // Create Field select menu.
+      if EpiCtrl is TEpiField then
+      with TEpiField(EpiCtrl) do
+      begin
+        MI := TMenuItem.Create(SubMenu);
+        MI.Caption := 'All ' + EpiTypeNames[FieldType] + ' fields';
+        MI.OnClick := @SelectAllFieldsType;
+        MI.Tag := PtrInt(EpiCtrl);
+        SubMenu.Add(MI);
+
+        MI := TMenuItem.Create(SubMenu);
+        MI.Caption := 'All ' + EpiTypeNames[FieldType] + ' fields in section ' + Section.Caption.Text;
+        MI.OnClick := @SelectAllFieldsTypeInSection;
+        MI.Tag := PtrInt(EpiCtrl);
+        SubMenu.Add(MI);
+
+        SubMenu.AddSeparator;
+
+        if FieldType in IntFieldTypes + FloatFieldTypes + StringFieldTypes then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. length: ' + IntToStr(Length);
+          MI.OnClick := @SelectAllFieldsLength;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+
+        if Assigned(ValueLabelSet) then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. Valuelabelset: ' + ValueLabelSet.Name;
+          MI.OnClick := @SelectAllFieldsValueLabel;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+
+        if Assigned(Ranges) then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. Range: ' + Ranges[0].AsString[true] + ' - ' + Ranges[0].AsString[false];
+          MI.OnClick := @SelectAllFieldsRange;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+
+        if DefaultValueAsString <> '' then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. Default value: ' + DefaultValueAsString;
+          MI.OnClick := @SelectAllFieldsDefaultValue;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+
+        if RepeatValue then
+        begin
+          MI := TMenuItem.Create(SubMenu);
+          MI.Caption := '- w. Repeat Value';
+          MI.OnClick := @SelectAllFieldsRepeat;
+          MI.Tag := PtrInt(EpiCtrl);
+          SubMenu.Add(MI);
+        end;
+      end;
+      if SubMenu.Count = 2 then
+        SubMenu.Items[1].Free;
+      DesignControlPopUpMenu.Items.Add(SubMenu);
     end;
   end;
 end;
@@ -1795,6 +2208,26 @@ begin
   S := DataFile.SaveToXml('', 0);
   Fs.Write(S[1], Length(S));
   Fs.Free;
+end;
+
+procedure TRuntimeDesignFrame.AlignLeftActionExecute(Sender: TObject);
+begin
+  AlignControls(dcaLeftMost);
+end;
+
+procedure TRuntimeDesignFrame.AlignRightActionExecute(Sender: TObject);
+begin
+  AlignControls(dcaRightMost);
+end;
+
+procedure TRuntimeDesignFrame.AlignTopActionExecute(Sender: TObject);
+begin
+  AlignControls(dcaTopMost);
+end;
+
+procedure TRuntimeDesignFrame.AlignBottomActionExecute(Sender: TObject);
+begin
+  AlignControls(dcaBottomMost);
 end;
 
 procedure TRuntimeDesignFrame.ClearSelectionActionExecute(Sender: TObject);
@@ -1870,6 +2303,8 @@ begin
   Controller.ClearDragRect;
   Surface.Select(FDesignPanel);
   FSettingDataFile := false;
+  if AlignmentFormIsVisible then
+    ShowAlignFormAction.Execute;
 end;
 
 constructor TRuntimeDesignFrame.Create(TheOwner: TComponent);

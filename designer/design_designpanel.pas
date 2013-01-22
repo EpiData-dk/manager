@@ -21,6 +21,7 @@ type
   private
     FSection: TEpiSection;
     function  GetEpiControl: TEpiCustomControlItem;
+    function GetTotalWidth: Integer;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
   {$IFDEF MSWINDOWS}
   protected
@@ -31,6 +32,7 @@ type
     procedure UpdateControl;
     procedure FixupCopyControl;
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
+    property TotalWidth: Integer read GetTotalWidth;
   end;
 
 
@@ -40,7 +42,7 @@ uses
   {$IFDEF MSWINDOWS}
   windows, win32proc, Win32Int, LMessages, LCLMessageGlue,
   {$ENDIF}
-  design_properties_sectionframe;
+  design_properties_sectionframe, manager_globals;
 
 {$IFDEF MSWINDOWS}
 var
@@ -54,9 +56,15 @@ begin
   result := FSection;
 end;
 
+function TDesignPanel.GetTotalWidth: Integer;
+begin
+  result := Width;
+end;
+
 procedure TDesignPanel.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FSection := TEpiSection(AValue);
+  FSection.AddCustomData(DesignControlCustomDataKey, Self);
 end;
 
 {$IFDEF MSWINDOWS}

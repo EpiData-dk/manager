@@ -7,7 +7,8 @@ interface
 uses
   Classes, sysutils, design_commander;
 
-
+const
+  DesignControlCustomDataKey = 'DesignControlCustomDataKey';
 
 function GlobalCopyList: TFPList;
 function GlobalCopyListClear: TFPList;
