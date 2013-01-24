@@ -941,6 +941,7 @@ var
     i: integer;
     WinCtrl: TWinControl;
     OldPY: LongInt;
+    F: TEpiField;
   begin
     // Rename if already present.
     if (not DataFile.Sections.ValidateRename(S.Name, false))
@@ -948,6 +949,21 @@ var
       S.Name := DataFile.Sections.GetUniqueItemName(TEpiSection);
 
     S.DataFile.Sections.RemoveItem(S);
+
+    // Section has beem detached -> to avoid possible renaming by Core
+    // during AddItem, check for overlapping fieldnames now.
+    for i := 0 to S.Fields.Count -1 do
+    begin
+      F := S.Fields[i];
+      if (DataFile.Fields.ItemExistsByName(F.Name)) and
+         (not RenameFields) and
+         (F.FieldType = DataFile.Fields.FieldByName[F.Name].FieldType)
+      then
+        begin
+          S.Fields.RemoveItem(F);
+          F.Free;
+        end;
+    end;
     DataFile.Sections.AddItem(S);
 
     WinCtrl := NewDesignSection(Bounds(S.Left, S.Top + P.Y, S.Width, S.Height), S);
@@ -1463,6 +1479,11 @@ var
   AEvenDistVert: Integer;
   LastBot: Integer;
   LastRight: Integer;
+  ABounds: TRect;
+  EBounds: TRect;
+  ATotLeft: Integer;
+  ASideBounds: TRect;
+  ESideBounds: TRect;
 
   procedure SortTop(var List: TJvDesignObjectArray);
   var
@@ -1522,67 +1543,86 @@ begin
   Objs := DesignPanel.Surface.Selected;
   L := Length(Objs);
 
-  ALeft  := MaxInt;
-  ATop   := MaxInt;
-  ABot   := 0;
-  ARight := 0;
-  ATotRight := 0;
+  if L > 0 then
+  begin
+    ASideBounds := TControl(Objs[0]).BoundsRect;
+    ESideBounds := (TControl(Objs[0]) as IDesignEpiControl).ExtendedBounds;
+  end;
   ATotalCtrlHeight := 0;
   ATotalCtrlWidth  := 0;
 
   for i := 0 to L - 1 do
   with TControl(Objs[i]) do
   begin
-    ALeft  := Min(ALeft, Left);
-    ARight := Max(ARight, Left + Width);
-    ATotRight := Max(ARight, Left + (TControl(Objs[i]) as IDesignEpiControl).TotalWidth);
-    ATop   := Min(ATop, Top);
-    ABot   := Max(ABot, Top + Height);
-    ATotalCtrlHeight += Height;
-    ATotalCtrlWidth  += (TControl(Objs[i]) as IDesignEpiControl).TotalWidth;
+    ABounds := BoundsRect;
+    EBounds := (TControl(Objs[i]) as IDesignEpiControl).ExtendedBounds;
+
+    UnionRect(ASideBounds, ASideBounds, ABounds);
+    UnionRect(ESideBounds, ESideBounds, EBounds);
+
+    ATotalCtrlHeight += EBounds.Bottom - EBounds.Top;
+    ATotalCtrlWidth  += EBounds.Right - EBounds.Left;
   end;
 
-  ACenterVert := ALeft + ((ARight - ALeft) div 2);
-  ACenterHorz := ATop  + ((ABot - ATop) div 2);
-  if L > 1 then
+  with ASideBounds do
   begin
-    AEvenDistHorz := Max(1,
-      ((ATotRight - ALeft) - ATotalCtrlWidth) div (L - 1));
-    AEvenDistVert := Max(1,
-      ((ABot - ATop) - ATotalCtrlHeight) div (L - 1));
+    ACenterVert := Left + ((Right - Left) div 2);
+    ACenterHorz := Top  + ((Bottom - Top) div 2);
   end;
+
+  if L > 1 then
+    with ESideBounds do
+    begin
+      AEvenDistHorz := Max(1,
+        ((Right - Left) - ATotalCtrlWidth) div (L - 1));
+      AEvenDistVert := Max(1,
+        ((Bottom - Top) - ATotalCtrlHeight) div (L - 1));
+    end;
 
   if AAlignMent in [dcaEvenHorz, dcaFixedHorz] then
     SortLeft(Objs);
   if AAlignMent in [dcaEvenVert, dcaFixedVert] then
     SortTop(Objs);
 
+  // Initial positions -> using controls left/top restrains first control
+  // to same position.
   if L > 0 then
+  begin
+    EBounds := (TControl(Objs[0]) as IDesignEpiControl).ExtendedBounds;
     Case AAlignMent of
-      dcaEvenVert:   LastBot  := TControl(Objs[0]).Top - AEvenDistVert;
-      dcaEvenHorz:   LastRight  := TControl(Objs[0]).Left - AEvenDistHorz;
-      dcaFixedVert:  LastBot  := TControl(Objs[0]).Top - FixedDist;
-      dcaFixedHorz:  LastRight  := TControl(Objs[0]).Left - FixedDist;
+      dcaEvenVert:   LastBot   := EBounds.Top - AEvenDistVert;
+      dcaEvenHorz:   LastRight := EBounds.Left - AEvenDistHorz;
+      dcaFixedVert:  LastBot   := EBounds.Top - FixedDist;
+      dcaFixedHorz:  LastRight := EBounds.Left - FixedDist;
     end;
+  end;
 
   DisableAutoSizing;
   for i := 0 to L - 1 do
   with TControl(Objs[i]) do
   begin
+    ABounds := BoundsRect;
+    EBounds := (TControl(Objs[i]) as IDesignEpiControl).ExtendedBounds;
     case AAlignMent of
-      dcaLeftMost:   Left := ALeft;
-      dcaRightMost:  Left := ARight - Width;
-      dcaTopMost:    Top  := ATop;
-      dcaBottomMost: Top  := ABot - Height;
-      dcaCenterVert: Left := ACenterVert - (Width div 2);
-      dcaCenterHorz: Top  := ACenterHorz - (Height div 2);
-      dcaEvenVert:   Top  := LastBot + AEvenDistVert;
-      dcaEvenHorz:   Left := LastRight + AEvenDistHorz;
-      dcaFixedVert:  Top  := LastBot + FixedDist;
-      dcaFixedHorz:  Left := LastRight + FixedDist;
+      dcaLeftMost:   OffsetRect(ABounds, ASideBounds.Left - ABounds.Left, 0);
+      dcaRightMost:  OffsetRect(ABounds, ASideBounds.Right - ABounds.Right, 0);
+      dcaTopMost:    OffsetRect(ABounds, 0, ASideBounds.Top - ABounds.Top);
+      dcaBottomMost: OffsetRect(ABounds, 0, ASideBounds.Bottom - ABounds.Bottom);
+      dcaCenterVert: OffsetRect(ABounds, ACenterVert - (ABounds.Left + (Width div 2)), 0);
+      dcaCenterHorz: OffsetRect(ABounds, 0, ACenterHorz - (ABounds.Top + (Height div 2)));
+      dcaEvenVert:   OffsetRect(EBounds, 0, LastBot  + AEvenDistVert - EBounds.Top);
+      dcaEvenHorz:   OffsetRect(EBounds, LastRight + AEvenDistHorz - EBounds.Left, 0);
+      dcaFixedVert:  OffsetRect(EBounds, 0, LastBot  + FixedDist - EBounds.Top);
+      dcaFixedHorz:  OffsetRect(EBounds, LastRight + FixedDist - EBounds.Left, 0);
     end;
-    LastBot   := Top + Height;
-    LastRight := Left + (TControl(Objs[i]) as IDesignEpiControl).TotalWidth;
+
+    if AAlignMent in [dcaLeftMost..dcaCenterHorz] then
+      BoundsRect := ABounds
+    else
+      (TControl(Objs[i]) as IDesignEpiControl).ExtendedBounds := EBounds;
+
+    LastBot   := EBounds.Bottom;
+    LastRight := EBounds.Right;
   end;
   EnableAutoSizing;
 end;
@@ -1627,6 +1667,7 @@ begin
   SelectAllAction.ShortCut             := D_SelectAll;
 
   // Align
+  ShowAlignFormAction.ShortCut         := D_AlignForm;
   AlignLeftAction.ShortCut             := D_AlignLeft;
   AlignRightAction.ShortCut            := D_AlignRight;
   AlignTopAction.ShortCut              := D_AlignTop;

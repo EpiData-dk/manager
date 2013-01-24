@@ -49,6 +49,7 @@ begin
   D_SelectAll                  := KeyToShortCut(VK_A, [ssMeta]);
 
   // - align
+  D_AlignForm                  := KeyToShortCut(VK_A, [ssCtrl, ssMeta]);
   D_AlignLeft                  := KeyToShortCut(VK_LEFT, [ssCtrl, ssMeta]);
   D_AlignRight                 := KeyToShortCut(VK_RIGHT, [ssCtrl, ssMeta]);
   D_AlignTop                   := KeyToShortCut(VK_UP, [ssCtrl, ssMeta]);

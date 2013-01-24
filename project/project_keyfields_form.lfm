@@ -1,5 +1,5 @@
 object KeyFieldsForm: TKeyFieldsForm
-  Left = 1007
+  Left = 769
   Height = 507
   Top = 266
   Width = 509
@@ -23,10 +23,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 445
+      Left = 448
       Height = 32
       Top = 5
-      Width = 53
+      Width = 50
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -40,10 +40,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 360
+      Left = 373
       Height = 34
       Top = 4
-      Width = 80
+      Width = 70
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 5
@@ -58,9 +58,9 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 27
-      Top = 8
-      Width = 88
+      Height = 23
+      Top = 10
+      Width = 70
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'List Records'
@@ -72,10 +72,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
-      Left = 104
-      Height = 27
-      Top = 8
-      Width = 139
+      Left = 86
+      Height = 23
+      Top = 10
+      Width = 109
       Action = AddIndexFieldAction
       AutoSize = True
       BorderSpacing.Left = 5
@@ -97,9 +97,9 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideLeft.Control = ScrollBox1
       AnchorSideBottom.Control = TopBevel
       Left = 10
-      Height = 15
-      Top = 22
-      Width = 160
+      Height = 11
+      Top = 26
+      Width = 123
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Bottom = 3
@@ -249,7 +249,7 @@ object KeyFieldsForm: TKeyFieldsForm
       Left = 10
       Height = 22
       Top = 435
-      Width = 236
+      Width = 185
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Bottom = 5

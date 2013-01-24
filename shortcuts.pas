@@ -61,6 +61,7 @@ var
   D_MoveBottom,
   D_SelectAll,
   // Align
+  D_AlignForm,
   D_AlignLeft,
   D_AlignRight,
   D_AlignTop,

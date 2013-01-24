@@ -107,7 +107,8 @@ uses
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
-  shortcuts, project_keyfields_form, project_studyunit_form;
+  shortcuts, project_keyfields_form, project_studyunit_form,
+  align_form;
 
 type
 
@@ -499,6 +500,10 @@ begin
   // Close VAlueLabel Editor - else the reference to
   // ValueLabelSEts is incomplete!
   CloseValueLabelEditor2;
+
+  // Close Alignment Form.
+  CloseAlignmentForm;
+
   if not Assigned(FEpiDocument) then exit;
 
   // TODO : Delete ALL dataforms!

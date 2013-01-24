@@ -16,9 +16,10 @@ type
     FHeading: TEpiHeading;
   private
     function GetEpiControl: TEpiCustomControlItem;
-    function GetTotalWidth: Integer;
+    function GetExtendedBounds: TRect;
     procedure OnHeadingChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure SetExtendedBounds(const AValue: TRect);
     procedure UpdateHint;
     procedure UpdateEpiControl;
     procedure ReadHeading(Stream: TStream);
@@ -35,7 +36,7 @@ type
     procedure FixupCopyControl;
     function DesignFrameClass: TCustomFrameClass;
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
-    property TotalWidth: Integer read GetTotalWidth;
+    property ExtendedBounds: TRect read GetExtendedBounds write SetExtendedBounds;
   end;
 
 
@@ -88,9 +89,22 @@ begin
   Result := FHeading;
 end;
 
-function TDesignHeading.GetTotalWidth: Integer;
+function TDesignHeading.GetExtendedBounds: TRect;
 begin
-  result := Width;
+  with Result do
+  begin
+    // LEFT
+    Left := Self.Left;
+
+    // RIGHT
+    Right := Self.Left + Self.Width;
+
+    // TOP
+    Top := Self.Top;
+
+    // BOTTOM
+    Bottom := Self.Top + Self.Height;
+  end;
 end;
 
 procedure TDesignHeading.OnHeadingChange(Sender: TObject;
@@ -141,6 +155,11 @@ begin
 
   Caption := FHeading.Caption.Text;
   UpdateEpiControl;
+end;
+
+procedure TDesignHeading.SetExtendedBounds(const AValue: TRect);
+begin
+  BoundsRect := AValue;
 end;
 
 procedure TDesignHeading.UpdateHint;

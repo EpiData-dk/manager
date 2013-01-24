@@ -21,11 +21,12 @@ type
     FQuestionLabel: TLabel;
     FValueLabelLabel: TLabel;
     function  GetEpiControl: TEpiCustomControlItem;
-    function  GetTotalWidth: Integer;
+    function  GetExtendedBounds: TRect;
     procedure OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnValueLabelSetChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnProjectSettingsChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure SetExtendedBounds(Const AValue: TRect);
     procedure UpdateHint;
     procedure UpdateEpiControl;
     procedure UpdateValueLabelConnection(Const OldVLSet, NewVLSet: TEpiValueLabelSet);
@@ -43,7 +44,7 @@ type
     procedure   SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     procedure   FixupCopyControl;
     property    EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
-    property    TotalWidth: Integer read GetTotalWidth;
+    property    ExtendedBounds: TRect read GetExtendedBounds write SetExtendedBounds;
     property    NameLabel: TLabel read FNameLabel;
     property    QuestionLabel: TLabel read FQuestionLabel;
   end;
@@ -84,11 +85,28 @@ begin
   Result := FField;
 end;
 
-function TDesignField.GetTotalWidth: Integer;
+function TDesignField.GetExtendedBounds: TRect;
 begin
-  Result :=
-    (FValueLabelLabel.Left + FValueLabelLabel.Width) -
-    FNameLabel.Left;
+  with Result do
+  begin
+    // LEFT
+    Left := Self.Left;
+    if FQuestionLabel.Caption <> '' then
+      Left := FQuestionLabel.Left;
+    if FNameLabel.Caption <> '' then
+      Left := FNameLabel.Left;
+
+    // RIGHT
+    Right := Self.Left + Self.Width;
+    if FValueLabelLabel.Caption <> '' then
+      Right := FValueLabelLabel.Left + FValueLabelLabel.Width;
+
+    // TOP
+    Top := Self.Top;
+
+    // BOTTOM
+    Bottom := Self.Top + Self.Height;
+  end;
 end;
 
 procedure TDesignField.OnFieldChange(Sender: TObject;
@@ -184,6 +202,24 @@ begin
 
   UpdateEpiControl;
   UpdateControl;
+end;
+
+procedure TDesignField.SetExtendedBounds(Const AValue: TRect);
+var
+  lRect: TRect;
+begin
+  // Copy inital TOP, LEFT
+  lRect := AValue;
+
+  // LEFT
+  if FQuestionLabel.Caption <> '' then
+    lRect.Left := (Left - FQuestionLabel.Left) + AValue.Left;
+  if FNameLabel.Caption <> '' then
+    lRect.Left := (Left - FNameLabel.Left) + AValue.Left;
+
+  // RIGHT, BOT.
+  // - not needed -> is controlled by overridden SetBounds..
+  BoundsRect := lRect;
 end;
 
 procedure TDesignField.UpdateHint;
