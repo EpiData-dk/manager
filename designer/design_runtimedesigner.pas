@@ -2129,7 +2129,8 @@ begin
     end;
 
     if (Selector.Count = 1) and
-       (Supports(Ctrl, IDesignEpiControl))
+       (Ctrl is TDesignField)
+//       (Supports(Ctrl, IDesignEpiControl))
     then
     begin;
       EpiCtrl := (Ctrl as IDesignEpiControl).EpiControl;
