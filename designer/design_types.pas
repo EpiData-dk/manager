@@ -13,13 +13,14 @@ type
 
   IDesignEpiControl = interface ['IDesignEpiControl'] //['{D816F23A-0CC6-418A-8A6F-B1D28FC42E52}']
     function DesignFrameClass: TCustomFrameClass;
-    function GetTotalWidth: integer;
     function GetEpiControl: TEpiCustomControlItem;
+    function GetExtendedBounds: TRect;
+    procedure SetExtendedBounds(Const AValue: TRect);
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure FixupCopyControl;
     procedure UpdateControl;
     property  EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
-    property  TotalWidth: Integer read GetTotalWidth;
+    property  ExtendedBounds: TRect read GetExtendedBounds write SetExtendedBounds;
   end;
 
   TDesignFrameShowHintEvent = procedure(Sender: TObject; Ctrl: TControl; const Msg: string) of object;

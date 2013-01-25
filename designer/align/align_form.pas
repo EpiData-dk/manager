@@ -36,6 +36,8 @@ type
     procedure EvenDistHorzBtnClick(Sender: TObject);
     procedure FixedDistVertBtnClick(Sender: TObject);
     procedure FixedDistHorzBtnClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
     procedure LeftAlignBtnClick(Sender: TObject);
     procedure RightAlignBtnClick(Sender: TObject);
     procedure TopAlignBtnClick(Sender: TObject);
@@ -48,6 +50,7 @@ type
   end;
 
 procedure ShowAlignmentForm(DesignFrame: TRuntimeDesignFrame);
+procedure CloseAlignmentForm;
 function AlignmentFormIsVisible: boolean;
 
 implementation
@@ -55,7 +58,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_types;
+  design_types, settings2, settings2_var;
 
 var
   AlignForm: TAlignmentForm;
@@ -67,6 +70,12 @@ begin
 
   AlignForm.DesignFrame := DesignFrame;
   AlignForm.Show;
+end;
+
+procedure CloseAlignmentForm;
+begin
+  if Assigned(AlignForm) then
+    FreeAndNil(AlignForm);
 end;
 
 function AlignmentFormIsVisible: boolean;
@@ -96,6 +105,20 @@ end;
 procedure TAlignmentForm.FixedDistHorzBtnClick(Sender: TObject);
 begin
   DesignFrame.AlignControls(dcaFixedHorz, SpinEdit2.Value);
+end;
+
+procedure TAlignmentForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  CanClose := true;
+  if ManagerSettings.SaveWindowPositions
+  then
+    SaveFormPosition(Self, 'AlignmentForm');
+end;
+
+procedure TAlignmentForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'AlignmentForm');
 end;
 
 procedure TAlignmentForm.BottomAlignBtnClick(Sender: TObject);

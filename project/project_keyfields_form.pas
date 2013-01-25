@@ -177,9 +177,9 @@ begin
     for i := 0 to Fl.Count - 1 do
       FEpiDoc.DataFiles[0].KeyFields.AddItem(Fl[i]);
     Fl.Free;
-  end;
 
-  AddIndexFieldAction.Execute;
+    AddIndexFieldAction.Execute;
+  end;
 
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, FormName);

@@ -21,8 +21,9 @@ type
   private
     FSection: TEpiSection;
     function  GetEpiControl: TEpiCustomControlItem;
-    function GetTotalWidth: Integer;
+    function GetExtendedBounds: TRect;
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
+    procedure SetExtendedBounds(const AValue: TRect);
   {$IFDEF MSWINDOWS}
   protected
     procedure CreateWnd; override;
@@ -32,7 +33,7 @@ type
     procedure UpdateControl;
     procedure FixupCopyControl;
     property EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
-    property TotalWidth: Integer read GetTotalWidth;
+    property ExtendedBounds: TRect read GetExtendedBounds write SetExtendedBounds;
   end;
 
 
@@ -56,15 +57,33 @@ begin
   result := FSection;
 end;
 
-function TDesignPanel.GetTotalWidth: Integer;
+function TDesignPanel.GetExtendedBounds: TRect;
 begin
-  result := Width;
+  with Result do
+  begin
+    // LEFT
+    Left := Self.Left;
+
+    // RIGHT
+    Right := Self.Left + Self.Width;
+
+    // TOP
+    Top := Self.Top;
+
+    // BOTTOM
+    Bottom := Self.Top + Self.Height;
+  end;
 end;
 
 procedure TDesignPanel.SetEpiControl(const AValue: TEpiCustomControlItem);
 begin
   FSection := TEpiSection(AValue);
   FSection.AddCustomData(DesignControlCustomDataKey, Self);
+end;
+
+procedure TDesignPanel.SetExtendedBounds(const AValue: TRect);
+begin
+  BoundsRect := AValue;
 end;
 
 {$IFDEF MSWINDOWS}

@@ -283,7 +283,7 @@ end;
 
 procedure TMainForm.EpiDataTutorialsMenuItemClick(Sender: TObject);
 begin
-  OpenURL('http://www.epidata.org/dokuwiki/doku.php/documentation:tutorials');
+  OpenURL('http://epidata.info/dokuwiki/doku.php?id=training:start');
 end;
 
 procedure TMainForm.ExportActionExecute(Sender: TObject);

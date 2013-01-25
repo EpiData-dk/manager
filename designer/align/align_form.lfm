@@ -18,6 +18,8 @@ object AlignmentForm: TAlignmentForm
   ClientWidth = 300
   Constraints.MinHeight = 230
   Constraints.MinWidth = 300
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
   LCLVersion = '1.1'
   object SidesgrpBox: TGroupBox
     Left = 5

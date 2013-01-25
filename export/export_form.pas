@@ -23,6 +23,7 @@ type
     ExportTypeCombo: TComboBox;
     EncodingCmbBox: TComboBox;
     FromRecordEdit: TEdit;
+    NoneRecordsRadioBtn: TRadioButton;
     ToRecordEdit: TEdit;
     ExportFileNameEdit: TFileNameEdit;
     GroupBox1: TGroupBox;
@@ -114,8 +115,13 @@ begin
     DataFileIndex := 0;
     if RangeRBtn.Checked then
     begin
-      FromRecord := StrToInt(FromRecordEdit.Text) - 1;  // -1 because the record count in Cores
+      FromRecord := StrToInt(FromRecordEdit.Text) - 1;  // -1 because the record count in Core
       ToRecord   := StrToInt(ToRecordEdit.Text) - 1;    // expect the numbers 0-indexed.
+    end;
+    if NoneRecordsRadioBtn.Checked then
+    begin
+      FromRecord := 1;
+      ToRecord   := 0;
     end;
     Encoding := TEpiEncoding(PtrUInt(EncodingCmbBox.Items.Objects[EncodingCmbBox.ItemIndex]));
     for i := 0 to FieldsChkListBox.Items.Count - 1 do

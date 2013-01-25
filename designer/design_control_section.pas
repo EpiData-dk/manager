@@ -14,8 +14,9 @@ type
   TDesignSection = Class(TGroupBox, IDesignEpiControl)
   private
     FSection: TEpiSection;
-    function GetTotalWidth: integer;
+    function GetExtendedBounds: TRect;
     procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure SetExtendedBounds(const AValue: TRect);
     procedure UpdateHint;
     procedure UpdateEpiControl;
     function  GetEpiControl: TEpiCustomControlItem;
@@ -34,7 +35,7 @@ type
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: integer); override;
     procedure FixupCopyControl;
     property  EpiControl: TEpiCustomControlItem read GetEpiControl write SetEpiControl;
-    property  TotalWidth: integer read GetTotalWidth;
+    property  ExtendedBounds: TRect read GetExtendedBounds write SetExtendedBounds;
   end;
 
 implementation
@@ -94,9 +95,27 @@ begin
   end;
 end;
 
-function TDesignSection.GetTotalWidth: integer;
+procedure TDesignSection.SetExtendedBounds(const AValue: TRect);
 begin
-  result := Width;
+  BoundsRect := AValue;
+end;
+
+function TDesignSection.GetExtendedBounds: TRect;
+begin
+  with Result do
+  begin
+    // LEFT
+    Left := Self.Left;
+
+    // RIGHT
+    Right := Self.Left + Self.Width;
+
+    // TOP
+    Top := Self.Top;
+
+    // BOTTOM
+    Bottom := Self.Top + Self.Height;
+  end;
 end;
 
 procedure TDesignSection.SetEpiControl(const AValue: TEpiCustomControlItem);

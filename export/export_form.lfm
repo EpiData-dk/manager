@@ -1,34 +1,35 @@
 object ExportForm: TExportForm
-  Left = 903
-  Height = 457
-  Top = 236
-  Width = 700
-  Caption = 'ExportForm'
-  ClientHeight = 457
-  ClientWidth = 700
+  Left = 438
+  Height = 446
+  Top = 254
+  Width = 703
+  Caption = 'Export...'
+  ClientHeight = 446
+  ClientWidth = 703
   OnClose = FormClose
-  LCLVersion = '0.9.31'
+  OnShow = FormShow
+  LCLVersion = '1.1'
   object PageControl1: TPageControl
     Left = 0
-    Height = 416
+    Height = 405
     Top = 0
-    Width = 700
+    Width = 703
     ActivePage = BasicSheet
     Align = alClient
     TabIndex = 0
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Export'
-      ClientHeight = 383
-      ClientWidth = 694
+      ClientHeight = 376
+      ClientWidth = 697
       object Label1: TLabel
         AnchorSideLeft.Control = BasicSheet
         AnchorSideTop.Control = ExportFileNameEdit
         AnchorSideTop.Side = asrCenter
         Left = 20
-        Height = 16
-        Top = 26
-        Width = 63
+        Height = 11
+        Top = 27
+        Width = 49
         BorderSpacing.Left = 20
         Caption = 'Export to:'
         ParentColor = False
@@ -38,16 +39,16 @@ object ExportForm: TExportForm
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = ExportTypeCombo
         AnchorSideTop.Side = asrCenter
-        Left = 88
-        Height = 25
+        Left = 74
+        Height = 21
         Top = 22
-        Width = 381
+        Width = 398
         DialogKind = dkSave
         DialogOptions = []
         FilterIndex = 0
         HideDirectories = False
         ButtonWidth = 23
-        NumGlyphs = 0
+        NumGlyphs = 1
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
         MaxLength = 0
@@ -57,8 +58,8 @@ object ExportForm: TExportForm
         AnchorSideTop.Control = BasicSheet
         AnchorSideRight.Control = BasicSheet
         AnchorSideRight.Side = asrBottom
-        Left = 501
-        Height = 29
+        Left = 504
+        Height = 25
         Top = 20
         Width = 173
         Anchors = [akTop, akRight]
@@ -75,26 +76,27 @@ object ExportForm: TExportForm
         AnchorSideTop.Side = asrBottom
         AnchorSideBottom.Control = GroupBox3
         Left = 20
-        Height = 197
-        Top = 67
+        Height = 194
+        Top = 63
         Width = 265
         Anchors = [akTop, akLeft, akBottom]
         BorderSpacing.Left = 20
         BorderSpacing.Top = 20
         BorderSpacing.Bottom = 10
         Caption = 'Selected Records'
-        ClientHeight = 180
+        ClientHeight = 181
         ClientWidth = 261
         TabOrder = 2
         object AllRecordRBtn: TRadioButton
           AnchorSideLeft.Control = GroupBox1
-          AnchorSideTop.Control = GroupBox1
+          AnchorSideTop.Control = NoneRecordsRadioBtn
+          AnchorSideTop.Side = asrBottom
           Left = 10
           Height = 22
-          Top = 10
-          Width = 91
+          Top = 32
+          Width = 74
           BorderSpacing.Left = 10
-          BorderSpacing.Top = 10
+          BorderSpacing.Top = 5
           Caption = 'All records'
           Checked = True
           TabOrder = 0
@@ -106,8 +108,8 @@ object ExportForm: TExportForm
           AnchorSideTop.Side = asrBottom
           Left = 10
           Height = 22
-          Top = 37
-          Width = 64
+          Top = 59
+          Width = 55
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
           Caption = 'Range'
@@ -115,13 +117,16 @@ object ExportForm: TExportForm
         end
         object FromRecordEdit: TEdit
           AnchorSideLeft.Control = RangeRBtn
+          AnchorSideTop.Control = RangeRBtn
+          AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = Label2
           Left = 30
-          Height = 25
-          Top = 73
+          Height = 21
+          Top = 91
           Width = 95
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 20
+          BorderSpacing.Top = 10
           BorderSpacing.Right = 10
           OnClick = FromRecordEditClick
           OnKeyPress = FromRecordEditKeyPress
@@ -130,12 +135,13 @@ object ExportForm: TExportForm
         object ToRecordEdit: TEdit
           AnchorSideLeft.Control = Label2
           AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = FromRecordEdit
           AnchorSideRight.Control = GroupBox1
           AnchorSideRight.Side = asrBottom
-          Left = 159
-          Height = 25
-          Top = 73
-          Width = 92
+          Left = 155
+          Height = 21
+          Top = 91
+          Width = 96
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Right = 10
@@ -147,9 +153,9 @@ object ExportForm: TExportForm
           AnchorSideTop.Control = FromRecordEdit
           AnchorSideTop.Side = asrCenter
           Left = 135
-          Height = 16
-          Top = 77
-          Width = 14
+          Height = 11
+          Top = 96
+          Width = 10
           Caption = 'to'
           ParentColor = False
         end
@@ -159,12 +165,24 @@ object ExportForm: TExportForm
           AnchorSideTop.Side = asrBottom
           Left = 10
           Height = 22
-          Top = 118
-          Width = 169
+          Top = 132
+          Width = 135
           BorderSpacing.Left = 10
           BorderSpacing.Top = 20
           Caption = 'Export deleted records'
           TabOrder = 4
+        end
+        object NoneRecordsRadioBtn: TRadioButton
+          AnchorSideLeft.Control = GroupBox1
+          AnchorSideTop.Control = GroupBox1
+          Left = 10
+          Height = 22
+          Top = 5
+          Width = 128
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 5
+          Caption = 'None (structure only)'
+          TabOrder = 5
         end
       end
       object FieldGrpBox: TGroupBox
@@ -176,25 +194,25 @@ object ExportForm: TExportForm
         AnchorSideBottom.Control = BasicSheet
         AnchorSideBottom.Side = asrBottom
         Left = 295
-        Height = 296
-        Top = 67
-        Width = 379
+        Height = 293
+        Top = 63
+        Width = 382
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Right = 20
         BorderSpacing.Bottom = 20
         Caption = 'Fields'
-        ClientHeight = 279
-        ClientWidth = 375
+        ClientHeight = 280
+        ClientWidth = 378
         TabOrder = 4
         object AllBitBtn: TBitBtn
           AnchorSideTop.Control = NoneBitBtn
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = NoneBitBtn
-          Left = 229
+          Left = 244
           Height = 32
           Top = 11
-          Width = 50
+          Width = 46
           Anchors = [akTop, akRight]
           AutoSize = True
           BorderSpacing.Right = 10
@@ -207,10 +225,10 @@ object ExportForm: TExportForm
           AnchorSideTop.Control = FieldGrpBox
           AnchorSideRight.Control = FieldGrpBox
           AnchorSideRight.Side = asrBottom
-          Left = 289
+          Left = 300
           Height = 34
           Top = 10
-          Width = 71
+          Width = 63
           Anchors = [akTop, akRight]
           AutoSize = True
           BorderSpacing.Top = 10
@@ -226,9 +244,9 @@ object ExportForm: TExportForm
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = QuestionLabel
           Left = 15
-          Height = 215
+          Height = 216
           Top = 48
-          Width = 345
+          Width = 348
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 15
           BorderSpacing.Right = 15
@@ -244,7 +262,7 @@ object ExportForm: TExportForm
           AnchorSideBottom.Side = asrBottom
           Left = 15
           Height = 1
-          Top = 268
+          Top = 269
           Width = 1
           Anchors = [akLeft, akBottom]
           BorderSpacing.Left = 15
@@ -262,14 +280,14 @@ object ExportForm: TExportForm
         AnchorSideBottom.Side = asrBottom
         Left = 20
         Height = 89
-        Top = 274
+        Top = 267
         Width = 265
         Anchors = [akLeft, akRight, akBottom]
         BorderSpacing.Left = 20
         BorderSpacing.Top = 10
         BorderSpacing.Bottom = 20
         Caption = 'Other'
-        ClientHeight = 72
+        ClientHeight = 76
         ClientWidth = 261
         TabOrder = 3
         object Label5: TLabel
@@ -277,9 +295,9 @@ object ExportForm: TExportForm
           AnchorSideTop.Control = EncodingCmbBox
           AnchorSideTop.Side = asrCenter
           Left = 10
-          Height = 16
-          Top = 21
-          Width = 63
+          Height = 11
+          Top = 22
+          Width = 47
           BorderSpacing.Left = 10
           Caption = 'Encoding:'
           ParentColor = False
@@ -290,10 +308,10 @@ object ExportForm: TExportForm
           AnchorSideTop.Control = GroupBox3
           AnchorSideRight.Control = GroupBox3
           AnchorSideRight.Side = asrBottom
-          Left = 83
-          Height = 29
+          Left = 67
+          Height = 25
           Top = 15
-          Width = 168
+          Width = 184
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 15
@@ -308,20 +326,20 @@ object ExportForm: TExportForm
   object Panel1: TPanel
     Left = 0
     Height = 41
-    Top = 416
-    Width = 700
+    Top = 405
+    Width = 703
     Align = alBottom
     ClientHeight = 41
-    ClientWidth = 700
+    ClientWidth = 703
     TabOrder = 1
     object BitBtn3: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn4
-      Left = 541
+      Left = 557
       Height = 32
       Top = 4
-      Width = 53
+      Width = 50
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -335,10 +353,10 @@ object ExportForm: TExportForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 604
+      Left = 617
       Height = 34
       Top = 3
-      Width = 80
+      Width = 70
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 15
