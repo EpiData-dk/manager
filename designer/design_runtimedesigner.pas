@@ -2094,7 +2094,6 @@ end;
 
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
 begin
-  DesignControlPopUpMenu.Items.Find('Select...').Free;
 end;
 
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
@@ -2127,6 +2126,13 @@ begin
       SelectionChange;
       UpdateDesigner;
     end;
+
+    // Delete previous "Select..." menu -> if it didn't exists then
+    // .free is called on Nil which is OK (causes no A/V).
+    // We cannot put this in OnClose for the pop-up because on Windows,
+    // the close event is fired before the OnClick of the menu-item.
+    // Hence -> the menuitem is deleted and no event is fired!
+    DesignControlPopUpMenu.Items.Find('Select...').Free;
 
     if (Selector.Count = 1) and
        (Ctrl is TDesignField)
