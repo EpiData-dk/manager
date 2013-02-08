@@ -282,6 +282,9 @@ object MainForm: TMainForm
           Caption = '-'
           Visible = False
         end
+        object MenuItem4: TMenuItem
+          Action = CountsReportAction
+        end
         object CodeBookMenuItem: TMenuItem
           Action = ReportGeneratorAction
           Visible = False
@@ -472,6 +475,11 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Validate...'
       OnExecute = VerifyDoubleEntryActionExecute
+    end
+    object CountsReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Counts'
+      OnExecute = CountsReportActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

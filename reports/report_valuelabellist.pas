@@ -23,7 +23,7 @@ uses
   epidocument, epireport_base, epireport_valuelabels;
 
 resourcestring
-  rsReportValueLabelListTitle = 'Report: List of valuelabels.';
+  rsReportValueLabelListTitle = 'List of valuelabels.';
 
 { TReportValueLabelList }
 

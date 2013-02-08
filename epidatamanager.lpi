@@ -181,7 +181,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="74">
+    <Units Count="77">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -496,6 +496,7 @@
         <Filename Value="export/export_csv_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportCSVFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_csv_frame"/>
       </Unit45>
@@ -613,7 +614,7 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
+        <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_properties_fieldframe"/>
       </Unit63>
       <Unit64>
@@ -621,7 +622,7 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SectionPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
+        <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_properties_sectionframe"/>
       </Unit64>
       <Unit65>
@@ -677,6 +678,24 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="align_form"/>
       </Unit73>
+      <Unit74>
+        <Filename Value="reports/report_counts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_counts"/>
+      </Unit74>
+      <Unit75>
+        <Filename Value="reports/report_optionframe_counts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ReportOptionsFrameCounts"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_optionframe_counts"/>
+      </Unit75>
+      <Unit76>
+        <Filename Value="reports/report_types.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_types"/>
+      </Unit76>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

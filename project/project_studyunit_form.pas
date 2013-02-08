@@ -95,7 +95,7 @@ begin
     Publisher.Text            := PublisherEdit.Text;
     Agency                    := AgencyEdit.Text;
     Author                    := AuthorsMemo.Text;
-    Rights.Text               := Rights.Text;
+    Rights.Text               := RightsMemo.Text;
     Funding.Text              := FundingMemo.Text;
   end;
 end;
@@ -133,7 +133,7 @@ begin
     PublisherEdit.Text    := Publisher.Text;
     AgencyEdit.Text       := Agency;
     AuthorsMemo.Text      := Author;
-    Rights.Text           := Rights.Text;
+    RightsMemo.Text       := Rights.Text;
     FundingMemo.Text      := Funding.Text;
   end;
 

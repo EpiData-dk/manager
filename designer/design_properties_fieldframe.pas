@@ -178,6 +178,8 @@ type
     function ComboIgnoreSelected(Combo: TComboBox): boolean;
     function ComboNoneSelected(Const Combo: TComboBox): boolean;
     function ComboSelectedObject(Combo: TComboBox): TObject;
+    // Other common
+    function SelectedEnum(ItemObject: TObject): PtrInt;
   private
     { ValueLabels }
     procedure AddValueLabels;
@@ -294,6 +296,19 @@ begin
     result := Combo.Items.Objects[Combo.ItemIndex];
 end;
 
+function TFieldPropertiesFrame.SelectedEnum(ItemObject: TObject): PtrInt;
+var
+  Items: TStrings;
+  Idx: Int64;
+begin
+  Items := TStrings(GetObjectProp(ItemObject, 'Items', TStrings));
+  if not Assigned(Items) then exit;
+
+  Idx := GetOrdProp(ItemObject, 'ItemIndex');
+  if Idx > -1 then
+    result := PtrInt(Items.Objects[Idx]);
+end;
+
 procedure TFieldPropertiesFrame.AddValueLabels;
 var
   VL: TEpiValueLabelSet;
@@ -313,7 +328,6 @@ begin
   begin
     VL := ValueLabels[i];
 
-//    VL := FValueLabelSets[i];
     case VL.LabelType of
       ftInteger:
         begin
@@ -397,7 +411,7 @@ var
 begin
   InitCombo(CompareToCombo);
   for i := 0 to DataFile.Fields.Count -1 do
-    AddFieldToCombo(DataFile.Field[i], NativeFieldTypeSetFromFieldType(Field.FieldType) - AutoFieldTypes, CompareToCombo);
+    AddFieldToCombo(DataFile.Field[i], NativeFieldTypeSetFromFieldType(Field.FieldType), CompareToCombo);
   FinishCombo(CompareToCombo, FNoneObject);
 
   F := TEpiField(FNoneObject);
@@ -1574,7 +1588,7 @@ begin
      (UpdateModeRadioGrp.ItemIndex <> -1)
   then
     for i := 0 to FieldCount - 1 do
-      TEpiCustomAutoField(Fields[i]).AutoMode := TEpiAutoUpdateMode(PtrUInt(UpdateModeRadioGrp.Items.Objects[UpdateModeRadioGrp.ItemIndex]));
+      TEpiCustomAutoField(Fields[i]).AutoMode := TEpiAutoUpdateMode(SelectedEnum(UpdateModeRadioGrp));
 
   // ---------
   // EXTENDED
@@ -1583,7 +1597,7 @@ begin
   if (EntryRadioGroup.ItemIndex <> -1)
   then
     for i := 0 to FieldCount - 1 do
-      Fields[i].EntryMode := TEpiEntryMode(PtrUInt(EntryRadioGroup.Items.Objects[EntryRadioGroup.ItemIndex]));
+      Fields[i].EntryMode := TEpiEntryMode(SelectedEnum(EntryRadioGroup));
 
   // Confirm Entry
   if ConfirmEntryChkBox.State <> cbGrayed then
@@ -1633,7 +1647,7 @@ begin
       begin
         Fields[i].Comparison.Free;
         Fields[i].Comparison := TEpiComparison.Create(Fields[i]);
-        Fields[i].Comparison.CompareType := TEpiComparisonType(CompareTypeCombo.ItemIndex);
+        Fields[i].Comparison.CompareType := TEpiComparisonType(SelectedEnum(CompareTypeCombo));
         Fields[i].Comparison.CompareField := TEpiField(ComboSelectedObject(CompareToCombo));
       end;
     end;
@@ -1663,12 +1677,12 @@ begin
           with PJumpComponents(FJumpComponentsList[j])^ do
           begin
             if TComboBox(GotoCombo).ItemIndex <= 2 then
-              NJump.JumpType := TEpiJumpType(PtrInt(ComboSelectedObject(TComboBox(GotoCombo))))
+              NJump.JumpType := TEpiJumpType(SelectedEnum(TComboBox(GotoCombo)))
             else begin
               NJump.JumpType := jtToField;
               NJump.JumpToField := TEpiField(ComboSelectedObject(TComboBox(GotoCombo)))
             end;
-            NJump.ResetType := TEpiJumpResetType(PtrInt(ComboSelectedObject(TComboBox(ResetCombo))));
+            NJump.ResetType := TEpiJumpResetType(SelectedEnum(TComboBox(ResetCombo)));
             Case Field.FieldType of
               ftBoolean:     TEpiBoolJump(NJump).JumpValue   := StrToInt(TEdit(ValueEdit).Text);
               ftInteger:     TEpiIntJump(NJump).JumpValue    := StrToInt(TEdit(ValueEdit).Text);
@@ -1779,6 +1793,8 @@ begin
 end;
 
 constructor TFieldPropertiesFrame.Create(TheOwner: TComponent);
+var
+  CmpType: TEpiComparisonType;
 begin
   inherited Create(TheOwner);
   FieldPageControl.ActivePage := FieldBasicSheet;
@@ -1803,6 +1819,14 @@ begin
     AddObject('On new record', TObject(umCreated));
     AddObject('On first save', TObject(umFirstSave));
     AddObject('On save/update record', TObject(umUpdated));
+    EndUpdate;
+  end;
+
+  with CompareTypeCombo.Items do
+  begin
+    BeginUpdate;
+    for CmpType in TEpiComparisonType do
+      AddObject(ComparisonTypeToString(CmpType), TObject(PtrInt(CmpType)));
     EndUpdate;
   end;
 

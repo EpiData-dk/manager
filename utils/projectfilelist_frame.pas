@@ -27,6 +27,7 @@ type
     FDocList: TStringList;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
+    FOnSelectionChanged: TNotifyEvent;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedList: TStringList;
     procedure  ImportFile(Const FileName: string);
@@ -34,6 +35,7 @@ type
     procedure  SetOnAfterImportFile(const AValue: TProjectListFileEvent);
     procedure  SetOnBeforeImportFile(const AValue: TProjectListFileEvent);
   protected
+    procedure  DoSelectionChanged;
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  DoAfterImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  RecImportPassword(Sender: TObject; var Login: string; var Password: string);
@@ -45,6 +47,7 @@ type
     procedure   AddDocument(Const FileName: string; Const Doc: TEpiDocument);
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
+    property    OnSelectionChanged: TNotifyEvent read FOnSelectionChanged write FOnSelectionChanged;
     property    SelectedList: TStringList read GetSelectedList;
     property    DocList: TStringList read FDocList;
   private
@@ -119,6 +122,7 @@ begin
     end;
   end;
   FDocList.AddObject(FileName, Doc);
+  DoSelectionChanged;
 end;
 
 procedure TProjectFileListFrame.ImportFile(const FileName: string);
@@ -200,6 +204,12 @@ begin
   FOnBeforeImportFile := AValue;
 end;
 
+procedure TProjectFileListFrame.DoSelectionChanged;
+begin
+  if Assigned(FOnSelectionChanged) then
+    FOnSelectionChanged(Self);
+end;
+
 procedure TProjectFileListFrame.DoBeforeImportFile(Document: TEpiDocument;
   const FileName: string);
 begin
@@ -226,7 +236,7 @@ end;
 procedure TProjectFileListFrame.StructureGridCheckboxToggled(sender: TObject;
   aCol, aRow: Integer; aState: TCheckboxState);
 begin
-  // Include the file in the list?
+  DoSelectionChanged;
 end;
 
 constructor TProjectFileListFrame.Create(TheOwner: TComponent);

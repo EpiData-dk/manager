@@ -41,11 +41,11 @@ uses
   project_keyfields_form, manager_globals, validate_double_entry_form,
   report_double_entry_validation, design_runtimedesigner, design_control_field,
   design_control_heading, design_control_section, design_designpanel,
-  design_properties_form, design_designcontroller,
-design_properties_fieldframe, design_properties_sectionframe, 
-design_designmessenger, design_commander, design_properties_emptyframe, 
-design_designmover, design_designsizer, design_designbander, 
-project_studyunit_form, align_form;
+  design_properties_form, design_designcontroller, design_properties_fieldframe,
+  design_properties_sectionframe, design_designmessenger, design_commander,
+  design_properties_emptyframe, design_designmover, design_designsizer,
+  design_designbander, project_studyunit_form, align_form, report_counts,
+  report_optionframe_counts, report_types;
 
 {$R *.res}
 

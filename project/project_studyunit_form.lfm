@@ -60,9 +60,9 @@ object StudyUnitForm: TStudyUnitForm
     Height = 462
     Top = 0
     Width = 493
-    ActivePage = TabSheet1
+    ActivePage = TabSheet5
     Align = alClient
-    TabIndex = 0
+    TabIndex = 4
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Title'
@@ -458,7 +458,7 @@ object StudyUnitForm: TStudyUnitForm
         Height = 25
         Hint = 'Organisation to contact and contact information'
         Top = 30
-        Width = 539
+        Width = 467
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
@@ -475,10 +475,10 @@ object StudyUnitForm: TStudyUnitForm
         AnchorSideBottom.Control = TabSheet5
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 130
+        Height = 136
         Hint = 'Right to use data'
         Top = 283
-        Width = 539
+        Width = 467
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
@@ -498,7 +498,7 @@ object StudyUnitForm: TStudyUnitForm
         Height = 113
         Hint = 'Who created the data set and study, including contributors'
         Top = 140
-        Width = 539
+        Width = 467
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
@@ -513,7 +513,7 @@ object StudyUnitForm: TStudyUnitForm
         Left = 10
         Height = 15
         Top = 65
-        Width = 50
+        Width = 51
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         Caption = 'Agency:'
@@ -528,7 +528,7 @@ object StudyUnitForm: TStudyUnitForm
         Left = 10
         Height = 25
         Top = 85
-        Width = 539
+        Width = 467
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10

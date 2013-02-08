@@ -15,6 +15,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
     EditMenuDivider10: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
@@ -24,6 +25,7 @@ type
     AlignLeftMenuItem: TMenuItem;
     AlignRightMenuItem: TMenuItem;
     AlignTopMenuItem: TMenuItem;
+    MenuItem4: TMenuItem;
     SelectAllBoolMenuItem: TMenuItem;
     SelectAllStringMenuItem: TMenuItem;
     SelectAllFloatMenuItem: TMenuItem;
@@ -128,6 +130,7 @@ type
     procedure CloseProjectActionUpdate(Sender: TObject);
     procedure CombinedListReportActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
+    procedure CountsReportActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
     procedure ExportActionExecute(Sender: TObject);
@@ -205,18 +208,19 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, LCLProc, LCLIntf,
+  LCLProc, LCLIntf,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
-  valuelabelseditor_form, epimiscutils,
-  epicustombase, project_settings, LCLType, UTF8Process,
+  epimiscutils,
+  epicustombase, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
-  strutils, report_fieldlist, report_valuelabellist,
+  report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
+  report_counts,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
-  epitools_integritycheck, datasetviewer_frame, prepare_double_entry_form,
+  prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  report_double_entry_validation, managerprocs, process;
+  managerprocs, process;
 
 { TMainForm }
 
@@ -244,8 +248,6 @@ begin
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-var
-  res: LongInt;
 begin
   CanClose := true;
 
@@ -274,6 +276,11 @@ begin
       'Record count: ' + IntToStr(DataFiles[0].Size);
   end;
   Clipboard.AsText := S;
+end;
+
+procedure TMainForm.CountsReportActionExecute(Sender: TObject);
+begin
+  RunReport(TReportCounts);
 end;
 
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
@@ -722,7 +729,6 @@ end;
 procedure TMainForm.DoNewProject;
 var
   TabSheet: TTabSheet;
-  CanClose: boolean;
 begin
   // Close Old project
   if not DoCloseProject then exit;
@@ -881,7 +887,6 @@ function TMainForm.ToolsCheckOpenFile(out FileName: string;
   out LocalDoc: boolean): TEpiDocument;
 var
   Dlg: TOpenDialog;
-  St: TMemoryStream;
 begin
   Result := nil;
   if Assigned(FActiveFrame) then
@@ -895,7 +900,6 @@ begin
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     if not Dlg.Execute then exit;
 
-
     Result := TOpenEpiDoc.OpenDoc(Dlg.FileName, ManagerSettings.StudyLang);
 
     LocalDoc := true;
@@ -907,7 +911,6 @@ function TMainForm.RunReport(ReportClass: TReportBaseClass): boolean;
 var
   F: TStaticReportsForm;
   R: TReportBase;
-  H: TReportViewerForm;
   S: String;
 begin
   R := nil;
@@ -926,9 +929,15 @@ begin
     R := F.Report;
   if not Assigned(R) then exit;
 
+  Screen.Cursor := crHourGlass;
+  Application.ProcessMessages;
+  S := R.RunReport;
+  Screen.Cursor := crDefault;
+  Application.ProcessMessages;
+
   ShowReportForm(Self,
     'Report of: ' + R.ReportTitle,
-    R.RunReport,
+    S,
     F.RadioGroup1.ItemIndex = 0);
   F.Free;
 end;
