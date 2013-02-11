@@ -580,7 +580,10 @@ begin
       AddObject('Max defined missingvalue', TObject(jrMaxMissing));
       AddObject('Second max defined missing value', TObject(jr2ndMissing));
     end;
-    ItemIndex := 0;
+    if (FJumpComponentsList.Count > 0) then
+      ItemIndex := TComboBox(PJumpComponents(FJumpComponentsList[FJumpComponentsList.Count - 1])^.ResetCombo).ItemIndex
+    else
+      ItemIndex := 0;
     Parent := JumpScrollBox;
   end;
 
