@@ -15,6 +15,8 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
     SelectAllBoolsAction: TAction;
     SelectAllStringsAction: TAction;
     SelectAllFloatsAction: TAction;
@@ -173,7 +175,6 @@ type
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DeleteControlFastActionExecute(Sender: TObject);
-    procedure DesignControlPopUpMenuClose(Sender: TObject);
     procedure DesignControlPopUpMenuPopup(Sender: TObject);
     procedure DesignerActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
@@ -2090,10 +2091,6 @@ end;
 procedure TRuntimeDesignFrame.DeleteControlFastActionExecute(Sender: TObject);
 begin
   DeleteControls(true);
-end;
-
-procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
-begin
 end;
 
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
