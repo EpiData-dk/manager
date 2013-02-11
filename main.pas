@@ -26,6 +26,8 @@ type
     AlignRightMenuItem: TMenuItem;
     AlignTopMenuItem: TMenuItem;
     MenuItem4: TMenuItem;
+    MenuItem6: TMenuItem;
+    AlignMenuItem: TMenuItem;
     SelectAllBoolMenuItem: TMenuItem;
     SelectAllStringMenuItem: TMenuItem;
     SelectAllFloatMenuItem: TMenuItem;
@@ -1095,6 +1097,7 @@ begin
   AlignRightMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignRightAction;
   AlignTopMenuItem.Action          := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignTopAction;
   AlignBottomMenuItem.Action       := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignBottomAction;
+  AlignMenuItem.Action             := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ShowAlignFormAction;
 
   // Select
   SelectAllIntsMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllIntsAction;

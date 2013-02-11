@@ -243,6 +243,12 @@ object MainForm: TMainForm
       object AlignBottomMenuItem: TMenuItem
         Caption = 'AlBot'
       end
+      object MenuItem6: TMenuItem
+        Caption = '-'
+      end
+      object AlignMenuItem: TMenuItem
+        Caption = 'Align...'
+      end
     end
     object SelectMenu: TMenuItem
       Caption = 'Select'
