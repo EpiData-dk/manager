@@ -25,9 +25,7 @@ uses
   settings_visualdesign_frame,
 
   project_settings, project_settings_interface, project_settings_general_frame,
-  project_settings_field_frame, project_settings_study_frame,
-  project_settings_study_contentdesc_frame,
-  project_settings_study_ownership_frame, valuelabelseditor_form,
+  project_settings_field_frame, valuelabelseditor_form,
   UniqueInstanceRaw, epidatacore, design_properties_headingframe,
   design_properties_baseframe, design_types, import_structure_form,
   manager_messages, toolsform, reportgenerator, report_fieldlist, viewer_form,

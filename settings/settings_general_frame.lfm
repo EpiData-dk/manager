@@ -8,67 +8,30 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   TabOrder = 0
   DesignLeft = 630
   DesignTop = 466
-  object DefaultPasteCombo: TComboBox
-    AnchorSideTop.Control = MultipleInstanceChkbox
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 224
-    Height = 28
-    Top = 170
-    Width = 254
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 10
-    BorderSpacing.Right = 10
-    ItemHeight = 0
-    Items.Strings = (
-      'Heading'
-      'Integer'
-      'Float'
-      'String'
-    )
-    Style = csDropDownList
-    TabOrder = 5
-  end
-  object Label18: TLabel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = DefaultPasteCombo
-    AnchorSideTop.Side = asrCenter
-    Left = 10
-    Height = 14
-    Top = 177
-    Width = 164
-    BorderSpacing.Left = 10
-    Caption = 'Default paste special type'
-    ParentColor = False
-  end
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = DefaultSaveTypeComboBox
     AnchorSideTop.Side = asrCenter
     Left = 10
-    Height = 14
+    Height = 15
     Top = 215
-    Width = 109
+    Width = 112
     BorderSpacing.Left = 10
     Caption = 'Default save type'
     ParentColor = False
   end
   object DefaultSaveTypeComboBox: TComboBox
-    AnchorSideLeft.Control = DefaultPasteCombo
-    AnchorSideTop.Control = DefaultPasteCombo
     AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = DefaultPasteCombo
     AnchorSideRight.Side = asrBottom
     Left = 224
-    Height = 28
+    Height = 29
     Top = 208
     Width = 254
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     ItemHeight = 0
     Style = csDropDownList
-    TabOrder = 6
+    TabOrder = 5
   end
   object SaveWindowPositionsChkBox: TCheckBox
     AnchorSideLeft.Control = Owner
@@ -76,7 +39,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 10
-    Width = 164
+    Width = 166
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Save window positions'
@@ -89,7 +52,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 42
-    Width = 142
+    Width = 147
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Show Welcome Box'
@@ -102,7 +65,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 74
-    Width = 140
+    Width = 141
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Show Work Toolbar'
@@ -115,7 +78,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 138
-    Width = 246
+    Width = 251
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Allow multiple instances of program'
@@ -126,9 +89,9 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Control = UnAssociateBtn
     AnchorSideTop.Side = asrCenter
     Left = 10
-    Height = 14
+    Height = 15
     Top = 252
-    Width = 194
+    Width = 199
     BorderSpacing.Left = 10
     Caption = 'Associate filetypes (.epx, .epz):'
     ParentColor = False
@@ -136,16 +99,16 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   object UnAssociateBtn: TButton
     AnchorSideTop.Control = AssociateBtn
     AnchorSideRight.Control = AssociateBtn
-    Left = 301
-    Height = 26
+    Left = 297
+    Height = 27
     Top = 246
-    Width = 94
+    Width = 97
     Anchors = [akTop, akRight]
     AutoSize = True
     BorderSpacing.Right = 10
     Caption = 'Un-Associate'
     OnClick = UnAssociateBtnClick
-    TabOrder = 7
+    TabOrder = 6
   end
   object AssociateBtn: TButton
     AnchorSideLeft.Side = asrBottom
@@ -153,10 +116,10 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 405
-    Height = 26
+    Left = 404
+    Height = 27
     Top = 246
-    Width = 73
+    Width = 74
     Anchors = [akTop, akRight]
     AutoSize = True
     BorderSpacing.Left = 5
@@ -164,7 +127,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     BorderSpacing.Right = 10
     Caption = 'Associate'
     OnClick = AssociateBtnClick
-    TabOrder = 8
+    TabOrder = 7
   end
   object ShowA4LinesChkBox: TCheckBox
     AnchorSideLeft.Control = Owner
@@ -173,7 +136,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 22
     Top = 106
-    Width = 145
+    Width = 147
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Show A4 guidelines'

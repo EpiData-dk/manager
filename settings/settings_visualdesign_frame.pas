@@ -27,7 +27,6 @@ type
     Label10: TLabel;
     Label2: TLabel;
     Label3: TLabel;
-    Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
@@ -39,9 +38,6 @@ type
     ScrollBox1: TScrollBox;
     SectionColourBtn: TColorButton;
     SectionFontEditBtn: TEditButton;
-    SnapFieldsChkBox: TCheckBox;
-    SnappingGrpBox: TGroupBox;
-    SnapThresholdEdit: TMaskEdit;
     procedure FieldColourBtnColorChanged(Sender: TObject);
     procedure FieldFontEditBtnButtonClick(Sender: TObject);
   private
@@ -100,8 +96,6 @@ begin
   begin
     DefaultRightPosEdit.Text          := IntToStr(DefaultRightPosition);
     LabelLeftPosition.Text               := IntToStr(DefaultLabelPosition);
-    SnapFieldsChkBox.Checked          := SnapFields;
-    SnapThresholdEdit.Text            := IntToStr(SnappingThresHold);
     FieldFieldEdit.Text               := IntToStr(SpaceBtwFieldField);
     FieldLabelEdit.Text               := IntToStr(SpaceBtwFieldLabel);
     LabelLabelEdit.Text               := IntToStr(SpaceBtwLabelLabel);
@@ -127,10 +121,6 @@ begin
     S := Trim(LabelLeftPosition.Text);
     if not((S = '') or (StrToInt(S) <= 0)) then
       DefaultLabelPosition := StrToInt(S);
-    SnapFields            := SnapFieldsChkBox.Checked;
-    S := Trim(SnapThresholdEdit.Text);
-    if not((S = '') or (StrToInt(S) <= 0)) then
-      SnappingThresHold := StrToInt(S);
     S := Trim(FieldFieldEdit.Text);
     if not((S = '') or (StrToInt(S) <= 0)) then
       SpaceBtwFieldField := StrToInt(S);

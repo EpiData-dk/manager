@@ -16,10 +16,8 @@ type
     ShowA4LinesChkBox: TCheckBox;
     UnAssociateBtn: TButton;
     AssociateBtn: TButton;
-    DefaultPasteCombo: TComboBox;
     DefaultSaveTypeComboBox: TComboBox;
     Label1: TLabel;
-    Label18: TLabel;
     AssociateLabel: TLabel;
     MultipleInstanceChkbox: TCheckBox;
     SaveWindowPositionsChkBox: TCheckBox;
@@ -135,7 +133,6 @@ begin
   FData := Data;
   with FData^ do
   begin
-    DefaultPasteCombo.ItemIndex := PasteSpecialType;
     DefaultSaveTypeComboBox.ItemIndex := SaveType;
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
     ShowWelcomeChkBox.Checked         := ShowWelcome;
@@ -149,7 +146,6 @@ function TSettings_GeneralFrame.ApplySettings: boolean;
 begin
   with FData^ do
   begin
-    PasteSpecialType    := DefaultPasteCombo.ItemIndex;
     SaveType            := DefaultSaveTypeComboBox.ItemIndex;
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;
     ShowWelcome         := ShowWelcomeChkBox.Checked;

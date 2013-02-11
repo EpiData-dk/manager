@@ -47,12 +47,6 @@ procedure LoadFormPosition(AForm: TForm; Const SectionName: string);
 
 procedure AddToRecent(Const AFilename: string);
 
-{const
-  ManagerVersion: TEpiVersionInfo = (
-    {$I epidatamanager.version.inc}
-  );
-}
-
 procedure InitFont(Font: TFont);
 
 implementation
@@ -73,10 +67,7 @@ uses
   export_csv_frame, export_stata_frame, export_sas_frame, export_spss_frame,
 
   // project settings
-  project_settings_field_frame, project_settings_general_frame,
-  project_settings_study_contentdesc_frame, project_settings_study_frame,
-  project_settings_study_ownership_frame;
-
+  project_settings_field_frame, project_settings_general_frame;
 const
   RecentIniFileName: string = '';
 
@@ -580,10 +571,7 @@ begin
 
     // Project options
     FindNodeWithText('Project Defaults').GetFirstChild.Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
-    FindNodeWithText('Fields').Data              := Pointer(TProjectSettings_FieldFrame.Create(Self));
-    FindNodeWithText('Study').Data               := Pointer(TProjectsettings_StudyFrame.Create(Self));
-    FindNodeWithText('Content Description').Data := Pointer(TProjectSetting_ContentDescFrame.Create(Self));
-    FindNodeWithText('Ownership').Data           := Pointer(TProjectSetting_OwnershipFrame.Create(Self));
+    FindNodeWithText('Display of Fields').Data   := Pointer(TProjectSettings_FieldFrame.Create(Self));
   end;
 end;
 

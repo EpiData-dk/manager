@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 475
+  Left = 509
   Height = 443
-  Top = 313
+  Top = 295
   Width = 611
   ActiveControl = SettingsView
   Caption = 'Settings'
@@ -25,10 +25,10 @@ object SettingsForm: TSettingsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn2
-      Left = 460
+      Left = 457
       Height = 34
       Top = 8
-      Width = 79
+      Width = 80
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -43,10 +43,10 @@ object SettingsForm: TSettingsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 549
+      Left = 547
       Height = 32
       Top = 9
-      Width = 51
+      Width = 53
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -63,7 +63,7 @@ object SettingsForm: TSettingsForm
     Top = 0
     Width = 195
     Align = alLeft
-    DefaultItemHeight = 16
+    DefaultItemHeight = 18
     ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 1
@@ -81,14 +81,11 @@ object SettingsForm: TSettingsForm
       00000000050000005374617461FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000
       00000000000003000000435356FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000
       0000000000000400000053505353FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
-      0000000000000003000000534153FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0300
+      0000000000000003000000534153FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0200
       000000000000011000000050726F6A6563742044656661756C7473FFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFF0000000000000000000700000047656E6572616CFF
-      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000060000004669656C
-      6473FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0200000000000000010500000053
-      74756479FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000130000
-      00436F6E74656E74204465736372697074696F6EFFFFFFFFFFFFFFFFFFFFFFFF
-      FFFFFFFF000000000000000000090000004F776E657273686970
+      FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000001100000044697370
+      6C6179206F66204669656C6473
     }
   end
   object Splitter1: TSplitter

@@ -1,7 +1,7 @@
 object StudyUnitForm: TStudyUnitForm
-  Left = 788
+  Left = 1089
   Height = 511
-  Top = 367
+  Top = 360
   Width = 493
   Caption = 'Study Information'
   ClientHeight = 511
@@ -60,9 +60,9 @@ object StudyUnitForm: TStudyUnitForm
     Height = 462
     Top = 0
     Width = 493
-    ActivePage = TabSheet5
+    ActivePage = TabSheet1
     Align = alClient
-    TabIndex = 4
+    TabIndex = 0
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Title'
@@ -349,7 +349,7 @@ object StudyUnitForm: TStudyUnitForm
         Left = 10
         Height = 138
         Top = 85
-        Width = 539
+        Width = 467
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
@@ -366,9 +366,9 @@ object StudyUnitForm: TStudyUnitForm
         AnchorSideBottom.Control = TabSheet4
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 155
+        Height = 161
         Top = 258
-        Width = 539
+        Width = 467
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
@@ -382,7 +382,7 @@ object StudyUnitForm: TStudyUnitForm
         Left = 10
         Height = 15
         Top = 10
-        Width = 63
+        Width = 64
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         Caption = 'Keywords:'
@@ -397,7 +397,7 @@ object StudyUnitForm: TStudyUnitForm
         Left = 10
         Height = 25
         Top = 30
-        Width = 539
+        Width = 467
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
