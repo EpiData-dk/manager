@@ -453,6 +453,7 @@
         <Filename Value="export/export_stata_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportStataFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_stata_frame"/>
       </Unit39>

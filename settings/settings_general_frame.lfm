@@ -10,22 +10,25 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   DesignTop = 466
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = DefaultSaveTypeComboBox
     AnchorSideTop.Side = asrCenter
+    AnchorSideBottom.Control = DefaultSaveTypeComboBox
+    AnchorSideBottom.Side = asrBottom
     Left = 10
     Height = 15
-    Top = 215
+    Top = 223
     Width = 112
+    Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 10
     Caption = 'Default save type'
     ParentColor = False
   end
   object DefaultSaveTypeComboBox: TComboBox
+    AnchorSideTop.Control = ImportCasingCombo
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Side = asrBottom
     Left = 224
     Height = 29
-    Top = 208
+    Top = 209
     Width = 254
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
@@ -90,7 +93,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 15
-    Top = 252
+    Top = 254
     Width = 199
     BorderSpacing.Left = 10
     Caption = 'Associate filetypes (.epx, .epz):'
@@ -101,7 +104,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Control = AssociateBtn
     Left = 297
     Height = 27
-    Top = 246
+    Top = 248
     Width = 97
     Anchors = [akTop, akRight]
     AutoSize = True
@@ -118,7 +121,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Side = asrBottom
     Left = 404
     Height = 27
-    Top = 246
+    Top = 248
     Width = 74
     Anchors = [akTop, akRight]
     AutoSize = True
@@ -141,5 +144,36 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     BorderSpacing.Top = 10
     Caption = 'Show A4 guidelines'
     TabOrder = 3
+  end
+  object Label2: TLabel
+    AnchorSideBottom.Control = ImportCasingCombo
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 15
+    Top = 184
+    Width = 198
+    Anchors = [akLeft, akBottom]
+    Caption = 'Fieldname casing (.rec import):'
+    ParentColor = False
+  end
+  object ImportCasingCombo: TComboBox
+    AnchorSideTop.Control = MultipleInstanceChkbox
+    AnchorSideTop.Side = asrBottom
+    Left = 224
+    Height = 29
+    Hint = 'During read of .rec files, how should'#10'fieldnames be imported.'#10#10'This is important since Manager supports'#10'fieldnames with different case. This may'#10'cause confusion during import or tool-methods'#10'eg. Count. which depends on identical'#10'field names.'#10
+    Top = 170
+    Width = 252
+    BorderSpacing.Top = 10
+    ItemHeight = 0
+    Items.Strings = (
+      'UPPERCASE'
+      'lowercase'
+      'Leave As Is'
+    )
+    ParentShowHint = False
+    ShowHint = True
+    Style = csDropDownList
+    TabOrder = 8
   end
 end

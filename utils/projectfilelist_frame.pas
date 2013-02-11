@@ -76,7 +76,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epimiscutils, Dialogs, managerprocs;
+  epiimport, LCLProc, epimiscutils, Dialogs, managerprocs,
+  settings2_var;
 
 { TProjectFileListFrame }
 
@@ -135,6 +136,7 @@ var
   DataFile: TEpiDataFile;
 begin
   Importer := TEpiImport.Create;
+  Importer.ImportCasing := ManagerSettings.ImportCasing;
   FCurrentFile := FileName;
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
 

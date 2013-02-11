@@ -136,6 +136,7 @@ begin
       WriteString(Sec, 'EntryCLientDirectory', EntryClientDirUTF8);
       WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
       WriteInteger(Sec, 'SaveAsType', SaveType);
+      WriteInteger(Sec, 'ImportCasing', Integer(ImportCasing));
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       WriteBool(Sec, 'ShowWelcome', ShowWelcome);
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
@@ -289,6 +290,7 @@ begin
       EntryClientDirUTF8  := ReadString(Sec, 'EntryClientDirectory', EntryClientDirUTF8);
       PasteSpecialType    := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
       SaveType            := ReadInteger(Sec, 'SaveAsType', SaveType);
+      ImportCasing        := TEpiFieldNamingCase(ReadInteger(Sec, 'ImportCasing', Integer(ImportCasing)));
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
@@ -303,7 +305,7 @@ begin
 
       Sec := 'exportstata';
       ExportStataVersion     := TEpiStataVersion(ReadInteger(sec, 'ExportStataVersion', Integer(ExportStataVersion)));
-      ExportStataFieldCase   := TEpiStataFieldNamingCase(ReadInteger(sec, 'ExportStataFieldCase', Integer(ExportStataFieldCase)));
+      ExportStataFieldCase   := TEpiFieldNamingCase(ReadInteger(sec, 'ExportStataFieldCase', Integer(ExportStataFieldCase)));
       ExportStataValueLabels := ReadBool(sec, 'ExportStataValueLabels', ExportStataValueLabels);
 
       sec := 'exportcsv';

@@ -24,6 +24,7 @@ type
     SaveType:              byte;     // Index into list:
                                      //   0: .epx
                                      //   1: .epz
+    ImportCasing:          TEpiFieldNamingCase;
 
     // Visual design:
     DefaultRightPosition:  Integer;
@@ -59,7 +60,7 @@ type
 
     // - Stata:
     ExportStataVersion:    TEpiStataVersion;
-    ExportStataFieldCase:  TEpiStataFieldNamingCase;
+    ExportStataFieldCase:  TEpiFieldNamingCase;
     ExportStataValueLabels: boolean;
 
     // - CSV
@@ -122,6 +123,7 @@ var
     MultipleInstances:     false;
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
+    ImportCasing:          fncLower;     // lowercase
 
     // Visual design:
     DefaultRightPosition:  400;

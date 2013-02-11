@@ -13,6 +13,8 @@ type
   { TSettings_GeneralFrame }
 
   TSettings_GeneralFrame = class(TFrame, ISettingsFrame)
+    ImportCasingCombo: TComboBox;
+    Label2: TLabel;
     ShowA4LinesChkBox: TCheckBox;
     UnAssociateBtn: TButton;
     AssociateBtn: TButton;
@@ -40,7 +42,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2, epimiscutils,strutils, main
+  settings2, epimiscutils,strutils, main, epieximtypes
   {$IFDEF WINDOWS}
   ,registry
   {$ENDIF};
@@ -134,6 +136,7 @@ begin
   with FData^ do
   begin
     DefaultSaveTypeComboBox.ItemIndex := SaveType;
+    ImportCasingCombo.ItemIndex       := Integer(ImportCasing);
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
     ShowWelcomeChkBox.Checked         := ShowWelcome;
     ShowWorkToolBarChkBox.Checked     := ShowWorkToolBar;
@@ -147,6 +150,7 @@ begin
   with FData^ do
   begin
     SaveType            := DefaultSaveTypeComboBox.ItemIndex;
+    ImportCasing        := TEpiFieldNamingCase(ImportCasingCombo.ItemIndex);
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;
     ShowWelcome         := ShowWelcomeChkBox.Checked;
     ShowWorkToolBar     := ShowWorkToolBarChkBox.Checked;
