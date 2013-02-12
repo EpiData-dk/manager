@@ -12,7 +12,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, printer4lazarus, virtualtreeview_package,
-  jvRuntimeDesign, main, project_frame, workflow_frame,
+  jvRuntimeDesign, main, project_frame,
   managerprocs, sysutils, about,
 
   // Settings - import order defines order!

@@ -2462,11 +2462,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnUpdate = RedoActionUpdate
     end
     object ViewDatasetAction: TAction
-      Caption = 'View Dataset'
+      Caption = 'Browse Data'
       OnExecute = ViewDatasetActionExecute
     end
     object PrintDataFormAction: TAction
-      Caption = 'Print Dataform'
+      Caption = '&Print Dataform'
       Hint = 'Print Dataform'
       ImageIndex = 19
       OnExecute = PrintDataFormActionExecute
@@ -2509,22 +2509,22 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object SelectAllIntsAction: TAction
       Category = 'Select'
-      Caption = 'Select All Integer Fields'
+      Caption = 'All Integer Fields'
       OnExecute = SelectAllIntsActionExecute
     end
     object SelectAllFloatsAction: TAction
       Category = 'Select'
-      Caption = 'Select All Float Fields'
+      Caption = 'All Float Fields'
       OnExecute = SelectAllFloatsActionExecute
     end
     object SelectAllStringsAction: TAction
       Category = 'Select'
-      Caption = 'Select All String Fields'
+      Caption = 'All String Fields'
       OnExecute = SelectAllStringsActionExecute
     end
     object SelectAllBoolsAction: TAction
       Category = 'Select'
-      Caption = 'Select All Boolean Fields'
+      Caption = 'All Boolean Fields'
       OnExecute = SelectAllBoolsActionExecute
     end
   end

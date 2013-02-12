@@ -15,6 +15,30 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    MenuItem10: TMenuItem;
+    MenuItem11: TMenuItem;
+    MenuItem12: TMenuItem;
+    MenuItem13: TMenuItem;
+    MenuItem14: TMenuItem;
+    MenuItem15: TMenuItem;
+    BrowseDatasetMenuItem: TMenuItem;
+    MenuItem16: TMenuItem;
+    MenuItem17: TMenuItem;
+    MenuItem18: TMenuItem;
+    MenuItem19: TMenuItem;
+    MenuItem20: TMenuItem;
+    MenuItem21: TMenuItem;
+    MenuItem22: TMenuItem;
+    BrowseDataMenuItem: TMenuItem;
+    MenuItem23: TMenuItem;
+    MenuItem24: TMenuItem;
+    MenuItem25: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    ProjectDetailsBtn: TButton;
+    DocumentBtn: TButton;
+    EnterDataBtn: TButton;
+    ExportBtn: TButton;
     CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
     EditMenuDivider10: TMenuItem;
@@ -25,9 +49,19 @@ type
     AlignLeftMenuItem: TMenuItem;
     AlignRightMenuItem: TMenuItem;
     AlignTopMenuItem: TMenuItem;
-    MenuItem4: TMenuItem;
     MenuItem6: TMenuItem;
     AlignMenuItem: TMenuItem;
+    DefineProjectPopupMenu: TPopupMenu;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    KeyFieldsPopupMenuItem: TMenuItem;
+    DocumentPopupMenu: TPopupMenu;
+    MenuItem9: TMenuItem;
+    ValueLabelEditorPopupMenuItem: TMenuItem;
+    ProjectPropertiesPopupMenuItem: TMenuItem;
+    SetPasswordPopupMenuItem: TMenuItem;
+    StudyInfoPopupMenuItem: TMenuItem;
+    ProjectDetailsPopupMenu: TPopupMenu;
     SelectAllBoolMenuItem: TMenuItem;
     SelectAllStringMenuItem: TMenuItem;
     SelectAllFloatMenuItem: TMenuItem;
@@ -46,13 +80,7 @@ type
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
     ExportMenuItem: TMenuItem;
-    DataSetMenu: TMenuItem;
-    DoubleEntryMenu: TMenuItem;
-    PrepareDoubleEntryMenuItem: TMenuItem;
-    ValidatDoubleEntryMenuItem: TMenuItem;
     ProjectPasswordMenuItem: TMenuItem;
-    ViewDataSetMenuItem: TMenuItem;
-    ValueLabelEditor2MenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
     ExtendedListReportAction: TAction;
@@ -63,12 +91,10 @@ type
     ValueLabaleListReportMenuItem: TMenuItem;
     CombinedReportMenuItem: TMenuItem;
     QuestionListReportMenuItem: TMenuItem;
-    MenuItem5: TMenuItem;
     QuestionListReportAction: TAction;
     ReportGeneratorAction: TAction;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
-    CodeBookMenuItem: TMenuItem;
     PackAction: TAction;
     ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
@@ -77,10 +103,7 @@ type
     EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
-    UserAccessBtn: TButton;
-    GCPBtn: TButton;
-    OpenProjectBtn: TButton;
-    NewProjectBtn: TButton;
+    DefineProjectBtn: TButton;
     HelpMenuDivider1: TMenuItem;
     ProcessToolPanel: TPanel;
     TutorialsMenuDivider1: TMenuItem;
@@ -134,6 +157,8 @@ type
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure CountsReportActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
+    procedure DefineProjectBtnClick(Sender: TObject);
+    procedure DocumentBtnClick(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
     procedure ExportActionExecute(Sender: TObject);
     procedure ExtendedListReportActionExecute(Sender: TObject);
@@ -144,6 +169,7 @@ type
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
     procedure PrepareDoubleEntryActionExecute(Sender: TObject);
+    procedure ProjectDetailsBtnClick(Sender: TObject);
     procedure ProjectReportActionExecute(Sender: TObject);
     procedure QuestionListReportActionExecute(Sender: TObject);
     procedure ReportGeneratorActionExecute(Sender: TObject);
@@ -153,7 +179,6 @@ type
     procedure ShowAboutActionExecute(Sender: TObject);
     procedure StartEntryClientActionExecute(Sender: TObject);
     procedure StartEntryClientActionUpdate(Sender: TObject);
-    procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
@@ -243,10 +268,6 @@ begin
                    'See help menu above for an introduction.' + LineEnding +
                    'Get latest version from http://www.epidata.dk', 15, 15);
   {$ENDIF}
-
-  {$IFDEF EPI_DEBUG}
-  UserAccessBtn.Visible := true;
-  {$ENDIF}
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -288,6 +309,16 @@ end;
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
 begin
   RestoreDefaultPos;
+end;
+
+procedure TMainForm.DefineProjectBtnClick(Sender: TObject);
+begin
+  DefineProjectPopupMenu.PopUp;
+end;
+
+procedure TMainForm.DocumentBtnClick(Sender: TObject);
+begin
+  DocumentPopupMenu.PopUp;
 end;
 
 procedure TMainForm.EpiDataTutorialsMenuItemClick(Sender: TObject);
@@ -493,6 +524,11 @@ begin
   end;
 end;
 
+procedure TMainForm.ProjectDetailsBtnClick(Sender: TObject);
+begin
+  ProjectDetailsPopupMenu.PopUp;
+end;
+
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportProjectOverview);
@@ -619,11 +655,6 @@ begin
   {$ENDIF}
   Ext := ExtractFileExt(Application.ExeName);
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
-end;
-
-procedure TMainForm.UserAccessBtnClick(Sender: TObject);
-begin
-  ShowValueLabelEditor2(FActiveFrame.EpiDocument.ValueLabelSets);
 end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
@@ -818,29 +849,34 @@ begin
   PasteAsStringMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider7.Visible := Assigned(FActiveFrame);
   // -
+  AlignMenu.Visible         := Assigned(FActiveFrame);
+  // -
+  SelectMenu.Visible        := Assigned(FActiveFrame);
+  MenuItem25.Visible        := Assigned(FActiveFrame);
+  // -
   AddStructureMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider10.Visible := Assigned(FActiveFrame);
 
-  // PROJECT:
+  // PROJECT Details:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
   KeyFieldsMenuItem.Visible := Assigned(FActiveFrame);
   StudyInfoMenuItem.Visible := Assigned(FActiveFrame);
 
-  // ALIGN
-  AlignMenu.Visible         := Assigned(FActiveFrame);
-
-  // SELECT
-  SelectMenu.Visible        := Assigned(FActiveFrame);
-
-  // TOOLS:
-  DataSetMenu.Visible       := Assigned(FActiveFrame);
+  // Document:
+  BrowseDataMenuItem.Visible := Assigned(FActiveFrame);
+  MenuItem4.Visible          := Assigned(FActiveFrame);
+  // document popupmenu
+  BrowseDatasetMenuItem.Visible := Assigned(FActiveFrame);
+  MenuItem16.Visible            := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;
 begin
   ProcessToolPanel.Visible :=
-    (not Assigned(FActiveFrame)) and
+//    (not Assigned(FActiveFrame)) and
     ManagerSettings.ShowWorkToolBar;
+
+  ProjectDetailsBtn.Enabled := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateShortCuts;
@@ -1091,6 +1127,12 @@ begin
   ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
   KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
   StudyInfoMenuItem.Action         := FActiveFrame.StudyInformationAction;
+  // --project details popup-menu
+  ProjectPropertiesPopupMenuItem.Action := FActiveFrame.ProjectSettingsAction;
+  ValueLabelEditorPopupMenuItem.Action  := FActiveFrame.ValueLabelEditorAction;
+  SetPasswordPopupMenuItem.Action       := FActiveFrame.ProjectPasswordAction;
+  KeyFieldsPopupMenuItem.Action         := FActiveFrame.KeyFieldsAction;
+  StudyInfoPopupMenuItem.Action         := FActiveFrame.StudyInformationAction;
 
   // Align
   AlignLeftMenuItem.Action         := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignLeftAction;
@@ -1107,7 +1149,8 @@ begin
 
 
   // DataSet
-  ViewDataSetMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
+  BrowseDataMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
+  BrowseDatasetMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
 end;
 
 procedure TMainForm.BeginUpdatingForm;

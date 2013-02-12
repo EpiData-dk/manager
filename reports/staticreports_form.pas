@@ -157,9 +157,10 @@ begin
   if (not FActivatedOnce) and
      (FProjectList.DocList.Count = 0)
   then
+  begin
+    FActivatedOnce := true;
     DoAddFiles;
-
-  FActivatedOnce := true;
+  end;
 end;
 
 procedure TStaticReportsForm.AddFilesActionExecute(Sender: TObject);
