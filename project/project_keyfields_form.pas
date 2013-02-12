@@ -64,7 +64,7 @@ implementation
 {$R *.lfm}
 
 uses
-  types, datasetviewer_frame, settings2, settings2_var,
+  types, dataset_form, settings2, settings2_var,
   epiglobals, epidatafilestypes, LCLIntf, manager_messages,
   main, lcltype;
 
@@ -274,8 +274,6 @@ var
   FieldList: TEpiFields;
   i: Integer;
   Cmb: TComboBox;
-  F: TForm;
-  V: TDataSetViewFrame;
   FailedRecords: TBoundArray;
   FailedValues: TBoundArray;
 begin

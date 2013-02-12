@@ -35,7 +35,7 @@ uses
   valuelabelgrid_frame, valuelabelseditor_form2, settings_export, export_form,
   export_stata_frame, export_customvaluelabel_frame, export_frame_types,
   export_csv_frame, export_customtext_frame, export_spss_frame,
-  export_sas_frame, datasetviewer_frame, prepare_double_entry_form,
+  export_sas_frame, prepare_double_entry_form,
   project_keyfields_form, manager_globals, validate_double_entry_form,
   report_double_entry_validation, design_runtimedesigner, design_control_field,
   design_control_heading, design_control_section, design_designpanel,
@@ -43,7 +43,7 @@ uses
   design_properties_sectionframe, design_designmessenger, design_commander,
   design_properties_emptyframe, design_designmover, design_designsizer,
   design_designbander, project_studyunit_form, align_form, report_counts,
-  report_optionframe_counts, report_types;
+  report_optionframe_counts, report_types, dataset_form;
 
 {$R *.res}
 

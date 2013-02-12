@@ -334,7 +334,7 @@ uses
   main, epistringutils, JvDesignUtils, settings2_var,
   manager_globals, managerprocs, Clipbrd, math,
   Dialogs, import_structure_form, epimiscutils,
-  datasetviewer_frame,
+  dataset_form,
   LCLMessageGlue, LCLType, shortcuts, settings2,
   Printers, OSPrinters, strutils,
   design_control_section,
