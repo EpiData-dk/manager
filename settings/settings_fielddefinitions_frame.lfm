@@ -6,9 +6,9 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
   ClientHeight = 498
   ClientWidth = 761
   TabOrder = 0
-  DesignLeft = 575
-  DesignTop = 263
-  object GroupBox1: TGroupBox
+  DesignLeft = 671
+  DesignTop = 219
+  object LengthGrpBox: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
@@ -37,7 +37,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       ShowHint = True
     end
     object Label11: TLabel
-      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Control = LengthGrpBox
       AnchorSideRight.Side = asrBottom
       Left = 675
       Height = 15
@@ -67,7 +67,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideRight.Control = FloatIntEdit
       AnchorSideRight.Side = asrBottom
       Left = 78
-      Height = 25
+      Height = 23
       Hint = 'Default field length for:'#10'Integer and AutoIncrement'
       Top = 2
       Width = 301
@@ -83,7 +83,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     object FloatIntEdit: TMaskEdit
       AnchorSideRight.Control = Label9
       Left = 78
-      Height = 25
+      Height = 23
       Hint = 'Default field length for:'#10'Float'
       Top = 39
       Width = 301
@@ -101,7 +101,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideRight.Control = FloatIntEdit
       AnchorSideRight.Side = asrBottom
       Left = 78
-      Height = 25
+      Height = 23
       Hint = 'Default field length for:'#10'String and Uppercase'
       Top = 79
       Width = 301
@@ -119,7 +119,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = Label11
       Left = 389
-      Height = 25
+      Height = 23
       Hint = 'Default decimal length for:'#10'Float'
       Top = 39
       Width = 281
@@ -159,98 +159,97 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       ParentColor = False
     end
   end
-  object GroupBox2: TGroupBox
+  object NamingGrpBox: TGroupBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = GroupBox3
+    AnchorSideTop.Control = TypesGrpBox
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 10
-    Height = 160
-    Top = 264
+    Height = 104
+    Top = 274
     Width = 741
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
     BorderSpacing.Right = 10
     Caption = 'Field Naming'
-    ClientHeight = 143
+    ClientHeight = 87
     ClientWidth = 737
     TabOrder = 1
-    object FieldNamingGroup: TRadioGroup
-      AnchorSideLeft.Control = GroupBox2
-      AnchorSideRight.Control = GroupBox2
-      AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = GroupBox2
+    object Label1: TLabel
+      AnchorSideLeft.Control = NamingGrpBox
+      AnchorSideBottom.Control = PrefixEdit
       AnchorSideBottom.Side = asrBottom
       Left = 10
-      Height = 86
-      Top = 47
-      Width = 717
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      AutoFill = True
-      BorderSpacing.Left = 10
-      BorderSpacing.Right = 10
-      BorderSpacing.Bottom = 10
-      Caption = 'Field Naming from QES files'
-      ChildSizing.LeftRightSpacing = 6
-      ChildSizing.TopBottomSpacing = 6
-      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-      ChildSizing.EnlargeVertical = crsHomogenousChildResize
-      ChildSizing.ShrinkHorizontal = crsScaleChilds
-      ChildSizing.ShrinkVertical = crsScaleChilds
-      ChildSizing.Layout = cclLeftToRightThenTopToBottom
-      ChildSizing.ControlsPerLine = 1
-      ClientHeight = 69
-      ClientWidth = 713
-      Enabled = False
-      TabOrder = 1
-      Visible = False
-      object FieldNamingAutoRadio: TRadioButton
-        Left = 6
-        Height = 29
-        Top = 6
-        Width = 701
-        Caption = 'Automatic'
-        Enabled = False
-        TabOrder = 0
-      end
-      object FieldNamingFirstWordRadio: TRadioButton
-        Left = 6
-        Height = 28
-        Top = 35
-        Width = 701
-        Caption = 'First word'
-        Checked = True
-        Enabled = False
-        TabOrder = 1
-        TabStop = True
-      end
-    end
-    object Label1: TLabel
-      AnchorSideLeft.Control = GroupBox2
-      Left = 10
       Height = 15
-      Top = 15
+      Top = 18
       Width = 67
+      Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = 'Field Prefix'
       ParentColor = False
     end
     object PrefixEdit: TEdit
-      AnchorSideRight.Control = GroupBox2
+      AnchorSideLeft.Control = Label1
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = NamingGrpBox
+      AnchorSideRight.Control = NamingGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 116
-      Height = 25
-      Top = 7
-      Width = 611
+      Left = 102
+      Height = 23
+      Top = 10
+      Width = 625
       Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 25
+      BorderSpacing.Top = 10
       BorderSpacing.Right = 10
       TabOrder = 0
     end
+    object ImportCasingCombo: TComboBox
+      AnchorSideLeft.Control = Label2
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = PrefixEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = NamingGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 233
+      Height = 27
+      Hint = 'During read of .rec files, how should'#10'fieldnames be imported.'#10#10'This is important since Manager supports'#10'fieldnames with different case. This may'#10'cause confusion during import or tool-methods'#10'eg. Count. which depends on identical'#10'field names.'#10
+      Top = 43
+      Width = 494
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 25
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 10
+      ItemHeight = 0
+      Items.Strings = (
+        'UPPERCASE'
+        'lowercase'
+        'Leave As Is'
+      )
+      ParentShowHint = False
+      ShowHint = True
+      Style = csDropDownList
+      TabOrder = 1
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = NamingGrpBox
+      AnchorSideBottom.Control = ImportCasingCombo
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 55
+      Width = 198
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Fieldname casing (.rec import):'
+      ParentColor = False
+    end
   end
-  object GroupBox3: TGroupBox
+  object TypesGrpBox: TGroupBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Control = LengthGrpBox
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
@@ -267,12 +266,12 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     ClientWidth = 737
     TabOrder = 2
     object Label14: TLabel
-      AnchorSideLeft.Control = GroupBox3
+      AnchorSideLeft.Control = TypesGrpBox
       AnchorSideBottom.Control = DefaultDateCombo
       AnchorSideBottom.Side = asrBottom
       Left = 10
       Height = 15
-      Top = 24
+      Top = 18
       Width = 79
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
@@ -282,11 +281,11 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     object DefaultDateCombo: TComboBox
       AnchorSideLeft.Control = Label14
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = GroupBox3
-      AnchorSideRight.Control = GroupBox3
+      AnchorSideTop.Control = TypesGrpBox
+      AnchorSideRight.Control = TypesGrpBox
       AnchorSideRight.Side = asrBottom
       Left = 114
-      Height = 29
+      Height = 23
       Top = 10
       Width = 613
       Anchors = [akTop, akLeft, akRight]
@@ -307,11 +306,11 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = DefaultDateCombo
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox3
+      AnchorSideRight.Control = TypesGrpBox
       AnchorSideRight.Side = asrBottom
       Left = 201
-      Height = 29
-      Top = 49
+      Height = 23
+      Top = 43
       Width = 526
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 25
@@ -328,14 +327,14 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       TabOrder = 1
     end
     object Label18: TLabel
-      AnchorSideLeft.Control = GroupBox3
+      AnchorSideLeft.Control = TypesGrpBox
       AnchorSideTop.Control = DefaultPasteCombo
       AnchorSideTop.Side = asrCenter
       AnchorSideBottom.Control = DefaultPasteCombo
       AnchorSideBottom.Side = asrBottom
       Left = 10
       Height = 15
-      Top = 63
+      Top = 51
       Width = 166
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10

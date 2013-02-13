@@ -16,13 +16,11 @@ type
     DecimalLengthEdit: TMaskEdit;
     DefaultDateCombo: TComboBox;
     DefaultPasteCombo: TComboBox;
-    FieldNamingAutoRadio: TRadioButton;
-    FieldNamingFirstWordRadio: TRadioButton;
-    FieldNamingGroup: TRadioGroup;
     FloatIntEdit: TMaskEdit;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
-    GroupBox3: TGroupBox;
+    LengthGrpBox: TGroupBox;
+    NamingGrpBox: TGroupBox;
+    TypesGrpBox: TGroupBox;
+    ImportCasingCombo: TComboBox;
     IntLengthEdit: TMaskEdit;
     Label1: TLabel;
     Label10: TLabel;
@@ -31,6 +29,7 @@ type
     Label13: TLabel;
     Label14: TLabel;
     Label18: TLabel;
+    Label2: TLabel;
     Label9: TLabel;
     PrefixEdit: TEdit;
     StringLengthEdit: TMaskEdit;
@@ -48,7 +47,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2, epidatafilestypes;
+  settings2, epidatafilestypes, epieximtypes;
 
 { TSettings_FieldDefinitionFrame }
 
@@ -69,6 +68,7 @@ begin
     end;
     DefaultPasteCombo.ItemIndex       := PasteSpecialType;
     PrefixEdit.Text                   := FieldNamePrefix;
+    ImportCasingCombo.ItemIndex       := Integer(ImportCasing);
 {    FieldNamingAutoRadio.Checked      := (FieldNamingStyle = fnAuto);
     FieldNamingFirstWordRadio.Checked := (FieldNamingStyle = fnFirstWord);    }
   end;
@@ -101,6 +101,7 @@ begin
     end;
     PasteSpecialType     := DefaultPasteCombo.ItemIndex;
     FieldNamePrefix      := PrefixEdit.Text;
+    ImportCasing         := TEpiFieldNamingCase(ImportCasingCombo.ItemIndex);
   {  if FieldNamingAutoRadio.Checked then
       FieldNamingStyle    := fnAuto
     else

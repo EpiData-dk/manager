@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, epiversionutils;
+  Buttons, ComCtrls, StdCtrls, epiversionutils;
 
 type
 
@@ -16,9 +16,11 @@ type
   TSettingsForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
+    Button1: TButton;
     Panel1: TPanel;
     SettingsView: TTreeView;
     Splitter1: TSplitter;
+    procedure Button1Click(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure SettingsViewChange(Sender: TObject; Node: TTreeNode);
@@ -48,6 +50,7 @@ procedure LoadFormPosition(AForm: TForm; Const SectionName: string);
 procedure AddToRecent(Const AFilename: string);
 
 procedure InitFont(Font: TFont);
+procedure RestoreSettingsDefaults;
 
 implementation
 
@@ -548,6 +551,12 @@ begin
   CanClose := true;
 end;
 
+procedure TSettingsForm.Button1Click(Sender: TObject);
+begin
+  RestoreSettingsDefaults;
+  (FActiveFrame as ISettingsFrame).SetSettings(@ManagerSettings);
+end;
+
 constructor TSettingsForm.Create(TheOwner: TComponent);
 var
   i: Integer;
@@ -590,16 +599,128 @@ begin
   AForm.free;
 end;
 
-{$I initfont.inc}
+procedure RestoreSettingsDefaults;
+const
+  OriginalSettings: TManagerSettings = (
+    // General:
+    SaveWindowPositions:   true;
+    ShowWelcome:           true;
+    ShowWorkToolBar:       true;
+    ShowA4GuideLines:      true;
+    MultipleInstances:     false;
+    PasteSpecialType:      1;     // Heading.
+    SaveType:              0;     // epx format.
+    ImportCasing:          fncAsIs;
 
-initialization
+    // Visual design:
+    DefaultRightPosition:  400;
+    DefaultLabelPosition:  20;
+    SnapFields:            true;
+    SnappingThresHold:     10;
+    SpaceBtwFieldField:    10;
+    SpaceBtwFieldLabel:    25;
+    SpaceBtwLabelLabel:    5;
+
+    // Field definitions:
+    IntFieldLength:        2;
+    FloatIntLength:        5;
+    FloatDecimalLength:    2;
+    StringFieldLength:     20;
+    DefaultDateType:       ftDMYDate;
+    FieldNamePrefix:       'V';
+    //    FieldNamingStyle:      fnFirstWord;
+
+    // Advanced:
+    WorkingDirUTF8:        '';
+    TutorialDirUTF8:       '';
+    TutorialURLUTF8:       'http://epidata.dk/documentation.php';
+    EntryClientDirUTF8:    '';
+    FieldFont:             nil;
+    HeadingFont:           nil;
+    SectionFont:           nil;
+
+    // Export:
+    ExportType:            0;     // 0 = Stata
+                                  // 1 = CSV
+                                  // 2 = SPSS
+                                  // 3 = SAS
+    ExportDeleted:         false;
+    ExportEncoding:        eeUTF8;
+
+    // - Stata:
+    ExportStataVersion:    dta8;   // Default to Version 8
+    ExportStataFieldCase:  fncAsIs;
+    ExportStataValueLabels: true;
+
+    // - CSV
+    ExportCSVFieldName:    true;
+    ExportCSVQuote:        '"';
+    ExportCSVFieldSep:     ',';
+    ExportCSVDateSep:      '-';
+    ExportCSVTimeSep:      ':';
+    ExportCSVDecSep:       '.';
+    ExportCSVNewLine:      0;
+
+    // - SAS
+    ExportSASValueLabels:  true;
+    // - SPSS
+    ExportSPSSValueLabels: true;
+
+    // Project Defaults
+    // - general:
+    TimedRecoveryInterval: 10;
+    SaveBackup:            true;
+    AutoIncStart:          1;
+    // - Fields:
+    ShowNames:             false;
+    ShowBorders:           true;
+    ShowValuelabelText:    true;
+    // - Study:
+    StudyTitle:            'Untitled Project';
+    StudyIndent:           '';
+    StudyLang:             'en';
+    StudyVersion:          '1';
+    // - Content Desc:
+    ContKeywords:          '';
+    ContPurpose:           '';
+    ContAbstract:          '';
+    ContCitation:          '';
+    ContGeoCover:          '';
+    ContTimeCover:         '';
+    ContPopulation:        '';
+    // - Ownership:
+    OwnAgency:             '';
+    OwnAuthers:            '';
+    OwnRights:             '';
+    OwnPublisher:          '';
+    OwnFunding:            '';
+
+
+
+    // Not shown in dialog.
+    SelectedControlColour: $00B6F5F5;
+    LabelNamePrefix:       'label_';
+    IniFileName:           '';
+    );
 begin
-  ManagerSettings.FieldFont := TFont.Create;
-  ManagerSettings.HeadingFont := TFont.Create;
-  ManagerSettings.SectionFont := TFont.Create;
-//  InitFont(ManagerSettings.FieldFont);
-//  InitFont(ManagerSettings.HeadingFont);
-//  InitFont(ManagerSettings.SectionFont);
+  with ManagerSettings do
+  begin
+    if Assigned(FieldFont) then FieldFont.Free;
+    if Assigned(HeadingFont) then HeadingFont.Free;
+    if Assigned(SectionFont) then SectionFont.Free;
+  end;
+
+  ManagerSettings := OriginalSettings;
+
+  with ManagerSettings do
+  begin
+    FieldFont := TFont.Create;
+    HeadingFont := TFont.Create;
+    SectionFont := TFont.Create;
+    InitFont(FieldFont);
+    InitFont(HeadingFont);
+    InitFont(SectionFont);
+  end;
 
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
   if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then
@@ -610,7 +731,12 @@ begin
     ManagerSettings.TutorialDirUTF8 := GetCurrentDirUTF8;
 
   ManagerSettings.EntryClientDirUTF8 := SysToUTF8(ExtractFilePath(UTF8ToSys(Application.ExeName)));
+end;
 
+{$I initfont.inc}
+
+initialization
+begin
   RecentFiles := TStringList.Create;
   RecentFiles.CaseSensitive := true;
 end;

@@ -114,112 +114,18 @@ type
   PManagerSettings = ^TManagerSettings;
 
 var
-  ManagerSettings: TManagerSettings = (
-    // General:
-    SaveWindowPositions:   true;
-    ShowWelcome:           true;
-    ShowWorkToolBar:       true;
-    ShowA4GuideLines:      true;
-    MultipleInstances:     false;
-    PasteSpecialType:      1;     // Heading.
-    SaveType:              0;     // epx format.
-    ImportCasing:          fncLower;     // lowercase
-
-    // Visual design:
-    DefaultRightPosition:  400;
-    DefaultLabelPosition:  20;
-    SnapFields:            true;
-    SnappingThresHold:     10;
-    SpaceBtwFieldField:    10;
-    SpaceBtwFieldLabel:    25;
-    SpaceBtwLabelLabel:    5;
-
-    // Field definitions:
-    IntFieldLength:        2;
-    FloatIntLength:        5;
-    FloatDecimalLength:    2;
-    StringFieldLength:     20;
-    DefaultDateType:       ftDMYDate;
-    FieldNamePrefix:       'V';
-//    FieldNamingStyle:      fnFirstWord;
-
-    // Advanced:
-    WorkingDirUTF8:        '';
-    TutorialDirUTF8:       '';
-    TutorialURLUTF8:       'http://epidata.dk/documentation.php';
-    EntryClientDirUTF8:    '';
-    FieldFont:             nil;
-    HeadingFont:           nil;
-    SectionFont:           nil;
-
-    // Export:
-    ExportType:            0;     // 0 = Stata
-                                  // 1 = CSV
-                                  // 2 = SPSS
-                                  // 3 = SAS
-    ExportDeleted:         false;
-    ExportEncoding:        eeUTF8;
-
-    // - Stata:
-    ExportStataVersion:    dta8;   // Default to Version 8
-    ExportStataFieldCase:  fncAsIs;
-    ExportStataValueLabels: true;
-
-    // - CSV
-    ExportCSVFieldName:    true;
-    ExportCSVQuote:        '"';
-    ExportCSVFieldSep:     ',';
-    ExportCSVDateSep:      '-';
-    ExportCSVTimeSep:      ':';
-    ExportCSVDecSep:       '.';
-    ExportCSVNewLine:      0;
-
-    // - SAS
-    ExportSASValueLabels:  true;
-    // - SPSS
-    ExportSPSSValueLabels: true;
-
-    // Project Defaults
-    // - general:
-    TimedRecoveryInterval: 10;
-    SaveBackup:            true;
-    AutoIncStart:          1;
-    // - Fields:
-    ShowNames:             false;
-    ShowBorders:           true;
-    ShowValuelabelText:    true;
-    // - Study:
-    StudyTitle:            'Untitled Project';
-    StudyIndent:           '';
-    StudyLang:             'en';
-    StudyVersion:          '1';
-    // - Content Desc:
-    ContKeywords:          '';
-    ContPurpose:           '';
-    ContAbstract:          '';
-    ContCitation:          '';
-    ContGeoCover:          '';
-    ContTimeCover:         '';
-    ContPopulation:        '';
-    // - Ownership:
-    OwnAgency:             '';
-    OwnAuthers:            '';
-    OwnRights:             '';
-    OwnPublisher:          '';
-    OwnFunding:            '';
-
-
-
-    // Not shown in dialog.
-    SelectedControlColour: $00B6F5F5;
-    LabelNamePrefix:       'label_';
-    IniFileName:           '';
-  );
+  ManagerSettings: TManagerSettings;
 
 var
   RecentFiles: TStringList;
 
 implementation
+
+uses
+  settings2;
+
+initialization
+  RestoreSettingsDefaults;
 
 end.
 
