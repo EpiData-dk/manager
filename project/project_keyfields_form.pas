@@ -118,11 +118,12 @@ begin
     PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WParam(F), 0);
   end;
 
+  // TODO: A SetAll method is missing... :(
+  for i := 0 to F.Size -1 do
+    F.AsInteger[i] := 0;
+
   if not PerformIndexCheck(FailedRecords, FailedValues) then
   begin
-    // A SetAll method is missing... :(
-    for i := 0 to F.Size -1 do
-      F.AsInteger[i] := 0;
 
     // Set only failed records.
     for i := 0 to Length(FailedRecords) - 1 do
