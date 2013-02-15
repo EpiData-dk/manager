@@ -184,7 +184,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="73">
+    <Units Count="75">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -667,6 +667,22 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="dataset_form"/>
       </Unit72>
+      <Unit73>
+        <Filename Value="utils/ok_cancel_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="OkCancelForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="ok_cancel_form"/>
+      </Unit73>
+      <Unit74>
+        <Filename Value="tools/validate_double_entry_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ValideDoubleEntryFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="validate_double_entry_frame"/>
+      </Unit74>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

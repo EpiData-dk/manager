@@ -5,13 +5,14 @@ unit report_double_entry_validation;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidatafiles, epitools_val_dbl_entry;
+  Classes, SysUtils, Forms, report_base, epidatafiles, epitools_val_dbl_entry,
+  report_types;
 
 type
 
   { TReportDoubleEntryValidation }
 
-  TReportDoubleEntryValidation = class(TReportBase)
+  TReportDoubleEntryValidation = class(TReportBase, IReportFrameProvider)
   private
     FCompareFields: TEpiFields;
     FDblEntryValidateOptions: TEpiToolsDblEntryValidateOptions;
@@ -20,6 +21,7 @@ type
     function GetTitle: string; override;
     procedure DoRunReport; override;
   public
+    function GetFrameClass: TCustomFrameClass;
     property KeyFields: TEpiFields read FKeyFields write FKeyFields;
     property CompareFields: TEpiFields read FCompareFields write FCompareFields;
     property DblEntryValidateOptions: TEpiToolsDblEntryValidateOptions read FDblEntryValidateOptions write FDblEntryValidateOptions;
@@ -28,7 +30,7 @@ type
 implementation
 
 uses
-  epidocument,
+  validate_double_entry_frame, epidocument,
   epireport_base, epireport_doubleentry_validate,
   epireport_filelist;
 
@@ -64,6 +66,11 @@ begin
   R.DblEntryValidateOptions := FDblEntryValidateOptions;
   R.RunReport;
   R.Free;
+end;
+
+function TReportDoubleEntryValidation.GetFrameClass: TCustomFrameClass;
+begin
+  result := TValideDoubleEntryFrame;
 end;
 
 end.

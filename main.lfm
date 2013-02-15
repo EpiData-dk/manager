@@ -41,7 +41,6 @@ object MainForm: TMainForm
       AnchorSideTop.Side = asrCenter
       Left = 11
       Height = 27
-      Hint = 'New EpiData Project'
       Top = 6
       Width = 100
       AutoSize = True

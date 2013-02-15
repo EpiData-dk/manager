@@ -1,0 +1,266 @@
+object ValideDoubleEntryFrame: TValideDoubleEntryFrame
+  Left = 0
+  Height = 450
+  Top = 0
+  Width = 647
+  ClientHeight = 450
+  ClientWidth = 647
+  TabOrder = 0
+  DesignLeft = 658
+  DesignTop = 265
+  object GroupBox3: TGroupBox
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Bevel1
+    AnchorSideBottom.Control = OptionsChkGrp
+    Left = 10
+    Height = 303
+    Top = 10
+    Width = 304
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Top = 10
+    BorderSpacing.Bottom = 10
+    Caption = 'Key Fields:'
+    ClientHeight = 286
+    ClientWidth = 300
+    TabOrder = 0
+    object KFNoneBtn: TButton
+      AnchorSideLeft.Control = GroupBox3
+      AnchorSideTop.Control = Label7
+      AnchorSideTop.Side = asrBottom
+      Left = 5
+      Height = 27
+      Top = 25
+      Width = 12
+      AutoSize = True
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 0
+    end
+    object KFIndexBtn: TButton
+      AnchorSideLeft.Control = KFNoneBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = KFNoneBtn
+      AnchorSideTop.Side = asrCenter
+      Left = 22
+      Height = 27
+      Top = 25
+      Width = 12
+      AutoSize = True
+      BorderSpacing.Left = 5
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object KFAutoIncBtn: TButton
+      AnchorSideLeft.Control = KFIndexBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = KFNoneBtn
+      AnchorSideTop.Side = asrCenter
+      Left = 39
+      Height = 27
+      Top = 25
+      Width = 12
+      AutoSize = True
+      BorderSpacing.Left = 5
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object KFCheckList: TCheckListBox
+      AnchorSideLeft.Control = GroupBox3
+      AnchorSideTop.Control = KFNoneBtn
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox3
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = GroupBox3
+      AnchorSideBottom.Side = asrBottom
+      Left = 5
+      Height = 224
+      Top = 57
+      Width = 290
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      BorderSpacing.Bottom = 5
+      ItemHeight = 0
+      TabOrder = 3
+      TopIndex = -1
+    end
+    object Label7: TLabel
+      AnchorSideLeft.Control = GroupBox3
+      AnchorSideTop.Control = GroupBox3
+      Left = 5
+      Height = 15
+      Top = 5
+      Width = 202
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      Caption = 'Fields used to combine records:'
+      ParentColor = False
+    end
+  end
+  object Bevel1: TBevel
+    AnchorSideTop.Control = GroupBox3
+    AnchorSideBottom.Control = GroupBox3
+    AnchorSideBottom.Side = asrBottom
+    Left = 314
+    Height = 303
+    Top = 10
+    Width = 5
+    Anchors = [akTop, akBottom]
+    Shape = bsSpacer
+    Style = bsRaised
+  end
+  object GroupBox4: TGroupBox
+    AnchorSideLeft.Control = Bevel1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = OptionsChkGrp
+    Left = 319
+    Height = 303
+    Top = 10
+    Width = 318
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Top = 10
+    BorderSpacing.Bottom = 10
+    Caption = 'Compare Fields:'
+    ClientHeight = 286
+    ClientWidth = 314
+    TabOrder = 1
+    object CmpFCheckList: TCheckListBox
+      AnchorSideLeft.Control = GroupBox4
+      AnchorSideTop.Control = CmpFAutoDateTimeBtn
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox4
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = GroupBox4
+      AnchorSideBottom.Side = asrBottom
+      Left = 5
+      Height = 224
+      Top = 57
+      Width = 304
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 5
+      BorderSpacing.Bottom = 5
+      ItemHeight = 0
+      TabOrder = 0
+      TopIndex = -1
+    end
+    object CmpFAutoDateTimeBtn: TButton
+      AnchorSideLeft.Control = GroupBox4
+      AnchorSideTop.Control = Label8
+      AnchorSideTop.Side = asrBottom
+      Left = 5
+      Height = 27
+      Top = 25
+      Width = 12
+      AutoSize = True
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object CmpFAutoIncBtn: TButton
+      AnchorSideLeft.Control = CmpFAutoDateTimeBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = CmpFAutoDateTimeBtn
+      AnchorSideTop.Side = asrCenter
+      Left = 22
+      Height = 27
+      Top = 25
+      Width = 12
+      AutoSize = True
+      BorderSpacing.Left = 5
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object CmpFTextBtn: TButton
+      AnchorSideLeft.Control = CmpFAutoIncBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = CmpFAutoDateTimeBtn
+      AnchorSideTop.Side = asrCenter
+      Left = 39
+      Height = 27
+      Top = 25
+      Width = 12
+      AutoSize = True
+      BorderSpacing.Left = 5
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object Label8: TLabel
+      AnchorSideLeft.Control = GroupBox4
+      AnchorSideTop.Control = GroupBox4
+      Left = 5
+      Height = 15
+      Top = 5
+      Width = 214
+      BorderSpacing.Left = 5
+      BorderSpacing.Top = 5
+      Caption = 'Data comparison based on fields:'
+      ParentColor = False
+    end
+    object CmpFAllBtn: TButton
+      AnchorSideLeft.Control = CmpFTextBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = CmpFAutoDateTimeBtn
+      AnchorSideTop.Side = asrCenter
+      Left = 56
+      Height = 27
+      Top = 25
+      Width = 12
+      AutoSize = True
+      BorderSpacing.Left = 5
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+    end
+  end
+  object OptionsChkGrp: TCheckGroup
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 117
+    Top = 323
+    Width = 627
+    Anchors = [akLeft, akRight, akBottom]
+    AutoFill = True
+    AutoSize = True
+    BorderSpacing.Left = 10
+    BorderSpacing.Right = 10
+    BorderSpacing.Bottom = 10
+    Caption = 'Options:'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.TopBottomSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 100
+    ClientWidth = 623
+    Items.Strings = (
+      'Ignore deleted records'
+      'Case in-sensitive text fields'
+      'Ignore missing records in duplicate file'
+      'Add result field'
+    )
+    TabOrder = 2
+    Data = {
+      0400000002020202
+    }
+  end
+end

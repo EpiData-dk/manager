@@ -243,7 +243,7 @@ uses
   report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
-  report_counts,
+  report_counts, report_double_entry_validation,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
@@ -663,12 +663,12 @@ begin
 end;
 
 procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);
-var
+{var
   Fn: string;
   Local: boolean;
-  Doc: TEpiDocument;
+  Doc: TEpiDocument;}
 begin
-  Doc := ToolsCheckOpenFile(Fn, Local);
+{  Doc := ToolsCheckOpenFile(Fn, Local);
   if Assigned(Doc) then
   begin
     ValidateDoubleEntry(Doc, Fn);
@@ -678,7 +678,8 @@ begin
         Doc.SaveToFile(Fn);
       Doc.Free;
     end;
-  end;
+  end;}
+  RunReport(TReportDoubleEntryValidation);
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);

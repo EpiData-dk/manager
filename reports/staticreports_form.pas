@@ -21,25 +21,20 @@ type
     AddFilesBtn: TBitBtn;
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    PageControl1: TPageControl;
     Panel1: TPanel;
     ProgressBar1: TProgressBar;
     RadioGroup1: TRadioGroup;
-    TabSheet1: TTabSheet;
     procedure AddFilesActionExecute(Sender: TObject);
     procedure CancelActionExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure OkActionExecute(Sender: TObject);
-    procedure OkActionUpdate(Sender: TObject);
-    procedure ProjectFileListChanged(Sender: TObject);
   private
     { private declarations }
     FProjectList: TProjectFileListFrame;
     FReport: TReportBase;
     FReportClass: TReportBaseClass;
-    FFrame: TCustomFrame;
     FActivatedOnce: boolean;
     function ShowDialog(out Files: TStrings): boolean;
     procedure DoAddFiles;
@@ -62,7 +57,7 @@ implementation
 uses
   settings2_var, settings2, epimiscutils, viewer_form,
   epireport_generator_html, epireport_generator_txt, epireport_generator_base,
-  report_types;
+  report_types, ok_cancel_form;
 
 { TStaticReportsForm }
 
@@ -75,6 +70,9 @@ end;
 procedure TStaticReportsForm.OkActionExecute(Sender: TObject);
 var
   FGeneratorClass: TEpiReportGeneratorBaseClass;
+  FC: TCustomFrameClass;
+  NextForm: TForm;
+  Frame: TCustomFrame;
 begin
   case RadioGroup1.ItemIndex of
     0: FGeneratorClass := TEpiReportHTMLGenerator;
@@ -82,20 +80,26 @@ begin
   end;
   FReport := FReportClass.Create(FProjectList.SelectedList, FGeneratorClass);
 
-  if Assigned(FFrame) then
-    (FFrame as IReportOptionFrame).ApplyReportOptions(FReport);
-end;
+  if Supports(FReport, IReportFrameProvider) then
+  begin
+    FC := (FReport as IReportFrameProvider).GetFrameClass;
+    if Supports(FC, IReportOptionFrame) then
+    begin
+      NextForm := TOkCancelForm.Create(self);
+      Frame := FC.Create(NextForm);
+      Frame.Align := alClient;
+      Frame.Parent := NextForm;
+      (Frame as IReportOptionFrame).UpdateFrame(FProjectList.SelectedList);
+      NextForm.Caption := (Frame as IReportOptionFrame).GetFrameCaption;
 
-procedure TStaticReportsForm.OkActionUpdate(Sender: TObject);
-begin
-  if Assigned(FFrame) then
-    TAction(Sender).Enabled := (FFrame as IReportOptionFrame).CanClose;
-end;
+      Self.Hide;
+      ModalResult := NextForm.ShowModal;
 
-procedure TStaticReportsForm.ProjectFileListChanged(Sender: TObject);
-begin
-  if Assigned(FFrame) then
-    (FFrame as IReportOptionFrame).UpdateFrame(FProjectList.SelectedList);
+      if ModalResult = mrOK then
+        (Frame as IReportOptionFrame).ApplyReportOptions(FReport);
+      NextForm.Free;
+    end;
+  end;
 end;
 
 function TStaticReportsForm.ShowDialog(out Files: TStrings): boolean;
@@ -191,8 +195,8 @@ begin
   with FProjectList do
   begin
     Align := alClient;
-    Parent := TabSheet1;
-    OnSelectionChanged := @ProjectFileListChanged;
+    Parent := Self;
+//    OnSelectionChanged := @ProjectFileListChanged;
   end;
 end;
 
@@ -209,21 +213,6 @@ begin
 
   FakeReport := FReportClass.Create(TStringList.Create, TEpiReportTXTGenerator);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
-
-  if Supports(FReportClass, IReportFrameProvider) then
-  begin
-    FC := (FakeReport as IReportFrameProvider).GetFrameClass;
-    if Supports(FC, IReportOptionFrame) then
-    begin
-      TabSheet := PageControl1.AddTabSheet;
-      FFrame := FC.Create(TabSheet);
-      FFrame.Align := alClient;
-      FFrame.Parent := TabSheet;
-      TabSheet.Caption := (FFrame as IReportOptionFrame).GetFrameCaption;
-      PageControl1.ShowTabs := true;
-    end;
-  end;
-
   FakeReport.Free;
 end;
 

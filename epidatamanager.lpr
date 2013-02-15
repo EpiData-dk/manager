@@ -43,7 +43,8 @@ uses
   design_properties_sectionframe, design_designmessenger, design_commander,
   design_properties_emptyframe, design_designmover, design_designsizer,
   design_designbander, project_studyunit_form, align_form, report_counts,
-  report_optionframe_counts, report_types, dataset_form;
+  report_optionframe_counts, report_types, dataset_form, ok_cancel_form, 
+validate_double_entry_frame;
 
 {$R *.res}
 
