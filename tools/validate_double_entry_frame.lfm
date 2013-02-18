@@ -6,8 +6,8 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
   ClientHeight = 450
   ClientWidth = 647
   TabOrder = 0
-  DesignLeft = 658
-  DesignTop = 265
+  DesignLeft = 896
+  DesignTop = 300
   object GroupBox3: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Bevel1
@@ -30,7 +30,8 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       Left = 5
       Height = 27
       Top = 25
-      Width = 12
+      Width = 46
+      Action = KFNoneAction
       AutoSize = True
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -43,10 +44,11 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = KFNoneBtn
       AnchorSideTop.Side = asrCenter
-      Left = 22
+      Left = 56
       Height = 27
       Top = 25
-      Width = 12
+      Width = 46
+      Action = KFIndexAction
       AutoSize = True
       BorderSpacing.Left = 5
       ParentShowHint = False
@@ -58,10 +60,11 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = KFNoneBtn
       AnchorSideTop.Side = asrCenter
-      Left = 39
+      Left = 107
       Height = 27
       Top = 25
-      Width = 12
+      Width = 68
+      Action = KFAutoIncAction
       AutoSize = True
       BorderSpacing.Left = 5
       ParentShowHint = False
@@ -72,14 +75,13 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       AnchorSideLeft.Control = GroupBox3
       AnchorSideTop.Control = KFNoneBtn
       AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = GroupBox3
-      AnchorSideRight.Side = asrBottom
+      AnchorSideRight.Control = Panel1
       AnchorSideBottom.Control = GroupBox3
       AnchorSideBottom.Side = asrBottom
       Left = 5
       Height = 224
       Top = 57
-      Width = 290
+      Width = 263
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -100,6 +102,111 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       BorderSpacing.Top = 5
       Caption = 'Fields used to combine records:'
       ParentColor = False
+    end
+    object Panel1: TPanel
+      AnchorSideTop.Control = KFCheckList
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = GroupBox3
+      AnchorSideRight.Side = asrBottom
+      Left = 273
+      Height = 48
+      Top = 145
+      Width = 25
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      BorderSpacing.Right = 2
+      BevelOuter = bvSpace
+      ClientHeight = 48
+      ClientWidth = 25
+      TabOrder = 4
+      object SpeedButton1: TSpeedButton
+        Left = 1
+        Height = 22
+        Top = 25
+        Width = 23
+        Action = KFMoveFieldDown
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00256929C4216425C9FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002D7533CF488F4DFF458C4AFF2265
+          26D1FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF003C8A430638833ED9519957FF79C07EFF76BF7CFF468D
+          4BFF236627DB20622306FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF0042924AB83D8C45F765AD6CFF7DC282FF7AC180FF4B92
+          50FF276D2CF7246828BBFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF0043944B384E9A55FF81C587FF7EC385FF317A
+          36FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0045954CFF85C78CFF82C689FF3682
+          3DFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF004A9E53FF8ACA91FF87C98EFF3C8A
+          43FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0050A659FF8ECC95FF8BCB93FF4292
+          4AFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0056AD5FFF93CF9AFF90CE98FF489A
+          50FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF005BB465FF96D29FFF94D09CFF4EA2
+          57FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF005FBB6AFF9AD4A3FF98D3A1FF53AA
+          5DFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0063C06FFF9ED6A7FF9CD4A5FF59B2
+          63FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0066C572FFA2D8ABFFA0D7A9FF5DB8
+          68FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0068C774FF67C673FF65C270FF62BE
+          6DFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+        }
+        ShowCaption = False
+      end
+      object SpeedButton2: TSpeedButton
+        Left = 1
+        Height = 22
+        Top = 1
+        Width = 23
+        Action = KFMoveFieldUp
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00286E2DFF256929FF216425FF1E60
+          22FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF002D7533FF74BD7AFF72BD78FF2265
+          26FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00337D39FF79C07EFF76BF7CFF266B
+          2BFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0039853FFF7DC282FF7AC180FF2B72
+          30FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF003F8D46FF81C587FF7EC385FF317A
+          36FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0045954CFF85C78CFF82C689FF3682
+          3DFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF004A9E53FF8ACA91FF87C98EFF3C8A
+          43FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0050A659FF8ECC95FF8BCB93FF4292
+          4AFFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0056AD5FFF93CF9AFF90CE98FF489A
+          50FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF005BB465FF96D29FFF94D09CFF5DAC
+          65FF499C5238FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF0065C371BB62BF6EF779C683FF9AD4A3FF98D3A1FF7DC3
+          86FF4FA458F74A9E53B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF0068C7740666C472DB7CCA87FF9ED6A7FF9CD4A5FF73C0
+          7DFF55AC5ED950A65906FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0066C572D17ECA88FF7BC885FF5DB8
+          68CFFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF0067C673C965C270C4FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
+        }
+        ShowCaption = False
+      end
     end
   end
   object Bevel1: TBevel
@@ -159,7 +266,8 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       Left = 5
       Height = 27
       Top = 25
-      Width = 12
+      Width = 115
+      Action = CFSelectAllNonKFAction
       AutoSize = True
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -172,30 +280,16 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = CmpFAutoDateTimeBtn
       AnchorSideTop.Side = asrCenter
-      Left = 22
+      Left = 125
       Height = 27
       Top = 25
-      Width = 12
+      Width = 46
+      Action = CFSelectNoneAction
       AutoSize = True
       BorderSpacing.Left = 5
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
-    end
-    object CmpFTextBtn: TButton
-      AnchorSideLeft.Control = CmpFAutoIncBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = CmpFAutoDateTimeBtn
-      AnchorSideTop.Side = asrCenter
-      Left = 39
-      Height = 27
-      Top = 25
-      Width = 12
-      AutoSize = True
-      BorderSpacing.Left = 5
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 3
     end
     object Label8: TLabel
       AnchorSideLeft.Control = GroupBox4
@@ -208,21 +302,6 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       BorderSpacing.Top = 5
       Caption = 'Data comparison based on fields:'
       ParentColor = False
-    end
-    object CmpFAllBtn: TButton
-      AnchorSideLeft.Control = CmpFTextBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = CmpFAutoDateTimeBtn
-      AnchorSideTop.Side = asrCenter
-      Left = 56
-      Height = 27
-      Top = 25
-      Width = 12
-      AutoSize = True
-      BorderSpacing.Left = 5
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 4
     end
   end
   object OptionsChkGrp: TCheckGroup
@@ -262,5 +341,53 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
     Data = {
       0400000002020202
     }
+  end
+  object ActionList1: TActionList
+    left = 320
+    top = 192
+    object KFNoneAction: TAction
+      Category = 'KeyFields'
+      Caption = 'None'
+      Hint = 'No sorting (sequential compare)'
+      OnExecute = KFNoneActionExecute
+    end
+    object KFIndexAction: TAction
+      Category = 'KeyFields'
+      Caption = 'Index'
+      Hint = 'Select Index as Key Fields'
+      OnExecute = KFIndexActionExecute
+    end
+    object KFAutoIncAction: TAction
+      Category = 'KeyFields'
+      Caption = 'Auto Inc.'
+      Hint = 'Select Auto Increment field(s) as Key Fields'
+      OnExecute = KFAutoIncActionExecute
+    end
+    object KFMoveFieldUp: TAction
+      Category = 'KeyFields'
+      Caption = 'Move Field Up'
+      Hint = 'Move current field up one position'
+      OnExecute = KFMoveFieldUpExecute
+      OnUpdate = KFMoveFieldUpUpdate
+    end
+    object KFMoveFieldDown: TAction
+      Category = 'KeyFields'
+      Caption = 'Move Field Down'
+      Hint = 'Move current field down one position'
+      OnExecute = KFMoveFieldUpExecute
+      OnUpdate = KFMoveFieldUpUpdate
+    end
+    object CFSelectAllNonKFAction: TAction
+      Category = 'CompareFields'
+      Caption = 'All non-keyfields'
+      Hint = 'Select all fields not selected as keyfield'
+      OnExecute = CFSelectAllNonKFActionExecute
+    end
+    object CFSelectNoneAction: TAction
+      Category = 'CompareFields'
+      Caption = 'None'
+      Hint = 'Deselect all fields'
+      OnExecute = CFSelectNoneActionExecute
+    end
   end
 end

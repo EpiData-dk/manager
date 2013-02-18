@@ -201,7 +201,7 @@ type
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(out FileName: string; out LocalDoc: boolean): TEpiDocument;
-    function  RunReport(ReportClass: TReportBaseClass): boolean;
+    function  RunReport(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
   private
     { Messages }
     procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
@@ -663,23 +663,26 @@ begin
 end;
 
 procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);
-{var
-  Fn: string;
-  Local: boolean;
-  Doc: TEpiDocument;}
+var
+  R: TReportBase;
+  Doc: TEpiDocument;
+  Fn: String;
 begin
-{  Doc := ToolsCheckOpenFile(Fn, Local);
-  if Assigned(Doc) then
-  begin
-    ValidateDoubleEntry(Doc, Fn);
-    if Local then
+  R := RunReport(TReportDoubleEntryValidation, false);
+  if Assigned(R) and
+     (
+      (not Assigned(FActiveFrame)) or
+      (not Assigned(FActiveFrame.EpiDocument))
+     )
+  then
     begin
+      Fn := R.Documents[0];
+      Doc := TEpiDocument(R.Documents.Objects[0]);
       if Doc.Modified then
-        Doc.SaveToFile(Fn);
-      Doc.Free;
+        Doc.SaveToFile(fn);
     end;
-  end;}
-  RunReport(TReportDoubleEntryValidation);
+
+  R.Free;
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
@@ -946,13 +949,13 @@ begin
   end;
 end;
 
-function TMainForm.RunReport(ReportClass: TReportBaseClass): boolean;
+function TMainForm.RunReport(ReportClass: TReportBaseClass;
+  const FreeAfterRun: boolean): TReportBase;
 var
   F: TStaticReportsForm;
-  R: TReportBase;
   S: String;
 begin
-  R := nil;
+  Result := nil;
 
   F := TStaticReportsForm.Create(Self, ReportClass);
   if Assigned(FActiveFrame) and
@@ -965,19 +968,23 @@ begin
     F.AddInitialDocument(S, FActiveFrame.EpiDocument);
   end;
   if F.ShowModal = mrOK then
-    R := F.Report;
-  if not Assigned(R) then exit;
+    Result := F.Report;
+  if not Assigned(Result) then exit;
 
   Screen.Cursor := crHourGlass;
   Application.ProcessMessages;
-  S := R.RunReport;
+  S := Result.RunReport;
+
+  ShowReportForm(Self,
+    'Report of: ' + Result.ReportTitle,
+    S,
+    F.RadioGroup1.ItemIndex = 0);
+
   Screen.Cursor := crDefault;
   Application.ProcessMessages;
 
-  ShowReportForm(Self,
-    'Report of: ' + R.ReportTitle,
-    S,
-    F.RadioGroup1.ItemIndex = 0);
+  if FreeAfterRun then
+    FreeAndNil(Result);
   F.Free;
 end;
 

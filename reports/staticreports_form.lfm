@@ -69,7 +69,7 @@ object StaticReportsForm: TStaticReportsForm
       }
       TabOrder = 0
     end
-    object BitBtn1: TBitBtn
+    object OkBtn: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
@@ -88,9 +88,9 @@ object StaticReportsForm: TStaticReportsForm
       TabOrder = 1
     end
     object BitBtn2: TBitBtn
-      AnchorSideTop.Control = BitBtn1
+      AnchorSideTop.Control = OkBtn
       AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = BitBtn1
+      AnchorSideRight.Control = OkBtn
       Left = 442
       Height = 34
       Top = 8
@@ -153,6 +153,7 @@ object StaticReportsForm: TStaticReportsForm
     object OkAction: TAction
       Caption = '&Ok'
       OnExecute = OkActionExecute
+      OnUpdate = OkActionUpdate
     end
     object CancelAction: TAction
       Caption = '&Cancel'

@@ -19,7 +19,7 @@ type
     OkAction: TAction;
     ActionList1: TActionList;
     AddFilesBtn: TBitBtn;
-    BitBtn1: TBitBtn;
+    OkBtn: TBitBtn;
     BitBtn2: TBitBtn;
     Panel1: TPanel;
     ProgressBar1: TProgressBar;
@@ -30,8 +30,10 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure OkActionExecute(Sender: TObject);
+    procedure OkActionUpdate(Sender: TObject);
   private
     { private declarations }
+    FOkActive: boolean;
     FProjectList: TProjectFileListFrame;
     FReport: TReportBase;
     FReportClass: TReportBaseClass;
@@ -40,6 +42,7 @@ type
     procedure DoAddFiles;
     procedure AfterFileImport(Sender: TObject; Document: TEpiDocument;
       const FileName: string);
+    procedure ProjectFileListChanged(Sender: TObject);
   protected
     constructor Create(TheOwner: TComponent); override;
   public
@@ -100,6 +103,16 @@ begin
       NextForm.Free;
     end;
   end;
+end;
+
+procedure TStaticReportsForm.OkActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := FOkActive;
+end;
+
+procedure TStaticReportsForm.ProjectFileListChanged(Sender: TObject);
+begin
+  FOkActive := FProjectList.SelectedList.Count > 0;
 end;
 
 function TStaticReportsForm.ShowDialog(out Files: TStrings): boolean;
@@ -191,12 +204,13 @@ begin
   inherited Create(TheOwner);
 
   FActivatedOnce := false;
+  FOkActive := false;
   FProjectList := TProjectFileListFrame.Create(Self);
   with FProjectList do
   begin
     Align := alClient;
     Parent := Self;
-//    OnSelectionChanged := @ProjectFileListChanged;
+    OnSelectionChanged := @ProjectFileListChanged;
   end;
 end;
 
@@ -214,6 +228,9 @@ begin
   FakeReport := FReportClass.Create(TStringList.Create, TEpiReportTXTGenerator);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
   FakeReport.Free;
+
+  if Supports(FReportClass, IReportFrameProvider) then
+    OkBtn.Caption := 'Next';
 end;
 
 procedure TStaticReportsForm.AddInitialDocument(const FileName: string;
