@@ -70,7 +70,7 @@ uses
   export_csv_frame, export_stata_frame, export_sas_frame, export_spss_frame,
 
   // project settings
-  project_settings_field_frame, project_settings_general_frame;
+  project_settings_field_frame, project_settings_general_frame, project_settings_autoincrement_frame;
 const
   RecentIniFileName: string = '';
 
@@ -581,7 +581,8 @@ begin
     FindNodeWithText('SAS').Data                 := Pointer(TExportSASFrame.Create(Self));
 
     // Project options
-    FindNodeWithText('Project Defaults').GetFirstChild.Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
+    FindNodeWithText('Backup').Data              := Pointer(TProjectSettings_BackupFrame.Create(Self));
+    FindNodeWithText('Auto Increment').Data       := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
     FindNodeWithText('Display of Fields').Data   := Pointer(TProjectSettings_FieldFrame.Create(Self));
   end;
 end;

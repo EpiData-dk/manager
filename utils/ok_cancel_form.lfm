@@ -1,27 +1,29 @@
 object OkCancelForm: TOkCancelForm
-  Left = 544
-  Height = 285
-  Top = 381
-  Width = 446
+  Left = 493
+  Height = 536
+  Top = 363
+  Width = 595
   Caption = 'OkCancelForm'
-  ClientHeight = 285
-  ClientWidth = 446
+  ClientHeight = 536
+  ClientWidth = 595
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
   LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0
     Height = 50
-    Top = 235
-    Width = 446
+    Top = 486
+    Width = 595
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 446
+    ClientWidth = 595
     TabOrder = 0
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 382
+      Left = 531
       Height = 32
       Top = 9
       Width = 53
@@ -38,7 +40,7 @@ object OkCancelForm: TOkCancelForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 292
+      Left = 441
       Height = 34
       Top = 8
       Width = 80

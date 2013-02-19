@@ -10,9 +10,9 @@ uses
 
 type
 
-  { TValideDoubleEntryFrame }
+  { TValidateDoubleEntryFrame }
 
-  TValideDoubleEntryFrame = class(TFrame, IReportOptionFrame)
+  TValidateDoubleEntryFrame = class(TFrame, IReportOptionFrame)
     CFSelectNoneAction: TAction;
     CFSelectAllNonKFAction: TAction;
     KFMoveFieldDown: TAction;
@@ -69,14 +69,14 @@ uses
   epidatafilestypes, epiglobals, LCLIntf, manager_messages, LCLType,
   main;
 
-{ TValideDoubleEntryFrame }
+{ TValidateDoubleEntryFrame }
 
-procedure TValideDoubleEntryFrame.KFNoneActionExecute(Sender: TObject);
+procedure TValidateDoubleEntryFrame.KFNoneActionExecute(Sender: TObject);
 begin
   KFCheckList.CheckAll(cbUnchecked, false, false);
 end;
 
-procedure TValideDoubleEntryFrame.KFIndexActionExecute(Sender: TObject);
+procedure TValidateDoubleEntryFrame.KFIndexActionExecute(Sender: TObject);
 var
   i: Integer;
 begin
@@ -89,7 +89,7 @@ begin
   KFCheckList.Items.EndUpdate;
 end;
 
-procedure TValideDoubleEntryFrame.KFMoveFieldUpExecute(Sender: TObject);
+procedure TValidateDoubleEntryFrame.KFMoveFieldUpExecute(Sender: TObject);
 var
   Idx1: Integer;
   Idx2: Integer;
@@ -115,7 +115,7 @@ begin
   KFCheckList.Items.EndUpdate;
 end;
 
-procedure TValideDoubleEntryFrame.KFMoveFieldUpUpdate(Sender: TObject);
+procedure TValidateDoubleEntryFrame.KFMoveFieldUpUpdate(Sender: TObject);
 begin
   if Sender = KFMoveFieldUp then
     TAction(Sender).Enabled := KFCheckList.ItemIndex > 0
@@ -123,7 +123,7 @@ begin
     TAction(Sender).Enabled := KFCheckList.ItemIndex < (KFCheckList.Count - 1);
 end;
 
-procedure TValideDoubleEntryFrame.KFAutoIncActionExecute(Sender: TObject);
+procedure TValidateDoubleEntryFrame.KFAutoIncActionExecute(Sender: TObject);
 var
   i: Integer;
 begin
@@ -136,7 +136,7 @@ begin
   KFCheckList.Items.EndUpdate;
 end;
 
-procedure TValideDoubleEntryFrame.CFSelectAllNonKFActionExecute(Sender: TObject
+procedure TValidateDoubleEntryFrame.CFSelectAllNonKFActionExecute(Sender: TObject
   );
 var
   O: TObject;
@@ -156,12 +156,12 @@ begin
   CmpFCheckList.Items.EndUpdate;
 end;
 
-procedure TValideDoubleEntryFrame.CFSelectNoneActionExecute(Sender: TObject);
+procedure TValidateDoubleEntryFrame.CFSelectNoneActionExecute(Sender: TObject);
 begin
   CmpFCheckList.CheckAll(cbUnchecked, false, false);
 end;
 
-procedure TValideDoubleEntryFrame.UpdateKeyFields;
+procedure TValidateDoubleEntryFrame.UpdateKeyFields;
 var
   MainDF: TEpiDataFile;
   DupDF: TEpiDataFile;
@@ -188,7 +188,7 @@ begin
     KFCheckList.Selected[0] := true;
 end;
 
-procedure TValideDoubleEntryFrame.UpdateCompareFields;
+procedure TValidateDoubleEntryFrame.UpdateCompareFields;
 var
   MainDF: TEpiDataFile;
   DupDF: TEpiDataFile;
@@ -208,7 +208,7 @@ begin
   CmpFCheckList.Items.EndUpdate;
 end;
 
-procedure TValideDoubleEntryFrame.AddFieldHook(Sender: TObject;
+procedure TValidateDoubleEntryFrame.AddFieldHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   if (EventGroup <> eegCustomBase) then exit;
@@ -233,12 +233,12 @@ begin
   end;
 end;
 
-function TValideDoubleEntryFrame.GetFrameCaption: string;
+function TValidateDoubleEntryFrame.GetFrameCaption: string;
 begin
   result := 'Double Entry Validation Options';
 end;
 
-procedure TValideDoubleEntryFrame.UpdateFrame(Selection: TStrings);
+procedure TValidateDoubleEntryFrame.UpdateFrame(Selection: TStrings);
 begin
   if Selection.Count <> 2 then
     // Raise some error?
@@ -253,7 +253,7 @@ begin
   UpdateCompareFields;
 end;
 
-procedure TValideDoubleEntryFrame.ApplyReportOptions(Report: TReportBase);
+procedure TValidateDoubleEntryFrame.ApplyReportOptions(Report: TReportBase);
 var
   KF: TEpiFields;
   CF: TEpiFields;
@@ -284,7 +284,7 @@ begin
   end;
 end;
 
-function TValideDoubleEntryFrame.CanClose: boolean;
+function TValidateDoubleEntryFrame.CanClose: boolean;
 begin
   result := true;
 end;

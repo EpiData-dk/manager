@@ -70,7 +70,7 @@ end;
 
 function TReportDoubleEntryValidation.GetFrameClass: TCustomFrameClass;
 begin
-  result := TValideDoubleEntryFrame;
+  result := TValidateDoubleEntryFrame;
 end;
 
 end.

@@ -1,4 +1,4 @@
-object ValideDoubleEntryFrame: TValideDoubleEntryFrame
+object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
   Left = 0
   Height = 450
   Top = 0
@@ -6,8 +6,8 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
   ClientHeight = 450
   ClientWidth = 647
   TabOrder = 0
-  DesignLeft = 896
-  DesignTop = 300
+  DesignLeft = 2503
+  DesignTop = 522
   object GroupBox3: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Bevel1
@@ -297,10 +297,10 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
       Left = 5
       Height = 15
       Top = 5
-      Width = 214
+      Width = 148
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
-      Caption = 'Data comparison based on fields:'
+      Caption = 'Compare data in fields:'
       ParentColor = False
     end
   end
@@ -333,7 +333,7 @@ object ValideDoubleEntryFrame: TValideDoubleEntryFrame
     ClientWidth = 623
     Items.Strings = (
       'Ignore deleted records'
-      'Case in-sensitive text fields'
+      'Ignore case in text fields'
       'Ignore missing records in duplicate file'
       'Add result field'
     )

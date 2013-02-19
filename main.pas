@@ -33,6 +33,8 @@ type
     MenuItem23: TMenuItem;
     MenuItem24: TMenuItem;
     MenuItem25: TMenuItem;
+    MenuItem26: TMenuItem;
+    RecentFilesSubPopupMenu: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     ProjectDetailsBtn: TButton;
@@ -760,6 +762,7 @@ begin
     FActiveFrame := nil;
   end;
   UpdateMainMenu;
+  UpdateProcessToolbar;
   SetCaption;
 end;
 
@@ -877,7 +880,6 @@ end;
 procedure TMainForm.UpdateProcessToolbar;
 begin
   ProcessToolPanel.Visible :=
-//    (not Assigned(FActiveFrame)) and
     ManagerSettings.ShowWorkToolBar;
 
   ProjectDetailsBtn.Enabled := Assigned(FActiveFrame);
@@ -1056,13 +1058,11 @@ end;
 procedure TMainForm.LMNewProject(var Msg: TLMessage);
 begin
   DoNewProject;
-  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.LMCloseProject(var Msg: TLMessage);
 begin
   DoCloseProject;
-  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.LMDesignerAdd(var Msg: TLMessage);
@@ -1091,8 +1091,12 @@ begin
 
   RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
   RecentFilesSubMenu.Clear;
+  RecentFilesSubPopupMenu.Visible := RecentFilesSubMenu.Visible;
+  RecentFilesSubPopupMenu.Clear;
+
   for i := 0 to RecentFiles.Count - 1 do
   begin
+    // Main menu
     Mi := TMenuItem.Create(RecentFilesSubMenu);
     Mi.Name := 'recent' + inttostr(i);
     Mi.Caption := RecentFiles[i];
@@ -1100,6 +1104,15 @@ begin
     if i < 9 then
       Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
     RecentFilesSubMenu.Add(Mi);
+
+    // Popup menu
+    Mi := TMenuItem.Create(RecentFilesSubPopupMenu);
+    Mi.Name := 'recent' + inttostr(i);
+    Mi.Caption := RecentFiles[i];
+    Mi.OnClick := @OpenRecentMenuItemClick;
+    if i < 9 then
+      Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
+    RecentFilesSubPopupMenu.Add(Mi);
   end;
 end;
 

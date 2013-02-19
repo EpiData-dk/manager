@@ -11,12 +11,10 @@ uses
 
 type
 
-  { TProjectSettings_GeneralFrame }
+  { TProjectSettings_BackupFrame }
 
-  TProjectSettings_GeneralFrame = class(TFrame, IProjectSettingsFrame, ISettingsFrame)
+  TProjectSettings_BackupFrame = class(TFrame, IProjectSettingsFrame, ISettingsFrame)
     BackupOnShutdownChkBox: TCheckBox;
-    Label3: TLabel;
-    AutoIncStartEdit: TMaskEdit;
     Label1: TLabel;
     BackupIntervalEdit: TMaskEdit;
   private
@@ -35,20 +33,19 @@ implementation
 {$R *.lfm}
 
 uses
-  Dialogs, epidocument, project_settings_study_frame;
+  epidocument, Dialogs;
 
-{ TProjectSettings_GeneralFrame }
+{ TProjectSettings_BackupFrame }
 
-procedure TProjectSettings_GeneralFrame.SetProjectSettings(AValue: TEpiCustomBase);
+procedure TProjectSettings_BackupFrame.SetProjectSettings(AValue: TEpiCustomBase);
 begin
   FProjectSettings               := TEpiDocument(AValue).ProjectSettings;
 
   BackupIntervalEdit.Text        := IntToStr(FProjectSettings.BackupInterval);
   BackupOnShutdownChkBox.Checked := FProjectSettings.BackupOnShutdown;
-  AutoIncStartEdit.Text          := IntToStr(FProjectSettings.AutoIncStartValue);
 end;
 
-procedure TProjectSettings_GeneralFrame.SetSettings(Data: PManagerSettings);
+procedure TProjectSettings_BackupFrame.SetSettings(Data: PManagerSettings);
 begin
   FManagerSettings := Data;
 
@@ -56,11 +53,10 @@ begin
   begin
     BackupIntervalEdit.Text        := IntToStr(TimedRecoveryInterval);
     BackupOnShutdownChkBox.Checked := SaveBackup;
-    AutoIncStartEdit.Text          := IntToStr(AutoIncStart);
   end;
 end;
 
-function TProjectSettings_GeneralFrame.ApplySettings: boolean;
+function TProjectSettings_BackupFrame.ApplySettings: boolean;
 var
   I: LongInt;
 begin
@@ -79,7 +75,6 @@ begin
   begin
     FProjectSettings.BackupInterval   := I;
     FProjectSettings.BackupOnShutdown := BackupOnShutdownChkBox.Checked;
-    FProjectSettings.AutoIncStartValue := StrToInt(AutoIncStartEdit.Text);
   end;
 
   if Assigned(FManagerSettings) then
@@ -87,7 +82,6 @@ begin
   begin
     TimedRecoveryInterval := I;
     SaveBackup            := BackupOnShutdownChkBox.Checked;
-    AutoIncStart          := StrToInt(AutoIncStartEdit.Text);
   end;
 end;
 

@@ -240,7 +240,6 @@ object MainForm: TMainForm
       end
       object SettingsMenuItem: TMenuItem
         Action = SettingsAction
-        Caption = '&Settings'
         OnClick = SettingsActionExecute
       end
       object ResetWindowPosMenuItem: TMenuItem
@@ -380,10 +379,9 @@ object MainForm: TMainForm
     end
     object SettingsAction: TAction
       Category = 'Edit'
-      Caption = 'Settings'
+      Caption = 'Preferences'
       Hint = 'Settings'
       OnExecute = SettingsActionExecute
-      ShortCut = 32851
     end
     object FileExitAction: TFileExit
       Category = 'File'
@@ -483,7 +481,7 @@ object MainForm: TMainForm
     end
     object VerifyDoubleEntryAction: TAction
       Category = 'Tools'
-      Caption = 'Validate Dublicate Files'
+      Caption = 'Validate Duplicate Files'
       OnExecute = VerifyDoubleEntryActionExecute
     end
     object CountsReportAction: TAction
@@ -502,8 +500,14 @@ object MainForm: TMainForm
     object MenuItem7: TMenuItem
       Action = NewProjectAction
     end
+    object MenuItem26: TMenuItem
+      Caption = '-'
+    end
     object MenuItem8: TMenuItem
       Action = OpenProjectAction
+    end
+    object RecentFilesSubPopupMenu: TMenuItem
+      Caption = 'Open Recent...'
     end
   end
   object ProjectDetailsPopupMenu: TPopupMenu

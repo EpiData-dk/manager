@@ -44,7 +44,7 @@ uses
   project_settings_field_frame, project_settings_interface,
   project_settings_general_frame, settings2, settings2_var,
   project_settings_study_frame, project_settings_study_contentdesc_frame,
-  project_settings_study_ownership_frame,
+  project_settings_study_ownership_frame, project_settings_autoincrement_frame,
   main;
 
 { TProjectSettingsForm }
@@ -118,8 +118,9 @@ begin
 
   with ProjectSettingsView.Items do
   begin
-    FindNodeWithText('General').Data             := Pointer(TProjectSettings_GeneralFrame.Create(Self));
-    FindNodeWithText('Display of Fields').Data              := Pointer(TProjectSettings_FieldFrame.Create(Self));
+    FindNodeWithText('Backup').Data             := Pointer(TProjectSettings_BackupFrame.Create(Self));
+    FindNodeWithText('Auto Increment').Data     := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
+    FindNodeWithText('Display of Fields').Data  := Pointer(TProjectSettings_FieldFrame.Create(Self));
   end;
 end;
 

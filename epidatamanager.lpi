@@ -184,7 +184,7 @@
         <PackageName Value="LCL"/>
       </Item9>
     </RequiredPackages>
-    <Units Count="75">
+    <Units Count="76">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -243,7 +243,7 @@
       <Unit8>
         <Filename Value="project/project_settings_general_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="ProjectSettings_GeneralFrame"/>
+        <ComponentName Value="ProjectSettings_BackupFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_general_frame"/>
@@ -678,11 +678,18 @@
       <Unit74>
         <Filename Value="tools/validate_double_entry_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="ValideDoubleEntryFrame"/>
+        <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="validate_double_entry_frame"/>
       </Unit74>
+      <Unit75>
+        <Filename Value="project/project_settings_autoincrement_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectSettings_AutoIncFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_autoincrement_frame"/>
+      </Unit75>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
