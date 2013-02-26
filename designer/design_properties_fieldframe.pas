@@ -1434,14 +1434,16 @@ begin
       if TEdit(ValueEdit).Text = '' then
         Exit(DoError('Empty jump value!', TEdit(ValueEdit)));
 
-      with TEdit(ValueEdit) do
-      case Field.FieldType of
-        ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), TEdit(ValueEdit)));
-        ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), TEdit(ValueEdit)));
-        ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format(rsNotAValidType, ['float', Text]), TEdit(ValueEdit)));
-        ftString,
-        ftUpperString:  ;
-      end;
+      // This allow for using '.' as an "On any value" specifier.
+      if TEdit(ValueEdit).Text <> TEpiJump.DefaultOnAnyValue then
+        with TEdit(ValueEdit) do
+        case Field.FieldType of
+          ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), TEdit(ValueEdit)));
+          ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), TEdit(ValueEdit)));
+          ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format(rsNotAValidType, ['float', Text]), TEdit(ValueEdit)));
+          ftString,
+          ftUpperString:  ;
+        end;
 
       if TComboBox(GotoCombo).ItemIndex = -1 then
         Exit(DoError('Invalid "Go To" selection"', TComboBox(GotoCombo)));
@@ -1686,13 +1688,24 @@ begin
               NJump.JumpToField := TEpiField(ComboSelectedObject(TComboBox(GotoCombo)))
             end;
             NJump.ResetType := TEpiJumpResetType(SelectedEnum(TComboBox(ResetCombo)));
-            Case Field.FieldType of
-              ftBoolean:     TEpiBoolJump(NJump).JumpValue   := StrToInt(TEdit(ValueEdit).Text);
-              ftInteger:     TEpiIntJump(NJump).JumpValue    := StrToInt(TEdit(ValueEdit).Text);
-              ftFloat:       TEpiFloatJump(NJump).JumpValue  := StrToFloat(TEdit(ValueEdit).Text);
-              ftString,
-              ftUpperString: TEpiStringJump(NJump).JumpValue := TEdit(ValueEdit).Text;
-            end; // Case Field.Fieldtype
+            if TEdit(ValueEdit).Text = TEpiJump.DefaultOnAnyValue then
+            begin
+              Case Field.FieldType of
+                ftBoolean:     TEpiBoolJump(NJump).JumpValue   := TEpiBoolField.DefaultMissing;
+                ftInteger:     TEpiIntJump(NJump).JumpValue    := TEpiIntField.DefaultMissing;
+                ftFloat:       TEpiFloatJump(NJump).JumpValue  := TEpiFloatField.DefaultMissing;
+                ftString,
+                ftUpperString: TEpiStringJump(NJump).JumpValue := TEpiStringField.DefaultMissing;
+              end;
+            end else begin
+              Case Field.FieldType of
+                ftBoolean:     TEpiBoolJump(NJump).JumpValue   := StrToInt(TEdit(ValueEdit).Text);
+                ftInteger:     TEpiIntJump(NJump).JumpValue    := StrToInt(TEdit(ValueEdit).Text);
+                ftFloat:       TEpiFloatJump(NJump).JumpValue  := StrToFloat(TEdit(ValueEdit).Text);
+                ftString,
+                ftUpperString: TEpiStringJump(NJump).JumpValue := TEdit(ValueEdit).Text;
+              end; // Case Field.Fieldtype
+            end; // if TEdit(ValueEdit).Text = TEpiJump.DefaultOnAnyValue
           end; // with PJumpComponents(FJumpComponentsList[i])^ do
         end; // with Field.Jumps do
       end; // for i := 0 to FieldCount -1  do
