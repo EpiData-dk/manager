@@ -606,7 +606,7 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="EmptyPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
+        <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_properties_emptyframe"/>
       </Unit62>
       <Unit63>
