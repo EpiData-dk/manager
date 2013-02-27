@@ -182,6 +182,7 @@ type
     function SelectedEnum(ItemObject: TObject): PtrInt;
   private
     { ValueLabels }
+    FVLIncompatibleItemIndex: integer;
     procedure AddValueLabels;
     procedure UpdateValueLabels;
     procedure UpdateValueLabelWriteTo;
@@ -319,8 +320,11 @@ var
   S: String;
   l: SizeInt;
   j: Integer;
+  IncompatibleList: TList;
 begin
   if not ValueLabelComboBox.Visible then exit;
+
+  IncompatibleList := TList.Create;
 
   InitCombo(ValueLabelComboBox);
 
@@ -364,13 +368,26 @@ begin
     end;
 
     if DoAdd then
-      ValueLabelComboBox.AddItem(VL.Name, VL);
-
-{    // Only support same types.
-    if VL.LabelType <> Field.FieldType then continue;
-    ValueLabelComboBox.Items.AddObject(VL.Name, VL);}
+      ValueLabelComboBox.AddItem(VL.Name, VL)
+    else
+      IncompatibleList.Add(VL);
   end;
+
+  FVLIncompatibleItemIndex := -1;
+  if IncompatibleList.Count > 0 then
+  begin
+    FVLIncompatibleItemIndex := ValueLabelComboBox.Items.Count;
+    ValueLabelComboBox.AddItem('--- incompatible value label set ---', FIgnoreObject);
+
+    for i := 0 to IncompatibleList.Count - 1 do
+    begin
+      VL := TEpiValueLabelSet(IncompatibleList[i]);
+      ValueLabelComboBox.AddItem(VL.Name, VL)
+    end;
+  end;
+
   FinishCombo(ValueLabelComboBox, FNoneObject);
+  IncompatibleList.Free;
 end;
 
 procedure TFieldPropertiesFrame.UpdateValueLabels;
@@ -899,6 +916,12 @@ begin
   ValueLabelSettingGrpBox.Enabled :=
     (not ComboIgnoreSelected(ValueLabelComboBox)) and
     (not ComboNoneSelected(ValueLabelComboBox));
+
+  if (FVLIncompatibleItemIndex > - 1) and
+     (ValueLabelComboBox.ItemIndex > FVLIncompatibleItemIndex)
+  then
+    ShowHintMsg('Warning: Selected value label set is no compatible with all fields',
+      ValueLabelComboBox);
 end;
 
 procedure TFieldPropertiesFrame.RegisterValueLabelHook;
@@ -1318,6 +1341,12 @@ begin
       DoError('Invalid decimals', DecimalsEdit);
       Exit;
     end;
+
+  // Check for invalid chosen valuelabelset
+  if (FVLIncompatibleItemIndex > -1) and
+     (ValueLabelComboBox.ItemIndex >= FVLIncompatibleItemIndex)
+  then
+    Exit(DoError('Incompatible value label set selected', ValueLabelComboBox));
 
   // Safely assume that From/To Edits are only visible if all fields have same type.
   if FromEdit.Modified or ToEdit.Modified then
