@@ -533,7 +533,8 @@ end;
 
 procedure TRuntimeDesignFrame.PasteAsDateActionExecute(Sender: TObject);
 begin
-  PasteAsField(ftDMYDate);
+//  PasteAsField(ftDMYDate);
+  PasteAsField(ManagerSettings.DefaultDateType);
 end;
 
 procedure TRuntimeDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
@@ -1691,6 +1692,7 @@ end;
 
 procedure TRuntimeDesignFrame.UpdateInterface;
 begin
+  PasteAsDateAction.ImageIndex := Ord(ManagerSettings.DefaultDateType);
   with DateToolButton do
   begin
     Tag := Ord(ManagerSettings.DefaultDateType);

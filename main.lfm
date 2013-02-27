@@ -229,6 +229,9 @@ object MainForm: TMainForm
       object PasteAsStringMenuItem: TMenuItem
         Caption = 'StringPaste'
       end
+      object PasteAsDateMenuItem: TMenuItem
+        Caption = 'DatePaste'
+      end
       object EditMenuDivider7: TMenuItem
         Caption = '-'
       end

@@ -34,6 +34,7 @@ type
     MenuItem24: TMenuItem;
     MenuItem25: TMenuItem;
     MenuItem26: TMenuItem;
+    PasteAsDateMenuItem: TMenuItem;
     RecentFilesSubPopupMenu: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
@@ -854,6 +855,7 @@ begin
   PasteAsHeadingMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsIntMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsStringMenuItem.Visible := Assigned(FActiveFrame);
+  PasteAsDateMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider7.Visible := Assigned(FActiveFrame);
   // -
   AlignMenu.Visible         := Assigned(FActiveFrame);
@@ -1139,6 +1141,7 @@ begin
   PasteAsIntMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
+  PasteAsDateMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsDateAction;
   // -
   AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
 

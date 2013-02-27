@@ -103,15 +103,14 @@ end;
 
 procedure TFieldValueLabelEditor.FormShow(Sender: TObject);
 begin
+  ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
+  FGridFrame.VLG.SetFocus;
+
   if FGridFrame.ValueLabelSet.Count > 0 then // assume existing VL set.
-  begin
-    ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
-    FGridFrame.VLG.SetFocus;
-    CancelBtn.Enabled := false;
-  end else begin
+    CancelBtn.Enabled := false
+  else
     FGridFrame.NewLineBtn.Click;
-    ValueLabelNameEdit.SetFocus;
-  end;
+
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'FieldValueLabelEditor');
 end;
