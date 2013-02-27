@@ -372,6 +372,7 @@ object MainForm: TMainForm
     end
   end
   object ActionList1: TActionList
+    OnUpdate = ActionList1Update
     left = 368
     top = 336
     object NewProjectAction: TAction

@@ -153,6 +153,7 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
+    procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
@@ -409,6 +410,15 @@ begin
     else
       S := S + Format('Latest test version: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
   ShowMessage(S);
+end;
+
+procedure TMainForm.ActionList1Update(AAction: TBasicAction;
+  var Handled: Boolean);
+begin
+  if Screen.ActiveCustomForm <> MainForm then
+    ActionList1.State := asSuspended
+  else
+    ActionList1.State := asNormal;
 end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);
