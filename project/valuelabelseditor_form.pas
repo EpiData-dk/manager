@@ -560,7 +560,7 @@ begin
         ecceUpdate,
         ecceText:    UpdateGridCells;
       end;
-    if EventGroup = eegValueLabels then
+    if EventGroup = eegValueLabel then
       case TEpiValueLabelChangeEvent(EventType) of
         evceValue,
         evceMissing: UpdateGridCells;

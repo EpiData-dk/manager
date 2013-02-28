@@ -953,9 +953,9 @@ var
   VL: TEpiValueLabelSet;
   Idx: Integer;
 begin
-  if EventGroup <> eegCustomBase then exit;
-
-  if (Sender is TEpiValueLabelSets) then
+  if (Sender is TEpiValueLabelSets) and
+     (EventGroup = eegCustomBase)
+  then
   case TEpiCustomChangeEventType(EventType) of
     ecceDestroy: ;
     ecceUpdate: ;
@@ -992,23 +992,31 @@ begin
   end;
 
   if (Sender is TEpiValueLabelSet) then
-    case TEpiCustomChangeEventType(EventType) of
-      ecceDestroy: ;
-      ecceUpdate: ;
-      ecceName:
-        begin
-          S := string(data^);
-          Idx := ValueLabelComboBox.Items.IndexOf(S);
-          if Idx > -1 then
-            ValueLabelComboBox.Items.Strings[Idx] := TEpiValueLabelSet(Sender).Name;
-        end;
-      ecceAddItem: ;
-      ecceDelItem: ;
-      ecceSetItem: ;
-      ecceSetTop: ;
-      ecceSetLeft: ;
-      ecceText: ;
-    end;
+  begin
+    if EventGroup = eegCustomBase then
+      case TEpiCustomChangeEventType(EventType) of
+        ecceDestroy: ;
+        ecceUpdate: ;
+        ecceName:
+          begin
+            S := string(data^);
+            Idx := ValueLabelComboBox.Items.IndexOf(S);
+            if Idx > -1 then
+              ValueLabelComboBox.Items.Strings[Idx] := TEpiValueLabelSet(Sender).Name;
+          end;
+        ecceAddItem: ;
+        ecceDelItem: ;
+        ecceSetItem: ;
+        ecceSetTop: ;
+        ecceSetLeft: ;
+        ecceText: ;
+      end;
+
+    if EventGroup = eegValueLabelSet then
+      case TEpiValueLabelSetChangeEvent(EventType) of
+        evlsMaxValueLength: UpdateValueLabels;
+      end;
+  end;
 end;
 
 function TFieldPropertiesFrame.ManyFields: boolean;
