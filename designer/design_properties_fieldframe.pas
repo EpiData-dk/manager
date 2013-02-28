@@ -400,8 +400,12 @@ begin
   VL := Field.ValueLabelSet;
   for i := 1 to FieldCount - 1 do
     if Fields[i].ValueLabelSet <> VL then
+    begin
       VL := TEpiValueLabelSet(FIgnoreObject);
+      Break;
+    end;
   ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(VL);
+  ValueLabelComboBoxChange(ValueLabelComboBox);
 end;
 
 procedure TFieldPropertiesFrame.UpdateValueLabelWriteTo;

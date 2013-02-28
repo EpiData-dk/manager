@@ -5,7 +5,8 @@ unit design_properties_form;
 interface
 
 uses
-  Classes, SysUtils, Forms, JvDesignSurface, design_types, epicustombase;
+  Classes, SysUtils, Forms, JvDesignSurface, design_types, epicustombase,
+  Controls;
 
 type
 
@@ -29,6 +30,7 @@ type
     procedure RegisterHooks;
     procedure UnregisterHooks;
     function EpiCtrlIsEmpty: boolean;
+    procedure DoShowHint(Sender: TObject; Ctrl: TControl; const Msg: string);
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -42,9 +44,8 @@ type
 implementation
 
 uses
-  Buttons, ExtCtrls, Controls,
-  design_properties_baseframe, Graphics, design_properties_emptyframe,
-  settings2, settings2_var, main;
+  Buttons, ExtCtrls, design_properties_baseframe, Graphics,
+  design_properties_emptyframe, settings2, settings2_var, main;
 
 { TPropertiesForm }
 
@@ -122,6 +123,15 @@ begin
   result := true;
 end;
 
+procedure TPropertiesForm.DoShowHint(Sender: TObject; Ctrl: TControl;
+  const Msg: string);
+begin
+  if Assigned(OnShowHintMsg) and
+     Showing
+  then
+    FOnShowHintMsg(Sender, Ctrl, Msg);
+end;
+
 procedure TPropertiesForm.UpdateCaption(const S: string);
 begin
   Caption := S;
@@ -149,7 +159,7 @@ begin
     FFrame.Free;
 
   FFrame := TEmptyPropertiesFrame.Create(Self);
-  TDesignPropertiesFrame(FFrame).OnShowHintMsg := OnShowHintMsg;
+  TDesignPropertiesFrame(FFrame).OnShowHintMsg := @DoShowHint;
   TDesignPropertiesFrame(FFrame).OnUpdateCaption := @UpdateCaption;
   FFrame.Align := alClient;
   FFrame.Parent := Self;
@@ -239,7 +249,7 @@ var
     FFrame := FrameClass.Create(Self);
     FFrame.Align := alClient;
     FFrame.Parent := Self;
-    TDesignPropertiesFrame(FFrame).OnShowHintMsg := OnShowHintMsg;
+    TDesignPropertiesFrame(FFrame).OnShowHintMsg := @DoShowHint;
     TDesignPropertiesFrame(FFrame).OnUpdateCaption := @UpdateCaption;
   end;
 
@@ -280,7 +290,8 @@ begin
 
   RegisterHooks;
 
-  if Assigned(FFrame) then
+  if Assigned(FFrame)
+  then
     (FFrame as IDesignPropertiesFrame).SetEpiControls(EpiCtrlItemArray);
 end;
 
@@ -294,7 +305,8 @@ end;
 
 procedure TPropertiesForm.SetFocusOnNew;
 begin
-  (FFrame as IDesignPropertiesFrame).FocusOnNewControl;
+  if Showing then
+    (FFrame as IDesignPropertiesFrame).FocusOnNewControl;
 end;
 
 function TPropertiesForm.ValidateControls: boolean;
@@ -302,6 +314,7 @@ begin
   result := true;
 
   if Assigned(FFrame) and
+     Showing and
      (not EpiCtrlIsEmpty)
   then
     Result := (FFrame as IDesignPropertiesFrame).ApplyChanges;

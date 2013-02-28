@@ -807,6 +807,8 @@ end;
 
 procedure TMainForm.DoOpenProject(const AFileName: string);
 begin
+  if not DoCloseProject then exit;
+
   DoNewProject;
   try
     FActiveFrame.OpenProject(AFileName);
