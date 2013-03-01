@@ -1100,7 +1100,7 @@ begin
     BeginDoc;
 
     i := 0;
-    while i < DataFile.ControlItems.Count - 1 do
+    while i < DataFile.ControlItems.Count do
     begin
       CI := DataFile.ControlItem[i];
       if CI = DataFile.MainSection then
