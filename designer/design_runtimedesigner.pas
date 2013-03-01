@@ -2133,16 +2133,17 @@ begin
     // Hence -> the menuitem is deleted and no event is fired!
     DesignControlPopUpMenu.Items.Find('Select...').Free;
 
+    // Create submenu for selected component.
+    SubMenu := TMenuItem.Create(DesignControlPopUpMenu);
+    SubMenu.Caption := 'Select...';
+    SubMenu.Enabled := false;
+
     if (Selector.Count = 1) and
        (Ctrl is TDesignField)
-//       (Supports(Ctrl, IDesignEpiControl))
     then
     begin;
+      SubMenu.Enabled := true;
       EpiCtrl := (Ctrl as IDesignEpiControl).EpiControl;
-
-      // Create submenu for selected component.
-      SubMenu := TMenuItem.Create(DesignControlPopUpMenu);
-      SubMenu.Caption := 'Select...';
 
       // Create Field select menu.
       if EpiCtrl is TEpiField then
@@ -2209,8 +2210,8 @@ begin
       end;
       if SubMenu.Count = 2 then
         SubMenu.Items[1].Free;
-      DesignControlPopUpMenu.Items.Add(SubMenu);
     end;
+    DesignControlPopUpMenu.Items.Add(SubMenu);
   end;
 end;
 
