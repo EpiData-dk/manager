@@ -1595,39 +1595,48 @@ begin
   begin
     for i := 0 to FieldCount -1 do
     begin
-      if Assigned(Fields[i].Ranges) then
-        R := Fields[i].Ranges[0]
-      else begin
-        Fields[i].Ranges := TEpiRanges.Create(Fields[i]);
-        Fields[i].Ranges.ItemOwner := true;
-        R := Fields[i].Ranges.NewRange;
-      end;
-      Case Field.FieldType of
-        ftInteger:
-          begin
-            R.AsInteger[true]  := StrToInt64(FromEdit.Text);
-            R.AsInteger[false] := StrToInt64(ToEdit.Text);
-          end;
-        ftFloat:
-          begin
-            R.AsFloat[true]  := StrToFloat(FromEdit.Text);
-            R.AsFloat[false] := StrToFloat(ToEdit.Text);
-          end;
-        ftTime:
-          begin
-            R.AsTime[true]  := EpiStrToTime(FromEdit.Text, TimeSeparator, S);
-            R.AsTime[false] := EpiStrToTime(ToEdit.Text, TimeSeparator, S);
-          end;
-        ftDMYDate,
-        ftMDYDate,
-        ftYMDDate:
-          begin
-            R.AsDate[true]  := Trunc(EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, S));
-            R.AsDate[false] := Trunc(EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, S));
-          end;
-      end;
-    end;
-  end;
+      if FromEdit.Text = '' then
+      begin
+        if Assigned(Fields[i].Ranges) then
+        begin
+          Fields[i].Ranges.Free;
+          Fields[i].Ranges := nil;
+        end;
+      end else begin
+        if Assigned(Fields[i].Ranges) then
+          R := Fields[i].Ranges[0]
+        else begin
+          Fields[i].Ranges := TEpiRanges.Create(Fields[i]);
+          Fields[i].Ranges.ItemOwner := true;
+          R := Fields[i].Ranges.NewRange;
+        end;
+        Case Field.FieldType of
+          ftInteger:
+            begin
+              R.AsInteger[true]  := StrToInt64(FromEdit.Text);
+              R.AsInteger[false] := StrToInt64(ToEdit.Text);
+            end;
+          ftFloat:
+            begin
+              R.AsFloat[true]  := StrToFloat(FromEdit.Text);
+              R.AsFloat[false] := StrToFloat(ToEdit.Text);
+            end;
+          ftTime:
+            begin
+              R.AsTime[true]  := EpiStrToTime(FromEdit.Text, TimeSeparator, S);
+              R.AsTime[false] := EpiStrToTime(ToEdit.Text, TimeSeparator, S);
+            end;
+          ftDMYDate,
+          ftMDYDate,
+          ftYMDDate:
+            begin
+              R.AsDate[true]  := Trunc(EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, S));
+              R.AsDate[false] := Trunc(EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, S));
+            end;
+        end; // Case Field.FieldType
+      end; // if FromEdit.text = ''
+    end; // for i := 0 to fieldCount - 1
+  end; // FromEdit.Modified or ...
 
   // Updatemode
   if (Field is TEpiCustomAutoField) and

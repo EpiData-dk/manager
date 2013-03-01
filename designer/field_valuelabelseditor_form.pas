@@ -122,7 +122,15 @@ begin
   if InEditingDone then exit;
   InEditingDone := true;
 
-  FGridFrame.VLG.SetFocus;
+  if ValueLabelNameEdit.Modified and
+     (ValueLabelSet.Name <> ValueLabelNameEdit.Text) and
+     (not ValueLabelSets.ValidateRename(ValueLabelSet, ValueLabelNameEdit.Text))
+  then
+  begin
+    ShowHintMsg(nil, ValueLabelNameEdit, 'A ValueLabel set with same name already exists.');
+    ValueLabelNameEdit.SetFocus;
+  end else
+    FGridFrame.VLG.SetFocus;
 
   InEditingDone := false;
 end;
