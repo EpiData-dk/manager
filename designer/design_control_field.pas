@@ -350,6 +350,7 @@ begin
   Align := alNone;
   ShowHint := true;
   ParentColor := false;
+  ParentFont := false;
   Text := '';
 end;
 

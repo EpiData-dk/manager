@@ -693,7 +693,15 @@ begin
       Doc := TEpiDocument(R.Documents.Objects[0]);
       if Doc.Modified then
         Doc.SaveToFile(fn);
+
     end;
+
+  if Assigned(R) then
+  begin
+    AddToRecent(R.Documents[1]);
+    AddToRecent(R.Documents[0]);
+    UpdateRecentFiles;
+  end;
 
   R.Free;
 end;

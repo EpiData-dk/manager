@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, MaskEdit, EditBtn,
-  Dialogs, settings2_interface, settings2_var, Graphics;
+  Dialogs, settings2_interface, settings2_var, Graphics, ExtCtrls;
 
 type
 
@@ -35,6 +35,7 @@ type
     LabelLabelEdit: TMaskEdit;
     LabelLeftPosition: TMaskEdit;
     PositionsGrpBox: TGroupBox;
+    OutputFormatRadioGrp: TRadioGroup;
     ScrollBox1: TScrollBox;
     SectionColourBtn: TColorButton;
     SectionFontEditBtn: TEditButton;
@@ -105,6 +106,8 @@ begin
     HeadingColourBtn.ButtonColor := HeadingFont.Color;
     SetFont(SectionFont, SectionFontEditBtn);
     SectionColourBtn.ButtonColor := SectionFont.Color;
+
+    OutputFormatRadioGrp.ItemIndex := ReportOutputFormat;
   end;
 end;
 
@@ -133,6 +136,7 @@ begin
     FieldFont.Assign(FieldFontEditBtn.Font);
     HeadingFont.Assign(HeadingFontEditBtn.Font);
     SectionFont.Assign(SectionFontEditBtn.Font);
+    ReportOutputFormat := OutputFormatRadioGrp.ItemIndex;
   end;
   Result := true;
 end;

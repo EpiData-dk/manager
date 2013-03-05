@@ -67,7 +67,7 @@ implementation
 uses
   epidatafiles, report_double_entry_validation, epitools_val_dbl_entry,
   epidatafilestypes, epiglobals, LCLIntf, manager_messages, LCLType,
-  main;
+  main, math, LazUTF8, strutils;
 
 { TValidateDoubleEntryFrame }
 
@@ -166,17 +166,26 @@ var
   MainDF: TEpiDataFile;
   DupDF: TEpiDataFile;
   i: Integer;
+  F: TEpiField;
+  W: Integer;
 begin
   KFCheckList.Clear;
 
   MainDF := FMainDoc.DataFiles[0];
   DupDF  := FDupDoc.DataFiles[0];
 
+  W := 0;
+  for i := 0 to MainDF.Fields.Count - 1 do
+    if DupDF.Fields.ItemExistsByName(MainDF.Field[i].Name) then
+      W := Max(W, UTF8Length(MainDF.Field[i].Name));
+
   KFCheckList.Items.BeginUpdate;
   for i := 0 to MainDF.Fields.Count - 1 do
   begin
-    if DupDF.Fields.ItemExistsByName(MainDF.Fields[i].Name) then
-      KFCheckList.AddItem(MainDF.Fields[i].Name, MainDF.Fields[i]);
+    F := MainDF.Fields[i];
+    if DupDF.Fields.ItemExistsByName(F.Name) then
+      KFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text,
+      F);
   end;
   KFCheckList.Items.EndUpdate;
 
@@ -193,17 +202,27 @@ var
   MainDF: TEpiDataFile;
   DupDF: TEpiDataFile;
   i: Integer;
+  W: Integer;
+  F: TEpiField;
 begin
   CmpFCheckList.Clear;
 
   MainDF := FMainDoc.DataFiles[0];
   DupDF  := FDupDoc.DataFiles[0];
 
+  W := 0;
+  for i := 0 to MainDF.Fields.Count - 1 do
+    if DupDF.Fields.ItemExistsByName(MainDF.Field[i].Name) then
+      W := Max(W, UTF8Length(MainDF.Field[i].Name));
+
+
   CmpFCheckList.Items.BeginUpdate;
   for i := 0 to MainDF.Fields.Count - 1 do
   begin
-    if DupDF.Fields.ItemExistsByName(MainDF.Fields[i].Name) then
-      CmpFCheckList.AddItem(MainDF.Fields[i].Name, MainDF.Fields[i]);
+    F := MainDF.Fields[i];
+    if DupDF.Fields.ItemExistsByName(F.Name) then
+      CmpFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text,
+      F);
   end;
   CmpFCheckList.Items.EndUpdate;
 end;
@@ -235,7 +254,7 @@ end;
 
 function TValidateDoubleEntryFrame.GetFrameCaption: string;
 begin
-  result := 'Double Entry Validation Options';
+  result := 'Select all fields identifying an observation';
 end;
 
 procedure TValidateDoubleEntryFrame.UpdateFrame(Selection: TStrings);

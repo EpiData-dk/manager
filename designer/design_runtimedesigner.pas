@@ -613,15 +613,22 @@ function TRuntimeDesignFrame.FindNewPostion(NewControl: TControlClass): TPoint;
 var
   CI: TEpiCustomControlItem;
   Dist: Integer;
+  S: TEpiSection;
 begin
   CI := DataFile.ControlItem[DataFile.ControlItems.Count-1];
   if (CI is TEpiSection) then
+  begin
     if CI = DataFile.MainSection then
       Result := Point(ManagerSettings.DefaultRightPosition, 20)
     else
       Result := Point(CI.Left, CI.Top + TEpiSection(CI).Height)
-  else
-    Result := Point(CI.Left, CI.Top + ControlFromEpiControl(CI).Height);
+  end else begin
+    S := TEpiSection(Ci.Owner.Owner);
+    if S <> DataFile.MainSection then
+      Result := Point(S.Left, S.Top + S.Height)
+    else
+      Result := Point(CI.Left, CI.Top + ControlFromEpiControl(CI).Height);
+  end;
 
   Dist := ManagerSettings.SpaceBtwFieldLabel;
   if (NewControl = TDesignField) and (CI is TEpiField) then

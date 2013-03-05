@@ -6,8 +6,8 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
   ClientHeight = 450
   ClientWidth = 647
   TabOrder = 0
-  DesignLeft = 2503
-  DesignTop = 522
+  DesignLeft = 752
+  DesignTop = 327
   object GroupBox3: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Bevel1
@@ -87,7 +87,11 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 5
-      ItemHeight = 0
+      Font.Height = -13
+      Font.Name = 'Monospace'
+      ItemHeight = 15
+      ParentFont = False
+      Style = lbVirtual
       TabOrder = 3
       TopIndex = -1
     end
@@ -255,7 +259,10 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       BorderSpacing.Top = 5
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 5
+      Font.Height = -13
+      Font.Name = 'Monospace'
       ItemHeight = 0
+      ParentFont = False
       TabOrder = 0
       TopIndex = -1
     end

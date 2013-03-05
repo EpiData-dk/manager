@@ -112,6 +112,7 @@ begin
       WriteInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
       WriteInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
       WriteInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
+      WriteInteger(Sec, 'ReportOutputFormat',    ReportOutputFormat);
 
       {  // Field definitions:
       IntFieldLength:        Integer;
@@ -266,6 +267,7 @@ begin
       SpaceBtwFieldField    := ReadInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
       SpaceBtwFieldLabel    := ReadInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
       SpaceBtwLabelLabel    := ReadInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
+      ReportOutputFormat    := ReadInteger(Sec, 'ReportOutputFormat',    ReportOutputFormat);
 
       {  // Field definitions:
       IntFieldLength:        Integer;
@@ -621,6 +623,7 @@ const
     SpaceBtwFieldField:    10;
     SpaceBtwFieldLabel:    25;
     SpaceBtwLabelLabel:    5;
+    ReportOutputFormat:    1;   // Text
 
     // Field definitions:
     IntFieldLength:        2;

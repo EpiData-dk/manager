@@ -391,6 +391,38 @@ object Settings_VisualDesign: TSettings_VisualDesign
         ParentColor = False
       end
     end
+    object OutputFormatRadioGrp: TRadioGroup
+      AnchorSideLeft.Control = ScrollBox1
+      AnchorSideTop.Control = FontGrpBox
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = ScrollBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 89
+      Top = 408
+      Width = 638
+      Anchors = [akTop, akLeft, akRight]
+      AutoFill = True
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 10
+      Caption = 'Output Format:'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.TopBottomSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 72
+      ClientWidth = 634
+      Items.Strings = (
+        'Website (HTML)'
+        'Text'
+      )
+      TabOrder = 3
+    end
   end
   object FontDialog1: TFontDialog
     MinFontSize = 0

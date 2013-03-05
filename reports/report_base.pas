@@ -14,6 +14,7 @@ type
   private
     FDocuments: TStringList;
     FGenerator: TEpiReportGeneratorBase;
+    FSelfOpenedList: TBits;
   protected
     function    GetTitle: string; virtual; abstract;
     procedure   DoBeginReport; virtual;
@@ -80,6 +81,8 @@ var
   i: Integer;
 begin
   FGenerator := ReportGeneratorClass.Create;
+  FSelfOpenedList := TBits.Create(FileNames.Count);
+  FSelfOpenedList.Clearall;
 
   FDocuments := TStringList.Create;
   for i := 0 to FileNames.Count - 1 do
@@ -91,6 +94,7 @@ begin
       Continue;
     end;
 
+    FSelfOpenedList.Bits[i] := true;
     Doc := TOpenEpiDoc.OpenDoc(FileNames[i], '');
     FDocuments.AddObject(FileNames[i], Doc);
   end;
@@ -101,8 +105,10 @@ var
   i: Integer;
 begin
   for i := 0 to FDocuments.Count - 1 do
-    FDocuments.Objects[i].Free;
+    if FSelfOpenedList.Bits[i] then
+      FDocuments.Objects[i].Free;
 
+  FSelfOpenedList.Free;
   FDocuments.Free;
   FGenerator.Free;
   inherited Destroy;

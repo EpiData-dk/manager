@@ -68,6 +68,7 @@ procedure TStaticReportsForm.FormShow(Sender: TObject);
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'StaticReportsForm');
+  RadioGroup1.ItemIndex := ManagerSettings.ReportOutputFormat;
 end;
 
 procedure TStaticReportsForm.OkActionExecute(Sender: TObject);

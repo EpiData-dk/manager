@@ -34,6 +34,8 @@ type
     SpaceBtwFieldField:    Integer;
     SpaceBtwFieldLabel:    Integer;
     SpaceBtwLabelLabel:    Integer;
+    ReportOutputFormat:    Byte;     // 0: HTML
+                                     // 1: Text
 
     // Field definitions:
     IntFieldLength:        Integer;

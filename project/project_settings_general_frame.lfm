@@ -6,8 +6,8 @@ object ProjectSettings_BackupFrame: TProjectSettings_BackupFrame
   ClientHeight = 315
   ClientWidth = 472
   TabOrder = 0
-  DesignLeft = 1957
-  DesignTop = 85
+  DesignLeft = 703
+  DesignTop = 366
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = BackupIntervalEdit
@@ -47,10 +47,10 @@ object ProjectSettings_BackupFrame: TProjectSettings_BackupFrame
     Height = 22
     Hint = 'Automatically create a backup file of the'#13#10'entire project when program i closed.'
     Top = 51
-    Width = 257
+    Width = 371
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
-    Caption = 'Save backup project file after Entry ?'
+    Caption = 'Save backup project file after Entry with date in name?'
     TabOrder = 1
   end
 end
