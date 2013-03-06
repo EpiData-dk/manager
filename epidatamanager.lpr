@@ -11,7 +11,7 @@ uses
   cwstring, clocale,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, fpvectorialpkg, printer4lazarus, virtualtreeview_package,
+  Forms, printer4lazarus, virtualtreeview_package,
   jvRuntimeDesign, main, project_frame,
   managerprocs, sysutils, about,
 
