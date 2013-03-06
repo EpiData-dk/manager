@@ -1126,7 +1126,7 @@ begin
       end;
       if (CI is TEpiHeading) then
       begin
-        SetFont(ManagerSettings.HeadingFont);
+        SetFont(ControlFromEpiControl(CI).Font);
         ABot := ATop + Canvas.TextHeight(TEpiHeading(CI).Caption.Text);
       end;
       if (CI is TEpiField) then

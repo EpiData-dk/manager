@@ -6,8 +6,8 @@ object Settings_VisualDesign: TSettings_VisualDesign
   ClientHeight = 675
   ClientWidth = 660
   TabOrder = 0
-  DesignLeft = 490
-  DesignTop = 273
+  DesignLeft = 1991
+  DesignTop = 197
   object ScrollBox1: TScrollBox
     Left = 0
     Height = 675
@@ -134,183 +134,6 @@ object Settings_VisualDesign: TSettings_VisualDesign
         SpaceChar = '_'
       end
     end
-    object FontGrpBox: TGroupBox
-      AnchorSideLeft.Control = ScrollBox1
-      AnchorSideTop.Control = DistGrpBox
-      AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = PositionsGrpBox
-      AnchorSideRight.Side = asrBottom
-      Left = 10
-      Height = 151
-      Top = 247
-      Width = 638
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 10
-      BorderSpacing.Top = 10
-      Caption = 'Fonts:'
-      ClientHeight = 134
-      ClientWidth = 634
-      TabOrder = 2
-      object FieldFontEditBtn: TEditButton
-        AnchorSideTop.Control = FontGrpBox
-        AnchorSideRight.Side = asrBottom
-        Left = 204
-        Height = 25
-        Top = 10
-        Width = 360
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Top = 10
-        ButtonWidth = 23
-        CharCase = ecNormal
-        MaxLength = 0
-        NumGlyphs = 1
-        OnButtonClick = FieldFontEditBtnButtonClick
-        TabOrder = 0
-      end
-      object Label2: TLabel
-        AnchorSideLeft.Control = FontGrpBox
-        AnchorSideTop.Side = asrCenter
-        AnchorSideBottom.Control = FieldFontEditBtn
-        AnchorSideBottom.Side = asrBottom
-        Left = 10
-        Height = 15
-        Top = 20
-        Width = 159
-        Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 10
-        Caption = 'Questions / Field Names:'
-        ParentColor = False
-      end
-      object HeadingFontEditBtn: TEditButton
-        AnchorSideLeft.Control = FieldFontEditBtn
-        AnchorSideTop.Control = FieldFontEditBtn
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldFontEditBtn
-        AnchorSideRight.Side = asrBottom
-        Left = 204
-        Height = 25
-        Top = 45
-        Width = 360
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Top = 10
-        ButtonWidth = 23
-        CharCase = ecNormal
-        MaxLength = 0
-        NumGlyphs = 1
-        OnButtonClick = FieldFontEditBtnButtonClick
-        TabOrder = 1
-      end
-      object Label9: TLabel
-        AnchorSideLeft.Control = FontGrpBox
-        AnchorSideTop.Side = asrCenter
-        AnchorSideBottom.Control = HeadingFontEditBtn
-        AnchorSideBottom.Side = asrBottom
-        Left = 10
-        Height = 15
-        Top = 55
-        Width = 64
-        Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 10
-        Caption = 'Headings:'
-        ParentColor = False
-      end
-      object SectionFontEditBtn: TEditButton
-        AnchorSideLeft.Control = FieldFontEditBtn
-        AnchorSideTop.Control = HeadingFontEditBtn
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldFontEditBtn
-        AnchorSideRight.Side = asrBottom
-        Left = 204
-        Height = 25
-        Top = 80
-        Width = 360
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Top = 10
-        ButtonWidth = 23
-        CharCase = ecNormal
-        MaxLength = 0
-        NumGlyphs = 1
-        OnButtonClick = FieldFontEditBtnButtonClick
-        TabOrder = 2
-      end
-      object Label10: TLabel
-        AnchorSideLeft.Control = FontGrpBox
-        AnchorSideTop.Side = asrCenter
-        AnchorSideBottom.Control = SectionFontEditBtn
-        AnchorSideBottom.Side = asrBottom
-        Left = 10
-        Height = 15
-        Top = 90
-        Width = 59
-        Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 10
-        Caption = 'Sections:'
-        ParentColor = False
-      end
-      object FieldColourBtn: TColorButton
-        AnchorSideLeft.Control = FieldFontEditBtn
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = FieldFontEditBtn
-        AnchorSideRight.Control = FontGrpBox
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = FieldFontEditBtn
-        AnchorSideBottom.Side = asrBottom
-        Left = 592
-        Height = 25
-        Top = 10
-        Width = 32
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        BorderSpacing.Left = 28
-        BorderSpacing.Right = 10
-        BorderWidth = 2
-        ButtonColorSize = 16
-        ButtonColor = clBlack
-        ColorDialog = ColorDialog1
-        OnColorChanged = FieldColourBtnColorChanged
-      end
-      object HeadingColourBtn: TColorButton
-        AnchorSideLeft.Control = HeadingFontEditBtn
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = HeadingFontEditBtn
-        AnchorSideRight.Control = FontGrpBox
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = HeadingFontEditBtn
-        AnchorSideBottom.Side = asrBottom
-        Left = 592
-        Height = 25
-        Top = 45
-        Width = 32
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        BorderSpacing.Left = 28
-        BorderSpacing.Right = 10
-        BorderWidth = 2
-        ButtonColorSize = 16
-        ButtonColor = clBlack
-        ColorDialog = ColorDialog1
-        OnColorChanged = FieldColourBtnColorChanged
-      end
-      object SectionColourBtn: TColorButton
-        AnchorSideLeft.Control = SectionFontEditBtn
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = SectionFontEditBtn
-        AnchorSideRight.Control = FontGrpBox
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = SectionFontEditBtn
-        AnchorSideBottom.Side = asrBottom
-        Left = 592
-        Height = 25
-        Top = 80
-        Width = 32
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        BorderSpacing.Left = 28
-        BorderSpacing.Right = 10
-        BorderWidth = 2
-        ButtonColorSize = 16
-        ButtonColor = clBlack
-        ColorDialog = ColorDialog1
-        OnColorChanged = FieldColourBtnColorChanged
-      end
-    end
     object PositionsGrpBox: TGroupBox
       AnchorSideLeft.Control = ScrollBox1
       AnchorSideTop.Control = ScrollBox1
@@ -393,13 +216,13 @@ object Settings_VisualDesign: TSettings_VisualDesign
     end
     object OutputFormatRadioGrp: TRadioGroup
       AnchorSideLeft.Control = ScrollBox1
-      AnchorSideTop.Control = FontGrpBox
+      AnchorSideTop.Control = DistGrpBox
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = ScrollBox1
       AnchorSideRight.Side = asrBottom
       Left = 10
       Height = 89
-      Top = 408
+      Top = 247
       Width = 638
       Anchors = [akTop, akLeft, akRight]
       AutoFill = True
@@ -421,40 +244,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
         'Website (HTML)'
         'Text'
       )
-      TabOrder = 3
+      TabOrder = 2
     end
-  end
-  object FontDialog1: TFontDialog
-    MinFontSize = 0
-    MaxFontSize = 0
-    left = 308
-    top = 420
-  end
-  object ColorDialog1: TColorDialog
-    Color = clBlack
-    CustomColors.Strings = (
-      'ColorA=000000'
-      'ColorB=000080'
-      'ColorC=008000'
-      'ColorD=008080'
-      'ColorE=800000'
-      'ColorF=800080'
-      'ColorG=808000'
-      'ColorH=808080'
-      'ColorI=C0C0C0'
-      'ColorJ=0000FF'
-      'ColorK=00FF00'
-      'ColorL=00FFFF'
-      'ColorM=FF0000'
-      'ColorN=FF00FF'
-      'ColorO=FFFF00'
-      'ColorP=FFFFFF'
-      'ColorQ=C0DCC0'
-      'ColorR=F0CAA6'
-      'ColorS=F0FBFF'
-      'ColorT=A4A0A0'
-    )
-    left = 418
-    top = 427
   end
 end

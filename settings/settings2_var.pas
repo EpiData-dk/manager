@@ -52,7 +52,11 @@ type
     TutorialURLUTF8:       string;
     EntryClientDirUTF8:    string;
     FieldFont:             TFont;
-    HeadingFont:           TFont;
+    HeadingFont1:          TFont;
+    HeadingFont2:          TFont;
+    HeadingFont3:          TFont;
+    HeadingFont4:          TFont;
+    HeadingFont5:          TFont;
     SectionFont:           TFont;
 
     // Export:

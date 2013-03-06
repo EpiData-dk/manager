@@ -64,6 +64,7 @@ uses
   // settings
   settings_advanced_frame, settings_fielddefinitions_frame,
   settings_general_frame, settings_visualdesign_frame,
+  settings_font_frame,
   settings_export,
 
   // export
@@ -152,14 +153,31 @@ begin
       WriteInteger(sec, 'FieldFontSize', FieldFont.Size);
       WriteInteger(sec, 'FieldFontStyle', Integer(FieldFont.Style));
       WriteInteger(sec, 'FieldFontColour', FieldFont.Color);
-      WriteString(sec, 'HeadingFontName', HeadingFont.Name);
-      WriteInteger(sec, 'HeadingFontSize', HeadingFont.Size);
-      WriteInteger(sec, 'HeadingFontStyle', Integer(HeadingFont.Style));
-      WriteInteger(sec, 'HeadingFontColour', HeadingFont.Color);
       WriteString(sec, 'SectionFontName', SectionFont.Name);
       WriteInteger(sec, 'SectionFontSize', SectionFont.Size);
       WriteInteger(sec, 'SectionFontStyle', Integer(SectionFont.Style));
       WriteInteger(sec, 'SectionFontColour', SectionFont.Color);
+
+      WriteString(sec, 'HeadingFontName1', HeadingFont1.Name);
+      WriteInteger(sec, 'HeadingFontSize1', HeadingFont1.Size);
+      WriteInteger(sec, 'HeadingFontStyle1', Integer(HeadingFont1.Style));
+      WriteInteger(sec, 'HeadingFontColour1', HeadingFont1.Color);
+      WriteString(sec, 'HeadingFontName2', HeadingFont2.Name);
+      WriteInteger(sec, 'HeadingFontSize2', HeadingFont2.Size);
+      WriteInteger(sec, 'HeadingFontStyle2', Integer(HeadingFont2.Style));
+      WriteInteger(sec, 'HeadingFontColour2', HeadingFont2.Color);
+      WriteString(sec, 'HeadingFontName3', HeadingFont3.Name);
+      WriteInteger(sec, 'HeadingFontSize3', HeadingFont3.Size);
+      WriteInteger(sec, 'HeadingFontStyle3', Integer(HeadingFont3.Style));
+      WriteInteger(sec, 'HeadingFontColour3', HeadingFont3.Color);
+      WriteString(sec, 'HeadingFontName4', HeadingFont4.Name);
+      WriteInteger(sec, 'HeadingFontSize4', HeadingFont4.Size);
+      WriteInteger(sec, 'HeadingFontStyle4', Integer(HeadingFont4.Style));
+      WriteInteger(sec, 'HeadingFontColour4', HeadingFont4.Color);
+      WriteString(sec, 'HeadingFontName5', HeadingFont5.Name);
+      WriteInteger(sec, 'HeadingFontSize5', HeadingFont5.Size);
+      WriteInteger(sec, 'HeadingFontStyle5', Integer(HeadingFont5.Style));
+      WriteInteger(sec, 'HeadingFontColour5', HeadingFont5.Color);
 
       // Export:
       Sec := 'export';
@@ -335,16 +353,37 @@ begin
       FieldFont.Style  := TFontStyles(ReadInteger(sec, 'FieldFontStyle', Integer(FieldFont.Style)));
       FieldFont.Color  := ReadInteger(sec, 'FieldFontColour', FieldFont.Color);
       CorrectFont(FieldFont);
-      HeadingFont.Name   := ReadString(sec, 'HeadingFontName', HeadingFont.Name);
-      HeadingFont.Size   := ReadInteger(sec, 'HeadingFontSize', HeadingFont.Size);
-      HeadingFont.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle', Integer(HeadingFont.Style)));
-      HeadingFont.Color  := ReadInteger(sec, 'HeadingFontColour', HeadingFont.Color);
-      CorrectFont(HeadingFont);
       SectionFont.Name   := ReadString(sec, 'SectionFontName', SectionFont.Name);
       SectionFont.Size   := ReadInteger(sec, 'SectionFontSize', SectionFont.Size);
       SectionFont.Style  := TFontStyles(ReadInteger(sec, 'SectionFontStyle', Integer(SectionFont.Style)));
       SectionFont.Color  := ReadInteger(sec, 'SectionFontColour', SectionFont.Color);
       CorrectFont(SectionFont);
+
+      HeadingFont1.Name   := ReadString(sec, 'HeadingFontName1', HeadingFont1.Name);
+      HeadingFont1.Size   := ReadInteger(sec, 'HeadingFontSize1', HeadingFont1.Size);
+      HeadingFont1.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle1', Integer(HeadingFont1.Style)));
+      HeadingFont1.Color  := ReadInteger(sec, 'HeadingFontColour1', HeadingFont1.Color);
+      CorrectFont(HeadingFont1);
+      HeadingFont2.Name   := ReadString(sec, 'HeadingFontName2', HeadingFont2.Name);
+      HeadingFont2.Size   := ReadInteger(sec, 'HeadingFontSize2', HeadingFont2.Size);
+      HeadingFont2.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle2', Integer(HeadingFont2.Style)));
+      HeadingFont2.Color  := ReadInteger(sec, 'HeadingFontColour2', HeadingFont2.Color);
+      CorrectFont(HeadingFont2);
+      HeadingFont3.Name   := ReadString(sec, 'HeadingFontName3', HeadingFont3.Name);
+      HeadingFont3.Size   := ReadInteger(sec, 'HeadingFontSize3', HeadingFont3.Size);
+      HeadingFont3.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle3', Integer(HeadingFont3.Style)));
+      HeadingFont3.Color  := ReadInteger(sec, 'HeadingFontColour3', HeadingFont3.Color);
+      CorrectFont(HeadingFont3);
+      HeadingFont4.Name   := ReadString(sec, 'HeadingFontName4', HeadingFont4.Name);
+      HeadingFont4.Size   := ReadInteger(sec, 'HeadingFontSize4', HeadingFont4.Size);
+      HeadingFont4.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle4', Integer(HeadingFont4.Style)));
+      HeadingFont4.Color  := ReadInteger(sec, 'HeadingFontColour4', HeadingFont4.Color);
+      CorrectFont(HeadingFont4);
+      HeadingFont5.Name   := ReadString(sec, 'HeadingFontName5', HeadingFont5.Name);
+      HeadingFont5.Size   := ReadInteger(sec, 'HeadingFontSize5', HeadingFont5.Size);
+      HeadingFont5.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle5', Integer(HeadingFont5.Style)));
+      HeadingFont5.Color  := ReadInteger(sec, 'HeadingFontColour5', HeadingFont5.Color);
+      CorrectFont(HeadingFont5);
 
       // Project Defaults
       // - general:
@@ -574,6 +613,7 @@ begin
     FindNodeWithText('Paths').Data               := Pointer(TSettings_PathsFrame.Create(Self));
     FindNodeWithText('Field Definitions').Data   := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
     FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
+    FindNodeWithText('Fonts').Data               := Pointer(TSettingsFontFrame.Create(Self));
 
     // Export
     FindNodeWithText('Export').Data              := Pointer(TSettings_ExportFrame.Create(Self));
@@ -640,7 +680,11 @@ const
     TutorialURLUTF8:       'http://epidata.dk/documentation.php';
     EntryClientDirUTF8:    '';
     FieldFont:             nil;
-    HeadingFont:           nil;
+    HeadingFont1:          nil;
+    HeadingFont2:          nil;
+    HeadingFont3:          nil;
+    HeadingFont4:          nil;
+    HeadingFont5:          nil;
     SectionFont:           nil;
 
     // Export:
@@ -710,8 +754,12 @@ begin
   with ManagerSettings do
   begin
     if Assigned(FieldFont) then FieldFont.Free;
-    if Assigned(HeadingFont) then HeadingFont.Free;
     if Assigned(SectionFont) then SectionFont.Free;
+    if Assigned(HeadingFont1) then HeadingFont1.Free;
+    if Assigned(HeadingFont2) then HeadingFont2.Free;
+    if Assigned(HeadingFont3) then HeadingFont3.Free;
+    if Assigned(HeadingFont4) then HeadingFont4.Free;
+    if Assigned(HeadingFont5) then HeadingFont5.Free;
   end;
 
   ManagerSettings := OriginalSettings;
@@ -719,11 +767,23 @@ begin
   with ManagerSettings do
   begin
     FieldFont := TFont.Create;
-    HeadingFont := TFont.Create;
     SectionFont := TFont.Create;
+    HeadingFont1 := TFont.Create;
+    HeadingFont2 := TFont.Create;
+    HeadingFont3 := TFont.Create;
+    HeadingFont4 := TFont.Create;
+    HeadingFont5 := TFont.Create;
     InitFont(FieldFont);
-    InitFont(HeadingFont);
     InitFont(SectionFont);
+    InitFont(HeadingFont1);
+    HeadingFont1.Size := Trunc(HeadingFont1.Size * 2);
+    InitFont(HeadingFont2);
+    HeadingFont2.Size := Trunc(HeadingFont2.Size * 1.5);
+    InitFont(HeadingFont3);
+    HeadingFont3.Size := Trunc(HeadingFont3.Size * 1.2);
+    InitFont(HeadingFont4);
+    HeadingFont4.Size := Trunc(HeadingFont4.Size * 1.1);
+    InitFont(HeadingFont5);
   end;
 
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
