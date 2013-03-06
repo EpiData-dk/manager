@@ -13,6 +13,7 @@ type
   { TStudyUnitForm }
 
   TStudyUnitForm = class(TForm)
+    AbstractMemo: TMemo;
     AgencyEdit: TEdit;
     AuthorsMemo: TMemo;
     BitBtn1: TBitBtn;
@@ -27,6 +28,7 @@ type
     Label11: TLabel;
     Label12: TLabel;
     Label13: TLabel;
+    Label14: TLabel;
     Label15: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -37,7 +39,6 @@ type
     Label8: TLabel;
     Label9: TLabel;
     LanguageEdit: TEdit;
-    AbstractMemo: TMemo;
     PopulationMemo: TMemo;
     PageControl1: TPageControl;
     Panel1: TPanel;
@@ -45,11 +46,11 @@ type
     PurposeMemo: TMemo;
     RightsMemo: TMemo;
     TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
+    TabSheet7: TTabSheet;
     TimeCoverageEdit: TEdit;
     TitleEdit: TEdit;
     VersionEdit: TEdit;
@@ -95,7 +96,7 @@ begin
     Publisher.Text            := PublisherEdit.Text;
     Agency                    := AgencyEdit.Text;
     Author                    := AuthorsMemo.Text;
-    Rights.Text               := Rights.Text;
+    Rights.Text               := RightsMemo.Text;
     Funding.Text              := FundingMemo.Text;
   end;
 end;
@@ -133,7 +134,7 @@ begin
     PublisherEdit.Text    := Publisher.Text;
     AgencyEdit.Text       := Agency;
     AuthorsMemo.Text      := Author;
-    Rights.Text           := Rights.Text;
+    RightsMemo.Text       := Rights.Text;
     FundingMemo.Text      := Funding.Text;
   end;
 

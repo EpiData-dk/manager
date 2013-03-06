@@ -245,7 +245,7 @@ begin
   begin
     Clear;
     AddObject('Unicode (UTF-8)',        TObject(eeUTF8));
-    AddObject('Centel Europe (CP1250)', TObject(eeCP1250));
+    AddObject('Central Europe (CP1250)',TObject(eeCP1250));
     AddObject('Cyrillic (CP1251)',      TObject(eeCP1251));
     AddObject('Latin 1(CP1252)',        TObject(eeCP1252));
     AddObject('Greek (CP1253)',         TObject(eeCP1253));

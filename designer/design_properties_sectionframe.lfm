@@ -1,12 +1,12 @@
-inherited SectionPropertiesFrame: TSectionPropertiesFrame
+object SectionPropertiesFrame: TSectionPropertiesFrame
+  Left = 905
   Height = 509
+  Top = 458
   Width = 588
   ClientHeight = 509
   ClientWidth = 588
-  TabOrder = 0
-  DesignLeft = 885
-  DesignTop = 340
-  object SectionPageControl: TPageControl[0]
+  LCLVersion = '1.1'
+  object SectionPageControl: TPageControl
     Left = 0
     Height = 509
     Top = 0
@@ -82,7 +82,7 @@ inherited SectionPropertiesFrame: TSectionPropertiesFrame
           Left = 6
           Height = 15
           Top = 5
-          Width = 60
+          Width = 61
           BorderSpacing.Top = 5
           Caption = 'Available:'
           ParentColor = False

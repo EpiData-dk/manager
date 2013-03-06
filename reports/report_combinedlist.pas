@@ -28,7 +28,7 @@ uses
 
 
 resourcestring
-  rsReportCombinedListTitle = 'Report: Combined list of fields/question and valuelabels.';
+  rsReportCombinedListTitle = 'Combined list of fields/question and valuelabels.';
 
 { TReportCombinedList }
 

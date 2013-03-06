@@ -13,7 +13,8 @@ type
 
   TOpenEpiDoc = class
   private
-    constructor Create;
+    FFileName: string;
+    constructor Create(Const FileName: string);
     procedure EpiDocumentPassWord(Sender: TObject; var Login: string;
       var Password: string);
   public
@@ -114,9 +115,9 @@ end;
 
 { TOpenEpiDoc }
 
-constructor TOpenEpiDoc.Create;
+constructor TOpenEpiDoc.Create(const FileName: string);
 begin
-
+  FFileName := FileName;
 end;
 
 procedure TOpenEpiDoc.EpiDocumentPassWord(Sender: TObject; var Login: string;
@@ -124,6 +125,8 @@ procedure TOpenEpiDoc.EpiDocumentPassWord(Sender: TObject; var Login: string;
 begin
   Password :=
     PasswordBox('Project Password',
+                'File: ' + FFileName + LineEnding +
+                LineEnding +
                 'Project data is password protected.' + LineEnding +
                 'Please enter password:');
 end;
@@ -138,7 +141,7 @@ var
   Tmp: TOpenEpiDoc;
   St: TMemoryStream;
 begin
-  Tmp := TOpenEpiDoc.Create;
+  Tmp := TOpenEpiDoc.Create(ExtractFileName(FileName));
 
   St := TMemoryStream.Create;
   if ExtractFileExt(UTF8ToSys(FileName)) = '.epz' then

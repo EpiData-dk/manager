@@ -27,6 +27,7 @@ type
     FDocList: TStringList;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
+    FOnSelectionChanged: TNotifyEvent;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedList: TStringList;
     procedure  ImportFile(Const FileName: string);
@@ -34,6 +35,7 @@ type
     procedure  SetOnAfterImportFile(const AValue: TProjectListFileEvent);
     procedure  SetOnBeforeImportFile(const AValue: TProjectListFileEvent);
   protected
+    procedure  DoSelectionChanged;
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  DoAfterImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  RecImportPassword(Sender: TObject; var Login: string; var Password: string);
@@ -45,6 +47,7 @@ type
     procedure   AddDocument(Const FileName: string; Const Doc: TEpiDocument);
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
+    property    OnSelectionChanged: TNotifyEvent read FOnSelectionChanged write FOnSelectionChanged;
     property    SelectedList: TStringList read GetSelectedList;
     property    DocList: TStringList read FDocList;
   private
@@ -57,6 +60,7 @@ type
     FNameCol: TGridColumn;
     FRecordsCol: TGridColumn;
     FSectionsCol: TGridColumn;
+    FVersionCol: TGridColumn;
   public
     property FileNameCol: TGridColumn read FFileNameCol;
     property IncludeCol:  TGridColumn read FIncludeCol;
@@ -66,6 +70,7 @@ type
     property SectionsCol: TGridColumn read FSectionsCol;
     property FieldsCol:   TGridColumn read FFieldsCol;
     property RecordsCol:  TGridColumn read FRecordsCol;
+    property VersionCol:  TGridColumn read FVersionCol;
   end;
 
 implementation
@@ -73,7 +78,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epimiscutils, Dialogs, managerprocs;
+  epiimport, LCLProc, epimiscutils, Dialogs, managerprocs,
+  settings2_var;
 
 { TProjectFileListFrame }
 
@@ -97,28 +103,41 @@ begin
     Idx := RowCount;
     RowCount := RowCount + 1;
 
-    Cells[FileNameCol.Index + 1, Idx] := ExtractFileName(FileName);                           // Filename column.
-    Cells[IncludeCol.Index + 1, Idx]  := '1';                                                 // Include row.
+    // Filename column.
+    Cells[FileNameCol.Index + 1, Idx] := ExtractFileName(FileName);
+    // Include row - checkbox
+    Cells[IncludeCol.Index + 1, Idx]  := '1';
     if (ext = '.epx') or (ext ='.epz') then
     begin
-      Cells[CreatedCol.Index + 1, Idx]  := DateToStr(Doc.Study.Created); //FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.Created);                      // Created
-      Cells[LastEditCol.Index + 1, Idx] := DateToStr(Doc.Study.ModifiedDate); //FormatDateTime('YYYY/MM/DD HH:NN', Doc.Study.ModifiedDate);                 // Edited
+      // Created
+      Cells[CreatedCol.Index + 1, Idx]  := DateToStr(Doc.Study.Created);
+      // Edited
+      Cells[LastEditCol.Index + 1, Idx] := DateToStr(Doc.Study.ModifiedDate);
     end else begin
-      Cells[CreatedCol.Index + 1, Idx]  := 'N/A';                                                                          // Created
+      // Created
+      Cells[CreatedCol.Index + 1, Idx]  := 'N/A';
+      // Edited
       if FileExistsUTF8(FileName) then
-        Cells[LastEditCol.Index + 1, Idx] := DateToStr(FileDateToDateTime(FileAgeUTF8(FileName))) // FormatDateTime('YYYY/MM/DD HH:NN', FileDateToDateTime(FileAgeUTF8(FileName)));  // Edited
+        Cells[LastEditCol.Index + 1, Idx] := DateToStr(FileDateToDateTime(FileAgeUTF8(FileName)))
       else
         Cells[LastEditCol.Index + 1, Idx] := 'N/A';
     end;
     with Doc.DataFiles[0] do
     begin
-      Cells[NameCol.Index + 1, Idx]     := Caption.Text;                                      // Info
-      Cells[SectionsCol.Index + 1, Idx] := IntToStr(Sections.Count);                          // Sections
-      Cells[FieldsCol.Index + 1, Idx]   := IntToStr(Fields.Count);                            // Fields
-      Cells[RecordsCol.Index + 1, Idx]  := IntToStr(Size);                                    // Records
+      // Sections
+      Cells[SectionsCol.Index + 1, Idx] := IntToStr(Sections.Count);
+      // Fields
+      Cells[FieldsCol.Index + 1, Idx]   := IntToStr(Fields.Count);
+      // Records
+      Cells[RecordsCol.Index + 1, Idx]  := IntToStr(Size);
+      // Version info
+      Cells[VersionCol.Index + 1, Idx]  := Doc.Study.Version;
+      // Info
+      Cells[NameCol.Index + 1, Idx]     := Caption.Text;
     end;
   end;
   FDocList.AddObject(FileName, Doc);
+  DoSelectionChanged;
 end;
 
 procedure TProjectFileListFrame.ImportFile(const FileName: string);
@@ -131,6 +150,7 @@ var
   DataFile: TEpiDataFile;
 begin
   Importer := TEpiImport.Create;
+  Importer.ImportCasing := ManagerSettings.ImportCasing;
   FCurrentFile := FileName;
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
 
@@ -200,6 +220,12 @@ begin
   FOnBeforeImportFile := AValue;
 end;
 
+procedure TProjectFileListFrame.DoSelectionChanged;
+begin
+  if Assigned(FOnSelectionChanged) then
+    FOnSelectionChanged(Self);
+end;
+
 procedure TProjectFileListFrame.DoBeforeImportFile(Document: TEpiDocument;
   const FileName: string);
 begin
@@ -226,7 +252,7 @@ end;
 procedure TProjectFileListFrame.StructureGridCheckboxToggled(sender: TObject;
   aCol, aRow: Integer; aState: TCheckboxState);
 begin
-  // Include the file in the list?
+  DoSelectionChanged;
 end;
 
 constructor TProjectFileListFrame.Create(TheOwner: TComponent);
@@ -262,6 +288,10 @@ begin
   FLastEditCol := StructureGrid.Columns.Add;
   FLastEditCol.Title.Caption := 'Last edited';
   FLastEditCol.ReadOnly := true;
+
+  FVersionCol := StructureGrid.Columns.Add;
+  FVersionCol.Title.Caption := 'Version';
+  FVersionCol.ReadOnly := true;
 
   FNameCol := StructureGrid.Columns.Add;
   FNameCol.Title.Caption := 'Project Title';

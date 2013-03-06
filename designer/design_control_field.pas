@@ -139,14 +139,14 @@ begin
         end;
       ecceUpdate: ;
       ecceName:
-        FNameLabel.Caption :=  TEpiField(Sender).Name;
+        UpdateControl;
       ecceAddItem: ;
       ecceDelItem: ;
       ecceSetItem: ;
       ecceSetTop: ;
       ecceSetLeft: ;
       ecceText:
-        FQuestionLabel.Caption := TEpiField(Sender).Question.Text;
+        UpdateControl;
     end;
 end;
 
@@ -350,6 +350,7 @@ begin
   Align := alNone;
   ShowHint := true;
   ParentColor := false;
+  ParentFont := false;
   Text := '';
 end;
 

@@ -80,7 +80,7 @@ begin
   with TEpiStataExportSetting(Setting) do
   begin
     Version := TEpiStataVersion(PtrUInt(VersionComboBox.Items.Objects[VersionComboBox.ItemIndex]));
-    FieldNameCase := TEpiStataFieldNamingCase(PtrUInt(FieldNamingRGrp.Items.Objects[FieldNamingRGrp.ItemIndex]));
+    FieldNameCase := TEpiFieldNamingCase(PtrUInt(FieldNamingRGrp.Items.Objects[FieldNamingRGrp.ItemIndex]));
     with ExportLines do
     begin
       Add('Exported from EpiData Manager ' + GetEpiVersionInfo(HINSTANCE));
@@ -125,7 +125,7 @@ begin
   with FData^ do
   begin
     ExportStataVersion := TEpiStataVersion(PtrUInt(VersionComboBox.Items.Objects[VersionComboBox.ItemIndex]));
-    ExportStataFieldCase := TEpiStataFieldNamingCase(PtrUInt(FieldNamingRGrp.Items.Objects[FieldNamingRGrp.ItemIndex]));
+    ExportStataFieldCase := TEpiFieldNamingCase(PtrUInt(FieldNamingRGrp.Items.Objects[FieldNamingRGrp.ItemIndex]));
     ExportStataValueLabels := TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked;
   end;
   result := true;

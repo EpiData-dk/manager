@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, epiversionutils;
+  Buttons, ComCtrls, StdCtrls, epiversionutils;
 
 type
 
@@ -16,9 +16,11 @@ type
   TSettingsForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
+    Button1: TButton;
     Panel1: TPanel;
     SettingsView: TTreeView;
     Splitter1: TSplitter;
+    procedure Button1Click(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure SettingsViewChange(Sender: TObject; Node: TTreeNode);
@@ -47,13 +49,8 @@ procedure LoadFormPosition(AForm: TForm; Const SectionName: string);
 
 procedure AddToRecent(Const AFilename: string);
 
-{const
-  ManagerVersion: TEpiVersionInfo = (
-    {$I epidatamanager.version.inc}
-  );
-}
-
 procedure InitFont(Font: TFont);
+procedure RestoreSettingsDefaults;
 
 implementation
 
@@ -67,16 +64,14 @@ uses
   // settings
   settings_advanced_frame, settings_fielddefinitions_frame,
   settings_general_frame, settings_visualdesign_frame,
+  settings_font_frame,
   settings_export,
 
   // export
   export_csv_frame, export_stata_frame, export_sas_frame, export_spss_frame,
 
   // project settings
-  project_settings_field_frame, project_settings_general_frame,
-  project_settings_study_contentdesc_frame, project_settings_study_frame,
-  project_settings_study_ownership_frame;
-
+  project_settings_field_frame, project_settings_general_frame, project_settings_autoincrement_frame;
 const
   RecentIniFileName: string = '';
 
@@ -118,6 +113,7 @@ begin
       WriteInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
       WriteInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
       WriteInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
+      WriteInteger(Sec, 'ReportOutputFormat',    ReportOutputFormat);
 
       {  // Field definitions:
       IntFieldLength:        Integer;
@@ -145,6 +141,7 @@ begin
       WriteString(Sec, 'EntryCLientDirectory', EntryClientDirUTF8);
       WriteInteger(Sec, 'PasteAsType', PasteSpecialType);
       WriteInteger(Sec, 'SaveAsType', SaveType);
+      WriteInteger(Sec, 'ImportCasing', Integer(ImportCasing));
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       WriteBool(Sec, 'ShowWelcome', ShowWelcome);
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
@@ -156,14 +153,31 @@ begin
       WriteInteger(sec, 'FieldFontSize', FieldFont.Size);
       WriteInteger(sec, 'FieldFontStyle', Integer(FieldFont.Style));
       WriteInteger(sec, 'FieldFontColour', FieldFont.Color);
-      WriteString(sec, 'HeadingFontName', HeadingFont.Name);
-      WriteInteger(sec, 'HeadingFontSize', HeadingFont.Size);
-      WriteInteger(sec, 'HeadingFontStyle', Integer(HeadingFont.Style));
-      WriteInteger(sec, 'HeadingFontColour', HeadingFont.Color);
       WriteString(sec, 'SectionFontName', SectionFont.Name);
       WriteInteger(sec, 'SectionFontSize', SectionFont.Size);
       WriteInteger(sec, 'SectionFontStyle', Integer(SectionFont.Style));
       WriteInteger(sec, 'SectionFontColour', SectionFont.Color);
+
+      WriteString(sec, 'HeadingFontName1', HeadingFont1.Name);
+      WriteInteger(sec, 'HeadingFontSize1', HeadingFont1.Size);
+      WriteInteger(sec, 'HeadingFontStyle1', Integer(HeadingFont1.Style));
+      WriteInteger(sec, 'HeadingFontColour1', HeadingFont1.Color);
+      WriteString(sec, 'HeadingFontName2', HeadingFont2.Name);
+      WriteInteger(sec, 'HeadingFontSize2', HeadingFont2.Size);
+      WriteInteger(sec, 'HeadingFontStyle2', Integer(HeadingFont2.Style));
+      WriteInteger(sec, 'HeadingFontColour2', HeadingFont2.Color);
+      WriteString(sec, 'HeadingFontName3', HeadingFont3.Name);
+      WriteInteger(sec, 'HeadingFontSize3', HeadingFont3.Size);
+      WriteInteger(sec, 'HeadingFontStyle3', Integer(HeadingFont3.Style));
+      WriteInteger(sec, 'HeadingFontColour3', HeadingFont3.Color);
+      WriteString(sec, 'HeadingFontName4', HeadingFont4.Name);
+      WriteInteger(sec, 'HeadingFontSize4', HeadingFont4.Size);
+      WriteInteger(sec, 'HeadingFontStyle4', Integer(HeadingFont4.Style));
+      WriteInteger(sec, 'HeadingFontColour4', HeadingFont4.Color);
+      WriteString(sec, 'HeadingFontName5', HeadingFont5.Name);
+      WriteInteger(sec, 'HeadingFontSize5', HeadingFont5.Size);
+      WriteInteger(sec, 'HeadingFontStyle5', Integer(HeadingFont5.Style));
+      WriteInteger(sec, 'HeadingFontColour5', HeadingFont5.Color);
 
       // Export:
       Sec := 'export';
@@ -271,6 +285,7 @@ begin
       SpaceBtwFieldField    := ReadInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
       SpaceBtwFieldLabel    := ReadInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
       SpaceBtwLabelLabel    := ReadInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
+      ReportOutputFormat    := ReadInteger(Sec, 'ReportOutputFormat',    ReportOutputFormat);
 
       {  // Field definitions:
       IntFieldLength:        Integer;
@@ -298,6 +313,7 @@ begin
       EntryClientDirUTF8  := ReadString(Sec, 'EntryClientDirectory', EntryClientDirUTF8);
       PasteSpecialType    := ReadInteger(Sec, 'PasteAsType', PasteSpecialType);
       SaveType            := ReadInteger(Sec, 'SaveAsType', SaveType);
+      ImportCasing        := TEpiFieldNamingCase(ReadInteger(Sec, 'ImportCasing', Integer(ImportCasing)));
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
       ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
@@ -312,7 +328,7 @@ begin
 
       Sec := 'exportstata';
       ExportStataVersion     := TEpiStataVersion(ReadInteger(sec, 'ExportStataVersion', Integer(ExportStataVersion)));
-      ExportStataFieldCase   := TEpiStataFieldNamingCase(ReadInteger(sec, 'ExportStataFieldCase', Integer(ExportStataFieldCase)));
+      ExportStataFieldCase   := TEpiFieldNamingCase(ReadInteger(sec, 'ExportStataFieldCase', Integer(ExportStataFieldCase)));
       ExportStataValueLabels := ReadBool(sec, 'ExportStataValueLabels', ExportStataValueLabels);
 
       sec := 'exportcsv';
@@ -337,16 +353,37 @@ begin
       FieldFont.Style  := TFontStyles(ReadInteger(sec, 'FieldFontStyle', Integer(FieldFont.Style)));
       FieldFont.Color  := ReadInteger(sec, 'FieldFontColour', FieldFont.Color);
       CorrectFont(FieldFont);
-      HeadingFont.Name   := ReadString(sec, 'HeadingFontName', HeadingFont.Name);
-      HeadingFont.Size   := ReadInteger(sec, 'HeadingFontSize', HeadingFont.Size);
-      HeadingFont.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle', Integer(HeadingFont.Style)));
-      HeadingFont.Color  := ReadInteger(sec, 'HeadingFontColour', HeadingFont.Color);
-      CorrectFont(HeadingFont);
       SectionFont.Name   := ReadString(sec, 'SectionFontName', SectionFont.Name);
       SectionFont.Size   := ReadInteger(sec, 'SectionFontSize', SectionFont.Size);
       SectionFont.Style  := TFontStyles(ReadInteger(sec, 'SectionFontStyle', Integer(SectionFont.Style)));
       SectionFont.Color  := ReadInteger(sec, 'SectionFontColour', SectionFont.Color);
       CorrectFont(SectionFont);
+
+      HeadingFont1.Name   := ReadString(sec, 'HeadingFontName1', HeadingFont1.Name);
+      HeadingFont1.Size   := ReadInteger(sec, 'HeadingFontSize1', HeadingFont1.Size);
+      HeadingFont1.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle1', Integer(HeadingFont1.Style)));
+      HeadingFont1.Color  := ReadInteger(sec, 'HeadingFontColour1', HeadingFont1.Color);
+      CorrectFont(HeadingFont1);
+      HeadingFont2.Name   := ReadString(sec, 'HeadingFontName2', HeadingFont2.Name);
+      HeadingFont2.Size   := ReadInteger(sec, 'HeadingFontSize2', HeadingFont2.Size);
+      HeadingFont2.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle2', Integer(HeadingFont2.Style)));
+      HeadingFont2.Color  := ReadInteger(sec, 'HeadingFontColour2', HeadingFont2.Color);
+      CorrectFont(HeadingFont2);
+      HeadingFont3.Name   := ReadString(sec, 'HeadingFontName3', HeadingFont3.Name);
+      HeadingFont3.Size   := ReadInteger(sec, 'HeadingFontSize3', HeadingFont3.Size);
+      HeadingFont3.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle3', Integer(HeadingFont3.Style)));
+      HeadingFont3.Color  := ReadInteger(sec, 'HeadingFontColour3', HeadingFont3.Color);
+      CorrectFont(HeadingFont3);
+      HeadingFont4.Name   := ReadString(sec, 'HeadingFontName4', HeadingFont4.Name);
+      HeadingFont4.Size   := ReadInteger(sec, 'HeadingFontSize4', HeadingFont4.Size);
+      HeadingFont4.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle4', Integer(HeadingFont4.Style)));
+      HeadingFont4.Color  := ReadInteger(sec, 'HeadingFontColour4', HeadingFont4.Color);
+      CorrectFont(HeadingFont4);
+      HeadingFont5.Name   := ReadString(sec, 'HeadingFontName5', HeadingFont5.Name);
+      HeadingFont5.Size   := ReadInteger(sec, 'HeadingFontSize5', HeadingFont5.Size);
+      HeadingFont5.Style  := TFontStyles(ReadInteger(sec, 'HeadingFontStyle5', Integer(HeadingFont5.Style)));
+      HeadingFont5.Color  := ReadInteger(sec, 'HeadingFontColour5', HeadingFont5.Color);
+      CorrectFont(HeadingFont5);
 
       // Project Defaults
       // - general:
@@ -555,6 +592,12 @@ begin
   CanClose := true;
 end;
 
+procedure TSettingsForm.Button1Click(Sender: TObject);
+begin
+  RestoreSettingsDefaults;
+  (FActiveFrame as ISettingsFrame).SetSettings(@ManagerSettings);
+end;
+
 constructor TSettingsForm.Create(TheOwner: TComponent);
 var
   i: Integer;
@@ -570,6 +613,7 @@ begin
     FindNodeWithText('Paths').Data               := Pointer(TSettings_PathsFrame.Create(Self));
     FindNodeWithText('Field Definitions').Data   := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
     FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
+    FindNodeWithText('Fonts').Data               := Pointer(TSettingsFontFrame.Create(Self));
 
     // Export
     FindNodeWithText('Export').Data              := Pointer(TSettings_ExportFrame.Create(Self));
@@ -579,11 +623,9 @@ begin
     FindNodeWithText('SAS').Data                 := Pointer(TExportSASFrame.Create(Self));
 
     // Project options
-    FindNodeWithText('Project Defaults').GetFirstChild.Data := Pointer(TProjectSettings_GeneralFrame.Create(Self));
-    FindNodeWithText('Fields').Data              := Pointer(TProjectSettings_FieldFrame.Create(Self));
-    FindNodeWithText('Study').Data               := Pointer(TProjectsettings_StudyFrame.Create(Self));
-    FindNodeWithText('Content Description').Data := Pointer(TProjectSetting_ContentDescFrame.Create(Self));
-    FindNodeWithText('Ownership').Data           := Pointer(TProjectSetting_OwnershipFrame.Create(Self));
+    FindNodeWithText('Backup').Data              := Pointer(TProjectSettings_BackupFrame.Create(Self));
+    FindNodeWithText('Auto Increment').Data       := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
+    FindNodeWithText('Display of Fields').Data   := Pointer(TProjectSettings_FieldFrame.Create(Self));
   end;
 end;
 
@@ -600,16 +642,149 @@ begin
   AForm.free;
 end;
 
-{$I initfont.inc}
+procedure RestoreSettingsDefaults;
+const
+  OriginalSettings: TManagerSettings = (
+    // General:
+    SaveWindowPositions:   true;
+    ShowWelcome:           true;
+    ShowWorkToolBar:       true;
+    ShowA4GuideLines:      true;
+    MultipleInstances:     false;
+    PasteSpecialType:      1;     // Heading.
+    SaveType:              0;     // epx format.
+    ImportCasing:          fncAsIs;
 
-initialization
+    // Visual design:
+    DefaultRightPosition:  400;
+    DefaultLabelPosition:  20;
+    SnapFields:            true;
+    SnappingThresHold:     10;
+    SpaceBtwFieldField:    10;
+    SpaceBtwFieldLabel:    25;
+    SpaceBtwLabelLabel:    5;
+    ReportOutputFormat:    1;   // Text
+
+    // Field definitions:
+    IntFieldLength:        2;
+    FloatIntLength:        5;
+    FloatDecimalLength:    2;
+    StringFieldLength:     20;
+    DefaultDateType:       ftDMYDate;
+    FieldNamePrefix:       'V';
+    //    FieldNamingStyle:      fnFirstWord;
+
+    // Advanced:
+    WorkingDirUTF8:        '';
+    TutorialDirUTF8:       '';
+    TutorialURLUTF8:       'http://epidata.dk/documentation.php';
+    EntryClientDirUTF8:    '';
+    FieldFont:             nil;
+    HeadingFont1:          nil;
+    HeadingFont2:          nil;
+    HeadingFont3:          nil;
+    HeadingFont4:          nil;
+    HeadingFont5:          nil;
+    SectionFont:           nil;
+
+    // Export:
+    ExportType:            0;     // 0 = Stata
+                                  // 1 = CSV
+                                  // 2 = SPSS
+                                  // 3 = SAS
+    ExportDeleted:         false;
+    ExportEncoding:        eeUTF8;
+
+    // - Stata:
+    ExportStataVersion:    dta8;   // Default to Version 8
+    ExportStataFieldCase:  fncAsIs;
+    ExportStataValueLabels: true;
+
+    // - CSV
+    ExportCSVFieldName:    true;
+    ExportCSVQuote:        '"';
+    ExportCSVFieldSep:     ',';
+    ExportCSVDateSep:      '-';
+    ExportCSVTimeSep:      ':';
+    ExportCSVDecSep:       '.';
+    ExportCSVNewLine:      0;
+
+    // - SAS
+    ExportSASValueLabels:  true;
+    // - SPSS
+    ExportSPSSValueLabels: true;
+
+    // Project Defaults
+    // - general:
+    TimedRecoveryInterval: 10;
+    SaveBackup:            true;
+    AutoIncStart:          1;
+    // - Fields:
+    ShowNames:             false;
+    ShowBorders:           true;
+    ShowValuelabelText:    true;
+    // - Study:
+    StudyTitle:            'Untitled Project';
+    StudyIndent:           '';
+    StudyLang:             'en';
+    StudyVersion:          '1';
+    // - Content Desc:
+    ContKeywords:          '';
+    ContPurpose:           '';
+    ContAbstract:          '';
+    ContCitation:          '';
+    ContGeoCover:          '';
+    ContTimeCover:         '';
+    ContPopulation:        '';
+    // - Ownership:
+    OwnAgency:             '';
+    OwnAuthers:            '';
+    OwnRights:             '';
+    OwnPublisher:          '';
+    OwnFunding:            '';
+
+
+
+    // Not shown in dialog.
+    SelectedControlColour: $00B6F5F5;
+    LabelNamePrefix:       'label_';
+    IniFileName:           '';
+    );
 begin
-  ManagerSettings.FieldFont := TFont.Create;
-  ManagerSettings.HeadingFont := TFont.Create;
-  ManagerSettings.SectionFont := TFont.Create;
-//  InitFont(ManagerSettings.FieldFont);
-//  InitFont(ManagerSettings.HeadingFont);
-//  InitFont(ManagerSettings.SectionFont);
+  with ManagerSettings do
+  begin
+    if Assigned(FieldFont) then FieldFont.Free;
+    if Assigned(SectionFont) then SectionFont.Free;
+    if Assigned(HeadingFont1) then HeadingFont1.Free;
+    if Assigned(HeadingFont2) then HeadingFont2.Free;
+    if Assigned(HeadingFont3) then HeadingFont3.Free;
+    if Assigned(HeadingFont4) then HeadingFont4.Free;
+    if Assigned(HeadingFont5) then HeadingFont5.Free;
+  end;
+
+  ManagerSettings := OriginalSettings;
+
+  with ManagerSettings do
+  begin
+    FieldFont := TFont.Create;
+    SectionFont := TFont.Create;
+    HeadingFont1 := TFont.Create;
+    HeadingFont2 := TFont.Create;
+    HeadingFont3 := TFont.Create;
+    HeadingFont4 := TFont.Create;
+    HeadingFont5 := TFont.Create;
+    InitFont(FieldFont);
+    InitFont(SectionFont);
+    InitFont(HeadingFont1);
+    HeadingFont1.Size := Trunc(HeadingFont1.Size * 2);
+    InitFont(HeadingFont2);
+    HeadingFont2.Size := Trunc(HeadingFont2.Size * 1.5);
+    InitFont(HeadingFont3);
+    HeadingFont3.Size := Trunc(HeadingFont3.Size * 1.2);
+    InitFont(HeadingFont4);
+    HeadingFont4.Size := Trunc(HeadingFont4.Size * 1.1);
+    InitFont(HeadingFont5);
+  end;
 
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
   if not DirectoryExistsUTF8(ManagerSettings.WorkingDirUTF8) then
@@ -620,7 +795,12 @@ begin
     ManagerSettings.TutorialDirUTF8 := GetCurrentDirUTF8;
 
   ManagerSettings.EntryClientDirUTF8 := SysToUTF8(ExtractFilePath(UTF8ToSys(Application.ExeName)));
+end;
 
+{$I initfont.inc}
+
+initialization
+begin
   RecentFiles := TStringList.Create;
   RecentFiles.CaseSensitive := true;
 end;

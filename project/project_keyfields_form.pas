@@ -64,7 +64,7 @@ implementation
 {$R *.lfm}
 
 uses
-  types, datasetviewer_frame, settings2, settings2_var,
+  types, dataset_form, settings2, settings2_var,
   epiglobals, epidatafilestypes, LCLIntf, manager_messages,
   main, lcltype;
 
@@ -118,11 +118,12 @@ begin
     PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WParam(F), 0);
   end;
 
+  // TODO: A SetAll method is missing... :(
+  for i := 0 to F.Size -1 do
+    F.AsInteger[i] := 0;
+
   if not PerformIndexCheck(FailedRecords, FailedValues) then
   begin
-    // A SetAll method is missing... :(
-    for i := 0 to F.Size -1 do
-      F.AsInteger[i] := 0;
 
     // Set only failed records.
     for i := 0 to Length(FailedRecords) - 1 do
@@ -274,8 +275,6 @@ var
   FieldList: TEpiFields;
   i: Integer;
   Cmb: TComboBox;
-  F: TForm;
-  V: TDataSetViewFrame;
   FailedRecords: TBoundArray;
   FailedValues: TBoundArray;
 begin

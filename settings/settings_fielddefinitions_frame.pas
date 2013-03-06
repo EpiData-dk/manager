@@ -15,12 +15,12 @@ type
   TSettings_FieldDefinitionFrame = class(TFrame, ISettingsFrame)
     DecimalLengthEdit: TMaskEdit;
     DefaultDateCombo: TComboBox;
-    FieldNamingAutoRadio: TRadioButton;
-    FieldNamingFirstWordRadio: TRadioButton;
-    FieldNamingGroup: TRadioGroup;
+    DefaultPasteCombo: TComboBox;
     FloatIntEdit: TMaskEdit;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
+    LengthGrpBox: TGroupBox;
+    NamingGrpBox: TGroupBox;
+    TypesGrpBox: TGroupBox;
+    ImportCasingCombo: TComboBox;
     IntLengthEdit: TMaskEdit;
     Label1: TLabel;
     Label10: TLabel;
@@ -28,6 +28,8 @@ type
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
+    Label18: TLabel;
+    Label2: TLabel;
     Label9: TLabel;
     PrefixEdit: TEdit;
     StringLengthEdit: TMaskEdit;
@@ -45,7 +47,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2, epidatafilestypes;
+  settings2, epidatafilestypes, epieximtypes;
 
 { TSettings_FieldDefinitionFrame }
 
@@ -64,7 +66,9 @@ begin
       ftMDYDate: DefaultDateCombo.ItemIndex := 1;
       ftYMDDate: DefaultDateCombo.ItemIndex := 2;
     end;
+    DefaultPasteCombo.ItemIndex       := PasteSpecialType;
     PrefixEdit.Text                   := FieldNamePrefix;
+    ImportCasingCombo.ItemIndex       := Integer(ImportCasing);
 {    FieldNamingAutoRadio.Checked      := (FieldNamingStyle = fnAuto);
     FieldNamingFirstWordRadio.Checked := (FieldNamingStyle = fnFirstWord);    }
   end;
@@ -95,7 +99,9 @@ begin
       1: DefaultDateType := ftMDYDate;
       2: DefaultDateType := ftYMDDate;
     end;
-    FieldNamePrefix       := PrefixEdit.Text;
+    PasteSpecialType     := DefaultPasteCombo.ItemIndex;
+    FieldNamePrefix      := PrefixEdit.Text;
+    ImportCasing         := TEpiFieldNamingCase(ImportCasingCombo.ItemIndex);
   {  if FieldNamingAutoRadio.Checked then
       FieldNamingStyle    := fnAuto
     else

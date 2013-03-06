@@ -1,4 +1,4 @@
-object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
+object ProjectSettings_BackupFrame: TProjectSettings_BackupFrame
   Left = 0
   Height = 315
   Top = 0
@@ -6,17 +6,17 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
   ClientHeight = 315
   ClientWidth = 472
   TabOrder = 0
-  DesignLeft = 981
-  DesignTop = 291
+  DesignLeft = 703
+  DesignTop = 366
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = BackupIntervalEdit
     AnchorSideTop.Side = asrCenter
     Left = 10
-    Height = 16
+    Height = 15
     Hint = 'Number of minuts between timed recovery backup.'#13#10'Set to 0 for no backup (NOT recommended).'
-    Top = 20
-    Width = 207
+    Top = 21
+    Width = 206
     BorderSpacing.Left = 10
     Caption = 'Timed Recovery Backup Interval:'
     ParentColor = False
@@ -47,40 +47,10 @@ object ProjectSettings_GeneralFrame: TProjectSettings_GeneralFrame
     Height = 22
     Hint = 'Automatically create a backup file of the'#13#10'entire project when program i closed.'
     Top = 51
-    Width = 258
+    Width = 371
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
-    Caption = 'Save backup project file after Entry ?'
+    Caption = 'Save backup project file after Entry with date in name?'
     TabOrder = 1
-  end
-  object Label3: TLabel
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = AutoIncStartEdit
-    AnchorSideTop.Side = asrCenter
-    Left = 10
-    Height = 16
-    Top = 87
-    Width = 155
-    BorderSpacing.Left = 10
-    Caption = 'Auto Increment start at:'
-    ParentColor = False
-  end
-  object AutoIncStartEdit: TMaskEdit
-    AnchorSideTop.Control = BackupOnShutdownChkBox
-    AnchorSideTop.Side = asrBottom
-    AnchorSideRight.Control = Owner
-    AnchorSideRight.Side = asrBottom
-    Left = 286
-    Height = 25
-    Top = 83
-    Width = 176
-    Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 10
-    BorderSpacing.Right = 10
-    CharCase = ecNormal
-    MaxLength = 6
-    TabOrder = 2
-    EditMask = '999999;0;_'
-    SpaceChar = '_'
   end
 end

@@ -23,10 +23,10 @@ object ProjectSettingsForm: TProjectSettingsForm
     ClientWidth = 627
     TabOrder = 0
     object BitBtn1: TBitBtn
-      Left = 451
+      Left = 450
       Height = 34
       Top = 10
-      Width = 79
+      Width = 80
       Anchors = [akTop, akRight]
       AutoSize = True
       Cancel = True
@@ -36,10 +36,10 @@ object ProjectSettingsForm: TProjectSettingsForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 567
+      Left = 565
       Height = 32
       Top = 10
-      Width = 51
+      Width = 53
       Anchors = [akTop, akRight]
       AutoSize = True
       Caption = '&OK'
@@ -56,7 +56,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Width = 172
     Align = alLeft
     Constraints.MinWidth = 100
-    DefaultItemHeight = 16
+    DefaultItemHeight = 18
     ReadOnly = True
     ScrollBars = ssAutoBoth
     TabOrder = 1
@@ -65,12 +65,10 @@ object ProjectSettingsForm: TProjectSettingsForm
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     Items.Data = {
       F9FFFFFF020003000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
-      0000000700000047656E6572616CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
-      00000000000000060000004669656C6473FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-      FF020000000000000001050000005374756479FFFFFFFFFFFFFFFFFFFFFFFFFF
-      FFFFFF00000000000000000013000000436F6E74656E74206465736372697074
-      696F6EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000009000000
-      4F776E657273686970
+      000000060000004261636B7570FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000
+      0000000000000E0000004175746F20496E6372656D656E74FFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFF00000000000000000011000000446973706C6179206F6620
+      4669656C6473
     }
   end
   object Splitter1: TSplitter

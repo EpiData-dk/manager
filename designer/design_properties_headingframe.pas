@@ -5,7 +5,7 @@ unit design_properties_headingframe;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls,
   epicustombase, design_types, design_properties_baseframe;
 
 type
@@ -17,14 +17,18 @@ type
     CaptionEdit: TEdit;
     Label10: TLabel;
     Label9: TLabel;
+    HeadingTypeRadioGrp: TRadioGroup;
   private
     { private declarations }
     FHeadings: TEpiCustomControlItemArray;
+    FLeaveAsIsObject: TObject;
     procedure UpdateVisibility;
     procedure UpdateContent;
     procedure DoUpdateCaption;
   public
     { public declarations }
+    constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     procedure ResetControls;
@@ -36,7 +40,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, LazUTF8, epistringutils;
+  epidatafiles, LazUTF8, epistringutils, epidatafilestypes;
 
 { THeadingPropertiesFrame }
 
@@ -59,6 +63,15 @@ begin
         CaptionEdit.Text := '';
         break;
       end;
+
+  HeadingTypeRadioGrp.ItemIndex :=
+    HeadingTypeRadioGrp.Items.IndexOfObject(TObject(PtrInt(TEpiHeading(FHeadings[0]).HeadingType)));
+  for i := Low(FHeadings)+1 to High(FHeadings) do
+    if HeadingTypeRadioGrp.Items.IndexOfObject(TObject(PtrInt(TEpiHeading(FHeadings[i]).HeadingType))) <> HeadingTypeRadioGrp.ItemIndex then
+    begin
+      HeadingTypeRadioGrp.ItemIndex := HeadingTypeRadioGrp.Items.IndexOfObject(FLeaveAsIsObject);
+      Break;
+    end;
 end;
 
 procedure THeadingPropertiesFrame.DoUpdateCaption;
@@ -71,7 +84,30 @@ begin
     S := S + ', ' + FHeadings[i].Name;
 
   S := EpiCutString(S, 20);
-  UpdateCaption('Heaing Properties: ' + S);
+  UpdateCaption('Heading Properties: ' + S);
+end;
+
+constructor THeadingPropertiesFrame.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+
+  FLeaveAsIsObject := TObject.Create;
+  HeadingTypeRadioGrp.Items.BeginUpdate;
+  with HeadingTypeRadioGrp.Items do
+  begin
+    AddObject('Heading 1', TObject(htH1));
+    AddObject('Heading 2', TObject(htH2));
+    AddObject('Heading 3', TObject(htH3));
+    AddObject('Heading 4', TObject(htH4));
+    AddObject('Heading 5', TObject(htH5));
+    AddObject('Leave As Is', FLeaveAsIsObject);
+  end;
+end;
+
+destructor THeadingPropertiesFrame.Destroy;
+begin
+  FLeaveAsIsObject.Free;
+  inherited Destroy;
 end;
 
 procedure THeadingPropertiesFrame.FocusOnNewControl;
@@ -126,6 +162,11 @@ begin
   then
     for i := Low(FHeadings) to High(FHeadings) do
       TEpiHeading(FHeadings[i]).Caption.Text := CaptionEdit.Text;
+
+
+  if HeadingTypeRadioGrp.ItemIndex <> HeadingTypeRadioGrp.Items.IndexOfObject(FLeaveAsIsObject) then
+    for i := Low(FHeadings) to High(FHeadings) do
+      TEpiHeading(FHeadings[i]).HeadingType := TEpiHeadingType(PtrInt(HeadingTypeRadioGrp.Items.Objects[HeadingTypeRadioGrp.ItemIndex]));
 
   ShowHintMsg('', nil);
   result := true;

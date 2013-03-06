@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, StdCtrls, epicustombase, epidatafiles, design_types,
-  Forms, Controls;
+  Forms, Controls, JvDesignSurface;
 
 type
   { TDesignHeading }
@@ -24,6 +24,7 @@ type
     procedure UpdateEpiControl;
     procedure ReadHeading(Stream: TStream);
     procedure WriteHeading(Stream: TStream);
+    function Surface: TJvDesignSurface;
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure DefineProperties(Filer: TFiler); override;
@@ -45,7 +46,7 @@ implementation
 uses
   managerprocs, settings2_var, LCLIntf, main, manager_messages,
   LCLType, design_properties_headingframe,
-  JvDesignSurface, epistringutils,
+  epistringutils, epidatafilestypes,
   manager_globals;
 
 { TDesignHeading }
@@ -65,6 +66,20 @@ begin
   CopyHeading := TEpiHeading(FHeading.Clone(nil));
   GlobalCopyList.Add(CopyHeading);
   Stream.Write(CopyHeading, Sizeof(Pointer));
+end;
+
+function TDesignHeading.Surface: TJvDesignSurface;
+var
+  CurrControl: TControl;
+begin
+  CurrControl := Self;
+  while Assigned(CurrControl) and
+        (not (CurrControl is TJvDesignPanel))
+  do
+    CurrControl := CurrControl.Parent;
+
+  if Assigned(CurrControl) then
+    result := TJvDesignPanel(CurrControl).Surface;
 end;
 
 procedure TDesignHeading.SetParent(NewParent: TWinControl);
@@ -109,41 +124,36 @@ end;
 
 procedure TDesignHeading.OnHeadingChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-
-  function Surface: TJvDesignSurface;
-  var
-    CurrControl: TControl;
+begin
+  if EventGroup = eegCustomBase then
   begin
-    CurrControl := Self;
-    while Assigned(CurrControl) and
-          (not (CurrControl is TJvDesignPanel))
-    do
-      CurrControl := CurrControl.Parent;
+    case TEpiCustomChangeEventType(EventType) of
+      ecceDestroy:
+        begin
+          FHeading.UnRegisterOnChangeHook(@OnHeadingChange);
+          FHeading := nil;
+        end;
+      ecceName: ;
+      ecceAddItem: ;
+      ecceDelItem: ;
+      ecceSetItem: ;
+      ecceSetTop: ;
+      ecceSetLeft: ;
 
-    if Assigned(CurrControl) then
-      result := TJvDesignPanel(CurrControl).Surface;
+      ecceUpdate,
+      ecceText:
+        begin
+          Caption := TEpiHeading(Sender).Caption.Text;
+          Surface.UpdateDesigner;
+        end;
+    end;
   end;
 
-begin
-  case TEpiCustomChangeEventType(EventType) of
-    ecceDestroy:
-      begin
-        FHeading.UnRegisterOnChangeHook(@OnHeadingChange);
-        FHeading := nil;
-      end;
-    ecceName: ;
-    ecceAddItem: ;
-    ecceDelItem: ;
-    ecceSetItem: ;
-    ecceSetTop: ;
-    ecceSetLeft: ;
-
-    ecceUpdate,
-    ecceText:
-      begin
-        Caption := TEpiHeading(Sender).Caption.Text;
-        Surface.UpdateDesigner;
-      end;
+  if EventGroup = eegHeading then
+  begin
+    case TEpiHeadingChangeEvent(EventType) of
+      ehceType: UpdateControl;
+    end;
   end;
 end;
 
@@ -155,6 +165,7 @@ begin
 
   Caption := FHeading.Caption.Text;
   UpdateEpiControl;
+  UpdateControl;
 end;
 
 procedure TDesignHeading.SetExtendedBounds(const AValue: TRect);
@@ -205,10 +216,11 @@ begin
 
   // Standard properties being set for the component.
   ParentFont := false;
-  Font.Assign(ManagerSettings.HeadingFont);
   Align := alNone;
   ShowHint := true;
   ParentColor := true;
+
+  UpdateControl;
 end;
 
 destructor TDesignHeading.Destroy;
@@ -223,7 +235,16 @@ end;
 
 procedure TDesignHeading.UpdateControl;
 begin
-  Font.Assign(ManagerSettings.HeadingFont);
+  if not Assigned(FHeading) then exit;
+
+  case FHeading.HeadingType of
+    htH1: Font.Assign(ManagerSettings.HeadingFont1);
+    htH2: Font.Assign(ManagerSettings.HeadingFont2);
+    htH3: Font.Assign(ManagerSettings.HeadingFont3);
+    htH4: Font.Assign(ManagerSettings.HeadingFont4);
+    htH5: Font.Assign(ManagerSettings.HeadingFont5);
+  end;
+  Surface.UpdateDesigner;
 end;
 
 procedure TDesignHeading.SetBounds(aLeft, aTop, aWidth, aHeight: integer);

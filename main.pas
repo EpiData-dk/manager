@@ -15,6 +15,34 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    MenuItem10: TMenuItem;
+    MenuItem11: TMenuItem;
+    MenuItem12: TMenuItem;
+    MenuItem13: TMenuItem;
+    MenuItem14: TMenuItem;
+    MenuItem15: TMenuItem;
+    BrowseDatasetMenuItem: TMenuItem;
+    MenuItem16: TMenuItem;
+    MenuItem17: TMenuItem;
+    MenuItem18: TMenuItem;
+    MenuItem19: TMenuItem;
+    MenuItem20: TMenuItem;
+    MenuItem21: TMenuItem;
+    MenuItem22: TMenuItem;
+    BrowseDataMenuItem: TMenuItem;
+    MenuItem23: TMenuItem;
+    MenuItem24: TMenuItem;
+    MenuItem25: TMenuItem;
+    MenuItem26: TMenuItem;
+    PasteAsDateMenuItem: TMenuItem;
+    RecentFilesSubPopupMenu: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    ProjectDetailsBtn: TButton;
+    DocumentBtn: TButton;
+    EnterDataBtn: TButton;
+    ExportBtn: TButton;
+    CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
     EditMenuDivider10: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
@@ -24,6 +52,19 @@ type
     AlignLeftMenuItem: TMenuItem;
     AlignRightMenuItem: TMenuItem;
     AlignTopMenuItem: TMenuItem;
+    MenuItem6: TMenuItem;
+    AlignMenuItem: TMenuItem;
+    DefineProjectPopupMenu: TPopupMenu;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    KeyFieldsPopupMenuItem: TMenuItem;
+    DocumentPopupMenu: TPopupMenu;
+    MenuItem9: TMenuItem;
+    ValueLabelEditorPopupMenuItem: TMenuItem;
+    ProjectPropertiesPopupMenuItem: TMenuItem;
+    SetPasswordPopupMenuItem: TMenuItem;
+    StudyInfoPopupMenuItem: TMenuItem;
+    ProjectDetailsPopupMenu: TPopupMenu;
     SelectAllBoolMenuItem: TMenuItem;
     SelectAllStringMenuItem: TMenuItem;
     SelectAllFloatMenuItem: TMenuItem;
@@ -42,13 +83,7 @@ type
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
     ExportMenuItem: TMenuItem;
-    DataSetMenu: TMenuItem;
-    DoubleEntryMenu: TMenuItem;
-    PrepareDoubleEntryMenuItem: TMenuItem;
-    ValidatDoubleEntryMenuItem: TMenuItem;
     ProjectPasswordMenuItem: TMenuItem;
-    ViewDataSetMenuItem: TMenuItem;
-    ValueLabelEditor2MenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
     ExtendedListReportAction: TAction;
@@ -59,12 +94,10 @@ type
     ValueLabaleListReportMenuItem: TMenuItem;
     CombinedReportMenuItem: TMenuItem;
     QuestionListReportMenuItem: TMenuItem;
-    MenuItem5: TMenuItem;
     QuestionListReportAction: TAction;
     ReportGeneratorAction: TAction;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
-    CodeBookMenuItem: TMenuItem;
     PackAction: TAction;
     ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
@@ -73,10 +106,7 @@ type
     EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
-    UserAccessBtn: TButton;
-    GCPBtn: TButton;
-    OpenProjectBtn: TButton;
-    NewProjectBtn: TButton;
+    DefineProjectBtn: TButton;
     HelpMenuDivider1: TMenuItem;
     ProcessToolPanel: TPanel;
     TutorialsMenuDivider1: TMenuItem;
@@ -123,12 +153,16 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
+    procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
     procedure CombinedListReportActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
+    procedure CountsReportActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
+    procedure DefineProjectBtnClick(Sender: TObject);
+    procedure DocumentBtnClick(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
     procedure ExportActionExecute(Sender: TObject);
     procedure ExtendedListReportActionExecute(Sender: TObject);
@@ -139,6 +173,7 @@ type
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
     procedure PrepareDoubleEntryActionExecute(Sender: TObject);
+    procedure ProjectDetailsBtnClick(Sender: TObject);
     procedure ProjectReportActionExecute(Sender: TObject);
     procedure QuestionListReportActionExecute(Sender: TObject);
     procedure ReportGeneratorActionExecute(Sender: TObject);
@@ -148,7 +183,6 @@ type
     procedure ShowAboutActionExecute(Sender: TObject);
     procedure StartEntryClientActionExecute(Sender: TObject);
     procedure StartEntryClientActionUpdate(Sender: TObject);
-    procedure UserAccessBtnClick(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItemClick(Sender: TObject);
@@ -171,7 +205,7 @@ type
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(out FileName: string; out LocalDoc: boolean): TEpiDocument;
-    function  RunReport(ReportClass: TReportBaseClass): boolean;
+    function  RunReport(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
   private
     { Messages }
     procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
@@ -205,18 +239,19 @@ implementation
 {$R *.lfm}
 
 uses
-  workflow_frame, LCLProc, LCLIntf,
+  LCLProc, LCLIntf,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
-  valuelabelseditor_form, epimiscutils,
-  epicustombase, project_settings, LCLType, UTF8Process,
+  epimiscutils,
+  epicustombase, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
-  strutils, report_fieldlist, report_valuelabellist,
+  report_fieldlist, report_valuelabellist,
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
+  report_counts, report_double_entry_validation,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
-  epitools_integritycheck, datasetviewer_frame, prepare_double_entry_form,
+  prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  report_double_entry_validation, managerprocs, process;
+  managerprocs, process;
 
 { TMainForm }
 
@@ -237,15 +272,9 @@ begin
                    'See help menu above for an introduction.' + LineEnding +
                    'Get latest version from http://www.epidata.dk', 15, 15);
   {$ENDIF}
-
-  {$IFDEF EPI_DEBUG}
-  UserAccessBtn.Visible := true;
-  {$ENDIF}
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-var
-  res: LongInt;
 begin
   CanClose := true;
 
@@ -276,9 +305,24 @@ begin
   Clipboard.AsText := S;
 end;
 
+procedure TMainForm.CountsReportActionExecute(Sender: TObject);
+begin
+  RunReport(TReportCounts);
+end;
+
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
 begin
   RestoreDefaultPos;
+end;
+
+procedure TMainForm.DefineProjectBtnClick(Sender: TObject);
+begin
+  DefineProjectPopupMenu.PopUp;
+end;
+
+procedure TMainForm.DocumentBtnClick(Sender: TObject);
+begin
+  DocumentPopupMenu.PopUp;
 end;
 
 procedure TMainForm.EpiDataTutorialsMenuItemClick(Sender: TObject);
@@ -366,6 +410,15 @@ begin
     else
       S := S + Format('Latest test version: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
   ShowMessage(S);
+end;
+
+procedure TMainForm.ActionList1Update(AAction: TBasicAction;
+  var Handled: Boolean);
+begin
+  if Screen.ActiveCustomForm <> MainForm then
+    ActionList1.State := asSuspended
+  else
+    ActionList1.State := asNormal;
 end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);
@@ -482,6 +535,11 @@ begin
     if Local then
       Doc.Free;
   end;
+end;
+
+procedure TMainForm.ProjectDetailsBtnClick(Sender: TObject);
+begin
+  ProjectDetailsPopupMenu.PopUp;
 end;
 
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
@@ -612,11 +670,6 @@ begin
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
 end;
 
-procedure TMainForm.UserAccessBtnClick(Sender: TObject);
-begin
-  ShowValueLabelEditor2(FActiveFrame.EpiDocument.ValueLabelSets);
-end;
-
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportValueLabelList);
@@ -624,21 +677,33 @@ end;
 
 procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);
 var
-  Fn: string;
-  Local: boolean;
+  R: TReportBase;
   Doc: TEpiDocument;
+  Fn: String;
 begin
-  Doc := ToolsCheckOpenFile(Fn, Local);
-  if Assigned(Doc) then
-  begin
-    ValidateDoubleEntry(Doc, Fn);
-    if Local then
+  R := RunReport(TReportDoubleEntryValidation, false);
+  if Assigned(R) and
+     (
+      (not Assigned(FActiveFrame)) or
+      (not Assigned(FActiveFrame.EpiDocument))
+     )
+  then
     begin
+      Fn := R.Documents[0];
+      Doc := TEpiDocument(R.Documents.Objects[0]);
       if Doc.Modified then
-        Doc.SaveToFile(Fn);
-      Doc.Free;
+        Doc.SaveToFile(fn);
+
     end;
+
+  if Assigned(R) then
+  begin
+    AddToRecent(R.Documents[1]);
+    AddToRecent(R.Documents[0]);
+    UpdateRecentFiles;
   end;
+
+  R.Free;
 end;
 
 procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
@@ -716,13 +781,13 @@ begin
     FActiveFrame := nil;
   end;
   UpdateMainMenu;
+  UpdateProcessToolbar;
   SetCaption;
 end;
 
 procedure TMainForm.DoNewProject;
 var
   TabSheet: TTabSheet;
-  CanClose: boolean;
 begin
   // Close Old project
   if not DoCloseProject then exit;
@@ -750,6 +815,8 @@ end;
 
 procedure TMainForm.DoOpenProject(const AFileName: string);
 begin
+  if not DoCloseProject then exit;
+
   DoNewProject;
   try
     FActiveFrame.OpenProject(AFileName);
@@ -808,31 +875,36 @@ begin
   PasteAsHeadingMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsIntMenuItem.Visible := Assigned(FActiveFrame);
   PasteAsStringMenuItem.Visible := Assigned(FActiveFrame);
+  PasteAsDateMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider7.Visible := Assigned(FActiveFrame);
+  // -
+  AlignMenu.Visible         := Assigned(FActiveFrame);
+  // -
+  SelectMenu.Visible        := Assigned(FActiveFrame);
+  MenuItem25.Visible        := Assigned(FActiveFrame);
   // -
   AddStructureMenuItem.Visible := Assigned(FActiveFrame);
   EditMenuDivider10.Visible := Assigned(FActiveFrame);
 
-  // PROJECT:
+  // PROJECT Details:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
   KeyFieldsMenuItem.Visible := Assigned(FActiveFrame);
   StudyInfoMenuItem.Visible := Assigned(FActiveFrame);
 
-  // ALIGN
-  AlignMenu.Visible         := Assigned(FActiveFrame);
-
-  // SELECT
-  SelectMenu.Visible        := Assigned(FActiveFrame);
-
-  // TOOLS:
-  DataSetMenu.Visible       := Assigned(FActiveFrame);
+  // Document:
+  BrowseDataMenuItem.Visible := Assigned(FActiveFrame);
+  MenuItem4.Visible          := Assigned(FActiveFrame);
+  // document popupmenu
+  BrowseDatasetMenuItem.Visible := Assigned(FActiveFrame);
+  MenuItem16.Visible            := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateProcessToolbar;
 begin
   ProcessToolPanel.Visible :=
-    (not Assigned(FActiveFrame)) and
     ManagerSettings.ShowWorkToolBar;
+
+  ProjectDetailsBtn.Enabled := Assigned(FActiveFrame);
 end;
 
 procedure TMainForm.UpdateShortCuts;
@@ -881,7 +953,6 @@ function TMainForm.ToolsCheckOpenFile(out FileName: string;
   out LocalDoc: boolean): TEpiDocument;
 var
   Dlg: TOpenDialog;
-  St: TMemoryStream;
 begin
   Result := nil;
   if Assigned(FActiveFrame) then
@@ -895,7 +966,6 @@ begin
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     if not Dlg.Execute then exit;
 
-
     Result := TOpenEpiDoc.OpenDoc(Dlg.FileName, ManagerSettings.StudyLang);
 
     LocalDoc := true;
@@ -903,14 +973,13 @@ begin
   end;
 end;
 
-function TMainForm.RunReport(ReportClass: TReportBaseClass): boolean;
+function TMainForm.RunReport(ReportClass: TReportBaseClass;
+  const FreeAfterRun: boolean): TReportBase;
 var
   F: TStaticReportsForm;
-  R: TReportBase;
-  H: TReportViewerForm;
   S: String;
 begin
-  R := nil;
+  Result := nil;
 
   F := TStaticReportsForm.Create(Self, ReportClass);
   if Assigned(FActiveFrame) and
@@ -923,13 +992,23 @@ begin
     F.AddInitialDocument(S, FActiveFrame.EpiDocument);
   end;
   if F.ShowModal = mrOK then
-    R := F.Report;
-  if not Assigned(R) then exit;
+    Result := F.Report;
+  if not Assigned(Result) then exit;
+
+  Screen.Cursor := crHourGlass;
+  Application.ProcessMessages;
+  S := Result.RunReport;
 
   ShowReportForm(Self,
-    'Report of: ' + R.ReportTitle,
-    R.RunReport,
+    'Report of: ' + Result.ReportTitle,
+    S,
     F.RadioGroup1.ItemIndex = 0);
+
+  Screen.Cursor := crDefault;
+  Application.ProcessMessages;
+
+  if FreeAfterRun then
+    FreeAndNil(Result);
   F.Free;
 end;
 
@@ -1001,13 +1080,11 @@ end;
 procedure TMainForm.LMNewProject(var Msg: TLMessage);
 begin
   DoNewProject;
-  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.LMCloseProject(var Msg: TLMessage);
 begin
   DoCloseProject;
-  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.LMDesignerAdd(var Msg: TLMessage);
@@ -1036,8 +1113,12 @@ begin
 
   RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
   RecentFilesSubMenu.Clear;
+  RecentFilesSubPopupMenu.Visible := RecentFilesSubMenu.Visible;
+  RecentFilesSubPopupMenu.Clear;
+
   for i := 0 to RecentFiles.Count - 1 do
   begin
+    // Main menu
     Mi := TMenuItem.Create(RecentFilesSubMenu);
     Mi.Name := 'recent' + inttostr(i);
     Mi.Caption := RecentFiles[i];
@@ -1045,6 +1126,15 @@ begin
     if i < 9 then
       Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
     RecentFilesSubMenu.Add(Mi);
+
+    // Popup menu
+    Mi := TMenuItem.Create(RecentFilesSubPopupMenu);
+    Mi.Name := 'recent' + inttostr(i);
+    Mi.Caption := RecentFiles[i];
+    Mi.OnClick := @OpenRecentMenuItemClick;
+    if i < 9 then
+      Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
+    RecentFilesSubPopupMenu.Add(Mi);
   end;
 end;
 
@@ -1071,6 +1161,7 @@ begin
   PasteAsIntMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
   PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
+  PasteAsDateMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsDateAction;
   // -
   AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
 
@@ -1080,12 +1171,19 @@ begin
   ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
   KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
   StudyInfoMenuItem.Action         := FActiveFrame.StudyInformationAction;
+  // --project details popup-menu
+  ProjectPropertiesPopupMenuItem.Action := FActiveFrame.ProjectSettingsAction;
+  ValueLabelEditorPopupMenuItem.Action  := FActiveFrame.ValueLabelEditorAction;
+  SetPasswordPopupMenuItem.Action       := FActiveFrame.ProjectPasswordAction;
+  KeyFieldsPopupMenuItem.Action         := FActiveFrame.KeyFieldsAction;
+  StudyInfoPopupMenuItem.Action         := FActiveFrame.StudyInformationAction;
 
   // Align
   AlignLeftMenuItem.Action         := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignLeftAction;
   AlignRightMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignRightAction;
   AlignTopMenuItem.Action          := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignTopAction;
   AlignBottomMenuItem.Action       := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignBottomAction;
+  AlignMenuItem.Action             := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ShowAlignFormAction;
 
   // Select
   SelectAllIntsMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllIntsAction;
@@ -1095,7 +1193,8 @@ begin
 
 
   // DataSet
-  ViewDataSetMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
+  BrowseDataMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
+  BrowseDatasetMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
 end;
 
 procedure TMainForm.BeginUpdatingForm;

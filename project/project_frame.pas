@@ -108,7 +108,7 @@ uses
   valuelabelseditor_form2,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form, project_studyunit_form,
-  align_form;
+  align_form, RegExpr;
 
 type
 
@@ -406,9 +406,42 @@ var
   St: TMemoryStream;
   Fn: String;
   Res: Integer;
+  R: TRegExpr;
+  B: Boolean;
+  S: RegExprString;
+  S2: String;
 begin
   Fn := aFilename;
   Res := mrNone;
+
+
+  R := TRegExpr.Create;
+  R.Expression := '([0-9]{4}.[0-9]{2}.[0-9]{2}\.)';
+  B := R.Exec(Fn);
+  S := R.Replace(Fn, '', false);
+  S2 := ChangeFileExt(S, BoolToStr(ExtractFileExt(S) = '.epz', '.epx', '.epz'));
+  if B and
+     (FileExistsUTF8(S) or FileExistsUTF8(S2))
+  then
+  begin
+    if FileExistsUTF8(S2) then
+      S := S2;
+
+    Res := MessageDlg('Information',
+             'This file seem to be an automated backup file (on closing the program):' + LineEnding + LineEnding +
+             'File: ' + #9 + SysToUTF8(ExtractFileName(UTF8ToSys(Fn)))          +
+               ' (' + FormatDateTime('YYYY/MM/DD HH:NN:SS', FileDateToDateTime(FileAgeUTF8(Fn))) + ')' + LineEnding +
+             'Original: ' + #9 + SysToUTF8(ExtractFileName(UTF8ToSys(S))) +
+               ' (' + FormatDateTime('YYYY/MM/DD HH:NN:SS', FileDateToDateTime(FileAgeUTF8(S))) + ')' + LineEnding +  LineEnding +
+             'Load the original instead?',
+             mtInformation, mbYesNoCancel, 0, mbYes);
+    case Res of
+      mrYes:    Fn := S;
+      mrCancel: Exit;
+    end;
+  end;
+  R.Free;
+
   if FileExistsUTF8(Fn + '.bak') then
   begin
     Res := MessageDlg('Information',
@@ -420,7 +453,7 @@ begin
              'Load the backup instead?',
              mtInformation, mbYesNoCancel, 0, mbYes);
     case Res of
-      mrYes:    Fn := aFilename + '.bak';
+      mrYes:    Fn := Fn + '.bak';
       mrNo:     begin
                   Res := MessageDlg('Warning',
                            'Loading ' + SysToUTF8(ExtractFileName(UTF8ToSys(Fn))) + ' will delete recovery file.' + LineEnding +
@@ -444,7 +477,10 @@ begin
     St := nil;
     try
       FEpiDocument := TOpenEpiDoc.OpenDoc(DoCreateNewDocument, Fn);
-      FFileName := AFileName;
+      if ExtractFileExt(Fn) = '.bak' then
+        FFileName := ChangeFileExt(Fn, '')
+      else
+        FFileName := Fn;
       DoNewDataForm(FEpiDocument.DataFiles[0]);
       St.Free;
     except
@@ -453,7 +489,7 @@ begin
       if Assigned(FActiveFrame) then FreeAndNil(FActiveFrame);
       raise
     end;
-    FFileTimeStamp := FileAgeUTF8(fn);
+    FFileTimeStamp := FileAgeUTF8(FFileName);
 
     MainForm.AssignActionLinks;
 

@@ -103,15 +103,14 @@ end;
 
 procedure TFieldValueLabelEditor.FormShow(Sender: TObject);
 begin
+  ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
+  FGridFrame.VLG.SetFocus;
+
   if FGridFrame.ValueLabelSet.Count > 0 then // assume existing VL set.
-  begin
-    ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
-    FGridFrame.VLG.SetFocus;
-    CancelBtn.Enabled := false;
-  end else begin
+    CancelBtn.Enabled := false
+  else
     FGridFrame.NewLineBtn.Click;
-    ValueLabelNameEdit.SetFocus;
-  end;
+
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'FieldValueLabelEditor');
 end;
@@ -123,7 +122,15 @@ begin
   if InEditingDone then exit;
   InEditingDone := true;
 
-  FGridFrame.VLG.SetFocus;
+  if ValueLabelNameEdit.Modified and
+     (ValueLabelSet.Name <> ValueLabelNameEdit.Text) and
+     (not ValueLabelSets.ValidateRename(ValueLabelSet, ValueLabelNameEdit.Text))
+  then
+  begin
+    ShowHintMsg(nil, ValueLabelNameEdit, 'A ValueLabel set with same name already exists.');
+    ValueLabelNameEdit.SetFocus;
+  end else
+    FGridFrame.VLG.SetFocus;
 
   InEditingDone := false;
 end;

@@ -15,6 +15,8 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
     SelectAllBoolsAction: TAction;
     SelectAllStringsAction: TAction;
     SelectAllFloatsAction: TAction;
@@ -173,7 +175,6 @@ type
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DeleteControlFastActionExecute(Sender: TObject);
-    procedure DesignControlPopUpMenuClose(Sender: TObject);
     procedure DesignControlPopUpMenuPopup(Sender: TObject);
     procedure DesignerActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
@@ -333,7 +334,7 @@ uses
   main, epistringutils, JvDesignUtils, settings2_var,
   manager_globals, managerprocs, Clipbrd, math,
   Dialogs, import_structure_form, epimiscutils,
-  datasetviewer_frame, fpvectorial, fpvutils, FPimage,
+  dataset_form,
   LCLMessageGlue, LCLType, shortcuts, settings2,
   Printers, OSPrinters, strutils,
   design_control_section,
@@ -532,7 +533,8 @@ end;
 
 procedure TRuntimeDesignFrame.PasteAsDateActionExecute(Sender: TObject);
 begin
-  PasteAsField(ftDMYDate);
+//  PasteAsField(ftDMYDate);
+  PasteAsField(ManagerSettings.DefaultDateType);
 end;
 
 procedure TRuntimeDesignFrame.PasteAsFloatActionExecute(Sender: TObject);
@@ -611,15 +613,22 @@ function TRuntimeDesignFrame.FindNewPostion(NewControl: TControlClass): TPoint;
 var
   CI: TEpiCustomControlItem;
   Dist: Integer;
+  S: TEpiSection;
 begin
   CI := DataFile.ControlItem[DataFile.ControlItems.Count-1];
   if (CI is TEpiSection) then
+  begin
     if CI = DataFile.MainSection then
       Result := Point(ManagerSettings.DefaultRightPosition, 20)
     else
       Result := Point(CI.Left, CI.Top + TEpiSection(CI).Height)
-  else
-    Result := Point(CI.Left, CI.Top + ControlFromEpiControl(CI).Height);
+  end else begin
+    S := TEpiSection(Ci.Owner.Owner);
+    if S <> DataFile.MainSection then
+      Result := Point(S.Left, S.Top + S.Height)
+    else
+      Result := Point(CI.Left, CI.Top + ControlFromEpiControl(CI).Height);
+  end;
 
   Dist := ManagerSettings.SpaceBtwFieldLabel;
   if (NewControl = TDesignField) and (CI is TEpiField) then
@@ -1098,7 +1107,7 @@ begin
     BeginDoc;
 
     i := 0;
-    while i < DataFile.ControlItems.Count - 1 do
+    while i < DataFile.ControlItems.Count do
     begin
       CI := DataFile.ControlItem[i];
       if CI = DataFile.MainSection then
@@ -1117,7 +1126,7 @@ begin
       end;
       if (CI is TEpiHeading) then
       begin
-        SetFont(ManagerSettings.HeadingFont);
+        SetFont(ControlFromEpiControl(CI).Font);
         ABot := ATop + Canvas.TextHeight(TEpiHeading(CI).Caption.Text);
       end;
       if (CI is TEpiField) then
@@ -1690,6 +1699,7 @@ end;
 
 procedure TRuntimeDesignFrame.UpdateInterface;
 begin
+  PasteAsDateAction.ImageIndex := Ord(ManagerSettings.DefaultDateType);
   with DateToolButton do
   begin
     Tag := Ord(ManagerSettings.DefaultDateType);
@@ -2092,10 +2102,6 @@ begin
   DeleteControls(true);
 end;
 
-procedure TRuntimeDesignFrame.DesignControlPopUpMenuClose(Sender: TObject);
-begin
-end;
-
 procedure TRuntimeDesignFrame.DesignControlPopUpMenuPopup(Sender: TObject);
 var
   P: TPoint;
@@ -2134,16 +2140,17 @@ begin
     // Hence -> the menuitem is deleted and no event is fired!
     DesignControlPopUpMenu.Items.Find('Select...').Free;
 
+    // Create submenu for selected component.
+    SubMenu := TMenuItem.Create(DesignControlPopUpMenu);
+    SubMenu.Caption := 'Select...';
+    SubMenu.Enabled := false;
+
     if (Selector.Count = 1) and
        (Ctrl is TDesignField)
-//       (Supports(Ctrl, IDesignEpiControl))
     then
     begin;
+      SubMenu.Enabled := true;
       EpiCtrl := (Ctrl as IDesignEpiControl).EpiControl;
-
-      // Create submenu for selected component.
-      SubMenu := TMenuItem.Create(DesignControlPopUpMenu);
-      SubMenu.Caption := 'Select...';
 
       // Create Field select menu.
       if EpiCtrl is TEpiField then
@@ -2210,8 +2217,8 @@ begin
       end;
       if SubMenu.Count = 2 then
         SubMenu.Items[1].Free;
-      DesignControlPopUpMenu.Items.Add(SubMenu);
     end;
+    DesignControlPopUpMenu.Items.Add(SubMenu);
   end;
 end;
 
