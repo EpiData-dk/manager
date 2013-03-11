@@ -46,7 +46,7 @@ var
 begin
   inherited DoRunReport;
 
-  if FieldList.Count < 0 then exit;
+  if FieldList.Count = 0 then exit;
 
   S := FieldList[0].Name;
   for i := 0 to FieldList.Count - 1 do
