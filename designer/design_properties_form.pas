@@ -298,7 +298,7 @@ end;
 procedure TPropertiesForm.RestoreDefaultPos;
 begin
   BeginFormUpdate;
-  SetBounds(300, 20, 500, 500);
+  SetBounds(300, 200, 500, 500);
   EndFormUpdate;
   SaveFormPosition(Self, 'ControlsForm');
 end;
