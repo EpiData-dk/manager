@@ -255,7 +255,7 @@ begin
   Combo.Clear;
   Combo.Items.AddObject('(none)', FNoneObject);
   if ManyFields then
-    Combo.Items.AddObject('(ignore)', FIgnoreObject);
+    Combo.Items.AddObject('(leave as is)', FIgnoreObject);
 end;
 
 procedure TFieldPropertiesFrame.AddFieldToCombo(AField: TEpiField;
