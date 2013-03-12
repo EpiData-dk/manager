@@ -792,11 +792,23 @@ begin
   if Modified or
     (Assigned(EpiDocument) and (EpiDocument.Modified)) then
   begin
-    res := MessageDlg('Warning', 'Content has been modified since last save.' + LineEnding +
-             'Save before close?', mtWarning, mbYesNoCancel, 0, mbCancel);
+    Res := MessageDlg('Warning',
+      'Content has been modified since last save.' + LineEnding +
+      'Save project to disk before exit?',
+      mtWarning, mbYesNoCancel, 0, mbCancel);
+
+    if Res = mrNo then
+    begin
+      Res := MessageDlg('Warning',
+        'Project content is NOT saved to disk.' + LineEnding +
+        'If you choose No again you will loose all data since last save!' + LineEnding +
+        LineEnding +
+        'Save project to disk before exit?',
+        mtWarning, mbYesNoCancel, 0, mbCancel);
+    end;
+
     case res of
       mrYes:    SaveProjectAction.Execute;
-      mrNo:     exit;
       mrCancel: CanClose := false;
     end;
   end;
