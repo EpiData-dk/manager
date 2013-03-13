@@ -32,6 +32,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         Width = 173
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 5
+        OnEditingDone = LengthEditingDone
         TabOrder = 3
         Visible = False
       end
@@ -60,6 +61,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 2
         BorderSpacing.Right = 5
+        OnEditingDone = LengthEditingDone
         TabOrder = 2
       end
       object LengthLabel: TLabel

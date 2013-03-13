@@ -139,6 +139,7 @@ type
     procedure AddJumpBtnClick(Sender: TObject);
     procedure AddValueLabelPlusActionExecute(Sender: TObject);
     procedure CalcRadioChange(Sender: TObject);
+    procedure LengthEditingDone(Sender: TObject);
     procedure ManageValueLabelsBtnClick(Sender: TObject);
     procedure RemoveJumpBtnClick(Sender: TObject);
     procedure UseJumpsComboSelect(Sender: TObject);
@@ -840,6 +841,11 @@ begin
   TimeDiffGrpBox.Enabled      := TimeCalcRadio.Checked;
   CombineDateGrpBox.Enabled   := CombineDateRadio.Checked;
   CombineStringGrpBox.Enabled := CombineStringRadio.Checked;
+end;
+
+procedure TFieldPropertiesFrame.LengthEditingDone(Sender: TObject);
+begin
+  UpdateValueLabels;
 end;
 
 procedure TFieldPropertiesFrame.ManageValueLabelsBtnClick(Sender: TObject);
@@ -1553,6 +1559,29 @@ var
   S: string;
   NJump: TEpiJump;
   Calc: TEpiCalculation;
+  I1, I2: EpiInteger;
+  F1, F2: Extended;
+
+  procedure SwapInt(var LowI, HighI: EpiInteger);
+  var
+    Tmp: EpiInteger;
+  begin
+    if LowI <= HighI then exit;
+    Tmp := LowI;
+    LowI := HighI;
+    HighI := Tmp;
+  end;
+
+  procedure SwapFloat(var LowF, HighF: EpiFloat);
+  var
+    Tmp: EpiFloat;
+  begin
+    if LowF <= HighF then exit;
+    Tmp := LowF;
+    LowF := HighF;
+    HighF := Tmp;
+  end;
+
 begin
   // ---------
   // BASIC
@@ -1613,25 +1642,37 @@ begin
         Case Field.FieldType of
           ftInteger:
             begin
-              R.AsInteger[true]  := StrToInt64(FromEdit.Text);
-              R.AsInteger[false] := StrToInt64(ToEdit.Text);
+              I1 := StrToInt64(FromEdit.Text);
+              I2 := StrToInt64(ToEdit.Text);
+              SwapInt(I1, I2);
+              R.AsInteger[true]  := I1;
+              R.AsInteger[false] := I2;
             end;
           ftFloat:
             begin
-              R.AsFloat[true]  := StrToFloat(FromEdit.Text);
-              R.AsFloat[false] := StrToFloat(ToEdit.Text);
+              F1 := StrToFloat(FromEdit.Text);
+              F2 := StrToFloat(ToEdit.Text);
+              SwapFloat(F1, F2);
+              R.AsFloat[true]  := F1;
+              R.AsFloat[false] := F2;
             end;
           ftTime:
             begin
-              R.AsTime[true]  := EpiStrToTime(FromEdit.Text, TimeSeparator, S);
-              R.AsTime[false] := EpiStrToTime(ToEdit.Text, TimeSeparator, S);
+              F1 := EpiStrToTime(FromEdit.Text, TimeSeparator, S);
+              F2 := EpiStrToTime(ToEdit.Text, TimeSeparator, S);
+              SwapFloat(F1, F2);
+              R.AsTime[true]  := F1;
+              R.AsTime[false] := F2;
             end;
           ftDMYDate,
           ftMDYDate,
           ftYMDDate:
             begin
-              R.AsDate[true]  := Trunc(EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, S));
-              R.AsDate[false] := Trunc(EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, S));
+              I1 := Trunc(EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, S));
+              I2 := Trunc(EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, S));
+              SwapInt(I1, I2);
+              R.AsDate[true]  := I1;
+              R.AsDate[false] := I2;
             end;
         end; // Case Field.FieldType
       end; // if FromEdit.text = ''
