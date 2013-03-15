@@ -169,6 +169,7 @@ begin
     VLG.Selected[NewNode] := true;
   end;
   VLG.Refresh;
+  DoShowHintMsg(nil, '');
 end;
 
 procedure TValueLabelGridFrame.DoAddLine;
@@ -178,6 +179,8 @@ var
   V1, V2: Extended;
 begin
   if not Assigned(ValueLabelSet) then exit;
+
+  DoShowHintMsg(nil, '');
 
   VLG.BeginUpdate;
 

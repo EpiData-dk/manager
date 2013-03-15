@@ -213,6 +213,7 @@ type
     function  ValidateChanges: boolean;
     procedure InternalApplyChanges;
     procedure EditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+    procedure JumpEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -499,18 +500,28 @@ begin
   begin
     F := Fields[i];
 
+    if Assigned(F.Jumps) then
+      AddFieldToCombo(F, AllFieldTypes, UseJumpsCombo, True);
+
+    if SelectIgnoreCombo then
+      Continue;
+
     if (Assigned(Jmp) and (not Assigned(F.Jumps)))
        or
        ((not Assigned(Jmp)) and Assigned(F.Jumps))
     then
+    begin
       SelectIgnoreCombo := true;
+      Continue;
+    end;
 
     if (Assigned(Jmp) and Assigned(F.Jumps)) then
     begin
-      AddFieldToCombo(F, AllFieldTypes, UseJumpsCombo, True);
-
       if (Jmp.Count <> F.Jumps.Count) then
+      begin
         SelectIgnoreCombo := true;
+        Continue;
+      end;
 
       for j := 0 to Jmp.Count - 1 do
       begin
@@ -522,10 +533,14 @@ begin
            or
            (Jmp[j].JumpToField <> F.Jumps[j].JumpToField)
         then
+        begin
           SelectIgnoreCombo := true;
+          Break;
+        end;
       end;
     end;
   end;
+
   if SelectIgnoreCombo then
   begin
     FinishCombo(UseJumpsCombo, FIgnoreObject);
@@ -585,7 +600,10 @@ begin
     AnchorParallel(akLeft, 10, JumpScrollBox);
     AnchorToNeighbour(akRight, 5, JumpGotoBevel);
     AnchorVerticalCenterTo(GFC);
-    OnUTF8KeyPress := @EditUTF8KeyPress;
+    OnUTF8KeyPress := @JumpEditUTF8KeyPress;
+    Hint := 'Specify value or use "." to indicate all other values';
+    ShowHint := true;
+    ParentShowHint := false;
     Parent := JumpScrollBox;
   end;
 
@@ -1897,6 +1915,19 @@ begin
     ftMDYDate,
     ftYMDDate: if (Char(Ch) in ['/', '-', '\', '.']) then UTF8Key := DateSeparator;
   end;
+end;
+
+procedure TFieldPropertiesFrame.JumpEditUTF8KeyPress(Sender: TObject;
+  var UTF8Key: TUTF8Char);
+var
+  S: String;
+begin
+  S := String(UTF8Key);
+
+  if S = TEpiJump.DefaultOnAnyValue then
+    exit
+  else
+    EditUTF8KeyPress(Sender, UTF8Key);
 end;
 
 constructor TFieldPropertiesFrame.Create(TheOwner: TComponent);

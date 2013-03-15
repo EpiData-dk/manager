@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 674
+  Left = 593
   Height = 603
-  Top = 253
+  Top = 284
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -289,6 +289,9 @@ object MainForm: TMainForm
         object ExtendedReportMenuItem: TMenuItem
           Action = ExtendedListReportAction
         end
+        object CodeBookReportMenuItem: TMenuItem
+          Action = CodeBookReportAction
+        end
       end
       object MenuItem3: TMenuItem
         Caption = '-'
@@ -493,6 +496,11 @@ object MainForm: TMainForm
       Caption = 'Count records by Id'
       OnExecute = CountsReportActionExecute
     end
+    object CodeBookReportAction: TAction
+      Category = 'Reports'
+      Caption = 'CodeBook'
+      OnExecute = CodeBookReportActionExecute
+    end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
     left = 208
@@ -552,6 +560,9 @@ object MainForm: TMainForm
       end
       object MenuItem14: TMenuItem
         Action = ExtendedListReportAction
+      end
+      object MenuItem27: TMenuItem
+        Action = CodeBookReportAction
       end
     end
     object MenuItem15: TMenuItem

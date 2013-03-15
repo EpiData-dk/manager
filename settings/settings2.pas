@@ -776,14 +776,15 @@ begin
     InitFont(FieldFont);
     InitFont(SectionFont);
     InitFont(HeadingFont1);
-    HeadingFont1.Size := Trunc(HeadingFont1.Size * 2);
+    HeadingFont1.Size := Trunc(HeadingFont1.Size * 2.0);
     InitFont(HeadingFont2);
     HeadingFont2.Size := Trunc(HeadingFont2.Size * 1.5);
     InitFont(HeadingFont3);
     HeadingFont3.Size := Trunc(HeadingFont3.Size * 1.2);
     InitFont(HeadingFont4);
-    HeadingFont4.Size := Trunc(HeadingFont4.Size * 1.1);
+    HeadingFont4.Size := Trunc(HeadingFont4.Size * 1.0);
     InitFont(HeadingFont5);
+    HeadingFont5.Size := Trunc(HeadingFont5.Size * 0.8);
   end;
 
   ManagerSettings.WorkingDirUTF8 := GetCurrentDirUTF8 + DirectorySeparator + 'data';
