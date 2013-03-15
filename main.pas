@@ -15,6 +15,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    CodeBookReportAction: TAction;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
@@ -34,6 +35,8 @@ type
     MenuItem24: TMenuItem;
     MenuItem25: TMenuItem;
     MenuItem26: TMenuItem;
+    CodeBookReportMenuItem: TMenuItem;
+    MenuItem27: TMenuItem;
     PasteAsDateMenuItem: TMenuItem;
     RecentFilesSubPopupMenu: TMenuItem;
     MenuItem4: TMenuItem;
@@ -157,6 +160,7 @@ type
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
+    procedure CodeBookReportActionExecute(Sender: TObject);
     procedure CombinedListReportActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure CountsReportActionExecute(Sender: TObject);
@@ -248,6 +252,7 @@ uses
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
   report_counts, report_double_entry_validation,
+  report_codebook,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
@@ -429,6 +434,11 @@ end;
 procedure TMainForm.CloseProjectActionUpdate(Sender: TObject);
 begin
   CloseProjectAction.Enabled := Assigned(FActiveFrame);
+end;
+
+procedure TMainForm.CodeBookReportActionExecute(Sender: TObject);
+begin
+  RunReport(TReportCodeBook);
 end;
 
 procedure TMainForm.CombinedListReportActionExecute(Sender: TObject);

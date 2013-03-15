@@ -213,6 +213,7 @@ type
     function  ValidateChanges: boolean;
     procedure InternalApplyChanges;
     procedure EditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+    procedure JumpEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -599,7 +600,7 @@ begin
     AnchorParallel(akLeft, 10, JumpScrollBox);
     AnchorToNeighbour(akRight, 5, JumpGotoBevel);
     AnchorVerticalCenterTo(GFC);
-    OnUTF8KeyPress := @EditUTF8KeyPress;
+    OnUTF8KeyPress := @JumpEditUTF8KeyPress;
     Hint := 'Specify value or use "." to indicate all other values';
     ShowHint := true;
     ParentShowHint := false;
@@ -1914,6 +1915,19 @@ begin
     ftMDYDate,
     ftYMDDate: if (Char(Ch) in ['/', '-', '\', '.']) then UTF8Key := DateSeparator;
   end;
+end;
+
+procedure TFieldPropertiesFrame.JumpEditUTF8KeyPress(Sender: TObject;
+  var UTF8Key: TUTF8Char);
+var
+  S: String;
+begin
+  S := String(UTF8Key);
+
+  if S = TEpiJump.DefaultOnAnyValue then
+    exit
+  else
+    EditUTF8KeyPress(Sender, UTF8Key);
 end;
 
 constructor TFieldPropertiesFrame.Create(TheOwner: TComponent);
