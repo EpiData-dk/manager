@@ -117,7 +117,7 @@ var
   Idx: Integer;
 begin
   CheckListBox1.Items.BeginUpdate;
-  Doc := TEpiDocument(Selection.Objects[i]);
+  Doc := TEpiDocument(Selection.Objects[0]);
   for i := 0 to Doc.DataFiles.Count - 1 do
   begin
     DF := Doc.DataFiles[i];
