@@ -10,6 +10,7 @@ uses
 
 type
 
+
   { TSectionPropertiesFrame }
 
   TSectionPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
