@@ -1,7 +1,7 @@
 object SectionPropertiesFrame: TSectionPropertiesFrame
-  Left = 905
+  Left = 752
   Height = 509
-  Top = 458
+  Top = 403
   Width = 588
   ClientHeight = 509
   ClientWidth = 588

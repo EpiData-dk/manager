@@ -270,6 +270,10 @@ object MainForm: TMainForm
         Caption = 'Properties'
       end
     end
+    object ScriptingMenu: TMenuItem
+      Caption = 'Script'
+      OnClick = ScriptingMenuClick
+    end
     object MenuItem21: TMenuItem
       Caption = 'Document'
       object MenuItem2: TMenuItem

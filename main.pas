@@ -37,6 +37,7 @@ type
     MenuItem26: TMenuItem;
     CodeBookReportMenuItem: TMenuItem;
     MenuItem27: TMenuItem;
+    ScriptingMenu: TMenuItem;
     PasteAsDateMenuItem: TMenuItem;
     RecentFilesSubPopupMenu: TMenuItem;
     MenuItem4: TMenuItem;
@@ -181,6 +182,7 @@ type
     procedure ProjectReportActionExecute(Sender: TObject);
     procedure QuestionListReportActionExecute(Sender: TObject);
     procedure ReportGeneratorActionExecute(Sender: TObject);
+    procedure ScriptingMenuClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
@@ -256,7 +258,8 @@ uses
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  managerprocs, process;
+  managerprocs, process,
+  scripting_form;
 
 { TMainForm }
 
@@ -569,6 +572,16 @@ begin
   RGF := TReportGeneratorForm.Create(Self);
   RGF.ShowModal;
   RGF.Free;
+end;
+
+procedure TMainForm.ScriptingMenuClick(Sender: TObject);
+var
+  SF: TScriptingForm;
+begin
+  SF := TScriptingForm.Create(self);
+  SF.DataFile := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).DataFile;
+  SF.ShowModal;
+  SF.Free;
 end;
 
 procedure TMainForm.SettingsActionExecute(Sender: TObject);

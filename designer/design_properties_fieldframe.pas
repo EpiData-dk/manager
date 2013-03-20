@@ -5,10 +5,10 @@ unit design_properties_fieldframe;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, ExtCtrls,
-  Buttons, JvDesignSurface, design_types, epidatafilestypes,
-  epicustombase, epidatafiles, epivaluelabels, LCLType, ActnList,
-  design_properties_baseframe;
+  Classes, SysUtils, FileUtil, SynPluginSyncroEdit, SynEdit, Forms, Controls,
+  ComCtrls, StdCtrls, ExtCtrls, Buttons, JvDesignSurface, design_types,
+  epidatafilestypes, epicustombase, epidatafiles, epivaluelabels, LCLType,
+  ActnList, design_properties_baseframe;
 
 type
 
