@@ -164,7 +164,7 @@ begin
   FHeading.AddCustomData(DesignControlCustomDataKey, Self);
 
   Caption := FHeading.Caption.Text;
-  UpdateEpiControl;
+//  UpdateEpiControl;
   UpdateControl;
 end;
 

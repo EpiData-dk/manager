@@ -589,7 +589,7 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SectionPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
+        <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_properties_sectionframe"/>
       </Unit59>
       <Unit60>
