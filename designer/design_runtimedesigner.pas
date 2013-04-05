@@ -295,7 +295,7 @@ type
     { Align }
   private
     procedure DoAlignControls(Const AAlignMent: TDesignControlsAlignment;
-      Const FixedDist: integer);
+      FixedDist: integer);
   public
     procedure AlignControls(Const AAlignMent: TDesignControlsAlignment;
       Const FixedDist: integer = -1);
@@ -573,6 +573,8 @@ var
   Surface: TJvDesignSurface;
   i: Integer;
   F: TDesignField;
+  H: Integer;
+  Pt: TPoint;
 begin
   Cbl := TStringList.Create;
 
@@ -584,6 +586,7 @@ begin
     P := FDesignPanel.ScreenToClient(FPopUpPoint);
 
   FLastSelectedFieldType := Ft;
+  Surface := FDesignPanel.Surface;
   try
     MainForm.BeginUpdatingForm;
     ReadClipBoard(Cbl);
@@ -593,8 +596,13 @@ begin
 
         F := TDesignField(NewDesignField(P));
         TEpiField(F.EpiControl).Question.Text := Cbl[i];
-
         Inc(P.Y, ManagerSettings.SpaceBtwFieldField + F.Height);
+
+        Pt := Surface.ContainerToSelectedContainer(P);
+        if (Surface.SelectedContainer <> FDesignPanel)  and
+           ((Pt.Y + F.Height) > Surface.SelectedContainer.ClientHeight)
+        then
+          Dec(P.Y, F.Height + ManagerSettings.SpaceBtwFieldField + (Pt.Y - Surface.SelectedContainer.ClientHeight));
       end;
   finally
     Cbl.Free;
@@ -645,6 +653,7 @@ var
   R: TRect;
   i: Integer;
   O: TPoint;
+  ASelectedContainer: TWinControl;
 
   function TopLeftSelectionPoint: TPoint;
   var
@@ -666,6 +675,7 @@ begin
     with FDesignPanel.Surface do
       begin
         MainForm.BeginUpdatingForm;
+        ASelectedContainer := SelectedContainer;
         P := SelectedContainer.ScreenToClient(FPopUpPoint);
         PasteComponents;
 
@@ -678,6 +688,10 @@ begin
           begin
             R := Selection[i].BoundsRect;
             OffsetRect(R, P.X, P.Y);
+            if R.Bottom > ASelectedContainer.ClientHeight then
+              OffsetRect(R, 0, -(R.Bottom - ASelectedContainer.ClientHeight));
+            if R.Right > ASelectedContainer.ClientWidth then
+              OffsetRect(R, -(R.Right - ASelectedContainer.ClientWidth), 0);
             Selection[i].BoundsRect := R;
           end;
 
@@ -705,6 +719,7 @@ var
   Surface: TJvDesignSurface;
   i: Integer;
   L: TDesignHeading;
+  Pt: TPoint;
 begin
   Cbl := TStringList.Create;
 
@@ -714,6 +729,8 @@ begin
     P := FindNewPostion(TDesignHeading)
   else
     P := FDesignPanel.ScreenToClient(FPopUpPoint);
+
+  Surface := FDesignPanel.Surface;
   try
 //    MainForm.BeginUpdatingForm;
     ReadClipBoard(Cbl);
@@ -725,6 +742,12 @@ begin
         TEpiHeading(L.EpiControl).Caption.Text := Cbl[i];
 
         Inc(P.Y, ManagerSettings.SpaceBtwLabelLabel + L.Height);
+
+        Pt := Surface.ContainerToSelectedContainer(P);
+        if (Surface.SelectedContainer <> FDesignPanel)  and
+           ((Pt.Y + L.Height) > Surface.SelectedContainer.ClientHeight)
+        then
+          Dec(P.Y, L.Height + ManagerSettings.SpaceBtwLabelLabel + (Pt.Y - Surface.SelectedContainer.ClientHeight));
       end;
   finally
 //    MainForm.EndUpdatingForm;
@@ -1279,7 +1302,7 @@ begin
   Surface    := FDesignPanel.Surface;
 
   try
-    if Assigned(Parent) then
+    if Assigned(AParent) then
       TopLeft := DesignClientToParent(TopLeft, AParent, FDesignPanel);
 
     FCreatingControl := not Assigned(Field);
@@ -1469,7 +1492,7 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.DoAlignControls(
-  const AAlignMent: TDesignControlsAlignment; const FixedDist: integer);
+  const AAlignMent: TDesignControlsAlignment; FixedDist: integer);
 var
   Objs: TJvDesignObjectArray;
   L: Integer;
@@ -1493,6 +1516,8 @@ var
   ATotLeft: Integer;
   ASideBounds: TRect;
   ESideBounds: TRect;
+  P: TWinControl;
+  Ctrl: TControl;
 
   procedure SortTop(var List: TJvDesignObjectArray);
   var
@@ -1551,12 +1576,17 @@ var
 begin
   Objs := DesignPanel.Surface.Selected;
   L := Length(Objs);
+  if L = 0 then exit;
 
-  if L > 0 then
-  begin
-    ASideBounds := TControl(Objs[0]).BoundsRect;
-    ESideBounds := (TControl(Objs[0]) as IDesignEpiControl).ExtendedBounds;
-  end;
+  if AAlignMent in [dcaEvenHorz, dcaFixedHorz] then
+    SortLeft(Objs);
+  if AAlignMent in [dcaEvenVert, dcaFixedVert] then
+    SortTop(Objs);
+
+  Ctrl := TControl(Objs[0]);
+
+  ASideBounds := Ctrl.BoundsRect;
+  ESideBounds := (Ctrl as IDesignEpiControl).ExtendedBounds;
   ATotalCtrlHeight := 0;
   ATotalCtrlWidth  := 0;
 
@@ -1571,6 +1601,39 @@ begin
 
     ATotalCtrlHeight += EBounds.Bottom - EBounds.Top;
     ATotalCtrlWidth  += EBounds.Right - EBounds.Left;
+  end;
+
+  // Check that ATotalCtrlHeight & ATotalCtrlWidth does not
+  // exceed parent boundries if in a section. This can make
+  // controls disappear.
+  P := Ctrl.Parent;
+  if (P <> FDesignPanel) then
+  begin
+    if (AAlignMent = dcaFixedVert) and
+       (
+        (
+         (Ctrl as IDesignEpiControl).ExtendedBounds.Top +
+         ATotalCtrlHeight +
+         ((L - 1) * FixedDist)
+        )
+        >
+         P.ClientHeight
+       )
+    then
+      FixedDist := Max(((P.ClientHeight - (Ctrl as IDesignEpiControl).ExtendedBounds.Top) - ATotalCtrlHeight) div (L - 1), 1);
+
+    if (AAlignMent = dcaFixedHorz) and
+       (
+        (
+         (Ctrl as IDesignEpiControl).ExtendedBounds.Left +
+         ATotalCtrlWidth +
+         ((L - 1) * FixedDist)
+        )
+        >
+         P.ClientWidth
+       )
+    then
+      FixedDist := Max(((P.ClientWidth - (Ctrl as IDesignEpiControl).ExtendedBounds.Left) - ATotalCtrlWidth) div (L - 1), 1);
   end;
 
   with ASideBounds do
@@ -1588,22 +1651,14 @@ begin
         ((Bottom - Top) - ATotalCtrlHeight) div (L - 1));
     end;
 
-  if AAlignMent in [dcaEvenHorz, dcaFixedHorz] then
-    SortLeft(Objs);
-  if AAlignMent in [dcaEvenVert, dcaFixedVert] then
-    SortTop(Objs);
-
   // Initial positions -> using controls left/top restrains first control
   // to same position.
-  if L > 0 then
-  begin
-    EBounds := (TControl(Objs[0]) as IDesignEpiControl).ExtendedBounds;
-    Case AAlignMent of
-      dcaEvenVert:   LastBot   := EBounds.Top - AEvenDistVert;
-      dcaEvenHorz:   LastRight := EBounds.Left - AEvenDistHorz;
-      dcaFixedVert:  LastBot   := EBounds.Top - FixedDist;
-      dcaFixedHorz:  LastRight := EBounds.Left - FixedDist;
-    end;
+  EBounds := (TControl(Objs[0]) as IDesignEpiControl).ExtendedBounds;
+  Case AAlignMent of
+    dcaEvenVert:   LastBot   := EBounds.Top - AEvenDistVert;
+    dcaEvenHorz:   LastRight := EBounds.Left - AEvenDistHorz;
+    dcaFixedVert:  LastBot   := EBounds.Top - FixedDist;
+    dcaFixedHorz:  LastRight := EBounds.Left - FixedDist;
   end;
 
   DisableAutoSizing;
@@ -2313,6 +2368,7 @@ var
   H: TEpiHeading;
   j: Integer;
   P: TPoint;
+  z: Integer;
 begin
   FDatafile := AValue;
   FDatafile.Sections.RegisterOnChangeHook(@SectionsChangeEvent, true);
@@ -2339,6 +2395,7 @@ begin
         Selected := FDesignPanel;
 
       ApplyCommonCtrlSetting(Selected, S);
+      Surface.Select(Selected);
 
       for j := 0 to S.Fields.Count - 1 do
         begin

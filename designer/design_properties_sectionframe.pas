@@ -10,22 +10,21 @@ uses
 
 type
 
+
   { TSectionPropertiesFrame }
 
   TSectionPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
-    CaptionEdit: TEdit;
-    GroupAssignedListBox: TListBox;
-    GroupAvailableListBox: TListBox;
-    GrpRightsMoveLeft: TSpeedButton;
-    GrpRightsMoveRight: TSpeedButton;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label9: TLabel;
     NameEdit: TEdit;
-    SectionBasicSheet: TTabSheet;
+    CaptionEdit: TEdit;
     SectionGroupAccessGroupBox: TGroupBox;
+    Label1: TLabel;
+    Label2: TLabel;
+    GroupAvailableListBox: TListBox;
+    GroupAssignedListBox: TListBox;
     SectionPageControl: TPageControl;
+    GrpRightsMoveRight: TSpeedButton;
+    GrpRightsMoveLeft: TSpeedButton;
+    SectionBasicSheet: TTabSheet;
   private
     { private declarations }
     FSections: TEpiCustomControlItemArray;
