@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, CheckLst,
-  ExtCtrls, ActnList, report_types, report_base, epidocument, epicustombase, types;
+  ExtCtrls, ActnList, report_types, report_base, epidocument, epicustombase,
+  types, projectfilelist_frame;
 
 type
 
@@ -57,6 +58,8 @@ type
     function  GetFrameCaption: string;
     procedure UpdateFrame(Selection: TStrings);
     procedure ApplyReportOptions(Report: TReportBase);
+    function OkToAdvance(ProjectList: TProjectFileListFrame): boolean;
+    function OkToAdvanceText: string;
     function CanClose: boolean;
   end;
 
@@ -301,6 +304,18 @@ begin
     CompareFields := CF;
     DblEntryValidateOptions := Options;
   end;
+end;
+
+function TValidateDoubleEntryFrame.OkToAdvance(
+  ProjectList: TProjectFileListFrame): boolean;
+begin
+  Result := ProjectList.SelectedList.Count = 2;
+end;
+
+function TValidateDoubleEntryFrame.OkToAdvanceText: string;
+begin
+  result :=
+    'You MUST select 2 file to compare!'
 end;
 
 function TValidateDoubleEntryFrame.CanClose: boolean;

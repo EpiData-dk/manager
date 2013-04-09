@@ -31,7 +31,7 @@ implementation
 
 uses
   validate_double_entry_frame, epidocument,
-  epireport_base, epireport_doubleentry_validate,
+  epireport_doubleentry_validate,
   epireport_filelist;
 
 resourcestring
@@ -46,8 +46,6 @@ end;
 
 procedure TReportDoubleEntryValidation.DoRunReport;
 var
-  Doc: TEpiDocument;
-  i: Integer;
   R: TEpiReportDoubleEntryValidation;
   Rf: TEpiReportFileList;
 begin

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, Buttons, episettings, epicustombase;
+  ComCtrls, Buttons, epicustombase;
 
 type
 
@@ -43,8 +43,7 @@ implementation
 uses
   project_settings_field_frame, project_settings_interface,
   project_settings_general_frame, settings2, settings2_var,
-  project_settings_study_frame, project_settings_study_contentdesc_frame,
-  project_settings_study_ownership_frame, project_settings_autoincrement_frame,
+  project_settings_autoincrement_frame,
   main;
 
 { TProjectSettingsForm }

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   Buttons, StdCtrls, ComCtrls, ActnList, projectfilelist_frame, report_base,
-  epidocument;
+  epidocument, report_types;
 
 type
 
@@ -38,6 +38,8 @@ type
     FReport: TReportBase;
     FReportClass: TReportBaseClass;
     FActivatedOnce: boolean;
+    FNextFrame: TCustomFrame;
+    FNextForm: TCustomForm;
     function ShowDialog(out Files: TStrings): boolean;
     procedure DoAddFiles;
     procedure AfterFileImport(Sender: TObject; Document: TEpiDocument;
@@ -60,7 +62,7 @@ implementation
 uses
   settings2_var, settings2, epimiscutils, viewer_form,
   epireport_generator_html, epireport_generator_txt, epireport_generator_base,
-  report_types, ok_cancel_form;
+  ok_cancel_form;
 
 { TStaticReportsForm }
 
@@ -74,9 +76,6 @@ end;
 procedure TStaticReportsForm.OkActionExecute(Sender: TObject);
 var
   FGeneratorClass: TEpiReportGeneratorBaseClass;
-  FC: TCustomFrameClass;
-  NextForm: TForm;
-  Frame: TCustomFrame;
 begin
   case RadioGroup1.ItemIndex of
     0: FGeneratorClass := TEpiReportHTMLGenerator;
@@ -84,25 +83,13 @@ begin
   end;
   FReport := FReportClass.Create(FProjectList.SelectedList, FGeneratorClass);
 
-  if Supports(FReport, IReportFrameProvider) then
+  if Assigned(FNextForm) then
   begin
-    FC := (FReport as IReportFrameProvider).GetFrameClass;
-    if Supports(FC, IReportOptionFrame) then
-    begin
-      NextForm := TOkCancelForm.Create(self);
-      Frame := FC.Create(NextForm);
-      Frame.Align := alClient;
-      Frame.Parent := NextForm;
-      (Frame as IReportOptionFrame).UpdateFrame(FProjectList.SelectedList);
-      NextForm.Caption := (Frame as IReportOptionFrame).GetFrameCaption;
-
-      Self.Hide;
-      ModalResult := NextForm.ShowModal;
-
-      if ModalResult = mrOK then
-        (Frame as IReportOptionFrame).ApplyReportOptions(FReport);
-      NextForm.Free;
-    end;
+    Self.Hide;
+    (FNextFrame as IReportOptionFrame).UpdateFrame(FProjectList.SelectedList);
+    if FNextForm.ShowModal = mrOK then
+      (FNextFrame as IReportOptionFrame).ApplyReportOptions(FReport);
+    FNextForm.Free;
   end;
 end;
 
@@ -113,7 +100,22 @@ end;
 
 procedure TStaticReportsForm.ProjectFileListChanged(Sender: TObject);
 begin
-  FOkActive := FProjectList.SelectedList.Count > 0;
+  if Assigned(FNextFrame) then
+  begin
+    FOkActive := (FNextFrame as IReportOptionFrame).OkToAdvance(FProjectList);
+    if FOkActive then
+      Hint := ''
+    else
+      Hint := (FNextFrame as IReportOptionFrame).OkToAdvanceText;
+  end
+  else
+  begin
+    FOkActive := FProjectList.SelectedList.Count > 0;
+    if FOkActive then
+      Hint := ''
+    else
+      Hint := 'Select at least 1 project!';
+  end;
 end;
 
 function TStaticReportsForm.ShowDialog(out Files: TStrings): boolean;
@@ -179,6 +181,7 @@ begin
     FActivatedOnce := true;
     DoAddFiles;
   end;
+  ProjectFileListChanged(nil);
 end;
 
 procedure TStaticReportsForm.AddFilesActionExecute(Sender: TObject);
@@ -228,10 +231,23 @@ begin
 
   FakeReport := FReportClass.Create(TStringList.Create, TEpiReportTXTGenerator);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
-  FakeReport.Free;
 
-  if Supports(FReportClass, IReportFrameProvider) then
+  if Supports(FakeReport, IReportFrameProvider) then
+  begin
     OkBtn.Caption := 'Next';
+
+    FC := (FakeReport as IReportFrameProvider).GetFrameClass;
+    if Supports(FC, IReportOptionFrame) then
+    begin
+      FNextForm := TOkCancelForm.Create(self);
+      FNextFrame := FC.Create(FNextForm);
+      FNextFrame.Align := alClient;
+      FNextFrame.Parent := FNextForm;
+      FNextForm.Caption := (FNextFrame as IReportOptionFrame).GetFrameCaption;
+    end;
+  end;
+
+  FakeReport.Free;
 end;
 
 procedure TStaticReportsForm.AddInitialDocument(const FileName: string;
