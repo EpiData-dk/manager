@@ -688,22 +688,29 @@ end;
 procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);
 var
   R: TReportBase;
-  Doc: TEpiDocument;
   Fn: String;
+  i: Integer;
 begin
   R := RunReport(TReportDoubleEntryValidation, false);
   if Assigned(R) and
      (
       (not Assigned(FActiveFrame)) or
       (not Assigned(FActiveFrame.EpiDocument))
-     )
+     ) and
+     TEpiDocument(R.Documents.Objects[0]).Modified
   then
     begin
-      Fn := R.Documents[0];
-      Doc := TEpiDocument(R.Documents.Objects[0]);
-      if Doc.Modified then
-        Doc.SaveToFile(fn);
+      Fn := R.Documents[0] + '.doubleentry-verification.epx';
+      i := 0;
+      while FileExistsUTF8(Fn) do
+      begin
+        Inc(i);
+        Fn := R.Documents[0] + '.doubleentry-verification.' + IntToStr(i) + '.epx';
+      end;
 
+      TEpiDocument(R.Documents.Objects[0]).SaveToFile(fn);
+      ShowMessage('Validation saved to file:' + LineEnding +
+                  Fn);
     end;
 
   if Assigned(R) then

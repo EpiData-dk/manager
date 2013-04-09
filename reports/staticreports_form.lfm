@@ -1,7 +1,7 @@
 object StaticReportsForm: TStaticReportsForm
-  Left = 625
+  Left = 956
   Height = 516
-  Top = 242
+  Top = 404
   Width = 595
   Caption = 'StaticReportsForm'
   ClientHeight = 516
@@ -10,6 +10,7 @@ object StaticReportsForm: TStaticReportsForm
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
+  ShowHint = True
   LCLVersion = '1.1'
   object Panel1: TPanel
     Left = 0

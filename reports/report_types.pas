@@ -6,7 +6,7 @@ unit report_types;
 interface
 
 uses
-  Classes, Forms, report_base;
+  Classes, Forms, report_base, projectfilelist_frame;
 
 type
   IReportFrameProvider = interface ['IReportFrameProvider']
@@ -17,6 +17,8 @@ type
     function  GetFrameCaption: string;
     procedure UpdateFrame(Selection: TStrings);
     procedure ApplyReportOptions(Report: TReportBase);
+    function OkToAdvance(ProjectList: TProjectFileListFrame): boolean;
+    function OkToAdvanceText: string;
     function CanClose: boolean;
   end;
 

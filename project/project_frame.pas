@@ -228,7 +228,6 @@ end;
 procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
 var
   Dlg: TSaveDialog absolute Sender;
-  S: String;
 begin
   case Dlg.FilterIndex of
     1: Dlg.DefaultExt := 'epx';

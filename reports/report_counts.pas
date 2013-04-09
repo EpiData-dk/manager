@@ -49,7 +49,7 @@ begin
   if FieldList.Count = 0 then exit;
 
   S := FieldList[0].Name;
-  for i := 0 to FieldList.Count - 1 do
+  for i := 1 to FieldList.Count - 1 do
     S += ', ' + FieldList[i].Name;
 
   Generator.Heading('Count of observations for unique combined values of: ' + S);
