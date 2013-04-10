@@ -36,7 +36,7 @@ implementation
 
 uses
   Clipbrd, FileUtil, settings2, settings2_var, forms, strutils,
-  epimiscutils;
+  epimiscutils, LCLVersion;
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 var
