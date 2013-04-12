@@ -5,7 +5,8 @@ unit report_counts;
 interface
 
 uses
-  Classes, Forms, SysUtils, report_base, report_types, epidatafiles;
+  Classes, Forms, SysUtils, report_base, report_types, epidatafiles,
+  epidocument;
 
 type
 
@@ -17,6 +18,8 @@ type
   protected
     function GetTitle: string; override;
     procedure DoRunReport; override;
+    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string
+       ); override;
   public
     function GetFrameClass: TCustomFrameClass;
     property FieldList: TEpiFields read FFieldList write FFieldList;
@@ -25,7 +28,7 @@ type
 implementation
 
 uses
-  epireport_counts, report_optionframe_counts;
+  epireport_report_countbyid, report_optionframe_counts;
 
 
 resourcestring
@@ -40,7 +43,7 @@ end;
 
 procedure TReportCounts.DoRunReport;
 var
-  R: TEpiReportCounts;
+  R: TEpiReportCountById;
   S: String;
   i: Integer;
 begin
@@ -53,11 +56,18 @@ begin
     S += ', ' + FieldList[i].Name;
 
   Generator.Heading('Count of observations for unique combined values of: ' + S);
-  R := TEpiReportCounts.Create(Generator);
+  R := TEpiReportCountById.Create(Generator);
   R.Documents := Documents;
   R.FieldList := FFieldList;
   R.RunReport;
   R.Free;
+end;
+
+procedure TReportCounts.DoDocumentReport(const Doc: TEpiDocument;
+  const FileName: string);
+begin
+  // Do not inherit -> we do not want per file reports.
+  //inherited DoDocumentReport(Doc, FileName);
 end;
 
 function TReportCounts.GetFrameClass: TCustomFrameClass;

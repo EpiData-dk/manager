@@ -19,9 +19,9 @@ type
 
 implementation
 
-uses
+{uses
   epidocument,
-  epireport_base, epireport_fieldlist_extended;
+  epireport_base, epireport_fieldlist_extended;}
 
 
 resourcestring
@@ -35,11 +35,11 @@ begin
 end;
 
 procedure TReportFieldListExtended.DoRunReport;
-var
+{var
   i: Integer;
-  R: TEpiReportExtendedFieldList;
+  R: TEpiReportExtendedFieldList; }
 begin
-  inherited DoRunReport;
+ { inherited DoRunReport;
 
   for i := 0 to Documents.Count - 1 do
   begin
@@ -48,7 +48,7 @@ begin
     R.EpiDataFiles := TEpiDocument(Documents.Objects[i]).DataFiles;
     R.RunReport;
     R.Free;
-  end;
+  end;   }
 end;
 
 end.

@@ -5,7 +5,8 @@ unit report_base;
 interface
 
 uses
-  Classes, SysUtils, epireport_generator_base;
+  Classes, SysUtils, epireport_generator_base,
+  epidocument;
 
 type
 
@@ -36,26 +37,16 @@ type
   TReportFileListBase = class(TReportBase)
   protected
     procedure DoRunReport; override;
+    procedure DoDocumentReport(const Doc: TEpiDocument;
+      const FileName: string); virtual;
   end;
 
 implementation
 
 uses
-  epidocument, epireport_filelist, managerprocs;
-
-{ TReportFileListBase }
-
-procedure TReportFileListBase.DoRunReport;
-var
-  R: TEpiReportFileList;
-begin
-  inherited DoRunReport;
-
-  R := TEpiReportFileList.Create(Generator);
-  R.FileList := Documents;
-  R.RunReport;
-  R.Free;
-end;
+  epireport_base, epireport_report_mainheader,
+  epireport_report_projectheading,
+  managerprocs;
 
 { TReportBase }
 
@@ -66,7 +57,7 @@ end;
 
 procedure TReportBase.DoRunReport;
 begin
-  FGenerator.Section('Report: ' + GetTitle + ' Created ' + FormatDateTime('YYYY/MM/DD HH:NN:SS', Now));
+  //
 end;
 
 procedure TReportBase.DoEndReport;
@@ -123,7 +114,38 @@ begin
   Result := FGenerator.GetReportText;
 end;
 
-{ TReportListBase }
+{ TReportFileListBase }
+
+procedure TReportFileListBase.DoRunReport;
+var
+  R: TEpiReportBase;
+  i: Integer;
+begin
+  inherited DoRunReport;
+
+  R := TEpiReportMainHeader.Create(Generator);
+  TEpiReportMainHeader(R).ProjectList := Documents;
+  TEpiReportMainHeader(R).Title := GetTitle;
+  R.RunReport;
+  R.Free;
+
+  for i := 0 to Documents.Count - 1 do
+    DoDocumentReport(TEpiDocument(Documents.Objects[i]), Documents[i]);
+end;
+
+procedure TReportFileListBase.DoDocumentReport(const Doc: TEpiDocument;
+  const FileName: string);
+var
+  R: TEpiReportProjectHeader;
+begin
+  Generator.Line('');
+  R := TEpiReportProjectHeader.Create(Generator);
+  R.Document := Doc;
+  R.Filename := FileName;
+  R.RunReport;
+  R.Free;
+  Generator.Line('');
+end;
 
 end.
 

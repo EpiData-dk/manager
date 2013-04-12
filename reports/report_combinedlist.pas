@@ -20,11 +20,11 @@ type
 implementation
 
 
-uses
+{uses
   epidocument,
   epireport_base, epireport_types, epireport_fieldlist_simple,
   epireport_valuelabels,
-  epireport_generator_html, epireport_filelist;
+  epireport_generator_html, epireport_filelist;}
 
 
 resourcestring
@@ -38,12 +38,12 @@ begin
 end;
 
 procedure TReportCombinedList.DoRunReport;
-var
+{var
   Doc: TEpiDocument;
   i: Integer;
-  R: TEpiReportBase;
+  R: TEpiReportBase;  }
 begin
-  inherited DoRunReport;
+{  inherited DoRunReport;
 
   for i := 0 to Documents.Count - 1 do
   begin
@@ -57,7 +57,7 @@ begin
     TEpiReportValueLabels(R).EpiValueLabels := TEpiDocument(Documents.Objects[i]).ValueLabelSets;
     R.RunReport;
     R.Free;
-  end;
+  end;    }
 end;
 
 end.

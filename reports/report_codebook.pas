@@ -5,7 +5,7 @@ unit report_codebook;
 interface
 
 uses
-  Classes, SysUtils, report_base;
+  Classes, SysUtils, report_base, epidocument;
 
 type
 
@@ -14,14 +14,15 @@ type
   TReportCodeBook = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-    procedure DoRunReport; override;
+    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string
+      ); override;
   end;
 
 implementation
 
 uses
-  epidocument,
-  epireport_base, epireport_fieldlist_extended, epireport_valuelabels;
+  epireport_base, epireport_report_fieldlist, epireport_report_fieldinfo,
+  epireport_report_valuelabelsetlist;
 
 
 resourcestring
@@ -34,25 +35,41 @@ begin
   Result := rsReportCodeBook;
 end;
 
-procedure TReportCodeBook.DoRunReport;
+procedure TReportCodeBook.DoDocumentReport(const Doc: TEpiDocument;
+  const FileName: string);
 var
   i: Integer;
   R: TEpiReportBase;
 begin
-  inherited DoRunReport;
+  inherited DoDocumentReport(Doc, FileName);
 
-  for i := 0 to Documents.Count - 1 do
+  R := TEpiReportFieldList.Create(Generator);
+  with TEpiReportFieldList(R) do
   begin
-    Generator.Heading('File: ' + Documents[i]);
-    R := TEpiReportExtendedFieldList.Create(Generator);
-    TEpiReportExtendedFieldList(R).EpiDataFiles := TEpiDocument(Documents.Objects[i]).DataFiles;
-    R.RunReport;
-    R.Free;
+    Fields := Doc.DataFiles[0].Fields;
+    ExtendedList := true;
+  end;
+  R.RunReport;
+  R.Free;
+  Generator.Line('');
 
-    R := TEpiReportValueLabels.Create(Generator);
-    TEpiReportValueLabels(R).EpiValueLabels := TEpiDocument(Documents.Objects[i]).ValueLabelSets;
+  for i := 0 to Doc.DataFiles[0].Fields.Count - 1 do
+  begin
+    R := TEpiReportFieldInfo.Create(Generator);
+    TEpiReportFieldInfo(R).Field := Doc.DataFiles[0].Fields[i];
     R.RunReport;
     R.Free;
+    Generator.Line('');
+  end;
+
+  for i := 0 to Doc.ValueLabelSets.Count - 1 do
+  begin
+    R := TEpiReportValueLabelSetList.Create(Generator);
+    TEpiReportValueLabelSetList(R).ValueLabelSet := Doc.ValueLabelSets[i];
+    R.RunReport;
+    R.Free;
+    if not (i = Doc.ValueLabelSets.Count - 1) then
+      Generator.Line('');
   end;
 end;
 
