@@ -12,9 +12,9 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
     Height = 609
     Top = 0
     Width = 572
-    ActivePage = JumpSheet
+    ActivePage = FieldAdvancedSheet
     Align = alClient
-    TabIndex = 2
+    TabIndex = 1
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
@@ -480,15 +480,17 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Control = FieldAdvancedSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
-        Height = 134
+        Height = 159
         Top = 178
         Width = 546
         Anchors = [akTop, akLeft, akRight]
+        AutoSize = True
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
+        BorderSpacing.InnerBorder = 5
         Caption = 'Valuelabel Setting:'
-        ClientHeight = 117
+        ClientHeight = 142
         ClientWidth = 542
         TabOrder = 2
         object ValueLabelWriteToLabel: TLabel
@@ -497,7 +499,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideTop.Side = asrBottom
           Left = 10
           Height = 15
-          Top = 59
+          Top = 86
           Width = 157
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
@@ -524,7 +526,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideRight.Side = asrBottom
           Left = 10
           Height = 29
-          Top = 76
+          Top = 103
           Width = 522
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
@@ -538,16 +540,32 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         end
         object ForcePickListChkBox: TCheckBox
           AnchorSideLeft.Control = ValueLabelSettingGrpBox
-          AnchorSideTop.Control = ShowValueLabelChkBox
+          AnchorSideTop.Control = ValueLabelAsNoteChkBox
           AnchorSideTop.Side = asrBottom
           Left = 10
           Height = 22
-          Top = 32
+          Top = 59
           Width = 231
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
           Caption = 'Always show picklist during entry'
           TabOrder = 2
+        end
+        object ValueLabelAsNoteChkBox: TCheckBox
+          AnchorSideLeft.Control = ValueLabelSettingGrpBox
+          AnchorSideTop.Control = ShowValueLabelChkBox
+          AnchorSideTop.Side = asrBottom
+          Left = 10
+          Height = 22
+          Hint = 'Shows the content of the value label set as a note, but only i no notes already exists or "Always show piclist during entry" is NOT set.'
+          Top = 32
+          Width = 206
+          BorderSpacing.Left = 10
+          BorderSpacing.Top = 5
+          Caption = 'Show value label set as note'
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 3
         end
       end
       object CompareGroupBox: TGroupBox
@@ -558,7 +576,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 62
-        Top = 322
+        Top = 347
         Width = 546
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
