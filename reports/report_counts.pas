@@ -18,8 +18,8 @@ type
   protected
     function GetTitle: string; override;
     procedure DoRunReport; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string
-       ); override;
+    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+      const Index: Integer); override;
   public
     function GetFrameClass: TCustomFrameClass;
     property FieldList: TEpiFields read FFieldList write FFieldList;
@@ -64,7 +64,7 @@ begin
 end;
 
 procedure TReportCounts.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string);
+  const FileName: string; const Index: Integer);
 begin
   // Do not inherit -> we do not want per file reports.
   //inherited DoDocumentReport(Doc, FileName);

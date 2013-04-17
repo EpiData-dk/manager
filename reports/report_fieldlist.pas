@@ -14,8 +14,8 @@ type
   TReportFieldLists = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string
-       ); override;
+    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+      const Index: Integer); override;
   end;
 
 implementation
@@ -36,11 +36,11 @@ begin
 end;
 
 procedure TReportFieldLists.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string);
+  const FileName: string; const Index: Integer);
 var
   R: TEpiReportFieldList;
 begin
-  inherited DoDocumentReport(Doc, FileName);
+  inherited DoDocumentReport(Doc, FileName, Index);
 
   R := TEpiReportFieldList.Create(Generator);
   R.Fields := Doc.DataFiles[0].Fields;

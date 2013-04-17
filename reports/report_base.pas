@@ -38,7 +38,7 @@ type
   protected
     procedure DoRunReport; override;
     procedure DoDocumentReport(const Doc: TEpiDocument;
-      const FileName: string); virtual;
+      const FileName: string; Const Index: Integer); virtual;
   end;
 
 implementation
@@ -130,11 +130,11 @@ begin
   R.Free;
 
   for i := 0 to Documents.Count - 1 do
-    DoDocumentReport(TEpiDocument(Documents.Objects[i]), Documents[i]);
+    DoDocumentReport(TEpiDocument(Documents.Objects[i]), Documents[i], i);
 end;
 
 procedure TReportFileListBase.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string);
+  const FileName: string; const Index: Integer);
 var
   R: TEpiReportProjectHeader;
 begin
@@ -142,6 +142,7 @@ begin
   R := TEpiReportProjectHeader.Create(Generator);
   R.Document := Doc;
   R.Filename := FileName;
+  R.FileNo   := Index + 1;
   R.RunReport;
   R.Free;
   Generator.Line('');

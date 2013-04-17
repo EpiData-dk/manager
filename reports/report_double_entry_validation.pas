@@ -21,8 +21,8 @@ type
   protected
     function GetTitle: string; override;
     procedure DoRunReport; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string
-       ); override;
+    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+      const Index: Integer); override;
   public
     function GetFrameClass: TCustomFrameClass;
     property KeyFields: TEpiFields read FKeyFields write FKeyFields;
@@ -63,7 +63,7 @@ begin
 end;
 
 procedure TReportDoubleEntryValidation.DoDocumentReport(
-  const Doc: TEpiDocument; const FileName: string);
+  const Doc: TEpiDocument; const FileName: string; const Index: Integer);
 begin
   // do not do inherited -> we do not wan't a per file overview.
   // inherited DoDocumentReport(Doc, FileName);

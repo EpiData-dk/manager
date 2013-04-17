@@ -14,8 +14,8 @@ type
   TReportValueLabelList = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string
-       ); override;
+    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+      const Index: Integer); override;
   end;
 
 implementation
@@ -34,12 +34,12 @@ begin
 end;
 
 procedure TReportValueLabelList.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string);
+  const FileName: string; const Index: Integer);
 var
   R: TEpiReportValueLabelSetList;
   i: Integer;
 begin
-  inherited DoDocumentReport(Doc, FileName);
+  inherited DoDocumentReport(Doc, FileName, Index);
 
   for i := 0 to Doc.ValueLabelSets.Count - 1 do
   begin
