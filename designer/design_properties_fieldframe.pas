@@ -31,6 +31,7 @@ type
     Bevel4: TBevel;
     CalcFieldLabel: TLabel;
     CalcTabSheet: TTabSheet;
+    ValueLabelAsNoteChkBox: TCheckBox;
     CombineDateGrpBox: TGroupBox;
     CombineDateRadio: TRadioButton;
     CombineStringGrpBox: TGroupBox;
@@ -1295,6 +1296,11 @@ begin
     if ClearOrLeaveChkBox(ShowValueLabelChkBox, Fields[i].ShowValueLabel)
     then break;
 
+  ValueLabelAsNoteChkBox.Checked := Field.ShowValueLabelNotes;
+  for i := 1 to FieldCount - 1 do
+    if ClearOrLeaveChkBox(ValueLabelAsNoteChkBox, Fields[i].ShowValueLabelNotes)
+    then break;
+
   ForcePickListChkBox.Checked := Field.ForcePickList;
   for i := 1 to FieldCount - 1 do
     if ClearOrLeaveChkBox(ForcePickListChkBox, Fields[i].ForcePickList)
@@ -1732,6 +1738,11 @@ begin
   if ShowValueLabelChkBox.State <> cbGrayed then
     for i := 0 to FieldCount - 1 do
       Fields[i].ShowValueLabel := ShowValueLabelChkBox.Checked;
+
+  // Show valuelabel as notes
+  if ValueLabelAsNoteChkBox.State <> cbGrayed then
+    for i := 0 to FieldCount - 1 do
+      Fields[i].ShowValueLabelNotes := ValueLabelAsNoteChkBox.Checked;
 
   // Forcepicklist
   if ForcePickListChkBox.State <> cbGrayed then

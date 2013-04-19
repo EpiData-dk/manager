@@ -19,7 +19,6 @@ type
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
-    MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     BrowseDatasetMenuItem: TMenuItem;
@@ -90,12 +89,10 @@ type
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
     ExtendedListReportAction: TAction;
-    CombinedListReportAction: TAction;
-    ExtendedReportMenuItem: TMenuItem;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     ValueLabelListReportAction: TAction;
     ValueLabaleListReportMenuItem: TMenuItem;
-    CombinedReportMenuItem: TMenuItem;
+    ExtendedReportMenuItem: TMenuItem;
     QuestionListReportMenuItem: TMenuItem;
     QuestionListReportAction: TAction;
     ReportGeneratorAction: TAction;
@@ -161,7 +158,6 @@ type
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
     procedure CodeBookReportActionExecute(Sender: TObject);
-    procedure CombinedListReportActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure CountsReportActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
@@ -439,11 +435,6 @@ end;
 procedure TMainForm.CodeBookReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportCodeBook);
-end;
-
-procedure TMainForm.CombinedListReportActionExecute(Sender: TObject);
-begin
-  RunReport(TReportCombinedList);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -942,7 +933,6 @@ begin
   ExportAction.ShortCut               := M_Export;
   QuestionListReportAction.ShortCut   := M_QuestionListReport;
   ValueLabelListReportAction.ShortCut := M_ValueLabelListReport;
-  CombinedListReportAction.ShortCut   := M_CombinedListReport;
   ExtendedListReportAction.ShortCut   := M_ExtendedListReport;
   ProjectReportAction.ShortCut        := M_ProjectOverviewReport;
 end;

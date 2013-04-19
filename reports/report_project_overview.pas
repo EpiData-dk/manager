@@ -5,7 +5,7 @@ unit report_project_overview;
 interface
 
 uses
-  Classes, SysUtils, report_base;
+  Classes, SysUtils, report_base, epidocument;
 
 type
 
@@ -14,14 +14,16 @@ type
   TReportProjectOverview = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-    procedure DoRunReport; override;
+    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+      const Index: Integer); override;
   end;
 
 implementation
 
 uses
-  epidocument,
-  epireport_project_overview;
+  epireport_base,
+  epireport_report_projectheading,
+  epireport_report_studyinfo;
 
 
 resourcestring
@@ -34,23 +36,19 @@ begin
   Result := rsReportProjectOverviewTitle;
 end;
 
-procedure TReportProjectOverview.DoRunReport;
+procedure TReportProjectOverview.DoDocumentReport(const Doc: TEpiDocument;
+  const FileName: string; const Index: Integer);
 var
-  Doc: TEpiDocument;
-  i: Integer;
-  R: TEpiReportProjectOverView;
+  R: TEpiReportStudyInfo;
 begin
-  inherited DoRunReport;
+  inherited DoDocumentReport(Doc, FileName, Index);
 
-  for i := 0 to Documents.Count - 1 do
-  begin
-    Generator.Heading('File: ' + Documents[i]);;
-    R := TEpiReportProjectOverView.Create(Generator);
-    R.Document := TEpiDocument(Documents.Objects[i]);
-    R.RunReport;
-    R.Free;
-  end;
+  R := TEpiReportStudyInfo.Create(Generator);
+  R.Document := Doc;
+  R.RunReport;
+  R.Free;
 end;
+
 
 end.
 

@@ -280,14 +280,11 @@ object MainForm: TMainForm
         object QuestionListReportMenuItem: TMenuItem
           Action = QuestionListReportAction
         end
-        object ValueLabaleListReportMenuItem: TMenuItem
-          Action = ValueLabelListReportAction
-        end
-        object CombinedReportMenuItem: TMenuItem
-          Action = CombinedListReportAction
-        end
         object ExtendedReportMenuItem: TMenuItem
           Action = ExtendedListReportAction
+        end
+        object ValueLabaleListReportMenuItem: TMenuItem
+          Action = ValueLabelListReportAction
         end
         object CodeBookReportMenuItem: TMenuItem
           Action = CodeBookReportAction
@@ -376,7 +373,7 @@ object MainForm: TMainForm
   end
   object ActionList1: TActionList
     OnUpdate = ActionList1Update
-    left = 368
+    left = 360
     top = 336
     object NewProjectAction: TAction
       Category = 'File'
@@ -460,11 +457,6 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Valuelabel List'
       OnExecute = ValueLabelListReportActionExecute
-    end
-    object CombinedListReportAction: TAction
-      Category = 'Reports'
-      Caption = 'Combined List'
-      OnExecute = CombinedListReportActionExecute
     end
     object ExtendedListReportAction: TAction
       Category = 'Reports'
@@ -554,9 +546,6 @@ object MainForm: TMainForm
       end
       object MenuItem12: TMenuItem
         Action = ValueLabelListReportAction
-      end
-      object MenuItem13: TMenuItem
-        Action = CombinedListReportAction
       end
       object MenuItem14: TMenuItem
         Action = ExtendedListReportAction

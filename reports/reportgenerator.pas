@@ -35,9 +35,9 @@ implementation
 
 {$R *.lfm}
 
-uses
+{uses
   epireport_valuelabels, epireport_databasegrid,
-  epireport_fieldlist_simple;
+  epireport_fieldlist_simple;}
 
 { TReportGeneratorForm }
 

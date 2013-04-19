@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, StdCtrls, htmlview;
+  Buttons, StdCtrls;
 
 type
 
@@ -15,7 +15,6 @@ type
   TReportViewerForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    HTMLViewer1: THTMLViewer;
     Memo1: TMemo;
     Panel1: TPanel;
     SaveDialog1: TSaveDialog;
@@ -38,7 +37,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLType;
+  LCLType, LCLIntf;
 
 { TReportViewerForm }
 
@@ -59,12 +58,12 @@ begin
   begin
     Memo1.Lines.SaveToFile(SaveDialog1.FileName);
   end else begin
-    Ss := TStringStream.Create(HTMLViewer1.DocumentSource);
+  {  Ss := TStringStream.Create(HTMLViewer1.DocumentSource);
     Ss.Position := 0;
     Fs := TFileStream.Create(SaveDialog1.FileName, fmCreate);
     Fs.CopyFrom(Ss, ss.Size);
     Fs.Free;
-    Ss.Free;
+    Ss.Free;  }
   end;
 end;
 
@@ -72,23 +71,32 @@ procedure ShowReportForm(Owner: TComponent; const Caption: string;
   const ReportString: string; ShowHtml: boolean);
 var
   F: TReportViewerForm;
+  S: TFileStream;
+  Fn: String;
+  i: Integer;
 begin
-  F := TReportViewerForm.Create(Owner);
-  F.Caption := Caption;
-
   if ShowHtml then
   begin
-    F.Memo1.Visible := false;
-    F.HTMLViewer1.BringToFront;
-    F.HTMLViewer1.LoadFromString(ReportString);
+    i := 0;
+    repeat
+      Fn := SysUtils.GetTempDir(false) + Format('epidata_report.%d.html', [i]);
+      Inc(i);
+    until not FileExistsUTF8(Fn);
+
+    S := TFileStream.Create(Fn, fmCreate);
+    S.Write(ReportString[1], Length(ReportString));
+    S.Free;
+    OpenUrl('file://' + Fn);
   end else begin
-    F.HTMLViewer1.Visible := false;
+    F := TReportViewerForm.Create(Owner);
+    F.Caption := Caption;
+//    F.HTMLViewer1.Visible := false;
     F.Memo1.BringToFront;
     F.Memo1.Lines.BeginUpdate;
     F.Memo1.Text := ReportString;
     F.Memo1.Lines.EndUpdate;
+    F.Show;
   end;
-  F.Show;
 end;
 
 end.
