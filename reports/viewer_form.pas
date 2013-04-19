@@ -72,16 +72,21 @@ procedure ShowReportForm(Owner: TComponent; const Caption: string;
 var
   F: TReportViewerForm;
   S: TFileStream;
+  Fn: String;
+  i: Integer;
 begin
   if ShowHtml then
   begin
-    S := TFileStream.Create(SysUtils.GetTempFileName, fmCreate);
+    i := 0;
+    repeat
+      Fn := SysUtils.GetTempDir(false) + Format('epidata_report.%d.html', [i]);
+      Inc(i);
+    until not FileExistsUTF8(Fn);
+
+    S := TFileStream.Create(Fn, fmCreate);
     S.Write(ReportString[1], Length(ReportString));
-    OpenURL(S.FileName);
     S.Free;
-{    F.Memo1.Visible := false;
-    F.HTMLViewer1.BringToFront;
-    F.HTMLViewer1.LoadFromString(ReportString);}
+    OpenUrl('file://' + Fn);
   end else begin
     F := TReportViewerForm.Create(Owner);
     F.Caption := Caption;
