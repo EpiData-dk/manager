@@ -413,7 +413,7 @@ begin
   Fn := aFilename;
   Res := mrNone;
 
-
+  // Check for date in the file being opened.
   R := TRegExpr.Create;
   R.Expression := '([0-9]{4}.[0-9]{2}.[0-9]{2}\.)';
   B := R.Exec(Fn);
