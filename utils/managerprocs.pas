@@ -89,6 +89,13 @@ begin
     {$ENDIF}
     );
 
+  {$IF ((lcl_major = 1) and (lcl_minor < 1))}
+  S := ExtractFilePath(Fn);
+  if not DirectoryExistsUTF8(S) then
+    if not ForceDirectoriesUTF8(S) then
+      Exit;
+  {$ENDIF}
+
   // TODO : Settings can be loaded from commandline?
   if not LoadSettingsFromIni(Fn) then
   begin
