@@ -187,7 +187,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="78">
+    <Units Count="79">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -707,6 +707,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="report_codebook"/>
       </Unit77>
+      <Unit78>
+        <Filename Value="export/export_ddi_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ExportDDIFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_ddi_frame"/>
+      </Unit78>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
