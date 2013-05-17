@@ -34,7 +34,8 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form, export_customvaluelabel_frame;
+  export_form, export_customvaluelabel_frame,
+  settings2;
 
 { TExportDDIFrame }
 
@@ -61,6 +62,12 @@ function TExportDDIFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
 begin
   (LocalFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
+  with TEpiDDIExportSetting(Setting) do
+  begin
+    SoftwareName := 'EpiData Manager';
+    SoftwareVersion := GetManagerVersion;
+    Version := '1.0.0';
+  end;
 end;
 
 function TExportDDIFrame.GetFrameCaption: string;

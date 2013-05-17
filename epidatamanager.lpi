@@ -711,6 +711,7 @@
         <Filename Value="export/export_ddi_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportDDIFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_ddi_frame"/>
       </Unit78>

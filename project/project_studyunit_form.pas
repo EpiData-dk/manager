@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, StdCtrls, epistudy;
+  Buttons, ComCtrls, StdCtrls, EditBtn, epistudy;
 
 type
 
@@ -19,6 +19,12 @@ type
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     CitationsMemo: TMemo;
+    FromDateEdit: TDateEdit;
+    Label17: TLabel;
+    DesignMemo: TMemo;
+    Label18: TLabel;
+    UnitOfObsMemo: TMemo;
+    ToDateEdit: TDateEdit;
     FundingMemo: TMemo;
     GeoCoverageEdit: TEdit;
     IdentfierEdit: TEdit;
@@ -30,6 +36,7 @@ type
     Label13: TLabel;
     Label14: TLabel;
     Label15: TLabel;
+    Label16: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -51,7 +58,6 @@ type
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
     TabSheet7: TTabSheet;
-    TimeCoverageEdit: TEdit;
     TitleEdit: TEdit;
     VersionEdit: TEdit;
     procedure BitBtn1Click(Sender: TObject);
@@ -88,12 +94,18 @@ begin
     Version                   := VersionEdit.Text;
     AbstractText.Text         := AbstractMemo.Text;
     GeographicalCoverage.Text := GeoCoverageEdit.Text;
-    TimeCoverage.Text         := TimeCoverageEdit.Text;
+    if Trim(FromDateEdit.Text) <> '' then
+      DataCollectionStart := FromDateEdit.Date;
+    if Trim(ToDateEdit.Text) <> '' then
+      DataCollectionEnd := ToDateEdit.Date;
+//    TimeCoverage.Text         := TimeCoverageEdit.Text;
     Population.Text           := PopulationMemo.Text;
     Keywords                  := KeywordsEdit.Text;
     Purpose.Text              := PurposeMemo.Text;
     Citations.Text            := CitationsMemo.Text;
     Publisher.Text            := PublisherEdit.Text;
+    Design.Text               := DesignMemo.Text;
+    UnitOfObservation.Text    := UnitOfObsMemo.Text;
     Agency                    := AgencyEdit.Text;
     Author                    := AuthorsMemo.Text;
     Rights.Text               := RightsMemo.Text;
@@ -126,12 +138,18 @@ begin
     VersionEdit.Text      := Version;
     AbstractMemo.Text     := AbstractText.Text;
     GeoCoverageEdit.Text  := GeographicalCoverage.Text;
-    TimeCoverageEdit.Text := TimeCoverage.Text;
+//    TimeCoverageEdit.Text := TimeCoverage.Text;
+    if (DataCollectionStart <> MaxDateTime) then
+      FromDateEdit.Date   := DataCollectionStart;
+    if (DataCollectionEnd <> MaxDateTime) then
+      ToDateEdit.Date     := DataCollectionEnd;
     PopulationMemo.Text   := Population.Text;
     KeywordsEdit.Text     := Keywords;
     PurposeMemo.Text      := Purpose.Text;
     CitationsMemo.Text    := Citations.Text;
     PublisherEdit.Text    := Publisher.Text;
+    DesignMemo.Text       := Design.Text;
+    UnitOfObsMemo.Text    := UnitOfObservation.Text;
     AgencyEdit.Text       := Agency;
     AuthorsMemo.Text      := Author;
     RightsMemo.Text       := Rights.Text;
