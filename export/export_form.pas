@@ -50,6 +50,7 @@ type
     FExportSetting: TEpiExportSetting;
     FActiveSheet: TTabSheet;
     FDoc: TEpiDocument;
+    FFileName: string;
     { private declarations }
   public
     { public declarations }
@@ -165,7 +166,10 @@ begin
     // Delete the "*" part of "*.<ext>"
     Delete(Ext, 1, 1);
 
-    ExportFileNameEdit.Text := ChangeFileExt(ExportFileNameEdit.Text, Ext);
+//    if ExportFileNameEdit.Modified then
+      ExportFileNameEdit.Text := ChangeFileExt(ExportFileNameEdit.Text, Ext)
+{    else
+      ExportFileNameEdit.Text := ChangeFileExt(FFileName, Ext)}
   end;
 end;
 
@@ -197,6 +201,7 @@ begin
     1: S := 'CSV File';
     2: S := 'SPSS';
     3: S := 'SAS';
+    4: S := 'DDI';
   end;
   ExportTypeCombo.ItemIndex := ExportTypeCombo.Items.IndexOf(S);
   ExportTypeComboSelect(ExportTypeCombo);
@@ -233,11 +238,12 @@ begin
   DialogFilters := [];
 
   FDoc := Doc;
+  FFileName := FileName;
 
   // Export File Name
   ExportFileNameEdit.Filter := GetEpiDialogFilter(DialogFilters + [dfAll]);
   ExportFileNameEdit.InitialDir := ManagerSettings.WorkingDirUTF8;
-  ExportFileNameEdit.FileName := FileName;
+  ExportFileNameEdit.FileName := ChangeFileExt(FFileName, '.' + IntToStr(FDoc.CycleNo) + '.test');
 
   // Export types and their frames
   for i := 0 to RegisterList.Count - 1 do

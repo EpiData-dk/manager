@@ -94,9 +94,9 @@ begin
     Version                   := VersionEdit.Text;
     AbstractText.Text         := AbstractMemo.Text;
     GeographicalCoverage.Text := GeoCoverageEdit.Text;
-    if Trim(FromDateEdit.Text) <> '' then
+    if FromDateEdit.Date > 0 then
       DataCollectionStart := FromDateEdit.Date;
-    if Trim(ToDateEdit.Text) <> '' then
+    if ToDateEdit.Date > 0 then
       DataCollectionEnd := ToDateEdit.Date;
 //    TimeCoverage.Text         := TimeCoverageEdit.Text;
     Population.Text           := PopulationMemo.Text;

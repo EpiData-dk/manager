@@ -46,7 +46,7 @@ begin
   with TEpiReportFieldList(R) do
   begin
     Fields := Doc.DataFiles[0].Fields;
-    ExtendedList := true;
+    ExtendedList := false;
   end;
   R.RunReport;
   R.Free;

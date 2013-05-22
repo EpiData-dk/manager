@@ -94,7 +94,7 @@ object ExportForm: TExportForm
           Left = 10
           Height = 22
           Top = 32
-          Width = 90
+          Width = 91
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
           Caption = 'All records'
@@ -166,7 +166,7 @@ object ExportForm: TExportForm
           Left = 10
           Height = 22
           Top = 136
-          Width = 168
+          Width = 169
           BorderSpacing.Left = 10
           BorderSpacing.Top = 20
           Caption = 'Export deleted records'

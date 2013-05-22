@@ -6,7 +6,7 @@ unit export_frame_types;
 interface
 
 uses
-  Classes, SysUtils, epiexportsettings, epimiscutils;
+  Classes, SysUtils, epiexportsettings, epimiscutils, epidocument;
 
 type
   IExportSettingsFrame = interface ['IExportSettingsFrame']

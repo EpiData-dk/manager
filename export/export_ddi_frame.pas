@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls,
-  export_frame_types, epiexportsettings,
+  export_frame_types, epiexportsettings, epidocument,
   epimiscutils, settings2_interface, settings2_var;
 
 type
@@ -17,6 +17,7 @@ type
   private
     { private declarations }
     LocalFrame: TCustomFrame;
+    FData: PManagerSettings;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -45,12 +46,9 @@ begin
 
   LocalFrame := TCustomValueLabelFrame.Create(self);
   LocalFrame.Parent := self;
-//  LocalFrame.Align := alClient;
   LocalFrame.AnchorClient(10);
-{  LocalFrame.AnchorToNeighbour(akTop, 10, FieldNamingRGrp);
-  LocalFrame.AnchorParallel(akLeft, 20, Self);
-  LocalFrame.AnchorParallel(akRight, 20, Self);
-  LocalFrame.AnchorParallel(akBottom, 10, Self); }
+  // SETUP ACCORDING TO MANAGERSETTINGS.
+  SetSettings(@ManagerSettings);
 end;
 
 destructor TExportDDIFrame.Destroy;
@@ -87,12 +85,14 @@ end;
 
 procedure TExportDDIFrame.SetSettings(Data: PManagerSettings);
 begin
-  (LocalFrame as ISettingsFrame).SetSettings(Data);
+  Fdata := Data;
+  TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked := FData^.ExportDDIValueLabels;
 end;
 
 function TExportDDIFrame.ApplySettings: boolean;
 begin
-  (LocalFrame as ISettingsFrame).ApplySettings;
+  FData^.ExportDDIValueLabels := TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked;
+  result := true;
 end;
 
 initialization

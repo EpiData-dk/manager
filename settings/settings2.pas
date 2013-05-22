@@ -69,6 +69,7 @@ uses
 
   // export
   export_csv_frame, export_stata_frame, export_sas_frame, export_spss_frame,
+  export_ddi_frame,
 
   // project settings
   project_settings_field_frame, project_settings_general_frame, project_settings_autoincrement_frame;
@@ -204,6 +205,9 @@ begin
 
       sec := 'exportspss';
       WriteBool(sec, 'ExportSPSSValueLabels', ExportSPSSValueLabels);
+
+      sec := 'exportddi';
+      WriteBool(sec, 'ExportDDIValueLabels', ExportDDIValueLabels);
 
       // Project Defaults
       // - general:
@@ -345,6 +349,9 @@ begin
 
       sec := 'exportspss';
       ExportSPSSValueLabels  := ReadBool(sec, 'ExportSPSSValueLabels', ExportSPSSValueLabels);
+
+      sec := 'exportddi';
+      ExportDDIValueLabels   := ReadBool(sec, 'ExportDDIValueLabels', ExportDDIValueLabels);
 
       // Fonts
       Sec := 'fonts';
@@ -621,6 +628,7 @@ begin
     FindNodeWithText('CSV').Data                 := Pointer(TExportCSVFrame.Create(Self));
     FindNodeWithText('SPSS').Data                := Pointer(TExportSPSSFrame.Create(Self));
     FindNodeWithText('SAS').Data                 := Pointer(TExportSASFrame.Create(Self));
+    FindNodeWithText('DDI').Data                 := Pointer(TExportDDIFrame.Create(Self));
 
     // Project options
     FindNodeWithText('Backup').Data              := Pointer(TProjectSettings_BackupFrame.Create(Self));
@@ -713,6 +721,8 @@ const
     ExportSASValueLabels:  true;
     // - SPSS
     ExportSPSSValueLabels: true;
+    // - DDI
+    ExportDDIValueLabels:  true;
 
     // Project Defaults
     // - general:
