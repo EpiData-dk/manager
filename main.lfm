@@ -42,7 +42,7 @@ object MainForm: TMainForm
       Left = 11
       Height = 27
       Top = 6
-      Width = 100
+      Width = 101
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = '&Define Project'
@@ -57,10 +57,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 126
+      Left = 127
       Height = 27
       Top = 6
-      Width = 103
+      Width = 104
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -73,7 +73,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 244
+      Left = 246
       Height = 27
       Top = 6
       Width = 79
@@ -89,7 +89,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 338
+      Left = 340
       Height = 27
       Top = 6
       Width = 81
@@ -104,7 +104,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 434
+      Left = 436
       Height = 27
       Top = 6
       Width = 65
@@ -243,7 +243,6 @@ object MainForm: TMainForm
       end
       object SettingsMenuItem: TMenuItem
         Action = SettingsAction
-        OnClick = SettingsActionExecute
       end
       object ResetWindowPosMenuItem: TMenuItem
         Action = DefaultWindowPosAction

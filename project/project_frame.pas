@@ -339,7 +339,7 @@ begin
     AbstractText.Text         := ContAbstract;
     Citations.Text            := ContCitation;
     GeographicalCoverage.Text := ContGeoCover;
-    TimeCoverage.Text         := ContTimeCover;
+//    TimeCoverage.Text         := ContTimeCover;
 
     // - Ownership;
     Author                    := OwnAuthers;
@@ -378,7 +378,7 @@ begin
   Ms := nil;
   try
     Ms := TMemoryStream.Create;
-    EpiDocument.Study.ModifiedDate := Now;
+    EpiDocument.IncCycleNo;
     EpiDocument.SaveToStream(Ms);
     Ms.Position := 0;
 

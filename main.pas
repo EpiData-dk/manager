@@ -339,6 +339,7 @@ var
   ExportForm: TExportForm;
   Settings: TEpiExportSetting;
   Exporter: TEpiExport;
+  S: String;
 begin
   Settings := nil;
   Exporter := nil;
@@ -353,7 +354,15 @@ begin
 
     Exporter := TEpiExport.Create;
     if not Exporter.Export(ExportForm.ExportSetting) then
-      ShowMessage('Export Failed.');
+      ShowMessage('Export Failed.')
+    else
+    with ExportForm do
+    begin
+      S := 'Export Succeeded' + LineEnding + LineEnding;
+      S += 'Project: ' + Fn + LineEnding;
+      S += 'Export: ' + ExportSetting.ExportFileName;
+      ShowMessage(S);
+    end;
   finally
     ExportForm.Free;
     Exporter.Free;

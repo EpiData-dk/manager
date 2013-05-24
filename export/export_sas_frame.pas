@@ -44,7 +44,8 @@ begin
 
   FFrame := TCustomValueLabelFrame.Create(self);
   FFrame.Parent := self;
-  FFrame.Align := alClient;
+  FFrame.AnchorClient(10);
+
 
   // SETUP ACCORDING TO MANAGERSETTINGS.
   SetSettings(@ManagerSettings);

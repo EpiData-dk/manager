@@ -188,7 +188,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="78">
+    <Units Count="79">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -497,6 +497,7 @@
         <Filename Value="export/export_sas_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportSASFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_sas_frame"/>
       </Unit44>
@@ -708,6 +709,14 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="report_codebook"/>
       </Unit77>
+      <Unit78>
+        <Filename Value="export/export_ddi_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ExportDDIFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_ddi_frame"/>
+      </Unit78>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

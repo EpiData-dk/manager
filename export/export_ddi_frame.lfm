@@ -1,0 +1,9 @@
+object ExportDDIFrame: TExportDDIFrame
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 320
+  TabOrder = 0
+  DesignLeft = 464
+  DesignTop = 312
+end

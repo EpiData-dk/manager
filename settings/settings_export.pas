@@ -47,6 +47,7 @@ begin
     AddObject('CSV',   TObject(1));
     AddObject('SPSS',  TObject(2));
     AddObject('SAS',   TObject(3));
+    AddObject('DDI',   TObject(4));
   end;
 
   // Encodings
