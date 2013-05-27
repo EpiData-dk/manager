@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="5"/>
-      <BuildNr Value="1"/>
+      <BuildNr Value="2"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -162,16 +162,17 @@
     <RequiredPackages Count="8">
       <Item1>
         <PackageName Value="epidatacore_visuals"/>
+        <MinVersion Major="1" Minor="5" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="jvRuntimeDesign"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Major="1" Minor="5" Valid="True"/>
       </Item2>
       <Item3>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="jvRuntimeDesign"/>
       </Item3>
       <Item4>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Major="1" Minor="3" Valid="True"/>
+        <PackageName Value="SynEdit"/>
       </Item4>
       <Item5>
         <PackageName Value="Printer4Lazarus"/>
