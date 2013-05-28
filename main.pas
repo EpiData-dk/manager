@@ -340,6 +340,7 @@ var
   Settings: TEpiExportSetting;
   Exporter: TEpiExport;
   S: String;
+  ASettings: TEpiExportSetting;
 begin
   Settings := nil;
   Exporter := nil;
@@ -360,8 +361,15 @@ begin
     begin
       S := 'Export Succeeded' + LineEnding + LineEnding;
       S += 'Project: ' + Fn + LineEnding;
-      S += 'Export: ' + ExportSetting.ExportFileName;
-      ShowMessage(S);
+
+      ASettings := ExportSetting;
+      while Assigned(ASettings) do
+      begin
+        S += 'Export: ' + ASettings.ExportFileName + LineEnding;
+        ASettings := ASettings.AdditionalExportSettings;
+      end;
+
+      ShowMessage(TrimRight(S));
     end;
   finally
     ExportForm.Free;
