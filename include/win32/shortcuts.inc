@@ -18,7 +18,6 @@ begin
   M_Export               := KeyToShortCut(VK_UNKNOWN, []);
   M_QuestionListReport   := KeyToShortCut(VK_UNKNOWN, []);
   M_ValueLabelListReport := KeyToShortCut(VK_UNKNOWN, []);
-  M_CombinedListReport   := KeyToShortCut(VK_UNKNOWN, []);
   M_ExtendedListReport   := KeyToShortCut(VK_UNKNOWN, []);
   M_ProjectOverviewReport:= KeyToShortCut(VK_UNKNOWN, []);
 

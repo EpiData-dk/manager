@@ -5,14 +5,15 @@ unit report_double_entry_validation;
 interface
 
 uses
-  Classes, SysUtils, Forms, report_base, epidatafiles, epitools_val_dbl_entry,
+  Classes, SysUtils, Forms, report_base, epidatafiles, epidocument,
+  epitools_val_dbl_entry,
   report_types;
 
 type
 
   { TReportDoubleEntryValidation }
 
-  TReportDoubleEntryValidation = class(TReportBase, IReportFrameProvider)
+  TReportDoubleEntryValidation = class(TReportFileListBase, IReportFrameProvider)
   private
     FCompareFields: TEpiFields;
     FDblEntryValidateOptions: TEpiToolsDblEntryValidateOptions;
@@ -20,6 +21,8 @@ type
   protected
     function GetTitle: string; override;
     procedure DoRunReport; override;
+    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+      const Index: Integer); override;
   public
     function GetFrameClass: TCustomFrameClass;
     property KeyFields: TEpiFields read FKeyFields write FKeyFields;
@@ -30,9 +33,8 @@ type
 implementation
 
 uses
-  validate_double_entry_frame, epidocument,
-  epireport_base, epireport_doubleentry_validate,
-  epireport_filelist;
+  validate_double_entry_frame,
+  epireport_report_doubleentryvalidate;
 
 resourcestring
   rsReportDoubleEntryValidation = 'Double Entry Validation Report.';
@@ -46,17 +48,9 @@ end;
 
 procedure TReportDoubleEntryValidation.DoRunReport;
 var
-  Doc: TEpiDocument;
-  i: Integer;
   R: TEpiReportDoubleEntryValidation;
-  Rf: TEpiReportFileList;
 begin
   inherited DoRunReport;
-
-  Rf := TEpiReportFileList.Create(Generator);
-  Rf.FileList := Documents;
-  Rf.RunReport;
-  Rf.Free;
 
   R := TEpiReportDoubleEntryValidation.Create(Generator);
   R.MainDF := TEpiDocument(Documents.Objects[0]).DataFiles[0];
@@ -66,6 +60,13 @@ begin
   R.DblEntryValidateOptions := FDblEntryValidateOptions;
   R.RunReport;
   R.Free;
+end;
+
+procedure TReportDoubleEntryValidation.DoDocumentReport(
+  const Doc: TEpiDocument; const FileName: string; const Index: Integer);
+begin
+  // do not do inherited -> we do not wan't a per file overview.
+  // inherited DoDocumentReport(Doc, FileName);
 end;
 
 function TReportDoubleEntryValidation.GetFrameClass: TCustomFrameClass;

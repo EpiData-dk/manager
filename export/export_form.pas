@@ -50,6 +50,7 @@ type
     FExportSetting: TEpiExportSetting;
     FActiveSheet: TTabSheet;
     FDoc: TEpiDocument;
+    FFileName: string;
     { private declarations }
   public
     { public declarations }
@@ -146,7 +147,10 @@ begin
 
   if Assigned(FActiveSheet) then FActiveSheet.TabVisible := false;
 
-  Frame := PFrameRec(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex])^.Frame;
+  P := ExportTypeCombo.ItemIndex;
+  if P = -1 then exit;
+
+  Frame := PFrameRec(ExportTypeCombo.Items.Objects[P])^.Frame;
 
   FActiveSheet := TTabSheet(Frame.Parent);
   FActiveSheet.TabVisible := true;
@@ -162,7 +166,10 @@ begin
     // Delete the "*" part of "*.<ext>"
     Delete(Ext, 1, 1);
 
-    ExportFileNameEdit.Text := ChangeFileExt(ExportFileNameEdit.Text, Ext);
+//    if ExportFileNameEdit.Modified then
+      ExportFileNameEdit.Text := ChangeFileExt(ExportFileNameEdit.Text, Ext)
+{    else
+      ExportFileNameEdit.Text := ChangeFileExt(FFileName, Ext)}
   end;
 end;
 
@@ -183,9 +190,26 @@ begin
 end;
 
 procedure TExportForm.FormShow(Sender: TObject);
+var
+  S: String;
 begin
-  // Forces a change of filename extension and frame!
+  // SETUP ACCORDING TO MANAGERSETTINGS.
+  // Export type:
+  //  - Dirty way of doing, but works for now.
+  case ManagerSettings.ExportType of
+    0: S := 'Stata';
+    1: S := 'CSV File';
+    2: S := 'SPSS';
+    3: S := 'SAS';
+    4: S := 'DDI';
+  end;
+  ExportTypeCombo.ItemIndex := ExportTypeCombo.Items.IndexOf(S);
   ExportTypeComboSelect(ExportTypeCombo);
+
+  // Encoding:
+  EncodingCmbBox.ItemIndex := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ManagerSettings.ExportEncoding)));
+  // Export Deleted:
+  ExportDeletedChkBox.Checked := ManagerSettings.ExportDeleted;
 end;
 
 procedure TExportForm.FieldsChkListBoxMouseMove(Sender: TObject;
@@ -214,11 +238,12 @@ begin
   DialogFilters := [];
 
   FDoc := Doc;
+  FFileName := FileName;
 
   // Export File Name
   ExportFileNameEdit.Filter := GetEpiDialogFilter(DialogFilters + [dfAll]);
   ExportFileNameEdit.InitialDir := ManagerSettings.WorkingDirUTF8;
-  ExportFileNameEdit.FileName := FileName;
+  ExportFileNameEdit.FileName := ChangeFileExt(FFileName, '.' + IntToStr(FDoc.CycleNo) + '.test');
 
   // Export types and their frames
   for i := 0 to RegisterList.Count - 1 do
@@ -267,21 +292,6 @@ begin
   for i := 0 to Doc.DataFiles[0].Fields.Count - 1 do
     FieldsChkListBox.AddItem(Doc.DataFiles[0].Fields[i].Name, Doc.DataFiles[0].Fields[i]);
   FieldsChkListBox.CheckAll(cbChecked, false, false);
-
-  // SETUP ACCORDING TO MANAGERSETTINGS.
-  // Export type:
-  //  - Dirty way of doing, but works for now.
-  case ManagerSettings.ExportType of
-    0: S := 'Stata';
-    1: S := 'CSV File';
-    2: S := 'SPSS';
-    3: S := 'SAS';
-  end;
-  ExportTypeCombo.ItemIndex := ExportTypeCombo.Items.IndexOf(S);
-  // Encoding:
-  EncodingCmbBox.ItemIndex := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ManagerSettings.ExportEncoding)));
-  // Export Deleted:
-  ExportDeletedChkBox.Checked := ManagerSettings.ExportDeleted;
 end;
 
 end.

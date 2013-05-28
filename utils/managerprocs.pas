@@ -36,7 +36,7 @@ implementation
 
 uses
   Clipbrd, FileUtil, settings2, settings2_var, forms, strutils,
-  epimiscutils;
+  epimiscutils, LCLVersion;
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 var
@@ -84,7 +84,17 @@ begin
     {$ELSE}
     true
     {$ENDIF}
-    , true);
+    {$IF ((lcl_major = 1) and (lcl_minor >= 1))}
+    , true
+    {$ENDIF}
+    );
+
+  {$IF ((lcl_major = 1) and (lcl_minor < 1))}
+  S := ExtractFilePath(Fn);
+  if not DirectoryExistsUTF8(S) then
+    if not ForceDirectoriesUTF8(S) then
+      Exit;
+  {$ENDIF}
 
   // TODO : Settings can be loaded from commandline?
   if not LoadSettingsFromIni(Fn) then

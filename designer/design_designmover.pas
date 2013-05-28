@@ -5,7 +5,8 @@ unit design_designmover;
 interface
 
 uses
-  Classes, SysUtils, types, JvDesignImp, JvDesignSurface, LCLType;
+  Classes, SysUtils, types, JvDesignImp, JvDesignSurface, LCLType,
+  controls;
 
 type
 
@@ -22,17 +23,22 @@ type
   protected
     procedure PaintDragRects; override;
   {$ENDIF}
+  private
+    function DragRectsInParent: boolean;
   protected
     procedure ApplyDragRects; override;
   public
     constructor Create(AOwner: TJvDesignSurface); override;
     destructor Destroy; override;
+    procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer
+       ); override;
   end;
 
 implementation
 
 uses
-  design_commander, manager_globals, controls, LCLIntf, Graphics;
+  design_commander, manager_globals, LCLIntf, Graphics, forms;
 
 type
 
@@ -149,6 +155,32 @@ begin
 end;
 {$ENDIF}
 
+function TDesignMover.DragRectsInParent: boolean;
+var
+  C: TWinControl;
+  P: TWinControl;
+  i: Integer;
+  Pt: TPoint;
+begin
+  C := Surface.Container;
+  P := Surface.Selection[0].Parent;
+
+  Result := true;
+  for i := Low(FDragRects) to High(FDragRects) do
+  begin
+    Pt := P.ScreenToClient(FDragRects[i].TopLeft);
+    if (Pt.X < 0) or (Pt.Y < 0)
+    then
+      Exit(false);
+
+    Pt := P.ScreenToClient(FDragRects[i].BottomRight);
+    if (P <> C) and
+       ((Pt.X > P.Width) or (Pt.Y > P.Height))
+    then
+      Exit(false);
+  end;
+end;
+
 procedure TDesignMover.ApplyDragRects;
 var
   L: TCustomCommandList;
@@ -186,6 +218,37 @@ begin
   RemoveDarwinHack;
   {$ENDIF}
   inherited Destroy;
+end;
+
+procedure TDesignMover.MouseMove(Shift: TShiftState; X, Y: Integer);
+var
+  FCapture: HWND;
+begin
+  inherited MouseMove(Shift, X, Y);
+
+  {$IFNDEF LINUX}
+  // Changing the cursor in linux f*cks with mouse capture, hence
+  // if the mouse is released OUTSIDE the program drag/drop is
+  // seriously misbehaving afterwards.
+  if DragRectsInParent
+  then
+    Screen.Cursor := crDrag
+  else
+    Screen.Cursor := crNoDrop;
+  {$ENDIF}
+end;
+
+procedure TDesignMover.MouseUp(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Integer);
+var
+  ValidPos: Boolean;
+begin
+  PaintDragRects;
+  FMouseLast := Point(X, Y);
+  ValidPos := DragRectsInParent;
+
+  if ValidPos then
+    ApplyDragRects;
 end;
 
 end.

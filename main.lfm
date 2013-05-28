@@ -42,7 +42,7 @@ object MainForm: TMainForm
       Left = 11
       Height = 27
       Top = 6
-      Width = 100
+      Width = 101
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = '&Define Project'
@@ -57,10 +57,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 126
+      Left = 127
       Height = 27
       Top = 6
-      Width = 103
+      Width = 104
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -73,7 +73,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 244
+      Left = 246
       Height = 27
       Top = 6
       Width = 79
@@ -89,7 +89,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 338
+      Left = 340
       Height = 27
       Top = 6
       Width = 81
@@ -104,7 +104,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 434
+      Left = 436
       Height = 27
       Top = 6
       Width = 65
@@ -243,7 +243,6 @@ object MainForm: TMainForm
       end
       object SettingsMenuItem: TMenuItem
         Action = SettingsAction
-        OnClick = SettingsActionExecute
       end
       object ResetWindowPosMenuItem: TMenuItem
         Action = DefaultWindowPosAction
@@ -270,10 +269,6 @@ object MainForm: TMainForm
         Caption = 'Properties'
       end
     end
-    object ScriptingMenu: TMenuItem
-      Caption = 'Script'
-      OnClick = ScriptingMenuClick
-    end
     object MenuItem21: TMenuItem
       Caption = 'Document'
       object MenuItem2: TMenuItem
@@ -284,14 +279,11 @@ object MainForm: TMainForm
         object QuestionListReportMenuItem: TMenuItem
           Action = QuestionListReportAction
         end
-        object ValueLabaleListReportMenuItem: TMenuItem
-          Action = ValueLabelListReportAction
-        end
-        object CombinedReportMenuItem: TMenuItem
-          Action = CombinedListReportAction
-        end
         object ExtendedReportMenuItem: TMenuItem
           Action = ExtendedListReportAction
+        end
+        object ValueLabaleListReportMenuItem: TMenuItem
+          Action = ValueLabelListReportAction
         end
         object CodeBookReportMenuItem: TMenuItem
           Action = CodeBookReportAction
@@ -380,7 +372,7 @@ object MainForm: TMainForm
   end
   object ActionList1: TActionList
     OnUpdate = ActionList1Update
-    left = 368
+    left = 360
     top = 336
     object NewProjectAction: TAction
       Category = 'File'
@@ -464,11 +456,6 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Valuelabel List'
       OnExecute = ValueLabelListReportActionExecute
-    end
-    object CombinedListReportAction: TAction
-      Category = 'Reports'
-      Caption = 'Combined List'
-      OnExecute = CombinedListReportActionExecute
     end
     object ExtendedListReportAction: TAction
       Category = 'Reports'
@@ -558,9 +545,6 @@ object MainForm: TMainForm
       end
       object MenuItem12: TMenuItem
         Action = ValueLabelListReportAction
-      end
-      object MenuItem13: TMenuItem
-        Action = CombinedListReportAction
       end
       object MenuItem14: TMenuItem
         Action = ExtendedListReportAction

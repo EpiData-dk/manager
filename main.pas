@@ -19,7 +19,6 @@ type
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
-    MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     BrowseDatasetMenuItem: TMenuItem;
@@ -37,7 +36,6 @@ type
     MenuItem26: TMenuItem;
     CodeBookReportMenuItem: TMenuItem;
     MenuItem27: TMenuItem;
-    ScriptingMenu: TMenuItem;
     PasteAsDateMenuItem: TMenuItem;
     RecentFilesSubPopupMenu: TMenuItem;
     MenuItem4: TMenuItem;
@@ -91,12 +89,10 @@ type
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
     ExtendedListReportAction: TAction;
-    CombinedListReportAction: TAction;
-    ExtendedReportMenuItem: TMenuItem;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     ValueLabelListReportAction: TAction;
     ValueLabaleListReportMenuItem: TMenuItem;
-    CombinedReportMenuItem: TMenuItem;
+    ExtendedReportMenuItem: TMenuItem;
     QuestionListReportMenuItem: TMenuItem;
     QuestionListReportAction: TAction;
     ReportGeneratorAction: TAction;
@@ -162,7 +158,6 @@ type
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
     procedure CodeBookReportActionExecute(Sender: TObject);
-    procedure CombinedListReportActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure CountsReportActionExecute(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
@@ -182,7 +177,6 @@ type
     procedure ProjectReportActionExecute(Sender: TObject);
     procedure QuestionListReportActionExecute(Sender: TObject);
     procedure ReportGeneratorActionExecute(Sender: TObject);
-    procedure ScriptingMenuClick(Sender: TObject);
     procedure SettingsActionExecute(Sender: TObject);
     procedure ShortCutKeysMenuItemClick(Sender: TObject);
     procedure ShortIntroMenuItemClick(Sender: TObject);
@@ -258,8 +252,7 @@ uses
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  managerprocs, process,
-  scripting_form;
+  managerprocs, process;
 
 { TMainForm }
 
@@ -346,6 +339,8 @@ var
   ExportForm: TExportForm;
   Settings: TEpiExportSetting;
   Exporter: TEpiExport;
+  S: String;
+  ASettings: TEpiExportSetting;
 begin
   Settings := nil;
   Exporter := nil;
@@ -360,7 +355,22 @@ begin
 
     Exporter := TEpiExport.Create;
     if not Exporter.Export(ExportForm.ExportSetting) then
-      ShowMessage('Export Failed.');
+      ShowMessage('Export Failed.')
+    else
+    with ExportForm do
+    begin
+      S := 'Export Succeeded' + LineEnding + LineEnding;
+      S += 'Project: ' + Fn + LineEnding;
+
+      ASettings := ExportSetting;
+      while Assigned(ASettings) do
+      begin
+        S += 'Export: ' + ASettings.ExportFileName + LineEnding;
+        ASettings := ASettings.AdditionalExportSettings;
+      end;
+
+      ShowMessage(TrimRight(S));
+    end;
   finally
     ExportForm.Free;
     Exporter.Free;
@@ -442,11 +452,6 @@ end;
 procedure TMainForm.CodeBookReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportCodeBook);
-end;
-
-procedure TMainForm.CombinedListReportActionExecute(Sender: TObject);
-begin
-  RunReport(TReportCombinedList);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -574,16 +579,6 @@ begin
   RGF.Free;
 end;
 
-procedure TMainForm.ScriptingMenuClick(Sender: TObject);
-var
-  SF: TScriptingForm;
-begin
-  SF := TScriptingForm.Create(self);
-  SF.DataFile := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).DataFile;
-  SF.ShowModal;
-  SF.Free;
-end;
-
 procedure TMainForm.SettingsActionExecute(Sender: TObject);
 var
   SettingForm: TSettingsForm;
@@ -701,22 +696,29 @@ end;
 procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);
 var
   R: TReportBase;
-  Doc: TEpiDocument;
   Fn: String;
+  i: Integer;
 begin
   R := RunReport(TReportDoubleEntryValidation, false);
   if Assigned(R) and
      (
       (not Assigned(FActiveFrame)) or
       (not Assigned(FActiveFrame.EpiDocument))
-     )
+     ) and
+     TEpiDocument(R.Documents.Objects[0]).Modified
   then
     begin
-      Fn := R.Documents[0];
-      Doc := TEpiDocument(R.Documents.Objects[0]);
-      if Doc.Modified then
-        Doc.SaveToFile(fn);
+      Fn := R.Documents[0] + '.doubleentry-verification.epx';
+      i := 0;
+      while FileExistsUTF8(Fn) do
+      begin
+        Inc(i);
+        Fn := R.Documents[0] + '.doubleentry-verification.' + IntToStr(i) + '.epx';
+      end;
 
+      TEpiDocument(R.Documents.Objects[0]).SaveToFile(fn);
+      ShowMessage('Validation saved to file:' + LineEnding +
+                  Fn);
     end;
 
   if Assigned(R) then
@@ -948,7 +950,6 @@ begin
   ExportAction.ShortCut               := M_Export;
   QuestionListReportAction.ShortCut   := M_QuestionListReport;
   ValueLabelListReportAction.ShortCut := M_ValueLabelListReport;
-  CombinedListReportAction.ShortCut   := M_CombinedListReport;
   ExtendedListReportAction.ShortCut   := M_ExtendedListReport;
   ProjectReportAction.ShortCut        := M_ProjectOverviewReport;
 end;

@@ -228,7 +228,6 @@ end;
 procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
 var
   Dlg: TSaveDialog absolute Sender;
-  S: String;
 begin
   case Dlg.FilterIndex of
     1: Dlg.DefaultExt := 'epx';
@@ -340,7 +339,7 @@ begin
     AbstractText.Text         := ContAbstract;
     Citations.Text            := ContCitation;
     GeographicalCoverage.Text := ContGeoCover;
-    TimeCoverage.Text         := ContTimeCover;
+//    TimeCoverage.Text         := ContTimeCover;
 
     // - Ownership;
     Author                    := OwnAuthers;
@@ -379,7 +378,7 @@ begin
   Ms := nil;
   try
     Ms := TMemoryStream.Create;
-    EpiDocument.Study.ModifiedDate := Now;
+    EpiDocument.IncCycleNo;
     EpiDocument.SaveToStream(Ms);
     Ms.Position := 0;
 
@@ -414,7 +413,7 @@ begin
   Fn := aFilename;
   Res := mrNone;
 
-
+  // Check for date in the file being opened.
   R := TRegExpr.Create;
   R.Expression := '([0-9]{4}.[0-9]{2}.[0-9]{2}\.)';
   B := R.Exec(Fn);

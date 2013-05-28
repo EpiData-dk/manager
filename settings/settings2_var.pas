@@ -79,9 +79,11 @@ type
     ExportCSVNewLine:      integer;
 
     // - SAS
-    ExportSASValueLabels: boolean;
+    ExportSASValueLabels:  boolean;
     // - SPSS
     ExportSPSSValueLabels: boolean;
+    // - DDI
+    ExportDDIValueLabels:  boolean;
 
     // Project Defaults
     // - general:

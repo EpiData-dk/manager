@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, ExtCtrls,
-  CheckLst, ActnList, report_types, report_base;
+  CheckLst, ActnList, report_types, report_base, projectfilelist_frame;
 
 type
 
@@ -39,6 +39,8 @@ type
     function GetFrameCaption: string;
     procedure ApplyReportOptions(Report: TReportBase);
     procedure UpdateFrame(Selection: TStrings);
+    function OkToAdvance(ProjectList: TProjectFileListFrame): boolean;
+    function OkToAdvanceText: string;
     function CanClose: boolean;
   end;
 
@@ -176,6 +178,18 @@ end;
 procedure TReportOptionsFrameCounts.UpdateFrame(Selection: TStrings);
 begin
   PopulateAvailable(Selection);
+end;
+
+function TReportOptionsFrameCounts.OkToAdvance(
+  ProjectList: TProjectFileListFrame): boolean;
+begin
+  result := ProjectList.SelectedList.Count > 0;
+end;
+
+function TReportOptionsFrameCounts.OkToAdvanceText: string;
+begin
+  result :=
+    'Select at least 1 file to advance!'
 end;
 
 function TReportOptionsFrameCounts.CanClose: boolean;

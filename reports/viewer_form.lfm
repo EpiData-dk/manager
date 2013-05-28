@@ -85,26 +85,6 @@ object ReportViewerForm: TReportViewerForm
       TabOrder = 1
     end
   end
-  object HTMLViewer1: THTMLViewer
-    Left = 0
-    Height = 467
-    Top = 0
-    Width = 651
-    TabOrder = 2
-    Align = alClient
-    DefBackground = clWhite
-    BorderStyle = htFocused
-    HistoryMaxCount = 0
-    DefFontName = 'Times New Roman'
-    DefPreFontName = 'Courier New'
-    NoSelect = False
-    CharSet = DEFAULT_CHARSET
-    PrintMarginLeft = 2
-    PrintMarginRight = 2
-    PrintMarginTop = 2
-    PrintMarginBottom = 2
-    PrintScale = 1
-  end
   object Memo1: TMemo
     Left = 0
     Height = 467

@@ -150,8 +150,11 @@ var
   FL: TEpiFields;
   i: Integer;
   FailedValues: TBoundArray;
+  IndexCheck: Boolean;
 begin
-  if (ModalResult = mrOK) and (not PerformIndexCheck(FailedRecords, FailedValues)) then
+  IndexCheck := PerformIndexCheck(FailedRecords, FailedValues);
+
+  if (ModalResult = mrOK) and (not IndexCheck) then
   begin
     Res := MessageDlg('Index Error',
                         'Records with Non-Unique key' + LineEnding +
@@ -159,7 +162,7 @@ begin
                         BoolToStr(FEpiDoc.DataFiles[0].Fields.ItemExistsByName(EpiIndexIntegrityFieldName),
                           'Index status saved in field: '+ EpiIndexIntegrityFieldName + LineEnding, '') +
                         LineEnding +
-                        'Apply Index?',
+                        'Apply Key Fields?',
                         mtWarning, mbYesNoCancel, 0, mbCancel);
 
     // On cancel do nothing, not even close the form.
@@ -179,7 +182,8 @@ begin
       FEpiDoc.DataFiles[0].KeyFields.AddItem(Fl[i]);
     Fl.Free;
 
-    AddIndexFieldAction.Execute;
+    if FEpiDoc.DataFiles[0].Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
+      AddIndexFieldAction.Execute;
   end;
 
   if ManagerSettings.SaveWindowPositions then

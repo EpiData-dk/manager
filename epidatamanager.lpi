@@ -15,6 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="5"/>
+      <BuildNr Value="2"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -46,6 +47,11 @@
             <Debugging>
               <DebugInfoType Value="dsDwarf2Set"/>
             </Debugging>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
           </Linking>
           <Other>
             <CompilerMessages>
@@ -153,19 +159,20 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="9">
+    <RequiredPackages Count="8">
       <Item1>
         <PackageName Value="epidatacore_visuals"/>
+        <MinVersion Major="1" Minor="5" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="jvRuntimeDesign"/>
+        <PackageName Value="epidatacore"/>
+        <MinVersion Major="1" Minor="5" Valid="True"/>
       </Item2>
       <Item3>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="jvRuntimeDesign"/>
       </Item3>
       <Item4>
-        <PackageName Value="epidatacore"/>
-        <MinVersion Major="1" Minor="3" Valid="True"/>
+        <PackageName Value="SynEdit"/>
       </Item4>
       <Item5>
         <PackageName Value="Printer4Lazarus"/>
@@ -174,15 +181,12 @@
         <PackageName Value="virtualtreeview_package"/>
       </Item6>
       <Item7>
-        <PackageName Value="HtmlComp"/>
-      </Item7>
-      <Item8>
         <PackageName Value="LCLBase"/>
         <MinVersion Major="1" Release="1" Valid="True"/>
-      </Item8>
-      <Item9>
+      </Item7>
+      <Item8>
         <PackageName Value="LCL"/>
-      </Item9>
+      </Item8>
     </RequiredPackages>
     <Units Count="79">
       <Unit0>
@@ -493,6 +497,7 @@
         <Filename Value="export/export_sas_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportSASFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_sas_frame"/>
       </Unit44>
@@ -589,7 +594,7 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SectionPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
+        <ResourceBaseClass Value="Form"/>
         <UnitName Value="design_properties_sectionframe"/>
       </Unit59>
       <Unit60>
@@ -705,12 +710,12 @@
         <UnitName Value="report_codebook"/>
       </Unit77>
       <Unit78>
-        <Filename Value="scripting/scripting_form.pas"/>
+        <Filename Value="export/export_ddi_frame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="ScriptingForm"/>
+        <ComponentName Value="ExportDDIFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="scripting_form"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_ddi_frame"/>
       </Unit78>
     </Units>
   </ProjectOptions>
@@ -721,7 +726,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;scripting"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

@@ -24,7 +24,6 @@ var
   M_Export,
   M_QuestionListReport,
   M_ValueLabelListReport,
-  M_CombinedListReport,
   M_ExtendedListReport,
   M_ProjectOverviewReport:
     TShortCut;

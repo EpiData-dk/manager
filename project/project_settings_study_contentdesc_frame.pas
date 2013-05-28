@@ -43,7 +43,7 @@ type
 implementation
 
 uses
-  epidocument, project_settings_study_frame;
+  epidocument;
 {$R *.lfm}
 
 { TProjectSetting_ContentDescFrame }
