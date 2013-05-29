@@ -5,8 +5,8 @@ unit design_properties_fieldframe;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, ExtCtrls,
-  Buttons, JvDesignSurface, design_types, epidatafilestypes,
+  Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, ComCtrls, StdCtrls,
+  ExtCtrls, Buttons, JvDesignSurface, design_types, epidatafilestypes,
   epicustombase, epidatafiles, epivaluelabels, LCLType, ActnList,
   design_properties_baseframe;
 
@@ -31,6 +31,13 @@ type
     Bevel4: TBevel;
     CalcFieldLabel: TLabel;
     CalcTabSheet: TTabSheet;
+    Label27: TLabel;
+    Label28: TLabel;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    BeforeEntryEdit: TSynEdit;
+    AfterEntryEdit: TSynEdit;
+    TabSheet1: TTabSheet;
     ValueLabelAsNoteChkBox: TCheckBox;
     CombineDateGrpBox: TGroupBox;
     CombineDateRadio: TRadioButton;
@@ -199,7 +206,11 @@ type
     procedure UpdateJumps(Jumps: TEpiJumps); overload;
     function  DoAddNewJump: pointer;
     procedure AddFieldsToCombo(Combo: TComboBox);
-
+  private
+    { Script }
+    procedure ScriptError(const Msg: string; const LineNo, ColNo: integer;
+      const TextFound: string);
+    function  ValidateScript(Lines: TStrings): boolean;
   private
     { Calculation }
     procedure UpdateCalcFields;
@@ -232,7 +243,9 @@ implementation
 uses
   epimiscutils, typinfo, epiranges, epiconvertutils,
   epistringutils, LazUTF8, field_valuelabelseditor_form,
-  valuelabelseditor_form2, math;
+  valuelabelseditor_form2, math,
+  // script
+  epi_script_parser, epi_script_AST, design_properties_fieldframe_parser;
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';
@@ -924,6 +937,13 @@ begin
     AddJumpBtn.AnchorVerticalCenterTo(TControl(PJumpComponents(FJumpComponentsList.Last)^.GotoCombo));
 end;
 
+procedure TFieldPropertiesFrame.ScriptError(const Msg: string; const LineNo,
+  ColNo: integer; const TextFound: string);
+begin
+  BeforeEntryEdit.CaretXY := Point(ColNo, LineNo);
+  ShowHintMsg('Script failed:' + LineEnding + Msg, BeforeEntryEdit);
+end;
+
 procedure TFieldPropertiesFrame.UseJumpsComboSelect(Sender: TObject);
 var
   F: TEpiField;
@@ -1328,6 +1348,14 @@ begin
   for i := 1 to FieldCount - 1 do
     if ClearOrLeaveEdit(NotesMemo, Fields[i].Notes.Text)
     then break;
+
+  // ---------
+  // Script
+  // --------
+  BeforeEntryEdit.ClearAll;
+  BeforeEntryEdit.Lines.Assign(Field.BeforeEntryScript);
+  AfterEntryEdit.ClearAll;
+  AfterEntryEdit.Lines.Assign(Field.AfterEntryScript);
 end;
 
 procedure TFieldPropertiesFrame.DoUpdateCaption;
@@ -1341,6 +1369,21 @@ begin
 
   S := EpiCutString(S, 20);
   UpdateCaption('Field Properties: ' + S);
+end;
+
+function TFieldPropertiesFrame.ValidateScript(Lines: TStrings): boolean;
+var
+  Executor: TScriptParser;
+  Parser: TEpiScriptParser;
+  Stm: TStatementList;
+begin
+  Executor := TScriptParser.Create(DataFile);
+  Executor.OnError := @ScriptError;
+  Parser := TEpiScriptParser.Create(Executor);
+
+  result := Parser.Parse(Lines, Stm);
+  Executor.Free;
+  Parser.Free;
 end;
 
 function TFieldPropertiesFrame.ValidateChanges: boolean;
@@ -1570,6 +1613,23 @@ begin
         Exit(DoError('At least one field must be assigned!', Field1Combo));
     end;
   end;
+
+  // SCripting
+  if (BeforeEntryEdit.Lines.Count > 0) and
+     (BeforeEntryEdit.Modified)
+  then
+  begin
+    Result := ValidateScript(BeforeEntryEdit.Lines);
+    if not result then exit;
+//      Exit(DoError('Invalid script!', BeforeEntryEdit));
+  end;
+{
+  if AfterEntryEdit.Lines.Count > 0 then
+  begin
+    Result := ValidateScript(AfterEntryEdit.Lines);
+    if not result then exit;
+//      Exit(DoError('Invalid script!', AfterEntryEdit));
+  end;                  }
 
   ShowHintMsg('', nil);
   result := true;
@@ -1907,6 +1967,10 @@ begin
   if NotesMemo.Modified then
     for i := 0 to FieldCount - 1 do
       Fields[i].Notes.Text := NotesMemo.Text;
+
+  // Scripting:
+  Field.BeforeEntryScript.Assign(BeforeEntryEdit.Lines);
+  Field.AfterEntryScript.Assign(AfterEntryEdit.Lines);
 end;
 
 procedure TFieldPropertiesFrame.EditUTF8KeyPress(Sender: TObject;
