@@ -5,10 +5,10 @@ unit design_properties_fieldframe;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, ComCtrls, StdCtrls,
-  ExtCtrls, Buttons, JvDesignSurface, design_types, epidatafilestypes,
-  epicustombase, epidatafiles, epivaluelabels, LCLType, ActnList,
-  design_properties_baseframe;
+  Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, SynCompletion, Forms,
+  Controls, ComCtrls, StdCtrls, ExtCtrls, Buttons, JvDesignSurface,
+  design_types, epidatafilestypes, epicustombase, epidatafiles, epivaluelabels,
+  LCLType, ActnList, design_properties_baseframe;
 
 type
 
@@ -37,6 +37,7 @@ type
     Panel2: TPanel;
     BeforeEntryEdit: TSynEdit;
     AfterEntryEdit: TSynEdit;
+    SynAnySyn1: TSynAnySyn;
     TabSheet1: TTabSheet;
     ValueLabelAsNoteChkBox: TCheckBox;
     CombineDateGrpBox: TGroupBox;
@@ -208,9 +209,10 @@ type
     procedure AddFieldsToCombo(Combo: TComboBox);
   private
     { Script }
+    FCurrentSynEdit: TSynEdit;
     procedure ScriptError(const Msg: string; const LineNo, ColNo: integer;
       const TextFound: string);
-    function  ValidateScript(Lines: TStrings): boolean;
+    function  ValidateScript(SynEdit: TSynEdit): boolean;
   private
     { Calculation }
     procedure UpdateCalcFields;
@@ -940,8 +942,10 @@ end;
 procedure TFieldPropertiesFrame.ScriptError(const Msg: string; const LineNo,
   ColNo: integer; const TextFound: string);
 begin
-  BeforeEntryEdit.CaretXY := Point(ColNo, LineNo);
-  ShowHintMsg('Script failed:' + LineEnding + Msg, BeforeEntryEdit);
+  FCurrentSynEdit.CaretXY := Point(ColNo, LineNo);
+  FCurrentSynEdit.SelectLine(true);
+  FCurrentSynEdit.SetFocus;
+  ShowHintMsg('Script failed:' + LineEnding + Msg, FCurrentSynEdit);
 end;
 
 procedure TFieldPropertiesFrame.UseJumpsComboSelect(Sender: TObject);
@@ -1371,19 +1375,21 @@ begin
   UpdateCaption('Field Properties: ' + S);
 end;
 
-function TFieldPropertiesFrame.ValidateScript(Lines: TStrings): boolean;
+function TFieldPropertiesFrame.ValidateScript(SynEdit: TSynEdit): boolean;
 var
   Executor: TScriptParser;
   Parser: TEpiScriptParser;
   Stm: TStatementList;
 begin
+  FCurrentSynEdit := SynEdit;
   Executor := TScriptParser.Create(DataFile);
   Executor.OnError := @ScriptError;
   Parser := TEpiScriptParser.Create(Executor);
 
-  result := Parser.Parse(Lines, Stm);
+  result := Parser.Parse(SynEdit.Lines, Stm);
   Executor.Free;
   Parser.Free;
+  FCurrentSynEdit := nil;
 end;
 
 function TFieldPropertiesFrame.ValidateChanges: boolean;
@@ -1619,17 +1625,17 @@ begin
      (BeforeEntryEdit.Modified)
   then
   begin
-    Result := ValidateScript(BeforeEntryEdit.Lines);
+    Result := ValidateScript(BeforeEntryEdit);
+    // No message, this is handled from within the parser/type checker.
     if not result then exit;
-//      Exit(DoError('Invalid script!', BeforeEntryEdit));
   end;
-{
+
   if AfterEntryEdit.Lines.Count > 0 then
   begin
-    Result := ValidateScript(AfterEntryEdit.Lines);
+    Result := ValidateScript(AfterEntryEdit);
+    // No message, this is handled from within the parser/type checker.
     if not result then exit;
-//      Exit(DoError('Invalid script!', AfterEntryEdit));
-  end;                  }
+  end;
 
   ShowHintMsg('', nil);
   result := true;
