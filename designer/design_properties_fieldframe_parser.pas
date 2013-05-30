@@ -5,7 +5,8 @@ unit design_properties_fieldframe_parser;
 interface
 
 uses
-  Classes, SysUtils, epi_script_AST, epidatafiles, contnrs, epi_parser_types;
+  Classes, SysUtils, epi_script_AST, epidatafiles, contnrs, epi_parser_types,
+  epidatafilestypes;
 
 type
 
@@ -25,6 +26,12 @@ type
     function  FindVariable(Const Ident: string): TCustomVariable;
     function  RecordIndex: Integer;
     property OnError: TExecutorError read FOnError write FOnError;
+    procedure SetFieldInteger(Const F: TEpiField; Const Value: EpiInteger);
+    procedure SetFieldFloat(Const F: TEpiField; Const Value: EpiFloat);
+    procedure SetFieldBoolean(Const F: TEpiField; Const Value: Boolean);
+    function  GetFieldInteger(Const F: TEpiField): EpiInteger;
+    function  GetFieldFloat(Const F: TEpiField): EpiFloat;
+    function  GetFieldBoolean(Const F: TEpiField): EpiBool;
   end;
 
 implementation
@@ -72,6 +79,39 @@ end;
 function TScriptParser.RecordIndex: Integer;
 begin
   result := 0;
+end;
+
+procedure TScriptParser.SetFieldInteger(const F: TEpiField;
+  const Value: EpiInteger);
+begin
+
+end;
+
+procedure TScriptParser.SetFieldFloat(const F: TEpiField; const Value: EpiFloat
+  );
+begin
+
+end;
+
+procedure TScriptParser.SetFieldBoolean(const F: TEpiField; const Value: Boolean
+  );
+begin
+
+end;
+
+function TScriptParser.GetFieldInteger(const F: TEpiField): EpiInteger;
+begin
+
+end;
+
+function TScriptParser.GetFieldFloat(const F: TEpiField): EpiFloat;
+begin
+
+end;
+
+function TScriptParser.GetFieldBoolean(const F: TEpiField): EpiBool;
+begin
+
 end;
 
 end.
