@@ -2900,6 +2900,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
     end
   end
   object SynAnySyn1: TSynAnySyn
+    Enabled = False
     CommentAttri.FrameEdges = sfeAround
     Comments = []
     DetectPreprocessor = False
@@ -2916,15 +2917,17 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
       'AND'
       'BEGIN'
       'BOOLEAN'
+      'CLEAR'
       'DEFINE'
       'DIV'
       'ELSE'
       'END'
       'FALSE'
       'FLOAT'
+      'GOTO'
       'IF'
-      'INFO'
       'INTEGER'
+      'MISSING'
       'MOD'
       'NOT'
       'NOTE'
@@ -2932,7 +2935,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
       'STRING'
       'THEN'
       'TRUE'
-      'WARNING'
+      'WRITE'
     )
     NumberAttri.FrameEdges = sfeAround
     PreprocessorAttri.FrameEdges = sfeAround

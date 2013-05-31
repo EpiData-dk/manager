@@ -12,7 +12,7 @@ type
 
   { TScriptParser }
 
-  TScriptParser = class(TObject, IEpiScriptParser)
+  TScriptParser = class(TObject, IEpiScriptParser, IEpiScriptExecutor)
   private
     FOnError: TExecutorError;
     FVariables: TFPObjectHashTable;
@@ -26,12 +26,8 @@ type
     function  FindVariable(Const Ident: string): TCustomVariable;
     function  RecordIndex: Integer;
     property OnError: TExecutorError read FOnError write FOnError;
-    procedure SetFieldInteger(Const F: TEpiField; Const Value: EpiInteger);
-    procedure SetFieldFloat(Const F: TEpiField; Const Value: EpiFloat);
-    procedure SetFieldBoolean(Const F: TEpiField; Const Value: Boolean);
-    function  GetFieldInteger(Const F: TEpiField): EpiInteger;
-    function  GetFieldFloat(Const F: TEpiField): EpiFloat;
-    function  GetFieldBoolean(Const F: TEpiField): EpiBool;
+    procedure SetFieldValue(Const Sender: TObject; Const F: TEpiField; Const Value: Variant);
+    function GetFieldValue(Const Sender: TObject; Const F: TEpiField): Variant;
   end;
 
 implementation
@@ -81,35 +77,14 @@ begin
   result := 0;
 end;
 
-procedure TScriptParser.SetFieldInteger(const F: TEpiField;
-  const Value: EpiInteger);
+procedure TScriptParser.SetFieldValue(const Sender: TObject;
+  const F: TEpiField; const Value: Variant);
 begin
 
 end;
 
-procedure TScriptParser.SetFieldFloat(const F: TEpiField; const Value: EpiFloat
-  );
-begin
-
-end;
-
-procedure TScriptParser.SetFieldBoolean(const F: TEpiField; const Value: Boolean
-  );
-begin
-
-end;
-
-function TScriptParser.GetFieldInteger(const F: TEpiField): EpiInteger;
-begin
-
-end;
-
-function TScriptParser.GetFieldFloat(const F: TEpiField): EpiFloat;
-begin
-
-end;
-
-function TScriptParser.GetFieldBoolean(const F: TEpiField): EpiBool;
+function TScriptParser.GetFieldValue(const Sender: TObject; const F: TEpiField
+  ): Variant;
 begin
 
 end;
