@@ -61,6 +61,7 @@ type
     FRecordsCol: TGridColumn;
     FSectionsCol: TGridColumn;
     FVersionCol: TGridColumn;
+    FCycleCol: TGridColumn;
   public
     property FileNameCol: TGridColumn read FFileNameCol;
     property IncludeCol:  TGridColumn read FIncludeCol;
@@ -71,6 +72,7 @@ type
     property FieldsCol:   TGridColumn read FFieldsCol;
     property RecordsCol:  TGridColumn read FRecordsCol;
     property VersionCol:  TGridColumn read FVersionCol;
+    property CycleCol:    TGridColumn read FCycleCol;
   end;
 
 implementation
@@ -132,6 +134,8 @@ begin
       Cells[RecordsCol.Index + 1, Idx]  := IntToStr(Size);
       // Version info
       Cells[VersionCol.Index + 1, Idx]  := Doc.Study.Version;
+      // Cycle
+      Cells[CycleCol.Index + 1, Idx]    := IntToStr(Doc.CycleNo);
       // Info
       Cells[NameCol.Index + 1, Idx]     := Caption.Text;
     end;
@@ -292,6 +296,10 @@ begin
   FVersionCol := StructureGrid.Columns.Add;
   FVersionCol.Title.Caption := 'Version';
   FVersionCol.ReadOnly := true;
+
+  FCycleCol := StructureGrid.Columns.Add;
+  FCycleCol.Title.Caption := 'Cycle';
+  FCycleCol.ReadOnly := true;
 
   FNameCol := StructureGrid.Columns.Add;
   FNameCol.Title.Caption := 'Project Title';
