@@ -892,7 +892,9 @@ begin
   begin
     VLEdit.ValueLabelSet := VLSet
   end else begin
-    VLEdit.ValueLabelSet := ValueLabels.NewValueLabelSet(Field.FieldType);
+    VLSet := ValueLabels.NewValueLabelSet(Field.FieldType);
+    VLSet.Name := 'valuelabel_' + Field.Name;
+    VLEdit.ValueLabelSet := VLSet;
     NewVL := true;
   end;
 
