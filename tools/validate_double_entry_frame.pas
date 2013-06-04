@@ -232,6 +232,9 @@ end;
 
 procedure TValidateDoubleEntryFrame.AddFieldHook(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+var
+  D: TEpiDataFile;
+  C: TEpiCustomControlItem;
 begin
   if (EventGroup <> eegCustomBase) then exit;
 
@@ -245,7 +248,19 @@ begin
         TEpiField(Sender).UnRegisterOnChangeHook(@AddFieldHook);
       end;
     ecceAddItem:
-      TEpiField(Data).RegisterOnChangeHook(@AddFieldHook, true);
+      begin
+        with TEpiField(Data) do
+        begin
+          D := TEpiFields(Sender).DataFile;
+          C := D.ControlItem[D.ControlItems.Count - 1];
+
+          RegisterOnChangeHook(@AddFieldHook, true);
+          BeginUpdate;
+          Top := C.Top + 20;
+          Left := C.Left;
+          EndUpdate;
+        end;
+      end;
     ecceDelItem:
       TEpiField(Data).UnRegisterOnChangeHook(@AddFieldHook);
     ecceSetItem: ;
