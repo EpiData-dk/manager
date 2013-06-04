@@ -244,7 +244,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     TabOrder = 1
     object CmpFCheckList: TCheckListBox
       AnchorSideLeft.Control = GroupBox4
-      AnchorSideTop.Control = CmpFAutoDateTimeBtn
+      AnchorSideTop.Control = CmpFAllNonKeyFBtn
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = GroupBox4
       AnchorSideRight.Side = asrBottom
@@ -266,7 +266,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       TabOrder = 0
       TopIndex = -1
     end
-    object CmpFAutoDateTimeBtn: TButton
+    object CmpFAllNonKeyFBtn: TButton
       AnchorSideLeft.Control = GroupBox4
       AnchorSideTop.Control = Label8
       AnchorSideTop.Side = asrBottom
@@ -282,10 +282,10 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       ShowHint = True
       TabOrder = 1
     end
-    object CmpFAutoIncBtn: TButton
-      AnchorSideLeft.Control = CmpFAutoDateTimeBtn
+    object CmpFNoneBtn: TButton
+      AnchorSideLeft.Control = CmpFAllNonKeyFBtn
       AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = CmpFAutoDateTimeBtn
+      AnchorSideTop.Control = CmpFAllNonKeyFBtn
       AnchorSideTop.Side = asrCenter
       Left = 125
       Height = 27
@@ -309,6 +309,20 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       BorderSpacing.Top = 5
       Caption = 'Compare data in fields:'
       ParentColor = False
+    end
+    object CmpFExcludeTextFBtn: TButton
+      AnchorSideLeft.Control = CmpFNoneBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = CmpFNoneBtn
+      AnchorSideTop.Side = asrCenter
+      Left = 176
+      Height = 27
+      Top = 25
+      Width = 129
+      Action = CFExcludeTxtAction
+      AutoSize = True
+      BorderSpacing.Left = 5
+      TabOrder = 3
     end
   end
   object OptionsChkGrp: TCheckGroup
@@ -395,6 +409,11 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       Caption = 'None'
       Hint = 'Deselect all fields'
       OnExecute = CFSelectNoneActionExecute
+    end
+    object CFExcludeTxtAction: TAction
+      Category = 'CompareFields'
+      Caption = 'Exclude Text Fields'
+      OnExecute = CFExcludeTxtActionExecute
     end
   end
 end
