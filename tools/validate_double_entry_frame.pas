@@ -14,6 +14,8 @@ type
   { TValidateDoubleEntryFrame }
 
   TValidateDoubleEntryFrame = class(TFrame, IReportOptionFrame)
+    CFExcludeTxtAction: TAction;
+    CmpFExcludeTextFBtn: TButton;
     CFSelectNoneAction: TAction;
     CFSelectAllNonKFAction: TAction;
     KFMoveFieldDown: TAction;
@@ -23,8 +25,8 @@ type
     KFNoneAction: TAction;
     ActionList1: TActionList;
     Bevel1: TBevel;
-    CmpFAutoDateTimeBtn: TButton;
-    CmpFAutoIncBtn: TButton;
+    CmpFAllNonKeyFBtn: TButton;
+    CmpFNoneBtn: TButton;
     CmpFCheckList: TCheckListBox;
     GroupBox3: TGroupBox;
     GroupBox4: TGroupBox;
@@ -38,6 +40,7 @@ type
     Panel1: TPanel;
     SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
+    procedure CFExcludeTxtActionExecute(Sender: TObject);
     procedure CFSelectAllNonKFActionExecute(Sender: TObject);
     procedure CFSelectNoneActionExecute(Sender: TObject);
     procedure KFAutoIncActionExecute(Sender: TObject);
@@ -155,6 +158,21 @@ begin
     Idx := KFCheckList.Items.IndexOfObject(O);
     if not KFCheckList.Checked[Idx] then
       CmpFCheckList.Checked[i] := true;
+  end;
+  CmpFCheckList.Items.EndUpdate;
+end;
+
+procedure TValidateDoubleEntryFrame.CFExcludeTxtActionExecute(Sender: TObject);
+var
+  i: Integer;
+  F: TEpiField;
+begin
+  CmpFCheckList.Items.BeginUpdate;
+  for i := 0 to CmpFCheckList.Count -1 do
+  begin
+    F := TEpiField(CmpFCheckList.Items.Objects[i]);
+    if F.FieldType in StringFieldTypes then
+      CmpFCheckList.Checked[i] := false;
   end;
   CmpFCheckList.Items.EndUpdate;
 end;
