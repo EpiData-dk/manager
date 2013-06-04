@@ -882,6 +882,16 @@ end;
 
 procedure TRuntimeDesignFrame.LMDesignerAdd(var Msg: TLMessage);
 begin
+  // Hack - because we need the incomming field to be furthest
+  // away from being the last entry in Datafile.CustomControls.
+  // Otherwise FindNewPosition fails misarably.
+  with TEpiField(Msg.WParam) do
+  begin
+    BeginUpdate;
+    Top := 0;
+    Left := 0;
+    EndUpdate;
+  end;
   NewDesignField(FindNewPostion(TDesignField), TEpiField(Msg.WParam), FDesignPanel);
 end;
 
