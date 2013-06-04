@@ -87,8 +87,11 @@ begin
   begin
     Self.Hide;
     (FNextFrame as IReportOptionFrame).UpdateFrame(FProjectList.SelectedList);
-    if FNextForm.ShowModal = mrOK then
-      (FNextFrame as IReportOptionFrame).ApplyReportOptions(FReport);
+    ModalResult := FNextForm.ShowModal;
+    if ModalResult = mrOK then
+      (FNextFrame as IReportOptionFrame).ApplyReportOptions(FReport)
+    else
+      FreeAndNil(FReport);
     FNextForm.Free;
   end;
 end;
