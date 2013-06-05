@@ -89,9 +89,8 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       BorderSpacing.Bottom = 5
       Font.Height = -13
       Font.Name = 'Monospace'
-      ItemHeight = 15
+      ItemHeight = 0
       ParentFont = False
-      Style = lbVirtual
       TabOrder = 3
       TopIndex = -1
     end
