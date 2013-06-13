@@ -1043,6 +1043,9 @@ begin
         Continue;
       end;
 
+
+    if DataFile.ValueLabels.ItemExistsByName(VLSet.Name) then
+      VLSet.Name := DataFile.ValueLabels.GetUniqueItemName(TEpiValueLabelSet);
     DataFile.ValueLabels.AddItem(VLSet);
   end;
 
