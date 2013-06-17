@@ -19,15 +19,20 @@ type
     FDataFile: TEpiDataFile;
   public
     constructor Create(Const DataFile: TEpiDataFile);
-    procedure ParseError(Const Msg: string; Const LineNo, ColNo: integer;
-      Const TextFound: string);
+    property OnError: TExecutorError read FOnError write FOnError;
+  public
+    { IEpiScriptParser }
+    procedure ParseError(Const Msg: string; Const LineNo, ColNo: integer; Const TextFound: string);
     function  VariableExists(Const Ident: string): boolean;
     procedure AddVariable(Const Variable: TCustomVariable);
     function  FindVariable(Const Ident: string): TCustomVariable;
-    function  RecordIndex: Integer;
-    property OnError: TExecutorError read FOnError write FOnError;
+    function  CreateFunction(const FunctionName: string; const ParamList: TParamList): TFunction;
+  public
+    { IEpiScriptExecutor }
     procedure SetFieldValue(Const Sender: TObject; Const F: TEpiField; Const Value: Variant);
-    function GetFieldValue(Const Sender: TObject; Const F: TEpiField): Variant;
+    function  GetFieldValue(Const Sender: TObject; Const F: TEpiField): Variant;
+    function  GetFieldIsMissing(const Sender: TObject; const F: TEpiField): Boolean;
+    procedure SetFieldIsMissing(const Sender: TObject; const F: TEpiField; const Value: Boolean);
   end;
 
 implementation
@@ -72,21 +77,34 @@ begin
   Result := TCustomVariable(FVariables.Items[Ident]);
 end;
 
-function TScriptParser.RecordIndex: Integer;
-begin
-  result := 0;
-end;
-
 procedure TScriptParser.SetFieldValue(const Sender: TObject;
   const F: TEpiField; const Value: Variant);
 begin
-
+  //
 end;
 
 function TScriptParser.GetFieldValue(const Sender: TObject; const F: TEpiField
   ): Variant;
 begin
+  //
+end;
 
+function TScriptParser.CreateFunction(const FunctionName: string;
+  const ParamList: TParamList): TFunction;
+begin
+  result := nil;
+end;
+
+function TScriptParser.GetFieldIsMissing(const Sender: TObject;
+  const F: TEpiField): Boolean;
+begin
+  //
+end;
+
+procedure TScriptParser.SetFieldIsMissing(const Sender: TObject;
+  const F: TEpiField; const Value: Boolean);
+begin
+  //
 end;
 
 end.
