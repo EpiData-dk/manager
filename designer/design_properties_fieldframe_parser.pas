@@ -29,10 +29,14 @@ type
     function  CreateFunction(const FunctionName: string; const ParamList: TParamList): TFunction;
   public
     { IEpiScriptExecutor }
-    procedure SetFieldValue(Const Sender: TObject; Const F: TEpiField; Const Value: Variant);
-    function  GetFieldValue(Const Sender: TObject; Const F: TEpiField): Variant;
-    function  GetFieldIsMissing(const Sender: TObject; const F: TEpiField): Boolean;
-    procedure SetFieldIsMissing(const Sender: TObject; const F: TEpiField; const Value: Boolean);
+    procedure SetFieldValue(Const Sender: TObject; Const F: TEpiField; Const Value: EpiBool); overload;
+    procedure SetFieldValue(Const Sender: TObject; Const F: TEpiField; Const Value: EpiInteger); overload;
+    procedure SetFieldValue(Const Sender: TObject; Const F: TEpiField; Const Value: EpiFloat); overload;
+    procedure SetFieldValue(Const Sender: TObject; Const F: TEpiField; Const Value: EpiString); overload;
+    function GetFieldValueBool(Const Sender: TObject; Const F: TEpiField): EpiBool;
+    function GetFieldValueInt(Const Sender: TObject; Const F: TEpiField): EpiInteger;
+    function GetFieldValueFloat(Const Sender: TObject; Const F: TEpiField): EpiFloat;
+    function GetFieldValueString(Const Sender: TObject; Const F: TEpiField): EpiString;
   end;
 
 implementation
@@ -77,35 +81,61 @@ begin
   Result := TCustomVariable(FVariables.Items[Ident]);
 end;
 
-procedure TScriptParser.SetFieldValue(const Sender: TObject;
-  const F: TEpiField; const Value: Variant);
-begin
-  //
-end;
-
-function TScriptParser.GetFieldValue(const Sender: TObject; const F: TEpiField
-  ): Variant;
-begin
-  //
-end;
-
 function TScriptParser.CreateFunction(const FunctionName: string;
   const ParamList: TParamList): TFunction;
 begin
   result := nil;
 end;
 
-function TScriptParser.GetFieldIsMissing(const Sender: TObject;
-  const F: TEpiField): Boolean;
+procedure TScriptParser.SetFieldValue(const Sender: TObject;
+  const F: TEpiField; const Value: EpiBool);
 begin
-  //
+
 end;
 
-procedure TScriptParser.SetFieldIsMissing(const Sender: TObject;
-  const F: TEpiField; const Value: Boolean);
+procedure TScriptParser.SetFieldValue(const Sender: TObject;
+  const F: TEpiField; const Value: EpiInteger);
 begin
-  //
+
 end;
+
+procedure TScriptParser.SetFieldValue(const Sender: TObject;
+  const F: TEpiField; const Value: EpiFloat);
+begin
+
+end;
+
+procedure TScriptParser.SetFieldValue(const Sender: TObject;
+  const F: TEpiField; const Value: EpiString);
+begin
+
+end;
+
+function TScriptParser.GetFieldValueBool(const Sender: TObject;
+  const F: TEpiField): EpiBool;
+begin
+
+end;
+
+function TScriptParser.GetFieldValueInt(const Sender: TObject;
+  const F: TEpiField): EpiInteger;
+begin
+
+end;
+
+function TScriptParser.GetFieldValueFloat(const Sender: TObject;
+  const F: TEpiField): EpiFloat;
+begin
+
+end;
+
+function TScriptParser.GetFieldValueString(const Sender: TObject;
+  const F: TEpiField): EpiString;
+begin
+
+end;
+
+
 
 end.
 
