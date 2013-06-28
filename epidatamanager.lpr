@@ -45,7 +45,8 @@ uses
   design_designbander, project_studyunit_form, align_form, report_counts,
   report_optionframe_counts, report_types, dataset_form, ok_cancel_form, 
   validate_double_entry_frame, project_settings_autoincrement_frame,
-  settings_font_frame, report_codebook, export_ddi_frame;
+  settings_font_frame, report_codebook, export_ddi_frame, 
+design_control_extender;
 
 {$R *.res}
 
