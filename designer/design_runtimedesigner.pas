@@ -2393,6 +2393,7 @@ end;
 procedure TRuntimeDesignFrame.CopyControlActionExecute(Sender: TObject);
 begin
   GlobalCopyListClear;
+  FDesignPanel.Surface.Selector.RemoveFromSelection(FExtender);
   FDesignPanel.Surface.CopyComponents;
 end;
 
@@ -2443,6 +2444,7 @@ end;
 procedure TRuntimeDesignFrame.CutControlActionExecute(Sender: TObject);
 begin
   GlobalCopyListClear;
+  FDesignPanel.Surface.Selector.RemoveFromSelection(FExtender);
   FDesignPanel.Surface.CutComponents;
 end;
 
