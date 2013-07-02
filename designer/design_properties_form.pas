@@ -272,6 +272,12 @@ begin
     end;
   end;
 
+  if not Supports(Objects[0], IDesignEpiControl) then
+  begin
+    ShowEmptyPage;
+    Exit;
+  end;
+
   if Assigned(FFrame) and (FFrame.ClassType <> (Objects[0] as IDesignEpiControl).DesignFrameClass) then
   begin
     FFrame.Free;

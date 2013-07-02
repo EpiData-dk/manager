@@ -59,7 +59,7 @@ implementation
 uses
   settings2_interface, settings2_var, epidatafilestypes,
   IniFiles, strutils, epieximtypes, epiexportsettings,
-  main,
+  main, managerprocs,
 
   // settings
   settings_advanced_frame, settings_fielddefinitions_frame,
@@ -73,9 +73,6 @@ uses
 
   // project settings
   project_settings_field_frame, project_settings_general_frame, project_settings_autoincrement_frame;
-const
-  RecentIniFileName: string = '';
-
 
 function GetIniFile(Const FileName: String): TIniFile;
 begin
@@ -266,7 +263,6 @@ var
 
 begin
   Result := false;
-  ManagerSettings.IniFileName := FileName;
 
   if not FileExistsUTF8(FileName) then exit;
 
@@ -437,14 +433,8 @@ var
 begin
   Result := false;
 
-  Fn := FileName;
-  if (RecentIniFileName <> '') and
-     (FileName = '')
-  then
-    Fn := RecentIniFileName;
-
   try
-    Ini := GetIniFile(Fn);
+    Ini := GetIniFile(FileName);
 
     for i := 0 to RecentFiles.Count - 1 do
       Ini.WriteString('Files', 'file'+inttostr(i), RecentFiles[i]);
@@ -461,10 +451,6 @@ var
   S: String;
 begin
   Result := false;
-
-  // trick - store filename in const :)
-  // and use in save recent.
-  if RecentIniFileName = '' then RecentIniFileName := FileName;
 
   try
     Ini := GetIniFile(FileName);
@@ -486,10 +472,8 @@ procedure SaveFormPosition(const AForm: TForm; const SectionName: string);
 var
   Ini: TIniFile;
 begin
-  if ManagerSettings.IniFileName = '' then exit;
-
   try
-    Ini := GetIniFile(ManagerSettings.IniFileName);
+    Ini := GetIniFile(GetIniFileName);
     with Ini, AForm do
     begin
       WriteInteger(SectionName, 'Top', Top);
@@ -506,10 +490,8 @@ procedure LoadFormPosition(AForm: TForm; const SectionName: string);
 var
   Ini: TIniFile;
 begin
-  if ManagerSettings.IniFileName = '' then exit;
-
   try
-    Ini := GetIniFile(ManagerSettings.IniFileName);
+    Ini := GetIniFile(GetIniFileName);
     with Ini, AForm do
     begin
       Top     := ReadInteger(SectionName, 'Top', Top);
@@ -593,7 +575,7 @@ begin
 
   CanClose := false;
   if not (FActiveFrame as ISettingsFrame).ApplySettings then exit;
-  SaveSettingToIni(ManagerSettings.IniFileName);
+  SaveSettingToIni(GetIniFileName);
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, 'SettingsForm');
   CanClose := true;
@@ -758,7 +740,6 @@ const
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;
     LabelNamePrefix:       'label_';
-    IniFileName:           '';
     );
 begin
   with ManagerSettings do

@@ -189,7 +189,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="80">
+    <Units Count="81">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -719,6 +719,11 @@
         <UnitName Value="export_ddi_frame"/>
       </Unit78>
       <Unit79>
+        <Filename Value="designer/design_control_extender.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="design_control_extender"/>
+      </Unit79>
+      <Unit80>
         <Filename Value="designer/design_properties_fieldframe_parser.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_properties_fieldframe_parser"/>

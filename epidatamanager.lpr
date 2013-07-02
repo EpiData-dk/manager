@@ -46,7 +46,7 @@ uses
   report_optionframe_counts, report_types, dataset_form, ok_cancel_form, 
   validate_double_entry_frame, project_settings_autoincrement_frame,
   settings_font_frame, report_codebook, export_ddi_frame, 
-design_properties_fieldframe_parser;
+  design_control_extender, design_properties_fieldframe_parser;
 
 {$R *.res}
 
@@ -62,16 +62,25 @@ begin
 end;
 
 begin
-  Application.Title := 'EpiData Manager';
-  OnGetApplicationName := @EpiDataApplicationName;
-  OnGetVendorName := @EpiDataVendorName;
-  // Load ini before anything else - it contains start-up info.
-  LoadIniFile;
   {$IFNDEF EPI_DEBUG}
   if (not ManagerSettings.MultipleInstances) and
      InstanceRunning(EpiDataApplicationName) then exit;
   {$ENDIF}
+
+  Application.Title := 'EpiData Manager';
+  OnGetApplicationName := @EpiDataApplicationName;
+  OnGetVendorName := @EpiDataVendorName;
+
+  // Initialize the application (and widgetset), we may
+  // need it during commandline options (windows doesn't have
+  // a console, so help/versioninfo is displayed in a window).
   Application.Initialize;
+
+  // Parse commandline options!
+  ParseCommandLineOpts;
+
+  // Load ini before anything else - it contains start-up info.
+  LoadIniFiles;
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.

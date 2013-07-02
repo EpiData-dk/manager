@@ -286,7 +286,7 @@ begin
 
   if CanClose and ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, 'MainForm');
-  SaveSettingToIni(ManagerSettings.IniFileName);
+  SaveSettingToIni(GetIniFileName);
 end;
 
 procedure TMainForm.CopyProjectInfoActionExecute(Sender: TObject);
@@ -457,12 +457,19 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 var
   Fn: String;
+  i: Integer;
 begin
   Modified := false;
-  if Paramcount < 1 then exit;
-  Fn := ParamStrUTF8(1);
-  if FileExistsUTF8(Fn) then
-    PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, WPARAM(TString.Create(Fn)), 0);
+
+  if Assigned(StartupFiles) then
+  begin
+    for i := 0 to StartupFiles.Count - 1 do
+    begin
+      Fn := StartupFiles[i];
+      if FileExistsUTF8(Fn) then
+        PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, WPARAM(TString.Create(Fn)), 0);
+    end;
+  end;
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);

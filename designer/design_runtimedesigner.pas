@@ -15,6 +15,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    ExpandPageAction: TAction;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
     SelectAllBoolsAction: TAction;
@@ -84,6 +85,8 @@ type
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
+    ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
     ViewDatasetAction: TAction;
     UndoAction: TAction;
     ImportAction: TAction;
@@ -179,6 +182,7 @@ type
     procedure DesignerActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
     procedure EditControlActionExecute(Sender: TObject);
+    procedure ExpandPageActionExecute(Sender: TObject);
     procedure ExportToolButtonClick(Sender: TObject);
     procedure FieldBtnClick(Sender: TObject);
     function FieldNamePrefix: string;
@@ -253,10 +257,13 @@ type
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
     { Designer Panel/ScrollBox }
+    FExtender: TWinControl;
     FDesignPanel: TJvDesignPanel;
     FDesignScrollBox: TJvDesignScrollBox;
     procedure DesignScrollBoxMouseWheel(Sender: TObject; Shift: TShiftState;
       WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+  public
+    property Extender: TWinControl read FExtender write FExtender;
   private
     { Import }
     procedure PasteEpiDoc(const ImportDoc: TEpiDocument;
@@ -340,6 +347,7 @@ uses
   design_control_section,
   design_control_field,
   design_control_heading,
+  design_control_extender,
   align_form;
 
 { TRuntimeDesignFrame }
@@ -1531,6 +1539,7 @@ var
   ESideBounds: TRect;
   P: TWinControl;
   Ctrl: TControl;
+  J: Integer;
 
   procedure SortTop(var List: TJvDesignObjectArray);
   var
@@ -1588,8 +1597,25 @@ var
 
 begin
   Objs := DesignPanel.Surface.Selected;
+
   L := Length(Objs);
   if L = 0 then exit;
+
+  J := 0;
+  for i := 0 to L - 1 do
+  begin
+    if not Supports(Objs[i], IDesignEpiControl) then
+      Continue
+    else begin
+      Objs[j] := Objs[i];
+      Inc(j);
+    end;
+  end;
+  if J <> L then
+  begin
+    SetLength(Objs, J);
+    L := J;
+  end;
 
   if AAlignMent in [dcaEvenHorz, dcaFixedHorz] then
     SortLeft(Objs);
@@ -1892,7 +1918,7 @@ begin
   SectionsLabel.Caption := IntToStr(DataFile.Sections.Count);
 
   // TODO : Better statusbar with multiple selected controls!
-  if Length(ControlList) = 1 then
+  if (Length(ControlList) = 1) and (Supports(ControlList[0], IDesignEpiControl)) then
     EpiCtrl := (ControlList[0] as IDesignEpiControl).EpiControl
   else
     EpiCtrl := nil;
@@ -1960,6 +1986,7 @@ end;
 
 procedure TRuntimeDesignFrame.DeleteControls(ForceDelete: boolean);
 var
+  EpiDsgCtrl: IDesignEpiControl;
   EpiCtrl: TEpiCustomControlItem;
   i: Integer;
   S: String;
@@ -1973,23 +2000,30 @@ begin
      (FDesignPanel.Surface.Count >= 1)
   then
   begin
+    EpiCtrl := nil;
+
     if FDesignPanel.Surface.Count > 1 then
     begin
-      EpiCtrl := nil;
       for i := 0 to FDesignPanel.Surface.Count - 1 do
-        if not ((FDesignPanel.Surface.Selection[i] as IDesignEpiControl).EpiControl is TEpiHeading) then
+      begin
+        if Supports(FDesignPanel.Surface.Selection[i], IDesignEpiControl, EpiDsgCtrl) and
+           (not (EpiDsgCtrl.EpiControl is TEpiHeading))
+        then
         begin
-          EpiCtrl := (FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl;
+          EpiCtrl := EpiDsgCtrl.EpiControl;
           Break;
         end;
+      end;
 
       if MessageDlg('Warning', 'Are you sure you want to delete?' + LineEnding +
                     'Number of selected controls: ' + IntToStr(FDesignPanel.Surface.Count),
                     mtWarning, mbYesNo, 0, mbNo) = mrNo
       then
         Exit;
-    end else begin
-      EpiCtrl := (FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl;
+    end else
+    if Supports(FDesignPanel.Surface.Selection[0], IDesignEpiControl, EpiDsgCtrl) then
+    begin
+      EpiCtrl := EpiDsgCtrl.EpiControl;
       if EpiCtrl is TEpiSection then
         S := 'Section: ';
       if EpiCtrl is TEpiField then
@@ -2002,7 +2036,13 @@ begin
                     S, mtWarning, mbYesNo, 0, mbNo) = mrNo
       then
         Exit;
-    end;  // if FDesignPanel.Surface.Count > 1 then
+    end else
+    begin
+      if MessageDlg('Warning', 'Are you sure you want to delete the extender?',
+                    mtWarning, mbYesNo, 0, mbNo) = mrNo
+      then
+        Exit;
+    end;
 
 
     if (DataFile.Size > 0) and
@@ -2153,6 +2193,47 @@ end;
 procedure TRuntimeDesignFrame.EditControlActionExecute(Sender: TObject);
 begin
   ShowPropertiesForm(False);
+end;
+
+procedure TRuntimeDesignFrame.ExpandPageActionExecute(Sender: TObject);
+var
+  Controller: TDesignController;
+  Surface: TJvDesignSurface;
+  TopLeft: TPoint;
+  R: Integer;
+  P: TScrollBarInc;
+begin
+  Controller := TDesignController(FDesignPanel.Surface.Controller);
+  Surface    := FDesignPanel.Surface;
+
+  FDesignScrollBox.BeginUpdateBounds;
+  if not Assigned(FExtender) then
+    try
+      TopLeft := Point(FDesignScrollBox.ClientWidth div 2,0);
+
+      RegisterClass(TDesignStaticText);
+      FCreatingControl := false;
+      Controller.SetDragRect(Rect(TopLeft.X, TopLeft.Y, 0, 0));
+      Surface.AddClass := 'TDesignStaticText';
+      Surface.AddComponent;
+
+      FExtender := TWinControl(Surface.Selection[0]);
+    finally
+      Controller.ClearDragRect;
+      UnRegisterClass(TDesignStaticText);
+    end
+  else
+    TopLeft := FExtender.BoundsRect.TopLeft;
+
+  if FDesignScrollBox.VertScrollBar.IsScrollBarVisible then
+    R := FDesignScrollBox.VertScrollBar.Range
+  else
+    R := FDesignScrollBox.ClientHeight;
+  P := FDesignScrollBox.VertScrollBar.Page;
+  TopLeft.Y := R + P;
+  FExtender.SetBounds(TopLeft.X, TopLeft.Y, 0, 0);
+
+  FDesignScrollBox.EndUpdateBounds;
 end;
 
 procedure TRuntimeDesignFrame.ExportToolButtonClick(Sender: TObject);
@@ -2312,6 +2393,7 @@ end;
 procedure TRuntimeDesignFrame.CopyControlActionExecute(Sender: TObject);
 begin
   GlobalCopyListClear;
+  FDesignPanel.Surface.Selector.RemoveFromSelection(FExtender);
   FDesignPanel.Surface.CopyComponents;
 end;
 
@@ -2362,6 +2444,7 @@ end;
 procedure TRuntimeDesignFrame.CutControlActionExecute(Sender: TObject);
 begin
   GlobalCopyListClear;
+  FDesignPanel.Surface.Selector.RemoveFromSelection(FExtender);
   FDesignPanel.Surface.CutComponents;
 end;
 

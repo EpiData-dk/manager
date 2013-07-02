@@ -70,12 +70,12 @@ begin
   FField.ValueLabelWriteField := CopyField.ValueLabelWriteField;
 
   // Must be fixed during DOFixupCopyControl
-  FField.Calculation := CopyField.Calculation;
-  FField.Jumps       := CopyField.Jumps;
-  FField.Comparison  := CopyField.Comparison;
-  CopyField.Calculation := nil;
-  CopyField.Jumps       := nil;
-  CopyField.Comparison  := nil;
+//  FField.Calculation := CopyField.Calculation;
+//  FField.Jumps       := CopyField.Jumps;
+//  FField.Comparison  := CopyField.Comparison;
+//  CopyField.Calculation := nil;
+//  CopyField.Jumps       := nil;
+//  CopyField.Comparison  := nil;
 end;
 
 procedure TDesignField.WriteField(Stream: TStream);
@@ -87,9 +87,9 @@ begin
 
   CopyField.ValueLabelSet := FField.ValueLabelSet;
   CopyField.ValueLabelWriteField := FField.ValueLabelWriteField;
-  CopyField.Calculation          := FField.Calculation;
-  CopyField.Jumps                := FField.Jumps;
-  CopyField.Comparison           := FField.Comparison;
+//  CopyField.Calculation          := FField.Calculation;
+//  CopyField.Jumps                := FField.Jumps;
+//  CopyField.Comparison           := FField.Comparison;
 
   GlobalCopyList.Add(CopyField);
   Stream.Write(CopyField, Sizeof(Pointer));
@@ -330,12 +330,12 @@ begin
     FField.Name := Section.Fields.GetUniqueItemName(TEpiField);
   Section.Fields.AddItem(FField);
 
-  if Assigned(FField.Jumps) then
-    FField.Jumps       := TEpiJumps(FField.Jumps.Clone(FField));
-  if Assigned(FField.Calculation) then
-    FField.Calculation := TEpiCalculation(FField.Calculation.Clone(FField));
-  if Assigned(FField.Comparison) then
-    FField.Comparison  := TEpiComparison(FField.Comparison.Clone(FField));
+{  if Assigned(FField.Jumps) then
+    FField.Jumps       := TEpiJumps(FField.Jumps.Clone(FField));}
+{  if Assigned(FField.Calculation) then
+    FField.Calculation := TEpiCalculation(FField.Calculation.Clone(FField));   }
+{  if Assigned(FField.Comparison) then
+    FField.Comparison  := TEpiComparison(FField.Comparison.Clone(FField));}
 
   SetEpiControl(FField);
 end;
