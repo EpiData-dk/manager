@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 582
   ClientWidth = 812
   TabOrder = 0
-  DesignLeft = 466
-  DesignTop = 289
+  DesignLeft = 703
+  DesignTop = 263
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
@@ -93,10 +93,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object RecordsLabel: TLabel
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 59
+        Left = 58
         Height = 15
         Top = 4
-        Width = 85
+        Width = 84
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         ParentColor = False
@@ -105,7 +105,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 55
+        Width = 54
         Caption = 'Records:'
         ParentColor = False
       end
@@ -128,10 +128,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object FieldsLabel: TLabel
         AnchorSideLeft.Control = FieldsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 44
+        Left = 43
         Height = 15
         Top = 4
-        Width = 70
+        Width = 69
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         ParentColor = False
@@ -140,7 +140,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 40
+        Width = 39
         Caption = 'Fields:'
         ParentColor = False
       end
@@ -168,7 +168,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 102
+        Width = 101
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         ParentColor = False
@@ -197,7 +197,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 91
+        Width = 90
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         ParentColor = False
@@ -313,7 +313,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 57
+        Width = 56
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         ParentColor = False
@@ -584,49 +584,49 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider4: TToolButton
-        Left = 334
+        Left = 372
         Top = 1
         Width = 5
         Caption = 'Divider4'
         Style = tbsDivider
       end
       object EditToolButton: TToolButton
-        Left = 339
+        Left = 377
         Top = 1
         Action = EditControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteToolButton: TToolButton
-        Left = 367
+        Left = 405
         Top = 1
         Action = DeleteControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteAllToolButton: TToolButton
-        Left = 395
+        Left = 433
         Top = 1
         Action = DeleteAllAction
         ParentShowHint = False
         ShowHint = True
       end
       object Divider5: TToolButton
-        Left = 423
+        Left = 461
         Top = 1
         Width = 5
         Caption = 'Divider5'
         Style = tbsDivider
       end
       object Divider6: TToolButton
-        Left = 456
+        Left = 494
         Top = 1
         Width = 5
         Caption = 'Divider6'
         Style = tbsDivider
       end
       object TestToolButton: TToolButton
-        Left = 461
+        Left = 499
         Top = 1
         Caption = 'TestToolButton'
         ImageIndex = 0
@@ -669,9 +669,21 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Style = tbsDivider
       end
       object ToolButton5: TToolButton
-        Left = 428
+        Left = 466
         Top = 1
         Action = ShowAlignFormAction
+      end
+      object ToolButton6: TToolButton
+        Left = 344
+        Top = 1
+        Action = ExpandPageAction
+      end
+      object ToolButton7: TToolButton
+        Left = 334
+        Top = 1
+        Width = 10
+        Caption = 'ToolButton7'
+        Style = tbsSeparator
       end
     end
     object ProjectToolBar: TToolBar
@@ -2526,6 +2538,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Category = 'Select'
       Caption = 'All Boolean Fields'
       OnExecute = SelectAllBoolsActionExecute
+    end
+    object ExpandPageAction: TAction
+      Caption = 'Extend Page'
+      ImageIndex = 18
+      OnExecute = ExpandPageActionExecute
     end
   end
   object OtherFieldsPopup: TPopupMenu

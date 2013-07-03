@@ -117,7 +117,6 @@ type
     // Not shown in dialog.
     SelectedControlColour: Integer;
     LabelNamePrefix:       string;
-    IniFileName:           string;
   end;
   PManagerSettings = ^TManagerSettings;
 
@@ -126,6 +125,10 @@ var
 
 var
   RecentFiles: TStringList;
+  // Startup files are a list of files that the program should
+  // open. This list is gathered during parsing commandline options.
+  // Maintained from "managerprocs.pas"
+  StartupFiles: TStringList = nil;
 
 implementation
 

@@ -158,6 +158,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <CommandLineParams Value="-i=~/manager.ini ~/EpiData/data/sample.epx"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
@@ -192,7 +193,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="79">
+    <Units Count="80">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -721,6 +722,11 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_ddi_frame"/>
       </Unit78>
+      <Unit79>
+        <Filename Value="designer/design_control_extender.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="design_control_extender"/>
+      </Unit79>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
