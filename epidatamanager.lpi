@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
     <Version Value="9"/>
@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="5"/>
-      <BuildNr Value="2"/>
+      <BuildNr Value="3"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -157,7 +157,6 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="-i=~/manager.ini ~/EpiData/data/sample.epx"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
@@ -190,7 +189,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="80">
+    <Units Count="81">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -724,6 +723,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_control_extender"/>
       </Unit79>
+      <Unit80>
+        <Filename Value="utils/manager_types.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="manager_types"/>
+      </Unit80>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

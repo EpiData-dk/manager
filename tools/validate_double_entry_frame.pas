@@ -7,13 +7,13 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, CheckLst,
   ExtCtrls, ActnList, report_types, report_base, epidocument, epicustombase,
-  types, projectfilelist_frame;
+  types, projectfilelist_frame, manager_types;
 
 type
 
   { TValidateDoubleEntryFrame }
 
-  TValidateDoubleEntryFrame = class(TFrame, IReportOptionFrame)
+  TValidateDoubleEntryFrame = class(TFrame, IReportOptionFrame, ICanCloseQuery)
     CFExcludeTxtAction: TAction;
     CmpFExcludeTextFBtn: TButton;
     CFSelectNoneAction: TAction;
@@ -73,7 +73,7 @@ implementation
 uses
   epidatafiles, report_double_entry_validation, epitools_val_dbl_entry,
   epidatafilestypes, epiglobals, LCLIntf, manager_messages, LCLType,
-  main, math, LazUTF8, strutils;
+  main, math, LazUTF8, strutils, Dialogs;
 
 { TValidateDoubleEntryFrame }
 
@@ -352,8 +352,31 @@ begin
 end;
 
 function TValidateDoubleEntryFrame.CanClose: boolean;
+var
+  KFChecked: Boolean;
+  Res: TModalResult;
+  i: Integer;
 begin
-  result := true;
+  KFChecked := false;
+
+  for i := 0 to KFCheckList.Count - 1 do
+    KFChecked := KFChecked or KFCheckList.Checked[i];
+
+  if not KFChecked then
+  begin
+    Res := MessageDlg('Warning!',
+             'No Key Fields selected! The two files will be validated sequentially.' + LineEnding +
+             'Press Cancel to select Key Fields!',
+             mtWarning,
+             mbOKCancel,
+             0,
+             mbCancel
+           );
+    if Res = mrCancel then
+      Result := false
+    else
+      Result := true;
+  end;
 end;
 
 end.

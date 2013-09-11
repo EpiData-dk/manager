@@ -46,7 +46,7 @@ uses
   report_optionframe_counts, report_types, dataset_form, ok_cancel_form, 
   validate_double_entry_frame, project_settings_autoincrement_frame,
   settings_font_frame, report_codebook, export_ddi_frame, 
-design_control_extender;
+design_control_extender, manager_types;
 
 {$R *.res}
 
