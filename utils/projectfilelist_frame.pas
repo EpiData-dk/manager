@@ -175,7 +175,7 @@ begin
     else if (ext = '.epx') or (ext = '.epz') then
     begin
       DoBeforeImportFile(Doc, FileName);
-      TOpenEpiDoc.OpenDoc(Doc, FileName);
+// TODO:      TDocumentFile.OpenDoc(Doc, FileName);
       DoAfterImportFile(Doc, FileName);
     end;
 

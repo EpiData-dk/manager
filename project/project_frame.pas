@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase,
-  manager_messages, LMessages;
+  manager_messages, LMessages, epiopenfile;
 
 type
 
@@ -48,6 +48,8 @@ type
     procedure ValueLabelEditorActionExecute(Sender: TObject);
   private
     { private declarations }
+    FDocumentFile: TEpiDocumentFile;
+
     FFileName: string;
     FFileTimeStamp: longint;
     FActiveFrame: TFrame;
@@ -409,7 +411,10 @@ var
   B: Boolean;
   S: RegExprString;
   S2: String;
+  TmpDoc: TEpiDocument;
 begin
+
+  {
   Fn := aFilename;
   Res := mrNone;
 
@@ -465,9 +470,17 @@ begin
                 end;
       mrCancel: Exit;
     end;
-  end;
+  end;   }
 
-  DoCloseProject;
+  FDocumentFile := TDocumentFile.Create;
+  TmpDoc := FDocumentFile.OpenFile(AFileName);
+
+  if Assigned(TmpDoc) then
+    DoCloseProject
+  else
+    Exit;
+
+  FEpiDocument := TmpDoc;
 
   try
     Screen.Cursor := crHourGlass;
@@ -475,15 +488,16 @@ begin
 
     St := nil;
     try
-      FEpiDocument := TOpenEpiDoc.OpenDoc(DoCreateNewDocument, Fn);
+{      FEpiDocument := TDocumentFile.OpenDoc(DoCreateNewDocument, Fn);
       if ExtractFileExt(Fn) = '.bak' then
         FFileName := ChangeFileExt(Fn, '')
       else
-        FFileName := Fn;
+        FFileName := Fn;}
+      FFileName := AFileName;
       DoNewDataForm(FEpiDocument.DataFiles[0]);
-      St.Free;
+//      St.Free;
     except
-      if Assigned(St) then FreeAndNil(St);
+//      if Assigned(St) then FreeAndNil(St);
       if Assigned(FEpiDocument) then FreeAndNil(FEpiDocument);
       if Assigned(FActiveFrame) then FreeAndNil(FActiveFrame);
       raise
@@ -498,7 +512,7 @@ begin
     if Res = mrYes then
       EpiDocument.Modified := true;
 
-    AddToRecent(Fn);
+    AddToRecent(FFileName);
     UpdateCaption;
   finally
     Screen.Cursor := crDefault;

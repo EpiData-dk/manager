@@ -5,21 +5,22 @@ unit managerprocs;
 interface
 
 uses
-  Classes, SysUtils, dialogs, epidocument;
+  Classes, SysUtils, dialogs, epidocument, epiopenfile;
 
 type
 
-  { TOpenEpiDoc }
+  { TDocumentFile }
 
-  TOpenEpiDoc = class
+  TDocumentFile = class(TEpiDocumentFile)
   private
     FFileName: string;
-    constructor Create(Const FileName: string);
-    procedure EpiDocumentPassWord(Sender: TObject; var Login: string;
+    procedure DoPassWord(Sender: TObject; var Login: string;
       var Password: string);
-  public
-    class function OpenDoc(const FileName, Lang: string): TEpiDocument; overload;
-    class function OpenDoc(Doc: TEpiDocument; const FileName: string): TEpiDocument;
+    function DoWarning(WarningType: TOpenEpiWarningType; const Msg: string
+      ): TOpenEpiWarningResult;
+    procedure DoError(const Msg: string);
+  protected
+    constructor Create; override;
   end;
 
 
@@ -251,14 +252,30 @@ begin
   Result := '_' + StringsReplace(GUIDToString(GUID), ['{','}','-'], ['','',''], [rfReplaceAll]);
 end;
 
-{ TOpenEpiDoc }
+{ TDocumentFile }
 
-constructor TOpenEpiDoc.Create(const FileName: string);
+constructor TDocumentFile.Create;
 begin
-  FFileName := FileName;
+  inherited Create;
+
+  OnWarning := @DoWarning;
+  OnPassword := @DoPassword;
+  OnError := @DoError;
 end;
 
-procedure TOpenEpiDoc.EpiDocumentPassWord(Sender: TObject; var Login: string;
+function TDocumentFile.DoWarning(WarningType: TOpenEpiWarningType;
+  const Msg: string): TOpenEpiWarningResult;
+begin
+  ShowMessage(Msg);
+  Result := wrYes;
+end;
+
+procedure TDocumentFile.DoError(const Msg: string);
+begin
+  ShowMessage(Msg);
+end;
+
+procedure TDocumentFile.DoPassWord(Sender: TObject; var Login: string;
   var Password: string);
 begin
   Password :=
@@ -267,33 +284,6 @@ begin
                 LineEnding +
                 'Project data is password protected.' + LineEnding +
                 'Please enter password:');
-end;
-
-class function TOpenEpiDoc.OpenDoc(const FileName, Lang: string): TEpiDocument;
-begin
-  result := OpenDoc(TEpiDocument.Create(Lang), FileName);
-end;
-
-class function TOpenEpiDoc.OpenDoc(Doc: TEpiDocument; const FileName: string): TEpiDocument;
-var
-  Tmp: TOpenEpiDoc;
-  St: TMemoryStream;
-begin
-  Tmp := TOpenEpiDoc.Create(ExtractFileName(FileName));
-
-  St := TMemoryStream.Create;
-  if ExtractFileExt(UTF8ToSys(FileName)) = '.epz' then
-    ZipFileToStream(St, FileName)
-  else
-    St.LoadFromFile(UTF8ToSys(FileName));
-  St.Position := 0;
-
-  result := Doc;
-  result.OnPassword := @Tmp.EpiDocumentPassWord;
-  result.LoadFromStream(St);
-
-  St.Free;
-  Tmp.Free;
 end;
 
 finalization

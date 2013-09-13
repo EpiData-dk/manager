@@ -352,7 +352,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     ClientHeight = 100
     ClientWidth = 623
     Items.Strings = (
-      'Ignore deleted records'
+      'Exclude deleted records'
       'Ignore case in text fields'
       'Ignore missing records in duplicate file'
       'Add result field'

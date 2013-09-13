@@ -850,9 +850,9 @@ begin
   if not DoCloseProject then exit;
 
   DoNewProject;
-  try
+//  try
     FActiveFrame.OpenProject(AFileName);
-  except
+{  except
     on E: TEpiCoreException do
       begin
         ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
@@ -881,7 +881,7 @@ begin
                     E.Message);
         DoCloseProject;
       end;
-  end;
+  end;     }
 end;
 
 procedure TMainForm.UpdateMainMenu;
@@ -997,7 +997,7 @@ begin
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     if not Dlg.Execute then exit;
 
-    Result := TOpenEpiDoc.OpenDoc(Dlg.FileName, ManagerSettings.StudyLang);
+//    Result := TDocumentFile.GetInstance.OpenFile(Dlg.FileName); //, ManagerSettings.StudyLang);
 
     LocalDoc := true;
     FileName := Dlg.FileName;
@@ -1080,7 +1080,7 @@ begin
     TString(Msg.WParam).Free;
   end;
 
-  if CheckEntryClientOpenFile(Fn) then
+{  if CheckEntryClientOpenFile(Fn) then
   begin
     if MessageDlg('Warning',
       'The file: ' + LineEnding +
@@ -1093,7 +1093,7 @@ begin
       0,
       mbNo) = mrNo then exit;
   end;
-  if not DoCloseProject then exit;
+  if not DoCloseProject then exit;}
 
   DoOpenProject(Fn);
   UpdateProcessToolbar;
