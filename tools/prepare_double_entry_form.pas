@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Buttons, EditBtn, epidocument, epidatafiles;
+  ExtCtrls, Buttons, EditBtn, epidocument, epidatafiles, epiopenfile;
 
 type
 
@@ -38,14 +38,14 @@ type
       Const FileName: String);
   end;
 
-procedure PrepareDoubleEntry(Const Doc: TEpiDocument; Const FileName: string);
+procedure PrepareDoubleEntry(Const Doc: TEpiDocumentFile);
 
 implementation
 
 {$R *.lfm}
 
 uses
-  epidatafilestypes;
+  epidatafilestypes, epiv_documentfile;
 
 { TPrepareDoubleEntryForm }
 
@@ -61,6 +61,7 @@ var
   S: TEpiSection;
   j: Integer;
   NewF: TEpiField;
+  DocFile: TDocumentFile;
 begin
   if ModalResult  = mrCancel then exit;
 
@@ -84,9 +85,10 @@ begin
     end;
   end;
 
-  NewDoc := nil;
   try
-    NewDoc := TEpiDocument(FDoc.Clone);
+    DocFile := TDocumentFile.Create;
+    NewDoc  := DocFile.CreateClonedDocument(FDoc);
+
     if TitleEdit.Text <> '' then
       NewDoc.Study.Title.Text := TitleEdit.Text;
 
@@ -110,19 +112,19 @@ begin
       end;
     end;
 
-    NewDoc.SaveToFile(FN);
+    DocFile.SaveFile(FN);
   except
     MessageDlg('Error Saving File!',
       'This file ' + FN + ' could not be save.',
       mtError,
       [mbAbort], 0);
     CanClose := false;
-    NewDoc.Free;
+    DocFile.Free;
     Exit;
   end;
   ShowMessage('Double Entry file save successfully:' + LineEnding +
     FN);
-  NewDoc.Free;
+  DocFile.Free;
 end;
 
 constructor TPrepareDoubleEntryForm.Create(TheOwner: TComponent; const Doc: TEpiDocument;
@@ -139,11 +141,11 @@ begin
   TitleEdit.Text    := TitleLabel.Caption + ' (double entry file)';
 end;
 
-procedure PrepareDoubleEntry(const Doc: TEpiDocument; const FileName: string);
+procedure PrepareDoubleEntry(const Doc: TEpiDocumentFile);
 var
   F: TPrepareDoubleEntryForm;
 begin
-  F := TPrepareDoubleEntryForm.Create(nil, Doc, FileName);
+  F := TPrepareDoubleEntryForm.Create(nil, Doc.Document, Doc.FileName);
   F.ShowModal;
   F.Free;
 end;

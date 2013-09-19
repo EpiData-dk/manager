@@ -80,7 +80,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epimiscutils, Dialogs, managerprocs,
+  epiimport, LCLProc, epimiscutils, Dialogs, managerprocs, epiv_documentfile,
   settings2_var;
 
 { TProjectFileListFrame }
@@ -152,6 +152,7 @@ var
   St: TMemoryStream;
   Idx: Integer;
   DataFile: TEpiDataFile;
+  DocFile: TDocumentFile;
 begin
   Importer := TEpiImport.Create;
   Importer.ImportCasing := ManagerSettings.ImportCasing;
@@ -159,9 +160,12 @@ begin
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
 
   try
-    Doc := TEpiDocument.Create('en');
+    DocFile := TDocumentFile.Create;
+
     if (ext = '.rec') or (ext = '.dta') then
     begin
+      Doc := DocFile.CreateNewDocument('en');
+
       DataFile := Doc.DataFiles.NewDataFile;
       DoBeforeImportFile(Doc, FileName);
       if (ext = '.dta') then
@@ -174,17 +178,17 @@ begin
     end
     else if (ext = '.epx') or (ext = '.epz') then
     begin
-      DoBeforeImportFile(Doc, FileName);
-// TODO:      TDocumentFile.OpenDoc(Doc, FileName);
-      DoAfterImportFile(Doc, FileName);
+      DoBeforeImportFile(nil, FileName);
+      DocFile.OpenFile(FileName, true);
+      DoAfterImportFile(DocFile.Document, FileName);
     end;
 
-    AddDocumentToGrid(FileName, Doc);
+    AddDocumentToGrid(FileName, DocFile.Document);
   except
     on E: Exception do
       begin
         ReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
-        Doc.Free;
+        DocFile.Free;
       end;
   end;
   Importer.Free;

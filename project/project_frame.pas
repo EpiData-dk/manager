@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase,
-  manager_messages, LMessages, epiopenfile;
+  manager_messages, LMessages, epiv_documentfile;
 
 type
 
@@ -48,27 +48,25 @@ type
     procedure ValueLabelEditorActionExecute(Sender: TObject);
   private
     { private declarations }
-    FDocumentFile: TEpiDocumentFile;
-
-    FFileName: string;
-    FFileTimeStamp: longint;
+    FDocumentFile: TDocumentFile;
     FActiveFrame: TFrame;
     FModified: Boolean;
     FOnModified: TNotifyEvent;
     FrameCount: integer;
-    FEpiDocument: TEpiDocument;
     procedure OnDataFileChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnTitleChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    function  DoCreateNewDocument: TEpiDocument;
     function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
     procedure AddToRecent(Const AFileName: string);
-    procedure DoSaveProject(AFileName: string);
-    procedure DoOpenProject(Const AFileName: string);
+    // Common for open/create
+    procedure CommonProjectInit;
     procedure DoNewDataForm(Df: TEpiDataFile);
+    // open existing
+    procedure DoSaveProject(AFileName: string);
+    function  DoOpenProject(Const AFileName: string): boolean;
+    // create new
+    function  DoCreateNewDocument: TEpiDocument;
+    procedure DoCreateNewProject;
     procedure DoCloseProject;
-    {$IFDEF EPI_DEBUG_CONTENT}
-    procedure AddDebugingContent;
-    {$ENDIF}
     procedure EpiDocumentModified(Sender: TObject);
     procedure SaveDlgTypeChange(Sender: TObject);
     procedure SetModified(const AValue: Boolean);
@@ -82,6 +80,8 @@ type
     procedure TimedBackup(Sender: TObject);
     procedure UpdateShortCuts;
   private
+//    FFileName: string;
+    function GetEpiDocument: TEpiDocument;
     { Messages }
     // Message relaying...
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
@@ -92,10 +92,12 @@ type
     procedure   CloseQuery(var CanClose: boolean);
     procedure   RestoreDefaultPos;
     procedure   UpdateFrame;
-    procedure   OpenProject(Const AFileName: string);
-    property   EpiDocument: TEpiDocument read FEpiDocument;
+    function    OpenProject(Const AFileName: string): boolean;
+    procedure   CreateNewProject;
+    property   DocumentFile: TDocumentFile read FDocumentFile;
+    property   EpiDocument: TEpiDocument read GetEpiDocument;
     property   ActiveFrame: TFrame read FActiveFrame;
-    property   ProjectFileName: string read FFileName write FFileName;
+//    property   ProjectFileName: string read FFileName write FFileName;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
   end;
@@ -196,33 +198,11 @@ procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
 var
   Res: LongInt;
 begin
-  if ProjectFileName = '' then
+  if DocumentFile.FileName = '' then
     SaveProjectAsAction.Execute
   else
-    try
-      if (FileExistsUTF8(ProjectFileName)) and
-         (FileAgeUTF8(ProjectFileName) <> FFileTimeStamp) then
-      begin
-        Res := MessageDlg('WARNING', 'Project file: ' + ProjectFileName + ' has been modified by another program since last save.' + LineEnding+
-                          'Backup existing file?', mtWarning, mbYesNoCancel, 0, mbCancel);
-        case Res of
-          mrYes:    CopyAndBackup(ProjectFileName);
-          mrCancel: Exit;
-          mrNo:     ; // do nothing.
-        end;
-      end;
-      DoSaveProject(ProjectFileName);
-    except
-      on E: EFCreateError do
-        begin
-          MessageDlg('Error',
-            'Unable to save project to:' + LineEnding +
-            ProjectFileName + LineEnding +
-            'Error message: ' + E.Message,
-            mtError, [mbOK], 0);
-          Exit;
-        end;
-    end;
+    DoSaveProject(DocumentFile.FileName);
+
   EpiDocument.Modified := false;
   UpdateCaption;
 end;
@@ -238,7 +218,7 @@ begin
 
   // TODO : Must be changed when supporting multiple desinger frames (take only the topmost/first datafile).
   if (Dlg.FileName = '') and
-     (ProjectFileName = '') and
+     (Assigned(DocumentFile)) and
      (TRuntimeDesignFrame(ActiveFrame).ImportedFileName <> '') then
     Dlg.FileName := ChangeFileExt(TRuntimeDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);
 end;
@@ -273,9 +253,6 @@ begin
         Exit;
       end;
   end;
-
-  if Fn <> ProjectFileName then
-    FFileName := Fn;
 
   EpiDocument.Modified := false;
   UpdateCaption;
@@ -315,7 +292,8 @@ end;
 
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
-  Result := TEpiDocument.Create(ManagerSettings.StudyLang);
+  FDocumentFile := TDocumentFile.Create;
+  Result := FDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
 
   with Result.ProjectSettings, ManagerSettings do
   begin
@@ -366,153 +344,69 @@ begin
   MainForm.UpdateRecentFiles;
 end;
 
+procedure TProjectFrame.CommonProjectInit;
+begin
+  UpdateCaption;
+  UpdateShortCuts;
+  InitBackupTimer;
+end;
+
 procedure TProjectFrame.DoSaveProject(AFileName: string);
-var
-  Fs: TFileStream;
-  Ms: TMemoryStream;
 begin
   // If project haven't been saved before.
   InitBackupTimer;
 
   ActiveFrame.Cursor := crHourGlass;
   Application.ProcessMessages;
-  Fs := nil;
-  Ms := nil;
-  try
-    Ms := TMemoryStream.Create;
-    EpiDocument.IncCycleNo;
-    EpiDocument.SaveToStream(Ms);
-    Ms.Position := 0;
 
-    if ExtractFileExt(UTF8ToSys(AFileName)) = '.epz' then
-      StreamToZipFile(Ms, AFileName)
-    else begin
-      Fs := TFileStream.Create(UTF8ToSys(AFileName), fmCreate);
-      Fs.CopyFrom(Ms, Ms.Size);
-    end;
-    FFileTimeStamp := FileAgeUTF8(AFileName);
-    // Do not add backupfiles to Recent list!
-    if ExtractFileExt(AFileName) <> '.bak' then
-      AddToRecent(AFileName);
+  try
+    EpiDocument.IncCycleNo;
+    DocumentFile.SaveFile(AFileName);
+    AddToRecent(AFileName);
   finally
     ActiveFrame.Cursor := crDefault;
     Application.ProcessMessages;
-    if Assigned(Ms) then FreeAndNil(Ms);
-    if Assigned(Fs) then FreeAndNil(Fs);
   end;
 end;
 
-procedure TProjectFrame.DoOpenProject(Const AFileName: string);
+function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
 var
-  St: TMemoryStream;
-  Fn: String;
-  Res: Integer;
-  R: TRegExpr;
-  B: Boolean;
-  S: RegExprString;
-  S2: String;
   TmpDoc: TEpiDocument;
 begin
-
-  {
-  Fn := aFilename;
-  Res := mrNone;
-
-  // Check for date in the file being opened.
-  R := TRegExpr.Create;
-  R.Expression := '([0-9]{4}.[0-9]{2}.[0-9]{2}\.)';
-  B := R.Exec(Fn);
-  S := R.Replace(Fn, '', false);
-  S2 := ChangeFileExt(S, BoolToStr(ExtractFileExt(S) = '.epz', '.epx', '.epz'));
-  if B and
-     (FileExistsUTF8(S) or FileExistsUTF8(S2))
-  then
-  begin
-    if FileExistsUTF8(S2) then
-      S := S2;
-
-    Res := MessageDlg('Information',
-             'This file seem to be an automated backup file (on closing the program):' + LineEnding + LineEnding +
-             'File: ' + #9 + SysToUTF8(ExtractFileName(UTF8ToSys(Fn)))          +
-               ' (' + FormatDateTime('YYYY/MM/DD HH:NN:SS', FileDateToDateTime(FileAgeUTF8(Fn))) + ')' + LineEnding +
-             'Original: ' + #9 + SysToUTF8(ExtractFileName(UTF8ToSys(S))) +
-               ' (' + FormatDateTime('YYYY/MM/DD HH:NN:SS', FileDateToDateTime(FileAgeUTF8(S))) + ')' + LineEnding +  LineEnding +
-             'Load the original instead?',
-             mtInformation, mbYesNoCancel, 0, mbYes);
-    case Res of
-      mrYes:    Fn := S;
-      mrCancel: Exit;
+  Result := false;
+  try
+    FDocumentFile := TDocumentFile.Create;
+    if not FDocumentFile.OpenFile(AFileName) then
+    begin
+      FreeAndNil(FDocumentFile);
+      Exit;
     end;
+  except
+    FreeAndNil(FDocumentFile);
+    // If ever this happens then it is because something not right happened
+    // during OpenFile(...) and we need to notify the user.
+    raise;
   end;
-  R.Free;
-
-  if FileExistsUTF8(Fn + '.bak') then
-  begin
-    Res := MessageDlg('Information',
-             'A timed backup file exists. (loading of this overwrites previous project file)' + LineEnding + LineEnding +
-             'File: ' +  #9  + #9  + SysToUTF8(ExtractFileName(UTF8ToSys(Fn)))          +
-               ' (' + FormatDateTime('YYYY/MM/DD HH:NN:SS', FileDateToDateTime(FileAgeUTF8(Fn))) + ')' + LineEnding +
-             'Recovery: ' + #9 + SysToUTF8(ExtractFileName(UTF8ToSys(Fn + '.bak'))) +
-               ' (' + FormatDateTime('YYYY/MM/DD HH:NN:SS', FileDateToDateTime(FileAgeUTF8(Fn + '.bak'))) + ')' + LineEnding +  LineEnding +
-             'Load the backup instead?',
-             mtInformation, mbYesNoCancel, 0, mbYes);
-    case Res of
-      mrYes:    Fn := Fn + '.bak';
-      mrNo:     begin
-                  Res := MessageDlg('Warning',
-                           'Loading ' + SysToUTF8(ExtractFileName(UTF8ToSys(Fn))) + ' will delete recovery file.' + LineEnding +
-                           'Continue?',
-                           mtWarning, mbYesNo, 0, mbNo);
-                  case Res of
-                    mrNo:  Exit;
-                    mrYes: Res := mrNo;  // Res used later to check for modification state.
-                  end;
-                end;
-      mrCancel: Exit;
-    end;
-  end;   }
-
-  FDocumentFile := TDocumentFile.Create;
-  TmpDoc := FDocumentFile.OpenFile(AFileName);
-
-  if Assigned(TmpDoc) then
-    DoCloseProject
-  else
-    Exit;
-
-  FEpiDocument := TmpDoc;
 
   try
     Screen.Cursor := crHourGlass;
     Application.ProcessMessages;
 
-    St := nil;
     try
-{      FEpiDocument := TDocumentFile.OpenDoc(DoCreateNewDocument, Fn);
-      if ExtractFileExt(Fn) = '.bak' then
-        FFileName := ChangeFileExt(Fn, '')
-      else
-        FFileName := Fn;}
-      FFileName := AFileName;
-      DoNewDataForm(FEpiDocument.DataFiles[0]);
-//      St.Free;
+      DoNewDataForm(EpiDocument.DataFiles[0]);
     except
-//      if Assigned(St) then FreeAndNil(St);
-      if Assigned(FEpiDocument) then FreeAndNil(FEpiDocument);
+      if Assigned(FDocumentFile) then
+        FreeAndNil(FDocumentFile);
       if Assigned(FActiveFrame) then FreeAndNil(FActiveFrame);
       raise
     end;
-    FFileTimeStamp := FileAgeUTF8(FFileName);
 
-    MainForm.AssignActionLinks;
+    CommonProjectInit;
 
-    // Create backup process.
-    InitBackupTimer;
+    EpiDocument.Modified := false;
+    Result := true;
 
-    if Res = mrYes then
-      EpiDocument.Modified := true;
-
-    AddToRecent(FFileName);
+    AddToRecent(DocumentFile.FileName);
     UpdateCaption;
   finally
     Screen.Cursor := crDefault;
@@ -535,13 +429,16 @@ begin
   Frame.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
   Frame.ProjectToolBar.Images := ProjectImageList;
 
-  {$IFDEF EPI_DEBUG}
-//  AddDebugingContent;
-  {$ENDIF}
-
   DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Caption.Text, Frame);
   TEpiDataFileEx(Df).TreeNode := DataFilesTreeView.Selected;
   Df.Caption.RegisterOnChangeHook(@OnDataFileChange);
+end;
+
+procedure TProjectFrame.DoCreateNewProject;
+begin
+  DoCreateNewDocument;
+  CommonProjectInit;
+  NewDataFormAction.Execute;
 end;
 
 procedure TProjectFrame.DoCloseProject;
@@ -553,84 +450,21 @@ begin
   // Close Alignment Form.
   CloseAlignmentForm;
 
-  if not Assigned(FEpiDocument) then exit;
+//  if not Assigned(EpiDocument) then exit;
 
   // TODO : Delete ALL dataforms!
   FreeAndNil(FActiveFrame);
 
   FreeAndNil(FBackupTimer);
-  FreeAndNil(FEpiDocument);
+  FreeAndNil(FDocumentFile);
 
-  if FileExistsUTF8(ProjectFileName + '.bak') then
-    DeleteFileUTF8(ProjectFileName + '.bak');
+//  if FileExistsUTF8(ProjectFileName + '.bak') then
+//    DeleteFileUTF8(ProjectFileName + '.bak');
+
   DataFilesTreeView.Items.Clear;
 
   Modified := false;
 end;
-
-{$IFDEF EPI_DEBUG_CONTENT}
-procedure TProjectFrame.AddDebugingContent;
-var
-  i: Integer;
-  LocalAdm: TEpiAdmin;
-  Grp: TEpiGroup;
-  LocalVLSets: TEpiValueLabelSets;
-  VLSet: TEpiValueLabelSet;
-begin
-  // DEBUGGING!!!!
-  LocalAdm := FEpiDocument.Admin;
-  Grp := LocalAdm.NewGroup;
-  GRp.Name := 'G1';
-  Grp.Caption.Text := 'Group 1';
-  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
-    earStructure, earTranslate, earUsers, earPassword];
-  Grp := LocalAdm.NewGroup;
-  Grp.Name := 'G2';
-  Grp.Caption.Text := 'Group 2';
-  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
-    earStructure, earTranslate, earUsers, earPassword];
-  Grp := LocalAdm.NewGroup;
-  Grp.Name := 'G3';
-  Grp.Caption.Text := 'Group 3';
-  Grp.Rights := [earCreate, earRead, earUpdate, earDelete, earVerify,
-    earStructure, earTranslate, earUsers, earPassword];
-  FEpiDocument.DataFiles[0].MainSection.Groups.AddItem(Grp);
-{
-  LocalVLSets := FEpiDocument.ValueLabelSets;
-  VLSet := LocalVLSets.NewValueLabelSet(ftInteger);
-  VLSet.Name := 'The Set';
-  for i := 1 to 10 do
-    with TEpiIntValueLabel(VLSet.NewValueLabel) do
-    begin
-      Value := i;
-      TheLabel.Text := DupeString(IntToStr(i), 4);
-      if (i mod 2) = 0 then
-        IsMissingValue := true;
-    end;
-
-  VLSet := LocalVLSets.NewValueLabelSet(ftInteger);
-  VLSet.Name := 'Whatever';
-  for i := 1 to 10 do
-    with TEpiIntValueLabel(VLSet.NewValueLabel) do
-    begin
-      Value := i;
-      TheLabel.Text := DupeString(IntToStr(i), 4);
-      if (i mod 2) = 0 then
-        IsMissingValue := true;
-    end;
-
-  VLSet := LocalVLSets.NewValueLabelSet(ftFloat);
-  VLSet.Name := 'ZZ Top';
-  for i := 1 to 10 do
-    with TEpiFloatValueLabel(VLSet.NewValueLabel) do
-    begin
-      Value := i / 10;
-      TheLabel.Text := DupeString(IntToStr(i), 4);
-      if (i mod 2) = 0 then
-        IsMissingValue := true;
-    end;          }
-end;
-{$ENDIF}
 
 procedure TProjectFrame.EpiDocumentModified(Sender: TObject);
 begin
@@ -669,8 +503,8 @@ begin
 
   if Assigned(EpiDocument) then
   begin
-    if FFileName <> '' then
-      S := S + ' - ' + ExtractFileName(FFileName);
+    if DocumentFile.FileName <> '' then
+      S := S + ' - ' + ExtractFileName(DocumentFile.FileName);
     if EpiDocument.Modified then
       S := S + '*';
 
@@ -725,7 +559,7 @@ begin
 
     {$IFNDEF EPI_DEBUG}
     // Warn user that project has not yet been saved...
-    if ProjectFileName = '' then
+    if DocumentFile.FileName = '' then
     begin
       Res := MessageDlg('Warning',
                'Your project have not yet been saved' + LineEnding +
@@ -736,7 +570,7 @@ begin
     end;
     {$ENDIF}
     try
-      DoSaveProject(ProjectFileName + '.bak');
+      DocumentFile.SaveBackupFile;
     except
       // TODO : Message on bad backup?
       Exit;
@@ -761,6 +595,15 @@ begin
   KeyFieldsAction.ShortCut        := P_KeyFields;
 end;
 
+function TProjectFrame.GetEpiDocument: TEpiDocument;
+begin
+  result := nil;
+  if Assigned(DocumentFile) and
+     Assigned(DocumentFile.Document)
+  then
+    Result := DocumentFile.Document;
+end;
+
 procedure TProjectFrame.LMDesignerAdd(var Msg: TLMessage);
 begin
   if Assigned(FActiveFrame) then
@@ -776,12 +619,6 @@ begin
 
   FrameCount := 0;
   FActiveFrame := nil;
-  FFileName := '';
-
-  FEpiDocument := DoCreateNewDocument;
-  UpdateCaption;
-  UpdateShortCuts;
-  InitBackupTimer;
 
   {$IFDEF EPI_DEBUG}
 
@@ -849,9 +686,14 @@ begin
     TRuntimeDesignFrame(FActiveFrame).UpdateFrame;
 end;
 
-procedure TProjectFrame.OpenProject(const AFileName: string);
+function TProjectFrame.OpenProject(const AFileName: string): boolean;
 begin
-  DoOpenProject(AFileName);
+  Result := DoOpenProject(AFileName);
+end;
+
+procedure TProjectFrame.CreateNewProject;
+begin
+  DoCreateNewProject;
 end;
 
 end.

@@ -5,26 +5,7 @@ unit managerprocs;
 interface
 
 uses
-  Classes, SysUtils, dialogs, epidocument, epiopenfile;
-
-type
-
-  { TDocumentFile }
-
-  TDocumentFile = class(TEpiDocumentFile)
-  private
-    FFileName: string;
-    procedure DoPassWord(Sender: TObject; var Login: string;
-      var Password: string);
-    function DoWarning(WarningType: TOpenEpiWarningType; const Msg: string
-      ): TOpenEpiWarningResult;
-    procedure DoError(const Msg: string);
-  protected
-    constructor Create; override;
-  end;
-
-
-
+  Classes, SysUtils, epidocument, epiopenfile;
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 procedure CopyAndBackup(Const AFileName: string);
@@ -40,7 +21,7 @@ implementation
 
 uses
   Clipbrd, FileUtil, settings2, settings2_var, forms, strutils,
-  epimiscutils, LCLVersion, LazUTF8;
+  epimiscutils, LCLVersion, LazUTF8, dialogs, controls;
 
 var
   IniFileName: string = '';
@@ -250,40 +231,6 @@ begin
   //  - And the chance of creating to equal component name are very-very-very unlikely.
   CreateGUID(GUID);
   Result := '_' + StringsReplace(GUIDToString(GUID), ['{','}','-'], ['','',''], [rfReplaceAll]);
-end;
-
-{ TDocumentFile }
-
-constructor TDocumentFile.Create;
-begin
-  inherited Create;
-
-  OnWarning := @DoWarning;
-  OnPassword := @DoPassword;
-  OnError := @DoError;
-end;
-
-function TDocumentFile.DoWarning(WarningType: TOpenEpiWarningType;
-  const Msg: string): TOpenEpiWarningResult;
-begin
-  ShowMessage(Msg);
-  Result := wrYes;
-end;
-
-procedure TDocumentFile.DoError(const Msg: string);
-begin
-  ShowMessage(Msg);
-end;
-
-procedure TDocumentFile.DoPassWord(Sender: TObject; var Login: string;
-  var Password: string);
-begin
-  Password :=
-    PasswordBox('Project Password',
-                'File: ' + FFileName + LineEnding +
-                LineEnding +
-                'Project data is password protected.' + LineEnding +
-                'Please enter password:');
 end;
 
 finalization
