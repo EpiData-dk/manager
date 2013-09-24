@@ -61,7 +61,7 @@ type
     procedure CommonProjectInit;
     procedure DoNewDataForm(Df: TEpiDataFile);
     // open existing
-    procedure DoSaveProject(AFileName: string);
+    function  DoSaveProject(AFileName: string): boolean;
     function  DoOpenProject(Const AFileName: string): boolean;
     // create new
     function  DoCreateNewDocument: TEpiDocument;
@@ -93,6 +93,7 @@ type
     procedure   RestoreDefaultPos;
     procedure   UpdateFrame;
     function    OpenProject(Const AFileName: string): boolean;
+    function    SaveProject(Const AFileName: string): boolean;
     procedure   CreateNewProject;
     property   DocumentFile: TDocumentFile read FDocumentFile;
     property   EpiDocument: TEpiDocument read GetEpiDocument;
@@ -198,13 +199,14 @@ procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
 var
   Res: LongInt;
 begin
-  if DocumentFile.FileName = '' then
+{  if DocumentFile.FileName = '' then
     SaveProjectAsAction.Execute
   else
     DoSaveProject(DocumentFile.FileName);
 
   EpiDocument.Modified := false;
-  UpdateCaption;
+  UpdateCaption;}
+  SaveProject(DocumentFile.FileName);
 end;
 
 procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
@@ -228,7 +230,8 @@ var
   Dlg: TSaveDialog;
   Fn: String;
 begin
-  Dlg := TSaveDialog.Create(Self);
+  SaveProject('');
+{  Dlg := TSaveDialog.Create(Self);
   Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.FilterIndex := ManagerSettings.SaveType + 1;
@@ -256,6 +259,7 @@ begin
 
   EpiDocument.Modified := false;
   UpdateCaption;
+  }
 end;
 
 procedure TProjectFrame.StudyInformationActionExecute(Sender: TObject);
@@ -351,7 +355,7 @@ begin
   InitBackupTimer;
 end;
 
-procedure TProjectFrame.DoSaveProject(AFileName: string);
+function TProjectFrame.DoSaveProject(AFileName: string): boolean;
 begin
   // If project haven't been saved before.
   InitBackupTimer;
@@ -361,7 +365,7 @@ begin
 
   try
     EpiDocument.IncCycleNo;
-    DocumentFile.SaveFile(AFileName);
+    Result := DocumentFile.SaveFile(AFileName);
     AddToRecent(AFileName);
   finally
     ActiveFrame.Cursor := crDefault;
@@ -658,7 +662,7 @@ begin
     end;
 
     case res of
-      mrYes:    SaveProjectAction.Execute;
+      mrYes:    CanClose := SaveProject(DocumentFile.FileName);
       mrCancel: CanClose := false;
     end;
   end;
@@ -689,6 +693,33 @@ end;
 function TProjectFrame.OpenProject(const AFileName: string): boolean;
 begin
   Result := DoOpenProject(AFileName);
+end;
+
+function TProjectFrame.SaveProject(const AFileName: string): boolean;
+var
+  Dlg: TSaveDialog;
+  Fn: String;
+begin
+  if AFileName = '' then
+  begin
+    Dlg := TSaveDialog.Create(Self);
+    Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    Dlg.FilterIndex := ManagerSettings.SaveType + 1;
+    SaveDlgTypeChange(Dlg);
+    Dlg.OnTypeChange := @SaveDlgTypeChange;
+    Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
+
+    if not Dlg.Execute then exit;
+    Fn := Dlg.FileName;
+    Dlg.Free;
+  end else
+    Fn := AFileName;
+
+  Result := DoSaveProject(Fn);
+  if Result then
+    EpiDocument.Modified := false;
+  UpdateCaption;
 end;
 
 procedure TProjectFrame.CreateNewProject;
