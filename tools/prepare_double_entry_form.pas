@@ -106,6 +106,7 @@ begin
         F := Fields[j];
         NewF := F.Section.NewField(ftInteger);
         NewF.Assign(F);
+        NewF.EntryMode := emMustEnter;
         NewName := F.Name;
         F.Free;
         NewF.Name := NewName;
@@ -115,7 +116,8 @@ begin
     DocFile.SaveFile(FN);
   except
     MessageDlg('Error Saving File!',
-      'This file ' + FN + ' could not be save.',
+      'This file ' + FN + ' could not be save.' + LineEnding +
+      Exception(ExceptObject).Message,
       mtError,
       [mbAbort], 0);
     CanClose := false;
