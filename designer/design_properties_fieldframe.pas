@@ -944,7 +944,7 @@ begin
   if (FVLIncompatibleItemIndex > - 1) and
      (ValueLabelComboBox.ItemIndex > FVLIncompatibleItemIndex)
   then
-    ShowHintMsg('Warning: Selected value label set is no compatible with all fields',
+    ShowHintMsg('Warning: Selected value label set is not compatible with all fields',
       ValueLabelComboBox);
 
   If ComboNoneSelected(ValueLabelComboBox) then

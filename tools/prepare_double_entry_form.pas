@@ -116,7 +116,7 @@ begin
     DocFile.SaveFile(FN);
   except
     MessageDlg('Error Saving File!',
-      'This file ' + FN + ' could not be save.' + LineEnding +
+      'This file ' + FN + ' could not be saved.' + LineEnding +
       Exception(ExceptObject).Message,
       mtError,
       [mbAbort], 0);
