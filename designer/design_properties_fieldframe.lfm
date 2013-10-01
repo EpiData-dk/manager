@@ -1,20 +1,20 @@
 object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 673
+  Left = 744
   Height = 609
-  Top = 250
+  Top = 254
   Width = 572
   ClientHeight = 609
   ClientWidth = 572
-  LCLVersion = '1.1'
+  LCLVersion = '1.3'
   object FieldPageControl: TPageControl
     AnchorSideLeft.Control = Owner
     Left = 0
     Height = 609
     Top = 0
     Width = 572
-    ActivePage = FieldAdvancedSheet
+    ActivePage = FieldBasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
@@ -134,7 +134,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
       object Label10: TLabel
         AnchorSideRight.Control = FieldTypeLabel
         AnchorSideBottom.Control = NameEdit
-        Left = 412
+        Left = 413
         Height = 15
         Top = 10
         Width = 32
@@ -149,10 +149,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = Label10
         AnchorSideBottom.Side = asrBottom
-        Left = 446
+        Left = 447
         Height = 15
         Top = 10
-        Width = 110
+        Width = 109
         Anchors = [akRight, akBottom]
         Caption = 'FieldTypeLabel'
         Font.Style = [fsBold]
@@ -310,7 +310,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Height = 29
           Hint = 'Select value label or define new at "+"'
           Top = 11
-          Width = 426
+          Width = 483
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 2
@@ -326,38 +326,23 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = ValueLabelComboBox
           AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ManageValueLabelsBtn
+          AnchorSideRight.Control = ValueLabelGrpBox
+          AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = ValueLabelComboBox
           AnchorSideBottom.Side = asrBottom
-          Left = 441
+          Left = 498
           Height = 27
           Hint = 'Edit Valuelabel'
           Top = 12
-          Width = 23
+          Width = 39
           Anchors = [akTop, akRight]
           AutoSize = True
           BorderSpacing.Right = 5
-          Caption = '+'
+          Caption = 'New'
           OnClick = AddEditValueLabelBtnClick
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
-        end
-        object ManageValueLabelsBtn: TButton
-          AnchorSideTop.Control = ValueLabelGrpBox
-          AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = ValueLabelGrpBox
-          AnchorSideRight.Side = asrBottom
-          Left = 469
-          Height = 27
-          Top = 12
-          Width = 63
-          Anchors = [akTop, akRight]
-          AutoSize = True
-          BorderSpacing.Right = 10
-          Caption = 'Manage'
-          OnClick = ManageValueLabelsBtnClick
-          TabOrder = 2
         end
       end
     end
@@ -500,7 +485,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 15
           Top = 86
-          Width = 157
+          Width = 156
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
           Caption = 'Write label to string field:'
