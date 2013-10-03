@@ -841,6 +841,7 @@ begin
   PageControl1.ActivePage := TabSheet;
 
   AssignActionLinks;
+  UpdateProcessToolbar;
 
   Inc(TabNameCount);
 end;
