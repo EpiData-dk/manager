@@ -7,8 +7,10 @@ object ReportViewerForm: TReportViewerForm
   ClientHeight = 517
   ClientWidth = 651
   KeyPreview = True
+  OnCloseQuery = FormCloseQuery
   OnKeyDown = FormKeyDown
-  LCLVersion = '1.1'
+  OnShow = FormShow
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 50
@@ -23,10 +25,10 @@ object ReportViewerForm: TReportViewerForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 568
+      Left = 567
       Height = 34
       Top = 8
-      Width = 72
+      Width = 73
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
