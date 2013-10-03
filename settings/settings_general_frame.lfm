@@ -15,7 +15,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideBottom.Side = asrBottom
     Left = 10
     Height = 15
-    Top = 177
+    Top = 152
     Width = 112
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 10
@@ -30,8 +30,8 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 147
-    Height = 27
-    Top = 165
+    Height = 29
+    Top = 138
     Width = 331
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 25
@@ -39,58 +39,45 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     BorderSpacing.Right = 10
     ItemHeight = 0
     Style = csDropDownList
-    TabOrder = 5
+    TabOrder = 4
   end
   object SaveWindowPositionsChkBox: TCheckBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 10
-    Height = 21
+    Height = 22
     Top = 10
-    Width = 165
+    Width = 166
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Save window positions'
     TabOrder = 0
   end
-  object ShowWelcomeChkBox: TCheckBox
+  object ShowWorkToolBarChkBox: TCheckBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = SaveWindowPositionsChkBox
     AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 21
-    Top = 41
-    Width = 146
-    BorderSpacing.Left = 10
-    BorderSpacing.Top = 10
-    Caption = 'Show Welcome Box'
-    TabOrder = 1
-  end
-  object ShowWorkToolBarChkBox: TCheckBox
-    AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = ShowWelcomeChkBox
-    AnchorSideTop.Side = asrBottom
-    Left = 10
-    Height = 21
-    Top = 72
-    Width = 140
+    Height = 22
+    Top = 42
+    Width = 141
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Show Work Toolbar'
-    TabOrder = 2
+    TabOrder = 1
   end
   object MultipleInstanceChkbox: TCheckBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = ShowA4LinesChkBox
     AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 21
-    Top = 134
-    Width = 250
+    Height = 22
+    Top = 106
+    Width = 251
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Allow multiple instances of program'
-    TabOrder = 4
+    TabOrder = 3
   end
   object AssociateLabel: TLabel
     AnchorSideLeft.Control = Owner
@@ -98,7 +85,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 15
-    Top = 207
+    Top = 183
     Width = 199
     BorderSpacing.Left = 10
     Caption = 'Associate filetypes (.epx, .epz):'
@@ -107,16 +94,16 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   object UnAssociateBtn: TButton
     AnchorSideTop.Control = AssociateBtn
     AnchorSideRight.Control = AssociateBtn
-    Left = 301
-    Height = 25
-    Top = 202
-    Width = 95
+    Left = 297
+    Height = 27
+    Top = 177
+    Width = 97
     Anchors = [akTop, akRight]
     AutoSize = True
     BorderSpacing.Right = 10
     Caption = 'Un-Associate'
     OnClick = UnAssociateBtnClick
-    TabOrder = 6
+    TabOrder = 5
   end
   object AssociateBtn: TButton
     AnchorSideLeft.Side = asrBottom
@@ -124,10 +111,10 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 406
-    Height = 25
-    Top = 202
-    Width = 72
+    Left = 404
+    Height = 27
+    Top = 177
+    Width = 74
     Anchors = [akTop, akRight]
     AutoSize = True
     BorderSpacing.Left = 5
@@ -135,19 +122,19 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     BorderSpacing.Right = 10
     Caption = 'Associate'
     OnClick = AssociateBtnClick
-    TabOrder = 7
+    TabOrder = 6
   end
   object ShowA4LinesChkBox: TCheckBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = ShowWorkToolBarChkBox
     AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 21
-    Top = 103
-    Width = 146
+    Height = 22
+    Top = 74
+    Width = 147
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     Caption = 'Show A4 guidelines'
-    TabOrder = 3
+    TabOrder = 2
   end
 end

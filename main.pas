@@ -266,14 +266,6 @@ begin
 
   UpdateSettings;
   UpdateRecentFiles;
-
-  // Show welcome message
-  {$IFNDEF EPI_DEBUG}
-  if ManagerSettings.ShowWelcome then
-    ShowMessagePos('EpiData Manager:' + LineEnding +
-                   'See help menu above for an introduction.' + LineEnding +
-                   'Get latest version from http://www.epidata.dk', 15, 15);
-  {$ENDIF}
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);

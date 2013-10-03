@@ -12,7 +12,6 @@ type
   TManagerSettings = record
     // General:
     SaveWindowPositions:   boolean;
-    ShowWelcome:           boolean;
     ShowWorkToolBar:       boolean;
     ShowA4GuideLines:      boolean;
     MultipleInstances:     boolean;
