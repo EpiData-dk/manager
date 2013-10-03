@@ -596,8 +596,20 @@ begin
 end;
 
 procedure TMainForm.ShortCutKeysMenuItemClick(Sender: TObject);
+var
+  Fn: String;
 begin
-  OpenURL('http://epidata.info/dokuwiki/doku.php?id=documentation:keyboard_shortcuts');
+  Fn := ManagerSettings.TutorialDirUTF8 + '/epidatamanagershortcuts.pdf';
+  if FileExistsUTF8(Fn) then
+    OpenURL(Fn)
+  else
+  begin
+    ShowMessage(
+      'Introduction document was not found in tutorial folder:' + LineEnding +
+      ManagerSettings.TutorialDirUTF8
+    );
+    OpenURL('http://epidata.info/dokuwiki/doku.php?id=documentation:keyboard_shortcuts');
+  end;
 end;
 
 procedure TMainForm.ShortIntroMenuItemClick(Sender: TObject);
