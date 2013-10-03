@@ -329,18 +329,15 @@ object MainForm: TMainForm
     object HelpMenu: TMenuItem
       Caption = '&Help'
       object TutorialSubMenu: TMenuItem
-        Caption = 'Tutorials'
-        object TutorialsMenuDivider1: TMenuItem
-          Caption = '-'
-        end
-        object EpiDataTutorialsMenuItem: TMenuItem
-          Caption = 'Tutorials On EpiData Web'
-          OnClick = EpiDataTutorialsMenuItemClick
-        end
-        object WebTutorialsMenuItem: TMenuItem
-          Caption = 'Tutorials On Web'
-          OnClick = WebTutorialsMenuItemClick
-        end
+        Caption = 'Tutorials (Local)'
+      end
+      object EpiDataTutorialsMenuItem: TMenuItem
+        Caption = 'Tutorials (EpiData Wiki)'
+        OnClick = EpiDataTutorialsMenuItemClick
+      end
+      object WebTutorialsMenuItem: TMenuItem
+        Caption = 'Tutorials On Web'
+        OnClick = WebTutorialsMenuItem12Click
       end
       object HelpMenuDivider1: TMenuItem
         Caption = '-'
