@@ -19,6 +19,8 @@ type
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
+    EpiDataTutorialsMenuItem: TMenuItem;
+    WebTutorialsMenuItem: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     BrowseDatasetMenuItem: TMenuItem;
@@ -101,7 +103,6 @@ type
     PackAction: TAction;
     ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
-    EpiDataTutorialsMenuItem: TMenuItem;
     MenuItem1: TMenuItem;
     EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
@@ -109,8 +110,6 @@ type
     DefineProjectBtn: TButton;
     HelpMenuDivider1: TMenuItem;
     ProcessToolPanel: TPanel;
-    TutorialsMenuDivider1: TMenuItem;
-    WebTutorialsMenuItem: TMenuItem;
     TutorialSubMenu: TMenuItem;
     OpenProjectAction: TAction;
     CloseProjectAction: TAction;
@@ -185,7 +184,7 @@ type
     procedure StartEntryClientActionUpdate(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
-    procedure WebTutorialsMenuItemClick(Sender: TObject);
+    procedure WebTutorialsMenuItem12Click(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -265,14 +264,6 @@ begin
 
   UpdateSettings;
   UpdateRecentFiles;
-
-  // Show welcome message
-  {$IFNDEF EPI_DEBUG}
-  if ManagerSettings.ShowWelcome then
-    ShowMessagePos('EpiData Manager:' + LineEnding +
-                   'See help menu above for an introduction.' + LineEnding +
-                   'Get latest version from http://www.epidata.dk', 15, 15);
-  {$ENDIF}
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -598,19 +589,37 @@ begin
 end;
 
 procedure TMainForm.ShortCutKeysMenuItemClick(Sender: TObject);
+var
+  Fn: String;
 begin
-  OpenURL('http://epidata.info/dokuwiki/doku.php?id=documentation:keyboard_shortcuts');
+  Fn := ManagerSettings.TutorialDirUTF8 + '/epidatamanagershortcuts.pdf';
+  if FileExistsUTF8(Fn) then
+    OpenURL(Fn)
+  else
+  begin
+    ShowMessage(
+      'Introduction document was not found in tutorial folder:' + LineEnding +
+      ManagerSettings.TutorialDirUTF8
+    );
+    OpenURL('http://epidata.info/dokuwiki/doku.php?id=documentation:keyboard_shortcuts');
+  end;
 end;
 
 procedure TMainForm.ShortIntroMenuItemClick(Sender: TObject);
 var
   Fn: String;
 begin
-  Fn := UTF8Encode(ExtractFilePath(Application.ExeName) + '/epidatamanagerintro.pdf');
+  Fn := ManagerSettings.TutorialDirUTF8 + '/epidatamanagerintro.pdf';
   if FileExistsUTF8(Fn) then
     OpenURL(Fn)
   else
+  begin
+    ShowMessage(
+      'Introduction document was not found in tutorial folder:' + LineEnding +
+      ManagerSettings.TutorialDirUTF8
+    );
     OpenURL('http://epidata.dk/php/downloadc.php?file=epidatamanagerintro.pdf');
+  end;
 end;
 
 procedure TMainForm.ShowAboutActionExecute(Sender: TObject);
@@ -738,7 +747,7 @@ begin
   R.Free;
 end;
 
-procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
+procedure TMainForm.WebTutorialsMenuItem12Click(Sender: TObject);
 begin
   OpenURL(ManagerSettings.TutorialURLUTF8);
 end;
@@ -773,11 +782,6 @@ begin
   // First delete all previous tutorials.. (could be a change in tutorial dir).
   for i := TutorialSubMenu.Count - 1 downto 0 do
   begin
-    if (TutorialSubMenu[i] = TutorialsMenuDivider1) or
-       (TutorialSubMenu[i] = WebTutorialsMenuItem) or
-       (TutorialSubMenu[i] = EpiDataTutorialsMenuItem)
-       then continue;
-
     MenuItem := TutorialSubMenu[i];
     TutorialSubMenu.Delete(i);
     MenuItem.Free;
@@ -785,9 +789,12 @@ begin
 
   // Find all .pdf files in the directory set by TutorialsDirUTF8
   FileList := FindAllFiles(ManagerSettings.TutorialDirUTF8, '*.pdf', false);
-  TutorialsMenuDivider1.Visible := FileList.Count > 0;
 
-  if FileList.Count = 0 then Exit;
+  if FileList.Count = 0 then
+  begin
+    TutorialSubMenu.Enabled := false;
+    Exit;
+  end;
 
   for i := 0 to FileList.Count - 1 do
   begin
@@ -796,8 +803,7 @@ begin
     MenuItem.Caption := ExtractFileNameOnly(FileList[i]);
     MenuItem.OnClick := @OpenTutorialMenuItemClick;
 
-    With TutorialSubMenu do
-      Insert(IndexOf(TutorialsMenuDivider1), MenuItem);
+    TutorialSubMenu.Add(MenuItem);
   end;
 end;
 

@@ -141,7 +141,6 @@ begin
       WriteInteger(Sec, 'SaveAsType', SaveType);
       WriteInteger(Sec, 'ImportCasing', Integer(ImportCasing));
       WriteBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
-      WriteBool(Sec, 'ShowWelcome', ShowWelcome);
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
       WriteBool(Sec, 'ShowA4GuideLines', ShowA4GuideLines);
       WriteBool(Sec, 'MultipleInstances', MultipleInstances);
@@ -315,7 +314,6 @@ begin
       SaveType            := ReadInteger(Sec, 'SaveAsType', SaveType);
       ImportCasing        := TEpiFieldNamingCase(ReadInteger(Sec, 'ImportCasing', Integer(ImportCasing)));
       SaveWindowPositions := ReadBool(Sec, 'SaveWindowPositions', SaveWindowPositions);
-      ShowWelcome         := ReadBool(Sec, 'ShowWelcome', ShowWelcome);
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
       ShowA4GuideLines    := ReadBool(Sec, 'ShowA4GuideLines', ShowA4GuideLines);
       MultipleInstances   := ReadBool(Sec, 'MultipleInstances', MultipleInstances);
@@ -637,7 +635,6 @@ const
   OriginalSettings: TManagerSettings = (
     // General:
     SaveWindowPositions:   true;
-    ShowWelcome:           true;
     ShowWorkToolBar:       true;
     ShowA4GuideLines:      true;
     MultipleInstances:     false;
