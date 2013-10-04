@@ -480,6 +480,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Transparent = True
       object SelectorToolButton: TToolButton
         Left = 67
+        Hint = 'Point and select'
         Top = 1
         Caption = 'SelectorToolButton'
         Down = True
@@ -635,6 +636,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object ToolButton2: TToolButton
         Tag = 10
         Left = 212
+        Hint = 'New Time Field'
         Top = 1
         Caption = 'ToolButton2'
         ImageIndex = 15
@@ -675,6 +677,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object ToolButton6: TToolButton
         Left = 344
+        Hint = 'Extend dataform'
         Top = 1
         Action = ExpandPageAction
       end
@@ -2351,7 +2354,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = SelectNextActionExecute
     end
     object ImportAction: TAction
-      Caption = 'Import...'
+      Caption = 'Import file...'
       Hint = 'Import data and structure from files'
       ImageIndex = 13
       OnExecute = ImportActionExecute
@@ -3298,7 +3301,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object NewAutoIncMenu: TMenuItem
       Tag = 2
-      Caption = 'Auto Increment'
+      Caption = 'Auto Increment (id)'
       Bitmap.Data = {
         36090000424D3609000000000000360000002800000018000000180000000100
         2000000000000009000064000000640000000000000000000000000000000000
