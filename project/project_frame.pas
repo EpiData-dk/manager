@@ -269,6 +269,7 @@ begin
   F := TStudyUnitForm.Create(Self, EpiDocument.Study);
   F.ShowModal;
   F.Free;
+  UpdateCaption;
 end;
 
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
