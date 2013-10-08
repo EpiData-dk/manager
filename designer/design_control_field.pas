@@ -168,7 +168,7 @@ end;
 procedure TDesignField.OnValueLabelSetChange(Sender: TObject;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
-  if (EventGroup = eegCustomBase) and (TEpiCustomChangeEventType(EventType) = ecceDestroy) then exit;
+  //if (EventGroup = eegCustomBase) and (TEpiCustomChangeEventType(EventType) = ecceDestroy) then exit;
 
   UpdateControl;
 end;
