@@ -19,7 +19,9 @@ type
     Panel1: TPanel;
     SaveDialog1: TSaveDialog;
     procedure BitBtn2Click(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     { private declarations }
   public
@@ -37,7 +39,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLType, LCLIntf;
+  LCLType, LCLIntf, settings2, settings2_var;
 
 { TReportViewerForm }
 
@@ -47,24 +49,26 @@ begin
   if (Key = VK_ESCAPE) and (Shift = []) then Close;
 end;
 
+procedure TReportViewerForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'ReportViewerForm');
+end;
+
 procedure TReportViewerForm.BitBtn2Click(Sender: TObject);
-var
-  Ss: TStringStream;
-  Fs: TFileStream;
 begin
   if not SaveDialog1.Execute then exit;
 
-  if Memo1.Visible then
-  begin
-    Memo1.Lines.SaveToFile(SaveDialog1.FileName);
-  end else begin
-  {  Ss := TStringStream.Create(HTMLViewer1.DocumentSource);
-    Ss.Position := 0;
-    Fs := TFileStream.Create(SaveDialog1.FileName, fmCreate);
-    Fs.CopyFrom(Ss, ss.Size);
-    Fs.Free;
-    Ss.Free;  }
-  end;
+  Memo1.Lines.SaveToFile(SaveDialog1.FileName);
+end;
+
+procedure TReportViewerForm.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  CanClose := true;
+  if ManagerSettings.SaveWindowPositions
+  then
+    SaveFormPosition(Self, 'ReportViewerForm');
 end;
 
 procedure ShowReportForm(Owner: TComponent; const Caption: string;
@@ -90,7 +94,6 @@ begin
   end else begin
     F := TReportViewerForm.Create(Owner);
     F.Caption := Caption;
-//    F.HTMLViewer1.Visible := false;
     F.Memo1.BringToFront;
     F.Memo1.Lines.BeginUpdate;
     F.Memo1.Text := ReportString;

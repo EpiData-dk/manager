@@ -22,10 +22,10 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 584
+      Left = 583
       Height = 32
       Top = 9
-      Width = 53
+      Width = 54
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -40,10 +40,10 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = OkBtn
-      Left = 494
+      Left = 492
       Height = 34
       Top = 8
-      Width = 80
+      Width = 81
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -86,7 +86,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 15
         Height = 15
         Top = 7
-        Width = 62
+        Width = 61
         Anchors = [akLeft]
         BorderSpacing.Left = 15
         BorderSpacing.Top = 10
@@ -113,7 +113,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 15
         Height = 15
         Top = 48
-        Width = 55
+        Width = 54
         Anchors = [akLeft]
         BorderSpacing.Top = 10
         Caption = 'Records:'
@@ -127,7 +127,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 143
         Height = 15
         Top = 7
-        Width = 60
+        Width = 59
         BorderSpacing.Left = 50
         Caption = 'FileName'
         ParentColor = False
@@ -150,7 +150,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 143
         Height = 15
         Top = 48
-        Width = 86
+        Width = 85
         Caption = 'Record Count'
         ParentColor = False
       end
@@ -179,7 +179,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 15
         Height = 15
         Top = 7
-        Width = 62
+        Width = 61
         Anchors = [akLeft]
         BorderSpacing.Left = 15
         BorderSpacing.Top = 10
@@ -206,7 +206,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 15
         Height = 15
         Top = 48
-        Width = 55
+        Width = 54
         Anchors = [akLeft]
         BorderSpacing.Top = 10
         Caption = 'Records:'
@@ -220,7 +220,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 143
         Height = 15
         Top = 7
-        Width = 60
+        Width = 59
         BorderSpacing.Left = 50
         Caption = 'FileName'
         ParentColor = False
@@ -243,7 +243,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
         Left = 143
         Height = 15
         Top = 48
-        Width = 86
+        Width = 85
         Caption = 'Record Count'
         ParentColor = False
       end

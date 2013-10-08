@@ -21,7 +21,6 @@ type
     AssociateLabel: TLabel;
     MultipleInstanceChkbox: TCheckBox;
     SaveWindowPositionsChkBox: TCheckBox;
-    ShowWelcomeChkBox: TCheckBox;
     ShowWorkToolBarChkBox: TCheckBox;
     procedure AssociateBtnClick(Sender: TObject);
     procedure UnAssociateBtnClick(Sender: TObject);
@@ -135,7 +134,6 @@ begin
   begin
     DefaultSaveTypeComboBox.ItemIndex := SaveType;
     SaveWindowPositionsChkBox.Checked := SaveWindowPositions;
-    ShowWelcomeChkBox.Checked         := ShowWelcome;
     ShowWorkToolBarChkBox.Checked     := ShowWorkToolBar;
     ShowA4LinesChkBox.Checked         := ShowA4GuideLines;
     MultipleInstanceChkbox.Checked    := MultipleInstances;
@@ -148,7 +146,6 @@ begin
   begin
     SaveType            := DefaultSaveTypeComboBox.ItemIndex;
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;
-    ShowWelcome         := ShowWelcomeChkBox.Checked;
     ShowWorkToolBar     := ShowWorkToolBarChkBox.Checked;
     MultipleInstances   := MultipleInstanceChkbox.Checked;
     ShowA4GuideLines    := ShowA4LinesChkBox.Checked;

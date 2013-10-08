@@ -19,7 +19,6 @@ type
     procedure ApplyReportOptions(Report: TReportBase);
     function OkToAdvance(ProjectList: TProjectFileListFrame): boolean;
     function OkToAdvanceText: string;
-    function CanClose: boolean;
   end;
 
 implementation

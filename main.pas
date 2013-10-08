@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
   project_frame, LMessages, manager_messages, epidocument, report_base,
-  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc;
+  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile;
 
 type
 
@@ -19,6 +19,8 @@ type
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
+    EpiDataTutorialsMenuItem: TMenuItem;
+    WebTutorialsMenuItem: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     BrowseDatasetMenuItem: TMenuItem;
@@ -101,7 +103,6 @@ type
     PackAction: TAction;
     ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
-    EpiDataTutorialsMenuItem: TMenuItem;
     MenuItem1: TMenuItem;
     EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
@@ -109,8 +110,6 @@ type
     DefineProjectBtn: TButton;
     HelpMenuDivider1: TMenuItem;
     ProcessToolPanel: TPanel;
-    TutorialsMenuDivider1: TMenuItem;
-    WebTutorialsMenuItem: TMenuItem;
     TutorialSubMenu: TMenuItem;
     OpenProjectAction: TAction;
     CloseProjectAction: TAction;
@@ -185,7 +184,7 @@ type
     procedure StartEntryClientActionUpdate(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
-    procedure WebTutorialsMenuItemClick(Sender: TObject);
+    procedure WebTutorialsMenuItem12Click(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -197,6 +196,7 @@ type
     procedure OpenTutorialMenuItemClick(Sender: TObject);
     procedure LoadTutorials;
     function  DoCloseProject: boolean;
+    procedure NewProjectFrame;
     procedure DoNewProject;
     procedure DoOpenProject(Const AFileName: string);
     procedure UpdateMainMenu;
@@ -204,7 +204,8 @@ type
     procedure UpdateShortCuts;
     procedure UpdateSettings;
     procedure OpenRecentMenuItemClick(Sender: TObject);
-    function  ToolsCheckOpenFile(out FileName: string; out LocalDoc: boolean): TEpiDocument;
+    function  ToolsCheckOpenFile(Const ReadOnly: boolean;
+      out LocalDoc: boolean): TEpiDocumentFile;
     function  RunReport(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
   private
     { Messages }
@@ -252,7 +253,7 @@ uses
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  managerprocs, process;
+  managerprocs, process, epiv_documentfile;
 
 { TMainForm }
 
@@ -265,14 +266,6 @@ begin
 
   UpdateSettings;
   UpdateRecentFiles;
-
-  // Show welcome message
-  {$IFNDEF EPI_DEBUG}
-  if ManagerSettings.ShowWelcome then
-    ShowMessagePos('EpiData Manager:' + LineEnding +
-                   'See help menu above for an introduction.' + LineEnding +
-                   'Get latest version from http://www.epidata.dk', 15, 15);
-  {$ENDIF}
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -298,7 +291,7 @@ begin
   with TProjectFrame(FActiveFrame).EpiDocument do
   begin
     S := S + LineEnding +
-      'Filename: ' + TProjectFrame(FActiveFrame).ProjectFileName + LineEnding +
+      'Filename: ' + TProjectFrame(FActiveFrame).DocumentFile.FileName + LineEnding +
       'XML Version: ' + IntToStr(Version) + LineEnding +
       'Field count: ' + IntToStr(DataFiles[0].Fields.Count) + LineEnding +
       'Record count: ' + IntToStr(DataFiles[0].Size);
@@ -335,7 +328,7 @@ procedure TMainForm.ExportActionExecute(Sender: TObject);
 var
   IsLocalDoc: boolean;
   Fn: string;
-  Doc: TEpiDocument;
+  Doc: TEpiDocumentFile;
   ExportForm: TExportForm;
   Settings: TEpiExportSetting;
   Exporter: TEpiExport;
@@ -346,11 +339,11 @@ begin
   Exporter := nil;
   ExportForm := nil;
 
-  Doc := ToolsCheckOpenFile(Fn, IsLocalDoc);
+  Doc := ToolsCheckOpenFile(True, IsLocalDoc);
   if not Assigned(Doc) then exit;
 
   try
-    ExportForm := TExportForm.Create(Self, Doc, Fn);
+    ExportForm := TExportForm.Create(Self, Doc.Document, Doc.FileName);
     if ExportForm.ShowModal <> mrOK then exit;
 
     Exporter := TEpiExport.Create;
@@ -376,6 +369,8 @@ begin
     Exporter.Free;
     Settings.Free;
   end;
+  if IsLocalDoc then
+    Doc.Free;
 end;
 
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
@@ -485,7 +480,8 @@ end;
 procedure TMainForm.PackActionExecute(Sender: TObject);
 var
   F: TToolsForm;
-  Doc: TEpiDocument;
+  Doc: TEpiDocumentFile;
+  EpiDoc: TEpiDocument;
   LocalDoc: Boolean;
   S: LongInt;
   T: Integer;
@@ -495,12 +491,14 @@ var
 begin
   try
     F := nil;
-    Doc := ToolsCheckOpenFile(Fn, LocalDoc);
+    Doc := ToolsCheckOpenFile(False, LocalDoc);
     if not Assigned(Doc) then exit;
 
+    EpiDoc := Doc.Document;
+
     F := TToolsForm.Create(Self);
-    F.Caption := 'Pack: ' + Doc.Study.Title.Text;
-    F.EpiDocument := Doc;
+    F.Caption := 'Pack: ' + EpiDoc.Study.Title.Text;
+    F.EpiDocument := EpiDoc;
     if F.ShowModal = mrCancel then exit;
 
     if F.SelectedDatafiles.Count = 0 then
@@ -539,7 +537,7 @@ begin
       'Total: ' + IntToStr(T));
 
     if LocalDoc then
-      Doc.SaveToFile(Fn);
+      Doc.SaveFile(Doc.FileName);
   finally
     if LocalDoc and Assigned(Doc) then
       Doc.Free;
@@ -551,12 +549,12 @@ procedure TMainForm.PrepareDoubleEntryActionExecute(Sender: TObject);
 var
   Fn: string;
   Local: boolean;
-  Doc: TEpiDocument;
+  Doc: TEpiDocumentFile;
 begin
-  Doc := ToolsCheckOpenFile(Fn, Local);
+  Doc := ToolsCheckOpenFile(True, Local);
   if Assigned(Doc) then
   begin
-    PrepareDoubleEntry(Doc, Fn);
+    PrepareDoubleEntry(Doc);
     if Local then
       Doc.Free;
   end;
@@ -598,19 +596,37 @@ begin
 end;
 
 procedure TMainForm.ShortCutKeysMenuItemClick(Sender: TObject);
+var
+  Fn: String;
 begin
-  OpenURL('http://epidata.info/dokuwiki/doku.php?id=documentation:keyboard_shortcuts');
+  Fn := ManagerSettings.TutorialDirUTF8 + '/epidatamanagershortcuts.pdf';
+  if FileExistsUTF8(Fn) then
+    OpenURL(Fn)
+  else
+  begin
+    ShowMessage(
+      'Introduction document was not found in tutorial folder:' + LineEnding +
+      ManagerSettings.TutorialDirUTF8
+    );
+    OpenURL('http://epidata.info/dokuwiki/doku.php?id=documentation:keyboard_shortcuts');
+  end;
 end;
 
 procedure TMainForm.ShortIntroMenuItemClick(Sender: TObject);
 var
   Fn: String;
 begin
-  Fn := UTF8Encode(ExtractFilePath(Application.ExeName) + '/epidatamanagerintro.pdf');
+  Fn := ManagerSettings.TutorialDirUTF8 + '/epidatamanagerintro.pdf';
   if FileExistsUTF8(Fn) then
     OpenURL(Fn)
   else
+  begin
+    ShowMessage(
+      'Introduction document was not found in tutorial folder:' + LineEnding +
+      ManagerSettings.TutorialDirUTF8
+    );
     OpenURL('http://epidata.dk/php/downloadc.php?file=epidatamanagerintro.pdf');
+  end;
 end;
 
 procedure TMainForm.ShowAboutActionExecute(Sender: TObject);
@@ -650,7 +666,7 @@ begin
     begin
       CanClose := true;
       FActiveFrame.CloseQuery(CanClose);
-      Param := FActiveFrame.ProjectFileName;
+      Param := FActiveFrame.DocumentFile.FileName;
       if not DoCloseProject then exit;
     end
     else
@@ -738,7 +754,7 @@ begin
   R.Free;
 end;
 
-procedure TMainForm.WebTutorialsMenuItemClick(Sender: TObject);
+procedure TMainForm.WebTutorialsMenuItem12Click(Sender: TObject);
 begin
   OpenURL(ManagerSettings.TutorialURLUTF8);
 end;
@@ -773,11 +789,6 @@ begin
   // First delete all previous tutorials.. (could be a change in tutorial dir).
   for i := TutorialSubMenu.Count - 1 downto 0 do
   begin
-    if (TutorialSubMenu[i] = TutorialsMenuDivider1) or
-       (TutorialSubMenu[i] = WebTutorialsMenuItem) or
-       (TutorialSubMenu[i] = EpiDataTutorialsMenuItem)
-       then continue;
-
     MenuItem := TutorialSubMenu[i];
     TutorialSubMenu.Delete(i);
     MenuItem.Free;
@@ -785,9 +796,12 @@ begin
 
   // Find all .pdf files in the directory set by TutorialsDirUTF8
   FileList := FindAllFiles(ManagerSettings.TutorialDirUTF8, '*.pdf', false);
-  TutorialsMenuDivider1.Visible := FileList.Count > 0;
 
-  if FileList.Count = 0 then Exit;
+  if FileList.Count = 0 then
+  begin
+    TutorialSubMenu.Enabled := false;
+    Exit;
+  end;
 
   for i := 0 to FileList.Count - 1 do
   begin
@@ -796,8 +810,7 @@ begin
     MenuItem.Caption := ExtractFileNameOnly(FileList[i]);
     MenuItem.OnClick := @OpenTutorialMenuItemClick;
 
-    With TutorialSubMenu do
-      Insert(IndexOf(TutorialsMenuDivider1), MenuItem);
+    TutorialSubMenu.Add(MenuItem);
   end;
 end;
 
@@ -817,13 +830,10 @@ begin
   SetCaption;
 end;
 
-procedure TMainForm.DoNewProject;
+procedure TMainForm.NewProjectFrame;
 var
   TabSheet: TTabSheet;
 begin
-  // Close Old project
-  if not DoCloseProject then exit;
-
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -837,10 +847,18 @@ begin
   FActiveFrame.Align := alClient;
   FActiveFrame.Parent := TabSheet;
   FActiveFrame.OnModified := @ProjectModified;
-  FActiveFrame.NewDataFormAction.Execute;
   PageControl1.ActivePage := TabSheet;
+end;
 
+procedure TMainForm.DoNewProject;
+begin
+  // Close Old project
+  if not DoCloseProject then exit;
+
+  NewProjectFrame;
+  FActiveFrame.CreateNewProject;
   AssignActionLinks;
+  UpdateProcessToolbar;
 
   Inc(TabNameCount);
 end;
@@ -849,39 +867,12 @@ procedure TMainForm.DoOpenProject(const AFileName: string);
 begin
   if not DoCloseProject then exit;
 
-  DoNewProject;
-  try
-    FActiveFrame.OpenProject(AFileName);
-  except
-    on E: TEpiCoreException do
-      begin
-        ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
-                    E.Message);
-        DoCloseProject;
-      end;
-    on E: EFOpenError do
-      begin
-        ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
-                    'File is corrupt or does not exist.');
-        DoCloseProject;
-      end;
-    on EEpiBadPassword do
-      begin
-        MessageDlg('Error',
-                   'Unable to open the file: ' + AFileName + LineEnding + LineEnding +
-                   'Invalid Password!',
-                   mtError,
-                   [mbOK], 0);
-        DoCloseProject;
-      end;
-    on E: Exception do
-      begin
-        ShowMessage('Unable to open the file: ' + AFileName + LineEnding +
-                    'An error occured:' + LineEnding +
-                    E.Message);
-        DoCloseProject;
-      end;
-  end;
+  NewProjectFrame;
+  if not FActiveFrame.OpenProject(AFileName) then
+    DoCloseProject
+  else
+    AssignActionLinks;
+  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.UpdateMainMenu;
@@ -980,8 +971,8 @@ begin
   PostMessage(Self.Handle, LM_MAIN_OPENRECENT, WParam(Sender), 0);
 end;
 
-function TMainForm.ToolsCheckOpenFile(out FileName: string;
-  out LocalDoc: boolean): TEpiDocument;
+function TMainForm.ToolsCheckOpenFile(const ReadOnly: boolean; out
+  LocalDoc: boolean): TEpiDocumentFile;
 var
   Dlg: TOpenDialog;
 begin
@@ -989,18 +980,21 @@ begin
   if Assigned(FActiveFrame) then
   begin
     LocalDoc := false;
-    Result := FActiveFrame.EpiDocument;
-    FileName := FActiveFrame.ProjectFileName;
+    Result := FActiveFrame.DocumentFile;
   end else begin
     Dlg := TOpenDialog.Create(Self);
     Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ, dfCollection]);
     Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     if not Dlg.Execute then exit;
 
-    Result := TOpenEpiDoc.OpenDoc(Dlg.FileName, ManagerSettings.StudyLang);
+    Result := TDocumentFile.Create;
+    if not Result.OpenFile(Dlg.FileName, ReadOnly) then
+    begin
+      FreeAndNil(Result);
+      Exit;
+    end;
 
     LocalDoc := true;
-    FileName := Dlg.FileName;
   end;
 end;
 
@@ -1018,8 +1012,8 @@ begin
   then
   begin
     S := '(Not Saved)';
-    if FActiveFrame.ProjectFileName <> '' then
-      S := FActiveFrame.ProjectFileName;
+    if Assigned(FActiveFrame.DocumentFile) { ProjectFileName <> ''} then
+      S := FActiveFrame.DocumentFile.FileName; // ProjectFileName;
     F.AddInitialDocument(S, FActiveFrame.EpiDocument);
   end;
   if F.ShowModal = mrOK then
@@ -1055,9 +1049,9 @@ end;
 procedure TMainForm.CheckHasOpenFile(const MsgType: TMessageType;
   const Msg: string; out Ack: TMessageType);
 begin
-  Ack := epiIPC_Ack_FileNotOpen;
+{  Ack := epiIPC_Ack_FileNotOpen;
   if Assigned(FActiveFrame) and (FActiveFrame.ProjectFileName = Msg) then
-    Ack := epiIPC_Ack_FileIsOpen;
+    Ack := epiIPC_Ack_FileIsOpen;      }
 end;
 
 procedure TMainForm.LMOpenProject(var Msg: TLMessage);
@@ -1080,7 +1074,7 @@ begin
     TString(Msg.WParam).Free;
   end;
 
-  if CheckEntryClientOpenFile(Fn) then
+{  if CheckEntryClientOpenFile(Fn) then
   begin
     if MessageDlg('Warning',
       'The file: ' + LineEnding +
@@ -1093,7 +1087,7 @@ begin
       0,
       mbNo) = mrNo then exit;
   end;
-  if not DoCloseProject then exit;
+  if not DoCloseProject then exit;}
 
   DoOpenProject(Fn);
   UpdateProcessToolbar;

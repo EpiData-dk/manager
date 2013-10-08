@@ -107,7 +107,6 @@ type
     Label9: TLabel;
     LengthEdit: TEdit;
     LengthLabel: TLabel;
-    ManageValueLabelsBtn: TButton;
     MidLabel: TLabel;
     MonthCombo: TComboBox;
     NameEdit: TEdit;
@@ -149,7 +148,6 @@ type
     procedure AddValueLabelPlusActionExecute(Sender: TObject);
     procedure CalcRadioChange(Sender: TObject);
     procedure LengthEditingDone(Sender: TObject);
-    procedure ManageValueLabelsBtnClick(Sender: TObject);
     procedure RemoveJumpBtnClick(Sender: TObject);
     procedure UseJumpsComboSelect(Sender: TObject);
     procedure ValueLabelComboBoxChange(Sender: TObject);
@@ -882,11 +880,6 @@ begin
   UpdateValueLabels;
 end;
 
-procedure TFieldPropertiesFrame.ManageValueLabelsBtnClick(Sender: TObject);
-begin
-  ShowValueLabelEditor2(ValueLabels);
-end;
-
 procedure TFieldPropertiesFrame.AddEditValueLabelBtnClick(Sender: TObject);
 var
   VLEdit: TFieldValueLabelEditor;
@@ -908,7 +901,7 @@ begin
     VLEdit.ValueLabelSet := VLSet
   end else begin
     VLSet := ValueLabels.NewValueLabelSet(Field.FieldType);
-    VLSet.Name := 'valuelabel_' + Field.Name;
+    VLSet.Name := '_' + Field.Name;
     VLEdit.ValueLabelSet := VLSet;
     NewVL := true;
   end;
@@ -975,8 +968,13 @@ begin
   if (FVLIncompatibleItemIndex > - 1) and
      (ValueLabelComboBox.ItemIndex > FVLIncompatibleItemIndex)
   then
-    ShowHintMsg('Warning: Selected value label set is no compatible with all fields',
+    ShowHintMsg('Warning: Selected value label set is not compatible with all fields',
       ValueLabelComboBox);
+
+  If ComboNoneSelected(ValueLabelComboBox) then
+    AddEditValueLabelBtn.Caption := 'New'
+  else
+    AddEditValueLabelBtn.Caption := 'Edit';
 end;
 
 procedure TFieldPropertiesFrame.RegisterValueLabelHook;

@@ -190,7 +190,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="81">
+    <Units Count="82">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -729,6 +729,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="design_properties_fieldframe_parser"/>
       </Unit80>
+      <Unit81>
+        <Filename Value="utils/manager_types.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="manager_types"/>
+      </Unit81>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

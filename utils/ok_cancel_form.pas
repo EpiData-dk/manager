@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons;
+  Buttons, manager_types;
 
 type
 
@@ -22,6 +22,7 @@ type
     { private declarations }
   public
     { public declarations }
+    CanCloseInt: ICanCloseQuery;
   end;
 
 implementation
@@ -42,6 +43,9 @@ end;
 
 procedure TOkCancelForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
+  if Assigned(CanCloseInt) then
+    CanClose := CanCloseInt.CanClose;
+
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, OkCancelForm);
 end;

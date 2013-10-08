@@ -46,7 +46,8 @@ uses
   report_optionframe_counts, report_types, dataset_form, ok_cancel_form, 
   validate_double_entry_frame, project_settings_autoincrement_frame,
   settings_font_frame, report_codebook, export_ddi_frame, 
-  design_control_extender, design_properties_fieldframe_parser;
+  design_control_extender, manager_types,
+  design_properties_fieldframe_parser;
 
 {$R *.res}
 
@@ -62,11 +63,6 @@ begin
 end;
 
 begin
-  {$IFNDEF EPI_DEBUG}
-  if (not ManagerSettings.MultipleInstances) and
-     InstanceRunning(EpiDataApplicationName) then exit;
-  {$ENDIF}
-
   Application.Title := 'EpiData Manager';
   OnGetApplicationName := @EpiDataApplicationName;
   OnGetVendorName := @EpiDataVendorName;
@@ -81,6 +77,12 @@ begin
 
   // Load ini before anything else - it contains start-up info.
   LoadIniFiles;
+
+  {$IFNDEF EPI_DEBUG}
+  if (not ManagerSettings.MultipleInstances) and
+     InstanceRunning(EpiDataApplicationName) then exit;
+  {$ENDIF}
+
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.

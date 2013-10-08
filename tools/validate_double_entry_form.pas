@@ -125,7 +125,7 @@ begin
   try
     if not Dlg.Execute then exit;
 
-    FDupDoc := TOpenEpiDoc.OpenDoc(Dlg.FileName, ManagerSettings.StudyLang);
+//    FDupDoc := TDocumentFile.OpenDoc(Dlg.FileName, ManagerSettings.StudyLang);
 
     UpdateDupDocInfo(Dlg.FileName);
     UpdateKeyFields;
