@@ -15,6 +15,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    ImportInNewProjectAction: TAction;
     CodeBookReportAction: TAction;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
@@ -48,7 +49,6 @@ type
     ExportBtn: TButton;
     CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
-    EditMenuDivider10: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
     EditMenuDivider0: TMenuItem;
     AlignMenu: TMenuItem;
@@ -132,6 +132,7 @@ type
     FileExitMenuItem: TMenuItem;
     HelpMenu: TMenuItem;
     FileMenuDivider2: TMenuItem;
+    FileMenuDivider4: TMenuItem;
     EditMenuDivider7: TMenuItem;
     ProjectPropertiesMenuItem: TMenuItem;
     ProjectMenu: TMenuItem;
@@ -168,6 +169,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ImportInNewProjectActionExecute(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
@@ -264,6 +266,12 @@ begin
 
   UpdateSettings;
   UpdateRecentFiles;
+end;
+
+procedure TMainForm.ImportInNewProjectActionExecute(Sender: TObject);
+begin
+  DoNewProject;
+  TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction.Execute;
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -820,6 +828,7 @@ begin
   end;
   UpdateMainMenu;
   UpdateProcessToolbar;
+  AssignActionLinks;
   SetCaption;
 end;
 
@@ -894,11 +903,15 @@ end;
 procedure TMainForm.UpdateMainMenu;
 begin
   // FILE:
-  CloseProjectAction.Enabled := Assigned(FActiveFrame);
+  // New, -, Open, Open Recent,
   SaveProjectMenuItem.Visible := Assigned(FActiveFrame);
   SaveProjectAsMenuItem.Visible := Assigned(FActiveFrame);
+  CloseProjectAction.Enabled := Assigned(FActiveFrame);
+  // -, AddStructur/Import, -
   PrintDataFormMenuItem.Visible := Assigned(FActiveFrame);
-  FileMenuDivider3.Visible := PrintDataFormMenuItem.Visible;
+  // -
+  FileMenuDivider4.Visible := PrintDataFormMenuItem.Visible;
+  // -, Exit
 
   // EDIT:
   UndoMenuItem.Visible := Assigned(FActiveFrame);
@@ -921,9 +934,6 @@ begin
   // -
   SelectMenu.Visible        := Assigned(FActiveFrame);
   MenuItem25.Visible        := Assigned(FActiveFrame);
-  // -
-  AddStructureMenuItem.Visible := Assigned(FActiveFrame);
-  EditMenuDivider10.Visible := Assigned(FActiveFrame);
 
   // PROJECT Details:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
@@ -966,6 +976,7 @@ begin
   ValueLabelListReportAction.ShortCut := M_ValueLabelListReport;
   ExtendedListReportAction.ShortCut   := M_ExtendedListReport;
   ProjectReportAction.ShortCut        := M_ProjectOverviewReport;
+  ImportInNewProjectAction.ShortCut   := D_ImportData;
 end;
 
 procedure TMainForm.UpdateSettings;
@@ -1179,13 +1190,22 @@ end;
 procedure TMainForm.AssignActionLinks;
 begin
   // Only as long as one project is created!
-  if Not Assigned(FActiveFrame) then exit;
+  if Not Assigned(FActiveFrame) then
+  begin
+    // The "importnewprojectaction" is an action that is only assigned if no
+    // active project is assigned. This will create a new project and start
+    // the import dialog.
+    AddStructureMenuItem.Action := ImportInNewProjectAction;
+    exit;
+  end;
 
   UpdateMainMenu;
   // File
   SaveProjectMenuItem.Action   := FActiveFrame.SaveProjectAction;
   SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
   PrintDataFormMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PrintDataFormAction;
+  // -
+  AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
 
   // Edit
   UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;
@@ -1200,8 +1220,6 @@ begin
   PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
   PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
   PasteAsDateMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsDateAction;
-  // -
-  AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
 
   // Project
   ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
@@ -1251,6 +1269,7 @@ begin
   FActiveFrame := nil;
   SetupIPC;
   UpdateMainMenu;
+  AssignActionLinks;
 end;
 
 procedure TMainForm.RestoreDefaultPos;
