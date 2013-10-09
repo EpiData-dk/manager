@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 593
+  Left = 900
   Height = 603
-  Top = 284
+  Top = 355
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -145,10 +145,16 @@ object MainForm: TMainForm
       object FileMenuDivider2: TMenuItem
         Caption = '-'
       end
+      object AddStructureMenuItem: TMenuItem
+        Caption = 'AddStructure'
+      end
+      object FileMenuDivider3: TMenuItem
+        Caption = '-'
+      end
       object PrintDataFormMenuItem: TMenuItem
         Caption = 'Print'
       end
-      object FileMenuDivider3: TMenuItem
+      object FileMenuDivider4: TMenuItem
         Caption = '-'
       end
       object FileExitMenuItem: TMenuItem
@@ -233,12 +239,6 @@ object MainForm: TMainForm
         Caption = 'DatePaste'
       end
       object EditMenuDivider7: TMenuItem
-        Caption = '-'
-      end
-      object AddStructureMenuItem: TMenuItem
-        Caption = 'AddStructure'
-      end
-      object EditMenuDivider10: TMenuItem
         Caption = '-'
       end
       object SettingsMenuItem: TMenuItem
@@ -488,6 +488,11 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'CodeBook'
       OnExecute = CodeBookReportActionExecute
+    end
+    object ImportInNewProjectAction: TAction
+      Category = 'File'
+      Caption = 'Import file...'
+      OnExecute = ImportInNewProjectActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
