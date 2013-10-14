@@ -59,6 +59,7 @@ var
   D_MoveSideDown,
   D_MoveBottom,
   D_SelectAll,
+  D_ExpandDataframe,
   // Align
   D_AlignForm,
   D_AlignLeft,

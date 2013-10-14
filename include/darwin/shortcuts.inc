@@ -46,6 +46,7 @@ begin
   D_NewHeading_Fast            := KeyToShortCut(VK_6, [ssShift]);
   D_NewSection                 := KeyToShortCut(VK_UNKNOWN, []);
   D_SelectAll                  := KeyToShortCut(VK_A, [ssMeta]);
+  D_ExpandDataframe            := KeyToShortCut(VK_NEXT, [ssMeta]);
 
   // - align
   D_AlignForm                  := KeyToShortCut(VK_A, [ssCtrl, ssMeta]);
