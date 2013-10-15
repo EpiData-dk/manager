@@ -1779,6 +1779,7 @@ begin
   UndoAction.ShortCut                  := D_Undo;
   RedoAction.ShortCut                  := D_Redo;
   PrintDataFormAction.ShortCut         := D_PrintDataForm;
+  ExpandPageAction.ShortCut            := D_ExpandDataframe;
 end;
 
 procedure TRuntimeDesignFrame.UpdateControls;
@@ -1811,6 +1812,7 @@ var
   Ctrl: TControl;
   SPage: TScrollBarInc;
   SPos: Integer;
+  ICtrl: IDesignEpiControl;
 
   function RelativeTop(Ctrl: TControl): integer;
   begin
@@ -1819,10 +1821,11 @@ var
 
 begin
   Surface := FDesignPanel.Surface;
-  if Surface.Count = 0 then
+  if (Surface.Count = 0) or (not (Supports(Surface.Selection[0], IDesignEpiControl, ICtrl))) then
     EpiCtrl := (FDesignPanel as IDesignEpiControl).EpiControl
   else
-    EpiCtrl := (Surface.Selection[0] as IDesignEpiControl).EpiControl;
+    EpiCtrl := ICtrl.EpiControl;
+
   Idx := DataFile.ControlItems.IndexOf(EpiCtrl);
 
   case AAction of

@@ -797,6 +797,7 @@ begin
 
   // Find all .pdf files in the directory set by TutorialsDirUTF8
   FileList := FindAllFiles(ManagerSettings.TutorialDirUTF8, '*.pdf', false);
+  FileList.CustomSort(@EpiStringListSortStr);
 
   if FileList.Count = 0 then
   begin
