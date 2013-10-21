@@ -74,6 +74,7 @@ begin
   D_Undo                       := KeyToShortCut(VK_Z, [ssMeta]);
   D_Redo                       := KeyToShortCut(VK_Z, [ssMeta, ssShift]);
   D_PrintDataForm              := KeyToShortCut(VK_P, [ssMeta]);
+  D_BrowseData                 := KeyToShortCut(VK_D, [ssMeta]);
 
   // ValueLabel Editor
   // - tree actions

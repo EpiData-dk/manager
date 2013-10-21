@@ -48,6 +48,8 @@ begin
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_SelectAll                  := KeyToShortCut(VK_A, [ssCtrl]);
   D_ExpandDataframe            := KeyToShortCut(VK_NEXT, [ssCtrl]);
+  D_BrowseData                 := KeyToShortCut(VK_D, [ssCtrl]);
+
 
   // - align
   D_AlignForm                  := KeyToShortCut(VK_A, [ssCtrl, ssShift]);

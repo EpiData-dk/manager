@@ -1780,6 +1780,7 @@ begin
   RedoAction.ShortCut                  := D_Redo;
   PrintDataFormAction.ShortCut         := D_PrintDataForm;
   ExpandPageAction.ShortCut            := D_ExpandDataframe;
+  ViewDatasetAction.ShortCut           := D_BrowseData;
 end;
 
 procedure TRuntimeDesignFrame.UpdateControls;

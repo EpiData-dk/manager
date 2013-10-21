@@ -74,6 +74,7 @@ var
   D_PasteControl,
   D_ViewDataSet,
   D_PrintDataForm,
+  D_BrowseData,
   D_Undo,
   D_Redo:
     TShortCut;
