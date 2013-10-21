@@ -86,7 +86,7 @@ begin
     end;
 
     FSelfOpenedList.Bits[i] := true;
-    Doc := TOpenEpiDoc.OpenDoc(FileNames[i], '');
+//    Doc := TDocumentFile.GetInstance.OpenFile(FileNames[i]); //, '');
     FDocuments.AddObject(FileNames[i], Doc);
   end;
 end;

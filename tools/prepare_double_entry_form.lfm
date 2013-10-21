@@ -7,7 +7,7 @@ object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
   ClientHeight = 305
   ClientWidth = 523
   OnCloseQuery = FormCloseQuery
-  LCLVersion = '1.1'
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 50
@@ -22,10 +22,10 @@ object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 454
+      Left = 453
       Height = 32
       Top = 9
-      Width = 53
+      Width = 54
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 15
@@ -39,10 +39,10 @@ object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 364
+      Left = 362
       Height = 34
       Top = 8
-      Width = 80
+      Width = 81
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -81,33 +81,33 @@ object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
       TabOrder = 0
       object Label1: TLabel
         Left = 16
-        Height = 16
+        Height = 15
         Top = 18
-        Width = 62
+        Width = 61
         Caption = 'Filename:'
         ParentColor = False
       end
       object Label2: TLabel
         Left = 16
-        Height = 16
+        Height = 15
         Top = 50
-        Width = 31
+        Width = 30
         Caption = 'Title:'
         ParentColor = False
       end
       object FileNameLabel: TLabel
         Left = 96
-        Height = 16
+        Height = 15
         Top = 18
-        Width = 94
+        Width = 93
         Caption = 'FileNameLabel'
         ParentColor = False
       end
       object TitleLabel: TLabel
         Left = 96
-        Height = 16
+        Height = 15
         Top = 50
-        Width = 61
+        Width = 60
         Caption = 'TitleLabel'
         ParentColor = False
       end
@@ -129,9 +129,9 @@ object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
       TabOrder = 1
       object Label3: TLabel
         Left = 16
-        Height = 16
+        Height = 15
         Top = 26
-        Width = 62
+        Width = 61
         Caption = 'Filename:'
         ParentColor = False
       end
@@ -144,16 +144,16 @@ object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
         FilterIndex = 0
         HideDirectories = False
         ButtonWidth = 23
-        NumGlyphs = 0
+        NumGlyphs = 1
         Anchors = [akTop, akLeft, akRight]
         MaxLength = 0
         TabOrder = 0
       end
       object Label4: TLabel
         Left = 16
-        Height = 16
+        Height = 15
         Top = 58
-        Width = 31
+        Width = 30
         Caption = 'Title:'
         ParentColor = False
       end

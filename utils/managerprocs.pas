@@ -5,25 +5,7 @@ unit managerprocs;
 interface
 
 uses
-  Classes, SysUtils, dialogs, epidocument;
-
-type
-
-  { TOpenEpiDoc }
-
-  TOpenEpiDoc = class
-  private
-    FFileName: string;
-    constructor Create(Const FileName: string);
-    procedure EpiDocumentPassWord(Sender: TObject; var Login: string;
-      var Password: string);
-  public
-    class function OpenDoc(const FileName, Lang: string): TEpiDocument; overload;
-    class function OpenDoc(Doc: TEpiDocument; const FileName: string): TEpiDocument;
-  end;
-
-
-
+  Classes, SysUtils, epidocument, epiopenfile;
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 procedure CopyAndBackup(Const AFileName: string);
@@ -39,7 +21,7 @@ implementation
 
 uses
   Clipbrd, FileUtil, settings2, settings2_var, forms, strutils,
-  epimiscutils, LCLVersion, LazUTF8;
+  epimiscutils, LCLVersion, LazUTF8, dialogs, controls;
 
 var
   IniFileName: string = '';
@@ -249,51 +231,6 @@ begin
   //  - And the chance of creating to equal component name are very-very-very unlikely.
   CreateGUID(GUID);
   Result := '_' + StringsReplace(GUIDToString(GUID), ['{','}','-'], ['','',''], [rfReplaceAll]);
-end;
-
-{ TOpenEpiDoc }
-
-constructor TOpenEpiDoc.Create(const FileName: string);
-begin
-  FFileName := FileName;
-end;
-
-procedure TOpenEpiDoc.EpiDocumentPassWord(Sender: TObject; var Login: string;
-  var Password: string);
-begin
-  Password :=
-    PasswordBox('Project Password',
-                'File: ' + FFileName + LineEnding +
-                LineEnding +
-                'Project data is password protected.' + LineEnding +
-                'Please enter password:');
-end;
-
-class function TOpenEpiDoc.OpenDoc(const FileName, Lang: string): TEpiDocument;
-begin
-  result := OpenDoc(TEpiDocument.Create(Lang), FileName);
-end;
-
-class function TOpenEpiDoc.OpenDoc(Doc: TEpiDocument; const FileName: string): TEpiDocument;
-var
-  Tmp: TOpenEpiDoc;
-  St: TMemoryStream;
-begin
-  Tmp := TOpenEpiDoc.Create(ExtractFileName(FileName));
-
-  St := TMemoryStream.Create;
-  if ExtractFileExt(UTF8ToSys(FileName)) = '.epz' then
-    ZipFileToStream(St, FileName)
-  else
-    St.LoadFromFile(UTF8ToSys(FileName));
-  St.Position := 0;
-
-  result := Doc;
-  result.OnPassword := @Tmp.EpiDocumentPassWord;
-  result.LoadFromStream(St);
-
-  St.Free;
-  Tmp.Free;
 end;
 
 finalization

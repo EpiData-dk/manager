@@ -62,11 +62,6 @@ begin
 end;
 
 begin
-  {$IFNDEF EPI_DEBUG}
-  if (not ManagerSettings.MultipleInstances) and
-     InstanceRunning(EpiDataApplicationName) then exit;
-  {$ENDIF}
-
   Application.Title := 'EpiData Manager';
   OnGetApplicationName := @EpiDataApplicationName;
   OnGetVendorName := @EpiDataVendorName;
@@ -81,6 +76,12 @@ begin
 
   // Load ini before anything else - it contains start-up info.
   LoadIniFiles;
+
+  {$IFNDEF EPI_DEBUG}
+  if (not ManagerSettings.MultipleInstances) and
+     InstanceRunning(EpiDataApplicationName) then exit;
+  {$ENDIF}
+
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.
