@@ -23,6 +23,7 @@ type
   public
     { public declarations }
     CanCloseInt: ICanCloseQuery;
+    class procedure RestoreDefaultPos;
   end;
 
 implementation
@@ -39,6 +40,19 @@ procedure TOkCancelForm.FormShow(Sender: TObject);
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, OkCancelForm);
+end;
+
+class procedure TOkCancelForm.RestoreDefaultPos;
+var
+  F: TForm;
+begin
+  F := TForm.Create(nil);
+  F.Width := 400;
+  F.Height := 400;
+  F.Top := 200;
+  F.Left := 200;
+  SaveFormPosition(F, OkCancelForm);
+  F.Free;
 end;
 
 procedure TOkCancelForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);

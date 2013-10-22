@@ -31,6 +31,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
@@ -77,13 +78,14 @@ type
 
 procedure ShowValueLabelEditor2(ValueLabelSet: TEpiValueLabelSets);
 procedure CloseValueLabelEditor2;
+procedure RestoreDefaultPosValueLabelEditor2;
 
 implementation
 
 {$R *.lfm}
 
 uses
-  Main, settings2_var, LCLIntf, LCLType;
+  Main, settings2_var, settings2, LCLIntf, LCLType;
 
 var
   Editor: TValueLabelEditor2 = nil;
@@ -99,6 +101,29 @@ end;
 procedure CloseValueLabelEditor2;
 begin
   FreeAndNil(Editor);
+end;
+
+procedure RestoreDefaultPosValueLabelEditor2;
+var
+  F: TForm;
+begin
+  if Assigned(Editor) then
+    F := Editor
+  else
+    F := TForm.Create(nil);
+
+  with F do
+  begin
+    LockRealizeBounds;
+    Width := 700;
+    Height := 700;
+    Left := 100;
+    Top := 100;
+    UnlockRealizeBounds;
+  end;
+  SaveFormPosition(F, F.ClassName);
+
+  if F <> Editor then F.Free;
 end;
 
 { TValueLabelEditor2 }
@@ -207,6 +232,12 @@ begin
   end;
 end;
 
+procedure TValueLabelEditor2.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, Self.ClassName);
+end;
+
 procedure TValueLabelEditor2.DelBtnClick(Sender: TObject);
 begin
   DoDeleteValueLabelSet(VLSetsTree.FocusedNode);
@@ -217,6 +248,9 @@ procedure TValueLabelEditor2.FormCloseQuery(Sender: TObject;
 begin
   if Assigned(FGridFrame) then
     CanClose := FGridFrame.ValidateGridEntries;
+
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, Self.ClassName);
 end;
 
 procedure TValueLabelEditor2.MenuItem1Click(Sender: TObject);

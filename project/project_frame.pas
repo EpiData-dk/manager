@@ -90,7 +90,6 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     procedure   CloseQuery(var CanClose: boolean);
-    procedure   RestoreDefaultPos;
     procedure   UpdateFrame;
     function    OpenProject(Const AFileName: string): boolean;
     function    SaveProject(Const AFileName: string): boolean;
@@ -101,6 +100,8 @@ type
 //    property   ProjectFileName: string read FFileName write FFileName;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
+  public
+    class procedure   RestoreDefaultPos(F: TProjectFrame);
   end;
 
 implementation
@@ -670,14 +671,17 @@ begin
   {$ENDIF}
 end;
 
-procedure TProjectFrame.RestoreDefaultPos;
+class procedure TProjectFrame.RestoreDefaultPos(F: TProjectFrame);
 begin
-//  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
+  RestoreDefaultPosValueLabelEditor2;
   TProjectSettingsForm.RestoreDefaultPos;
   TStudyUnitForm.RestoreDefaultPos;
+  TKeyFieldsForm.RestoreDefaultPos;
 
-  if Assigned(FActiveFrame) then
-    TRuntimeDesignFrame(FActiveFrame).RestoreDefaultPos;
+   if Assigned(F) then
+    TRuntimeDesignFrame.RestoreDefaultPos(TRuntimeDesignFrame(F.ActiveFrame))
+  else
+    TRuntimeDesignFrame.RestoreDefaultPos(nil);
 end;
 
 procedure TProjectFrame.UpdateFrame;

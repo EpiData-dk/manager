@@ -52,6 +52,7 @@ type
 procedure ShowAlignmentForm(DesignFrame: TRuntimeDesignFrame);
 procedure CloseAlignmentForm;
 function AlignmentFormIsVisible: boolean;
+procedure AlignmentFormRestoreDefaultPos;
 
 implementation
 
@@ -83,6 +84,26 @@ begin
   if not Assigned(AlignForm) then exit(false);
 
   result := AlignForm.Visible;
+end;
+
+procedure AlignmentFormRestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  if Assigned(AlignForm) then
+    AForm := AlignForm
+  else
+    Aform := TForm.Create(nil);
+  Aform.LockRealizeBounds;
+  Aform.Width := 500;
+  Aform.Height := 500;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  Aform.UnlockRealizeBounds;
+  SaveFormPosition(Aform, 'AlignmentForm');
+
+  if Aform <> AlignForm then
+    AForm.free;
 end;
 
 { TAlignmentForm }

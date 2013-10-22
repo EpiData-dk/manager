@@ -10,7 +10,8 @@ object ValueLabelEditor2: TValueLabelEditor2
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
-  LCLVersion = '1.1'
+  OnShow = FormShow
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 577
@@ -92,10 +93,10 @@ object ValueLabelEditor2: TValueLabelEditor2
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel2
       AnchorSideRight.Side = asrBottom
-      Left = 737
-      Height = 32
-      Top = 9
-      Width = 70
+      Left = 734
+      Height = 34
+      Top = 8
+      Width = 73
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10

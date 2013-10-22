@@ -18,19 +18,22 @@ procedure ShowDataSetViewerForm(TheOwner: TComponent;
   const ShowIndexFields: boolean = false
   );
 
+procedure DataSetViewerFormRestoreDefaultPos;
+
 
 implementation
 
 uses
   Forms, Controls, settings2_var, settings2, epiv_dataset_viewer_frame;
 
+const
+  FormName = 'DataSetViewerForm';
+
 procedure ShowDataSetViewerForm(TheOwner: TComponent;
   const FormCaption: string; const DataFile: TEpiDataFile;
   const Records: TBoundArray; const KeyFields: TEpiFields;
   const DisplayFields: TEpiFields; const SortFieldNo: Integer;
   const ShowIndexFields: boolean);
-const
-  FormName = 'DataSetViewerForm';
 var
   F: TForm;
   V: TDatasetViewerFrame;
@@ -63,6 +66,19 @@ begin
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(F, FormName);
   F.Free;
+end;
+
+procedure DataSetViewerFormRestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 600;
+  Aform.Height := 600;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, FormName);
+  AForm.free;
 end;
 
 end.

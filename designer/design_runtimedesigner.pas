@@ -321,7 +321,6 @@ type
   public
     constructor Create(TheOwner: TComponent); override;
     procedure   UpdateFrame;
-    procedure   RestoreDefaultPos;
     procedure   ShowPropertiesForm(NewControl: boolean);
     function    IsShortCut(var Message: TLMKey): boolean;
     function ValidateControls: boolean;
@@ -329,6 +328,8 @@ type
     property ImportedFileName: string read FImportedFileName;
     property DesignPanel: TJvDesignPanel read FDesignPanel;
     property DesignScrollBar: TJvDesignScrollBox read FDesignScrollBox;
+  public
+    class procedure RestoreDefaultPos(F: TRuntimeDesignFrame);
   end;
 
 implementation
@@ -2568,21 +2569,18 @@ begin
   UpdateInterface;
 end;
 
-procedure TRuntimeDesignFrame.RestoreDefaultPos;
+class procedure TRuntimeDesignFrame.RestoreDefaultPos(F: TRuntimeDesignFrame);
 var
   Aform: TForm;
 begin
-  if Assigned(FPropertiesForm) then
-    FPropertiesForm.RestoreDefaultPos;
-  TImportStructureForm.RestoreDefaultPos;
+  if Assigned(F) then
+    TPropertiesForm.RestoreDefaultPos(F.FPropertiesForm)
+  else
+    TPropertiesForm.RestoreDefaultPos(nil);
 
-  Aform := TForm.Create(nil);
-  Aform.Width := 600;
-  Aform.Height := 600;
-  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
-  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
-  SaveFormPosition(Aform, 'DataSetViewer');
-  AForm.free;
+  TImportStructureForm.RestoreDefaultPos;
+  AlignmentFormRestoreDefaultPos;
+  DataSetViewerFormRestoreDefaultPos;
 end;
 
 procedure TRuntimeDesignFrame.ShowPropertiesForm(NewControl: boolean);

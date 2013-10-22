@@ -35,6 +35,7 @@ type
     procedure DataFilesListViewSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
   private
     FEpiDocument: TEpiDocument;
     FSelectedDatafiles: TList;
@@ -45,11 +46,16 @@ type
     constructor Create(TheOwner: TComponent); override;
     property EpiDocument: TEpiDocument read FEpiDocument write SetEpiDocument;
     property SelectedDatafiles: TList read FSelectedDatafiles;
+  public
+    class procedure RestoreDefaultPos;
   end; 
 
 implementation
 
 {$R *.lfm}
+
+uses
+  settings2, settings2_var;
 
 { TToolsForm }
 
@@ -77,6 +83,15 @@ begin
     with DataFilesListView.Items[i] do
       if Checked then
         FSelectedDatafiles.Add(Data);
+
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, Self.ClassName);
+end;
+
+procedure TToolsForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, Self.ClassName);
 end;
 
 procedure TToolsForm.SetEpiDocument(const AValue: TEpiDocument);
@@ -106,6 +121,19 @@ begin
   OptionsPanel.Hide;
   Splitter1.Hide;
   Panel2.Align := alClient;
+end;
+
+class procedure TToolsForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 500;
+  Aform.Height := 500;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, TToolsForm.ClassName);
+  AForm.free;
 end;
 
 end.

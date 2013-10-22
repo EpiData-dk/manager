@@ -1262,10 +1262,16 @@ end;
 
 procedure TMainForm.RestoreDefaultPos;
 begin
-  if Assigned(FActiveFrame) then
-    FActiveFrame.RestoreDefaultPos;
-
+  TProjectFrame.RestoreDefaultPos(FActiveFrame);
   TSettingsForm.RestoreDefaultPos;
+  TPrepareDoubleEntryForm.RestoreDefaultPos;
+  TAboutForm.RestoreDefaultPos;
+  TToolsForm.RestoreDefaultPos;
+  TExportForm.RestoreDefaultPos;
+
+
+  ReportFormRestoreDefaultPos;
+
 
   BeginFormUpdate;
   Width := 700;
