@@ -38,8 +38,7 @@ var
   F: TForm;
   V: TDatasetViewerFrame;
 begin
-  F := TForm.Create(TheOwner);
-  F.Position := poMainFormCenter;
+  F := TForm.CreateNew(TheOwner);
   F.Caption := FormCaption;
 
   V := TDatasetViewerFrame.Create(F, DataFile);

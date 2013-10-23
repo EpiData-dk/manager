@@ -492,10 +492,12 @@ begin
     Ini := GetIniFile(GetIniFileName);
     with Ini, AForm do
     begin
+      LockRealizeBounds;
       Top     := ReadInteger(SectionName, 'Top', Top);
       Left    := ReadInteger(SectionName, 'Left', Left);
       Width   := ReadInteger(SectionName, 'Width', Width);
       Height  := ReadInteger(SectionName, 'Height', Height);
+      UnlockRealizeBounds;
     end;
   finally
     Ini.Free;
