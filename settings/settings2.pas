@@ -653,7 +653,7 @@ const
     ReportOutputFormat:    1;   // Text
 
     // Field definitions:
-    IntFieldLength:        2;
+    IntFieldLength:        1;
     FloatIntLength:        5;
     FloatDecimalLength:    2;
     StringFieldLength:     20;
