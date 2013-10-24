@@ -92,7 +92,7 @@ type
     procedure   CloseQuery(var CanClose: boolean);
     procedure   UpdateFrame;
     function    OpenProject(Const AFileName: string): boolean;
-    function    SaveProject(Const AFileName: string): boolean;
+    function    SaveProject(Const ForceSaveAs: boolean): boolean;
     procedure   CreateNewProject;
     property   DocumentFile: TDocumentFile read FDocumentFile;
     property   EpiDocument: TEpiDocument read GetEpiDocument;
@@ -200,14 +200,7 @@ procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
 var
   Res: LongInt;
 begin
-{  if DocumentFile.FileName = '' then
-    SaveProjectAsAction.Execute
-  else
-    DoSaveProject(DocumentFile.FileName);
-
-  EpiDocument.Modified := false;
-  UpdateCaption;}
-  SaveProject(DocumentFile.FileName);
+  SaveProject(False);
 end;
 
 procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
@@ -227,40 +220,8 @@ begin
 end;
 
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
-var
-  Dlg: TSaveDialog;
-  Fn: String;
 begin
-  SaveProject('');
-{  Dlg := TSaveDialog.Create(Self);
-  Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
-  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.FilterIndex := ManagerSettings.SaveType + 1;
-  SaveDlgTypeChange(Dlg);
-  Dlg.OnTypeChange := @SaveDlgTypeChange;
-  Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
-
-  if not Dlg.Execute then exit;
-  Fn := Dlg.FileName;
-  Dlg.Free;
-
-  try
-    DoSaveProject(Fn);
-  except
-    on E: EFCreateError do
-      begin
-        MessageDlg('Error',
-          'Unable to save project to:' + LineEnding +
-          Fn + LineEnding +
-          'Error message: ' + E.Message,
-          mtError, [mbOK], 0);
-        Exit;
-      end;
-  end;
-
-  EpiDocument.Modified := false;
-  UpdateCaption;
-  }
+  SaveProject(True);
 end;
 
 procedure TProjectFrame.StudyInformationActionExecute(Sender: TObject);
@@ -664,7 +625,7 @@ begin
     end;
 
     case res of
-      mrYes:    CanClose := SaveProject(DocumentFile.FileName);
+      mrYes:    CanClose := SaveProject(False);
       mrCancel: CanClose := false;
     end;
   end;
@@ -700,12 +661,14 @@ begin
   Result := DoOpenProject(AFileName);
 end;
 
-function TProjectFrame.SaveProject(const AFileName: string): boolean;
+function TProjectFrame.SaveProject(const ForceSaveAs: boolean): boolean;
 var
   Dlg: TSaveDialog;
   Fn: String;
 begin
-  if AFileName = '' then
+  if (not DocumentFile.IsSaved) or
+     ForceSaveAs
+  then
   begin
     Dlg := TSaveDialog.Create(Self);
     Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
@@ -719,7 +682,7 @@ begin
     Fn := Dlg.FileName;
     Dlg.Free;
   end else
-    Fn := AFileName;
+    Fn := DocumentFile.FileName;
 
   Result := DoSaveProject(Fn);
   if Result then
