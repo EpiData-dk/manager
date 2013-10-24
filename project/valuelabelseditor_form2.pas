@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Buttons, StdCtrls, ComCtrls, Menus, VirtualTrees, epidatafilestypes,
-  valuelabelgrid_frame, epivaluelabels, manager_messages, LMessages, epicustombase;
+  valuelabelgrid_frame, epivaluelabels, manager_messages, LMessages, ActnList,
+  epicustombase;
 
 type
 

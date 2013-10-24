@@ -52,7 +52,11 @@ var
 procedure TReportViewerForm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
-  if (Key = VK_ESCAPE) and (Shift = []) then Close;
+  if (Key = VK_ESCAPE) and (Shift = []) then
+  begin
+    Key := VK_UNKNOWN;
+    Close;
+  end;
 end;
 
 procedure TReportViewerForm.FormShow(Sender: TObject);

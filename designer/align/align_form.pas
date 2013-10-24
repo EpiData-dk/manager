@@ -37,6 +37,7 @@ type
     procedure FixedDistVertBtnClick(Sender: TObject);
     procedure FixedDistHorzBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure LeftAlignBtnClick(Sender: TObject);
     procedure RightAlignBtnClick(Sender: TObject);
@@ -59,7 +60,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_types, settings2, settings2_var;
+  design_types, settings2, settings2_var, LCLType;
 
 var
   AlignForm: TAlignmentForm;
@@ -134,6 +135,16 @@ begin
   if ManagerSettings.SaveWindowPositions
   then
     SaveFormPosition(Self, 'AlignmentForm');
+end;
+
+procedure TAlignmentForm.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_ESCAPE) and (Shift = []) then
+  begin
+    Key := VK_UNKNOWN;
+    Close;
+  end;
 end;
 
 procedure TAlignmentForm.FormShow(Sender: TObject);

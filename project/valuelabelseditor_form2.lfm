@@ -6,7 +6,6 @@ object ValueLabelEditor2: TValueLabelEditor2
   Caption = 'Valuelabel Editor'
   ClientHeight = 627
   ClientWidth = 818
-  KeyPreview = True
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
