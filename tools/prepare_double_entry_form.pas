@@ -28,6 +28,7 @@ type
     TitleEdit: TEdit;
     TitleLabel: TLabel;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
   private
     { private declarations }
     FDoc: TEpiDocument;
@@ -36,6 +37,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Doc: TEpiDocument;
       Const FileName: String);
+    class procedure RestoreDefaultPos;
   end;
 
 procedure PrepareDoubleEntry(Const Doc: TEpiDocumentFile);
@@ -45,7 +47,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafilestypes, epiv_documentfile;
+  epidatafilestypes, epiv_documentfile, settings2, settings2_var;
 
 { TPrepareDoubleEntryForm }
 
@@ -127,6 +129,15 @@ begin
   ShowMessage('Double Entry file save successfully:' + LineEnding +
     FN);
   DocFile.Free;
+
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, Self.ClassName);
+end;
+
+procedure TPrepareDoubleEntryForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, Self.ClassName);
 end;
 
 constructor TPrepareDoubleEntryForm.Create(TheOwner: TComponent; const Doc: TEpiDocument;
@@ -141,6 +152,19 @@ begin
 
   FileNameEdit.Text := ChangeFileExt(FFileName, '.double.epx');
   TitleEdit.Text    := TitleLabel.Caption + ' (double entry file)';
+end;
+
+class procedure TPrepareDoubleEntryForm.RestoreDefaultPos;
+var
+  F: TForm;
+begin
+  F := TForm.Create(nil);
+  F.Width := 520;
+  F.Height := 320;
+  F.Left := 200;
+  F.Top := 300;
+  SaveFormPosition(F, TPrepareDoubleEntryForm.ClassName);
+  F.Free;
 end;
 
 procedure PrepareDoubleEntry(const Doc: TEpiDocumentFile);

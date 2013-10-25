@@ -27,20 +27,25 @@ type
     ManagerRevisionLabel: TLabel;
     VersionLabel: TLabel;
     VersionPage: TTabSheet;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure VersionPageResize(Sender: TObject);
   private
     { private declarations }
   public
     { public declarations }
+    class procedure RestoreDefaultPos;
   end; 
 
 function GetProgramInfo: string;
 
 implementation
 
+{$R *.lfm}
+
 uses
-  settings2, epiversionutils;
+  settings2, epiversionutils, settings2_var;
 
 function ManagerVersionCaption: string;
 begin
@@ -81,8 +86,6 @@ begin
             PlatformCaption;
 end;
 
-{$R *.lfm}
-
 { TAboutForm }
 
 procedure TAboutForm.FormCreate(Sender: TObject);
@@ -97,10 +100,35 @@ begin
   PlatformLabel.Caption        := PlatformCaption;
 end;
 
+procedure TAboutForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, Self.ClassName);
+end;
+
+procedure TAboutForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, Self.ClassName);
+end;
+
 procedure TAboutForm.VersionPageResize(Sender: TObject);
 begin
   Panel1.Left := (VersionPage.Width div 2) - (Panel1.Width div 2);
   Panel1.Top  := (VersionPage.Height div 2) - (Panel1.Height div 2);
+end;
+
+class procedure TAboutForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 500;
+  Aform.Height := 500;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, TAboutForm.ClassName);
+  AForm.free;
 end;
 
 end.

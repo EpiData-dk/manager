@@ -47,7 +47,7 @@ begin
   D_NewSection                 := KeyToShortCut(VK_UNKNOWN, []);
   D_EditControl                := KeyToShortCut(VK_RETURN, []);
   D_SelectAll                  := KeyToShortCut(VK_A, [ssCtrl]);
-  D_ExpandDataframe            := KeyToShortCut(VK_NEXT, [ssCtrl]);
+  D_ExpandDataframe            := KeyToShortCut(VK_RETURN, [ssCtrl]);
 
   // - align
   D_AlignForm                  := KeyToShortCut(VK_A, [ssCtrl, ssShift]);
@@ -74,6 +74,7 @@ begin
   D_Undo                       := KeyToShortCut(VK_Z, [ssCtrl]);
   D_Redo                       := KeyToShortCut(VK_Z, [ssCtrl, ssShift]);
   D_PrintDataForm              := KeyToShortCut(VK_P, [ssCtrl]);
+  D_BrowseData                 := KeyToShortCut(VK_D, [ssCtrl]);
 
   // ValueLabel Editor
   // - tree actions

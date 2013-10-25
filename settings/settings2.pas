@@ -452,6 +452,7 @@ begin
 
   try
     Ini := GetIniFile(FileName);
+    RecentFiles.Clear;
 
     // Read recent files.
     Sec := 'Files';
@@ -492,10 +493,12 @@ begin
     Ini := GetIniFile(GetIniFileName);
     with Ini, AForm do
     begin
+      LockRealizeBounds;
       Top     := ReadInteger(SectionName, 'Top', Top);
       Left    := ReadInteger(SectionName, 'Left', Left);
       Width   := ReadInteger(SectionName, 'Width', Width);
       Height  := ReadInteger(SectionName, 'Height', Height);
+      UnlockRealizeBounds;
     end;
   finally
     Ini.Free;
@@ -653,7 +656,7 @@ const
     ReportOutputFormat:    1;   // Text
 
     // Field definitions:
-    IntFieldLength:        2;
+    IntFieldLength:        1;
     FloatIntLength:        5;
     FloatDecimalLength:    2;
     StringFieldLength:     20;

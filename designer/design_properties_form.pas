@@ -35,17 +35,19 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
     procedure UpdateSelection(Objects: TJvDesignObjectArray);
-    procedure RestoreDefaultPos;
     procedure SetFocusOnNew;
     function  ValidateControls: boolean;
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
+  public
+    class procedure RestoreDefaultPos(F: TPropertiesForm);
   end;
 
 implementation
 
 uses
   Buttons, ExtCtrls, design_properties_baseframe, Graphics,
-  design_properties_emptyframe, settings2, settings2_var, main;
+  design_properties_emptyframe, settings2, settings2_var, main,
+  field_valuelabelseditor_form;
 
 { TPropertiesForm }
 
@@ -301,12 +303,25 @@ begin
     (FFrame as IDesignPropertiesFrame).SetEpiControls(EpiCtrlItemArray);
 end;
 
-procedure TPropertiesForm.RestoreDefaultPos;
+class procedure TPropertiesForm.RestoreDefaultPos(F: TPropertiesForm);
+var
+  AForm: TForm;
 begin
-  BeginFormUpdate;
-  SetBounds(300, 200, 500, 500);
-  EndFormUpdate;
-  SaveFormPosition(Self, 'ControlsForm');
+  if Assigned(F) then
+    AForm := F
+  else
+    AForm := TForm.Create(nil);
+
+  TFieldValueLabelEditor.RestoreDefaultPos;
+
+  with AForm  do
+  begin
+    LockRealizeBounds;
+    SetBounds(300, 200, 500, 500);
+    UnlockRealizeBounds;
+  end;
+  SaveFormPosition(AForm, 'ControlsForm');
+  if AForm <> F then AForm.Free;
 end;
 
 procedure TPropertiesForm.SetFocusOnNew;

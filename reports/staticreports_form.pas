@@ -263,6 +263,8 @@ class procedure TStaticReportsForm.RestoreDefaultPos;
 var
   Aform: TForm;
 begin
+  TOkCancelForm.RestoreDefaultPos;
+
   Aform := TForm.Create(nil);
   Aform.Width := 600;
   Aform.Height := 480;

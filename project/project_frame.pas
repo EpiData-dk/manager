@@ -61,7 +61,7 @@ type
     procedure CommonProjectInit;
     procedure DoNewDataForm(Df: TEpiDataFile);
     // open existing
-    procedure DoSaveProject(AFileName: string);
+    function  DoSaveProject(AFileName: string): boolean;
     function  DoOpenProject(Const AFileName: string): boolean;
     // create new
     function  DoCreateNewDocument: TEpiDocument;
@@ -90,9 +90,9 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     procedure   CloseQuery(var CanClose: boolean);
-    procedure   RestoreDefaultPos;
     procedure   UpdateFrame;
     function    OpenProject(Const AFileName: string): boolean;
+    function    SaveProject(Const ForceSaveAs: boolean): boolean;
     procedure   CreateNewProject;
     property   DocumentFile: TDocumentFile read FDocumentFile;
     property   EpiDocument: TEpiDocument read GetEpiDocument;
@@ -100,6 +100,8 @@ type
 //    property   ProjectFileName: string read FFileName write FFileName;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
+  public
+    class procedure   RestoreDefaultPos(F: TProjectFrame);
   end;
 
 implementation
@@ -198,13 +200,7 @@ procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
 var
   Res: LongInt;
 begin
-  if DocumentFile.FileName = '' then
-    SaveProjectAsAction.Execute
-  else
-    DoSaveProject(DocumentFile.FileName);
-
-  EpiDocument.Modified := false;
-  UpdateCaption;
+  SaveProject(False);
 end;
 
 procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
@@ -224,38 +220,8 @@ begin
 end;
 
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
-var
-  Dlg: TSaveDialog;
-  Fn: String;
 begin
-  Dlg := TSaveDialog.Create(Self);
-  Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
-  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-  Dlg.FilterIndex := ManagerSettings.SaveType + 1;
-  SaveDlgTypeChange(Dlg);
-  Dlg.OnTypeChange := @SaveDlgTypeChange;
-  Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
-
-  if not Dlg.Execute then exit;
-  Fn := Dlg.FileName;
-  Dlg.Free;
-
-  try
-    DoSaveProject(Fn);
-  except
-    on E: EFCreateError do
-      begin
-        MessageDlg('Error',
-          'Unable to save project to:' + LineEnding +
-          Fn + LineEnding +
-          'Error message: ' + E.Message,
-          mtError, [mbOK], 0);
-        Exit;
-      end;
-  end;
-
-  EpiDocument.Modified := false;
-  UpdateCaption;
+  SaveProject(True);
 end;
 
 procedure TProjectFrame.StudyInformationActionExecute(Sender: TObject);
@@ -352,7 +318,7 @@ begin
   InitBackupTimer;
 end;
 
-procedure TProjectFrame.DoSaveProject(AFileName: string);
+function TProjectFrame.DoSaveProject(AFileName: string): boolean;
 begin
   // If project haven't been saved before.
   InitBackupTimer;
@@ -362,7 +328,7 @@ begin
 
   try
     EpiDocument.IncCycleNo;
-    DocumentFile.SaveFile(AFileName);
+    Result := DocumentFile.SaveFile(AFileName);
     AddToRecent(AFileName);
   finally
     ActiveFrame.Cursor := crDefault;
@@ -659,21 +625,24 @@ begin
     end;
 
     case res of
-      mrYes:    SaveProjectAction.Execute;
+      mrYes:    CanClose := SaveProject(False);
       mrCancel: CanClose := false;
     end;
   end;
   {$ENDIF}
 end;
 
-procedure TProjectFrame.RestoreDefaultPos;
+class procedure TProjectFrame.RestoreDefaultPos(F: TProjectFrame);
 begin
-//  GetValueLabelsEditor(EpiDocument).RestoreDefaultPos;
+  RestoreDefaultPosValueLabelEditor2;
   TProjectSettingsForm.RestoreDefaultPos;
   TStudyUnitForm.RestoreDefaultPos;
+  TKeyFieldsForm.RestoreDefaultPos;
 
-  if Assigned(FActiveFrame) then
-    TRuntimeDesignFrame(FActiveFrame).RestoreDefaultPos;
+   if Assigned(F) then
+    TRuntimeDesignFrame.RestoreDefaultPos(TRuntimeDesignFrame(F.ActiveFrame))
+  else
+    TRuntimeDesignFrame.RestoreDefaultPos(nil);
 end;
 
 procedure TProjectFrame.UpdateFrame;
@@ -690,6 +659,35 @@ end;
 function TProjectFrame.OpenProject(const AFileName: string): boolean;
 begin
   Result := DoOpenProject(AFileName);
+end;
+
+function TProjectFrame.SaveProject(const ForceSaveAs: boolean): boolean;
+var
+  Dlg: TSaveDialog;
+  Fn: String;
+begin
+  if (not DocumentFile.IsSaved) or
+     ForceSaveAs
+  then
+  begin
+    Dlg := TSaveDialog.Create(Self);
+    Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
+    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+    Dlg.FilterIndex := ManagerSettings.SaveType + 1;
+    SaveDlgTypeChange(Dlg);
+    Dlg.OnTypeChange := @SaveDlgTypeChange;
+    Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
+
+    if not Dlg.Execute then exit;
+    Fn := Dlg.FileName;
+    Dlg.Free;
+  end else
+    Fn := DocumentFile.FileName;
+
+  Result := DoSaveProject(Fn);
+  if Result then
+    EpiDocument.Modified := false;
+  UpdateCaption;
 end;
 
 procedure TProjectFrame.CreateNewProject;

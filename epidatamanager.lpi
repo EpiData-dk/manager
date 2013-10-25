@@ -352,6 +352,7 @@
         <Filename Value="tools/toolsform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ToolsForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="toolsform"/>
       </Unit22>
@@ -487,6 +488,7 @@
         <Filename Value="export/export_customtext_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportCustomTextFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_customtext_frame"/>
       </Unit42>
@@ -494,6 +496,7 @@
         <Filename Value="export/export_spss_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportSPSSFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_spss_frame"/>
       </Unit43>
@@ -697,6 +700,7 @@
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSettings_AutoIncFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_settings_autoincrement_frame"/>
       </Unit75>

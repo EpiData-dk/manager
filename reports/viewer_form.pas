@@ -26,12 +26,15 @@ type
     { private declarations }
   public
     { public declarations }
+    procedure RestoreDefaultPos;
   end;
 
 procedure ShowReportForm(Owner: TComponent;
   Const Caption: string;
   Const ReportString: string;
   ShowHtml: boolean = false);
+
+procedure ReportFormRestoreDefaultPos;
 
 
 implementation
@@ -41,18 +44,36 @@ implementation
 uses
   LCLType, LCLIntf, settings2, settings2_var;
 
+var
+  CompList: TList;
+
 { TReportViewerForm }
 
 procedure TReportViewerForm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
-  if (Key = VK_ESCAPE) and (Shift = []) then Close;
+  if (Key = VK_ESCAPE) and (Shift = []) then
+  begin
+    Key := VK_UNKNOWN;
+    Close;
+  end;
 end;
 
 procedure TReportViewerForm.FormShow(Sender: TObject);
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'ReportViewerForm');
+end;
+
+procedure TReportViewerForm.RestoreDefaultPos;
+begin
+  BeginFormUpdate;
+  Width := 400;
+  Height := 400;
+  Left := 200;
+  Top := 200;
+  EndFormUpdate;
+  SaveFormPosition(Self, 'ReportViewerForm');
 end;
 
 procedure TReportViewerForm.BitBtn2Click(Sender: TObject);
@@ -92,6 +113,9 @@ begin
     S.Free;
     OpenUrl('file://' + Fn);
   end else begin
+    if not Assigned(CompList) then
+      CompList := TList.Create;
+
     F := TReportViewerForm.Create(Owner);
     F.Caption := Caption;
     F.Memo1.BringToFront;
@@ -99,8 +123,22 @@ begin
     F.Memo1.Text := ReportString;
     F.Memo1.Lines.EndUpdate;
     F.Show;
+
+    CompList.Add(F);
   end;
 end;
+
+procedure ReportFormRestoreDefaultPos;
+var
+  C: Pointer;
+begin
+  if Assigned(CompList) then
+    For C in CompList do
+      TReportViewerForm(C).RestoreDefaultPos;
+end;
+
+finalization
+  CompList.Free;
 
 end.
 

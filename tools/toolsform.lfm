@@ -7,8 +7,9 @@ object ToolsForm: TToolsForm
   ClientHeight = 485
   ClientWidth = 355
   OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 50
@@ -40,10 +41,10 @@ object ToolsForm: TToolsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 201
-      Height = 32
-      Top = 9
-      Width = 79
+      Left = 199
+      Height = 34
+      Top = 8
+      Width = 81
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -100,9 +101,9 @@ object ToolsForm: TToolsForm
         AnchorSideBottom.Control = FieldCountPanel
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 18
-        Top = 14
-        Width = 43
+        Height = 15
+        Top = 17
+        Width = 39
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 10
         Caption = 'Fields:'
@@ -113,9 +114,9 @@ object ToolsForm: TToolsForm
         AnchorSideBottom.Control = SectionCountPanel
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 18
-        Top = 41
-        Width = 60
+        Height = 15
+        Top = 44
+        Width = 59
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 10
         Caption = 'Sections:'
@@ -126,9 +127,9 @@ object ToolsForm: TToolsForm
         AnchorSideBottom.Control = RecordCountPanel
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 18
-        Top = 68
-        Width = 56
+        Height = 15
+        Top = 71
+        Width = 54
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 10
         Caption = 'Records:'
@@ -139,9 +140,9 @@ object ToolsForm: TToolsForm
         AnchorSideBottom.Control = DeletedCountPanel
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 18
-        Top = 95
-        Width = 56
+        Height = 15
+        Top = 98
+        Width = 54
         Anchors = [akLeft, akBottom]
         BorderSpacing.Left = 10
         Caption = 'Deleted:'
@@ -232,9 +233,9 @@ object ToolsForm: TToolsForm
       object Label1: TLabel
         AnchorSideLeft.Control = Panel5
         Left = 10
-        Height = 18
+        Height = 15
         Top = 7
-        Width = 63
+        Width = 62
         BorderSpacing.Left = 10
         Caption = 'Datasets:'
         ParentColor = False

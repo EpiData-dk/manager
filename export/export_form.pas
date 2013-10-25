@@ -38,6 +38,7 @@ type
     AllRecordRBtn: TRadioButton;
     RangeRBtn: TRadioButton;
     BasicSheet: TTabSheet;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure FromRecordEditClick(Sender: TObject);
     procedure NoneBitBtnClick(Sender: TObject);
@@ -56,6 +57,8 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Doc: TEpiDocument; Const FileName: string);
     property ExportSetting: TEpiExportSetting read FExportSetting;
+  public
+    class procedure RestoreDefaultPos;
   end;
 
 
@@ -67,7 +70,7 @@ implementation
 
 uses
   epieximtypes, export_frame_types, epimiscutils,
-  settings2_var, LCLType;
+  settings2, settings2_var, LCLType;
 
 type
   TFrameRec = record
@@ -210,6 +213,15 @@ begin
   EncodingCmbBox.ItemIndex := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ManagerSettings.ExportEncoding)));
   // Export Deleted:
   ExportDeletedChkBox.Checked := ManagerSettings.ExportDeleted;
+
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, Self.ClassName);
+end;
+
+procedure TExportForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, Self.ClassName);
 end;
 
 procedure TExportForm.FieldsChkListBoxMouseMove(Sender: TObject;
@@ -292,6 +304,19 @@ begin
   for i := 0 to Doc.DataFiles[0].Fields.Count - 1 do
     FieldsChkListBox.AddItem(Doc.DataFiles[0].Fields[i].Name, Doc.DataFiles[0].Fields[i]);
   FieldsChkListBox.CheckAll(cbChecked, false, false);
+end;
+
+class procedure TExportForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 500;
+  Aform.Height := 500;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, TExportForm.ClassName);
+  AForm.free;
 end;
 
 end.

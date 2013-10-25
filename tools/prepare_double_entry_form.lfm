@@ -7,6 +7,7 @@ object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
   ClientHeight = 305
   ClientWidth = 523
   OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
   LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
