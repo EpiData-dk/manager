@@ -24,10 +24,20 @@ procedure DataSetViewerFormRestoreDefaultPos;
 implementation
 
 uses
-  Forms, Controls, settings2_var, settings2, epiv_dataset_viewer_frame;
+  Forms, Controls, settings2_var, settings2, epiv_dataset_viewer_frame,
+  LCLType;
 
 const
   FormName = 'DataSetViewerForm';
+
+type
+
+  { TFormHandler }
+
+  TFormHandler = class
+  private
+    procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  end;
 
 procedure ShowDataSetViewerForm(TheOwner: TComponent;
   const FormCaption: string; const DataFile: TEpiDataFile;
@@ -37,9 +47,14 @@ procedure ShowDataSetViewerForm(TheOwner: TComponent;
 var
   F: TForm;
   V: TDatasetViewerFrame;
+  FH: TFormHandler;
 begin
+  FH := TFormHandler.Create;
+
   F := TForm.CreateNew(TheOwner);
   F.Caption := FormCaption;
+  F.OnKeyDown := @FH.KeyDown;
+  F.KeyPreview := True;
 
   V := TDatasetViewerFrame.Create(F, DataFile);
   V.Align := alClient;
@@ -65,6 +80,7 @@ begin
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(F, FormName);
   F.Free;
+  FH.Free;
 end;
 
 procedure DataSetViewerFormRestoreDefaultPos;
@@ -78,6 +94,28 @@ begin
   Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
   SaveFormPosition(Aform, FormName);
   AForm.free;
+end;
+
+{ TFormHandler }
+
+procedure TFormHandler.KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if ((Key = VK_ESCAPE) and (Shift = [])) or
+     {$IFDEF MSWINDOWS}
+     ((Key = VK_F4)  and (Shift = [ssAlt]))
+     {$ENDIF}
+     {$IFDEF LINUX}
+     ((Key = VK_W)  and (Shift = [ssCtrl]))
+     {$ENDIF}
+     {$IFDEF DARWIN}
+     ((Key = VK_W)  and (Shift = [ssMeta]))
+     {$ENDIF}
+  then
+  begin
+    Key := VK_UNKNOWN;
+    TForm(Sender).Close;
+  end;
 end;
 
 end.

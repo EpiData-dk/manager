@@ -452,6 +452,7 @@ begin
 
   try
     Ini := GetIniFile(FileName);
+    RecentFiles.Clear;
 
     // Read recent files.
     Sec := 'Files';

@@ -166,6 +166,7 @@ type
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
     procedure ExportActionExecute(Sender: TObject);
     procedure ExtendedListReportActionExecute(Sender: TObject);
+    procedure FileMenuItemClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -305,6 +306,7 @@ begin
       'Record count: ' + IntToStr(DataFiles[0].Size);
   end;
   Clipboard.AsText := S;
+  ShowMessage('Version info copied to clipboard!');
 end;
 
 procedure TMainForm.CountsReportActionExecute(Sender: TObject);
@@ -319,6 +321,7 @@ end;
 
 procedure TMainForm.DefineProjectBtnClick(Sender: TObject);
 begin
+  UpdateRecentFiles;
   DefineProjectPopupMenu.PopUp;
 end;
 
@@ -384,6 +387,11 @@ end;
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportFieldListExtended);
+end;
+
+procedure TMainForm.FileMenuItemClick(Sender: TObject);
+begin
+  UpdateRecentFiles;
 end;
 
 procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
@@ -1148,6 +1156,7 @@ var
 begin
   ShortCutToKey(M_OpenRecent, K, Shift);
 
+  LoadRecentFilesIni(GetRecentIniFileName);
   RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
   RecentFilesSubMenu.Clear;
   RecentFilesSubPopupMenu.Visible := RecentFilesSubMenu.Visible;
