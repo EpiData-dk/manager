@@ -762,8 +762,10 @@ begin
 
   if Assigned(R) then
   begin
-    AddToRecent(R.Documents[1]);
-    AddToRecent(R.Documents[0]);
+    if R.Documents[1] <> '(Not Saved)' then
+      AddToRecent(R.Documents[1]);
+    if R.Documents[0] <> '(Not Saved)' then
+      AddToRecent(R.Documents[0]);
     UpdateRecentFiles;
   end;
 
