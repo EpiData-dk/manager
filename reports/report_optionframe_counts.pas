@@ -140,17 +140,9 @@ begin
       for k := CheckListBox1.Count - 1 downto 0 do
       begin
         F := Df.Fields.FieldByName[CheckListBox1.Items[k]];
-        if not Assigned(F) then
-        begin
-          CheckListBox1.Items.Delete(k);
-          Continue;
-        end;
 
-        if F.FieldType <> TEpiField(CheckListBox1.Items.Objects[k]).FieldType then
-        begin
+        if not Assigned(F) then
           CheckListBox1.Items.Delete(k);
-          Continue;
-        end;
       end;
     end;
   end;
