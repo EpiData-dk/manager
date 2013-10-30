@@ -703,6 +703,7 @@ const
     ExportSASValueLabels:  true;
     // - SPSS
     ExportSPSSValueLabels: true;
+    ExportSPSSDelimiter:   '|';
     // - DDI
     ExportDDIValueLabels:  true;
 

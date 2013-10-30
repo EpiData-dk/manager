@@ -81,6 +81,7 @@ type
     ExportSASValueLabels:  boolean;
     // - SPSS
     ExportSPSSValueLabels: boolean;
+    ExportSPSSDelimiter:   char;
     // - DDI
     ExportDDIValueLabels:  boolean;
 

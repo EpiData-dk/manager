@@ -139,7 +139,9 @@ begin
 
       for k := CheckListBox1.Count - 1 downto 0 do
       begin
-        if not Df.Fields.ItemExistsByName(CheckListBox1.Items[k]) then
+        F := Df.Fields.FieldByName[CheckListBox1.Items[k]];
+
+        if not Assigned(F) then
           CheckListBox1.Items.Delete(k);
       end;
     end;
