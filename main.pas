@@ -391,7 +391,7 @@ end;
 
 procedure TMainForm.FileMenuItemClick(Sender: TObject);
 begin
-  UpdateRecentFiles;
+  //UpdateRecentFiles;
 end;
 
 procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
