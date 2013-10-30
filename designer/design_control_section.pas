@@ -15,7 +15,8 @@ type
   private
     FSection: TEpiSection;
     function GetExtendedBounds: TRect;
-    procedure OnChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnChange(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetExtendedBounds(const AValue: TRect);
     procedure UpdateHint;
     procedure UpdateEpiControl;
@@ -71,12 +72,14 @@ begin
   Stream.Write(CopySection, Sizeof(Pointer));
 end;
 
-procedure TDesignSection.OnChange(Sender: TObject; EventGroup: TEpiEventGroup;
-  EventType: Word; Data: Pointer);
+procedure TDesignSection.OnChange(const Sender, Initiator: TEpiCustomBase;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   case TEpiCustomChangeEventType(EventType) of
     ecceDestroy:
       begin
+        if Initiator <> FSection then exit;
+
         FSection.UnRegisterOnChangeHook(@OnChange);
         FSection := nil;
       end;

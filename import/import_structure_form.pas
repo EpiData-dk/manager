@@ -51,7 +51,8 @@ type
       aState: TCheckboxState);
     procedure ImportDataColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
-    procedure ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
+    procedure ImportHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure BeforeLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
     procedure AfterLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
@@ -115,8 +116,9 @@ begin
   FProjectList.AddFiles(Dlg.Files);
 end;
 
-procedure TImportStructureForm.ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
-  EventType: Word; Data: Pointer);
+procedure TImportStructureForm.ImportHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 var
   Cls: TControlClass;
   Pt: TPoint;
@@ -148,23 +150,23 @@ const
     {$ENDIF}
   {$ENDIF};
 begin
-  if (Sender is TEpiFields) then
+{  if (Sender is TEpiFields) then
   begin
     if (EventGroup = eegCustomBase) and (EventType = Ord(ecceAddItem)) then
       TEpiField(Data).RegisterOnChangeHook(@ImportHook, false);
     exit;
-  end;
+  end;   }
 
-  if (Sender is TEpiHeadings) then
+{  if (Sender is TEpiHeadings) then
   begin
     if (EventGroup = eegCustomBase) and (EventType = Ord(ecceAddItem)) then
       TEpiHeading(Data).RegisterOnChangeHook(@ImportHook, false);
     exit;
-  end;
+  end;      }
 
-  if (Sender is TEpiCustomControlItem) and (EventGroup = eegCustomBase) and (EventType = Ord(ecceUpdate)) then
+  if (Initiator is TEpiCustomControlItem) and (EventGroup = eegCustomBase) and (EventType = Ord(ecceUpdate)) then
   begin
-    TEpiCustomControlItem(Sender).UnRegisterOnChangeHook(@ImportHook);
+//    TEpiCustomControlItem(Sender).UnRegisterOnChangeHook(@ImportHook);
 
     if FLastEpiCtrl = nil then
     begin
@@ -254,8 +256,9 @@ begin
   FLastEpiCtrl := nil;
 
   DataFile := Doc.DataFiles[Doc.DataFiles.Count - 1];
-  DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
-  DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+//  DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
+//  DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+  DataFile.MainSection.RegisterOnChangeHook(@ImportHook);
 end;
 
 procedure TImportStructureForm.AfterLoad(Sender: TObject; Doc: TEpiDocument;

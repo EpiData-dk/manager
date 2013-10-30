@@ -22,9 +22,12 @@ type
     FValueLabelLabel: TLabel;
     function  GetEpiControl: TEpiCustomControlItem;
     function  GetExtendedBounds: TRect;
-    procedure OnFieldChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure OnValueLabelSetChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure OnProjectSettingsChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnFieldChange(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnValueLabelSetChange(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnProjectSettingsChange(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure SetExtendedBounds(Const AValue: TRect);
     procedure UpdateHint;
@@ -124,9 +127,11 @@ begin
   end;
 end;
 
-procedure TDesignField.OnFieldChange(Sender: TObject;
+procedure TDesignField.OnFieldChange(const Sender, Initiator: TEpiCustomBase;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
+  // TODO: Jump, Compare, Calculation changes (displayed as hint!
+
   if EventGroup = eegFields then
     case TEpiFieldsChangeEventType(EventType) of
       efceSetDecimal,
@@ -147,6 +152,8 @@ begin
     case TEpiCustomChangeEventType(EventType) of
       ecceDestroy:
         begin
+          if Initiator <> FField then exit;
+
           FProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
           FProjectSettings := nil;
           FField.UnRegisterOnChangeHook(@OnFieldChange);
@@ -165,16 +172,18 @@ begin
     end;
 end;
 
-procedure TDesignField.OnValueLabelSetChange(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TDesignField.OnValueLabelSetChange(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 begin
   //if (EventGroup = eegCustomBase) and (TEpiCustomChangeEventType(EventType) = ecceDestroy) then exit;
-
+  if Initiator <> FField.ValueLabelSet then exit;
   UpdateControl;
 end;
 
-procedure TDesignField.OnProjectSettingsChange(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TDesignField.OnProjectSettingsChange(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 begin
   if (EventGroup = eegCustomBase)
   then
@@ -219,7 +228,7 @@ begin
   UpdateControl;
 end;
 
-procedure TDesignField.SetExtendedBounds(Const AValue: TRect);
+procedure TDesignField.SetExtendedBounds(const AValue: TRect);
 var
   lRect: TRect;
 begin

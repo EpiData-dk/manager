@@ -147,7 +147,8 @@ type
     { Hooks }
     procedure RegisterValueLabelHook;
     procedure UnRegisterValueLabelHook;
-    procedure ValueLabelsHook(Sender: TObject; EventGroup: TEpiEventGroup;
+    procedure ValueLabelsHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
   private
     FDataFile: TEpiDataFile;
@@ -960,8 +961,8 @@ begin
   if not Assigned(ValueLabels) then exit;
 
   ValueLabels.RegisterOnChangeHook(@ValueLabelsHook, true);
-  for i := 0 to ValueLabels.Count -1 do
-    ValueLabels[i].RegisterOnChangeHook(@ValueLabelsHook, true);
+{  for i := 0 to ValueLabels.Count -1 do
+    ValueLabels[i].RegisterOnChangeHook(@ValueLabelsHook, true);  }
 end;
 
 procedure TFieldPropertiesFrame.UnRegisterValueLabelHook;
@@ -970,19 +971,21 @@ var
 begin
   if not Assigned(ValueLabels) then exit;
 
-  for i := 0 to ValueLabels.Count -1 do
-    ValueLabels[i].UnRegisterOnChangeHook(@ValueLabelsHook);
+{  for i := 0 to ValueLabels.Count -1 do
+    ValueLabels[i].UnRegisterOnChangeHook(@ValueLabelsHook);   }
   ValueLabels.UnRegisterOnChangeHook(@ValueLabelsHook);
 end;
 
-procedure TFieldPropertiesFrame.ValueLabelsHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TFieldPropertiesFrame.ValueLabelsHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 var
   S: String;
   VL: TEpiValueLabelSet;
   Idx: Integer;
 begin
-  if (Sender is TEpiValueLabelSets) and
+//  if (Sender is TEpiValueLabelSets) and
+  if (Initiator = FValueLabels) and
      (EventGroup = eegCustomBase)
   then
   case TEpiCustomChangeEventType(EventType) of
@@ -992,7 +995,7 @@ begin
     ecceAddItem:
       begin
         VL := TEpiValueLabelSet(Data);
-        VL.RegisterOnChangeHook(@ValueLabelsHook, true);
+///        VL.RegisterOnChangeHook(@ValueLabelsHook, true);
 
         if VL.LabelType = Field.FieldType then
           ValueLabelComboBox.Items.AddObject(VL.Name, VL);
@@ -1000,14 +1003,14 @@ begin
     ecceDelItem:
       begin
         VL := TEpiValueLabelSet(Data);
-        VL.UnRegisterOnChangeHook(@ValueLabelsHook);
+//        VL.UnRegisterOnChangeHook(@ValueLabelsHook);
 
         ValueLabelComboBox.Items.BeginUpdate;
         Idx := ValueLabelComboBox.Items.IndexOfObject(VL);
         if Idx > -1 then
         begin
           if Idx = ValueLabelComboBox.ItemIndex then
-          ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FNoneObject);
+            ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FNoneObject);
           ValueLabelComboBox.Items.Delete(Idx);
 
           DoWarning('Warning: Valuelabels changed!', ValueLabelComboBox);
@@ -1020,7 +1023,7 @@ begin
     ecceText: ;
   end;
 
-  if (Sender is TEpiValueLabelSet) then
+  if (Initiator is TEpiValueLabelSet) then
   begin
     if EventGroup = eegCustomBase then
       case TEpiCustomChangeEventType(EventType) of

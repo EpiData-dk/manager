@@ -250,7 +250,8 @@ type
     function DesignPanelAsJvObjectArray: TJvDesignObjectArray;
     procedure ApplyCommonCtrlSetting(Ctrl: TControl;
       EpiCtrl: TEpiCustomControlItem);
-    procedure SectionsChangeEvent(Sender: TObject; EventGroup: TEpiEventGroup;
+    procedure SectionsChangeEvent(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     function ClipBoardHasText: boolean;
     function ClipBoardHasComponent: boolean;
@@ -853,9 +854,11 @@ begin
   F.Free;
 end;
 
-procedure TRuntimeDesignFrame.SectionsChangeEvent(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TRuntimeDesignFrame.SectionsChangeEvent(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 begin
+  if not (Initiator = DataFile.Sections) then exit;
   if not (EventGroup = eegCustomBase) then exit;
 
   case TEpiCustomChangeEventType(EventType) of
