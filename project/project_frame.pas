@@ -53,8 +53,8 @@ type
     FModified: Boolean;
     FOnModified: TNotifyEvent;
     FrameCount: integer;
-    procedure OnDataFileChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    procedure OnTitleChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnDataFileChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnTitleChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
     procedure AddToRecent(Const AFileName: string);
     // Common for open/create
@@ -239,19 +239,21 @@ begin
   ShowValueLabelEditor2(EpiDocument.ValueLabelSets);
 end;
 
-procedure TProjectFrame.OnDataFileChange(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TProjectFrame.OnDataFileChange(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 var
   Df: TEpiDataFileEx;
 begin
-  if (EventGroup = eegCustomBase) and (EventType = Word(ecceText)) then
+  // TODO : Handle change event when implementing multiple dataforms.
+{  if (EventGroup = eegCustomBase) and (EventType = Word(ecceText)) then
   begin
     Df := TEpiDataFileEx(TEpiCustomItem(Sender).Owner);
     Df.TreeNode.Text := Df.Caption.Text;
-  end;
+  end;}
 end;
 
-procedure TProjectFrame.OnTitleChange(Sender: TObject;
+procedure TProjectFrame.OnTitleChange(const Sender, Initiator: TEpiCustomBase;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   UpdateCaption;
