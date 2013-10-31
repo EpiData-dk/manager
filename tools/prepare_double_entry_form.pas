@@ -126,7 +126,7 @@ begin
     DocFile.Free;
     Exit;
   end;
-  ShowMessage('Double Entry file save successfully:' + LineEnding +
+  ShowMessage('Double Entry file saved successfully:' + LineEnding +
     FN);
   DocFile.Free;
 
@@ -150,7 +150,7 @@ begin
   FileNameLabel.Caption := FFileName;
   TitleLabel.Caption := FDoc.Study.Title.Text;
 
-  FileNameEdit.Text := ChangeFileExt(FFileName, '.double.epx');
+  FileNameEdit.Text := ChangeFileExt(FFileName, '_double.epx');
   TitleEdit.Text    := TitleLabel.Caption + ' (double entry file)';
 end;
 
