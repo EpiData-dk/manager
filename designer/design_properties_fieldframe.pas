@@ -1901,6 +1901,9 @@ begin
             Delim2 := Delim2Edit.Text;
           end;
         end;
+        // We call free no matter what, since if Calculation = nil then
+        // .Free ignores the call...
+        Fields[i].Calculation.Free;
         Fields[i].Calculation := Calc;
       end;
     end;
