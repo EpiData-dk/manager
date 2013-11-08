@@ -84,6 +84,8 @@ type
     ExportSPSSDelimiter:   char;
     // - DDI
     ExportDDIValueLabels:  boolean;
+    // - EPX
+    ExportEPXValueLabels:  boolean;
 
     // Project Defaults
     // - general:

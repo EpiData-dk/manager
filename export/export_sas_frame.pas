@@ -27,6 +27,7 @@ type
     function GetFileDialogExtensions: TEpiDialogFilters;
     procedure SetSettings(Data: PManagerSettings);
     function ApplySettings: boolean;
+    function ExportHeadings: boolean;
   end;
 
 implementation
@@ -82,6 +83,11 @@ function TExportSASFrame.ApplySettings: boolean;
 begin
   FData^.ExportSPSSValueLabels := TCustomValueLabelFrame(FFrame).ExportValueLabelsChkBox.Checked;
   result := true;
+end;
+
+function TExportSASFrame.ExportHeadings: boolean;
+begin
+  result := false;
 end;
 
 initialization
