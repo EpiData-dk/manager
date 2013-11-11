@@ -374,6 +374,9 @@ begin
       end;
 
       ShowMessage(TrimRight(S));
+
+      if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
+        AddToRecent(ExportForm.ExportSetting.ExportFileName);
     end;
   finally
     ExportForm.Free;
