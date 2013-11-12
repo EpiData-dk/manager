@@ -69,7 +69,7 @@ uses
 
   // export
   export_csv_frame, export_stata_frame, export_sas_frame, export_spss_frame,
-  export_ddi_frame,
+  export_ddi_frame, export_epx_frame,
 
   // project settings
   project_settings_field_frame, project_settings_general_frame, project_settings_autoincrement_frame;
@@ -204,6 +204,9 @@ begin
 
       sec := 'exportddi';
       WriteBool(sec, 'ExportDDIValueLabels', ExportDDIValueLabels);
+
+      sec := 'exportepx';
+      WriteBool(sec, 'ExportEPXValueLabels', ExportEPXValueLabels);
 
       // Project Defaults
       // - general:
@@ -346,6 +349,9 @@ begin
 
       sec := 'exportddi';
       ExportDDIValueLabels   := ReadBool(sec, 'ExportDDIValueLabels', ExportDDIValueLabels);
+
+      sec := 'exportepx';
+      ExportDDIValueLabels   := ReadBool(sec, 'ExportEPXValueLabels', ExportEPXValueLabels);
 
       // Fonts
       Sec := 'fonts';
@@ -612,6 +618,7 @@ begin
     FindNodeWithText('SPSS').Data                := Pointer(TExportSPSSFrame.Create(Self));
     FindNodeWithText('SAS').Data                 := Pointer(TExportSASFrame.Create(Self));
     FindNodeWithText('DDI').Data                 := Pointer(TExportDDIFrame.Create(Self));
+    FindNodeWithText('EPX').Data                 := Pointer(TExportEPXFrame.Create(Self));
 
     // Project options
     FindNodeWithText('Backup').Data              := Pointer(TProjectSettings_BackupFrame.Create(Self));
@@ -706,6 +713,8 @@ const
     ExportSPSSDelimiter:   '|';
     // - DDI
     ExportDDIValueLabels:  true;
+    // - EPX
+    ExportEPXValueLabels:  true;
 
     // Project Defaults
     // - general:

@@ -30,6 +30,7 @@ type
     function GetFileDialogExtensions: TEpiDialogFilters;
     procedure SetSettings(Data: PManagerSettings);
     function  ApplySettings: boolean;
+    function ExportHeadings: boolean;
   end;
 
 implementation
@@ -129,6 +130,11 @@ begin
     ExportStataValueLabels := TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked;
   end;
   result := true;
+end;
+
+function TExportStataFrame.ExportHeadings: boolean;
+begin
+  result := false;
 end;
 
 initialization

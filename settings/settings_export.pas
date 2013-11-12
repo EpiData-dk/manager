@@ -48,6 +48,7 @@ begin
     AddObject('SPSS',  TObject(2));
     AddObject('SAS',   TObject(3));
     AddObject('DDI',   TObject(4));
+    AddObject('EPX',   TObject(5));
   end;
 
   // Encodings

@@ -29,6 +29,7 @@ type
     function GetFileDialogExtensions: TEpiDialogFilters;
     procedure SetSettings(Data: PManagerSettings);
     function ApplySettings: boolean;
+    function ExportHeadings: boolean;
   end;
 
 implementation
@@ -94,6 +95,11 @@ begin
     Result := true;
   end else
     Result := False;
+end;
+
+function TExportSPSSFrame.ExportHeadings: boolean;
+begin
+  result := false;
 end;
 
 initialization

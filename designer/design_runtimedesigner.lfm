@@ -2547,6 +2547,13 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ImageIndex = 18
       OnExecute = ExpandPageActionExecute
     end
+    object ClearDataAction: TAction
+      Category = 'Data'
+      Caption = 'Clear Data'
+      Hint = 'Clear data in field(s) to system missing!'
+      OnExecute = ClearDataActionExecute
+      OnUpdate = ClearDataActionUpdate
+    end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList
@@ -3958,6 +3965,12 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0
         A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000A4A0A000
       }
+    end
+    object MenuItem7: TMenuItem
+      Caption = 'Data'
+      object ClearDataMenuItem: TMenuItem
+        Action = ClearDataAction
+      end
     end
     object MenuItem6: TMenuItem
       Caption = '-'

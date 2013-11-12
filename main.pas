@@ -374,6 +374,9 @@ begin
       end;
 
       ShowMessage(TrimRight(S));
+
+      if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
+        AddToRecent(ExportForm.ExportSetting.ExportFileName);
     end;
   finally
     ExportForm.Free;
@@ -901,7 +904,7 @@ begin
   // New, -, Open, Open Recent,
   SaveProjectMenuItem.Visible := Assigned(FActiveFrame);
   SaveProjectAsMenuItem.Visible := Assigned(FActiveFrame);
-  CloseProjectAction.Enabled := Assigned(FActiveFrame);
+//  CloseProjectAction.Enabled := Assigned(FActiveFrame);
   // -, AddStructur/Import, -
   PrintDataFormMenuItem.Visible := Assigned(FActiveFrame);
   // -
@@ -1096,23 +1099,7 @@ begin
     TString(Msg.WParam).Free;
   end;
 
-{  if CheckEntryClientOpenFile(Fn) then
-  begin
-    if MessageDlg('Warning',
-      'The file: ' + LineEnding +
-      Fn + LineEnding +
-      'is already opened by EpiData EntryClient.' + LineEnding +
-      'Having the same file open in both programs may cause loss of data, due to overwriting of the file.' + LineEnding +
-      'Do you wish to open file anyway?',
-      mtWarning,
-      mbYesNo,
-      0,
-      mbNo) = mrNo then exit;
-  end;
-  if not DoCloseProject then exit;}
-
   DoOpenProject(Fn);
-  UpdateProcessToolbar;
 end;
 
 procedure TMainForm.LMOpenRecent(var Msg: TLMessage);
