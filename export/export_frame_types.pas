@@ -13,10 +13,13 @@ type
     function UpdateExportSetting(Setting: TEpiExportSetting): boolean;
   end;
 
+  { IExportSettingsPresenterFrame }
+
   IExportSettingsPresenterFrame = interface(IExportSettingsFrame) ['IExportSettingsPresenterFrame']
     function GetFrameCaption: string;
     function GetExportName: string;
     function GetFileDialogExtensions: TEpiDialogFilters;
+    function ExportHeadings: boolean;
   end;
 
 implementation

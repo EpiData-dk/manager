@@ -39,6 +39,7 @@ type
     function GetFileDialogExtensions: TEpiDialogFilters;
     procedure SetSettings(Data: PManagerSettings);
     function ApplySettings: boolean;
+    function ExportHeadings: boolean;
   end; 
 
 implementation
@@ -154,6 +155,11 @@ begin
     ExportCSVQuote     := TExportCustomTextFrame(FTextExport).QuoteCharEdit.Text;
     ExportCSVNewLine   := NewLineCmbBox.ItemIndex;
   end;
+end;
+
+function TExportCSVFrame.ExportHeadings: boolean;
+begin
+  result := false;
 end;
 
 initialization

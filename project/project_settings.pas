@@ -128,7 +128,7 @@ var
   Aform: TForm;
 begin
   Aform := TForm.Create(nil);
-  Aform.Width := 480;
+  Aform.Width := 580;
   Aform.Height := 320;
   Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
   Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;

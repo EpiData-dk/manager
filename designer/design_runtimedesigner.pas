@@ -15,9 +15,12 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    ClearDataAction: TAction;
     ExpandPageAction: TAction;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    ClearDataMenuItem: TMenuItem;
     SelectAllBoolsAction: TAction;
     SelectAllStringsAction: TAction;
     SelectAllFloatsAction: TAction;
@@ -171,6 +174,8 @@ type
     procedure AlignRightActionExecute(Sender: TObject);
     procedure AlignTopActionExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure ClearDataActionExecute(Sender: TObject);
+    procedure ClearDataActionUpdate(Sender: TObject);
     procedure ClearSelectionActionExecute(Sender: TObject);
     procedure CopyControlActionExecute(Sender: TObject);
     procedure CutCopyControlUpdate(Sender: TObject);
@@ -2421,6 +2426,87 @@ begin
   S := DataFile.SaveToXml('', 0);
   Fs.Write(S[1], Length(S));
   Fs.Free;
+end;
+
+procedure TRuntimeDesignFrame.ClearDataActionExecute(Sender: TObject);
+var
+  Objs: TJvDesignObjectArray;
+  ICtrl: IDesignEpiControl;
+  EpiCtrl: TEpiCustomControlItem;
+  i: Integer;
+  j: Integer;
+
+  procedure ResetData(F: TEpiField);
+  begin
+    F.ResetData;
+  end;
+
+begin
+  if DataFile.Size = 0 then exit;
+
+  if
+    MessageDlg('WARNING',
+      'You are about to clear data from all selected fields!' + LineEnding +
+      'Do you wish to proceed further?',
+      mtWarning,
+      mbYesNo,
+      0,
+      mbNo
+    ) = mrNo
+  then
+    Exit;
+
+  Objs := DesignPanel.Surface.Selected;
+
+  for i := Low(Objs) to high(Objs) do
+  begin
+    if not Supports(Objs[i], IDesignEpiControl, ICtrl) then
+      Continue;
+
+    EpiCtrl := ICtrl.EpiControl;
+    if EpiCtrl is TEpiHeading then Continue;
+
+    if EpiCtrl is TEpiField then
+     ResetData(TEpiField(EpiCtrl));
+
+    if EpiCtrl is TEpiSection then
+    with TEpiSection(EpiCtrl) do
+      for j := 0 to Fields.Count - 1 do
+        ResetData(Field[j]);
+  end;
+end;
+
+procedure TRuntimeDesignFrame.ClearDataActionUpdate(Sender: TObject);
+var
+  Objs: TJvDesignObjectArray;
+  i: Integer;
+  ActionEnabled: Boolean;
+begin
+  Objs := DesignPanel.Surface.Selected;
+
+  ActionEnabled := false;
+
+  if DataFile.Size > 0 then
+  begin
+    for i := Low(Objs) to High(Objs) do
+    begin
+      if (Objs[i] is TDesignField) then
+      begin
+        ActionEnabled := true;
+        Break;
+      end;
+
+      if (Objs[i] is TDesignSection) and
+         (TEpiSection(TDesignSection(Objs[i]).EpiControl).Fields.Count > 0)
+      then
+      begin
+        ActionEnabled := true;
+        Break;
+      end;
+    end;
+  end;
+
+  ClearDataAction.Enabled := ActionEnabled;
 end;
 
 procedure TRuntimeDesignFrame.AlignLeftActionExecute(Sender: TObject);

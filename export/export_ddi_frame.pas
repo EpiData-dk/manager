@@ -28,6 +28,7 @@ type
     function GetFileDialogExtensions: TEpiDialogFilters;
     procedure SetSettings(Data: PManagerSettings);
     function  ApplySettings: boolean;
+    function ExportHeadings: boolean;
   end;
 
 implementation
@@ -92,6 +93,11 @@ end;
 function TExportDDIFrame.ApplySettings: boolean;
 begin
   FData^.ExportDDIValueLabels := TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked;
+  result := true;
+end;
+
+function TExportDDIFrame.ExportHeadings: boolean;
+begin
   result := true;
 end;
 

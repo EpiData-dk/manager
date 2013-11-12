@@ -13,9 +13,9 @@ object ExportStataFrame: TExportStataFrame
     AnchorSideTop.Control = VersionComboBox
     AnchorSideTop.Side = asrCenter
     Left = 20
-    Height = 16
-    Top = 26
-    Width = 52
+    Height = 15
+    Top = 27
+    Width = 51
     BorderSpacing.Left = 20
     Caption = 'Version:'
     ParentColor = False
@@ -26,10 +26,10 @@ object ExportStataFrame: TExportStataFrame
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 82
+    Left = 81
     Height = 29
     Top = 20
-    Width = 414
+    Width = 415
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 20

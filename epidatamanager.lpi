@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="5"/>
-      <BuildNr Value="4"/>
+      <BuildNr Value="5"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -189,7 +189,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="81">
+    <Units Count="82">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -732,6 +732,14 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="manager_types"/>
       </Unit80>
+      <Unit81>
+        <Filename Value="export/export_epx_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ExportEPXFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_epx_frame"/>
+      </Unit81>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
