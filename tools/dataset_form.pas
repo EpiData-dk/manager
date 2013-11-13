@@ -25,7 +25,10 @@ implementation
 
 uses
   Forms, Controls, settings2_var, settings2, epiv_dataset_viewer_frame,
-  LCLType;
+  LCLType,
+
+
+  Dialogs;
 
 const
   FormName = 'DataSetViewerForm';
@@ -36,7 +39,9 @@ type
 
   TFormHandler = class
   private
+    Frame: TDatasetViewerFrame;
     procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ShowForm(Sender: TObject);
   end;
 
 procedure ShowDataSetViewerForm(TheOwner: TComponent;
@@ -48,15 +53,25 @@ var
   F: TForm;
   V: TDatasetViewerFrame;
   FH: TFormHandler;
+  T1: TDateTime;
+  T2: TDateTime;
 begin
   FH := TFormHandler.Create;
 
   F := TForm.CreateNew(TheOwner);
   F.Caption := FormCaption;
   F.OnKeyDown := @FH.KeyDown;
+  F.OnShow    := @FH.ShowForm;
   F.KeyPreview := True;
 
+  T1 := Now;
   V := TDatasetViewerFrame.Create(F, DataFile);
+  FH.Frame := V;
+  T2 := Now;
+
+//  ShowMessage('TDatasetViewerFrame.Create(F, DataFile): ' +
+//    FormatDateTime('NN:SS:ZZZZ', T2-T1));
+
   V.Align := alClient;
   V.Parent := F;
   if Assigned(KeyFields) then
@@ -116,6 +131,11 @@ begin
     Key := VK_UNKNOWN;
     TForm(Sender).Close;
   end;
+end;
+
+procedure TFormHandler.ShowForm(Sender: TObject);
+begin
+  Frame.InitVisual;
 end;
 
 end.
