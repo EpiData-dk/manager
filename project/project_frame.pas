@@ -356,9 +356,6 @@ begin
   end;
 
   try
-    Screen.Cursor := crHourGlass;
-    Application.ProcessMessages;
-
     try
       DoNewDataForm(EpiDocument.DataFiles[0]);
     except
@@ -376,8 +373,6 @@ begin
     AddToRecent(DocumentFile.FileName);
     UpdateCaption;
   finally
-    Screen.Cursor := crDefault;
-    Application.ProcessMessages;
   end;
 end;
 
@@ -425,9 +420,6 @@ begin
   FreeAndNil(FBackupTimer);
   FreeAndNil(FDocumentFile);
 
-//  if FileExistsUTF8(ProjectFileName + '.bak') then
-//    DeleteFileUTF8(ProjectFileName + '.bak');
-
   DataFilesTreeView.Items.Clear;
 
   Modified := false;
@@ -470,7 +462,7 @@ begin
 
   if Assigned(EpiDocument) then
   begin
-    if DocumentFile.FileName <> '' then
+    if DocumentFile.IsSaved then
       S := S + ' - ' + ExtractFileName(DocumentFile.FileName);
     if EpiDocument.Modified then
       S := S + '*';
@@ -526,7 +518,7 @@ begin
 
     {$IFNDEF EPI_DEBUG}
     // Warn user that project has not yet been saved...
-    if DocumentFile.FileName = '' then
+    if not DocumentFile.IsSaved then
     begin
       Res := MessageDlg('Warning',
                'Your project have not yet been saved' + LineEnding +
