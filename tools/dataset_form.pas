@@ -81,10 +81,10 @@ begin
   if Assigned(DisplayFields) then
     V.DisplayFields := DisplayFields;
 
-  if SortFieldNo = -1 then
+{  if SortFieldNo = -1 then
     V.SortByIndexAction.Execute
   else
-    V.ListGridHeaderClick(nil, true, SortFieldNo);
+    V.ListGridHeaderClick(nil, true, SortFieldNo);    }
 
   if ShowIndexFields then
     V.ShowIndexOrAllFieldsAction.Execute;
