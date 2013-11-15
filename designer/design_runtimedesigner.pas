@@ -437,7 +437,12 @@ begin
     Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
     if not Dlg.Execute then exit;
 
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
     ImpStructurForm := TImportStructureForm.Create(FDesignScrollBox, Dlg.Files);
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+
     ImpStructurForm.ImportData := (DataFile.Size = 0);
     if ImpStructurForm.ShowModal = mrCancel then exit;
 

@@ -167,6 +167,7 @@ begin
     eptInit:
       begin
         ProgressUpdate := MaxPos div 50;
+        ProgressBar1.Position := CurrentPos;
         ProgressBar1.Visible := true;
         ProgressBar1.Max := MaxPos;
         Application.ProcessMessages;
@@ -175,6 +176,7 @@ begin
       begin
         ProgressBar1.Visible := false;
         Application.ProcessMessages;
+        LastUpdate := 0;
       end;
     eptRecords:
       begin
@@ -361,7 +363,7 @@ begin
   // If project haven't been saved before.
   InitBackupTimer;
 
-  ActiveFrame.Cursor := crHourGlass;
+  Screen.Cursor := crHourGlass;
   Application.ProcessMessages;
 
   try
@@ -369,7 +371,7 @@ begin
     Result := DocumentFile.SaveFile(AFileName);
     AddToRecent(AFileName);
   finally
-    ActiveFrame.Cursor := crDefault;
+    Screen.Cursor := crDefault;
     Application.ProcessMessages;
   end;
 end;
