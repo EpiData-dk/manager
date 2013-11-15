@@ -7,13 +7,14 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase,
-  manager_messages, LMessages, epiv_documentfile;
+  manager_messages, LMessages, epiv_documentfile, types;
 
 type
 
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ProgressBar1: TProgressBar;
     StudyInformationAction: TAction;
     KeyFieldsAction: TAction;
     ProjectPasswordAction: TAction;
@@ -37,6 +38,9 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure DocumentProgress(const Sender: TEpiCustomBase;
+      ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
+      var Canceled: Boolean);
     procedure KeyFieldsActionExecute(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -150,6 +154,40 @@ begin
   F := TKeyFieldsForm.Create(Self, EpiDocument);
   F.ShowModal;
   F.Free;
+end;
+
+procedure TProjectFrame.DocumentProgress(const Sender: TEpiCustomBase;
+  ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
+  var Canceled: Boolean);
+Const
+  LastUpdate: Cardinal = 0;
+  ProgressUpdate: Cardinal = 0;
+begin
+  case ProgressType of
+    eptInit:
+      begin
+        ProgressUpdate := MaxPos div 50;
+        ProgressBar1.Visible := true;
+        ProgressBar1.Max := MaxPos;
+        Application.ProcessMessages;
+      end;
+    eptFinish:
+      begin
+        ProgressBar1.Visible := false;
+        Application.ProcessMessages;
+      end;
+    eptRecords:
+      begin
+        if CurrentPos > (LastUpdate + ProgressUpdate) then
+        begin
+          ProgressBar1.Position := CurrentPos;
+          {$IFNDEF MSWINDOWS}
+          Application.ProcessMessages;
+          {$ENDIF}
+          LastUpdate := CurrentPos;
+        end;
+      end;
+  end;
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -343,6 +381,7 @@ begin
   Result := false;
   try
     FDocumentFile := TDocumentFile.Create;
+    FDocumentFile.OnProgress := @DocumentProgress;
     if not FDocumentFile.OpenFile(AFileName) then
     begin
       FreeAndNil(FDocumentFile);
@@ -649,8 +688,14 @@ begin
 end;
 
 function TProjectFrame.OpenProject(const AFileName: string): boolean;
+var
+  T1: TDateTime;
+  T2: TDateTime;
 begin
+  T1 := Now;
   Result := DoOpenProject(AFileName);
+  T2 := now;
+//  ShowMessage('Open Time: ' + FormatDateTime('NN:SS:ZZZ', T2-T1));
 end;
 
 function TProjectFrame.SaveProject(const ForceSaveAs: boolean): boolean;

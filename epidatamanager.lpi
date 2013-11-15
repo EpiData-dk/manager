@@ -47,11 +47,6 @@
             <Debugging>
               <DebugInfoType Value="dsDwarf2Set"/>
             </Debugging>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
           </Linking>
           <Other>
             <CompilerMessages>
@@ -144,8 +139,9 @@
           </Other>
         </CompilerOptions>
       </Item4>
-      <SharedMatrixOptions Count="1">
+      <SharedMatrixOptions Count="2">
         <Item1 ID="452080431331" Modes="Win32,Win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
+        <Item2 ID="637697368399" Modes="Win32,Win64" Value="-WG"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -163,10 +159,12 @@
     <RequiredPackages Count="8">
       <Item1>
         <PackageName Value="epidatacore_visuals"/>
+        <MaxVersion Major="1" Minor="5" Valid="True"/>
         <MinVersion Major="1" Minor="5" Valid="True"/>
       </Item1>
       <Item2>
         <PackageName Value="epidatacore"/>
+        <MaxVersion Major="1" Minor="5" Valid="True"/>
         <MinVersion Major="1" Minor="5" Valid="True"/>
       </Item2>
       <Item3>
