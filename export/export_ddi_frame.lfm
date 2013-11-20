@@ -1,9 +1,43 @@
 object ExportDDIFrame: TExportDDIFrame
   Left = 0
-  Height = 240
+  Height = 397
   Top = 0
-  Width = 320
+  Width = 642
+  ClientHeight = 397
+  ClientWidth = 642
   TabOrder = 0
-  DesignLeft = 464
-  DesignTop = 312
+  DesignLeft = 608
+  DesignTop = 420
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
+    Height = 15
+    Top = 10
+    Width = 67
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Language:'
+    ParentColor = False
+  end
+  object ComboBox1: TComboBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 27
+    Top = 27
+    Width = 622
+    Anchors = [akTop, akLeft, akRight]
+    AutoComplete = True
+    AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    DropDownCount = 20
+    ItemHeight = 0
+    TabOrder = 0
+  end
 end

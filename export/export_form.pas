@@ -303,7 +303,19 @@ begin
 end;
 
 procedure TExportForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+var
+  Rec: PFrameRec;
+  ErrorText: string;
 begin
+  if ModalResult = mrOk then
+  begin
+    Rec := PFrameRec(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex]);
+    CanClose := (Rec^.Frame as IExportSettingsPresenterFrame).CheckExportAllowed(FExportSetting, FDoc, ErrorText);
+
+    if not CanClose then
+      ShowMessage(ErrorText);
+  end;
+
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, Self.ClassName);
 end;

@@ -20,6 +20,9 @@ type
     function GetExportName: string;
     function GetFileDialogExtensions: TEpiDialogFilters;
     function ExportHeadings: boolean;
+    function CheckExportAllowed(Const Setting: TEpiExportSetting;
+      Const Doc: TEpiDocument;
+      out ErrorText: string): boolean;
   end;
 
 implementation

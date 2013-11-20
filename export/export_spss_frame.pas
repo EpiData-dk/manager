@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
   epiexportsettings, export_frame_types, epimiscutils, settings2_interface,
-  settings2_var;
+  settings2_var, epidocument;
 
 type
 
@@ -30,6 +30,9 @@ type
     procedure SetSettings(Data: PManagerSettings);
     function ApplySettings: boolean;
     function ExportHeadings: boolean;
+    function CheckExportAllowed(Const Setting: TEpiExportSetting;
+      Const Doc: TEpiDocument;
+      out ErrorText: string): boolean;
   end;
 
 implementation
@@ -100,6 +103,12 @@ end;
 function TExportSPSSFrame.ExportHeadings: boolean;
 begin
   result := false;
+end;
+
+function TExportSPSSFrame.CheckExportAllowed(const Setting: TEpiExportSetting;
+  const Doc: TEpiDocument; out ErrorText: string): boolean;
+begin
+  result := true;
 end;
 
 initialization
