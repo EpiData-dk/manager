@@ -103,6 +103,8 @@ procedure TProjectFileListFrame.AddDocumentToGrid(const FileName: string;
 var
   Idx: Integer;
   Ext: String;
+  i: Integer;
+  LastDate: TDateTime;
 begin
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
   with StructureGrid do
@@ -119,7 +121,15 @@ begin
       // Created
       Cells[CreatedCol.Index + 1, Idx]  := DateToStr(Doc.Study.Created);
       // Edited
-      Cells[LastEditCol.Index + 1, Idx] := DateToStr(Doc.Study.ModifiedDate);
+      LastDate := Doc.Study.ModifiedDate;
+      for i := 0 to Doc.DataFiles.Count - 1 do
+      begin
+        if Doc.DataFiles[i].RecModifiedDate > LastDate then
+          LastDate := Doc.DataFiles[i].RecModifiedDate;
+        if Doc.DataFiles[i].StructureModifiedDate > LastDate then
+          LastDate := Doc.DataFiles[i].StructureModifiedDate;
+      end;
+      Cells[LastEditCol.Index + 1, Idx] := DateToStr(LastDate);
     end else begin
       // Created
       Cells[CreatedCol.Index + 1, Idx]  := 'N/A';
