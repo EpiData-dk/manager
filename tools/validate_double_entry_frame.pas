@@ -348,7 +348,7 @@ end;
 function TValidateDoubleEntryFrame.OkToAdvanceText: string;
 begin
   result :=
-    'You MUST select 2 file to compare!'
+    'You MUST select 2 files to compare!'
 end;
 
 function TValidateDoubleEntryFrame.CanClose: boolean;
