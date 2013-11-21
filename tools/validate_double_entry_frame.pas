@@ -357,6 +357,7 @@ var
   Res: TModalResult;
   i: Integer;
 begin
+  Result := true;
   KFChecked := false;
 
   for i := 0 to KFCheckList.Count - 1 do
