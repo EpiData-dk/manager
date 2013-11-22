@@ -18,7 +18,8 @@ type
     Label1: TLabel;
   private
     { private declarations }
-    LocalFrame: TCustomFrame;
+    ValueLabelFrame: TCustomFrame;
+    CSVFrame: TCustomFrame;
     FData: PManagerSettings;
   public
     { public declarations }
@@ -41,7 +42,9 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form, export_customvaluelabel_frame,
+  export_form,
+  export_customvaluelabel_frame,
+  export_csv_frame,
   settings2, epi_iso639, epistringutils;
 
 { TExportDDIFrame }
@@ -50,12 +53,20 @@ constructor TExportDDIFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-  LocalFrame := TCustomValueLabelFrame.Create(self);
-  LocalFrame.Parent := self;
-  LocalFrame.AnchorToNeighbour(akTop, 10, ComboBox1);
-  LocalFrame.AnchorParallel(akLeft, 10, Self);
-  LocalFrame.AnchorParallel(akRight, 10, Self);
-  LocalFrame.AnchorParallel(akBottom, 10, Self);
+  CSVFrame := TExportCSVFrame.Create(Self);
+  CSVFrame.Parent := self;
+  CSVFrame.AutoSize := true;
+  CSVFrame.AnchorToNeighbour(akTop, 10, ComboBox1);
+  CSVFrame.AnchorParallel(akLeft, 10, Self);
+  CSVFrame.AnchorParallel(akRight, 10, Self);
+
+  ValueLabelFrame := TCustomValueLabelFrame.Create(self);
+  ValueLabelFrame.Parent := self;
+  ValueLabelFrame.AnchorToNeighbour(akTop, 10, CSVFrame);
+  ValueLabelFrame.AnchorParallel(akLeft, 10, Self);
+  ValueLabelFrame.AnchorParallel(akRight, 10, Self);
+  ValueLabelFrame.AnchorParallel(akBottom, 10, Self);
+
 
   ComboBox1.Items.BeginUpdate;
   Epi_ISO639_AddLangAndDesciption(ComboBox1.Items);
@@ -74,8 +85,10 @@ end;
 
 function TExportDDIFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
+var
+  CSVSettings: TEpiCSVExportSetting;
 begin
-  (LocalFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
+  (ValueLabelFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
   with TEpiDDIExportSetting(Setting) do
   begin
     SoftwareName := 'EpiData Manager';
@@ -83,6 +96,12 @@ begin
     Version := '1.0.0';
     ExportLang := TString(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Str;
   end;
+
+  CSVSettings := TEpiCSVExportSetting.Create;
+  CSVSettings.Assign(Setting);
+
+  (CSVFrame as IExportSettingsPresenterFrame).UpdateExportSetting(CSVSettings);
+  Setting.AdditionalExportSettings := CSVSettings;
 end;
 
 function TExportDDIFrame.GetFrameCaption: string;
@@ -103,12 +122,12 @@ end;
 procedure TExportDDIFrame.SetSettings(Data: PManagerSettings);
 begin
   Fdata := Data;
-  TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked := FData^.ExportDDIValueLabels;
+  TCustomValueLabelFrame(ValueLabelFrame).ExportValueLabelsChkBox.Checked := FData^.ExportDDIValueLabels;
 end;
 
 function TExportDDIFrame.ApplySettings: boolean;
 begin
-  FData^.ExportDDIValueLabels := TCustomValueLabelFrame(LocalFrame).ExportValueLabelsChkBox.Checked;
+  FData^.ExportDDIValueLabels := TCustomValueLabelFrame(ValueLabelFrame).ExportValueLabelsChkBox.Checked;
   result := true;
 end;
 
