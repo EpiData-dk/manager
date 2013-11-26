@@ -1,29 +1,29 @@
 object ExportCSVFrame: TExportCSVFrame
   Left = 0
-  Height = 240
+  Height = 439
   Top = 0
-  Width = 320
-  ClientHeight = 240
-  ClientWidth = 320
+  Width = 613
+  ClientHeight = 439
+  ClientWidth = 613
   TabOrder = 0
-  DesignLeft = 1150
-  DesignTop = 477
+  DesignLeft = 906
+  DesignTop = 373
   object SeparatorGrpBox: TGroupBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 20
-    Height = 156
+    Height = 188
     Top = 20
-    Width = 280
+    Width = 573
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 20
     BorderSpacing.Top = 20
     BorderSpacing.Right = 20
-    Caption = 'Separators:'
-    ClientHeight = 139
-    ClientWidth = 276
+    Caption = 'Specification:'
+    ClientHeight = 171
+    ClientWidth = 569
     TabOrder = 0
     object Label1: TLabel
       AnchorSideLeft.Control = SeparatorGrpBox
@@ -32,9 +32,9 @@ object ExportCSVFrame: TExportCSVFrame
       AnchorSideBottom.Control = FieldSepEdit
       AnchorSideBottom.Side = asrBottom
       Left = 10
-      Height = 16
-      Top = 19
-      Width = 99
+      Height = 15
+      Top = 20
+      Width = 98
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -48,9 +48,9 @@ object ExportCSVFrame: TExportCSVFrame
       AnchorSideBottom.Control = DateSepEdit
       AnchorSideBottom.Side = asrBottom
       Left = 10
-      Height = 16
-      Top = 49
-      Width = 104
+      Height = 15
+      Top = 50
+      Width = 103
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -64,9 +64,9 @@ object ExportCSVFrame: TExportCSVFrame
       AnchorSideBottom.Control = TimeSepEdit
       AnchorSideBottom.Side = asrBottom
       Left = 10
-      Height = 16
-      Top = 79
-      Width = 104
+      Height = 15
+      Top = 80
+      Width = 103
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -80,9 +80,9 @@ object ExportCSVFrame: TExportCSVFrame
       AnchorSideBottom.Control = DecimalSepEdit
       AnchorSideBottom.Side = asrBottom
       Left = 10
-      Height = 16
-      Top = 109
-      Width = 125
+      Height = 15
+      Top = 110
+      Width = 124
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -93,7 +93,7 @@ object ExportCSVFrame: TExportCSVFrame
       AnchorSideTop.Control = SeparatorGrpBox
       AnchorSideRight.Control = SeparatorGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 242
+      Left = 535
       Height = 25
       Top = 10
       Width = 24
@@ -108,7 +108,7 @@ object ExportCSVFrame: TExportCSVFrame
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = SeparatorGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 242
+      Left = 535
       Height = 25
       Top = 40
       Width = 24
@@ -123,7 +123,7 @@ object ExportCSVFrame: TExportCSVFrame
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = SeparatorGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 242
+      Left = 535
       Height = 25
       Top = 70
       Width = 24
@@ -138,7 +138,7 @@ object ExportCSVFrame: TExportCSVFrame
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = SeparatorGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 242
+      Left = 535
       Height = 25
       Top = 100
       Width = 24
@@ -148,6 +148,36 @@ object ExportCSVFrame: TExportCSVFrame
       MaxLength = 1
       TabOrder = 3
     end
+    object QuoteCharEdit: TEdit
+      AnchorSideTop.Control = DecimalSepEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = SeparatorGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 535
+      Height = 25
+      Top = 130
+      Width = 24
+      Anchors = [akTop, akRight]
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      MaxLength = 1
+      TabOrder = 4
+    end
+    object QuoteCharLabel: TLabel
+      AnchorSideLeft.Control = SeparatorGrpBox
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Control = QuoteCharEdit
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 140
+      Width = 110
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Quote Character:'
+      ParentColor = False
+    end
   end
   object Label5: TLabel
     AnchorSideLeft.Control = Owner
@@ -156,9 +186,9 @@ object ExportCSVFrame: TExportCSVFrame
     AnchorSideBottom.Control = NewLineCmbBox
     AnchorSideBottom.Side = asrBottom
     Left = 20
-    Height = 16
-    Top = 199
-    Width = 62
+    Height = 15
+    Top = 232
+    Width = 61
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 20
     BorderSpacing.Top = 10
@@ -170,14 +200,40 @@ object ExportCSVFrame: TExportCSVFrame
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = SeparatorGrpBox
     AnchorSideRight.Side = asrBottom
-    Left = 160
+    Left = 453
     Height = 29
-    Top = 186
+    Top = 218
     Width = 140
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 10
     ItemHeight = 0
     Style = csDropDownList
     TabOrder = 1
+  end
+  object ExportFieldNameChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = NewLineCmbBox
+    AnchorSideTop.Side = asrBottom
+    Left = 20
+    Height = 22
+    Top = 257
+    Width = 204
+    BorderSpacing.Left = 20
+    BorderSpacing.Top = 10
+    Caption = 'Export Field Name (first row)'
+    TabOrder = 2
+  end
+  object ByteOrderMarkCheckBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ExportFieldNameChkBox
+    AnchorSideTop.Side = asrBottom
+    Left = 20
+    Height = 22
+    Top = 289
+    Width = 157
+    BorderSpacing.Left = 20
+    BorderSpacing.Top = 10
+    Caption = 'Add Byte Order Mark'
+    TabOrder = 3
   end
 end

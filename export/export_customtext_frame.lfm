@@ -6,8 +6,8 @@ object ExportCustomTextFrame: TExportCustomTextFrame
   ClientHeight = 217
   ClientWidth = 377
   TabOrder = 0
-  DesignLeft = 756
-  DesignTop = 418
+  DesignLeft = 2118
+  DesignTop = 343
   object ExportFieldNameChkBox: TCheckBox
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner

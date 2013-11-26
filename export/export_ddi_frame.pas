@@ -56,9 +56,9 @@ begin
   CSVFrame := TExportCSVFrame.Create(Self);
   CSVFrame.Parent := self;
   CSVFrame.AutoSize := true;
-  CSVFrame.AnchorToNeighbour(akTop, 10, ComboBox1);
-  CSVFrame.AnchorParallel(akLeft, 10, Self);
-  CSVFrame.AnchorParallel(akRight, 10, Self);
+  CSVFrame.AnchorToNeighbour(akTop, 0, ComboBox1);
+  CSVFrame.AnchorParallel(akLeft, 0, Self);
+  CSVFrame.AnchorParallel(akRight, 0, Self);
 
   ValueLabelFrame := TCustomValueLabelFrame.Create(self);
   ValueLabelFrame.Parent := self;
