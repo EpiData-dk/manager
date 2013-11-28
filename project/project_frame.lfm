@@ -10,17 +10,17 @@ object ProjectFrame: TProjectFrame
   DesignTop = 233
   object ProjectPanel: TPanel
     Left = 0
-    Height = 658
+    Height = 638
     Top = 0
     Width = 200
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 658
+    ClientHeight = 638
     ClientWidth = 200
     TabOrder = 0
     object DataFilesTreeView: TTreeView
       Left = 0
-      Height = 632
+      Height = 612
       Top = 26
       Width = 200
       Align = alClient
@@ -103,6 +103,19 @@ object ProjectFrame: TProjectFrame
         Style = tbsDivider
       end
     end
+  end
+  object ProgressBar1: TProgressBar
+    Left = 0
+    Height = 20
+    Top = 638
+    Width = 778
+    Align = alBottom
+    Position = 50
+    Smooth = True
+    Step = 1
+    TabOrder = 1
+    Visible = False
+    BarShowText = True
   end
   object ActionList1: TActionList
     Images = ProjectImageList

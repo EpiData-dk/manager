@@ -59,6 +59,7 @@ type
       EventType: Word; Data: Pointer);
   public
     { public declarations }
+    destructor Destroy; override;
     function  GetFrameCaption: string;
     procedure UpdateFrame(Selection: TStrings);
     procedure ApplyReportOptions(Report: TReportBase);
@@ -256,7 +257,7 @@ var
   D: TEpiDataFile;
   C: TEpiCustomControlItem;
 begin
-  if (EventGroup <> eegCustomBase) then exit;
+{  if (EventGroup <> eegCustomBase) then exit;
 
   case TEpiCustomChangeEventType(EventType) of
     ecceDestroy: ;
@@ -293,7 +294,12 @@ begin
     ecceSetTop: ;
     ecceSetLeft: ;
     ecceText: ;
-  end;
+  end;             }
+end;
+
+destructor TValidateDoubleEntryFrame.Destroy;
+begin
+  inherited Destroy;
 end;
 
 function TValidateDoubleEntryFrame.GetFrameCaption: string;
@@ -310,7 +316,7 @@ begin
   FMainDoc := TEpiDocument(Selection.Objects[0]);
   FDupDoc  := TEpiDocument(Selection.Objects[1]);
 
-  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
+//  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
 
   UpdateKeyFields;
   UpdateCompareFields;
@@ -356,7 +362,7 @@ end;
 function TValidateDoubleEntryFrame.OkToAdvanceText: string;
 begin
   result :=
-    'You MUST select 2 file to compare!'
+    'You MUST select 2 files to compare!'
 end;
 
 function TValidateDoubleEntryFrame.CanClose: boolean;
@@ -365,6 +371,7 @@ var
   Res: TModalResult;
   i: Integer;
 begin
+  Result := true;
   KFChecked := false;
 
   for i := 0 to KFCheckList.Count - 1 do

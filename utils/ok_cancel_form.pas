@@ -57,7 +57,9 @@ end;
 
 procedure TOkCancelForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-  if Assigned(CanCloseInt) then
+  if (ModalResult = mrOk) and
+     (Assigned(CanCloseInt))
+  then
     CanClose := CanCloseInt.CanClose;
 
   if ManagerSettings.SaveWindowPositions then

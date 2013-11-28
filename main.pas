@@ -890,11 +890,20 @@ procedure TMainForm.DoOpenProject(const AFileName: string);
 begin
   if not DoCloseProject then exit;
 
-  NewProjectFrame;
-  if not FActiveFrame.OpenProject(AFileName) then
-    DoCloseProject
-  else
-    AssignActionLinks;
+  try
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
+
+    NewProjectFrame;
+    if not FActiveFrame.OpenProject(AFileName) then
+      DoCloseProject
+    else
+      AssignActionLinks;
+  finally
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+  end;
+
   UpdateProcessToolbar;
 end;
 

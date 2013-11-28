@@ -13,6 +13,7 @@ type
   { TExportCustomTextFrame }
 
   TExportCustomTextFrame = class(TFrame, IExportSettingsFrame)
+    ByteOrderMarkCheckBox: TCheckBox;
     ExportFieldNameChkBox: TCheckBox;
     QuoteCharEdit: TEdit;
     Label1: TLabel;
@@ -35,6 +36,7 @@ begin
   begin
     QuoteChar := QuoteCharEdit.Text;
     ExportFieldNames := ExportFieldNameChkBox.Checked;
+    ByteOrderMark := ByteOrderMarkCheckBox.Checked;
   end;
   result := true;
 end;

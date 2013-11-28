@@ -7,13 +7,14 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase,
-  manager_messages, LMessages, epiv_documentfile;
+  manager_messages, LMessages, epiv_documentfile, types;
 
 type
 
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ProgressBar1: TProgressBar;
     StudyInformationAction: TAction;
     KeyFieldsAction: TAction;
     ProjectPasswordAction: TAction;
@@ -37,6 +38,9 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure DocumentProgress(const Sender: TEpiCustomBase;
+      ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
+      var Canceled: Boolean);
     procedure KeyFieldsActionExecute(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -150,6 +154,42 @@ begin
   F := TKeyFieldsForm.Create(Self, EpiDocument);
   F.ShowModal;
   F.Free;
+end;
+
+procedure TProjectFrame.DocumentProgress(const Sender: TEpiCustomBase;
+  ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
+  var Canceled: Boolean);
+Const
+  LastUpdate: Cardinal = 0;
+  ProgressUpdate: Cardinal = 0;
+begin
+  case ProgressType of
+    eptInit:
+      begin
+        ProgressUpdate := MaxPos div 50;
+        ProgressBar1.Position := CurrentPos;
+        ProgressBar1.Visible := true;
+        ProgressBar1.Max := MaxPos;
+        Application.ProcessMessages;
+      end;
+    eptFinish:
+      begin
+        ProgressBar1.Visible := false;
+        Application.ProcessMessages;
+        LastUpdate := 0;
+      end;
+    eptRecords:
+      begin
+        if CurrentPos > (LastUpdate + ProgressUpdate) then
+        begin
+          ProgressBar1.Position := CurrentPos;
+          {$IFNDEF MSWINDOWS}
+          Application.ProcessMessages;
+          {$ENDIF}
+          LastUpdate := CurrentPos;
+        end;
+      end;
+  end;
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -325,7 +365,7 @@ begin
   // If project haven't been saved before.
   InitBackupTimer;
 
-  ActiveFrame.Cursor := crHourGlass;
+  Screen.Cursor := crHourGlass;
   Application.ProcessMessages;
 
   try
@@ -333,7 +373,7 @@ begin
     Result := DocumentFile.SaveFile(AFileName);
     AddToRecent(AFileName);
   finally
-    ActiveFrame.Cursor := crDefault;
+    Screen.Cursor := crDefault;
     Application.ProcessMessages;
   end;
 end;
@@ -345,6 +385,7 @@ begin
   Result := false;
   try
     FDocumentFile := TDocumentFile.Create;
+    FDocumentFile.OnProgress := @DocumentProgress;
     if not FDocumentFile.OpenFile(AFileName) then
     begin
       FreeAndNil(FDocumentFile);
@@ -358,9 +399,6 @@ begin
   end;
 
   try
-    Screen.Cursor := crHourGlass;
-    Application.ProcessMessages;
-
     try
       DoNewDataForm(EpiDocument.DataFiles[0]);
     except
@@ -378,8 +416,6 @@ begin
     AddToRecent(DocumentFile.FileName);
     UpdateCaption;
   finally
-    Screen.Cursor := crDefault;
-    Application.ProcessMessages;
   end;
 end;
 
@@ -427,9 +463,6 @@ begin
   FreeAndNil(FBackupTimer);
   FreeAndNil(FDocumentFile);
 
-//  if FileExistsUTF8(ProjectFileName + '.bak') then
-//    DeleteFileUTF8(ProjectFileName + '.bak');
-
   DataFilesTreeView.Items.Clear;
 
   Modified := false;
@@ -472,7 +505,7 @@ begin
 
   if Assigned(EpiDocument) then
   begin
-    if DocumentFile.FileName <> '' then
+    if DocumentFile.IsSaved then
       S := S + ' - ' + ExtractFileName(DocumentFile.FileName);
     if EpiDocument.Modified then
       S := S + '*';
@@ -528,7 +561,7 @@ begin
 
     {$IFNDEF EPI_DEBUG}
     // Warn user that project has not yet been saved...
-    if DocumentFile.FileName = '' then
+    if not DocumentFile.IsSaved then
     begin
       Res := MessageDlg('Warning',
                'Your project have not yet been saved' + LineEnding +
@@ -659,8 +692,14 @@ begin
 end;
 
 function TProjectFrame.OpenProject(const AFileName: string): boolean;
+var
+  T1: TDateTime;
+  T2: TDateTime;
 begin
+  T1 := Now;
   Result := DoOpenProject(AFileName);
+  T2 := now;
+//  ShowMessage('Open Time: ' + FormatDateTime('NN:SS:ZZZ', T2-T1));
 end;
 
 function TProjectFrame.SaveProject(const ForceSaveAs: boolean): boolean;
