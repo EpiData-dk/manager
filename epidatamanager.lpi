@@ -187,7 +187,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="82">
+    <Units Count="83">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -738,6 +738,11 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_epx_frame"/>
       </Unit81>
+      <Unit82>
+        <Filename Value="reports/report_project_validation.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_project_validation"/>
+      </Unit82>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -289,6 +289,12 @@ object MainForm: TMainForm
         object CodeBookReportMenuItem: TMenuItem
           Action = CodeBookReportAction
         end
+        object MenuItem13: TMenuItem
+          Caption = '-'
+        end
+        object ValidatorMenuItem: TMenuItem
+          Action = ValidationReportAction
+        end
       end
       object MenuItem3: TMenuItem
         Caption = '-'
@@ -494,6 +500,11 @@ object MainForm: TMainForm
       Category = 'File'
       Caption = 'Import file...'
       OnExecute = ImportInNewProjectActionExecute
+    end
+    object ValidationReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Validator'
+      OnExecute = ValidationReportActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

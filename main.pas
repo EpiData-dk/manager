@@ -15,12 +15,15 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    ValidationReportAction: TAction;
     ImportInNewProjectAction: TAction;
     CodeBookReportAction: TAction;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     EpiDataTutorialsMenuItem: TMenuItem;
+    MenuItem13: TMenuItem;
+    ValidatorMenuItem: TMenuItem;
     WebTutorialsMenuItem: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
@@ -185,6 +188,7 @@ type
     procedure ShowAboutActionExecute(Sender: TObject);
     procedure StartEntryClientActionExecute(Sender: TObject);
     procedure StartEntryClientActionUpdate(Sender: TObject);
+    procedure ValidationReportActionExecute(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
@@ -252,7 +256,7 @@ uses
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
   report_counts, report_double_entry_validation,
-  report_codebook,
+  report_codebook, report_project_validation,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
@@ -728,6 +732,11 @@ begin
   {$ENDIF}
   Ext := ExtractFileExt(Application.ExeName);
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
+end;
+
+procedure TMainForm.ValidationReportActionExecute(Sender: TObject);
+begin
+  RunReport(TReportProjectValidation);
 end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
