@@ -5,25 +5,33 @@ unit report_project_validation;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument;
+  Classes, SysUtils, report_base, epidocument, epidatafiles, report_types, forms;
 
 type
 
-  { TReportProjectOverview }
-
   { TReportProjectValidation }
 
-  TReportProjectValidation = class(TReportFileListBase)
+  TReportProjectValidation = class(TReportFileListBase, IReportFrameProvider)
+  private
+    FKeyFields: TEpiFields;
+    FValidationFields: TEpiFields;
   protected
     function GetTitle: string; override;
     procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
       const Index: Integer); override;
+  public
+    { IReportFrameProvider }
+    function GetFrameClass: TCustomFrameClass;
+  public
+    property KeyFields: TEpiFields read FKeyFields;
+    property ValidationFields: TEpiFields read FValidationFields;
   end;
 
 implementation
 
 uses
-  epireport_base, epireport_report_projectvalidator;
+  epireport_base, epireport_report_projectvalidator,
+  report_project_validation_frame;
 
 resourcestring
   rsReportProjectValidationTitle = 'Project Validation.';
@@ -47,6 +55,11 @@ begin
   R.Document := Doc;
   R.RunReport;
   R.Free;
+end;
+
+function TReportProjectValidation.GetFrameClass: TCustomFrameClass;
+begin
+  result := TProjectValidationFrame;
 end;
 
 
