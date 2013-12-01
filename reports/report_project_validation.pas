@@ -5,7 +5,8 @@ unit report_project_validation;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument, epidatafiles, report_types, forms;
+  Classes, SysUtils, report_base, epidocument, epidatafiles, report_types,
+  forms, epitools_projectvalidate;
 
 type
 
@@ -14,6 +15,7 @@ type
   TReportProjectValidation = class(TReportFileListBase, IReportFrameProvider)
   private
     FKeyFields: TEpiFields;
+    FOptions: TEpiToolsProjectValidateOptions;
     FValidationFields: TEpiFields;
   protected
     function GetTitle: string; override;
@@ -23,8 +25,9 @@ type
     { IReportFrameProvider }
     function GetFrameClass: TCustomFrameClass;
   public
-    property KeyFields: TEpiFields read FKeyFields;
-    property ValidationFields: TEpiFields read FValidationFields;
+    property KeyFields: TEpiFields read FKeyFields write FKeyFields;
+    property ValidationFields: TEpiFields read FValidationFields write FValidationFields;
+    property Options: TEpiToolsProjectValidateOptions read FOptions write FOptions;
   end;
 
 implementation
@@ -53,6 +56,9 @@ begin
 
   R := TEpiReportProjectValidator.Create(Generator);
   R.Document := Doc;
+  R.KeyFields := KeyFields;
+  R.ValidationFields := ValidationFields;
+  R.Options := Options;
   R.RunReport;
   R.Free;
 end;

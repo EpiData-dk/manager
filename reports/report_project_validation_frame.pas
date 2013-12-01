@@ -53,8 +53,10 @@ type
     FDoc:     TEpiDocument;
     procedure UpdateKeyFields;
     procedure UpdateCompareFields;
+    procedure UpdateOptions;
   public
     { public declarations }
+    constructor Create(TheOwner: TComponent); override;
     function  GetFrameCaption: string;
     procedure UpdateFrame(Selection: TStrings);
     procedure ApplyReportOptions(Report: TReportBase);
@@ -235,6 +237,33 @@ begin
   CmpFCheckList.Items.EndUpdate;
 end;
 
+procedure TProjectValidationFrame.UpdateOptions;
+var
+  i: Integer;
+begin
+  for i := 0 to OptionsChkGrp.Items.Count - 1 do
+    OptionsChkGrp.Checked[i] := true;
+end;
+
+constructor TProjectValidationFrame.Create(TheOwner: TComponent);
+var
+  Option: TEpiToolsProjectValidateOption;
+begin
+  inherited Create(TheOwner);
+
+
+  With OptionsChkGrp.Items do
+  begin
+    BeginUpdate;
+    Clear;
+
+    for Option in TEpiToolsProjectValidateOption do
+      AddObject(EpiToolProjectValidationOptionText[Option], TObject(PtrInt(Option)));
+
+    EndUpdate;
+  end;
+end;
+
 function TProjectValidationFrame.GetFrameCaption: string;
 begin
   result := 'Select all fields identifying an observation';
@@ -250,36 +279,36 @@ begin
 
   UpdateKeyFields;
   UpdateCompareFields;
+  UpdateOptions;
 end;
 
 procedure TProjectValidationFrame.ApplyReportOptions(Report: TReportBase);
 var
   KF: TEpiFields;
-  CF: TEpiFields;
+  VF: TEpiFields;
   i: Integer;
-//  Options: TEpiToolsDblEntryValidateOptions;
+  Opts: TEpiToolsProjectValidateOptions;
 begin
   KF := TEpiFields.Create(nil);
   for i := 0 to KFCheckList.Count - 1 do
     if KFCheckList.Checked[i] then
       KF.AddItem(TEpiField(KFCheckList.Items.Objects[i]));
 
-  CF := TEpiFields.Create(nil);
+  VF := TEpiFields.Create(nil);
   for i := 0 to CmpFCheckList.Count - 1 do
     if CmpFCheckList.Checked[i] then
-      CF.AddItem(TEpiField(CmpFCheckList.Items.Objects[i]));
+      VF.AddItem(TEpiField(CmpFCheckList.Items.Objects[i]));
 
-{  Options := [];
-  if OptionsChkGrp.Checked[0] then Include(Options, devIgnoreDeleted);
-  if OptionsChkGrp.Checked[1] then Include(Options, devCaseSensitiveText);
-  if OptionsChkGrp.Checked[2] then Include(Options, devIgnoreMissingRecords);
-  if OptionsChkGrp.Checked[3] then Include(Options, devAddResultToField);    }
+  Opts := [];
+  for i := 0 to OptionsChkGrp.Items.Count -1 do
+    if OptionsChkGrp.Checked[i] then
+      Include(Opts, TEpiToolsProjectValidateOption(PtrInt(OptionsChkGrp.Items.Objects[i])));
 
   with TReportProjectValidation(Report) do
   begin
-//    KeyFields := KF;
-//    CompareFields := CF;
-//    DblEntryValidateOptions := Options;
+    KeyFields := KF;
+    ValidationFields := VF;
+    Options := Opts;
   end;
 end;
 
