@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 900
+  Left = 336
   Height = 603
-  Top = 355
+  Top = 220
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -273,7 +273,7 @@ object MainForm: TMainForm
     object MenuItem21: TMenuItem
       Caption = 'Document'
       object MenuItem2: TMenuItem
-        Caption = 'Reports'
+        Caption = 'Report Structure'
         object ProjectOverviewReportMenuItem: TMenuItem
           Action = ProjectReportAction
         end
@@ -288,12 +288,6 @@ object MainForm: TMainForm
         end
         object CodeBookReportMenuItem: TMenuItem
           Action = CodeBookReportAction
-        end
-        object MenuItem13: TMenuItem
-          Caption = '-'
-        end
-        object ValidatorMenuItem: TMenuItem
-          Action = ValidationReportAction
         end
       end
       object MenuItem3: TMenuItem
@@ -316,6 +310,9 @@ object MainForm: TMainForm
       end
       object MenuItem24: TMenuItem
         Action = CountsReportAction
+      end
+      object MenuItem13: TMenuItem
+        Action = ValidationReportAction
       end
     end
     object ToolsMenu: TMenuItem
@@ -503,7 +500,7 @@ object MainForm: TMainForm
     end
     object ValidationReportAction: TAction
       Category = 'Reports'
-      Caption = 'Validator'
+      Caption = 'Data Validation'
       OnExecute = ValidationReportActionExecute
     end
   end
@@ -547,21 +544,21 @@ object MainForm: TMainForm
     end
   end
   object DocumentPopupMenu: TPopupMenu
-    left = 272
-    top = 40
+    left = 280
+    top = 48
     object MenuItem9: TMenuItem
-      Caption = 'Reports'
+      Caption = 'Report Structure'
       object MenuItem10: TMenuItem
         Action = ProjectReportAction
       end
       object MenuItem11: TMenuItem
         Action = QuestionListReportAction
       end
-      object MenuItem12: TMenuItem
-        Action = ValueLabelListReportAction
-      end
       object MenuItem14: TMenuItem
         Action = ExtendedListReportAction
+      end
+      object MenuItem12: TMenuItem
+        Action = ValueLabelListReportAction
       end
       object MenuItem27: TMenuItem
         Action = CodeBookReportAction
@@ -587,6 +584,9 @@ object MainForm: TMainForm
     end
     object MenuItem20: TMenuItem
       Action = CountsReportAction
+    end
+    object MenuItem28: TMenuItem
+      Action = ValidationReportAction
     end
   end
 end

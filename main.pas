@@ -15,6 +15,8 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    MenuItem13: TMenuItem;
+    MenuItem28: TMenuItem;
     ValidationReportAction: TAction;
     ImportInNewProjectAction: TAction;
     CodeBookReportAction: TAction;
@@ -22,8 +24,6 @@ type
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     EpiDataTutorialsMenuItem: TMenuItem;
-    MenuItem13: TMenuItem;
-    ValidatorMenuItem: TMenuItem;
     WebTutorialsMenuItem: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
