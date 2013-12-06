@@ -348,9 +348,10 @@ object ProjectValidationFrame: TProjectValidationFrame
     ChildSizing.ShrinkHorizontal = crsScaleChilds
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 1
+    ChildSizing.ControlsPerLine = 2
     ClientHeight = 34
     ClientWidth = 623
+    Columns = 2
     Items.Strings = (
       'A'
     )
