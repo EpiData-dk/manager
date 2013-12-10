@@ -315,7 +315,7 @@ end;
 function TProjectValidationFrame.OkToAdvance(
   ProjectList: TProjectFileListFrame): boolean;
 begin
-  Result := ProjectList.DocList.Count = 1;
+  Result := ProjectList.SelectedList.Count = 1;
 end;
 
 function TProjectValidationFrame.OkToAdvanceText: string;
