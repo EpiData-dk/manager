@@ -187,7 +187,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="84">
+    <Units Count="85">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -751,6 +751,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="report_project_validation_frame"/>
       </Unit83>
+      <Unit84>
+        <Filename Value="tools/recode_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RecodeForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="recode_form"/>
+      </Unit84>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
