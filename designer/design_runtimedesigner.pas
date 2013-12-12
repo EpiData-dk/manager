@@ -808,8 +808,6 @@ begin
   RecodeForm.Field := TEpiField((FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl);
   RecodeForm.ShowModal;
   RecodeForm.Free;
-
-  //
 end;
 
 procedure TRuntimeDesignFrame.RecodeDataActionUpdate(Sender: TObject);
@@ -824,7 +822,10 @@ begin
   ActionEnable := true;
   if DataFile.Size = 0 then ActionEnable := false;
   if Length(Obs) <> 1 then  ActionEnable := false;
-  if not (Obs[0] is TDesignField) then ActionEnable := false;
+  if (Length(Obs) > 0) and
+     (not (Obs[0] is TDesignField))
+  then
+    ActionEnable := false;
 
   TAction(Sender).Enabled := ActionEnable;
 end;
