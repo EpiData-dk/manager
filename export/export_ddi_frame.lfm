@@ -6,8 +6,8 @@ object ExportDDIFrame: TExportDDIFrame
   ClientHeight = 397
   ClientWidth = 642
   TabOrder = 0
-  DesignLeft = 910
-  DesignTop = 353
+  DesignLeft = 891
+  DesignTop = 272
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -55,7 +55,6 @@ object ExportDDIFrame: TExportDDIFrame
     BorderSpacing.Right = 10
     BorderSpacing.Bottom = 10
     BevelOuter = bvNone
-    Caption = 'Panel1'
     ClientHeight = 160
     ClientWidth = 622
     TabOrder = 1
@@ -65,8 +64,8 @@ object ExportDDIFrame: TExportDDIFrame
       Left = 0
       Height = 22
       Top = 0
-      Width = 266
-      Caption = 'Remove valuelabels from missingdata'
+      Width = 277
+      Caption = 'Remove Value Labels indicating missing'
       TabOrder = 0
     end
     object FilterTagIsUserIdChkBox: TCheckBox
@@ -76,9 +75,9 @@ object ExportDDIFrame: TExportDDIFrame
       Left = 0
       Height = 22
       Top = 32
-      Width = 339
+      Width = 329
       BorderSpacing.Top = 10
-      Caption = 'Apply <UserId> for filter (default: <Description>)'
+      Caption = 'Use <UserId> for filter (default: <Description>)'
       TabOrder = 1
     end
   end

@@ -484,8 +484,8 @@ var
   Aform: TForm;
 begin
   Aform := TForm.Create(nil);
-  Aform.Width := 500;
-  Aform.Height := 500;
+  Aform.Width := 600;
+  Aform.Height := 650;
   Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
   Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
   SaveFormPosition(Aform, TExportForm.ClassName);
