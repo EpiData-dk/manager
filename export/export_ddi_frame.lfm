@@ -6,8 +6,8 @@ object ExportDDIFrame: TExportDDIFrame
   ClientHeight = 397
   ClientWidth = 642
   TabOrder = 0
-  DesignLeft = 608
-  DesignTop = 420
+  DesignLeft = 910
+  DesignTop = 353
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -39,5 +39,47 @@ object ExportDDIFrame: TExportDDIFrame
     DropDownCount = 20
     ItemHeight = 0
     TabOrder = 0
+  end
+  object XMLOptionPanel: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 160
+    Top = 227
+    Width = 622
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Left = 10
+    BorderSpacing.Right = 10
+    BorderSpacing.Bottom = 10
+    BevelOuter = bvNone
+    Caption = 'Panel1'
+    ClientHeight = 160
+    ClientWidth = 622
+    TabOrder = 1
+    object RemoveVLCheckBox: TCheckBox
+      AnchorSideLeft.Control = XMLOptionPanel
+      AnchorSideTop.Control = XMLOptionPanel
+      Left = 0
+      Height = 22
+      Top = 0
+      Width = 266
+      Caption = 'Remove valuelabels from missingdata'
+      TabOrder = 0
+    end
+    object FilterTagIsUserIdChkBox: TCheckBox
+      AnchorSideLeft.Control = XMLOptionPanel
+      AnchorSideTop.Control = RemoveVLCheckBox
+      AnchorSideTop.Side = asrBottom
+      Left = 0
+      Height = 22
+      Top = 32
+      Width = 339
+      BorderSpacing.Top = 10
+      Caption = 'Apply <UserId> for filter (default: <Description>)'
+      TabOrder = 1
+    end
   end
 end

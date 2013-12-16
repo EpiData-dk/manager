@@ -8,7 +8,7 @@ uses
     {$IFDEF EPI_USEIPC}
     cthreads,
     {$ENDIF}
-  cwstring, clocale,
+  clocale,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, printer4lazarus, virtualtreeview_package,
