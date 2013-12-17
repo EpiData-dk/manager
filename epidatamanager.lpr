@@ -8,7 +8,7 @@ uses
     {$IFDEF EPI_USEIPC}
     cthreads,
     {$ENDIF}
-  cwstring, clocale,
+  clocale,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, printer4lazarus, virtualtreeview_package,
@@ -46,7 +46,8 @@ uses
   report_optionframe_counts, report_types, dataset_form, ok_cancel_form, 
   validate_double_entry_frame, project_settings_autoincrement_frame,
   settings_font_frame, report_codebook, export_ddi_frame, 
-design_control_extender, manager_types, export_epx_frame;
+design_control_extender, manager_types, export_epx_frame, 
+report_project_validation, report_project_validation_frame, recode_form;
 
 {$R *.res}
 

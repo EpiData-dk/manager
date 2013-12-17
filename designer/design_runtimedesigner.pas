@@ -15,12 +15,14 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    RecodeDataAction: TAction;
     ClearDataAction: TAction;
     ExpandPageAction: TAction;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
     ClearDataMenuItem: TMenuItem;
+    MenuItem8: TMenuItem;
     SelectAllBoolsAction: TAction;
     SelectAllStringsAction: TAction;
     SelectAllFloatsAction: TAction;
@@ -215,6 +217,8 @@ type
     procedure PasteAsHeadingActionExecute(Sender: TObject);
     procedure PasteControlActionUpdate(Sender: TObject);
     procedure PrintDataFormActionExecute(Sender: TObject);
+    procedure RecodeDataActionExecute(Sender: TObject);
+    procedure RecodeDataActionUpdate(Sender: TObject);
     procedure RedoActionExecute(Sender: TObject);
     procedure RedoActionUpdate(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
@@ -355,7 +359,8 @@ uses
   design_control_field,
   design_control_heading,
   design_control_extender,
-  align_form;
+  align_form,
+  recode_form;
 
 { TRuntimeDesignFrame }
 
@@ -792,6 +797,38 @@ end;
 procedure TRuntimeDesignFrame.PrintDataFormActionExecute(Sender: TObject);
 begin
   DoPrintDataForm;
+end;
+
+procedure TRuntimeDesignFrame.RecodeDataActionExecute(Sender: TObject);
+var
+  RecodeForm: TRecodeForm;
+begin
+  if FDesignPanel.Surface.Selector.Count <> 1 then exit;
+
+  RecodeForm := TRecodeForm.Create(self);
+  RecodeForm.Field := TEpiField((FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl);
+  RecodeForm.ShowModal;
+  RecodeForm.Free;
+end;
+
+procedure TRuntimeDesignFrame.RecodeDataActionUpdate(Sender: TObject);
+var
+  Surface: TJvDesignSurface;
+  Obs: TJvDesignObjectArray;
+  ActionEnable: Boolean;
+begin
+  Surface := FDesignPanel.Surface;
+  Obs := Surface.Selected;
+
+  ActionEnable := true;
+  if DataFile.Size = 0 then ActionEnable := false;
+  if Length(Obs) <> 1 then  ActionEnable := false;
+  if (Length(Obs) > 0) and
+     (not (Obs[0] is TDesignField))
+  then
+    ActionEnable := false;
+
+  TAction(Sender).Enabled := ActionEnable;
 end;
 
 procedure TRuntimeDesignFrame.RedoActionExecute(Sender: TObject);

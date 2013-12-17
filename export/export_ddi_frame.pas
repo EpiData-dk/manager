@@ -5,7 +5,7 @@ unit export_ddi_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls,
   export_frame_types, epiexportsettings, epidocument,
   epimiscutils, settings2_interface, settings2_var;
 
@@ -14,8 +14,11 @@ type
   { TExportDDIFrame }
 
   TExportDDIFrame = class(TFrame, IExportSettingsPresenterFrame, ISettingsFrame)
+    RemoveVLCheckBox: TCheckBox;
+    FilterTagIsUserIdChkBox: TCheckBox;
     ComboBox1: TComboBox;
     Label1: TLabel;
+    XMLOptionPanel: TPanel;
   private
     { private declarations }
     ValueLabelFrame: TCustomFrame;
@@ -56,17 +59,23 @@ begin
   CSVFrame := TExportCSVFrame.Create(Self);
   CSVFrame.Parent := self;
   CSVFrame.AutoSize := true;
-  CSVFrame.AnchorToNeighbour(akTop, 10, ComboBox1);
-  CSVFrame.AnchorParallel(akLeft, 10, Self);
-  CSVFrame.AnchorParallel(akRight, 10, Self);
+  CSVFrame.AnchorToNeighbour(akTop, 0, ComboBox1);
+  CSVFrame.AnchorParallel(akLeft, 0, Self);
+  CSVFrame.AnchorParallel(akRight, 0, Self);
 
   ValueLabelFrame := TCustomValueLabelFrame.Create(self);
   ValueLabelFrame.Parent := self;
   ValueLabelFrame.AnchorToNeighbour(akTop, 10, CSVFrame);
   ValueLabelFrame.AnchorParallel(akLeft, 10, Self);
   ValueLabelFrame.AnchorParallel(akRight, 10, Self);
-  ValueLabelFrame.AnchorParallel(akBottom, 10, Self);
+  ValueLabelFrame.AutoSize := true;
+//  ValueLabelFrame.AnchorParallel(akBottom, 10, Self);
 
+  XMLOptionPanel.AnchorToNeighbour(akTop, 8, ValueLabelFrame);
+{  XMLOptionPanel.AnchorParallel(akLeft, 10, Self);
+  XMLOptionPanel.AnchorParallel(akRight, 10, Self);
+  XMLOptionPanel.AnchorParallel(akBottom, 0, Self); }
+  XMLOptionPanel.Caption := '';
 
   ComboBox1.Items.BeginUpdate;
   Epi_ISO639_AddLangAndDesciption(ComboBox1.Items);
@@ -95,6 +104,8 @@ begin
     SoftwareVersion := GetManagerVersion;
     Version := '1.0.0';
     ExportLang := TString(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Str;
+    RemoveMissingVL := RemoveVLCheckBox.Checked;
+    FilterTagIsUserId := FilterTagIsUserIdChkBox.Checked;
   end;
 
   CSVSettings := TEpiCSVExportSetting.Create;
