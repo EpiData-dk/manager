@@ -5,7 +5,7 @@ unit design_control_field;
 interface
 
 uses
-  Classes, SysUtils, epicustombase, epidatafiles, epidatafilestypes,
+  Classes, SysUtils, types, epicustombase, epidatafiles, epidatafilestypes,
   Controls, StdCtrls, design_types, Forms, episettings, epivaluelabels;
 
 type
@@ -13,6 +13,7 @@ type
   TDesignField = class(TEdit, IDesignEpiControl)
   private
     FField: TEpiField;
+    FOnShowHint: TDesignFrameShowHintEvent;
     FWidth: Integer;
     FHeight: Integer;
     FInitialized: boolean;
@@ -35,6 +36,8 @@ type
     procedure UpdateValueLabelConnection(Const OldVLSet, NewVLSet: TEpiValueLabelSet);
     procedure ReadField(Stream: TStream);
     procedure WriteField(Stream: TStream);
+    procedure DoShowHint(Const Msg: String);
+    procedure HintDeactivate(Sender: TObject);
   protected
     procedure SetParent(NewParent: TWinControl); override;
     procedure DefineProperties(Filer: TFiler); override;
@@ -50,6 +53,7 @@ type
     property    ExtendedBounds: TRect read GetExtendedBounds write SetExtendedBounds;
     property    NameLabel: TLabel read FNameLabel;
     property    QuestionLabel: TLabel read FQuestionLabel;
+    property    OnShowHint: TDesignFrameShowHintEvent read FOnShowHint write FOnShowHint;
   end;
 
 
@@ -58,7 +62,9 @@ implementation
 uses
   managerprocs, Graphics, main, LCLIntf, LCLType, manager_messages,
   design_properties_fieldframe, JvDesignSurface, epidocument,
-  epistringutils, manager_globals, settings2_var;
+  epistringutils, manager_globals, settings2_var,
+
+  CustomTimer;
 
 { TDesignField }
 
@@ -98,6 +104,33 @@ begin
   Stream.Write(CopyField, Sizeof(Pointer));
 end;
 
+procedure TDesignField.DoShowHint(const Msg: String);
+var
+  H: THintWindow;
+  R: types.TRect;
+  P: TPoint;
+  T: TCustomTimer;
+begin
+  T := TCustomTimer.Create(self);
+  T.Enabled := false;
+  T.Interval := 3500;
+  T.OnTimer := @HintDeactivate;
+
+  H := THintWindow.Create(T);
+  H.OnHide := @HintDeactivate;
+  R := H.CalcHintRect(0, Msg, nil);
+
+  P := Self.ClientToScreen(Point(Self.Width + 2, 0));
+  OffsetRect(R, P.X, P.Y);
+  H.ActivateHint(R, Msg);
+  T.Enabled := true;
+end;
+
+procedure TDesignField.HintDeactivate(Sender: TObject);
+begin
+  Sender.Free;
+end;
+
 function TDesignField.GetEpiControl: TEpiCustomControlItem;
 begin
   Result := FField;
@@ -129,9 +162,12 @@ end;
 
 procedure TDesignField.OnFieldChange(const Sender, Initiator: TEpiCustomBase;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+var
+  S: String;
 begin
-  // TODO: Jump, Compare, Calculation changes (displayed as hint!
+  if (csDestroying in ComponentState) then exit;
 
+  // TODO: Jump, Compare, Calculation changes (displayed as hint!
   if EventGroup = eegFields then
     case TEpiFieldsChangeEventType(EventType) of
       efceSetDecimal,
@@ -154,6 +190,7 @@ begin
         begin
           if Initiator <> FField then exit;
 
+          UpdateValueLabelConnection(FField.ValueLabelSet, nil);
           FProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
           FProjectSettings := nil;
           FField.UnRegisterOnChangeHook(@OnFieldChange);
@@ -169,6 +206,19 @@ begin
       ecceSetLeft: ;
       ecceText:
         UpdateControl;
+      ecceReferenceDestroyed:
+        begin
+          if Initiator is TEpiJump then
+            S := 'A Jump-to field was deleted: ' + TEpiField(Data).Name;
+
+          if Initiator is TEpiComparison then
+            S := 'Compare to field was deleted: ' + TEpiField(Data).Name;
+
+          if Initiator is TEpiCalculation then
+            S := 'A calculation field was deleted: ' + TEpiField(Data).Name;
+
+          DoShowHint(S);
+        end;
     end;
 end;
 
@@ -176,7 +226,8 @@ procedure TDesignField.OnValueLabelSetChange(const Sender,
   Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
 begin
-  //if (EventGroup = eegCustomBase) and (TEpiCustomChangeEventType(EventType) = ecceDestroy) then exit;
+  if (csDestroying in ComponentState) then exit;
+
   if Initiator <> FField.ValueLabelSet then exit;
   UpdateControl;
 end;
@@ -185,6 +236,8 @@ procedure TDesignField.OnProjectSettingsChange(const Sender,
   Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
 begin
+  if (csDestroying in ComponentState) then exit;
+
   if (EventGroup = eegCustomBase)
   then
     case TEpiCustomChangeEventType(EventType) of

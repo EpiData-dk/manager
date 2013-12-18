@@ -1384,6 +1384,7 @@ begin
 
     Result := TDesignField(Surface.Selection[0]);
     Result.PopupMenu := DesignControlPopUpMenu;
+    TDesignField(Result).OnShowHint := @ShowHintMsg;
 
     if Assigned(Field) then
       TDesignField(Result).EpiControl := Field;
