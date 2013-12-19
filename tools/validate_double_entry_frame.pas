@@ -54,10 +54,12 @@ type
     FDupDoc: TEpiDocument;
     procedure UpdateKeyFields;
     procedure UpdateCompareFields;
-    procedure AddFieldHook(Sender: TObject; EventGroup: TEpiEventGroup;
+    procedure AddFieldHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
   public
     { public declarations }
+    destructor Destroy; override;
     function  GetFrameCaption: string;
     procedure UpdateFrame(Selection: TStrings);
     procedure ApplyReportOptions(Report: TReportBase);
@@ -248,27 +250,34 @@ begin
   CmpFCheckList.Items.EndUpdate;
 end;
 
-procedure TValidateDoubleEntryFrame.AddFieldHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TValidateDoubleEntryFrame.AddFieldHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 var
   D: TEpiDataFile;
   C: TEpiCustomControlItem;
 begin
-  if (EventGroup <> eegCustomBase) then exit;
+{  if (EventGroup <> eegCustomBase) then exit;
 
   case TEpiCustomChangeEventType(EventType) of
     ecceDestroy: ;
     ecceUpdate: ;
     ecceName:
       begin
-        if TEpiField(Sender).Name = EpiDoubleEntryFieldName then
-          PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Sender), 0);
-        TEpiField(Sender).UnRegisterOnChangeHook(@AddFieldHook);
+        if not (Initiator is TEpiField) then exit;
+
+        // TODO: We may be able to aboid this PostMessage if there is a hook
+        // in RuntimeDesignerFrame, looking for an added field!
+        if TEpiField(Initiator).Name = EpiDoubleEntryFieldName then
+          PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Initiator), 0);
+        TEpiField(Initiator).UnRegisterOnChangeHook(@AddFieldHook);
       end;
     ecceAddItem:
       begin
         with TEpiField(Data) do
         begin
+          if Initiator <> FMainDoc.DataFiles[0].Fields then exit;
+
           D := TEpiFields(Sender).DataFile;
           C := D.ControlItem[D.ControlItems.Count - 1];
 
@@ -285,7 +294,12 @@ begin
     ecceSetTop: ;
     ecceSetLeft: ;
     ecceText: ;
-  end;
+  end;             }
+end;
+
+destructor TValidateDoubleEntryFrame.Destroy;
+begin
+  inherited Destroy;
 end;
 
 function TValidateDoubleEntryFrame.GetFrameCaption: string;
@@ -302,7 +316,7 @@ begin
   FMainDoc := TEpiDocument(Selection.Objects[0]);
   FDupDoc  := TEpiDocument(Selection.Objects[1]);
 
-  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
+//  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
 
   UpdateKeyFields;
   UpdateCompareFields;

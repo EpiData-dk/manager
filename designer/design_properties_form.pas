@@ -18,7 +18,7 @@ type
     FFrame: TCustomFrame;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     procedure UpdateCaption(const S: string);
-    procedure EpiCtrlChangeHook(Sender: TObject; EventGroup: TEpiEventGroup;
+    procedure EpiCtrlChangeHook(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure ShowEmptyPage;
     procedure FormDeactivate(Sender: TObject);
@@ -139,8 +139,9 @@ begin
   Caption := S;
 end;
 
-procedure TPropertiesForm.EpiCtrlChangeHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TPropertiesForm.EpiCtrlChangeHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 var
   i: Integer;
 begin
@@ -148,8 +149,9 @@ begin
   if TEpiCustomChangeEventType(EventType) <> ecceDestroy then exit;
 
   for i := 0 to Length(EpiCtrlItemArray) - 1 do
-    if Sender = EpiCtrlItemArray[i] then
+    if Initiator = EpiCtrlItemArray[i] then
     begin
+      Initiator.UnRegisterOnChangeHook(@EpiCtrlChangeHook);
       EpiCtrlItemArray[i] := nil;
       break;
     end;

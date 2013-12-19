@@ -108,7 +108,8 @@ type
     procedure   UpdateShortCuts;
     procedure   SetEpiDocument(EpiDoc: TEpiDocument);
     procedure   UpdateVLTreeView;
-    procedure   UpdateVLHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure   UpdateVLHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
   public
     { public declarations }
     procedure   UpdateSettings;
@@ -481,8 +482,8 @@ begin
     FValueLabelSets.RegisterOnChangeHook(@UpdateVLHook, true);
   end;
 
-  for i := 0 to FValueLabelSets.Count - 1 do
-    FValueLabelSets[i].RegisterOnChangeHook(@UpdateVLHook, true);
+{  for i := 0 to FValueLabelSets.Count - 1 do
+    FValueLabelSets[i].RegisterOnChangeHook(@UpdateVLHook, true);    }
 
   UpdateVLTreeView;
 end;
@@ -517,25 +518,32 @@ begin
     ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.GetFirstNode;
 end;
 
-procedure TValueLabelEditor.UpdateVLHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TValueLabelEditor.UpdateVLHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 begin
-  if Sender is TEpiValueLabelSets then
+//  if Sender is TEpiValueLabelSets then
+  if (Initiator is TEpiValueLabelSets) and
+     (EventGroup = eegCustomBase)
+  then
     case TEpiCustomChangeEventType(EventType) of
       ecceDestroy: Exit;
       ecceUpdate:  UpdateVLTreeView;
       ecceAddItem: begin
-                     TEpiValueLabelSet(Data).RegisterOnChangeHook(@UpdateVLHook, true);
+//                     TEpiValueLabelSet(Data).RegisterOnChangeHook(@UpdateVLHook, true);
                      UpdateVLTreeView;
                      ValueLabelSetTreeView.Selected := ValueLabelSetTreeView.Items.FindNodeWithData(Data);
                    end;
       ecceDelItem: begin
-                     TEpiValueLabelSet(Data).UnRegisterOnChangeHook(@UpdateVLHook);
+//                     TEpiValueLabelSet(Data).UnRegisterOnChangeHook(@UpdateVLHook);
                      UpdateVLTreeView;
                    end;
     end;
 
-  if Sender is TEpiValueLabelSet then
+//  if Sender is TEpiValueLabelSet then
+  if (Initiator is TEpiValueLabelSet) and
+     (EventGroup = eegCustomBase)
+  then
     case TEpiCustomChangeEventType(EventType) of
       ecceDestroy: Exit;
       ecceUpdate:  begin
@@ -544,27 +552,31 @@ begin
                    end;
       ecceName:    UpdateVLTreeView;
       ecceAddItem: begin
-                     TEpiCustomValueLabel(Data).RegisterOnChangeHook(@UpdateVLHook, true);
+//                     TEpiCustomValueLabel(Data).RegisterOnChangeHook(@UpdateVLHook, true);
                      UpdateGridCells;
                    end;
       ecceDelItem: begin
-                     TEpiCustomValueLabel(Data).UnRegisterOnChangeHook(@UpdateVLHook);
+//                     TEpiCustomValueLabel(Data).UnRegisterOnChangeHook(@UpdateVLHook);
                      UpdateGridCells;
                    end;
     end;
 
-  if Sender is TEpiCustomValueLabel then
-    if EventGroup = eegCustomBase then
-      case TEpiCustomChangeEventType(EventType) of
-        ecceDestroy: Exit;
-        ecceUpdate,
-        ecceText:    UpdateGridCells;
-      end;
-    if EventGroup = eegValueLabel then
-      case TEpiValueLabelChangeEvent(EventType) of
-        evceValue,
-        evceMissing: UpdateGridCells;
-      end;
+//  if Sender is TEpiCustomValueLabel then
+  if (Initiator is TEpiCustomValueLabel) and
+     (EventGroup = eegCustomBase)
+  then
+//    if EventGroup = eegCustomBase then
+    case TEpiCustomChangeEventType(EventType) of
+      ecceDestroy: Exit;
+      ecceUpdate,
+      ecceText:    UpdateGridCells;
+    end;
+
+  if EventGroup = eegValueLabel then
+    case TEpiValueLabelChangeEvent(EventType) of
+      evceValue,
+      evceMissing: UpdateGridCells;
+    end;
 end;
 
 procedure TValueLabelEditor.UpdateSettings;

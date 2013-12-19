@@ -63,7 +63,8 @@ type
     { ValueLabelSet(s) Hook / Update }
     FLocalUpdating: boolean;
     procedure UpdateVLSetsTree;
-    procedure ValueLabelsHook(Sender: TObject; EventGroup: TEpiEventGroup;
+    procedure ValueLabelsHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
   private
     { Hint }
@@ -337,8 +338,8 @@ begin
   if Assigned(FValueLabelSets) then
   begin // Unregister old hooks.
     FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelsHook);
-    for i := 0 to FValueLabelSets.Count - 1 do
-      FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelsHook);
+{    for i := 0 to FValueLabelSets.Count - 1 do
+      FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelsHook); }
   end;
 
   FValueLabelSets := AValue;
@@ -346,8 +347,8 @@ begin
   if Assigned(FValueLabelSets) then
   begin // Register hook in new ValueLabelSets
     FValueLabelSets.RegisterOnChangeHook(@ValueLabelsHook, true);
-    for i := 0 to FValueLabelSets.Count - 1 do
-      FValueLabelSets[i].RegisterOnChangeHook(@ValueLabelsHook, true);
+{    for i := 0 to FValueLabelSets.Count - 1 do
+      FValueLabelSets[i].RegisterOnChangeHook(@ValueLabelsHook, true); }
   end;
 
   VLSetsTree.RootNodeCount := FValueLabelSets.Count;
@@ -393,10 +394,12 @@ begin
   VLSetsTree.EndUpdate;
 end;
 
-procedure TValueLabelEditor2.ValueLabelsHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TValueLabelEditor2.ValueLabelsHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 begin
   if Sender is TEpiValueLabelSet then
+//  if Initiator is TEpiValueLabelSet then
   begin
     if EventGroup = eegCustomBase then
     case TEpiCustomChangeEventType(EventType) of
@@ -407,19 +410,20 @@ begin
     Exit;
   end;
 
-  if Sender is TEpiValueLabelSets then
+//  if Sender is TEpiValueLabelSets then
+  if Initiator = FValueLabelSets then
   begin
     if EventGroup = eegCustomBase then
     case TEpiCustomChangeEventType(EventType) of
       ecceDestroy: Exit;
       ecceAddItem:
         begin
-          TEpiValueLabelSet(Data).RegisterOnChangeHook(@ValueLabelsHook, true);
+//          TEpiValueLabelSet(Data).RegisterOnChangeHook(@ValueLabelsHook, true);
           UpdateVLSetsTree;
         end;
       ecceDelItem:
         begin
-          TEpiValueLabelSet(Data).UnRegisterOnChangeHook(@ValueLabelsHook);
+//          TEpiValueLabelSet(Data).UnRegisterOnChangeHook(@ValueLabelsHook);
           UpdateVLSetsTree;
         end;
     end;
@@ -463,8 +467,8 @@ begin
   if Assigned(FValueLabelSets) then
   begin // Unregister old hooks.
     FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelsHook);
-    for i := 0 to FValueLabelSets.Count - 1 do
-      FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelsHook);
+{    for i := 0 to FValueLabelSets.Count - 1 do
+      FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelsHook);}
   end;
 
   inherited Destroy;
