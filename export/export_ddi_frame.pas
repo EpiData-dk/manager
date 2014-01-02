@@ -14,11 +14,15 @@ type
   { TExportDDIFrame }
 
   TExportDDIFrame = class(TFrame, IExportSettingsPresenterFrame, ISettingsFrame)
+    VarPrefixEdit: TEdit;
+    RenameVariablesChkBox: TCheckBox;
+    SectionHeaderIsQTextChkBox: TCheckBox;
     RemoveVLCheckBox: TCheckBox;
     FilterTagIsUserIdChkBox: TCheckBox;
     ComboBox1: TComboBox;
     Label1: TLabel;
     XMLOptionPanel: TPanel;
+    procedure RenameVariablesChkBoxChange(Sender: TObject);
   private
     { private declarations }
     ValueLabelFrame: TCustomFrame;
@@ -51,6 +55,11 @@ uses
   settings2, epi_iso639, epistringutils;
 
 { TExportDDIFrame }
+
+procedure TExportDDIFrame.RenameVariablesChkBoxChange(Sender: TObject);
+begin
+  VarPrefixEdit.Enabled := RenameVariablesChkBox.Checked;
+end;
 
 constructor TExportDDIFrame.Create(TheOwner: TComponent);
 begin
@@ -106,6 +115,10 @@ begin
     ExportLang := TString(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Str;
     RemoveMissingVL := RemoveVLCheckBox.Checked;
     FilterTagIsUserId := FilterTagIsUserIdChkBox.Checked;
+    RenameVariablesPrefix := '';
+    if RenameVariablesChkBox.Checked then
+      RenameVariablesPrefix := VarPrefixEdit.Text;
+    SectionCaptionIsQText := SectionHeaderIsQTextChkBox.Checked;
   end;
 
   CSVSettings := TEpiCSVExportSetting.Create;

@@ -6,8 +6,8 @@ object ExportDDIFrame: TExportDDIFrame
   ClientHeight = 397
   ClientWidth = 642
   TabOrder = 0
-  DesignLeft = 891
-  DesignTop = 272
+  DesignLeft = 1189
+  DesignTop = 670
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -79,6 +79,49 @@ object ExportDDIFrame: TExportDDIFrame
       BorderSpacing.Top = 10
       Caption = 'Use <UserId> for filter (default: <Description>)'
       TabOrder = 1
+    end
+    object SectionHeaderIsQTextChkBox: TCheckBox
+      AnchorSideLeft.Control = XMLOptionPanel
+      AnchorSideTop.Control = FilterTagIsUserIdChkBox
+      AnchorSideTop.Side = asrBottom
+      Left = 0
+      Height = 22
+      Top = 64
+      Width = 395
+      BorderSpacing.Top = 10
+      Caption = 'Use section caption as <Question Text> for sub questions'
+      TabOrder = 2
+    end
+    object RenameVariablesChkBox: TCheckBox
+      AnchorSideLeft.Control = XMLOptionPanel
+      AnchorSideTop.Control = SectionHeaderIsQTextChkBox
+      AnchorSideTop.Side = asrBottom
+      Left = 0
+      Height = 22
+      Top = 96
+      Width = 243
+      BorderSpacing.Top = 10
+      Caption = 'Rename variables (DDA Standard)'
+      OnChange = RenameVariablesChkBoxChange
+      TabOrder = 3
+    end
+    object VarPrefixEdit: TEdit
+      AnchorSideLeft.Control = RenameVariablesChkBox
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideBottom.Control = RenameVariablesChkBox
+      AnchorSideBottom.Side = asrBottom
+      Left = 253
+      Height = 25
+      Hint = 'Variable prefix used for renaming.'#10#10'All variable will be renamed to <Prefix>x,'#10'where x is a number from 1 -> number of'#10'variables. Eg. V1 -> V10'#10#10'The original name is stored in <UserID> tag'#10'with type="dk.dda.variable.orgvariablename".'
+      Top = 93
+      Width = 25
+      Alignment = taCenter
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Enabled = False
+      MaxLength = 1
+      TabOrder = 4
+      Text = 'V'
     end
   end
 end
