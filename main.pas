@@ -1037,7 +1037,9 @@ begin
       Exit;
     end;
 
+    AddToRecent(Result.FileName);
     LocalDoc := true;
+    Dlg.Free;
   end;
 end;
 
