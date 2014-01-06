@@ -52,7 +52,11 @@ var
 procedure TReportViewerForm.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
-  if (Key = VK_ESCAPE) and (Shift = []) then
+  if ((Key = VK_ESCAPE) and (Shift = []))
+     {$IFDEF LINUX}
+     or ((Key = VK_W) and (Shift = [ssCtrl]))
+     {$ENDIF}
+  then
   begin
     Key := VK_UNKNOWN;
     Close;
