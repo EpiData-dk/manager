@@ -234,6 +234,7 @@ begin
     F := DF.Fields[i];
     CmpFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text, F);
   end;
+  CmpFCheckList.CheckAll(cbChecked, false, false);
   CmpFCheckList.Items.EndUpdate;
 end;
 

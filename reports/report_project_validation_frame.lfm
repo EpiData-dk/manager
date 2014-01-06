@@ -100,10 +100,10 @@ object ProjectValidationFrame: TProjectValidationFrame
       Left = 5
       Height = 15
       Top = 5
-      Width = 202
+      Width = 156
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
-      Caption = 'Fields used to combine records:'
+      Caption = 'Fields identifying records'
       ParentColor = False
     end
     object Panel1: TPanel
