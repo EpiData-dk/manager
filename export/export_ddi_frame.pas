@@ -170,7 +170,8 @@ begin
     ErrorText :=
       'A DDI Export CANNOT contain an empty Agency' + LineEnding +
       LineEnding +
-      'Please open Study Information and provide the details before exporting.';
+      'Please open in Manager (Recent files).' + LineEnding +
+      'Complete "Study Information" in menu "Project Details"';
     result := false;
   end;
 
