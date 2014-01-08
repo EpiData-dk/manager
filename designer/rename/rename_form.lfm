@@ -1,0 +1,120 @@
+object RenameForm: TRenameForm
+  Left = 575
+  Height = 360
+  Top = 291
+  Width = 461
+  Caption = 'RenameForm'
+  ClientHeight = 360
+  ClientWidth = 461
+  LCLVersion = '1.3'
+  object Edit1: TEdit
+    Left = 304
+    Height = 25
+    Top = 86
+    Width = 80
+    TabOrder = 0
+    Text = 'Edit1'
+  end
+  object Edit2: TEdit
+    Left = 304
+    Height = 25
+    Top = 163
+    Width = 80
+    TabOrder = 1
+    Text = 'Edit2'
+  end
+  object Edit3: TEdit
+    Left = 304
+    Height = 25
+    Top = 238
+    Width = 80
+    TabOrder = 2
+    Text = 'Edit3'
+  end
+  object Label1: TLabel
+    Left = 61
+    Height = 15
+    Top = 96
+    Width = 39
+    Caption = 'Fields:'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 61
+    Height = 15
+    Top = 173
+    Width = 59
+    Caption = 'Sections:'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 61
+    Height = 15
+    Top = 248
+    Width = 64
+    Caption = 'Headings:'
+    ParentColor = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 310
+    Width = 461
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 461
+    TabOrder = 3
+    object BitBtn1: TBitBtn
+      Left = 296
+      Height = 30
+      Top = 10
+      Width = 75
+      Default = True
+      DefaultCaption = True
+      Kind = bkOK
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 176
+      Height = 30
+      Top = 10
+      Width = 75
+      Cancel = True
+      DefaultCaption = True
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object CheckBox1: TCheckBox
+    Tag = 1
+    Left = 61
+    Height = 22
+    Top = 64
+    Width = 95
+    Caption = 'CheckBox1'
+    OnChange = CheckBox1Change
+    TabOrder = 4
+  end
+  object CheckBox2: TCheckBox
+    Tag = 2
+    Left = 61
+    Height = 22
+    Top = 152
+    Width = 95
+    Caption = 'CheckBox2'
+    OnChange = CheckBox1Change
+    TabOrder = 5
+  end
+  object CheckBox3: TCheckBox
+    Tag = 3
+    Left = 61
+    Height = 22
+    Top = 224
+    Width = 95
+    Caption = 'CheckBox3'
+    OnChange = CheckBox1Change
+    TabOrder = 6
+  end
+end

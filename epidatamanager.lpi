@@ -187,7 +187,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="85">
+    <Units Count="87">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -758,6 +758,18 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="recode_form"/>
       </Unit84>
+      <Unit85>
+        <Filename Value="designer/rename/rename_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RenameForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="rename_form"/>
+      </Unit85>
+      <Unit86>
+        <Filename Value="reports/report_export.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_export"/>
+      </Unit86>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -767,7 +779,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

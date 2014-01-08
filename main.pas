@@ -17,6 +17,12 @@ type
   TMainForm = class(TForm)
     MenuItem13: TMenuItem;
     MenuItem28: TMenuItem;
+    MenuItem29: TMenuItem;
+    MenuItem31: TMenuItem;
+    RenameControlsPopupMenuItem: TMenuItem;
+    MenuItem32: TMenuItem;
+    RenameControlsMenuItem: TMenuItem;
+    MenuItem30: TMenuItem;
     ValidationReportAction: TAction;
     ImportInNewProjectAction: TAction;
     CodeBookReportAction: TAction;
@@ -174,6 +180,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ImportInNewProjectActionExecute(Sender: TObject);
+    procedure MenuItem31Click(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
@@ -260,7 +267,8 @@ uses
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  managerprocs, process, epiv_documentfile;
+  managerprocs, process, epiv_documentfile,
+  report_export;
 
 { TMainForm }
 
@@ -279,6 +287,11 @@ procedure TMainForm.ImportInNewProjectActionExecute(Sender: TObject);
 begin
   DoNewProject;
   TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction.Execute;
+end;
+
+procedure TMainForm.MenuItem31Click(Sender: TObject);
+begin
+  RunReport(TReportExport);
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -1233,12 +1246,14 @@ begin
   ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
   KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
   StudyInfoMenuItem.Action         := FActiveFrame.StudyInformationAction;
+  RenameControlsMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RenameControlsAction;
   // --project details popup-menu
   ProjectPropertiesPopupMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelEditorPopupMenuItem.Action  := FActiveFrame.ValueLabelEditorAction;
   SetPasswordPopupMenuItem.Action       := FActiveFrame.ProjectPasswordAction;
   KeyFieldsPopupMenuItem.Action         := FActiveFrame.KeyFieldsAction;
   StudyInfoPopupMenuItem.Action         := FActiveFrame.StudyInformationAction;
+  RenameControlsPopupMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RenameControlsAction;
 
   // Align
   AlignLeftMenuItem.Action         := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignLeftAction;

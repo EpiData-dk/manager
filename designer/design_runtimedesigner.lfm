@@ -2560,6 +2560,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = RecodeDataActionExecute
       OnUpdate = RecodeDataActionUpdate
     end
+    object RenameControlsAction: TAction
+      Caption = 'Rename Controls...'
+      OnExecute = RenameControlsActionExecute
+    end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList

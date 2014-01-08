@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 336
+  Left = 617
   Height = 603
-  Top = 220
+  Top = 282
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -40,9 +40,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 25
-      Top = 7
-      Width = 99
+      Height = 27
+      Top = 6
+      Width = 101
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = '&Define Project'
@@ -57,10 +57,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 125
-      Height = 25
-      Top = 7
-      Width = 102
+      Left = 127
+      Height = 27
+      Top = 6
+      Width = 104
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -73,10 +73,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 242
-      Height = 25
-      Top = 7
-      Width = 77
+      Left = 246
+      Height = 27
+      Top = 6
+      Width = 79
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Document'
@@ -89,10 +89,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 334
-      Height = 25
-      Top = 7
-      Width = 79
+      Left = 340
+      Height = 27
+      Top = 6
+      Width = 81
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -104,10 +104,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 428
-      Height = 25
-      Top = 7
-      Width = 63
+      Left = 436
+      Height = 27
+      Top = 6
+      Width = 65
       Action = ExportAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -266,6 +266,12 @@ object MainForm: TMainForm
       object MenuItem1: TMenuItem
         Caption = '-'
       end
+      object RenameControlsMenuItem: TMenuItem
+        Caption = 'RenameControls'
+      end
+      object MenuItem30: TMenuItem
+        Caption = '-'
+      end
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
       end
@@ -288,6 +294,10 @@ object MainForm: TMainForm
         end
         object CodeBookReportMenuItem: TMenuItem
           Action = CodeBookReportAction
+        end
+        object MenuItem31: TMenuItem
+          Caption = 'TEST'
+          OnClick = MenuItem31Click
         end
       end
       object MenuItem3: TMenuItem
@@ -527,8 +537,8 @@ object MainForm: TMainForm
   object ProjectDetailsPopupMenu: TPopupMenu
     left = 152
     top = 112
-    object StudyInfoPopupMenuItem: TMenuItem
-      Caption = 'StudyInfo'
+    object ValueLabelEditorPopupMenuItem: TMenuItem
+      Caption = 'ValueLabelEditor'
     end
     object KeyFieldsPopupMenuItem: TMenuItem
       Caption = 'KeyFields'
@@ -536,11 +546,20 @@ object MainForm: TMainForm
     object SetPasswordPopupMenuItem: TMenuItem
       Caption = 'Password'
     end
+    object StudyInfoPopupMenuItem: TMenuItem
+      Caption = 'StudyInfo'
+    end
+    object MenuItem29: TMenuItem
+      Caption = '-'
+    end
+    object RenameControlsPopupMenuItem: TMenuItem
+      Caption = 'RenameControls'
+    end
+    object MenuItem32: TMenuItem
+      Caption = '-'
+    end
     object ProjectPropertiesPopupMenuItem: TMenuItem
       Caption = 'Properties'
-    end
-    object ValueLabelEditorPopupMenuItem: TMenuItem
-      Caption = 'ValueLabelEditor'
     end
   end
   object DocumentPopupMenu: TPopupMenu

@@ -15,6 +15,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    RenameControlsAction: TAction;
     RecodeDataAction: TAction;
     ClearDataAction: TAction;
     ExpandPageAction: TAction;
@@ -221,6 +222,7 @@ type
     procedure RecodeDataActionUpdate(Sender: TObject);
     procedure RedoActionExecute(Sender: TObject);
     procedure RedoActionUpdate(Sender: TObject);
+    procedure RenameControlsActionExecute(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
     procedure SelectAllActionExecute(Sender: TObject);
     procedure SelectAllBoolsActionExecute(Sender: TObject);
@@ -839,6 +841,11 @@ end;
 procedure TRuntimeDesignFrame.RedoActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled := GlobalCommandList.CanRedo;
+end;
+
+procedure TRuntimeDesignFrame.RenameControlsActionExecute(Sender: TObject);
+begin
+  //
 end;
 
 
