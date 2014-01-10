@@ -5,7 +5,7 @@ unit report_export;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument, epiexportsettings;
+  Classes, SysUtils, report_base, epidocument, epidatafiles, epiexportsettings;
 
 type
 
@@ -28,7 +28,7 @@ implementation
 
 uses
   epireport_base, epireport_report_controllist, epireport_report_studyinfo,
-  epireport_report_exportsettings;
+  epireport_report_exportsettings, epiexport;
 
 resourcestring
   rsReportExportTitle = 'Export Report';
@@ -49,10 +49,10 @@ begin
     Inc(Rows);
     TmpSetting := TmpSetting.AdditionalExportSettings;
   end;
-  Generator.TableHeader('Files created', 2, Rows);
+  Generator.TableHeader('Files created:', 2, Rows);
 
-  Generator.TableCell('Content', 0, 0);
-  Generator.TableCell('File', 1, 0);
+  Generator.TableCell('Content:', 0, 0);
+  Generator.TableCell('Filename:', 1, 0);
   Generator.TableCell('Report', 0, 1);
   Generator.TableCell(ChangeFileExt(ExportSettings.ExportFileName, '.log'), 1, 1);
 
@@ -82,27 +82,46 @@ procedure TReportExport.DoDocumentReport(const Doc: TEpiDocument;
   const FileName: string; const Index: Integer);
 var
   R: TEpiReportBase;
+  TmpDoc: TEpiDocument;
+  Df: TEpiDataFile;
+  i: Integer;
 begin
   inherited DoDocumentReport(Doc, FileName, Index);
 
-  Generator.Heading('Selections for Export');
-
   R := TEpiReportExportSettings.Create(Generator);
   TEpiReportExportSettings(R).ExportSetting := ExportSettings;
+  TEpiReportExportSettings(R).TableHeader := 'Specifications for Export:';
   R.RunReport;
   R.Free;
 
   Generator.Line('');
 
+  TmpDoc := TEpiExport.PrepareExportDocument(ExportSettings);
+  Df := TmpDoc.DataFiles[ExportSettings.DataFileIndex];
+
   R := TEpiReportControlList.Create(Generator);
   with TEpiReportControlList(R) do
   begin
-    ControlItems := Doc.DataFiles[0].ControlItems;
+    TableHeader := 'Exported Items:';
+    // TODO: VERY DIRTY HACK - MOVE TO PREPAREEXPORTDOCUMENT!!!
+
+    if (ExportSettings is TEpiDDIExportSetting) and
+       (TEpiDDIExportSetting(ExportSettings).RenameVariablesPrefix <> '')
+    then
+    begin
+      for i := 0 to Df.Fields.Count -1 do
+        Df.Field[i].Name := '@rename' + IntToStr(i);
+      for i := 0 to Df.Fields.Count -1 do
+        Df.Field[i].Name := TEpiDDIExportSetting(ExportSettings).RenameVariablesPrefix + IntToStr(i+1);
+    end;
+
+    ControlItems := Df.ControlItems;
     ControlItemsAreSubItemized := false;
     ExtendedList := true;
   end;
   R.RunReport;
   R.Free;
+  TmpDoc.Free;
 
   Generator.Line('');
 
