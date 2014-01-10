@@ -14,6 +14,7 @@ type
   TReportExport = class(TReportFileListBase)
   private
     FExportSettings: TEpiExportSetting;
+    procedure CreateFileTable;
   protected
     function GetTitle: string; override;
     procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
@@ -33,6 +34,44 @@ resourcestring
   rsReportExportTitle = 'Export Report';
 
 { TReportExport }
+
+procedure TReportExport.CreateFileTable;
+var
+  TmpSetting: TEpiExportSetting;
+  Rows: Integer;
+  Ext: String;
+  RowNo: Integer;
+begin
+  TmpSetting := ExportSettings;
+  Rows := 2;
+  while Assigned(TmpSetting) do
+  begin
+    Inc(Rows);
+    TmpSetting := TmpSetting.AdditionalExportSettings;
+  end;
+  Generator.TableHeader('Files created', 2, Rows);
+
+  Generator.TableCell('Content', 0, 0);
+  Generator.TableCell('File', 1, 0);
+  Generator.TableCell('Report', 0, 1);
+  Generator.TableCell(ChangeFileExt(ExportSettings.ExportFileName, '.log'), 1, 1);
+
+  RowNo := 2;
+  TmpSetting := ExportSettings;
+  while Assigned(TmpSetting) do
+  begin
+    Ext := ExtractFileExt(TmpSetting.ExportFileName);
+    Delete(Ext, 1, 1);
+
+    Generator.TableCell(Ext, 0, RowNo);
+    Generator.TableCell(TmpSetting.ExportFileName, 1, RowNo);
+
+    Inc(RowNo);
+    TmpSetting := TmpSetting.AdditionalExportSettings;
+  end;
+
+  Generator.TableFooter('');
+end;
 
 function TReportExport.GetTitle: string;
 begin
@@ -64,6 +103,10 @@ begin
   end;
   R.RunReport;
   R.Free;
+
+  Generator.Line('');
+
+  CreateFileTable;
 
   Generator.Line('');
 
