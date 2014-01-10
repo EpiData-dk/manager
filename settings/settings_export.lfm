@@ -80,4 +80,12 @@ object Settings_ExportFrame: TSettings_ExportFrame
     Caption = 'Export deleted records'
     TabOrder = 2
   end
+  object ExportReportChkBox: TCheckBox
+    Left = 20
+    Height = 22
+    Top = 151
+    Width = 157
+    Caption = 'Create Export Report'
+    TabOrder = 3
+  end
 end

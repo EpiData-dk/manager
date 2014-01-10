@@ -16,6 +16,7 @@ type
 
   TExportForm = class(TForm)
     AllBitBtn: TBitBtn;
+    ExportReportChkBox: TCheckBox;
     ImageList1: TImageList;
     NoneBitBtn: TBitBtn;
     BitBtn3: TBitBtn;
@@ -135,11 +136,13 @@ begin
     ExportFileName := ExportFileNameEdit.Text;
     DataFileIndex := 0;
     ExportDeleted := ExportDeletedChkBox.Checked;
+
     if RangeRBtn.Checked then
     begin
       FromRecord := StrToInt(FromRecordEdit.Text) - 1;  // -1 because the record count in Core
       ToRecord   := StrToInt(ToRecordEdit.Text) - 1;    // expect the numbers 0-indexed.
     end;
+
     if NoneRecordsRadioBtn.Checked then
     begin
       FromRecord := 1;
@@ -297,6 +300,7 @@ begin
   EncodingCmbBox.ItemIndex := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ManagerSettings.ExportEncoding)));
   // Export Deleted:
   ExportDeletedChkBox.Checked := ManagerSettings.ExportDeleted;
+  ExportReportChkBox.Checked := ManagerSettings.ExportCreateReport;
 
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);

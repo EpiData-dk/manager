@@ -5,24 +5,29 @@ unit report_export;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument;
+  Classes, SysUtils, report_base, epidocument, epiexportsettings;
 
 type
 
   { TReportExport }
 
   TReportExport = class(TReportFileListBase)
+  private
+    FExportSettings: TEpiExportSetting;
   protected
     function GetTitle: string; override;
     procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
       const Index: Integer); override;
+  public
+    property ExportSettings: TEpiExportSetting read FExportSettings write FExportSettings;
   end;
 
 implementation
 
 
 uses
-  epireport_base, epireport_report_controllist, epireport_report_studyinfo;
+  epireport_base, epireport_report_controllist, epireport_report_studyinfo,
+  epireport_report_exportsettings;
 
 resourcestring
   rsReportExportTitle = 'Export Report';
@@ -41,6 +46,15 @@ var
 begin
   inherited DoDocumentReport(Doc, FileName, Index);
 
+  Generator.Heading('Selections for Export');
+
+  R := TEpiReportExportSettings.Create(Generator);
+  TEpiReportExportSettings(R).ExportSetting := ExportSettings;
+  R.RunReport;
+  R.Free;
+
+  Generator.Line('');
+
   R := TEpiReportControlList.Create(Generator);
   with TEpiReportControlList(R) do
   begin
@@ -49,12 +63,14 @@ begin
     ExtendedList := true;
   end;
   R.RunReport;
+  R.Free;
 
   Generator.Line('');
 
   R := TEpiReportStudyInfo.Create(Generator);
   TEpiReportStudyInfo(R).Document := Doc;
   R.RunReport;
+  R.Free;
 end;
 
 

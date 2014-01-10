@@ -62,6 +62,7 @@ type
     ExportType:            Integer;
     ExportDeleted:         boolean;
     ExportEncoding:        TEpiEncoding;
+    ExportCreateReport:    boolean;
 
     // - Stata:
     ExportStataVersion:    TEpiStataVersion;

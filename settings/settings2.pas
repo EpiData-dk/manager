@@ -181,6 +181,7 @@ begin
       WriteInteger(sec, 'ExportType', ExportType);
       WriteBool(sec, 'ExportDeleted', ExportDeleted);
       WriteInteger(sec, 'ExportEncoding', Integer(ExportEncoding));
+      WriteBool(sec, 'ExportCreateReport', ExportCreateReport);
 
       Sec := 'exportstata';
       WriteInteger(sec, 'ExportStataVersion', Integer(ExportStataVersion));
@@ -326,6 +327,7 @@ begin
       ExportType             := ReadInteger(sec, 'ExportType', ExportType);
       ExportDeleted          := ReadBool(sec, 'ExportDeleted', ExportDeleted);
       ExportEncoding         := TEpiEncoding(ReadInteger(sec, 'ExportEncoding', Integer(ExportEncoding)));
+      ExportCreateReport     := ReadBool(sec, 'ExportCreateReport', ExportCreateReport);
 
       Sec := 'exportstata';
       ExportStataVersion     := TEpiStataVersion(ReadInteger(sec, 'ExportStataVersion', Integer(ExportStataVersion)));
@@ -691,6 +693,7 @@ const
                                   // 3 = SAS
     ExportDeleted:         false;
     ExportEncoding:        eeUTF8;
+    ExportCreateReport:    true;
 
     // - Stata:
     ExportStataVersion:    dta8;   // Default to Version 8

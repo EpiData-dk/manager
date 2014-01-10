@@ -254,7 +254,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLProc, LCLIntf,
+  LCLProc, LCLIntf, LazUTF8Classes,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   epimiscutils,
   epicustombase, LCLType, UTF8Process,
@@ -268,7 +268,7 @@ uses
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
   managerprocs, process, epiv_documentfile,
-  report_export;
+  report_export, epireport_generator_txt;
 
 { TMainForm }
 
@@ -362,6 +362,9 @@ var
   Exporter: TEpiExport;
   S: String;
   ASettings: TEpiExportSetting;
+  FileList: TStringList;
+  R: TReportExport;
+  FS: TFileStreamUTF8;
 begin
   Settings := nil;
   Exporter := nil;
@@ -380,6 +383,22 @@ begin
     else
     with ExportForm do
     begin
+      FS := nil;
+      if ExportReportChkBox.Checked then
+      begin
+        FileList := TStringList.Create;
+        FileList.AddObject(ExportSetting.ExportFileName, ExportSetting.Doc);
+        R := TReportExport.Create(FileList, TEpiReportTXTGenerator);
+        R.ExportSettings := ExportSetting;
+        S := R.RunReport;
+
+        FS := TFileStreamUTF8.Create(ChangeFileExt(ExportSetting.ExportFileName, '.log'), fmCreate);
+        FS.Write(S[1], Length(S));
+
+        R.Free;
+        FileList.Free;
+      end;
+
       S := 'Export Succeeded' + LineEnding + LineEnding;
       S += 'Project: ' + Fn + LineEnding;
 
@@ -390,10 +409,15 @@ begin
         ASettings := ASettings.AdditionalExportSettings;
       end;
 
+      if Assigned(FS) then
+        S += 'Report: ' + FS.FileName;
+
       ShowMessage(TrimRight(S));
 
       if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
         AddToRecent(ExportForm.ExportSetting.ExportFileName);
+
+      FS.Free;
     end;
   finally
     ExportForm.Free;
