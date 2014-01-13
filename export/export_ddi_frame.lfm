@@ -6,8 +6,8 @@ object ExportDDIFrame: TExportDDIFrame
   ClientHeight = 397
   ClientWidth = 642
   TabOrder = 0
-  DesignLeft = 1189
-  DesignTop = 670
+  DesignLeft = 982
+  DesignTop = 728
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner

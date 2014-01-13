@@ -97,7 +97,12 @@ begin
 end;
 
 destructor TExportDDIFrame.Destroy;
+var
+  i: Integer;
 begin
+  for i := 0 to ComboBox1.Items.Count - 1 do
+    ComboBox1.Items.Objects[i].Free;
+
   inherited Destroy;
 end;
 
@@ -144,15 +149,48 @@ begin
 end;
 
 procedure TExportDDIFrame.SetSettings(Data: PManagerSettings);
+var
+  i: Integer;
 begin
   Fdata := Data;
-  TCustomValueLabelFrame(ValueLabelFrame).ExportValueLabelsChkBox.Checked := FData^.ExportDDIValueLabels;
+
+  (CSVFrame as ISettingsFrame).SetSettings(Data);
+  with FData^ do
+  begin
+    TCustomValueLabelFrame(ValueLabelFrame).ExportValueLabelsChkBox.Checked := ExportDDIValueLabels;
+    RemoveVLCheckBox.Checked := ExportDDIValueLabels;
+    FilterTagIsUserIdChkBox.Checked := ExportDDIFilterTagIsUserId;
+    SectionHeaderIsQTextChkBox.Checked := ExportDDISectionCaptionIsQText;
+    RenameVariablesChkBox.Checked := ExportDDIRenameVariables;
+    VarPrefixEdit.Text := ExportDDIRenameVariablesPrefix;
+
+    for i := 0 to ComboBox1.Items.Count - 1 do
+    begin
+      if TString(ComboBox1.Items.Objects[i]).Str = ExportDDILanguageISO then
+      begin
+        ComboBox1.ItemIndex := i;
+        break;
+      end;
+    end;
+  end;
 end;
 
 function TExportDDIFrame.ApplySettings: boolean;
 begin
-  FData^.ExportDDIValueLabels := TCustomValueLabelFrame(ValueLabelFrame).ExportValueLabelsChkBox.Checked;
-  result := true;
+  if VarPrefixEdit.Text = '' then
+    Exit(False);
+
+  with FData^ do
+  begin
+    ExportDDIValueLabels           := TCustomValueLabelFrame(ValueLabelFrame).ExportValueLabelsChkBox.Checked;
+    ExportDDIValueLabels           := RemoveVLCheckBox.Checked;
+    ExportDDIFilterTagIsUserId     := FilterTagIsUserIdChkBox.Checked;
+    ExportDDISectionCaptionIsQText := SectionHeaderIsQTextChkBox.Checked;
+    ExportDDIRenameVariables       := RenameVariablesChkBox.Checked;
+    ExportDDIRenameVariablesPrefix := VarPrefixEdit.Text;
+    ExportDDILanguageISO           := TString(ComboBox1.Items.Objects[ComboBox1.ItemIndex]).Str;
+  end;
+  result := (CSVFrame as ISettingsFrame).ApplySettings;
 end;
 
 function TExportDDIFrame.ExportHeadings: boolean;
@@ -183,6 +221,14 @@ begin
       'Please select the language on the ' + GetFrameCaption + ' tab.';
     Result := false;
   end;
+
+  if RenameVariablesChkBox.Checked and
+     (VarPrefixEdit.Text = '')
+  then
+    begin
+      ErrorText := 'The variable name cannot be empty!';
+      Result := false;
+    end;
 end;
 
 initialization

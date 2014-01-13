@@ -85,6 +85,12 @@ type
     ExportSPSSDelimiter:   char;
     // - DDI
     ExportDDIValueLabels:  boolean;
+    ExportDDIRemoveMissingVL: boolean;
+    ExportDDIFilterTagIsUserId: boolean;
+    ExportDDIRenameVariables: boolean;
+    ExportDDIRenameVariablesPrefix: string;
+    ExportDDISectionCaptionIsQText: boolean;
+    ExportDDILanguageISO: string;
     // - EPX
     ExportEPXValueLabels:  boolean;
 

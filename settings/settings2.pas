@@ -205,6 +205,12 @@ begin
 
       sec := 'exportddi';
       WriteBool(sec, 'ExportDDIValueLabels', ExportDDIValueLabels);
+      WriteBool(sec, 'ExportDDIRemoveMissingVL', ExportDDIRemoveMissingVL);
+      WriteBool(sec, 'ExportDDIFilterTagIsUserId', ExportDDIFilterTagIsUserId);
+      WriteBool(sec, 'ExportDDIRenameVariables', ExportDDIRenameVariables);
+      WriteBool(sec, 'ExportDDISectionCaptionIsQText', ExportDDISectionCaptionIsQText);
+      WriteString(sec, 'ExportDDIRenameVariablesPrefix', ExportDDIRenameVariablesPrefix);
+      WriteString(sec, 'ExportDDILanguageISO', ExportDDILanguageISO);
 
       sec := 'exportepx';
       WriteBool(sec, 'ExportEPXValueLabels', ExportEPXValueLabels);
@@ -350,7 +356,13 @@ begin
       ExportSPSSValueLabels  := ReadBool(sec, 'ExportSPSSValueLabels', ExportSPSSValueLabels);
 
       sec := 'exportddi';
-      ExportDDIValueLabels   := ReadBool(sec, 'ExportDDIValueLabels', ExportDDIValueLabels);
+      ExportDDIValueLabels           := ReadBool(sec, 'ExportDDIValueLabels', ExportDDIValueLabels);
+      ExportDDIRemoveMissingVL       := ReadBool(sec, 'ExportDDIRemoveMissingVL', ExportDDIRemoveMissingVL);
+      ExportDDIFilterTagIsUserId     := ReadBool(sec, 'ExportDDIFilterTagIsUserId', ExportDDIFilterTagIsUserId);
+      ExportDDIRenameVariables       := ReadBool(sec, 'ExportDDIRenameVariables', ExportDDIRenameVariables);
+      ExportDDISectionCaptionIsQText := ReadBool(sec, 'ExportDDISectionCaptionIsQText', ExportDDISectionCaptionIsQText);
+      ExportDDIRenameVariablesPrefix := ReadString(sec, 'ExportDDIRenameVariablesPrefix', ExportDDIRenameVariablesPrefix);
+      ExportDDILanguageISO           := ReadString(sec, 'ExportDDILanguageISO', ExportDDILanguageISO);
 
       sec := 'exportepx';
       ExportDDIValueLabels   := ReadBool(sec, 'ExportEPXValueLabels', ExportEPXValueLabels);
@@ -716,6 +728,12 @@ const
     ExportSPSSDelimiter:   '|';
     // - DDI
     ExportDDIValueLabels:  true;
+    ExportDDIRemoveMissingVL: false;
+    ExportDDIFilterTagIsUserId: false;
+    ExportDDIRenameVariables: false;
+    ExportDDIRenameVariablesPrefix: 'V';
+    ExportDDISectionCaptionIsQText: false;
+    ExportDDILanguageISO:  '';
     // - EPX
     ExportEPXValueLabels:  true;
 
