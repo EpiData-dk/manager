@@ -365,6 +365,8 @@ var
   FileList: TStringList;
   R: TReportExport;
   FS: TFileStreamUTF8;
+  ReportText: String;
+  ReportTitle: String;
 begin
   Settings := nil;
   Exporter := nil;
@@ -390,10 +392,11 @@ begin
         FileList.AddObject(ExportSetting.ExportFileName, ExportSetting.Doc);
         R := TReportExport.Create(FileList, TEpiReportTXTGenerator);
         R.ExportSettings := ExportSetting;
-        S := R.RunReport;
+        ReportTitle := R.ReportTitle;
+        ReportText := R.RunReport;
 
         FS := TFileStreamUTF8.Create(ChangeFileExt(ExportSetting.ExportFileName, '.log'), fmCreate);
-        FS.Write(S[1], Length(S));
+        FS.Write(ReportText[1], Length(ReportText));
 
         R.Free;
         FileList.Free;
@@ -413,6 +416,9 @@ begin
         S += 'Report: ' + FS.FileName;
 
       ShowMessage(TrimRight(S));
+
+      if Assigned(FS) then
+        ShowReportForm(Self, ReportTitle, ReportText);
 
       if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
         AddToRecent(ExportForm.ExportSetting.ExportFileName);
