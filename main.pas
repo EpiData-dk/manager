@@ -18,7 +18,6 @@ type
     MenuItem13: TMenuItem;
     MenuItem28: TMenuItem;
     MenuItem29: TMenuItem;
-    MenuItem31: TMenuItem;
     RenameControlsPopupMenuItem: TMenuItem;
     MenuItem32: TMenuItem;
     RenameControlsMenuItem: TMenuItem;
@@ -180,7 +179,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ImportInNewProjectActionExecute(Sender: TObject);
-    procedure MenuItem31Click(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure PackActionExecute(Sender: TObject);
@@ -287,11 +285,6 @@ procedure TMainForm.ImportInNewProjectActionExecute(Sender: TObject);
 begin
   DoNewProject;
   TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction.Execute;
-end;
-
-procedure TMainForm.MenuItem31Click(Sender: TObject);
-begin
-  RunReport(TReportExport);
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);

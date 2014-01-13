@@ -295,10 +295,6 @@ object MainForm: TMainForm
         object CodeBookReportMenuItem: TMenuItem
           Action = CodeBookReportAction
         end
-        object MenuItem31: TMenuItem
-          Caption = 'TEST'
-          OnClick = MenuItem31Click
-        end
       end
       object MenuItem3: TMenuItem
         Caption = '-'
