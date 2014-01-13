@@ -362,7 +362,8 @@ uses
   design_control_heading,
   design_control_extender,
   align_form,
-  recode_form;
+  recode_form,
+  rename_form;
 
 { TRuntimeDesignFrame }
 
@@ -844,8 +845,12 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.RenameControlsActionExecute(Sender: TObject);
+var
+  F: TRenameForm;
 begin
-  //
+  F := TRenameForm.Create(self, DataFile);
+  F.ShowModal;
+  F.Free;
 end;
 
 

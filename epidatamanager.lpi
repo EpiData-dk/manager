@@ -762,6 +762,7 @@
         <Filename Value="designer/rename/rename_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="RenameForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="rename_form"/>
       </Unit85>
