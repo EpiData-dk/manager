@@ -38,14 +38,14 @@ end;
 procedure TReportFieldLists.DoDocumentReport(const Doc: TEpiDocument;
   const FileName: string; const Index: Integer);
 var
-  R: TEpiReportFieldList;
+  R: TEpiReportControlList;
 begin
   inherited DoDocumentReport(Doc, FileName, Index);
 
-  R := TEpiReportFieldList.Create(Generator);
-  R.Fields := Doc.DataFiles[0].Fields;
+  R := TEpiReportControlList.Create(Generator);
+  R.ControlItems := Doc.DataFiles[0].ControlItems;
   R.ExtendedList := false;
-  R.SortType := stEntryFlow;
+//  R.SortType := stEntryFlow;
   R.RunReport;
   R.Free;
 end;
