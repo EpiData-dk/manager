@@ -78,12 +78,8 @@ begin
   ValueLabelFrame.AnchorParallel(akLeft, 10, Self);
   ValueLabelFrame.AnchorParallel(akRight, 10, Self);
   ValueLabelFrame.AutoSize := true;
-//  ValueLabelFrame.AnchorParallel(akBottom, 10, Self);
 
   XMLOptionPanel.AnchorToNeighbour(akTop, 8, ValueLabelFrame);
-{  XMLOptionPanel.AnchorParallel(akLeft, 10, Self);
-  XMLOptionPanel.AnchorParallel(akRight, 10, Self);
-  XMLOptionPanel.AnchorParallel(akBottom, 0, Self); }
   XMLOptionPanel.Caption := '';
 
   ComboBox1.Items.BeginUpdate;

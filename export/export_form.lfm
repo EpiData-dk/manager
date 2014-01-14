@@ -3,6 +3,7 @@ object ExportForm: TExportForm
   Height = 581
   Top = 287
   Width = 690
+  ActiveControl = BitBtn3
   Caption = 'Export...'
   ClientHeight = 581
   ClientWidth = 690
@@ -384,6 +385,7 @@ object ExportForm: TExportForm
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
+      Default = True
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
