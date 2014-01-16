@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
   project_frame, LMessages, manager_messages, epidocument, report_base,
-  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile;
+  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile,
+  AnchorDocking;
 
 type
 
@@ -514,6 +515,8 @@ var
   i: Integer;
 begin
   Modified := false;
+
+  DockMaster.MakeDockSite(Self, [akRight, akBottom, akLeft], admrpNone, true);
 
   if Assigned(StartupFiles) then
   begin

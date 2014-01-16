@@ -60,7 +60,7 @@ implementation
 {$R *.lfm}
 
 uses
-  design_types, settings2, settings2_var, LCLType;
+  design_types, settings2, settings2_var, LCLType, AnchorDocking;
 
 var
   AlignForm: TAlignmentForm;
@@ -71,7 +71,8 @@ begin
     AlignForm  := TAlignmentForm.Create(nil);
 
   AlignForm.DesignFrame := DesignFrame;
-  AlignForm.Show;
+
+  DockMaster.MakeDockable(AlignForm, true, true);
 end;
 
 procedure CloseAlignmentForm;

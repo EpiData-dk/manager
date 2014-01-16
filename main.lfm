@@ -7,6 +7,7 @@ object MainForm: TMainForm
   Caption = 'MainForm'
   ClientHeight = 580
   ClientWidth = 910
+  DockSite = True
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate

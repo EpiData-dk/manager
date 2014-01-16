@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, FileUtil, PrintersDlgs, Forms, Controls, ComCtrls,
   ExtCtrls, StdCtrls, JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
   Buttons, manager_messages, epidatafilestypes, design_properties_form, types,
-  epicustombase, epidocument, epivaluelabels, design_types;
+  epicustombase, epidocument, epivaluelabels, design_types,
+  AnchorDocking;
 
 type
 
@@ -2691,6 +2692,7 @@ begin
   FHintWindow.HideInterval := 5 * 1000;
 
   FPropertiesForm := TPropertiesForm.Create(Self);
+  FPropertiesForm.Name := 'TPropertiesForm1';
   FPropertiesForm.OnShowHintMsg := @ShowHintMsg;
   FPropertiesForm.UpdateSelection(nil);
 
@@ -2731,9 +2733,14 @@ procedure TRuntimeDesignFrame.ShowPropertiesForm(NewControl: boolean);
 begin
   if not Assigned(FPropertiesForm) then exit;
 
-  FPropertiesForm.Show;
-  FPropertiesForm.SetFocus;
-  if NewControl then
+  DockMaster.MakeDockable(FPropertiesForm, true, true);
+
+//  FPropertiesForm.Show;
+//  FPropertiesForm.SetFocus;
+
+  if (not DockMaster.IsFloating(FPropertiesForm)) or
+     NewControl
+  then
     FPropertiesForm.SetFocusOnNew;
 end;
 
