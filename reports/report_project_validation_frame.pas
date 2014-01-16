@@ -258,7 +258,7 @@ begin
     BeginUpdate;
     Clear;
 
-    for Option in TEpiToolsProjectValidateOption do
+    for Option in EpiProjectValidationOptionsSelectable do
       AddObject(EpiToolProjectValidationOptionText[Option], TObject(PtrInt(Option)));
 
     EndUpdate;
@@ -300,10 +300,10 @@ begin
     if CmpFCheckList.Checked[i] then
       VF.AddItem(TEpiField(CmpFCheckList.Items.Objects[i]));
 
-  Opts := [];
+  Opts := EpiProjectValidationOptionsAll;
   for i := 0 to OptionsChkGrp.Items.Count -1 do
-    if OptionsChkGrp.Checked[i] then
-      Include(Opts, TEpiToolsProjectValidateOption(PtrInt(OptionsChkGrp.Items.Objects[i])));
+    if not OptionsChkGrp.Checked[i] then
+      Exclude(Opts, TEpiToolsProjectValidateOption(PtrInt(OptionsChkGrp.Items.Objects[i])));
 
   with TReportProjectValidation(Report) do
   begin
