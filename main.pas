@@ -771,8 +771,18 @@ begin
 end;
 
 procedure TMainForm.ValidationReportActionExecute(Sender: TObject);
+var
+  R: TReportBase;
+  Fn: String;
 begin
-  RunReport(TReportProjectValidation);
+  R := RunReport(TReportProjectValidation, false);
+
+  if Assigned(R) and
+     (R.Documents[0] <> '(Not Saved)')
+  then
+    AddToRecent(R.Documents[0]);
+
+  R.Free;
 end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
