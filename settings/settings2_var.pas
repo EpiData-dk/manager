@@ -62,6 +62,7 @@ type
     ExportType:            Integer;
     ExportDeleted:         boolean;
     ExportEncoding:        TEpiEncoding;
+    ExportCreateReport:    boolean;
 
     // - Stata:
     ExportStataVersion:    TEpiStataVersion;
@@ -84,6 +85,12 @@ type
     ExportSPSSDelimiter:   char;
     // - DDI
     ExportDDIValueLabels:  boolean;
+    ExportDDIRemoveMissingVL: boolean;
+    ExportDDIFilterTagIsUserId: boolean;
+    ExportDDIRenameVariables: boolean;
+    ExportDDIRenameVariablesPrefix: string;
+    ExportDDISectionCaptionIsQText: boolean;
+    ExportDDILanguageISO: string;
     // - EPX
     ExportEPXValueLabels:  boolean;
 

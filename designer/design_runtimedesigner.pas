@@ -15,12 +15,15 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    RenameControlsAction: TAction;
+    RecodeDataAction: TAction;
     ClearDataAction: TAction;
     ExpandPageAction: TAction;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
     ClearDataMenuItem: TMenuItem;
+    MenuItem8: TMenuItem;
     SelectAllBoolsAction: TAction;
     SelectAllStringsAction: TAction;
     SelectAllFloatsAction: TAction;
@@ -215,8 +218,11 @@ type
     procedure PasteAsHeadingActionExecute(Sender: TObject);
     procedure PasteControlActionUpdate(Sender: TObject);
     procedure PrintDataFormActionExecute(Sender: TObject);
+    procedure RecodeDataActionExecute(Sender: TObject);
+    procedure RecodeDataActionUpdate(Sender: TObject);
     procedure RedoActionExecute(Sender: TObject);
     procedure RedoActionUpdate(Sender: TObject);
+    procedure RenameControlsActionExecute(Sender: TObject);
     procedure SectionBtnClick(Sender: TObject);
     procedure SelectAllActionExecute(Sender: TObject);
     procedure SelectAllBoolsActionExecute(Sender: TObject);
@@ -255,7 +261,8 @@ type
     function DesignPanelAsJvObjectArray: TJvDesignObjectArray;
     procedure ApplyCommonCtrlSetting(Ctrl: TControl;
       EpiCtrl: TEpiCustomControlItem);
-    procedure SectionsChangeEvent(Sender: TObject; EventGroup: TEpiEventGroup;
+    procedure SectionsChangeEvent(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     function ClipBoardHasText: boolean;
     function ClipBoardHasComponent: boolean;
@@ -354,7 +361,9 @@ uses
   design_control_field,
   design_control_heading,
   design_control_extender,
-  align_form;
+  align_form,
+  recode_form,
+  rename_form;
 
 { TRuntimeDesignFrame }
 
@@ -437,7 +446,12 @@ begin
     Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
     if not Dlg.Execute then exit;
 
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
     ImpStructurForm := TImportStructureForm.Create(FDesignScrollBox, Dlg.Files);
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+
     ImpStructurForm.ImportData := (DataFile.Size = 0);
     if ImpStructurForm.ShowModal = mrCancel then exit;
 
@@ -788,6 +802,38 @@ begin
   DoPrintDataForm;
 end;
 
+procedure TRuntimeDesignFrame.RecodeDataActionExecute(Sender: TObject);
+var
+  RecodeForm: TRecodeForm;
+begin
+  if FDesignPanel.Surface.Selector.Count <> 1 then exit;
+
+  RecodeForm := TRecodeForm.Create(self);
+  RecodeForm.Field := TEpiField((FDesignPanel.Surface.Selection[0] as IDesignEpiControl).EpiControl);
+  RecodeForm.ShowModal;
+  RecodeForm.Free;
+end;
+
+procedure TRuntimeDesignFrame.RecodeDataActionUpdate(Sender: TObject);
+var
+  Surface: TJvDesignSurface;
+  Obs: TJvDesignObjectArray;
+  ActionEnable: Boolean;
+begin
+  Surface := FDesignPanel.Surface;
+  Obs := Surface.Selected;
+
+  ActionEnable := true;
+  if DataFile.Size = 0 then ActionEnable := false;
+  if Length(Obs) <> 1 then  ActionEnable := false;
+  if (Length(Obs) > 0) and
+     (not (Obs[0] is TDesignField))
+  then
+    ActionEnable := false;
+
+  TAction(Sender).Enabled := ActionEnable;
+end;
+
 procedure TRuntimeDesignFrame.RedoActionExecute(Sender: TObject);
 begin
   GlobalCommandList.ReDo;
@@ -796,6 +842,15 @@ end;
 procedure TRuntimeDesignFrame.RedoActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled := GlobalCommandList.CanRedo;
+end;
+
+procedure TRuntimeDesignFrame.RenameControlsActionExecute(Sender: TObject);
+var
+  F: TRenameForm;
+begin
+  F := TRenameForm.Create(self, DataFile);
+  F.ShowModal;
+  F.Free;
 end;
 
 
@@ -858,9 +913,11 @@ begin
   F.Free;
 end;
 
-procedure TRuntimeDesignFrame.SectionsChangeEvent(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TRuntimeDesignFrame.SectionsChangeEvent(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 begin
+  if not (Initiator = DataFile.Sections) then exit;
   if not (EventGroup = eegCustomBase) then exit;
 
   case TEpiCustomChangeEventType(EventType) of
@@ -1339,6 +1396,7 @@ begin
 
     Result := TDesignField(Surface.Selection[0]);
     Result.PopupMenu := DesignControlPopUpMenu;
+    TDesignField(Result).OnShowHint := @ShowHintMsg;
 
     if Assigned(Field) then
       TDesignField(Result).EpiControl := Field;

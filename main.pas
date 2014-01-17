@@ -15,6 +15,14 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    MenuItem13: TMenuItem;
+    MenuItem28: TMenuItem;
+    MenuItem29: TMenuItem;
+    RenameControlsPopupMenuItem: TMenuItem;
+    MenuItem32: TMenuItem;
+    RenameControlsMenuItem: TMenuItem;
+    MenuItem30: TMenuItem;
+    ValidationReportAction: TAction;
     ImportInNewProjectAction: TAction;
     CodeBookReportAction: TAction;
     MenuItem10: TMenuItem;
@@ -185,6 +193,7 @@ type
     procedure ShowAboutActionExecute(Sender: TObject);
     procedure StartEntryClientActionExecute(Sender: TObject);
     procedure StartEntryClientActionUpdate(Sender: TObject);
+    procedure ValidationReportActionExecute(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
@@ -243,7 +252,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLProc, LCLIntf,
+  LCLProc, LCLIntf, LazUTF8Classes,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   epimiscutils,
   epicustombase, LCLType, UTF8Process,
@@ -252,11 +261,12 @@ uses
   report_combinedlist, viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
   report_counts, report_double_entry_validation,
-  report_codebook,
+  report_codebook, report_project_validation,
   shortcuts, valuelabelseditor_form2, export_form, epiadmin,
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
-  managerprocs, process, epiv_documentfile;
+  managerprocs, process, epiv_documentfile,
+  report_export, epireport_generator_txt;
 
 { TMainForm }
 
@@ -345,6 +355,11 @@ var
   Exporter: TEpiExport;
   S: String;
   ASettings: TEpiExportSetting;
+  FileList: TStringList;
+  R: TReportExport;
+  FS: TFileStreamUTF8;
+  ReportText: String;
+  ReportTitle: String;
 begin
   Settings := nil;
   Exporter := nil;
@@ -363,6 +378,23 @@ begin
     else
     with ExportForm do
     begin
+      FS := nil;
+      if ExportReportChkBox.Checked then
+      begin
+        FileList := TStringList.Create;
+        FileList.AddObject(ExportSetting.ExportFileName, ExportSetting.Doc);
+        R := TReportExport.Create(FileList, TEpiReportTXTGenerator);
+        R.ExportSettings := ExportSetting;
+        ReportTitle := R.ReportTitle;
+        ReportText := R.RunReport;
+
+        FS := TFileStreamUTF8.Create(ChangeFileExt(ExportSetting.ExportFileName, '.log'), fmCreate);
+        FS.Write(ReportText[1], Length(ReportText));
+
+        R.Free;
+        FileList.Free;
+      end;
+
       S := 'Export Succeeded' + LineEnding + LineEnding;
       S += 'Project: ' + Fn + LineEnding;
 
@@ -373,10 +405,18 @@ begin
         ASettings := ASettings.AdditionalExportSettings;
       end;
 
+      if Assigned(FS) then
+        S += 'Report: ' + FS.FileName;
+
       ShowMessage(TrimRight(S));
+
+      if Assigned(FS) then
+        ShowReportForm(Self, ReportTitle, ReportText);
 
       if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
         AddToRecent(ExportForm.ExportSetting.ExportFileName);
+
+      FS.Free;
     end;
   finally
     ExportForm.Free;
@@ -730,6 +770,21 @@ begin
   TAction(Sender).Enabled := FileExistsUTF8(Path + 'epidataentryclient' + Ext);
 end;
 
+procedure TMainForm.ValidationReportActionExecute(Sender: TObject);
+var
+  R: TReportBase;
+  Fn: String;
+begin
+  R := RunReport(TReportProjectValidation, false);
+
+  if Assigned(R) and
+     (R.Documents[0] <> '(Not Saved)')
+  then
+    AddToRecent(R.Documents[0]);
+
+  R.Free;
+end;
+
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportValueLabelList);
@@ -890,11 +945,20 @@ procedure TMainForm.DoOpenProject(const AFileName: string);
 begin
   if not DoCloseProject then exit;
 
-  NewProjectFrame;
-  if not FActiveFrame.OpenProject(AFileName) then
-    DoCloseProject
-  else
-    AssignActionLinks;
+  try
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
+
+    NewProjectFrame;
+    if not FActiveFrame.OpenProject(AFileName) then
+      DoCloseProject
+    else
+      AssignActionLinks;
+  finally
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+  end;
+
   UpdateProcessToolbar;
 end;
 
@@ -1019,7 +1083,9 @@ begin
       Exit;
     end;
 
+    AddToRecent(Result.FileName);
     LocalDoc := true;
+    Dlg.Free;
   end;
 end;
 
@@ -1213,12 +1279,14 @@ begin
   ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
   KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
   StudyInfoMenuItem.Action         := FActiveFrame.StudyInformationAction;
+  RenameControlsMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RenameControlsAction;
   // --project details popup-menu
   ProjectPropertiesPopupMenuItem.Action := FActiveFrame.ProjectSettingsAction;
   ValueLabelEditorPopupMenuItem.Action  := FActiveFrame.ValueLabelEditorAction;
   SetPasswordPopupMenuItem.Action       := FActiveFrame.ProjectPasswordAction;
   KeyFieldsPopupMenuItem.Action         := FActiveFrame.KeyFieldsAction;
   StudyInfoPopupMenuItem.Action         := FActiveFrame.StudyInformationAction;
+  RenameControlsPopupMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RenameControlsAction;
 
   // Align
   AlignLeftMenuItem.Action         := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignLeftAction;

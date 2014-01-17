@@ -48,11 +48,6 @@
             <Debugging>
               <DebugInfoType Value="dsDwarf2Set"/>
             </Debugging>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
           </Linking>
           <Other>
             <CompilerMessages>
@@ -145,8 +140,9 @@
           </Other>
         </CompilerOptions>
       </Item4>
-      <SharedMatrixOptions Count="1">
+      <SharedMatrixOptions Count="2">
         <Item1 ID="452080431331" Modes="Win32,Win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
+        <Item2 ID="637697368399" Modes="Win32,Win64" Value="-WG"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -192,7 +188,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="82">
+    <Units Count="87">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -743,6 +739,39 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="export_epx_frame"/>
       </Unit81>
+      <Unit82>
+        <Filename Value="reports/report_project_validation.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_project_validation"/>
+      </Unit82>
+      <Unit83>
+        <Filename Value="reports/report_project_validation_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectValidationFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_project_validation_frame"/>
+      </Unit83>
+      <Unit84>
+        <Filename Value="tools/recode_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RecodeForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="recode_form"/>
+      </Unit84>
+      <Unit85>
+        <Filename Value="designer/rename/rename_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RenameForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="rename_form"/>
+      </Unit85>
+      <Unit86>
+        <Filename Value="reports/report_export.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="report_export"/>
+      </Unit86>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -752,7 +781,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

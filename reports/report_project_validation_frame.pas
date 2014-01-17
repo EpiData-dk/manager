@@ -1,4 +1,4 @@
-unit validate_double_entry_frame;
+unit report_project_validation_frame;
 
 {$mode objfpc}{$H+}
 
@@ -11,9 +11,9 @@ uses
 
 type
 
-  { TValidateDoubleEntryFrame }
+  { TProjectValidationFrame }
 
-  TValidateDoubleEntryFrame = class(TFrame, IReportOptionFrame, ICanCloseQuery)
+  TProjectValidationFrame = class(TFrame, IReportOptionFrame, ICanCloseQuery)
     CFExcludeTxtAction: TAction;
     CmpFExcludeTextFBtn: TButton;
     CFSelectNoneAction: TAction;
@@ -50,16 +50,13 @@ type
     procedure KFNoneActionExecute(Sender: TObject);
   private
     { private declarations }
-    FMainDoc: TEpiDocument;
-    FDupDoc: TEpiDocument;
+    FDoc:     TEpiDocument;
     procedure UpdateKeyFields;
     procedure UpdateCompareFields;
-    procedure AddFieldHook(Const Sender, Initiator: TEpiCustomBase;
-      EventGroup: TEpiEventGroup;
-      EventType: Word; Data: Pointer);
+    procedure UpdateOptions;
   public
     { public declarations }
-    destructor Destroy; override;
+    constructor Create(TheOwner: TComponent); override;
     function  GetFrameCaption: string;
     procedure UpdateFrame(Selection: TStrings);
     procedure ApplyReportOptions(Report: TReportBase);
@@ -73,18 +70,18 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, report_double_entry_validation, epitools_val_dbl_entry,
+  epidatafiles, report_project_validation, epitools_projectvalidate,
   epidatafilestypes, epiglobals, LCLIntf, manager_messages, LCLType,
   main, math, LazUTF8, strutils, Dialogs;
 
-{ TValidateDoubleEntryFrame }
+{ TProjectValidationFrame }
 
-procedure TValidateDoubleEntryFrame.KFNoneActionExecute(Sender: TObject);
+procedure TProjectValidationFrame.KFNoneActionExecute(Sender: TObject);
 begin
   KFCheckList.CheckAll(cbUnchecked, false, false);
 end;
 
-procedure TValidateDoubleEntryFrame.KFIndexActionExecute(Sender: TObject);
+procedure TProjectValidationFrame.KFIndexActionExecute(Sender: TObject);
 var
   i: Integer;
 begin
@@ -92,12 +89,12 @@ begin
 
   KFCheckList.Items.BeginUpdate;
   for i := 0 to KFCheckList.Count - 1 do
-    if FMainDoc.DataFiles[0].KeyFields.FieldExists(TEpiField(KFCheckList.Items.Objects[i])) then
+    if FDoc.DataFiles[0].KeyFields.FieldExists(TEpiField(KFCheckList.Items.Objects[i])) then
       KFCheckList.Checked[i] := true;
   KFCheckList.Items.EndUpdate;
 end;
 
-procedure TValidateDoubleEntryFrame.KFMoveFieldUpExecute(Sender: TObject);
+procedure TProjectValidationFrame.KFMoveFieldUpExecute(Sender: TObject);
 var
   Idx1: Integer;
   Idx2: Integer;
@@ -123,7 +120,7 @@ begin
   KFCheckList.Items.EndUpdate;
 end;
 
-procedure TValidateDoubleEntryFrame.KFMoveFieldUpUpdate(Sender: TObject);
+procedure TProjectValidationFrame.KFMoveFieldUpUpdate(Sender: TObject);
 begin
   if Sender = KFMoveFieldUp then
     TAction(Sender).Enabled := KFCheckList.ItemIndex > 0
@@ -131,7 +128,7 @@ begin
     TAction(Sender).Enabled := KFCheckList.ItemIndex < (KFCheckList.Count - 1);
 end;
 
-procedure TValidateDoubleEntryFrame.KFAutoIncActionExecute(Sender: TObject);
+procedure TProjectValidationFrame.KFAutoIncActionExecute(Sender: TObject);
 var
   i: Integer;
 begin
@@ -144,7 +141,7 @@ begin
   KFCheckList.Items.EndUpdate;
 end;
 
-procedure TValidateDoubleEntryFrame.CFSelectAllNonKFActionExecute(Sender: TObject
+procedure TProjectValidationFrame.CFSelectAllNonKFActionExecute(Sender: TObject
   );
 var
   O: TObject;
@@ -164,7 +161,7 @@ begin
   CmpFCheckList.Items.EndUpdate;
 end;
 
-procedure TValidateDoubleEntryFrame.CFExcludeTxtActionExecute(Sender: TObject);
+procedure TProjectValidationFrame.CFExcludeTxtActionExecute(Sender: TObject);
 var
   i: Integer;
   F: TEpiField;
@@ -179,36 +176,31 @@ begin
   CmpFCheckList.Items.EndUpdate;
 end;
 
-procedure TValidateDoubleEntryFrame.CFSelectNoneActionExecute(Sender: TObject);
+procedure TProjectValidationFrame.CFSelectNoneActionExecute(Sender: TObject);
 begin
   CmpFCheckList.CheckAll(cbUnchecked, false, false);
 end;
 
-procedure TValidateDoubleEntryFrame.UpdateKeyFields;
+procedure TProjectValidationFrame.UpdateKeyFields;
 var
-  MainDF: TEpiDataFile;
-  DupDF: TEpiDataFile;
+  DF: TEpiDataFile;
   i: Integer;
   F: TEpiField;
   W: Integer;
 begin
   KFCheckList.Clear;
 
-  MainDF := FMainDoc.DataFiles[0];
-  DupDF  := FDupDoc.DataFiles[0];
+  DF := FDoc.DataFiles[0];
 
   W := 0;
-  for i := 0 to MainDF.Fields.Count - 1 do
-    if DupDF.Fields.ItemExistsByName(MainDF.Field[i].Name) then
-      W := Max(W, UTF8Length(MainDF.Field[i].Name));
+  for i := 0 to DF.Fields.Count - 1 do
+    W := Max(W, UTF8Length(DF.Field[i].Name));
 
   KFCheckList.Items.BeginUpdate;
-  for i := 0 to MainDF.Fields.Count - 1 do
+  for i := 0 to DF.Fields.Count - 1 do
   begin
-    F := MainDF.Fields[i];
-    if DupDF.Fields.ItemExistsByName(F.Name) then
-      KFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text,
-      F);
+    F := DF.Fields[i];
+    KFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text,  F);
   end;
   KFCheckList.Items.EndUpdate;
 
@@ -220,152 +212,119 @@ begin
     KFCheckList.Selected[0] := true;
 end;
 
-procedure TValidateDoubleEntryFrame.UpdateCompareFields;
+procedure TProjectValidationFrame.UpdateCompareFields;
 var
-  MainDF: TEpiDataFile;
-  DupDF: TEpiDataFile;
+  DF: TEpiDataFile;
   i: Integer;
   W: Integer;
   F: TEpiField;
 begin
   CmpFCheckList.Clear;
 
-  MainDF := FMainDoc.DataFiles[0];
-  DupDF  := FDupDoc.DataFiles[0];
+  DF := FDoc.DataFiles[0];
 
   W := 0;
-  for i := 0 to MainDF.Fields.Count - 1 do
-    if DupDF.Fields.ItemExistsByName(MainDF.Field[i].Name) then
-      W := Max(W, UTF8Length(MainDF.Field[i].Name));
+  for i := 0 to DF.Fields.Count - 1 do
+    W := Max(W, UTF8Length(DF.Field[i].Name));
 
 
   CmpFCheckList.Items.BeginUpdate;
-  for i := 0 to MainDF.Fields.Count - 1 do
+  for i := 0 to DF.Fields.Count - 1 do
   begin
-    F := MainDF.Fields[i];
-    if DupDF.Fields.ItemExistsByName(F.Name) then
-      CmpFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text,
-      F);
+    F := DF.Fields[i];
+    CmpFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text, F);
   end;
+  CmpFCheckList.CheckAll(cbChecked, false, false);
   CmpFCheckList.Items.EndUpdate;
 end;
 
-procedure TValidateDoubleEntryFrame.AddFieldHook(const Sender,
-  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
-  Data: Pointer);
+procedure TProjectValidationFrame.UpdateOptions;
 var
-  D: TEpiDataFile;
-  C: TEpiCustomControlItem;
+  i: Integer;
 begin
-{  if (EventGroup <> eegCustomBase) then exit;
-
-  case TEpiCustomChangeEventType(EventType) of
-    ecceDestroy: ;
-    ecceUpdate: ;
-    ecceName:
-      begin
-        if not (Initiator is TEpiField) then exit;
-
-        // TODO: We may be able to aboid this PostMessage if there is a hook
-        // in RuntimeDesignerFrame, looking for an added field!
-        if TEpiField(Initiator).Name = EpiDoubleEntryFieldName then
-          PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Initiator), 0);
-        TEpiField(Initiator).UnRegisterOnChangeHook(@AddFieldHook);
-      end;
-    ecceAddItem:
-      begin
-        with TEpiField(Data) do
-        begin
-          if Initiator <> FMainDoc.DataFiles[0].Fields then exit;
-
-          D := TEpiFields(Sender).DataFile;
-          C := D.ControlItem[D.ControlItems.Count - 1];
-
-          RegisterOnChangeHook(@AddFieldHook, true);
-          BeginUpdate;
-          Top := C.Top + 20;
-          Left := C.Left;
-          EndUpdate;
-        end;
-      end;
-    ecceDelItem:
-      TEpiField(Data).UnRegisterOnChangeHook(@AddFieldHook);
-    ecceSetItem: ;
-    ecceSetTop: ;
-    ecceSetLeft: ;
-    ecceText: ;
-  end;             }
+  for i := 0 to OptionsChkGrp.Items.Count - 1 do
+    OptionsChkGrp.Checked[i] := true;
 end;
 
-destructor TValidateDoubleEntryFrame.Destroy;
+constructor TProjectValidationFrame.Create(TheOwner: TComponent);
+var
+  Option: TEpiToolsProjectValidateOption;
 begin
-  inherited Destroy;
+  inherited Create(TheOwner);
+
+
+  With OptionsChkGrp.Items do
+  begin
+    BeginUpdate;
+    Clear;
+
+    for Option in EpiProjectValidationOptionsSelectable do
+      AddObject(EpiToolProjectValidationOptionText[Option], TObject(PtrInt(Option)));
+
+    EndUpdate;
+  end;
 end;
 
-function TValidateDoubleEntryFrame.GetFrameCaption: string;
+function TProjectValidationFrame.GetFrameCaption: string;
 begin
   result := 'Select all fields identifying an observation';
 end;
 
-procedure TValidateDoubleEntryFrame.UpdateFrame(Selection: TStrings);
+procedure TProjectValidationFrame.UpdateFrame(Selection: TStrings);
 begin
-  if Selection.Count <> 2 then
+  if Selection.Count <> 1 then
     // Raise some error?
     Exit;
 
-  FMainDoc := TEpiDocument(Selection.Objects[0]);
-  FDupDoc  := TEpiDocument(Selection.Objects[1]);
-
-//  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
+  FDoc := TEpiDocument(Selection.Objects[0]);
 
   UpdateKeyFields;
   UpdateCompareFields;
+  UpdateOptions;
 end;
 
-procedure TValidateDoubleEntryFrame.ApplyReportOptions(Report: TReportBase);
+procedure TProjectValidationFrame.ApplyReportOptions(Report: TReportBase);
 var
   KF: TEpiFields;
-  CF: TEpiFields;
+  VF: TEpiFields;
   i: Integer;
-  Options: TEpiToolsDblEntryValidateOptions;
+  Opts: TEpiToolsProjectValidateOptions;
 begin
   KF := TEpiFields.Create(nil);
   for i := 0 to KFCheckList.Count - 1 do
     if KFCheckList.Checked[i] then
       KF.AddItem(TEpiField(KFCheckList.Items.Objects[i]));
 
-  CF := TEpiFields.Create(nil);
+  VF := TEpiFields.Create(nil);
   for i := 0 to CmpFCheckList.Count - 1 do
     if CmpFCheckList.Checked[i] then
-      CF.AddItem(TEpiField(CmpFCheckList.Items.Objects[i]));
+      VF.AddItem(TEpiField(CmpFCheckList.Items.Objects[i]));
 
-  Options := [];
-  if OptionsChkGrp.Checked[0] then Include(Options, devIgnoreDeleted);
-  if OptionsChkGrp.Checked[1] then Include(Options, devCaseSensitiveText);
-  if OptionsChkGrp.Checked[2] then Include(Options, devIgnoreMissingRecords);
-  if OptionsChkGrp.Checked[3] then Include(Options, devAddResultToField);
+  Opts := EpiProjectValidationOptionsAll;
+  for i := 0 to OptionsChkGrp.Items.Count -1 do
+    if not OptionsChkGrp.Checked[i] then
+      Exclude(Opts, TEpiToolsProjectValidateOption(PtrInt(OptionsChkGrp.Items.Objects[i])));
 
-  with TReportDoubleEntryValidation(Report) do
+  with TReportProjectValidation(Report) do
   begin
     KeyFields := KF;
-    CompareFields := CF;
-    DblEntryValidateOptions := Options;
+    ValidationFields := VF;
+    Options := Opts;
   end;
 end;
 
-function TValidateDoubleEntryFrame.OkToAdvance(
+function TProjectValidationFrame.OkToAdvance(
   ProjectList: TProjectFileListFrame): boolean;
 begin
-  Result := ProjectList.SelectedList.Count = 2;
+  Result := ProjectList.SelectedList.Count = 1;
 end;
 
-function TValidateDoubleEntryFrame.OkToAdvanceText: string;
+function TProjectValidationFrame.OkToAdvanceText: string;
 begin
-  result :=
-    'You MUST select 2 files to compare!'
+  result := 'Only one project may be validated at a time!';
 end;
 
-function TValidateDoubleEntryFrame.CanClose: boolean;
+function TProjectValidationFrame.CanClose: boolean;
 var
   KFChecked: Boolean;
   Res: TModalResult;
@@ -375,12 +334,15 @@ begin
   KFChecked := false;
 
   for i := 0 to KFCheckList.Count - 1 do
+  begin
     KFChecked := KFChecked or KFCheckList.Checked[i];
+    if KFChecked then break;
+  end;
 
   if not KFChecked then
   begin
     Res := MessageDlg('Warning!',
-             'No Key Fields selected! The two files will be validated sequentially.' + LineEnding +
+             'No Key Fields selected! Report will be displayed in order of record number!' + LineEnding +
              'Press Cancel to select Key Fields!',
              mtWarning,
              mbOKCancel,

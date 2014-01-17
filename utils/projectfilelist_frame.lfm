@@ -1,35 +1,23 @@
 object ProjectFileListFrame: TProjectFileListFrame
   Left = 0
-  Height = 553
+  Height = 780
   Top = 0
-  Width = 764
-  ClientHeight = 553
-  ClientWidth = 764
+  Width = 1191
+  ClientHeight = 780
+  ClientWidth = 1191
   TabOrder = 0
-  DesignLeft = 771
-  DesignTop = 327
-  object ErrorListBox: TListBox
-    Left = 0
-    Height = 107
-    Top = 446
-    Width = 764
-    Align = alBottom
-    ItemHeight = 0
-    ScrollWidth = 762
-    TabOrder = 0
-    TopIndex = -1
-    Visible = False
-  end
+  DesignLeft = 371
+  DesignTop = 208
   object StructureGrid: TStringGrid
     Left = 0
-    Height = 446
+    Height = 680
     Top = 0
-    Width = 764
+    Width = 1191
     Align = alClient
     ColCount = 1
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goTabs, goSmoothScroll, goFixedRowNumbering]
     RowCount = 1
-    TabOrder = 1
+    TabOrder = 0
     OnCheckboxToggled = StructureGridCheckboxToggled
     OnColRowMoved = StructureGridColRowMoved
     Cells = (
@@ -38,5 +26,40 @@ object ProjectFileListFrame: TProjectFileListFrame
       0
       'Order'
     )
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 100
+    Top = 680
+    Width = 1191
+    Align = alBottom
+    AutoSize = True
+    BevelOuter = bvNone
+    ClientHeight = 100
+    ClientWidth = 1191
+    TabOrder = 1
+    object ProgressBar1: TProgressBar
+      Left = 0
+      Height = 20
+      Top = 80
+      Width = 1191
+      Align = alBottom
+      Smooth = True
+      Step = 1
+      TabOrder = 0
+      Visible = False
+    end
+    object ErrorListBox: TListBox
+      Left = 0
+      Height = 80
+      Top = 0
+      Width = 1191
+      Align = alClient
+      ItemHeight = 0
+      ScrollWidth = 1189
+      TabOrder = 1
+      TopIndex = -1
+      Visible = False
+    end
   end
 end

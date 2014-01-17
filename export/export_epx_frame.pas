@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls,
   export_frame_types, epiexportsettings, epimiscutils,
   export_customvaluelabel_frame, settings2_interface,
-  settings2_var;
+  settings2_var, epidocument;
 
 type
 
@@ -26,6 +26,9 @@ type
     function GetExportName: string;
     function GetFileDialogExtensions: TEpiDialogFilters;
     function ExportHeadings: boolean;
+    function CheckExportAllowed(Const Setting: TEpiExportSetting;
+      Const Doc: TEpiDocument;
+      out ErrorText: string): boolean;
     // ISettingsFrame
     procedure SetSettings(Data: PManagerSettings);
     function  ApplySettings: boolean;
@@ -74,6 +77,12 @@ end;
 function TExportEPXFrame.ExportHeadings: boolean;
 begin
   Result := true;
+end;
+
+function TExportEPXFrame.CheckExportAllowed(const Setting: TEpiExportSetting;
+  const Doc: TEpiDocument; out ErrorText: string): boolean;
+begin
+  result := true;
 end;
 
 procedure TExportEPXFrame.SetSettings(Data: PManagerSettings);

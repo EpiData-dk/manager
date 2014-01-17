@@ -13,6 +13,7 @@ type
   { TSettings_ExportFrame }
 
   TSettings_ExportFrame = class(TFrame, ISettingsFrame)
+    ExportReportChkBox: TCheckBox;
     EncodingCmbBox: TComboBox;
     ExportDeletedChkBox: TCheckBox;
     ExportTypeCombo: TComboBox;
@@ -82,6 +83,7 @@ begin
     ExportTypeCombo.ItemIndex   := ExportTypeCombo.Items.IndexOfObject(TObject(PtrUInt(ExportType)));
     EncodingCmbBox.ItemIndex    := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ExportEncoding)));
     ExportDeletedChkBox.Checked := ExportDeleted;
+    ExportReportChkBox.Checked  := ExportCreateReport;
   end;
 end;
 
@@ -92,6 +94,7 @@ begin
     ExportType     := PtrUInt(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex]);
     ExportEncoding := TEpiEncoding(PtrUInt(EncodingCmbBox.Items.Objects[EncodingCmbBox.ItemIndex]));
     ExportDeleted  := ExportDeletedChkBox.Checked;
+    ExportCreateReport := ExportReportChkBox.Checked;
   end;
   result := true;
 end;

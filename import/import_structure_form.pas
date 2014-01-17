@@ -51,7 +51,8 @@ type
       aState: TCheckboxState);
     procedure ImportDataColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
-    procedure ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
+    procedure ImportHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure BeforeLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
     procedure AfterLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
@@ -115,8 +116,9 @@ begin
   FProjectList.AddFiles(Dlg.Files);
 end;
 
-procedure TImportStructureForm.ImportHook(Sender: TObject; EventGroup: TEpiEventGroup;
-  EventType: Word; Data: Pointer);
+procedure TImportStructureForm.ImportHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 var
   Cls: TControlClass;
   Pt: TPoint;
@@ -147,99 +149,102 @@ const
         {$ENDIF}
     {$ENDIF}
   {$ENDIF};
+
+  InImportHook: boolean = false;
+
 begin
-  if (Sender is TEpiFields) then
-  begin
-    if (EventGroup = eegCustomBase) and (EventType = Ord(ecceAddItem)) then
-      TEpiField(Data).RegisterOnChangeHook(@ImportHook, false);
-    exit;
-  end;
+  if not (
+    (Initiator is TEpiField) or
+    (Initiator is TEpiHeading)
+    )
+  then
+    Exit;
 
-  if (Sender is TEpiHeadings) then
-  begin
-    if (EventGroup = eegCustomBase) and (EventType = Ord(ecceAddItem)) then
-      TEpiHeading(Data).RegisterOnChangeHook(@ImportHook, false);
-    exit;
-  end;
+  if not (
+     (EventGroup = eegCustomBase) and
+     (EventType = Ord(ecceUpdate))
+    )
+  then
+    Exit;
 
-  if (Sender is TEpiCustomControlItem) and (EventGroup = eegCustomBase) and (EventType = Ord(ecceUpdate)) then
-  begin
-    TEpiCustomControlItem(Sender).UnRegisterOnChangeHook(@ImportHook);
+  If InImportHook then exit;
+  InImportHook := true;
 
-    if FLastEpiCtrl = nil then
+  if FLastEpiCtrl = nil then
+  begin
+    Pt := Point(ManagerSettings.DefaultLabelPosition, 5);
+    if Initiator is TEpiField then
+      Pt.X := ManagerSettings.DefaultRightPosition;
+  end else begin
+    if (FLastRecYPos <> -1) and (FLastRecYPos = TEpiCustomControlItem(Initiator).Top) then
     begin
-      Pt := Point(ManagerSettings.DefaultLabelPosition, 5);
-      if Sender is TEpiField then
-        Pt.X := ManagerSettings.DefaultRightPosition;
-    end else begin
-      if (FLastRecYPos <> -1) and (FLastRecYPos = TEpiCustomControlItem(Sender).Top) then
+      Pt.Y := FLastEpiCtrl.Top;
+
+      if (FLastEpiCtrl is TEpiField) then
       begin
-        Pt.Y := FLastEpiCtrl.Top;
+        S := '4';
+        if TEpiField(FLastEpiCtrl).FieldType in StringFieldTypes then
+          S := 'W';
 
-        if (FLastEpiCtrl is TEpiField) then
-        begin
-          S := '4';
-          if TEpiField(FLastEpiCtrl).FieldType in StringFieldTypes then
-            S := 'W';
-
-          if (Sender is TEpiField) then
-            Pt.X := FLastEpiCtrl.Left +
-                    FDesignerBox.Canvas.GetTextWidth(S) * TEpiField(FLastEpiCtrl).Length + 15 +   // This calculates right side of previous placed control (with 5px margin)
-                    FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Question.Text) + 5 +        // This gives a rough estimate of the width of the Question text (5px margin)
-                    FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
-          else
-            Pt.X := FLastEpiCtrl.Left +
-                    FDesignerBox.Canvas.GetTextWidth(S) * TEpiField(FLastEpiCtrl).Length + 15;    // This calculates right side of previous placed control (with 5px margin)
-        end else begin
-          if (Sender is TEpiField) then
-            Pt.X := FLastEpiCtrl.Left +
-                    FDesignerBox.Canvas.GetTextWidth(TEpiHeading(FLastEpiCtrl).Caption.Text) + 10 +
-                    FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Question.Text) + 5 +        // This gives a rough estimate of the width of the Question text (5px margin)
-                    FDesignerBox.Canvas.GetTextWidth(TEpiField(Sender).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
-          else
-            Pt.X := FLastEpiCtrl.Left +
-                    FDesignerBox.Canvas.GetTextWidth(TEpiHeading(FLastEpiCtrl).Caption.Text) + 10;
-        end;
+        if (Initiator is TEpiField) then
+          Pt.X := FLastEpiCtrl.Left +
+                  FDesignerBox.Canvas.GetTextWidth(S) * TEpiField(FLastEpiCtrl).Length + 15 +   // This calculates right side of previous placed control (with 5px margin)
+                  FDesignerBox.Canvas.GetTextWidth(TEpiField(Initiator).Question.Text) + 5 +        // This gives a rough estimate of the width of the Question text (5px margin)
+                  FDesignerBox.Canvas.GetTextWidth(TEpiField(Initiator).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
+        else
+          Pt.X := FLastEpiCtrl.Left +
+                  FDesignerBox.Canvas.GetTextWidth(S) * TEpiField(FLastEpiCtrl).Length + 15;    // This calculates right side of previous placed control (with 5px margin)
       end else begin
-        if (FLastEpiCtrl is TEpiField) then
+        if (Initiator is TEpiField) then
+          Pt.X := FLastEpiCtrl.Left +
+                  FDesignerBox.Canvas.GetTextWidth(TEpiHeading(FLastEpiCtrl).Caption.Text) + 10 +
+                  FDesignerBox.Canvas.GetTextWidth(TEpiField(Initiator).Question.Text) + 5 +        // This gives a rough estimate of the width of the Question text (5px margin)
+                  FDesignerBox.Canvas.GetTextWidth(TEpiField(Initiator).Name) + 5                   // This gives a rough estimate of the width of the Name (if shown).
+        else
+          Pt.X := FLastEpiCtrl.Left +
+                  FDesignerBox.Canvas.GetTextWidth(TEpiHeading(FLastEpiCtrl).Caption.Text) + 10;
+      end;
+    end else begin
+      if (FLastEpiCtrl is TEpiField) then
+      begin
+        Pt.Y := FLastEpiCtrl.Top + FieldHeigth;
+        if (Initiator is TEpiField) then
         begin
-          Pt.Y := FLastEpiCtrl.Top + FieldHeigth;
-          if (Sender is TEpiField) then
-          begin
-            Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldField;
-            Pt.X := ManagerSettings.DefaultRightPosition;
-          end else begin
-            Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldLabel;
-            Pt.X := ManagerSettings.DefaultLabelPosition;
-          end;
+          Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldField;
+          Pt.X := ManagerSettings.DefaultRightPosition;
+        end else begin
+          Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldLabel;
+          Pt.X := ManagerSettings.DefaultLabelPosition;
         end;
-        if (FLastEpiCtrl is TEpiHeading) then
+      end;
+      if (FLastEpiCtrl is TEpiHeading) then
+      begin
+        Pt.Y := FLastEpiCtrl.Top + HeadingHeigth;
+        if (Initiator is TEpiField) then
         begin
-          Pt.Y := FLastEpiCtrl.Top + HeadingHeigth;
-          if (Sender is TEpiField) then
-          begin
-            Pt.Y := Pt.Y + ManagerSettings.SpaceBtwFieldLabel;
-            Pt.X := ManagerSettings.DefaultRightPosition;
-          end else begin
-            Pt.Y := Pt.Y + ManagerSettings.SpaceBtwLabelLabel;
-            Pt.X := ManagerSettings.DefaultLabelPosition;
-          end;
+          Pt.Y := Pt.Y + ManagerSettings.SpaceBtwFieldLabel;
+          Pt.X := ManagerSettings.DefaultRightPosition;
+        end else begin
+          Pt.Y := Pt.Y + ManagerSettings.SpaceBtwLabelLabel;
+          Pt.X := ManagerSettings.DefaultLabelPosition;
         end;
       end;
     end;
-
-    with TEpiCustomControlItem(Sender) do
-    begin
-      // Top not yet adjusted for pixel position...
-      FLastRecYPos := Top;
-
-      BeginUpdate;
-      Top := Pt.Y;
-      Left := Pt.X;
-      EndUpdate;
-    end;
-    FLastEpiCtrl := TEpiCustomControlItem(Sender);
   end;
+
+  with TEpiCustomControlItem(Initiator) do
+  begin
+    // Top not yet adjusted for pixel position...
+    FLastRecYPos := Top;
+
+    BeginUpdate;
+    Top := Pt.Y;
+    Left := Pt.X;
+    EndUpdate;
+  end;
+  FLastEpiCtrl := TEpiCustomControlItem(Initiator);
+
+  InImportHook := false;
 end;
 
 procedure TImportStructureForm.BeforeLoad(Sender: TObject; Doc: TEpiDocument;
@@ -254,8 +259,9 @@ begin
   FLastEpiCtrl := nil;
 
   DataFile := Doc.DataFiles[Doc.DataFiles.Count - 1];
-  DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
-  DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+//  DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
+//  DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
+  DataFile.MainSection.RegisterOnChangeHook(@ImportHook);
 end;
 
 procedure TImportStructureForm.AfterLoad(Sender: TObject; Doc: TEpiDocument;

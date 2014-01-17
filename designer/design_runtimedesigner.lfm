@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 582
   ClientWidth = 812
   TabOrder = 0
-  DesignLeft = 703
-  DesignTop = 263
+  DesignLeft = 602
+  DesignTop = 251
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
@@ -2554,6 +2554,16 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = ClearDataActionExecute
       OnUpdate = ClearDataActionUpdate
     end
+    object RecodeDataAction: TAction
+      Category = 'Data'
+      Caption = 'Recode...'
+      OnExecute = RecodeDataActionExecute
+      OnUpdate = RecodeDataActionUpdate
+    end
+    object RenameControlsAction: TAction
+      Caption = 'Rename Controls...'
+      OnExecute = RenameControlsActionExecute
+    end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList
@@ -3968,6 +3978,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object MenuItem7: TMenuItem
       Caption = 'Data'
+      object MenuItem8: TMenuItem
+        Action = RecodeDataAction
+      end
       object ClearDataMenuItem: TMenuItem
         Action = ClearDataAction
       end

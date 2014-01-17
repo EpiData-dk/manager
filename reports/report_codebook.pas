@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  epireport_base, epireport_report_fieldlist, epireport_report_fieldinfo;
+  epireport_base, epireport_report_controllist, epireport_report_fieldinfo;
 
 
 resourcestring
@@ -42,11 +42,11 @@ var
 begin
   inherited DoDocumentReport(Doc, FileName, Index);
 
-  R := TEpiReportFieldList.Create(Generator);
-  with TEpiReportFieldList(R) do
+  R := TEpiReportControlList.Create(Generator);
+  with TEpiReportControlList(R) do
   begin
-    Fields := Doc.DataFiles[0].Fields;
-    ExtendedList := false;
+    ControlItems := Doc.DataFiles[0].ControlItems;
+    ExtendedList := true;
   end;
   R.RunReport;
   R.Free;

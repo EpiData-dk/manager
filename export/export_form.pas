@@ -16,6 +16,7 @@ type
 
   TExportForm = class(TForm)
     AllBitBtn: TBitBtn;
+    ExportReportChkBox: TCheckBox;
     ImageList1: TImageList;
     NoneBitBtn: TBitBtn;
     BitBtn3: TBitBtn;
@@ -135,11 +136,13 @@ begin
     ExportFileName := ExportFileNameEdit.Text;
     DataFileIndex := 0;
     ExportDeleted := ExportDeletedChkBox.Checked;
+
     if RangeRBtn.Checked then
     begin
       FromRecord := StrToInt(FromRecordEdit.Text) - 1;  // -1 because the record count in Core
       ToRecord   := StrToInt(ToRecordEdit.Text) - 1;    // expect the numbers 0-indexed.
     end;
+
     if NoneRecordsRadioBtn.Checked then
     begin
       FromRecord := 1;
@@ -297,13 +300,26 @@ begin
   EncodingCmbBox.ItemIndex := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ManagerSettings.ExportEncoding)));
   // Export Deleted:
   ExportDeletedChkBox.Checked := ManagerSettings.ExportDeleted;
+  ExportReportChkBox.Checked := ManagerSettings.ExportCreateReport;
 
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);
 end;
 
 procedure TExportForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+var
+  Rec: PFrameRec;
+  ErrorText: string;
 begin
+  if ModalResult = mrOk then
+  begin
+    Rec := PFrameRec(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex]);
+    CanClose := (Rec^.Frame as IExportSettingsPresenterFrame).CheckExportAllowed(FExportSetting, FDoc, ErrorText);
+
+    if not CanClose then
+      ShowMessage(ErrorText);
+  end;
+
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, Self.ClassName);
 end;
@@ -472,8 +488,8 @@ var
   Aform: TForm;
 begin
   Aform := TForm.Create(nil);
-  Aform.Width := 500;
-  Aform.Height := 500;
+  Aform.Width := 600;
+  Aform.Height := 650;
   Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
   Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
   SaveFormPosition(Aform, TExportForm.ClassName);

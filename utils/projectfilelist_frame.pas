@@ -5,8 +5,8 @@ unit projectfilelist_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Grids,
-  epidocument, epidatafiles;
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Grids, ComCtrls,
+  ExtCtrls, epidocument, epidatafiles, epicustombase;
 
 type
 
@@ -16,7 +16,12 @@ type
 
   TProjectFileListFrame = class(TFrame)
     ErrorListBox: TListBox;
+    Panel1: TPanel;
+    ProgressBar1: TProgressBar;
     StructureGrid: TStringGrid;
+    procedure Progress(const Sender: TEpiCustomBase;
+      ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
+      var Canceled: Boolean);
     procedure StructureGridCheckboxToggled(sender: TObject; aCol,
       aRow: Integer; aState: TCheckboxState);
     procedure StructureGridColRowMoved(Sender: TObject; IsColumn: Boolean;
@@ -98,6 +103,8 @@ procedure TProjectFileListFrame.AddDocumentToGrid(const FileName: string;
 var
   Idx: Integer;
   Ext: String;
+  i: Integer;
+  LastDate: TDateTime;
 begin
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
   with StructureGrid do
@@ -114,7 +121,15 @@ begin
       // Created
       Cells[CreatedCol.Index + 1, Idx]  := DateToStr(Doc.Study.Created);
       // Edited
-      Cells[LastEditCol.Index + 1, Idx] := DateToStr(Doc.Study.ModifiedDate);
+      LastDate := Doc.Study.ModifiedDate;
+      for i := 0 to Doc.DataFiles.Count - 1 do
+      begin
+        if Doc.DataFiles[i].RecModifiedDate > LastDate then
+          LastDate := Doc.DataFiles[i].RecModifiedDate;
+        if Doc.DataFiles[i].StructureModifiedDate > LastDate then
+          LastDate := Doc.DataFiles[i].StructureModifiedDate;
+      end;
+      Cells[LastEditCol.Index + 1, Idx] := DateToStr(LastDate);
     end else begin
       // Created
       Cells[CreatedCol.Index + 1, Idx]  := 'N/A';
@@ -153,14 +168,17 @@ var
   Idx: Integer;
   DataFile: TEpiDataFile;
   DocFile: TDocumentFile;
+  Res: Boolean;
 begin
   Importer := TEpiImport.Create;
   Importer.ImportCasing := ManagerSettings.ImportCasing;
+  Importer.OnProgress := @Progress;
   FCurrentFile := FileName;
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
 
   try
     DocFile := TDocumentFile.Create;
+    Res := False;
 
     if (ext = '.rec') or (ext = '.dta') then
     begin
@@ -175,15 +193,20 @@ begin
         Importer.ImportRec(FileName , DataFile, true);
       end;
       DoAfterImportFile(Doc, FileName);
+      Res := true;
     end
     else if (ext = '.epx') or (ext = '.epz') then
     begin
       DoBeforeImportFile(nil, FileName);
-      DocFile.OpenFile(FileName, true);
+      DocFile.OnProgress := @Progress;
+      Res := DocFile.OpenFile(FileName, true);
       DoAfterImportFile(DocFile.Document, FileName);
     end;
 
-    AddDocumentToGrid(FileName, DocFile.Document);
+    if Res then
+      AddDocumentToGrid(FileName, DocFile.Document)
+    else
+      ReportError('Failed to read file "' + ExtractFileName(FileName));
   except
     on E: Exception do
       begin
@@ -261,6 +284,42 @@ procedure TProjectFileListFrame.StructureGridCheckboxToggled(sender: TObject;
   aCol, aRow: Integer; aState: TCheckboxState);
 begin
   DoSelectionChanged;
+end;
+
+procedure TProjectFileListFrame.Progress(const Sender: TEpiCustomBase;
+  ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
+  var Canceled: Boolean);
+Const
+  LastUpdate: Cardinal = 0;
+  ProgressUpdate: Cardinal = 0;
+begin
+  case ProgressType of
+    eptInit:
+      begin
+        ProgressUpdate := MaxPos div 50;
+        ProgressBar1.Position := CurrentPos;
+        ProgressBar1.Visible := true;
+        ProgressBar1.Max := MaxPos;
+        Application.ProcessMessages;
+      end;
+    eptFinish:
+      begin
+        ProgressBar1.Visible := false;
+        Application.ProcessMessages;
+        LastUpdate := 0;
+      end;
+    eptRecords:
+      begin
+        if CurrentPos > (LastUpdate + ProgressUpdate) then
+        begin
+          ProgressBar1.Position := CurrentPos;
+          {$IFNDEF MSWINDOWS}
+          Application.ProcessMessages;
+          {$ENDIF}
+          LastUpdate := CurrentPos;
+        end;
+      end;
+  end;
 end;
 
 constructor TProjectFileListFrame.Create(TheOwner: TComponent);

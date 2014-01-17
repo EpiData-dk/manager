@@ -38,7 +38,8 @@ type
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FValueLabelSet: TEpiValueLabelSet;
     procedure UpdateGrid;
-    procedure EventHook(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure EventHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
     function  ValueLabelFromNode(Node: PVirtualNode): TEpiCustomValueLabel;
     procedure NodeError(Node: PVirtualNode; Column: TColumnIndex; Const Msg: string);
@@ -359,9 +360,12 @@ begin
     VLG.RootNodeCount := 0;
 end;
 
-procedure TValueLabelGridFrame.EventHook(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TValueLabelGridFrame.EventHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 begin
+  if Initiator <> FValueLabelSet then exit;
+
   case EventGroup of
     eegCustomBase:
       begin

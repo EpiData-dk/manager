@@ -7,15 +7,19 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, MaskEdit,
   epiexportsettings, export_frame_types, epimiscutils, settings2_interface,
-  settings2_var;
+  settings2_var, epidocument;
 
 type
 
   { TExportCSVFrame }
 
   TExportCSVFrame = class(TFrame, IExportSettingsPresenterFrame, ISettingsFrame)
+    ByteOrderMarkCheckBox: TCheckBox;
+    ExportFieldNameChkBox: TCheckBox;
     FieldSepEdit: TEdit;
     DateSepEdit: TEdit;
+    QuoteCharLabel: TLabel;
+    QuoteCharEdit: TEdit;
     TimeSepEdit: TEdit;
     DecimalSepEdit: TEdit;
     NewLineCmbBox: TComboBox;
@@ -27,7 +31,7 @@ type
     SeparatorGrpBox: TGroupBox;
   private
     { private declarations }
-    FTextExport: TFrame;
+//    FTextExport: TFrame;
     FData:       PManagerSettings;
   public
     { public declarations }
@@ -40,7 +44,10 @@ type
     procedure SetSettings(Data: PManagerSettings);
     function ApplySettings: boolean;
     function ExportHeadings: boolean;
-  end; 
+    function CheckExportAllowed(Const Setting: TEpiExportSetting;
+      Const Doc: TEpiDocument;
+      out ErrorText: string): boolean;
+  end;
 
 implementation
 
@@ -68,13 +75,13 @@ begin
     AddObject('Windows' {$IFDEF WINDOWS}+ ' (System)'{$ENDIF}, TString.Create(#13#10));
   end;
 
-  // Custom Text Frame;
+{  // Custom Text Frame;
   FTextExport := TExportCustomTextFrame.Create(self);
   FTextExport.Parent := Self;
   FTextExport.AnchorToNeighbour(akTop, 10, NewLineCmbBox);
   FTextExport.AnchorParallel(akLeft, 20, Self);
   FTextExport.AnchorParallel(akRight, 20, Self);
-  FTextExport.AnchorParallel(akBottom, 10, Self);
+  FTextExport.AnchorParallel(akBottom, 10, Self);     }
 
   // SETUP ACCORDING TO MANAGERSETTINGS.
   SetSettings(@ManagerSettings);
@@ -108,9 +115,12 @@ begin
     TimeSeparator     := TimeSepEdit.Text;
     DecimalSeparator  := DecimalSepEdit.Text;
     NewLine           := TString(NewLineCmbBox.Items.Objects[NewLineCmbBox.ItemIndex]).Str;
+    QuoteChar         := QuoteCharEdit.Text;
+    ExportFieldNames  := ExportFieldNameChkBox.Checked;
+    ByteOrderMark     := ByteOrderMarkCheckBox.Checked;
   end;
 
-  result := (FTextExport as IExportSettingsFrame).UpdateExportSetting(Setting);
+  result := true; // (FTextExport as IExportSettingsFrame).UpdateExportSetting(Setting);
 end;
 
 function TExportCSVFrame.GetFileDialogExtensions: TEpiDialogFilters;
@@ -129,8 +139,8 @@ begin
     DateSepEdit.Text                                                  := ExportCSVDateSep;
     TimeSepEdit.Text                                                  := ExportCSVTimeSep;
     DecimalSepEdit.Text                                               := ExportCSVDecSep;
-    TExportCustomTextFrame(FTextExport).ExportFieldNameChkBox.Checked := ExportCSVFieldName;
-    TExportCustomTextFrame(FTextExport).QuoteCharEdit.Text            := ExportCSVQuote;
+    ExportFieldNameChkBox.Checked                                     := ExportCSVFieldName;
+    QuoteCharEdit.Text                                                := ExportCSVQuote;
     NewLineCmbBox.ItemIndex                                           := ExportCSVNewLine;
   end;
 end;
@@ -142,7 +152,7 @@ begin
     (DateSepEdit.Text <> '') and
     (TimeSepEdit.Text <> '') and
     (DecimalSepEdit.Text <> '') and
-    (TExportCustomTextFrame(FTextExport).QuoteCharEdit.Text <> '');
+    (QuoteCharEdit.Text <> '');
   if not result then exit;
 
   with FData^ do
@@ -151,8 +161,8 @@ begin
     ExportCSVDateSep   := DateSepEdit.Text;
     ExportCSVTimeSep   := TimeSepEdit.Text;
     ExportCSVDecSep    := DecimalSepEdit.Text;
-    ExportCSVFieldName := TExportCustomTextFrame(FTextExport).ExportFieldNameChkBox.Checked;
-    ExportCSVQuote     := TExportCustomTextFrame(FTextExport).QuoteCharEdit.Text;
+    ExportCSVFieldName := ExportFieldNameChkBox.Checked;
+    ExportCSVQuote     := QuoteCharEdit.Text;
     ExportCSVNewLine   := NewLineCmbBox.ItemIndex;
   end;
 end;
@@ -160,6 +170,12 @@ end;
 function TExportCSVFrame.ExportHeadings: boolean;
 begin
   result := false;
+end;
+
+function TExportCSVFrame.CheckExportAllowed(const Setting: TEpiExportSetting;
+  const Doc: TEpiDocument; out ErrorText: string): boolean;
+begin
+  result := true;
 end;
 
 initialization

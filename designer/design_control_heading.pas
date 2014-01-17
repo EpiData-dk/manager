@@ -17,7 +17,8 @@ type
   private
     function GetEpiControl: TEpiCustomControlItem;
     function GetExtendedBounds: TRect;
-    procedure OnHeadingChange(Sender: TObject; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnHeadingChange(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure SetEpiControl(const AValue: TEpiCustomControlItem);
     procedure SetExtendedBounds(const AValue: TRect);
     procedure UpdateHint;
@@ -122,14 +123,17 @@ begin
   end;
 end;
 
-procedure TDesignHeading.OnHeadingChange(Sender: TObject;
-  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+procedure TDesignHeading.OnHeadingChange(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
 begin
   if EventGroup = eegCustomBase then
   begin
     case TEpiCustomChangeEventType(EventType) of
       ecceDestroy:
         begin
+          if Initiator <> FHeading then exit;
+
           FHeading.UnRegisterOnChangeHook(@OnHeadingChange);
           FHeading := nil;
         end;

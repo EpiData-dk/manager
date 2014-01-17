@@ -1,4 +1,4 @@
-object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
+object ProjectValidationFrame: TProjectValidationFrame
   Left = 0
   Height = 450
   Top = 0
@@ -6,21 +6,21 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
   ClientHeight = 450
   ClientWidth = 647
   TabOrder = 0
-  DesignLeft = 60
-  DesignTop = 473
+  DesignLeft = 806
+  DesignTop = 324
   object GroupBox3: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Bevel1
     AnchorSideBottom.Control = OptionsChkGrp
     Left = 10
-    Height = 303
+    Height = 369
     Top = 10
     Width = 304
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 10
     BorderSpacing.Bottom = 10
     Caption = 'Key Fields:'
-    ClientHeight = 286
+    ClientHeight = 352
     ClientWidth = 300
     TabOrder = 0
     object KFNoneBtn: TButton
@@ -79,7 +79,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       AnchorSideBottom.Control = GroupBox3
       AnchorSideBottom.Side = asrBottom
       Left = 5
-      Height = 224
+      Height = 290
       Top = 57
       Width = 263
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -100,10 +100,10 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       Left = 5
       Height = 15
       Top = 5
-      Width = 202
+      Width = 156
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
-      Caption = 'Fields used to combine records:'
+      Caption = 'Fields identifying records'
       ParentColor = False
     end
     object Panel1: TPanel
@@ -113,7 +113,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       AnchorSideRight.Side = asrBottom
       Left = 273
       Height = 48
-      Top = 145
+      Top = 178
       Width = 25
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -217,7 +217,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     AnchorSideBottom.Control = GroupBox3
     AnchorSideBottom.Side = asrBottom
     Left = 314
-    Height = 303
+    Height = 369
     Top = 10
     Width = 5
     Anchors = [akTop, akBottom]
@@ -231,14 +231,14 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = OptionsChkGrp
     Left = 319
-    Height = 303
+    Height = 369
     Top = 10
     Width = 318
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 10
     BorderSpacing.Bottom = 10
-    Caption = 'Compare Fields:'
-    ClientHeight = 286
+    Caption = 'Validation Fields:'
+    ClientHeight = 352
     ClientWidth = 314
     TabOrder = 1
     object CmpFCheckList: TCheckListBox
@@ -250,7 +250,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       AnchorSideBottom.Control = GroupBox4
       AnchorSideBottom.Side = asrBottom
       Left = 5
-      Height = 224
+      Height = 290
       Top = 57
       Width = 304
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -303,10 +303,10 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       Left = 5
       Height = 15
       Top = 5
-      Width = 148
+      Width = 144
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
-      Caption = 'Compare data in fields:'
+      Caption = 'Validate Data in Fields:'
       ParentColor = False
     end
     object CmpFExcludeTextFBtn: TButton
@@ -331,8 +331,8 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 10
-    Height = 117
-    Top = 323
+    Height = 51
+    Top = 389
     Width = 627
     Anchors = [akLeft, akRight, akBottom]
     AutoFill = True
@@ -348,23 +348,21 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     ChildSizing.ShrinkHorizontal = crsScaleChilds
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 1
-    ClientHeight = 100
+    ChildSizing.ControlsPerLine = 2
+    ClientHeight = 34
     ClientWidth = 623
+    Columns = 2
     Items.Strings = (
-      'Exclude deleted records'
-      'Ignore case in text fields'
-      'Ignore missing records in duplicate file'
-      'Add result field'
+      'A'
     )
     TabOrder = 2
     Data = {
-      0400000002020202
+      0100000002
     }
   end
   object ActionList1: TActionList
-    left = 320
-    top = 192
+    left = 400
+    top = 216
     object KFNoneAction: TAction
       Category = 'KeyFields'
       Caption = 'None'

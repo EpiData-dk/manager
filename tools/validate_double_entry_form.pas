@@ -264,12 +264,12 @@ begin
       begin
         if TEpiField(Sender).Name = EpiDoubleEntryFieldName then
           PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Sender), 0);
-        TEpiField(Sender).UnRegisterOnChangeHook(@AddFieldHook);
+//        TEpiField(Sender).UnRegisterOnChangeHook(@AddFieldHook);
       end;
-    ecceAddItem:
-      TEpiField(Data).RegisterOnChangeHook(@AddFieldHook, true);
-    ecceDelItem:
-      TEpiField(Data).UnRegisterOnChangeHook(@AddFieldHook);
+    ecceAddItem:    ;
+//      TEpiField(Data).RegisterOnChangeHook(@AddFieldHook, true);
+    ecceDelItem:     ;
+//      TEpiField(Data).UnRegisterOnChangeHook(@AddFieldHook);
     ecceSetItem: ;
     ecceSetTop: ;
     ecceSetLeft: ;
@@ -399,12 +399,12 @@ begin
   UpdateMainDocInfo(FileName);
   UpdateDupDocInfo('');
 
-  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
+//  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
 end;
 
 destructor TValidateDoubleEntryForm.Destroy;
 begin
-  FMainDoc.DataFiles[0].Fields.UnRegisterOnChangeHook(@AddFieldHook);
+//  FMainDoc.DataFiles[0].Fields.UnRegisterOnChangeHook(@AddFieldHook);
   inherited Destroy;
 end;
 

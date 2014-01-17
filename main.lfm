@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 900
+  Left = 617
   Height = 603
-  Top = 355
+  Top = 282
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -266,6 +266,12 @@ object MainForm: TMainForm
       object MenuItem1: TMenuItem
         Caption = '-'
       end
+      object RenameControlsMenuItem: TMenuItem
+        Caption = 'RenameControls'
+      end
+      object MenuItem30: TMenuItem
+        Caption = '-'
+      end
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
       end
@@ -273,7 +279,7 @@ object MainForm: TMainForm
     object MenuItem21: TMenuItem
       Caption = 'Document'
       object MenuItem2: TMenuItem
-        Caption = 'Reports'
+        Caption = 'Report Structure'
         object ProjectOverviewReportMenuItem: TMenuItem
           Action = ProjectReportAction
         end
@@ -310,6 +316,9 @@ object MainForm: TMainForm
       end
       object MenuItem24: TMenuItem
         Action = CountsReportAction
+      end
+      object MenuItem13: TMenuItem
+        Action = ValidationReportAction
       end
     end
     object ToolsMenu: TMenuItem
@@ -495,6 +504,11 @@ object MainForm: TMainForm
       Caption = 'Import file...'
       OnExecute = ImportInNewProjectActionExecute
     end
+    object ValidationReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Data Validation'
+      OnExecute = ValidationReportActionExecute
+    end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
     left = 208
@@ -519,8 +533,8 @@ object MainForm: TMainForm
   object ProjectDetailsPopupMenu: TPopupMenu
     left = 152
     top = 112
-    object StudyInfoPopupMenuItem: TMenuItem
-      Caption = 'StudyInfo'
+    object ValueLabelEditorPopupMenuItem: TMenuItem
+      Caption = 'ValueLabelEditor'
     end
     object KeyFieldsPopupMenuItem: TMenuItem
       Caption = 'KeyFields'
@@ -528,29 +542,38 @@ object MainForm: TMainForm
     object SetPasswordPopupMenuItem: TMenuItem
       Caption = 'Password'
     end
+    object StudyInfoPopupMenuItem: TMenuItem
+      Caption = 'StudyInfo'
+    end
+    object MenuItem29: TMenuItem
+      Caption = '-'
+    end
+    object RenameControlsPopupMenuItem: TMenuItem
+      Caption = 'RenameControls'
+    end
+    object MenuItem32: TMenuItem
+      Caption = '-'
+    end
     object ProjectPropertiesPopupMenuItem: TMenuItem
       Caption = 'Properties'
     end
-    object ValueLabelEditorPopupMenuItem: TMenuItem
-      Caption = 'ValueLabelEditor'
-    end
   end
   object DocumentPopupMenu: TPopupMenu
-    left = 272
-    top = 40
+    left = 280
+    top = 48
     object MenuItem9: TMenuItem
-      Caption = 'Reports'
+      Caption = 'Report Structure'
       object MenuItem10: TMenuItem
         Action = ProjectReportAction
       end
       object MenuItem11: TMenuItem
         Action = QuestionListReportAction
       end
-      object MenuItem12: TMenuItem
-        Action = ValueLabelListReportAction
-      end
       object MenuItem14: TMenuItem
         Action = ExtendedListReportAction
+      end
+      object MenuItem12: TMenuItem
+        Action = ValueLabelListReportAction
       end
       object MenuItem27: TMenuItem
         Action = CodeBookReportAction
@@ -576,6 +599,9 @@ object MainForm: TMainForm
     end
     object MenuItem20: TMenuItem
       Action = CountsReportAction
+    end
+    object MenuItem28: TMenuItem
+      Action = ValidationReportAction
     end
   end
 end
