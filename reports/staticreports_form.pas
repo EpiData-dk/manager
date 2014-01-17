@@ -62,7 +62,7 @@ implementation
 uses
   settings2_var, settings2, epimiscutils, viewer_form,
   epireport_generator_html, epireport_generator_txt, epireport_generator_base,
-  ok_cancel_form;
+  ok_cancel_form, manager_types;
 
 { TStaticReportsForm }
 
@@ -227,6 +227,7 @@ var
   FakeReport: TReportBase;
   TabSheet: TTabSheet;
   FC: TCustomFrameClass;
+  Intf: ICanCloseQuery;
 begin
   Create(TheOwner);
   FReportClass := ReportClass;
@@ -247,6 +248,9 @@ begin
       FNextFrame.Align := alClient;
       FNextFrame.Parent := FNextForm;
       FNextForm.Caption := (FNextFrame as IReportOptionFrame).GetFrameCaption;
+
+      if Supports(FNextFrame, ICanCloseQuery, Intf) then
+        TOkCancelForm(FNextForm).CanCloseInt := Intf;
     end;
   end;
 

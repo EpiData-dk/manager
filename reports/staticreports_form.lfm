@@ -28,7 +28,7 @@ object StaticReportsForm: TStaticReportsForm
       Left = 11
       Height = 28
       Top = 11
-      Width = 87
+      Width = 88
       Action = AddFilesAction
       AutoSize = True
       BorderSpacing.Left = 10
@@ -75,10 +75,10 @@ object StaticReportsForm: TStaticReportsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 532
+      Left = 531
       Height = 32
       Top = 9
-      Width = 52
+      Width = 53
       Action = OkAction
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -92,10 +92,10 @@ object StaticReportsForm: TStaticReportsForm
       AnchorSideTop.Control = OkBtn
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = OkBtn
-      Left = 442
+      Left = 440
       Height = 34
       Top = 8
-      Width = 80
+      Width = 81
       Action = CancelAction
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -111,10 +111,10 @@ object StaticReportsForm: TStaticReportsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn2
-      Left = 108
+      Left = 109
       Height = 20
       Top = 15
-      Width = 324
+      Width = 321
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Right = 10
