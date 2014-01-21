@@ -84,10 +84,12 @@ begin
   if Assigned(DisplayFields) then
     V.DisplayFields := DisplayFields;
 
-{  if SortFieldNo = -1 then
+  {$IFDEF DARWIN}
+  if SortFieldNo = -1 then
     V.SortByIndexAction.Execute
   else
-    V.ListGridHeaderClick(nil, true, SortFieldNo);    }
+    V.ListGridHeaderClick(nil, true, SortFieldNo);
+  {$ENDIF}
 
   if ShowIndexFields then
     V.ShowIndexOrAllFieldsAction.Execute;
@@ -138,7 +140,9 @@ end;
 
 procedure TFormHandler.ShowForm(Sender: TObject);
 begin
+  {$IFNDEF DARWIN}
   Frame.InitVisual;
+  {$ENDIF}
 end;
 
 end.
