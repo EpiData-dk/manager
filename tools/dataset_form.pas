@@ -24,10 +24,13 @@ procedure DataSetViewerFormRestoreDefaultPos;
 implementation
 
 uses
-  Forms, Controls, settings2_var, settings2, epiv_dataset_viewer_frame,
+  Forms, Controls, settings2_var, settings2,
+  {$IFDEF DARWIN}
+  epiv_dataset_viewer_frame_mac,
+  {$ELSE}
+  epiv_dataset_viewer_frame,
+  {$ENDIF}
   LCLType,
-
-
   Dialogs;
 
 const
