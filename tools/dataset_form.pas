@@ -24,10 +24,13 @@ procedure DataSetViewerFormRestoreDefaultPos;
 implementation
 
 uses
-  Forms, Controls, settings2_var, settings2, epiv_dataset_viewer_frame,
+  Forms, Controls, settings2_var, settings2,
+  {$IFDEF DARWIN}
+  epiv_dataset_viewer_frame_mac,
+  {$ELSE}
+  epiv_dataset_viewer_frame,
+  {$ENDIF}
   LCLType,
-
-
   Dialogs;
 
 const
@@ -81,10 +84,12 @@ begin
   if Assigned(DisplayFields) then
     V.DisplayFields := DisplayFields;
 
-{  if SortFieldNo = -1 then
+  {$IFDEF DARWIN}
+  if SortFieldNo = -1 then
     V.SortByIndexAction.Execute
   else
-    V.ListGridHeaderClick(nil, true, SortFieldNo);    }
+    V.ListGridHeaderClick(nil, true, SortFieldNo);
+  {$ENDIF}
 
   if ShowIndexFields then
     V.ShowIndexOrAllFieldsAction.Execute;
@@ -135,7 +140,9 @@ end;
 
 procedure TFormHandler.ShowForm(Sender: TObject);
 begin
+  {$IFNDEF DARWIN}
   Frame.InitVisual;
+  {$ENDIF}
 end;
 
 end.

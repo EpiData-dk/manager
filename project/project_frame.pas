@@ -47,6 +47,7 @@ type
     procedure ProjectPasswordActionExecute(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
+    procedure SaveProjectActionUpdate(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
     procedure StudyInformationActionExecute(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
@@ -237,10 +238,14 @@ begin
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
-var
-  Res: LongInt;
 begin
   SaveProject(False);
+end;
+
+procedure TProjectFrame.SaveProjectActionUpdate(Sender: TObject);
+begin
+  SaveProjectAction.Enabled :=
+    (not FDocumentFile.ReadOnly);
 end;
 
 procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
