@@ -127,6 +127,7 @@ object ProjectFrame: TProjectFrame
       Hint = 'Save Project'
       ImageIndex = 1
       OnExecute = SaveProjectActionExecute
+      OnUpdate = SaveProjectActionUpdate
       ShortCut = 16467
     end
     object SaveProjectAsAction: TAction
