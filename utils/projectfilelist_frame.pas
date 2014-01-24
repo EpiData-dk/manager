@@ -201,6 +201,15 @@ begin
       DocFile.OnProgress := @Progress;
       Res := DocFile.OpenFile(FileName, true);
       DoAfterImportFile(DocFile.Document, FileName);
+    end
+    else if (ext = '.csv') or (ext = '.txt') then
+    begin
+      Doc := DocFile.CreateNewDocument('en');
+      DataFile := Doc.DataFiles.NewDataFile;
+      DoBeforeImportFile(Doc, FileName);
+      Importer.ImportTxt(FileName, DataFile, true);
+      DoAfterImportFile(Doc, FileName);
+      Res := true;
     end;
 
     if Res then
