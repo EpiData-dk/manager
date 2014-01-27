@@ -176,6 +176,9 @@ begin
   if VarPrefixEdit.Text = '' then
     Exit(False);
 
+  if ComboBox1.ItemIndex < 0 then
+    Exit(False);
+
   with FData^ do
   begin
     ExportDDIValueLabels           := TCustomValueLabelFrame(ValueLabelFrame).ExportValueLabelsChkBox.Checked;
