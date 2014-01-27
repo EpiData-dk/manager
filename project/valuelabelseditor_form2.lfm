@@ -1,7 +1,7 @@
 object ValueLabelEditor2: TValueLabelEditor2
-  Left = 2060
+  Left = 449
   Height = 627
-  Top = 165
+  Top = 271
   Width = 818
   Caption = 'Valuelabel Editor'
   ClientHeight = 627
@@ -10,6 +10,7 @@ object ValueLabelEditor2: TValueLabelEditor2
   OnCreate = FormCreate
   OnDeactivate = FormDeactivate
   OnShow = FormShow
+  Position = poScreenCenter
   LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
