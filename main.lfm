@@ -149,6 +149,9 @@ object MainForm: TMainForm
       object AddStructureMenuItem: TMenuItem
         Caption = 'AddStructure'
       end
+      object AddStructFromBLMenuItem: TMenuItem
+        Caption = 'AddStructureCB'
+      end
       object FileMenuDivider3: TMenuItem
         Caption = '-'
       end
@@ -508,6 +511,11 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Data Validation'
       OnExecute = ValidationReportActionExecute
+    end
+    object ImportCBInNewProjectAction: TAction
+      Category = 'File'
+      Caption = 'Import from clipboard'
+      OnExecute = ImportCBInNewProjectActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

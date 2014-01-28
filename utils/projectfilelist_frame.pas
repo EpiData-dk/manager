@@ -26,6 +26,7 @@ type
       aRow: Integer; aState: TCheckboxState);
     procedure StructureGridColRowMoved(Sender: TObject; IsColumn: Boolean;
       sIndex, tIndex: Integer);
+    procedure ClipboardRead(ClipBoardLine: TStrings);
   private
     { private declarations }
     FCurrentFile: string;
@@ -86,7 +87,7 @@ implementation
 
 uses
   epiimport, LCLProc, epimiscutils, Dialogs, managerprocs, epiv_documentfile,
-  settings2_var;
+  settings2_var, Clipbrd, LCLIntf, LCLType;
 
 { TProjectFileListFrame }
 
@@ -96,6 +97,19 @@ begin
   if IsColumn then exit;
 
   FDocList.Move(sIndex - 1, tIndex - 1);
+end;
+
+procedure TProjectFileListFrame.ClipboardRead(ClipBoardLine: TStrings);
+var
+  MS: TMemoryStream;
+begin
+  MS := TMemoryStream.Create;
+  if Clipboard.GetFormat(PredefinedClipboardFormat(pcfText), MS) then
+  begin
+    Ms.Position := 0;
+    ClipBoardLine.LoadFromStream(MS);
+  end;
+  MS.Free;
 end;
 
 procedure TProjectFileListFrame.AddDocumentToGrid(const FileName: string;
@@ -113,7 +127,10 @@ begin
     RowCount := RowCount + 1;
 
     // Filename column.
-    Cells[FileNameCol.Index + 1, Idx] := ExtractFileName(FileName);
+    if FileName = '' then
+      Cells[FileNameCol.Index + 1, Idx] := '(Clipboard)'
+    else
+      Cells[FileNameCol.Index + 1, Idx] := ExtractFileName(FileName);
     // Include row - checkbox
     Cells[IncludeCol.Index + 1, Idx]  := '1';
     if (ext = '.epx') or (ext ='.epz') then
@@ -173,6 +190,7 @@ begin
   Importer := TEpiImport.Create;
   Importer.ImportCasing := ManagerSettings.ImportCasing;
   Importer.OnProgress := @Progress;
+  Importer.OnClipBoardRead := @ClipboardRead;
   FCurrentFile := FileName;
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
 
@@ -202,7 +220,10 @@ begin
       Res := DocFile.OpenFile(FileName, true);
       DoAfterImportFile(DocFile.Document, FileName);
     end
-    else if (ext = '.csv') or (ext = '.txt') then
+    else if (ext = '.csv') or
+            (ext = '.txt') or
+            (FileName = '') // import from clipboard
+    then
     begin
       Doc := DocFile.CreateNewDocument('en');
       DataFile := Doc.DataFiles.NewDataFile;

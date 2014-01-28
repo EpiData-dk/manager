@@ -15,6 +15,7 @@ type
 
   TImportStructureForm = class(TForm)
     AddFilesAction: TAction;
+    OpenCBBtn: TBitBtn;
     CancelAction: TAction;
     Label1: TLabel;
     OkAction: TAction;
@@ -32,6 +33,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure OkActionExecute(Sender: TObject);
     procedure AddFilesActionExecute(Sender: TObject);
+    procedure OpenCBBtnClick(Sender: TObject);
   private
     { Data Import }
     FImportDataSelectedIndex: integer;
@@ -41,6 +43,7 @@ type
     FOldColRowMoved: TGridOperationEvent;
   private
     { private declarations }
+    FInitialFiles: TStringList;
     FSelectedDocuments: TStringList;
     FLastRecYPos: Integer;
     FLastEpiCtrl: TEpiCustomControlItem;
@@ -59,8 +62,9 @@ type
     procedure SetImportData(AValue: boolean);
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; Const Files: TStrings);
+    constructor Create(TheOwner: TComponent);
     destructor Destroy; override;
+    procedure  AddInitialFiles(Const Files: TStrings);
     class procedure RestoreDefaultPos;
     property    SelectedDocuments: TStringList read FSelectedDocuments;
     property    ImportData: boolean read FImportData write SetImportData;
@@ -114,6 +118,16 @@ begin
   if not Dlg.Execute then exit;
 
   FProjectList.AddFiles(Dlg.Files);
+end;
+
+procedure TImportStructureForm.OpenCBBtnClick(Sender: TObject);
+var
+  Files: TStringList;
+begin
+  Files := TStringList.Create;
+  Files.Add('');
+  FProjectList.AddFiles(Files);
+  Files.Free;
 end;
 
 procedure TImportStructureForm.ImportHook(const Sender,
@@ -322,6 +336,21 @@ begin
     FDataCol.ReadOnly := true;
     FDataCol.Color := clSilver;
   end;
+
+
+  if Assigned(FInitialFiles) then
+  begin
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
+
+    FProjectList.AddFiles(FInitialFiles);
+
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+
+    if ImportData then
+      FProjectList.StructureGrid.Cells[FDataCol.Index + 1, 1] := '1';
+  end;
 end;
 
 procedure TImportStructureForm.ImportDataColRowMoved(Sender: TObject;
@@ -386,8 +415,7 @@ begin
   end;
 end;
 
-constructor TImportStructureForm.Create(TheOwner: TComponent;
-  const Files: TStrings);
+constructor TImportStructureForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
@@ -411,14 +439,21 @@ begin
     FDesignerBox := TScrollBox(TheOwner);
 
   FProjectList.DocList.OnChange := @DocListHook;
-
-  FProjectList.AddFiles(Files);
 end;
 
 destructor TImportStructureForm.Destroy;
 begin
   FSelectedDocuments.Free;
   inherited Destroy;
+end;
+
+procedure TImportStructureForm.AddInitialFiles(const Files: TStrings);
+begin
+  if Assigned(Files) and (Files.Count > 0) then
+  begin
+    FInitialFiles := TStringList.Create;
+    FInitialFiles.Assign(Files);
+  end;
 end;
 
 class procedure TImportStructureForm.RestoreDefaultPos;

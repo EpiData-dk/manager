@@ -59,6 +59,7 @@ begin
   D_DeleteControl              := KeyToShortCut(VK_BACK, []);
   D_DeleteControl_Fast         := KeyToShortCut(VK_BACK, [ssMeta]);
   D_ImportData                 := KeyToShortCut(VK_I, [ssMeta]);
+  D_ImportDataCB               := KeyToShortCut(VK_I, [ssMeta, ssShift]);
   D_MoveTop                    := KeyToShortCut(VK_UP, [ssMeta]);
   D_MoveSideUp                 := KeyToShortCut(VK_UP, [ssAlt]);
   D_MoveControlUp              := KeyToShortCut(VK_UP, []);

@@ -15,9 +15,11 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    ImportCBInNewProjectAction: TAction;
     MenuItem13: TMenuItem;
     MenuItem28: TMenuItem;
     MenuItem29: TMenuItem;
+    AddStructFromBLMenuItem: TMenuItem;
     RenameControlsPopupMenuItem: TMenuItem;
     MenuItem32: TMenuItem;
     RenameControlsMenuItem: TMenuItem;
@@ -178,6 +180,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ImportCBInNewProjectActionExecute(Sender: TObject);
     procedure ImportInNewProjectActionExecute(Sender: TObject);
     procedure NewProjectActionExecute(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -279,6 +282,12 @@ begin
 
   UpdateSettings;
   UpdateRecentFiles;
+end;
+
+procedure TMainForm.ImportCBInNewProjectActionExecute(Sender: TObject);
+begin
+  DoNewProject;
+  TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportCBAction.Execute;
 end;
 
 procedure TMainForm.ImportInNewProjectActionExecute(Sender: TObject);
@@ -1039,6 +1048,7 @@ begin
   ExtendedListReportAction.ShortCut   := M_ExtendedListReport;
   ProjectReportAction.ShortCut        := M_ProjectOverviewReport;
   ImportInNewProjectAction.ShortCut   := D_ImportData;
+  ImportCBInNewProjectAction.ShortCut := D_ImportDataCB;
 end;
 
 procedure TMainForm.UpdateSettings;
@@ -1247,7 +1257,8 @@ begin
     // The "importnewprojectaction" is an action that is only assigned if no
     // active project is assigned. This will create a new project and start
     // the import dialog.
-    AddStructureMenuItem.Action := ImportInNewProjectAction;
+    AddStructureMenuItem.Action    := ImportInNewProjectAction;
+    AddStructFromBLMenuItem.Action := ImportCBInNewProjectAction;
     exit;
   end;
 
@@ -1258,6 +1269,7 @@ begin
   PrintDataFormMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PrintDataFormAction;
   // -
   AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
+  AddStructFromBLMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportCBAction;
 
   // Edit
   UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;

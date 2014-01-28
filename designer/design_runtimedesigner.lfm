@@ -2564,6 +2564,12 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Caption = 'Rename Controls...'
       OnExecute = RenameControlsActionExecute
     end
+    object ImportCBAction: TAction
+      Caption = 'Import from clipboard'
+      Hint = 'Import data and structure from clipboard'
+      ImageIndex = 13
+      OnExecute = ImportCBActionExecute
+    end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList

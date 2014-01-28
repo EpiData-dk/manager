@@ -52,6 +52,7 @@ var
   D_EditControl,
   D_DeleteControl, D_DeleteControl_Fast,
   D_ImportData,
+  D_ImportDataCB,
   D_MoveTop,
   D_MoveSideUp,
   D_MoveControlUp,

@@ -15,6 +15,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame)
+    ImportCBAction: TAction;
     RenameControlsAction: TAction;
     RecodeDataAction: TAction;
     ClearDataAction: TAction;
@@ -196,6 +197,7 @@ type
     function FieldNamePrefix: string;
     procedure HeadingBtnClick(Sender: TObject);
     procedure ImportActionExecute(Sender: TObject);
+    procedure ImportCBActionExecute(Sender: TObject);
     procedure NewDateFieldActionExecute(Sender: TObject);
     procedure NewDateFieldFastActionExecute(Sender: TObject);
     procedure NewFloatFieldActionExecute(Sender: TObject);
@@ -281,6 +283,7 @@ type
     procedure PasteEpiDoc(const ImportDoc: TEpiDocument;
       RenameVL, RenameFields: boolean;
       ImportData: boolean);
+    function ImportStructureAndData(Const Files: TStrings): boolean;
   private
     { Print }
     procedure DoPrintDataForm;
@@ -433,11 +436,8 @@ end;
 procedure TRuntimeDesignFrame.ImportActionExecute(Sender: TObject);
 var
   Dlg: TOpenDialog;
-  ImpStructurForm: TImportStructureForm;
-  i: Integer;
 begin
   Dlg := nil;
-  ImpStructurForm := nil;
   try
     Dlg := TOpenDialog.Create(Self);
     Dlg.Title := 'Add structure from existing file(s)';
@@ -446,39 +446,22 @@ begin
     Dlg.Options := [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail];
     if not Dlg.Execute then exit;
 
-    Screen.Cursor := crHourGlass;
-    Application.ProcessMessages;
-    ImpStructurForm := TImportStructureForm.Create(FDesignScrollBox, Dlg.Files);
-    Screen.Cursor := crDefault;
-    Application.ProcessMessages;
-
-    ImpStructurForm.ImportData := (DataFile.Size = 0);
-    if ImpStructurForm.ShowModal = mrCancel then exit;
-
-    // Prepare screen...
-    Screen.Cursor := crHourGlass;
-    Application.ProcessMessages;
-    try
-      MainForm.BeginUpdatingForm;
-
-      for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
-        PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
-          ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex = 1,
-          ImpStructurForm.FieldsRenameGrpBox.ItemIndex = 1,
-          ImpStructurForm.ImportDataIndex = i
-        );
-
-      FDesignPanel.Surface.Select(FDesignPanel);
-      FDesignPanel.Surface.UpdateDesigner;
-    finally
-      MainForm.EndUpdatingForm;
-    end;
+    ImportStructureAndData(Dlg.Files);
   finally
-    Screen.Cursor := crDefault;
-    Application.ProcessMessages;
-
     Dlg.Free;
-    ImpStructurForm.Free;
+  end;
+end;
+
+procedure TRuntimeDesignFrame.ImportCBActionExecute(Sender: TObject);
+var
+  Files: TStringList;
+begin
+  try
+    Files := TStringList.Create;
+    Files.Add('');
+    ImportStructureAndData(Files);
+  finally
+    Files.Free;
   end;
 end;
 
@@ -1145,6 +1128,42 @@ begin
 
   DataFile.EndUpdate;
   ImportDoc.EndUpdate;
+end;
+
+function TRuntimeDesignFrame.ImportStructureAndData(const Files: TStrings
+  ): boolean;
+var
+  ImpStructurForm: TImportStructureForm;
+  i: Integer;
+begin
+  ImpStructurForm := TImportStructureForm.Create(FDesignScrollBox);
+  ImpStructurForm.AddInitialFiles(Files);
+  ImpStructurForm.ImportData := (DataFile.Size = 0);
+  if ImpStructurForm.ShowModal = mrCancel then exit;
+
+  // Prepare screen...
+  try
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
+
+    MainForm.BeginUpdatingForm;
+
+    for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
+      PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
+        ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex = 1,
+        ImpStructurForm.FieldsRenameGrpBox.ItemIndex = 1,
+        ImpStructurForm.ImportDataIndex = i
+      );
+
+    FDesignPanel.Surface.Select(FDesignPanel);
+    FDesignPanel.Surface.UpdateDesigner;
+  finally
+    ImpStructurForm.Free;
+    MainForm.EndUpdatingForm;
+
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+  end;
 end;
 
 procedure TRuntimeDesignFrame.DoPrintDataForm;
@@ -1821,6 +1840,7 @@ begin
   DeleteControlFastAction.ShortCut     := D_DeleteControl_Fast;
   DeleteAllAction.ShortCut             := D_DeleteAllControl;
   ImportAction.ShortCut                := D_ImportData;
+  ImportCBAction.ShortCut              := D_ImportDataCB;
   CutControlAction.ShortCut            := D_CutControl;
   CopyControlAction.ShortCut           := D_CopyControl;
   PasteControlAction.ShortCut          := D_PasteControl;
@@ -2121,7 +2141,9 @@ begin
       exit;
   end;
 
+  FDesignPanel.DisableAutoSizing;
   FDesignPanel.Surface.DeleteComponents;
+  FDesignPanel.EnableAutoSizing;
 end;
 
 procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
