@@ -348,8 +348,13 @@ begin
     Screen.Cursor := crDefault;
     Application.ProcessMessages;
 
-    if ImportData then
+    if ImportData and
+       (FProjectList.StructureGrid.RowCount > 1)
+    then
+    begin
       FProjectList.StructureGrid.Cells[FDataCol.Index + 1, 1] := '1';
+      FImportDataSelectedIndex := 0;
+    end;
   end;
 end;
 
