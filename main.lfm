@@ -486,7 +486,7 @@ object MainForm: TMainForm
     end
     object VerifyDoubleEntryAction: TAction
       Category = 'Tools'
-      Caption = 'Validate Duplicate Files'
+      Caption = 'Compare Duplicate Files'
       OnExecute = VerifyDoubleEntryActionExecute
     end
     object CountsReportAction: TAction
@@ -506,7 +506,7 @@ object MainForm: TMainForm
     end
     object ValidationReportAction: TAction
       Category = 'Reports'
-      Caption = 'Data Validation'
+      Caption = 'Data Content Validation'
       OnExecute = ValidationReportActionExecute
     end
   end
