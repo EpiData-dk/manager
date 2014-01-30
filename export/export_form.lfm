@@ -46,7 +46,7 @@ object ExportForm: TExportForm
         Top = 22
         Width = 372
         DialogKind = dkSave
-        DialogOptions = []
+        DialogOptions = [ofEnableSizing]
         FilterIndex = 0
         HideDirectories = False
         ButtonWidth = 23
@@ -389,6 +389,7 @@ object ExportForm: TExportForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
+      OnClick = BitBtn3Click
       TabOrder = 0
     end
     object BitBtn4: TBitBtn

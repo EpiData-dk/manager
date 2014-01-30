@@ -41,6 +41,7 @@ type
     RangeRBtn: TRadioButton;
     BasicSheet: TTabSheet;
     DataFileTree: TVirtualStringTree;
+    procedure BitBtn3Click(Sender: TObject);
     procedure DataFileTreeGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
       var Ghosted: Boolean; var ImageIndex: Integer);
@@ -363,6 +364,35 @@ begin
     ftString,
     ftUpperString:
       ImageIndex := 7;
+  end;
+end;
+
+procedure TExportForm.BitBtn3Click(Sender: TObject);
+var
+  Msg: String;
+  Res: TModalResult;
+begin
+  if FileExistsUTF8(ExportFileNameEdit.FileName) then
+  begin
+    Msg :=
+      'A file named "' + ExtractFileName(ExportFileNameEdit.FileName) + '" already exits!' + LineEnding +
+      'Replacing this file will also replace any addition files this export may create (eg. .csv/.log files)' + LineEnding +
+      LineEnding +
+      'Do you wish to replace the existing file(s)?';
+
+    Res := MessageDlg(
+      'Warning!',
+      Msg,
+      mtWarning,
+      mbYesNo,
+      0,
+      mbNo);
+
+    if Res = mrNo then
+    begin
+      ModalResult := mrNone;
+      Exit;
+    end;
   end;
 end;
 
