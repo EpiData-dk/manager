@@ -391,6 +391,8 @@ begin
   try
     FDocumentFile := TDocumentFile.Create;
     FDocumentFile.OnProgress := @DocumentProgress;
+    FDocumentFile.DataDirectory := ManagerSettings.WorkingDirUTF8;
+    FDocumentFile.BackupDirectory := '';
     if not FDocumentFile.OpenFile(AFileName) then
     begin
       FreeAndNil(FDocumentFile);
