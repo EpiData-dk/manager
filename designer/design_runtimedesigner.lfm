@@ -2561,7 +2561,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnUpdate = RecodeDataActionUpdate
     end
     object RenameControlsAction: TAction
-      Caption = 'Rename Controls...'
+      Caption = 'Rename Fields etc....'
       OnExecute = RenameControlsActionExecute
     end
   end

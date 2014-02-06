@@ -1,9 +1,9 @@
 object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
-  Left = 882
+  Left = 674
   Height = 305
-  Top = 340
+  Top = 320
   Width = 523
-  Caption = 'Prepare project for Double Entry'
+  Caption = 'Prepare copy for second independent entry'
   ClientHeight = 305
   ClientWidth = 523
   OnCloseQuery = FormCloseQuery
