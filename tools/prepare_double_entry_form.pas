@@ -126,7 +126,7 @@ begin
     DocFile.Free;
     Exit;
   end;
-  ShowMessage('Double Entry file saved successfully:' + LineEnding +
+  ShowMessage('Adapted file for Double Entry saved successfully:' + LineEnding +
     FN);
   DocFile.Free;
 
