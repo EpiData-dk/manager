@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Buttons, StdCtrls, ComCtrls, Menus, VirtualTrees, epidatafilestypes,
   valuelabelgrid_frame, epivaluelabels, manager_messages, LMessages, ActnList,
-  epicustombase;
+  epicustombase, ImgList;
 
 type
 
@@ -27,6 +27,7 @@ type
     ToolBar1: TToolBar;
     AddBtn: TToolButton;
     DelBtn: TToolButton;
+    ToolButton1: TToolButton;
     VLSetsTree: TVirtualStringTree;
     procedure DelBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -37,6 +38,7 @@ type
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
+    procedure ToolButton1Click(Sender: TObject);
     procedure VLSetsTreeFocusChanging(Sender: TBaseVirtualTree; OldNode,
       NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
       var Allowed: Boolean);
@@ -45,6 +47,10 @@ type
       var Ghosted: Boolean; var ImageIndex: Integer);
     procedure VLSetsTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+    procedure VLSetsTreeInitChildren(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; var ChildCount: Cardinal);
+    procedure VLSetsTreeInitNode(Sender: TBaseVirtualTree; ParentNode,
+      Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure VLSetsTreeKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure VLSetsTreeNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -87,7 +93,8 @@ implementation
 {$R *.lfm}
 
 uses
-  Main, settings2_var, settings2, LCLIntf, LCLType;
+  Main, settings2_var, settings2, LCLIntf, LCLType, epimiscutils,
+  valuelabel_import_external;
 
 var
   Editor: TValueLabelEditor2 = nil;
@@ -135,6 +142,15 @@ begin
   DoAddNewValueLabelSet(ftInteger);
 end;
 
+procedure TValueLabelEditor2.ToolButton1Click(Sender: TObject);
+var
+  ExtImporter: TExtVLSetForm;
+begin
+  ExtImporter := TExtVLSetForm.Create(Self, ValueLabelSets);
+  ExtImporter.ShowModal;
+  ExtImporter.Free;
+end;
+
 procedure TValueLabelEditor2.VLSetsTreeFocusChanging(Sender: TBaseVirtualTree;
   OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
   var Allowed: Boolean);
@@ -155,6 +171,9 @@ procedure TValueLabelEditor2.VLSetsTreeGetImageIndex(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
   var Ghosted: Boolean; var ImageIndex: Integer);
 begin
+  if Node^.Parent = Sender.RootNode then
+    Exit;
+
   Case ValueLabelSetFromNode(Node).LabelType of
     ftInteger:     ImageIndex := 0;
     ftFloat:       ImageIndex := 1;
@@ -167,7 +186,34 @@ procedure TValueLabelEditor2.VLSetsTreeGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
 begin
-  CellText := FValueLabelSets[Node^.Index].Name;
+  if Node^.Parent = Sender.RootNode then
+  begin
+    if Node^.Index = 0 then
+      CellText := 'Internal'
+    else
+      CellText := 'External';
+  end else
+    CellText := FValueLabelSets[Node^.Index].Name;
+end;
+
+procedure TValueLabelEditor2.VLSetsTreeInitChildren(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; var ChildCount: Cardinal);
+begin
+  if Node^.Parent <> Sender.RootNode then exit;
+
+  if Node^.Index = 0 then
+    ChildCount := ValueLabelSets.InternalCount
+  else
+    ChildCount := ValueLabelSets.ExternalCount;
+end;
+
+procedure TValueLabelEditor2.VLSetsTreeInitNode(Sender: TBaseVirtualTree;
+  ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+begin
+  if Assigned(ParentNode) then exit;
+
+  Include(InitialStates, ivsHasChildren);
+  Include(InitialStates, ivsExpanded);
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeKeyDown(Sender: TObject; var Key: Word;
@@ -338,8 +384,6 @@ begin
   if Assigned(FValueLabelSets) then
   begin // Unregister old hooks.
     FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelsHook);
-{    for i := 0 to FValueLabelSets.Count - 1 do
-      FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelsHook); }
   end;
 
   FValueLabelSets := AValue;
@@ -347,11 +391,9 @@ begin
   if Assigned(FValueLabelSets) then
   begin // Register hook in new ValueLabelSets
     FValueLabelSets.RegisterOnChangeHook(@ValueLabelsHook, true);
-{    for i := 0 to FValueLabelSets.Count - 1 do
-      FValueLabelSets[i].RegisterOnChangeHook(@ValueLabelsHook, true); }
   end;
 
-  VLSetsTree.RootNodeCount := FValueLabelSets.Count;
+  UpdateVLSetsTree;
 end;
 
 function TValueLabelEditor2.ValueLabelSetFromNode(Node: PVirtualNode
@@ -390,7 +432,7 @@ begin
 
   VLSetsTree.BeginUpdate;
   VLSetsTree.Clear;
-  VLSetsTree.RootNodeCount := FValueLabelSets.Count;
+  VLSetsTree.RootNodeCount := 2;
   VLSetsTree.EndUpdate;
 end;
 

@@ -236,7 +236,7 @@ begin
     if Res then
       AddDocumentToGrid(FileName, DocFile.Document)
     else
-      ReportError('Failed to read file "' + ExtractFileName(FileName));
+      ReportError('Failed to read file: ' + ExtractFileName(FileName));
   except
     on E: Exception do
       begin

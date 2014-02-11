@@ -37,6 +37,7 @@ type
     { Other frame parts }
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FValueLabelSet: TEpiValueLabelSet;
+    procedure InternalSetup;
     procedure UpdateGrid;
     procedure EventHook(Const Sender, Initiator: TEpiCustomBase;
       EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
@@ -224,7 +225,12 @@ end;
 procedure TValueLabelGridFrame.VLGChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
 begin
-  ValueLabelFromNode(Node).IsMissingValue := NewState in [csCheckedNormal, csCheckedPressed];
+  if ValueLabelSet.LabelScope = vlsExternal then
+  begin
+    Allowed := false;
+    Exit;
+  end else
+    ValueLabelFromNode(Node).IsMissingValue := NewState in [csCheckedNormal, csCheckedPressed];
 end;
 
 procedure TValueLabelGridFrame.VLGEdited(Sender: TBaseVirtualTree;
@@ -279,6 +285,9 @@ procedure TValueLabelGridFrame.VLGKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   DoShowHintMsg(nil, '');
+
+  // External valuelabels do not need shortcut keys
+  if FValueLabelSet.LabelScope = vlsExternal then exit;
 
   case Key of
     VK_RETURN:
@@ -351,6 +360,19 @@ begin
   VLG.EditNode(VLG.FocusedNode, VLG.FocusedColumn);
 end;
 
+procedure TValueLabelGridFrame.InternalSetup;
+begin
+  if not Assigned(FValueLabelSet) then exit;
+
+  if FValueLabelSet.LabelScope = vlsExternal then
+    VLG.TreeOptions.MiscOptions := VLG.TreeOptions.MiscOptions - [toEditable]
+  else
+    VLG.TreeOptions.MiscOptions := VLG.TreeOptions.MiscOptions + [toEditable];
+
+  NewLineBtn.Enabled := (FValueLabelSet.LabelScope = vlsInternal);
+  DelLineBtn.Enabled := (FValueLabelSet.LabelScope = vlsInternal);
+end;
+
 procedure TValueLabelGridFrame.UpdateGrid;
 begin
   VLG.Clear;
@@ -400,6 +422,7 @@ begin
   if Assigned(FValueLabelSet) then
     FValueLabelSet.RegisterOnChangeHook(@EventHook, true);
 
+  InternalSetup;
   UpdateGrid;
 end;
 
