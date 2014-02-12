@@ -99,6 +99,9 @@ uses
 var
   Editor: TValueLabelEditor2 = nil;
 
+const
+  VLEDITOR2_NODE_KEY = 'VLEDITOR2_NODE_KEY';
+
 procedure ShowValueLabelEditor2(ValueLabelSet: TEpiValueLabelSets);
 begin
   if not Assigned(Editor) then
@@ -146,6 +149,8 @@ procedure TValueLabelEditor2.ToolButton1Click(Sender: TObject);
 var
   ExtImporter: TExtVLSetForm;
 begin
+  if not FGridFrame.ValidateGridEntries then exit;
+
   ExtImporter := TExtVLSetForm.Create(Self, ValueLabelSets);
   ExtImporter.ShowModal;
   ExtImporter.Free;
@@ -193,7 +198,7 @@ begin
     else
       CellText := 'External';
   end else
-    CellText := FValueLabelSets[Node^.Index].Name;
+    CellText := ValueLabelSetFromNode(Node).Name;
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeInitChildren(Sender: TBaseVirtualTree;
@@ -210,10 +215,19 @@ end;
 procedure TValueLabelEditor2.VLSetsTreeInitNode(Sender: TBaseVirtualTree;
   ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
-  if Assigned(ParentNode) then exit;
-
-  Include(InitialStates, ivsHasChildren);
-  Include(InitialStates, ivsExpanded);
+  if Assigned(ParentNode) then
+  begin
+    // Either internal or external VLSets.
+    if ParentNode^.Index = 0 then
+      Pointer(Sender.GetNodeData(Node)^) := FValueLabelSets.InternalSets[Node^.Index]
+    else
+      Pointer(Sender.GetNodeData(Node)^) := FValueLabelSets.ExternalSets[Node^.Index];
+    ValueLabelSetFromNode(Node).AddCustomData(VLEDITOR2_NODE_KEY, TObject(Node));
+  end else begin
+    // The two top nodes (Internal, External)
+    Include(InitialStates, ivsHasChildren);
+    Include(InitialStates, ivsExpanded);
+  end;
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeKeyDown(Sender: TObject; var Key: Word;
@@ -323,7 +337,6 @@ var
   VLSet: TEpiValueLabelSet;
 begin
   if not FGridFrame.ValidateGridEntries then exit;
-  FLocalUpdating := true;
 
   VLSet := FValueLabelSets.NewValueLabelSet(FieldType);
   With VLSet do
@@ -338,11 +351,11 @@ begin
     end;
   end;
 
-  Node := VLSetsTree.AddChild(nil);
+  UpdateVLSetsTree;
+  Node := PVirtualNode(VLSet.FindCustomData(VLEDITOR2_NODE_KEY));
   VLSetsTree.FocusedNode := Node;
   FGridFrame.NewLineBtn.Click;
 
-  FLocalUpdating := False;
   PostMessage(Self.Handle, LM_VLEDIT_STARTEDIT, WParam(Node), 0);
 end;
 
@@ -352,6 +365,8 @@ var
   NewNode: PVirtualNode;
 begin
   if not Assigned(Node) then exit;
+  if Node^.Parent = VLSetsTree.RootNode then exit;
+
   FLocalUpdating := true;
 
   VL := ValueLabelSetFromNode(Node);
@@ -401,7 +416,7 @@ function TValueLabelEditor2.ValueLabelSetFromNode(Node: PVirtualNode
 begin
   Result := nil;
   if Assigned(Node) then
-    result := FValueLabelSets[Node^.Index];
+    Result := TEpiValueLabelSet(VLSetsTree.GetNodeData(Node)^);
 end;
 
 procedure TValueLabelEditor2.LMEditNode(var Message: TLMessage);
@@ -409,6 +424,8 @@ var
   Node: PVirtualNode;
 begin
   Node := PVirtualNode(Message.WParam);
+  if ValueLabelSetFromNode(Node).LabelScope = vlsExternal then exit;
+
   VLSetsTree.Selected[Node] := true;
   VLSetsTree.EditNode(Node, -1);
 end;
@@ -500,6 +517,7 @@ constructor TValueLabelEditor2.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FLocalUpdating := false;
+  VLSetsTree.NodeDataSize := SizeOf(TEpiValueLabelSet);
 end;
 
 destructor TValueLabelEditor2.Destroy;

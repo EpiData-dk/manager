@@ -137,7 +137,10 @@ begin
       StringGrid1.Objects[2, Idx + i] := TObject($2);
 
 
-    StringGrid1.Cells[0, Idx + i] := '1';                                // Add
+    if Assigned(StringGrid1.Objects[2, Idx + i]) then
+      StringGrid1.Cells[0, Idx + i] := '0'                               // Add
+    else
+      StringGrid1.Cells[0, Idx + i] := '1';
     StringGrid1.Cells[1, Idx + i] := ExtractFileName(DocFile.FileName);  // Filename
     StringGrid1.Cells[2, Idx + i] := VL.Name;                            // Set Name
     StringGrid1.Cells[3, Idx + i] := EpiTypeNamesShort[VL.LabelType];    // Type
