@@ -332,6 +332,10 @@ object MainForm: TMainForm
       object PackMenuItem: TMenuItem
         Action = PackAction
       end
+      object MenuItem31: TMenuItem
+        Action = VLSetFromDataAction
+        Visible = False
+      end
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
       end
@@ -516,6 +520,11 @@ object MainForm: TMainForm
       Category = 'File'
       Caption = 'Import from clipboard'
       OnExecute = ImportCBInNewProjectActionExecute
+    end
+    object VLSetFromDataAction: TAction
+      Category = 'Tools'
+      Caption = 'Valuelabelset From Data'
+      OnExecute = VLSetFromDataActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

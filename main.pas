@@ -15,11 +15,13 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    VLSetFromDataAction: TAction;
     ImportCBInNewProjectAction: TAction;
     MenuItem13: TMenuItem;
     MenuItem28: TMenuItem;
     MenuItem29: TMenuItem;
     AddStructFromBLMenuItem: TMenuItem;
+    MenuItem31: TMenuItem;
     RenameControlsPopupMenuItem: TMenuItem;
     MenuItem32: TMenuItem;
     RenameControlsMenuItem: TMenuItem;
@@ -199,6 +201,7 @@ type
     procedure ValidationReportActionExecute(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
+    procedure VLSetFromDataActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
   private
     { private declarations }
@@ -837,6 +840,20 @@ begin
   end;
 
   R.Free;
+end;
+
+procedure TMainForm.VLSetFromDataActionExecute(Sender: TObject);
+var
+  Docfile: TEpiDocumentFile;
+  LocalDoc: boolean;
+begin
+  Docfile := ToolsCheckOpenFile(false, LocalDoc);
+  try
+
+  finally
+    if LocalDoc and Assigned(Docfile) then
+       Docfile.Free;
+  end;
 end;
 
 procedure TMainForm.WebTutorialsMenuItem12Click(Sender: TObject);
