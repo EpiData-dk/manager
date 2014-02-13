@@ -6,8 +6,8 @@ object ProjectFileListFrame: TProjectFileListFrame
   ClientHeight = 405
   ClientWidth = 582
   TabOrder = 0
-  DesignLeft = 1920
-  DesignTop = 143
+  DesignLeft = 756
+  DesignTop = 226
   object StructureGrid: TStringGrid
     Left = 0
     Height = 305

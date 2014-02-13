@@ -334,7 +334,6 @@ object MainForm: TMainForm
       end
       object MenuItem31: TMenuItem
         Action = VLSetFromDataAction
-        Visible = False
       end
       object ToolMenuDivider1: TMenuItem
         Caption = '-'

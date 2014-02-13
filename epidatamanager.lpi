@@ -187,7 +187,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="88">
+    <Units Count="89">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -779,6 +779,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="valuelabel_import_external"/>
       </Unit87>
+      <Unit88>
+        <Filename Value="project/valuelabel_import_data.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ValueLabelDataImport"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabel_import_data"/>
+      </Unit88>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

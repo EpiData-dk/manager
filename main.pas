@@ -272,7 +272,8 @@ uses
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
   managerprocs, process, epiv_documentfile,
-  report_export, epireport_generator_txt;
+  report_export, epireport_generator_txt,
+  valuelabel_import_data;
 
 { TMainForm }
 
@@ -846,11 +847,14 @@ procedure TMainForm.VLSetFromDataActionExecute(Sender: TObject);
 var
   Docfile: TEpiDocumentFile;
   LocalDoc: boolean;
+  F: TValueLabelDataImport;
 begin
   Docfile := ToolsCheckOpenFile(false, LocalDoc);
   try
-
+    F := TValueLabelDataImport.Create(Self);
+    F.ShowModal;
   finally
+    F.Free;
     if LocalDoc and Assigned(Docfile) then
        Docfile.Free;
   end;
