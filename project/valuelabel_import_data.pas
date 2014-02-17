@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, Grids, projectfilelist_frame, epidatafiles, epidatafilestypes;
+  Buttons, ComCtrls, Grids, StdCtrls, projectfilelist_frame, epidatafiles,
+  epidatafilestypes, epivaluelabels, epidocument;
 
 type
 
@@ -19,16 +20,26 @@ type
     Panel1: TPanel;
     ProgressBar1: TProgressBar;
     procedure AddFilesBtnClick(Sender: TObject);
+    procedure OkBtnClick(Sender: TObject);
   private
+    FImportCount: Integer;
     FProjectFileListFrame: TProjectFileListFrame;
     function ShowDialog(out Files: TStrings): boolean;
     procedure DoAddfiles;
     function GetFieldList(Const DataFile: TEpiDataFile;
-      FieldTypes: TEpiFieldTypes): TStrings;
+      FieldTypes: TEpiFieldTypes;
+      CheckIndex: boolean): TStrings;
   private
     { Filelist frame - grid}
+    FEditCol: Integer;
+    FEditRow: Integer;
     FValueFieldColumn: TGridColumn;
     FLabelFieldColumn: TGridColumn;
+    FMissingFieldColumn: TGridColumn;
+    FValueLabelSets: TEpiValueLabelSets;
+    procedure ProjectFileListCallBack(Sender: TObject; Document: TEpiDocument;
+      const Filename: string; const RowNo: Integer);
+    procedure SelectedItem(Sender: TObject);
     procedure SelectEditor(Sender: TObject; aCol, aRow: Integer;
       var Editor: TWinControl);
     procedure PrepareCanvas(sender: TObject; aCol, aRow: Integer;
@@ -37,6 +48,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    property ValueLabelSets: TEpiValueLabelSets read FValueLabelSets write FValueLabelSets;
   end;
 
 var
@@ -46,8 +58,9 @@ implementation
 
 {$R *.lfm}
 uses
-  epidocument, epimiscutils, settings2_var, StdCtrls,
-  LCLType, epitools_integritycheck;
+  epimiscutils, settings2_var,
+  LCLType, epitools_integritycheck,
+  epistringutils;
 
 type
 
@@ -59,6 +72,7 @@ type
   public
     constructor Create(TheOwner: TComponent); override;
     property OnCloseUp;
+    property OnSelect;
   end;
 
 { TFieldListEditor }
@@ -87,6 +101,84 @@ begin
   DoAddFiles;
 end;
 
+procedure TValueLabelDataImport.OkBtnClick(Sender: TObject);
+begin
+  // Do Checks for correct choices
+  FImportCount := 0;
+
+  Screen.Cursor := crHourGlass;
+  Application.ProcessMessages;
+  try
+    FProjectFileListFrame.ForEachIncluded(@ProjectFileListCallBack);
+  finally
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
+    if FImportCount > 0 then
+      ShowMessage('Successfully created ' + IntToStr(FImportCount) + ' Value Label Sets');
+  end;
+end;
+
+procedure TValueLabelDataImport.SelectedItem(Sender: TObject);
+var
+  SG: TStringGrid;
+  CB: TCustomComboBox absolute Sender;
+begin
+  SG := FProjectFileListFrame.StructureGrid;
+  SG.Objects[FEditCol, FEditRow] := CB.Items.Objects[CB.ItemIndex];
+end;
+
+procedure TValueLabelDataImport.ProjectFileListCallBack(Sender: TObject;
+  Document: TEpiDocument; const Filename: string; const RowNo: Integer);
+var
+  ValIdx: Integer;
+  LabIdx: Integer;
+  MisIdx: Integer;
+  SVal: String;
+  SLab: String;
+  SMis: String;
+  FVal: TEpiField;
+  FLab: TEpiField;
+  FMis: TEpiField;
+  VLSet: TEpiValueLabelSet;
+  VL: TEpiCustomValueLabel;
+  i: Integer;
+begin
+  ValIdx := FValueFieldColumn.Index + 1;
+  LabIdx := FLabelFieldColumn.Index + 1;
+  MisIdx := FMissingFieldColumn.Index + 1;
+
+  FVal := TEpiField(FProjectFileListFrame.StructureGrid.Objects[ValIdx, RowNo]);
+  FLab := TEpiField(FProjectFileListFrame.StructureGrid.Objects[LabIdx, RowNo]);
+  FMis := TEpiField(FProjectFileListFrame.StructureGrid.Objects[MisIdx, RowNo]);
+
+  if (not Assigned(FVal)) or
+     (not Assigned(FLab))
+  then
+    Exit;
+
+  VLSet := ValueLabelSets.NewValueLabelSet(FVal.FieldType);
+  VLSet.BeginUpdate;
+  VLSet.Name := '_' + FVal.Name;
+
+  for i := 0 to FVal.Size -1 do
+  begin
+    VL := VLSet.NewValueLabel;
+    VL.TheLabel.Text := FLab.AsString[i];
+    case FVal.FieldType of
+      ftInteger:
+        TEpiIntValueLabel(VL).Value    := FVal.AsInteger[i];
+      ftFloat:
+        TEpiFloatValueLabel(VL).Value  := FVal.AsFloat[i];
+      ftString, ftUpperString:
+        TEpiStringValueLabel(VL).Value := FVal.AsString[i];
+    end;
+    if Assigned(FMis) then
+      VL.IsMissingValue := FMis.AsBoolean[i] = 1;
+  end;
+  VLSet.EndUpdate;
+  Inc(FImportCount);
+end;
+
 procedure TValueLabelDataImport.EditorCloseUp(Sender: TObject);
 begin
   FProjectFileListFrame.StructureGrid.EditorMode := false;
@@ -98,10 +190,11 @@ begin
   if aRow = 0 then exit;
 
   if (aCol = (FLabelFieldColumn.Index + 1)) or
-     (aCol = (FValueFieldColumn.Index + 1))
+     (aCol = (FValueFieldColumn.Index + 1)) or
+     (aCol = (FMissingFieldColumn.Index + 1))
   then
   begin
-    FProjectFileListFrame.StructureGrid.Canvas.Brush.Color := clYellow;
+//    FProjectFileListFrame.StructureGrid.Canvas.Brush.Color := clYellow;
   end;
 end;
 
@@ -114,27 +207,35 @@ var
   List: TStrings;
 begin
   if (aCol = (FLabelFieldColumn.Index + 1)) or
-     (aCol = (FValueFieldColumn.Index + 1))
+     (aCol = (FValueFieldColumn.Index + 1)) or
+     (aCol = (FMissingFieldColumn.Index + 1))
   then
   begin
     NewEditor := TFieldListEditor.Create(Self);
     NewEditor.OnCloseUp := @EditorCloseUp;
+    NewEditor.OnSelect := @SelectedItem;
     NewEditor.AutoSize := false;
 
     if aCol = (FLabelFieldColumn.Index + 1) then
-      FieldTypes := StringFieldTypes
-    else
+      FieldTypes := StringFieldTypes;
+    if aCol = (FValueFieldColumn.Index + 1) then
       FieldTypes := ValueLabelFieldTypes;
+    if aCol = (FMissingFieldColumn.Index + 1) then
+      FieldTypes := (BoolFieldTypes + IntFieldTypes + StringFieldTypes + FloatFieldTypes) - AutoFieldTypes;
 
     List := GetFieldList(
       TEpiDocument(FProjectFileListFrame.DocList.Objects[aRow-1]).DataFiles[0],
-      FieldTypes
+      FieldTypes,
+      aCol = (FValueFieldColumn.Index + 1)
     );
 
     NewEditor.Items.Assign(List);
     List.Free;
     NewEditor.DropDownCount := 7;
     Editor := NewEditor;
+
+    FEditCol := aCol;
+    FEditRow := aRow;
   end;
 end;
 
@@ -184,7 +285,7 @@ begin
 end;
 
 function TValueLabelDataImport.GetFieldList(const DataFile: TEpiDataFile;
-  FieldTypes: TEpiFieldTypes): TStrings;
+  FieldTypes: TEpiFieldTypes; CheckIndex: boolean): TStrings;
 var
   F: TEpiField;
   i: Integer;
@@ -192,6 +293,9 @@ var
   Fields: TEpiFields;
   FR: TBoundArray;
   FV: TBoundArray;
+  UnsupportedTypes: TStringList;
+  IndexFail: TStringList;
+  S: String;
 begin
   Result := TStringList.Create;
   Result.AddObject('', nil);
@@ -199,19 +303,45 @@ begin
   Checker := TEpiIntegrityChecker.Create;
   Fields := TEpiFields.Create(nil);
 
+  UnsupportedTypes := TStringList.Create;
+  IndexFail := TStringList.Create;
+
 
   for i := 0 to DataFile.Fields.Count - 1 do
   begin
     F := DataFile.Fields[i];
-    Fields.AddItem(F);
+    S := EpiCutString(F.Name + ' (' + F.Question.Text + ')', 20);
 
-    if (F.FieldType in FieldTypes) and
-       (Checker.IndexIntegrity(DataFile, FR, FV, true, Fields))
-    then
-      Result.AddObject(F.Name, F);
+    if not (F.FieldType in FieldTypes) then
+    begin
+      UnsupportedTypes.Add(S);
+      Continue;
+    end;
 
-    Fields.RemoveItem(F);
+    if CheckIndex then
+    begin
+      Fields.AddItem(F);
+      if (Checker.IndexIntegrity(DataFile, FR, FV, true, Fields)) then
+        Result.AddObject(S, F)
+      else
+        IndexFail.Add(S);
+
+      Fields.RemoveItem(F);
+    end
+    else
+      Result.AddObject(S, F);
+
   end;
+  if IndexFail.Count > 0 then
+    Result.Add(' --- NON-UNIQUE FIELDS --- ');
+  Result.AddStrings(IndexFail);
+
+  if UnsupportedTypes.Count > 0 then
+    Result.Add(' --- UNSUPPORTED TYPES --- ');
+  Result.AddStrings(UnsupportedTypes);
+
+  IndexFail.Free;
+  UnsupportedTypes.Free;
   Fields.Free;
   Checker.Free;
 end;
@@ -225,7 +355,7 @@ begin
   FProjectFileListFrame.Align := alClient;
   FProjectFileListFrame.Parent := Self;
 
-  FProjectFileListFrame.IncludeCol.Visible := false;
+//  FProjectFileListFrame.IncludeCol.Visible := false;
   SG := FProjectFileListFrame.StructureGrid;
   SG.OnSelectEditor := @SelectEditor;
   SG.OnPrepareCanvas := @PrepareCanvas;
@@ -237,6 +367,10 @@ begin
   FLabelFieldColumn := TGridColumn(SG.Columns.Insert(3));
   FLabelFieldColumn.ButtonStyle := cbsPickList;
   FLabelFieldColumn.Title.Caption := 'Label Field';
+
+  FMissingFieldColumn := TGridColumn(SG.Columns.Insert(4));
+  FMissingFieldColumn.ButtonStyle := cbsPickList;
+  FMissingFieldColumn.Title.Caption := 'Missing Field';
 end;
 
 end.

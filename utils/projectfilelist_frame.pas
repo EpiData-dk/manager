@@ -10,7 +10,10 @@ uses
 
 type
 
-  TProjectListFileEvent = procedure (Sender: TObject; Document: TEpiDocument; Const FileName: string) of object;
+  TProjectListFileEvent = procedure (Sender: TObject; Document: TEpiDocument;
+    Const FileName: string) of object;
+  TProjectFileListCallback = procedure (Sender: TObject; Document: TEpiDocument;
+    Const Filename: string; Const RowNo: Integer) of object;
 
   { TProjectFileListFrame }
 
@@ -51,6 +54,7 @@ type
     destructor  Destroy; override;
     procedure   AddFiles(Const Files: TStrings);
     procedure   AddDocument(Const FileName: string; Const Doc: TEpiDocument);
+    procedure   ForEachIncluded(CallBackMethod: TProjectFileListCallback);
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
     property    OnSelectionChanged: TNotifyEvent read FOnSelectionChanged write FOnSelectionChanged;
@@ -419,6 +423,23 @@ procedure TProjectFileListFrame.AddDocument(const FileName: string;
   const Doc: TEpiDocument);
 begin
   AddDocumentToGrid(FileName, Doc);
+end;
+
+procedure TProjectFileListFrame.ForEachIncluded(
+  CallBackMethod: TProjectFileListCallback);
+var
+  IncludeIdx: Integer;
+  i: Integer;
+begin
+  if not Assigned(CallBackMethod) then exit;
+
+  IncludeIdx := IncludeCol.Index + 1;
+
+  for i := 1 to StructureGrid.RowCount - 1 do
+  begin
+    if StructureGrid.Cells[IncludeIdx, i] = IncludeCol.ValueChecked then
+      CallBackMethod(Self, TEpiDocument(FDocList.Objects[i-1]), FDocList[i-1], i);
+  end;
 end;
 
 end.

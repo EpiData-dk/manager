@@ -848,24 +848,35 @@ var
   Docfile: TEpiDocumentFile;
   LocalDoc: boolean;
   F: TValueLabelDataImport;
+  Dlg: TSaveDialog;
+  Fn: String;
 begin
   Docfile := ToolsCheckOpenFile(false, LocalDoc);
   try
     F := TValueLabelDataImport.Create(Self);
+    F.ValueLabelSets := DocFile.Document.ValueLabelSets;
     F.ShowModal;
   finally
-    if Docfile.Document.Modified then
+    if (Docfile.Document.Modified) and
+       (LocalDoc)
+    then
     begin
-      if not Docfile.IsSaved then
+      if (not Docfile.IsSaved)  then
       begin
         Dlg := TSaveDialog.Create(nil);
+        Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
+        Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+        if Dlg.Execute then
+          Fn := Dlg.FileName;
+      end else
+        Fn := Docfile.FileName;
 
-      end;
+      Docfile.SaveFile(Fn);
     end;
 
     F.Free;
     if LocalDoc and Assigned(Docfile) then
-       Docfile.Free;
+      Docfile.Free;
   end;
 end;
 
