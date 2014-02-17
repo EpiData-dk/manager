@@ -854,6 +854,15 @@ begin
     F := TValueLabelDataImport.Create(Self);
     F.ShowModal;
   finally
+    if Docfile.Document.Modified then
+    begin
+      if not Docfile.IsSaved then
+      begin
+        Dlg := TSaveDialog.Create(nil);
+
+      end;
+    end;
+
     F.Free;
     if LocalDoc and Assigned(Docfile) then
        Docfile.Free;
