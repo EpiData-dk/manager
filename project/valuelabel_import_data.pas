@@ -20,6 +20,8 @@ type
     Panel1: TPanel;
     ProgressBar1: TProgressBar;
     procedure AddFilesBtnClick(Sender: TObject);
+    procedure MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure OkBtnClick(Sender: TObject);
     procedure SelectCell(Sender: TObject; aCol, aRow: Integer;
       var CanSelect: Boolean);
@@ -114,6 +116,26 @@ end;
 procedure TValueLabelDataImport.AddFilesBtnClick(Sender: TObject);
 begin
   DoAddFiles;
+end;
+
+procedure TValueLabelDataImport.MouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  ACol: Longint;
+  ARow: Longint;
+  SG: TStringGrid;
+begin
+  SG := FProjectFileListFrame.StructureGrid;
+  SG.MouseToCell(X,Y, ACol, ARow);
+
+  if (not (
+           (ARow = FEditRow) and
+           (ACol = FEditCol)
+          )
+     ) and
+     SG.EditorMode
+  then
+    SG.EditorMode := false;
 end;
 
 procedure TValueLabelDataImport.AsyncEditorMode(Data: PtrInt);
@@ -408,6 +430,7 @@ begin
   SG := FProjectFileListFrame.StructureGrid;
   SG.OnSelectEditor := @SelectEditor;
   SG.OnPrepareCanvas := @PrepareCanvas;
+  SG.OnMouseDown := @MouseDown;
 
   FValueFieldColumn := TGridColumn(SG.Columns.Insert(2));
   FValueFieldColumn.ButtonStyle := cbsPickList;
