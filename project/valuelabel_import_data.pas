@@ -21,6 +21,8 @@ type
     ProgressBar1: TProgressBar;
     procedure AddFilesBtnClick(Sender: TObject);
     procedure OkBtnClick(Sender: TObject);
+    procedure SelectCell(Sender: TObject; aCol, aRow: Integer;
+      var CanSelect: Boolean);
   private
     FImportCount: Integer;
     FProjectFileListFrame: TProjectFileListFrame;
@@ -37,6 +39,7 @@ type
     FLabelFieldColumn: TGridColumn;
     FMissingFieldColumn: TGridColumn;
     FValueLabelSets: TEpiValueLabelSets;
+    procedure AsyncEditorMode(Data: PtrInt);
     procedure ProjectFileListCallBack(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
     procedure SelectedItem(Sender: TObject);
@@ -60,7 +63,7 @@ implementation
 uses
   epimiscutils, settings2_var,
   LCLType, epitools_integritycheck,
-  epistringutils;
+  epistringutils, LMessages;
 
 type
 
@@ -69,8 +72,10 @@ type
   TFieldListEditor = class(TPickListCellEditor)
   protected
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+  private
+    FValueDataImportForm: TValueLabelDataImport;
   public
-    constructor Create(TheOwner: TComponent); override;
+    constructor Create(TheOwner: TComponent; AForm: TValueLabelDataImport);
     property OnCloseUp;
     property OnSelect;
   end;
@@ -85,12 +90,22 @@ begin
   then
     DroppedDown := true;
 
+  if (Shift = []) and
+     (Key = VK_ESCAPE)
+  then
+  begin
+    Application.QueueAsyncCall(@FValueDataImportForm.AsyncEditorMode, 0);
+    Key := VK_UNKNOWN;
+  end;
+
   inherited KeyDown(Key, Shift);
 end;
 
-constructor TFieldListEditor.Create(TheOwner: TComponent);
+constructor TFieldListEditor.Create(TheOwner: TComponent;
+  AForm: TValueLabelDataImport);
 begin
   inherited Create(TheOwner);
+  FValueDataImportForm := AForm;
   Style := csDropDownList;
 end;
 
@@ -99,6 +114,11 @@ end;
 procedure TValueLabelDataImport.AddFilesBtnClick(Sender: TObject);
 begin
   DoAddFiles;
+end;
+
+procedure TValueLabelDataImport.AsyncEditorMode(Data: PtrInt);
+begin
+  FProjectFileListFrame.StructureGrid.EditorMode := Boolean(Data);
 end;
 
 procedure TValueLabelDataImport.OkBtnClick(Sender: TObject);
@@ -115,6 +135,33 @@ begin
     Application.ProcessMessages;
     if FImportCount > 0 then
       ShowMessage('Successfully created ' + IntToStr(FImportCount) + ' Value Label Sets');
+  end;
+end;
+
+procedure TValueLabelDataImport.SelectCell(Sender: TObject; aCol,
+  aRow: Integer; var CanSelect: Boolean);
+begin
+  if (aCol = FValueFieldColumn.Index + 1) or
+     (aCol = FLabelFieldColumn.Index + 1) or
+     (aCol = FMissingFieldColumn.Index + 1) or
+     (aCol = FProjectFileListFrame.IncludeCol.Index + 1)
+  then
+    CanSelect := true
+  else
+    CanSelect := false;
+
+
+  if (aCol = FValueFieldColumn.Index + 1) or
+     (aCol = FLabelFieldColumn.Index + 1) or
+     (aCol = FMissingFieldColumn.Index + 1)
+  then
+  begin
+    if ((FEditCol <> aCol) or (FEditRow <> aRow)) and
+       (FProjectFileListFrame.StructureGrid.EditorMode)
+    then
+      FProjectFileListFrame.StructureGrid.EditorMode := false;
+
+    Application.QueueAsyncCall(@AsyncEditorMode, 1);
   end;
 end;
 
@@ -182,6 +229,8 @@ end;
 procedure TValueLabelDataImport.EditorCloseUp(Sender: TObject);
 begin
   FProjectFileListFrame.StructureGrid.EditorMode := false;
+  FEditCol := -1;
+  FEditRow := -1;
 end;
 
 procedure TValueLabelDataImport.PrepareCanvas(sender: TObject; aCol,
@@ -211,7 +260,7 @@ begin
      (aCol = (FMissingFieldColumn.Index + 1))
   then
   begin
-    NewEditor := TFieldListEditor.Create(Self);
+    NewEditor := TFieldListEditor.Create(Self, Self);
     NewEditor.OnCloseUp := @EditorCloseUp;
     NewEditor.OnSelect := @SelectedItem;
     NewEditor.AutoSize := false;
@@ -371,6 +420,8 @@ begin
   FMissingFieldColumn := TGridColumn(SG.Columns.Insert(4));
   FMissingFieldColumn.ButtonStyle := cbsPickList;
   FMissingFieldColumn.Title.Caption := 'Missing Field';
+
+  SG.OnSelectCell := @SelectCell;
 end;
 
 end.
