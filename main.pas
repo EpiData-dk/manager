@@ -852,9 +852,11 @@ var
   Fn: String;
 begin
   Docfile := ToolsCheckOpenFile(false, LocalDoc);
+  if not Assigned(DocFile) then exit;
+
   try
     F := TValueLabelDataImport.Create(Self);
-    F.ValueLabelSets := DocFile.Document.ValueLabelSets;
+    F.DocFile := DocFile;
     F.ShowModal;
   finally
     if (Docfile.Document.Modified) and
