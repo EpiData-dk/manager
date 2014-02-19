@@ -24,6 +24,8 @@ type
     procedure AddFilesBtnClick(Sender: TObject);
     procedure AfterFileImport(Sender: TObject; Document: TEpiDocument;
       const FileName: string);
+    procedure CellHint(Sender: TObject; ACol, ARow: Integer;
+      var HintText: String);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure MouseDown(Sender: TObject; Button: TMouseButton;
@@ -31,7 +33,9 @@ type
     procedure OkBtnClick(Sender: TObject);
     procedure SelectCell(Sender: TObject; aCol, aRow: Integer;
       var CanSelect: Boolean);
+    procedure SelectionChanged(Sender: TObject);
   private
+    FAfterImportingCheck: boolean;
     FImportCount: Integer;
     FProjectFileListFrame: TProjectFileListFrame;
     function ShowDialog(out Files: TStrings): boolean;
@@ -42,8 +46,8 @@ type
       ): TStrings;
     procedure UpdateCaption;
   private
-    FDocFile: TEpiDocumentFile;
     { Filelist frame - grid}
+    FDocFile: TEpiDocumentFile;
     FEditCol: Integer;
     FEditRow: Integer;
     FValueFieldColumn: TGridColumn;
@@ -136,8 +140,25 @@ end;
 procedure TValueLabelDataImport.AfterFileImport(Sender: TObject;
   Document: TEpiDocument; const FileName: string);
 begin
+  FAfterImportingCheck := true;
+
   if not ProgressBar1.Visible then exit;
   ProgressBar1.StepIt;
+end;
+
+procedure TValueLabelDataImport.CellHint(Sender: TObject; ACol, ARow: Integer;
+  var HintText: String);
+begin
+  HintText := '';
+
+  if ACol = (FValueFieldColumn.Index + 1) then
+    HintText := 'Select field for category content';
+
+  if ACol = (FLabelFieldColumn.Index + 1) then
+    HintText := 'Select field containing descriptive label';
+
+  if ACol = (FMissingFieldColumn.Index + 1) then
+    HintText := 'Select field indicating missing (value is 1, "Y", "TRUE")';
 end;
 
 procedure TValueLabelDataImport.FormCloseQuery(Sender: TObject;
@@ -230,8 +251,6 @@ begin
   if (aCol = FProjectFileListFrame.IncludeCol.Index + 1) then
     CanSelect := true;
 
-
-
   if (aCol = FValueFieldColumn.Index + 1) or
      (aCol = FLabelFieldColumn.Index + 1) or
      (aCol = FMissingFieldColumn.Index + 1)
@@ -252,6 +271,15 @@ begin
 
     Application.QueueAsyncCall(@AsyncEditorMode, 1);
   end;
+end;
+
+procedure TValueLabelDataImport.SelectionChanged(Sender: TObject);
+begin
+  if not FAfterImportingCheck then exit;
+  FAfterImportingCheck := false;
+
+  with FProjectFileListFrame do
+    StructureGrid.Cells[IncludeCol.Index + 1, StructureGrid.RowCount - 1] := IncludeCol.ValueUnchecked;
 end;
 
 procedure TValueLabelDataImport.SelectedItem(Sender: TObject);
@@ -557,12 +585,15 @@ begin
   FProjectFileListFrame.Align := alClient;
   FProjectFileListFrame.Parent := Self;
   FProjectFileListFrame.OnAfterImportFile := @AfterFileImport;
+  FProjectFileListFrame.OnSelectionChanged := @SelectionChanged;
 
-//  FProjectFileListFrame.IncludeCol.Visible := false;
   SG := FProjectFileListFrame.StructureGrid;
   SG.OnSelectEditor := @SelectEditor;
   SG.OnPrepareCanvas := @PrepareCanvas;
   SG.OnMouseDown := @MouseDown;
+  SG.Options := SG.Options + [goCellHints];
+  SG.ShowHint := true;
+  SG.OnGetCellHint := @CellHint;
 
   FValueFieldColumn := TGridColumn(SG.Columns.Insert(2));
   FValueFieldColumn.ButtonStyle := cbsPickList;
