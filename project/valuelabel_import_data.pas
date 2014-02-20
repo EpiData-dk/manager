@@ -22,6 +22,8 @@ type
     ProgressBar1: TProgressBar;
     procedure AddCBBtnClick(Sender: TObject);
     procedure AddFilesBtnClick(Sender: TObject);
+    procedure AfterAddToGrid(Sender: TObject; Document: TEpiDocument;
+      const Filename: string; const RowNo: Integer);
     procedure AfterFileImport(Sender: TObject; Document: TEpiDocument;
       const FileName: string);
     procedure CellHint(Sender: TObject; ACol, ARow: Integer;
@@ -33,9 +35,8 @@ type
     procedure OkBtnClick(Sender: TObject);
     procedure SelectCell(Sender: TObject; aCol, aRow: Integer;
       var CanSelect: Boolean);
-    procedure SelectionChanged(Sender: TObject);
   private
-    FAfterImportingCheck: boolean;
+    FSuccesImportList: TStringList;
     FImportCount: Integer;
     FProjectFileListFrame: TProjectFileListFrame;
     function ShowDialog(out Files: TStrings): boolean;
@@ -50,6 +51,7 @@ type
     FDocFile: TEpiDocumentFile;
     FEditCol: Integer;
     FEditRow: Integer;
+    FEditor: TPickListCellEditor;
     FValueFieldColumn: TGridColumn;
     FLabelFieldColumn: TGridColumn;
     FMissingFieldColumn: TGridColumn;
@@ -80,13 +82,23 @@ implementation
 {$R *.lfm}
 uses
   epimiscutils, settings2_var, settings2,
-  LCLType, epitools_integritycheck, epitools_projectvalidate,
-  epistringutils, LMessages;
+  LCLType, epitools_integritycheck,
+  epistringutils;
 
 const
   FormName = 'ValueLabelDataImport';
 
 type
+
+  { TGridObject }
+
+  TGridObject = class(TComponent)
+  public
+    FieldList: TStrings;
+    SelectedField: TEpiField;
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
 
   { TFieldListEditor }
 
@@ -100,6 +112,18 @@ type
     property OnCloseUp;
     property OnSelect;
   end;
+
+constructor TGridObject.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FieldList := TStringList.Create;
+end;
+
+destructor TGridObject.Destroy;
+begin
+  FieldList.Destroy;
+  inherited Destroy;
+end;
 
 { TFieldListEditor }
 
@@ -137,11 +161,32 @@ begin
   DoAddFiles;
 end;
 
+procedure TValueLabelDataImport.AfterAddToGrid(Sender: TObject;
+  Document: TEpiDocument; const Filename: string; const RowNo: Integer);
+var
+  GO: TGridObject;
+begin
+  with FProjectFileListFrame do
+  begin
+    StructureGrid.Cells[IncludeCol.Index + 1, StructureGrid.RowCount - 1] := IncludeCol.ValueUnchecked;
+
+    GO := TGridObject.Create(Self);
+    GO.FieldList.Assign(GetFieldList(Document.DataFiles[0], ValueLabelFieldTypes, 1));
+    StructureGrid.Objects[FValueFieldColumn.Index + 1, RowNo] := GO;
+
+    GO := TGridObject.Create(Self);
+    GO.FieldList.Assign(GetFieldList(Document.DataFiles[0], AllFieldTypes, 2));
+    StructureGrid.Objects[FLabelFieldColumn.Index + 1, RowNo] := GO;
+
+    GO := TGridObject.Create(Self);
+    GO.FieldList.Assign(GetFieldList(Document.DataFiles[0], (BoolFieldTypes + IntFieldTypes + StringFieldTypes + FloatFieldTypes) - AutoFieldTypes, 0));
+    StructureGrid.Objects[FMissingFieldColumn.Index + 1, RowNo] := GO;
+  end;
+end;
+
 procedure TValueLabelDataImport.AfterFileImport(Sender: TObject;
   Document: TEpiDocument; const FileName: string);
 begin
-  FAfterImportingCheck := true;
-
   if not ProgressBar1.Visible then exit;
   ProgressBar1.StepIt;
 end;
@@ -230,6 +275,8 @@ procedure TValueLabelDataImport.OkBtnClick(Sender: TObject);
 begin
   // Do Checks for correct choices
   FImportCount := 0;
+  FSuccesImportList.Clear;
+  FSuccesImportList.Add('Project: ' + ExtractFileName(FDocFile.FileName));
 
   Screen.Cursor := crHourGlass;
   Application.ProcessMessages;
@@ -238,8 +285,10 @@ begin
   finally
     Screen.Cursor := crDefault;
     Application.ProcessMessages;
+    FSuccesImportList.Insert(1, 'Successfully added ' + IntToStr(FImportCount) + ' Value Label Sets');
+
     if FImportCount > 0 then
-      ShowMessage('Successfully created ' + IntToStr(FImportCount) + ' Value Label Sets');
+      ShowMessage(FSuccesImportList.Text);
   end;
 end;
 
@@ -249,7 +298,10 @@ begin
   CanSelect := false;
 
   if (aCol = FProjectFileListFrame.IncludeCol.Index + 1) then
+  begin
     CanSelect := true;
+    FProjectFileListFrame.StructureGrid.InvalidateRow(aRow);
+  end;
 
   if (aCol = FValueFieldColumn.Index + 1) or
      (aCol = FLabelFieldColumn.Index + 1) or
@@ -273,22 +325,13 @@ begin
   end;
 end;
 
-procedure TValueLabelDataImport.SelectionChanged(Sender: TObject);
-begin
-  if not FAfterImportingCheck then exit;
-  FAfterImportingCheck := false;
-
-  with FProjectFileListFrame do
-    StructureGrid.Cells[IncludeCol.Index + 1, StructureGrid.RowCount - 1] := IncludeCol.ValueUnchecked;
-end;
-
 procedure TValueLabelDataImport.SelectedItem(Sender: TObject);
 var
   SG: TStringGrid;
   CB: TCustomComboBox absolute Sender;
 begin
   SG := FProjectFileListFrame.StructureGrid;
-  SG.Objects[FEditCol, FEditRow] := CB.Items.Objects[CB.ItemIndex];
+  TGridObject(SG.Objects[FEditCol, FEditRow]).SelectedField := TEpiField(CB.Items.Objects[CB.ItemIndex]);
 end;
 
 procedure TValueLabelDataImport.ProjectFileListCallBack(Sender: TObject;
@@ -297,23 +340,23 @@ var
   ValIdx: Integer;
   LabIdx: Integer;
   MisIdx: Integer;
-  SVal: String;
-  SLab: String;
-  SMis: String;
   FVal: TEpiField;
   FLab: TEpiField;
   FMis: TEpiField;
   VLSet: TEpiValueLabelSet;
   VL: TEpiCustomValueLabel;
   i: Integer;
+  SG: TStringGrid;
+  S: String;
 begin
   ValIdx := FValueFieldColumn.Index + 1;
   LabIdx := FLabelFieldColumn.Index + 1;
   MisIdx := FMissingFieldColumn.Index + 1;
 
-  FVal := TEpiField(FProjectFileListFrame.StructureGrid.Objects[ValIdx, RowNo]);
-  FLab := TEpiField(FProjectFileListFrame.StructureGrid.Objects[LabIdx, RowNo]);
-  FMis := TEpiField(FProjectFileListFrame.StructureGrid.Objects[MisIdx, RowNo]);
+  SG := FProjectFileListFrame.StructureGrid;
+  FVal := TEpiField(TGridObject(SG.Objects[ValIdx, RowNo]).SelectedField);
+  FLab := TEpiField(TGridObject(SG.Objects[LabIdx, RowNo]).SelectedField);
+  FMis := TEpiField(TGridObject(SG.Objects[MisIdx, RowNo]).SelectedField);
 
   if (not Assigned(FVal)) or
      (not Assigned(FLab))
@@ -322,7 +365,15 @@ begin
 
   VLSet := ValueLabelSets.NewValueLabelSet(FVal.FieldType);
   VLSet.BeginUpdate;
-  VLSet.Name := '_' + FVal.Name;
+  S := '_' + FVal.Name;
+  i := 0;
+
+  while (not ValueLabelSets.ValidateRename(VLSet, S)) do
+  begin
+    inc(i);
+    S := '_' + FVal.Name + '_' + IntToStr(i);
+  end;
+  VLSet.Name := S;
 
   for i := 0 to FVal.Size -1 do
   begin
@@ -341,6 +392,13 @@ begin
   end;
   VLSet.EndUpdate;
   Inc(FImportCount);
+
+  S := '  ' + IntToStr(FImportCount) + ') ' + VLSet.Name + ' - Fields: ' + FVal.Name + ', ' + FLab.Name;
+  if Assigned(FMis) then
+    S += ', ' + FMis.Name;
+  S += ' from ' + SG.Cells[FProjectFileListFrame.FileNameCol.Index + 1, RowNo];
+
+  FSuccesImportList.Add(S);
 end;
 
 procedure TValueLabelDataImport.EditorCloseUp(Sender: TObject);
@@ -369,7 +427,7 @@ begin
      (aCol = (FValueFieldColumn.Index + 1))
   then
   begin
-    if (not Assigned(SG.Objects[aCol, aRow])) and
+    if (not Assigned(TGridObject(SG.Objects[aCol, aRow]).SelectedField)) and
        (SG.Cells[FProjectFileListFrame.IncludeCol.Index + 1, aRow] = FProjectFileListFrame.IncludeCol.ValueChecked)
     then
       FProjectFileListFrame.StructureGrid.Canvas.Brush.Color := clBtnShadow;
@@ -378,7 +436,7 @@ begin
   if (aCol = (FMissingFieldColumn.Index + 1))
   then
   begin
-    if (not Assigned(SG.Objects[aCol, aRow])) and
+    if (not Assigned(TGridObject(SG.Objects[aCol, aRow]).SelectedField)) and
        (SG.Cells[FProjectFileListFrame.IncludeCol.Index + 1, aRow] = FProjectFileListFrame.IncludeCol.ValueChecked)
     then
       FProjectFileListFrame.StructureGrid.Canvas.Brush.Color := clBtnFace;
@@ -387,52 +445,14 @@ end;
 
 procedure TValueLabelDataImport.SelectEditor(Sender: TObject; aCol, aRow: Integer;
   var Editor: TWinControl);
-var
-  NewEditor: TFieldListEditor;
-  PickEditor: TPickListCellEditor absolute Editor;
-  FieldTypes: TEpiFieldTypes;
-  List: TStrings;
-  CheckType: Integer;
 begin
   if (aCol = (FLabelFieldColumn.Index + 1)) or
      (aCol = (FValueFieldColumn.Index + 1)) or
      (aCol = (FMissingFieldColumn.Index + 1))
   then
   begin
-    NewEditor := TFieldListEditor.Create(Self, Self);
-    NewEditor.OnCloseUp := @EditorCloseUp;
-    NewEditor.OnSelect := @SelectedItem;
-    NewEditor.AutoSize := false;
-
-    if aCol = (FValueFieldColumn.Index + 1) then
-    begin
-      FieldTypes := ValueLabelFieldTypes;
-      CheckType := 1;  // Index
-    end;
-
-    if aCol = (FLabelFieldColumn.Index + 1) then
-    begin
-      FieldTypes := AllFieldTypes;
-      CheckType := 2;  // No missing
-    end;
-
-    if aCol = (FMissingFieldColumn.Index + 1) then
-    begin
-      FieldTypes := (BoolFieldTypes + IntFieldTypes + StringFieldTypes + FloatFieldTypes) - AutoFieldTypes;
-      CheckType := 0;  // No checks
-    end;
-
-    // TODO : OPTIMIZE... really really slow with many records. And this is done EACH TIME THE COMBO IS PRESSED
-    List := GetFieldList(
-      TEpiDocument(FProjectFileListFrame.DocList.Objects[aRow-1]).DataFiles[0],
-      FieldTypes,
-      CheckType
-    );
-
-    NewEditor.Items.Assign(List);
-    List.Free;
-    NewEditor.DropDownCount := 7;
-    Editor := NewEditor;
+    FEditor.Items.Assign(TGridObject(FProjectFileListFrame.StructureGrid.Objects[aCol, aRow]).FieldList);
+    Editor := FEditor;
 
     FEditCol := aCol;
     FEditRow := aRow;
@@ -476,11 +496,15 @@ begin
     ProgressBar1.Step := 1;
     ProgressBar1.Visible := true;
 
+    Screen.Cursor := crHourGlass;
     Application.ProcessMessages;
+
     FProjectFileListFrame.AddFiles(Files);
     Files.Free;
-
     ProgressBar1.Visible := false;
+
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
   end;
 end;
 
@@ -496,15 +520,12 @@ var
   UnsupportedTypes: TStringList;
   IndexFail: TStringList;
   S: String;
-  MissingChecker: TEpiProjectValidationTool;
-  FRA: TEpiProjectResultArray;
-  SRA: TEpiProjectStudyArray;
+  j: Integer;
 begin
   Result := TStringList.Create;
   Result.AddObject('', nil);
 
   IndexChecker := TEpiIntegrityChecker.Create;
-  MissingChecker := TEpiProjectValidationTool.Create;
   Fields := TEpiFields.Create(nil);
 
   UnsupportedTypes := TStringList.Create;
@@ -514,7 +535,9 @@ begin
   for i := 0 to DataFile.Fields.Count - 1 do
   begin
     F := DataFile.Fields[i];
-    S := EpiCutString(F.Name + ' (' + F.Question.Text + ')', 20);
+    S := F.Name;
+    if F.Question.Text <> '' then
+      S += ' (' + F.Question.Text + ')';
 
     if not (F.FieldType in FieldTypes) then
     begin
@@ -537,15 +560,14 @@ begin
         end;
       2:
         begin
-          Fields.AddItem(F);
-          MissingChecker.ValidationFields := Fields;
-          MissingChecker.Document := TEpiDocument(DataFile.RootOwner);
-          MissingChecker.ValidateProject(FRA, SRA, [pvCheckSystemMissing]);
-          if Length(FRA) > 0 then
+          for j := 0 to F.Size - 1 do
+            if F.IsMissing[j] then
+              Break;
+
+          if F.IsMissing[j] then
             IndexFail.Add(S)
           else
             Result.AddObject(S, F);
-          Fields.RemoveItem(F);
         end;
     end;
   end;
@@ -561,7 +583,6 @@ begin
   UnsupportedTypes.Free;
   Fields.Free;
   IndexChecker.Free;
-  MissingChecker.Free;
 end;
 
 procedure TValueLabelDataImport.UpdateCaption;
@@ -585,7 +606,7 @@ begin
   FProjectFileListFrame.Align := alClient;
   FProjectFileListFrame.Parent := Self;
   FProjectFileListFrame.OnAfterImportFile := @AfterFileImport;
-  FProjectFileListFrame.OnSelectionChanged := @SelectionChanged;
+  FProjectFileListFrame.OnAfterAddToGrid := @AfterAddToGrid;
 
   SG := FProjectFileListFrame.StructureGrid;
   SG.OnSelectEditor := @SelectEditor;
@@ -607,7 +628,16 @@ begin
   FMissingFieldColumn.ButtonStyle := cbsPickList;
   FMissingFieldColumn.Title.Caption := 'Missing Field';
 
+  FEditor := TFieldListEditor.Create(Self, Self);
+  with TFieldListEditor(FEditor) do
+  begin
+    OnCloseUp := @EditorCloseUp;
+    OnSelect := @SelectedItem;
+  end;
+  FEditor.AutoSize := false;
+
   SG.OnSelectCell := @SelectCell;
+  FSuccesImportList := TStringList.Create;
 end;
 
 class procedure TValueLabelDataImport.RestoreDefaultPos;

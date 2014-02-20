@@ -12,7 +12,7 @@ type
 
   TProjectListFileEvent = procedure (Sender: TObject; Document: TEpiDocument;
     Const FileName: string) of object;
-  TProjectFileListCallback = procedure (Sender: TObject; Document: TEpiDocument;
+  TProjectFileListGridEvent = procedure (Sender: TObject; Document: TEpiDocument;
     Const Filename: string; Const RowNo: Integer) of object;
 
   { TProjectFileListFrame }
@@ -34,6 +34,7 @@ type
     { private declarations }
     FCurrentFile: string;
     FDocList: TStringList;
+    FOnAfterAddToGrid: TProjectFileListGridEvent;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
     FOnSelectionChanged: TNotifyEvent;
@@ -44,6 +45,8 @@ type
     procedure  SetOnAfterImportFile(const AValue: TProjectListFileEvent);
     procedure  SetOnBeforeImportFile(const AValue: TProjectListFileEvent);
   protected
+    procedure  DoAfterGridEvent(Const Filename: string; Const Document: TEpiDocument;
+      Const RowNo: Integer);
     procedure  DoSelectionChanged;
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  DoAfterImportFile(Document: TEpiDocument; Const FileName: string);
@@ -54,10 +57,11 @@ type
     destructor  Destroy; override;
     procedure   AddFiles(Const Files: TStrings);
     procedure   AddDocument(Const FileName: string; Const Doc: TEpiDocument);
-    procedure   ForEachIncluded(CallBackMethod: TProjectFileListCallback);
+    procedure   ForEachIncluded(CallBackMethod: TProjectFileListGridEvent);
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
     property    OnSelectionChanged: TNotifyEvent read FOnSelectionChanged write FOnSelectionChanged;
+    property    OnAfterAddToGrid: TProjectFileListGridEvent read FOnAfterAddToGrid write FOnAfterAddToGrid;
     property    SelectedList: TStringList read GetSelectedList;
     property    DocList: TStringList read FDocList;
   private
@@ -177,6 +181,7 @@ begin
     end;
   end;
   FDocList.AddObject(FileName, Doc);
+  DoAfterGridEvent(Filename, Doc, Idx);
   DoSelectionChanged;
 end;
 
@@ -283,6 +288,13 @@ procedure TProjectFileListFrame.SetOnBeforeImportFile(
 begin
   if FOnBeforeImportFile = AValue then exit;
   FOnBeforeImportFile := AValue;
+end;
+
+procedure TProjectFileListFrame.DoAfterGridEvent(const Filename: string;
+  const Document: TEpiDocument; const RowNo: Integer);
+begin
+  if Assigned(FOnAfterAddToGrid) then
+    FOnAfterAddToGrid(Self, Document, Filename, RowNo);
 end;
 
 procedure TProjectFileListFrame.DoSelectionChanged;
@@ -426,7 +438,7 @@ begin
 end;
 
 procedure TProjectFileListFrame.ForEachIncluded(
-  CallBackMethod: TProjectFileListCallback);
+  CallBackMethod: TProjectFileListGridEvent);
 var
   IncludeIdx: Integer;
   i: Integer;

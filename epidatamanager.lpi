@@ -142,7 +142,7 @@
       </Item4>
       <SharedMatrixOptions Count="2">
         <Item1 ID="452080431331" Modes="Win32,Win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
-        <Item2 ID="637697368399" Modes="Win32,Win64" Value="-WG"/>
+        <Item2 ID="637697368399" Value="-WG"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
