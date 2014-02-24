@@ -50,6 +50,7 @@ end;
 procedure TRenameForm.BitBtn1Click(Sender: TObject);
 var
   i: Integer;
+  S: String;
 begin
   if (not CheckBox1.Checked) and
      (not CheckBox2.Checked) and
@@ -60,9 +61,19 @@ begin
     Exit;
   end;
 
+  S := '';
+  if CheckBox1.Checked then
+    S += '/Fields';
+  if CheckBox2.Checked then
+    S += '/Sections';
+  if CheckBox3.Checked then
+    S += '/Headings';
+  Delete(S, 1, 1);
+
   case
     MessageDlg('Warning!',
-      'This will rename all selected items!' + LineEnding +
+      'Sequential renaming of all:' + LineEnding +
+      S + LineEnding +
       'This cannot be undone!' + LineEnding +
       LineEnding +
       'Do you wish to continue?',
@@ -93,9 +104,16 @@ begin
   if CheckBox2.Checked then
   begin
     for i := 0 to FDataFile.Sections.Count -1 do
-      FDataFile.Section[i].Name := '@rename' + IntToStr(i);
+      if FDataFile.Section[i] = FDataFile.MainSection then
+        Continue
+      else
+        FDataFile.Section[i].Name := '@rename' + IntToStr(i);
+
     for i := 0 to FDataFile.Sections.Count -1 do
-      FDataFile.Section[i].Name := Edit2.Text + IntToStr(i + 1);
+      if FDataFile.Section[i] = FDataFile.MainSection then
+        Continue
+      else
+        FDataFile.Section[i].Name := Edit2.Text + IntToStr(i + 1);
   end;
 
   if CheckBox3.Checked then
