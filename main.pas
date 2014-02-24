@@ -372,8 +372,10 @@ begin
     ExportForm := TExportForm.Create(Self, Doc.Document, Doc.FileName);
     if ExportForm.ShowModal <> mrOK then exit;
 
+    Settings := ExportForm.ExportSetting;
+
     Exporter := TEpiExport.Create;
-    if not Exporter.Export(ExportForm.ExportSetting) then
+    if not Exporter.Export(Settings) then
       ShowMessage('Export Failed.')
     else
     with ExportForm do
@@ -382,7 +384,7 @@ begin
       if ExportReportChkBox.Checked then
       begin
         FileList := TStringList.Create;
-        FileList.AddObject(ExportSetting.ExportFileName, ExportSetting.Doc);
+        FileList.AddObject(Doc.FileName, ExportSetting.Doc);
         R := TReportExport.Create(FileList, TEpiReportTXTGenerator);
         R.ExportSettings := ExportSetting;
         ReportTitle := R.ReportTitle;
