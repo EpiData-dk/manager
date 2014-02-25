@@ -16,7 +16,7 @@ type
     AbstractMemo: TMemo;
     AgencyEdit: TEdit;
     AuthorsMemo: TMemo;
-    BitBtn1: TBitBtn;
+    OkBtn: TBitBtn;
     BitBtn2: TBitBtn;
     CitationsMemo: TMemo;
     FromDateEdit: TDateEdit;
@@ -60,7 +60,7 @@ type
     TabSheet7: TTabSheet;
     TitleEdit: TEdit;
     VersionEdit: TEdit;
-    procedure BitBtn1Click(Sender: TObject);
+    procedure OkBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
   private
@@ -80,12 +80,43 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, settings2;
+  settings2_var, settings2, RegExpr;
 
 { TStudyUnitForm }
 
-procedure TStudyUnitForm.BitBtn1Click(Sender: TObject);
+procedure TStudyUnitForm.OkBtnClick(Sender: TObject);
+var
+  Reg: TRegExpr;
+
+const
+  Letter = '[A-Za-z]';
+  Digits = '[0-9]';
 begin
+  if AgencyEdit.Text <> '' then
+    begin
+      Reg := TRegExpr.Create;
+
+      Reg.Expression :=
+        '(' + Letter + '|_)' +
+        '(' + Letter + '|' + Digits + '|\.|-|_)*';
+      Reg.Exec(AgencyEdit.Text);
+
+      // http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName
+      if (Reg.MatchLen[0] <> Length(Reg.InputString)) then
+        begin
+          ShowMessage(
+            'Agency is not valid according to XML Standard:' + LineEnding +
+            'Please visit this website for more information on NCName or use blank name:' + LineEnding +
+            LineEnding +
+            'http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName'
+          );
+          ModalResult := mrNone;
+        end;
+
+      Reg.Free;
+    end;
+
+
   with FStudy do
   begin
     Title.Text                := TitleEdit.Text;
@@ -98,7 +129,6 @@ begin
       DataCollectionStart := FromDateEdit.Date;
     if ToDateEdit.Date > 0 then
       DataCollectionEnd := ToDateEdit.Date;
-//    TimeCoverage.Text         := TimeCoverageEdit.Text;
     Population.Text           := PopulationMemo.Text;
     Keywords                  := KeywordsEdit.Text;
     Purpose.Text              := PurposeMemo.Text;
