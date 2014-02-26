@@ -8,7 +8,7 @@ object StudyUnitForm: TStudyUnitForm
   ClientWidth = 532
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
-  LCLVersion = '1.1'
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 49
@@ -18,15 +18,15 @@ object StudyUnitForm: TStudyUnitForm
     ClientHeight = 49
     ClientWidth = 532
     TabOrder = 0
-    object BitBtn1: TBitBtn
+    object OkBtn: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 468
+      Left = 467
       Height = 32
       Top = 8
-      Width = 53
+      Width = 54
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -34,17 +34,17 @@ object StudyUnitForm: TStudyUnitForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
-      OnClick = BitBtn1Click
+      OnClick = OkBtnClick
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = BitBtn1
-      Left = 378
+      AnchorSideRight.Control = OkBtn
+      Left = 376
       Height = 34
       Top = 7
-      Width = 80
+      Width = 81
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -60,9 +60,9 @@ object StudyUnitForm: TStudyUnitForm
     Height = 563
     Top = 0
     Width = 532
-    ActivePage = TabSheet3
+    ActivePage = TabSheet5
     Align = alClient
-    TabIndex = 1
+    TabIndex = 3
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Title/Abstract'
@@ -88,7 +88,7 @@ object StudyUnitForm: TStudyUnitForm
         Left = 10
         Height = 25
         Top = 27
-        Width = 569
+        Width = 506
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -104,9 +104,9 @@ object StudyUnitForm: TStudyUnitForm
         AnchorSideBottom.Control = TabSheet1
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 479
+        Height = 441
         Top = 79
-        Width = 569
+        Width = 506
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -506,7 +506,7 @@ object StudyUnitForm: TStudyUnitForm
         Height = 25
         Hint = 'Organisation to contact and contact information'
         Top = 30
-        Width = 569
+        Width = 506
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
@@ -523,10 +523,10 @@ object StudyUnitForm: TStudyUnitForm
         AnchorSideBottom.Control = TabSheet5
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 216
+        Height = 178
         Hint = 'Who has the copyright to these data'
         Top = 342
-        Width = 569
+        Width = 506
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
@@ -546,7 +546,7 @@ object StudyUnitForm: TStudyUnitForm
         Height = 172
         Hint = 'Who created the data set and study, including contributors'
         Top = 140
-        Width = 569
+        Width = 506
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
@@ -577,7 +577,7 @@ object StudyUnitForm: TStudyUnitForm
         Height = 25
         Hint = 'Can be the same as Organisation/Institute'
         Top = 85
-        Width = 569
+        Width = 506
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
@@ -598,10 +598,10 @@ object StudyUnitForm: TStudyUnitForm
         AnchorSideBottom.Control = TabSheet6
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 548
+        Height = 510
         Hint = 'Contributors'
         Top = 10
-        Width = 569
+        Width = 506
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10

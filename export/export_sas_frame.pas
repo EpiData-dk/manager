@@ -57,8 +57,16 @@ end;
 
 function TExportSASFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
+var
+  CSVSettings: TEpiCSVExportSetting;
 begin
   result := (FFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
+
+  CSVSettings := TEpiCSVExportSetting.Create;
+  CSVSettings.Assign(Setting);
+  CSVSettings.ExportFileName := ChangeFileExt(Setting.ExportFileName, '.txt');
+
+  Setting.AdditionalExportSettings := CSVSettings;
 end;
 
 function TExportSASFrame.GetFrameCaption: string;

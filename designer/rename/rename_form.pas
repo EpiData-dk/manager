@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Buttons, epidatafiles;
+  ExtCtrls, Buttons, epidatafiles, epicustombase;
 
 type
 
@@ -50,6 +50,8 @@ end;
 procedure TRenameForm.BitBtn1Click(Sender: TObject);
 var
   i: Integer;
+  S: String;
+  CI: TEpiCustomControlItem;
 begin
   if (not CheckBox1.Checked) and
      (not CheckBox2.Checked) and
@@ -60,9 +62,19 @@ begin
     Exit;
   end;
 
+  S := '';
+  if CheckBox1.Checked then
+    S += '/Fields';
+  if CheckBox2.Checked then
+    S += '/Sections';
+  if CheckBox3.Checked then
+    S += '/Headings';
+  Delete(S, 1, 1);
+
   case
     MessageDlg('Warning!',
-      'This will rename all selected items!' + LineEnding +
+      'Sequential renaming of all:' + LineEnding +
+      S + LineEnding +
       'This cannot be undone!' + LineEnding +
       LineEnding +
       'Do you wish to continue?',
@@ -82,10 +94,27 @@ begin
 
   FDataFile.BeginUpdate;
 
+  // First rename all controls selected for renaming
+  // - this is if two different types (eg. field and section)
+  //   is going to have a name-clash if rename seperately.
+  for i := 0 to FDataFile.ControlItems.Count - 1 do
+  begin
+    CI := FDataFile.ControlItem[i];
+    if CI = FDataFile.MainSection then continue;
+
+    if CI.InheritsFrom(TEpiField) and CheckBox1.Checked then
+      CI.Name := '@Rename' + IntToStr(i);
+
+    if CI.InheritsFrom(TEpiSection) and CheckBox2.Checked then
+      CI.Name := '@Rename' + IntToStr(i);
+
+    if CI.InheritsFrom(TEpiHeading) and CheckBox3.Checked then
+      CI.Name := '@Rename' + IntToStr(i);
+  end;
+
+  // Rename controls sequentially. One by one...
   if CheckBox1.Checked then
   begin
-    for i := 0 to FDataFile.Fields.Count -1 do
-      FDataFile.Field[i].Name := '@rename' + IntToStr(i);
     for i := 0 to FDataFile.Fields.Count -1 do
       FDataFile.Field[i].Name := Edit1.Text + IntToStr(i + 1);
   end;
@@ -93,18 +122,18 @@ begin
   if CheckBox2.Checked then
   begin
     for i := 0 to FDataFile.Sections.Count -1 do
-      FDataFile.Section[i].Name := '@rename' + IntToStr(i);
-    for i := 0 to FDataFile.Sections.Count -1 do
-      FDataFile.Section[i].Name := Edit2.Text + IntToStr(i + 1);
+      if FDataFile.Section[i] = FDataFile.MainSection then
+        Continue
+      else
+        FDataFile.Section[i].Name := Edit2.Text + IntToStr(i + 1);
   end;
 
   if CheckBox3.Checked then
   begin
     for i := 0 to FDataFile.Headings.Count -1 do
-      FDataFile.Heading[i].Name := '@rename' + IntToStr(i);
-    for i := 0 to FDataFile.Headings.Count -1 do
       FDataFile.Heading[i].Name := Edit3.Text + IntToStr(i + 1);
   end;
+
   FDataFile.EndUpdate;
 end;
 
