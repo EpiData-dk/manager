@@ -12,9 +12,9 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
     Height = 609
     Top = 0
     Width = 572
-    ActivePage = FieldAdvancedSheet
+    ActivePage = FieldBasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object FieldBasicSheet: TTabSheet
       Caption = 'Basic'
