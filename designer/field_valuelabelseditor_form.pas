@@ -104,6 +104,8 @@ end;
 procedure TFieldValueLabelEditor.FormShow(Sender: TObject);
 begin
   ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
+  ValueLabelNameEdit.Enabled := (ValueLabelSet.LabelScope = vlsInternal);
+
   FGridFrame.VLG.SetFocus;
 
   if FGridFrame.ValueLabelSet.Count > 0 then // assume existing VL set.

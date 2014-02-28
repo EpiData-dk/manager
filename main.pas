@@ -15,11 +15,13 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    VLSetFromDataAction: TAction;
     ImportCBInNewProjectAction: TAction;
     MenuItem13: TMenuItem;
     MenuItem28: TMenuItem;
     MenuItem29: TMenuItem;
     AddStructFromBLMenuItem: TMenuItem;
+    MenuItem31: TMenuItem;
     RenameControlsPopupMenuItem: TMenuItem;
     MenuItem32: TMenuItem;
     RenameControlsMenuItem: TMenuItem;
@@ -199,6 +201,7 @@ type
     procedure ValidationReportActionExecute(Sender: TObject);
     procedure ValueLabelListReportActionExecute(Sender: TObject);
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
+    procedure VLSetFromDataActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
   private
     { private declarations }
@@ -269,7 +272,8 @@ uses
   prepare_double_entry_form,
   validate_double_entry_form, design_runtimedesigner,
   managerprocs, process, epiv_documentfile,
-  report_export, epireport_generator_txt;
+  report_export, epireport_generator_txt,
+  valuelabel_import_data;
 
 { TMainForm }
 
@@ -839,6 +843,45 @@ begin
   end;
 
   R.Free;
+end;
+
+procedure TMainForm.VLSetFromDataActionExecute(Sender: TObject);
+var
+  Docfile: TEpiDocumentFile;
+  LocalDoc: boolean;
+  F: TValueLabelDataImport;
+  Dlg: TSaveDialog;
+  Fn: String;
+begin
+  Docfile := ToolsCheckOpenFile(false, LocalDoc);
+  if not Assigned(DocFile) then exit;
+
+  try
+    F := TValueLabelDataImport.Create(Self);
+    F.DocFile := DocFile;
+    F.ShowModal;
+  finally
+    if (Docfile.Document.Modified) and
+       (LocalDoc)
+    then
+    begin
+      if (not Docfile.IsSaved)  then
+      begin
+        Dlg := TSaveDialog.Create(nil);
+        Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
+        Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+        if Dlg.Execute then
+          Fn := Dlg.FileName;
+      end else
+        Fn := Docfile.FileName;
+
+      Docfile.SaveFile(Fn);
+    end;
+
+    F.Free;
+    if LocalDoc and Assigned(Docfile) then
+      Docfile.Free;
+  end;
 end;
 
 procedure TMainForm.WebTutorialsMenuItem12Click(Sender: TObject);

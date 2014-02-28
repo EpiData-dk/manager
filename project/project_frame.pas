@@ -5,7 +5,7 @@ unit project_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
+  Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase,
   manager_messages, LMessages, epiv_documentfile, types;
 
@@ -86,6 +86,8 @@ type
     procedure UpdateShortCuts;
   private
 //    FFileName: string;
+    procedure LoadError(const Sender: TEpiCustomBase; ErrorType: Word;
+      Data: Pointer; out Continue: boolean);
     function GetEpiDocument: TEpiDocument;
     { Messages }
     // Message relaying...
@@ -116,7 +118,7 @@ implementation
 uses
   design_runtimedesigner, Clipbrd, epimiscutils,
   main, settings2, settings2_var, epistringutils,
-  valuelabelseditor_form2,
+  valuelabelseditor_form2, LazFileUtils,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form, project_studyunit_form,
   align_form, RegExpr;
@@ -155,6 +157,34 @@ begin
   F := TKeyFieldsForm.Create(Self, EpiDocument);
   F.ShowModal;
   F.Free;
+end;
+
+procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
+  ErrorType: Word; Data: Pointer; out Continue: boolean);
+var
+  Fn: String;
+  Res: TModalResult;
+begin
+  Continue := false;
+  if ErrorType <> 0 then exit;
+  if Sender <> EpiDocument then exit;
+  if not Assigned(FDocumentFile) then exit;
+
+  Fn := string(data^);
+  Res :=
+    MessageDlg('Warning',
+      'External file "' + Fn + '" not found.' + LineEnding +
+      'Please restore "' + Fn + '" to folder: ' + ExtractFilePath(FDocumentFile.FileName) + LineEnding +
+      LineEnding +
+      'If you continue all fields referecing the valuelabelset will be lost!' + LineEnding +
+      LineEnding +
+      'Continue loading the project?',
+      mtWarning,
+      mbYesNo,
+      0,
+      mbNo
+    );
+  Continue := Res = mrYes;
 end;
 
 procedure TProjectFrame.DocumentProgress(const Sender: TEpiCustomBase;
@@ -391,6 +421,7 @@ begin
   try
     FDocumentFile := TDocumentFile.Create;
     FDocumentFile.OnProgress := @DocumentProgress;
+    FDocumentFile.OnLoadError := @LoadError;
     FDocumentFile.DataDirectory := ManagerSettings.WorkingDirUTF8;
     FDocumentFile.BackupDirectory := '';
     if not FDocumentFile.OpenFile(AFileName) then

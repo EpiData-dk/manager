@@ -16,9 +16,11 @@
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="5"/>
       <RevisionNr Value="1"/>
+      <BuildNr Value="1"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable ProductVersion=""/>
+      <Attributes pvaSpecialBuild="True"/>
+      <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
     </VersionInfo>
     <BuildModes Count="4">
       <Item1 Name="Default" Default="True"/>
@@ -141,7 +143,7 @@
       </Item4>
       <SharedMatrixOptions Count="2">
         <Item1 ID="452080431331" Modes="Win32,Win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
-        <Item2 ID="637697368399" Modes="Win32,Win64" Value="-WG"/>
+        <Item2 ID="637697368399" Value="-WG"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -187,7 +189,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="87">
+    <Units Count="89">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -771,6 +773,22 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="report_export"/>
       </Unit86>
+      <Unit87>
+        <Filename Value="project/valuelabel_import_external.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ExtVLSetForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabel_import_external"/>
+      </Unit87>
+      <Unit88>
+        <Filename Value="project/valuelabel_import_data.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ValueLabelDataImport"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabel_import_data"/>
+      </Unit88>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -1,23 +1,24 @@
 object ProjectFileListFrame: TProjectFileListFrame
   Left = 0
-  Height = 780
+  Height = 405
   Top = 0
-  Width = 1191
-  ClientHeight = 780
-  ClientWidth = 1191
+  Width = 582
+  ClientHeight = 405
+  ClientWidth = 582
   TabOrder = 0
-  DesignLeft = 363
-  DesignTop = 188
+  DesignLeft = 895
+  DesignTop = 352
   object StructureGrid: TStringGrid
     Left = 0
-    Height = 680
+    Height = 305
     Top = 0
-    Width = 1191
+    Width = 582
     Align = alClient
     ColCount = 1
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goTabs, goSmoothScroll, goFixedRowNumbering]
     RowCount = 1
     TabOrder = 0
+    TitleStyle = tsNative
     OnCheckboxToggled = StructureGridCheckboxToggled
     OnColRowMoved = StructureGridColRowMoved
     Cells = (
@@ -30,19 +31,19 @@ object ProjectFileListFrame: TProjectFileListFrame
   object Panel1: TPanel
     Left = 0
     Height = 100
-    Top = 680
-    Width = 1191
+    Top = 305
+    Width = 582
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
     ClientHeight = 100
-    ClientWidth = 1191
+    ClientWidth = 582
     TabOrder = 1
     object ProgressBar1: TProgressBar
       Left = 0
       Height = 20
       Top = 80
-      Width = 1191
+      Width = 582
       Align = alBottom
       Smooth = True
       Step = 1
@@ -53,10 +54,10 @@ object ProjectFileListFrame: TProjectFileListFrame
       Left = 0
       Height = 80
       Top = 0
-      Width = 1191
+      Width = 582
       Align = alClient
       ItemHeight = 0
-      ScrollWidth = 1189
+      ScrollWidth = 580
       TabOrder = 1
       TopIndex = -1
       Visible = False
