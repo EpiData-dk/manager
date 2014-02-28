@@ -33,7 +33,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -70,7 +70,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -109,7 +109,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
