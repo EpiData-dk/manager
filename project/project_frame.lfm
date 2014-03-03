@@ -25,11 +25,10 @@ object ProjectFrame: TProjectFrame
       Width = 200
       Align = alClient
       DefaultItemHeight = 18
-      ReadOnly = True
       ScrollBars = ssAutoBoth
       TabOrder = 0
+      OnEdited = DataFilesTreeViewEdited
       OnSelectionChanged = DataFilesTreeViewSelectionChanged
-      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end
     object ToolBar1: TToolBar
       Left = 0

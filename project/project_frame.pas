@@ -38,6 +38,8 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure DataFilesTreeViewEdited(Sender: TObject; Node: TTreeNode;
+      var S: string);
     procedure DataFilesTreeViewSelectionChanged(Sender: TObject);
     procedure DocumentProgress(const Sender: TEpiCustomBase;
       ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
@@ -227,6 +229,16 @@ begin
   FActiveFrame.Show;
 end;
 
+procedure TProjectFrame.DataFilesTreeViewEdited(Sender: TObject;
+  Node: TTreeNode; var S: string);
+begin
+  if Trim(S) = '' then
+  begin
+    ShowMessage('A dataform name cannot be empty!');
+    S := TRuntimeDesignFrame(Node.Data).DataFile.Caption.Text;
+  end;
+end;
+
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
   PostMessage(MainForm.Handle, LM_MAIN_OPENPROJECT, 0, 0);
@@ -333,12 +345,11 @@ procedure TProjectFrame.OnDataFileChange(const Sender,
 var
   TN: TTreeNode;
 begin
-  if not Sender.InheritsFrom(TEpiDataFile) then exit;
-  if not (TEpiDataFile(Sender).Caption = Initiator) then exit;
+  if not Initiator.InheritsFrom(TEpiTranslatedText) then exit;
   if not ((EventGroup = eegCustomBase) and (EventType = Word(ecceText))) then exit;
 
-  TN := TTreeNode(TEpiDataFile(Sender).FindCustomData(PROJECT_TREE_NODE_KEY));
-  TN.Text := TEpiDataFile(Sender).Caption.Text;
+  TN := TTreeNode(TEpiDataFile(Initiator.Owner).FindCustomData(PROJECT_TREE_NODE_KEY));
+  TN.Text := TEpiDataFile(Initiator.Owner).Caption.Text;
 end;
 
 procedure TProjectFrame.OnTitleChange(const Sender, Initiator: TEpiCustomBase;

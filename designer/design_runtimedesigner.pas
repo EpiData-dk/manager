@@ -1148,12 +1148,19 @@ begin
 
     MainForm.BeginUpdatingForm;
 
+    if (ImpStructurForm.SelectedDocuments.Count = 1) and
+       (DataFile.ControlItems.Count = 1) // only main section
+    then
+      DataFile.Caption.Text := TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[0]).DataFiles[0].Caption.Text;
+
     for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
       PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
         ImpStructurForm.ValueLabelsRenameGrpBox.ItemIndex = 1,
         ImpStructurForm.FieldsRenameGrpBox.ItemIndex = 1,
         ImpStructurForm.ImportDataIndex = i
       );
+
+
 
     FDesignPanel.Surface.Select(FDesignPanel);
     FDesignPanel.Surface.UpdateDesigner;
@@ -2466,7 +2473,8 @@ end;
 procedure TRuntimeDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
-  if Screen.ActiveCustomForm <> MainForm then
+  if (Screen.ActiveCustomForm <> MainForm)
+  then
     DesignerActionList.State := asSuspended
   else
     DesignerActionList.State := asNormal;
@@ -2697,8 +2705,8 @@ begin
     PropertiesForm.OnShowHintMsg := @ShowHintMsg
   end
   else begin
-    FDesignPanel.Surface.ClearSelection;
-    FDesignPanel.Surface.SelectionChange;
+{    FDesignPanel.Surface.ClearSelection;
+    FDesignPanel.Surface.SelectionChange;  }
     PropertiesForm.OnShowHintMsg := nil;
     FDesignPanel.Active := false;
   end;
@@ -2720,9 +2728,9 @@ begin
   FDesignPanel.OnPaint := @PaintDesignPanel;
   FDesignPanel.Align := alClient;
   FDesignPanel.Color := clWhite;
-  FDesignPanel.Parent := FDesignScrollBox;
   FDesignPanel.Surface.ControllerClass := TDesignController;
   FDesignPanel.Surface.MessengerClass := TDesignMessenger;
+  FDesignPanel.Parent := FDesignScrollBox;
 
   FActiveButton := SelectorToolButton;
 
@@ -2774,7 +2782,8 @@ begin
   result :=
     // Only execute our actionlist if mainform is active!
     (Screen.ActiveCustomForm = MainForm) and
-    (DesignerActionList.IsShortCut(Message));
+    (DesignerActionList.IsShortCut(Message)) and
+    (Self.Focused);
 
   // Else ready for implementing a larger Short-cut editor.
 end;
