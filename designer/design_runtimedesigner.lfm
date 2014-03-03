@@ -703,8 +703,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       EdgeBorders = [ebLeft, ebTop, ebBottom]
       EdgeInner = esNone
       EdgeOuter = esRaised
+      Enabled = False
       Images = DesignerImageList
       TabOrder = 1
+      Visible = False
       object OpenProjectToolBtn: TToolButton
         Left = 2
         Top = 1

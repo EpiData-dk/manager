@@ -27,9 +27,9 @@ object ProjectFrame: TProjectFrame
       DefaultItemHeight = 18
       ReadOnly = True
       ScrollBars = ssAutoBoth
-      ShowRoot = False
       TabOrder = 0
-      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoToolTips, tvoThemedDraw]
+      OnSelectionChanged = DataFilesTreeViewSelectionChanged
+      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end
     object ToolBar1: TToolBar
       Left = 0
@@ -84,7 +84,6 @@ object ProjectFrame: TProjectFrame
         Left = 81
         Top = 1
         Action = NewDataFormAction
-        Enabled = False
         ParentShowHint = False
         ShowHint = True
       end

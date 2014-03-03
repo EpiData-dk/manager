@@ -273,7 +273,7 @@ uses
   validate_double_entry_form, design_runtimedesigner,
   managerprocs, process, epiv_documentfile,
   report_export, epireport_generator_txt,
-  valuelabel_import_data;
+  valuelabel_import_data, design_properties_form;
 
 { TMainForm }
 
@@ -1378,6 +1378,8 @@ constructor TMainForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FActiveFrame := nil;
+  PropertiesForm := TPropertiesForm.Create(self);
+
   SetupIPC;
   UpdateMainMenu;
   AssignActionLinks;

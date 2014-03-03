@@ -38,6 +38,7 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure DataFilesTreeViewSelectionChanged(Sender: TObject);
     procedure DocumentProgress(const Sender: TEpiCustomBase;
       ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
       var Canceled: Boolean);
@@ -60,7 +61,6 @@ type
     FrameCount: integer;
     procedure OnDataFileChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnTitleChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
-    function  NewDataFileItem(Sender: TEpiCustomList; DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
     procedure AddToRecent(Const AFileName: string);
     // Common for open/create
     procedure CommonProjectInit;
@@ -123,16 +123,8 @@ uses
   shortcuts, project_keyfields_form, project_studyunit_form,
   align_form, RegExpr;
 
-type
-
-  { TEpiDataFileEx }
-
-  TEpiDataFileEx = class(TEpiDataFile)
-  private
-    FTreeNode: TTreeNode;
-  public
-    property TreeNode: TTreeNode read FTreeNode write FTreeNode;
-  end;
+const
+  PROJECT_TREE_NODE_KEY = 'PROJECT_TREE_NODE_KEY';
 
 { TProjectFrame }
 
@@ -223,6 +215,18 @@ begin
   end;
 end;
 
+procedure TProjectFrame.DataFilesTreeViewSelectionChanged(Sender: TObject);
+var
+  TN: TTreeNode;
+begin
+  TN := DataFilesTreeView.Selected;
+  if not Assigned(TN) then exit;
+
+  FActiveFrame.Hide;
+  FActiveFrame := TFrame(TN.Data);
+  FActiveFrame.Show;
+end;
+
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
   PostMessage(MainForm.Handle, LM_MAIN_OPENPROJECT, 0, 0);
@@ -258,12 +262,21 @@ end;
 procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);
 var
   ProjectSettings: TProjectSettingsForm;
+  TN: TTreeNode;
+  Res: Integer;
 begin
   ProjectSettings := TProjectSettingsForm.Create(self, EpiDocument);
-  ProjectSettings.ShowModal;
+  Res := ProjectSettings.ShowModal;
   ProjectSettings.Free;
 
-  TRuntimeDesignFrame(ActiveFrame).UpdateFrame;
+  if Res <> mrOK then Exit;
+
+  TN := DataFilesTreeView.TopItem;
+  While Assigned(TN) do
+  begin
+    TRuntimeDesignFrame(TN.Data).UpdateFrame;
+    TN := TN.GetNext;
+  end;
   UpdateTimer;
 end;
 
@@ -318,14 +331,14 @@ procedure TProjectFrame.OnDataFileChange(const Sender,
   Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
 var
-  Df: TEpiDataFileEx;
+  TN: TTreeNode;
 begin
-  // TODO : Handle change event when implementing multiple dataforms.
-{  if (EventGroup = eegCustomBase) and (EventType = Word(ecceText)) then
-  begin
-    Df := TEpiDataFileEx(TEpiCustomItem(Sender).Owner);
-    Df.TreeNode.Text := Df.Caption.Text;
-  end;}
+  if not Sender.InheritsFrom(TEpiDataFile) then exit;
+  if not (TEpiDataFile(Sender).Caption = Initiator) then exit;
+  if not ((EventGroup = eegCustomBase) and (EventType = Word(ecceText))) then exit;
+
+  TN := TTreeNode(TEpiDataFile(Sender).FindCustomData(PROJECT_TREE_NODE_KEY));
+  TN.Text := TEpiDataFile(Sender).Caption.Text;
 end;
 
 procedure TProjectFrame.OnTitleChange(const Sender, Initiator: TEpiCustomBase;
@@ -372,14 +385,7 @@ begin
     Funding.Text              := OwnFunding;
   end;
 
-  Result.DataFiles.OnNewItemClass := @NewDataFileItem;
   Result.OnModified := @EpiDocumentModified;
-end;
-
-function TProjectFrame.NewDataFileItem(Sender: TEpiCustomList;
-  DefaultItemClass: TEpiCustomItemClass): TEpiCustomItemClass;
-begin
-  result := TEpiDataFileEx;
 end;
 
 procedure TProjectFrame.AddToRecent(const AFileName: string);
@@ -416,6 +422,7 @@ end;
 function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
 var
   TmpDoc: TEpiDocument;
+  i: Integer;
 begin
   Result := false;
   try
@@ -438,13 +445,15 @@ begin
 
   try
     try
-      DoNewDataForm(EpiDocument.DataFiles[0]);
+      for i := 0 to EpiDocument.DataFiles.Count - 1 do
+        DoNewDataForm(EpiDocument.DataFiles[i]);
     except
       if Assigned(FDocumentFile) then
         FreeAndNil(FDocumentFile);
       if Assigned(FActiveFrame) then FreeAndNil(FActiveFrame);
       raise
     end;
+    DataFilesTreeView.Selected := TTreeNode(EpiDocument.DataFiles[0].FindCustomData(PROJECT_TREE_NODE_KEY));
 
     CommonProjectInit;
 
@@ -462,18 +471,23 @@ var
   Frame: TRuntimeDesignFrame;
 begin
   Frame := TRuntimeDesignFrame.Create(Self);
+//  Frame.Name := GetRandomComponentName;
+  Frame.Name := Df.Name;
   Frame.Align := alClient;
   Frame.Parent := Self;
+  // Needed to activate FDesignPanel in RuntimeDesigner...
+  Frame.Show;
+
   Frame.DataFile := Df;
   FActiveFrame := Frame;
 
-  Frame.OpenProjectToolBtn.Action := OpenProjectAction;
+ { Frame.OpenProjectToolBtn.Action := OpenProjectAction;
   Frame.SaveProjectToolBtn.Action := SaveProjectAction;
   Frame.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
-  Frame.ProjectToolBar.Images := ProjectImageList;
+  Frame.ProjectToolBar.Images := ProjectImageList; }
 
   DataFilesTreeView.Selected := DataFilesTreeView.Items.AddObject(nil, Df.Caption.Text, Frame);
-  TEpiDataFileEx(Df).TreeNode := DataFilesTreeView.Selected;
+  Df.AddCustomData(PROJECT_TREE_NODE_KEY, DataFilesTreeView.Selected);
   Df.Caption.RegisterOnChangeHook(@OnDataFileChange);
 end;
 
@@ -485,6 +499,8 @@ begin
 end;
 
 procedure TProjectFrame.DoCloseProject;
+var
+  TN: TTreeNode;
 begin
   // Close VAlueLabel Editor - else the reference to
   // ValueLabelSEts is incomplete!
@@ -496,12 +512,17 @@ begin
 //  if not Assigned(EpiDocument) then exit;
 
   // TODO : Delete ALL dataforms!
-  FreeAndNil(FActiveFrame);
+  TN := DataFilesTreeView.TopItem;
+  while Assigned(TN) do
+  begin
+    TFrame(TN.Data).Free;
+    TN := TN.GetNext;
+  end;
+  DataFilesTreeView.Items.Clear;
 
+  FActiveFrame := nil;
   FreeAndNil(FBackupTimer);
   FreeAndNil(FDocumentFile);
-
-  DataFilesTreeView.Items.Clear;
 
   Modified := false;
 end;
@@ -660,12 +681,12 @@ begin
   FrameCount := 0;
   FActiveFrame := nil;
 
-  {$IFDEF EPI_DEBUG}
+{  {$IFDEF EPI_DEBUG}
 
   {$ELSE}
   ProjectPanel.Enabled := false;
   ProjectPanel.Visible := false;
-  {$ENDIF}
+  {$ENDIF}    }
 end;
 
 destructor TProjectFrame.Destroy;
@@ -719,14 +740,17 @@ begin
 end;
 
 procedure TProjectFrame.UpdateFrame;
+var
+  TN: TTreeNode;
 begin
   UpdateShortCuts;
-//  if ValueLabelsEditorCreated then
-//    GetValueLabelsEditor(EpiDocument).UpdateSettings;
 
-  // TODO : Update all frames.
-  if Assigned(FActiveFrame) then
-    TRuntimeDesignFrame(FActiveFrame).UpdateFrame;
+  TN := DataFilesTreeView.TopItem;
+  while Assigned(TN) do
+  begin
+    TRuntimeDesignFrame(TN.Data).UpdateFrame;
+    TN := TN.GetNext;
+  end;
 end;
 
 function TProjectFrame.OpenProject(const AFileName: string): boolean;

@@ -42,6 +42,9 @@ type
     class procedure RestoreDefaultPos(F: TPropertiesForm);
   end;
 
+var
+  PropertiesForm: TPropertiesForm;
+
 implementation
 
 uses

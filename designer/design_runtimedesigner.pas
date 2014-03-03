@@ -250,7 +250,6 @@ type
     FAddClass: string;
     FImportedFileName: string;
     FLastSelectedFieldType: TEpiFieldType;
-    FPropertiesForm: TPropertiesForm;
     FSettingDataFile: boolean;
     FCreatingControl: boolean;
     FCheckingClipBoard: boolean;
@@ -333,6 +332,7 @@ type
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
+    procedure SetVisible(Value: Boolean); override;
   public
     constructor Create(TheOwner: TComponent); override;
     procedure   UpdateFrame;
@@ -2001,6 +2001,8 @@ procedure TRuntimeDesignFrame.UpdateStatusbar(ControlList: TJvDesignObjectArray
 var
   EpiCtrl: TEpiCustomControlItem;
 begin
+  if not Assigned(DataFile) then exit;
+
   // New "statusbar"
   RecordsLabel.Caption := IntToStr(DataFile.Size);
   SectionsLabel.Caption := IntToStr(DataFile.Sections.Count);
@@ -2274,8 +2276,8 @@ begin
   else
     Selection := FDesignPanel.Surface.Selected;
 
-  if Assigned(FPropertiesForm) and (not FSettingDataFile) then
-    FPropertiesForm.UpdateSelection(Selection);
+  if Assigned(PropertiesForm) and (not FSettingDataFile) then
+    PropertiesForm.UpdateSelection(Selection);
 
   UpdateStatusbar(Selection);
 end;
@@ -2642,7 +2644,6 @@ begin
   FDatafile.MainSection.Fields.OnGetPrefix := @FieldNamePrefix;
   (FDesignPanel as IDesignEpiControl).EpiControl := FDatafile.MainSection;
 
-  FDesignPanel.Active := true;
   TJvDesignSelector(FDesignPanel.Surface.Selector).HandleWidth := 4;
 
   Controller := TDesignController(FDesignPanel.Surface.Controller);
@@ -2686,6 +2687,23 @@ begin
     ShowAlignFormAction.Execute;
 end;
 
+procedure TRuntimeDesignFrame.SetVisible(Value: Boolean);
+begin
+  inherited SetVisible(Value);
+
+  if Value then
+  begin
+    FDesignPanel.Active := true;
+    PropertiesForm.OnShowHintMsg := @ShowHintMsg
+  end
+  else begin
+    FDesignPanel.Surface.ClearSelection;
+    FDesignPanel.Surface.SelectionChange;
+    PropertiesForm.OnShowHintMsg := nil;
+    FDesignPanel.Active := false;
+  end;
+end;
+
 constructor TRuntimeDesignFrame.Create(TheOwner: TComponent);
 var
   ScrollBox: TJvDesignScrollBox;
@@ -2712,9 +2730,8 @@ begin
   FHintWindow.AutoHide := true;
   FHintWindow.HideInterval := 5 * 1000;
 
-  FPropertiesForm := TPropertiesForm.Create(Self);
-  FPropertiesForm.OnShowHintMsg := @ShowHintMsg;
-  FPropertiesForm.UpdateSelection(nil);
+//  PropertiesForm := TPropertiesForm.Create(Self);
+  PropertiesForm.UpdateSelection(nil);
 
   {$IFNDEF EPI_DEBUG}
   TestToolButton.Visible := false;
@@ -2736,14 +2753,7 @@ begin
 end;
 
 class procedure TRuntimeDesignFrame.RestoreDefaultPos(F: TRuntimeDesignFrame);
-var
-  Aform: TForm;
 begin
-  if Assigned(F) then
-    TPropertiesForm.RestoreDefaultPos(F.FPropertiesForm)
-  else
-    TPropertiesForm.RestoreDefaultPos(nil);
-
   TImportStructureForm.RestoreDefaultPos;
   AlignmentFormRestoreDefaultPos;
   DataSetViewerFormRestoreDefaultPos;
@@ -2751,12 +2761,12 @@ end;
 
 procedure TRuntimeDesignFrame.ShowPropertiesForm(NewControl: boolean);
 begin
-  if not Assigned(FPropertiesForm) then exit;
+  if not Assigned(PropertiesForm) then exit;
 
-  FPropertiesForm.Show;
-  FPropertiesForm.SetFocus;
+  PropertiesForm.Show;
+  PropertiesForm.SetFocus;
   if NewControl then
-    FPropertiesForm.SetFocusOnNew;
+    PropertiesForm.SetFocusOnNew;
 end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;
@@ -2773,8 +2783,8 @@ function TRuntimeDesignFrame.ValidateControls: boolean;
 begin
   Result := true;
 
-  if Assigned(FPropertiesForm) then
-     result := FPropertiesForm.ValidateControls;
+  if Assigned(PropertiesForm) then
+     result := PropertiesForm.ValidateControls;
 end;
 
 end.
