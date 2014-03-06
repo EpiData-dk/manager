@@ -6,35 +6,37 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 820
-  DesignTop = 233
+  DesignLeft = 739
+  DesignTop = 267
   object ProjectPanel: TPanel
+    Cursor = crIBeam
     Left = 0
     Height = 638
     Top = 0
-    Width = 200
+    Width = 171
     Align = alLeft
     BevelOuter = bvNone
     ClientHeight = 638
-    ClientWidth = 200
+    ClientWidth = 171
     TabOrder = 0
     object DataFilesTreeView: TTreeView
       Left = 0
       Height = 612
       Top = 26
-      Width = 200
+      Width = 171
       Align = alClient
       DefaultItemHeight = 18
       ScrollBars = ssAutoBoth
       TabOrder = 0
       OnEdited = DataFilesTreeViewEdited
+      OnEditing = DataFilesTreeViewEditing
       OnSelectionChanged = DataFilesTreeViewSelectionChanged
     end
     object ToolBar1: TToolBar
       Left = 0
       Height = 26
       Top = 0
-      Width = 200
+      Width = 171
       Caption = 'ProjectToolBar'
       EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
       EdgeInner = esNone
@@ -115,6 +117,14 @@ object ProjectFrame: TProjectFrame
     Visible = False
     BarShowText = True
   end
+  object Splitter1: TSplitter
+    Left = 171
+    Height = 638
+    Top = 0
+    Width = 5
+    AutoSnap = False
+    Beveled = True
+  end
   object ActionList1: TActionList
     Images = ProjectImageList
     left = 624
@@ -148,6 +158,8 @@ object ProjectFrame: TProjectFrame
       Caption = 'Delete Data Form'
       Hint = 'Delete Data Form'
       ImageIndex = 4
+      OnExecute = DeleteDataFormActionExecute
+      OnUpdate = DeleteDataFormActionUpdate
     end
     object ProjectSettingsAction: TAction
       Category = 'Project'

@@ -321,7 +321,9 @@ type
     procedure AlignControls(Const AAlignMent: TDesignControlsAlignment;
       Const FixedDist: integer = -1);
   private
+    FMayHandleShortcuts: boolean;
     { Other }
+    procedure SetMayHandleShortcuts(AValue: boolean);
     procedure UpdateShortcuts;
     procedure UpdateControls;
     procedure UpdateInterface;
@@ -335,6 +337,7 @@ type
     procedure SetVisible(Value: Boolean); override;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     procedure   UpdateFrame;
     procedure   ShowPropertiesForm(NewControl: boolean);
     function    IsShortCut(var Message: TLMKey): boolean;
@@ -343,6 +346,7 @@ type
     property ImportedFileName: string read FImportedFileName;
     property DesignPanel: TJvDesignPanel read FDesignPanel;
     property DesignScrollBar: TJvDesignScrollBox read FDesignScrollBox;
+    property MayHandleShortcuts: boolean read FMayHandleShortcuts write SetMayHandleShortcuts;
   public
     class procedure RestoreDefaultPos(F: TRuntimeDesignFrame);
   end;
@@ -1874,6 +1878,15 @@ begin
   ViewDatasetAction.ShortCut           := D_BrowseData;
 end;
 
+procedure TRuntimeDesignFrame.SetMayHandleShortcuts(AValue: boolean);
+var
+  handled: Boolean;
+begin
+  if FMayHandleShortcuts = AValue then Exit;
+  FMayHandleShortcuts := AValue;
+  DesignerActionListUpdate(nil, handled);
+end;
+
 procedure TRuntimeDesignFrame.UpdateControls;
 var
   i: Integer;
@@ -2205,12 +2218,12 @@ end;
 
 procedure TRuntimeDesignFrame.ShowAlignFormActionExecute(Sender: TObject);
 begin
-  ShowAlignmentForm(Self);
+  AlignForm.Show;
 end;
 
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
-//  ShowAlignmentForm(Self);
+  //
 end;
 
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
@@ -2473,7 +2486,9 @@ end;
 procedure TRuntimeDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
-  if (Screen.ActiveCustomForm <> MainForm)
+  if (Screen.ActiveCustomForm <> MainForm) or
+     (not Visible) or
+     (not MayHandleShortcuts)
   then
     DesignerActionList.State := asSuspended
   else
@@ -2647,12 +2662,11 @@ var
   P: TPoint;
   z: Integer;
 begin
+  FDesignPanel.Active := true;
   FDatafile := AValue;
   FDatafile.Sections.RegisterOnChangeHook(@SectionsChangeEvent, true);
   FDatafile.MainSection.Fields.OnGetPrefix := @FieldNamePrefix;
   (FDesignPanel as IDesignEpiControl).EpiControl := FDatafile.MainSection;
-
-  TJvDesignSelector(FDesignPanel.Surface.Selector).HandleWidth := 4;
 
   Controller := TDesignController(FDesignPanel.Surface.Controller);
   Surface    := FDesignPanel.Surface;
@@ -2691,8 +2705,7 @@ begin
   Controller.ClearDragRect;
   Surface.Select(FDesignPanel);
   FSettingDataFile := false;
-  if AlignmentFormIsVisible then
-    ShowAlignFormAction.Execute;
+  FDesignPanel.Active := false;
 end;
 
 procedure TRuntimeDesignFrame.SetVisible(Value: Boolean);
@@ -2705,8 +2718,6 @@ begin
     PropertiesForm.OnShowHintMsg := @ShowHintMsg
   end
   else begin
-{    FDesignPanel.Surface.ClearSelection;
-    FDesignPanel.Surface.SelectionChange;  }
     PropertiesForm.OnShowHintMsg := nil;
     FDesignPanel.Active := false;
   end;
@@ -2738,7 +2749,6 @@ begin
   FHintWindow.AutoHide := true;
   FHintWindow.HideInterval := 5 * 1000;
 
-//  PropertiesForm := TPropertiesForm.Create(Self);
   PropertiesForm.UpdateSelection(nil);
 
   {$IFNDEF EPI_DEBUG}
@@ -2751,6 +2761,13 @@ begin
 
   FPopUpPoint := Point(-1, -1);
   FSettingDataFile := false;
+  FMayHandleShortcuts := true;
+end;
+
+destructor TRuntimeDesignFrame.Destroy;
+begin
+  FDatafile.Sections.UnRegisterOnChangeHook(@SectionsChangeEvent);
+  inherited Destroy;
 end;
 
 procedure TRuntimeDesignFrame.UpdateFrame;
@@ -2763,7 +2780,6 @@ end;
 class procedure TRuntimeDesignFrame.RestoreDefaultPos(F: TRuntimeDesignFrame);
 begin
   TImportStructureForm.RestoreDefaultPos;
-  AlignmentFormRestoreDefaultPos;
   DataSetViewerFormRestoreDefaultPos;
 end;
 
@@ -2783,7 +2799,7 @@ begin
     // Only execute our actionlist if mainform is active!
     (Screen.ActiveCustomForm = MainForm) and
     (DesignerActionList.IsShortCut(Message)) and
-    (Self.Focused);
+    (MayHandleShortcuts);
 
   // Else ready for implementing a larger Short-cut editor.
 end;

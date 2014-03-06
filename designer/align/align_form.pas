@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, Buttons,
-  Spin, StdCtrls, ExtCtrls, design_runtimedesigner;
+  Spin, StdCtrls, ExtCtrls, design_runtimedesigner, design_types;
 
 type
 
@@ -45,88 +45,45 @@ type
   private
     FDesignFrame: TRuntimeDesignFrame;
     { private declarations }
+    procedure DoAlignControls(AAlignment: TDesignControlsAlignment;
+      Const FixedDist: Integer = -1);
   public
     { public declarations }
     property DesignFrame: TRuntimeDesignFrame read FDesignFrame write FDesignFrame;
+    class procedure RestoreDefaultPos;
   end;
 
-procedure ShowAlignmentForm(DesignFrame: TRuntimeDesignFrame);
-procedure CloseAlignmentForm;
-function AlignmentFormIsVisible: boolean;
-procedure AlignmentFormRestoreDefaultPos;
+var
+  AlignForm: TAlignmentForm;
+
 
 implementation
 
 {$R *.lfm}
 
 uses
-  design_types, settings2, settings2_var, LCLType;
-
-var
-  AlignForm: TAlignmentForm;
-
-procedure ShowAlignmentForm(DesignFrame: TRuntimeDesignFrame);
-begin
-  if not Assigned(AlignForm) then
-    AlignForm  := TAlignmentForm.Create(nil);
-
-  AlignForm.DesignFrame := DesignFrame;
-  AlignForm.Show;
-end;
-
-procedure CloseAlignmentForm;
-begin
-  if Assigned(AlignForm) then
-    FreeAndNil(AlignForm);
-end;
-
-function AlignmentFormIsVisible: boolean;
-begin
-  if not Assigned(AlignForm) then exit(false);
-
-  result := AlignForm.Visible;
-end;
-
-procedure AlignmentFormRestoreDefaultPos;
-var
-  Aform: TForm;
-begin
-  if Assigned(AlignForm) then
-    AForm := AlignForm
-  else
-    Aform := TForm.Create(nil);
-  Aform.LockRealizeBounds;
-  Aform.Width := 500;
-  Aform.Height := 500;
-  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
-  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
-  Aform.UnlockRealizeBounds;
-  SaveFormPosition(Aform, 'AlignmentForm');
-
-  if Aform <> AlignForm then
-    AForm.free;
-end;
+  settings2, settings2_var, LCLType;
 
 { TAlignmentForm }
 
 procedure TAlignmentForm.EvenDistVertBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaEvenVert);
+  DoAlignControls(dcaEvenVert);
 end;
 
 procedure TAlignmentForm.EvenDistHorzBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaEvenHorz);
+  DoAlignControls(dcaEvenHorz);
 end;
 
 procedure TAlignmentForm.FixedDistVertBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaFixedVert, SpinEdit1.Value);
+  DoAlignControls(dcaFixedVert, SpinEdit1.Value);
 end;
 
 procedure TAlignmentForm.FixedDistHorzBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaFixedHorz, SpinEdit2.Value);
+  DoAlignControls(dcaFixedHorz, SpinEdit2.Value);
 end;
 
 procedure TAlignmentForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -155,32 +112,59 @@ end;
 
 procedure TAlignmentForm.BottomAlignBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaBottomMost);
+  DoAlignControls(dcaBottomMost);
 end;
 
 procedure TAlignmentForm.CenterVertBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaCenterVert);
+  DoAlignControls(dcaCenterVert);
 end;
 
 procedure TAlignmentForm.CenterHorzBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaCenterHorz);
+  DoAlignControls(dcaCenterHorz);
 end;
 
 procedure TAlignmentForm.LeftAlignBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaLeftMost);
+  DoAlignControls(dcaLeftMost);
 end;
 
 procedure TAlignmentForm.RightAlignBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaRightMost);
+  DoAlignControls(dcaRightMost);
 end;
 
 procedure TAlignmentForm.TopAlignBtnClick(Sender: TObject);
 begin
-  DesignFrame.AlignControls(dcaTopMost);
+  DoAlignControls(dcaTopMost);
+end;
+
+procedure TAlignmentForm.DoAlignControls(AAlignment: TDesignControlsAlignment;
+  const FixedDist: Integer);
+begin
+  if Assigned(DesignFrame) then
+    DesignFrame.AlignControls(AAlignment, FixedDist);
+end;
+
+class procedure TAlignmentForm.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  if Assigned(AlignForm) then
+    AForm := AlignForm
+  else
+    Aform := TForm.Create(nil);
+  Aform.LockRealizeBounds;
+  Aform.Width := 500;
+  Aform.Height := 500;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  Aform.UnlockRealizeBounds;
+  SaveFormPosition(Aform, 'AlignmentForm');
+
+  if Aform <> AlignForm then
+    AForm.free;
 end;
 
 
