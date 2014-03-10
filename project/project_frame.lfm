@@ -28,6 +28,7 @@ object ProjectFrame: TProjectFrame
       DefaultItemHeight = 18
       ScrollBars = ssAutoBoth
       TabOrder = 0
+      OnDeletion = DataFilesTreeViewDeletion
       OnEdited = DataFilesTreeViewEdited
       OnEditing = DataFilesTreeViewEditing
       OnSelectionChanged = DataFilesTreeViewSelectionChanged

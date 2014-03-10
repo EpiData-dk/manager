@@ -2670,6 +2670,8 @@ begin
 
   Controller := TDesignController(FDesignPanel.Surface.Controller);
   Surface    := FDesignPanel.Surface;
+  TJvDesignSelector(Surface.Selector).HandleWidth := 4;
+
 
   FSettingDataFile := true;
   MainForm.BeginUpdatingForm;
