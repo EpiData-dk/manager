@@ -44,6 +44,8 @@ type
       var S: string);
     procedure DataFilesTreeViewEditing(Sender: TObject; Node: TTreeNode;
       var AllowEdit: Boolean);
+    procedure DataFilesTreeViewEditingEnd(Sender: TObject; Node: TTreeNode;
+      Cancel: Boolean);
     procedure DataFilesTreeViewSelectionChanged(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
@@ -68,7 +70,7 @@ type
     FModified: Boolean;
     FOnModified: TNotifyEvent;
     FrameCount: integer;
-    procedure OnDataFileChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+    procedure OnDataFileCaptionChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnTitleChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure AddToRecent(Const AFileName: string);
     // Common for open/create
@@ -88,6 +90,7 @@ type
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
     procedure UpdateCaption;
+    procedure UpdateRootNode;
   private
     { Backup }
     FBackupTimer: TTimer;
@@ -115,7 +118,6 @@ type
     property   DocumentFile: TDocumentFile read FDocumentFile;
     property   EpiDocument: TEpiDocument read GetEpiDocument;
     property   ActiveFrame: TRuntimeDesignFrame read FActiveFrame;
-//    property   ProjectFileName: string read FFileName write FFileName;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
   public
@@ -137,6 +139,15 @@ uses
 const
   PROJECT_TREE_NODE_KEY = 'PROJECT_TREE_NODE_KEY';
   PROJECT_RUNTIMEFRAME_KEY = 'PROJECT_RUNTIMEFRAME_KEY';
+
+type
+
+  TNodeData = class
+  public
+    DataFile: TEpiDataFile;
+    Frame: TRuntimeDesignFrame;
+    Relation: TEpiMasterRelation;
+  end;
 
 { TProjectFrame }
 
@@ -227,21 +238,26 @@ end;
 procedure TProjectFrame.DataFilesTreeViewSelectionChanged(Sender: TObject);
 var
   TN: TTreeNode;
+  F: TForm;
 begin
   TN := DataFilesTreeView.Selected;
   if not Assigned(TN) then exit;
 
   if Assigned(FActiveFrame) then
   begin
-    FActiveFrame.MayHandleShortcuts := false;
-    FActiveFrame.Hide;
+    FActiveFrame.DeActivate;
+    FActiveFrame.SendToBack;
   end;
 
-  FActiveFrame := TRuntimeDesignFrame(TN.Data);
+  if Assigned(TN.Data) then
+    FActiveFrame := TNodeData(TN.Data).Frame
+  else
+    FActiveFrame := nil;
+
   if Assigned(FActiveFrame) then
   begin
-    FActiveFrame.Show;
-    FActiveFrame.MayHandleShortcuts := true;
+    FActiveFrame.BringToFront;
+    FActiveFrame.Activate;
     AlignForm.DesignFrame := FActiveFrame;
   end;
 end;
@@ -256,7 +272,7 @@ begin
   CurrentNode := DataFilesTreeView.Selected;
   if CurrentNode = FRootNode then exit;
 
-  DF := TRuntimeDesignFrame(CurrentNode.Data).DataFile;
+  DF := TNodeData(CurrentNode.Data).DataFile;
   Res :=
     MessageDlg('Warning!',
       'Are you sure you want to delete the dataform "' + Df.Caption.Text + '" ?',
@@ -272,7 +288,6 @@ begin
   if not Assigned(NewNode) then
     NewNode := CurrentNode.GetNextSibling;
 
-//  TFrame(CurrentNode.Data).Free;
   CurrentNode.Free;
   FActiveFrame := nil;
 
@@ -292,21 +307,22 @@ begin
   if Trim(S) = '' then
   begin
     ShowMessage('A dataform name cannot be empty!');
-    S := TRuntimeDesignFrame(Node.Data).DataFile.Caption.Text;
+    S := TNodeData(Node.Data).DataFile.Caption.Text;
   end;
-  FActiveFrame.MayHandleShortcuts := true;
 end;
 
 procedure TProjectFrame.DataFilesTreeViewDeletion(Sender: TObject;
   Node: TTreeNode);
 var
-  F: TRuntimeDesignFrame;
-  DF: TEpiDataFile;
+  ND: TNodeData;
 begin
-  F := TRuntimeDesignFrame(Node.Data);
-  DF := F.DataFile;
-  F.Free;
-  Df.Free;
+  ND := TNodeData(Node.Data);
+  if not Assigned(ND) then exit;
+
+  ND.Frame.Free;
+  ND.DataFile.Caption.UnRegisterOnChangeHook(@OnDataFileCaptionChange);
+  ND.DataFile.Free;
+  ND.Free;
 end;
 
 procedure TProjectFrame.DataFilesTreeViewEditing(Sender: TObject;
@@ -314,7 +330,13 @@ procedure TProjectFrame.DataFilesTreeViewEditing(Sender: TObject;
 begin
   if Node = FRootNode then AllowEdit := false;
 
-  if AllowEdit then FActiveFrame.MayHandleShortcuts := false;
+  if AllowEdit then FActiveFrame.DeActivate; //MayHandleShortcuts := false;
+end;
+
+procedure TProjectFrame.DataFilesTreeViewEditingEnd(Sender: TObject;
+  Node: TTreeNode; Cancel: Boolean);
+begin
+  FActiveFrame.Activate; //MayHandleShortcuts := true;
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -409,7 +431,6 @@ begin
   F := TStudyUnitForm.Create(Self, EpiDocument.Study);
   F.ShowModal;
   F.Free;
-  UpdateCaption;
 end;
 
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
@@ -417,7 +438,7 @@ begin
   ShowValueLabelEditor2(EpiDocument.ValueLabelSets);
 end;
 
-procedure TProjectFrame.OnDataFileChange(const Sender,
+procedure TProjectFrame.OnDataFileCaptionChange(const Sender,
   Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
 var
@@ -434,6 +455,7 @@ procedure TProjectFrame.OnTitleChange(const Sender, Initiator: TEpiCustomBase;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
   UpdateCaption;
+  UpdateRootNode;
 end;
 
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
@@ -546,11 +568,12 @@ begin
       raise
     end;
 
+    EpiDocument.Study.Title.RegisterOnChangeHook(@OnTitleChange);
+
     DoCreateRelationalStructure;
+    DataFilesTreeView.FullExpand;
     DataFilesTreeView.Selected := FRootNode.GetFirstChild;
-    DataFilesTreeViewSelectionChanged(nil);
-//    FActiveFrame := TRuntimeDesignFrame(DataFilesTreeView.Selected.Data);
-//    FActiveFrame.Show;
+//    DataFilesTreeViewSelectionChanged(nil);
 
     CommonProjectInit;
 
@@ -559,6 +582,7 @@ begin
 
     AddToRecent(DocumentFile.FileName);
     UpdateCaption;
+    UpdateRootNode;
   finally
   end;
 end;
@@ -571,6 +595,7 @@ var
   DR: TEpiDetailRelation;
   Df: TEpiDataFile;
   TN: TTreeNode;
+  NodeData: TNodeData;
 begin
   if (ParentNode <> FRootNode) then
   begin
@@ -580,56 +605,28 @@ begin
 
   Df := EpiDocument.DataFiles.NewDataFile;
   Df.Caption.Text := 'Dataform ' + IntToStr(FrameCount);
-  Df.Caption.RegisterOnChangeHook(@OnDataFileChange);
+  Df.Caption.RegisterOnChangeHook(@OnDataFileCaptionChange);
 
-  Frame := DoNewRuntimeFrame(Df);
-  TN := DataFilesTreeView.Items.AddChildObject(ParentNode, Df.Caption.Text, Frame);
+  NodeData := TNodeData.Create;
+  NodeData.Frame := DoNewRuntimeFrame(Df);
+  if ParentNode = FRootNode then
+    NodeData.Relation := EpiDocument.Relations.NewMasterRelation
+  else
+    NodeData.Relation := TNodeData(ParentNode.Data).Relation.NewDetailRelation;
+  NodeData.Relation.Datafile := Df;
+  NodeData.DataFile := Df;
+
+  TN := DataFilesTreeView.Items.AddChildObject(ParentNode, Df.Caption.Text, NodeData);
   Df.AddCustomData(PROJECT_TREE_NODE_KEY, TN);
   DataFilesTreeView.Selected := TN;
-
-  if ParentNode = FRootNode then
-  begin
-    MR := EpiDocument.Relations.NewMasterRelation;
-    Mr.Datafile := Df;
-  end
-  else
-  begin
-    DR := EpiDocument.Relations[ParentNode.Index].NewDetailRelation;
-    DR.Datafile := Df;
-  end;
-
-  {  Frame := TRuntimeDesignFrame.Create(Self);
-  Frame.Name := GetRandomComponentName;
-  Frame.Align := alClient;
-  Frame.Parent := Self;
-  // Needed to activate FDesignPanel in RuntimeDesigner...
-  Frame.Show;
-
-  Frame.DataFile := Df;
-  FActiveFrame := Frame;
-
-  Frame.OpenProjectToolBtn.Action := OpenProjectAction;
-  Frame.SaveProjectToolBtn.Action := SaveProjectAction;
-  Frame.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
-  Frame.ProjectToolBar.Images := ProjectImageList;
-
-  ASelected := DataFilesTreeView.Selected;
-  if not Assigned(ASelected) then
-    ASelected := FRootNode;
-  DataFilesTreeView.Selected := DataFilesTreeView.Items.AddChildObject(ASelected, Df.Caption.Text, Frame);
-  Df.AddCustomData(PROJECT_TREE_NODE_KEY, DataFilesTreeView.Selected);
-  Df.Caption.RegisterOnChangeHook(@OnDataFileChange);
-  end;
-  end;
-  end;
-
-//  ProjectPanel.Visible := (EpiDocument.DataFiles.Count > 1);}
 end;
 
 function TProjectFrame.DoNewRuntimeFrame(Df: TEpiDataFile): TRuntimeDesignFrame;
 var
   Bogus: HWND;
 begin
+  Inc(FrameCount);
+
   Result := TRuntimeDesignFrame.Create(Self);
   Result.Name := GetRandomComponentName;
   Result.Align := alClient;
@@ -639,6 +636,7 @@ begin
   Result.SaveProjectToolBtn.Action := SaveProjectAction;
   Result.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
   Result.ProjectToolBar.Images := ProjectImageList;
+  Result.DeActivate;
   Df.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Result);
 end;
 
@@ -646,23 +644,40 @@ procedure TProjectFrame.DoCreateRelationalStructure;
 var
   Relations: TEpiRelationList;
   i: Integer;
+  MR: TEpiMasterRelation;
 
-  procedure AddRelation(ParentNode: TTreeNode; MasterRelation: TEpiMasterRelation);
+  function AddRelation(ParentNode: TTreeNode; Relation: TEpiMasterRelation): TTreeNode;
+  var
+    NodeData: TNodeData;
+    S: String;
+  begin
+    NodeData := TNodeData.Create;
+    NodeData.Relation := Relation;
+    NodeData.DataFile := Relation.Datafile;
+    NodeData.Frame := TRuntimeDesignFrame(NodeData.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
+
+    S := NodeData.DataFile.Caption.Text;
+    if Trim(S) = '' then
+      S := '(Untitled Dataset)';
+
+    Result :=
+      DataFilesTreeView.Items.AddChildObject(
+        ParentNode,
+        S,
+        NodeData
+      );
+    Relation.Datafile.AddCustomData(PROJECT_TREE_NODE_KEY, Result);
+  end;
+
+  procedure AddRelationRecursive(ParentNode: TTreeNode; MasterRelation: TEpiMasterRelation);
   var
     i: Integer;
     Df: TEpiDataFile;
   begin
-    Df := MasterRelation.Datafile;
-    ParentNode :=
-      DataFilesTreeView.Items.AddChildObject(
-        ParentNode,
-        Df.Caption.Text,
-        Df.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)
-      );
-    Df.AddCustomData(PROJECT_TREE_NODE_KEY, ParentNode);
+    ParentNode := AddRelation(ParentNode, MasterRelation);
 
     for i := 0 to MasterRelation.Count - 1 do
-      AddRelation(ParentNode, MasterRelation.DetailRelation[i]);
+      AddRelationRecursive(ParentNode, MasterRelation.DetailRelation[i]);
   end;
 
 begin
@@ -671,25 +686,23 @@ begin
      (EpiDocument.DataFiles.Count = 1)
   then
     begin
-      DataFilesTreeView.Items.AddChildObject(
-        FRootNode,
-        EpiDocument.DataFiles[0].Caption.Text,
-        EpiDocument.DataFiles[0].FindCustomData(PROJECT_RUNTIMEFRAME_KEY)
-      );
+      // This should only happen when loading .epx version 2 files!
+      MR := Relations.NewMasterRelation;
+      MR.Datafile := EpiDocument.DataFiles[0];
+
+      AddRelation(FRootNode, Mr);
       Exit;
     end;
 
   for i := 0 to Relations.Count - 1 do
-  begin
-    AddRelation(FRootNode, Relations.MasterRelation[i]);
-  end;
+    AddRelationRecursive(FRootNode, Relations.MasterRelation[i]);
 end;
 
 procedure TProjectFrame.DoCreateNewProject;
 begin
   DoCreateNewDocument;
+  DoNewDataForm(FRootNode);
   CommonProjectInit;
-  NewDataFormAction.Execute;
 end;
 
 procedure TProjectFrame.DoCloseProject;
@@ -704,14 +717,8 @@ begin
   AlignForm.DesignFrame := nil;
   AlignForm.Hide;
 
-  FRootNode.FreeAllNodeData;
-{  TN := FRootNode.GetNext;
-  while Assigned(TN) do
-  begin
-    TFrame(TN.Data).Free;
-    TN := TN.GetNext;
-  end;
-  TN.FreeAllNodeData;}
+  EpiDocument.Study.Title.UnRegisterOnChangeHook(@OnTitleChange);
+  FRootNode.Free;
   DataFilesTreeView.Items.Clear;
 
   FActiveFrame := nil;
@@ -772,6 +779,11 @@ begin
       S := S + ' [' + EpiCutString(T, 20) + ']';
   end;
   MainForm.Caption := S;
+end;
+
+procedure TProjectFrame.UpdateRootNode;
+begin
+  FRootNode.Text := EpiDocument.Study.Title.Text;
 end;
 
 function TProjectFrame.InitBackupTimer: boolean;
@@ -870,9 +882,7 @@ constructor TProjectFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-  FrameCount := 0;
-
-  FrameCount := 0;
+  FrameCount := 1;
   FActiveFrame := nil;
 
   AlignForm := TAlignmentForm.Create(self);
@@ -946,7 +956,7 @@ begin
   TN := DataFilesTreeView.TopItem;
   while Assigned(TN) do
   begin
-    TRuntimeDesignFrame(TN.Data).UpdateFrame;
+    TNodeData(TN.Data).Frame.UpdateFrame;
     TN := TN.GetNext;
   end;
 end;

@@ -348,6 +348,8 @@ type
     property DesignScrollBar: TJvDesignScrollBox read FDesignScrollBox;
     property MayHandleShortcuts: boolean read FMayHandleShortcuts write SetMayHandleShortcuts;
   public
+    procedure Activate;
+    procedure DeActivate;
     class procedure RestoreDefaultPos(F: TRuntimeDesignFrame);
   end;
 
@@ -2812,6 +2814,20 @@ begin
 
   if Assigned(PropertiesForm) then
      result := PropertiesForm.ValidateControls;
+end;
+
+procedure TRuntimeDesignFrame.Activate;
+begin
+  FDesignPanel.Surface.Active := true;
+  DesignerActionList.State := asNormal;
+  MayHandleShortcuts := true;
+end;
+
+procedure TRuntimeDesignFrame.DeActivate;
+begin
+  FDesignPanel.Surface.Active := false;
+  DesignerActionList.State := asSuspended;
+  MayHandleShortcuts := false;
 end;
 
 end.
