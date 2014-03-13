@@ -137,14 +137,9 @@ uses
   valuelabelseditor_form2, LazFileUtils,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form, project_studyunit_form,
-  align_form, RegExpr, project_studyunit_frame;
-
-const
-  PROJECT_TREE_NODE_KEY = 'PROJECT_TREE_NODE_KEY';
-  PROJECT_RUNTIMEFRAME_KEY = 'PROJECT_RUNTIMEFRAME_KEY';
+  align_form, RegExpr, project_studyunit_frame, epidatafilestypes;
 
 type
-
   TNodeData = class
   public
     DataFile: TEpiDataFile;
@@ -168,8 +163,12 @@ end;
 procedure TProjectFrame.KeyFieldsActionExecute(Sender: TObject);
 var
   F: TKeyFieldsForm;
+  NodeData: TNodeData;
 begin
-  F := TKeyFieldsForm.Create(Self, EpiDocument);
+  NodeData := TNodeData(DataFilesTreeView.Selected.Data);
+  if NodeData.DataFile = nil then exit;
+
+  F := TKeyFieldsForm.Create(Self, NodeData.DataFile, EpiDocument.ValueLabelSets);
   F.ShowModal;
   F.Free;
 end;
@@ -441,12 +440,8 @@ begin
 end;
 
 procedure TProjectFrame.StudyInformationActionExecute(Sender: TObject);
-var
-  F: TStudyUnitForm;
 begin
-  F := TStudyUnitForm.Create(Self, EpiDocument.Study);
-  F.ShowModal;
-  F.Free;
+  DataFilesTreeView.Selected := FRootNode;
 end;
 
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
@@ -623,28 +618,56 @@ var
   Df: TEpiDataFile;
   TN: TTreeNode;
   NodeData: TNodeData;
+  F: TEpiField;
+  i: Integer;
 begin
+  Result := nil;
+  Df := nil;
   if (ParentNode <> FRootNode) then
   begin
     // TODO: Check for KeyFields and uniqueness!
-
+    NodeData := TNodeData(ParentNode.Data);
+    Df := NodeData.DataFile;
+    if Df.KeyFields.Count = 0 then
+    begin
+      ShowMessage(
+        'You must define at least 1 keyfield' + LineEnding +
+        'before you can create a related dataform'
+      );
+      Exit;
+    end;
   end;
 
-  Df := EpiDocument.DataFiles.NewDataFile;
-  Df.Caption.Text := 'Dataform ' + IntToStr(FrameCount);
-  Df.Caption.RegisterOnChangeHook(@OnDataFileCaptionChange);
+  Result := EpiDocument.DataFiles.NewDataFile;
+  Result.Caption.Text := 'Dataform ' + IntToStr(FrameCount);
+  Result.Caption.RegisterOnChangeHook(@OnDataFileCaptionChange);
 
   NodeData := TNodeData.Create;
-  NodeData.Frame := DoNewRuntimeFrame(Df);
+  Frame := DoNewRuntimeFrame(Result);
+  NodeData.Frame := Frame;
   if ParentNode = FRootNode then
     NodeData.Relation := EpiDocument.Relations.NewMasterRelation
-  else
+  else begin
     NodeData.Relation := TNodeData(ParentNode.Data).Relation.NewDetailRelation;
-  NodeData.Relation.Datafile := Df;
-  NodeData.DataFile := Df;
 
-  TN := DataFilesTreeView.Items.AddChildObject(ParentNode, Df.Caption.Text, NodeData);
-  Df.AddCustomData(PROJECT_TREE_NODE_KEY, TN);
+    Frame.Activate;
+    for i := 0 to Df.KeyFields.Count - 1 do
+    begin
+      F := Result.NewField(Df.KeyFields[i].FieldType);
+      F.Assign(Df.KeyFields[i]);
+      F.EntryMode := emNoEnter;
+      Result.KeyFields.AddItem(F);
+
+      SendMessage(Frame.Handle, LM_DESIGNER_ADD, WPARAM(F), 0);
+    end;
+    Frame.DeActivate(true);
+  end;
+  NodeData.Relation.Datafile := Result;
+  NodeData.DataFile := Result;
+
+  TN := DataFilesTreeView.Items.AddChildObject(ParentNode, Result.Caption.Text, NodeData);
+  Result.AddCustomData(PROJECT_TREE_NODE_KEY, TN);
+  Result.AddCustomData(PROJECT_RELATION_KEY, NodeData.Relation);
   DataFilesTreeView.Selected := TN;
 end;
 
@@ -659,10 +682,10 @@ begin
   Result.Align := alClient;
   Result.Parent := Self;
   Result.DataFile := Df;
-  Result.OpenProjectToolBtn.Action := OpenProjectAction;
+{  Result.OpenProjectToolBtn.Action := OpenProjectAction;
   Result.SaveProjectToolBtn.Action := SaveProjectAction;
   Result.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
-  Result.ProjectToolBar.Images := ProjectImageList;
+  Result.ProjectToolBar.Images := ProjectImageList;   }
   Result.DeActivate(true);
   Df.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Result);
 end;
@@ -682,6 +705,7 @@ var
     NodeData.Relation := Relation;
     NodeData.DataFile := Relation.Datafile;
     NodeData.Frame := TRuntimeDesignFrame(NodeData.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
+    NodeData.DataFile.AddCustomData(PROJECT_RELATION_KEY, Relation);
 
     S := NodeData.DataFile.Caption.Text;
     if Trim(S) = '' then
@@ -730,6 +754,7 @@ begin
   DoCreateNewDocument;
   DoNewDataForm(FRootNode);
   CommonProjectInit;
+  DataFilesTreeView.Selected := FRootNode;
 end;
 
 procedure TProjectFrame.DoCloseProject;

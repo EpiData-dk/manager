@@ -8,7 +8,7 @@ object KeyFieldsForm: TKeyFieldsForm
   ClientWidth = 509
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
-  LCLVersion = '1.1'
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 43
@@ -23,10 +23,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 445
+      Left = 444
       Height = 32
       Top = 5
-      Width = 53
+      Width = 54
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -40,10 +40,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 360
+      Left = 358
       Height = 34
       Top = 4
-      Width = 80
+      Width = 81
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 5
@@ -152,6 +152,7 @@ object KeyFieldsForm: TKeyFieldsForm
       Height = 22
       Top = 15
       Width = 23
+      Action = AddNewIndexAction
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5
       BorderSpacing.Bottom = 3
@@ -191,7 +192,6 @@ object KeyFieldsForm: TKeyFieldsForm
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      OnClick = AddIndexComboBtnClick
     end
     object RemoveIndexBtn: TSpeedButton
       AnchorSideLeft.Control = AddIndexComboBtn
@@ -202,8 +202,8 @@ object KeyFieldsForm: TKeyFieldsForm
       Height = 22
       Top = 15
       Width = 23
+      Action = DeleteIndexAction
       BorderSpacing.Left = 5
-      Enabled = False
       Glyph.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
         2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -240,7 +240,6 @@ object KeyFieldsForm: TKeyFieldsForm
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      OnClick = RemoveIndexBtnClick
     end
     object RealTimeStatusChkBox: TCheckBox
       AnchorSideLeft.Control = ScrollBox1
@@ -265,6 +264,13 @@ object KeyFieldsForm: TKeyFieldsForm
       Caption = 'AddIndexFieldAction'
       OnExecute = AddIndexFieldActionExecute
       OnUpdate = AddIndexFieldActionUpdate
+    end
+    object AddNewIndexAction: TAction
+      OnExecute = AddNewIndexActionExecute
+    end
+    object DeleteIndexAction: TAction
+      OnExecute = DeleteIndexActionExecute
+      OnUpdate = DeleteIndexActionUpdate
     end
   end
 end

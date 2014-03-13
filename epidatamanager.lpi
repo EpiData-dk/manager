@@ -48,6 +48,11 @@
             <Debugging>
               <DebugInfoType Value="dsDwarf2Set"/>
             </Debugging>
+            <Options>
+              <Win32>
+                <GraphicApplication Value="True"/>
+              </Win32>
+            </Options>
           </Linking>
           <Other>
             <CompilerMessages>
@@ -797,6 +802,7 @@
         <Filename Value="project/project_studyunit_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="StudyUnitFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_studyunit_frame"/>
       </Unit90>

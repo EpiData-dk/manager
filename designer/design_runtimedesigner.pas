@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, FileUtil, PrintersDlgs, Forms, Controls, ComCtrls,
   ExtCtrls, StdCtrls, JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
   Buttons, manager_messages, epidatafilestypes, design_properties_form, types,
-  epicustombase, epidocument, epivaluelabels, design_types, project_types;
+  epicustombase, epidocument, epivaluelabels, design_types, project_types,
+  epirelations;
 
 type
 
@@ -55,17 +56,12 @@ type
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
-    OpenProjectToolBtn: TToolButton;
     OtherToolButton: TToolButton;
     ToolBarPanel: TPanel;
     PrintDialog1: TPrintDialog;
-    ProjectDivider1: TToolButton;
-    ProjectToolBar: TToolBar;
     RedoAction: TAction;
     NewTimeFieldFastAction: TAction;
     NewTimeFieldAction: TAction;
-    SaveProjectAsToolBtn: TToolButton;
-    SaveProjectToolBtn: TToolButton;
     SectionToolButton: TToolButton;
     SelectLastAction: TAction;
     SelectFirstAction: TAction;
@@ -87,7 +83,6 @@ type
     PrintDataFormAction: TAction;
     StringToolButton: TToolButton;
     TestToolButton: TToolButton;
-    ToolButton1: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -321,8 +316,9 @@ type
     procedure AlignControls(Const AAlignMent: TDesignControlsAlignment;
       Const FixedDist: integer = -1);
   private
-    FMayHandleShortcuts: boolean;
     { Other }
+    FMayHandleShortcuts: boolean;
+    function GetRelation: TEpiMasterRelation;
     procedure SetMayHandleShortcuts(AValue: boolean);
     procedure UpdateShortcuts;
     procedure UpdateControls;
@@ -343,6 +339,7 @@ type
     function    IsShortCut(var Message: TLMKey): boolean;
     function ValidateControls: boolean;
     property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
+    property Relation: TEpiMasterRelation read GetRelation;
     property ImportedFileName: string read FImportedFileName;
     property DesignPanel: TJvDesignPanel read FDesignPanel;
     property DesignScrollBar: TJvDesignScrollBox read FDesignScrollBox;
@@ -941,18 +938,29 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.LMDesignerAdd(var Msg: TLMessage);
+var
+  F: TEpiField;
+  P: TPoint;
+  S: TEpiSection;
 begin
   // Hack - because we need the incomming field to be furthest
   // away from being the last entry in Datafile.CustomControls.
   // Otherwise FindNewPosition fails misarably.
-  with TEpiField(Msg.WParam) do
+  F := TEpiField(Msg.WParam);
+  S := F.Section;
+  S.Fields.RemoveItem(F);
+
+  with F do
   begin
     BeginUpdate;
     Top := 0;
     Left := 0;
     EndUpdate;
   end;
-  NewDesignField(FindNewPostion(TDesignField), TEpiField(Msg.WParam), FDesignPanel);
+
+  P := FindNewPostion(TDesignField);
+  S.Fields.AddItem(F);
+  NewDesignField(P, F, FDesignPanel);
 end;
 
 procedure TRuntimeDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument;
@@ -1889,6 +1897,11 @@ begin
   DesignerActionListUpdate(nil, handled);
 end;
 
+function TRuntimeDesignFrame.GetRelation: TEpiMasterRelation;
+begin
+  result := TEpiMasterRelation(DataFile.FindCustomData(PROJECT_RELATION_KEY));
+end;
+
 procedure TRuntimeDesignFrame.UpdateControls;
 var
   i: Integer;
@@ -2515,10 +2528,27 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.CutCopyControlUpdate(Sender: TObject);
+var
+  Items: TJvDesignObjectArray;
+  i: Integer;
+  lEnabled: Boolean;
 begin
-  TAction(Sender).Enabled :=
+  lEnabled := true;
+  Items := FDesignPanel.Surface.Selected;
+
+  for i := Low(Items) to High(Items) do
+    if FDatafile.KeyFields.IndexOf((Items[i] as IDesignEpiControl).EpiControl) >= 0 then
+    begin
+      lEnabled := false;
+      break;
+    end;
+
+  lEnabled :=
+    (lEnabled) and
     (FDesignPanel.Surface.Count > 0) and
     (not FDesignPanel.Surface.Selector.IsSelected(FDesignPanel));
+
+  TAction(Sender).Enabled := lEnabled;
 end;
 
 procedure TRuntimeDesignFrame.Button1Click(Sender: TObject);
@@ -2776,7 +2806,8 @@ end;
 
 procedure TRuntimeDesignFrame.UpdateFrame;
 begin
-  UpdateShortcuts;
+  if MayHandleShortcuts then
+    UpdateShortcuts;
   UpdateControls;
   UpdateInterface;
 end;

@@ -156,6 +156,13 @@ begin
       if not Result then exit;
     end;
 
+  if trim(TitleEdit.Text) = '' then
+    begin
+      ShowMessage('Title cannot be empty!');
+      Result := false;
+      Exit;
+    end;
+
   with FStudy do
   begin
     Title.Text                := TitleEdit.Text;

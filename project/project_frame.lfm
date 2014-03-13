@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 739
-  DesignTop = 267
+  DesignLeft = 539
+  DesignTop = 257
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
@@ -27,6 +27,7 @@ object ProjectFrame: TProjectFrame
       Align = alClient
       AutoExpand = True
       DefaultItemHeight = 18
+      HotTrack = True
       ScrollBars = ssAutoBoth
       TabOrder = 0
       OnChanging = DataFilesTreeViewChanging
@@ -35,7 +36,7 @@ object ProjectFrame: TProjectFrame
       OnEditing = DataFilesTreeViewEditing
       OnEditingEnd = DataFilesTreeViewEditingEnd
       OnSelectionChanged = DataFilesTreeViewSelectionChanged
-      Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+      Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoHotTrack, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end
     object ToolBar1: TToolBar
       Left = 0
