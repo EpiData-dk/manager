@@ -8,13 +8,13 @@ uses
   Classes, SysUtils, FileUtil, PrintersDlgs, Forms, Controls, ComCtrls,
   ExtCtrls, StdCtrls, JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
   Buttons, manager_messages, epidatafilestypes, design_properties_form, types,
-  epicustombase, epidocument, epivaluelabels, design_types;
+  epicustombase, epidocument, epivaluelabels, design_types, project_types;
 
 type
 
   { TRuntimeDesignFrame }
 
-  TRuntimeDesignFrame = class(TFrame)
+  TRuntimeDesignFrame = class(TFrame, IProjectFrame)
     ImportCBAction: TAction;
     RenameControlsAction: TAction;
     RecodeDataAction: TAction;
@@ -349,7 +349,7 @@ type
     property MayHandleShortcuts: boolean read FMayHandleShortcuts write SetMayHandleShortcuts;
   public
     procedure Activate;
-    procedure DeActivate;
+    function DeActivate(aHide: boolean): boolean;
     class procedure RestoreDefaultPos(F: TRuntimeDesignFrame);
   end;
 
@@ -2818,16 +2818,21 @@ end;
 
 procedure TRuntimeDesignFrame.Activate;
 begin
+  BringToFront;
   FDesignPanel.Surface.Active := true;
   DesignerActionList.State := asNormal;
   MayHandleShortcuts := true;
 end;
 
-procedure TRuntimeDesignFrame.DeActivate;
+function TRuntimeDesignFrame.DeActivate(aHide: boolean): boolean;
 begin
   FDesignPanel.Surface.Active := false;
   DesignerActionList.State := asSuspended;
   MayHandleShortcuts := false;
+  if aHide then
+    SendToBack;
+
+  Result := true;
 end;
 
 end.

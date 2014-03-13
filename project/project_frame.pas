@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
   Controls, Dialogs, epidocument, epidatafiles, epicustombase, epirelations,
-  manager_messages, LMessages, epiv_documentfile, types, design_runtimedesigner;
+  manager_messages, LMessages, epiv_documentfile, types, design_runtimedesigner,
+  project_types;
 
 type
 
@@ -39,6 +40,8 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure DataFilesTreeViewChanging(Sender: TObject; Node: TTreeNode;
+      var AllowChange: Boolean);
     procedure DataFilesTreeViewDeletion(Sender: TObject; Node: TTreeNode);
     procedure DataFilesTreeViewEdited(Sender: TObject; Node: TTreeNode;
       var S: string);
@@ -66,7 +69,7 @@ type
     { private declarations }
     FRootNode: TTreeNode;
     FDocumentFile: TDocumentFile;
-    FActiveFrame: TRuntimeDesignFrame;
+    FActiveFrame: IProjectFrame;
     FModified: Boolean;
     FOnModified: TNotifyEvent;
     FrameCount: integer;
@@ -117,7 +120,7 @@ type
     procedure   CreateNewProject;
     property   DocumentFile: TDocumentFile read FDocumentFile;
     property   EpiDocument: TEpiDocument read GetEpiDocument;
-    property   ActiveFrame: TRuntimeDesignFrame read FActiveFrame;
+    property   ActiveFrame: IProjectFrame read FActiveFrame;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
   public
@@ -134,7 +137,7 @@ uses
   valuelabelseditor_form2, LazFileUtils,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form, project_studyunit_form,
-  align_form, RegExpr;
+  align_form, RegExpr, project_studyunit_frame;
 
 const
   PROJECT_TREE_NODE_KEY = 'PROJECT_TREE_NODE_KEY';
@@ -145,7 +148,7 @@ type
   TNodeData = class
   public
     DataFile: TEpiDataFile;
-    Frame: TRuntimeDesignFrame;
+    Frame: IProjectFrame;
     Relation: TEpiMasterRelation;
   end;
 
@@ -243,12 +246,13 @@ begin
   TN := DataFilesTreeView.Selected;
   if not Assigned(TN) then exit;
 
-  if Assigned(FActiveFrame) then
+{  if Assigned(FActiveFrame) then
   begin
-    FActiveFrame.DeActivate;
-    FActiveFrame.SendToBack;
+    if not FActiveFrame.DeActivate(true)
+    then
+      Exit;
   end;
-
+                     }
   if Assigned(TN.Data) then
     FActiveFrame := TNodeData(TN.Data).Frame
   else
@@ -256,9 +260,8 @@ begin
 
   if Assigned(FActiveFrame) then
   begin
-    FActiveFrame.BringToFront;
     FActiveFrame.Activate;
-    AlignForm.DesignFrame := FActiveFrame;
+//    AlignForm.DesignFrame := FActiveFrame;
   end;
 end;
 
@@ -315,14 +318,27 @@ procedure TProjectFrame.DataFilesTreeViewDeletion(Sender: TObject;
   Node: TTreeNode);
 var
   ND: TNodeData;
+  Frame: TObject;
 begin
   ND := TNodeData(Node.Data);
-  if not Assigned(ND) then exit;
+  if not Assigned(ND.DataFile) then exit;
 
-  ND.Frame.Free;
+//  ND.Frame.Free;
+  ND.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY).Free;
   ND.DataFile.Caption.UnRegisterOnChangeHook(@OnDataFileCaptionChange);
   ND.DataFile.Free;
   ND.Free;
+end;
+
+procedure TProjectFrame.DataFilesTreeViewChanging(Sender: TObject;
+  Node: TTreeNode; var AllowChange: Boolean);
+var
+  NodeData: TNodeData;
+begin
+  if csDestroying in ComponentState then exit;
+
+  NodeData := TNodeData(Node.Data);
+  AllowChange := NodeData.Frame.DeActivate(true);
 end;
 
 procedure TProjectFrame.DataFilesTreeViewEditing(Sender: TObject;
@@ -330,13 +346,13 @@ procedure TProjectFrame.DataFilesTreeViewEditing(Sender: TObject;
 begin
   if Node = FRootNode then AllowEdit := false;
 
-  if AllowEdit then FActiveFrame.DeActivate; //MayHandleShortcuts := false;
+  if AllowEdit then FActiveFrame.DeActivate(false);
 end;
 
 procedure TProjectFrame.DataFilesTreeViewEditingEnd(Sender: TObject;
   Node: TTreeNode; Cancel: Boolean);
 begin
-  FActiveFrame.Activate; //MayHandleShortcuts := true;
+  FActiveFrame.Activate;
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -506,10 +522,22 @@ begin
 end;
 
 procedure TProjectFrame.CommonProjectInit;
+var
+  NodeData: TNodeData;
+  Frame: TStudyUnitFrame;
 begin
   UpdateCaption;
   UpdateShortCuts;
   InitBackupTimer;
+
+  Frame := TStudyUnitFrame.Create(self, EpiDocument.Study);
+  Frame.Align := alClient;
+  Frame.Parent := self;
+  NodeData := TNodeData.Create;
+  NodeData.Frame := Frame;
+  NodeData.DataFile := nil;
+  NodeData.Relation := nil;
+  FRootNode.Data := NodeData;
 end;
 
 function TProjectFrame.DoSaveProject(AFileName: string): boolean;
@@ -571,11 +599,10 @@ begin
     EpiDocument.Study.Title.RegisterOnChangeHook(@OnTitleChange);
 
     DoCreateRelationalStructure;
+    CommonProjectInit;
+
     DataFilesTreeView.FullExpand;
     DataFilesTreeView.Selected := FRootNode.GetFirstChild;
-//    DataFilesTreeViewSelectionChanged(nil);
-
-    CommonProjectInit;
 
     EpiDocument.Modified := false;
     Result := true;
@@ -636,7 +663,7 @@ begin
   Result.SaveProjectToolBtn.Action := SaveProjectAction;
   Result.SaveProjectAsToolBtn.Action := SaveProjectAsAction;
   Result.ProjectToolBar.Images := ProjectImageList;
-  Result.DeActivate;
+  Result.DeActivate(true);
   Df.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Result);
 end;
 
@@ -873,9 +900,9 @@ end;
 
 procedure TProjectFrame.LMDesignerAdd(var Msg: TLMessage);
 begin
-  if Assigned(FActiveFrame) then
+{  if Assigned(FActiveFrame) then
   with Msg do
-    Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
+    Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);   }
 end;
 
 constructor TProjectFrame.Create(TheOwner: TComponent);
@@ -887,13 +914,6 @@ begin
 
   AlignForm := TAlignmentForm.Create(self);
   FRootNode := DataFilesTreeView.Items.AddObject(nil, 'Root', nil);
-
-{  {$IFDEF EPI_DEBUG}
-
-  {$ELSE}
-  ProjectPanel.Enabled := false;
-  ProjectPanel.Visible := false;
-  {$ENDIF}    }
 end;
 
 destructor TProjectFrame.Destroy;

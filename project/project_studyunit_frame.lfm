@@ -1,73 +1,27 @@
-object StudyUnitForm: TStudyUnitForm
-  Left = 2176
-  Height = 612
-  Top = 232
-  Width = 532
-  Caption = 'Study Information'
-  ClientHeight = 612
-  ClientWidth = 532
-  OnCloseQuery = FormCloseQuery
-  OnShow = FormShow
-  LCLVersion = '1.3'
-  object Panel1: TPanel
-    Left = 0
-    Height = 49
-    Top = 563
-    Width = 532
-    Align = alBottom
-    ClientHeight = 49
-    ClientWidth = 532
-    TabOrder = 0
-    object OkBtn: TBitBtn
-      AnchorSideTop.Control = Panel1
-      AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = Panel1
-      AnchorSideRight.Side = asrBottom
-      Left = 467
-      Height = 32
-      Top = 8
-      Width = 54
-      Anchors = [akTop, akRight]
-      AutoSize = True
-      BorderSpacing.Right = 10
-      Default = True
-      DefaultCaption = True
-      Kind = bkOK
-      ModalResult = 1
-      OnClick = OkBtnClick
-      TabOrder = 0
-    end
-    object BitBtn2: TBitBtn
-      AnchorSideTop.Control = Panel1
-      AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = OkBtn
-      Left = 376
-      Height = 34
-      Top = 7
-      Width = 81
-      Anchors = [akTop, akRight]
-      AutoSize = True
-      BorderSpacing.Right = 10
-      Cancel = True
-      DefaultCaption = True
-      Kind = bkCancel
-      ModalResult = 2
-      TabOrder = 1
-    end
-  end
+object StudyUnitFrame: TStudyUnitFrame
+  Left = 0
+  Height = 590
+  Top = 0
+  Width = 651
+  ClientHeight = 590
+  ClientWidth = 651
+  TabOrder = 0
+  DesignLeft = 612
+  DesignTop = 299
   object PageControl1: TPageControl
     Left = 0
-    Height = 563
+    Height = 590
     Top = 0
-    Width = 532
+    Width = 651
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
-    TabOrder = 1
+    TabOrder = 0
+    TabPosition = tpRight
     object TabSheet1: TTabSheet
       Caption = 'Title/Abstract'
-      ClientHeight = 530
-      ClientWidth = 526
+      ClientHeight = 584
+      ClientWidth = 538
       object Label1: TLabel
         AnchorSideLeft.Control = TabSheet1
         AnchorSideTop.Control = Owner
@@ -88,7 +42,7 @@ object StudyUnitForm: TStudyUnitForm
         Left = 10
         Height = 25
         Top = 27
-        Width = 506
+        Width = 518
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -104,9 +58,9 @@ object StudyUnitForm: TStudyUnitForm
         AnchorSideBottom.Control = TabSheet1
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 441
+        Height = 495
         Top = 79
-        Width = 506
+        Width = 518
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -130,8 +84,8 @@ object StudyUnitForm: TStudyUnitForm
     end
     object TabSheet3: TTabSheet
       Caption = 'Coverage'
-      ClientHeight = 530
-      ClientWidth = 526
+      ClientHeight = 584
+      ClientWidth = 538
       object Label5: TLabel
         AnchorSideLeft.Control = TabSheet3
         AnchorSideTop.Control = TabSheet3
@@ -322,8 +276,8 @@ object StudyUnitForm: TStudyUnitForm
     end
     object TabSheet4: TTabSheet
       Caption = 'Description'
-      ClientHeight = 530
-      ClientWidth = 526
+      ClientHeight = 584
+      ClientWidth = 538
       object Label8: TLabel
         AnchorSideLeft.Control = Owner
         AnchorSideTop.Control = KeywordsEdit
@@ -455,8 +409,8 @@ object StudyUnitForm: TStudyUnitForm
     end
     object TabSheet5: TTabSheet
       Caption = 'Ownership'
-      ClientHeight = 530
-      ClientWidth = 526
+      ClientHeight = 584
+      ClientWidth = 538
       object Label9: TLabel
         AnchorSideLeft.Control = TabSheet5
         AnchorSideTop.Control = AgencyEdit
@@ -588,8 +542,8 @@ object StudyUnitForm: TStudyUnitForm
     end
     object TabSheet6: TTabSheet
       Caption = 'Funding'
-      ClientHeight = 530
-      ClientWidth = 526
+      ClientHeight = 584
+      ClientWidth = 538
       object FundingMemo: TMemo
         AnchorSideLeft.Control = TabSheet6
         AnchorSideTop.Control = TabSheet6
@@ -614,8 +568,8 @@ object StudyUnitForm: TStudyUnitForm
     end
     object TabSheet7: TTabSheet
       Caption = 'Version Details'
-      ClientHeight = 530
-      ClientWidth = 526
+      ClientHeight = 584
+      ClientWidth = 538
       object Label2: TLabel
         AnchorSideLeft.Control = TabSheet7
         AnchorSideTop.Control = TabSheet7
