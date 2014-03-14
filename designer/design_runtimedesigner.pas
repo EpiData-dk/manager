@@ -347,6 +347,7 @@ type
   public
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
+    procedure AssignActionLinks;
     class procedure RestoreDefaultPos(F: TRuntimeDesignFrame);
   end;
 
@@ -2853,6 +2854,7 @@ begin
   FDesignPanel.Surface.Active := true;
   DesignerActionList.State := asNormal;
   MayHandleShortcuts := true;
+  UpdateFrame;
 end;
 
 function TRuntimeDesignFrame.DeActivate(aHide: boolean): boolean;
@@ -2860,10 +2862,56 @@ begin
   FDesignPanel.Surface.Active := false;
   DesignerActionList.State := asSuspended;
   MayHandleShortcuts := false;
+  UpdateFrame;
   if aHide then
     SendToBack;
 
   Result := true;
+end;
+
+procedure TRuntimeDesignFrame.AssignActionLinks;
+begin
+  with MainForm do
+  begin
+    PrintDataFormMenuItem.Action     := PrintDataFormAction;
+    // -
+    AddStructureMenuItem.Action      := ImportAction;
+    AddStructFromBLMenuItem.Action   := ImportCBAction;
+
+    // Edit
+    UndoMenuItem.Action              := UndoAction;
+    RedoMenuItem.Action              := RedoAction;
+    // -
+    CutMenuItem.Action               := CutControlAction;
+    CopyMenuItem.Action              := CopyControlAction;
+    PasteMenuItem.Action             := PasteControlAction;
+    // -
+    PasteAsHeadingMenuItem.Action    := PasteAsHeadingAction;
+    PasteAsIntMenuItem.Action        := PasteAsIntAction;
+    PasteAsFloatMenuItem.Action      := PasteAsFloatAction;
+    PasteAsStringMenuItem.Action     := PasteAsStringAction;
+    PasteAsDateMenuItem.Action       := PasteAsDateAction;
+    RenameControlsMenuItem.Action    := RenameControlsAction;
+    RenameControlsPopupMenuItem.Action := RenameControlsAction;
+
+    // Align
+    AlignLeftMenuItem.Action         := AlignLeftAction;
+    AlignRightMenuItem.Action        := AlignRightAction;
+    AlignTopMenuItem.Action          := AlignTopAction;
+    AlignBottomMenuItem.Action       := AlignBottomAction;
+    AlignMenuItem.Action             := ShowAlignFormAction;
+
+    // Select
+    SelectAllIntsMenuItem.Action     := SelectAllIntsAction;
+    SelectAllFloatMenuItem.Action    := SelectAllFloatsAction;
+    SelectAllStringMenuItem.Action   := SelectAllStringsAction;
+    SelectAllBoolMenuItem.Action     := SelectAllBoolsAction;
+
+
+    // DataSet
+    BrowseDataMenuItem.Action        := ViewDatasetAction;
+    BrowseDatasetMenuItem.Action     := ViewDatasetAction;
+  end;
 end;
 
 end.

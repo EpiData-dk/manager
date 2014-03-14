@@ -66,6 +66,7 @@ type
     procedure UpdateFrame;
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
+    procedure AssignActionLinks;
   end;
 
 implementation
@@ -73,7 +74,7 @@ implementation
 {$R *.lfm}
 
 uses
-  RegExpr, Dialogs;
+  RegExpr, Dialogs, main;
 
 { TStudyUnitFrame }
 
@@ -190,6 +191,51 @@ begin
 
   if aHide then
     SendToBack;
+end;
+
+procedure TStudyUnitFrame.AssignActionLinks;
+begin
+  with MainForm do
+  begin
+    PrintDataFormMenuItem.Action     := nil;
+    // -
+    AddStructureMenuItem.Action      := nil;
+    AddStructFromBLMenuItem.Action   := nil;
+
+    // Edit
+    UndoMenuItem.Action              := nil;
+    RedoMenuItem.Action              := nil;
+    // -
+    CutMenuItem.Action               := nil;
+    CopyMenuItem.Action              := nil;
+    PasteMenuItem.Action             := nil;
+    // -
+    PasteAsHeadingMenuItem.Action    := nil;
+    PasteAsIntMenuItem.Action        := nil;
+    PasteAsFloatMenuItem.Action      := nil;
+    PasteAsStringMenuItem.Action     := nil;
+    PasteAsDateMenuItem.Action       := nil;
+    RenameControlsMenuItem.Action    := nil;
+    RenameControlsPopupMenuItem.Action := nil;
+
+    // Align
+    AlignLeftMenuItem.Action         := nil;
+    AlignRightMenuItem.Action        := nil;
+    AlignTopMenuItem.Action          := nil;
+    AlignBottomMenuItem.Action       := nil;
+    AlignMenuItem.Action             := nil;
+
+    // Select
+    SelectAllIntsMenuItem.Action     := nil;
+    SelectAllFloatMenuItem.Action    := nil;
+    SelectAllStringMenuItem.Action   := nil;
+    SelectAllBoolMenuItem.Action     := nil;
+
+
+    // DataSet
+    BrowseDataMenuItem.Action        := nil;
+    BrowseDatasetMenuItem.Action     := nil;
+  end;
 end;
 
 end.

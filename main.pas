@@ -1308,60 +1308,7 @@ begin
   end;
 
   UpdateMainMenu;
-  // File
-  SaveProjectMenuItem.Action   := FActiveFrame.SaveProjectAction;
-  SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
-{  PrintDataFormMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PrintDataFormAction;
-  // -
-  AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
-  AddStructFromBLMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportCBAction;
-
-  // Edit
-  UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;
-  RedoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RedoAction;
-  // -
-  CutMenuItem.Action            := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).CutControlAction;
-  CopyMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).CopyControlAction;
-  PasteMenuItem.Action          := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteControlAction;
-  // -
-  PasteAsHeadingMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
-  PasteAsIntMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
-  PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
-  PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-  PasteAsDateMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsDateAction;    }
-
-  // Project
-  ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
-  ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
-  ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
-  KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
-  StudyInfoMenuItem.Action         := FActiveFrame.StudyInformationAction;
-//  RenameControlsMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RenameControlsAction;
-  // --project details popup-menu
-  ProjectPropertiesPopupMenuItem.Action := FActiveFrame.ProjectSettingsAction;
-  ValueLabelEditorPopupMenuItem.Action  := FActiveFrame.ValueLabelEditorAction;
-  SetPasswordPopupMenuItem.Action       := FActiveFrame.ProjectPasswordAction;
-  KeyFieldsPopupMenuItem.Action         := FActiveFrame.KeyFieldsAction;
-  StudyInfoPopupMenuItem.Action         := FActiveFrame.StudyInformationAction;
-{  RenameControlsPopupMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RenameControlsAction;
-
-  // Align
-  AlignLeftMenuItem.Action         := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignLeftAction;
-  AlignRightMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignRightAction;
-  AlignTopMenuItem.Action          := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignTopAction;
-  AlignBottomMenuItem.Action       := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignBottomAction;
-  AlignMenuItem.Action             := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ShowAlignFormAction;
-
-  // Select
-  SelectAllIntsMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllIntsAction;
-  SelectAllFloatMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllFloatsAction;
-  SelectAllStringMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllStringsAction;
-  SelectAllBoolMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllBoolsAction;
-
-
-  // DataSet
-  BrowseDataMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
-  BrowseDatasetMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;      }
+  FActiveFrame.AssignActionLinks;
 end;
 
 procedure TMainForm.BeginUpdatingForm;

@@ -9,10 +9,14 @@ uses
   Classes, SysUtils;
 
 type
+
+  { IProjectFrame }
+
   IProjectFrame = interface['IProjectFrame']
     procedure UpdateFrame;
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
+    procedure AssignActionLinks;
   end;
 
 const

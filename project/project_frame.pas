@@ -118,6 +118,7 @@ type
     function    OpenProject(Const AFileName: string): boolean;
     function    SaveProject(Const ForceSaveAs: boolean): boolean;
     procedure   CreateNewProject;
+    procedure   AssignActionLinks;
     property   DocumentFile: TDocumentFile read FDocumentFile;
     property   EpiDocument: TEpiDocument read GetEpiDocument;
     property   ActiveFrame: IProjectFrame read FActiveFrame;
@@ -245,23 +246,9 @@ begin
   TN := DataFilesTreeView.Selected;
   if not Assigned(TN) then exit;
 
-{  if Assigned(FActiveFrame) then
-  begin
-    if not FActiveFrame.DeActivate(true)
-    then
-      Exit;
-  end;
-                     }
-  if Assigned(TN.Data) then
-    FActiveFrame := TNodeData(TN.Data).Frame
-  else
-    FActiveFrame := nil;
-
-  if Assigned(FActiveFrame) then
-  begin
-    FActiveFrame.Activate;
-//    AlignForm.DesignFrame := FActiveFrame;
-  end;
+  FActiveFrame := TNodeData(TN.Data).Frame;
+  FActiveFrame.Activate;
+  FActiveFrame.AssignActionLinks;
 end;
 
 procedure TProjectFrame.DeleteDataFormActionExecute(Sender: TObject);
@@ -310,7 +297,8 @@ begin
   begin
     ShowMessage('A dataform name cannot be empty!');
     S := TNodeData(Node.Data).DataFile.Caption.Text;
-  end;
+  end else
+    TNodeData(Node.Data).DataFile.Caption.Text := S;
 end;
 
 procedure TProjectFrame.DataFilesTreeViewDeletion(Sender: TObject;
@@ -428,10 +416,10 @@ begin
   end;
 
   // TODO : Must be changed when supporting multiple desinger frames (take only the topmost/first datafile).
-  if (Dlg.FileName = '') and
+{  if (Dlg.FileName = '') and
      (Assigned(DocumentFile)) and
      (TRuntimeDesignFrame(ActiveFrame).ImportedFileName <> '') then
-    Dlg.FileName := ChangeFileExt(TRuntimeDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt);
+    Dlg.FileName := ChangeFileExt(TRuntimeDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt); }
 end;
 
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
@@ -620,6 +608,7 @@ var
   NodeData: TNodeData;
   F: TEpiField;
   i: Integer;
+  Ft: TEpiFieldType;
 begin
   Result := nil;
   Df := nil;
@@ -635,6 +624,19 @@ begin
         'before you can create a related dataform'
       );
       Exit;
+    end;
+
+    if (NodeData.Relation is TEpiDetailRelation) then
+    begin
+      MR := TEpiDetailRelation(NodeData.Relation).MasterRelation;
+      if MR.Datafile.KeyFields.Count = Df.KeyFields.Count then
+      begin
+        ShowMessage(
+          'This dataform MUST have at least 1 keyfield more than' + LineEnding +
+          'its parent!'
+        );
+        Exit;
+      end;
     end;
   end;
 
@@ -653,7 +655,12 @@ begin
     Frame.Activate;
     for i := 0 to Df.KeyFields.Count - 1 do
     begin
-      F := Result.NewField(Df.KeyFields[i].FieldType);
+      // In a related form, the "primary" keys cannot be autoinc - it would
+      // screw up the numbering.
+      Ft := Df.KeyFields[i].FieldType;
+      if Ft = ftAutoInc then Ft := ftInteger;
+
+      F := Result.NewField(Ft);
       F.Assign(Df.KeyFields[i]);
       F.EntryMode := emNoEnter;
       Result.KeyFields.AddItem(F);
@@ -755,6 +762,7 @@ begin
   DoNewDataForm(FRootNode);
   CommonProjectInit;
   DataFilesTreeView.Selected := FRootNode;
+  EpiDocument.Modified := false;
 end;
 
 procedure TProjectFrame.DoCloseProject;
@@ -1049,6 +1057,31 @@ end;
 procedure TProjectFrame.CreateNewProject;
 begin
   DoCreateNewProject;
+end;
+
+procedure TProjectFrame.AssignActionLinks;
+begin
+  // File
+  with MainForm do
+  begin
+    SaveProjectMenuItem.Action   := SaveProjectAction;
+    SaveProjectAsMenuItem.Action := SaveProjectAsAction;
+
+    // Project
+    ProjectPropertiesMenuItem.Action := ProjectSettingsAction;
+    ValueLabelsMenuItem.Action       := ValueLabelEditorAction;
+    ProjectPasswordMenuItem.Action   := ProjectPasswordAction;
+    KeyFieldsMenuItem.Action         := KeyFieldsAction;
+    StudyInfoMenuItem.Action         := StudyInformationAction;
+
+    // --project details popup-menu
+    ProjectPropertiesPopupMenuItem.Action := ProjectSettingsAction;
+    ValueLabelEditorPopupMenuItem.Action  := ValueLabelEditorAction;
+    SetPasswordPopupMenuItem.Action       := ProjectPasswordAction;
+    KeyFieldsPopupMenuItem.Action         := KeyFieldsAction;
+    StudyInfoPopupMenuItem.Action         := StudyInformationAction;
+  end;
+  FActiveFrame.AssignActionLinks;
 end;
 
 end.
