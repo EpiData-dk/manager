@@ -7,7 +7,7 @@ object StudyUnitFrame: TStudyUnitFrame
   ClientWidth = 651
   TabOrder = 0
   DesignLeft = 612
-  DesignTop = 299
+  DesignTop = 284
   object PageControl1: TPageControl
     Left = 0
     Height = 590
@@ -17,10 +17,11 @@ object StudyUnitFrame: TStudyUnitFrame
     Align = alClient
     TabIndex = 0
     TabOrder = 0
+    TabPosition = tpRight
     object TabSheet1: TTabSheet
       Caption = 'Title/Abstract'
-      ClientHeight = 557
-      ClientWidth = 645
+      ClientHeight = 584
+      ClientWidth = 538
       object Label1: TLabel
         AnchorSideLeft.Control = TabSheet1
         AnchorSideTop.Control = Owner
@@ -41,7 +42,7 @@ object StudyUnitFrame: TStudyUnitFrame
         Left = 10
         Height = 25
         Top = 27
-        Width = 625
+        Width = 518
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -57,9 +58,9 @@ object StudyUnitFrame: TStudyUnitFrame
         AnchorSideBottom.Control = TabSheet1
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 468
+        Height = 495
         Top = 79
-        Width = 625
+        Width = 518
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -83,8 +84,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet3: TTabSheet
       Caption = 'Coverage'
-      ClientHeight = 557
-      ClientWidth = 645
+      ClientHeight = 584
+      ClientWidth = 538
       object Label5: TLabel
         AnchorSideLeft.Control = TabSheet3
         AnchorSideTop.Control = TabSheet3
@@ -275,8 +276,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet4: TTabSheet
       Caption = 'Description'
-      ClientHeight = 557
-      ClientWidth = 645
+      ClientHeight = 584
+      ClientWidth = 538
       object Label8: TLabel
         AnchorSideLeft.Control = Owner
         AnchorSideTop.Control = KeywordsEdit
@@ -408,8 +409,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet5: TTabSheet
       Caption = 'Ownership'
-      ClientHeight = 557
-      ClientWidth = 645
+      ClientHeight = 584
+      ClientWidth = 538
       object Label9: TLabel
         AnchorSideLeft.Control = TabSheet5
         AnchorSideTop.Control = AgencyEdit
@@ -541,8 +542,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet6: TTabSheet
       Caption = 'Funding'
-      ClientHeight = 557
-      ClientWidth = 645
+      ClientHeight = 584
+      ClientWidth = 538
       object FundingMemo: TMemo
         AnchorSideLeft.Control = TabSheet6
         AnchorSideTop.Control = TabSheet6
@@ -567,8 +568,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet7: TTabSheet
       Caption = 'Version Details'
-      ClientHeight = 557
-      ClientWidth = 645
+      ClientHeight = 584
+      ClientWidth = 538
       object Label2: TLabel
         AnchorSideLeft.Control = TabSheet7
         AnchorSideTop.Control = TabSheet7

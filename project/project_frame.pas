@@ -308,7 +308,14 @@ var
   Frame: TObject;
 begin
   ND := TNodeData(Node.Data);
-  if not Assigned(ND.DataFile) then exit;
+  Node.Data := nil;
+
+  // This is the case with the studyunit frame!
+  if not Assigned(ND.DataFile) then
+  begin
+    ND.Free;
+    exit;
+  end;
 
 //  ND.Frame.Free;
   ND.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY).Free;
@@ -325,7 +332,8 @@ begin
   if csDestroying in ComponentState then exit;
 
   NodeData := TNodeData(Node.Data);
-  AllowChange := NodeData.Frame.DeActivate(true);
+  if Assigned(NodeData) then
+    AllowChange := NodeData.Frame.DeActivate(true);
 end;
 
 procedure TProjectFrame.DataFilesTreeViewEditing(Sender: TObject;
@@ -758,11 +766,13 @@ end;
 
 procedure TProjectFrame.DoCreateNewProject;
 begin
+  MainForm.BeginUpdatingForm;
   DoCreateNewDocument;
   DoNewDataForm(FRootNode);
   CommonProjectInit;
   DataFilesTreeView.Selected := FRootNode;
   EpiDocument.Modified := false;
+  MainForm.EndUpdatingForm;
 end;
 
 procedure TProjectFrame.DoCloseProject;

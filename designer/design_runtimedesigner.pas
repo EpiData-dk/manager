@@ -994,7 +994,32 @@ var
   end;
 
   procedure AssignField(F: TEpiField; S: TEpiSection = nil; AParent: TWinControl = nil);
+  var
+    MR: TEpiMasterRelation;
+    KF: TEpiField;
+    i: integer;
   begin
+    // Related dataset import.
+    if  (ImportData) then
+    begin
+      MR := TEpiMasterRelation(DataFile.FindCustomData(PROJECT_RELATION_KEY));
+      KF := DataFile.KeyFields.FieldByName[F.Name];
+      if (Assigned(KF)) and
+         (KF.FieldType = F.FieldType) and
+         (MR.InheritsFrom(TEpiDetailRelation))
+      then
+        begin
+          // An imported field has the same name + type of a keyfield in this datafile.
+          // This datafile is in addition related a master datafile AND we are importing
+          // data.
+          // Now: try to assign data to the existing keyfield->
+          for i := 0 to F.Size -1 do
+            KF.AsValue[i] := F.AsValue[i];
+
+          Exit;
+        end;
+    end;
+
     if (DataFile.Fields.ItemExistsByName(F.Name)) and
        (not RenameFields) and
        (F.FieldType = DataFile.Fields.FieldByName[F.Name].FieldType)
@@ -1164,7 +1189,8 @@ begin
     MainForm.BeginUpdatingForm;
 
     if (ImpStructurForm.SelectedDocuments.Count = 1) and
-       (DataFile.ControlItems.Count = 1) // only main section
+       (Pos('Dataform', DataFile.Caption.Text) > 0)
+//       (DataFile.ControlItems.Count = 1) // only main section
     then
       DataFile.Caption.Text := TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[0]).DataFiles[0].Caption.Text;
 
