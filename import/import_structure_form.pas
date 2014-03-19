@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Buttons, ActnList, Grids, StdCtrls, ShellCtrls, epicustombase,
-  epidatafiles, projectfilelist_frame, epidocument;
+  epidatafiles, projectfilelist_frame, epidocument, epirelations;
 
 type
 
@@ -27,13 +27,19 @@ type
     OptionsPanel: TPanel;
     FieldsRenameGrpBox: TRadioGroup;
     ValueLabelsRenameGrpBox: TRadioGroup;
+    procedure AfterAddToGrid(Sender: TObject; Document: TEpiDocument;
+      const Filename: string; const RowNo: Integer);
     procedure CancelActionExecute(Sender: TObject);
+    procedure CellHint(Sender: TObject; ACol, ARow: Integer;
+      var HintText: String);
     procedure DocListHook(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure OkActionExecute(Sender: TObject);
     procedure AddFilesActionExecute(Sender: TObject);
     procedure OpenCBBtnClick(Sender: TObject);
+    procedure PrepareCanvas(sender: TObject; aCol, aRow: Integer;
+      aState: TGridDrawState);
   private
     { Data Import }
     FImportDataSelectedIndex: integer;
@@ -43,11 +49,15 @@ type
     FOldColRowMoved: TGridOperationEvent;
   private
     { private declarations }
+    // The currently loaded datafile from projectfilelist_frame
+    CurrentDataFile: TEpiDataFile;
+    // The "incomming" datafile from runtime designer
+    FDataFile: TEpiDataFile;
     FInitialFiles: TStringList;
+    FRelation: TEpiMasterRelation;
     FSelectedDocuments: TStringList;
     FLastRecYPos: Integer;
     FLastEpiCtrl: TEpiCustomControlItem;
-    DataFile: TEpiDatafile;
     FDesignerBox: TScrollBox;
     FProjectList: TProjectFileListFrame;
     procedure ImportDataCheckBoxToogle(sender: TObject; aCol, aRow: Integer;
@@ -59,7 +69,9 @@ type
       EventType: Word; Data: Pointer);
     procedure BeforeLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
     procedure AfterLoad(Sender: TObject; Doc: TEpiDocument; Const FN: string);
+    procedure SetDataFile(AValue: TEpiDataFile);
     procedure SetImportData(AValue: boolean);
+    procedure SetRelation(AValue: TEpiMasterRelation);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent);
@@ -69,6 +81,8 @@ type
     property    SelectedDocuments: TStringList read FSelectedDocuments;
     property    ImportData: boolean read FImportData write SetImportData;
     property    ImportDataIndex: Integer read FImportDataSelectedIndex;
+    property    DataFile: TEpiDataFile read FDataFile write SetDataFile;
+    property    Relation: TEpiMasterRelation read FRelation write SetRelation;
   end; 
 
 implementation
@@ -128,6 +142,19 @@ begin
   Files.Add('');
   FProjectList.AddFiles(Files);
   Files.Free;
+end;
+
+procedure TImportStructureForm.PrepareCanvas(sender: TObject; aCol,
+  aRow: Integer; aState: TGridDrawState);
+var
+  Grid: TStringGrid absolute Sender;
+  Idx: Integer;
+begin
+  Idx := FProjectList.FileNameCol.Index + 1;
+  if aCol <> Idx then exit;
+
+  if Assigned(Grid.Objects[aCol, aRow]) then
+    Grid.Canvas.Brush.Color := clYellow;
 end;
 
 procedure TImportStructureForm.ImportHook(const Sender,
@@ -272,10 +299,8 @@ begin
   FLastRecYPos := -1;
   FLastEpiCtrl := nil;
 
-  DataFile := Doc.DataFiles[Doc.DataFiles.Count - 1];
-//  DataFile.MainSection.Fields.RegisterOnChangeHook(@ImportHook, false);
-//  DataFile.MainSection.Headings.RegisterOnChangeHook(@ImportHook, false);
-  DataFile.MainSection.RegisterOnChangeHook(@ImportHook);
+  CurrentDataFile := Doc.DataFiles[Doc.DataFiles.Count - 1];
+  CurrentDataFile.MainSection.RegisterOnChangeHook(@ImportHook);
 end;
 
 procedure TImportStructureForm.AfterLoad(Sender: TObject; Doc: TEpiDocument;
@@ -283,12 +308,21 @@ procedure TImportStructureForm.AfterLoad(Sender: TObject; Doc: TEpiDocument;
 var
   Ext: String;
   i: Integer;
+  KFCount: Integer;
+  F: TEpiField;
+  KF: TEpiField;
 begin
   Ext := ExtractFileExt(FN);
   if (Ext = '.epx') or (Ext = '.epz') then exit;
 
-  DataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-  DataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+  CurrentDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+  CurrentDataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+end;
+
+procedure TImportStructureForm.SetDataFile(AValue: TEpiDataFile);
+begin
+  if FDataFile = AValue then Exit;
+  FDataFile := AValue;
 end;
 
 procedure TImportStructureForm.SetImportData(AValue: boolean);
@@ -297,9 +331,69 @@ begin
   FImportData := AValue;
 end;
 
+procedure TImportStructureForm.SetRelation(AValue: TEpiMasterRelation);
+begin
+  if FRelation = AValue then Exit;
+  FRelation := AValue;
+end;
+
 procedure TImportStructureForm.CancelActionExecute(Sender: TObject);
 begin
   ModalResult := mrCancel;
+end;
+
+procedure TImportStructureForm.AfterAddToGrid(Sender: TObject;
+  Document: TEpiDocument; const Filename: string; const RowNo: Integer);
+var
+  KFCount: Integer;
+  F: TEpiField;
+  KF: TEpiField;
+  i: Integer;
+  Fn: String;
+begin
+  if Relation.InheritsFrom(TEpiDetailRelation) then
+  begin
+    KFCount := 0;
+    for i := 0 to Document.DataFiles[0].Fields.Count - 1 do
+    begin
+      F := Document.DataFiles[0].Fields[i];
+      KF := DataFile.KeyFields.FieldByName[F.Name];
+
+      if Assigned(KF) and
+         (KF.FieldType = F.FieldType)
+      then
+        Inc(KFCount);
+    end;
+
+    if (KFCount < DataFile.KeyFields.Count)
+    then
+    begin
+      FProjectList.StructureGrid.Objects[
+        FProjectList.FileNameCol.Index + 1,
+        RowNo
+      ] := TObject(1);
+
+      Fn := ExtractFileName(Filename);
+
+      FProjectList.ReportError(
+        Fn + ': Importing data is only possible when the imported' +
+        'dataset has the same fields (name + type) as the defined keyfields!'
+      );
+    end;
+  end;
+end;
+
+procedure TImportStructureForm.CellHint(Sender: TObject; ACol, ARow: Integer;
+  var HintText: String);
+var
+  SG: TStringGrid absolute Sender;
+  Idx: Integer;
+begin
+  Idx := FProjectList.FileNameCol.Index + 1;
+  if Assigned(SG.Objects[Idx, ARow]) then
+    HintText :=
+      'Importing data is only possible when the imported' + LineEnding +
+      'dataset has the same fields (name + type) as the defined keyfields!';
 end;
 
 procedure TImportStructureForm.DocListHook(Sender: TObject);
@@ -316,19 +410,24 @@ begin
 end;
 
 procedure TImportStructureForm.FormShow(Sender: TObject);
+var
+  SG: TStringGrid;
+  i: Integer;
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'ImportStructureForm');
+
+  SG := FProjectList.StructureGrid;
 
   if ImportData then
   begin
     Caption := 'Add structure/Import Data';
 
-    FOldCheckBoxToggle := FProjectList.StructureGrid.OnCheckboxToggled;
-    FProjectList.StructureGrid.OnCheckboxToggled := @ImportDataCheckBoxToogle;
+    FOldCheckBoxToggle := SG.OnCheckboxToggled;
+    SG.OnCheckboxToggled := @ImportDataCheckBoxToogle;
 
-    FOldColRowMoved := FProjectList.StructureGrid.OnColRowMoved;
-    FProjectList.StructureGrid.OnColRowMoved := @ImportDataColRowMoved;
+    FOldColRowMoved := SG.OnColRowMoved;
+    SG.OnColRowMoved := @ImportDataColRowMoved;
     FImportDataSelectedIndex := -1;
   end else begin
     Caption := 'Add structure';
@@ -349,11 +448,17 @@ begin
     Application.ProcessMessages;
 
     if ImportData and
-       (FProjectList.StructureGrid.RowCount > 1)
+       (SG.RowCount > 1)
     then
     begin
-      FProjectList.StructureGrid.Cells[FDataCol.Index + 1, 1] := '1';
-      FImportDataSelectedIndex := 0;
+      for i := 1 to SG.RowCount - 1 do
+      begin
+        if not Assigned(SG.Objects[FProjectList.FileNameCol.Index + 1, i]) then
+        begin
+          FProjectList.StructureGrid.Cells[FDataCol.Index + 1, i] := FDataCol.ValueChecked;
+          FImportDataSelectedIndex := i;
+        end;
+      end;
     end;
   end;
 end;
@@ -395,6 +500,8 @@ end;
 
 procedure TImportStructureForm.ImportDataCheckBoxToogle(sender: TObject; aCol,
   aRow: Integer; aState: TCheckboxState);
+var
+  SG: TStringGrid absolute Sender;
 begin
   // Always send event on to others!
   if Assigned(FOldCheckBoxToggle) then
@@ -411,12 +518,18 @@ begin
     Exit;
   end;
 
+
   if (aState = cbChecked) then
   begin
-    if FImportDataSelectedIndex <> -1 then
-      TStringGRid(FDataCol.Grid).Cells[FDataCol.Index+1, FImportDataSelectedIndex] := '0';
+    if Assigned(SG.Objects[FProjectList.FileNameCol.Index + 1, aRow]) then
+      SG.Cells[aCol, aRow] := FDataCol.ValueUnchecked
+    else
+    begin
+      if FImportDataSelectedIndex <> -1 then
+        SG.Cells[FDataCol.Index+1, FImportDataSelectedIndex] := FDataCol.ValueUnchecked;
 
-    FImportDataSelectedIndex := aRow;
+      FImportDataSelectedIndex := aRow;
+    end;
   end;
 end;
 
@@ -429,8 +542,13 @@ begin
   begin
     OnBeforeImportFile := @BeforeLoad;
     OnAfterImportFile  := @AfterLoad;
+    OnAfterAddToGrid := @AfterAddToGrid;
 
+    StructureGrid.Options  := StructureGrid.Options + [goCellHints];
+    StructureGrid.ShowHint := true;
     StructureGrid.Columns[1].Title.Caption := 'Structure';
+    StructureGrid.OnPrepareCanvas := @PrepareCanvas;
+    StructureGrid.OnGetCellHint := @CellHint;
 
     FDataCol := TGridColumn(StructureGrid.Columns.Insert(2));
     FDataCol.Title.Caption := 'Data';

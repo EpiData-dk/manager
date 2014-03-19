@@ -52,10 +52,8 @@ object ProjectFrame: TProjectFrame
       Transparent = True
       object OpenProjectToolBtn: TToolButton
         Left = 2
-        Hint = 'Open Project'
         Top = 1
-        Caption = '&Open Project'
-        ImageIndex = 0
+        Action = OpenProjectAction
         ParentShowHint = False
         ShowHint = True
       end

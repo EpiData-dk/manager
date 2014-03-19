@@ -318,7 +318,7 @@ type
   private
     { Other }
     FMayHandleShortcuts: boolean;
-    function GetRelation: TEpiMasterRelation;
+    function  GetRelation: TEpiMasterRelation;
     procedure SetMayHandleShortcuts(AValue: boolean);
     procedure UpdateShortcuts;
     procedure UpdateControls;
@@ -995,18 +995,16 @@ var
 
   procedure AssignField(F: TEpiField; S: TEpiSection = nil; AParent: TWinControl = nil);
   var
-    MR: TEpiMasterRelation;
     KF: TEpiField;
     i: integer;
   begin
     // Related dataset import.
     if  (ImportData) then
     begin
-      MR := TEpiMasterRelation(DataFile.FindCustomData(PROJECT_RELATION_KEY));
       KF := DataFile.KeyFields.FieldByName[F.Name];
       if (Assigned(KF)) and
          (KF.FieldType = F.FieldType) and
-         (MR.InheritsFrom(TEpiDetailRelation))
+         (Relation.InheritsFrom(TEpiDetailRelation))
       then
         begin
           // An imported field has the same name + type of a keyfield in this datafile.
@@ -1179,6 +1177,8 @@ begin
   ImpStructurForm := TImportStructureForm.Create(FDesignScrollBox);
   ImpStructurForm.AddInitialFiles(Files);
   ImpStructurForm.ImportData := (DataFile.Size = 0);
+  ImpStructurForm.DataFile := DataFile;
+  ImpStructurForm.Relation := Relation;
   if ImpStructurForm.ShowModal = mrCancel then exit;
 
   // Prepare screen...
@@ -1190,7 +1190,6 @@ begin
 
     if (ImpStructurForm.SelectedDocuments.Count = 1) and
        (Pos('Dataform', DataFile.Caption.Text) > 0)
-//       (DataFile.ControlItems.Count = 1) // only main section
     then
       DataFile.Caption.Text := TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[0]).DataFiles[0].Caption.Text;
 
@@ -1200,8 +1199,6 @@ begin
         ImpStructurForm.FieldsRenameGrpBox.ItemIndex = 1,
         ImpStructurForm.ImportDataIndex = i
       );
-
-
 
     FDesignPanel.Surface.Select(FDesignPanel);
     FDesignPanel.Surface.UpdateDesigner;

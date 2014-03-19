@@ -117,6 +117,7 @@ type
     procedure   UpdateFrame;
     function    OpenProject(Const AFileName: string): boolean;
     function    SaveProject(Const ForceSaveAs: boolean): boolean;
+    function    Import(Const FromCB: boolean): boolean;
     procedure   CreateNewProject;
     procedure   AssignActionLinks;
     property   DocumentFile: TDocumentFile read FDocumentFile;
@@ -257,11 +258,16 @@ var
   DF: TEpiDataFile;
   Res: TModalResult;
   NewNode: TTreeNode;
+  ND: TNodeData;
+  Relation: TEpiMasterRelation;
 begin
   CurrentNode := DataFilesTreeView.Selected;
   if CurrentNode = FRootNode then exit;
 
-  DF := TNodeData(CurrentNode.Data).DataFile;
+  ND := TNodeData(CurrentNode.Data);
+  Relation := ND.Relation;
+
+  DF := ND.DataFile;
   Res :=
     MessageDlg('Warning!',
       'Are you sure you want to delete the dataform "' + Df.Caption.Text + '" ?',
@@ -278,6 +284,7 @@ begin
     NewNode := CurrentNode.GetNextSibling;
 
   CurrentNode.Free;
+  Relation.Free;
   FActiveFrame := nil;
 
   DataFilesTreeView.Selected := NewNode;
@@ -317,9 +324,14 @@ begin
     exit;
   end;
 
-//  ND.Frame.Free;
+//  ND.Frame.Free =>
   ND.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY).Free;
   ND.DataFile.Caption.UnRegisterOnChangeHook(@OnDataFileCaptionChange);
+  // Do not Free Relation structure here, since the treeview deletion order starts is top->bottom,
+  // and if we delete the relation here => all child relation object will have been freed on the next
+  // call to DataFilesTreeViewDeletion... hence we have a dead reference and we get an A/V.;
+  // The relation object is freed in the call "DeleteDataFormActionExecute"
+//  ND.Relation.Free;
   ND.DataFile.Free;
   ND.Free;
 end;
@@ -1046,9 +1058,17 @@ begin
   begin
     Dlg := TSaveDialog.Create(Self);
     Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
-    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
     Dlg.FilterIndex := ManagerSettings.SaveType + 1;
-    SaveDlgTypeChange(Dlg);
+
+    if DocumentFile.IsSaved then
+    begin
+      Dlg.InitialDir := ExtractFilePath(DocumentFile.FileName);
+      Dlg.FileName := DocumentFile.FileName
+    end else begin
+      Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+      SaveDlgTypeChange(Dlg);
+    end;
+
     Dlg.OnTypeChange := @SaveDlgTypeChange;
     Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
 
@@ -1062,6 +1082,21 @@ begin
   if Result then
     EpiDocument.Modified := false;
   UpdateCaption;
+end;
+
+function TProjectFrame.Import(const FromCB: boolean): boolean;
+var
+  Frame: TRuntimeDesignFrame;
+  TN: TTreeNode;
+begin
+  TN := FRootNode.GetFirstChild;
+  DataFilesTreeView.Selected := TN;
+
+  Frame := TRuntimeDesignFrame(TNodeData(TN.Data).DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
+  if FromCB then
+    Frame.ImportCBAction.Execute
+  else
+    Frame.ImportAction.Execute;
 end;
 
 procedure TProjectFrame.CreateNewProject;

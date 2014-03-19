@@ -291,13 +291,13 @@ end;
 procedure TMainForm.ImportCBInNewProjectActionExecute(Sender: TObject);
 begin
   DoNewProject;
-  TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportCBAction.Execute;
+  FActiveFrame.Import(true);
 end;
 
 procedure TMainForm.ImportInNewProjectActionExecute(Sender: TObject);
 begin
   DoNewProject;
-  TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction.Execute;
+  FActiveFrame.Import(false);
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
