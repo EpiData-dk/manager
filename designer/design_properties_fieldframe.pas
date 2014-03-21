@@ -30,7 +30,8 @@ type
     Bevel3: TBevel;
     Bevel4: TBevel;
     CalcFieldLabel: TLabel;
-    CalcTabSheet: TTabSheet;
+    CalcSheet: TTabSheet;
+    RelateSheet: TTabSheet;
     ValueLabelAsNoteChkBox: TCheckBox;
     CombineDateGrpBox: TGroupBox;
     CombineDateRadio: TRadioButton;
@@ -57,8 +58,8 @@ type
     Field1Combo: TComboBox;
     Field2Combo: TComboBox;
     Field3Combo: TComboBox;
-    FieldAdvancedSheet: TTabSheet;
-    FieldBasicSheet: TTabSheet;
+    ExtendedSheet: TTabSheet;
+    BasicSheet: TTabSheet;
     FieldNameLabel: TLabel;
     FieldPageControl: TPageControl;
     FieldTypeLabel: TLabel;
@@ -151,11 +152,12 @@ type
       EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
   private
-    FDataFile: TEpiDataFile;
     FValueLabels: TEpiValueLabelSets;
 
     // Fields Access Functions:
     function ManyFields: boolean;
+    function IsKeyField: boolean;
+    function IsRelatedKeyField: boolean;
     function FieldsMustHaveFieldTypes(FieldTypes: TEpiFieldTypes): boolean;
     function FieldsHaveFieldTypes(FieldTypes: TEpiFieldTypes): boolean;
     function FieldsHaveSameFieldType: boolean;
@@ -166,7 +168,6 @@ type
     function GetField(const Index: integer): TEpiField;
   protected
     property Fields[const Index: integer]: TEpiField read GetField;
-    property DataFile: TEpiDataFile read FDataFile;
     property ValueLabels: TEpiValueLabelSets read FValueLabels;
   private
     { Common combo handling }
@@ -231,7 +232,7 @@ implementation
 uses
   epimiscutils, typinfo, epiranges, epiconvertutils,
   epistringutils, LazUTF8, field_valuelabelseditor_form,
-  valuelabelseditor_form2, math;
+  valuelabelseditor_form2, math, epirelations;
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';
@@ -955,14 +956,9 @@ begin
 end;
 
 procedure TFieldPropertiesFrame.RegisterValueLabelHook;
-var
-  i: Integer;
 begin
   if not Assigned(ValueLabels) then exit;
-
   ValueLabels.RegisterOnChangeHook(@ValueLabelsHook, true);
-{  for i := 0 to ValueLabels.Count -1 do
-    ValueLabels[i].RegisterOnChangeHook(@ValueLabelsHook, true);  }
 end;
 
 procedure TFieldPropertiesFrame.UnRegisterValueLabelHook;
@@ -970,9 +966,6 @@ var
   i: Integer;
 begin
   if not Assigned(ValueLabels) then exit;
-
-{  for i := 0 to ValueLabels.Count -1 do
-    ValueLabels[i].UnRegisterOnChangeHook(@ValueLabelsHook);   }
   ValueLabels.UnRegisterOnChangeHook(@ValueLabelsHook);
 end;
 
@@ -984,7 +977,6 @@ var
   VL: TEpiValueLabelSet;
   Idx: Integer;
 begin
-//  if (Sender is TEpiValueLabelSets) and
   if (Initiator = FValueLabels) and
      (EventGroup = eegCustomBase)
   then
@@ -995,7 +987,6 @@ begin
     ecceAddItem:
       begin
         VL := TEpiValueLabelSet(Data);
-///        VL.RegisterOnChangeHook(@ValueLabelsHook, true);
 
         if VL.LabelType = Field.FieldType then
           ValueLabelComboBox.Items.AddObject(VL.Name, VL);
@@ -1003,7 +994,6 @@ begin
     ecceDelItem:
       begin
         VL := TEpiValueLabelSet(Data);
-//        VL.UnRegisterOnChangeHook(@ValueLabelsHook);
 
         ValueLabelComboBox.Items.BeginUpdate;
         Idx := ValueLabelComboBox.Items.IndexOfObject(VL);
@@ -1054,6 +1044,28 @@ end;
 function TFieldPropertiesFrame.ManyFields: boolean;
 begin
   result := Length(FFields) > 1;
+end;
+
+function TFieldPropertiesFrame.IsKeyField: boolean;
+begin
+  Result := (DataFile.KeyFields.IndexOf(Field) > -1);
+end;
+
+function TFieldPropertiesFrame.IsRelatedKeyField: boolean;
+var
+  KFs: TEpiFields;
+  i: Integer;
+begin
+  Result := false;
+
+  if not (FRelation.InheritsFrom(TEpiDetailRelation)) then exit;
+  KFs := TEpiDetailRelation(FRelation).MasterRelation.Datafile.KeyFields;
+
+  // Check if one of the selected fields is a member of the keyfields
+  // in the Master Datafile. If it is, return true!
+  for i := 0 to FieldCount -1 do
+    if KFs.ItemExistsByName(Fields[i].Name) then
+      Exit(true);
 end;
 
 function TFieldPropertiesFrame.FieldsMustHaveFieldTypes(
@@ -1109,10 +1121,10 @@ procedure TFieldPropertiesFrame.UpdateVisibility;
 begin
   // Visiblity
   // - basic
-  if ManyFields then
-    NameEdit.Enabled              := False
-  else
-    NameEdit.Enabled              := (not IsReservedEpiFieldName(Field.Name));
+  BasicSheet.Enabled              := not IsRelatedKeyField;
+  NameEdit.Enabled                := not (ManyFields or
+                                          IsReservedEpiFieldName(Field.Name) or
+                                          IsKeyField);
 
   LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes);
   if FieldsHaveFieldTypes(FloatFieldTypes) and FieldsHaveFieldTypes(IntFieldTypes + StringFieldTypes)
@@ -1126,11 +1138,13 @@ begin
     Bevel1.Left := QuestionEdit.Left + QuestionEdit.Width
   else
     Bevel1.Left := QuestionEdit.Left + ((QuestionEdit.Width - Bevel1.Width) div 2);
+
   ValueLabelGrpBox.Visible        := FieldsMustHaveFieldTypes(ValueLabelFieldTypes) and FieldsHaveSameFieldType;
   UpdateModeRadioGrp.Visible      := FieldsMustHaveFieldTypes(AutoUpdateFieldTypes);
   RangesGrpBox.Visible            := FieldsMustHaveFieldTypes(RangeFieldTypes) and FieldsHaveSameFieldType;
 
   // - extended
+  ExtendedSheet.Enabled           := not IsRelatedKeyField;
   EntryRadioGroup.Visible         := FieldsMustHaveFieldTypes(EntryModeFieldTypes);
   ConfirmEntryChkBox.Visible      := FieldsMustHaveFieldTypes(ConfirmEntryFieldTypes);
   AutoValuesGrpBox.Visible        := FieldsMustHaveFieldTypes(RepeatValueFieldTypes + DefaultValueFieldTypes);
@@ -1138,16 +1152,18 @@ begin
   DefaulValueLabel.Visible        := DefaultValueEdit.Visible;
   ValueLabelSettingGrpBox.Visible := FieldsMustHaveFieldTypes(ValueLabelFieldTypes) and FieldsHaveSameFieldType;
   CompareGroupBox.Visible         := FieldsMustHaveFieldTypes(CompareFieldTypes);
-  FieldAdvancedSheet.TabVisible   := not FieldsMustHaveFieldTypes(AutoFieldTypes);
+  ExtendedSheet.TabVisible        := not FieldsMustHaveFieldTypes(AutoFieldTypes);
 
   // - jumps
   JumpSheet.TabVisible            := FieldsMustHaveFieldTypes(JumpsFieldTypes) and FieldsHaveSameFieldType;
+  JumpSheet.Enabled               := not IsRelatedKeyField;
   UseJumpsCombo.Visible           := ManyFields;
   UseJumpsLabel.Visible           := ManyFields;
 
   // - calc
-  CalcUnchangedRadioBtn.Visible      := ManyFields;
-  CalcTabSheet.TabVisible         := (not FieldsMustHaveFieldTypes(AutoFieldTypes));
+  CalcSheet.Enabled               := not IsRelatedKeyField;
+  CalcUnchangedRadioBtn.Visible   := ManyFields;
+  CalcSheet.TabVisible            := (not FieldsMustHaveFieldTypes(AutoFieldTypes));
 
   // - notes
   NotesSheet.Visible              := FieldsMustHaveFieldTypes(NotesFieldTypes);
@@ -1952,7 +1968,7 @@ var
   CmpType: TEpiComparisonType;
 begin
   inherited Create(TheOwner);
-  FieldPageControl.ActivePage := FieldBasicSheet;
+  FieldPageControl.ActivePage := BasicSheet;
   QuestionEdit.SetFocus;
 
   FNoneObject   := nil; //TObject.Create;
@@ -1998,7 +2014,7 @@ end;
 
 procedure TFieldPropertiesFrame.FocusOnNewControl;
 begin
-  FieldPageControl.ActivePage := FieldBasicSheet;
+  FieldPageControl.ActivePage := BasicSheet;
   QuestionEdit.SetFocus;
 end;
 
@@ -2015,7 +2031,6 @@ begin
   FFields := EpiControls;
   if not Assigned(FFields[0]) then exit;
 
-  FDataFile := Field.DataFile;
   FValueLabels := FDataFile.ValueLabels;
 
   RegisterValueLabelHook;

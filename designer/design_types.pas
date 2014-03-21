@@ -6,7 +6,7 @@ unit design_types;
 interface
 
 uses
-  Classes, SysUtils, epicustombase, Controls, Forms;
+  Classes, SysUtils, epicustombase, Controls, Forms, epidatafiles, epirelations;
 
 type
   { IDesignEpiControl }
@@ -32,6 +32,8 @@ type
   IDesignPropertiesFrame = interface ['IDesignPropertiesFrame']
     procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
+    procedure SetDataFile(Const DataFile: TEpiDataFile);
+    procedure SetRelation(Const Relation: TEpiMasterRelation);
     procedure ResetControls;
     function  ApplyChanges: boolean;
   end;

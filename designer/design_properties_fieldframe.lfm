@@ -1,7 +1,7 @@
 object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 744
+  Left = 481
   Height = 609
-  Top = 254
+  Top = 265
   Width = 572
   ClientHeight = 609
   ClientWidth = 572
@@ -12,11 +12,11 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
     Height = 609
     Top = 0
     Width = 572
-    ActivePage = FieldBasicSheet
+    ActivePage = JumpSheet
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 0
-    object FieldBasicSheet: TTabSheet
+    object BasicSheet: TTabSheet
       Caption = 'Basic'
       ClientHeight = 576
       ClientWidth = 566
@@ -104,10 +104,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         ParentColor = False
       end
       object NameEdit: TEdit
-        AnchorSideLeft.Control = FieldBasicSheet
+        AnchorSideLeft.Control = BasicSheet
         AnchorSideTop.Control = FieldNameLabel
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldBasicSheet
+        AnchorSideRight.Control = BasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 25
@@ -121,7 +121,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
       end
       object FieldNameLabel: TLabel
         AnchorSideLeft.Control = NameEdit
-        AnchorSideTop.Control = FieldBasicSheet
+        AnchorSideTop.Control = BasicSheet
         Left = 10
         Height = 15
         Top = 10
@@ -160,10 +160,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         ParentFont = False
       end
       object RangesGrpBox: TGroupBox
-        AnchorSideLeft.Control = FieldBasicSheet
+        AnchorSideLeft.Control = BasicSheet
         AnchorSideTop.Control = ValueLabelGrpBox
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldBasicSheet
+        AnchorSideRight.Control = BasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 70
@@ -258,10 +258,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         Style = bsRaised
       end
       object UpdateModeRadioGrp: TRadioGroup
-        AnchorSideLeft.Control = FieldBasicSheet
+        AnchorSideLeft.Control = BasicSheet
         AnchorSideTop.Control = RangesGrpBox
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldBasicSheet
+        AnchorSideRight.Control = BasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 76
@@ -284,10 +284,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         TabOrder = 6
       end
       object ValueLabelGrpBox: TGroupBox
-        AnchorSideLeft.Control = FieldBasicSheet
+        AnchorSideLeft.Control = BasicSheet
         AnchorSideTop.Control = LengthEdit
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldBasicSheet
+        AnchorSideRight.Control = BasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 67
@@ -346,14 +346,14 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         end
       end
     end
-    object FieldAdvancedSheet: TTabSheet
+    object ExtendedSheet: TTabSheet
       Caption = 'Extended'
       ClientHeight = 576
       ClientWidth = 566
       object EntryRadioGroup: TRadioGroup
-        AnchorSideLeft.Control = FieldAdvancedSheet
-        AnchorSideTop.Control = FieldAdvancedSheet
-        AnchorSideRight.Control = FieldAdvancedSheet
+        AnchorSideLeft.Control = ExtendedSheet
+        AnchorSideTop.Control = ExtendedSheet
+        AnchorSideRight.Control = ExtendedSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 86
@@ -377,7 +377,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         ClientWidth = 542
         TabOrder = 0
         object ConfirmEntryChkBox: TCheckBox
-          AnchorSideLeft.Control = FieldAdvancedSheet
+          AnchorSideLeft.Control = ExtendedSheet
           AnchorSideTop.Control = EntryRadioGroup
           AnchorSideRight.Control = EntryRadioGroup
           AnchorSideRight.Side = asrBottom
@@ -393,10 +393,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         end
       end
       object AutoValuesGrpBox: TGroupBox
-        AnchorSideLeft.Control = FieldAdvancedSheet
+        AnchorSideLeft.Control = ExtendedSheet
         AnchorSideTop.Control = EntryRadioGroup
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldAdvancedSheet
+        AnchorSideRight.Control = ExtendedSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 62
@@ -459,10 +459,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         end
       end
       object ValueLabelSettingGrpBox: TGroupBox
-        AnchorSideLeft.Control = FieldAdvancedSheet
+        AnchorSideLeft.Control = ExtendedSheet
         AnchorSideTop.Control = AutoValuesGrpBox
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldAdvancedSheet
+        AnchorSideRight.Control = ExtendedSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 159
@@ -554,10 +554,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         end
       end
       object CompareGroupBox: TGroupBox
-        AnchorSideLeft.Control = FieldAdvancedSheet
+        AnchorSideLeft.Control = ExtendedSheet
         AnchorSideTop.Control = ValueLabelSettingGrpBox
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = FieldAdvancedSheet
+        AnchorSideRight.Control = ExtendedSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 62
@@ -857,7 +857,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
             Left = 299
             Height = 15
             Top = 21
-            Width = 79
+            Width = 78
             BorderSpacing.Left = 5
             Caption = 'Reset Value:'
             ParentColor = False
@@ -937,7 +937,10 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         ParentColor = False
       end
     end
-    object CalcTabSheet: TTabSheet
+    object RelateSheet: TTabSheet
+      Caption = 'Relate'
+    end
+    object CalcSheet: TTabSheet
       Caption = 'Calculate'
       ClientHeight = 576
       ClientWidth = 566
@@ -946,7 +949,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = NoCalcRadio
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = CalcTabSheet
+        AnchorSideRight.Control = CalcSheet
         AnchorSideRight.Side = asrBottom
         Left = 32
         Height = 118
@@ -1051,7 +1054,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 15
           Top = 10
-          Width = 39
+          Width = 38
           BorderSpacing.Left = 10
           BorderSpacing.Top = 10
           Caption = 'Result'
@@ -1255,7 +1258,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         end
       end
       object TimeCalcRadio: TRadioButton
-        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideLeft.Control = CalcSheet
         AnchorSideTop.Control = TimeDiffGrpBox
         AnchorSideTop.Side = asrCenter
         Left = 10
@@ -1267,7 +1270,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         TabOrder = 1
       end
       object CombineDateRadio: TRadioButton
-        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideLeft.Control = CalcSheet
         AnchorSideTop.Control = CombineDateGrpBox
         AnchorSideTop.Side = asrCenter
         Left = 10
@@ -1279,7 +1282,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         TabOrder = 3
       end
       object CombineStringRadio: TRadioButton
-        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideLeft.Control = CalcSheet
         AnchorSideTop.Control = CombineStringGrpBox
         AnchorSideTop.Side = asrCenter
         Left = 10
@@ -1295,7 +1298,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = TimeDiffGrpBox
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = CalcTabSheet
+        AnchorSideRight.Control = CalcSheet
         AnchorSideRight.Side = asrBottom
         Left = 32
         Height = 100
@@ -1383,7 +1386,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 15
           Top = 10
-          Width = 39
+          Width = 38
           BorderSpacing.Left = 10
           BorderSpacing.Top = 10
           Caption = 'Result'
@@ -1395,7 +1398,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 142
           Height = 15
           Top = 10
-          Width = 29
+          Width = 28
           BorderSpacing.Top = 10
           Caption = 'Day:'
           ParentColor = False
@@ -1417,7 +1420,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 399
           Height = 15
           Top = 10
-          Width = 31
+          Width = 30
           BorderSpacing.Top = 10
           Caption = 'Year:'
           ParentColor = False
@@ -1468,7 +1471,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideLeft.Side = asrBottom
         AnchorSideTop.Control = CombineDateGrpBox
         AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = CalcTabSheet
+        AnchorSideRight.Control = CalcSheet
         AnchorSideRight.Side = asrBottom
         Left = 32
         Height = 100
@@ -1588,7 +1591,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 15
           Top = 10
-          Width = 39
+          Width = 38
           BorderSpacing.Left = 10
           BorderSpacing.Top = 10
           Caption = 'Result'
@@ -1600,7 +1603,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 108
           Height = 15
           Top = 10
-          Width = 45
+          Width = 44
           BorderSpacing.Top = 10
           Caption = 'Field 1:'
           ParentColor = False
@@ -1611,7 +1614,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 254
           Height = 15
           Top = 10
-          Width = 45
+          Width = 44
           BorderSpacing.Top = 10
           Caption = 'Field 2:'
           ParentColor = False
@@ -1622,7 +1625,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 408
           Height = 15
           Top = 10
-          Width = 45
+          Width = 44
           BorderSpacing.Top = 10
           Caption = 'Field 3:'
           ParentColor = False
@@ -1695,7 +1698,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         end
       end
       object NoCalcRadio: TRadioButton
-        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideLeft.Control = CalcSheet
         AnchorSideTop.Control = CalcUnchangedRadioBtn
         AnchorSideTop.Side = asrBottom
         Left = 10
@@ -1710,7 +1713,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
       end
       object CalcFieldLabel: TLabel
         AnchorSideLeft.Control = TimeDiffGrpBox
-        AnchorSideTop.Control = CalcTabSheet
+        AnchorSideTop.Control = CalcSheet
         Left = 32
         Height = 15
         Top = 10
@@ -1732,7 +1735,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         ParentColor = False
       end
       object CalcUnchangedRadioBtn: TRadioButton
-        AnchorSideLeft.Control = CalcTabSheet
+        AnchorSideLeft.Control = CalcSheet
         AnchorSideTop.Control = Label24
         AnchorSideTop.Side = asrBottom
         Left = 10

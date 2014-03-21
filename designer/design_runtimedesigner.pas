@@ -2877,6 +2877,7 @@ begin
   FDesignPanel.Surface.Active := true;
   DesignerActionList.State := asNormal;
   MayHandleShortcuts := true;
+
   UpdateFrame;
 end;
 

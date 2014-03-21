@@ -50,7 +50,7 @@ implementation
 uses
   Buttons, ExtCtrls, design_properties_baseframe, Graphics,
   design_properties_emptyframe, settings2, settings2_var, main,
-  field_valuelabelseditor_form;
+  field_valuelabelseditor_form, project_types, epidatafiles, epirelations;
 
 { TPropertiesForm }
 
@@ -250,6 +250,7 @@ procedure TPropertiesForm.UpdateSelection(Objects: TJvDesignObjectArray);
 var
   AClassType: TClass;
   i: Integer;
+  Item: TEpiCustomItem;
 
   procedure NewFrame(FrameClass: TCustomFrameClass);
   begin
@@ -305,7 +306,23 @@ begin
 
   if Assigned(FFrame)
   then
-    (FFrame as IDesignPropertiesFrame).SetEpiControls(EpiCtrlItemArray);
+  with (FFrame as IDesignPropertiesFrame) do
+  begin
+    Item := EpiCtrlItemArray[0];
+    while (Assigned(Item)) and
+          (not (Item.InheritsFrom(TEpiDataFile)))
+    do
+      Item := TEpiCustomItem(Item.Owner);
+
+    if Assigned(Item)
+    then
+      begin
+        SetDataFile(TEpiDataFile(Item));
+        SetRelation(TEpiMasterRelation(Item.FindCustomData(PROJECT_RELATION_KEY)));
+      end;
+
+    SetEpiControls(EpiCtrlItemArray);
+  end;
 end;
 
 class procedure TPropertiesForm.RestoreDefaultPos(F: TPropertiesForm);

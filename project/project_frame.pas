@@ -95,6 +95,12 @@ type
     procedure UpdateCaption;
     procedure UpdateRootNode;
   private
+    { Relation Handling }
+    procedure KeyFieldEvent(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+    procedure BindKeyFields(DR: TEpiDetailRelation);
+  private
     { Backup }
     FBackupTimer: TTimer;
     function  InitBackupTimer: boolean;
@@ -243,13 +249,20 @@ procedure TProjectFrame.DataFilesTreeViewSelectionChanged(Sender: TObject);
 var
   TN: TTreeNode;
   F: TForm;
+  ND: TNodeData;
 begin
   TN := DataFilesTreeView.Selected;
   if not Assigned(TN) then exit;
 
-  FActiveFrame := TNodeData(TN.Data).Frame;
+  ND := TNodeData(TN.Data);
+  FActiveFrame := ND.Frame;
   FActiveFrame.Activate;
   FActiveFrame.AssignActionLinks;
+
+  if not Assigned(ND.DataFile) then
+    AlignForm.DesignFrame := nil
+  else
+    AlignForm.DesignFrame := TRuntimeDesignFrame(ND.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
 end;
 
 procedure TProjectFrame.DeleteDataFormActionExecute(Sender: TObject);
@@ -692,6 +705,10 @@ begin
   NodeData.Relation.Datafile := Result;
   NodeData.DataFile := Result;
 
+  if NodeData.Relation.InheritsFrom(TEpiDetailRelation)
+  then
+    BindKeyFields(TEpiDetailRelation(NodeData.Relation));
+
   TN := DataFilesTreeView.Items.AddChildObject(ParentNode, Result.Caption.Text, NodeData);
   Result.AddCustomData(PROJECT_TREE_NODE_KEY, TN);
   Result.AddCustomData(PROJECT_RELATION_KEY, NodeData.Relation);
@@ -733,6 +750,9 @@ var
     NodeData.DataFile := Relation.Datafile;
     NodeData.Frame := TRuntimeDesignFrame(NodeData.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
     NodeData.DataFile.AddCustomData(PROJECT_RELATION_KEY, Relation);
+
+    if Relation.InheritsFrom(TEpiDetailRelation) then
+      BindKeyFields(TEpiDetailRelation(Relation));
 
     S := NodeData.DataFile.Caption.Text;
     if Trim(S) = '' then
@@ -866,6 +886,129 @@ end;
 procedure TProjectFrame.UpdateRootNode;
 begin
   FRootNode.Text := EpiDocument.Study.Title.Text;
+end;
+
+procedure TProjectFrame.KeyFieldEvent(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+var
+  MasterField: TEpiField absolute Sender;
+  DetailFields: TEpiFields;
+  SelfInitiated: Boolean;
+  i: Integer;
+  DetailField: TEpiField;
+  ParentField: TEpiField;
+
+begin
+  DetailFields := TEPiFields(MasterField.FindCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY));
+  SelfInitiated := (Sender = Initiator);
+
+  case EventGroup of
+    eegCustomBase:
+      case TEpiCustomChangeEventType(EventType) of
+        ecceDestroy,
+        ecceUpdate,
+        ecceName,
+        ecceAddItem,
+        ecceDelItem,
+        ecceSetItem,
+        ecceSetTop,
+        ecceSetLeft:
+          exit;   // We don't care about being updated in these ways.
+
+        ecceText:
+          // Text can be from Question or Notes.
+          // Only update question -> notes is "personal" to the field.
+          if Initiator = MasterField.Question then
+            for DetailField in DetailFields do
+              DetailField.Question.Text := MasterField.Question.Text;
+
+        ecceReferenceDestroyed:
+          Exit;   // Just ignore.
+      end;
+
+    eegFields:
+      case TEpiFieldsChangeEventType(EventType) of
+        efceSetDecimal:
+          for DetailField in DetailFields do
+            DetailField.Decimals := MasterField.Decimals;
+
+        efceSetLeft:
+          Exit;     // Ignore.
+
+        efceSetLength:
+          for DetailField in DetailFields do
+            DetailField.Length := MasterField.Length;
+
+        efceSetTop,
+        efceSetSize,
+        efceData,
+        efceEntryMode,
+        efceConfirmEntry:
+          Exit;   // ignore
+
+        efceShowValueLabel:
+          for DetailField in DetailFields do
+            DetailField.ShowValueLabel := MasterField.ShowValueLabel;
+
+        efceShowValueLabelNotes:
+          for DetailField in DetailFields do
+            DetailField.ShowValueLabelNotes := MasterField.ShowValueLabelNotes;
+
+        efceRepeatValue:
+          Exit;  // Ignore
+
+        efceDefaultValue:
+          Exit;  // Ignore
+
+        efceValueLabelWriteTo:
+          Exit;  // Ignore
+
+        efceForcePickList:
+          Exit;  // Ignore
+
+        efceValueLabelSet:
+          for DetailField in DetailFields do
+            DetailField.ValueLabelSet := MasterField.ValueLabelSet;
+      end;
+  end;
+end;
+
+procedure TProjectFrame.BindKeyFields(DR: TEpiDetailRelation);
+var
+  MasterKeyFields: TEpiFields;
+  DetailKeyFields: TEpiFields;
+  MasterField: TEpiField;
+  DetailField: TEpiField;
+  ChildFields: TEpiFields;
+  i: Integer;
+begin
+  if not Assigned(DR) then exit;
+
+  MasterKeyFields := DR.MasterRelation.Datafile.KeyFields;
+  DetailKeyFields := DR.Datafile.KeyFields;
+
+  for i := 0 to MasterKeyFields.Count - 1 do
+  begin
+    MasterField := MasterKeyFields[i];
+    DetailField := DetailKeyFields.FieldByName[MasterField.Name];
+
+    // It does not matter if we register the same event multiple times, since
+    // the underlying structure does not allow duplicates anyway...
+    MasterField.RegisterOnChangeHook(@KeyFieldEvent, true);
+
+    // Link to "child" field...
+    ChildFields := TEpiFields(MasterField.FindCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY));
+    if (not Assigned(ChildFields)) then
+    begin
+      ChildFields := TEpiFields.Create(nil);
+      ChildFields.Sorted := false;
+      ChildFields.ItemOwner := false;
+      ChildFields.UniqueNames := false;
+      MasterField.AddCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY, ChildFields);
+    end;
+    ChildFields.AddItem(DetailField);
+  end;
 end;
 
 function TProjectFrame.InitBackupTimer: boolean;
