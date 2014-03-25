@@ -36,13 +36,15 @@ type
     CalcSheet: TTabSheet;
     GotoDataformLabel: TLabel;
     RelateValueBevel: TBevel;
-    JumpScrollBox1: TScrollBox;
+    RelateScrollBox: TScrollBox;
     RelatesGrpBox: TGroupBox;
     RelateValueLabel: TLabel;
     RelateSheet: TTabSheet;
     RemoveRelateBtn: TSpeedButton;
     GotoDataFormBevel: TBevel;
     RelateTopBevel: TBevel;
+    UseRelatesCombo: TComboBox;
+    UseRelatesLabel: TLabel;
     ValueLabelAsNoteChkBox: TCheckBox;
     CombineDateGrpBox: TGroupBox;
     CombineDateRadio: TRadioButton;
@@ -149,10 +151,12 @@ type
     YearCombo: TComboBox;
     procedure AddEditValueLabelBtnClick(Sender: TObject);
     procedure AddJumpBtnClick(Sender: TObject);
+    procedure AddRelateBtnClick(Sender: TObject);
     procedure AddValueLabelPlusActionExecute(Sender: TObject);
     procedure CalcRadioChange(Sender: TObject);
     procedure LengthEditingDone(Sender: TObject);
     procedure RemoveJumpBtnClick(Sender: TObject);
+    procedure RemoveRelateBtnClick(Sender: TObject);
     procedure UseJumpsComboSelect(Sender: TObject);
     procedure ValueLabelComboBoxChange(Sender: TObject);
   private
@@ -212,6 +216,11 @@ type
     procedure AddFieldsToCombo(Combo: TComboBox);
 
   private
+    { Relates }
+    FRelatesComponentsList: TList;
+    function  DoAddNewRelate: pointer;
+
+  private
     { Calculation }
     procedure UpdateCalcFields;
   private
@@ -255,6 +264,12 @@ type
     ResetCombo: PtrUInt;
   end;
   PJumpComponents = ^TJumpComponents;
+
+  TRelateComponents = record
+    ValueEdit: TEdit;
+    GotoCombo: TComboBox;
+  end;
+  PRelateComponents = ^TRelateComponents;
 
 { TFieldPropertiesFrame }
 
@@ -673,6 +688,57 @@ begin
   Combo.Items.EndUpdate;
 end;
 
+function TFieldPropertiesFrame.DoAddNewRelate: pointer;
+var
+  RVE: TEdit;
+  GDC: TComboBox;
+  RRec: PRelateComponents;
+begin
+  RVE := TEdit.Create(RelateScrollBox);
+  GDC := TComboBox.Create(RelateScrollBox);
+
+  with GDC do
+  begin
+    if FRelatesComponentsList.Count = 0 then
+      AnchorToNeighbour(akTop, 3, RelateTopBevel)
+    else
+      AnchorToNeighbour(akTop, 3, PRelateComponents(FRelatesComponentsList[FRelatesComponentsList.Count-1])^.GotoCombo);
+    AnchorToNeighbour(akLeft, 5, RelateValueBevel);
+    AnchorToNeighbour(akRight, 5, GotoDataFormBevel);
+//    AddFieldsToCombo(GDC);
+    Style := csDropDownList;
+    Parent := RelateScrollBox;
+  end;
+
+  with RVE do
+  begin
+    AnchorParallel(akLeft, 10, RelateScrollBox);
+    AnchorToNeighbour(akRight, 5, RelateValueBevel);
+    AnchorVerticalCenterTo(GDC);
+    OnUTF8KeyPress := @JumpEditUTF8KeyPress;
+    Hint := 'Specify value or use "." to indicate all other values';
+    ShowHint := true;
+    ParentShowHint := false;
+    Parent := RelateScrollBox;
+  end;
+
+  AddRelateBtn.AnchorVerticalCenterTo(GDC);
+  RemoveRelateBtn.Enabled := true;
+
+  RVE.Tag      := FRelatesComponentsList.Count;
+  RVE.TabOrder := (FRelatesComponentsList.Count * 3);
+  GDC.TabOrder := (FRelatesComponentsList.Count * 3) + 1;
+
+  RRec := New(PRelateComponents);
+  with RRec^ do
+  begin
+    ValueEdit := RVE;
+    GotoCombo := GDC;
+  end;
+  FRelatesComponentsList.Add(RRec);
+  Result := RRec;
+end;
+
 procedure TFieldPropertiesFrame.UpdateCalcFields;
 var
   i: Integer;
@@ -861,6 +927,16 @@ begin
     UseJumpsCombo.ItemIndex := UseJumpsCombo.Items.IndexOfObject(FNoneObject);
 end;
 
+procedure TFieldPropertiesFrame.AddRelateBtnClick(Sender: TObject);
+begin
+  PRelateComponents(DoAddNewRelate)^.ValueEdit.SetFocus;
+
+  if ManyFields and
+     (ComboIgnoreSelected(UseRelatesCombo))
+  then
+    UseRelatesCombo.ItemIndex := UseRelatesCombo.Items.IndexOfObject(FNoneObject);
+end;
+
 procedure TFieldPropertiesFrame.AddValueLabelPlusActionExecute(Sender: TObject);
 begin
   AddEditValueLabelBtn.Click;
@@ -930,6 +1006,22 @@ begin
     RemoveJumpBtn.Enabled := false;
   end else
     AddJumpBtn.AnchorVerticalCenterTo(TControl(PJumpComponents(FJumpComponentsList.Last)^.GotoCombo));
+end;
+
+procedure TFieldPropertiesFrame.RemoveRelateBtnClick(Sender: TObject);
+begin
+  with PRelateComponents(FRelatesComponentsList.Last)^ do
+  begin
+    ValueEdit.Free;
+    GotoCombo.Free;
+    FRelatesComponentsList.Delete(FRelatesComponentsList.Count - 1);
+  end;
+  if FRelatesComponentsList.Count = 0  then
+  begin
+    AddRelateBtn.AnchorToNeighbour(akBottom, 3, RelateTopBevel);
+    RemoveRelateBtn.Enabled := false;
+  end else
+    AddRelateBtn.AnchorVerticalCenterTo(PRelateComponents(FRelatesComponentsList.Last)^.GotoCombo);
 end;
 
 procedure TFieldPropertiesFrame.UseJumpsComboSelect(Sender: TObject);
@@ -1985,6 +2077,7 @@ begin
   FNoneObject   := nil; //TObject.Create;
   FIgnoreObject := TObject.Create;
   FJumpComponentsList := TList.Create;
+  FRelatesComponentsList := TList.Create;
 
   with EntryRadioGroup.Items do
   begin
