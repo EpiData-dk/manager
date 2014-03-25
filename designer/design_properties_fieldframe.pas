@@ -15,6 +15,7 @@ type
   { TFieldPropertiesFrame }
 
   TFieldPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
+    AddRelateBtn: TSpeedButton;
     AddValueLabelPlusAction: TAction;
     ActionList1: TActionList;
     AddEditValueLabelBtn: TButton;
@@ -29,9 +30,19 @@ type
     Bevel2: TBevel;
     Bevel3: TBevel;
     Bevel4: TBevel;
+    Bevel5: TBevel;
+    Bevel7: TBevel;
     CalcFieldLabel: TLabel;
     CalcSheet: TTabSheet;
+    GotoDataformLabel: TLabel;
+    RelateValueBevel: TBevel;
+    JumpScrollBox1: TScrollBox;
+    RelatesGrpBox: TGroupBox;
+    RelateValueLabel: TLabel;
     RelateSheet: TTabSheet;
+    RemoveRelateBtn: TSpeedButton;
+    GotoDataFormBevel: TBevel;
+    RelateTopBevel: TBevel;
     ValueLabelAsNoteChkBox: TCheckBox;
     CombineDateGrpBox: TGroupBox;
     CombineDateRadio: TRadioButton;

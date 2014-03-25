@@ -774,7 +774,7 @@ var
   begin
     ParentNode := AddRelation(ParentNode, MasterRelation);
 
-    for i := 0 to MasterRelation.Count - 1 do
+    for i := 0 to MasterRelation.DetailRelations.Count - 1 do
       AddRelationRecursive(ParentNode, MasterRelation.DetailRelation[i]);
   end;
 
@@ -1159,10 +1159,12 @@ begin
   TKeyFieldsForm.RestoreDefaultPos;
   TAlignmentForm.RestoreDefaultPos;
 
+  // TODO:
+  {
   if Assigned(F) then
     TRuntimeDesignFrame.RestoreDefaultPos(TRuntimeDesignFrame(F.ActiveFrame))
   else
-    TRuntimeDesignFrame.RestoreDefaultPos(nil);
+    TRuntimeDesignFrame.RestoreDefaultPos(nil);        }
 end;
 
 procedure TProjectFrame.UpdateFrame;
