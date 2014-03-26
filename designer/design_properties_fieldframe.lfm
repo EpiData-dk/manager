@@ -1,7 +1,7 @@
 object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 1996
+  Left = 860
   Height = 682
-  Top = 167
+  Top = 210
   Width = 545
   ClientHeight = 682
   ClientWidth = 545
@@ -1183,7 +1183,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.Left = 5
         BorderSpacing.Bottom = 10
         ItemHeight = 0
-        OnSelect = UseJumpsComboSelect
+        OnSelect = UseRelatesComboSelect
         Style = csDropDownList
         TabOrder = 1
       end

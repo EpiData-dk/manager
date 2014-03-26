@@ -14,11 +14,11 @@ type
 
   TDesignPropertiesFrame = class(TFrame)
   private
+    FDataFile: TEpiDataFile;
+    FRelation: TEpiMasterRelation;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FOnUpdateCaption: TGetStrProc;
   protected
-    FDataFile: TEpiDataFile;
-    FRelation: TEpiMasterRelation;
     procedure ShowHintMsg(const Msg: string; Ctrl: TControl);
     procedure UpdateCaption(Const S: String); virtual;
   public
@@ -28,6 +28,7 @@ type
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
     property  OnUpdateCaption: TGetStrProc read FOnUpdateCaption write FOnUpdateCaption;
     property  DataFile: TEpiDataFile read FDataFile;
+    property  Relation: TEpiMasterRelation read FRelation;
   end;
 
 implementation

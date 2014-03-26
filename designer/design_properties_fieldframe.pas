@@ -158,6 +158,7 @@ type
     procedure RemoveJumpBtnClick(Sender: TObject);
     procedure RemoveRelateBtnClick(Sender: TObject);
     procedure UseJumpsComboSelect(Sender: TObject);
+    procedure UseRelatesComboSelect(Sender: TObject);
     procedure ValueLabelComboBoxChange(Sender: TObject);
   private
     { Hooks }
@@ -218,7 +219,11 @@ type
   private
     { Relates }
     FRelatesComponentsList: TList;
+    procedure ClearRelates;
+    procedure UpdateRelates; overload;
+    procedure UpdateRelates(Relates: TEpiRelates); overload;
     function  DoAddNewRelate: pointer;
+    procedure AddRelationsToCombo(Combo: TComboBox);
 
   private
     { Calculation }
@@ -682,10 +687,110 @@ begin
   Combo.Items.AddObject('(Skip Next Field)', TObject(jtSkipNextField));
   Combo.Items.AddObject('(Exit Section)', TObject(jtExitSection));
   Combo.Items.AddObject('(Save Record)', TObject(jtSaveRecord));
-  for i := 0 to FDataFile.Fields.Count - 1 do
-    AddFieldToCombo(FDataFile.Field[i], AllFieldTypes - AutoFieldTypes, Combo);
+  for i := 0 to DataFile.Fields.Count - 1 do
+    AddFieldToCombo(DataFile.Field[i], AllFieldTypes - AutoFieldTypes, Combo);
   Combo.ItemIndex := 0;
   Combo.Items.EndUpdate;
+end;
+
+procedure TFieldPropertiesFrame.ClearRelates;
+begin
+  // Clear all previous visual controls
+  // - remove akTop, since AnchorVertical uses akTop and not akBottom.
+  AddRelateBtn.Anchors := AddRelateBtn.Anchors - [akTop];
+  AddRelateBtn.AnchorToNeighbour(akBottom, 3, RelateTopBevel);
+  RemoveRelateBtn.Enabled := False;
+  while FRelatesComponentsList.Count > 0 do
+    with PRelateComponents(FRelatesComponentsList.Last)^ do
+    begin
+      ValueEdit.Free;
+      GotoCombo.Free;
+      FRelatesComponentsList.Delete(FRelatesComponentsList.Count-1);
+    end;
+end;
+
+procedure TFieldPropertiesFrame.UpdateRelates;
+var
+  Relates: TEpiRelates;
+  F: TEpiField;
+  FRelates: TEpiRelates;
+  SelectIgnoreCombo: Boolean;
+  i: Integer;
+  j: Integer;
+begin
+  InitCombo(UseRelatesCombo);
+  SelectIgnoreCombo := false;
+  Relates := Field.Relates;
+
+  if Assigned(Relates) then
+    AddFieldToCombo(Field, AllFieldTypes, UseRelatesCombo, True);
+
+  for i := 1 to FieldCount - 1 do
+  begin
+    F := Fields[i];
+    FRelates := F.Relates;
+
+    if Assigned(FRelates) then
+      AddFieldToCombo(F, AllFieldTypes, UseRelatesCombo, True);
+
+    if SelectIgnoreCombo then
+      Continue;
+
+    if (Assigned(Relates) and (not Assigned(FRelates)))
+       or
+       ((not Assigned(Relates)) and Assigned(FRelates))
+    then
+    begin
+      SelectIgnoreCombo := true;
+      Continue;
+    end;
+
+    if (Assigned(Relates) and Assigned(FRelates)) then
+    begin
+      if (Relates.Count <> FRelates.Count) then
+      begin
+        SelectIgnoreCombo := true;
+        Continue;
+      end;
+
+      for j := 0 to Relates.Count - 1 do
+      begin
+        if (Relates[j].RelateValue <> FRelates[j].RelateValue)
+           or
+           (Relates[j].DetailRelation <> FRelates[j].DetailRelation)
+        then
+        begin
+          SelectIgnoreCombo := true;
+          Break;
+        end;
+      end;
+    end;
+  end;
+
+  if SelectIgnoreCombo then
+  begin
+    FinishCombo(UseRelatesCombo, FIgnoreObject);
+    Relates := nil;
+  end else
+    FinishCombo(UseRelatesCombo, Field);
+
+  UpdateRelates(Relates);
+end;
+
+procedure TFieldPropertiesFrame.UpdateRelates(Relates: TEpiRelates);
+var
+  i: Integer;
+begin
+  ClearRelates;
+
+  if Assigned(Relates) then
+    for i := 0 to Relates.Count -1 do
+      with PRelateComponents(DoAddNewRelate)^ do
+        with Relates[i] do
+        begin
+          ValueEdit.Text      := RelateValue;
+          GotoCombo.ItemIndex := GotoCombo.Items.IndexOfObject(DetailRelation);
+        end;
 end;
 
 function TFieldPropertiesFrame.DoAddNewRelate: pointer;
@@ -705,7 +810,7 @@ begin
       AnchorToNeighbour(akTop, 3, PRelateComponents(FRelatesComponentsList[FRelatesComponentsList.Count-1])^.GotoCombo);
     AnchorToNeighbour(akLeft, 5, RelateValueBevel);
     AnchorToNeighbour(akRight, 5, GotoDataFormBevel);
-//    AddFieldsToCombo(GDC);
+    AddRelationsToCombo(GDC);
     Style := csDropDownList;
     Parent := RelateScrollBox;
   end;
@@ -737,6 +842,18 @@ begin
   end;
   FRelatesComponentsList.Add(RRec);
   Result := RRec;
+end;
+
+procedure TFieldPropertiesFrame.AddRelationsToCombo(Combo: TComboBox);
+var
+  i: Integer;
+begin
+  Combo.Items.BeginUpdate;
+  Combo.Clear;
+  for i := 0 to Relation.DetailRelations.Count - 1 do
+    Combo.AddItem(Relation.DetailRelation[i].Datafile.Caption.Text, Relation.DetailRelation[i]);
+  Combo.ItemIndex := 0;
+  Combo.Items.EndUpdate;
 end;
 
 procedure TFieldPropertiesFrame.UpdateCalcFields;
@@ -1040,6 +1157,22 @@ begin
   UpdateJumps(F.Jumps);
 end;
 
+procedure TFieldPropertiesFrame.UseRelatesComboSelect(Sender: TObject);
+var
+  F: TEpiField;
+begin
+  if ComboIgnoreSelected(UseRelatesCombo) or
+     ComboNoneSelected(UseRelatesCombo)
+  then
+  begin
+    ClearRelates;
+    Exit;
+  end;
+
+  F := TEpiField(ComboSelectedObject(UseRelatesCombo));
+  UpdateRelates(F.Relates);
+end;
+
 procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
 begin
   ValueLabelSettingGrpBox.Enabled :=
@@ -1161,8 +1294,8 @@ var
 begin
   Result := false;
 
-  if not (FRelation.InheritsFrom(TEpiDetailRelation)) then exit;
-  KFs := TEpiDetailRelation(FRelation).MasterRelation.Datafile.KeyFields;
+  if not (Relation.InheritsFrom(TEpiDetailRelation)) then exit;
+  KFs := TEpiDetailRelation(Relation).MasterRelation.Datafile.KeyFields;
 
   // Check if one of the selected fields is a member of the keyfields
   // in the Master Datafile. If it is, return true!
@@ -1262,6 +1395,9 @@ begin
   JumpSheet.Enabled               := not IsRelatedKeyField;
   UseJumpsCombo.Visible           := ManyFields;
   UseJumpsLabel.Visible           := ManyFields;
+
+  // - relates
+  RelateSheet.Enabled             := not (IsKeyField or IsRelatedKeyField);
 
   // - calc
   CalcSheet.Enabled               := not IsRelatedKeyField;
@@ -1436,6 +1572,12 @@ begin
   // Jumps
   // --------
   UpdateJumps;
+
+  // ---------
+  // Relates
+  // --------
+  UpdateRelates;
+
 
   // ---------
   // Calculations
@@ -1644,6 +1786,32 @@ begin
   end;
 
   // *******
+  // Relates
+  // *******
+  for I := 0 to FRelatesComponentsList.Count - 1 do
+  begin
+    with PRelateComponents(FRelatesComponentsList[I])^ do
+    begin
+      if ValueEdit.Text = '' then
+        Exit(DoError('Empty relate value!', ValueEdit));
+
+      // This allow for using '.' as an "On any value" specifier.
+      if ValueEdit.Text <> TEpiJump.DefaultOnAnyValue then
+        with ValueEdit do
+        case Field.FieldType of
+          ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), ValueEdit));
+          ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), ValueEdit));
+          ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format(rsNotAValidType, ['float', Text]), ValueEdit));
+          ftString,
+          ftUpperString:  ;
+        end;
+
+      if GotoCombo.ItemIndex = -1 then
+        Exit(DoError('Invalid "Go To" selection"', GotoCombo));
+    end;
+  end;
+
+  // *******
   // Calculate
   // *******
   if not (
@@ -1707,6 +1875,7 @@ var
   Calc: TEpiCalculation;
   I1, I2: EpiInteger;
   F1, F2: Extended;
+  NRelate: TEpiRelate;
 
   procedure SwapInt(var LowI, HighI: EpiInteger);
   var
@@ -1954,6 +2123,37 @@ begin
     end; // if ComboNoneSelected(UseJumpsCombo) then > ELSE
   end; // if (not ComboIgnoreSelected(UseJumpsCombo)) then
 
+  // Relates
+  if (not ComboIgnoreSelected(UseRelatesCombo)) then
+  begin
+    if (FRelatesComponentsList.Count = 0) then
+    begin
+      for i := 0 to FieldCount -1  do
+      begin
+        Fields[i].Relates.Free;
+        Fields[i].Relates := nil;
+      end;
+    end else begin
+      for i := 0 to FieldCount -1  do
+      begin
+        Fields[i].Relates.Free;
+        Fields[i].Relates := TEpiRelates.Create(Fields[i]);
+        Fields[i].Relates.ItemOwner := true;
+
+        for j := 0 to FRelatesComponentsList.Count - 1 do
+        with Fields[i].Relates do
+        begin
+          NRelate := NewRelate;
+          with PRelateComponents(FRelatesComponentsList[j])^ do
+          begin
+            NRelate.DetailRelation := TEpiDetailRelation(ComboSelectedObject(GotoCombo));
+            NRelate.RelateValue    := ValueEdit.Text;
+          end; // with PRelateComponents(FRelatesComponentsList[i])^ do
+        end; // with Field.Relates do
+      end; // for i := 0 to FieldCount -1  do
+    end;
+  end; // if (not ComboIgnoreSelected(UseRelatesCombo)) then
+
   // Calculate
   if not (CalcUnchangedRadioBtn.Checked) then
   begin
@@ -2135,7 +2335,7 @@ begin
   FFields := EpiControls;
   if not Assigned(FFields[0]) then exit;
 
-  FValueLabels := FDataFile.ValueLabels;
+  FValueLabels := DataFile.ValueLabels;
 
   RegisterValueLabelHook;
 

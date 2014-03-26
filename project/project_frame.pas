@@ -145,7 +145,8 @@ uses
   valuelabelseditor_form2, LazFileUtils,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form, project_studyunit_form,
-  align_form, RegExpr, project_studyunit_frame, epidatafilestypes;
+  align_form, RegExpr, project_studyunit_frame, epidatafilestypes,
+  design_properties_form;
 
 type
   TNodeData = class
@@ -818,6 +819,8 @@ begin
   // Close Alignment Form.
   AlignForm.DesignFrame := nil;
   AlignForm.Hide;
+
+  PropertiesForm.Hide;
 
   EpiDocument.Study.Title.UnRegisterOnChangeHook(@OnTitleChange);
   FRootNode.Free;
