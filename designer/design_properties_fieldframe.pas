@@ -681,6 +681,7 @@ end;
 procedure TFieldPropertiesFrame.AddFieldsToCombo(Combo: TComboBox);
 var
   i: Integer;
+  F: TEpiField;
 begin
   Combo.Items.BeginUpdate;
   Combo.Clear;
@@ -688,7 +689,11 @@ begin
   Combo.Items.AddObject('(Exit Section)', TObject(jtExitSection));
   Combo.Items.AddObject('(Save Record)', TObject(jtSaveRecord));
   for i := 0 to DataFile.Fields.Count - 1 do
-    AddFieldToCombo(DataFile.Field[i], AllFieldTypes - AutoFieldTypes, Combo);
+  begin
+    F := DataFile.Field[i];
+    if (DataFile.KeyFields.IndexOf(F) = -1) then
+      AddFieldToCombo(F, AllFieldTypes - AutoFieldTypes, Combo);
+  end;
   Combo.ItemIndex := 0;
   Combo.Items.EndUpdate;
 end;
@@ -1397,7 +1402,8 @@ begin
   UseJumpsLabel.Visible           := ManyFields;
 
   // - relates
-  RelateSheet.Enabled             := not (IsKeyField or IsRelatedKeyField);
+  RelateSheet.TabVisible          := (not (IsKeyField or IsRelatedKeyField)) and
+                                     (Relation.DetailRelations.Count > 0);
 
   // - calc
   CalcSheet.Enabled               := not IsRelatedKeyField;

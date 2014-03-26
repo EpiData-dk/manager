@@ -193,7 +193,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="91">
+    <Units Count="92">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -806,6 +806,13 @@
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="project_studyunit_frame"/>
       </Unit90>
+      <Unit91>
+        <Filename Value="designer/design_properties_dataformframe.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DataformPropertiesFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_properties_dataformframe"/>
+      </Unit91>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

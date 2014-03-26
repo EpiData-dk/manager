@@ -73,6 +73,7 @@ type
     FModified: Boolean;
     FOnModified: TNotifyEvent;
     FrameCount: integer;
+    FDataFileTreeViewCaptionUpdating: boolean;
     procedure OnDataFileCaptionChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure OnTitleChange(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
     procedure AddToRecent(Const AFileName: string);
@@ -319,7 +320,11 @@ begin
     ShowMessage('A dataform name cannot be empty!');
     S := TNodeData(Node.Data).DataFile.Caption.Text;
   end else
+  begin
+    FDataFileTreeViewCaptionUpdating := True;
     TNodeData(Node.Data).DataFile.Caption.Text := S;
+    FDataFileTreeViewCaptionUpdating := False;
+  end;
 end;
 
 procedure TProjectFrame.DataFilesTreeViewDeletion(Sender: TObject;
@@ -365,6 +370,9 @@ end;
 procedure TProjectFrame.DataFilesTreeViewEditing(Sender: TObject;
   Node: TTreeNode; var AllowEdit: Boolean);
 begin
+  AllowEdit := false;
+  Exit;
+
   if Node = FRootNode then AllowEdit := false;
 
   if AllowEdit then FActiveFrame.DeActivate(false);
@@ -479,6 +487,10 @@ var
 begin
   if not Initiator.InheritsFrom(TEpiTranslatedText) then exit;
   if not ((EventGroup = eegCustomBase) and (EventType = Word(ecceText))) then exit;
+
+  // This will happen if we are upding from a treenode..., hence we do not need to
+  // update the node again!
+  if FDataFileTreeViewCaptionUpdating then exit;
 
   TN := TTreeNode(TEpiDataFile(Initiator.Owner).FindCustomData(PROJECT_TREE_NODE_KEY));
   TN.Text := TEpiDataFile(Initiator.Owner).Caption.Text;
@@ -751,6 +763,7 @@ var
     NodeData.DataFile := Relation.Datafile;
     NodeData.Frame := TRuntimeDesignFrame(NodeData.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
     NodeData.DataFile.AddCustomData(PROJECT_RELATION_KEY, Relation);
+    NodeData.DataFile.Caption.RegisterOnChangeHook(@OnDataFileCaptionChange, true);
 
     if Relation.InheritsFrom(TEpiDetailRelation) then
       BindKeyFields(TEpiDetailRelation(Relation));
@@ -1112,8 +1125,11 @@ begin
 
   FrameCount := 1;
   FActiveFrame := nil;
+  FDataFileTreeViewCaptionUpdating := false;
 
   AlignForm := TAlignmentForm.Create(self);
+  PropertiesForm := TPropertiesForm.Create(self);
+
   FRootNode := DataFilesTreeView.Items.AddObject(nil, 'Root', nil);
 end;
 

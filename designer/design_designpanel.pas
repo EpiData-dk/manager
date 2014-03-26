@@ -43,7 +43,7 @@ uses
   {$IFDEF MSWINDOWS}
   windows, win32proc, Win32Int, LMessages, LCLMessageGlue,
   {$ENDIF}
-  design_properties_sectionframe, manager_globals;
+  design_properties_dataformframe, manager_globals;
 
 {$IFDEF MSWINDOWS}
 var
@@ -126,7 +126,7 @@ end;
 
 function TDesignPanel.DesignFrameClass: TCustomFrameClass;
 begin
-  result := TSectionPropertiesFrame;
+  result := TDataformPropertiesFrame;
 end;
 
 procedure TDesignPanel.UpdateControl;

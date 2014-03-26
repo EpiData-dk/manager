@@ -23,7 +23,7 @@ type
     procedure UpdateCaption(Const S: String); virtual;
   public
     procedure ShiftToTabSheet(Const SheetNo: Byte); virtual; abstract;
-    procedure SetDataFile(const DataFile: TEpiDataFile);
+    procedure SetDataFile(const ADataFile: TEpiDataFile); virtual;
     procedure SetRelation(const Relation: TEpiMasterRelation);
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
     property  OnUpdateCaption: TGetStrProc read FOnUpdateCaption write FOnUpdateCaption;
@@ -47,9 +47,9 @@ begin
     OnUpdateCaption(S);
 end;
 
-procedure TDesignPropertiesFrame.SetDataFile(const DataFile: TEpiDataFile);
+procedure TDesignPropertiesFrame.SetDataFile(const ADataFile: TEpiDataFile);
 begin
-  FDataFile := DataFile;
+  FDataFile := ADataFile;
 end;
 
 procedure TDesignPropertiesFrame.SetRelation(const Relation: TEpiMasterRelation

@@ -49,7 +49,8 @@ uses
   design_control_extender, manager_types, export_epx_frame,
   report_project_validation, report_project_validation_frame, recode_form,
   rename_form, report_export, valuelabel_import_external,
-  valuelabel_import_data, project_types, project_studyunit_frame;
+  valuelabel_import_data, project_types, project_studyunit_frame, 
+design_properties_dataformframe;
 
 {$R *.res}
 

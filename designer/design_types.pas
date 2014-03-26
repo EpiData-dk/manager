@@ -25,14 +25,15 @@ type
 
   TDesignFrameShowHintEvent = procedure(Sender: TObject; Ctrl: TControl; const Msg: string) of object;
 
-  TEpiCustomControlItemArray = array of TEpiCustomControlItem;
+//  TEpiCustomControlItemArray = array of TEpiCustomControlItem;
+  TEpiCustomControlItemArray = array of TEpiCustomItem;
 
   { IDesignPropertiesFrame }
 
   IDesignPropertiesFrame = interface ['IDesignPropertiesFrame']
     procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
-    procedure SetDataFile(Const DataFile: TEpiDataFile);
+    procedure SetDataFile(Const ADataFile: TEpiDataFile);
     procedure SetRelation(Const Relation: TEpiMasterRelation);
     procedure ResetControls;
     function  ApplyChanges: boolean;
