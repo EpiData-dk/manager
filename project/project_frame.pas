@@ -726,6 +726,7 @@ begin
   Result.AddCustomData(PROJECT_TREE_NODE_KEY, TN);
   Result.AddCustomData(PROJECT_RELATION_KEY, NodeData.Relation);
   DataFilesTreeView.Selected := TN;
+  DataFilesTreeViewSelectionChanged(DataFilesTreeView);
 end;
 
 function TProjectFrame.DoNewRuntimeFrame(Df: TEpiDataFile): TRuntimeDesignFrame;

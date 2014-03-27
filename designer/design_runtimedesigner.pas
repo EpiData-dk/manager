@@ -2877,12 +2877,17 @@ begin
   FDesignPanel.Surface.Active := true;
   DesignerActionList.State := asNormal;
   MayHandleShortcuts := true;
+  FDesignPanel.Surface.Select(FDesignPanel);
+  FDesignPanel.Surface.SelectionChange;
 
   UpdateFrame;
 end;
 
 function TRuntimeDesignFrame.DeActivate(aHide: boolean): boolean;
 begin
+  Result := PropertiesForm.ValidateControls;
+  if not Result then exit;
+
   FDesignPanel.Surface.Active := false;
   DesignerActionList.State := asSuspended;
   MayHandleShortcuts := false;

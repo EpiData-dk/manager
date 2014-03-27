@@ -94,6 +94,12 @@ end;
 
 function TDataformPropertiesFrame.ApplyChanges: boolean;
 begin
+  result := true;
+
+  if not Assigned(DataFile) then exit;
+  if not Assigned(Relation) then exit;
+
+
   if (AllowedRecordsEdit.Text = '')
   then
   begin
