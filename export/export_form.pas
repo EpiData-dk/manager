@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, EditBtn, Buttons, CheckLst, ExtCtrls, VirtualTrees,
   epiexportsettings, export_stata_frame, epidatafiles, epidocument,
-  epicustombase, export_frame_types;
+  epicustombase, epirelations, export_frame_types;
 
 type
 
@@ -16,6 +16,7 @@ type
 
   TExportForm = class(TForm)
     AllBitBtn: TBitBtn;
+    DataFileComboBox: TComboBox;
     ExportReportChkBox: TCheckBox;
     ImageList1: TImageList;
     NoneBitBtn: TBitBtn;
@@ -42,6 +43,7 @@ type
     BasicSheet: TTabSheet;
     DataFileTree: TVirtualStringTree;
     procedure BitBtn3Click(Sender: TObject);
+    procedure DataFileComboBoxSelect(Sender: TObject);
     procedure DataFileTreeGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
       var Ghosted: Boolean; var ImageIndex: Integer);
@@ -70,6 +72,7 @@ type
     procedure DataFileTreeInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure PopulateTree(Const Datafile: TEpiDataFile);
+    procedure UpdateDataFileCombo;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Doc: TEpiDocument; Const FileName: string);
@@ -125,17 +128,19 @@ var
   Rec: PFrameRec;
   Node: PVirtualNode;
   CI: TEpiCustomControlItem;
+  SelectedDF: TEpiDataFile;
 begin
   if ModalResult <> mrOK then exit;
 
   Rec := PFrameRec(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex]);
+  SelectedDF := TEpiDataFile(DataFileComboBox.Items.Objects[DataFileComboBox.ItemIndex]);
 
   FExportSetting := Rec^.ESC.Create;
   with FExportSetting do
   begin
     Doc := FDoc;
     ExportFileName := ExportFileNameEdit.Text;
-    DataFileIndex := 0;
+    DataFileIndex := FDoc.DataFiles.IndexOf(SelectedDF);
     ExportDeleted := ExportDeletedChkBox.Checked;
 
     if RangeRBtn.Checked then
@@ -194,9 +199,6 @@ var
   CurrentNode: PVirtualNode;
   i: Integer;
 begin
-  DataFileTree.OnGetText  := @DataFileTreeGetText;
-  DataFileTree.OnInitNode := @DataFileTreeInitNode;
-
   DataFileTree.Clear;
   DataFileTree.BeginUpdate;
   DataFileTree.NodeDataSize := SizeOf(TEpiCustomControlItem);
@@ -220,6 +222,30 @@ begin
   DataFileTree.EndUpdate;
   DataFileTree.ReinitChildren(MainNode, true);
   DataFileTree.ToggleNode(MainNode);
+end;
+
+procedure TExportForm.UpdateDataFileCombo;
+
+  procedure RecursiveFill(Master: TEpiMasterRelation);
+  var
+    DF: TEpiDataFile;
+    i: Integer;
+  begin
+    DF := Master.Datafile;
+    DataFileComboBox.AddItem(DF.Caption.Text, DF);
+
+    for i := 0 to Master.DetailRelations.Count -1 do
+      RecursiveFill(Master.DetailRelation[i]);
+  end;
+
+var
+  RList: TEpiRelationList;
+  i: Integer;
+begin
+  RList := FDoc.Relations;
+
+  for i := 0 to RList.Count - 1 do
+    RecursiveFill(RList.MasterRelation[i]);
 end;
 
 procedure TExportForm.ExportTypeComboSelect(Sender: TObject);
@@ -295,7 +321,6 @@ begin
   end;
   ExportTypeCombo.ItemIndex := ExportTypeCombo.Items.IndexOf(S);
   ExportTypeComboSelect(ExportTypeCombo);
-  PopulateTree(FDoc.DataFiles[0]);
 
   // Encoding:
   EncodingCmbBox.ItemIndex := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ManagerSettings.ExportEncoding)));
@@ -305,6 +330,9 @@ begin
 
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);
+
+  DataFileComboBox.ItemIndex := 0;
+  DataFileComboBoxSelect(nil);
 end;
 
 procedure TExportForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -394,6 +422,11 @@ begin
       Exit;
     end;
   end;
+end;
+
+procedure TExportForm.DataFileComboBoxSelect(Sender: TObject);
+begin
+  PopulateTree(TEpiDataFile(DataFileComboBox.Items.Objects[DataFileComboBox.ItemIndex]));
 end;
 
 procedure TExportForm.DataFileTreeGetText(Sender: TBaseVirtualTree;
@@ -509,8 +542,10 @@ begin
     AddObject('Japanes (CP932)',        TObject(eeCP932));
   end;
 
-  // TODO : Using only for datafile until more df's are supported.
-//  PopulateListBox(Doc.DataFiles[0]);
+  DataFileTree.OnGetText  := @DataFileTreeGetText;
+  DataFileTree.OnInitNode := @DataFileTreeInitNode;
+
+  UpdateDataFileCombo;
 end;
 
 class procedure TExportForm.RestoreDefaultPos;

@@ -35,6 +35,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
     procedure UpdateSelection(Objects: TJvDesignObjectArray);
+    procedure ReloadControls;
     procedure SetFocusOnNew;
     function  ValidateControls: boolean;
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
@@ -323,6 +324,11 @@ begin
 
     SetEpiControls(EpiCtrlItemArray);
   end;
+end;
+
+procedure TPropertiesForm.ReloadControls;
+begin
+  (FFrame as IDesignPropertiesFrame).ResetControls;
 end;
 
 class procedure TPropertiesForm.RestoreDefaultPos(F: TPropertiesForm);

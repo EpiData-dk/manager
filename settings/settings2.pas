@@ -47,6 +47,9 @@ function LoadRecentFilesIni(Const FileName: string): boolean;
 procedure SaveFormPosition(Const AForm: TForm; Const SectionName: string);
 procedure LoadFormPosition(AForm: TForm; Const SectionName: string);
 
+procedure SaveSplitterPosition(Const ASplitter: TSplitter; Const SectionName: string);
+procedure LoadSplitterPosition(ASplitter: TSplitter; Const SectionName: string);
+
 procedure AddToRecent(Const AFilename: string);
 
 procedure InitFont(Font: TFont);
@@ -525,13 +528,40 @@ begin
   end;
 end;
 
+procedure SaveSplitterPosition(const ASplitter: TSplitter;
+  const SectionName: string);
+var
+  Ini: TIniFile;
+begin
+  try
+    Ini := GetIniFile(GetIniFileName);
+    Ini.WriteInteger(SectionName, 'SplitterPosition', ASplitter.GetSplitterPosition);
+  finally
+    Ini.Free;
+  end;
+end;
+
+procedure LoadSplitterPosition(ASplitter: TSplitter; const SectionName: string);
+var
+  Ini: TIniFile;
+begin
+  try
+    Ini := GetIniFile(GetIniFileName);
+    ASplitter.SetSplitterPosition(
+      Ini.ReadInteger(SectionName, 'SplitterPosition', ASplitter.GetSplitterPosition)
+    );
+  finally
+    Ini.Free;
+  end;
+end;
+
 procedure AddToRecent(const AFilename: string);
 var
   Idx: Integer;
 begin
   Idx := RecentFiles.IndexOf(AFilename);
   if (Idx >= 0) then
-    RecentFiles.Exchange(Idx, 0)
+    RecentFiles.Move(Idx, 0)
   else
     RecentFiles.Insert(0, AFilename);
   if RecentFiles.Count > 10 then

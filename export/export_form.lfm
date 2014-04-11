@@ -2,11 +2,11 @@ object ExportForm: TExportForm
   Left = 614
   Height = 581
   Top = 287
-  Width = 690
+  Width = 713
   ActiveControl = BitBtn3
   Caption = 'Export...'
   ClientHeight = 581
-  ClientWidth = 690
+  ClientWidth = 713
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
@@ -15,7 +15,7 @@ object ExportForm: TExportForm
     Left = 0
     Height = 540
     Top = 0
-    Width = 690
+    Width = 713
     ActivePage = BasicSheet
     Align = alClient
     TabIndex = 0
@@ -23,7 +23,7 @@ object ExportForm: TExportForm
     object BasicSheet: TTabSheet
       Caption = 'Export'
       ClientHeight = 507
-      ClientWidth = 684
+      ClientWidth = 707
       object Label1: TLabel
         AnchorSideLeft.Control = BasicSheet
         AnchorSideTop.Control = ExportFileNameEdit
@@ -44,7 +44,7 @@ object ExportForm: TExportForm
         Left = 87
         Height = 25
         Top = 22
-        Width = 372
+        Width = 395
         DialogKind = dkSave
         DialogOptions = [ofEnableSizing]
         FilterIndex = 0
@@ -60,7 +60,7 @@ object ExportForm: TExportForm
         AnchorSideTop.Control = BasicSheet
         AnchorSideRight.Control = BasicSheet
         AnchorSideRight.Side = asrBottom
-        Left = 491
+        Left = 514
         Height = 29
         Top = 20
         Width = 173
@@ -198,20 +198,20 @@ object ExportForm: TExportForm
         Left = 295
         Height = 420
         Top = 67
-        Width = 369
+        Width = 392
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Right = 20
         BorderSpacing.Bottom = 20
         Caption = 'Fields'
         ClientHeight = 403
-        ClientWidth = 365
+        ClientWidth = 388
         TabOrder = 4
         object AllBitBtn: TBitBtn
           AnchorSideTop.Control = NoneBitBtn
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = NoneBitBtn
-          Left = 217
+          Left = 240
           Height = 32
           Top = 1
           Width = 51
@@ -227,7 +227,7 @@ object ExportForm: TExportForm
           AnchorSideTop.Control = FieldGrpBox
           AnchorSideRight.Control = FieldGrpBox
           AnchorSideRight.Side = asrBottom
-          Left = 278
+          Left = 301
           Height = 34
           Top = 0
           Width = 72
@@ -246,7 +246,7 @@ object ExportForm: TExportForm
           Left = 15
           Height = 331
           Top = 56
-          Width = 335
+          Width = 358
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 15
           BorderSpacing.Right = 15
@@ -268,7 +268,7 @@ object ExportForm: TExportForm
           Left = 5
           Height = 359
           Top = 39
-          Width = 355
+          Width = 378
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 5
           BorderSpacing.Top = 5
@@ -291,7 +291,7 @@ object ExportForm: TExportForm
               Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coSmartResize, coAllowFocus]
               Position = 1
               Text = 'Caption'
-              Width = 203
+              Width = 226
             end>
           Header.DefaultHeight = 20
           Header.Height = 20
@@ -302,6 +302,21 @@ object ExportForm: TExportForm
           TabOrder = 3
           TreeOptions.MiscOptions = [toCheckSupport, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning]
           OnGetImageIndex = DataFileTreeGetImageIndex
+        end
+        object DataFileComboBox: TComboBox
+          AnchorSideLeft.Control = FieldGrpBox
+          AnchorSideRight.Control = AllBitBtn
+          Left = 5
+          Height = 29
+          Top = 4
+          Width = 230
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 5
+          BorderSpacing.Right = 5
+          ItemHeight = 0
+          OnSelect = DataFileComboBoxSelect
+          Style = csDropDownList
+          TabOrder = 4
         end
       end
       object GroupBox3: TGroupBox
@@ -369,16 +384,16 @@ object ExportForm: TExportForm
     Left = 0
     Height = 41
     Top = 540
-    Width = 690
+    Width = 713
     Align = alBottom
     ClientHeight = 41
-    ClientWidth = 690
+    ClientWidth = 713
     TabOrder = 1
     object BitBtn3: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn4
-      Left = 529
+      Left = 552
       Height = 32
       Top = 4
       Width = 54
@@ -397,7 +412,7 @@ object ExportForm: TExportForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 593
+      Left = 616
       Height = 34
       Top = 3
       Width = 81

@@ -1,26 +1,26 @@
 object DataformPropertiesFrame: TDataformPropertiesFrame
-  Left = 848
-  Height = 412
-  Top = 386
-  Width = 568
-  ClientHeight = 412
-  ClientWidth = 568
+  Left = 549
+  Height = 474
+  Top = 306
+  Width = 388
+  ClientHeight = 474
+  ClientWidth = 388
   LCLVersion = '1.3'
   object SectionGroupAccessGroupBox: TGroupBox
     AnchorSideLeft.Control = CaptionEdit
-    AnchorSideTop.Control = AllowedRecordsEdit
+    AnchorSideTop.Control = GroupBox1
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = CaptionEdit
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 170
-    Top = 114
-    Width = 548
+    Top = 158
+    Width = 368
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     Caption = 'Groups access:'
     ClientHeight = 153
-    ClientWidth = 544
+    ClientWidth = 364
     TabOrder = 0
     Visible = False
     object GroupAvailableListBox: TListBox
@@ -32,13 +32,13 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       Left = 6
       Height = 126
       Top = 22
-      Width = 250
+      Width = 160
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Top = 2
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 5
       ItemHeight = 0
-      ScrollWidth = 248
+      ScrollWidth = 158
       Sorted = True
       TabOrder = 0
       TopIndex = -1
@@ -50,16 +50,16 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       AnchorSideTop.Side = asrBottom
       AnchorSideBottom.Control = SectionGroupAccessGroupBox
       AnchorSideBottom.Side = asrBottom
-      Left = 291
+      Left = 201
       Height = 126
       Top = 22
-      Width = 246
+      Width = 156
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 7
       BorderSpacing.Top = 2
       BorderSpacing.Bottom = 5
       ItemHeight = 0
-      ScrollWidth = 244
+      ScrollWidth = 154
       Sorted = True
       TabOrder = 1
       TopIndex = -1
@@ -78,7 +78,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       AnchorSideLeft.Control = GroupAvailableListBox
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = GroupAssignedListBox
-      Left = 261
+      Left = 171
       Height = 22
       Top = 87
       Width = 23
@@ -123,7 +123,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     object Label6: TLabel
       AnchorSideLeft.Control = GroupAssignedListBox
       AnchorSideTop.Control = SectionGroupAccessGroupBox
-      Left = 291
+      Left = 201
       Height = 15
       Top = 5
       Width = 62
@@ -135,7 +135,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       AnchorSideLeft.Control = GroupAvailableListBox
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = GroupAvailableListBox
-      Left = 261
+      Left = 171
       Height = 22
       Top = 55
       Width = 23
@@ -187,7 +187,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     Left = 10
     Height = 25
     Top = 27
-    Width = 548
+    Width = 368
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
@@ -208,30 +208,63 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     Caption = 'Caption:'
     ParentColor = False
   end
-  object Label1: TLabel
-    AnchorSideTop.Control = CaptionEdit
-    AnchorSideTop.Side = asrBottom
-    Left = 10
-    Height = 15
-    Top = 62
-    Width = 196
-    BorderSpacing.Top = 10
-    Caption = 'Allowed records pr. unique key:'
-    ParentColor = False
-  end
-  object AllowedRecordsEdit: TEdit
+  object GroupBox1: TGroupBox
     AnchorSideLeft.Control = CaptionEdit
-    AnchorSideTop.Control = Label1
+    AnchorSideTop.Control = CaptionEdit
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = CaptionEdit
     AnchorSideRight.Side = asrBottom
     Left = 10
-    Height = 25
-    Top = 79
-    Width = 548
+    Height = 91
+    Top = 57
+    Width = 368
     Anchors = [akTop, akLeft, akRight]
-    BorderSpacing.Top = 2
-    OnKeyPress = AllowedRecordsEditKeyPress
+    BorderSpacing.Top = 5
+    Caption = 'Number of child records:'
+    ClientHeight = 74
+    ClientWidth = 364
     TabOrder = 2
+    object RadioButton1: TRadioButton
+      Left = 12
+      Height = 22
+      Top = 12
+      Width = 73
+      Caption = 'No limit'
+      Checked = True
+      OnClick = RadioButton1Click
+      TabOrder = 1
+      TabStop = True
+    end
+    object RadioButton2: TRadioButton
+      Left = 12
+      Height = 22
+      Top = 44
+      Width = 91
+      Caption = 'Fixed limit:'
+      OnClick = RadioButton1Click
+      TabOrder = 0
+    end
+    object MaskEdit1: TMaskEdit
+      AnchorSideLeft.Control = RadioButton2
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = RadioButton2
+      AnchorSideBottom.Side = asrBottom
+      Left = 113
+      Height = 25
+      Top = 41
+      Width = 61
+      Anchors = [akTop, akLeft, akBottom]
+      BorderSpacing.Left = 10
+      BorderSpacing.Right = 10
+      CharCase = ecNormal
+      Enabled = False
+      MaxLength = 4
+      TabOrder = 2
+      OnEditingDone = MaskEdit1EditingDone
+      EditMask = '9999;1; '
+      Text = '1   '
+      SpaceChar = ' '
+    end
   end
 end

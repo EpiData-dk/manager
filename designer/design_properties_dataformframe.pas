@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, Spin,
-  design_properties_baseframe, design_types, epicustombase,
+  MaskEdit, design_properties_baseframe, design_types, epicustombase,
   epidatafiles;
 
 type
@@ -15,17 +15,21 @@ type
 
   TDataformPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
     CaptionEdit: TEdit;
-    AllowedRecordsEdit: TEdit;
     GroupAssignedListBox: TListBox;
     GroupAvailableListBox: TListBox;
+    GroupBox1: TGroupBox;
     GrpRightsMoveLeft: TSpeedButton;
     GrpRightsMoveRight: TSpeedButton;
-    Label1: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label9: TLabel;
+    MaskEdit1: TMaskEdit;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
     SectionGroupAccessGroupBox: TGroupBox;
     procedure AllowedRecordsEditKeyPress(Sender: TObject; var Key: char);
+    procedure MaskEdit1EditingDone(Sender: TObject);
+    procedure RadioButton1Click(Sender: TObject);
   private
     procedure DoUpdateCaption;
     procedure UpdateVisibility;
@@ -52,24 +56,53 @@ begin
   if not (Key in ['0'..'9', #8]) then Key := #0;
 end;
 
+procedure TDataformPropertiesFrame.MaskEdit1EditingDone(Sender: TObject);
+begin
+  //
+end;
+
+procedure TDataformPropertiesFrame.RadioButton1Click(Sender: TObject);
+begin
+  MaskEdit1.Enabled := (Sender = RadioButton2);
+end;
+
 procedure TDataformPropertiesFrame.DoUpdateCaption;
 begin
   UpdateCaption('DataForm Properties: ' + DataFile.Caption.Text);
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
+var
+  MasterDF: TEpiDataFile;
 begin
   SectionGroupAccessGroupBox.Visible := false;
+  GroupBox1.Visible := Relation.InheritsFrom(TEpiDetailRelation);
 
-  AllowedRecordsEdit.Enabled := Relation.InheritsFrom(TEpiDetailRelation);
+  if GroupBox1.Visible then
+  begin
+    MasterDF := TEpiDetailRelation(Relation).MasterRelation.Datafile;
+    GroupBox1.Enabled := (MasterDF.KeyFields.Count < DataFile.KeyFields.Count);
+  end;
 end;
 
 procedure TDataformPropertiesFrame.UpdateContent;
 begin
   CaptionEdit.Text := DataFile.Caption.Text;
 
-  if AllowedRecordsEdit.Enabled then;
-    AllowedRecordsEdit.Text := IntToStr(TEpiDetailRelation(Relation).MaxRecordCount);
+  if GroupBox1.Visible then
+    if GroupBox1.Enabled then
+      begin
+        if (TEpiDetailRelation(Relation).MaxRecordCount = 0) then
+          RadioButton1.Checked := true
+        else
+          RadioButton2.Checked := true;
+        MaskEdit1.Text := IntToStr(TEpiDetailRelation(Relation).MaxRecordCount);
+      end
+    else
+      begin
+        RadioButton2.Checked := true;
+        MaskEdit1.Text := '1';
+      end;
 end;
 
 procedure TDataformPropertiesFrame.FocusOnNewControl;
@@ -89,30 +122,18 @@ end;
 
 procedure TDataformPropertiesFrame.ResetControls;
 begin
+  UpdateVisibility;
   UpdateContent;
 end;
 
 function TDataformPropertiesFrame.ApplyChanges: boolean;
+var
+  S: String;
 begin
   result := true;
 
   if not Assigned(DataFile) then exit;
   if not Assigned(Relation) then exit;
-
-
-  if (AllowedRecordsEdit.Text = '')
-  then
-  begin
-    ShowHintMsg('Allowed recordcount must have a number specified!', AllowedRecordsEdit);
-    Exit(false);
-  end;
-
-  if (StrToInt(AllowedRecordsEdit.Text) < 0)
-  then
-  begin
-    ShowHintMsg('A dataset cannot have a negative recordcount!', AllowedRecordsEdit);
-    Exit(false);
-  end;
 
   if CaptionEdit.Modified then
   begin
@@ -123,9 +144,29 @@ begin
     end;
   end;
 
+  S := Trim(MaskEdit1.Text);
+  if (GroupBox1.Visible) and
+     (RadioButton2.Checked) and
+     (
+      (S = '') or
+      (StrToInt(S) = 0)
+     )
+  then
+  begin
+    ShowHintMsg('Number of child records cannot be empty or 0!', MaskEdit1);
+    Exit(false);
+  end;
+
   DataFile.Caption.Text := CaptionEdit.Text;
-  if AllowedRecordsEdit.Enabled then
-    TEpiDetailRelation(Relation).MaxRecordCount := StrToInt(AllowedRecordsEdit.Text);
+
+  if GroupBox1.Visible then
+  with TEpiDetailRelation(Relation) do
+  begin
+    if RadioButton1.Checked then
+      MaxRecordCount := 0
+    else
+      MaxRecordCount := StrToInt(S);
+  end;
 
   ShowHintMsg('', nil);
   DoUpdateCaption;

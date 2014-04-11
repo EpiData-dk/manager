@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, EditBtn,
-  project_types, epistudy;
+  Buttons, project_types, epistudy;
 
 type
 
@@ -16,6 +16,7 @@ type
     AbstractMemo: TMemo;
     AgencyEdit: TEdit;
     AuthorsMemo: TMemo;
+    BitBtn1: TBitBtn;
     CitationsMemo: TMemo;
     DesignMemo: TMemo;
     FromDateEdit: TDateEdit;
@@ -47,7 +48,9 @@ type
     PublisherEdit: TEdit;
     PurposeMemo: TMemo;
     RightsMemo: TMemo;
-    TabSheet1: TTabSheet;
+    StaticText1: TStaticText;
+    TitleSheet: TTabSheet;
+    WelcomeSheet: TTabSheet;
     TabSheet3: TTabSheet;
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
@@ -57,12 +60,14 @@ type
     ToDateEdit: TDateEdit;
     UnitOfObsMemo: TMemo;
     VersionEdit: TEdit;
+    procedure BitBtn1Click(Sender: TObject);
   private
     { private declarations }
     FStudy: TEpiStudy;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; StudyInfo: TEpiStudy);
+    constructor Create(TheOwner: TComponent; StudyInfo: TEpiStudy;
+      Const IsNew: boolean = false);
     procedure UpdateFrame;
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
@@ -78,7 +83,14 @@ uses
 
 { TStudyUnitFrame }
 
-constructor TStudyUnitFrame.Create(TheOwner: TComponent; StudyInfo: TEpiStudy);
+procedure TStudyUnitFrame.BitBtn1Click(Sender: TObject);
+begin
+  PageControl1.ActivePage := TitleSheet;
+  WelcomeSheet.TabVisible := False;
+end;
+
+constructor TStudyUnitFrame.Create(TheOwner: TComponent; StudyInfo: TEpiStudy;
+  const IsNew: boolean);
 begin
   inherited Create(TheOwner);
 
@@ -109,7 +121,12 @@ begin
     FundingMemo.Text      := Funding.Text;
   end;
 
-  PageControl1.ActivePageIndex := 0;
+  if IsNew then
+    PageControl1.ActivePage := WelcomeSheet
+  else begin
+    WelcomeSheet.TabVisible := false;
+    PageControl1.ActivePage := TitleSheet;
+  end;
 end;
 
 procedure TStudyUnitFrame.UpdateFrame;

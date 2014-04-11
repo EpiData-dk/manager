@@ -102,6 +102,10 @@ type
       EventType: Word; Data: Pointer);
     procedure BindKeyFields(DR: TEpiDetailRelation);
   private
+    { Hint }
+    FHintWindow: THintWindow;
+    procedure ShowHintMsg(Sender: TObject; Ctrl: TControl; const Msg: string);
+  private
     { Backup }
     FBackupTimer: TTimer;
     function  InitBackupTimer: boolean;
@@ -145,7 +149,7 @@ uses
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2, LazFileUtils,
   managerprocs, Menus, LCLType, LCLIntf, project_settings,
-  shortcuts, project_keyfields_form, project_studyunit_form,
+  shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame, epidatafilestypes,
   design_properties_form;
 
@@ -181,6 +185,8 @@ begin
   F := TKeyFieldsForm.Create(Self, NodeData.DataFile, EpiDocument.ValueLabelSets);
   F.ShowModal;
   F.Free;
+
+  PropertiesForm.ReloadControls;
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -559,7 +565,7 @@ begin
   UpdateShortCuts;
   InitBackupTimer;
 
-  Frame := TStudyUnitFrame.Create(self, EpiDocument.Study);
+  Frame := TStudyUnitFrame.Create(self, EpiDocument.Study, (not DocumentFile.IsSaved));
   Frame.Align := alClient;
   Frame.Parent := self;
   NodeData := TNodeData.Create;
@@ -1028,6 +1034,24 @@ begin
   end;
 end;
 
+procedure TProjectFrame.ShowHintMsg(Sender: TObject; Ctrl: TControl;
+  const Msg: string);
+var
+  R: TRect;
+  P: TPoint;
+begin
+  if (Msg = '') and (Ctrl = nil) then
+  begin
+    FHintWindow.Hide;
+    Exit;
+  end;
+
+  R := FHintWindow.CalcHintRect(0, Msg, nil);
+  P := Ctrl.ClientToScreen(Point(0, Ctrl.Height + 2));
+  OffsetRect(R, P.X, P.Y);
+  FHintWindow.ActivateHint(R, Msg);
+end;
+
 function TProjectFrame.InitBackupTimer: boolean;
 begin
   if Assigned(FBackupTimer) then
@@ -1130,12 +1154,21 @@ begin
 
   AlignForm := TAlignmentForm.Create(self);
   PropertiesForm := TPropertiesForm.Create(self);
+  PropertiesForm.OnShowHintMsg := @ShowHintMsg;
+
+  FHintWindow := THintWindow.Create(Self);
+  FHintWindow.AutoHide := true;
+  FHintWindow.HideInterval := 5 * 1000;
+
+  LoadSplitterPosition(Splitter1, 'ProjectSplitter');
 
   FRootNode := DataFilesTreeView.Items.AddObject(nil, 'Root', nil);
 end;
 
 destructor TProjectFrame.Destroy;
 begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveSplitterPosition(Splitter1, 'ProjectSplitter');
   DoCloseProject;
   inherited Destroy;
 end;
@@ -1175,7 +1208,6 @@ class procedure TProjectFrame.RestoreDefaultPos(F: TProjectFrame);
 begin
   RestoreDefaultPosValueLabelEditor2;
   TProjectSettingsForm.RestoreDefaultPos;
-  TStudyUnitForm.RestoreDefaultPos;
   TKeyFieldsForm.RestoreDefaultPos;
   TAlignmentForm.RestoreDefaultPos;
 
