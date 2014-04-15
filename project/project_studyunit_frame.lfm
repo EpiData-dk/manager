@@ -1,18 +1,18 @@
 object StudyUnitFrame: TStudyUnitFrame
   Left = 0
-  Height = 412
+  Height = 422
   Top = 0
-  Width = 679
-  ClientHeight = 412
-  ClientWidth = 679
+  Width = 656
+  ClientHeight = 422
+  ClientWidth = 656
   TabOrder = 0
-  DesignLeft = 671
-  DesignTop = 324
+  DesignLeft = 476
+  DesignTop = 289
   object PageControl1: TPageControl
     Left = 0
-    Height = 412
+    Height = 422
     Top = 0
-    Width = 679
+    Width = 656
     ActivePage = WelcomeSheet
     Align = alClient
     TabIndex = 0
@@ -20,28 +20,12 @@ object StudyUnitFrame: TStudyUnitFrame
     TabPosition = tpRight
     object WelcomeSheet: TTabSheet
       Caption = 'Welcome'
-      ClientHeight = 406
-      ClientWidth = 566
-      object StaticText1: TStaticText
-        AnchorSideRight.Control = WelcomeSheet
-        AnchorSideRight.Side = asrCenter
-        Left = 10
-        Height = 48
-        Top = 53
-        Width = 546
-        Alignment = taCenter
-        Anchors = [akTop, akRight]
-        Caption = 'Welcome to EpiData Manager'
-        Font.Height = -32
-        Font.Name = 'Sans'
-        Font.Style = [fsBold]
-        ParentFont = False
-        TabOrder = 0
-      end
+      ClientHeight = 416
+      ClientWidth = 543
       object BitBtn1: TBitBtn
-        Left = 443
+        Left = 420
         Height = 28
-        Top = 363
+        Top = 373
         Width = 102
         Anchors = [akRight, akBottom]
         AutoSize = True
@@ -83,13 +67,34 @@ object StudyUnitFrame: TStudyUnitFrame
           FF00FFFFFF00FFFFFF006360F80AFFFFFF00FFFFFF00FFFFFF00
         }
         OnClick = BitBtn1Click
+        TabOrder = 0
+      end
+      object Memo1: TMemo
+        Left = 29
+        Height = 341
+        Top = 21
+        Width = 493
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Lines.Strings = (
+          'Create single dataforms by using "dataform 1"'
+          ''
+          'For relational datasets:'
+          '   1 Add dataforms with + on left side'
+          '   2 Define Key variables on first form'
+          '   3 Then add other related dataforms: one by one'
+          '       (after adding key on each)'
+          '   4 Then define criteria to execute a relate during entry from top to down.'
+          '   5 You do so by looking at attributes of the field controlling the flow of data entry.'
+        )
+        ReadOnly = True
+        ScrollBars = ssAutoBoth
         TabOrder = 1
       end
     end
     object TitleSheet: TTabSheet
       Caption = 'Title/Abstract'
-      ClientHeight = 406
-      ClientWidth = 566
+      ClientHeight = 416
+      ClientWidth = 543
       object Label1: TLabel
         AnchorSideLeft.Control = TitleSheet
         AnchorSideTop.Control = Owner
@@ -152,8 +157,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet3: TTabSheet
       Caption = 'Coverage'
-      ClientHeight = 406
-      ClientWidth = 566
+      ClientHeight = 416
+      ClientWidth = 543
       object Label5: TLabel
         AnchorSideLeft.Control = TabSheet3
         AnchorSideTop.Control = TabSheet3
@@ -344,8 +349,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet4: TTabSheet
       Caption = 'Description'
-      ClientHeight = 406
-      ClientWidth = 566
+      ClientHeight = 416
+      ClientWidth = 543
       object Label8: TLabel
         AnchorSideLeft.Control = Owner
         AnchorSideTop.Control = KeywordsEdit
@@ -477,8 +482,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet5: TTabSheet
       Caption = 'Ownership'
-      ClientHeight = 406
-      ClientWidth = 566
+      ClientHeight = 416
+      ClientWidth = 543
       object Label9: TLabel
         AnchorSideLeft.Control = TabSheet5
         AnchorSideTop.Control = AgencyEdit
@@ -610,8 +615,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet6: TTabSheet
       Caption = 'Funding'
-      ClientHeight = 406
-      ClientWidth = 566
+      ClientHeight = 416
+      ClientWidth = 543
       object FundingMemo: TMemo
         AnchorSideLeft.Control = TabSheet6
         AnchorSideTop.Control = TabSheet6
@@ -636,8 +641,8 @@ object StudyUnitFrame: TStudyUnitFrame
     end
     object TabSheet7: TTabSheet
       Caption = 'Version Details'
-      ClientHeight = 406
-      ClientWidth = 566
+      ClientHeight = 416
+      ClientWidth = 543
       object Label2: TLabel
         AnchorSideLeft.Control = TabSheet7
         AnchorSideTop.Control = TabSheet7

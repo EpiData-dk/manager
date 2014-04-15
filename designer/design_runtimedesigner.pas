@@ -838,6 +838,8 @@ begin
   F := TRenameForm.Create(self, DataFile);
   F.ShowModal;
   F.Free;
+
+  UpdateControls;
 end;
 
 

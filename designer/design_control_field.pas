@@ -200,7 +200,18 @@ begin
       ecceName:
         UpdateControl;
       ecceAddItem: ;
-      ecceDelItem: ;
+      ecceDelItem:
+        begin
+          if (Initiator = FField.Relates) and
+             // The FField.Relates is destroyed each and every time the content is
+             // applied in Field Properties Frame!
+             (not (ebsDestroying in Initiator.State))
+          then
+          begin
+            S := 'A relate jump was removed because a childform was deleted!';
+            DoShowHint(S);
+          end;
+        end;
       ecceSetItem: ;
       ecceSetTop: ;
       ecceSetLeft: ;
@@ -208,6 +219,8 @@ begin
         UpdateControl;
       ecceReferenceDestroyed:
         begin
+          S := '';
+
           if Initiator is TEpiJump then
             S := 'A Jump-to field was deleted: ' + TEpiField(Data).Name;
 
@@ -217,7 +230,8 @@ begin
           if Initiator is TEpiCalculation then
             S := 'A calculation field was deleted: ' + TEpiField(Data).Name;
 
-          DoShowHint(S);
+          if S <> '' then
+            DoShowHint(S);
         end;
     end;
 end;

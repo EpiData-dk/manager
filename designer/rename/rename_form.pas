@@ -52,6 +52,7 @@ var
   i: Integer;
   S: String;
   CI: TEpiCustomControlItem;
+  F: TEpiField;
 begin
   if (not CheckBox1.Checked) and
      (not CheckBox2.Checked) and
@@ -100,23 +101,33 @@ begin
   for i := 0 to FDataFile.ControlItems.Count - 1 do
   begin
     CI := FDataFile.ControlItem[i];
+
+    // Do not rename main section
     if CI = FDataFile.MainSection then continue;
 
+    // Do not rename key fields
+    if FDataFile.KeyFields.IndexOf(CI) >= 0 then Continue;
+
     if CI.InheritsFrom(TEpiField) and CheckBox1.Checked then
-      CI.Name := '@Rename' + IntToStr(i);
+      CI.Name := '@RenameF' + IntToStr(i);
 
     if CI.InheritsFrom(TEpiSection) and CheckBox2.Checked then
-      CI.Name := '@Rename' + IntToStr(i);
+      CI.Name := '@RenameS' + IntToStr(i);
 
     if CI.InheritsFrom(TEpiHeading) and CheckBox3.Checked then
-      CI.Name := '@Rename' + IntToStr(i);
+      CI.Name := '@RenameH' + IntToStr(i);
   end;
 
   // Rename controls sequentially. One by one...
   if CheckBox1.Checked then
   begin
     for i := 0 to FDataFile.Fields.Count -1 do
-      FDataFile.Field[i].Name := Edit1.Text + IntToStr(i + 1);
+    begin
+      F := FDataFile.Fields[i];
+      if FDataFile.KeyFields.IndexOf(F) >= 0 then Continue;
+
+      F.Name := Edit1.Text + IntToStr(i + 1);
+    end;
   end;
 
   if CheckBox2.Checked then

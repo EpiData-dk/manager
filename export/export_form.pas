@@ -225,27 +225,16 @@ begin
 end;
 
 procedure TExportForm.UpdateDataFileCombo;
+var
+  OrderedDataFiles: TEpiDataFiles;
+  DF: TEpiDataFile;
+begin
+  OrderedDataFiles := FDoc.Relations.GetOrderedDataFiles;
 
-  procedure RecursiveFill(Master: TEpiMasterRelation);
-  var
-    DF: TEpiDataFile;
-    i: Integer;
-  begin
-    DF := Master.Datafile;
+  for DF in OrderedDataFiles do
     DataFileComboBox.AddItem(DF.Caption.Text, DF);
 
-    for i := 0 to Master.DetailRelations.Count -1 do
-      RecursiveFill(Master.DetailRelation[i]);
-  end;
-
-var
-  RList: TEpiRelationList;
-  i: Integer;
-begin
-  RList := FDoc.Relations;
-
-  for i := 0 to RList.Count - 1 do
-    RecursiveFill(RList.MasterRelation[i]);
+  OrderedDataFiles.Free;
 end;
 
 procedure TExportForm.ExportTypeComboSelect(Sender: TObject);

@@ -231,7 +231,7 @@ type
   private
     { private declarations }
     FFields: TEpiCustomControlItemArray;
-    function DoError(Const Msg: string; Ctrl: TWinControl): boolean;
+    function  DoError(Const Msg: string; Ctrl: TWinControl): boolean;
     procedure DoWarning(Const Msg: string; Ctrl: TWinControl);
     procedure UpdateVisibility;
     procedure UpdateContent;

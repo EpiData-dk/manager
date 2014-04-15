@@ -261,7 +261,6 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       Enabled = False
       MaxLength = 4
       TabOrder = 2
-      OnEditingDone = MaskEdit1EditingDone
       EditMask = '9999;1; '
       Text = '1   '
       SpaceChar = ' '

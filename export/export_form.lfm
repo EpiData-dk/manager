@@ -1,5 +1,5 @@
 object ExportForm: TExportForm
-  Left = 614
+  Left = 602
   Height = 581
   Top = 287
   Width = 713

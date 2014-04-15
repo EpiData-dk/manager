@@ -43,12 +43,12 @@ type
     Label8: TLabel;
     Label9: TLabel;
     LanguageEdit: TEdit;
+    Memo1: TMemo;
     PageControl1: TPageControl;
     PopulationMemo: TMemo;
     PublisherEdit: TEdit;
     PurposeMemo: TMemo;
     RightsMemo: TMemo;
-    StaticText1: TStaticText;
     TitleSheet: TTabSheet;
     WelcomeSheet: TTabSheet;
     TabSheet3: TTabSheet;

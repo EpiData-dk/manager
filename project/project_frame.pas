@@ -305,7 +305,7 @@ begin
     NewNode := CurrentNode.GetNextSibling;
 
   CurrentNode.Free;
-  Relation.Free;
+//  Relation.Free;
   FActiveFrame := nil;
 
   DataFilesTreeView.Selected := NewNode;
@@ -352,11 +352,9 @@ begin
 //  ND.Frame.Free =>
   ND.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY).Free;
   ND.DataFile.Caption.UnRegisterOnChangeHook(@OnDataFileCaptionChange);
-  // Do not Free Relation structure here, since the treeview deletion order starts is top->bottom,
-  // and if we delete the relation here => all child relation object will have been freed on the next
-  // call to DataFilesTreeViewDeletion... hence we have a dead reference and we get an A/V.;
-  // The relation object is freed in the call "DeleteDataFormActionExecute"
-//  ND.Relation.Free;
+
+  // Do not Free Relation structure here, the relation is automatically destroyed
+  // when the Datafile is free'd.
   ND.DataFile.Free;
   ND.Free;
 end;
@@ -376,9 +374,6 @@ end;
 procedure TProjectFrame.DataFilesTreeViewEditing(Sender: TObject;
   Node: TTreeNode; var AllowEdit: Boolean);
 begin
-  AllowEdit := false;
-  Exit;
-
   if Node = FRootNode then AllowEdit := false;
 
   if AllowEdit then FActiveFrame.DeActivate(false);
@@ -437,7 +432,7 @@ begin
   TN := DataFilesTreeView.TopItem;
   While Assigned(TN) do
   begin
-    TRuntimeDesignFrame(TN.Data).UpdateFrame;
+    TNodeData(TN.Data).Frame.UpdateFrame;
     TN := TN.GetNext;
   end;
   UpdateTimer;
@@ -666,7 +661,6 @@ begin
   Df := nil;
   if (ParentNode <> FRootNode) then
   begin
-    // TODO: Check for KeyFields and uniqueness!
     NodeData := TNodeData(ParentNode.Data);
     Df := NodeData.DataFile;
     if Df.KeyFields.Count = 0 then
@@ -840,7 +834,7 @@ begin
   AlignForm.DesignFrame := nil;
   AlignForm.Hide;
 
-  PropertiesForm.Hide;
+  PropertiesForm.Free;
 
   EpiDocument.Study.Title.UnRegisterOnChangeHook(@OnTitleChange);
   FRootNode.Free;

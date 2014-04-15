@@ -28,13 +28,19 @@ type
     RadioButton2: TRadioButton;
     SectionGroupAccessGroupBox: TGroupBox;
     procedure AllowedRecordsEditKeyPress(Sender: TObject; var Key: char);
-    procedure MaskEdit1EditingDone(Sender: TObject);
     procedure RadioButton1Click(Sender: TObject);
   private
+    procedure DataFileCaptionHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
     procedure DoUpdateCaption;
     procedure UpdateVisibility;
     procedure UpdateContent;
+    procedure RegisterDataFileCaptionHook;
+    procedure UnRegisterDataFileCaptionHook;
   public
+    constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     procedure ResetControls;
@@ -56,14 +62,19 @@ begin
   if not (Key in ['0'..'9', #8]) then Key := #0;
 end;
 
-procedure TDataformPropertiesFrame.MaskEdit1EditingDone(Sender: TObject);
-begin
-  //
-end;
-
 procedure TDataformPropertiesFrame.RadioButton1Click(Sender: TObject);
 begin
   MaskEdit1.Enabled := (Sender = RadioButton2);
+end;
+
+procedure TDataformPropertiesFrame.DataFileCaptionHook(
+  const Sender: TEpiCustomBase; const Initiator: TEpiCustomBase;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if (EventGroup <> eegCustomBase) then exit;
+  if (Word(ecceText) <> EventType) then exit;
+
+  CaptionEdit.Text := DataFile.Caption.Text;
 end;
 
 procedure TDataformPropertiesFrame.DoUpdateCaption;
@@ -105,6 +116,28 @@ begin
       end;
 end;
 
+procedure TDataformPropertiesFrame.RegisterDataFileCaptionHook;
+begin
+  DataFile.Caption.RegisterOnChangeHook(@DataFileCaptionHook, true);
+end;
+
+procedure TDataformPropertiesFrame.UnRegisterDataFileCaptionHook;
+begin
+  DataFile.Caption.UnRegisterOnChangeHook(@DataFileCaptionHook);
+end;
+
+constructor TDataformPropertiesFrame.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+end;
+
+destructor TDataformPropertiesFrame.Destroy;
+begin
+  if Assigned(DataFile) then
+    UnRegisterDataFileCaptionHook;
+  inherited Destroy;
+end;
+
 procedure TDataformPropertiesFrame.FocusOnNewControl;
 begin
   CaptionEdit.SetFocus;
@@ -114,6 +147,8 @@ procedure TDataformPropertiesFrame.SetEpiControls(EpiControls: TEpiCustomControl
 begin
   if not Assigned(DataFile) then exit;
   if not Assigned(Relation) then exit;
+
+  RegisterDataFileCaptionHook;
 
   UpdateVisibility;
   UpdateContent;
