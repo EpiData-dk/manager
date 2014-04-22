@@ -2522,6 +2522,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ImageIndex = 13
       OnExecute = ImportCBActionExecute
     end
+    object DataformPropertiesAction: TAction
+      Category = 'Edit'
+      Caption = 'Properties'
+      OnExecute = DataformPropertiesActionExecute
+    end
   end
   object OtherFieldsPopup: TPopupMenu
     Images = DesignerImageList

@@ -16,6 +16,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame, IProjectFrame)
+    DataformPropertiesAction: TAction;
     ImportCBAction: TAction;
     RenameControlsAction: TAction;
     RecodeDataAction: TAction;
@@ -179,6 +180,7 @@ type
     procedure CopyControlActionExecute(Sender: TObject);
     procedure CutCopyControlUpdate(Sender: TObject);
     procedure CutControlActionExecute(Sender: TObject);
+    procedure DataformPropertiesActionExecute(Sender: TObject);
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DeleteControlFastActionExecute(Sender: TObject);
@@ -2702,6 +2704,13 @@ begin
   FDesignPanel.Surface.CutComponents;
 end;
 
+procedure TRuntimeDesignFrame.DataformPropertiesActionExecute(Sender: TObject);
+begin
+  FDesignPanel.Surface.Select(FDesignPanel);
+  SelectionChange(self);
+  ShowPropertiesForm(false);
+end;
+
 function TRuntimeDesignFrame.GetDataFile: TEpiDataFile;
 begin
   result := FDatafile;
@@ -2938,6 +2947,9 @@ begin
     SelectAllStringMenuItem.Action   := SelectAllStringsAction;
     SelectAllBoolMenuItem.Action     := SelectAllBoolsAction;
 
+    // Dataform
+    DataformPropertiesMenuItem.Action := DataformPropertiesAction;
+    DataformPropertiesPopupMenuItem.Action := DataformPropertiesAction;
 
     // DataSet
     BrowseDataMenuItem.Action        := ViewDatasetAction;

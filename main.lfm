@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 647
-  Height = 603
-  Top = 228
-  Width = 910
+  Left = 593
+  Height = 599
+  Top = 430
+  Width = 803
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
-  ClientHeight = 580
-  ClientWidth = 910
+  ClientHeight = 576
+  ClientWidth = 803
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -15,9 +15,9 @@ object MainForm: TMainForm
   LCLVersion = '1.3'
   object PageControl1: TPageControl
     Left = 0
-    Height = 542
+    Height = 538
     Top = 38
-    Width = 910
+    Width = 803
     Align = alClient
     ParentShowHint = False
     ShowHint = True
@@ -28,10 +28,10 @@ object MainForm: TMainForm
     Left = 0
     Height = 38
     Top = 0
-    Width = 910
+    Width = 803
     Align = alTop
     ClientHeight = 38
-    ClientWidth = 910
+    ClientWidth = 803
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
@@ -60,20 +60,20 @@ object MainForm: TMainForm
       Left = 127
       Height = 27
       Top = 6
-      Width = 104
+      Width = 56
       AutoSize = True
       BorderSpacing.Left = 15
-      Caption = 'Project Details'
+      Caption = 'Project'
       OnClick = ProjectDetailsBtnClick
-      PopupMenu = ProjectDetailsPopupMenu
+      PopupMenu = ProjectPopupMenu
       TabOrder = 1
     end
     object DocumentBtn: TButton
-      AnchorSideLeft.Control = ProjectDetailsBtn
+      AnchorSideLeft.Control = DataFormBtn
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 246
+      Left = 286
       Height = 27
       Top = 6
       Width = 79
@@ -89,7 +89,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 340
+      Left = 380
       Height = 27
       Top = 6
       Width = 81
@@ -104,7 +104,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 436
+      Left = 476
       Height = 27
       Top = 6
       Width = 65
@@ -112,6 +112,21 @@ object MainForm: TMainForm
       AutoSize = True
       BorderSpacing.Left = 15
       TabOrder = 4
+    end
+    object DataFormBtn: TButton
+      AnchorSideLeft.Control = ProjectDetailsBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 198
+      Height = 27
+      Top = 6
+      Width = 73
+      AutoSize = True
+      BorderSpacing.Left = 15
+      Caption = 'Dataform'
+      OnClick = DataFormBtnClick
+      TabOrder = 5
     end
   end
   object MainMenu1: TMainMenu
@@ -253,12 +268,9 @@ object MainForm: TMainForm
       end
     end
     object ProjectMenu: TMenuItem
-      Caption = 'P&roject Details'
+      Caption = 'P&roject'
       object ValueLabelsMenuItem: TMenuItem
         Caption = 'ValueLabels'
-      end
-      object KeyFieldsMenuItem: TMenuItem
-        Caption = 'KeyFields'
       end
       object ProjectPasswordMenuItem: TMenuItem
         Caption = 'Set Password'
@@ -266,16 +278,31 @@ object MainForm: TMainForm
       object StudyInfoMenuItem: TMenuItem
         Caption = 'StudyInfo'
       end
-      object MenuItem1: TMenuItem
-        Caption = '-'
-      end
-      object RenameControlsMenuItem: TMenuItem
-        Caption = 'RenameControls'
-      end
       object MenuItem30: TMenuItem
         Caption = '-'
       end
       object ProjectPropertiesMenuItem: TMenuItem
+        Caption = 'Properties'
+      end
+    end
+    object DataformMenu: TMenuItem
+      Caption = 'Dataform'
+      object KeyFieldsMenuItem: TMenuItem
+        Caption = 'KeyFields'
+      end
+      object RenameControlsMenuItem: TMenuItem
+        Caption = 'RenameControls'
+      end
+      object MenuItem3: TMenuItem
+        Caption = '-'
+      end
+      object BrowseDataMenuItem: TMenuItem
+        Caption = 'BrowseData'
+      end
+      object MenuItem1: TMenuItem
+        Caption = '-'
+      end
+      object DataformPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
       end
     end
@@ -299,17 +326,8 @@ object MainForm: TMainForm
           Action = CodeBookReportAction
         end
       end
-      object MenuItem3: TMenuItem
-        Caption = '-'
-      end
-      object BrowseDataMenuItem: TMenuItem
-        Caption = 'BrowseData'
-      end
       object MenuItem4: TMenuItem
         Caption = '-'
-      end
-      object MenuItem5: TMenuItem
-        Action = PrepareDoubleEntryAction
       end
       object MenuItem22: TMenuItem
         Action = VerifyDoubleEntryAction
@@ -326,6 +344,12 @@ object MainForm: TMainForm
     end
     object ToolsMenu: TMenuItem
       Caption = '&Tools'
+      object MenuItem5: TMenuItem
+        Action = PrepareDoubleEntryAction
+      end
+      object MenuItem18: TMenuItem
+        Caption = '-'
+      end
       object ExportMenuItem: TMenuItem
         Action = ExportAction
       end
@@ -532,7 +556,7 @@ object MainForm: TMainForm
   end
   object DefineProjectPopupMenu: TPopupMenu
     left = 64
-    top = 40
+    top = 56
     object MenuItem7: TMenuItem
       Action = NewProjectAction
     end
@@ -546,26 +570,17 @@ object MainForm: TMainForm
       Caption = 'Open Recent...'
     end
   end
-  object ProjectDetailsPopupMenu: TPopupMenu
-    left = 152
-    top = 112
+  object ProjectPopupMenu: TPopupMenu
+    left = 136
+    top = 160
     object ValueLabelEditorPopupMenuItem: TMenuItem
       Caption = 'ValueLabelEditor'
-    end
-    object KeyFieldsPopupMenuItem: TMenuItem
-      Caption = 'KeyFields'
     end
     object SetPasswordPopupMenuItem: TMenuItem
       Caption = 'Password'
     end
     object StudyInfoPopupMenuItem: TMenuItem
       Caption = 'StudyInfo'
-    end
-    object MenuItem29: TMenuItem
-      Caption = '-'
-    end
-    object RenameControlsPopupMenuItem: TMenuItem
-      Caption = 'RenameControls'
     end
     object MenuItem32: TMenuItem
       Caption = '-'
@@ -575,8 +590,8 @@ object MainForm: TMainForm
     end
   end
   object DocumentPopupMenu: TPopupMenu
-    left = 280
-    top = 48
+    left = 304
+    top = 160
     object MenuItem9: TMenuItem
       Caption = 'Report Structure'
       object MenuItem10: TMenuItem
@@ -595,17 +610,8 @@ object MainForm: TMainForm
         Action = CodeBookReportAction
       end
     end
-    object MenuItem15: TMenuItem
-      Caption = '-'
-    end
-    object BrowseDatasetMenuItem: TMenuItem
-      Caption = 'BrowseData'
-    end
     object MenuItem16: TMenuItem
       Caption = '-'
-    end
-    object MenuItem18: TMenuItem
-      Action = PrepareDoubleEntryAction
     end
     object MenuItem17: TMenuItem
       Action = VerifyDoubleEntryAction
@@ -618,6 +624,28 @@ object MainForm: TMainForm
     end
     object MenuItem28: TMenuItem
       Action = ValidationReportAction
+    end
+  end
+  object DataformPopupMenu: TPopupMenu
+    left = 224
+    top = 56
+    object KeyFieldsPopupMenuItem: TMenuItem
+      Caption = 'KeyFields'
+    end
+    object RenameControlsPopupMenuItem: TMenuItem
+      Caption = 'RenameControls'
+    end
+    object MenuItem15: TMenuItem
+      Caption = '-'
+    end
+    object BrowseDatasetMenuItem: TMenuItem
+      Caption = 'BrowseData'
+    end
+    object MenuItem29: TMenuItem
+      Caption = '-'
+    end
+    object DataformPropertiesPopupMenuItem: TMenuItem
+      Caption = 'Properties'
     end
   end
 end

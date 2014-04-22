@@ -15,6 +15,13 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    DataFormBtn: TButton;
+    DataformMenu: TMenuItem;
+    DataformPropertiesMenuItem: TMenuItem;
+    MenuItem1: TMenuItem;
+    DataformPropertiesPopupMenuItem: TMenuItem;
+    MenuItem34: TMenuItem;
+    DataformPopupMenu: TPopupMenu;
     VLSetFromDataAction: TAction;
     ImportCBInNewProjectAction: TAction;
     MenuItem13: TMenuItem;
@@ -80,7 +87,7 @@ type
     ProjectPropertiesPopupMenuItem: TMenuItem;
     SetPasswordPopupMenuItem: TMenuItem;
     StudyInfoPopupMenuItem: TMenuItem;
-    ProjectDetailsPopupMenu: TPopupMenu;
+    ProjectPopupMenu: TPopupMenu;
     SelectAllBoolMenuItem: TMenuItem;
     SelectAllStringMenuItem: TMenuItem;
     SelectAllFloatMenuItem: TMenuItem;
@@ -115,7 +122,6 @@ type
     PackAction: TAction;
     ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
-    MenuItem1: TMenuItem;
     EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
@@ -172,6 +178,7 @@ type
     procedure CodeBookReportActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure CountsReportActionExecute(Sender: TObject);
+    procedure DataFormBtnClick(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure DefineProjectBtnClick(Sender: TObject);
     procedure DocumentBtnClick(Sender: TObject);
@@ -335,6 +342,11 @@ end;
 procedure TMainForm.CountsReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportCounts);
+end;
+
+procedure TMainForm.DataFormBtnClick(Sender: TObject);
+begin
+  DataformPopupMenu.PopUp;
 end;
 
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
@@ -636,7 +648,7 @@ end;
 
 procedure TMainForm.ProjectDetailsBtnClick(Sender: TObject);
 begin
-  ProjectDetailsPopupMenu.PopUp;
+  ProjectPopupMenu.PopUp;
 end;
 
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
@@ -1051,10 +1063,11 @@ begin
   SelectMenu.Visible        := Assigned(FActiveFrame);
   MenuItem25.Visible        := Assigned(FActiveFrame);
 
-  // PROJECT Details:
+  // PROJECT:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
-  KeyFieldsMenuItem.Visible := Assigned(FActiveFrame);
-  StudyInfoMenuItem.Visible := Assigned(FActiveFrame);
+
+  // Dataform:
+  DataformMenu.Visible      := Assigned(FActiveFrame);
 
   // Document:
   BrowseDataMenuItem.Visible := Assigned(FActiveFrame);
@@ -1070,6 +1083,7 @@ begin
     ManagerSettings.ShowWorkToolBar;
 
   ProjectDetailsBtn.Enabled := Assigned(FActiveFrame);
+  DataFormBtn.Enabled := ProjectDetailsBtn.Enabled;
 end;
 
 procedure TMainForm.UpdateShortCuts;
