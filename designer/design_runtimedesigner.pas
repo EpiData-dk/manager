@@ -16,6 +16,7 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame, IProjectFrame)
+    DefineKeyAction: TAction;
     DataformPropertiesAction: TAction;
     ImportCBAction: TAction;
     RenameControlsAction: TAction;
@@ -181,6 +182,7 @@ type
     procedure CutCopyControlUpdate(Sender: TObject);
     procedure CutControlActionExecute(Sender: TObject);
     procedure DataformPropertiesActionExecute(Sender: TObject);
+    procedure DefineKeyActionExecute(Sender: TObject);
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DeleteControlFastActionExecute(Sender: TObject);
@@ -372,7 +374,9 @@ uses
   design_control_extender,
   align_form,
   recode_form,
-  rename_form;
+  rename_form,
+  project_keyfields_form
+  ;
 
 { TRuntimeDesignFrame }
 
@@ -2437,6 +2441,12 @@ begin
       UpdateDesigner;
     end;
 
+    if (Selector.Count = 1) and (Ctrl = FDesignPanel)
+    then
+      EditPopupMenuItem.Action := DataformPropertiesAction
+    else
+      EditPopupMenuItem.Action := EditControlAction;
+
     // Delete previous "Select..." menu -> if it didn't exists then
     // .free is called on Nil which is OK (causes no A/V).
     // We cannot put this in OnClose for the pop-up because on Windows,
@@ -2711,6 +2721,17 @@ begin
   ShowPropertiesForm(false);
 end;
 
+procedure TRuntimeDesignFrame.DefineKeyActionExecute(Sender: TObject);
+var
+  F: TKeyFieldsForm;
+begin
+  F := TKeyFieldsForm.Create(Self, DataFile, DataFile.ValueLabels);
+  F.ShowModal;
+  F.Free;
+
+  PropertiesForm.ReloadControls;
+end;
+
 function TRuntimeDesignFrame.GetDataFile: TEpiDataFile;
 begin
   result := FDatafile;
@@ -2948,6 +2969,8 @@ begin
     SelectAllBoolMenuItem.Action     := SelectAllBoolsAction;
 
     // Dataform
+    KeyFieldsMenuItem.Action         := DefineKeyAction;
+    KeyFieldsPopupMenuItem.Action    := DefineKeyAction;
     DataformPropertiesMenuItem.Action := DataformPropertiesAction;
     DataformPropertiesPopupMenuItem.Action := DataformPropertiesAction;
 

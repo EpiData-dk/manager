@@ -1,9 +1,9 @@
 object KeyFieldsForm: TKeyFieldsForm
-  Left = 769
+  Left = 576
   Height = 507
-  Top = 266
+  Top = 269
   Width = 509
-  Caption = 'Define Key Fields'
+  Caption = 'Define Key'
   ClientHeight = 507
   ClientWidth = 509
   OnCloseQuery = FormCloseQuery
@@ -99,11 +99,11 @@ object KeyFieldsForm: TKeyFieldsForm
       Left = 10
       Height = 15
       Top = 22
-      Width = 160
+      Width = 175
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Bottom = 3
-      Caption = 'Key Fields (unique index):'
+      Caption = 'Fields in Key (unique index):'
       ParentColor = False
     end
     object TopBevel: TBevel
@@ -248,11 +248,11 @@ object KeyFieldsForm: TKeyFieldsForm
       Left = 10
       Height = 22
       Top = 435
-      Width = 236
+      Width = 245
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Bottom = 5
-      Caption = 'Show index status while selecting'
+      Caption = 'Show unique status while selecting'
       OnChange = RealTimeStatusChkBoxChange
       TabOrder = 0
     end

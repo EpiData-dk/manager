@@ -2524,8 +2524,12 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object DataformPropertiesAction: TAction
       Category = 'Edit'
-      Caption = 'Properties'
+      Caption = 'Dataform Properties'
       OnExecute = DataformPropertiesActionExecute
+    end
+    object DefineKeyAction: TAction
+      Caption = 'Define Key'
+      OnExecute = DefineKeyActionExecute
     end
   end
   object OtherFieldsPopup: TPopupMenu

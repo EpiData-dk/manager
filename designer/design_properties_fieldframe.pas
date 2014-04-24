@@ -34,6 +34,7 @@ type
     Bevel7: TBevel;
     CalcFieldLabel: TLabel;
     CalcSheet: TTabSheet;
+    ZeroFilledChkBox: TCheckBox;
     GotoDataformLabel: TLabel;
     RelateValueBevel: TBevel;
     RelateScrollBox: TScrollBox;
@@ -1385,6 +1386,7 @@ begin
   RangesGrpBox.Visible            := FieldsMustHaveFieldTypes(RangeFieldTypes) and FieldsHaveSameFieldType;
 
   // - extended
+  ExtendedSheet.TabVisible        := not FieldsMustHaveFieldTypes(AutoFieldTypes);
   ExtendedSheet.Enabled           := not IsRelatedKeyField;
   EntryRadioGroup.Visible         := FieldsMustHaveFieldTypes(EntryModeFieldTypes);
   ConfirmEntryChkBox.Visible      := FieldsMustHaveFieldTypes(ConfirmEntryFieldTypes);
@@ -1393,7 +1395,8 @@ begin
   DefaulValueLabel.Visible        := DefaultValueEdit.Visible;
   ValueLabelSettingGrpBox.Visible := FieldsMustHaveFieldTypes(ValueLabelFieldTypes) and FieldsHaveSameFieldType;
   CompareGroupBox.Visible         := FieldsMustHaveFieldTypes(CompareFieldTypes);
-  ExtendedSheet.TabVisible        := not FieldsMustHaveFieldTypes(AutoFieldTypes);
+  ZeroFilledChkBox.Visible        := FieldsMustHaveFieldTypes(IntFieldTypes);
+  ZeroFilledChkBox.AllowGrayed    := ManyFields;
 
   // - jumps
   JumpSheet.TabVisible            := FieldsMustHaveFieldTypes(JumpsFieldTypes) and FieldsHaveSameFieldType;
@@ -1573,6 +1576,14 @@ begin
   UpdateValueLabelWriteTo;
 
   UpdateComparison;
+
+  if ZeroFilledChkBox.Visible then
+  begin
+    ZeroFilledChkBox.Checked := TEpiIntField(Field).ZeroFilled;
+    for i := 1 to FieldCount - 1 do
+      if ClearOrLeaveChkBox(ZeroFilledChkBox, TEpiIntField(Fields[i]).ZeroFilled)
+      then break;
+  end;
 
   // ---------
   // Jumps
@@ -2074,6 +2085,13 @@ begin
       end;
     end;
   end;
+
+  // ZeroFilled
+  if (ZeroFilledChkBox.Visible) and
+     (ZeroFilledChkBox.State <> cbGrayed)
+  then
+    for i := 0 to FieldCount - 1 do
+      TEpiIntField(Fields[i]).ZeroFilled := ZeroFilledChkBox.Checked;
 
   // Jumps
   if (not ComboIgnoreSelected(UseJumpsCombo)) then

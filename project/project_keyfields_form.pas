@@ -142,7 +142,7 @@ begin
   S := 'Add ';
   if FDataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
     S := 'Update ';
-  AddIndexFieldAction.Caption := S + 'Index Field';
+  AddIndexFieldAction.Caption := S + 'Status Field';
 end;
 
 procedure TKeyFieldsForm.AddNewIndexActionExecute(Sender: TObject);

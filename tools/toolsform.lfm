@@ -1,11 +1,11 @@
 object ToolsForm: TToolsForm
   Left = 772
-  Height = 485
+  Height = 544
   Top = 264
-  Width = 355
+  Width = 448
   Caption = 'ToolsForm'
-  ClientHeight = 485
-  ClientWidth = 355
+  ClientHeight = 544
+  ClientWidth = 448
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
@@ -13,18 +13,18 @@ object ToolsForm: TToolsForm
   object Panel1: TPanel
     Left = 0
     Height = 50
-    Top = 435
-    Width = 355
+    Top = 494
+    Width = 448
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 355
+    ClientWidth = 448
     TabOrder = 0
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 290
+      Left = 383
       Height = 32
       Top = 9
       Width = 54
@@ -41,7 +41,7 @@ object ToolsForm: TToolsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 199
+      Left = 292
       Height = 34
       Top = 8
       Width = 81
@@ -56,46 +56,27 @@ object ToolsForm: TToolsForm
     end
   end
   object Panel2: TPanel
-    Left = 144
-    Height = 435
+    Left = 0
+    Height = 494
     Top = 0
-    Width = 211
-    Align = alRight
+    Width = 448
+    Align = alClient
     Caption = 'Panel2'
-    ClientHeight = 435
-    ClientWidth = 211
+    ClientHeight = 494
+    ClientWidth = 448
     Constraints.MinHeight = 300
     Constraints.MinWidth = 150
     TabOrder = 1
-    object DataFilesListView: TListView
-      Left = 3
-      Height = 278
-      Top = 34
-      Width = 205
-      Align = alClient
-      BorderSpacing.Left = 2
-      BorderSpacing.Top = 2
-      BorderSpacing.Right = 2
-      BorderSpacing.InnerBorder = 2
-      Checkboxes = True
-      Columns = <>
-      ColumnClick = False
-      ReadOnly = True
-      ScrollBars = ssAutoBoth
-      ShowColumnHeaders = False
-      TabOrder = 0
-      OnSelectItem = DataFilesListViewSelectItem
-    end
     object DataSetInfoPanel: TPanel
       Left = 1
       Height = 122
-      Top = 312
-      Width = 209
+      Top = 371
+      Width = 446
       Align = alBottom
       BevelOuter = bvNone
       ClientHeight = 122
-      ClientWidth = 209
-      TabOrder = 1
+      ClientWidth = 446
+      TabOrder = 0
       object Label2: TLabel
         AnchorSideLeft.Control = DataSetInfoPanel
         AnchorSideBottom.Control = FieldCountPanel
@@ -155,7 +136,7 @@ object ToolsForm: TToolsForm
         Left = 82
         Height = 22
         Top = 10
-        Width = 117
+        Width = 354
         Alignment = taLeftJustify
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
@@ -173,7 +154,7 @@ object ToolsForm: TToolsForm
         Left = 82
         Height = 22
         Top = 37
-        Width = 117
+        Width = 354
         Alignment = taLeftJustify
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
@@ -191,7 +172,7 @@ object ToolsForm: TToolsForm
         Left = 82
         Height = 22
         Top = 64
-        Width = 117
+        Width = 354
         Alignment = taLeftJustify
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
@@ -209,7 +190,7 @@ object ToolsForm: TToolsForm
         Left = 82
         Height = 22
         Top = 91
-        Width = 117
+        Width = 354
         Alignment = taLeftJustify
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 5
@@ -224,12 +205,12 @@ object ToolsForm: TToolsForm
       Left = 1
       Height = 31
       Top = 1
-      Width = 209
+      Width = 446
       Align = alTop
       BevelOuter = bvNone
       ClientHeight = 31
-      ClientWidth = 209
-      TabOrder = 2
+      ClientWidth = 446
+      TabOrder = 1
       object Label1: TLabel
         AnchorSideLeft.Control = Panel5
         Left = 10
@@ -241,23 +222,27 @@ object ToolsForm: TToolsForm
         ParentColor = False
       end
     end
-  end
-  object Splitter1: TSplitter
-    Left = 139
-    Height = 435
-    Top = 0
-    Width = 5
-    Align = alRight
-    AutoSnap = False
-    Beveled = True
-    ResizeAnchor = akRight
-  end
-  object OptionsPanel: TPanel
-    Left = 0
-    Height = 435
-    Top = 0
-    Width = 139
-    Align = alClient
-    TabOrder = 3
+    object VirtualStringTree1: TVirtualStringTree
+      Left = 1
+      Height = 339
+      Top = 32
+      Width = 446
+      Align = alClient
+      DefaultText = 'Node'
+      Header.AutoSizeIndex = 0
+      Header.Columns = <>
+      Header.DefaultHeight = 17
+      Header.MainColumn = -1
+      ScrollBarOptions.AlwaysVisible = True
+      ScrollBarOptions.ScrollBars = ssAutoBoth
+      TabOrder = 2
+      TreeOptions.AutoOptions = [toAutoDropExpand, toAutoScrollOnExpand, toAutoDeleteMovedNodes]
+      TreeOptions.MiscOptions = [toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
+      OnChecked = VirtualStringTree1Checked
+      OnChecking = VirtualStringTree1Checking
+      OnGetText = VirtualStringTree1GetText
+      OnInitChildren = VirtualStringTree1InitChildren
+      OnInitNode = VirtualStringTree1InitNode
+    end
   end
 end

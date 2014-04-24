@@ -152,7 +152,7 @@ object ProjectFrame: TProjectFrame
     object NewDataFormAction: TAction
       Category = 'DataForm'
       Caption = 'New Data Form'
-      Hint = 'New Data Form'
+      Hint = 'New Relate DataForm'
       ImageIndex = 3
       OnExecute = NewDataFormActionExecute
     end

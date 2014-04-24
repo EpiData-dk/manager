@@ -179,14 +179,14 @@ var
   F: TKeyFieldsForm;
   NodeData: TNodeData;
 begin
-  NodeData := TNodeData(DataFilesTreeView.Selected.Data);
+{  NodeData := TNodeData(DataFilesTreeView.Selected.Data);
   if NodeData.DataFile = nil then exit;
 
   F := TKeyFieldsForm.Create(Self, NodeData.DataFile, EpiDocument.ValueLabelSets);
   F.ShowModal;
   F.Free;
 
-  PropertiesForm.ReloadControls;
+  PropertiesForm.ReloadControls;   }
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -666,7 +666,7 @@ begin
     if Df.KeyFields.Count = 0 then
     begin
       ShowMessage(
-        'You must define at least 1 keyfield' + LineEnding +
+        'You must define a key with at least 1 field' + LineEnding +
         'before you can create a related dataform'
       );
       Exit;
@@ -678,8 +678,8 @@ begin
       if MR.Datafile.KeyFields.Count = Df.KeyFields.Count then
       begin
         ShowMessage(
-          'This dataform MUST have at least 1 keyfield more than' + LineEnding +
-          'its parent!'
+          'You must define a key with at least 1 field more than' + LineEnding +
+          'in the parent dataform!'
         );
         Exit;
       end;
@@ -1307,14 +1307,12 @@ begin
     ProjectPropertiesMenuItem.Action := ProjectSettingsAction;
     ValueLabelsMenuItem.Action       := ValueLabelEditorAction;
     ProjectPasswordMenuItem.Action   := ProjectPasswordAction;
-    KeyFieldsMenuItem.Action         := KeyFieldsAction;
     StudyInfoMenuItem.Action         := StudyInformationAction;
 
     // --project details popup-menu
     ProjectPropertiesPopupMenuItem.Action := ProjectSettingsAction;
     ValueLabelEditorPopupMenuItem.Action  := ValueLabelEditorAction;
     SetPasswordPopupMenuItem.Action       := ProjectPasswordAction;
-    KeyFieldsPopupMenuItem.Action         := KeyFieldsAction;
     StudyInfoPopupMenuItem.Action         := StudyInformationAction;
   end;
   FActiveFrame.AssignActionLinks;
