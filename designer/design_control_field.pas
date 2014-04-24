@@ -117,12 +117,14 @@ begin
   T.OnTimer := @HintDeactivate;
 
   H := THintWindow.Create(T);
-  H.OnHide := @HintDeactivate;
-  R := H.CalcHintRect(0, Msg, nil);
+  H.HideInterval := 3000;
+  H.AutoHide := true;
 
+  R := H.CalcHintRect(0, Msg, nil);
   P := Self.ClientToScreen(Point(Self.Width + 2, 0));
   OffsetRect(R, P.X, P.Y);
   H.ActivateHint(R, Msg);
+
   T.Enabled := true;
 end;
 

@@ -432,6 +432,8 @@ begin
   with FDataFile do
     for i := 0 to KeyFields.Count - 1 do
       SetItemIndexOnField(DoAddNewKey, KeyFields[i]);
+
+  Caption := 'Define Key (' + Datafile.Caption.Text + ')';
 end;
 
 destructor TKeyFieldsForm.Destroy;

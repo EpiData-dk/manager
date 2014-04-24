@@ -36,6 +36,8 @@ type
       Node: PVirtualNode);
     procedure VirtualStringTree1Checking(Sender: TBaseVirtualTree;
       Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
+    procedure VirtualStringTree1FocusChanged(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Column: TColumnIndex);
     procedure VirtualStringTree1GetText(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
       var CellText: String);
@@ -68,13 +70,31 @@ uses
 procedure TToolsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 var
   i: Integer;
+
+
+  procedure RecurseAddDF(Node: PVirtualNode);
+  var
+    MR: TEpiMasterRelation;
+    Run: PVirtualNode;
+  begin
+    Run := Node^.FirstChild;
+
+    while Assigned(Run) do
+    begin
+      MR := TEpiMasterRelation(VirtualStringTree1.GetNodeData(Run)^);
+
+      if VirtualStringTree1.CheckState[Run] in [csCheckedNormal, csMixedNormal] then
+        FSelectedDatafiles.Add(MR.Datafile);
+
+      RecurseAddDF(Run);
+      Run := Run^.NextSibling;
+    end;
+  end;
+
 begin
   CanClose := true;
 
-{  for i := 0 to DataFilesListView.Items.Count - 1 do
-    with DataFilesListView.Items[i] do
-      if Checked then
-        FSelectedDatafiles.Add(Data);}
+  RecurseAddDF(VirtualStringTree1.RootNode);
 
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, Self.ClassName);
@@ -115,6 +135,21 @@ begin
 
   if (Node^.Parent <> nil) and (NewState = csUncheckedNormal) then
     Allowed := Sender.CheckState[Node^.Parent] = csUncheckedNormal;
+end;
+
+procedure TToolsForm.VirtualStringTree1FocusChanged(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex);
+var
+  MR: TEpiMasterRelation;
+  DF: TEpiDataFile;
+begin
+  MR := TEpiMasterRelation(Sender.GetNodeData(Node)^);
+  DF := MR.Datafile;
+
+  FieldCountPanel.Caption   := IntToStr(DF.Fields.Count);
+  SectionCountPanel.Caption := IntToStr(DF.Sections.Count);
+  RecordCountPanel.Caption  := IntToStr(DF.Size);
+  DeletedCountPanel.Caption := IntToStr(DF.DeletedCount);
 end;
 
 procedure TToolsForm.VirtualStringTree1GetText(Sender: TBaseVirtualTree;

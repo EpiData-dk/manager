@@ -28,7 +28,9 @@ object ProjectFrame: TProjectFrame
       AutoExpand = True
       DefaultItemHeight = 18
       HotTrack = True
+      ParentShowHint = False
       ScrollBars = ssAutoBoth
+      ShowHint = True
       TabOrder = 0
       OnChanging = DataFilesTreeViewChanging
       OnDeletion = DataFilesTreeViewDeletion
@@ -36,6 +38,7 @@ object ProjectFrame: TProjectFrame
       OnEditing = DataFilesTreeViewEditing
       OnEditingEnd = DataFilesTreeViewEditingEnd
       OnSelectionChanged = DataFilesTreeViewSelectionChanged
+      OnShowHint = DataFilesTreeViewShowHint
       Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoHotTrack, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end
     object ToolBar1: TToolBar

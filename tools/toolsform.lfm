@@ -240,6 +240,7 @@ object ToolsForm: TToolsForm
       TreeOptions.MiscOptions = [toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
       OnChecked = VirtualStringTree1Checked
       OnChecking = VirtualStringTree1Checking
+      OnFocusChanged = VirtualStringTree1FocusChanged
       OnGetText = VirtualStringTree1GetText
       OnInitChildren = VirtualStringTree1InitChildren
       OnInitNode = VirtualStringTree1InitNode

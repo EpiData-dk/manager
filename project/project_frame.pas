@@ -50,6 +50,7 @@ type
     procedure DataFilesTreeViewEditingEnd(Sender: TObject; Node: TTreeNode;
       Cancel: Boolean);
     procedure DataFilesTreeViewSelectionChanged(Sender: TObject);
+    procedure DataFilesTreeViewShowHint(Sender: TObject; HintInfo: PHintInfo);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
     procedure DocumentProgress(const Sender: TEpiCustomBase;
@@ -273,6 +274,20 @@ begin
     AlignForm.DesignFrame := TRuntimeDesignFrame(ND.DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
 end;
 
+procedure TProjectFrame.DataFilesTreeViewShowHint(Sender: TObject;
+  HintInfo: PHintInfo);
+var
+  Node: TTreeNode;
+begin
+  with HintInfo^ do
+  begin
+    Node := DataFilesTreeView.GetNodeAt(CursorPos.X, CursorPos.Y);
+
+    if Assigned(Node) then
+      HintStr := TNodeData(Node.Data).DataFile.Caption.Text;
+  end;
+end;
+
 procedure TProjectFrame.DeleteDataFormActionExecute(Sender: TObject);
 var
   CurrentNode: TTreeNode;
@@ -300,12 +315,8 @@ begin
 
   if Res = mrNo then exit;
 
-  NewNode := CurrentNode.GetPrev;
-  if not Assigned(NewNode) then
-    NewNode := CurrentNode.GetNextSibling;
-
+  NewNode := CurrentNode.Parent;
   CurrentNode.Free;
-//  Relation.Free;
   FActiveFrame := nil;
 
   DataFilesTreeView.Selected := NewNode;
