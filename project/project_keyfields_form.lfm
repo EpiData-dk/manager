@@ -267,6 +267,7 @@ object KeyFieldsForm: TKeyFieldsForm
     end
     object AddNewIndexAction: TAction
       OnExecute = AddNewIndexActionExecute
+      OnUpdate = AddNewIndexActionUpdate
     end
     object DeleteIndexAction: TAction
       OnExecute = DeleteIndexActionExecute

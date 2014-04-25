@@ -203,7 +203,7 @@ object ExportForm: TExportForm
         BorderSpacing.Left = 10
         BorderSpacing.Right = 20
         BorderSpacing.Bottom = 20
-        Caption = 'Fields'
+        Caption = 'Select Dataform and Fields:'
         ClientHeight = 403
         ClientWidth = 388
         TabOrder = 4

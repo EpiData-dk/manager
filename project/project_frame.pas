@@ -5,16 +5,17 @@ unit project_frame;
 interface
 
 uses
-  Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList,
-  Controls, Dialogs, epidocument, epidatafiles, epicustombase, epirelations,
-  manager_messages, LMessages, epiv_documentfile, types, design_runtimedesigner,
-  project_types;
+  Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList, Controls,
+  Dialogs, epidocument, epidatafiles, epicustombase, epirelations,
+  manager_messages, LMessages, Menus, epiv_documentfile, types,
+  design_runtimedesigner, project_types;
 
 type
 
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ProjectRecentFilesDropDownMenu: TPopupMenu;
     ProgressBar1: TProgressBar;
     Splitter1: TSplitter;
     StudyInformationAction: TAction;
@@ -121,6 +122,8 @@ type
     { Messages }
     // Message relaying...
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
+    procedure OpenRecentMenuItemClick(Sender: TObject);
+    procedure UpdateRecentFilesDropDown;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -149,7 +152,7 @@ uses
   Clipbrd, epimiscutils,
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2, LazFileUtils,
-  managerprocs, Menus, LCLType, LCLIntf, project_settings,
+  managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame, epidatafilestypes,
   design_properties_form;
@@ -399,6 +402,11 @@ end;
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
 begin
   PostMessage(MainForm.Handle, LM_MAIN_OPENPROJECT, 0, 0);
+end;
+
+procedure TProjectFrame.OpenRecentMenuItemClick(Sender: TObject);
+begin
+  PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, WParam(Sender), 0);
 end;
 
 procedure TProjectFrame.ProjectPasswordActionExecute(Sender: TObject);
@@ -1149,6 +1157,32 @@ begin
     Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);   }
 end;
 
+procedure TProjectFrame.UpdateRecentFilesDropDown;
+var
+  Mi: TMenuItem;
+  K: Word;
+  Shift: TShiftState;
+  i: Integer;
+begin
+  ShortCutToKey(M_OpenRecent, K, Shift);
+
+  LoadRecentFilesIni(GetRecentIniFileName);
+
+  ProjectRecentFilesDropDownMenu.Items.Clear;
+
+  for i := 0 to RecentFiles.Count - 1 do
+  begin
+    // Main menu
+    Mi := TMenuItem.Create(ProjectRecentFilesDropDownMenu);
+    Mi.Name := 'project_frame_recent' + inttostr(i);
+    Mi.Caption := RecentFiles[i];
+    Mi.OnClick := @OpenRecentMenuItemClick;
+    if i < 9 then
+      Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
+    ProjectRecentFilesDropDownMenu.Items.Add(Mi);
+  end;
+end;
+
 constructor TProjectFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -1165,6 +1199,7 @@ begin
   FHintWindow.AutoHide := true;
   FHintWindow.HideInterval := 5 * 1000;
 
+  UpdateRecentFilesDropDown;
   LoadSplitterPosition(Splitter1, 'ProjectSplitter');
 
   FRootNode := DataFilesTreeView.Items.AddObject(nil, 'Root', nil);

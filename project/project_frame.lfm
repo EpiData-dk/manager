@@ -369,4 +369,8 @@ object ProjectFrame: TProjectFrame
       FF00FFFFFF00FFFFFF00FFFFFF00
     }
   end
+  object ProjectRecentFilesDropDownMenu: TPopupMenu
+    left = 280
+    top = 120
+  end
 end

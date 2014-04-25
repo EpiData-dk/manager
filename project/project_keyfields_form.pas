@@ -34,6 +34,7 @@ type
     procedure AddIndexFieldActionExecute(Sender: TObject);
     procedure AddIndexFieldActionUpdate(Sender: TObject);
     procedure AddNewIndexActionExecute(Sender: TObject);
+    procedure AddNewIndexActionUpdate(Sender: TObject);
     procedure DeleteIndexActionExecute(Sender: TObject);
     procedure DeleteIndexActionUpdate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -150,6 +151,11 @@ begin
   DoAddNewKey;
 end;
 
+procedure TKeyFieldsForm.AddNewIndexActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := GetRelation.DetailRelations.Count = 0;
+end;
+
 procedure TKeyFieldsForm.DeleteIndexActionExecute(Sender: TObject);
 begin
   DoDeleteKey;
@@ -160,6 +166,7 @@ var
   Cmb: TComboBox;
 begin
   Cmb := TComboBox(FKeyList.Last);
+
   TAction(Sender).Enabled :=
     Assigned(Cmb) and
     Cmb.Enabled;
@@ -361,7 +368,12 @@ begin
   begin
     Combo.ItemIndex := Idx;
     MR := GetRelation;
-    if (MR is TEpiDetailRelation) then
+
+    Combo.Enabled := not (MR.DetailRelations.Count > 0);
+
+    if (MR is TEpiDetailRelation) and
+       (Combo.Enabled)
+    then
     begin
       MasterDF := TEpiDetailRelation(MR).MasterRelation.Datafile;
       Combo.Enabled := not (MasterDF.KeyFields.ItemExistsByName(Field.Name));
