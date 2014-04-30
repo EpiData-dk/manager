@@ -1006,6 +1006,10 @@ begin
         efceValueLabelSet:
           for DetailField in DetailFields do
             DetailField.ValueLabelSet := MasterField.ValueLabelSet;
+
+        efceZeroFilled:
+          for DetailField in DetailFields do
+            TEpiIntField(DetailField).ZeroFilled := TEpiIntField(MasterField).ZeroFilled;
       end;
   end;
 end;
