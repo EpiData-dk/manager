@@ -13,9 +13,9 @@ object StudyUnitFrame: TStudyUnitFrame
     Height = 422
     Top = 0
     Width = 656
-    ActivePage = WelcomeSheet
+    ActivePage = TabSheet3
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 0
     TabPosition = tpRight
     object WelcomeSheet: TTabSheet
@@ -115,7 +115,7 @@ object StudyUnitFrame: TStudyUnitFrame
         Left = 10
         Height = 25
         Top = 27
-        Width = 580
+        Width = 523
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -131,9 +131,9 @@ object StudyUnitFrame: TStudyUnitFrame
         AnchorSideBottom.Control = TitleSheet
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 407
+        Height = 327
         Top = 79
-        Width = 580
+        Width = 523
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -179,7 +179,7 @@ object StudyUnitFrame: TStudyUnitFrame
         Left = 10
         Height = 25
         Top = 27
-        Width = 506
+        Width = 523
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -221,7 +221,7 @@ object StudyUnitFrame: TStudyUnitFrame
         Left = 10
         Height = 173
         Top = 186
-        Width = 506
+        Width = 523
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
@@ -252,7 +252,7 @@ object StudyUnitFrame: TStudyUnitFrame
         Height = 25
         Hint = 'Default language - two letter ISO. Eg:'#10'en, de, da, fr'
         Top = 79
-        Width = 506
+        Width = 523
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -336,9 +336,9 @@ object StudyUnitFrame: TStudyUnitFrame
         AnchorSideBottom.Control = TabSheet3
         AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 126
+        Height = 35
         Top = 394
-        Width = 506
+        Width = 523
         Anchors = [akTop, akLeft, akRight, akBottom]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10

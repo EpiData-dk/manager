@@ -286,7 +286,9 @@ begin
   begin
     Node := DataFilesTreeView.GetNodeAt(CursorPos.X, CursorPos.Y);
 
-    if Assigned(Node) then
+    if Assigned(Node) and
+       (Node <> FRootNode)
+    then
       HintStr := TNodeData(Node.Data).DataFile.Caption.Text;
   end;
 end;

@@ -127,6 +127,10 @@ begin
     WelcomeSheet.TabVisible := false;
     PageControl1.ActivePage := TitleSheet;
   end;
+
+  {$IFDEF darwin}
+  PageControl1.TabPosition := tpTop;
+  {$ENDIF}
 end;
 
 procedure TStudyUnitFrame.UpdateFrame;
@@ -136,7 +140,8 @@ end;
 
 procedure TStudyUnitFrame.Activate;
 begin
-  BringToFront;
+//  BringToFront;
+  Show;
 end;
 
 function TStudyUnitFrame.DeActivate(aHide: boolean): boolean;
@@ -207,7 +212,7 @@ begin
   end;
 
   if aHide then
-    SendToBack;
+    Hide;
 end;
 
 procedure TStudyUnitFrame.AssignActionLinks;
