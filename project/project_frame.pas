@@ -589,6 +589,7 @@ begin
   NodeData.DataFile := nil;
   NodeData.Relation := nil;
   FRootNode.Data := NodeData;
+  Frame.DeActivate(true);
 end;
 
 function TProjectFrame.DoSaveProject(AFileName: string): boolean;
@@ -715,7 +716,11 @@ begin
   Frame := DoNewRuntimeFrame(Result);
   NodeData.Frame := Frame;
   if ParentNode = FRootNode then
-    NodeData.Relation := EpiDocument.Relations.NewMasterRelation
+  begin
+    NodeData.Relation := EpiDocument.Relations.NewMasterRelation;
+    Frame.Activate;
+    Frame.DeActivate(true);
+  end
   else begin
     NodeData.Relation := TNodeData(ParentNode.Data).Relation.NewDetailRelation;
 
@@ -1371,4 +1376,5 @@ begin
 end;
 
 end.
+
 

@@ -136,7 +136,7 @@ begin
 
   with FDesignPanel.Canvas do
   begin
-    Pen.Style := psDot;
+    Pen.Style := psDash;
     Pen.Color := clBlack;
     Brush.Style := bsClear;
 

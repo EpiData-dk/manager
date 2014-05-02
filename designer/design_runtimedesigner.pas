@@ -2906,7 +2906,7 @@ end;
 procedure TRuntimeDesignFrame.Activate;
 begin
   Show;
-//  BringToFront;
+  BringToFront;
   FDesignPanel.Surface.Active := true;
   DesignerActionList.State := asNormal;
   MayHandleShortcuts := true;
@@ -2926,7 +2926,10 @@ begin
   MayHandleShortcuts := false;
   UpdateFrame;
   if aHide then
-    Hide; //SendToBack;
+  begin
+    SendToBack;
+    Hide;
+  end;
 
   Result := true;
 end;
