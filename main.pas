@@ -15,6 +15,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    Button1: TButton;
     DataFormBtn: TButton;
     DataformMenu: TMenuItem;
     DataformPropertiesMenuItem: TMenuItem;
@@ -172,6 +173,7 @@ type
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
+    procedure Button1Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
@@ -518,6 +520,27 @@ begin
     ActionList1.State := asSuspended
   else
     ActionList1.State := asNormal;
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+var
+  LocalDoc: boolean;
+  DocFile: TEpiDocumentFile;
+  Doc: TEpiDocument;
+  Df: TEpiDataFile;
+begin
+  DocFile := ToolsCheckOpenFile(false, LocalDoc);
+  if not Assigned(DocFile) then exit;
+
+  Doc := DocFile.Document;
+  for Df in Doc.DataFiles do
+    Df.Size := 0;
+
+  if LocalDoc then
+  begin
+    DocFile.SaveFile(DocFile.FileName);
+    DocFile.Free;
+  end;
 end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);

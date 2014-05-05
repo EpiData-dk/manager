@@ -80,6 +80,7 @@ object MainForm: TMainForm
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Document'
+      Enabled = False
       OnClick = DocumentBtnClick
       PopupMenu = DocumentPopupMenu
       TabOrder = 2
@@ -127,6 +128,16 @@ object MainForm: TMainForm
       Caption = 'Dataform'
       OnClick = DataFormBtnClick
       TabOrder = 5
+    end
+    object Button1: TButton
+      Left = 552
+      Height = 25
+      Top = 7
+      Width = 136
+      Caption = 'Empty Project'
+      OnClick = Button1Click
+      TabOrder = 6
+      Visible = False
     end
   end
   object MainMenu1: TMainMenu
@@ -308,6 +319,7 @@ object MainForm: TMainForm
     end
     object MenuItem21: TMenuItem
       Caption = 'Document'
+      Enabled = False
       object MenuItem2: TMenuItem
         Caption = 'Report Structure'
         object ProjectOverviewReportMenuItem: TMenuItem
@@ -512,6 +524,7 @@ object MainForm: TMainForm
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'
       Caption = 'Prepare Double Entry'
+      Enabled = False
       OnExecute = PrepareDoubleEntryActionExecute
     end
     object VerifyDoubleEntryAction: TAction
