@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 405
+  Left = 1656
   Height = 599
-  Top = 274
+  Top = 275
   Width = 803
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'

@@ -2570,16 +2570,25 @@ var
   Items: TJvDesignObjectArray;
   i: Integer;
   lEnabled: Boolean;
+  IEpiControl: IDesignEpiControl;
 begin
   lEnabled := true;
   Items := FDesignPanel.Surface.Selected;
 
   for i := Low(Items) to High(Items) do
-    if FDatafile.KeyFields.IndexOf((Items[i] as IDesignEpiControl).EpiControl) >= 0 then
+  begin
+    if not Supports(Items[i], IDesignEpiControl, IEpiControl) then
     begin
       lEnabled := false;
       break;
     end;
+
+    if FDatafile.KeyFields.IndexOf(IEpiControl.EpiControl) >= 0 then
+    begin
+      lEnabled := false;
+      break;
+    end;
+  end;
 
   lEnabled :=
     (lEnabled) and
