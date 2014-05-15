@@ -1,27 +1,27 @@
 object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
   Left = 0
-  Height = 450
+  Height = 476
   Top = 0
-  Width = 647
-  ClientHeight = 450
-  ClientWidth = 647
+  Width = 629
+  ClientHeight = 476
+  ClientWidth = 629
   TabOrder = 0
-  DesignLeft = 60
-  DesignTop = 473
+  DesignLeft = 355
+  DesignTop = 190
   object GroupBox3: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Bevel1
     AnchorSideBottom.Control = OptionsChkGrp
     Left = 10
-    Height = 303
+    Height = 329
     Top = 10
-    Width = 304
+    Width = 295
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 10
     BorderSpacing.Bottom = 10
     Caption = 'Key Fields:'
-    ClientHeight = 286
-    ClientWidth = 300
+    ClientHeight = 312
+    ClientWidth = 291
     TabOrder = 0
     object KFNoneBtn: TButton
       AnchorSideLeft.Control = GroupBox3
@@ -79,9 +79,9 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       AnchorSideBottom.Control = GroupBox3
       AnchorSideBottom.Side = asrBottom
       Left = 5
-      Height = 224
+      Height = 250
       Top = 57
-      Width = 263
+      Width = 254
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -111,9 +111,9 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = GroupBox3
       AnchorSideRight.Side = asrBottom
-      Left = 273
+      Left = 264
       Height = 48
-      Top = 145
+      Top = 158
       Width = 25
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -216,8 +216,8 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     AnchorSideTop.Control = GroupBox3
     AnchorSideBottom.Control = GroupBox3
     AnchorSideBottom.Side = asrBottom
-    Left = 314
-    Height = 303
+    Left = 305
+    Height = 329
     Top = 10
     Width = 5
     Anchors = [akTop, akBottom]
@@ -230,16 +230,16 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     AnchorSideTop.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = OptionsChkGrp
-    Left = 319
-    Height = 303
+    Left = 310
+    Height = 329
     Top = 10
-    Width = 318
+    Width = 309
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 10
     BorderSpacing.Bottom = 10
     Caption = 'Compare Fields:'
-    ClientHeight = 286
-    ClientWidth = 314
+    ClientHeight = 312
+    ClientWidth = 305
     TabOrder = 1
     object CmpFCheckList: TCheckListBox
       AnchorSideLeft.Control = GroupBox4
@@ -250,9 +250,9 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       AnchorSideBottom.Control = GroupBox4
       AnchorSideBottom.Side = asrBottom
       Left = 5
-      Height = 224
+      Height = 250
       Top = 57
-      Width = 304
+      Width = 295
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -332,8 +332,8 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     AnchorSideBottom.Side = asrBottom
     Left = 10
     Height = 117
-    Top = 323
-    Width = 627
+    Top = 349
+    Width = 609
     Anchors = [akLeft, akRight, akBottom]
     AutoFill = True
     AutoSize = True
@@ -350,7 +350,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
     ClientHeight = 100
-    ClientWidth = 623
+    ClientWidth = 605
     Items.Strings = (
       'Exclude deleted records'
       'Ignore case in text fields'

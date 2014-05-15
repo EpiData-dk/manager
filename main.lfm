@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 617
+  Left = 1851
   Height = 603
-  Top = 282
+  Top = 294
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -115,7 +115,7 @@ object MainForm: TMainForm
     end
   end
   object MainMenu1: TMainMenu
-    left = 264
+    left = 272
     top = 400
     object FileMenuItem: TMenuItem
       Caption = '&File'
@@ -335,6 +335,9 @@ object MainForm: TMainForm
       object MenuItem31: TMenuItem
         Action = VLSetFromDataAction
       end
+      object MenuItem33: TMenuItem
+        Action = AppendAction
+      end
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
       end
@@ -524,6 +527,11 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Value Labels from Data'
       OnExecute = VLSetFromDataActionExecute
+    end
+    object AppendAction: TAction
+      Category = 'Tools'
+      Caption = 'Append'
+      OnExecute = AppendActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

@@ -16,7 +16,7 @@
       <MajorVersionNr Value="1"/>
       <MinorVersionNr Value="5"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="1"/>
+      <BuildNr Value="2"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <Attributes pvaSpecialBuild="True"/>
@@ -189,7 +189,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="89">
+    <Units Count="90">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -789,6 +789,14 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="valuelabel_import_data"/>
       </Unit88>
+      <Unit89>
+        <Filename Value="tools/append_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AppendForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="append_form"/>
+      </Unit89>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -2722,7 +2722,9 @@ begin
   Splitter1.Visible := false;
   {$ENDIF}
 
-  UpdateFrame;
+  UpdateShortcuts;
+  UpdateControls;
+  UpdateInterface;
 
   FPopUpPoint := Point(-1, -1);
   FSettingDataFile := false;
@@ -2733,6 +2735,7 @@ begin
   UpdateShortcuts;
   UpdateControls;
   UpdateInterface;
+  UpdateStatusbar(FDesignPanel.Surface.Selected);
 end;
 
 class procedure TRuntimeDesignFrame.RestoreDefaultPos(F: TRuntimeDesignFrame);
