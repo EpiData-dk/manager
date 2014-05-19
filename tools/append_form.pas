@@ -6,44 +6,49 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, Buttons, CheckLst,
-  epidocument, epidatafiles, epiopenfile, epitools_append;
+  ExtCtrls, Buttons, CheckLst, Grids,
+  epidocument, epidatafiles, epiopenfile, epitools_append,
+  projectfilelist_frame;
 
 type
 
   { TAppendForm }
 
   TAppendForm = class(TForm)
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
-    FileNameLabel: TLabel;
-    FileNameLabel1: TLabel;
-    GroupBox1: TGroupBox;
-    GroupBox2: TGroupBox;
+    AddFilesBtn: TBitBtn;
+    OkBtn: TBitBtn;
+    CancelBtn: TBitBtn;
     GroupBox3: TGroupBox;
     AFCheckList: TCheckListBox;
     AFAllBtn: TButton;
     AFNoneBtn: TButton;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
     Label7: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
-    SpeedButton1: TSpeedButton;
-    TitleLabel: TLabel;
-    TitleLabel1: TLabel;
+    Splitter1: TSplitter;
+    procedure AddFilesBtnClick(Sender: TObject);
     procedure AFAllBtnClick(Sender: TObject);
     procedure AFNoneBtnClick(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
   private
     FAppendProject: TEpiDocumentFile;
     FMainProject: TEpiDocumentFile;
     procedure SetMainProject(AValue: TEpiDocumentFile);
-    procedure DoOpenFile(Const FileName: string);
     procedure UpdateFieldList;
+    procedure UpdateOkBtn;
+    procedure UpdateAppendProject;
+  private
+    { File Frame }
+    FFileFrame: TProjectFileListFrame;
+    FSelectedIndex: Integer;
+    procedure FileFrameAddToGrid(Sender: TObject; Document: TEpiDocument;
+      const Filename: string; const RowNo: Integer);
+    procedure FileFremCheckBoxToggled(sender: TObject; aCol, aRow: Integer;
+      aState: TCheckboxState);
+    procedure FileFramePrepareCanvas(sender: TObject; aCol, aRow: Integer;
+      aState: TGridDrawState);
+    procedure FileFrameSetCheckBoxState(Sender: TObject; ACol, ARow: Integer;
+      const Value: TCheckboxState);
   public
     constructor Create(TheOwner: TComponent); override;
     procedure CreateSelectedList(var ResultList: TStrings);
@@ -76,24 +81,6 @@ uses
 
 { TAppendForm }
 
-procedure TAppendForm.SpeedButton1Click(Sender: TObject);
-var
-  Dlg: TOpenDialog;
-begin
-
-  try
-    Dlg := TOpenDialog.Create(self);
-    Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-    Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
-
-    if not Dlg.Execute then exit;
-
-    DoOpenFile(Dlg.FileName);
-  finally
-    Dlg.Free;
-  end;
-end;
-
 procedure TAppendForm.AFNoneBtnClick(Sender: TObject);
 begin
   AFCheckList.CheckAll(cbUnchecked, false, false);
@@ -104,52 +91,34 @@ begin
   AFCheckList.CheckAll(cbChecked, false, false);
 end;
 
+procedure TAppendForm.AddFilesBtnClick(Sender: TObject);
+var
+  Dlg: TOpenDialog;
+begin
+  Dlg := TOpenDialog.Create(self);
+  Dlg.Filter := GetEpiDialogFilter(dfImport);
+  Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+  Dlg.Options := Dlg.Options + [ofAllowMultiSelect];
+
+  try
+    if Dlg.Execute then
+      FFileFrame.AddFiles(Dlg.Files);
+  finally
+    Dlg.Free;
+  end;
+end;
+
 procedure TAppendForm.SetMainProject(AValue: TEpiDocumentFile);
 begin
   if FMainProject = AValue then Exit;
   FMainProject := AValue;
 
-  FileNameLabel.Caption := FMainProject.FileName;
-  TitleLabel.Caption := FMainProject.Document.Study.Title.Text;
+  FFileFrame.AddDocument(AValue);
+  FFileFrame.StructureGrid.AutoAdjustColumns;
+
+  UpdateOkBtn;
 end;
 
-procedure TAppendForm.DoOpenFile(const FileName: string);
-var
-  S: String;
-begin
-  // TODO: Show Error?
-  if not FileExistsUTF8(FileName) then
-  begin
-    S := 'Warning: File "' + FileName + '" not found!';
-
-    if Assigned(FAppendProject) then
-      S := S + LineEnding +
-        'Content shown is from "' + FAppendProject.FileName + '"';
-
-    ShowMessage(S);
-    Exit;
-  end;
-
-
-  if Assigned(FAppendProject) then
-  begin
-    if FAppendProject.FileName = FileName then exit;
-
-    FreeAndNil(FAppendProject);
-  end;
-
-  FAppendProject := TDocumentFile.Create;
-  if not FAppendProject.OpenFile(FileName, true) then
-  begin
-    FreeAndNil(FAppendProject);
-    Exit;
-  end;
-
-  FileNameLabel1.Caption := FAppendProject.FileName;
-  TitleLabel1.Caption := FAppendProject.Document.Study.Title.Text;
-
-  UpdateFieldList;
-end;
 
 procedure TAppendForm.UpdateFieldList;
 var
@@ -159,13 +128,13 @@ var
   W: Integer;
   i: Integer;
 begin
+  AFCheckList.Clear;
 
   if (not Assigned(MainProject)) or
      (not Assigned(AppendProject))
   then
     Exit;
 
-  AFCheckList.Clear;
   AFCheckList.Items.BeginUpdate;
 
   MainDF   := MainProject.Document.DataFiles[0];
@@ -189,11 +158,100 @@ begin
   AFCheckList.CheckAll(cbChecked, false, false);
 end;
 
+procedure TAppendForm.UpdateOkBtn;
+begin
+  OkBtn.Enabled := (FSelectedIndex >= 0);
+end;
+
+procedure TAppendForm.UpdateAppendProject;
+begin
+  if FSelectedIndex < 0 then
+    FAppendProject := nil
+  else
+    FAppendProject := TDocumentFile(FFileFrame.DocFileList[FSelectedIndex - 1]);
+end;
+
+procedure TAppendForm.FileFrameAddToGrid(Sender: TObject;
+  Document: TEpiDocument; const Filename: string; const RowNo: Integer);
+var
+  SG: TStringGrid;
+begin
+  if RowNo = 1 then exit;
+
+  SG := FFileFrame.StructureGrid;
+
+  if FSelectedIndex >= 0 then
+    SG.Cells[FFileFrame.IncludeCol.Index + 1, RowNo] := FFileFrame.IncludeCol.ValueUnchecked
+  else
+    FSelectedIndex := RowNo;
+
+  UpdateAppendProject;
+  UpdateOkBtn;
+  UpdateFieldList;
+end;
+
+procedure TAppendForm.FileFremCheckBoxToggled(sender: TObject; aCol,
+  aRow: Integer; aState: TCheckboxState);
+begin
+  // Skip if first row
+  if aRow = 1 then exit;
+
+  if FSelectedIndex >= 0 then
+    FFileFrame.StructureGrid.Cells[FFileFrame.IncludeCol.Index + 1, FSelectedIndex] := FFileFrame.IncludeCol.ValueUnchecked;
+
+  if aState = cbUnchecked then
+    FSelectedIndex := -1
+  else
+    FSelectedIndex := aRow;
+
+  UpdateAppendProject;
+  UpdateOkBtn;
+  UpdateFieldList;
+end;
+
+procedure TAppendForm.FileFramePrepareCanvas(sender: TObject; aCol,
+  aRow: Integer; aState: TGridDrawState);
+begin
+  if (aRow = 1) and
+     (aCol >= 1)
+  then
+    TStringGrid(Sender).Canvas.Brush.Color := clBtnShadow;
+end;
+
+procedure TAppendForm.FileFrameSetCheckBoxState(Sender: TObject; ACol,
+  ARow: Integer; const Value: TCheckboxState);
+var
+  SG: TStringGrid absolute Sender;
+begin
+  // Main file cannot be de-selected
+  if ARow = 1 then Exit;
+
+  case Value of
+    cbUnchecked:
+      SG.Cells[ACol, ARow] := FFileFrame.IncludeCol.ValueUnchecked;
+    cbChecked:
+      SG.Cells[ACol, ARow] := FFileFrame.IncludeCol.ValueChecked;
+    cbGrayed: ;
+  end;
+end;
+
 constructor TAppendForm.Create(TheOwner: TComponent);
+var
+  SG: TStringGrid;
 begin
   inherited Create(TheOwner);
-  FileNameLabel1.Caption := '(press button to open file)';
-  TitleLabel1.Caption := 'N/A';
+  FSelectedIndex := -1;
+
+  FFileFrame := TProjectFileListFrame.Create(self);
+  FFileFrame.Align := alClient;
+  FFileFrame.Parent := Panel2;
+  FFileFrame.OnAfterAddToGrid := @FileFrameAddToGrid;
+
+  SG := FFileFrame.StructureGrid;
+  SG.OnPrepareCanvas := @FileFramePrepareCanvas;
+  SG.OnSetCheckboxState := @FileFrameSetCheckBoxState;
+  SG.Options := SG.Options - [goRowMoving];
+  SG.OnCheckboxToggled := @FileFremCheckBoxToggled;
 end;
 
 procedure TAppendForm.CreateSelectedList(var ResultList: TStrings);

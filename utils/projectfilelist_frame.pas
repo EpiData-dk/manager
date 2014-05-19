@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Grids, ComCtrls,
-  ExtCtrls, epidocument, epidatafiles, epicustombase;
+  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile;
 
 type
 
@@ -33,6 +33,7 @@ type
   private
     { private declarations }
     FCurrentFile: string;
+    FDocFileList: TList;
     FDocList: TStringList;
     FOnAfterAddToGrid: TProjectFileListGridEvent;
     FOnAfterImportFile: TProjectListFileEvent;
@@ -56,7 +57,8 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     procedure   AddFiles(Const Files: TStrings);
-    procedure   AddDocument(Const FileName: string; Const Doc: TEpiDocument);
+    procedure   AddDocument(Const FileName: string; Const Doc: TEpiDocument); overload;
+    procedure   AddDocument(Const DocFile: TEpiDocumentFile); overload;
     procedure   ForEachIncluded(CallBackMethod: TProjectFileListGridEvent);
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
@@ -64,6 +66,7 @@ type
     property    OnAfterAddToGrid: TProjectFileListGridEvent read FOnAfterAddToGrid write FOnAfterAddToGrid;
     property    SelectedList: TStringList read GetSelectedList;
     property    DocList: TStringList read FDocList;
+    property    DocFileList: TList read FDocFileList;
   private
     { columns }
     FCreatedCol: TGridColumn;
@@ -140,7 +143,7 @@ begin
     else
       Cells[FileNameCol.Index + 1, Idx] := ExtractFileName(FileName);
     // Include row - checkbox
-    Cells[IncludeCol.Index + 1, Idx]  := '1';
+    Cells[IncludeCol.Index + 1, Idx]  := IncludeCol.ValueChecked;
     if (ext = '.epx') or (ext ='.epz') then
     begin
       // Created
@@ -243,7 +246,10 @@ begin
     end;
 
     if Res then
-      AddDocumentToGrid(FileName, DocFile.Document)
+    begin
+      FDocFileList.Add(DocFile);
+      AddDocumentToGrid(FileName, DocFile.Document);
+    end
     else
       ReportError('Failed to read file: ' + ExtractFileName(FileName));
   except
@@ -372,6 +378,7 @@ constructor TProjectFileListFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FDocList := TStringList.Create;
+  FDocFileList := TList.Create;
 
   // Preserve ADD order!
   FFileNameCol := StructureGrid.Columns.Add;
@@ -435,6 +442,12 @@ procedure TProjectFileListFrame.AddDocument(const FileName: string;
   const Doc: TEpiDocument);
 begin
   AddDocumentToGrid(FileName, Doc);
+end;
+
+procedure TProjectFileListFrame.AddDocument(const DocFile: TEpiDocumentFile);
+begin
+  AddDocumentToGrid(DocFile.FileName, DocFile.Document);
+  FDocFileList.Add(Docfile);
 end;
 
 procedure TProjectFileListFrame.ForEachIncluded(
