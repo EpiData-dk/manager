@@ -71,7 +71,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -160,13 +160,13 @@
     <RequiredPackages Count="8">
       <Item1>
         <PackageName Value="epidatacore_visuals"/>
-        <MaxVersion Major="1" Minor="4" Release="5" Valid="True"/>
-        <MinVersion Major="1" Minor="4" Release="5" Valid="True"/>
+        <MaxVersion Major="1" Minor="4" Release="4" Build="5" Valid="True"/>
+        <MinVersion Major="1" Minor="4" Release="4" Build="5" Valid="True"/>
       </Item1>
       <Item2>
         <PackageName Value="epidatacore"/>
-        <MaxVersion Major="1" Minor="4" Release="5" Valid="True"/>
-        <MinVersion Major="1" Minor="4" Release="5" Valid="True"/>
+        <MaxVersion Major="1" Minor="4" Release="4" Build="5" Valid="True"/>
+        <MinVersion Major="1" Minor="4" Release="4" Build="5" Valid="True"/>
       </Item2>
       <Item3>
         <PackageName Value="jvRuntimeDesign"/>
@@ -188,7 +188,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="87">
+    <Units Count="88">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -772,6 +772,14 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="report_export"/>
       </Unit86>
+      <Unit87>
+        <Filename Value="tools/append_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AppendForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="append_form"/>
+      </Unit87>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

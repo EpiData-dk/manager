@@ -48,7 +48,7 @@ uses
   settings_font_frame, report_codebook, export_ddi_frame, 
 design_control_extender, manager_types, export_epx_frame, 
 report_project_validation, report_project_validation_frame, recode_form, 
-rename_form, report_export;
+rename_form, report_export, append_form;
 
 {$R *.res}
 
