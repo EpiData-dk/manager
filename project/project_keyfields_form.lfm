@@ -1,14 +1,14 @@
 object KeyFieldsForm: TKeyFieldsForm
-  Left = 769
+  Left = 2176
   Height = 507
-  Top = 266
+  Top = 388
   Width = 509
   Caption = 'Define Key Fields'
   ClientHeight = 507
   ClientWidth = 509
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
-  LCLVersion = '1.1'
+  LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
     Height = 43
@@ -23,10 +23,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 445
+      Left = 444
       Height = 32
       Top = 5
-      Width = 53
+      Width = 54
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -40,10 +40,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 360
+      Left = 358
       Height = 34
       Top = 4
-      Width = 80
+      Width = 81
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 5
@@ -87,8 +87,8 @@ object KeyFieldsForm: TKeyFieldsForm
     Height = 464
     Top = 0
     Width = 509
-    HorzScrollBar.Page = 507
-    VertScrollBar.Page = 462
+    HorzScrollBar.Page = 246
+    VertScrollBar.Page = 65
     Align = alClient
     ClientHeight = 462
     ClientWidth = 507

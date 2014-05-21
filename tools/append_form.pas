@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls, Buttons, CheckLst, Grids,
   epidocument, epidatafiles, epiopenfile, epitools_append,
-  projectfilelist_frame;
+  projectfilelist_frame, types;
 
 type
 
@@ -29,7 +29,13 @@ type
     Splitter1: TSplitter;
     procedure AddFilesBtnClick(Sender: TObject);
     procedure AFAllBtnClick(Sender: TObject);
+    procedure AFCheckListDrawItem(Control: TWinControl; Index: Integer;
+      ARect: TRect; State: TOwnerDrawState);
+    procedure AFCheckListItemClick(Sender: TObject; Index: integer);
+    procedure AFCheckListShowHint(Sender: TObject; HintInfo: PHintInfo);
     procedure AFNoneBtnClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
   private
     FAppendProject: TEpiDocumentFile;
     FMainProject: TEpiDocumentFile;
@@ -77,7 +83,7 @@ implementation
 
 uses
   epimiscutils, settings2_var, epiv_documentfile,
-  LazUTF8, math, strutils, main;
+  LazUTF8, math, strutils, main, settings2;
 
 { TAppendForm }
 
@@ -86,9 +92,80 @@ begin
   AFCheckList.CheckAll(cbUnchecked, false, false);
 end;
 
+procedure TAppendForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'AppendForm');
+end;
+
+procedure TAppendForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'AppendForm');
+end;
+
 procedure TAppendForm.AFAllBtnClick(Sender: TObject);
 begin
   AFCheckList.CheckAll(cbChecked, false, false);
+end;
+
+procedure TAppendForm.AFCheckListDrawItem(Control: TWinControl; Index: Integer;
+  ARect: TRect; State: TOwnerDrawState);
+var
+  CB: TCheckListBox absolute Control;
+  F: TEpiField;
+  OldBrush: TBrush;
+  OldTextStyle: TTextStyle;
+  NewTextStyle: TTextStyle;
+begin
+  if (csDestroying in Self.ComponentState) then exit;
+
+  F := TEpiField(AFCheckList.Items.Objects[Index]);
+
+  if MainProject.Document.DataFiles[0].KeyFields.IndexOf(F) >= 0 then
+    begin
+      OldBrush := TBrush.Create;
+      OldBrush.Assign(CB.Canvas.Brush);
+      CB.Canvas.Brush.Color := clBtnShadow;
+      CB.Canvas.FillRect(ARect);
+      CB.Canvas.Brush.Assign(OldBrush);
+      OldBrush.Free;
+    end;
+
+  OldTextStyle := CB.Canvas.TextStyle;
+  NewTextStyle := OldTextStyle;
+  NewTextStyle.Layout := tlCenter;
+  CB.Canvas.TextStyle := NewTextStyle;
+  CB.Canvas.TextRect(ARect, ARect.Left, ARect.Top, AFCheckList.Items[Index]);
+  CB.Canvas.TextStyle := OldTextStyle;
+end;
+
+procedure TAppendForm.AFCheckListItemClick(Sender: TObject; Index: integer);
+var
+  B: Boolean;
+  F: TEpiField;
+begin
+  F := TEpiField(AFCheckList.Items.Objects[Index]);
+
+  if MainProject.Document.DataFiles[0].KeyFields.IndexOf(F) >= 0 then
+    AFCheckList.Checked[Index] := true;
+end;
+
+procedure TAppendForm.AFCheckListShowHint(Sender: TObject; HintInfo: PHintInfo);
+var
+  P: TPoint;
+  Idx: Integer;
+  F: TEpiField;
+begin
+  Idx := AFCheckList.GetIndexAtY(HintInfo^.CursorPos.Y);
+
+   if (Idx >= 0) then
+  begin
+    F := TEpiField(AFCheckList.Items.Objects[Idx]);
+
+    if MainProject.Document.DataFiles[0].KeyFields.IndexOf(F) >= 0 then
+      HintInfo^.HintStr := 'Key Field! Cannot be unchecked!';
+  end;
 end;
 
 procedure TAppendForm.AddFilesBtnClick(Sender: TObject);
@@ -127,6 +204,7 @@ var
   F: TEpiField;
   W: Integer;
   i: Integer;
+  AF: TEpiField;
 begin
   AFCheckList.Clear;
 
@@ -142,16 +220,26 @@ begin
 
   W := 0;
   for i := 0 to MainDF.Fields.Count - 1 do
-    if AppendDF.Fields.ItemExistsByName(MainDF.Field[i].Name) then
+  begin
+    F := MainDF.Fields[i];
+    AF := AppendDF.Fields.FieldByName[F.Name];
+
+    if Assigned(AF) and
+       (F.FieldType = AF.FieldType)
+    then
       W := Max(W, UTF8Length(MainDF.Field[i].Name));
+  end;
 
   for i := 0 to MainDF.Fields.Count - 1 do
   begin
     F := MainDF.Fields[i];
+    AF := AppendDF.Fields.FieldByName[F.Name];
 
-    if AppendDF.Fields.ItemExistsByName(F.Name) then
+    if Assigned(AF) and
+       (F.FieldType = AF.FieldType)
+    then
       AFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text,
-      F);
+                          F);
   end;
 
   AFCheckList.Items.EndUpdate;
@@ -241,6 +329,11 @@ var
 begin
   inherited Create(TheOwner);
   FSelectedIndex := -1;
+
+  {$IFDEF LINUX}
+  AFCheckList.Style := lbOwnerDrawFixed;
+  {$ENDIF}
+
 
   FFileFrame := TProjectFileListFrame.Create(self);
   FFileFrame.Align := alClient;

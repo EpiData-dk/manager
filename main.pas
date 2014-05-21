@@ -553,7 +553,14 @@ begin
     end;
 
     ShowMessage(S);
-    FActiveFrame.UpdateFrame;
+    if Assigned(FActiveFrame) then
+      FActiveFrame.UpdateFrame;
+
+    AddToRecent(AppendForm.AppendProject.FileName);
+    AddToRecent(AppendForm.MainProject.FileName);
+
+    if LocalDoc then
+      DocFile.SaveFile(DocFile.FileName);
   finally
     AppendForm.Free;
     AppendTool.Free;

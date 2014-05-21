@@ -1,11 +1,13 @@
 object AppendForm: TAppendForm
-  Left = 1893
+  Left = 1877
   Height = 705
-  Top = 305
+  Top = 360
   Width = 779
   Caption = 'Append Project'
   ClientHeight = 705
   ClientWidth = 779
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
   LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0
@@ -103,7 +105,7 @@ object AppendForm: TAppendForm
   end
   object Panel2: TPanel
     Left = 0
-    Height = 192
+    Height = 112
     Top = 0
     Width = 779
     Align = alTop
@@ -112,11 +114,11 @@ object AppendForm: TAppendForm
   end
   object Panel3: TPanel
     Left = 0
-    Height = 455
-    Top = 200
+    Height = 535
+    Top = 120
     Width = 779
     Align = alClient
-    ClientHeight = 455
+    ClientHeight = 535
     ClientWidth = 779
     TabOrder = 2
     object GroupBox3: TGroupBox
@@ -127,7 +129,7 @@ object AppendForm: TAppendForm
       AnchorSideBottom.Control = Panel3
       AnchorSideBottom.Side = asrBottom
       Left = 11
-      Height = 433
+      Height = 513
       Top = 11
       Width = 757
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -136,7 +138,7 @@ object AppendForm: TAppendForm
       BorderSpacing.Right = 10
       BorderSpacing.Bottom = 10
       Caption = 'Append from fields:'
-      ClientHeight = 416
+      ClientHeight = 496
       ClientWidth = 753
       TabOrder = 0
       object AFNoneBtn: TButton
@@ -182,7 +184,7 @@ object AppendForm: TAppendForm
         AnchorSideBottom.Control = GroupBox3
         AnchorSideBottom.Side = asrBottom
         Left = 5
-        Height = 354
+        Height = 434
         Top = 57
         Width = 743
         Anchors = [akTop, akLeft, akRight, akBottom]
@@ -193,7 +195,12 @@ object AppendForm: TAppendForm
         Font.Height = -13
         Font.Name = 'Monospace'
         ItemHeight = 0
+        OnDrawItem = AFCheckListDrawItem
+        OnItemClick = AFCheckListItemClick
+        OnShowHint = AFCheckListShowHint
         ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 2
         TopIndex = -1
       end
@@ -215,7 +222,7 @@ object AppendForm: TAppendForm
     Cursor = crVSplit
     Left = 0
     Height = 8
-    Top = 192
+    Top = 112
     Width = 779
     Align = alTop
     Beveled = True

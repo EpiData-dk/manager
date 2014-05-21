@@ -267,8 +267,10 @@ begin
     AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
     AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
     RemoveIndexBtn.Enabled := false;
-  end else
+  end else begin
+    TComboBox(FKeyList.Last).Enabled := true;
     AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FKeyList.Last));
+  end;
   Cmb.Free;
 
   IndexCheckError;
@@ -323,6 +325,9 @@ begin
 
     Parent := ScrollBox1;
   end;
+
+  if FKeyList.Count > 0 then
+    TComboBox(FKeyList.Last).Enabled := false;
   FKeyList.Add(Result);
 
   AddIndexComboBtn.AnchorVerticalCenterTo(result);
@@ -343,12 +348,30 @@ procedure TKeyFieldsForm.AddFieldsToCombo(Combo: TComboBox);
 var
   Flds: TEpiFields;
   i: Integer;
+  F: TEpiField;
+  CB: TComboBox;
+  j: Integer;
+  DoContinue: Boolean;
 begin
   Combo.Clear;
 
   Flds := FEpiDoc.DataFiles[0].Fields;
   for i := 0 to Flds.Count - 1 do
   begin
+    F := Flds[i];
+
+    DoContinue := false;
+    for j := 0 to FKeyList.Count - 1 do
+    begin
+      CB := TComboBox(FKeyList[j]);
+      if CB.Items.Objects[CB.ItemIndex] = F then
+      begin
+        DoContinue := true;
+        Break;
+      end
+    end;
+    if DoContinue then Continue;
+
     Combo.AddItem(
       Flds[i].Name + BoolToStr(Flds[i].Question.Text <> '', ': ' + Flds[i].Question.Text, ''),
       Flds[i]
