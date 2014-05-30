@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 582
   ClientWidth = 812
   TabOrder = 0
-  DesignLeft = 602
-  DesignTop = 251
+  DesignLeft = 1962
+  DesignTop = 471
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26

@@ -526,5 +526,12 @@ begin
   AForm.free;
 end;
 
+finalization
+  begin
+    while RegisterList.Count > 0 do
+      FreeMem(RegisterList.Extract(RegisterList.Last));
+    RegisterList.Free;
+  end;
+
 end.
 

@@ -1005,6 +1005,7 @@ begin
 
     TutorialSubMenu.Add(MenuItem);
   end;
+  FileList.Free;
 end;
 
 function TMainForm.DoCloseProject: boolean;

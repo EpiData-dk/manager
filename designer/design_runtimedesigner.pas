@@ -335,6 +335,7 @@ type
     procedure SetDataFile(AValue: TEpiDataFile);
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor  Destroy; override;
     procedure   UpdateFrame;
     procedure   ShowPropertiesForm(NewControl: boolean);
     function    IsShortCut(var Message: TLMKey): boolean;
@@ -2728,6 +2729,16 @@ begin
 
   FPopUpPoint := Point(-1, -1);
   FSettingDataFile := false;
+end;
+
+destructor TRuntimeDesignFrame.Destroy;
+begin
+  if Assigned(DataFile) then
+  begin
+    DataFile.Sections.UnRegisterOnChangeHook(@SectionsChangeEvent);
+    DataFile.Fields.OnGetPrefix := nil;
+  end;
+  inherited Destroy;
 end;
 
 procedure TRuntimeDesignFrame.UpdateFrame;
