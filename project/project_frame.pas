@@ -1261,6 +1261,8 @@ begin
   TProjectSettingsForm.RestoreDefaultPos;
   TKeyFieldsForm.RestoreDefaultPos;
   TAlignmentForm.RestoreDefaultPos;
+  TPropertiesForm.RestoreDefaultPos(PropertiesForm);
+  TRuntimeDesignFrame.RestoreDefaultPos(nil);
 
   // TODO:
   {
