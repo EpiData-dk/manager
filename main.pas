@@ -15,6 +15,8 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    AppendAction: TAction;
+    MenuItem33: TMenuItem;
     Button1: TButton;
     DataFormBtn: TButton;
     DataformMenu: TMenuItem;
@@ -173,6 +175,7 @@ type
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
+    procedure AppendActionExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
@@ -282,7 +285,8 @@ uses
   validate_double_entry_form, design_runtimedesigner,
   managerprocs, process, epiv_documentfile,
   report_export, epireport_generator_txt,
-  valuelabel_import_data;
+  valuelabel_import_data,
+  append_form, epitools_append;
 
 { TMainForm }
 
@@ -520,6 +524,64 @@ begin
     ActionList1.State := asSuspended
   else
     ActionList1.State := asNormal;
+end;
+
+procedure TMainForm.AppendActionExecute(Sender: TObject);
+var
+  LocalDoc: boolean;
+  DocFile: TEpiDocumentFile;
+  AppendTool: TEpiToolAppend;
+  ResultList: TStrings;
+  Handler: TAppendHandler;
+  S: String;
+
+begin
+  DocFile := ToolsCheckOpenFile(false, LocalDoc);
+  if not Assigned(DocFile) then exit;
+
+  AppendForm := nil;
+  AppendTool := nil;
+  ResultList := nil;
+
+  try
+    AppendForm := TAppendForm.Create(self);
+    AppendForm.MainProject := DocFile;
+    if AppendForm.ShowModal <> mrOK then exit;
+
+    Handler := TAppendHandler.Create(Self);
+
+    AppendForm.CreateSelectedList(ResultList);
+    AppendTool := TEpiToolAppend.Create;
+    AppendTool.FieldNames.Assign(ResultList);
+    AppendTool.OnError := @Handler.AppendError;
+    AppendTool.OnWarning := @Handler.AppendWarning;
+
+    case AppendTool.Append(AppendForm.MainProject.Document, AppendForm.AppendProject.Document) of
+      eapFailed:
+        S := 'Append failed!';
+      eapPartialSuccess:
+        S := 'Append skipped'; // TODO: multiple dataforms
+      eapSuccess:
+        S := 'Sucessfully appended ' + IntToStr(AppendForm.AppendProject.Document.DataFiles[0].Size) +
+             ' records!';
+    end;
+
+    ShowMessage(S);
+    if Assigned(FActiveFrame) then
+      FActiveFrame.UpdateFrame;
+
+    AddToRecent(AppendForm.AppendProject.FileName);
+    AddToRecent(AppendForm.MainProject.FileName);
+
+    if LocalDoc then
+      DocFile.SaveFile(DocFile.FileName);
+  finally
+    AppendForm.Free;
+    AppendTool.Free;
+    ResultList.Free;
+    if LocalDoc then
+      DocFile.Free;
+  end;
 end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
@@ -978,6 +1040,7 @@ begin
 
     TutorialSubMenu.Add(MenuItem);
   end;
+  FileList.Free;
 end;
 
 function TMainForm.DoCloseProject: boolean;

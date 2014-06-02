@@ -50,7 +50,7 @@ uses
   report_project_validation, report_project_validation_frame, recode_form,
   rename_form, report_export, valuelabel_import_external,
   valuelabel_import_data, project_types, project_studyunit_frame, 
-design_properties_dataformframe;
+  design_properties_dataformframe, append_form;
 
 {$R *.res}
 

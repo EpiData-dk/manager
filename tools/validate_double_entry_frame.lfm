@@ -6,8 +6,8 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
   ClientHeight = 450
   ClientWidth = 647
   TabOrder = 0
-  DesignLeft = 878
-  DesignTop = 409
+  DesignLeft = 355
+  DesignTop = 190
   object GroupBox3: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Bevel1

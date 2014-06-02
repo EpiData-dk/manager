@@ -337,7 +337,7 @@ type
     procedure SetVisible(Value: Boolean); override;
   public
     constructor Create(TheOwner: TComponent); override;
-    destructor Destroy; override;
+    destructor  Destroy; override;
     procedure   UpdateFrame;
     procedure   ShowPropertiesForm(NewControl: boolean);
     function    IsShortCut(var Message: TLMKey): boolean;
@@ -2865,7 +2865,11 @@ end;
 
 destructor TRuntimeDesignFrame.Destroy;
 begin
-  FDatafile.Sections.UnRegisterOnChangeHook(@SectionsChangeEvent);
+  if Assigned(DataFile) then
+  begin
+    DataFile.Sections.UnRegisterOnChangeHook(@SectionsChangeEvent);
+    DataFile.Fields.OnGetPrefix := nil;
+  end;
   inherited Destroy;
 end;
 

@@ -861,6 +861,16 @@ end;
 finalization
 
 begin
+  with ManagerSettings do
+  begin
+    FieldFont.Free;
+    SectionFont.Free;
+    HeadingFont1.Free;
+    HeadingFont2.Free;
+    HeadingFont3.Free;
+    HeadingFont4.Free;
+    HeadingFont5.Free;
+  end;
   RecentFiles.Free
 end;
 
