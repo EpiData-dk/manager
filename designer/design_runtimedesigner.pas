@@ -1064,13 +1064,14 @@ var
   begin
     if Assigned(S) then
     begin
+      // Remove from old section...
+      H.Section.Headings.RemoveItem(H);
+
       // Rename if already present.
       if (not S.ValidateRename(H.Name, false))
       then
         H.Name := DataFile.Headings.GetUniqueItemName(TEpiHeading);
 
-      // Remove from old section...
-      H.Section.Headings.RemoveItem(H);
       // Insert into new...
       S.Headings.AddItem(H);
     end;
@@ -2287,7 +2288,7 @@ procedure TRuntimeDesignFrame.ViewDatasetActionExecute(Sender: TObject);
 begin
   ShowDataSetViewerForm(
     Self,
-    'View Dataset:',
+    'View Dataset: ' + DataFile.Caption.Text,
     DataFile);
 end;
 

@@ -358,6 +358,8 @@ begin
   ND := TNodeData(Node.Data);
   Node.Data := nil;
 
+  if not Assigned(ND) then exit;
+
   // This is the case with the studyunit frame!
   if not Assigned(ND.DataFile) then
   begin
@@ -638,7 +640,7 @@ begin
     try
       for i := 0 to EpiDocument.DataFiles.Count - 1 do
       begin
-        Inc(FrameCount);
+//        Inc(FrameCount);
         DoNewRuntimeFrame(EpiDocument.DataFiles[i]);
       end;
     except
@@ -862,7 +864,10 @@ begin
 
   PropertiesForm.Free;
 
-  EpiDocument.Study.Title.UnRegisterOnChangeHook(@OnTitleChange);
+  // Could be that project wasn't even opened...
+  if Assigned(EpiDocument) then
+    EpiDocument.Study.Title.UnRegisterOnChangeHook(@OnTitleChange);
+
   FRootNode.Free;
   DataFilesTreeView.Items.Clear;
 
