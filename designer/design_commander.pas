@@ -98,6 +98,7 @@ end;
 destructor TCustomCommandList.Destroy;
 begin
   FList.ForEachCall(@FreeCommand, nil);
+  FList.Free;
   inherited Destroy;
 end;
 

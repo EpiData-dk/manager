@@ -2337,6 +2337,11 @@ end;
 destructor TFieldPropertiesFrame.Destroy;
 begin
   UnRegisterValueLabelHook;
+
+  FIgnoreObject.Free;
+  FJumpComponentsList.Free;
+  FRelatesComponentsList.Free;
+
   inherited Destroy;
 end;
 

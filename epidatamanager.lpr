@@ -1,9 +1,14 @@
 program epidatamanager;
 
 {$mode objfpc}{$H+}
+{$DEFINE MEM_LEAK_FINDER}
+
 
 uses
-//  heaptrc,
+  {$IFDEF MEM_LEAK_FINDER}
+  heaptrc, LazFileUtils,
+  {$ENDIF}
+
   {$IFDEF UNIX}
     {$IFDEF EPI_USEIPC}
     cthreads,
@@ -65,7 +70,19 @@ begin
   result := 'epidata';
 end;
 
+{$IFDEF MEM_LEAK_FINDER}
+const
+  MemTraceFileName = '/tmp/manager.trc';
+{$ENDIF}
+
 begin
+  {$IFDEF MEM_LEAK_FINDER}
+  HaltOnError := false;
+  if FileExistsUTF8(MemTraceFileName) then
+    DeleteFileUTF8(MemTraceFileName);
+  SetHeapTraceOutput(MemTraceFileName);
+  {$ENDIF}
+
   Application.Title := 'EpiData Manager';
   OnGetApplicationName := @EpiDataApplicationName;
   OnGetVendorName := @EpiDataVendorName;

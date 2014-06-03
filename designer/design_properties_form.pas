@@ -182,6 +182,8 @@ var
 begin
   inherited CreateNew(TheOwner);
 
+  FFrame := nil;
+
   BeginFormUpdate;
 
   Color := clSkyBlue;
@@ -244,6 +246,8 @@ end;
 destructor TPropertiesForm.Destroy;
 begin
   UnregisterHooks;
+
+  FFrame.Free;
   inherited Destroy;
 end;
 
