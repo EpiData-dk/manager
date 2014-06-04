@@ -1266,7 +1266,7 @@ begin
             S := string(data^);
             Idx := ValueLabelComboBox.Items.IndexOf(S);
             if Idx > -1 then
-              ValueLabelComboBox.Items.Strings[Idx] := TEpiValueLabelSet(Sender).Name;
+              ValueLabelComboBox.Items.Strings[Idx] := TEpiValueLabelSet(Initiator).Name;
           end;
         ecceAddItem: ;
         ecceDelItem: ;

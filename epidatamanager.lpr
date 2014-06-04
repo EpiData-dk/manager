@@ -1,8 +1,6 @@
 program epidatamanager;
 
 {$mode objfpc}{$H+}
-{$DEFINE MEM_LEAK_FINDER}
-
 
 uses
   {$IFDEF MEM_LEAK_FINDER}

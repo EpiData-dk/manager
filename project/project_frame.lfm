@@ -21,9 +21,9 @@ object ProjectFrame: TProjectFrame
     TabOrder = 0
     object DataFilesTreeView: TTreeView
       Left = 0
-      Height = 612
+      Height = 608
       Top = 26
-      Width = 171
+      Width = 167
       Align = alClient
       AutoExpand = True
       DefaultItemHeight = 18
@@ -45,7 +45,7 @@ object ProjectFrame: TProjectFrame
       Left = 0
       Height = 26
       Top = 0
-      Width = 171
+      Width = 167
       Caption = 'ProjectToolBar'
       EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
       EdgeInner = esNone

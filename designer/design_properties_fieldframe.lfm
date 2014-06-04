@@ -671,8 +671,8 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Height = 566
           Top = 0
           Width = 515
-          HorzScrollBar.Page = 515
-          VertScrollBar.Page = 566
+          HorzScrollBar.Page = 85
+          VertScrollBar.Page = 59
           Align = alClient
           BorderStyle = bsNone
           ClientHeight = 566
@@ -978,8 +978,8 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Height = 570
           Top = 0
           Width = 515
-          HorzScrollBar.Page = 515
-          VertScrollBar.Page = 570
+          HorzScrollBar.Page = 117
+          VertScrollBar.Page = 59
           Align = alClient
           BorderStyle = bsNone
           ClientHeight = 570

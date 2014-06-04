@@ -954,7 +954,12 @@ begin
   case EventGroup of
     eegCustomBase:
       case TEpiCustomChangeEventType(EventType) of
-        ecceDestroy,
+        ecceDestroy:
+          begin
+            // I am being destroyed, remember to destroy the detailfields list too.
+            MasterField.RemoveCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY);
+            DetailFields.Free;
+          end;
         ecceUpdate,
         ecceName,
         ecceAddItem,

@@ -1028,6 +1028,7 @@ begin
   if FileList.Count = 0 then
   begin
     TutorialSubMenu.Enabled := false;
+    FileList.Free;
     Exit;
   end;
 
