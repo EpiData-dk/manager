@@ -61,8 +61,8 @@ implementation
 
 uses
   settings2_interface, settings2_var, epidatafilestypes,
-  IniFiles, strutils, epieximtypes, epiexportsettings,
-  main, managerprocs,
+  IniFiles, epieximtypes,
+  managerprocs,
 
   // settings
   settings_advanced_frame, settings_fielddefinitions_frame,
@@ -90,7 +90,6 @@ end;
 function SaveSettingToIni(Const FileName: string): boolean;
 var
   Sec: string;
-  i: Integer;
   Ini: TIniFile;
 begin
   Result := false;
@@ -260,8 +259,6 @@ end;
 function LoadSettingsFromIni(Const FileName: string): boolean;
 var
   Sec: String;
-  i: Integer;
-  S: String;
   Ini: TIniFile;
 
   procedure CorrectFont(F: TFont);
@@ -449,7 +446,6 @@ end;
 function SaveRecentFilesToIni(const FileName: string): boolean;
 var
   Ini: TIniFile;
-  Fn: String;
   i: Integer;
 begin
   Result := false;
@@ -639,10 +635,6 @@ begin
 end;
 
 constructor TSettingsForm.Create(TheOwner: TComponent);
-var
-  i: Integer;
-  Frame: TCustomFrame;
-  FrameClass: TCustomFrameClass;
 begin
   inherited Create(TheOwner);
 
