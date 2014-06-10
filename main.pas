@@ -579,6 +579,7 @@ begin
     AppendForm.Free;
     AppendTool.Free;
     ResultList.Free;
+    Handler.Free;
     if LocalDoc then
       DocFile.Free;
   end;
