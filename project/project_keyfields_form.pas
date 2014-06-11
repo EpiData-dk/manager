@@ -385,16 +385,19 @@ procedure TKeyFieldsForm.AddFieldsToCombo(Combo: TComboBox);
 var
   Flds: TEpiFields;
   i: Integer;
+  F: TEpiField;
 begin
   Combo.Clear;
 
   Flds := FDataFile.Fields;
-  for i := 0 to Flds.Count - 1 do
+  for F in Flds do
   begin
-    Combo.AddItem(
-      Flds[i].Name + BoolToStr(Flds[i].Question.Text <> '', ': ' + Flds[i].Question.Text, ''),
-      Flds[i]
-    );
+    if (F.FieldType in AutoFieldTypes) or
+       (F.EntryMode = emNoEnter)
+    then
+      Continue;
+
+    Combo.AddItem(F.Name + BoolToStr(F.Question.Text <> '', ': ' + F.Question.Text, ''), F);
   end;
 end;
 
