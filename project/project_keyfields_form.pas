@@ -392,8 +392,11 @@ begin
   Flds := FDataFile.Fields;
   for F in Flds do
   begin
-    if (F.FieldType in AutoFieldTypes) or
-       (F.EntryMode = emNoEnter)
+    if (not FDataFile.KeyFields.FieldExists(F)) and
+        (
+         (F.FieldType in AutoFieldTypes) or
+         (F.EntryMode = emNoEnter)
+        )
     then
       Continue;
 

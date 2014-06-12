@@ -87,8 +87,8 @@ object KeyFieldsForm: TKeyFieldsForm
     Height = 464
     Top = 0
     Width = 509
-    HorzScrollBar.Page = 507
-    VertScrollBar.Page = 462
+    HorzScrollBar.Page = 255
+    VertScrollBar.Page = 65
     Align = alClient
     ClientHeight = 462
     ClientWidth = 507
