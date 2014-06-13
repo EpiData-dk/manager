@@ -3,7 +3,7 @@ object KeyFieldsForm: TKeyFieldsForm
   Height = 507
   Top = 388
   Width = 509
-  Caption = 'Define Key Fields'
+  Caption = 'Define Key'
   ClientHeight = 507
   ClientWidth = 509
   OnCloseQuery = FormCloseQuery
@@ -87,7 +87,7 @@ object KeyFieldsForm: TKeyFieldsForm
     Height = 464
     Top = 0
     Width = 509
-    HorzScrollBar.Page = 246
+    HorzScrollBar.Page = 255
     VertScrollBar.Page = 65
     Align = alClient
     ClientHeight = 462
@@ -99,11 +99,11 @@ object KeyFieldsForm: TKeyFieldsForm
       Left = 10
       Height = 15
       Top = 22
-      Width = 160
+      Width = 175
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Bottom = 3
-      Caption = 'Key Fields (unique index):'
+      Caption = 'Fields in Key (unique index):'
       ParentColor = False
     end
     object TopBevel: TBevel
@@ -152,6 +152,7 @@ object KeyFieldsForm: TKeyFieldsForm
       Height = 22
       Top = 15
       Width = 23
+      Action = AddNewIndexAction
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5
       BorderSpacing.Bottom = 3
@@ -191,7 +192,6 @@ object KeyFieldsForm: TKeyFieldsForm
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      OnClick = AddIndexComboBtnClick
     end
     object RemoveIndexBtn: TSpeedButton
       AnchorSideLeft.Control = AddIndexComboBtn
@@ -202,8 +202,8 @@ object KeyFieldsForm: TKeyFieldsForm
       Height = 22
       Top = 15
       Width = 23
+      Action = DeleteIndexAction
       BorderSpacing.Left = 5
-      Enabled = False
       Glyph.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
         2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -240,7 +240,6 @@ object KeyFieldsForm: TKeyFieldsForm
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      OnClick = RemoveIndexBtnClick
     end
     object RealTimeStatusChkBox: TCheckBox
       AnchorSideLeft.Control = ScrollBox1
@@ -249,11 +248,11 @@ object KeyFieldsForm: TKeyFieldsForm
       Left = 10
       Height = 22
       Top = 435
-      Width = 236
+      Width = 245
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Bottom = 5
-      Caption = 'Show index status while selecting'
+      Caption = 'Show unique status while selecting'
       OnChange = RealTimeStatusChkBoxChange
       TabOrder = 0
     end
@@ -265,6 +264,14 @@ object KeyFieldsForm: TKeyFieldsForm
       Caption = 'AddIndexFieldAction'
       OnExecute = AddIndexFieldActionExecute
       OnUpdate = AddIndexFieldActionUpdate
+    end
+    object AddNewIndexAction: TAction
+      OnExecute = AddNewIndexActionExecute
+      OnUpdate = AddNewIndexActionUpdate
+    end
+    object DeleteIndexAction: TAction
+      OnExecute = DeleteIndexActionExecute
+      OnUpdate = DeleteIndexActionUpdate
     end
   end
 end

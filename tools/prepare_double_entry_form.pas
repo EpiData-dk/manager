@@ -64,6 +64,7 @@ var
   j: Integer;
   NewF: TEpiField;
   DocFile: TDocumentFile;
+  DF: TEpiDataFile;
 begin
   if ModalResult  = mrCancel then exit;
 
@@ -94,18 +95,17 @@ begin
     if TitleEdit.Text <> '' then
       NewDoc.Study.Title.Text := TitleEdit.Text;
 
-    for i := 0 to NewDoc.DataFiles.Count - 1 do
-    with NewDoc.DataFiles[i] do
+    for DF in NewDoc.DataFiles do
+    with DF do
     begin
       Size := 0;
 
       // Convert IDNUM fields to Integer!
-      for j := 0 to Fields.Count - 1 do
+      for F in Fields do
       begin
-        if Fields[j].FieldType <> ftAutoInc then continue;
+        if F.FieldType <> ftAutoInc then continue;
 
         // TODO -cRuntimeDesigner: Check up on workign after rewriting TEpiCustomBase.Assign.
-        F := Fields[j];
         NewF := F.Section.NewField(ftInteger);
         NewF.Assign(F);
         NewF.EntryMode := emMustEnter;

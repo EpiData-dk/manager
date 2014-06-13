@@ -57,6 +57,8 @@ begin
   GlobalCopyListClear;
   FGlobalCopyList.Free;
   FGlobalCopyList := nil;
+
+  FGlobalCommandList.Free;
 end;
 
 finalization

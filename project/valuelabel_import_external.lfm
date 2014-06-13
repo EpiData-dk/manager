@@ -1,7 +1,7 @@
 object ExtVLSetForm: TExtVLSetForm
-  Left = 437
+  Left = 694
   Height = 334
-  Top = 316
+  Top = 212
   Width = 840
   Caption = 'External Value Label Sets'
   ClientHeight = 334

@@ -17,6 +17,14 @@ type
   TMainForm = class(TForm)
     AppendAction: TAction;
     MenuItem33: TMenuItem;
+    Button1: TButton;
+    DataFormBtn: TButton;
+    DataformMenu: TMenuItem;
+    DataformPropertiesMenuItem: TMenuItem;
+    MenuItem1: TMenuItem;
+    DataformPropertiesPopupMenuItem: TMenuItem;
+    MenuItem34: TMenuItem;
+    DataformPopupMenu: TPopupMenu;
     VLSetFromDataAction: TAction;
     ImportCBInNewProjectAction: TAction;
     MenuItem13: TMenuItem;
@@ -82,7 +90,7 @@ type
     ProjectPropertiesPopupMenuItem: TMenuItem;
     SetPasswordPopupMenuItem: TMenuItem;
     StudyInfoPopupMenuItem: TMenuItem;
-    ProjectDetailsPopupMenu: TPopupMenu;
+    ProjectPopupMenu: TPopupMenu;
     SelectAllBoolMenuItem: TMenuItem;
     SelectAllStringMenuItem: TMenuItem;
     SelectAllFloatMenuItem: TMenuItem;
@@ -117,7 +125,6 @@ type
     PackAction: TAction;
     ToolMenuDivider1: TMenuItem;
     StartEntryClientAction: TAction;
-    MenuItem1: TMenuItem;
     EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
@@ -169,12 +176,14 @@ type
     PageControl1: TPageControl;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
     procedure CodeBookReportActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure CountsReportActionExecute(Sender: TObject);
+    procedure DataFormBtnClick(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure DefineProjectBtnClick(Sender: TObject);
     procedure DocumentBtnClick(Sender: TObject);
@@ -295,13 +304,13 @@ end;
 procedure TMainForm.ImportCBInNewProjectActionExecute(Sender: TObject);
 begin
   DoNewProject;
-  TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportCBAction.Execute;
+  FActiveFrame.Import(true);
 end;
 
 procedure TMainForm.ImportInNewProjectActionExecute(Sender: TObject);
 begin
   DoNewProject;
-  TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction.Execute;
+  FActiveFrame.Import(false);
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -339,6 +348,11 @@ end;
 procedure TMainForm.CountsReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportCounts);
+end;
+
+procedure TMainForm.DataFormBtnClick(Sender: TObject);
+begin
+  DataformPopupMenu.PopUp;
 end;
 
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
@@ -565,8 +579,30 @@ begin
     AppendForm.Free;
     AppendTool.Free;
     ResultList.Free;
+    Handler.Free;
     if LocalDoc then
       DocFile.Free;
+  end;
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+var
+  LocalDoc: boolean;
+  DocFile: TEpiDocumentFile;
+  Doc: TEpiDocument;
+  Df: TEpiDataFile;
+begin
+  DocFile := ToolsCheckOpenFile(false, LocalDoc);
+  if not Assigned(DocFile) then exit;
+
+  Doc := DocFile.Document;
+  for Df in Doc.DataFiles do
+    Df.Size := 0;
+
+  if LocalDoc then
+  begin
+    DocFile.SaveFile(DocFile.FileName);
+    DocFile.Free;
   end;
 end;
 
@@ -698,7 +734,7 @@ end;
 
 procedure TMainForm.ProjectDetailsBtnClick(Sender: TObject);
 begin
-  ProjectDetailsPopupMenu.PopUp;
+  ProjectPopupMenu.PopUp;
 end;
 
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
@@ -993,6 +1029,7 @@ begin
   if FileList.Count = 0 then
   begin
     TutorialSubMenu.Enabled := false;
+    FileList.Free;
     Exit;
   end;
 
@@ -1114,10 +1151,11 @@ begin
   SelectMenu.Visible        := Assigned(FActiveFrame);
   MenuItem25.Visible        := Assigned(FActiveFrame);
 
-  // PROJECT Details:
+  // PROJECT:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
-  KeyFieldsMenuItem.Visible := Assigned(FActiveFrame);
-  StudyInfoMenuItem.Visible := Assigned(FActiveFrame);
+
+  // Dataform:
+  DataformMenu.Visible      := Assigned(FActiveFrame);
 
   // Document:
   BrowseDataMenuItem.Visible := Assigned(FActiveFrame);
@@ -1133,6 +1171,7 @@ begin
     ManagerSettings.ShowWorkToolBar;
 
   ProjectDetailsBtn.Enabled := Assigned(FActiveFrame);
+  DataFormBtn.Enabled := ProjectDetailsBtn.Enabled;
 end;
 
 procedure TMainForm.UpdateShortCuts;
@@ -1371,60 +1410,7 @@ begin
   end;
 
   UpdateMainMenu;
-  // File
-  SaveProjectMenuItem.Action   := FActiveFrame.SaveProjectAction;
-  SaveProjectAsMenuItem.Action := FActiveFrame.SaveProjectAsAction;
-  PrintDataFormMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PrintDataFormAction;
-  // -
-  AddStructureMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportAction;
-  AddStructFromBLMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ImportCBAction;
-
-  // Edit
-  UndoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).UndoAction;
-  RedoMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RedoAction;
-  // -
-  CutMenuItem.Action            := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).CutControlAction;
-  CopyMenuItem.Action           := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).CopyControlAction;
-  PasteMenuItem.Action          := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteControlAction;
-  // -
-  PasteAsHeadingMenuItem.Action := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsHeadingAction;
-  PasteAsIntMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsIntAction;
-  PasteAsFloatMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsFloatAction;
-  PasteAsStringMenuItem.Action  := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsStringAction;
-  PasteAsDateMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).PasteAsDateAction;
-
-  // Project
-  ProjectPropertiesMenuItem.Action := FActiveFrame.ProjectSettingsAction;
-  ValueLabelsMenuItem.Action       := FActiveFrame.ValueLabelEditorAction;
-  ProjectPasswordMenuItem.Action   := FActiveFrame.ProjectPasswordAction;
-  KeyFieldsMenuItem.Action         := FActiveFrame.KeyFieldsAction;
-  StudyInfoMenuItem.Action         := FActiveFrame.StudyInformationAction;
-  RenameControlsMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RenameControlsAction;
-  // --project details popup-menu
-  ProjectPropertiesPopupMenuItem.Action := FActiveFrame.ProjectSettingsAction;
-  ValueLabelEditorPopupMenuItem.Action  := FActiveFrame.ValueLabelEditorAction;
-  SetPasswordPopupMenuItem.Action       := FActiveFrame.ProjectPasswordAction;
-  KeyFieldsPopupMenuItem.Action         := FActiveFrame.KeyFieldsAction;
-  StudyInfoPopupMenuItem.Action         := FActiveFrame.StudyInformationAction;
-  RenameControlsPopupMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).RenameControlsAction;
-
-  // Align
-  AlignLeftMenuItem.Action         := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignLeftAction;
-  AlignRightMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignRightAction;
-  AlignTopMenuItem.Action          := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignTopAction;
-  AlignBottomMenuItem.Action       := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).AlignBottomAction;
-  AlignMenuItem.Action             := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ShowAlignFormAction;
-
-  // Select
-  SelectAllIntsMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllIntsAction;
-  SelectAllFloatMenuItem.Action    := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllFloatsAction;
-  SelectAllStringMenuItem.Action   := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllStringsAction;
-  SelectAllBoolMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).SelectAllBoolsAction;
-
-
-  // DataSet
-  BrowseDataMenuItem.Action        := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
-  BrowseDatasetMenuItem.Action     := TRuntimeDesignFrame(FActiveFrame.ActiveFrame).ViewDatasetAction;
+  FActiveFrame.AssignActionLinks;
 end;
 
 procedure TMainForm.BeginUpdatingForm;
@@ -1441,6 +1427,7 @@ constructor TMainForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FActiveFrame := nil;
+
   SetupIPC;
   UpdateMainMenu;
   AssignActionLinks;

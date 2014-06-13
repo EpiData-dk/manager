@@ -7,13 +7,15 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Buttons, ActnList, epitools_integritycheck, epidatafiles, epidocument,
-  epivaluelabels;
+  epivaluelabels, project_types, epirelations;
 
 type
 
   { TKeyFieldsForm }
 
   TKeyFieldsForm = class(TForm)
+    DeleteIndexAction: TAction;
+    AddNewIndexAction: TAction;
     AddIndexFieldAction: TAction;
     ActionList1: TActionList;
     AddIndexComboBtn: TSpeedButton;
@@ -29,21 +31,25 @@ type
     ShowRecordsBtn: TButton;
     Panel1: TPanel;
     TopBevel: TBevel;
-    procedure AddIndexComboBtnClick(Sender: TObject);
     procedure AddIndexFieldActionExecute(Sender: TObject);
     procedure AddIndexFieldActionUpdate(Sender: TObject);
+    procedure AddNewIndexActionExecute(Sender: TObject);
+    procedure AddNewIndexActionUpdate(Sender: TObject);
+    procedure DeleteIndexActionExecute(Sender: TObject);
+    procedure DeleteIndexActionUpdate(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure RealTimeStatusChkBoxChange(Sender: TObject);
-    procedure RemoveIndexBtnClick(Sender: TObject);
     procedure ShowRecordsBtnClick(Sender: TObject);
   private
     { private declarations }
     FIndexChecker: TEpiIntegrityChecker;
     FKeyList: TList;
     FHintWindow: THintWindow;
-    FEpiDoc: TEpiDocument;
+    FDataFile: TEpiDataFile;
+    FValueLabelSets: TEpiValueLabelSets;
     function  DoAddNewKey: TComboBox;
+    function  DoDeleteKey: boolean;
     procedure SetItemIndexOnField(Combo: TComboBox; Field: TEpiField);
     procedure AddFieldsToCombo(Combo: TComboBox);
     procedure ComboSelect(Sender: TObject);
@@ -52,9 +58,11 @@ type
     function  PerformIndexCheck(Out FailedRecords: TBoundArray;
       out FailedValues: TBoundArray): Boolean;
     function  ShowError(Const Msg: string; Const Ctrl: TControl): boolean;
+    function  GetRelation: TEpiMasterRelation;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; EpiDoc: TEpiDocument);
+    constructor Create(TheOwner: TComponent; Datafile: TEpiDataFile;
+      ValueLabelSets: TEpiValueLabelSets);
     destructor Destroy; override;
     class procedure RestoreDefaultPos;
   end;
@@ -73,11 +81,6 @@ const
 
 { TKeyFieldsForm }
 
-procedure TKeyFieldsForm.AddIndexComboBtnClick(Sender: TObject);
-begin
-  DoAddNewKey;
-end;
-
 procedure TKeyFieldsForm.AddIndexFieldActionExecute(Sender: TObject);
 var
   i: Integer;
@@ -87,18 +90,18 @@ var
   VL: TEpiValueLabelSet;
   V: TEpiCustomValueLabel;
 begin
-  F := FEpiDoc.DataFiles[0].Fields.FieldByName[EpiIndexIntegrityFieldName];
+  F := FDataFile.Fields.FieldByName[EpiIndexIntegrityFieldName];
   if not Assigned(F) then
   begin
-    F := FEpiDoc.DataFiles[0].NewField(ftInteger);
+    F := FDataFile.NewField(ftInteger);
     F.Name := EpiIndexIntegrityFieldName;
     F.Question.Text := 'Unique index status';
     F.ShowValueLabel := ManagerSettings.ShowValuelabelText;
 
-    VL := FEpiDoc.ValueLabelSets.GetValueLabelSetByName(EpiIndexIntegrityValueLabelSetName);
+    VL := FValueLabelSets.GetValueLabelSetByName(EpiIndexIntegrityValueLabelSetName);
     if not Assigned(VL) then
     begin
-      VL := FEpiDoc.ValueLabelSets.NewValueLabelSet(ftInteger);
+      VL := FValueLabelSets.NewValueLabelSet(ftInteger);
       VL.Name := EpiIndexIntegrityValueLabelSetName;
 
       V := Vl.NewValueLabel;
@@ -138,9 +141,35 @@ var
   S: String;
 begin
   S := 'Add ';
-  if FEpiDoc.DataFiles[0].Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
+  if FDataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
     S := 'Update ';
-  AddIndexFieldAction.Caption := S + 'Index Field';
+  AddIndexFieldAction.Caption := S + 'Status Field';
+end;
+
+procedure TKeyFieldsForm.AddNewIndexActionExecute(Sender: TObject);
+begin
+  DoAddNewKey;
+end;
+
+procedure TKeyFieldsForm.AddNewIndexActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := GetRelation.DetailRelations.Count = 0;
+end;
+
+procedure TKeyFieldsForm.DeleteIndexActionExecute(Sender: TObject);
+begin
+  DoDeleteKey;
+end;
+
+procedure TKeyFieldsForm.DeleteIndexActionUpdate(Sender: TObject);
+var
+  Cmb: TComboBox;
+begin
+  Cmb := TComboBox(FKeyList.Last);
+
+  TAction(Sender).Enabled :=
+    Assigned(Cmb) and
+    Cmb.Enabled;
 end;
 
 procedure TKeyFieldsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -159,7 +188,7 @@ begin
     Res := MessageDlg('Index Error',
                         'Records with Non-Unique key' + LineEnding +
                         'or missing values in key fields exist.' + LineEnding +
-                        BoolToStr(FEpiDoc.DataFiles[0].Fields.ItemExistsByName(EpiIndexIntegrityFieldName),
+                        BoolToStr(FDataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName),
                           'Index status saved in field: '+ EpiIndexIntegrityFieldName + LineEnding, '') +
                         LineEnding +
                         'Apply Key Fields?',
@@ -177,12 +206,12 @@ begin
   if ModalResult = mrOk then
   begin
     FL := GetFieldList;
-    FEpiDoc.DataFiles[0].KeyFields.Clear;
+    FDataFile.KeyFields.Clear;
     for i := 0 to Fl.Count - 1 do
-      FEpiDoc.DataFiles[0].KeyFields.AddItem(Fl[i]);
+      FDataFile.KeyFields.AddItem(Fl[i]);
     Fl.Free;
 
-    if FEpiDoc.DataFiles[0].Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
+    if FDataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
       AddIndexFieldAction.Execute;
   end;
 
@@ -246,34 +275,13 @@ begin
   FieldList := GetFieldList;
 
   Result :=
-    FIndexChecker.IndexIntegrity(FEpiDoc.DataFiles[0],
+    FIndexChecker.IndexIntegrity(FDataFile,
       FailedRecords,
       FailedValues,
       false,
       FieldList);
 
   FieldList.Free;
-end;
-
-procedure TKeyFieldsForm.RemoveIndexBtnClick(Sender: TObject);
-var
-  Cmb: TComboBox;
-begin
-  Cmb := TComboBox(FKeyList.Last);
-  FKeyList.Delete(FKeyList.Count - 1);
-
-  if FKeyList.Count = 0  then
-  begin
-    AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
-    AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
-    RemoveIndexBtn.Enabled := false;
-  end else begin
-    TComboBox(FKeyList.Last).Enabled := true;
-    AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FKeyList.Last));
-  end;
-  Cmb.Free;
-
-  IndexCheckError;
 end;
 
 procedure TKeyFieldsForm.ShowRecordsBtnClick(Sender: TObject);
@@ -293,11 +301,11 @@ begin
     FieldList.AddItem(TEpiField(Cmb.Items.Objects[Cmb.ItemIndex]));
   end;
 
-  if not FIndexChecker.IndexIntegrity(FEpiDoc.DataFiles[0], FailedRecords, FailedValues,
+  if not FIndexChecker.IndexIntegrity(FDataFile, FailedRecords, FailedValues,
            false, FieldList) then
     ShowDataSetViewerForm(Self,
       'List of non-unique records:',
-      FEpiDoc.DataFiles[0],
+      FDataFile,
       FailedRecords,
       FieldList,
       nil,
@@ -325,23 +333,52 @@ begin
 
     Parent := ScrollBox1;
   end;
-
-  if FKeyList.Count > 0 then
-    TComboBox(FKeyList.Last).Enabled := false;
   FKeyList.Add(Result);
 
   AddIndexComboBtn.AnchorVerticalCenterTo(result);
-  RemoveIndexBtn.Enabled := true;
+end;
+
+function TKeyFieldsForm.DoDeleteKey: boolean;
+var
+  Cmb: TComboBox;
+begin
+  Cmb := TComboBox(FKeyList.Last);
+  FKeyList.Delete(FKeyList.Count - 1);
+
+  if FKeyList.Count = 0  then
+  begin
+    AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
+    AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
+  end else
+    AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FKeyList.Last));
+  Cmb.Free;
+
+  IndexCheckError;
 end;
 
 procedure TKeyFieldsForm.SetItemIndexOnField(Combo: TComboBox; Field: TEpiField
   );
 var
   Idx: Integer;
+  MR: TEpiMasterRelation;
+  MasterDF: TEpiDataFile;
 begin
   Idx := Combo.Items.IndexOfObject(Field);
   if Idx <> -1 then
+  begin
     Combo.ItemIndex := Idx;
+    MR := GetRelation;
+
+    Combo.Enabled := not (MR.DetailRelations.Count > 0);
+
+    if (MR is TEpiDetailRelation) and
+       (Combo.Enabled)
+    then
+    begin
+      MasterDF := TEpiDetailRelation(MR).MasterRelation.Datafile;
+      Combo.Enabled := not (MasterDF.KeyFields.ItemExistsByName(Field.Name));
+    end;
+  end;
 end;
 
 procedure TKeyFieldsForm.AddFieldsToCombo(Combo: TComboBox);
@@ -349,33 +386,21 @@ var
   Flds: TEpiFields;
   i: Integer;
   F: TEpiField;
-  CB: TComboBox;
-  j: Integer;
-  DoContinue: Boolean;
 begin
   Combo.Clear;
 
-  Flds := FEpiDoc.DataFiles[0].Fields;
-  for i := 0 to Flds.Count - 1 do
+  Flds := FDataFile.Fields;
+  for F in Flds do
   begin
-    F := Flds[i];
+    if (not FDataFile.KeyFields.FieldExists(F)) and
+        (
+         (F.FieldType in AutoFieldTypes) or
+         (F.EntryMode = emNoEnter)
+        )
+    then
+      Continue;
 
-    DoContinue := false;
-    for j := 0 to FKeyList.Count - 1 do
-    begin
-      CB := TComboBox(FKeyList[j]);
-      if CB.Items.Objects[CB.ItemIndex] = F then
-      begin
-        DoContinue := true;
-        Break;
-      end
-    end;
-    if DoContinue then Continue;
-
-    Combo.AddItem(
-      Flds[i].Name + BoolToStr(Flds[i].Question.Text <> '', ': ' + Flds[i].Question.Text, ''),
-      Flds[i]
-    );
+    Combo.AddItem(F.Name + BoolToStr(F.Question.Text <> '', ': ' + F.Question.Text, ''), F);
   end;
 end;
 
@@ -400,21 +425,33 @@ begin
   FHintWindow.ActivateHint(R, Msg);
 end;
 
-constructor TKeyFieldsForm.Create(TheOwner: TComponent; EpiDoc: TEpiDocument);
+function TKeyFieldsForm.GetRelation: TEpiMasterRelation;
+begin
+  result := TEpiMasterRelation(FDataFile.FindCustomData(PROJECT_RELATION_KEY));
+end;
+
+constructor TKeyFieldsForm.Create(TheOwner: TComponent; Datafile: TEpiDataFile;
+  ValueLabelSets: TEpiValueLabelSets);
 var
   i: Integer;
 begin
   inherited Create(TheOwner);
-  FEpiDoc := EpiDoc;
+
+  FDataFile := Datafile;
+  FValueLabelSets := ValueLabelSets;
+
   FIndexChecker := TEpiIntegrityChecker.Create;
   FKeyList := TList.Create;
+
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.HideInterval := 5 * 1000;
   FHintWindow.AutoHide := true;
 
-  with FEpiDoc.DataFiles[0] do
+  with FDataFile do
     for i := 0 to KeyFields.Count - 1 do
       SetItemIndexOnField(DoAddNewKey, KeyFields[i]);
+
+  Caption := 'Define Key (' + Datafile.Caption.Text + ')';
 end;
 
 destructor TKeyFieldsForm.Destroy;
@@ -439,4 +476,3 @@ begin
 end;
 
 end.
-

@@ -5,7 +5,8 @@ unit design_properties_baseframe;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, epicustombase, design_types;
+  Classes, SysUtils, FileUtil, Forms, Controls, epicustombase, design_types,
+  epidatafiles, epirelations;
 
 type
 
@@ -13,6 +14,8 @@ type
 
   TDesignPropertiesFrame = class(TFrame)
   private
+    FDataFile: TEpiDataFile;
+    FRelation: TEpiMasterRelation;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FOnUpdateCaption: TGetStrProc;
   protected
@@ -20,8 +23,12 @@ type
     procedure UpdateCaption(Const S: String); virtual;
   public
     procedure ShiftToTabSheet(Const SheetNo: Byte); virtual; abstract;
+    procedure SetDataFile(const ADataFile: TEpiDataFile); virtual;
+    procedure SetRelation(const Relation: TEpiMasterRelation);
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
     property  OnUpdateCaption: TGetStrProc read FOnUpdateCaption write FOnUpdateCaption;
+    property  DataFile: TEpiDataFile read FDataFile;
+    property  Relation: TEpiMasterRelation read FRelation;
   end;
 
 implementation
@@ -38,6 +45,17 @@ procedure TDesignPropertiesFrame.UpdateCaption(const S: String);
 begin
   if Assigned(OnUpdateCaption) then
     OnUpdateCaption(S);
+end;
+
+procedure TDesignPropertiesFrame.SetDataFile(const ADataFile: TEpiDataFile);
+begin
+  FDataFile := ADataFile;
+end;
+
+procedure TDesignPropertiesFrame.SetRelation(const Relation: TEpiMasterRelation
+  );
+begin
+  FRelation := Relation;
 end;
 
 end.

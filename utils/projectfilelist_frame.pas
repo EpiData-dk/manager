@@ -42,7 +42,7 @@ type
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedList: TStringList;
     procedure  ImportFile(Const FileName: string);
-    procedure  ReportError(Const Msg: string);
+    procedure  DoReportError(Const Msg: string);
     procedure  SetOnAfterImportFile(const AValue: TProjectListFileEvent);
     procedure  SetOnBeforeImportFile(const AValue: TProjectListFileEvent);
   protected
@@ -60,6 +60,7 @@ type
     procedure   AddDocument(Const FileName: string; Const Doc: TEpiDocument); overload;
     procedure   AddDocument(Const DocFile: TEpiDocumentFile); overload;
     procedure   ForEachIncluded(CallBackMethod: TProjectFileListGridEvent);
+    procedure   ReportError(Const Msg: string);
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
     property    OnSelectionChanged: TNotifyEvent read FOnSelectionChanged write FOnSelectionChanged;
@@ -251,11 +252,11 @@ begin
       AddDocumentToGrid(FileName, DocFile.Document);
     end
     else
-      ReportError('Failed to read file: ' + ExtractFileName(FileName));
+      DoReportError('Failed to read file: ' + ExtractFileName(FileName));
   except
     on E: Exception do
       begin
-        ReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
+        DoReportError('Failed to read file "' + ExtractFileName(FileName) + '": ' + E.Message);
         DocFile.Free;
       end;
   end;
@@ -274,7 +275,7 @@ begin
       Result.AddObject(FDocList[i - 1], FDocList.Objects[i - 1]);
 end;
 
-procedure TProjectFileListFrame.ReportError(const Msg: string);
+procedure TProjectFileListFrame.DoReportError(const Msg: string);
 begin
   if not ErrorListBox.Visible then
     ErrorListBox.Visible := true;
@@ -465,6 +466,11 @@ begin
     if StructureGrid.Cells[IncludeIdx, i] = IncludeCol.ValueChecked then
       CallBackMethod(Self, TEpiDocument(FDocList.Objects[i-1]), FDocList[i-1], i);
   end;
+end;
+
+procedure TProjectFileListFrame.ReportError(const Msg: string);
+begin
+  DoReportError(Msg);
 end;
 
 end.

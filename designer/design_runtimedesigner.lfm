@@ -460,14 +460,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     ClientWidth = 812
     TabOrder = 3
     object DesignerToolBar: TToolBar
-      AnchorSideLeft.Control = ProjectToolBar
-      AnchorSideLeft.Side = asrBottom
-      Left = 84
+      Left = 0
       Height = 26
       Top = 0
-      Width = 726
-      Align = alCustom
-      Anchors = [akTop, akLeft, akRight]
+      Width = 812
+      Align = alClient
       AutoSize = True
       ButtonHeight = 24
       ButtonWidth = 24
@@ -687,52 +684,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Width = 10
         Caption = 'ToolButton7'
         Style = tbsSeparator
-      end
-    end
-    object ProjectToolBar: TToolBar
-      Left = 0
-      Height = 26
-      Top = 0
-      Width = 84
-      Align = alNone
-      Anchors = [akTop, akLeft, akBottom]
-      AutoSize = True
-      ButtonHeight = 24
-      ButtonWidth = 24
-      Caption = 'ProjectToolBar'
-      EdgeBorders = [ebLeft, ebTop, ebBottom]
-      EdgeInner = esNone
-      EdgeOuter = esRaised
-      Images = DesignerImageList
-      TabOrder = 1
-      object OpenProjectToolBtn: TToolButton
-        Left = 2
-        Top = 1
-        Caption = 'OpenProjectToolBtn'
-      end
-      object ProjectDivider1: TToolButton
-        Left = 26
-        Top = 1
-        Width = 5
-        Caption = 'ProjectDivider1'
-        Style = tbsDivider
-      end
-      object SaveProjectToolBtn: TToolButton
-        Left = 31
-        Top = 1
-        Caption = 'SaveProjectToolBtn'
-      end
-      object SaveProjectAsToolBtn: TToolButton
-        Left = 55
-        Top = 1
-        Caption = 'SaveProjectAsToolBtn'
-      end
-      object ToolButton1: TToolButton
-        Left = 79
-        Top = 1
-        Width = 5
-        Caption = 'ToolButton1'
-        Style = tbsDivider
       end
     end
   end
@@ -2424,6 +2375,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Caption = 'DeleteControlFastAction'
       ImageIndex = 11
       OnExecute = DeleteControlFastActionExecute
+      OnUpdate = CutCopyControlUpdate
     end
     object SelectPgDnAction: TAction
       Category = 'Select'
@@ -2569,6 +2521,15 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Import data and structure from clipboard'
       ImageIndex = 13
       OnExecute = ImportCBActionExecute
+    end
+    object DataformPropertiesAction: TAction
+      Category = 'Edit'
+      Caption = 'Dataform Properties'
+      OnExecute = DataformPropertiesActionExecute
+    end
+    object DefineKeyAction: TAction
+      Caption = 'Define Key'
+      OnExecute = DefineKeyActionExecute
     end
   end
   object OtherFieldsPopup: TPopupMenu

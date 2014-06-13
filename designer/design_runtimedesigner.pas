@@ -8,13 +8,16 @@ uses
   Classes, SysUtils, FileUtil, PrintersDlgs, Forms, Controls, ComCtrls,
   ExtCtrls, StdCtrls, JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
   Buttons, manager_messages, epidatafilestypes, design_properties_form, types,
-  epicustombase, epidocument, epivaluelabels, design_types;
+  epicustombase, epidocument, epivaluelabels, design_types, project_types,
+  epirelations;
 
 type
 
   { TRuntimeDesignFrame }
 
-  TRuntimeDesignFrame = class(TFrame)
+  TRuntimeDesignFrame = class(TFrame, IProjectFrame)
+    DefineKeyAction: TAction;
+    DataformPropertiesAction: TAction;
     ImportCBAction: TAction;
     RenameControlsAction: TAction;
     RecodeDataAction: TAction;
@@ -55,17 +58,12 @@ type
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
-    OpenProjectToolBtn: TToolButton;
     OtherToolButton: TToolButton;
     ToolBarPanel: TPanel;
     PrintDialog1: TPrintDialog;
-    ProjectDivider1: TToolButton;
-    ProjectToolBar: TToolBar;
     RedoAction: TAction;
     NewTimeFieldFastAction: TAction;
     NewTimeFieldAction: TAction;
-    SaveProjectAsToolBtn: TToolButton;
-    SaveProjectToolBtn: TToolButton;
     SectionToolButton: TToolButton;
     SelectLastAction: TAction;
     SelectFirstAction: TAction;
@@ -87,7 +85,6 @@ type
     PrintDataFormAction: TAction;
     StringToolButton: TToolButton;
     TestToolButton: TToolButton;
-    ToolButton1: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
@@ -184,6 +181,8 @@ type
     procedure CopyControlActionExecute(Sender: TObject);
     procedure CutCopyControlUpdate(Sender: TObject);
     procedure CutControlActionExecute(Sender: TObject);
+    procedure DataformPropertiesActionExecute(Sender: TObject);
+    procedure DefineKeyActionExecute(Sender: TObject);
     procedure DeleteAllActionExecute(Sender: TObject);
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DeleteControlFastActionExecute(Sender: TObject);
@@ -250,7 +249,6 @@ type
     FAddClass: string;
     FImportedFileName: string;
     FLastSelectedFieldType: TEpiFieldType;
-    FPropertiesForm: TPropertiesForm;
     FSettingDataFile: boolean;
     FCreatingControl: boolean;
     FCheckingClipBoard: boolean;
@@ -323,6 +321,9 @@ type
       Const FixedDist: integer = -1);
   private
     { Other }
+    FMayHandleShortcuts: boolean;
+    function  GetRelation: TEpiMasterRelation;
+    procedure SetMayHandleShortcuts(AValue: boolean);
     procedure UpdateShortcuts;
     procedure UpdateControls;
     procedure UpdateInterface;
@@ -333,6 +334,7 @@ type
   protected
     function GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
+    procedure SetVisible(Value: Boolean); override;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
@@ -341,10 +343,15 @@ type
     function    IsShortCut(var Message: TLMKey): boolean;
     function ValidateControls: boolean;
     property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
+    property Relation: TEpiMasterRelation read GetRelation;
     property ImportedFileName: string read FImportedFileName;
     property DesignPanel: TJvDesignPanel read FDesignPanel;
     property DesignScrollBar: TJvDesignScrollBox read FDesignScrollBox;
+    property MayHandleShortcuts: boolean read FMayHandleShortcuts write SetMayHandleShortcuts;
   public
+    procedure Activate;
+    function DeActivate(aHide: boolean): boolean;
+    procedure AssignActionLinks;
     class procedure RestoreDefaultPos(F: TRuntimeDesignFrame);
   end;
 
@@ -367,7 +374,9 @@ uses
   design_control_extender,
   align_form,
   recode_form,
-  rename_form;
+  rename_form,
+  project_keyfields_form
+  ;
 
 { TRuntimeDesignFrame }
 
@@ -835,6 +844,8 @@ begin
   F := TRenameForm.Create(self, DataFile);
   F.ShowModal;
   F.Free;
+
+  UpdateControls;
 end;
 
 
@@ -936,18 +947,29 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.LMDesignerAdd(var Msg: TLMessage);
+var
+  F: TEpiField;
+  P: TPoint;
+  S: TEpiSection;
 begin
   // Hack - because we need the incomming field to be furthest
   // away from being the last entry in Datafile.CustomControls.
   // Otherwise FindNewPosition fails misarably.
-  with TEpiField(Msg.WParam) do
+  F := TEpiField(Msg.WParam);
+  S := F.Section;
+  S.Fields.RemoveItem(F);
+
+  with F do
   begin
     BeginUpdate;
     Top := 0;
     Left := 0;
     EndUpdate;
   end;
-  NewDesignField(FindNewPostion(TDesignField), TEpiField(Msg.WParam), FDesignPanel);
+
+  P := FindNewPostion(TDesignField);
+  S.Fields.AddItem(F);
+  NewDesignField(P, F, FDesignPanel);
 end;
 
 procedure TRuntimeDesignFrame.PasteEpiDoc(const ImportDoc: TEpiDocument;
@@ -980,7 +1002,30 @@ var
   end;
 
   procedure AssignField(F: TEpiField; S: TEpiSection = nil; AParent: TWinControl = nil);
+  var
+    KF: TEpiField;
+    i: integer;
   begin
+    // Related dataset import.
+    if  (ImportData) then
+    begin
+      KF := DataFile.KeyFields.FieldByName[F.Name];
+      if (Assigned(KF)) and
+         (KF.FieldType = F.FieldType) and
+         (Relation.InheritsFrom(TEpiDetailRelation))
+      then
+        begin
+          // An imported field has the same name + type of a keyfield in this datafile.
+          // This datafile is in addition related a master datafile AND we are importing
+          // data.
+          // Now: try to assign data to the existing keyfield->
+          for i := 0 to F.Size -1 do
+            KF.AsValue[i] := F.AsValue[i];
+
+          Exit;
+        end;
+    end;
+
     if (DataFile.Fields.ItemExistsByName(F.Name)) and
        (not RenameFields) and
        (F.FieldType = DataFile.Fields.FieldByName[F.Name].FieldType)
@@ -1019,13 +1064,14 @@ var
   begin
     if Assigned(S) then
     begin
+      // Remove from old section...
+      H.Section.Headings.RemoveItem(H);
+
       // Rename if already present.
       if (not S.ValidateRename(H.Name, false))
       then
         H.Name := DataFile.Headings.GetUniqueItemName(TEpiHeading);
 
-      // Remove from old section...
-      H.Section.Headings.RemoveItem(H);
       // Insert into new...
       S.Headings.AddItem(H);
     end;
@@ -1140,6 +1186,8 @@ begin
   ImpStructurForm := TImportStructureForm.Create(FDesignScrollBox);
   ImpStructurForm.AddInitialFiles(Files);
   ImpStructurForm.ImportData := (DataFile.Size = 0);
+  ImpStructurForm.DataFile := DataFile;
+  ImpStructurForm.Relation := Relation;
   if ImpStructurForm.ShowModal = mrCancel then exit;
 
   // Prepare screen...
@@ -1148,6 +1196,11 @@ begin
     Application.ProcessMessages;
 
     MainForm.BeginUpdatingForm;
+
+    if (ImpStructurForm.SelectedDocuments.Count = 1) and
+       (Pos('Dataform', DataFile.Caption.Text) > 0)
+    then
+      DataFile.Caption.Text := TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[0]).DataFiles[0].Caption.Text;
 
     for i := 0 to ImpStructurForm.SelectedDocuments.Count - 1 do
       PasteEpiDoc(TEpiDocument(ImpStructurForm.SelectedDocuments.Objects[i]),
@@ -1868,6 +1921,20 @@ begin
   ViewDatasetAction.ShortCut           := D_BrowseData;
 end;
 
+procedure TRuntimeDesignFrame.SetMayHandleShortcuts(AValue: boolean);
+var
+  handled: Boolean;
+begin
+  if FMayHandleShortcuts = AValue then Exit;
+  FMayHandleShortcuts := AValue;
+  DesignerActionListUpdate(nil, handled);
+end;
+
+function TRuntimeDesignFrame.GetRelation: TEpiMasterRelation;
+begin
+  result := TEpiMasterRelation(DataFile.FindCustomData(PROJECT_RELATION_KEY));
+end;
+
 procedure TRuntimeDesignFrame.UpdateControls;
 var
   i: Integer;
@@ -2002,6 +2069,8 @@ procedure TRuntimeDesignFrame.UpdateStatusbar(ControlList: TJvDesignObjectArray
 var
   EpiCtrl: TEpiCustomControlItem;
 begin
+  if not Assigned(DataFile) then exit;
+
   // New "statusbar"
   RecordsLabel.Caption := IntToStr(DataFile.Size);
   SectionsLabel.Caption := IntToStr(DataFile.Sections.Count);
@@ -2197,12 +2266,12 @@ end;
 
 procedure TRuntimeDesignFrame.ShowAlignFormActionExecute(Sender: TObject);
 begin
-  ShowAlignmentForm(Self);
+  AlignForm.Show;
 end;
 
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
-//  ShowAlignmentForm(Self);
+  //
 end;
 
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
@@ -2219,7 +2288,7 @@ procedure TRuntimeDesignFrame.ViewDatasetActionExecute(Sender: TObject);
 begin
   ShowDataSetViewerForm(
     Self,
-    'View Dataset:',
+    'View Dataset: ' + DataFile.Caption.Text,
     DataFile);
 end;
 
@@ -2275,8 +2344,8 @@ begin
   else
     Selection := FDesignPanel.Surface.Selected;
 
-  if Assigned(FPropertiesForm) and (not FSettingDataFile) then
-    FPropertiesForm.UpdateSelection(Selection);
+  if Assigned(PropertiesForm) and (not FSettingDataFile) then
+    PropertiesForm.UpdateSelection(Selection);
 
   UpdateStatusbar(Selection);
 end;
@@ -2373,6 +2442,12 @@ begin
       UpdateDesigner;
     end;
 
+    if (Selector.Count = 1) and (Ctrl = FDesignPanel)
+    then
+      EditPopupMenuItem.Action := DataformPropertiesAction
+    else
+      EditPopupMenuItem.Action := EditControlAction;
+
     // Delete previous "Select..." menu -> if it didn't exists then
     // .free is called on Nil which is OK (causes no A/V).
     // We cannot put this in OnClose for the pop-up because on Windows,
@@ -2465,7 +2540,10 @@ end;
 procedure TRuntimeDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
-  if Screen.ActiveCustomForm <> MainForm then
+  if (Screen.ActiveCustomForm <> MainForm) or
+     (not Visible) or
+     (not MayHandleShortcuts)
+  then
     DesignerActionList.State := asSuspended
   else
     DesignerActionList.State := asNormal;
@@ -2489,10 +2567,36 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.CutCopyControlUpdate(Sender: TObject);
+var
+  Items: TJvDesignObjectArray;
+  i: Integer;
+  lEnabled: Boolean;
+  IEpiControl: IDesignEpiControl;
 begin
-  TAction(Sender).Enabled :=
+  lEnabled := true;
+  Items := FDesignPanel.Surface.Selected;
+
+  for i := Low(Items) to High(Items) do
+  begin
+    if not Supports(Items[i], IDesignEpiControl, IEpiControl) then
+    begin
+      lEnabled := false;
+      break;
+    end;
+
+    if FDatafile.KeyFields.IndexOf(IEpiControl.EpiControl) >= 0 then
+    begin
+      lEnabled := false;
+      break;
+    end;
+  end;
+
+  lEnabled :=
+    (lEnabled) and
     (FDesignPanel.Surface.Count > 0) and
     (not FDesignPanel.Surface.Selector.IsSelected(FDesignPanel));
+
+  TAction(Sender).Enabled := lEnabled;
 end;
 
 procedure TRuntimeDesignFrame.Button1Click(Sender: TObject);
@@ -2620,6 +2724,24 @@ begin
   FDesignPanel.Surface.CutComponents;
 end;
 
+procedure TRuntimeDesignFrame.DataformPropertiesActionExecute(Sender: TObject);
+begin
+  FDesignPanel.Surface.Select(FDesignPanel);
+  SelectionChange(self);
+  ShowPropertiesForm(false);
+end;
+
+procedure TRuntimeDesignFrame.DefineKeyActionExecute(Sender: TObject);
+var
+  F: TKeyFieldsForm;
+begin
+  F := TKeyFieldsForm.Create(Self, DataFile, DataFile.ValueLabels);
+  F.ShowModal;
+  F.Free;
+
+  PropertiesForm.ReloadControls;
+end;
+
 function TRuntimeDesignFrame.GetDataFile: TEpiDataFile;
 begin
   result := FDatafile;
@@ -2638,16 +2760,16 @@ var
   P: TPoint;
   z: Integer;
 begin
+  FDesignPanel.Active := true;
   FDatafile := AValue;
   FDatafile.Sections.RegisterOnChangeHook(@SectionsChangeEvent, true);
   FDatafile.MainSection.Fields.OnGetPrefix := @FieldNamePrefix;
   (FDesignPanel as IDesignEpiControl).EpiControl := FDatafile.MainSection;
 
-  FDesignPanel.Active := true;
-  TJvDesignSelector(FDesignPanel.Surface.Selector).HandleWidth := 4;
-
   Controller := TDesignController(FDesignPanel.Surface.Controller);
   Surface    := FDesignPanel.Surface;
+  TJvDesignSelector(Surface.Selector).HandleWidth := 4;
+
 
   FSettingDataFile := true;
   MainForm.BeginUpdatingForm;
@@ -2683,8 +2805,22 @@ begin
   Controller.ClearDragRect;
   Surface.Select(FDesignPanel);
   FSettingDataFile := false;
-  if AlignmentFormIsVisible then
-    ShowAlignFormAction.Execute;
+  FDesignPanel.Active := false;
+end;
+
+procedure TRuntimeDesignFrame.SetVisible(Value: Boolean);
+begin
+  inherited SetVisible(Value);
+
+  if Value then
+  begin
+    FDesignPanel.Active := true;
+    PropertiesForm.OnShowHintMsg := @ShowHintMsg
+  end
+  else begin
+    PropertiesForm.OnShowHintMsg := nil;
+    FDesignPanel.Active := false;
+  end;
 end;
 
 constructor TRuntimeDesignFrame.Create(TheOwner: TComponent);
@@ -2703,9 +2839,9 @@ begin
   FDesignPanel.OnPaint := @PaintDesignPanel;
   FDesignPanel.Align := alClient;
   FDesignPanel.Color := clWhite;
-  FDesignPanel.Parent := FDesignScrollBox;
   FDesignPanel.Surface.ControllerClass := TDesignController;
   FDesignPanel.Surface.MessengerClass := TDesignMessenger;
+  FDesignPanel.Parent := FDesignScrollBox;
 
   FActiveButton := SelectorToolButton;
 
@@ -2713,9 +2849,7 @@ begin
   FHintWindow.AutoHide := true;
   FHintWindow.HideInterval := 5 * 1000;
 
-  FPropertiesForm := TPropertiesForm.Create(Self);
-  FPropertiesForm.OnShowHintMsg := @ShowHintMsg;
-  FPropertiesForm.UpdateSelection(nil);
+  PropertiesForm.UpdateSelection(nil);
 
   {$IFNDEF EPI_DEBUG}
   TestToolButton.Visible := false;
@@ -2723,12 +2857,11 @@ begin
   Splitter1.Visible := false;
   {$ENDIF}
 
-  UpdateShortcuts;
-  UpdateControls;
-  UpdateInterface;
+  UpdateFrame;
 
   FPopUpPoint := Point(-1, -1);
   FSettingDataFile := false;
+  FMayHandleShortcuts := true;
 end;
 
 destructor TRuntimeDesignFrame.Destroy;
@@ -2743,34 +2876,26 @@ end;
 
 procedure TRuntimeDesignFrame.UpdateFrame;
 begin
-  UpdateShortcuts;
+  if MayHandleShortcuts then
+    UpdateShortcuts;
   UpdateControls;
   UpdateInterface;
-  UpdateStatusbar(FDesignPanel.Surface.Selected);
 end;
 
 class procedure TRuntimeDesignFrame.RestoreDefaultPos(F: TRuntimeDesignFrame);
-var
-  Aform: TForm;
 begin
-  if Assigned(F) then
-    TPropertiesForm.RestoreDefaultPos(F.FPropertiesForm)
-  else
-    TPropertiesForm.RestoreDefaultPos(nil);
-
   TImportStructureForm.RestoreDefaultPos;
-  AlignmentFormRestoreDefaultPos;
   DataSetViewerFormRestoreDefaultPos;
 end;
 
 procedure TRuntimeDesignFrame.ShowPropertiesForm(NewControl: boolean);
 begin
-  if not Assigned(FPropertiesForm) then exit;
+  if not Assigned(PropertiesForm) then exit;
 
-  FPropertiesForm.Show;
-  FPropertiesForm.SetFocus;
+  PropertiesForm.Show;
+  PropertiesForm.SetFocus;
   if NewControl then
-    FPropertiesForm.SetFocusOnNew;
+    PropertiesForm.SetFocusOnNew;
 end;
 
 function TRuntimeDesignFrame.IsShortCut(var Message: TLMKey): boolean;
@@ -2778,7 +2903,8 @@ begin
   result :=
     // Only execute our actionlist if mainform is active!
     (Screen.ActiveCustomForm = MainForm) and
-    (DesignerActionList.IsShortCut(Message));
+    (DesignerActionList.IsShortCut(Message)) and
+    (MayHandleShortcuts);
 
   // Else ready for implementing a larger Short-cut editor.
 end;
@@ -2787,8 +2913,89 @@ function TRuntimeDesignFrame.ValidateControls: boolean;
 begin
   Result := true;
 
-  if Assigned(FPropertiesForm) then
-     result := FPropertiesForm.ValidateControls;
+  if Assigned(PropertiesForm) then
+     result := PropertiesForm.ValidateControls;
+end;
+
+procedure TRuntimeDesignFrame.Activate;
+begin
+  Show;
+  BringToFront;
+  FDesignPanel.Surface.Active := true;
+  DesignerActionList.State := asNormal;
+  MayHandleShortcuts := true;
+  FDesignPanel.Surface.Select(FDesignPanel);
+  FDesignPanel.Surface.SelectionChange;
+
+  UpdateFrame;
+end;
+
+function TRuntimeDesignFrame.DeActivate(aHide: boolean): boolean;
+begin
+  Result := PropertiesForm.ValidateControls;
+  if not Result then exit;
+
+  FDesignPanel.Surface.Active := false;
+  DesignerActionList.State := asSuspended;
+  MayHandleShortcuts := false;
+  UpdateFrame;
+  if aHide then
+  begin
+    SendToBack;
+    Hide;
+  end;
+
+  Result := true;
+end;
+
+procedure TRuntimeDesignFrame.AssignActionLinks;
+begin
+  with MainForm do
+  begin
+    PrintDataFormMenuItem.Action     := PrintDataFormAction;
+    // -
+    AddStructureMenuItem.Action      := ImportAction;
+    AddStructFromBLMenuItem.Action   := ImportCBAction;
+
+    // Edit
+    UndoMenuItem.Action              := UndoAction;
+    RedoMenuItem.Action              := RedoAction;
+    // -
+    CutMenuItem.Action               := CutControlAction;
+    CopyMenuItem.Action              := CopyControlAction;
+    PasteMenuItem.Action             := PasteControlAction;
+    // -
+    PasteAsHeadingMenuItem.Action    := PasteAsHeadingAction;
+    PasteAsIntMenuItem.Action        := PasteAsIntAction;
+    PasteAsFloatMenuItem.Action      := PasteAsFloatAction;
+    PasteAsStringMenuItem.Action     := PasteAsStringAction;
+    PasteAsDateMenuItem.Action       := PasteAsDateAction;
+    RenameControlsMenuItem.Action    := RenameControlsAction;
+    RenameControlsPopupMenuItem.Action := RenameControlsAction;
+
+    // Align
+    AlignLeftMenuItem.Action         := AlignLeftAction;
+    AlignRightMenuItem.Action        := AlignRightAction;
+    AlignTopMenuItem.Action          := AlignTopAction;
+    AlignBottomMenuItem.Action       := AlignBottomAction;
+    AlignMenuItem.Action             := ShowAlignFormAction;
+
+    // Select
+    SelectAllIntsMenuItem.Action     := SelectAllIntsAction;
+    SelectAllFloatMenuItem.Action    := SelectAllFloatsAction;
+    SelectAllStringMenuItem.Action   := SelectAllStringsAction;
+    SelectAllBoolMenuItem.Action     := SelectAllBoolsAction;
+
+    // Dataform
+    KeyFieldsMenuItem.Action         := DefineKeyAction;
+    KeyFieldsPopupMenuItem.Action    := DefineKeyAction;
+    DataformPropertiesMenuItem.Action := DataformPropertiesAction;
+    DataformPropertiesPopupMenuItem.Action := DataformPropertiesAction;
+
+    // DataSet
+    BrowseDataMenuItem.Action        := ViewDatasetAction;
+    BrowseDatasetMenuItem.Action     := ViewDatasetAction;
+  end;
 end;
 
 end.

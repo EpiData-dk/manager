@@ -3,7 +3,10 @@ program epidatamanager;
 {$mode objfpc}{$H+}
 
 uses
-//  heaptrc,
+  {$IFDEF MEM_LEAK_FINDER}
+  heaptrc, LazFileUtils,
+  {$ENDIF}
+
   {$IFDEF UNIX}
     {$IFDEF EPI_USEIPC}
     cthreads,
@@ -42,14 +45,15 @@ uses
   design_designcontroller, design_properties_fieldframe,
   design_properties_sectionframe, design_designmessenger, design_commander,
   design_properties_emptyframe, design_designmover, design_designsizer,
-  design_designbander, project_studyunit_form, align_form, report_counts,
+  design_designbander, align_form, report_counts,
   report_optionframe_counts, report_types, dataset_form, ok_cancel_form,
   validate_double_entry_frame, project_settings_autoincrement_frame,
   settings_font_frame, report_codebook, export_ddi_frame,
   design_control_extender, manager_types, export_epx_frame,
   report_project_validation, report_project_validation_frame, recode_form,
   rename_form, report_export, valuelabel_import_external,
-  valuelabel_import_data, append_form;
+  valuelabel_import_data, project_types, project_studyunit_frame, 
+  design_properties_dataformframe, append_form;
 
 {$R *.res}
 
@@ -64,7 +68,19 @@ begin
   result := 'epidata';
 end;
 
+{$IFDEF MEM_LEAK_FINDER}
+const
+  MemTraceFileName = '/tmp/manager.trc';
+{$ENDIF}
+
 begin
+  {$IFDEF MEM_LEAK_FINDER}
+  HaltOnError := false;
+  if FileExistsUTF8(MemTraceFileName) then
+    DeleteFileUTF8(MemTraceFileName);
+  SetHeapTraceOutput(MemTraceFileName);
+  {$ENDIF}
+
   Application.Title := 'EpiData Manager';
   OnGetApplicationName := @EpiDataApplicationName;
   OnGetVendorName := @EpiDataVendorName;
