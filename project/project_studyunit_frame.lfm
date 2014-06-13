@@ -6,8 +6,8 @@ object StudyUnitFrame: TStudyUnitFrame
   ClientHeight = 422
   ClientWidth = 656
   TabOrder = 0
-  DesignLeft = 476
-  DesignTop = 289
+  DesignLeft = 1759
+  DesignTop = 410
   object PageControl1: TPageControl
     Left = 0
     Height = 422
@@ -278,10 +278,10 @@ object StudyUnitFrame: TStudyUnitFrame
         ButtonWidth = 23
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
+        CharCase = ecNormal
         NumGlyphs = 1
         MaxLength = 10
         TabOrder = 3
-        Text = '  -  -    '
       end
       object ToDateEdit: TDateEdit
         AnchorSideLeft.Control = Label16
@@ -298,10 +298,10 @@ object StudyUnitFrame: TStudyUnitFrame
         DateOrder = doDMY
         ButtonWidth = 23
         BorderSpacing.Left = 10
+        CharCase = ecNormal
         NumGlyphs = 1
         MaxLength = 10
         TabOrder = 4
-        Text = '  -  -    '
       end
       object Label16: TLabel
         AnchorSideLeft.Control = FromDateEdit
