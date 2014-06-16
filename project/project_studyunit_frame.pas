@@ -61,6 +61,7 @@ type
     UnitOfObsMemo: TMemo;
     VersionEdit: TEdit;
     procedure BitBtn1Click(Sender: TObject);
+    procedure StudyEditingDone(Sender: TObject);
   private
     { private declarations }
     FStudy: TEpiStudy;
@@ -87,6 +88,11 @@ procedure TStudyUnitFrame.BitBtn1Click(Sender: TObject);
 begin
   PageControl1.ActivePage := TitleSheet;
   WelcomeSheet.TabVisible := False;
+end;
+
+procedure TStudyUnitFrame.StudyEditingDone(Sender: TObject);
+begin
+  FStudy.Modified := true;
 end;
 
 constructor TStudyUnitFrame.Create(TheOwner: TComponent; StudyInfo: TEpiStudy;
@@ -167,10 +173,18 @@ begin
       // http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName
       if (Reg.MatchLen[0] <> Length(Reg.InputString)) then
         begin
+          PageControl1.ActivePage := TabSheet5;
+          AgencyEdit.SetFocus;
+
           ShowMessage(
-            'Agency is not valid according to XML Standard:' + LineEnding +
-            'Please visit this website for more information on NCName or use blank name:' + LineEnding +
+            'The "Agency" specified in ownership as part of' + LineEnding +
+            'Study Information does not conform to the w3 standard.' + LineEnding +
+            'Please correct or leave it blank.' + LineEnding +
             LineEnding +
+            'A simplified rule is restrict content to:' + LineEnding +
+            ' a..z, A..Z, 0...9 and _ - /' + LineEnding +
+            LineEnding +
+            'See:' + LineEnding +
             'http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName'
           );
           result := false;

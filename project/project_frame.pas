@@ -640,7 +640,6 @@ begin
     try
       for i := 0 to EpiDocument.DataFiles.Count - 1 do
       begin
-//        Inc(FrameCount);
         DoNewRuntimeFrame(EpiDocument.DataFiles[i]);
       end;
     except
@@ -1239,6 +1238,15 @@ var
   res: LongInt;
 begin
   {$IFNDEF EPI_DEBUG}
+  // If Seleted Page is StudyUnit, then do a "silent" deactive in order to
+  // check if content of page can actually be saved.
+  if (not FActiveFrame.DeActivate(false)) then
+  begin
+    FActiveFrame.Activate;
+    CanClose := false;
+    Exit;
+  end;
+
   if Modified or
     (Assigned(EpiDocument) and (EpiDocument.Modified)) then
   begin
@@ -1261,6 +1269,8 @@ begin
       mrYes:    CanClose := SaveProject(False);
       mrCancel: CanClose := false;
     end;
+
+    FActiveFrame.Activate;
   end;
   {$ENDIF}
 end;
