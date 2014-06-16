@@ -173,9 +173,16 @@ begin
       // http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName
       if (Reg.MatchLen[0] <> Length(Reg.InputString)) then
         begin
+          PageControl1.ActivePage := TabSheet5;
+          AgencyEdit.SetFocus;
+
           ShowMessage(
-            'The "Agency" specified in ownership as part of Study Information does' + LineEnding +
-            'not conform to the w3 standard. Please correct or leave it blank.' + LineEnding +
+            'The "Agency" specified in ownership as part of' + LineEnding +
+            'Study Information does not conform to the w3 standard.' + LineEnding +
+            'Please correct or leave it blank.' + LineEnding +
+            LineEnding +
+            'A simplified rule is restrict content to:' + LineEnding +
+            ' a..z, A..Z, 0...9 and _ - /' + LineEnding +
             LineEnding +
             'See:' + LineEnding +
             'http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName'

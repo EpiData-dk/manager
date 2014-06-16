@@ -13,9 +13,9 @@ object StudyUnitFrame: TStudyUnitFrame
     Height = 576
     Top = 0
     Width = 659
-    ActivePage = TabSheet7
+    ActivePage = TabSheet5
     Align = alClient
-    TabIndex = 6
+    TabIndex = 4
     TabOrder = 0
     TabPosition = tpRight
     object WelcomeSheet: TTabSheet
@@ -603,10 +603,10 @@ object StudyUnitFrame: TStudyUnitFrame
         Left = 10
         Height = 15
         Top = 65
-        Width = 195
+        Width = 394
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
-        Caption = 'Agency (where data is stored):'
+        Caption = 'Agency (Short acronym for organisation where data is stored)'
         ParentColor = False
       end
       object AgencyEdit: TEdit
