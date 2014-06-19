@@ -425,6 +425,7 @@ end;
 
 destructor TProjectFileListFrame.Destroy;
 begin
+  FDocFileList.Free;
   FDocList.Free;
   inherited Destroy;
 end;

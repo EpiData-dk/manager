@@ -5,7 +5,7 @@ unit report_fieldlist;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument;
+  Classes, SysUtils, report_base, epidocument, epidatafiles;
 
 type
 
@@ -39,15 +39,24 @@ procedure TReportFieldLists.DoDocumentReport(const Doc: TEpiDocument;
   const FileName: string; const Index: Integer);
 var
   R: TEpiReportControlList;
+  OrderedDFs: TEpiDataFiles;
+  DF: TEpiDataFile;
 begin
   inherited DoDocumentReport(Doc, FileName, Index);
 
-  R := TEpiReportControlList.Create(Generator);
-  R.ControlItems := Doc.DataFiles[0].ControlItems;
-  R.ExtendedList := false;
-//  R.SortType := stEntryFlow;
-  R.RunReport;
-  R.Free;
+  OrderedDFs := Doc.Relations.GetOrderedDataFiles;
+
+  for DF in OrderedDFs do
+  begin
+    Generator.Line('');
+    R := TEpiReportControlList.Create(Generator);
+    R.TableHeader := 'List Overview: ' + DF.Caption.Text;
+    R.ControlItems := DF.ControlItems;
+    R.ExtendedList := false;
+    R.RunReport;
+    R.Free;
+    Generator.Line('');
+  end;
 end;
 
 end.

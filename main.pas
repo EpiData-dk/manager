@@ -462,7 +462,7 @@ end;
 
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
 begin
-  RunReport(TReportFieldListExtended);
+  RunReport(TReportFieldListExtended).Free;
 end;
 
 procedure TMainForm.FileMenuItemClick(Sender: TObject);
@@ -618,7 +618,7 @@ end;
 
 procedure TMainForm.CodeBookReportActionExecute(Sender: TObject);
 begin
-  RunReport(TReportCodeBook);
+  RunReport(TReportCodeBook).Free;
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -739,12 +739,12 @@ end;
 
 procedure TMainForm.ProjectReportActionExecute(Sender: TObject);
 begin
-  RunReport(TReportProjectOverview);
+  RunReport(TReportProjectOverview).Free;
 end;
 
 procedure TMainForm.QuestionListReportActionExecute(Sender: TObject);
 begin
-  RunReport(TReportFieldLists);
+  RunReport(TReportFieldLists).Free;
 end;
 
 procedure TMainForm.ReportGeneratorActionExecute(Sender: TObject);
@@ -900,7 +900,7 @@ end;
 
 procedure TMainForm.ValueLabelListReportActionExecute(Sender: TObject);
 begin
-  RunReport(TReportValueLabelList);
+  RunReport(TReportValueLabelList).Free;
 end;
 
 procedure TMainForm.VerifyDoubleEntryActionExecute(Sender: TObject);

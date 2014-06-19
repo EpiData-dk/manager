@@ -228,12 +228,14 @@ var
   TabSheet: TTabSheet;
   FC: TCustomFrameClass;
   Intf: ICanCloseQuery;
+  L: TStringList;
 begin
   Create(TheOwner);
   FReportClass := ReportClass;
   FReport := nil;
 
-  FakeReport := FReportClass.Create(TStringList.Create, TEpiReportTXTGenerator);
+  L := TStringList.Create;
+  FakeReport := FReportClass.Create(L, TEpiReportTXTGenerator);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
 
   if Supports(FakeReport, IReportFrameProvider) then
@@ -254,6 +256,7 @@ begin
     end;
   end;
 
+  L.Free;
   FakeReport.Free;
 end;
 

@@ -1237,10 +1237,10 @@ procedure TProjectFrame.CloseQuery(var CanClose: boolean);
 var
   res: LongInt;
 begin
-  {$IFNDEF EPI_DEBUG}
   // If Seleted Page is StudyUnit, then do a "silent" deactive in order to
   // check if content of page can actually be saved.
-  if (not FActiveFrame.DeActivate(false)) then
+  if (Assigned(FActiveFrame)) and
+     (not FActiveFrame.DeActivate(false)) then
   begin
     FActiveFrame.Activate;
     CanClose := false;
@@ -1272,7 +1272,6 @@ begin
 
     FActiveFrame.Activate;
   end;
-  {$ENDIF}
 end;
 
 class procedure TProjectFrame.RestoreDefaultPos(F: TProjectFrame);
@@ -1283,13 +1282,6 @@ begin
   TAlignmentForm.RestoreDefaultPos;
   TPropertiesForm.RestoreDefaultPos(PropertiesForm);
   TRuntimeDesignFrame.RestoreDefaultPos(nil);
-
-  // TODO:
-  {
-  if Assigned(F) then
-    TRuntimeDesignFrame.RestoreDefaultPos(TRuntimeDesignFrame(F.ActiveFrame))
-  else
-    TRuntimeDesignFrame.RestoreDefaultPos(nil);        }
 end;
 
 procedure TProjectFrame.UpdateFrame;

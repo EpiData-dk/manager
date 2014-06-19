@@ -319,7 +319,6 @@ object MainForm: TMainForm
     end
     object MenuItem21: TMenuItem
       Caption = 'Document'
-      Enabled = False
       object MenuItem2: TMenuItem
         Caption = 'Report Structure'
         object ProjectOverviewReportMenuItem: TMenuItem

@@ -5,13 +5,16 @@ unit report_codebook;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument;
+  Classes, SysUtils, report_base, epidocument, epidatafiles, epirelations;
 
 type
 
   { TReportCodeBook }
 
   TReportCodeBook = class(TReportFileListBase)
+  private
+    procedure DataFileReport(const Relation: TEpiMasterRelation;
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
   protected
     function GetTitle: string; override;
     procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
@@ -29,6 +32,45 @@ resourcestring
 
 { TReportCodeBook }
 
+procedure TReportCodeBook.DataFileReport(const Relation: TEpiMasterRelation;
+  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+var
+  DF: TEpiDataFile;
+  F: TEpiField;
+  R: TEpiReportBase;
+begin
+  DF := Relation.Datafile;
+
+  Generator.Line('');
+  Generator.Section('Dataform: ' + DF.Caption.Text);
+  Generator.Line('');
+
+  R := TEpiReportControlList.Create(Generator);
+  with TEpiReportControlList(R) do
+  begin
+    ControlItems := DF.ControlItems;
+    ExtendedList := true;
+  end;
+  R.RunReport;
+  R.Free;
+
+  Generator.Line('');
+  Generator.Line('.-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-.');
+  Generator.Line('');
+
+  for F in DF.Fields do
+  begin
+    R := TEpiReportFieldInfo.Create(Generator);
+    TEpiReportFieldInfo(R).Field := F;
+    R.RunReport;
+    R.Free;
+
+    Generator.Line('');
+    Generator.Line('.-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-..-^-.');
+    Generator.Line('');
+  end;
+end;
+
 function TReportCodeBook.GetTitle: string;
 begin
   Result := rsReportCodeBook;
@@ -42,25 +84,7 @@ var
 begin
   inherited DoDocumentReport(Doc, FileName, Index);
 
-  R := TEpiReportControlList.Create(Generator);
-  with TEpiReportControlList(R) do
-  begin
-    ControlItems := Doc.DataFiles[0].ControlItems;
-    ExtendedList := true;
-  end;
-  R.RunReport;
-  R.Free;
-  Generator.Line('');
-
-  for i := 0 to Doc.DataFiles[0].Fields.Count - 1 do
-  begin
-    R := TEpiReportFieldInfo.Create(Generator);
-    TEpiReportFieldInfo(R).Field := Doc.DataFiles[0].Fields[i];
-    R.RunReport;
-    R.Free;
-    if not (i = Doc.DataFiles[0].Fields.Count - 1) then
-      Generator.Line('');
-  end;
+  Doc.Relations.OrderedWalk(@DataFileReport);
 end;
 
 end.
