@@ -199,6 +199,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value=""/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -353,6 +354,7 @@
       <Unit24>
         <Filename Value="reports/report_fieldlist.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value=""/>
       </Unit24>
       <Unit25>
         <Filename Value="reports/report_valuelabellist.pas"/>
@@ -367,6 +369,7 @@
       <Unit27>
         <Filename Value="reports/report_base.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value=""/>
       </Unit27>
       <Unit28>
         <Filename Value="utils/projectfilelist_frame.pas"/>
@@ -374,6 +377,7 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value=""/>
       </Unit28>
       <Unit29>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -381,6 +385,7 @@
         <ComponentName Value="StaticReportsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value=""/>
       </Unit29>
       <Unit30>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
@@ -390,6 +395,7 @@
       <Unit31>
         <Filename Value="reports/report_project_overview.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value=""/>
       </Unit31>
       <Unit32>
         <Filename Value="shortcuts.pas"/>
@@ -495,7 +501,6 @@
         <ComponentName Value="PrepareDoubleEntryForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value=""/>
       </Unit45>
       <Unit46>
         <Filename Value="project/project_keyfields_form.pas"/>
@@ -503,7 +508,6 @@
         <ComponentName Value="KeyFieldsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value=""/>
       </Unit46>
       <Unit47>
         <Filename Value="utils/manager_globals.pas"/>
@@ -688,6 +692,7 @@
       <Unit76>
         <Filename Value="reports/report_codebook.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value=""/>
       </Unit76>
       <Unit77>
         <Filename Value="export/export_ddi_frame.pas"/>

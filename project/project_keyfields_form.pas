@@ -384,7 +384,6 @@ end;
 procedure TKeyFieldsForm.AddFieldsToCombo(Combo: TComboBox);
 var
   Flds: TEpiFields;
-  i: Integer;
   F: TEpiField;
 begin
   Combo.Clear;
@@ -394,7 +393,7 @@ begin
   begin
     if (not FDataFile.KeyFields.FieldExists(F)) and
         (
-         (F.FieldType in AutoFieldTypes) or
+         (F.FieldType in AutoUpdateFieldTypes) or
          (F.EntryMode = emNoEnter)
         )
     then

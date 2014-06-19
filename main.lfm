@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 1800
+  Left = 1733
   Height = 603
-  Top = 470
+  Top = 321
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -526,7 +526,6 @@ object MainForm: TMainForm
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'
       Caption = 'Prepare Double Entry'
-      Enabled = False
       OnExecute = PrepareDoubleEntryActionExecute
     end
     object VerifyDoubleEntryAction: TAction

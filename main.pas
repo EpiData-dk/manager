@@ -719,7 +719,6 @@ end;
 
 procedure TMainForm.PrepareDoubleEntryActionExecute(Sender: TObject);
 var
-  Fn: string;
   Local: boolean;
   Doc: TEpiDocumentFile;
 begin

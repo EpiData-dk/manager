@@ -55,16 +55,13 @@ procedure TPrepareDoubleEntryForm.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
 var
   NewDoc: TEpiDocument;
-  i: Integer;
-  Res: Integer;
   FN: TCaption;
   F: TEpiField;
   NewName: String;
-  S: TEpiSection;
-  j: Integer;
   NewF: TEpiField;
   DocFile: TDocumentFile;
   DF: TEpiDataFile;
+  Idx: Integer;
 begin
   if ModalResult  = mrCancel then exit;
 
@@ -110,8 +107,13 @@ begin
         NewF.Assign(F);
         NewF.EntryMode := emMustEnter;
         NewName := F.Name;
+
+        Idx := DF.KeyFields.IndexOf(F);
         F.Free;
+
         NewF.Name := NewName;
+        if (Idx > -1) then
+          DF.KeyFields.InsertItem(Idx, NewF);
       end;
     end;
 
