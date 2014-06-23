@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   StdCtrls, EditBtn, Buttons, CheckLst, ExtCtrls, VirtualTrees,
   epiexportsettings, export_stata_frame, epidatafiles, epidocument,
-  epicustombase, epirelations, export_frame_types;
+  epicustombase, epirelations, epiv_dataform_treeview, export_frame_types;
 
 type
 
@@ -17,13 +17,12 @@ type
   TExportForm = class(TForm)
     AllBitBtn: TBitBtn;
     DataFileComboBox: TComboBox;
+    DFTreeViewFrame: TDataFormTreeViewFrame;
     ExportReportChkBox: TCheckBox;
-    ImageList1: TImageList;
     NoneBitBtn: TBitBtn;
     BitBtn3: TBitBtn;
     BitBtn4: TBitBtn;
     ExportDeletedChkBox: TCheckBox;
-    FieldsChkListBox: TCheckListBox;
     ExportTypeCombo: TComboBox;
     EncodingCmbBox: TComboBox;
     FromRecordEdit: TEdit;
@@ -41,19 +40,13 @@ type
     AllRecordRBtn: TRadioButton;
     RangeRBtn: TRadioButton;
     BasicSheet: TTabSheet;
-    DataFileTree: TVirtualStringTree;
     procedure BitBtn3Click(Sender: TObject);
     procedure DataFileComboBoxSelect(Sender: TObject);
-    procedure DataFileTreeGetImageIndex(Sender: TBaseVirtualTree;
-      Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var ImageIndex: Integer);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure FromRecordEditClick(Sender: TObject);
     procedure NoneBitBtnClick(Sender: TObject);
     procedure ExportTypeComboSelect(Sender: TObject);
-    procedure FieldsChkListBoxMouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FromRecordEditKeyPress(Sender: TObject; var Key: char);
   private
@@ -62,16 +55,6 @@ type
     IFrame: IExportSettingsPresenterFrame;
     FDoc: TEpiDocument;
     FFileName: string;
-    procedure PopulateListBox(Const Datafile: TEpiDataFile);
-  private
-    { VirtualStringTree }
-    FDataFile: TEpiDataFile;
-    function GetCustomItemFromNode(Const Node: PVirtualNode): TEpiCustomControlItem;
-    procedure DataFileTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
-    procedure DataFileTreeInitNode(Sender: TBaseVirtualTree; ParentNode,
-      Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-    procedure PopulateTree(Const Datafile: TEpiDataFile);
     procedure UpdateDataFileCombo;
   public
     { public declarations }
@@ -155,18 +138,9 @@ begin
       ToRecord   := 0;
     end;
     Encoding := TEpiEncoding(PtrUInt(EncodingCmbBox.Items.Objects[EncodingCmbBox.ItemIndex]));
+    Fields.Free;
 
-    Node := DataFileTree.GetFirst();
-    while Assigned(Node) do
-    begin
-      CI := GetCustomItemFromNode(Node);
-
-      if (DataFileTree.CheckState[Node] in [csMixedNormal, csCheckedNormal]) and
-         (DataFileTree.IsVisible[Node])
-      then
-        Fields.Add(GetCustomItemFromNode(Node));
-      Node := DataFileTree.GetNext(Node, true);
-    end;
+    Fields := DFTreeViewFrame.SelectedList;
   end;
   (Rec^.Frame as IExportSettingsPresenterFrame).UpdateExportSetting(FExportSetting);
 end;
@@ -174,54 +148,6 @@ end;
 procedure TExportForm.FromRecordEditKeyPress(Sender: TObject; var Key: char);
 begin
   if not (Key in [Char('0')..Char('9')]) then Key := #0;
-end;
-
-procedure TExportForm.PopulateListBox(const Datafile: TEpiDataFile);
-var
-  i: Integer;
-begin
-  // Fields:
-  for i := 0 to DataFile.Fields.Count - 1 do
-    FieldsChkListBox.AddItem(DataFile.Fields[i].Name, DataFile.Fields[i]);
-  FieldsChkListBox.CheckAll(cbChecked, false, false);
-end;
-
-function TExportForm.GetCustomItemFromNode(const Node: PVirtualNode
-  ): TEpiCustomControlItem;
-begin
-  result := TEpiCustomControlItem(DataFileTree.GetNodeData(Node)^);
-end;
-
-procedure TExportForm.PopulateTree(const Datafile: TEpiDataFile);
-var
-  MainNode: PVirtualNode;
-  CI: TEpiCustomControlItem;
-  CurrentNode: PVirtualNode;
-  i: Integer;
-begin
-  DataFileTree.Clear;
-  DataFileTree.BeginUpdate;
-  DataFileTree.NodeDataSize := SizeOf(TEpiCustomControlItem);
-
-  MainNode := DataFileTree.AddChild(nil, Datafile.MainSection);
-
-  for i := 1 to Datafile.ControlItems.Count - 1 do
-  begin
-    CI := Datafile.ControlItem[i];
-
-    if (CI.Owner.Owner = Datafile.MainSection) or
-       (CI is TEpiSection)
-    then
-      CurrentNode := MainNode;
-
-    if CI is TEpiSection then
-      CurrentNode := DataFileTree.AddChild(CurrentNode, CI)
-    else
-      DataFileTree.AddChild(CurrentNode, CI);
-  end;
-  DataFileTree.EndUpdate;
-  DataFileTree.ReinitChildren(MainNode, true);
-  DataFileTree.ToggleNode(MainNode);
 end;
 
 procedure TExportForm.UpdateDataFileCombo;
@@ -272,7 +198,7 @@ begin
     ExportFileNameEdit.Text := ChangeFileExt(ExportFileNameEdit.Text, Ext)
   end;
 
-  DataFileTree.ReinitNode(DataFileTree.GetFirst(), true);
+  DFTreeViewFrame.ShowHeadings := IFrame.ExportHeadings;
 end;
 
 procedure TExportForm.NoneBitBtnClick(Sender: TObject);
@@ -280,12 +206,9 @@ var
   State: TCheckState;
 begin
   if Sender = NoneBitBtn then
-    State := csUncheckedNormal
+    DFTreeViewFrame.SelectNone
   else
-    State := csCheckedNormal;
-
-  DataFileTree.CheckState[DataFileTree.GetFirst()] := State;
-//  FieldsChkListBox.CheckAll(State, false, false);
+    DFTreeViewFrame.SelectAll;
 end;
 
 procedure TExportForm.FromRecordEditClick(Sender: TObject);
@@ -342,48 +265,6 @@ begin
     SaveFormPosition(Self, Self.ClassName);
 end;
 
-procedure TExportForm.DataFileTreeGetImageIndex(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-  var Ghosted: Boolean; var ImageIndex: Integer);
-var
-  CI: TEpiCustomControlItem;
-begin
-  if Column = 1 then exit;
-
-  CI := GetCustomItemFromNode(Node);
-
-  if CI is TEpiHeading then
-    ImageIndex := 8;
-  if CI is TEpiSection then
-    ImageIndex := 9;
-
-  if CI is TEpiField then
-  case TEpiField(CI).FieldType of
-    ftBoolean:
-      ImageIndex := 0;
-    ftInteger,
-    ftAutoInc:
-      ImageIndex := 1;
-    ftFloat:
-      ImageIndex := 2;
-    ftDMYDate,
-    ftDMYAuto:
-      ImageIndex := 3;
-    ftMDYDate,
-    ftMDYAuto:
-      ImageIndex := 4;
-    ftYMDDate,
-    ftYMDAuto:
-      ImageIndex := 5;
-    ftTime,
-    ftTimeAuto:
-      ImageIndex := 6;
-    ftString,
-    ftUpperString:
-      ImageIndex := 7;
-  end;
-end;
-
 procedure TExportForm.BitBtn3Click(Sender: TObject);
 var
   Msg: String;
@@ -415,54 +296,7 @@ end;
 
 procedure TExportForm.DataFileComboBoxSelect(Sender: TObject);
 begin
-  PopulateTree(TEpiDataFile(DataFileComboBox.Items.Objects[DataFileComboBox.ItemIndex]));
-end;
-
-procedure TExportForm.DataFileTreeGetText(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-  var CellText: String);
-var
-  CI: TEpiCustomControlItem;
-begin
-  CI := GetCustomItemFromNode(Node);
-
-  if Column = 0 then
-    CellText := CI.Name
-  else begin
-    if CI is TEpiSection then
-      CellText := TEpiSection(CI).Caption.Text;
-    if CI is TEpiHeading then
-      CellText := TEpiHeading(CI).Caption.Text;
-    if CI is TEpiField then
-      CellText := TEpiField(CI).Question.Text;
-  end;
-end;
-
-procedure TExportForm.DataFileTreeInitNode(Sender: TBaseVirtualTree;
-  ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-var
-  CI: TEpiCustomControlItem;
-begin
-  Sender.CheckType[Node]  := ctTriStateCheckBox;
-  Sender.CheckState[Node] := csCheckedNormal;
-
-  CI := GetCustomItemFromNode(Node);
-  if (CI is TEpiHeading) and
-     (not IFrame.ExportHeadings)
-  then
-    Sender.IsVisible[Node] := false
-  else
-    Sender.IsVisible[Node] := true;
-end;
-
-procedure TExportForm.FieldsChkListBoxMouseMove(Sender: TObject;
-  Shift: TShiftState; X, Y: Integer);
-var
-  Idx: Integer;
-begin
-{  Idx := FieldsChkListBox.GetIndexAtXY(X,Y);
-  if Idx <> -1 then
-    QuestionLabel.Caption := TEpiField(FieldsChkListBox.Items.Objects[Idx]).Question.Text;         }
+  DFTreeViewFrame.DataFile := TEpiDataFile(DataFileComboBox.Items.Objects[DataFileComboBox.ItemIndex]);
 end;
 
 constructor TExportForm.Create(TheOwner: TComponent; const Doc: TEpiDocument;
@@ -530,9 +364,6 @@ begin
     AddObject('Korean (CP949)',         TObject(eeCP949));
     AddObject('Japanes (CP932)',        TObject(eeCP932));
   end;
-
-  DataFileTree.OnGetText  := @DataFileTreeGetText;
-  DataFileTree.OnInitNode := @DataFileTreeInitNode;
 
   UpdateDataFileCombo;
 end;

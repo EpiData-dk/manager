@@ -458,6 +458,7 @@
         <ComponentName Value="PrepareDoubleEntryForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="prepare_double_entry_form"/>
       </Unit45>
       <Unit46>
         <Filename Value="project/project_keyfields_form.pas"/>
@@ -465,6 +466,7 @@
         <ComponentName Value="KeyFieldsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="project_keyfields_form"/>
       </Unit46>
       <Unit47>
         <Filename Value="utils/manager_globals.pas"/>
@@ -480,7 +482,6 @@
       <Unit49>
         <Filename Value="reports/report_double_entry_validation.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_double_entry_validation"/>
       </Unit49>
       <Unit50>
         <Filename Value="reports/viewer_form.pas"/>
@@ -604,7 +605,6 @@
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="validate_double_entry_frame"/>
       </Unit73>
       <Unit74>
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
