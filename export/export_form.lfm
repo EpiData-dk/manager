@@ -1,7 +1,7 @@
 object ExportForm: TExportForm
-  Left = 2018
+  Left = 637
   Height = 581
-  Top = 305
+  Top = 216
   Width = 713
   ActiveControl = BitBtn3
   Caption = 'Export...'

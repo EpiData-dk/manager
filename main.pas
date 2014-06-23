@@ -16,6 +16,7 @@ type
 
   TMainForm = class(TForm)
     AppendAction: TAction;
+    Button2: TButton;
     MenuItem33: TMenuItem;
     Button1: TButton;
     DataFormBtn: TButton;
@@ -177,6 +178,7 @@ type
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
@@ -286,7 +288,8 @@ uses
   managerprocs, process, epiv_documentfile,
   report_export, epireport_generator_txt,
   valuelabel_import_data,
-  append_form, epitools_append;
+  append_form, epitools_append,
+  epiv_dataform_treeview;
 
 { TMainForm }
 
@@ -604,6 +607,25 @@ begin
     DocFile.SaveFile(DocFile.FileName);
     DocFile.Free;
   end;
+end;
+
+procedure TMainForm.Button2Click(Sender: TObject);
+var
+  F: TForm;
+  Fr: TDataFormTreeViewFrame;
+begin
+  F := TForm.Create(self);
+  F.SetBounds(0, 0, 200, 400);
+  F.Position := poMainFormCenter;
+
+  Fr := TDataFormTreeViewFrame.Create(F);
+  Fr.Parent := F;
+  FR.Align := alClient;
+  Fr.ShowHeadings := true;
+  Fr.DataFile := FActiveFrame.EpiDocument.DataFiles[0];
+
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 1733
+  Left = 528
   Height = 603
-  Top = 321
+  Top = 316
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -138,6 +138,15 @@ object MainForm: TMainForm
       OnClick = Button1Click
       TabOrder = 6
       Visible = False
+    end
+    object Button2: TButton
+      Left = 696
+      Height = 25
+      Top = 7
+      Width = 75
+      Caption = 'Test'
+      OnClick = Button2Click
+      TabOrder = 7
     end
   end
   object MainMenu1: TMainMenu
