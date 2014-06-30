@@ -474,7 +474,7 @@ begin
   begin
     Align := alClient;
     Parent := Self;
-    Color := clNone;
+    Color := clWindow;
     NodeDataSize := SizeOF(PEpiValueLabel);
     WantTabs := true;
     TabStop := true;

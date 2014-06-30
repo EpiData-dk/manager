@@ -249,10 +249,12 @@ type
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
     { Process communication }
+    {$IFDEF EPI_IPC_TEST}
     FEpiIPC:  TEpiIPC;
     procedure  SetupIPC;
     function   CheckEntryClientOpenFile(Const FileName: string): boolean;
     procedure  CheckHasOpenFile(Const MsgType: TMessageType; Const Msg: string; out Ack: TMessageType);
+    {$ENDIF}
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -278,13 +280,11 @@ uses
   epicustombase, LCLType, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   report_fieldlist, report_valuelabellist,
-  report_combinedlist, viewer_form, staticreports_form,
+  viewer_form, staticreports_form,
   report_fieldlist_extended, report_project_overview,
   report_counts, report_double_entry_validation,
   report_codebook, report_project_validation,
-  shortcuts, valuelabelseditor_form2, export_form, epiadmin,
-  prepare_double_entry_form,
-  validate_double_entry_form, design_runtimedesigner,
+  shortcuts, export_form, prepare_double_entry_form,
   managerprocs, process, epiv_documentfile,
   report_export, epireport_generator_txt,
   valuelabel_import_data,
@@ -1306,6 +1306,7 @@ begin
   F.Free;
 end;
 
+{$IFDEF EPI_IPC_TEST}
 function TMainForm.CheckEntryClientOpenFile(const FileName: string): boolean;
 begin
   {$IFDEF EPI_USEIPC}
@@ -1322,6 +1323,7 @@ begin
   if Assigned(FActiveFrame) and (FActiveFrame.ProjectFileName = Msg) then
     Ack := epiIPC_Ack_FileIsOpen;      }
 end;
+{$ENDIF}
 
 procedure TMainForm.LMOpenProject(var Msg: TLMessage);
 var
@@ -1372,13 +1374,13 @@ begin
     Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
 end;
 
+{$IFDEF EPI_IPC_TEST}
 procedure TMainForm.SetupIPC;
 begin
-  {$IFDEF EPI_USEIPC}
   FEpiIPC := TEpiIPC.Create(ApplicationName, Self);
   FEpiIPC.OnRequest := @CheckHasOpenFile;
-  {$ENDIF}
 end;
+{$ENDIF}
 
 procedure TMainForm.UpdateRecentFiles;
 var
@@ -1437,10 +1439,12 @@ end;
 procedure TMainForm.BeginUpdatingForm;
 begin
   BeginFormUpdate;
+//  LockRealizeBounds;
 end;
 
 procedure TMainForm.EndUpdatingForm;
 begin
+//  UnlockRealizeBounds;
   EndFormUpdate;
 end;
 
@@ -1449,7 +1453,9 @@ begin
   inherited Create(TheOwner);
   FActiveFrame := nil;
 
+  {$IFDEF EPI_IPC_TEST}
   SetupIPC;
+  {$ENDIF}
   UpdateMainMenu;
   AssignActionLinks;
 end;
@@ -1463,9 +1469,7 @@ begin
   TToolsForm.RestoreDefaultPos;
   TExportForm.RestoreDefaultPos;
 
-
   ReportFormRestoreDefaultPos;
-
 
   BeginFormUpdate;
   Width := 700;

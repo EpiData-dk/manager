@@ -18,6 +18,7 @@ type
     FCompareFields: TEpiFields;
     FDblEntryValidateOptions: TEpiToolsDblEntryValidateOptions;
     FKeyFields: TEpiFields;
+    procedure DoDataFileReport(Const MainDf, DuplDF: TEpiDataFile);
   protected
     function GetTitle: string; override;
     procedure DoRunReport; override;
@@ -41,6 +42,23 @@ resourcestring
 
 { TReportDoubleEntryValidation }
 
+procedure TReportDoubleEntryValidation.DoDataFileReport(const MainDf,
+  DuplDF: TEpiDataFile);
+var
+  R: TEpiReportDoubleEntryValidation;
+begin
+  R := TEpiReportDoubleEntryValidation.Create(Generator);
+  R.MainDF := MainDf;
+  R.DuplDF := DuplDF;
+
+  R.CompareFields := MainDF.Fields;
+  R.KeyFields     := MainDF.KeyFields;
+
+  R.DblEntryValidateOptions := FDblEntryValidateOptions;
+  R.RunReport;
+  R.Free;
+end;
+
 function TReportDoubleEntryValidation.GetTitle: string;
 begin
   result := rsReportDoubleEntryValidation;
@@ -49,17 +67,33 @@ end;
 procedure TReportDoubleEntryValidation.DoRunReport;
 var
   R: TEpiReportDoubleEntryValidation;
+  MainDoc: TEpiDocument;
+  DuplDoc: TEpiDocument;
+  OrderedMainDF: TEpiDataFiles;
+  MainDF: TEpiDataFile;
+  DuplDF: TEpiDataFile;
 begin
   inherited DoRunReport;
+  Generator.Line('');
 
-  R := TEpiReportDoubleEntryValidation.Create(Generator);
-  R.MainDF := TEpiDocument(Documents.Objects[0]).DataFiles[0];
-  R.DuplDF := TEpiDocument(Documents.Objects[1]).DataFiles[0];
-  R.CompareFields := FCompareFields;
-  R.KeyFields     := FKeyFields;
-  R.DblEntryValidateOptions := FDblEntryValidateOptions;
-  R.RunReport;
-  R.Free;
+  MainDoc := TEpiDocument(Documents.Objects[0]);
+  DuplDoc := TEpiDocument(Documents.Objects[1]);
+
+
+  OrderedMainDF := MainDoc.Relations.GetOrderedDataFiles;
+
+  for MainDF in OrderedMainDF do
+  begin
+    Generator.Section('DataForm: ' + MainDF.Caption.Text);
+    Generator.Line('');
+
+    DuplDF := TEpiDataFile(DuplDoc.DataFiles.GetItemByName(MainDF.Name));
+
+    DoDataFileReport(MainDF, DuplDF);
+
+    Generator.Line('');
+  end;
+
 end;
 
 procedure TReportDoubleEntryValidation.DoDocumentReport(

@@ -2838,7 +2838,7 @@ begin
   FDesignPanel.OnSelectionChange := @SelectionChange;
   FDesignPanel.OnPaint := @PaintDesignPanel;
   FDesignPanel.Align := alClient;
-  FDesignPanel.Color := clWhite;
+  FDesignPanel.Color := clWindow;
   FDesignPanel.Surface.ControllerClass := TDesignController;
   FDesignPanel.Surface.MessengerClass := TDesignMessenger;
   FDesignPanel.Parent := FDesignScrollBox;
