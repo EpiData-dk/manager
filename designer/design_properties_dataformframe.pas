@@ -15,11 +15,13 @@ type
 
   TDataformPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
     CaptionEdit: TEdit;
+    NameEdit: TEdit;
     GroupAssignedListBox: TListBox;
     GroupAvailableListBox: TListBox;
     GroupBox1: TGroupBox;
     GrpRightsMoveLeft: TSpeedButton;
     GrpRightsMoveRight: TSpeedButton;
+    Label1: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label9: TLabel;
@@ -98,6 +100,7 @@ end;
 
 procedure TDataformPropertiesFrame.UpdateContent;
 begin
+  NameEdit.Text    := DataFile.Name;
   CaptionEdit.Text := DataFile.Caption.Text;
 
   if GroupBox1.Visible then
@@ -170,11 +173,29 @@ begin
   if not Assigned(DataFile) then exit;
   if not Assigned(Relation) then exit;
 
+  if NameEdit.Modified then
+  begin
+    if NameEdit.Text = '' then
+    begin
+      ShowHintMsg('A dataform name cannot be empty!', NameEdit);
+      Exit(false);
+    end;
+
+    if (NameEdit.Text <> DataFile.Name) then
+    begin
+      if not TEpiCustomList(DataFile.Owner).ValidateRename(NameEdit.Text, false) then
+      begin
+        ShowHintMsg('Name already exists or invalid identifier', NameEdit);
+        Exit(false);
+      end;
+    end;
+  end;
+
   if CaptionEdit.Modified then
   begin
     if CaptionEdit.Text = '' then
     begin
-      ShowHintMsg('A dataform name cannot be empty!', CaptionEdit);
+      ShowHintMsg('A dataform caption cannot be empty!', CaptionEdit);
       Exit(false);
     end;
   end;
@@ -192,7 +213,11 @@ begin
     Exit(false);
   end;
 
-  DataFile.Caption.Text := CaptionEdit.Text;
+  if NameEdit.Modified then
+    DataFile.Name := NameEdit.Text;
+
+  if CaptionEdit.Modified then
+    DataFile.Caption.Text := CaptionEdit.Text;
 
   if GroupBox1.Visible then
   with TEpiDetailRelation(Relation) do

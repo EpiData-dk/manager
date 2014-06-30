@@ -1,10 +1,10 @@
 object DataformPropertiesFrame: TDataformPropertiesFrame
-  Left = 549
-  Height = 474
-  Top = 306
-  Width = 388
-  ClientHeight = 474
-  ClientWidth = 388
+  Left = 2053
+  Height = 471
+  Top = 431
+  Width = 599
+  ClientHeight = 471
+  ClientWidth = 599
   LCLVersion = '1.3'
   object SectionGroupAccessGroupBox: TGroupBox
     AnchorSideLeft.Control = CaptionEdit
@@ -14,13 +14,13 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 170
-    Top = 158
-    Width = 368
+    Top = 213
+    Width = 579
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
     Caption = 'Groups access:'
     ClientHeight = 153
-    ClientWidth = 364
+    ClientWidth = 575
     TabOrder = 0
     Visible = False
     object GroupAvailableListBox: TListBox
@@ -32,13 +32,13 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       Left = 6
       Height = 126
       Top = 22
-      Width = 160
+      Width = 266
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Top = 2
       BorderSpacing.Right = 5
       BorderSpacing.Bottom = 5
       ItemHeight = 0
-      ScrollWidth = 158
+      ScrollWidth = 264
       Sorted = True
       TabOrder = 0
       TopIndex = -1
@@ -50,16 +50,16 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       AnchorSideTop.Side = asrBottom
       AnchorSideBottom.Control = SectionGroupAccessGroupBox
       AnchorSideBottom.Side = asrBottom
-      Left = 201
+      Left = 307
       Height = 126
       Top = 22
-      Width = 156
+      Width = 261
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 7
       BorderSpacing.Top = 2
       BorderSpacing.Bottom = 5
       ItemHeight = 0
-      ScrollWidth = 154
+      ScrollWidth = 259
       Sorted = True
       TabOrder = 1
       TopIndex = -1
@@ -78,7 +78,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       AnchorSideLeft.Control = GroupAvailableListBox
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = GroupAssignedListBox
-      Left = 171
+      Left = 277
       Height = 22
       Top = 87
       Width = 23
@@ -123,7 +123,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     object Label6: TLabel
       AnchorSideLeft.Control = GroupAssignedListBox
       AnchorSideTop.Control = SectionGroupAccessGroupBox
-      Left = 201
+      Left = 307
       Height = 15
       Top = 5
       Width = 62
@@ -135,7 +135,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       AnchorSideLeft.Control = GroupAvailableListBox
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = GroupAvailableListBox
-      Left = 171
+      Left = 277
       Height = 22
       Top = 55
       Width = 23
@@ -186,8 +186,8 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 25
-    Top = 27
-    Width = 368
+    Top = 82
+    Width = 579
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 2
@@ -196,12 +196,13 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
   end
   object Label9: TLabel
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = Owner
+    AnchorSideTop.Control = NameEdit
+    AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 15
-    Top = 10
+    Top = 65
     Width = 53
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
@@ -216,13 +217,13 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 91
-    Top = 57
-    Width = 368
+    Top = 112
+    Width = 579
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 5
     Caption = 'Number of child records:'
     ClientHeight = 74
-    ClientWidth = 364
+    ClientWidth = 575
     TabOrder = 2
     object RadioButton1: TRadioButton
       Left = 12
@@ -265,5 +266,33 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       Text = '1   '
       SpaceChar = ' '
     end
+  end
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
+    Height = 15
+    Top = 10
+    Width = 39
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Name'
+    ParentColor = False
+  end
+  object NameEdit: TEdit
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 25
+    Top = 30
+    Width = 579
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 10
+    TabOrder = 3
   end
 end
