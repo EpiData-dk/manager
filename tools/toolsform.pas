@@ -29,21 +29,21 @@ type
     SectionCountPanel: TPanel;
     RecordCountPanel: TPanel;
     DeletedCountPanel: TPanel;
-    VirtualStringTree1: TVirtualStringTree;
+    DataFileTreeView: TVirtualStringTree;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
-    procedure VirtualStringTree1Checked(Sender: TBaseVirtualTree;
+    procedure DataFileTreeViewChecked(Sender: TBaseVirtualTree;
       Node: PVirtualNode);
-    procedure VirtualStringTree1Checking(Sender: TBaseVirtualTree;
+    procedure DataFileTreeViewChecking(Sender: TBaseVirtualTree;
       Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
-    procedure VirtualStringTree1FocusChanged(Sender: TBaseVirtualTree;
+    procedure DataFileTreeViewFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
-    procedure VirtualStringTree1GetText(Sender: TBaseVirtualTree;
+    procedure DataFileTreeViewGetText(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
       var CellText: String);
-    procedure VirtualStringTree1InitChildren(Sender: TBaseVirtualTree;
+    procedure DataFileTreeViewInitChildren(Sender: TBaseVirtualTree;
       Node: PVirtualNode; var ChildCount: Cardinal);
-    procedure VirtualStringTree1InitNode(Sender: TBaseVirtualTree; ParentNode,
+    procedure DataFileTreeViewInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
   private
     FEpiDocument: TEpiDocument;
@@ -81,9 +81,9 @@ var
 
     while Assigned(Run) do
     begin
-      MR := TEpiMasterRelation(VirtualStringTree1.GetNodeData(Run)^);
+      MR := TEpiMasterRelation(DataFileTreeView.GetNodeData(Run)^);
 
-      if VirtualStringTree1.CheckState[Run] in [csCheckedNormal, csMixedNormal] then
+      if DataFileTreeView.CheckState[Run] in [csCheckedNormal, csMixedNormal] then
         FSelectedDatafiles.Add(MR.Datafile);
 
       RecurseAddDF(Run);
@@ -94,7 +94,7 @@ var
 begin
   CanClose := true;
 
-  RecurseAddDF(VirtualStringTree1.RootNode);
+  RecurseAddDF(DataFileTreeView.RootNode);
 
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, Self.ClassName);
@@ -106,7 +106,7 @@ begin
     LoadFormPosition(Self, Self.ClassName);
 end;
 
-procedure TToolsForm.VirtualStringTree1Checked(Sender: TBaseVirtualTree;
+procedure TToolsForm.DataFileTreeViewChecked(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
 var
   CNode: PVirtualNode;
@@ -122,7 +122,7 @@ begin
   end;
 end;
 
-procedure TToolsForm.VirtualStringTree1Checking(Sender: TBaseVirtualTree;
+procedure TToolsForm.DataFileTreeViewChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
 begin
   if (Sender.CheckState[Node] = csMixedNormal) and
@@ -137,7 +137,7 @@ begin
     Allowed := Sender.CheckState[Node^.Parent] = csUncheckedNormal;
 end;
 
-procedure TToolsForm.VirtualStringTree1FocusChanged(Sender: TBaseVirtualTree;
+procedure TToolsForm.DataFileTreeViewFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 var
   MR: TEpiMasterRelation;
@@ -152,7 +152,7 @@ begin
   DeletedCountPanel.Caption := IntToStr(DF.DeletedCount);
 end;
 
-procedure TToolsForm.VirtualStringTree1GetText(Sender: TBaseVirtualTree;
+procedure TToolsForm.DataFileTreeViewGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
 var
@@ -164,7 +164,7 @@ begin
   CellText := MR.Datafile.Caption.Text;
 end;
 
-procedure TToolsForm.VirtualStringTree1InitChildren(Sender: TBaseVirtualTree;
+procedure TToolsForm.DataFileTreeViewInitChildren(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var ChildCount: Cardinal);
 var
   MR: TEpiMasterRelation;
@@ -173,7 +173,7 @@ begin
   ChildCount := MR.DetailRelations.Count;
 end;
 
-procedure TToolsForm.VirtualStringTree1InitNode(Sender: TBaseVirtualTree;
+procedure TToolsForm.DataFileTreeViewInitNode(Sender: TBaseVirtualTree;
   ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 var
   MR: TEpiMasterRelation;
@@ -207,8 +207,8 @@ begin
   if FEpiDocument = AValue then exit;
   FEpiDocument := AValue;
 
-  VirtualStringTree1.NodeDataSize := SizeOf(TEpiMasterRelation);
-  VirtualStringTree1.RootNodeCount := EpiDocument.Relations.Count;
+  DataFileTreeView.NodeDataSize := SizeOf(TEpiMasterRelation);
+  DataFileTreeView.RootNodeCount := EpiDocument.Relations.Count;
 end;
 
 constructor TToolsForm.Create(TheOwner: TComponent);

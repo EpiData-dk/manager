@@ -289,7 +289,8 @@ uses
   report_export, epireport_generator_txt,
   valuelabel_import_data,
   append_form, epitools_append,
-  epiv_dataform_treeview;
+  epiv_dataform_treeview,
+  append_form2;
 
 { TMainForm }
 
@@ -612,17 +613,10 @@ end;
 procedure TMainForm.Button2Click(Sender: TObject);
 var
   F: TForm;
-  Fr: TDataFormTreeViewFrame;
 begin
-  F := TForm.Create(self);
-  F.SetBounds(0, 0, 200, 400);
+  F := TAppendForm2.Create(self);
+  F.SetBounds(0, 0, 600, 800);
   F.Position := poMainFormCenter;
-
-  Fr := TDataFormTreeViewFrame.Create(F);
-  Fr.Parent := F;
-  FR.Align := alClient;
-  Fr.ShowHeadings := true;
-  Fr.DataFile := FActiveFrame.EpiDocument.DataFiles[0];
 
   F.ShowModal;
   F.Free;

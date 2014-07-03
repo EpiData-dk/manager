@@ -1,7 +1,7 @@
 object ToolsForm: TToolsForm
-  Left = 772
+  Left = 306
   Height = 544
-  Top = 264
+  Top = 110
   Width = 448
   Caption = 'ToolsForm'
   ClientHeight = 544
@@ -222,7 +222,7 @@ object ToolsForm: TToolsForm
         ParentColor = False
       end
     end
-    object VirtualStringTree1: TVirtualStringTree
+    object DataFileTreeView: TVirtualStringTree
       Left = 1
       Height = 339
       Top = 32
@@ -238,12 +238,12 @@ object ToolsForm: TToolsForm
       TabOrder = 2
       TreeOptions.AutoOptions = [toAutoDropExpand, toAutoScrollOnExpand, toAutoDeleteMovedNodes]
       TreeOptions.MiscOptions = [toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
-      OnChecked = VirtualStringTree1Checked
-      OnChecking = VirtualStringTree1Checking
-      OnFocusChanged = VirtualStringTree1FocusChanged
-      OnGetText = VirtualStringTree1GetText
-      OnInitChildren = VirtualStringTree1InitChildren
-      OnInitNode = VirtualStringTree1InitNode
+      OnChecked = DataFileTreeViewChecked
+      OnChecking = DataFileTreeViewChecking
+      OnFocusChanged = DataFileTreeViewFocusChanged
+      OnGetText = DataFileTreeViewGetText
+      OnInitChildren = DataFileTreeViewInitChildren
+      OnInitNode = DataFileTreeViewInitNode
     end
   end
 end

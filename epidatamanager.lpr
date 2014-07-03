@@ -28,7 +28,7 @@ uses
   settings_visualdesign_frame,
 
   project_settings, project_settings_interface, project_settings_general_frame,
-  project_settings_field_frame, valuelabelseditor_form, UniqueInstanceRaw,
+  project_settings_field_frame, UniqueInstanceRaw,
   epidatacore, design_properties_headingframe, design_properties_baseframe,
   design_types, import_structure_form, manager_messages, toolsform,
   reportgenerator, report_fieldlist, viewer_form, report_valuelabellist,
@@ -52,7 +52,8 @@ uses
   report_project_validation, report_project_validation_frame, recode_form,
   rename_form, report_export, valuelabel_import_external,
   valuelabel_import_data, project_types, project_studyunit_frame,
-  design_properties_dataformframe, append_form;
+  design_properties_dataformframe, append_form, append_form2, 
+projecttreeview_frame;
 
 {$R *.res}
 

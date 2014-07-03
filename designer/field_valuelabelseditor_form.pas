@@ -47,7 +47,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLIntf, LMessages, valuelabelseditor_form, epidocument, settings2_var, settings2;
+  LCLIntf, LMessages, epidocument, settings2_var, settings2;
 
   { TFieldValueLabelEditor }
 

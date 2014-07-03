@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = 1784
+  Left = 1780
   Height = 603
   Top = 276
   Width = 910
@@ -142,7 +142,7 @@ object MainForm: TMainForm
     object Button2: TButton
       Left = 696
       Height = 25
-      Top = 7
+      Top = 6
       Width = 75
       Caption = 'Test'
       OnClick = Button2Click
