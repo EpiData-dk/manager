@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, projectfilelist_frame, epiv_dataform_treeview,
-  projecttreeview_frame, epidocument, epidatafiles;
+  epiv_projecttreeview_frame, epidocument, epidatafiles;
 
 type
 
@@ -86,6 +86,11 @@ begin
   FProjectTree.Align := alClient;
   FProjectTree.Parent := ProjectTreePanel;
   FProjectTree.AllowSelectProject := false;
+  FProjectTree.EditStructure := true;
+  FProjectTree.EditCaption := true;
+  FProjectTree.ShowCheckBoxes := false;
+  FProjectTree.ShowHint := true;
+
   FProjectTree.OnDataFileSelected := @ProjectTreeDataFileSelected;
 
   FDataFormList := TDataFormTreeViewFrame.Create(Self);

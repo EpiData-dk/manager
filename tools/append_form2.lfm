@@ -1,7 +1,7 @@
 object AppendForm2: TAppendForm2
-  Left = 2240
+  Left = 756
   Height = 702
-  Top = 327
+  Top = 266
   Width = 708
   Caption = 'AppendForm2'
   ClientHeight = 702
@@ -43,7 +43,7 @@ object AppendForm2: TAppendForm2
       Left = 0
       Height = 155
       Top = 0
-      Width = 708
+      Width = 704
       Align = alTop
       BevelOuter = bvNone
       Caption = 'FileListPanel'
@@ -54,25 +54,25 @@ object AppendForm2: TAppendForm2
       Left = 0
       Height = 5
       Top = 155
-      Width = 708
+      Width = 704
       Align = alTop
       Beveled = True
       ResizeAnchor = akTop
     end
     object Panel2: TPanel
       Left = 0
-      Height = 492
+      Height = 488
       Top = 160
-      Width = 708
+      Width = 704
       Align = alClient
       BevelOuter = bvNone
       Caption = 'Panel2'
-      ClientHeight = 492
-      ClientWidth = 708
+      ClientHeight = 488
+      ClientWidth = 704
       TabOrder = 2
       object ProjectTreePanel: TPanel
         Left = 0
-        Height = 492
+        Height = 488
         Top = 0
         Width = 355
         Align = alLeft
@@ -82,16 +82,16 @@ object AppendForm2: TAppendForm2
       end
       object Splitter2: TSplitter
         Left = 355
-        Height = 492
+        Height = 488
         Top = 0
         Width = 5
         Beveled = True
       end
       object DataFormTreePanel: TPanel
         Left = 360
-        Height = 492
+        Height = 488
         Top = 0
-        Width = 348
+        Width = 344
         Align = alClient
         BevelOuter = bvNone
         Caption = 'DataFormTreePanel'
