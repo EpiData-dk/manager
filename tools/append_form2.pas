@@ -27,7 +27,7 @@ type
     procedure FormCreate(Sender: TObject);
   private
     FFileList: TProjectFileListFrame;
-    FProjectTree: TProjectTreeViewFrame;
+    FProjectTree: TEpiVProjectTreeViewFrame;
     FDataFormList: TDataFormTreeViewFrame;
     procedure FileListAddToGrid(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
@@ -81,14 +81,15 @@ begin
   FFileList.Parent := FileListPanel;
   FFileList.OnAfterAddToGrid := @FileListAddToGrid;
 
-  FProjectTree := TProjectTreeViewFrame.Create(self);
+  FProjectTree := TEpiVProjectTreeViewFrame.Create(self);
   FProjectTree.DisplayMode := pdmCommon;
   FProjectTree.Align := alClient;
   FProjectTree.Parent := ProjectTreePanel;
   FProjectTree.AllowSelectProject := false;
+  FProjectTree.CheckType := pctCascade;
   FProjectTree.EditStructure := true;
   FProjectTree.EditCaption := true;
-  FProjectTree.ShowCheckBoxes := false;
+  FProjectTree.ShowCheckBoxes := true;
   FProjectTree.ShowHint := true;
 
   FProjectTree.OnDataFileSelected := @ProjectTreeDataFileSelected;
