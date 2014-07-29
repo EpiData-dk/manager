@@ -348,6 +348,7 @@ var
   i: Integer;
   SG: TStringGrid;
   S: String;
+  Ft: TEpiFieldType;
 begin
   ValIdx := FValueFieldColumn.Index + 1;
   LabIdx := FLabelFieldColumn.Index + 1;
@@ -363,7 +364,13 @@ begin
   then
     Exit;
 
-  VLSet := ValueLabelSets.NewValueLabelSet(FVal.FieldType);
+  // We can read and understand uppercase fieldtypes, but a valuelabelset
+  // can never be defined as uppercase.
+  Ft := FVal.FieldType;
+  if Ft = ftUpperString then
+    Ft := ftString;
+
+  VLSet := ValueLabelSets.NewValueLabelSet(Ft);
   VLSet.BeginUpdate;
   S := '_' + FVal.Name;
   i := 0;
