@@ -92,7 +92,7 @@ begin
   FProjectTree.ShowCheckBoxes := true;
   FProjectTree.ShowHint := true;
 
-  FProjectTree.OnDataFileSelected := @ProjectTreeDataFileSelected;
+//  FProjectTree.OnDataFileSelected := @ProjectTreeDataFileSelected;
 
   FDataFormList := TDataFormTreeViewFrame.Create(Self);
   FDataFormList.Align := alClient;
