@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 2043
-  DesignTop = 290
+  DesignLeft = 572
+  DesignTop = 416
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
@@ -349,5 +349,8 @@ object ProjectFrame: TProjectFrame
   object ProjectRecentFilesDropDownMenu: TPopupMenu
     left = 280
     top = 120
+    object MenuItem1: TMenuItem
+      Caption = 'New Item1'
+    end
   end
 end

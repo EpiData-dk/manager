@@ -15,6 +15,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    MenuItem1: TMenuItem;
     ProjectRecentFilesDropDownMenu: TPopupMenu;
     ProgressBar1: TProgressBar;
     Splitter1: TSplitter;
@@ -84,7 +85,7 @@ type
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
     procedure UpdateCaption;
-    procedure ProjectSettingsOrderedWalkCallBack(
+    procedure RuntimeFrameUpdateFrameOrderedWalkCallBack(
       const Relation: TEpiMasterRelation; const Depth: Cardinal;
       const Index: Cardinal; var aContinue: boolean);
   private
@@ -317,7 +318,7 @@ begin
   if Res <> mrOK then Exit;
 
   IProjectFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
-  EpiDocument.Relations.OrderedWalk(@ProjectSettingsOrderedWalkCallBack);
+  EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
   UpdateTimer;
 end;
 
@@ -655,7 +656,7 @@ begin
   MainForm.Caption := S;
 end;
 
-procedure TProjectFrame.ProjectSettingsOrderedWalkCallBack(
+procedure TProjectFrame.RuntimeFrameUpdateFrameOrderedWalkCallBack(
   const Relation: TEpiMasterRelation; const Depth: Cardinal;
   const Index: Cardinal; var aContinue: boolean);
 var
@@ -1080,12 +1081,8 @@ var
 begin
   UpdateShortCuts;
 
-  TN := DataFilesTreeView.TopItem;
-  while Assigned(TN) do
-  begin
-    TNodeData(TN.Data).Frame.UpdateFrame;
-    TN := TN.GetNext;
-  end;
+  IProjectFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
+  EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
 end;
 
 function TProjectFrame.OpenProject(const AFileName: string): boolean;
