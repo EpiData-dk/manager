@@ -68,7 +68,7 @@ type
     // Common for open/create
     procedure CommonProjectInit;
     function  DoNewDataForm(ParentRelation: TEpiMasterRelation): TEpiDataFile;
-    function  DoNewRuntimeFrame(Df: TEpiDataFile): TRuntimeDesignFrame;
+    function  DoNewRuntimeFrame(Relation: TEpiMasterRelation): TRuntimeDesignFrame;
     // open existing
     procedure DoCreateRelationalStructure;
     function  DoSaveProject(AFileName: string): boolean;
@@ -92,6 +92,11 @@ type
     { Project Tree View }
     FProjectTreeView: TEpiVProjectTreeViewFrame;
     procedure ProjectTreeDelete(const Relation: TEpiMasterRelation);
+    procedure ProjectTreeEdited(Sender: TObject;
+      const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
+    procedure ProjectTreeEditing(Sender: TObject;
+      const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
+      var Allowed: Boolean);
     procedure ProjectTreeError(const Msg: String);
     procedure ProjectTreeGetHint(Sender: TObject;
       const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
@@ -166,7 +171,7 @@ uses
 
 procedure TProjectFrame.NewDataFormActionExecute(Sender: TObject);
 var
-  MR: TEpiDataFile;
+  MR: TEpiMasterRelation;
 begin
   MR := nil;
   if FProjectTreeView.SelectedObjectType = otRelation then
@@ -317,7 +322,7 @@ begin
 
   if Res <> mrOK then Exit;
 
-  IProjectFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
+  TStudyUnitFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
   EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
   UpdateTimer;
 end;
@@ -449,8 +454,8 @@ procedure TProjectFrame.OpenProjectOrderedWalkCallBack(
 var
   Frame: TRuntimeDesignFrame;
 begin
-  Frame := DoNewRuntimeFrame(Relation.Datafile);
-  Relation.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Relation);
+  Frame := DoNewRuntimeFrame(Relation);
+  Relation.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Frame);
 end;
 
 function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
@@ -492,6 +497,7 @@ begin
     DoCreateRelationalStructure;
     CommonProjectInit;
 
+    FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
     EpiDocument.Modified := false;
     Result := true;
 
@@ -512,7 +518,8 @@ begin
 
   if Assigned(ParentRelation) then
   begin
-    if ParentRelation.Datafile.KeyFields.Count = 0 then
+    DF := ParentRelation.Datafile;
+    if DF.KeyFields.Count = 0 then
     begin
       ShowMessage(
         'You must define a key with at least 1 field' + LineEnding +
@@ -533,14 +540,13 @@ begin
         Exit;
       end;
     end;
-
-    DF := ParentRelation.Datafile;
   end;
 
   FProjectTreeView.CreateRelatedDataFile(DF);
 end;
 
-function TProjectFrame.DoNewRuntimeFrame(Df: TEpiDataFile): TRuntimeDesignFrame;
+function TProjectFrame.DoNewRuntimeFrame(Relation: TEpiMasterRelation
+  ): TRuntimeDesignFrame;
 begin
   Inc(FrameCount);
 
@@ -548,7 +554,7 @@ begin
   Result.Name := GetRandomComponentName;
   Result.Align := alClient;
   Result.Parent := Self;
-  Result.DataFile := Df;
+  Result.Relation := Relation;
   Result.DeActivate(true);
 end;
 
@@ -573,12 +579,18 @@ begin
 end;
 
 procedure TProjectFrame.DoCreateNewProject;
+var
+  Doc: TEpiDocument;
 begin
   MainForm.BeginUpdatingForm;
 
-  DoCreateNewDocument;
-  DoNewDataForm(nil);
+  Doc := DoCreateNewDocument;
   CommonProjectInit;
+
+  FProjectTreeView.AddDocument(Doc);
+
+  DoNewDataForm(nil);
+  FProjectTreeView.SelectedObject := EpiDocument;
   EpiDocument.Modified := false;
 
   MainForm.EndUpdatingForm;
@@ -659,10 +671,8 @@ end;
 procedure TProjectFrame.RuntimeFrameUpdateFrameOrderedWalkCallBack(
   const Relation: TEpiMasterRelation; const Depth: Cardinal;
   const Index: Cardinal; var aContinue: boolean);
-var
-  Frame: TRuntimeDesignFrame;
 begin
-  IProjectFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
+  TRuntimeDesignFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
 end;
 
 procedure TProjectFrame.ProjectTreeDelete(const Relation: TEpiMasterRelation);
@@ -670,16 +680,30 @@ begin
 
 end;
 
+procedure TProjectFrame.ProjectTreeEdited(Sender: TObject;
+  const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
+begin
+  (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).Activate;
+end;
+
+procedure TProjectFrame.ProjectTreeEditing(Sender: TObject;
+  const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
+  var Allowed: Boolean);
+begin
+  Allowed := true;
+  (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).DeActivate(false);
+end;
+
 procedure TProjectFrame.ProjectTreeError(const Msg: String);
 begin
-
+  //
 end;
 
 procedure TProjectFrame.ProjectTreeGetHint(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
   var HintText: string);
 begin
-
+  //
 end;
 
 procedure TProjectFrame.ProjectTreeNewRelation(
@@ -688,7 +712,7 @@ var
   Frame: TRuntimeDesignFrame;
 begin
   Relation.Datafile.Caption.Text := 'Dataform ' + IntToStr(FrameCount);
-  Frame := DoNewRuntimeFrame(Relation.Datafile);
+  Frame := DoNewRuntimeFrame(Relation);
   Frame.Activate;
   Frame.DeActivate(true);
   Relation.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Frame);
@@ -701,14 +725,34 @@ end;
 procedure TProjectFrame.ProjectTreeSelected(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
 begin
+  if not Supports(AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY), IProjectFrame, FActiveFrame)
+  then
+    Exit;
 
+  FActiveFrame.Activate;
+  FActiveFrame.AssignActionLinks;
+
+  if ObjectType = otRelation then
+    AlignForm.DesignFrame := TRuntimeDesignFrame(AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
 end;
 
 procedure TProjectFrame.ProjectTreeSelecting(Sender: TObject; const OldObject,
   NewObject: TEpiCustomBase; OldObjectType,
   NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
+var
+  IFrame: IProjectFrame;
 begin
+  Allowed :=
+    // Cannot select empty tree node
+    (NewObjectType <> otEmpty) and
+    // Selecting the same node again should do nothing.
+    (OldObject <> NewObject);
 
+  if Allowed and
+     Assigned(OldObject) and
+     Supports(OldObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY), IProjectFrame, IFrame)
+  then
+    Allowed := IFrame.DeActivate(true);
 end;
 
 procedure TProjectFrame.KeyFieldEvent(const Sender: TEpiCustomBase;
@@ -1005,12 +1049,16 @@ begin
     ShowHint            := true;
     ShowProject         := true;
     OnDelete            := @ProjectTreeDelete;
+    OnEdited            := @ProjectTreeEdited;
+    OnEditing           := @ProjectTreeEditing;
     OnError             := @ProjectTreeError;
     OnGetHint           := @ProjectTreeGetHint;
     OnNewRelation       := @ProjectTreeNewRelation;
     OnTreeNodeSelected  := @ProjectTreeSelected;
     OnTreeNodeSelecting := @ProjectTreeSelecting;
   end;
+  FProjectTreeView.Align  := alClient;
+  FProjectTreeView.Parent := ProjectPanel;
 
   UpdateRecentFilesDropDown;
   LoadSplitterPosition(Splitter1, 'ProjectSplitter');
@@ -1081,7 +1129,7 @@ var
 begin
   UpdateShortCuts;
 
-  IProjectFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
+  TStudyUnitFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
   EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
 end;
 
@@ -1137,11 +1185,13 @@ function TProjectFrame.Import(const FromCB: boolean): boolean;
 var
   Frame: TRuntimeDesignFrame;
   TN: TTreeNode;
+  MR: TEpiMasterRelation;
 begin
-  TN := FRootNode.GetFirstChild;
-  DataFilesTreeView.Selected := TN;
+  // Assumes the user want to open new project with direct import.
 
-  Frame := TRuntimeDesignFrame(TNodeData(TN.Data).DataFile.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
+  // Relation[0] will always exists!
+  MR := EpiDocument.Relations[0];
+  Frame := TRuntimeDesignFrame(MR.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
   if FromCB then
     Frame.ImportCBAction.Execute
   else

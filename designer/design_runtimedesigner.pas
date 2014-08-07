@@ -244,7 +244,6 @@ type
     procedure ViewDatasetActionExecute(Sender: TObject);
   private
     FPopUpPoint: TPoint;
-    FDatafile: TEpiDataFile;
     FActiveButton: TToolButton;
     FAddClass: string;
     FImportedFileName: string;
@@ -322,6 +321,7 @@ type
   private
     { Other }
     FMayHandleShortcuts: boolean;
+    FRelation: TEpiMasterRelation;
     function  GetRelation: TEpiMasterRelation;
     procedure SetMayHandleShortcuts(AValue: boolean);
     procedure UpdateShortcuts;
@@ -331,9 +331,16 @@ type
     procedure UpdateStatusbar(ControlList: TJvDesignObjectArray);
     procedure UpdateStatusbarSizes;
     procedure DeleteControls(ForceDelete: boolean);
+    procedure RelationHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+    procedure DataFileHook(Const Sender, Initiator: TEpiCustomBase;
+      EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
   protected
-    function GetDataFile: TEpiDataFile;
+    function  GetDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
+    procedure SetRelation(AValue: TEpiMasterRelation);
     procedure SetVisible(Value: Boolean); override;
   public
     constructor Create(TheOwner: TComponent); override;
@@ -342,8 +349,8 @@ type
     procedure   ShowPropertiesForm(NewControl: boolean);
     function    IsShortCut(var Message: TLMKey): boolean;
     function ValidateControls: boolean;
-    property DataFile: TEpiDataFile read GetDataFile write SetDataFile;
-    property Relation: TEpiMasterRelation read GetRelation;
+    property DataFile: TEpiDataFile read GetDataFile;
+    property Relation: TEpiMasterRelation read GetRelation write SetRelation;
     property ImportedFileName: string read FImportedFileName;
     property DesignPanel: TJvDesignPanel read FDesignPanel;
     property DesignScrollBar: TJvDesignScrollBox read FDesignScrollBox;
@@ -912,6 +919,8 @@ procedure TRuntimeDesignFrame.SectionsChangeEvent(const Sender,
   Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
 begin
+  if (csDestroying in ComponentState) then exit;
+
   if not (Initiator = DataFile.Sections) then exit;
   if not (EventGroup = eegCustomBase) then exit;
 
@@ -1567,10 +1576,8 @@ begin
   Selector := DesignPanel.Surface.Selector;
   Selector.ClearSelection;
 
-  for i := 0 to FDatafile.Fields.Count -1 do
+  for CmpField in Datafile.Fields do
   begin
-    CmpField := FDatafile.Fields[i];
-
     if not (CmpField.FieldType = Field.FieldType)  then continue;
     if Assigned(Section) and (CmpField.Section <> Section) then continue;
 
@@ -1930,16 +1937,26 @@ begin
   DesignerActionListUpdate(nil, handled);
 end;
 
+procedure TRuntimeDesignFrame.SetRelation(AValue: TEpiMasterRelation);
+begin
+  if FRelation = AValue then exit;
+  FRelation := AValue;
+
+  FRelation.RegisterOnChangeHook(@RelationHook);
+  FRelation.Datafile.RegisterOnChangeHook(@DataFileHook, true);
+  SetDataFile(FRelation.Datafile);
+end;
+
 function TRuntimeDesignFrame.GetRelation: TEpiMasterRelation;
 begin
-  result := TEpiMasterRelation(DataFile.FindCustomData(PROJECT_RELATION_KEY));
+  result := FRelation;
 end;
 
 procedure TRuntimeDesignFrame.UpdateControls;
 var
   i: Integer;
 begin
-  if not Assigned(FDatafile) then exit;
+  if not Assigned(Datafile) then exit;
 
   for i := 0 to DataFile.ControlItems.Count - 1 do
     (ControlFromEpiControl(DataFile.ControlItem[i]) as IDesignEpiControl).UpdateControl;
@@ -2216,6 +2233,31 @@ begin
   FDesignPanel.EnableAutoSizing;
 end;
 
+procedure TRuntimeDesignFrame.RelationHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if (Initiator <> FRelation) then exit;
+  if (EventGroup <> eegCustomBase) then exit;
+  if (TEpiCustomChangeEventType(EventType) <> ecceDestroy) then exit;
+
+  FRelation.UnRegisterOnChangeHook(@RelationHook);
+  FRelation := nil;
+end;
+
+procedure TRuntimeDesignFrame.DataFileHook(const Sender,
+  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if (not Assigned(FRelation)) then exit;
+  if (Initiator <> FRelation.Datafile) then exit;
+  if (EventGroup <> eegCustomBase) then exit;
+  if (TEpiCustomChangeEventType(EventType) <> ecceDestroy) then exit;
+
+  FRelation.Datafile.Sections.UnRegisterOnChangeHook(@SectionsChangeEvent);
+  FRelation.Datafile.UnRegisterOnChangeHook(@DataFileHook);
+end;
+
 procedure TRuntimeDesignFrame.SelecterBtnClick(Sender: TObject);
 begin
   FAddClass := '';
@@ -2345,7 +2387,7 @@ begin
     Selection := FDesignPanel.Surface.Selected;
 
   if Assigned(PropertiesForm) and (not FSettingDataFile) then
-    PropertiesForm.UpdateSelection(Selection);
+    PropertiesForm.UpdateSelection(Selection, Relation);
 
   UpdateStatusbar(Selection);
 end;
@@ -2584,7 +2626,7 @@ begin
       break;
     end;
 
-    if FDatafile.KeyFields.IndexOf(IEpiControl.EpiControl) >= 0 then
+    if Datafile.KeyFields.IndexOf(IEpiControl.EpiControl) >= 0 then
     begin
       lEnabled := false;
       break;
@@ -2744,7 +2786,10 @@ end;
 
 function TRuntimeDesignFrame.GetDataFile: TEpiDataFile;
 begin
-  result := FDatafile;
+  result := nil;
+
+  if Assigned(FRelation) then
+    result := FRelation.Datafile;
 end;
 
 procedure TRuntimeDesignFrame.SetDataFile(AValue: TEpiDataFile);
@@ -2761,15 +2806,13 @@ var
   z: Integer;
 begin
   FDesignPanel.Active := true;
-  FDatafile := AValue;
-  FDatafile.Sections.RegisterOnChangeHook(@SectionsChangeEvent, true);
-  FDatafile.MainSection.Fields.OnGetPrefix := @FieldNamePrefix;
-  (FDesignPanel as IDesignEpiControl).EpiControl := FDatafile.MainSection;
+  Datafile.Sections.RegisterOnChangeHook(@SectionsChangeEvent, true);
+  Datafile.MainSection.Fields.OnGetPrefix := @FieldNamePrefix;
+  (FDesignPanel as IDesignEpiControl).EpiControl := Datafile.MainSection;
 
   Controller := TDesignController(FDesignPanel.Surface.Controller);
   Surface    := FDesignPanel.Surface;
   TJvDesignSelector(Surface.Selector).HandleWidth := 4;
-
 
   FSettingDataFile := true;
   MainForm.BeginUpdatingForm;
@@ -2849,7 +2892,7 @@ begin
   FHintWindow.AutoHide := true;
   FHintWindow.HideInterval := 5 * 1000;
 
-  PropertiesForm.UpdateSelection(nil);
+  PropertiesForm.UpdateSelection(nil, nil);
 
   {$IFNDEF EPI_DEBUG}
   TestToolButton.Visible := false;
