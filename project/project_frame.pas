@@ -483,6 +483,9 @@ begin
   end;
 
   try
+    CommonProjectInit;
+    DoCreateRelationalStructure;
+
     FProjectTreeView.AddDocument(EpiDocument);
 
     try
@@ -494,8 +497,6 @@ begin
       raise
     end;
 
-    DoCreateRelationalStructure;
-    CommonProjectInit;
 
     FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
     EpiDocument.Modified := false;
@@ -677,7 +678,7 @@ end;
 
 procedure TProjectFrame.ProjectTreeDelete(const Relation: TEpiMasterRelation);
 begin
-
+  Relation.FindCustomData(PROJECT_RUNTIMEFRAME_KEY).Free;
 end;
 
 procedure TProjectFrame.ProjectTreeEdited(Sender: TObject;
@@ -696,14 +697,14 @@ end;
 
 procedure TProjectFrame.ProjectTreeError(const Msg: String);
 begin
-  //
+  ShowMessage(Msg);
 end;
 
 procedure TProjectFrame.ProjectTreeGetHint(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
   var HintText: string);
 begin
-  //
+  //  No hints - the ones produces are sufficient.
 end;
 
 procedure TProjectFrame.ProjectTreeNewRelation(

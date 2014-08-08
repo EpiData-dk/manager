@@ -243,7 +243,6 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -287,6 +286,7 @@
         <ComponentName Value="DesignPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_properties_baseframe"/>
       </Unit16>
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
@@ -547,7 +547,6 @@
         <ComponentName Value="EmptyPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_emptyframe"/>
       </Unit61>
       <Unit62>
         <Filename Value="designer/design_designmover.pas"/>
@@ -691,7 +690,6 @@
       <Unit87>
         <Filename Value="project/project_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="project_types"/>
       </Unit87>
       <Unit88>
         <Filename Value="project/project_studyunit_frame.pas"/>
@@ -706,7 +704,6 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_dataformframe"/>
       </Unit89>
       <Unit90>
         <Filename Value="tools/append_form2.pas"/>

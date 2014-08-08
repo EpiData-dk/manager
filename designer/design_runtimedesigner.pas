@@ -2777,7 +2777,7 @@ procedure TRuntimeDesignFrame.DefineKeyActionExecute(Sender: TObject);
 var
   F: TKeyFieldsForm;
 begin
-  F := TKeyFieldsForm.Create(Self, DataFile, DataFile.ValueLabels);
+  F := TKeyFieldsForm.Create(Self, Relation);
   F.ShowModal;
   F.Free;
 
