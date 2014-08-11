@@ -167,7 +167,16 @@ procedure TDesignField.OnFieldChange(const Sender, Initiator: TEpiCustomBase;
 var
   S: String;
 begin
-  if (csDestroying in ComponentState) then exit;
+{  if (csDestroying in ComponentState) then
+  begin
+    UpdateValueLabelConnection(FField.ValueLabelSet, nil);
+    FProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
+    FProjectSettings := nil;
+    FField.UnRegisterOnChangeHook(@OnFieldChange);
+    FField := nil;
+
+    exit;
+  end;   }
 
   // TODO: Jump, Compare, Calculation changes (displayed as hint!
   if EventGroup = eegFields then
@@ -191,10 +200,7 @@ begin
       ecceDestroy:
         begin
           if Initiator <> FField then exit;
-
           UpdateValueLabelConnection(FField.ValueLabelSet, nil);
-          FProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
-          FProjectSettings := nil;
           FField.UnRegisterOnChangeHook(@OnFieldChange);
           FField := nil;
         end;
@@ -252,13 +258,14 @@ procedure TDesignField.OnProjectSettingsChange(const Sender,
   Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
 begin
-  if (csDestroying in ComponentState) then exit;
-
   if (EventGroup = eegCustomBase)
   then
     case TEpiCustomChangeEventType(EventType) of
       ecceDestroy:
-        exit;
+        begin
+          FProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
+          FProjectSettings := nil;
+        end;
       ecceUpdate:
         UpdateControl;
       ecceName: ;

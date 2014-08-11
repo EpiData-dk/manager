@@ -199,6 +199,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -285,10 +286,12 @@
         <ComponentName Value="DesignPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_properties_baseframe"/>
       </Unit16>
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_types"/>
       </Unit17>
       <Unit18>
         <Filename Value="import/import_structure_form.pas"/>
@@ -487,10 +490,12 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_control_field"/>
       </Unit51>
       <Unit52>
         <Filename Value="designer/design_control_heading.pas"/>
@@ -507,6 +512,7 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -518,6 +524,7 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_fieldframe"/>
       </Unit57>
       <Unit58>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -704,7 +711,6 @@
         <ComponentName Value="AppendForm2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="append_form2"/>
       </Unit90>
     </Units>
   </ProjectOptions>

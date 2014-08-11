@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 570
-  DesignTop = 249
+  DesignLeft = 500
+  DesignTop = 340
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
@@ -19,28 +19,6 @@ object ProjectFrame: TProjectFrame
     ClientHeight = 638
     ClientWidth = 171
     TabOrder = 0
-    object DataFilesTreeView: TTreeView
-      Left = 0
-      Height = 608
-      Top = 26
-      Width = 167
-      Align = alClient
-      AutoExpand = True
-      DefaultItemHeight = 18
-      HotTrack = True
-      ParentShowHint = False
-      ScrollBars = ssAutoBoth
-      ShowHint = True
-      TabOrder = 0
-      OnChanging = DataFilesTreeViewChanging
-      OnDeletion = DataFilesTreeViewDeletion
-      OnEdited = DataFilesTreeViewEdited
-      OnEditing = DataFilesTreeViewEditing
-      OnEditingEnd = DataFilesTreeViewEditingEnd
-      OnSelectionChanged = DataFilesTreeViewSelectionChanged
-      OnShowHint = DataFilesTreeViewShowHint
-      Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoHotTrack, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
-    end
     object ToolBar1: TToolBar
       Left = 0
       Height = 26
@@ -51,7 +29,7 @@ object ProjectFrame: TProjectFrame
       EdgeInner = esNone
       EdgeOuter = esRaised
       Images = ProjectImageList
-      TabOrder = 1
+      TabOrder = 0
       Transparent = True
       object OpenProjectToolBtn: TToolButton
         Left = 2
@@ -194,7 +172,6 @@ object ProjectFrame: TProjectFrame
     object KeyFieldsAction: TAction
       Category = 'Project'
       Caption = 'Key Fields...'
-      OnExecute = KeyFieldsActionExecute
     end
     object StudyInformationAction: TAction
       Category = 'Project'
@@ -372,5 +349,8 @@ object ProjectFrame: TProjectFrame
   object ProjectRecentFilesDropDownMenu: TPopupMenu
     left = 280
     top = 120
+    object MenuItem1: TMenuItem
+      Caption = 'New Item1'
+    end
   end
 end

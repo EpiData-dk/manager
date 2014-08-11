@@ -46,10 +46,11 @@ type
     FIndexChecker: TEpiIntegrityChecker;
     FKeyList: TList;
     FHintWindow: THintWindow;
-    FDataFile: TEpiDataFile;
+    FRelation: TEpiMasterRelation;
     FValueLabelSets: TEpiValueLabelSets;
     function  DoAddNewKey: TComboBox;
     function  DoDeleteKey: boolean;
+    function GetDataFile: TEpiDataFile;
     procedure SetItemIndexOnField(Combo: TComboBox; Field: TEpiField);
     procedure AddFieldsToCombo(Combo: TComboBox);
     procedure ComboSelect(Sender: TObject);
@@ -58,11 +59,13 @@ type
     function  PerformIndexCheck(Out FailedRecords: TBoundArray;
       out FailedValues: TBoundArray): Boolean;
     function  ShowError(Const Msg: string; Const Ctrl: TControl): boolean;
-    function  GetRelation: TEpiMasterRelation;
+  protected
+    property  DataFile: TEpiDataFile read GetDataFile;
+    property  Relation: TEpiMasterRelation read FRelation;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; Datafile: TEpiDataFile;
-      ValueLabelSets: TEpiValueLabelSets);
+    constructor Create(TheOwner: TComponent;
+      ARelation: TEpiMasterRelation);
     destructor Destroy; override;
     class procedure RestoreDefaultPos;
   end;
@@ -90,10 +93,10 @@ var
   VL: TEpiValueLabelSet;
   V: TEpiCustomValueLabel;
 begin
-  F := FDataFile.Fields.FieldByName[EpiIndexIntegrityFieldName];
+  F := DataFile.Fields.FieldByName[EpiIndexIntegrityFieldName];
   if not Assigned(F) then
   begin
-    F := FDataFile.NewField(ftInteger);
+    F := DataFile.NewField(ftInteger);
     F.Name := EpiIndexIntegrityFieldName;
     F.Question.Text := 'Unique index status';
     F.ShowValueLabel := ManagerSettings.ShowValuelabelText;
@@ -141,7 +144,7 @@ var
   S: String;
 begin
   S := 'Add ';
-  if FDataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
+  if DataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
     S := 'Update ';
   AddIndexFieldAction.Caption := S + 'Status Field';
 end;
@@ -153,7 +156,7 @@ end;
 
 procedure TKeyFieldsForm.AddNewIndexActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := GetRelation.DetailRelations.Count = 0;
+  TAction(Sender).Enabled := Relation.DetailRelations.Count = 0;
 end;
 
 procedure TKeyFieldsForm.DeleteIndexActionExecute(Sender: TObject);
@@ -188,7 +191,7 @@ begin
     Res := MessageDlg('Index Error',
                         'Records with Non-Unique key' + LineEnding +
                         'or missing values in key fields exist.' + LineEnding +
-                        BoolToStr(FDataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName),
+                        BoolToStr(DataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName),
                           'Index status saved in field: '+ EpiIndexIntegrityFieldName + LineEnding, '') +
                         LineEnding +
                         'Apply Key Fields?',
@@ -206,12 +209,12 @@ begin
   if ModalResult = mrOk then
   begin
     FL := GetFieldList;
-    FDataFile.KeyFields.Clear;
+    DataFile.KeyFields.Clear;
     for i := 0 to Fl.Count - 1 do
-      FDataFile.KeyFields.AddItem(Fl[i]);
+      DataFile.KeyFields.AddItem(Fl[i]);
     Fl.Free;
 
-    if FDataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
+    if DataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
       AddIndexFieldAction.Execute;
   end;
 
@@ -275,7 +278,7 @@ begin
   FieldList := GetFieldList;
 
   Result :=
-    FIndexChecker.IndexIntegrity(FDataFile,
+    FIndexChecker.IndexIntegrity(DataFile,
       FailedRecords,
       FailedValues,
       false,
@@ -301,11 +304,11 @@ begin
     FieldList.AddItem(TEpiField(Cmb.Items.Objects[Cmb.ItemIndex]));
   end;
 
-  if not FIndexChecker.IndexIntegrity(FDataFile, FailedRecords, FailedValues,
+  if not FIndexChecker.IndexIntegrity(DataFile, FailedRecords, FailedValues,
            false, FieldList) then
     ShowDataSetViewerForm(Self,
       'List of non-unique records:',
-      FDataFile,
+      DataFile,
       FailedRecords,
       FieldList,
       nil,
@@ -356,6 +359,13 @@ begin
   IndexCheckError;
 end;
 
+function TKeyFieldsForm.GetDataFile: TEpiDataFile;
+begin
+  Result := nil;
+  if Assigned(Relation) then
+    Result := Relation.Datafile;
+end;
+
 procedure TKeyFieldsForm.SetItemIndexOnField(Combo: TComboBox; Field: TEpiField
   );
 var
@@ -367,7 +377,7 @@ begin
   if Idx <> -1 then
   begin
     Combo.ItemIndex := Idx;
-    MR := GetRelation;
+    MR := Relation;
 
     Combo.Enabled := not (MR.DetailRelations.Count > 0);
 
@@ -388,10 +398,10 @@ var
 begin
   Combo.Clear;
 
-  Flds := FDataFile.Fields;
+  Flds := DataFile.Fields;
   for F in Flds do
   begin
-    if (not FDataFile.KeyFields.FieldExists(F)) and
+    if (not DataFile.KeyFields.FieldExists(F)) and
         (
          (F.FieldType in AutoUpdateFieldTypes) or
          (F.EntryMode = emNoEnter)
@@ -424,20 +434,15 @@ begin
   FHintWindow.ActivateHint(R, Msg);
 end;
 
-function TKeyFieldsForm.GetRelation: TEpiMasterRelation;
-begin
-  result := TEpiMasterRelation(FDataFile.FindCustomData(PROJECT_RELATION_KEY));
-end;
-
-constructor TKeyFieldsForm.Create(TheOwner: TComponent; Datafile: TEpiDataFile;
-  ValueLabelSets: TEpiValueLabelSets);
+constructor TKeyFieldsForm.Create(TheOwner: TComponent;
+  ARelation: TEpiMasterRelation);
 var
   i: Integer;
 begin
   inherited Create(TheOwner);
 
-  FDataFile := Datafile;
-  FValueLabelSets := ValueLabelSets;
+  FRelation := ARelation;
+  FValueLabelSets := ARelation.Datafile.ValueLabels;
 
   FIndexChecker := TEpiIntegrityChecker.Create;
   FKeyList := TList.Create;
@@ -446,7 +451,7 @@ begin
   FHintWindow.HideInterval := 5 * 1000;
   FHintWindow.AutoHide := true;
 
-  with FDataFile do
+  with DataFile do
     for i := 0 to KeyFields.Count - 1 do
       SetItemIndexOnField(DoAddNewKey, KeyFields[i]);
 

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, JvDesignSurface, design_types, epicustombase,
-  Controls;
+  Controls, epirelations;
 
 type
 
@@ -34,7 +34,8 @@ type
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
-    procedure UpdateSelection(Objects: TJvDesignObjectArray);
+    procedure UpdateSelection(Objects: TJvDesignObjectArray;
+      Const Relation: TEpiMasterRelation);
     procedure ReloadControls;
     procedure SetFocusOnNew;
     function  ValidateControls: boolean;
@@ -51,7 +52,7 @@ implementation
 uses
   Buttons, ExtCtrls, design_properties_baseframe, Graphics,
   design_properties_emptyframe, settings2, settings2_var, main,
-  field_valuelabelseditor_form, project_types, epidatafiles, epirelations;
+  field_valuelabelseditor_form, project_types, epidatafiles;
 
 { TPropertiesForm }
 
@@ -251,7 +252,8 @@ begin
   inherited Destroy;
 end;
 
-procedure TPropertiesForm.UpdateSelection(Objects: TJvDesignObjectArray);
+procedure TPropertiesForm.UpdateSelection(Objects: TJvDesignObjectArray;
+  const Relation: TEpiMasterRelation);
 var
   AClassType: TClass;
   i: Integer;
@@ -313,19 +315,8 @@ begin
   then
   with (FFrame as IDesignPropertiesFrame) do
   begin
-    Item := EpiCtrlItemArray[0];
-    while (Assigned(Item)) and
-          (not (Item.InheritsFrom(TEpiDataFile)))
-    do
-      Item := TEpiCustomItem(Item.Owner);
-
-    if Assigned(Item)
-    then
-      begin
-        SetDataFile(TEpiDataFile(Item));
-        SetRelation(TEpiMasterRelation(Item.FindCustomData(PROJECT_RELATION_KEY)));
-      end;
-
+    SetDataFile(Relation.Datafile);
+    SetRelation(Relation);
     SetEpiControls(EpiCtrlItemArray);
   end;
 end;
