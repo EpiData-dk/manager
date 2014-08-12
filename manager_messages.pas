@@ -18,8 +18,9 @@ const
   LM_MAIN_OPENRECENT   = LM_MAIN_OPENPROJECT + 1;   // WParam = index into the TMenuItem list of filenames.
   LM_MAIN_NEWPROJECT   = LM_MAIN_OPENRECENT  + 1;
   LM_MAIN_CLOSEPROJECT = LM_MAIN_NEWPROJECT  + 1;
+  LM_MAIN_IMPORTTONEW  = LM_MAIN_CLOSEPROJECT + 1;  // WParam: 0 = Open File Dialog; 1 = Read from clipboard
   // Last Main message... always update when inserting new messages.!
-  LM_MAIN_LAST         = LM_MAIN_CLOSEPROJECT;
+  LM_MAIN_LAST         = LM_MAIN_IMPORTTONEW;
 
   // Value Label Editor (2) messages
   LM_VLEDIT_STARTEDIT  = LM_MAIN_LAST + 1;        // WParam = PVirtualNode.

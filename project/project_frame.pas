@@ -1192,6 +1192,7 @@ begin
 
   // Relation[0] will always exists!
   MR := EpiDocument.Relations[0];
+  FProjectTreeView.SelectedObject := MR;
   Frame := TRuntimeDesignFrame(MR.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
   if FromCB then
     Frame.ImportCBAction.Execute

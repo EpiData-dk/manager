@@ -1,7 +1,7 @@
 object ExportForm: TExportForm
-  Left = 453
+  Left = 1934
   Height = 581
-  Top = 161
+  Top = 251
   Width = 713
   ActiveControl = BitBtn3
   Caption = 'Export...'
@@ -277,6 +277,7 @@ object ExportForm: TExportForm
           inherited DataFileTree: TVirtualStringTree
             Height = 360
             Width = 378
+            Header.AutoSizeIndex = -1
             Header.Columns = <            
               item
                 CheckType = ctTriStateCheckBox

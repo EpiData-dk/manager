@@ -245,6 +245,7 @@ type
     procedure LMOpenRecent(var Msg: TLMessage);   message LM_MAIN_OPENRECENT;
     procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
     procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
+    procedure LMImportToProject(var Msg: TLMessage); message LM_MAIN_IMPORTTONEW;
     // Message relaying...
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
@@ -307,14 +308,12 @@ end;
 
 procedure TMainForm.ImportCBInNewProjectActionExecute(Sender: TObject);
 begin
-  DoNewProject;
-  FActiveFrame.Import(true);
+  PostMessage(Self.Handle, LM_MAIN_IMPORTTONEW, 1, 0);
 end;
 
 procedure TMainForm.ImportInNewProjectActionExecute(Sender: TObject);
 begin
-  DoNewProject;
-  FActiveFrame.Import(false);
+  PostMessage(Self.Handle, LM_MAIN_IMPORTTONEW, 0, 0);
 end;
 
 procedure TMainForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -1359,6 +1358,12 @@ end;
 procedure TMainForm.LMCloseProject(var Msg: TLMessage);
 begin
   DoCloseProject;
+end;
+
+procedure TMainForm.LMImportToProject(var Msg: TLMessage);
+begin
+  DoNewProject;
+  FActiveFrame.Import(Boolean(Msg.WParam));
 end;
 
 procedure TMainForm.LMDesignerAdd(var Msg: TLMessage);
