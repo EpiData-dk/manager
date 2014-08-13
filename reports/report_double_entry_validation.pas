@@ -51,8 +51,8 @@ begin
   R.MainDF := MainDf;
   R.DuplDF := DuplDF;
 
-  R.CompareFields := MainDF.Fields;
-  R.KeyFields     := MainDF.KeyFields;
+  R.CompareFields := FCompareFields; //MainDF.Fields;
+  R.KeyFields     := FKeyFields; // MainDF.KeyFields;
 
   R.DblEntryValidateOptions := FDblEntryValidateOptions;
   R.RunReport;

@@ -70,7 +70,6 @@ type
     function  DoNewDataForm(ParentRelation: TEpiMasterRelation): TEpiDataFile;
     function  DoNewRuntimeFrame(Relation: TEpiMasterRelation): TRuntimeDesignFrame;
     // open existing
-    procedure DoCreateRelationalStructure;
     function  DoSaveProject(AFileName: string): boolean;
     procedure OpenProjectOrderedWalkCallBack(
       const Relation: TEpiMasterRelation; const Depth: Cardinal;
@@ -484,7 +483,6 @@ begin
 
   try
     CommonProjectInit;
-    DoCreateRelationalStructure;
 
     FProjectTreeView.AddDocument(EpiDocument);
 
@@ -557,26 +555,6 @@ begin
   Result.Parent := Self;
   Result.Relation := Relation;
   Result.DeActivate(true);
-end;
-
-procedure TProjectFrame.DoCreateRelationalStructure;
-var
-  Relations: TEpiRelationList;
-  i: Integer;
-  MR: TEpiMasterRelation;
-begin
-  Relations := EpiDocument.Relations;
-  if (Relations.Count = 0) and
-     (EpiDocument.DataFiles.Count = 1)
-  then
-    begin
-      // This should only happen when loading .epx version 2 files!
-      MR := Relations.NewMasterRelation;
-      MR.Datafile := EpiDocument.DataFiles[0];
-
-//      AddRelation(FRootNode, Mr);
-      Exit;
-    end;
 end;
 
 procedure TProjectFrame.DoCreateNewProject;
