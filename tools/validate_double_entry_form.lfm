@@ -1,609 +1,111 @@
 object ValidateDoubleEntryForm: TValidateDoubleEntryForm
-  Left = 467
-  Height = 629
-  Top = 157
-  Width = 648
+  Left = 1884
+  Height = 621
+  Top = 257
+  Width = 746
   Caption = 'ValidateDoubleEntryForm'
-  ClientHeight = 629
-  ClientWidth = 648
-  Position = poMainFormCenter
+  ClientHeight = 621
+  ClientWidth = 746
   LCLVersion = '1.3'
-  object Panel1: TPanel
+  object FilePanel: TPanel
+    Left = 0
+    Height = 130
+    Top = 0
+    Width = 746
+    Align = alTop
+    Caption = 'FilePanel'
+    TabOrder = 0
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 6
+    Top = 130
+    Width = 746
+    Align = alTop
+    ResizeAnchor = akTop
+  end
+  object ProjectPanel: TPanel
+    Left = 0
+    Height = 435
+    Top = 136
+    Width = 243
+    Align = alLeft
+    Caption = 'ProjectPanel'
+    TabOrder = 2
+  end
+  object Splitter2: TSplitter
+    Left = 243
+    Height = 435
+    Top = 136
+    Width = 5
+  end
+  object PageControl: TPageControl
+    Left = 248
+    Height = 435
+    Top = 136
+    Width = 498
+    ActivePage = KeyTab
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 4
+    object KeyTab: TTabSheet
+      Caption = 'Keys'
+    end
+    object CompareTab: TTabSheet
+      Caption = 'Compare'
+    end
+    object OptionsTab: TTabSheet
+      Caption = 'Options'
+    end
+  end
+  object BottomPanel: TPanel
     Left = 0
     Height = 50
-    Top = 579
-    Width = 648
+    Top = 571
+    Width = 746
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 648
-    TabOrder = 0
-    object OkBtn: TBitBtn
-      AnchorSideTop.Control = Panel1
-      AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = Panel1
-      AnchorSideRight.Side = asrBottom
-      Left = 583
+    ClientWidth = 746
+    TabOrder = 5
+    object Button1: TButton
+      Left = 24
+      Height = 25
+      Top = 16
+      Width = 75
+      Caption = 'Add'
+      OnClick = Button1Click
+      TabOrder = 0
+    end
+    object BitBtn1: TBitBtn
+      Left = 680
       Height = 32
       Top = 9
       Width = 54
-      Anchors = [akTop, akRight]
       AutoSize = True
-      BorderSpacing.Right = 10
       Default = True
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
-      OnClick = OkBtnClick
-      TabOrder = 0
+      OnClick = BitBtn1Click
+      TabOrder = 1
     end
-    object CancelBtn: TBitBtn
-      AnchorSideTop.Control = Panel1
-      AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = OkBtn
-      Left = 492
+    object BitBtn2: TBitBtn
+      Left = 592
       Height = 34
-      Top = 8
+      Top = 7
       Width = 81
-      Anchors = [akTop, akRight]
       AutoSize = True
-      BorderSpacing.Right = 10
       Cancel = True
       DefaultCaption = True
       Kind = bkCancel
       ModalResult = 2
-      TabOrder = 1
-    end
-  end
-  object Panel2: TPanel
-    Left = 0
-    Height = 579
-    Top = 0
-    Width = 648
-    Align = alClient
-    ClientHeight = 579
-    ClientWidth = 648
-    TabOrder = 1
-    object GroupBox1: TGroupBox
-      AnchorSideLeft.Control = Panel2
-      AnchorSideTop.Control = Panel2
-      AnchorSideRight.Control = Panel2
-      AnchorSideRight.Side = asrBottom
-      Left = 11
-      Height = 86
-      Top = 11
-      Width = 626
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 10
-      BorderSpacing.Top = 10
-      BorderSpacing.Right = 10
-      Caption = 'Main Project File:'
-      ClientHeight = 69
-      ClientWidth = 622
-      TabOrder = 0
-      object Label1: TLabel
-        AnchorSideLeft.Control = GroupBox1
-        AnchorSideTop.Control = GroupBox1
-        Left = 15
-        Height = 15
-        Top = 7
-        Width = 61
-        Anchors = [akLeft]
-        BorderSpacing.Left = 15
-        BorderSpacing.Top = 10
-        Caption = 'Filename:'
-        ParentColor = False
-      end
-      object Label2: TLabel
-        AnchorSideLeft.Control = Label1
-        AnchorSideTop.Control = Label1
-        AnchorSideTop.Side = asrBottom
-        Left = 15
-        Height = 15
-        Top = 28
-        Width = 78
-        Anchors = [akLeft]
-        BorderSpacing.Top = 10
-        Caption = 'Project Title:'
-        ParentColor = False
-      end
-      object Label3: TLabel
-        AnchorSideLeft.Control = Label1
-        AnchorSideTop.Control = Label2
-        AnchorSideTop.Side = asrBottom
-        Left = 15
-        Height = 15
-        Top = 48
-        Width = 54
-        Anchors = [akLeft]
-        BorderSpacing.Top = 10
-        Caption = 'Records:'
-        ParentColor = False
-      end
-      object FileNameLabel1: TLabel
-        AnchorSideLeft.Control = Label2
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = Label1
-        AnchorSideTop.Side = asrCenter
-        Left = 143
-        Height = 15
-        Top = 7
-        Width = 59
-        BorderSpacing.Left = 50
-        Caption = 'FileName'
-        ParentColor = False
-      end
-      object ProjectTitle1: TLabel
-        AnchorSideLeft.Control = FileNameLabel1
-        AnchorSideTop.Control = Label2
-        AnchorSideTop.Side = asrCenter
-        Left = 143
-        Height = 15
-        Top = 28
-        Width = 74
-        Caption = 'Project Title'
-        ParentColor = False
-      end
-      object RecordCount1: TLabel
-        AnchorSideLeft.Control = FileNameLabel1
-        AnchorSideTop.Control = Label3
-        AnchorSideTop.Side = asrCenter
-        Left = 143
-        Height = 15
-        Top = 48
-        Width = 85
-        Caption = 'Record Count'
-        ParentColor = False
-      end
-    end
-    object GroupBox2: TGroupBox
-      AnchorSideLeft.Control = Panel2
-      AnchorSideTop.Control = GroupBox1
-      AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = Panel2
-      AnchorSideRight.Side = asrBottom
-      Left = 11
-      Height = 86
-      Top = 107
-      Width = 626
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 10
-      BorderSpacing.Top = 10
-      BorderSpacing.Right = 10
-      Caption = 'Dublicate Entry File:'
-      ClientHeight = 69
-      ClientWidth = 622
-      TabOrder = 1
-      object Label4: TLabel
-        AnchorSideLeft.Control = GroupBox2
-        AnchorSideTop.Control = GroupBox2
-        Left = 15
-        Height = 15
-        Top = 7
-        Width = 61
-        Anchors = [akLeft]
-        BorderSpacing.Left = 15
-        BorderSpacing.Top = 10
-        Caption = 'Filename:'
-        ParentColor = False
-      end
-      object Label5: TLabel
-        AnchorSideLeft.Control = Label4
-        AnchorSideTop.Control = Label4
-        AnchorSideTop.Side = asrBottom
-        Left = 15
-        Height = 15
-        Top = 28
-        Width = 78
-        Anchors = [akLeft]
-        BorderSpacing.Top = 10
-        Caption = 'Project Title:'
-        ParentColor = False
-      end
-      object Label6: TLabel
-        AnchorSideLeft.Control = Label4
-        AnchorSideTop.Control = Label5
-        AnchorSideTop.Side = asrBottom
-        Left = 15
-        Height = 15
-        Top = 48
-        Width = 54
-        Anchors = [akLeft]
-        BorderSpacing.Top = 10
-        Caption = 'Records:'
-        ParentColor = False
-      end
-      object FileNameLabel2: TLabel
-        AnchorSideLeft.Control = Label5
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = Label4
-        AnchorSideTop.Side = asrCenter
-        Left = 143
-        Height = 15
-        Top = 7
-        Width = 59
-        BorderSpacing.Left = 50
-        Caption = 'FileName'
-        ParentColor = False
-      end
-      object ProjectTitle2: TLabel
-        AnchorSideLeft.Control = FileNameLabel2
-        AnchorSideTop.Control = Label5
-        AnchorSideTop.Side = asrCenter
-        Left = 143
-        Height = 15
-        Top = 28
-        Width = 74
-        Caption = 'Project Title'
-        ParentColor = False
-      end
-      object RecordCount2: TLabel
-        AnchorSideLeft.Control = FileNameLabel2
-        AnchorSideTop.Control = Label6
-        AnchorSideTop.Side = asrCenter
-        Left = 143
-        Height = 15
-        Top = 48
-        Width = 85
-        Caption = 'Record Count'
-        ParentColor = False
-      end
-      object OpenDblEntryFileBtn: TSpeedButton
-        AnchorSideRight.Control = GroupBox2
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = FileNameLabel2
-        AnchorSideBottom.Side = asrBottom
-        Left = 594
-        Height = 22
-        Top = 0
-        Width = 23
-        Anchors = [akRight, akBottom]
-        BorderSpacing.Right = 5
-        Glyph.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          20000000000000040000640000006400000000000000000000002C86D8D12D88
-          D8F72D87D8F72D88D8F72D88D8F72D88D8F72D88D8F72D88D8F72D88D8F72D88
-          D8F72D88D8F72D87D8F72D88D8F72C86D8D1FFFFFF00FFFFFF00338ED9FBDCF0
-          FAFF98E1F6FF95E0F6FF92DFF6FF8EDEF5FF89DCF5FF85DAF4FF80D9F4FF7AD7
-          F3FF74D5F3FF70D3F2FFC2EAF8FF3594DAFFFFFFFF00FFFFFF003594DAF7EFFA
-          FEFF93E5F8FF8FE4F8FF89E3F8FF82E1F7FF7ADFF7FF71DEF6FF67DBF5FF5BD8
-          F4FF4DD4F3FF40D1F2FFCAF2FBFF3594DAFFFFFFFF00FFFFFF00369ADAF8F2FA
-          FDFF94E6F8FF92E5F8FF90E5F8FF8BE3F8FF86E2F7FF7FE1F7FF77DEF6FF6CDC
-          F6FF5ED9F4FF4FD5F3FFCCF2FBFF3594DAFFFFFFFF00FFFFFF0036A1DAF9F6FC
-          FEFF94E5F8FF93E5F8FF93E5F8FF91E5F8FF93DBE9FF93D7E3FF93D2DCFF90CE
-          D7FF8CC8CFFF86C1C6FFC9D8D6FF3594DAFFC57444E8CA7F53F137A6DAFAFEFF
-          FFFFF8FDFFFFF6FDFFFFF5FCFFFFF3FCFEFF9AE4F4FF9AE6F7FF9BE6F6FF9DE5
-          F5FF9EE5F5FF9FE5F4FFDAF3F8FF3594DAFFFDF4EEFFCA8054F935ABDAFAE8F6
-          FBFF70BCE7FF55AAE2FF4DA5E0FF91C9EBFFFAF3EFFFFDFEFDFFFFFDFCFFFFFD
-          FCFFFEFDFCFFFEFCFBFFFEFEFDFF3594DAFFEFF2E8FFCE8156FF36AADAF2F1FA
-          FDFF94DEF5FF93DCF4FF64BCE9FF3594DAFF3594DAFF3594DAFF3594DAFF3594
-          DAFF3594DAFF3594DAFF3594DAFF3594DAFFFBF6EFFFCC8355FE35AFDAF0F7FC
-          FEFF8EE4F8FF91DEF5FF9FE0F5FFACE1F6FFCA8452FFFFF7F1FFFFE9D9FFFFEA
-          DBFFFFE9D9FFFFE7D7FFFFE5D2FFFFE2CBFFFFF7F1FFCB8555FE36B3DAF8FDFE
-          FEFFFEFFFFFFFEFEFFFFFDFEFFFFFEFFFFFFE4BA91FFFFF7F0FFFFE7D5FFFDE7
-          D6FFFDE6D4FFFCE4D0FFFBE3CBFFFADCC2FFFEF3E8FFCC8656FE34B4D9D05EC2
-          E1FA60C3E2FA60C3E2FA60C3E2FA5FC3E2FAE4BB91FFFFF7F2FFFEE7D5FFFEE7
-          D5FFFDE5D1FFFAE0CAFFF9DEC4FFF7D9BCFFFDF2E7FFCC8757FEFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E4BB92FFFEF7F1FFFCE5D2FFFCE4
-          D1FFFBE2CCFFF9DDC4FFF6D7BBFFF3D1AFFFFAEFE4FFCC8758FEFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E4BB92FFFEF6F0FFFCE2CDFFFCE3
-          CDFFFADFC8FFF7D9BCFFF5E9DDFFFAF3EBFFFBF8F3FFCA8353FEFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E4BB93FFFEF5EDFFFCDEC5FFFBE0
-          C7FFF9DCC2FFF5D3B4FFFEF9F3FFFAE2C4FFECC193FFC37D4893FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E5BE96FFFFFFFEFFFDF3E9FFFDF3
-          EAFFFCF2E8FFFAEFE3FFFAF2E7FFEABB88FFCF8555B3B4693D0CFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00EAC39DFFE6BF96FFE4BB92FFE4BB
-          92FFD1A06CF5D09E6DF6CC965FDAC479427EB2673C09FFFFFF00
-        }
-        OnClick = OpenDblEntryFileBtnClick
-      end
-    end
-    object GroupBox3: TGroupBox
-      AnchorSideLeft.Control = GroupBox1
-      AnchorSideRight.Control = Bevel1
-      AnchorSideBottom.Control = OptionsChkGrp
-      Left = 11
-      Height = 241
-      Top = 200
-      Width = 311
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      BorderSpacing.Bottom = 10
-      Caption = 'Key Fields:'
-      ClientHeight = 224
-      ClientWidth = 307
       TabOrder = 2
-      object KFNoneBtn: TButton
-        AnchorSideLeft.Control = GroupBox3
-        AnchorSideTop.Control = Label7
-        AnchorSideTop.Side = asrBottom
-        Left = 5
-        Height = 27
-        Top = 25
-        Width = 46
-        Action = KFNoneAction
-        AutoSize = True
-        BorderSpacing.Left = 5
-        BorderSpacing.Top = 5
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 0
-      end
-      object KFIndexBtn: TButton
-        AnchorSideLeft.Control = KFNoneBtn
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = KFNoneBtn
-        AnchorSideTop.Side = asrCenter
-        Left = 56
-        Height = 27
-        Top = 25
-        Width = 46
-        Action = KFIndexAction
-        AutoSize = True
-        BorderSpacing.Left = 5
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 1
-      end
-      object KFAutoIncBtn: TButton
-        AnchorSideLeft.Control = KFIndexBtn
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = KFNoneBtn
-        AnchorSideTop.Side = asrCenter
-        Left = 107
-        Height = 27
-        Top = 25
-        Width = 68
-        Action = KFAutoIncAction
-        AutoSize = True
-        BorderSpacing.Left = 5
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 2
-      end
-      object KFCheckList: TCheckListBox
-        AnchorSideLeft.Control = GroupBox3
-        AnchorSideTop.Control = KFNoneBtn
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = GroupBox3
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = GroupBox3
-        AnchorSideBottom.Side = asrBottom
-        Left = 5
-        Height = 162
-        Top = 57
-        Width = 297
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        BorderSpacing.Left = 5
-        BorderSpacing.Top = 5
-        BorderSpacing.Right = 5
-        BorderSpacing.Bottom = 5
-        ItemHeight = 0
-        TabOrder = 3
-        TopIndex = -1
-      end
-      object Label7: TLabel
-        AnchorSideLeft.Control = GroupBox3
-        AnchorSideTop.Control = GroupBox3
-        Left = 5
-        Height = 15
-        Top = 5
-        Width = 202
-        BorderSpacing.Left = 5
-        BorderSpacing.Top = 5
-        Caption = 'Fields used to combine records:'
-        ParentColor = False
-      end
-    end
-    object GroupBox4: TGroupBox
-      AnchorSideLeft.Control = Bevel1
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = GroupBox1
-      AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = OptionsChkGrp
-      Left = 327
-      Height = 241
-      Top = 200
-      Width = 310
-      Anchors = [akTop, akLeft, akRight, akBottom]
-      BorderSpacing.Bottom = 10
-      Caption = 'Compare Fields:'
-      ClientHeight = 224
-      ClientWidth = 306
-      TabOrder = 3
-      object CmpFCheckList: TCheckListBox
-        AnchorSideLeft.Control = GroupBox4
-        AnchorSideTop.Control = CmpFAutoDateTimeBtn
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = GroupBox4
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = GroupBox4
-        AnchorSideBottom.Side = asrBottom
-        Left = 5
-        Height = 162
-        Top = 57
-        Width = 296
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        BorderSpacing.Left = 5
-        BorderSpacing.Top = 5
-        BorderSpacing.Right = 5
-        BorderSpacing.Bottom = 5
-        ItemHeight = 0
-        TabOrder = 0
-        TopIndex = -1
-      end
-      object CmpFAutoDateTimeBtn: TButton
-        AnchorSideLeft.Control = GroupBox4
-        AnchorSideTop.Control = Label8
-        AnchorSideTop.Side = asrBottom
-        Left = 5
-        Height = 27
-        Top = 25
-        Width = 112
-        Action = CFAutoTimeDateAction
-        AutoSize = True
-        BorderSpacing.Left = 5
-        BorderSpacing.Top = 5
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 1
-      end
-      object CmpFAutoIncBtn: TButton
-        AnchorSideLeft.Control = CmpFAutoDateTimeBtn
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = CmpFAutoDateTimeBtn
-        AnchorSideTop.Side = asrCenter
-        Left = 122
-        Height = 27
-        Top = 25
-        Width = 68
-        Action = CFAutoIncAction
-        AutoSize = True
-        BorderSpacing.Left = 5
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 2
-      end
-      object CmpFTextBtn: TButton
-        AnchorSideLeft.Control = CmpFAutoIncBtn
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = CmpFAutoDateTimeBtn
-        AnchorSideTop.Side = asrCenter
-        Left = 195
-        Height = 27
-        Top = 25
-        Width = 37
-        Action = CFTextAction
-        AutoSize = True
-        BorderSpacing.Left = 5
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 3
-      end
-      object Label8: TLabel
-        AnchorSideLeft.Control = GroupBox4
-        AnchorSideTop.Control = GroupBox4
-        Left = 5
-        Height = 15
-        Top = 5
-        Width = 214
-        BorderSpacing.Left = 5
-        BorderSpacing.Top = 5
-        Caption = 'Data comparison based on fields:'
-        ParentColor = False
-      end
-      object CmpFAllBtn: TButton
-        AnchorSideLeft.Control = CmpFTextBtn
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = CmpFAutoDateTimeBtn
-        AnchorSideTop.Side = asrCenter
-        Left = 237
-        Height = 27
-        Top = 25
-        Width = 27
-        Action = CFAllAction
-        AutoSize = True
-        BorderSpacing.Left = 5
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 4
-      end
-    end
-    object Bevel1: TBevel
-      AnchorSideTop.Control = GroupBox3
-      AnchorSideBottom.Control = GroupBox3
-      AnchorSideBottom.Side = asrBottom
-      Left = 322
-      Height = 241
-      Top = 200
-      Width = 5
-      Anchors = [akTop, akBottom]
-      Shape = bsSpacer
-      Style = bsRaised
-    end
-    object OptionsChkGrp: TCheckGroup
-      AnchorSideLeft.Control = Panel2
-      AnchorSideRight.Control = Panel2
-      AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = Panel2
-      AnchorSideBottom.Side = asrBottom
-      Left = 11
-      Height = 117
-      Top = 451
-      Width = 626
-      Anchors = [akLeft, akRight, akBottom]
-      AutoFill = True
-      AutoSize = True
-      BorderSpacing.Left = 10
-      BorderSpacing.Right = 10
-      BorderSpacing.Bottom = 10
-      Caption = 'Options:'
-      ChildSizing.LeftRightSpacing = 6
-      ChildSizing.TopBottomSpacing = 6
-      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-      ChildSizing.EnlargeVertical = crsHomogenousChildResize
-      ChildSizing.ShrinkHorizontal = crsScaleChilds
-      ChildSizing.ShrinkVertical = crsScaleChilds
-      ChildSizing.Layout = cclLeftToRightThenTopToBottom
-      ChildSizing.ControlsPerLine = 1
-      ClientHeight = 100
-      ClientWidth = 622
-      Items.Strings = (
-        'Ignore deleted records'
-        'Case in-sensitive text fields'
-        'Ignore missing records in duplicate file'
-        'Add result field'
-      )
-      TabOrder = 4
-      Data = {
-        0400000002020202
-      }
     end
   end
-  object ActionList1: TActionList
-    left = 310
-    top = 130
-    object KFNoneAction: TAction
-      Category = 'KeyFields'
-      Caption = 'None'
-      Hint = 'No sorting (sequential compare)'
-      OnExecute = KFNoneActionExecute
-    end
-    object KFIndexAction: TAction
-      Category = 'KeyFields'
-      Caption = 'Index'
-      Hint = 'Select Index as Key Fields'
-      OnExecute = KFIndexActionExecute
-      OnUpdate = KFIndexActionUpdate
-    end
-    object KFAutoIncAction: TAction
-      Category = 'KeyFields'
-      Caption = 'Auto Inc.'
-      Hint = 'Select Auto Increment field(s) as Key Fields'
-      OnExecute = KFAutoIncActionExecute
-      OnUpdate = KFAutoIncActionUpdate
-    end
-    object CFAutoTimeDateAction: TAction
-      Category = 'CompareFields'
-      Caption = 'Auto Time/Date'
-      Hint = 'Select/Deselect all Auto-Time/Date fields'
-      OnExecute = CFAutoTimeDateActionExecute
-    end
-    object CFAutoIncAction: TAction
-      Category = 'CompareFields'
-      Caption = 'Auto Inc.'
-      Hint = 'Select/Deselect all Auto Increment Fields'
-      OnExecute = CFAutoIncActionExecute
-    end
-    object CFTextAction: TAction
-      Category = 'CompareFields'
-      Caption = 'Text'
-      Hint = 'Select/Deselect all Text Fields'
-      OnExecute = CFTextActionExecute
-    end
-    object CFAllAction: TAction
-      Category = 'CompareFields'
-      Caption = 'All'
-      Hint = 'Select all Fields'
-      OnExecute = CFAllActionExecute
-    end
+  object Dlg: TOpenDialog
+    Options = [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail, ofAutoPreview]
+    left = 302
+    top = 237
   end
 end

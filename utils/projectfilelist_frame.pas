@@ -38,6 +38,7 @@ type
     FOnAfterAddToGrid: TProjectFileListGridEvent;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
+    FOnDocumentIncludedChange: TProjectFileListGridEvent;
     FOnSelectionChanged: TNotifyEvent;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedList: TStringList;
@@ -48,6 +49,7 @@ type
   protected
     procedure  DoAfterGridEvent(Const Filename: string; Const Document: TEpiDocument;
       Const RowNo: Integer);
+    procedure  DoIncludedChange(Const RowNo: Integer);
     procedure  DoSelectionChanged;
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  DoAfterImportFile(Document: TEpiDocument; Const FileName: string);
@@ -64,6 +66,7 @@ type
     property    OnBeforeImportFile: TProjectListFileEvent read FOnBeforeImportFile write SetOnBeforeImportFile;
     property    OnAfterImportFile: TProjectListFileEvent read FOnAfterImportFile write SetOnAfterImportFile;
     property    OnSelectionChanged: TNotifyEvent read FOnSelectionChanged write FOnSelectionChanged;
+    property    OnDocumentIncludedChange: TProjectFileListGridEvent read FOnDocumentIncludedChange write FOnDocumentIncludedChange;
     property    OnAfterAddToGrid: TProjectFileListGridEvent read FOnAfterAddToGrid write FOnAfterAddToGrid;
     property    SelectedList: TStringList read GetSelectedList;
     property    DocList: TStringList read FDocList;
@@ -304,6 +307,12 @@ begin
     FOnAfterAddToGrid(Self, Document, Filename, RowNo);
 end;
 
+procedure TProjectFileListFrame.DoIncludedChange(const RowNo: Integer);
+begin
+  if Assigned(OnDocumentIncludedChange) then
+    OnDocumentIncludedChange(Self, TEpiDocument(FDocList.Objects[RowNo - 1]), FDocList[RowNo - 1], RowNo);
+end;
+
 procedure TProjectFileListFrame.DoSelectionChanged;
 begin
   if Assigned(FOnSelectionChanged) then
@@ -336,6 +345,7 @@ end;
 procedure TProjectFileListFrame.StructureGridCheckboxToggled(sender: TObject;
   aCol, aRow: Integer; aState: TCheckboxState);
 begin
+  DoIncludedChange(aRow);
   DoSelectionChanged;
 end;
 

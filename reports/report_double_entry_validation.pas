@@ -11,6 +11,15 @@ uses
 
 type
 
+  TReportDoubleEntryValidationOption = record
+    MainDF: TEpiDataFile;
+    DuplDF: TEpiDataFile;
+    Keyfields: TEpiFields;
+    Comparefields: TEpiFields;
+    ValidateOptions: TEpiToolsDblEntryValidateOptions;
+  end;
+  TReportDoubleEntryValidationOptions = array of TReportDoubleEntryValidationOption;
+
   { TReportDoubleEntryValidation }
 
   TReportDoubleEntryValidation = class(TReportFileListBase, IReportFrameProvider)
@@ -18,17 +27,17 @@ type
     FCompareFields: TEpiFields;
     FDblEntryValidateOptions: TEpiToolsDblEntryValidateOptions;
     FKeyFields: TEpiFields;
-    procedure DoDataFileReport(Const MainDf, DuplDF: TEpiDataFile);
+    FReportOptions: TReportDoubleEntryValidationOptions;
+    procedure DoDataFileReport(Const ReportOption: TReportDoubleEntryValidationOption);
   protected
     function GetTitle: string; override;
+    procedure DoBeginReport; override;
     procedure DoRunReport; override;
     procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
       const Index: Integer); override;
   public
     function GetFrameClass: TCustomFrameClass;
-    property KeyFields: TEpiFields read FKeyFields write FKeyFields;
-    property CompareFields: TEpiFields read FCompareFields write FCompareFields;
-    property DblEntryValidateOptions: TEpiToolsDblEntryValidateOptions read FDblEntryValidateOptions write FDblEntryValidateOptions;
+    property ReportOptions: TReportDoubleEntryValidationOptions read FReportOptions write FReportOptions;
   end;
 
 implementation
@@ -42,19 +51,19 @@ resourcestring
 
 { TReportDoubleEntryValidation }
 
-procedure TReportDoubleEntryValidation.DoDataFileReport(const MainDf,
-  DuplDF: TEpiDataFile);
+procedure TReportDoubleEntryValidation.DoDataFileReport(
+  const ReportOption: TReportDoubleEntryValidationOption);
 var
   R: TEpiReportDoubleEntryValidation;
 begin
   R := TEpiReportDoubleEntryValidation.Create(Generator);
-  R.MainDF := MainDf;
-  R.DuplDF := DuplDF;
+  R.MainDF := ReportOption.MainDf;
+  R.DuplDF := ReportOption.DuplDF;
 
-  R.CompareFields := FCompareFields; //MainDF.Fields;
-  R.KeyFields     := FKeyFields; // MainDF.KeyFields;
+  R.CompareFields := ReportOption.CompareFields;
+  R.KeyFields     := ReportOption.KeyFields;
 
-  R.DblEntryValidateOptions := FDblEntryValidateOptions;
+  R.DblEntryValidateOptions := ReportOption.ValidateOptions;
   R.RunReport;
   R.Free;
 end;
@@ -64,36 +73,32 @@ begin
   result := rsReportDoubleEntryValidation;
 end;
 
+procedure TReportDoubleEntryValidation.DoBeginReport;
+begin
+  if not Assigned(ReportOptions) then
+    Exception.Create('TReportDoubleEntryValidation: No ReportOptions assigned!');
+
+  inherited DoBeginReport;
+end;
+
 procedure TReportDoubleEntryValidation.DoRunReport;
 var
-  R: TEpiReportDoubleEntryValidation;
-  MainDoc: TEpiDocument;
-  DuplDoc: TEpiDocument;
-  OrderedMainDF: TEpiDataFiles;
-  MainDF: TEpiDataFile;
-  DuplDF: TEpiDataFile;
+  RO: TReportDoubleEntryValidationOption;
 begin
   inherited DoRunReport;
   Generator.Line('');
 
-  MainDoc := TEpiDocument(Documents.Objects[0]);
-  DuplDoc := TEpiDocument(Documents.Objects[1]);
+  // All required information is present in the ReportOptions.
 
-
-  OrderedMainDF := MainDoc.Relations.GetOrderedDataFiles;
-
-  for MainDF in OrderedMainDF do
+  for RO in ReportOptions do
   begin
-    Generator.Section('DataForm: ' + MainDF.Caption.Text);
+    Generator.Section('DataForm: ' + RO.MainDF.Caption.Text);
     Generator.Line('');
 
-    DuplDF := TEpiDataFile(DuplDoc.DataFiles.GetItemByName(MainDF.Name));
-
-    DoDataFileReport(MainDF, DuplDF);
+    DoDataFileReport(RO);
 
     Generator.Line('');
   end;
-
 end;
 
 procedure TReportDoubleEntryValidation.DoDocumentReport(

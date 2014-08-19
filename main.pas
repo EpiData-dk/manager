@@ -291,7 +291,7 @@ uses
   valuelabel_import_data,
   append_form, epitools_append,
   epiv_dataform_treeview,
-  append_form2;
+  validate_double_entry_form;
 
 { TMainForm }
 
@@ -613,12 +613,12 @@ procedure TMainForm.Button2Click(Sender: TObject);
 var
   F: TForm;
 begin
-  F := TAppendForm2.Create(self);
+  F := TValidateDoubleEntryForm.Create(self);
   F.SetBounds(0, 0, 600, 800);
   F.Position := poMainFormCenter;
 
-  F.ShowModal;
-  F.Free;
+  F.Show;
+//  F.Free;
 end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);

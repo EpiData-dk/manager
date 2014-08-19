@@ -345,12 +345,12 @@ begin
   if OptionsChkGrp.Checked[2] then Include(Options, devIgnoreMissingRecords);
   if OptionsChkGrp.Checked[3] then Include(Options, devAddResultToField);
 
-  with TReportDoubleEntryValidation(Report) do
+{  with TReportDoubleEntryValidation(Report) do
   begin
     KeyFields := KF;
     CompareFields := CF;
     DblEntryValidateOptions := Options;
-  end;
+  end;}
 end;
 
 function TValidateDoubleEntryFrame.OkToAdvance(

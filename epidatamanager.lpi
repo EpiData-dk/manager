@@ -199,7 +199,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -346,6 +345,7 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -353,7 +353,6 @@
         <ComponentName Value="StaticReportsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="staticreports_form"/>
       </Unit28>
       <Unit29>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
@@ -472,6 +471,7 @@
         <ComponentName Value="ValidateDoubleEntryForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="validate_double_entry_form"/>
       </Unit47>
       <Unit48>
         <Filename Value="reports/report_double_entry_validation.pas"/>
@@ -582,6 +582,7 @@
       <Unit69>
         <Filename Value="reports/report_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_types"/>
       </Unit69>
       <Unit70>
         <Filename Value="tools/dataset_form.pas"/>

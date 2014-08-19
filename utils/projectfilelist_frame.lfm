@@ -1,18 +1,18 @@
 object ProjectFileListFrame: TProjectFileListFrame
   Left = 0
-  Height = 405
+  Height = 450
   Top = 0
-  Width = 582
-  ClientHeight = 405
-  ClientWidth = 582
+  Width = 878
+  ClientHeight = 450
+  ClientWidth = 878
   TabOrder = 0
-  DesignLeft = 627
-  DesignTop = 44
+  DesignLeft = 1746
+  DesignTop = 427
   object StructureGrid: TStringGrid
     Left = 0
-    Height = 305
+    Height = 350
     Top = 0
-    Width = 582
+    Width = 878
     Align = alClient
     ColCount = 1
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowMoving, goEditing, goTabs, goSmoothScroll, goFixedRowNumbering]
@@ -31,19 +31,19 @@ object ProjectFileListFrame: TProjectFileListFrame
   object Panel1: TPanel
     Left = 0
     Height = 100
-    Top = 305
-    Width = 582
+    Top = 350
+    Width = 878
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
     ClientHeight = 100
-    ClientWidth = 582
+    ClientWidth = 878
     TabOrder = 1
     object ProgressBar1: TProgressBar
       Left = 0
       Height = 20
       Top = 80
-      Width = 582
+      Width = 878
       Align = alBottom
       Smooth = True
       Step = 1
@@ -54,10 +54,10 @@ object ProjectFileListFrame: TProjectFileListFrame
       Left = 0
       Height = 80
       Top = 0
-      Width = 582
+      Width = 878
       Align = alClient
       ItemHeight = 0
-      ScrollWidth = 580
+      ScrollWidth = 876
       TabOrder = 1
       TopIndex = -1
       Visible = False
