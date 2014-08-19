@@ -60,7 +60,7 @@ implementation
 
 uses
   settings2_var, epiv_documentfile, epirelations, epidatafiles,
-  epimiscutils;
+  epimiscutils, report_double_entry_validation;
 
 const
   KEYTREE_CUSTOMDATA = 'KEYTREE_CUSTOMDATA';
@@ -76,9 +76,14 @@ begin
 end;
 
 procedure TValidateDoubleEntryForm.BitBtn1Click(Sender: TObject);
+var
+  L: TList;
+  ValOption: TReportDoubleEntryValidationOptions;
 begin
-  //
-  FProjectTree.CheckList;
+  L := FProjectTree.CheckList;
+
+  SetLength(ValOption, L.Count);
+
 end;
 
 procedure TValidateDoubleEntryForm.FileListAddDoc(Sender: TObject;

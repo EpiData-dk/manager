@@ -1021,6 +1021,8 @@ begin
   FProjectTreeView := TEpiVProjectTreeViewFrame.Create(Self);
   with FProjectTreeView do
   begin
+    MinDocumentCount    := 1;
+    MaxDocumentCount    := 1;
     AllowSelectProject  := true;
     DisplayMode         := pdmCommon;
     EditCaption         := true;
