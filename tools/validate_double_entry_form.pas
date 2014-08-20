@@ -5,8 +5,8 @@ unit validate_double_entry_form;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, StdCtrls, Buttons, epiv_projecttreeview_frame,
+  Classes, SysUtils, fgl, FileUtil, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, ComCtrls, StdCtrls, Buttons, epiv_projecttreeview_frame,
   epiv_dataform_treeview, projectfilelist_frame, epidocument, epicustombase;
 
 type
@@ -77,12 +77,14 @@ end;
 
 procedure TValidateDoubleEntryForm.BitBtn1Click(Sender: TObject);
 var
-  L: TList;
   ValOption: TReportDoubleEntryValidationOptions;
+  L: TEpiVCheckList;
 begin
   L := FProjectTree.CheckList;
 
   SetLength(ValOption, L.Count);
+
+
 
 end;
 

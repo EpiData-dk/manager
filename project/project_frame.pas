@@ -541,7 +541,7 @@ begin
     end;
   end;
 
-  FProjectTreeView.CreateRelatedDataFile(DF);
+  FProjectTreeView.CreateRelation(ParentRelation);
 end;
 
 function TProjectFrame.DoNewRuntimeFrame(Relation: TEpiMasterRelation
