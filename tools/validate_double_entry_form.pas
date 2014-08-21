@@ -5,9 +5,10 @@ unit validate_double_entry_form;
 interface
 
 uses
-  Classes, SysUtils, fgl, FileUtil, Forms, Controls, Graphics, Dialogs,
+  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, ComCtrls, StdCtrls, Buttons, epiv_projecttreeview_frame,
-  epiv_dataform_treeview, projectfilelist_frame, epidocument, epicustombase;
+  epiv_dataform_treeview, projectfilelist_frame, epidocument, epicustombase,
+  epirelations, contnrs, report_double_entry_validation;
 
 type
 
@@ -47,20 +48,27 @@ type
     FKeyTree: TDataFormTreeViewFrame;
     FCompareTree: TDataFormTreeViewFrame;
     FProjectCount: Integer;
+    FList: TObjectList;
+    FListCounter: Integer;
+    FValidationOptions: TReportDoubleEntryValidationOptions;
+    procedure BumpProjectCount(Const Value: Integer);
+    procedure AddCustomDataWalk(const Relation: TEpiMasterRelation;
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+    procedure RemoveCustomDataWalk(const Relation: TEpiMasterRelation;
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
   public
     constructor Create(TheOwner: TComponent); override;
+    property ValidationOptions: TReportDoubleEntryValidationOptions read FValidationOptions;
+    property FileListFrame: TProjectFileListFrame read FFileList;
   end;
-
-var
-  ValidateDoubleEntryForm: TValidateDoubleEntryForm;
 
 implementation
 
 {$R *.lfm}
 
 uses
-  settings2_var, epiv_documentfile, epirelations, epidatafiles,
-  epimiscutils, report_double_entry_validation;
+  settings2_var, epiv_documentfile, epidatafiles,
+  epimiscutils;
 
 const
   KEYTREE_CUSTOMDATA = 'KEYTREE_CUSTOMDATA';
@@ -77,15 +85,56 @@ end;
 
 procedure TValidateDoubleEntryForm.BitBtn1Click(Sender: TObject);
 var
-  ValOption: TReportDoubleEntryValidationOptions;
-  L: TEpiVCheckList;
+  L: TList;
+  MR: TEpiMasterRelation;
+  SelectFiles: TStringList;
+  SwapDatafiles: Boolean;
+  MainDataFiles: TEpiDataFiles;
+  DuplDataFiles: TEpiDataFiles;
+  FieldList: TList;
+  i: Integer;
+  j: Integer;
 begin
-  L := FProjectTree.CheckList;
+  try
+    L := FProjectTree.CheckList;
+    if L.Count = 0 then exit;
 
-  SetLength(ValOption, L.Count);
+    SetLength(FValidationOptions, L.Count);
 
+    SelectFiles := FFileList.SelectedList;
+    MainDataFiles := TEpiDocument(SelectFiles.Objects[0]).DataFiles;
+    DuplDataFiles := TEpiDocument(SelectFiles.Objects[1]).DataFiles;
 
+    MR := TEpiMasterRelation(L.Items[0]);
+    SwapDatafiles := false;
 
+    if MainDataFiles.IndexOf(MR.Datafile) < 0 then
+      SwapDatafiles := true;
+
+    for i := 0 to L.Count - 1 do
+      begin
+        MR := TEpiMasterRelation(L.Items[i]);
+
+        with FValidationOptions[i] do
+        begin
+          MainDF := MR.Datafile;
+          DuplDF := TEpiDataFile(DuplDataFiles.GetItemByName(MR.Datafile.Name));
+
+          Keyfields := TEpiFields.Create(nil);
+          FieldList := TList(MR.FindCustomData(KEYTREE_CUSTOMDATA));
+          for j := 0 to FieldList.Count - 1 do
+            KeyFields.AddItem(TEpiCustomItem(FieldList[j]));
+
+          Comparefields := TEpiFields.Create(nil);
+          FieldList := TList(MR.FindCustomData(COMPARETREE_CUSTOMDATA));
+          for j := 0 to FieldList.Count - 1 do
+            Comparefields.AddItem(TEpiCustomItem(FieldList[j]));
+        end;
+      end;
+  finally
+    L.Free;
+    SelectFiles.Free;
+  end;
 end;
 
 procedure TValidateDoubleEntryForm.FileListAddDoc(Sender: TObject;
@@ -93,8 +142,7 @@ procedure TValidateDoubleEntryForm.FileListAddDoc(Sender: TObject;
 begin
   FProjectTree.AddDocument(Document);
   FProjectTree.CheckAll;
-
-  Inc(FProjectCount);
+  BumpProjectCount(1);
 end;
 
 procedure TValidateDoubleEntryForm.FileListDocChange(Sender: TObject;
@@ -103,13 +151,15 @@ begin
   if FFileList.StructureGrid.Cells[FFileList.IncludeCol.Index + 1, RowNo] = FFileList.IncludeCol.ValueChecked
   then
     begin
+      Document.Relations.OrderedWalk(@AddCustomDataWalk);
       FProjectTree.AddDocument(Document);
-      Inc(FProjectCount);
+      BumpProjectCount(1);
     end
   else
     begin
+      Document.Relations.OrderedWalk(@RemoveCustomDataWalk);
       FProjectTree.RemoveDocument(Document);
-      Dec(FProjectCount);
+      BumpProjectCount(-1);
     end;
 end;
 
@@ -136,9 +186,7 @@ procedure TValidateDoubleEntryForm.ProjectTreeSelected(Sender: TObject;
   begin
     DataformTree.DataFile := TEpiMasterRelation(AObject).Datafile;
     DataformTree.SelectNone;
-    L := TList(AObject.RemoveCustomData(CustomDataName));
-    DataformTree.SelectedList := L;
-    L.Free;
+    DataformTree.SelectedList := TList(AObject.FindCustomData(CustomDataName));
   end;
 
 begin
@@ -152,6 +200,18 @@ end;
 procedure TValidateDoubleEntryForm.ProjectTreeSelecting(Sender: TObject;
   const OldObject, NewObject: TEpiCustomBase; OldObjectType,
   NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
+
+  procedure UpdateCustomData(AObject: TEpiCustomBase; NewList: TList;
+    Const Key: String);
+  var
+    List: TList;
+  begin
+    List := TList(AObject.FindCustomData(Key));
+    List.Clear;
+    List.Assign(NewList);
+    NewList.Free;
+  end;
+
 begin
   if OldObjectType <> otRelation then exit;
   if FProjectCount <> 2 then exit;
@@ -162,8 +222,62 @@ begin
       Exit;
     end;
 
-  OldObject.AddCustomData(KEYTREE_CUSTOMDATA,     FKeyTree.SelectedList);
-  OldObject.AddCustomData(COMPARETREE_CUSTOMDATA, FCompareTree.SelectedList);
+  UpdateCustomData(OldObject, FKeyTree.SelectedList,     KEYTREE_CUSTOMDATA);
+  UpdateCustomData(OldObject, FCompareTree.SelectedList, COMPARETREE_CUSTOMDATA);
+end;
+
+procedure TValidateDoubleEntryForm.BumpProjectCount(const Value: Integer);
+var
+  Method: TEpiRelationListExCallBack;
+  i: Integer;
+
+  procedure BuildList;
+  var
+    i: integer;
+  begin
+    for i := 1 to (FProjectTree.Documents[0].DataFiles.Count * 2) do
+      FList.Add(TList.Create);
+  end;
+
+  procedure ClearList;
+  begin
+    FList.Clear;
+  end;
+
+begin
+  Inc(FProjectCount, Value);
+
+  if FProjectCount = 2 then
+  begin
+    BuildList;
+    Method := @AddCustomDataWalk
+  end else begin
+    ClearList;
+    Method := @RemoveCustomDataWalk;
+  end;
+
+  for i := 0 to FFileList.DocList.Count -1 do
+    begin
+      FListCounter := 0;
+      TEpiDocument(FFileList.DocList.Objects[i]).Relations.OrderedWalk(Method);
+    end;
+end;
+
+procedure TValidateDoubleEntryForm.AddCustomDataWalk(
+  const Relation: TEpiMasterRelation; const Depth: Cardinal;
+  const Index: Cardinal; var aContinue: boolean);
+begin
+  Relation.AddCustomData(KEYTREE_CUSTOMDATA, FList[FListCounter]);
+  Relation.AddCustomData(COMPARETREE_CUSTOMDATA, FList[FListCounter+1]);
+  Inc(FListCounter, 2);
+end;
+
+procedure TValidateDoubleEntryForm.RemoveCustomDataWalk(
+  const Relation: TEpiMasterRelation; const Depth: Cardinal;
+  const Index: Cardinal; var aContinue: boolean);
+begin
+  Relation.RemoveCustomData(KEYTREE_CUSTOMDATA);
+  Relation.RemoveCustomData(COMPARETREE_CUSTOMDATA);
 end;
 
 constructor TValidateDoubleEntryForm.Create(TheOwner: TComponent);
@@ -171,6 +285,8 @@ begin
   inherited Create(TheOwner);
 
   FProjectCount := 0;
+  FValidationOptions := nil;
+  FList         := TObjectList.create(true);
   Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
   Dlg.Filter     := GetEpiDialogFilter(dfEpiData);
 

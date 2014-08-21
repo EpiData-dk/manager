@@ -264,7 +264,7 @@ begin
   );
   if Res = mrNo then exit;
 
-  FProjectTreeView.DeleteDataFile(DF);
+  FProjectTreeView.DeleteRelation(Relation);
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);

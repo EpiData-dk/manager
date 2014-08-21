@@ -23,7 +23,7 @@ object ProjectFrame: TProjectFrame
       Left = 0
       Height = 26
       Top = 0
-      Width = 171
+      Width = 167
       Caption = 'ProjectToolBar'
       EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
       EdgeInner = esNone

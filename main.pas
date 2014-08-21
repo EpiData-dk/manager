@@ -611,14 +611,27 @@ end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
 var
-  F: TForm;
+  F: TValidateDoubleEntryForm;
+  Opts: TReportDoubleEntryValidationOptions;
+  R: TReportDoubleEntryValidation;
+  S: String;
 begin
   F := TValidateDoubleEntryForm.Create(self);
   F.SetBounds(0, 0, 600, 800);
   F.Position := poMainFormCenter;
 
-  F.Show;
-//  F.Free;
+  F.ShowModal;
+  Opts := F.ValidationOptions;
+
+  R := TReportDoubleEntryValidation.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
+  R.ReportOptions := Opts;
+  S := R.RunReport;
+
+  ShowReportForm(Self,
+    'Report of: ' + R.ReportTitle,
+    S);
+
+  F.Free;
 end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);

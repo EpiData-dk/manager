@@ -1,17 +1,17 @@
 object ValidateDoubleEntryForm: TValidateDoubleEntryForm
-  Left = 1884
+  Left = 605
   Height = 621
-  Top = 257
-  Width = 746
+  Top = 267
+  Width = 825
   Caption = 'ValidateDoubleEntryForm'
   ClientHeight = 621
-  ClientWidth = 746
+  ClientWidth = 825
   LCLVersion = '1.3'
   object FilePanel: TPanel
     Left = 0
     Height = 130
     Top = 0
-    Width = 746
+    Width = 825
     Align = alTop
     Caption = 'FilePanel'
     TabOrder = 0
@@ -21,7 +21,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
     Left = 0
     Height = 6
     Top = 130
-    Width = 746
+    Width = 825
     Align = alTop
     ResizeAnchor = akTop
   end
@@ -44,7 +44,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
     Left = 248
     Height = 435
     Top = 136
-    Width = 498
+    Width = 577
     ActivePage = KeyTab
     Align = alClient
     TabIndex = 0
@@ -63,10 +63,10 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
     Left = 0
     Height = 50
     Top = 571
-    Width = 746
+    Width = 825
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 746
+    ClientWidth = 825
     TabOrder = 5
     object Button1: TButton
       Left = 24
@@ -78,10 +78,11 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
       TabOrder = 0
     end
     object BitBtn1: TBitBtn
-      Left = 680
+      Left = 759
       Height = 32
       Top = 9
       Width = 54
+      Anchors = [akTop, akRight]
       AutoSize = True
       Default = True
       DefaultCaption = True
@@ -91,10 +92,11 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
       TabOrder = 1
     end
     object BitBtn2: TBitBtn
-      Left = 592
+      Left = 671
       Height = 34
       Top = 7
       Width = 81
+      Anchors = [akTop, akRight]
       AutoSize = True
       Cancel = True
       DefaultCaption = True
