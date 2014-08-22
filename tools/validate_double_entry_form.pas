@@ -51,6 +51,8 @@ type
     FList: TObjectList;
     FListCounter: Integer;
     FValidationOptions: TReportDoubleEntryValidationOptions;
+    procedure DataFileTreeToCustomData(Const AObject: TEpiCustomBase);
+    procedure CustomDataToDataFileTree(Const AObject: TEpiCustomBase);
     procedure BumpProjectCount(Const Value: Integer);
     procedure AddCustomDataWalk(const Relation: TEpiMasterRelation;
       const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
@@ -95,6 +97,10 @@ var
   i: Integer;
   j: Integer;
 begin
+  // Before anything else, make sure the lastes changed to the DataFileTree's
+  // are applied to the custom data.
+  DataFileTreeToCustomData(FProjectTree.SelectedObject);
+
   try
     L := FProjectTree.CheckList;
     if L.Count = 0 then exit;
@@ -123,12 +129,14 @@ begin
           Keyfields := TEpiFields.Create(nil);
           FieldList := TList(MR.FindCustomData(KEYTREE_CUSTOMDATA));
           for j := 0 to FieldList.Count - 1 do
-            KeyFields.AddItem(TEpiCustomItem(FieldList[j]));
+            if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
+              KeyFields.AddItem(TEpiCustomItem(FieldList[j]));
 
           Comparefields := TEpiFields.Create(nil);
           FieldList := TList(MR.FindCustomData(COMPARETREE_CUSTOMDATA));
           for j := 0 to FieldList.Count - 1 do
-            Comparefields.AddItem(TEpiCustomItem(FieldList[j]));
+            if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
+              Comparefields.AddItem(TEpiCustomItem(FieldList[j]));
         end;
       end;
   finally
@@ -140,9 +148,9 @@ end;
 procedure TValidateDoubleEntryForm.FileListAddDoc(Sender: TObject;
   Document: TEpiDocument; const Filename: string; const RowNo: Integer);
 begin
+  BumpProjectCount(1);
   FProjectTree.AddDocument(Document);
   FProjectTree.CheckAll;
-  BumpProjectCount(1);
 end;
 
 procedure TValidateDoubleEntryForm.FileListDocChange(Sender: TObject;
@@ -151,14 +159,14 @@ begin
   if FFileList.StructureGrid.Cells[FFileList.IncludeCol.Index + 1, RowNo] = FFileList.IncludeCol.ValueChecked
   then
     begin
+      BumpProjectCount(1);
       Document.Relations.OrderedWalk(@AddCustomDataWalk);
       FProjectTree.AddDocument(Document);
-      BumpProjectCount(1);
     end
   else
     begin
-      Document.Relations.OrderedWalk(@RemoveCustomDataWalk);
       FProjectTree.RemoveDocument(Document);
+      Document.Relations.OrderedWalk(@RemoveCustomDataWalk);
       BumpProjectCount(-1);
     end;
 end;
@@ -178,6 +186,50 @@ end;
 
 procedure TValidateDoubleEntryForm.ProjectTreeSelected(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
+begin
+  if ObjectType <> otRelation then exit;
+  if FProjectCount <> 2 then exit;
+
+  CustomDataToDataFileTree(AObject);
+end;
+
+procedure TValidateDoubleEntryForm.ProjectTreeSelecting(Sender: TObject;
+  const OldObject, NewObject: TEpiCustomBase; OldObjectType,
+  NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
+begin
+  if OldObjectType <> otRelation then exit;
+  if FProjectCount <> 2 then exit;
+
+  if NewObjectType <> otRelation then
+    begin
+      Allowed := false;
+      Exit;
+    end;
+
+  DataFileTreeToCustomData(OldObject);
+end;
+
+procedure TValidateDoubleEntryForm.DataFileTreeToCustomData(
+  const AObject: TEpiCustomBase);
+
+  procedure UpdateCustomData(NewList: TList;
+    Const Key: String);
+  var
+    List: TList;
+  begin
+    List := TList(AObject.FindCustomData(Key));
+    List.Clear;
+    List.Assign(NewList);
+    NewList.Free;
+  end;
+
+begin
+  UpdateCustomData(FKeyTree.SelectedList,     KEYTREE_CUSTOMDATA);
+  UpdateCustomData(FCompareTree.SelectedList, COMPARETREE_CUSTOMDATA);
+end;
+
+procedure TValidateDoubleEntryForm.CustomDataToDataFileTree(
+  const AObject: TEpiCustomBase);
 
   procedure ApplyTree(Const DataformTree: TDataFormTreeViewFrame;
     Const CustomDataName: string);
@@ -190,40 +242,8 @@ procedure TValidateDoubleEntryForm.ProjectTreeSelected(Sender: TObject;
   end;
 
 begin
-  if ObjectType <> otRelation then exit;
-  if FProjectCount <> 2 then exit;
-
   ApplyTree(FKeyTree,     KEYTREE_CUSTOMDATA);
   ApplyTree(FCompareTree, COMPARETREE_CUSTOMDATA);
-end;
-
-procedure TValidateDoubleEntryForm.ProjectTreeSelecting(Sender: TObject;
-  const OldObject, NewObject: TEpiCustomBase; OldObjectType,
-  NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
-
-  procedure UpdateCustomData(AObject: TEpiCustomBase; NewList: TList;
-    Const Key: String);
-  var
-    List: TList;
-  begin
-    List := TList(AObject.FindCustomData(Key));
-    List.Clear;
-    List.Assign(NewList);
-    NewList.Free;
-  end;
-
-begin
-  if OldObjectType <> otRelation then exit;
-  if FProjectCount <> 2 then exit;
-
-  if NewObjectType <> otRelation then
-    begin
-      Allowed := false;
-      Exit;
-    end;
-
-  UpdateCustomData(OldObject, FKeyTree.SelectedList,     KEYTREE_CUSTOMDATA);
-  UpdateCustomData(OldObject, FCompareTree.SelectedList, COMPARETREE_CUSTOMDATA);
 end;
 
 procedure TValidateDoubleEntryForm.BumpProjectCount(const Value: Integer);

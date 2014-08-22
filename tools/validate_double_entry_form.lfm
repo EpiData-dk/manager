@@ -1,5 +1,5 @@
 object ValidateDoubleEntryForm: TValidateDoubleEntryForm
-  Left = 605
+  Left = 453
   Height = 621
   Top = 267
   Width = 825
@@ -45,9 +45,9 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
     Height = 435
     Top = 136
     Width = 577
-    ActivePage = KeyTab
+    ActivePage = CompareTab
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 4
     object KeyTab: TTabSheet
       Caption = 'Keys'

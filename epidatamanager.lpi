@@ -600,6 +600,7 @@
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="validate_double_entry_frame"/>
       </Unit72>
       <Unit73>
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
