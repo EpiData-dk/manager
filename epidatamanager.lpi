@@ -242,6 +242,7 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -337,7 +338,6 @@
       <Unit26>
         <Filename Value="reports/report_base.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_base"/>
       </Unit26>
       <Unit27>
         <Filename Value="utils/projectfilelist_frame.pas"/>
