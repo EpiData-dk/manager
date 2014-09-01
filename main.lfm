@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 1755
+  Left = 381
   Height = 603
-  Top = 278
-  Width = 910
+  Top = 237
+  Width = 1184
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
   ClientHeight = 580
-  ClientWidth = 910
+  ClientWidth = 1184
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -17,7 +17,7 @@ object MainForm: TMainForm
     Left = 0
     Height = 542
     Top = 38
-    Width = 910
+    Width = 1184
     Align = alClient
     ParentShowHint = False
     ShowHint = True
@@ -28,10 +28,10 @@ object MainForm: TMainForm
     Left = 0
     Height = 38
     Top = 0
-    Width = 910
+    Width = 1184
     Align = alTop
     ClientHeight = 38
-    ClientWidth = 910
+    ClientWidth = 1184
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
@@ -85,21 +85,6 @@ object MainForm: TMainForm
       PopupMenu = DocumentPopupMenu
       TabOrder = 2
     end
-    object EnterDataBtn: TButton
-      AnchorSideLeft.Control = DocumentBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 380
-      Height = 27
-      Top = 6
-      Width = 81
-      Action = StartEntryClientAction
-      AutoSize = True
-      BorderSpacing.Left = 15
-      Caption = 'Enter Data'
-      TabOrder = 3
-    end
     object DataFormBtn: TButton
       AnchorSideLeft.Control = ProjectDetailsBtn
       AnchorSideLeft.Side = asrBottom
@@ -113,26 +98,26 @@ object MainForm: TMainForm
       BorderSpacing.Left = 15
       Caption = 'Dataform'
       OnClick = DataFormBtnClick
-      TabOrder = 4
+      TabOrder = 3
     end
     object Button1: TButton
-      Left = 552
+      Left = 592
       Height = 25
-      Top = 7
+      Top = 8
       Width = 136
       Caption = 'Empty Project'
       OnClick = Button1Click
-      TabOrder = 5
+      TabOrder = 4
       Visible = False
     end
     object Button2: TButton
-      Left = 696
+      Left = 736
       Height = 25
-      Top = 6
+      Top = 8
       Width = 75
       Caption = 'Test'
       OnClick = Button2Click
-      TabOrder = 6
+      TabOrder = 5
     end
     object ExportBtn: TBitBtn
       AnchorSideLeft.Control = EnterDataBtn
@@ -147,6 +132,20 @@ object MainForm: TMainForm
       AutoSize = True
       BorderSpacing.Left = 15
       GlyphShowMode = gsmAlways
+      TabOrder = 6
+    end
+    object EnterDataBtn: TBitBtn
+      AnchorSideLeft.Control = DocumentBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 380
+      Height = 27
+      Top = 6
+      Width = 81
+      Action = StartEntryClientAction
+      AutoSize = True
+      BorderSpacing.Left = 15
       TabOrder = 7
     end
   end
@@ -168,11 +167,11 @@ object MainForm: TMainForm
       end
       object RecentFilesSubMenu: TMenuItem
         Caption = 'Open &Recent...'
+        ImageIndex = 18
       end
       object SaveProjectMenuItem: TMenuItem
         Caption = '&Save'
         Hint = 'Save Project'
-        ImageIndex = 1
       end
       object SaveProjectAsMenuItem: TMenuItem
         Caption = 'Save &As'
@@ -461,6 +460,7 @@ object MainForm: TMainForm
     object ShowAboutAction: TAction
       Category = 'Help'
       Caption = 'About'
+      ImageIndex = 39
       OnExecute = ShowAboutActionExecute
     end
     object CopyProjectInfoAction: TAction
@@ -490,13 +490,14 @@ object MainForm: TMainForm
       Category = 'File'
       Caption = '&Open Project'
       Hint = 'Open Project'
-      ImageIndex = 25
+      ImageIndex = 18
       OnExecute = OpenProjectActionExecute
       ShortCut = 16463
     end
     object StartEntryClientAction: TAction
       Category = 'Tools'
-      Caption = 'EpiData EntryClient'
+      Caption = 'Enter Data'
+      ImageIndex = 38
       OnExecute = StartEntryClientActionExecute
       OnUpdate = StartEntryClientActionUpdate
     end
@@ -558,7 +559,7 @@ object MainForm: TMainForm
     object ImportInNewProjectAction: TAction
       Category = 'File'
       Caption = 'Import file...'
-      ImageIndex = 18
+      ImageIndex = 17
       OnExecute = ImportInNewProjectActionExecute
     end
     object ValidationReportAction: TAction
@@ -569,7 +570,7 @@ object MainForm: TMainForm
     object ImportCBInNewProjectAction: TAction
       Category = 'File'
       Caption = 'Import from clipboard'
-      ImageIndex = 18
+      ImageIndex = 17
       OnExecute = ImportCBInNewProjectActionExecute
     end
     object VLSetFromDataAction: TAction
@@ -638,6 +639,43 @@ object MainForm: TMainForm
     end
     object RecentFilesSubPopupMenu: TMenuItem
       Caption = 'Open Recent...'
+      Bitmap.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000064000000640000000000000000000000FFFFFF00804D
+        0032814C0065814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF804C00A1FFFFFF00FFFFFF00814B
+        007D804A0030814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814B00D5FFFFFF00FFFFFF00814C
+        00C780400004814C00F7814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FD8B46000BFFFFFF00814C
+        00F685470019814C00C7814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FF804D003C804A0018814C
+        00FF814C0043814D0092814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FF824B0070804D0038814C
+        00FF824D006E814D005D814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00A4824B0058814C
+        00FF814B0098834B0029814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00D7824D0078814C
+        00FF814C00C280800002814C00CC804A0048804A0048804A0048804A0048804A
+        0048804A0048804A0048804A0048804C0076814C00A4814E0045804D0099814C
+        00FF814C00EC824C002F814C00B8FFFFFF00FFFFFF00CF992D50CF992D50CF99
+        2D50CF992D50CF983025FFFFFF00804C0040814C0080FFFFFF00824C00B9814C
+        00FF814C00FF814C00FF814B00BAFFFFFF00FFFFFF00D09A2F68D09A2F68D09A
+        2F68D09A2F68CF9A3030FFFFFF00804C0040814C0080FFFFFF00814C00D9814C
+        00FF814C00FF814C00FF814B00BAFFFFFF00FFFFFF00DF9F2008DF9F2008DF9F
+        2008DF9F2008AAAA5503FFFFFF00804C0040814C0080FFFFFF00814C00A8814B
+        00B0814B00B0814B00B0824C00B9FFFFFF00FFFFFF00D19A2EB0D19A2EB0D19A
+        2EB0D19A2EB0D09B2F52FFFFFF00804C0040814C0080FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00804C0040814C0080FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00824D0078814D00F0814B00DF804E002EFFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00814C0080814C00E8804B002CFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00814D00E6814C00B8814C00B8814C00B8814C00B8814C
+        00B8814C00B8814C00C0834E0027FFFFFF00FFFFFF00FFFFFF00
+      }
+      ImageIndex = 18
     end
   end
   object ProjectPopupMenu: TPopupMenu

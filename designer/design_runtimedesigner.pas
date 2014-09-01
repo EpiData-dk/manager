@@ -392,7 +392,7 @@ begin
   FActiveButton.Down := false;
 
   if FActiveButton = OtherToolButton then
-    OtherToolButton.ImageIndex := 7;
+    OtherToolButton.ImageIndex := 11;
 
   TToolButton(Sender).Down := true;
   FActiveButton := TToolButton(Sender);

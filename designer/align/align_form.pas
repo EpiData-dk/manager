@@ -47,8 +47,10 @@ type
     { private declarations }
     procedure DoAlignControls(AAlignment: TDesignControlsAlignment;
       Const FixedDist: Integer = -1);
+    procedure LoadGlyphs;
   public
     { public declarations }
+    constructor Create(TheOwner: TComponent); override;
     property DesignFrame: TRuntimeDesignFrame read FDesignFrame write FDesignFrame;
     class procedure RestoreDefaultPos;
   end;
@@ -62,7 +64,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2, settings2_var, LCLType;
+  settings2, settings2_var, LCLType, epiv_datamodule;
 
 { TAlignmentForm }
 
@@ -145,6 +147,27 @@ procedure TAlignmentForm.DoAlignControls(AAlignment: TDesignControlsAlignment;
 begin
   if Assigned(DesignFrame) then
     DesignFrame.AlignControls(AAlignment, FixedDist);
+end;
+
+procedure TAlignmentForm.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(22, CenterHorzBtn.Glyph);
+  DM.Icons16.GetBitmap(23, CenterVertBtn.Glyph);
+  DM.Icons16.GetBitmap(24, LeftAlignBtn.Glyph);
+  DM.Icons16.GetBitmap(25, RightAlignBtn.Glyph);
+  DM.Icons16.GetBitmap(26, EvenDistHorzBtn.Glyph);
+  DM.Icons16.GetBitmap(26, FixedDistHorzBtn.Glyph);
+  DM.Icons16.GetBitmap(27, EvenDistVertBtn.Glyph);
+  DM.Icons16.GetBitmap(27, FixedDistVertBtn.Glyph);
+  DM.Icons16.GetBitmap(28, TopAlignBtn.Glyph);
+  DM.Icons16.GetBitmap(29, BottomAlignBtn.Glyph);
+end;
+
+constructor TAlignmentForm.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+
+  LoadGlyphs;
 end;
 
 class procedure TAlignmentForm.RestoreDefaultPos;

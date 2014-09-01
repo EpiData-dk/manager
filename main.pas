@@ -17,6 +17,7 @@ type
   TMainForm = class(TForm)
     AppendAction: TAction;
     Button2: TButton;
+    EnterDataBtn: TBitBtn;
     ExportBtn: TBitBtn;
     MenuItem33: TMenuItem;
     Button1: TButton;
@@ -69,7 +70,6 @@ type
     MenuItem5: TMenuItem;
     ProjectDetailsBtn: TButton;
     DocumentBtn: TButton;
-    EnterDataBtn: TButton;
     CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
@@ -293,7 +293,7 @@ uses
   append_form, epitools_append,
   epiv_dataform_treeview,
   validate_double_entry_form,
-  datamodule;
+  epiv_datamodule;
 
 { TMainForm }
 
@@ -1247,7 +1247,8 @@ end;
 
 procedure TMainForm.LoadBitBtnIcons;
 begin
-  DM.Icons16.GetBitmap(14, ExportBtn.Glyph);
+  DM.Icons16.GetBitmap(16, ExportBtn.Glyph);
+  DM.Icons16.GetBitmap(38, EnterDataBtn.Glyph);
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
@@ -1479,6 +1480,8 @@ begin
   {$IFDEF EPI_IPC_TEST}
   SetupIPC;
   {$ENDIF}
+
+  LoadBitBtnIcons;
   UpdateMainMenu;
   AssignActionLinks;
 end;
