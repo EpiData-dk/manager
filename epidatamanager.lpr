@@ -53,7 +53,7 @@ uses
   rename_form, report_export, valuelabel_import_external,
   valuelabel_import_data, project_types, project_studyunit_frame,
   design_properties_dataformframe, append_form, append_form2, 
-  epiv_projecttreeview_frame;
+  epiv_projecttreeview_frame, datamodule;
 
 {$R *.res}
 
@@ -100,7 +100,7 @@ begin
   if (not ManagerSettings.MultipleInstances) and
      InstanceRunning(EpiDataApplicationName) then exit;
   {$ENDIF}
-
+  Application.CreateForm(TDM, DM);
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.

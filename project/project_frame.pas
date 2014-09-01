@@ -28,7 +28,6 @@ type
     DeleteDataFormAction: TAction;
     SaveProjectAsAction: TAction;
     SaveProjectAction: TAction;
-    ProjectImageList: TImageList;
     NewDataFormAction: TAction;
     ActionList1: TActionList;
     ProjectPanel: TPanel;

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 1358
+  Left = 1755
   Height = 603
-  Top = 434
+  Top = 278
   Width = 910
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -100,20 +100,6 @@ object MainForm: TMainForm
       Caption = 'Enter Data'
       TabOrder = 3
     end
-    object ExportBtn: TButton
-      AnchorSideLeft.Control = EnterDataBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 476
-      Height = 27
-      Top = 6
-      Width = 65
-      Action = ExportAction
-      AutoSize = True
-      BorderSpacing.Left = 15
-      TabOrder = 4
-    end
     object DataFormBtn: TButton
       AnchorSideLeft.Control = ProjectDetailsBtn
       AnchorSideLeft.Side = asrBottom
@@ -127,7 +113,7 @@ object MainForm: TMainForm
       BorderSpacing.Left = 15
       Caption = 'Dataform'
       OnClick = DataFormBtnClick
-      TabOrder = 5
+      TabOrder = 4
     end
     object Button1: TButton
       Left = 552
@@ -136,7 +122,7 @@ object MainForm: TMainForm
       Width = 136
       Caption = 'Empty Project'
       OnClick = Button1Click
-      TabOrder = 6
+      TabOrder = 5
       Visible = False
     end
     object Button2: TButton
@@ -146,10 +132,26 @@ object MainForm: TMainForm
       Width = 75
       Caption = 'Test'
       OnClick = Button2Click
+      TabOrder = 6
+    end
+    object ExportBtn: TBitBtn
+      AnchorSideLeft.Control = EnterDataBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 476
+      Height = 27
+      Top = 6
+      Width = 65
+      Action = ExportAction
+      AutoSize = True
+      BorderSpacing.Left = 15
+      GlyphShowMode = gsmAlways
       TabOrder = 7
     end
   end
   object MainMenu1: TMainMenu
+    Images = DM.Icons16
     left = 264
     top = 400
     object FileMenuItem: TMenuItem
@@ -431,6 +433,7 @@ object MainForm: TMainForm
     end
   end
   object ActionList1: TActionList
+    Images = DM.Icons16
     OnUpdate = ActionList1Update
     left = 360
     top = 336
@@ -487,7 +490,7 @@ object MainForm: TMainForm
       Category = 'File'
       Caption = '&Open Project'
       Hint = 'Open Project'
-      ImageIndex = 0
+      ImageIndex = 25
       OnExecute = OpenProjectActionExecute
       ShortCut = 16463
     end
@@ -555,6 +558,7 @@ object MainForm: TMainForm
     object ImportInNewProjectAction: TAction
       Category = 'File'
       Caption = 'Import file...'
+      ImageIndex = 18
       OnExecute = ImportInNewProjectActionExecute
     end
     object ValidationReportAction: TAction
@@ -565,6 +569,7 @@ object MainForm: TMainForm
     object ImportCBInNewProjectAction: TAction
       Category = 'File'
       Caption = 'Import from clipboard'
+      ImageIndex = 18
       OnExecute = ImportCBInNewProjectActionExecute
     end
     object VLSetFromDataAction: TAction
@@ -583,6 +588,7 @@ object MainForm: TMainForm
     top = 336
   end
   object DefineProjectPopupMenu: TPopupMenu
+    Images = DM.Icons16
     left = 64
     top = 56
     object MenuItem7: TMenuItem
@@ -593,12 +599,49 @@ object MainForm: TMainForm
     end
     object MenuItem8: TMenuItem
       Action = OpenProjectAction
+      Bitmap.Data = {
+        36040000424D3604000000000000360000002800000010000000100000000100
+        2000000000000004000064000000640000000000000000000000FFFFFF00804D
+        0032814C0065814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF804C00A1FFFFFF00FFFFFF00814B
+        007D804A0030814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814B00D5FFFFFF00FFFFFF00814C
+        00C780400004814C00F7814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FD8B46000BFFFFFF00814C
+        00F685470019814C00C7814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FF804D003C804A0018814C
+        00FF814C0043814D0092814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FF824B0070804D0038814C
+        00FF824D006E814D005D814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00A4824B0058814C
+        00FF814B0098834B0029814C00FF814C00FF814C00FF814C00FF814C00FF814C
+        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00D7824D0078814C
+        00FF814C00C280800002814C00CC804A0048804A0048804A0048804A0048804A
+        0048804A0048804A0048804A0048804C0076814C00A4814E0045804D0099814C
+        00FF814C00EC824C002F814C00B8FFFFFF00FFFFFF00CF992D50CF992D50CF99
+        2D50CF992D50CF983025FFFFFF00804C0040814C0080FFFFFF00824C00B9814C
+        00FF814C00FF814C00FF814B00BAFFFFFF00FFFFFF00D09A2F68D09A2F68D09A
+        2F68D09A2F68CF9A3030FFFFFF00804C0040814C0080FFFFFF00814C00D9814C
+        00FF814C00FF814C00FF814B00BAFFFFFF00FFFFFF00DF9F2008DF9F2008DF9F
+        2008DF9F2008AAAA5503FFFFFF00804C0040814C0080FFFFFF00814C00A8814B
+        00B0814B00B0814B00B0824C00B9FFFFFF00FFFFFF00D19A2EB0D19A2EB0D19A
+        2EB0D19A2EB0D09B2F52FFFFFF00804C0040814C0080FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00FFFFFF00804C0040814C0080FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00824D0078814D00F0814B00DF804E002EFFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00814C0080814C00E8804B002CFFFFFF00FFFFFF00FFFFFF00FFFF
+        FF00FFFFFF00FFFFFF00814D00E6814C00B8814C00B8814C00B8814C00B8814C
+        00B8814C00B8814C00C0834E0027FFFFFF00FFFFFF00FFFFFF00
+      }
     end
     object RecentFilesSubPopupMenu: TMenuItem
       Caption = 'Open Recent...'
     end
   end
   object ProjectPopupMenu: TPopupMenu
+    Images = DM.Icons16
     left = 136
     top = 160
     object ValueLabelEditorPopupMenuItem: TMenuItem
@@ -618,6 +661,7 @@ object MainForm: TMainForm
     end
   end
   object DocumentPopupMenu: TPopupMenu
+    Images = DM.Icons16
     left = 304
     top = 160
     object MenuItem9: TMenuItem
@@ -655,6 +699,7 @@ object MainForm: TMainForm
     end
   end
   object DataformPopupMenu: TPopupMenu
+    Images = DM.Icons16
     left = 224
     top = 56
     object KeyFieldsPopupMenuItem: TMenuItem

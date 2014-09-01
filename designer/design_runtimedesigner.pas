@@ -123,7 +123,6 @@ type
     CurrentSectionPanel: TPanel;
     DefaultValueLabel: TLabel;
     DefaultValuePanel: TPanel;
-    DesignerImageList: TImageList;
     EditPopupMenuItem: TMenuItem;
     ExtendedLabel: TLabel;
     ExtendedPanel: TPanel;
@@ -1964,12 +1963,8 @@ end;
 
 procedure TRuntimeDesignFrame.UpdateInterface;
 begin
-  PasteAsDateAction.ImageIndex := Ord(ManagerSettings.DefaultDateType);
   with DateToolButton do
-  begin
     Tag := Ord(ManagerSettings.DefaultDateType);
-    ImageIndex := Tag;
-  end;
 end;
 
 procedure TRuntimeDesignFrame.SelectControl(AAction: TDesignSelectAction);

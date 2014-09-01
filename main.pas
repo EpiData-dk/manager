@@ -17,6 +17,7 @@ type
   TMainForm = class(TForm)
     AppendAction: TAction;
     Button2: TButton;
+    ExportBtn: TBitBtn;
     MenuItem33: TMenuItem;
     Button1: TButton;
     DataFormBtn: TButton;
@@ -69,7 +70,6 @@ type
     ProjectDetailsBtn: TButton;
     DocumentBtn: TButton;
     EnterDataBtn: TButton;
-    ExportBtn: TButton;
     CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
@@ -235,6 +235,7 @@ type
     procedure UpdateProcessToolbar;
     procedure UpdateShortCuts;
     procedure UpdateSettings;
+    procedure LoadBitBtnIcons;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(Const ReadOnly: boolean;
       out LocalDoc: boolean): TEpiDocumentFile;
@@ -291,7 +292,8 @@ uses
   valuelabel_import_data,
   append_form, epitools_append,
   epiv_dataform_treeview,
-  validate_double_entry_form;
+  validate_double_entry_form,
+  datamodule;
 
 { TMainForm }
 
@@ -1241,6 +1243,11 @@ begin
     TProjectFrame(FActiveFrame).UpdateFrame;
 
   EndUpdatingForm;
+end;
+
+procedure TMainForm.LoadBitBtnIcons;
+begin
+  DM.Icons16.GetBitmap(14, ExportBtn.Glyph);
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
