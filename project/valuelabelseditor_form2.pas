@@ -16,7 +16,6 @@ type
 
   TValueLabelEditor2 = class(TForm)
     BitBtn1: TBitBtn;
-    ImageList1: TImageList;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
@@ -180,10 +179,9 @@ begin
     Exit;
 
   Case ValueLabelSetFromNode(Node).LabelType of
-    ftInteger:     ImageIndex := 0;
-    ftFloat:       ImageIndex := 1;
-    ftString,
-    ftUpperString: ImageIndex := 2;
+    ftInteger:     ImageIndex := 2;
+    ftFloat:       ImageIndex := 3;
+    ftString:      ImageIndex := 6;
   end;
 end;
 

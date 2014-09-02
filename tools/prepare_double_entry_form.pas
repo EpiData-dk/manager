@@ -33,6 +33,7 @@ type
     { private declarations }
     FDoc: TEpiDocument;
     FFileName: string;
+    procedure LoadGlyphs;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Doc: TEpiDocument;
@@ -47,7 +48,14 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafilestypes, epiv_documentfile, settings2, settings2_var;
+  epidatafilestypes, epiv_documentfile, settings2, settings2_var,
+  epiv_datamodule;
+
+type
+  TAccessFileNameEdit = class(TFileNameEdit)
+  public
+    property Button;
+  end;
 
 { TPrepareDoubleEntryForm }
 
@@ -142,6 +150,11 @@ begin
     LoadFormPosition(Self, Self.ClassName);
 end;
 
+procedure TPrepareDoubleEntryForm.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(19, TAccessFileNameEdit(FileNameEdit).Button.Glyph);
+end;
+
 constructor TPrepareDoubleEntryForm.Create(TheOwner: TComponent; const Doc: TEpiDocument;
   const FileName: String);
 begin
@@ -154,6 +167,8 @@ begin
 
   FileNameEdit.Text := ChangeFileExt(FFileName, '_double.epx');
   TitleEdit.Text    := TitleLabel.Caption + ' (double entry file)';
+
+  LoadGlyphs;
 end;
 
 class procedure TPrepareDoubleEntryForm.RestoreDefaultPos;

@@ -72,6 +72,7 @@ type
     procedure SetDataFile(AValue: TEpiDataFile);
     procedure SetImportData(AValue: boolean);
     procedure SetRelation(AValue: TEpiMasterRelation);
+    procedure LoadGlyphs;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent);
@@ -91,7 +92,7 @@ implementation
 
 uses
   epiimport, LCLProc, epimiscutils, settings2_var,
-  epidatafilestypes, settings2;
+  epidatafilestypes, settings2, epiv_datamodule;
 
 { TImportStructureForm }
 
@@ -337,6 +338,12 @@ begin
   FRelation := AValue;
 end;
 
+procedure TImportStructureForm.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(19, OpenBtn.Glyph);
+  DM.Icons16.GetBitmap(19, OpenCBBtn.Glyph);
+end;
+
 procedure TImportStructureForm.CancelActionExecute(Sender: TObject);
 begin
   ModalResult := mrCancel;
@@ -536,6 +543,8 @@ end;
 constructor TImportStructureForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+
+  LoadGlyphs;
 
   FProjectList := TProjectFileListFrame.Create(Self);
   with FProjectList do

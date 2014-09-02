@@ -85,7 +85,7 @@ type
     PrintDataFormAction: TAction;
     StringToolButton: TToolButton;
     TestToolButton: TToolButton;
-    ToolButton2: TToolButton;
+    TimeToolButton: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
@@ -368,11 +368,11 @@ implementation
 uses
   JvDesignImp, design_designpanel,
   Graphics, design_designcontroller, design_designmessenger,
-  main, epistringutils, JvDesignUtils, settings2_var,
+  main, JvDesignUtils, settings2_var,
   manager_globals, managerprocs, Clipbrd, math,
   Dialogs, import_structure_form, epimiscutils,
   dataset_form,
-  LCLMessageGlue, LCLType, shortcuts, settings2,
+  LCLType, shortcuts, settings2,
   Printers, OSPrinters, strutils,
   design_control_section,
   design_control_field,
@@ -391,7 +391,9 @@ begin
   if not (Sender is TToolButton) then exit;
   FActiveButton.Down := false;
 
-  if FActiveButton = OtherToolButton then
+  if (FActiveButton = OtherToolButton) and
+     (Sender <> OtherToolButton)
+  then
     OtherToolButton.ImageIndex := 11;
 
   TToolButton(Sender).Down := true;
@@ -412,8 +414,6 @@ end;
 
 
 procedure TRuntimeDesignFrame.GetAddClass(Sender: TObject; var ioClass: string);
-var
-  Key: Word;
 begin
   // Disallow Section-in-Section
   if (TDesignController(TJvDesignSurface(Sender).Controller).Clicked is TDesignSection) and

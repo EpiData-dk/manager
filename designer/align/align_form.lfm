@@ -1,5 +1,5 @@
 object AlignmentForm: TAlignmentForm
-  Left = 938
+  Left = 923
   Height = 316
   Top = 351
   Width = 355
@@ -25,7 +25,7 @@ object AlignmentForm: TAlignmentForm
   LCLVersion = '1.3'
   object SidesgrpBox: TGroupBox
     Left = 5
-    Height = 70
+    Height = 73
     Hint = 'Align controls according to sides'
     Top = 5
     Width = 345
@@ -37,7 +37,7 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 53
+    ClientHeight = 56
     ClientWidth = 341
     ParentShowHint = False
     ShowHint = True
@@ -46,7 +46,7 @@ object AlignmentForm: TAlignmentForm
       Left = 57
       Height = 12
       Hint = 'Align Left'
-      Top = 21
+      Top = 22
       Width = 12
       AutoSize = True
       BorderSpacing.Left = 5
@@ -60,7 +60,7 @@ object AlignmentForm: TAlignmentForm
       Left = 126
       Height = 12
       Hint = 'Align Top'
-      Top = 21
+      Top = 22
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -73,7 +73,7 @@ object AlignmentForm: TAlignmentForm
       Left = 195
       Height = 12
       Hint = 'Align Bottom'
-      Top = 21
+      Top = 22
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -87,7 +87,7 @@ object AlignmentForm: TAlignmentForm
       Left = 264
       Height = 12
       Hint = 'Align Right'
-      Top = 21
+      Top = 22
       Width = 12
       AutoSize = True
       BorderSpacing.Right = 5
@@ -100,9 +100,9 @@ object AlignmentForm: TAlignmentForm
   end
   object CenterGrpBox: TGroupBox
     Left = 5
-    Height = 72
+    Height = 74
     Hint = 'Center controls'
-    Top = 80
+    Top = 83
     Width = 345
     Caption = 'Center:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
@@ -111,7 +111,7 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 55
+    ClientHeight = 57
     ClientWidth = 341
     ParentShowHint = False
     ShowHint = True
@@ -120,7 +120,7 @@ object AlignmentForm: TAlignmentForm
       Left = 106
       Height = 12
       Hint = 'Center Vertical'
-      Top = 22
+      Top = 23
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -131,7 +131,7 @@ object AlignmentForm: TAlignmentForm
       Left = 224
       Height = 12
       Hint = 'Center Horizontal'
-      Top = 22
+      Top = 23
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -143,7 +143,7 @@ object AlignmentForm: TAlignmentForm
     Left = 5
     Height = 74
     Hint = 'Calculate even distance between controls'
-    Top = 157
+    Top = 162
     Width = 345
     Caption = 'Even distance:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
@@ -182,9 +182,9 @@ object AlignmentForm: TAlignmentForm
   end
   object FixedDistGrpBox: TGroupBox
     Left = 5
-    Height = 75
+    Height = 70
     Hint = 'Set fixed distance between controls'
-    Top = 236
+    Top = 241
     Width = 345
     Caption = 'Fixed distance:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
@@ -193,7 +193,7 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 58
+    ClientHeight = 53
     ClientWidth = 341
     ParentShowHint = False
     ShowHint = True
@@ -202,7 +202,7 @@ object AlignmentForm: TAlignmentForm
       Left = 106
       Height = 12
       Hint = 'Fixed vertical distance between controls'
-      Top = 23
+      Top = 21
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -215,7 +215,7 @@ object AlignmentForm: TAlignmentForm
       Left = 224
       Height = 12
       Hint = 'Fixed horizontal distance between controls'
-      Top = 23
+      Top = 21
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -233,7 +233,7 @@ object AlignmentForm: TAlignmentForm
       AnchorSideBottom.Side = asrBottom
       Left = 123
       Height = 25
-      Top = 10
+      Top = 8
       Width = 50
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5
@@ -248,7 +248,7 @@ object AlignmentForm: TAlignmentForm
       AnchorSideBottom.Side = asrBottom
       Left = 241
       Height = 25
-      Top = 10
+      Top = 8
       Width = 50
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5

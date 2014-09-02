@@ -45,6 +45,7 @@ type
     procedure AfterFileImport(Sender: TObject; Document: TEpiDocument;
       const FileName: string);
     procedure ProjectFileListChanged(Sender: TObject);
+    procedure LoadGlyphs;
   protected
     constructor Create(TheOwner: TComponent); override;
   public
@@ -62,7 +63,7 @@ implementation
 uses
   settings2_var, settings2, epimiscutils, viewer_form,
   epireport_generator_html, epireport_generator_txt, epireport_generator_base,
-  ok_cancel_form, manager_types;
+  ok_cancel_form, manager_types, epiv_datamodule;
 
 { TStaticReportsForm }
 
@@ -119,6 +120,11 @@ begin
     else
       Hint := 'Select at least 1 project!';
   end;
+end;
+
+procedure TStaticReportsForm.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(19, AddFilesBtn.Glyph);
 end;
 
 function TStaticReportsForm.ShowDialog(out Files: TStrings): boolean;

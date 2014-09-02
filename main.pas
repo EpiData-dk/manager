@@ -1247,8 +1247,8 @@ end;
 
 procedure TMainForm.LoadBitBtnIcons;
 begin
-  DM.Icons16.GetBitmap(16, ExportBtn.Glyph);
-  DM.Icons16.GetBitmap(38, EnterDataBtn.Glyph);
+  DM.Icons16.GetBitmap(17, ExportBtn.Glyph);
+  DM.Icons16.GetBitmap(39, EnterDataBtn.Glyph);
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);

@@ -56,6 +56,7 @@ type
     FDoc: TEpiDocument;
     FFileName: string;
     procedure UpdateDataFileCombo;
+    procedure LoadGlyphs;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const Doc: TEpiDocument; Const FileName: string);
@@ -73,7 +74,14 @@ implementation
 
 uses
   epieximtypes, epimiscutils,
-  settings2, settings2_var, LCLType, epidatafilestypes;
+  settings2, settings2_var, LCLType, epidatafilestypes,
+  epiv_datamodule;
+
+type
+  TAccessFileNameEdit = class(TFileNameEdit)
+  public
+    property Button;
+  end;
 
 type
   TFrameRec = record
@@ -161,6 +169,11 @@ begin
     DataFileComboBox.AddItem(DF.Caption.Text, DF);
 
   OrderedDataFiles.Free;
+end;
+
+procedure TExportForm.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(19, TAccessFileNameEdit(ExportFileNameEdit).Button.Glyph);
 end;
 
 procedure TExportForm.ExportTypeComboSelect(Sender: TObject);
@@ -310,6 +323,9 @@ var
   S: String;
 begin
   inherited Create(TheOwner);
+
+  LoadGlyphs;
+
   FExportSetting := nil;
   FActiveSheet := nil;
   DialogFilters := [];

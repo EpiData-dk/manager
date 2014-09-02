@@ -151,16 +151,16 @@ end;
 
 procedure TAlignmentForm.LoadGlyphs;
 begin
-  DM.Icons16.GetBitmap(22, CenterHorzBtn.Glyph);
-  DM.Icons16.GetBitmap(23, CenterVertBtn.Glyph);
-  DM.Icons16.GetBitmap(24, LeftAlignBtn.Glyph);
-  DM.Icons16.GetBitmap(25, RightAlignBtn.Glyph);
-  DM.Icons16.GetBitmap(26, EvenDistHorzBtn.Glyph);
-  DM.Icons16.GetBitmap(26, FixedDistHorzBtn.Glyph);
-  DM.Icons16.GetBitmap(27, EvenDistVertBtn.Glyph);
-  DM.Icons16.GetBitmap(27, FixedDistVertBtn.Glyph);
-  DM.Icons16.GetBitmap(28, TopAlignBtn.Glyph);
-  DM.Icons16.GetBitmap(29, BottomAlignBtn.Glyph);
+  DM.Icons16.GetBitmap(23, CenterHorzBtn.Glyph);
+  DM.Icons16.GetBitmap(24, CenterVertBtn.Glyph);
+  DM.Icons16.GetBitmap(25, LeftAlignBtn.Glyph);
+  DM.Icons16.GetBitmap(26, RightAlignBtn.Glyph);
+  DM.Icons16.GetBitmap(27, EvenDistHorzBtn.Glyph);
+  DM.Icons16.GetBitmap(27, FixedDistHorzBtn.Glyph);
+  DM.Icons16.GetBitmap(28, EvenDistVertBtn.Glyph);
+  DM.Icons16.GetBitmap(28, FixedDistVertBtn.Glyph);
+  DM.Icons16.GetBitmap(29, TopAlignBtn.Glyph);
+  DM.Icons16.GetBitmap(30, BottomAlignBtn.Glyph);
 end;
 
 constructor TAlignmentForm.Create(TheOwner: TComponent);

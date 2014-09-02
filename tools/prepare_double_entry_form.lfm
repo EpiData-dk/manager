@@ -1,7 +1,7 @@
 object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
-  Left = 363
+  Left = 1976
   Height = 305
-  Top = 266
+  Top = 326
   Width = 523
   Caption = 'Prepare copy for second independent entry'
   ClientHeight = 305
@@ -141,7 +141,6 @@ object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
         Height = 25
         Top = 17
         Width = 353
-        DialogKind = dkSave
         FilterIndex = 0
         HideDirectories = False
         ButtonWidth = 23

@@ -59,6 +59,7 @@ type
     function  PerformIndexCheck(Out FailedRecords: TBoundArray;
       out FailedValues: TBoundArray): Boolean;
     function  ShowError(Const Msg: string; Const Ctrl: TControl): boolean;
+    procedure LoadGlyphs;
   protected
     property  DataFile: TEpiDataFile read GetDataFile;
     property  Relation: TEpiMasterRelation read FRelation;
@@ -77,7 +78,7 @@ implementation
 uses
   types, dataset_form, settings2, settings2_var,
   epiglobals, epidatafilestypes, LCLIntf, manager_messages,
-  main, lcltype;
+  main, lcltype, epiv_datamodule;
 
 const
   FormName = 'KeyFieldsForm';
@@ -434,6 +435,12 @@ begin
   FHintWindow.ActivateHint(R, Msg);
 end;
 
+procedure TKeyFieldsForm.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(31, AddIndexComboBtn.Glyph);
+  DM.Icons16.GetBitmap(32, RemoveIndexBtn.Glyph);
+end;
+
 constructor TKeyFieldsForm.Create(TheOwner: TComponent;
   ARelation: TEpiMasterRelation);
 var
@@ -450,6 +457,8 @@ begin
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.HideInterval := 5 * 1000;
   FHintWindow.AutoHide := true;
+
+  LoadGlyphs;
 
   with DataFile do
     for i := 0 to KeyFields.Count - 1 do

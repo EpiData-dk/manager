@@ -23,7 +23,7 @@ object ProjectFrame: TProjectFrame
       Left = 0
       Height = 22
       Top = 0
-      Width = 211
+      Width = 207
       AutoSize = True
       ButtonHeight = 20
       ButtonWidth = 20
@@ -120,7 +120,7 @@ object ProjectFrame: TProjectFrame
       Category = 'File'
       Caption = '&Save Project'
       Hint = 'Save Project'
-      ImageIndex = 19
+      ImageIndex = 20
       OnExecute = SaveProjectActionExecute
       OnUpdate = SaveProjectActionUpdate
       ShortCut = 16467
@@ -129,7 +129,7 @@ object ProjectFrame: TProjectFrame
       Category = 'File'
       Caption = 'Save Project &As'
       Hint = 'Save Project As'
-      ImageIndex = 20
+      ImageIndex = 21
       OnExecute = SaveProjectAsActionExecute
       ShortCut = 24659
     end
@@ -137,14 +137,14 @@ object ProjectFrame: TProjectFrame
       Category = 'DataForm'
       Caption = 'New Data Form'
       Hint = 'New Relate DataForm'
-      ImageIndex = 30
+      ImageIndex = 31
       OnExecute = NewDataFormActionExecute
     end
     object DeleteDataFormAction: TAction
       Category = 'DataForm'
       Caption = 'Delete Data Form'
       Hint = 'Delete Data Form'
-      ImageIndex = 31
+      ImageIndex = 32
       OnExecute = DeleteDataFormActionExecute
       OnUpdate = DeleteDataFormActionUpdate
     end
@@ -164,7 +164,7 @@ object ProjectFrame: TProjectFrame
       Category = 'File'
       Caption = 'Open Project'
       Hint = 'Open Project'
-      ImageIndex = 18
+      ImageIndex = 19
       OnExecute = OpenProjectActionExecute
     end
     object ProjectPasswordAction: TAction
