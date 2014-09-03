@@ -7,14 +7,14 @@ object ReportOptionsFrameCounts: TReportOptionsFrameCounts
   ClientHeight = 415
   ClientWidth = 361
   TabOrder = 0
-  DesignLeft = 661
-  DesignTop = 380
+  DesignLeft = 704
+  DesignTop = 124
   object Label1: TLabel
     AnchorSideTop.Control = Owner
     Left = 10
     Height = 15
     Top = 10
-    Width = 100
+    Width = 99
     BorderSpacing.Top = 10
     Caption = 'Available Fields:'
     ParentColor = False

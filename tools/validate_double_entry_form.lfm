@@ -1,7 +1,7 @@
 object ValidateDoubleEntryForm: TValidateDoubleEntryForm
-  Left = 705
+  Left = 137
   Height = 490
-  Top = 320
+  Top = 98
   Width = 568
   Caption = 'ValidateDoubleEntryForm'
   ClientHeight = 490
@@ -273,7 +273,7 @@ object ValidateDoubleEntryForm: TValidateDoubleEntryForm
   end
   object Dlg: TOpenDialog
     Options = [ofAllowMultiSelect, ofFileMustExist, ofEnableSizing, ofViewDetail, ofAutoPreview]
-    left = 120
-    top = 240
+    left = 112
+    top = 216
   end
 end

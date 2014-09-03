@@ -293,7 +293,8 @@ uses
   append_form, epitools_append,
   epiv_dataform_treeview,
   validate_double_entry_form,
-  epiv_datamodule;
+  epiv_datamodule,
+  count_by_id_form;
 
 { TMainForm }
 
@@ -613,19 +614,16 @@ end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
 var
-  F: TValidateDoubleEntryForm;
-  Opts: TReportDoubleEntryValidationOptions;
-  R: TReportDoubleEntryValidation;
-  S: String;
+  F: TCountByIdForm;
 begin
   try
-    F := TValidateDoubleEntryForm.Create(self);
+    F := TCountByIdForm.Create(self);
     F.SetBounds(0, 0, 600, 800);
     F.Position := poMainFormCenter;
 
     if F.ShowModal <> mrOK then exit;
 
-    Opts := F.ValidationOptions;
+{    Opts := F.ValidationOptions;
 
     R := TReportDoubleEntryValidation.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
     R.ReportOptions := Opts;
@@ -634,7 +632,7 @@ begin
     ShowReportForm(Self,
       'Report of: ' + R.ReportTitle,
       S);
-
+             }
   finally
     F.Free;
   end;

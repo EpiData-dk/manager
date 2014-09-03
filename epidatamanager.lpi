@@ -180,7 +180,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="91">
+    <Units Count="92">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -199,7 +199,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -272,7 +271,6 @@
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -298,7 +296,6 @@
         <ComponentName Value="ImportStructureForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="import_structure_form"/>
       </Unit18>
       <Unit19>
         <Filename Value="manager_messages.pas"/>
@@ -347,6 +344,7 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -354,7 +352,6 @@
         <ComponentName Value="StaticReportsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="staticreports_form"/>
       </Unit28>
       <Unit29>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
@@ -374,7 +371,6 @@
         <ComponentName Value="FieldValueLabelEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="field_valuelabelseditor_form"/>
       </Unit32>
       <Unit33>
         <Filename Value="project/valuelabelgrid_frame.pas"/>
@@ -389,7 +385,6 @@
         <ComponentName Value="ValueLabelEditor2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="valuelabelseditor_form2"/>
       </Unit34>
       <Unit35>
         <Filename Value="settings/settings_export.pas"/>
@@ -404,7 +399,6 @@
         <ComponentName Value="ExportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="export_form"/>
       </Unit36>
       <Unit37>
         <Filename Value="export/export_stata_frame.pas"/>
@@ -458,7 +452,6 @@
         <ComponentName Value="PrepareDoubleEntryForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="prepare_double_entry_form"/>
       </Unit44>
       <Unit45>
         <Filename Value="project/project_keyfields_form.pas"/>
@@ -466,7 +459,6 @@
         <ComponentName Value="KeyFieldsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="project_keyfields_form"/>
       </Unit45>
       <Unit46>
         <Filename Value="utils/manager_globals.pas"/>
@@ -497,7 +489,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -518,7 +509,6 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -575,11 +565,11 @@
         <ComponentName Value="AlignmentForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="align_form"/>
       </Unit66>
       <Unit67>
         <Filename Value="reports/report_counts.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_counts"/>
       </Unit67>
       <Unit68>
         <Filename Value="reports/report_optionframe_counts.pas"/>
@@ -587,6 +577,7 @@
         <ComponentName Value="ReportOptionsFrameCounts"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_optionframe_counts"/>
       </Unit68>
       <Unit69>
         <Filename Value="reports/report_types.pas"/>
@@ -692,11 +683,11 @@
         <ComponentName Value="ValueLabelDataImport"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabel_import_data"/>
       </Unit86>
       <Unit87>
         <Filename Value="project/project_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="project_types"/>
       </Unit87>
       <Unit88>
         <Filename Value="project/project_studyunit_frame.pas"/>
@@ -719,6 +710,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit90>
+      <Unit91>
+        <Filename Value="tools/count_by_id_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CountByIdForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="count_by_id_form"/>
+      </Unit91>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
