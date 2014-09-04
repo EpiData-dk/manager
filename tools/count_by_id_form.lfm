@@ -1,17 +1,17 @@
 object CountByIdForm: TCountByIdForm
-  Left = 1946
-  Height = 650
-  Top = 299
-  Width = 758
+  Left = 601
+  Height = 653
+  Top = 349
+  Width = 810
   Caption = 'CountByIdForm'
-  ClientHeight = 650
-  ClientWidth = 758
+  ClientHeight = 653
+  ClientWidth = 810
   LCLVersion = '1.3'
   object FilePanel: TPanel
     Left = 0
     Height = 130
     Top = 0
-    Width = 758
+    Width = 810
     Align = alTop
     Caption = 'FilePanel'
     TabOrder = 0
@@ -21,13 +21,13 @@ object CountByIdForm: TCountByIdForm
     Left = 0
     Height = 6
     Top = 130
-    Width = 758
+    Width = 810
     Align = alTop
     ResizeAnchor = akTop
   end
   object ProjectPanel: TPanel
     Left = 0
-    Height = 464
+    Height = 467
     Top = 136
     Width = 243
     Align = alLeft
@@ -36,18 +36,18 @@ object CountByIdForm: TCountByIdForm
   end
   object Splitter2: TSplitter
     Left = 243
-    Height = 464
+    Height = 467
     Top = 136
     Width = 5
   end
   object BottomPanel: TPanel
     Left = 0
     Height = 50
-    Top = 600
-    Width = 758
+    Top = 603
+    Width = 810
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 758
+    ClientWidth = 810
     TabOrder = 4
     object Button1: TButton
       Left = 24
@@ -59,7 +59,7 @@ object CountByIdForm: TCountByIdForm
       TabOrder = 0
     end
     object BitBtn1: TBitBtn
-      Left = 692
+      Left = 744
       Height = 32
       Top = 9
       Width = 54
@@ -72,7 +72,7 @@ object CountByIdForm: TCountByIdForm
       TabOrder = 1
     end
     object BitBtn2: TBitBtn
-      Left = 604
+      Left = 656
       Height = 34
       Top = 7
       Width = 81
@@ -85,24 +85,24 @@ object CountByIdForm: TCountByIdForm
       TabOrder = 2
     end
   end
-  object Panel1: TPanel
+  object FieldListPanel: TPanel
     Left = 248
-    Height = 464
+    Height = 467
     Top = 136
-    Width = 510
+    Width = 562
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 464
-    ClientWidth = 510
+    ClientHeight = 467
+    ClientWidth = 562
     TabOrder = 5
     object Panel2: TPanel
       Left = 0
       Height = 50
-      Top = 414
-      Width = 510
+      Top = 417
+      Width = 562
       Align = alBottom
       ClientHeight = 50
-      ClientWidth = 510
+      ClientWidth = 562
       TabOrder = 0
       object Button2: TButton
         Left = 24
@@ -120,16 +120,6 @@ object CountByIdForm: TCountByIdForm
         Caption = 'Button3'
         TabOrder = 1
       end
-    end
-    object IDCheckListBox: TCheckListBox
-      Left = 0
-      Height = 414
-      Top = 0
-      Width = 510
-      Align = alClient
-      ItemHeight = 0
-      TabOrder = 1
-      TopIndex = -1
     end
   end
   object OpenDialog1: TOpenDialog

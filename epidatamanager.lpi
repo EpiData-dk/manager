@@ -344,7 +344,6 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -489,6 +488,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -569,7 +569,6 @@
       <Unit67>
         <Filename Value="reports/report_counts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_counts"/>
       </Unit67>
       <Unit68>
         <Filename Value="reports/report_optionframe_counts.pas"/>
@@ -577,7 +576,6 @@
         <ComponentName Value="ReportOptionsFrameCounts"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_optionframe_counts"/>
       </Unit68>
       <Unit69>
         <Filename Value="reports/report_types.pas"/>
@@ -683,7 +681,6 @@
         <ComponentName Value="ValueLabelDataImport"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="valuelabel_import_data"/>
       </Unit86>
       <Unit87>
         <Filename Value="project/project_types.pas"/>
@@ -714,6 +711,7 @@
         <Filename Value="tools/count_by_id_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CountByIdForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="count_by_id_form"/>
       </Unit91>

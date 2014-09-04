@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Buttons, CheckLst, projectfilelist_frame, epiv_projecttreeview_frame,
-  epidocument, epicustombase;
+  epidocument, epicustombase, epiv_field_list;
 
 type
 
@@ -20,10 +20,9 @@ type
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
-    IDCheckListBox: TCheckListBox;
     FilePanel: TPanel;
     OpenDialog1: TOpenDialog;
-    Panel1: TPanel;
+    FieldListPanel: TPanel;
     Panel2: TPanel;
     ProjectPanel: TPanel;
     Splitter1: TSplitter;
@@ -39,6 +38,7 @@ type
   private
     FFileList: TProjectFileListFrame;
     FProjectTree: TEpiVProjectTreeViewFrame;
+    FFieldList: TEpiVFieldList;
     procedure UpdateCommonFields;
     procedure PopulateFieldList(Const List: TList);
   public
@@ -140,7 +140,7 @@ var
   i: Integer;
   F: TEpiField;
 begin
-  IDCheckListBox.Clear;
+{  IDCheckListBox.Clear;
 
   IDCheckListBox.Items.BeginUpdate;
 
@@ -151,7 +151,7 @@ begin
     IDCheckListBox.AddItem(F.Name + ': ' + F.Question.Text, F);
   end;
 
-  IDCheckListBox.Items.BeginUpdate;
+  IDCheckListBox.Items.BeginUpdate;}
 end;
 
 constructor TCountByIdForm.Create(TheOwner: TComponent);
@@ -187,6 +187,13 @@ begin
     ShowProject        := True;
 
     OnChecked          := @ProjectTreeChecked;
+  end;
+
+  FFieldList := TEpiVFieldList.Create(SElf);
+  with FFieldList do
+  begin
+    Align              := alClient;
+    Parent             := FieldListPanel;
   end;
 end;
 
