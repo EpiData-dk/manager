@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 734
-  Height = 603
-  Top = 396
-  Width = 1184
+  Left = 2090
+  Height = 478
+  Top = 452
+  Width = 842
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
-  ClientHeight = 580
-  ClientWidth = 1184
+  ClientHeight = 455
+  ClientWidth = 842
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -15,9 +15,9 @@ object MainForm: TMainForm
   LCLVersion = '1.3'
   object PageControl1: TPageControl
     Left = 0
-    Height = 542
+    Height = 417
     Top = 38
-    Width = 1184
+    Width = 842
     Align = alClient
     ParentShowHint = False
     ShowHint = True
@@ -28,10 +28,10 @@ object MainForm: TMainForm
     Left = 0
     Height = 38
     Top = 0
-    Width = 1184
+    Width = 842
     Align = alTop
     ClientHeight = 38
-    ClientWidth = 1184
+    ClientWidth = 842
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1

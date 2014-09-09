@@ -217,8 +217,11 @@ begin
     if (ext = '.rec') or (ext = '.dta') then
     begin
       Doc := DocFile.CreateNewDocument('en');
+      Doc.Study.Title.Text := ExtractFileName(FileName);
 
       DataFile := Doc.DataFiles.NewDataFile;
+      Doc.Relations.NewMasterRelation.Datafile := DataFile;
+
       DoBeforeImportFile(Doc, FileName);
       if (ext = '.dta') then
         Importer.ImportStata(FileName, Doc, DataFile, true)
@@ -242,7 +245,11 @@ begin
     then
     begin
       Doc := DocFile.CreateNewDocument('en');
+      Doc.Study.Title.Text := ExtractFileName(FileName);
+
       DataFile := Doc.DataFiles.NewDataFile;
+      Doc.Relations.NewMasterRelation.Datafile := DataFile;
+
       DoBeforeImportFile(Doc, FileName);
       Importer.ImportTxt(FileName, DataFile, true);
       DoAfterImportFile(Doc, FileName);

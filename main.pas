@@ -615,6 +615,9 @@ end;
 procedure TMainForm.Button2Click(Sender: TObject);
 var
   F: TCountByIdForm;
+  Opts: TReportCountsOption;
+  R: TReportCounts;
+  S: String;
 begin
   try
     F := TCountByIdForm.Create(self);
@@ -623,16 +626,16 @@ begin
 
     if F.ShowModal <> mrOK then exit;
 
-{    Opts := F.ValidationOptions;
+    Opts := F.Options;
 
-    R := TReportDoubleEntryValidation.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
-    R.ReportOptions := Opts;
+    R := TReportCounts.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
+    R.Options := Opts;
     S := R.RunReport;
 
     ShowReportForm(Self,
       'Report of: ' + R.ReportTitle,
       S);
-             }
+
   finally
     F.Free;
   end;

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, Buttons, CheckLst, projectfilelist_frame, epiv_projecttreeview_frame,
-  epidocument, epicustombase, epiv_field_list;
+  epidocument, epicustombase, epiv_field_list_frame, epidatafiles, report_counts;
 
 type
 
@@ -18,16 +18,15 @@ type
     BitBtn2: TBitBtn;
     BottomPanel: TPanel;
     Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
     FilePanel: TPanel;
     OpenDialog1: TOpenDialog;
     FieldListPanel: TPanel;
-    Panel2: TPanel;
     ProjectPanel: TPanel;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
+    procedure BitBtn1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure CheckBox1Change(Sender: TObject);
     procedure FileListAddDoc(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
     procedure FileListDocChange(Sender: TObject; Document: TEpiDocument;
@@ -37,12 +36,16 @@ type
       Checked: Boolean);
   private
     FFileList: TProjectFileListFrame;
+    FOptions: TReportCountsOption;
     FProjectTree: TEpiVProjectTreeViewFrame;
     FFieldList: TEpiVFieldList;
+    FDisplayFields: TEpiFields;
     procedure UpdateCommonFields;
     procedure PopulateFieldList(Const List: TList);
   public
     constructor Create(TheOwner: TComponent); override;
+    property    Options: TReportCountsOption read FOptions;
+    property    FileListFrame: TProjectFileListFrame read FFileList;
   end;
 
 implementation
@@ -50,7 +53,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, epimiscutils, epidatafiles, epirelations;
+  settings2_var, epimiscutils, epirelations;
 
 { TCountByIdForm }
 
@@ -67,6 +70,39 @@ begin
   if not OpenDialog1.Execute then exit;
 
   FFileList.AddFiles(OpenDialog1.Files);
+end;
+
+procedure TCountByIdForm.BitBtn1Click(Sender: TObject);
+var
+  L: TList;
+  FL: TEpiFields;
+  F: TEpiField;
+  i: Integer;
+begin
+  try
+    L := FProjectTree.CheckList;
+
+    FOptions.DataFiles := TEpiDataFiles.Create(nil);
+    FOptions.DataFiles.UniqueNames := false;
+    FOptions.DataFiles.Sorted := false;
+
+    for i := 0 to L.Count - 1 do
+      FOptions.DataFiles.AddItem(TEpiMasterRelation(L[i]).Datafile);
+
+    FOptions.FieldNames := TStringList.Create;
+    FL := FFieldList.CheckedList;
+    for F in FL do
+      FOptions.FieldNames.Add(F.Name);
+
+  finally
+    L.Free;
+    FL.Free;
+  end;
+end;
+
+procedure TCountByIdForm.CheckBox1Change(Sender: TObject);
+begin
+  UpdateCommonFields;
 end;
 
 procedure TCountByIdForm.FileListDocChange(Sender: TObject;
@@ -106,7 +142,11 @@ begin
   CompareList := TList.Create;
 
   try
-    if L.Count = 0 then exit;
+    if L.Count = 0 then
+    begin
+      PopulateFieldList(nil);
+      Exit;
+    end;
 
     MainDF := TEpiMasterRelation(L[0]).Datafile;
     for F in MainDF.Fields do
@@ -138,28 +178,25 @@ end;
 procedure TCountByIdForm.PopulateFieldList(const List: TList);
 var
   i: Integer;
-  F: TEpiField;
 begin
-{  IDCheckListBox.Clear;
+  FDisplayFields.Clear;
 
-  IDCheckListBox.Items.BeginUpdate;
+  if Assigned(List) then
+    for i := 0 to List.Count - 1 do
+      FDisplayFields.AddItem(TEpiField(List[i]));
 
-  for i := 0 to List.Count - 1 do
-  begin
-    F := TEpiField(List[i]);
-
-    IDCheckListBox.AddItem(F.Name + ': ' + F.Question.Text, F);
-  end;
-
-  IDCheckListBox.Items.BeginUpdate;}
+  FFieldList.DisplayFields := FDisplayFields;
 end;
 
 constructor TCountByIdForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
+  FOptions.DataFiles := nil;
+  FOptions.FieldNames := nil;
+
   OpenDialog1.InitialDir := ManagerSettings.WorkingDirUTF8;
-  OpenDialog1.Filter     := GetEpiDialogFilter(dfImport);
+  OpenDialog1.Filter     := GetEpiDialogFilter(dfImport + [dfCollection]);
 
   FFileList := TProjectFileListFrame.Create(Self);
   with FFileList do
@@ -194,7 +231,12 @@ begin
   begin
     Align              := alClient;
     Parent             := FieldListPanel;
+
+    ShowCheckBoxes     := true;
+    ShowMoveButtons    := true;
   end;
+
+  FDisplayFields       := TEpiFields.Create(nil);
 end;
 
 end.
