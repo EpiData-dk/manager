@@ -492,6 +492,7 @@ begin
     ShowCheckBoxes     := True;
     ShowHint           := True;
     ShowProject        := False;
+    ShowRecordCount    := True;
 
     OnTreeNodeSelected := @ProjectTreeSelected;
     OnTreeNodeSelecting := @ProjectTreeSelecting;

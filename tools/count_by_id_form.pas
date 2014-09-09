@@ -222,6 +222,7 @@ begin
     ShowCheckBoxes     := True;
     ShowHint           := True;
     ShowProject        := True;
+    ShowRecordCount    := True;
 
     OnChecked          := @ProjectTreeChecked;
   end;

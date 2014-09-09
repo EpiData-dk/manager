@@ -618,6 +618,7 @@ var
   Opts: TReportCountsOption;
   R: TReportCounts;
   S: String;
+  F1: TValidateDoubleEntryForm;
 begin
   try
     F := TCountByIdForm.Create(self);
