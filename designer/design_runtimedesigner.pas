@@ -381,8 +381,7 @@ uses
   align_form,
   recode_form,
   rename_form,
-  project_keyfields_form
-  ;
+  project_keyfields_form;
 
 { TRuntimeDesignFrame }
 
@@ -394,7 +393,7 @@ begin
   if (FActiveButton = OtherToolButton) and
      (Sender <> OtherToolButton)
   then
-    OtherToolButton.ImageIndex := 11;
+    OtherToolButton.ImageIndex := 12;
 
   TToolButton(Sender).Down := true;
   FActiveButton := TToolButton(Sender);

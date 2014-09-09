@@ -187,7 +187,7 @@ begin
 
   BeginFormUpdate;
 
-  Color := clSkyBlue;
+//  Color := clSkyBlue;
   Top := 50;
   Left := 50;
   Width := 400;

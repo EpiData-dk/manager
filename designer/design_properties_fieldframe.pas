@@ -34,6 +34,7 @@ type
     Bevel7: TBevel;
     CalcFieldLabel: TLabel;
     CalcSheet: TTabSheet;
+    FieldTypeImage: TImage;
     ZeroFilledChkBox: TCheckBox;
     GotoDataformLabel: TLabel;
     RelateValueBevel: TBevel;
@@ -258,7 +259,7 @@ implementation
 uses
   epimiscutils, typinfo, epiranges, epiconvertutils,
   epistringutils, LazUTF8, field_valuelabelseditor_form,
-  valuelabelseditor_form2, math, epirelations;
+  valuelabelseditor_form2, math, epirelations, epiv_datamodule;
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';
@@ -1368,6 +1369,8 @@ begin
                                           IsReservedEpiFieldName(Field.Name) or
                                           IsKeyField);
 
+  FieldTypeImage.Visible          := FieldsHaveSameFieldType;
+
   LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes);
   if FieldsHaveFieldTypes(FloatFieldTypes) and FieldsHaveFieldTypes(IntFieldTypes + StringFieldTypes)
   then
@@ -1457,7 +1460,13 @@ begin
   // BASIC
   // --------
   // FieldType:
-  FieldTypeLabel.Caption := EpiTypeNames[Field.FieldType];
+  if FieldsHaveSameFieldType then
+  begin
+    FieldTypeLabel.Caption := EpiTypeNames[Field.FieldType];
+    DM.Icons16.GetBitmap(DM.GetImageIndex(Field.FieldType), FieldTypeImage.Picture.Bitmap);
+  end else begin
+    FieldTypeLabel.Caption := '(N/A)';
+  end;
 
   // NAME
   NameEdit.Text := Field.Name;

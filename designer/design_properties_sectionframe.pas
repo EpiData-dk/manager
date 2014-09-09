@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, Buttons,
-  epicustombase, design_types, design_properties_baseframe;
+  ExtCtrls, epicustombase, design_types, design_properties_baseframe;
 
 type
 
@@ -14,6 +14,11 @@ type
   { TSectionPropertiesFrame }
 
   TSectionPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
+    Image1: TImage;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label9: TLabel;
     NameEdit: TEdit;
     CaptionEdit: TEdit;
     SectionGroupAccessGroupBox: TGroupBox;
@@ -44,7 +49,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, LazUTF8, epistringutils;
+  epidatafiles, LazUTF8, epistringutils, epiv_datamodule;
 
 { TSectionPropertiesFrame }
 
@@ -69,6 +74,7 @@ var
 begin
   NameEdit.Text := FSections[0].Name;
   CaptionEdit.Text := TEpiSection(FSections[0]).Caption.Text;
+  DM.Icons16.GetBitmap(DM.GetImageIndex(TEpiSection(FSections[0])), Image1.Picture.Bitmap);
 
   for i := Low(FSections)+1 to High(FSections) do
     if TEpiSection(FSections[i]).Caption.Text <> CaptionEdit.Text then

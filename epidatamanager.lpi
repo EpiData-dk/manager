@@ -290,6 +290,7 @@
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_types"/>
       </Unit17>
       <Unit18>
         <Filename Value="import/import_structure_form.pas"/>
@@ -511,6 +512,7 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -522,6 +524,7 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_fieldframe"/>
       </Unit57>
       <Unit58>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -529,6 +532,7 @@
         <ComponentName Value="SectionPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_sectionframe"/>
       </Unit58>
       <Unit59>
         <Filename Value="designer/design_designmessenger.pas"/>
