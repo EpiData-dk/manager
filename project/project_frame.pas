@@ -650,7 +650,7 @@ procedure TProjectFrame.RuntimeFrameUpdateFrameOrderedWalkCallBack(
   const Relation: TEpiMasterRelation; const Depth: Cardinal;
   const Index: Cardinal; var aContinue: boolean);
 begin
-  TRuntimeDesignFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
+  TRuntimeDesignFrame(Relation.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
 end;
 
 procedure TProjectFrame.ProjectTreeDelete(const Relation: TEpiMasterRelation);
