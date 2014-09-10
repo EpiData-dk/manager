@@ -291,7 +291,6 @@ uses
   report_export, epireport_generator_txt,
   valuelabel_import_data,
   append_form, epitools_append,
-  epiv_dataform_treeview,
   validate_double_entry_form,
   epiv_datamodule,
   count_by_id_form;
