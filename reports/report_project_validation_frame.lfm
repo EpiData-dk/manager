@@ -6,8 +6,8 @@ object ProjectValidationFrame: TProjectValidationFrame
   ClientHeight = 450
   ClientWidth = 647
   TabOrder = 0
-  DesignLeft = 806
-  DesignTop = 324
+  DesignLeft = 391
+  DesignTop = 50
   object GroupBox3: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Bevel1

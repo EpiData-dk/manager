@@ -53,7 +53,8 @@ uses
   rename_form, report_export, valuelabel_import_external,
   valuelabel_import_data, project_types, project_studyunit_frame,
   design_properties_dataformframe, append_form, append_form2, 
-  epiv_projecttreeview_frame, epiv_datamodule, count_by_id_form;
+  epiv_projecttreeview_frame, epiv_datamodule, count_by_id_form, 
+report_project_validation_frame2;
 
 {$R *.res}
 

@@ -26,7 +26,6 @@ type
     Splitter2: TSplitter;
     procedure BitBtn1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
-    procedure CheckBox1Change(Sender: TObject);
     procedure FileListAddDoc(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
     procedure FileListDocChange(Sender: TObject; Document: TEpiDocument;
@@ -98,11 +97,6 @@ begin
     L.Free;
     FL.Free;
   end;
-end;
-
-procedure TCountByIdForm.CheckBox1Change(Sender: TObject);
-begin
-  UpdateCommonFields;
 end;
 
 procedure TCountByIdForm.FileListDocChange(Sender: TObject;

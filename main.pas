@@ -240,6 +240,7 @@ type
     function  ToolsCheckOpenFile(Const ReadOnly: boolean;
       out LocalDoc: boolean): TEpiDocumentFile;
     function  RunReport(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
+    function  RunReportEx(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
   private
     { Messages }
     procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
@@ -293,7 +294,8 @@ uses
   append_form, epitools_append,
   validate_double_entry_form,
   epiv_datamodule,
-  count_by_id_form;
+  count_by_id_form,
+  report_project_validation_frame2;
 
 { TMainForm }
 
@@ -613,29 +615,20 @@ end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
 var
-  F: TCountByIdForm;
-  Opts: TReportCountsOption;
-  R: TReportCounts;
-  S: String;
-  F1: TValidateDoubleEntryForm;
+  F: TForm;
+  Fr: TFrame1;
 begin
   try
-    F := TCountByIdForm.Create(self);
+    F := TForm.Create(self);
     F.SetBounds(0, 0, 600, 800);
     F.Position := poMainFormCenter;
+    Fr := TFrame1.Create(F);
 
-    if F.ShowModal <> mrOK then exit;
 
-    Opts := F.Options;
+    FR.Align := alClient;
+    Fr.Parent := F;
 
-    R := TReportCounts.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
-    R.Options := Opts;
-    S := R.RunReport;
-
-    ShowReportForm(Self,
-      'Report of: ' + R.ReportTitle,
-      S);
-
+    F.ShowModal;
   finally
     F.Free;
   end;
@@ -1295,6 +1288,7 @@ begin
   Result := nil;
 
   F := TStaticReportsForm.Create(Self, ReportClass);
+
   if Assigned(FActiveFrame) and
      Assigned(FActiveFrame.EpiDocument)
   then
@@ -1304,8 +1298,52 @@ begin
       S := FActiveFrame.DocumentFile.FileName; // ProjectFileName;
     F.AddInitialDocument(S, FActiveFrame.EpiDocument);
   end;
+
   if F.ShowModal = mrOK then
     Result := F.Report;
+
+  if not Assigned(Result) then exit;
+
+  Screen.Cursor := crHourGlass;
+  Application.ProcessMessages;
+  S := Result.RunReport;
+
+  ShowReportForm(Self,
+    'Report of: ' + Result.ReportTitle,
+    S,
+    F.RadioGroup1.ItemIndex = 0);
+
+  Screen.Cursor := crDefault;
+  Application.ProcessMessages;
+
+  if FreeAfterRun then
+    FreeAndNil(Result);
+  F.Free;
+end;
+
+function TMainForm.RunReportEx(ReportClass: TReportBaseClass;
+  const FreeAfterRun: boolean): TReportBase;
+var
+  F: TStaticReportsForm;
+  S: String;
+begin
+  Result := nil;
+
+  F := TStaticReportsForm.Create(Self, ReportClass);
+
+  if Assigned(FActiveFrame) and
+     Assigned(FActiveFrame.EpiDocument)
+  then
+  begin
+    S := '(Not Saved)';
+    if Assigned(FActiveFrame.DocumentFile) { ProjectFileName <> ''} then
+      S := FActiveFrame.DocumentFile.FileName; // ProjectFileName;
+    F.AddInitialDocument(S, FActiveFrame.EpiDocument);
+  end;
+
+  if F.ShowModal = mrOK then
+    Result := F.Report;
+
   if not Assigned(Result) then exit;
 
   Screen.Cursor := crHourGlass;

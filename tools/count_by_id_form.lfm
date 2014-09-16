@@ -1,7 +1,7 @@
 object CountByIdForm: TCountByIdForm
-  Left = 827
+  Left = 318
   Height = 653
-  Top = 238
+  Top = 215
   Width = 810
   Caption = 'CountByIdForm'
   ClientHeight = 653
