@@ -37,6 +37,7 @@ type
     ProjectPanel: TPanel;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
+    procedure BitBtn1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FileListAddDoc(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
@@ -84,6 +85,11 @@ begin
   FFileList.AddFiles(OpenDialog1.Files);
 end;
 
+procedure TFrame1.BitBtn1Click(Sender: TObject);
+begin
+  //
+end;
+
 procedure TFrame1.FileListAddDoc(Sender: TObject; Document: TEpiDocument;
   const Filename: string; const RowNo: Integer);
 begin
@@ -110,6 +116,8 @@ begin
 
   FSortTree.DisplayFields := TEpiMasterRelation(AObject).Datafile.Fields;
   FSortTree.CheckedList   := TEpiFields(AObject.FindCustomData(SORT_FIELDS_KEY));
+  FSortTree.Locked        := (TEpiMasterRelation(AObject).DetailRelations.Count > 0) or
+                             (AObject is TEpiDetailRelation);
 
   FCompareTree.DataFile   := TEpiMasterRelation(AObject).Datafile;
   FCompareTree.SelectedList := TList(AObject.FindCustomData(COMPARE_FIELDS_KEY));
@@ -158,6 +166,8 @@ procedure TFrame1.AddCustomDataWalk(const Relation: TEpiMasterRelation;
   const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
 var
   Fields: TEpiFields;
+  List: TList;
+  F: TEpiField;
 begin
   if not Assigned(Relation.FindCustomData(SORT_FIELDS_KEY)) then
   begin
@@ -167,17 +177,16 @@ begin
     if (Relation is TEpiDetailRelation) or
        (Relation.DetailRelations.Count > 0)
     then
-      begin
-        //Fields.Assign();
-        Relation.Datafile.KeyFields;
-      end;
-
-
-
+      Fields.Assign(Relation.Datafile.KeyFields);
   end;
 
   if not Assigned(Relation.FindCustomData(COMPARE_FIELDS_KEY)) then
-    Relation.AddCustomData(COMPARE_FIELDS_KEY, TList.Create);
+  begin
+    List := TList.Create;
+    Relation.AddCustomData(COMPARE_FIELDS_KEY, List);
+    For F in Relation.Datafile.Fields do
+      List.Add(F);
+  end;
 end;
 
 procedure TFrame1.RemoveCustomDataWalk(const Relation: TEpiMasterRelation;

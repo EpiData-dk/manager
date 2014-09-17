@@ -559,7 +559,6 @@ end;
 
 procedure TRuntimeDesignFrame.PasteAsDateActionExecute(Sender: TObject);
 begin
-//  PasteAsField(ftDMYDate);
   PasteAsField(ManagerSettings.DefaultDateType);
 end;
 

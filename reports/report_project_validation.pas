@@ -9,6 +9,17 @@ uses
   forms, epitools_projectvalidate;
 
 type
+{
+  TReportProjectValidateOption = record
+    Document: TEpiDocument;
+    Options:  TEpiToolsProjectValidateOptions;
+    FieldLists: array of
+      record
+        Relation: TEpiMasterRelation;
+        SortFields: TEpiFields;
+        CompareFields: TEpiFields;
+      end;
+  end;           }
 
   { TReportProjectValidation }
 

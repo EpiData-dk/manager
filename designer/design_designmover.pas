@@ -163,6 +163,9 @@ var
   Pt: TPoint;
 begin
   C := Surface.Container;
+  if Surface.Selector.Count = 0 then
+    Exit;
+
   P := Surface.Selection[0].Parent;
 
   Result := true;
