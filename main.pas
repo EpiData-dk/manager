@@ -16,11 +16,12 @@ type
 
   TMainForm = class(TForm)
     AppendAction: TAction;
+    Button1: TButton;
     Button2: TButton;
+    Button3: TButton;
     EnterDataBtn: TBitBtn;
     ExportBtn: TBitBtn;
     MenuItem33: TMenuItem;
-    Button1: TButton;
     DataFormBtn: TButton;
     DataformMenu: TMenuItem;
     DataformPropertiesMenuItem: TMenuItem;
@@ -179,6 +180,7 @@ type
     procedure AppendActionExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
@@ -594,22 +596,27 @@ end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
 var
-  LocalDoc: boolean;
-  DocFile: TEpiDocumentFile;
-  Doc: TEpiDocument;
-  Df: TEpiDataFile;
+  F: TValidateDoubleEntryForm;
+  R: TReportDoubleEntryValidation;
 begin
-  DocFile := ToolsCheckOpenFile(false, LocalDoc);
-  if not Assigned(DocFile) then exit;
+  try
+    F := TValidateDoubleEntryForm.Create(self);
+    F.SetBounds(0, 0, 600, 800);
+    F.Position := poMainFormCenter;
 
-  Doc := DocFile.Document;
-  for Df in Doc.DataFiles do
-    Df.Size := 0;
+    if F.ShowModal <> mrOK then exit;
 
-  if LocalDoc then
-  begin
-    DocFile.SaveFile(DocFile.FileName);
-    DocFile.Free;
+    R := TReportDoubleEntryValidation.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
+    R.ReportOptions := F.ValidationOptions;
+
+    ShowReportForm(Self,
+      R.ReportTitle,
+      R.RunReport,
+      False
+    );
+  finally
+    R.Free;
+    F.Free;
   end;
 end;
 
@@ -617,6 +624,8 @@ procedure TMainForm.Button2Click(Sender: TObject);
 var
   F: TForm;
   Fr: TFrame1;
+  O: TReportProjectValidateOptions;
+  R: TReportProjectValidation;
 begin
   try
     F := TForm.Create(self);
@@ -624,12 +633,47 @@ begin
     F.Position := poMainFormCenter;
     Fr := TFrame1.Create(F);
 
-
     FR.Align := alClient;
     Fr.Parent := F;
 
-    F.ShowModal;
+    if F.ShowModal <> mrOK then exit;
+
+    R := TReportProjectValidation.Create(FR.FileList.SelectedList, TEpiReportTXTGenerator);
+    R.Options := FR.Options;
+
+    ShowReportForm(Self,
+      R.ReportTitle,
+      R.RunReport,
+      False
+    );
   finally
+    R.Free;
+    F.Free;
+  end;
+end;
+
+procedure TMainForm.Button3Click(Sender: TObject);
+var
+  F: TCountByIdForm;
+  R: TReportCounts;
+begin
+  try
+    F := TCountByIdForm.Create(self);
+    F.SetBounds(0, 0, 600, 800);
+    F.Position := poMainFormCenter;
+
+    if F.ShowModal <> mrOK then exit;
+
+    R := TReportCounts.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
+    R.Options := F.Options;
+
+    ShowReportForm(Self,
+      R.ReportTitle,
+      R.RunReport,
+      False
+    );
+  finally
+    R.Free;
     F.Free;
   end;
 end;

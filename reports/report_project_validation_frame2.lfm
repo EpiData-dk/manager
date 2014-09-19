@@ -6,8 +6,8 @@ object Frame1: TFrame1
   ClientHeight = 690
   ClientWidth = 758
   TabOrder = 0
-  DesignLeft = 1933
-  DesignTop = 356
+  DesignLeft = 1941
+  DesignTop = 250
   object FilePanel: TPanel
     Left = 0
     Height = 130
@@ -92,9 +92,9 @@ object Frame1: TFrame1
     Height = 504
     Top = 136
     Width = 510
-    ActivePage = SortTab
+    ActivePage = OptionsTab
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 5
     object SortTab: TTabSheet
       Caption = 'Sort'

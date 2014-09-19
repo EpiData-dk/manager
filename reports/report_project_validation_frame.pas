@@ -305,12 +305,12 @@ begin
     if not OptionsChkGrp.Checked[i] then
       Exclude(Opts, TEpiToolsProjectValidateOption(PtrInt(OptionsChkGrp.Items.Objects[i])));
 
-  with TReportProjectValidation(Report) do
+{  with TReportProjectValidation(Report) do
   begin
     KeyFields := KF;
     ValidationFields := VF;
     Options := Opts;
-  end;
+  end;    }
 end;
 
 function TProjectValidationFrame.OkToAdvance(

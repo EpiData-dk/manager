@@ -73,9 +73,11 @@ type
     procedure CustomDataToDataFileTree(Const AObject: TEpiCustomBase);
     procedure BumpProjectCount(Const Value: Integer);
     procedure AddCustomDataWalk(const Relation: TEpiMasterRelation;
-      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
     procedure RemoveCustomDataWalk(const Relation: TEpiMasterRelation;
-      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
   private
     { Options Handling }
     function  GetDEVOptions: TEpiToolsDblEntryValidateOptions;
@@ -419,7 +421,7 @@ end;
 
 procedure TValidateDoubleEntryForm.AddCustomDataWalk(
   const Relation: TEpiMasterRelation; const Depth: Cardinal;
-  const Index: Cardinal; var aContinue: boolean);
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
 begin
   Relation.AddCustomData(KEYTREE_CUSTOMDATA, FKeyTreeList[FListCounter]);
   Relation.AddCustomData(COMPARETREE_CUSTOMDATA, FCompareTreeList[FListCounter]);
@@ -428,7 +430,7 @@ end;
 
 procedure TValidateDoubleEntryForm.RemoveCustomDataWalk(
   const Relation: TEpiMasterRelation; const Depth: Cardinal;
-  const Index: Cardinal; var aContinue: boolean);
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
 begin
   Relation.RemoveCustomData(KEYTREE_CUSTOMDATA);
   Relation.RemoveCustomData(COMPARETREE_CUSTOMDATA);

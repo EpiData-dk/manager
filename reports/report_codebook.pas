@@ -14,7 +14,8 @@ type
   TReportCodeBook = class(TReportFileListBase)
   private
     procedure DataFileReport(const Relation: TEpiMasterRelation;
-      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
   protected
     function GetTitle: string; override;
     procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
@@ -33,7 +34,8 @@ resourcestring
 { TReportCodeBook }
 
 procedure TReportCodeBook.DataFileReport(const Relation: TEpiMasterRelation;
-  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+  Data: Pointer);
 var
   DF: TEpiDataFile;
   F: TEpiField;

@@ -6,27 +6,18 @@ interface
 
 uses
   Classes, SysUtils, report_base, epidocument, epidatafiles, report_types,
-  forms, epitools_projectvalidate;
+  forms, epitools_projectvalidate, epirelations, epireport_report_projectvalidator;
 
 type
-{
-  TReportProjectValidateOption = record
-    Document: TEpiDocument;
-    Options:  TEpiToolsProjectValidateOptions;
-    FieldLists: array of
-      record
-        Relation: TEpiMasterRelation;
-        SortFields: TEpiFields;
-        CompareFields: TEpiFields;
-      end;
-  end;           }
+
+  TReportProjectValidateOptions = array of TEpiReportProjectValidateOption;
 
   { TReportProjectValidation }
 
   TReportProjectValidation = class(TReportFileListBase, IReportFrameProvider)
   private
     FKeyFields: TEpiFields;
-    FOptions: TEpiToolsProjectValidateOptions;
+    FOptions: TReportProjectValidateOptions;
     FValidationFields: TEpiFields;
   protected
     function GetTitle: string; override;
@@ -36,15 +27,13 @@ type
     { IReportFrameProvider }
     function GetFrameClass: TCustomFrameClass;
   public
-    property KeyFields: TEpiFields read FKeyFields write FKeyFields;
-    property ValidationFields: TEpiFields read FValidationFields write FValidationFields;
-    property Options: TEpiToolsProjectValidateOptions read FOptions write FOptions;
+    property Options: TReportProjectValidateOptions read FOptions write FOptions;
   end;
 
 implementation
 
 uses
-  epireport_base, epireport_report_projectvalidator,
+  epireport_base,
   report_project_validation_frame;
 
 resourcestring
@@ -62,14 +51,16 @@ procedure TReportProjectValidation.DoDocumentReport(const Doc: TEpiDocument;
   const FileName: string; const Index: Integer);
 var
   R: TEpiReportProjectValidator;
+  I: Integer;
 begin
   inherited DoDocumentReport(Doc, FileName, Index);
 
+  for I := Low(Options) to High(Options) do
+    if Options[i].Document = Doc then
+      Break;
+
   R := TEpiReportProjectValidator.Create(Generator);
-  R.Document := Doc;
-  R.KeyFields := KeyFields;
-  R.ValidationFields := ValidationFields;
-  R.Options := Options;
+  R.Option := Options[I];
   R.RunReport;
   R.Free;
 end;

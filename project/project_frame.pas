@@ -56,7 +56,6 @@ type
     procedure ValueLabelEditorActionExecute(Sender: TObject);
   private
     { private declarations }
-    FRootNode: TTreeNode;
     FDocumentFile: TDocumentFile;
     FActiveFrame: IProjectFrame;
     FModified: Boolean;
@@ -72,7 +71,8 @@ type
     function  DoSaveProject(AFileName: string): boolean;
     procedure OpenProjectOrderedWalkCallBack(
       const Relation: TEpiMasterRelation; const Depth: Cardinal;
-      const Index: Cardinal; var aContinue: boolean);
+      const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
     function  DoOpenProject(Const AFileName: string): boolean;
     // create new
     function  DoCreateNewDocument: TEpiDocument;
@@ -85,7 +85,8 @@ type
     procedure UpdateCaption;
     procedure RuntimeFrameUpdateFrameOrderedWalkCallBack(
       const Relation: TEpiMasterRelation; const Depth: Cardinal;
-      const Index: Cardinal; var aContinue: boolean);
+      const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
   private
     { Project Tree View }
     FProjectTreeView: TEpiVProjectTreeViewFrame;
@@ -448,7 +449,7 @@ end;
 
 procedure TProjectFrame.OpenProjectOrderedWalkCallBack(
   const Relation: TEpiMasterRelation; const Depth: Cardinal;
-  const Index: Cardinal; var aContinue: boolean);
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
 var
   Frame: TRuntimeDesignFrame;
 begin
@@ -648,7 +649,7 @@ end;
 
 procedure TProjectFrame.RuntimeFrameUpdateFrameOrderedWalkCallBack(
   const Relation: TEpiMasterRelation; const Depth: Cardinal;
-  const Index: Cardinal; var aContinue: boolean);
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
 begin
   TRuntimeDesignFrame(Relation.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
 end;

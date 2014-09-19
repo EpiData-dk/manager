@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Buttons,
   Dialogs, ComCtrls, projectfilelist_frame, epiv_projecttreeview_frame,
-  epiv_field_list_frame, epiv_dataform_treeview, epirelations,
-  epidocument, epicustombase, epidatafiles;
+  epiv_field_list_frame, epiv_dataform_treeview, epirelations, epitools_projectvalidate,
+  epidocument, epicustombase, epidatafiles, report_project_validation;
 
 type
 
@@ -38,6 +38,9 @@ type
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     procedure BitBtn1Click(Sender: TObject);
+    procedure BuildFieldLists(const ARelation: TEpiMasterRelation;
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
     procedure Button1Click(Sender: TObject);
     procedure FileListAddDoc(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
@@ -50,18 +53,25 @@ type
       NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
   private
     FFileList: TProjectFileListFrame;
+    FOptions: TReportProjectValidateOptions;
     FProjectTree: TEpiVProjectTreeViewFrame;
     FSortTree: TEpiVFieldList;
     FCompareTree: TDataFormTreeViewFrame;
+    FFieldListIndex: Integer;
+    function  GetOptions: TEpiToolsProjectValidateOptions;
     procedure AddCustomDataWalk(const Relation: TEpiMasterRelation;
-      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
     procedure RemoveCustomDataWalk(const Relation: TEpiMasterRelation;
-      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
     procedure DocumentAdded(Const Doc: TEpiDocument);
     procedure DocumentRemoved(Const Doc: TEpiDocument);
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+    property   Options: TReportProjectValidateOptions read FOptions write FOptions;
+    property   FileList: TProjectFileListFrame read FFileList;
   end;
 
 implementation
@@ -69,7 +79,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, epidatafilestypes, epitools_projectvalidate,
+  settings2_var, epidatafilestypes, epireport_report_projectvalidator,
   epimiscutils;
 
 const
@@ -86,8 +96,52 @@ begin
 end;
 
 procedure TFrame1.BitBtn1Click(Sender: TObject);
+var
+  DocCount: Integer;
+  i: Integer;
 begin
-  //
+  DocCount := FProjectTree.DocumentCount;
+  SetLength(FOptions, DocCount);
+
+  for i := 0 to DocCount - 1 do
+  with FOptions[i] do
+  begin
+    Document := FProjectTree.Documents[i];
+    Options  := GetOptions;
+    SetLength(FieldLists, Document.DataFiles.Count);
+
+    FFieldListIndex := 0;
+    Document.Relations.OrderedWalk(@BuildFieldLists, @FOptions[i]);
+  end;
+end;
+
+procedure TFrame1.BuildFieldLists(const ARelation: TEpiMasterRelation;
+  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+  Data: Pointer);
+var
+  Fields: TEpiFields;
+  F: TEpiField;
+  Option: TEpiReportProjectValidateOption;
+  List: TList;
+  i: Integer;
+begin
+  Option := TEpiReportProjectValidateOption(Data^);
+  with Option.FieldLists[FFieldListIndex] do
+  begin
+    Relation      := ARelation;
+    SortFields    := TStringList.Create;
+    CompareFields := TStringList.Create;
+
+    Fields := TEpiFields(Relation.FindCustomData(SORT_FIELDS_KEY));
+    for F in Fields do
+      SortFields.Add(F.Name);
+
+    List := TList(Relation.FindCustomData(COMPARE_FIELDS_KEY));
+    for i := 0 to List.Count -1 do
+      CompareFields.Add(TEpiField(List[i]).Name);
+  end;
+
+  Inc(FFieldListIndex);
 end;
 
 procedure TFrame1.FileListAddDoc(Sender: TObject; Document: TEpiDocument;
@@ -162,8 +216,14 @@ begin
   AssignList(TList(OldObject.FindCustomData(COMPARE_FIELDS_KEY)), FCompareTree.SelectedList);
 end;
 
+function TFrame1.GetOptions: TEpiToolsProjectValidateOptions;
+begin
+  result := EpiProjectValidationOptionsAll;
+end;
+
 procedure TFrame1.AddCustomDataWalk(const Relation: TEpiMasterRelation;
-  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+  Data: Pointer);
 var
   Fields: TEpiFields;
   List: TList;
@@ -190,7 +250,8 @@ begin
 end;
 
 procedure TFrame1.RemoveCustomDataWalk(const Relation: TEpiMasterRelation;
-  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean);
+  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+  Data: Pointer);
 begin
   Relation.RemoveCustomData(SORT_FIELDS_KEY).Free;
   Relation.RemoveCustomData(COMPARE_FIELDS_KEY).Free;
