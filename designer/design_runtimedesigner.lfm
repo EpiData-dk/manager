@@ -572,10 +572,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ImageIndex = 12
         ParentShowHint = False
         ShowHint = True
-        Style = tbsDropDown
       end
       object Divider2: TToolButton
-        Left = 218
+        Left = 206
         Top = 1
         Width = 10
         Caption = 'Divider2'
@@ -583,7 +582,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object HeadingToolButton: TToolButton
         Tag = 5
-        Left = 228
+        Left = 216
         Hint = 'New Heading'
         Top = 1
         Caption = 'New Heading'
@@ -593,7 +592,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider3: TToolButton
-        Left = 248
+        Left = 236
         Top = 1
         Width = 5
         Caption = 'Divider3'
@@ -601,7 +600,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object SectionToolButton: TToolButton
         Tag = 6
-        Left = 253
+        Left = 241
         Hint = 'New Section'
         Top = 1
         Caption = 'New Section'
@@ -611,49 +610,49 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider4: TToolButton
-        Left = 303
+        Left = 291
         Top = 1
         Width = 10
         Caption = 'Divider4'
         Style = tbsSeparator
       end
       object EditToolButton: TToolButton
-        Left = 313
+        Left = 301
         Top = 1
         Action = EditControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteToolButton: TToolButton
-        Left = 333
+        Left = 321
         Top = 1
         Action = DeleteControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteAllToolButton: TToolButton
-        Left = 353
+        Left = 341
         Top = 1
         Action = DeleteAllAction
         ParentShowHint = False
         ShowHint = True
       end
       object Divider5: TToolButton
-        Left = 373
+        Left = 361
         Top = 1
         Width = 10
         Caption = 'Divider5'
         Style = tbsSeparator
       end
       object Divider6: TToolButton
-        Left = 403
+        Left = 391
         Top = 1
         Width = 10
         Caption = 'Divider6'
         Style = tbsSeparator
       end
       object TestToolButton: TToolButton
-        Left = 413
+        Left = 401
         Top = 1
         Caption = 'TestToolButton'
         ImageIndex = 0
@@ -697,18 +696,18 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Style = tbsSeparator
       end
       object ToolButton5: TToolButton
-        Left = 383
+        Left = 371
         Top = 1
         Action = ShowAlignFormAction
       end
       object ToolButton6: TToolButton
-        Left = 283
+        Left = 271
         Hint = 'Extend dataform'
         Top = 1
         Action = ExpandPageAction
       end
       object ToolButton7: TToolButton
-        Left = 273
+        Left = 261
         Top = 1
         Width = 10
         Caption = 'ToolButton7'
