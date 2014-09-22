@@ -19,10 +19,11 @@ type
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    DataFormBtn: TBitBtn;
+    DocumentBtn: TBitBtn;
     EnterDataBtn: TBitBtn;
     ExportBtn: TBitBtn;
     MenuItem33: TMenuItem;
-    DataFormBtn: TButton;
     DataformMenu: TMenuItem;
     DataformPropertiesMenuItem: TMenuItem;
     MenuItem1: TMenuItem;
@@ -70,7 +71,6 @@ type
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     ProjectDetailsBtn: TButton;
-    DocumentBtn: TButton;
     CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
@@ -237,7 +237,7 @@ type
     procedure UpdateProcessToolbar;
     procedure UpdateShortCuts;
     procedure UpdateSettings;
-    procedure LoadBitBtnIcons;
+    procedure LoadGlyphs;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(Const ReadOnly: boolean;
       out LocalDoc: boolean): TEpiDocumentFile;
@@ -1283,10 +1283,12 @@ begin
   EndUpdatingForm;
 end;
 
-procedure TMainForm.LoadBitBtnIcons;
+procedure TMainForm.LoadGlyphs;
 begin
   DM.Icons16.GetBitmap(17, ExportBtn.Glyph);
   DM.Icons16.GetBitmap(39, EnterDataBtn.Glyph);
+  DM.Icons16.GetBitmap(43, DocumentBtn.Glyph);
+  DM.Icons16.GetBitmap(44, DataFormBtn.Glyph);
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);
@@ -1564,7 +1566,7 @@ begin
   SetupIPC;
   {$ENDIF}
 
-  LoadBitBtnIcons;
+  LoadGlyphs;
   UpdateMainMenu;
   AssignActionLinks;
 end;

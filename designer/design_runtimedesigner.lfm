@@ -1036,7 +1036,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     object ImportCBAction: TAction
       Caption = 'Import from clipboard'
       Hint = 'Import data and structure from clipboard'
-      ImageIndex = 17
+      ImageIndex = 18
       OnExecute = ImportCBActionExecute
     end
     object DataformPropertiesAction: TAction
