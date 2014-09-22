@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, EditBtn,
-  Buttons, project_types, epistudy;
+  Buttons, project_types, epistudy, epicustombase;
 
 type
 
@@ -65,10 +65,19 @@ type
   private
     { private declarations }
     FStudy: TEpiStudy;
+    procedure StudyHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+    procedure StudyTitleHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+    procedure RegisterHooks;
+    procedure UnRegisterHooks;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; StudyInfo: TEpiStudy;
       Const IsNew: boolean = false);
+    destructor Destroy; override;
     procedure UpdateFrame;
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
@@ -93,6 +102,48 @@ end;
 procedure TStudyUnitFrame.StudyEditingDone(Sender: TObject);
 begin
   FStudy.Modified := true;
+end;
+
+procedure TStudyUnitFrame.StudyHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if Initiator <> FStudy.Title then exit;
+  if EventGroup <> eegCustomBase then exit;
+
+  if TEpiCustomChangeEventType(EventType) = ecceDestroy then
+    begin
+      UnRegisterHooks;
+      FStudy := nil;
+    end;
+end;
+
+procedure TStudyUnitFrame.StudyTitleHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if Initiator <> FStudy.Title then exit;
+  if EventGroup <> eegCustomBase then exit;
+
+  if TEpiCustomChangeEventType(EventType) = ecceText then
+    begin
+      TitleEdit.Text := FStudy.Title.Text;
+    end;
+end;
+
+procedure TStudyUnitFrame.RegisterHooks;
+begin
+  FStudy.Title.RegisterOnChangeHook(@StudyTitleHook, true);
+  FStudy.RegisterOnChangeHook(@StudyHook, true);
+end;
+
+procedure TStudyUnitFrame.UnRegisterHooks;
+begin
+  if Assigned(FStudy) then
+    begin
+      FStudy.Title.UnRegisterOnChangeHook(@StudyTitleHook);
+      FStudy.UnRegisterOnChangeHook(@StudyHook);
+    end;
 end;
 
 constructor TStudyUnitFrame.Create(TheOwner: TComponent; StudyInfo: TEpiStudy;
@@ -134,9 +185,18 @@ begin
     PageControl1.ActivePage := TitleSheet;
   end;
 
+  // Hooks
+  RegisterHooks;
+
   {$IFDEF darwin}
   PageControl1.TabPosition := tpTop;
   {$ENDIF}
+end;
+
+destructor TStudyUnitFrame.Destroy;
+begin
+  UnRegisterHooks;
+  inherited Destroy;
 end;
 
 procedure TStudyUnitFrame.UpdateFrame;
