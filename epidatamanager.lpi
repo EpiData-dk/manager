@@ -470,12 +470,10 @@
         <ComponentName Value="ValidateDoubleEntryForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="validate_double_entry_form"/>
       </Unit47>
       <Unit48>
         <Filename Value="reports/report_double_entry_validation.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_double_entry_validation"/>
       </Unit48>
       <Unit49>
         <Filename Value="reports/viewer_form.pas"/>
@@ -490,7 +488,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -511,7 +508,6 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -688,7 +684,6 @@
       <Unit87>
         <Filename Value="project/project_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="project_types"/>
       </Unit87>
       <Unit88>
         <Filename Value="project/project_studyunit_frame.pas"/>
@@ -696,7 +691,6 @@
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_studyunit_frame"/>
       </Unit88>
       <Unit89>
         <Filename Value="designer/design_properties_dataformframe.pas"/>
@@ -704,7 +698,6 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_dataformframe"/>
       </Unit89>
       <Unit90>
         <Filename Value="tools/append_form2.pas"/>
@@ -726,7 +719,6 @@
         <ComponentName Value="Frame1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_project_validation_frame2"/>
       </Unit92>
     </Units>
   </ProjectOptions>

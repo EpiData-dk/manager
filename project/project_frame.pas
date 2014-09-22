@@ -252,11 +252,12 @@ var
   Res: TModalResult;
   Relation: TEpiMasterRelation;
 begin
-  if FProjectTreeView.SelectedObjectType = otProject then exit;
+  if FProjectTreeView.SelectedObjectType <> otRelation then exit;
 
   Relation := TEpiMasterRelation(FProjectTreeView.SelectedObject);
 
   DF := Relation.DataFile;
+
   Res :=
     MessageDlg('Warning!',
       'Are you sure you want to delete the dataform "' + Df.Caption.Text + '" ?',
@@ -266,6 +267,18 @@ begin
       mbNo
   );
   if Res = mrNo then exit;
+
+  Res :=
+    MessageDlg('Last Warning!',
+      'Are you absolutely sure you want to delete the dataform "' + Df.Caption.Text + '" ?' + LineEnding +
+      'All strutures and data will be permanently lost.' + LineEnding +
+      LineEnding +
+      'No additional warnings are given!',
+      mtWarning,
+      mbYesNo,
+      0,
+      mbNo
+  );
 
   FProjectTreeView.DeleteRelation(Relation);
 end;
