@@ -361,6 +361,9 @@ end;
 
 procedure TMainForm.DataFormBtnClick(Sender: TObject);
 begin
+  if not FActiveFrame.SelectDataformIfNotSelected then
+    Exit;
+
   DataformPopupMenu.PopUp;
 end;
 

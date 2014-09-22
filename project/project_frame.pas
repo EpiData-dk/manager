@@ -134,6 +134,9 @@ type
     procedure OpenRecentMenuItemClick(Sender: TObject);
     procedure UpdateRecentFilesDropDown;
   public
+    { Access/Helper methods }
+    function SelectDataformIfNotSelected: Boolean;
+  public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
@@ -713,6 +716,8 @@ begin
 
   if ObjectType = otRelation then
     AlignForm.DesignFrame := TRuntimeDesignFrame(AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
+
+  MainForm.DataFormBtn.Enabled := ObjectType = otRelation;
 end;
 
 procedure TProjectFrame.ProjectTreeSelecting(Sender: TObject; const OldObject,
@@ -999,6 +1004,31 @@ begin
     if i < 9 then
       Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
     ProjectRecentFilesDropDownMenu.Items.Add(Mi);
+  end;
+end;
+
+function TProjectFrame.SelectDataformIfNotSelected: Boolean;
+begin
+  Result := true;
+  case FProjectTreeView.SelectedObjectType of
+    otRelation:
+      // Do nothing - a Dataform IS selected!
+      Exit;
+
+    otEmpty,
+    otFake,
+    otProject:
+      // Either the Project is selected OR nothing is selected.
+      // Get First Dataform.
+      begin
+        if EpiDocument.Relations.Count = 0 then
+        begin
+          Result := false;
+          Exit;
+        end;
+
+        FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
+      end;
   end;
 end;
 

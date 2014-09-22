@@ -23,7 +23,7 @@ object ProjectFrame: TProjectFrame
       Left = 0
       Height = 22
       Top = 0
-      Width = 207
+      Width = 211
       AutoSize = True
       ButtonHeight = 20
       ButtonWidth = 20
