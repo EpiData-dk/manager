@@ -14,7 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="3"/>
+      <BuildNr Value="4"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
@@ -712,6 +712,7 @@
         <ComponentName Value="CountByIdForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="count_by_id_form"/>
       </Unit91>
       <Unit92>
         <Filename Value="reports/report_project_validation_frame2.pas"/>
