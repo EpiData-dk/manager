@@ -2955,6 +2955,7 @@ end;
 
 procedure TRuntimeDesignFrame.Activate;
 begin
+//  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate Start');
   Show;
   BringToFront;
   FDesignPanel.Surface.Active := true;
@@ -2964,10 +2965,12 @@ begin
   FDesignPanel.Surface.SelectionChange;
 
   UpdateFrame;
+//  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate End');
 end;
 
 function TRuntimeDesignFrame.DeActivate(aHide: boolean): boolean;
 begin
+//  WriteLn('Runtime (', DataFile.Caption.Text, '): DeActivate Start');
   Result := PropertiesForm.ValidateControls;
   if not Result then exit;
 
@@ -2982,6 +2985,7 @@ begin
   end;
 
   Result := true;
+//  WriteLn('Runtime (', DataFile.Caption.Text, '): DeActivate End');
 end;
 
 procedure TRuntimeDesignFrame.AssignActionLinks;
