@@ -1,11 +1,11 @@
 object MainForm: TMainForm
-  Left = 424
-  Height = 569
-  Top = 258
+  Left = 277
+  Height = 402
+  Top = 0
   Width = 1001
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
-  ClientHeight = 546
+  ClientHeight = 375
   ClientWidth = 1001
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
@@ -15,7 +15,7 @@ object MainForm: TMainForm
   LCLVersion = '1.3'
   object PageControl1: TPageControl
     Left = 0
-    Height = 508
+    Height = 337
     Top = 38
     Width = 1001
     Align = alClient
@@ -40,9 +40,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 27
-      Top = 6
-      Width = 100
+      Height = 33
+      Top = 3
+      Width = 99
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = '&Select Project'
@@ -57,10 +57,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 126
-      Height = 27
-      Top = 6
-      Width = 56
+      Left = 125
+      Height = 33
+      Top = 3
+      Width = 57
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project'
@@ -83,10 +83,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 475
-      Height = 27
-      Top = 6
-      Width = 65
+      Left = 474
+      Height = 33
+      Top = 3
+      Width = 67
       Action = ExportAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -99,9 +99,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 379
-      Height = 27
-      Top = 6
-      Width = 81
+      Height = 33
+      Top = 3
+      Width = 80
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -133,8 +133,8 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 197
-      Height = 27
-      Top = 6
+      Height = 33
+      Top = 3
       Width = 73
       AutoSize = True
       BorderSpacing.Left = 15
@@ -148,8 +148,8 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 285
-      Height = 27
-      Top = 6
+      Height = 33
+      Top = 3
       Width = 79
       AutoSize = True
       BorderSpacing.Left = 15

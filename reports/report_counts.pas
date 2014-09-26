@@ -28,6 +28,7 @@ type
       const Index: Integer); override;
   public
     function GetFrameClass: TCustomFrameClass;
+    class function ReportFrameClass: TCustomFrameClass; override;
     property FieldList: TEpiFields read FFieldList write FFieldList;
     property Options: TReportCountsOption read FOptions write FOptions;
   end;
@@ -82,6 +83,11 @@ end;
 function TReportCounts.GetFrameClass: TCustomFrameClass;
 begin
   result := TReportOptionsFrameCounts;
+end;
+
+class function TReportCounts.ReportFrameClass: TCustomFrameClass;
+begin
+  result := nil;
 end;
 
 end.

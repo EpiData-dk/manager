@@ -213,7 +213,10 @@ begin
           if (Initiator = FField.Relates) and
              // The FField.Relates is destroyed each and every time the content is
              // applied in Field Properties Frame!
-             (not (ebsDestroying in Initiator.State))
+             (not (ebsDestroying in Initiator.State)) and
+             // If the component itself is being destroyed, sending a hint
+             // may cause an A/V due to an Async call for the hint form.
+             (not (csDestroying in ComponentState))
           then
           begin
             S := 'A relate jump was removed because a childform was deleted!';
@@ -227,6 +230,10 @@ begin
         UpdateControl;
       ecceReferenceDestroyed:
         begin
+          // If the component itself is being destroyed, sending a hint
+          // may cause an A/V due to an Async call for the hint form.
+          if (csDestroying in ComponentState) then exit;
+
           S := '';
 
           if Initiator is TEpiJump then

@@ -297,7 +297,7 @@ uses
   validate_double_entry_form,
   epiv_datamodule,
   count_by_id_form,
-  report_project_validation_frame2;
+  report_project_validation_frame2, reports_form;
 
 { TMainForm }
 
@@ -630,6 +630,8 @@ var
   O: TReportProjectValidateOptions;
   R: TReportProjectValidation;
 begin
+  RunReportEx(TReportProjectValidation);
+{
   try
     F := TForm.Create(self);
     F.SetBounds(0, 0, 600, 800);
@@ -652,7 +654,7 @@ begin
   finally
     R.Free;
     F.Free;
-  end;
+  end;    }
 end;
 
 procedure TMainForm.Button3Click(Sender: TObject);
@@ -1373,24 +1375,19 @@ end;
 function TMainForm.RunReportEx(ReportClass: TReportBaseClass;
   const FreeAfterRun: boolean): TReportBase;
 var
-  F: TStaticReportsForm;
+  F: TReportForm;
   S: String;
 begin
   Result := nil;
 
-  F := TStaticReportsForm.Create(Self, ReportClass);
+  F := TReportForm.Create(Self, ReportClass);
 
   if Assigned(FActiveFrame) and
-     Assigned(FActiveFrame.EpiDocument)
+     Assigned(FActiveFrame.DocumentFile)
   then
-  begin
-    S := '(Not Saved)';
-    if Assigned(FActiveFrame.DocumentFile) { ProjectFileName <> ''} then
-      S := FActiveFrame.DocumentFile.FileName; // ProjectFileName;
-    F.AddInitialDocument(S, FActiveFrame.EpiDocument);
-  end;
+    F.AddInitialDocumentFile(FActiveFrame.DocumentFile);
 
-  if F.ShowModal = mrOK then
+{  if F.ShowModal = mrOK then
     Result := F.Report;
 
   if not Assigned(Result) then exit;
@@ -1408,7 +1405,8 @@ begin
   Application.ProcessMessages;
 
   if FreeAfterRun then
-    FreeAndNil(Result);
+    FreeAndNil(Result);  }
+  F.ShowModal;
   F.Free;
 end;
 

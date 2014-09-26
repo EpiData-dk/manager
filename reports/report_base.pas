@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, epireport_generator_base,
-  epidocument;
+  epidocument, Forms;
 
 type
 
@@ -24,9 +24,10 @@ type
     property    Generator: TEpiReportGeneratorBase read FGenerator;
   public
     constructor Create(const FileNames: TStringList;
-      ReportGeneratorClass: TEpiReportGeneratorBaseClass); virtual;
+      ReportGeneratorClass: TEpiReportGeneratorBaseClass); virtual; overload;
     destructor  Destroy; override;
     function    RunReport: string;
+    class function ReportFrameClass: TCustomFrameClass; virtual; abstract;
     property    Documents: TStringList read FDocuments;
     property    ReportTitle: String read GetTitle;
   end;

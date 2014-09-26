@@ -1,7 +1,7 @@
 object ReportForm: TReportForm
-  Left = 685
+  Left = 2021
   Height = 484
-  Top = 359
+  Top = 339
   Width = 679
   Caption = 'ReportForm'
   ClientHeight = 484
@@ -24,8 +24,8 @@ object ReportForm: TReportForm
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 68
-    ClientWidth = 665
+    ClientHeight = 63
+    ClientWidth = 667
     ItemIndex = 0
     Items.Strings = (
       'Website (HTML)'
@@ -47,11 +47,12 @@ object ReportForm: TReportForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 12
-      Top = 19
-      Width = 12
+      Height = 33
+      Top = 9
+      Width = 72
       AutoSize = True
       BorderSpacing.Left = 10
+      Caption = 'Add Files'
       TabOrder = 0
     end
     object OkBtn: TBitBtn
@@ -59,14 +60,15 @@ object ReportForm: TReportForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 636
-      Height = 32
+      Left = 610
+      Height = 33
       Top = 9
-      Width = 32
+      Width = 58
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
       Default = True
+      DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
       TabOrder = 1
@@ -75,14 +77,15 @@ object ReportForm: TReportForm
       AnchorSideTop.Control = OkBtn
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = OkBtn
-      Left = 592
+      Left = 518
       Height = 34
       Top = 8
-      Width = 34
+      Width = 82
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
       Cancel = True
+      DefaultCaption = True
       Kind = bkCancel
       ModalResult = 2
       TabOrder = 2
@@ -93,10 +96,10 @@ object ReportForm: TReportForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn2
-      Left = 33
+      Left = 93
       Height = 20
       Top = 15
-      Width = 549
+      Width = 415
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Right = 10

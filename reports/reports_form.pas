@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, report_base;
+  Buttons, ComCtrls, report_base, epidocument, report_types, epiopenfile;
 
 type
 
@@ -21,10 +21,17 @@ type
     RadioGroup1: TRadioGroup;
   private
     FReportClass: TReportBaseClass;
+    FFrame: TCustomFrame;
+    IFrame: IReportFrame;
+    procedure LoadGlyphs;
+  private
+    { Events }
+    procedure FormShow(Sender: TObject);
+    procedure AddFilesClick(Sender: TObject);
+    procedure OkClick(Sender: TObject);
   public
     constructor Create(TheOwner: TComponent; ReportClass: TReportBaseClass);
-    procedure   AddInitialDocument(Const FileName: string; Const Doc: TEpiDocument);
-    { public declarations }
+    procedure AddInitialDocumentFile(Const DocFile: TEpiDocumentFile);
   end;
 
 var
@@ -34,7 +41,41 @@ implementation
 
 {$R *.lfm}
 
+uses
+  epiv_datamodule, epireport_generator_base,
+  epireport_generator_html, epireport_generator_txt;
+
 { TReportForm }
+
+procedure TReportForm.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(19, AddFilesBtn.Glyph);
+end;
+
+procedure TReportForm.FormShow(Sender: TObject);
+begin
+  LoadGlyphs;
+  Caption := IFrame.GetCaption;
+end;
+
+procedure TReportForm.AddFilesClick(Sender: TObject);
+begin
+  IFrame.AddFiles(nil);
+end;
+
+procedure TReportForm.OkClick(Sender: TObject);
+var
+  FGeneratorClass: TEpiReportGeneratorBaseClass;
+  FReport: TReportBase;
+begin
+  case RadioGroup1.ItemIndex of
+    0: FGeneratorClass := TEpiReportHTMLGenerator;
+    1: FGeneratorClass := TEpiReportTXTGenerator;
+  end;
+  FReport := FReportClass.Create(nil, FGeneratorClass);
+
+  IFrame.ApplyReportOptions(FReport);
+end;
 
 constructor TReportForm.Create(TheOwner: TComponent;
   ReportClass: TReportBaseClass);
@@ -42,16 +83,25 @@ begin
   inherited Create(TheOwner);
 
   FReportClass := ReportClass;
+  FFrame       := FReportClass.ReportFrameClass.Create(Self);
 
-//  FakeReport := FReportClass.Create(L, TEpiReportTXTGenerator);
-//  Caption := 'Generate Report: ' + FakeReport.ReportTitle;
+  if not Supports(FFrame, IReportFrame, IFrame) then
+    Exception.Create('IReportFrame interface not supported!');
+
+  FFrame.Align := alClient;
+  FFrame.Parent := Self;
+
+  OnShow := @FormShow;
+
+  AddFilesBtn.OnClick := @AddFilesClick;
+  OkBtn.OnClick       := @OkClick;
 end;
 
-procedure TReportForm.AddInitialDocument(const FileName: string;
-  const Doc: TEpiDocument);
+procedure TReportForm.AddInitialDocumentFile(const DocFile: TEpiDocumentFile);
 begin
-
+  IFrame.AddDocumentFile(DocFile);
 end;
 
 end.
+
 

@@ -6,7 +6,7 @@ unit report_types;
 interface
 
 uses
-  Classes, Forms, report_base, projectfilelist_frame;
+  Classes, Forms, report_base, projectfilelist_frame, epiopenfile;
 
 type
   IReportFrameProvider = interface ['IReportFrameProvider']
@@ -19,6 +19,13 @@ type
     procedure ApplyReportOptions(Report: TReportBase);
     function OkToAdvance(ProjectList: TProjectFileListFrame): boolean;
     function OkToAdvanceText: string;
+  end;
+
+  IReportFrame = interface ['IReportFrame']
+    function  GetCaption: string;
+    procedure ApplyReportOptions(Report: TReportBase);
+    procedure AddFiles(FileNames: TStrings);
+    procedure AddDocumentFile(Const DocumentFile: TEpiDocumentFile);
   end;
 
 implementation

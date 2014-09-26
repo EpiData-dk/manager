@@ -199,6 +199,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -345,6 +346,7 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -489,6 +491,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -569,6 +572,7 @@
       <Unit67>
         <Filename Value="reports/report_counts.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_counts"/>
       </Unit67>
       <Unit68>
         <Filename Value="reports/report_optionframe_counts.pas"/>
@@ -576,10 +580,12 @@
         <ComponentName Value="ReportOptionsFrameCounts"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_optionframe_counts"/>
       </Unit68>
       <Unit69>
         <Filename Value="reports/report_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_types"/>
       </Unit69>
       <Unit70>
         <Filename Value="tools/dataset_form.pas"/>
@@ -642,6 +648,7 @@
       <Unit80>
         <Filename Value="reports/report_project_validation.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_project_validation"/>
       </Unit80>
       <Unit81>
         <Filename Value="reports/report_project_validation_frame.pas"/>
@@ -713,7 +720,6 @@
         <ComponentName Value="CountByIdForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="count_by_id_form"/>
       </Unit91>
       <Unit92>
         <Filename Value="reports/report_project_validation_frame2.pas"/>
@@ -727,6 +733,7 @@
         <Filename Value="reports/reports_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ReportForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="reports_form"/>
       </Unit93>

@@ -26,6 +26,7 @@ type
   public
     { IReportFrameProvider }
     function GetFrameClass: TCustomFrameClass;
+    class function ReportFrameClass: TCustomFrameClass; override;
   public
     property Options: TReportProjectValidateOptions read FOptions write FOptions;
   end;
@@ -34,7 +35,8 @@ implementation
 
 uses
   epireport_base,
-  report_project_validation_frame;
+  report_project_validation_frame,
+  report_project_validation_frame2;
 
 resourcestring
   rsReportProjectValidationTitle = 'Project Validation.';
@@ -68,6 +70,11 @@ end;
 function TReportProjectValidation.GetFrameClass: TCustomFrameClass;
 begin
   result := TProjectValidationFrame;
+end;
+
+class function TReportProjectValidation.ReportFrameClass: TCustomFrameClass;
+begin
+  result := TFrame1;
 end;
 
 
