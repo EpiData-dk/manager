@@ -59,8 +59,13 @@ begin
 end;
 
 procedure TReportForm.AddFilesClick(Sender: TObject);
+var
+  FileNames: TStrings;
 begin
-  IFrame.AddFiles(nil);
+  FileNames := TStringList.Create;
+  DM.OpenDlgEpiFiles(FileNames);
+  IFrame.AddFiles(FileNames);
+  FileNames.Free;
 end;
 
 procedure TReportForm.OkClick(Sender: TObject);
@@ -72,7 +77,12 @@ begin
     0: FGeneratorClass := TEpiReportHTMLGenerator;
     1: FGeneratorClass := TEpiReportTXTGenerator;
   end;
-  FReport := FReportClass.Create(nil, FGeneratorClass);
+  FReport := FReportClass.Create(FGeneratorClass);
+
+  if FReport.InheritsFrom(TReportFileListBase) then
+    TReportFileListBase(FReport).DocumentFiles := nil
+  else
+    FReport.DocumentFile := nil;
 
   IFrame.ApplyReportOptions(FReport);
 end;

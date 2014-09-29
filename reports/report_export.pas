@@ -5,7 +5,8 @@ unit report_export;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument, epidatafiles, epiexportsettings;
+  Classes, SysUtils, report_base, epidocument, epidatafiles, epiexportsettings,
+  epiopenfile;
 
 type
 
@@ -17,7 +18,7 @@ type
     procedure CreateFileTable;
   protected
     function GetTitle: string; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+    procedure DoDocumentReport(const Doc: TEpiDocumentFile;
       const Index: Integer); override;
   public
     property ExportSettings: TEpiExportSetting read FExportSettings write FExportSettings;
@@ -78,15 +79,15 @@ begin
   result := rsReportExportTitle;
 end;
 
-procedure TReportExport.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string; const Index: Integer);
+procedure TReportExport.DoDocumentReport(const Doc: TEpiDocumentFile;
+  const Index: Integer);
 var
   R: TEpiReportBase;
   TmpDoc: TEpiDocument;
   Df: TEpiDataFile;
   i: Integer;
 begin
-  inherited DoDocumentReport(Doc, FileName, Index);
+  inherited DoDocumentReport(Doc, Index);
 
   R := TEpiReportExportSettings.Create(Generator);
   TEpiReportExportSettings(R).ExportSetting := ExportSettings;
@@ -130,7 +131,7 @@ begin
   Generator.Line('');
 
   R := TEpiReportStudyInfo.Create(Generator);
-  TEpiReportStudyInfo(R).Document := Doc;
+  TEpiReportStudyInfo(R).Document := Doc.Document;
   R.RunReport;
   R.Free;
 end;

@@ -82,7 +82,7 @@ begin
     0: FGeneratorClass := TEpiReportHTMLGenerator;
     1: FGeneratorClass := TEpiReportTXTGenerator;
   end;
-  FReport := FReportClass.Create(FProjectList.SelectedList, FGeneratorClass);
+//  FReport := FReportClass.Create(FProjectList.SelectedList, FGeneratorClass);
 
   if Assigned(FNextForm) then
   begin
@@ -241,7 +241,7 @@ begin
   FReport := nil;
 
   L := TStringList.Create;
-  FakeReport := FReportClass.Create(L, TEpiReportTXTGenerator);
+//  FakeReport := FReportClass.Create(L, TEpiReportTXTGenerator);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
 
   if Supports(FakeReport, IReportFrameProvider) then

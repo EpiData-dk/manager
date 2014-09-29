@@ -5,7 +5,7 @@ unit report_fieldlist_extended;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument, epidatafiles;
+  Classes, SysUtils, report_base, epidocument, epidatafiles, epiopenfile;
 
 type
 
@@ -14,7 +14,7 @@ type
   TReportFieldListExtended = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+    procedure DoDocumentReport(const Doc: TEpiDocumentFile;
       const Index: Integer); override;
   end;
 
@@ -34,16 +34,16 @@ begin
   Result := rsReportFieldListTitleExtended;
 end;
 
-procedure TReportFieldListExtended.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string; const Index: Integer);
+procedure TReportFieldListExtended.DoDocumentReport(
+  const Doc: TEpiDocumentFile; const Index: Integer);
 var
   R: TEpiReportFieldList;
   OrderedDFs: TEpiDataFiles;
   DF: TEpiDataFile;
 begin
-  inherited DoDocumentReport(Doc, FileName, Index);
+  inherited DoDocumentReport(Doc, Index);
 
-  OrderedDFs := Doc.Relations.GetOrderedDataFiles;
+  OrderedDFs := Doc.Document.Relations.GetOrderedDataFiles;
   for DF in OrderedDFs do
   begin
     Generator.Line('');

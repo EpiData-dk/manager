@@ -101,7 +101,6 @@ begin
   if (not ManagerSettings.MultipleInstances) and
      InstanceRunning(EpiDataApplicationName) then exit;
   {$ENDIF}
-  Application.CreateForm(TDM, DM);
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.

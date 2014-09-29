@@ -5,7 +5,8 @@ unit report_codebook;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument, epidatafiles, epirelations;
+  Classes, SysUtils, report_base, epidocument, epidatafiles, epirelations,
+  epiopenfile;
 
 type
 
@@ -18,7 +19,7 @@ type
       Data: Pointer = nil);
   protected
     function GetTitle: string; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+    procedure DoDocumentReport(const Doc: TEpiDocumentFile;
       const Index: Integer); override;
   end;
 
@@ -78,15 +79,15 @@ begin
   Result := rsReportCodeBook;
 end;
 
-procedure TReportCodeBook.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string; const Index: Integer);
+procedure TReportCodeBook.DoDocumentReport(const Doc: TEpiDocumentFile;
+  const Index: Integer);
 var
   i: Integer;
   R: TEpiReportBase;
 begin
-  inherited DoDocumentReport(Doc, FileName, Index);
+  inherited DoDocumentReport(Doc, Index);
 
-  Doc.Relations.OrderedWalk(@DataFileReport);
+  Doc.Document.Relations.OrderedWalk(@DataFileReport);
 end;
 
 end.

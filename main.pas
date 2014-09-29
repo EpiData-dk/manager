@@ -428,7 +428,7 @@ begin
       begin
         FileList := TStringList.Create;
         FileList.AddObject(Doc.FileName, ExportSetting.Doc);
-        R := TReportExport.Create(FileList, TEpiReportTXTGenerator);
+// TODO        R := TReportExport.Create(FileList, TEpiReportTXTGenerator);
         R.ExportSettings := ExportSetting;
         ReportTitle := R.ReportTitle;
         ReportText := R.RunReport;
@@ -609,7 +609,7 @@ begin
 
     if F.ShowModal <> mrOK then exit;
 
-    R := TReportDoubleEntryValidation.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
+//    R := TReportDoubleEntryValidation.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
     R.ReportOptions := F.ValidationOptions;
 
     ShowReportForm(Self,
@@ -669,7 +669,7 @@ begin
 
     if F.ShowModal <> mrOK then exit;
 
-    R := TReportCounts.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
+//    R := TReportCounts.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
     R.Options := F.Options;
 
     ShowReportForm(Self,
@@ -714,6 +714,8 @@ begin
         PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, WPARAM(TString.Create(Fn)), 0);
     end;
   end;
+
+  DM.MainOpenDialog.InitialDir := ManagerSettings.WorkingDirUTF8;
 end;
 
 procedure TMainForm.NewProjectActionExecute(Sender: TObject);
@@ -967,9 +969,9 @@ begin
   R := RunReport(TReportProjectValidation, false);
 
   if Assigned(R) and
-     (R.Documents[0] <> '(Not Saved)')
+     (R.DocumentFile.IsSaved)
   then
-    AddToRecent(R.Documents[0]);
+    AddToRecent(R.DocumentFile.FileName);
 
   R.Free;
 end;

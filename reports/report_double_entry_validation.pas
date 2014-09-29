@@ -22,7 +22,7 @@ type
 
   { TReportDoubleEntryValidation }
 
-  TReportDoubleEntryValidation = class(TReportFileListBase, IReportFrameProvider)
+  TReportDoubleEntryValidation = class(TReportBase)
   private
     FCompareFields: TEpiFields;
     FDblEntryValidateOptions: TEpiToolsDblEntryValidateOptions;
@@ -33,10 +33,7 @@ type
     function GetTitle: string; override;
     procedure DoBeginReport; override;
     procedure DoRunReport; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
-      const Index: Integer); override;
   public
-    function GetFrameClass: TCustomFrameClass;
     property ReportOptions: TReportDoubleEntryValidationOptions read FReportOptions write FReportOptions;
   end;
 
@@ -99,18 +96,6 @@ begin
 
     Generator.Line('');
   end;
-end;
-
-procedure TReportDoubleEntryValidation.DoDocumentReport(
-  const Doc: TEpiDocument; const FileName: string; const Index: Integer);
-begin
-  // do not do inherited -> we do not wan't a per file overview.
-  // inherited DoDocumentReport(Doc, FileName);
-end;
-
-function TReportDoubleEntryValidation.GetFrameClass: TCustomFrameClass;
-begin
-  result := TValidateDoubleEntryFrame;
 end;
 
 end.

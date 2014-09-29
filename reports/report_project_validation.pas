@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, report_base, epidocument, epidatafiles, report_types,
-  forms, epitools_projectvalidate, epirelations, epireport_report_projectvalidator;
+  forms, epitools_projectvalidate, epirelations, epireport_report_projectvalidator,
+  epiopenfile;
 
 type
 
@@ -21,7 +22,7 @@ type
     FValidationFields: TEpiFields;
   protected
     function GetTitle: string; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+    procedure DoDocumentReport(const Doc: TEpiDocumentFile;
       const Index: Integer); override;
   public
     { IReportFrameProvider }
@@ -49,16 +50,16 @@ begin
   result := rsReportProjectValidationTitle;
 end;
 
-procedure TReportProjectValidation.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string; const Index: Integer);
+procedure TReportProjectValidation.DoDocumentReport(
+  const Doc: TEpiDocumentFile; const Index: Integer);
 var
   R: TEpiReportProjectValidator;
   I: Integer;
 begin
-  inherited DoDocumentReport(Doc, FileName, Index);
+  inherited DoDocumentReport(Doc,Index);
 
   for I := Low(Options) to High(Options) do
-    if Options[i].Document = Doc then
+    if Options[i].Document = Doc.Document then
       Break;
 
   R := TEpiReportProjectValidator.Create(Generator);

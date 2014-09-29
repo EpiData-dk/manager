@@ -1,7 +1,7 @@
 object ReportForm: TReportForm
-  Left = 2021
+  Left = 2036
   Height = 484
-  Top = 339
+  Top = 424
   Width = 679
   Caption = 'ReportForm'
   ClientHeight = 484
@@ -24,8 +24,8 @@ object ReportForm: TReportForm
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 63
-    ClientWidth = 667
+    ClientHeight = 68
+    ClientWidth = 665
     ItemIndex = 0
     Items.Strings = (
       'Website (HTML)'
@@ -47,9 +47,9 @@ object ReportForm: TReportForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 33
-      Top = 9
-      Width = 72
+      Height = 27
+      Top = 12
+      Width = 68
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Add Files'
@@ -60,10 +60,10 @@ object ReportForm: TReportForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 610
-      Height = 33
+      Left = 614
+      Height = 32
       Top = 9
-      Width = 58
+      Width = 54
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -77,10 +77,10 @@ object ReportForm: TReportForm
       AnchorSideTop.Control = OkBtn
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = OkBtn
-      Left = 518
+      Left = 523
       Height = 34
       Top = 8
-      Width = 82
+      Width = 81
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -96,10 +96,10 @@ object ReportForm: TReportForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn2
-      Left = 93
+      Left = 89
       Height = 20
       Top = 15
-      Width = 415
+      Width = 424
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Right = 10

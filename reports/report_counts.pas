@@ -17,17 +17,14 @@ type
 
   { TReportCounts }
 
-  TReportCounts = class(TReportFileListBase, IReportFrameProvider)
+  TReportCounts = class(TReportBase)
   private
     FFieldList: TEpiFields;
     FOptions: TReportCountsOption;
   protected
     function GetTitle: string; override;
     procedure DoRunReport; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
-      const Index: Integer); override;
   public
-    function GetFrameClass: TCustomFrameClass;
     class function ReportFrameClass: TCustomFrameClass; override;
     property FieldList: TEpiFields read FFieldList write FFieldList;
     property Options: TReportCountsOption read FOptions write FOptions;
@@ -57,8 +54,6 @@ var
 begin
   inherited DoRunReport;
 
-//  if FieldList.Count = 0 then exit;
-
   S := Options.FieldNames[0];
   for i := 1 to Options.FieldNames.Count - 1 do
     S += ', ' + Options.FieldNames[i];
@@ -67,22 +62,8 @@ begin
   R := TEpiReportCountById.Create(Generator);
   R.DataFiles := Options.DataFiles;
   R.FieldNames := Options.FieldNames;
-//  R.Documents := Documents;
-//  R.FieldList := FFieldList;
   R.RunReport;
   R.Free;
-end;
-
-procedure TReportCounts.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string; const Index: Integer);
-begin
-  // Do not inherit -> we do not want per file reports.
-  //inherited DoDocumentReport(Doc, FileName);
-end;
-
-function TReportCounts.GetFrameClass: TCustomFrameClass;
-begin
-  result := TReportOptionsFrameCounts;
 end;
 
 class function TReportCounts.ReportFrameClass: TCustomFrameClass;

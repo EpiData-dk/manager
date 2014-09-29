@@ -5,7 +5,7 @@ unit report_valuelabellist;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument;
+  Classes, SysUtils, report_base, epidocument, epiopenfile;
 
 type
 
@@ -14,7 +14,7 @@ type
   TReportValueLabelList = class(TReportFileListBase)
   protected
     function GetTitle: string; override;
-    procedure DoDocumentReport(const Doc: TEpiDocument; const FileName: string;
+    procedure DoDocumentReport(const Doc: TEpiDocumentFile;
       const Index: Integer); override;
   end;
 
@@ -33,21 +33,21 @@ begin
   Result := rsReportValueLabelListTitle;
 end;
 
-procedure TReportValueLabelList.DoDocumentReport(const Doc: TEpiDocument;
-  const FileName: string; const Index: Integer);
+procedure TReportValueLabelList.DoDocumentReport(const Doc: TEpiDocumentFile;
+  const Index: Integer);
 var
   R: TEpiReportValueLabelSetList;
   i: Integer;
 begin
-  inherited DoDocumentReport(Doc, FileName, Index);
+  inherited DoDocumentReport(Doc, Index);
 
-  for i := 0 to Doc.ValueLabelSets.Count - 1 do
+  for i := 0 to Doc.Document.ValueLabelSets.Count - 1 do
   begin
     R := TEpiReportValueLabelSetList.Create(Generator);
-    R.ValueLabelSet := Doc.ValueLabelSets[i];
+    R.ValueLabelSet := Doc.Document.ValueLabelSets[i];
     R.RunReport;
     R.Free;
-    if i < Doc.ValueLabelSets.Count then
+    if i < Doc.Document.ValueLabelSets.Count then
       Generator.Line('');
   end;
 end;
