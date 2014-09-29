@@ -15,19 +15,15 @@ type
   { TValidateDoubleEntryForm }
 
   TValidateDoubleEntryForm = class(TForm)
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
-    Button1: TButton;
     CmpFAllNonKeyFBtn: TButton;
     CmpFExcludeTextFBtn: TButton;
     CmpFNoneBtn: TButton;
-    Dlg: TOpenDialog;
     KFAutoIncBtn: TButton;
     KFIndexBtn: TButton;
     KFNoneBtn: TButton;
+    Dlg: TOpenDialog;
     OptionsChkGrp: TCheckGroup;
     PageControl: TPageControl;
-    BottomPanel: TPanel;
     Panel1: TPanel;
     Panel2: TPanel;
     ProjectPanel: TPanel;

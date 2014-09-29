@@ -41,6 +41,7 @@ type
     FOnDocumentIncludedChange: TProjectFileListGridEvent;
     FOnSelectionChanged: TNotifyEvent;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
+    function   GetSelectedDocfileList: TEpiDocumentFileList;
     function   GetSelectedList: TStringList;
     procedure  ImportFile(Const FileName: string);
     procedure  DoReportError(Const Msg: string);
@@ -69,6 +70,7 @@ type
     property    OnDocumentIncludedChange: TProjectFileListGridEvent read FOnDocumentIncludedChange write FOnDocumentIncludedChange;
     property    OnAfterAddToGrid: TProjectFileListGridEvent read FOnAfterAddToGrid write FOnAfterAddToGrid;
     property    SelectedList: TStringList read GetSelectedList;
+    property    SelectedDocfileList: TEpiDocumentFileList read GetSelectedDocfileList;
     property    DocList: TStringList read FDocList;
     property    DocFileList: TList read FDocFileList;
   private
@@ -190,6 +192,17 @@ begin
   FDocList.AddObject(FileName, Doc);
   DoAfterGridEvent(Filename, Doc, Idx);
   DoSelectionChanged;
+end;
+
+function TProjectFileListFrame.GetSelectedDocfileList: TEpiDocumentFileList;
+var
+  i: Integer;
+begin
+  Result := TEpiDocumentFileList.Create;
+
+  for i := 1 to StructureGrid.RowCount - 1 do
+    if StructureGrid.Cells[IncludeCol.Index + 1, i] = IncludeCol.ValueChecked then
+      Result.Add(TEpiDocumentFile(FDocFileList[i - 1]));
 end;
 
 procedure TProjectFileListFrame.ImportFile(const FileName: string);

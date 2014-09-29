@@ -21,6 +21,7 @@ type
     RadioGroup1: TRadioGroup;
   private
     FReportClass: TReportBaseClass;
+    FReport: TReportBase;
     FFrame: TCustomFrame;
     IFrame: IReportFrame;
     procedure LoadGlyphs;
@@ -32,6 +33,7 @@ type
   public
     constructor Create(TheOwner: TComponent; ReportClass: TReportBaseClass);
     procedure AddInitialDocumentFile(Const DocFile: TEpiDocumentFile);
+    property  Report: TReportBase read FReport;
   end;
 
 var
@@ -71,19 +73,12 @@ end;
 procedure TReportForm.OkClick(Sender: TObject);
 var
   FGeneratorClass: TEpiReportGeneratorBaseClass;
-  FReport: TReportBase;
 begin
   case RadioGroup1.ItemIndex of
     0: FGeneratorClass := TEpiReportHTMLGenerator;
     1: FGeneratorClass := TEpiReportTXTGenerator;
   end;
   FReport := FReportClass.Create(FGeneratorClass);
-
-  if FReport.InheritsFrom(TReportFileListBase) then
-    TReportFileListBase(FReport).DocumentFiles := nil
-  else
-    FReport.DocumentFile := nil;
-
   IFrame.ApplyReportOptions(FReport);
 end;
 

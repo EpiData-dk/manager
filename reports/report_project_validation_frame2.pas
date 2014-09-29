@@ -5,17 +5,17 @@ unit report_project_validation_frame2;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls, Buttons,
-  Dialogs, ComCtrls, projectfilelist_frame, epiv_projecttreeview_frame,
-  epiv_field_list_frame, epiv_dataform_treeview, epirelations, epitools_projectvalidate,
-  epidocument, epicustombase, epidatafiles, report_project_validation,
-  report_types, report_base, epiopenfile;
+  Classes, SysUtils, fgl, FileUtil, Forms, Controls, ExtCtrls, StdCtrls,
+  Buttons, Dialogs, ComCtrls, projectfilelist_frame, epiv_projecttreeview_frame,
+  epiv_field_list_frame, epiv_dataform_treeview, epirelations,
+  epitools_projectvalidate, epidocument, epicustombase, epidatafiles,
+  report_project_validation, report_types, report_base, epiopenfile;
 
 type
 
-  { TFrame1 }
+  { TProjectValidationFrame2 }
 
-  TFrame1 = class(TFrame, IReportFrame)
+  TProjectValidationFrame2 = class(TFrame, IReportFrame)
     CmpFAllNonKeyFBtn: TButton;
     CmpFExcludeTextFBtn: TButton;
     CmpFNoneBtn: TButton;
@@ -84,9 +84,9 @@ const
   SORT_FIELDS_KEY = 'SORT_FIELDS_KEY';
   COMPARE_FIELDS_KEY = 'COMPARE_FIELDS_KEY';
 
-{ TFrame1 }
+{ TProjectValidationFrame2 }
 
-procedure TFrame1.BuildFieldLists(const ARelation: TEpiMasterRelation;
+procedure TProjectValidationFrame2.BuildFieldLists(const ARelation: TEpiMasterRelation;
   const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
   Data: Pointer);
 var
@@ -115,13 +115,13 @@ begin
   Inc(FFieldListIndex);
 end;
 
-procedure TFrame1.FileListAddDoc(Sender: TObject; Document: TEpiDocument;
+procedure TProjectValidationFrame2.FileListAddDoc(Sender: TObject; Document: TEpiDocument;
   const Filename: string; const RowNo: Integer);
 begin
   DocumentAdded(Document);
 end;
 
-procedure TFrame1.FileListDocChange(Sender: TObject; Document: TEpiDocument;
+procedure TProjectValidationFrame2.FileListDocChange(Sender: TObject; Document: TEpiDocument;
   const Filename: string; const RowNo: Integer);
 var
   Added: Boolean;
@@ -134,7 +134,7 @@ begin
     DocumentRemoved(Document);
 end;
 
-procedure TFrame1.ProjectTreeSelected(Sender: TObject;
+procedure TProjectValidationFrame2.ProjectTreeSelected(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
 begin
   if ObjectType <> otRelation then exit;
@@ -148,7 +148,7 @@ begin
   FCompareTree.SelectedList := TList(AObject.FindCustomData(COMPARE_FIELDS_KEY));
 end;
 
-procedure TFrame1.ProjectTreeSelecting(Sender: TObject; const OldObject,
+procedure TProjectValidationFrame2.ProjectTreeSelecting(Sender: TObject; const OldObject,
   NewObject: TEpiCustomBase; OldObjectType,
   NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
 
@@ -187,12 +187,12 @@ begin
   AssignList(TList(OldObject.FindCustomData(COMPARE_FIELDS_KEY)), FCompareTree.SelectedList);
 end;
 
-function TFrame1.GetOptions: TEpiToolsProjectValidateOptions;
+function TProjectValidationFrame2.GetOptions: TEpiToolsProjectValidateOptions;
 begin
   result := EpiProjectValidationOptionsAll;
 end;
 
-procedure TFrame1.AddCustomDataWalk(const Relation: TEpiMasterRelation;
+procedure TProjectValidationFrame2.AddCustomDataWalk(const Relation: TEpiMasterRelation;
   const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
   Data: Pointer);
 var
@@ -220,7 +220,7 @@ begin
   end;
 end;
 
-procedure TFrame1.RemoveCustomDataWalk(const Relation: TEpiMasterRelation;
+procedure TProjectValidationFrame2.RemoveCustomDataWalk(const Relation: TEpiMasterRelation;
   const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
   Data: Pointer);
 begin
@@ -228,28 +228,28 @@ begin
   Relation.RemoveCustomData(COMPARE_FIELDS_KEY).Free;
 end;
 
-procedure TFrame1.DocumentAdded(const Doc: TEpiDocument);
+procedure TProjectValidationFrame2.DocumentAdded(const Doc: TEpiDocument);
 begin
   Doc.Relations.OrderedWalk(@AddCustomDataWalk);
   FProjectTree.AddDocument(Doc);
 end;
 
-procedure TFrame1.DocumentRemoved(const Doc: TEpiDocument);
+procedure TProjectValidationFrame2.DocumentRemoved(const Doc: TEpiDocument);
 begin
   FProjectTree.RemoveDocument(Doc);
 end;
 
-procedure TFrame1.AddDocumentFile(const DocumentFile: TEpiDocumentFile);
+procedure TProjectValidationFrame2.AddDocumentFile(const DocumentFile: TEpiDocumentFile);
 begin
   FFileList.AddDocument(DocumentFile);
 end;
 
-procedure TFrame1.AddFiles(FileNames: TStrings);
+procedure TProjectValidationFrame2.AddFiles(FileNames: TStrings);
 begin
   FFileList.AddFiles(FileNames);
 end;
 
-procedure TFrame1.ApplyReportOptions(Report: TReportBase);
+procedure TProjectValidationFrame2.ApplyReportOptions(Report: TReportBase);
 var
   DocCount: Integer;
   i: Integer;
@@ -263,6 +263,7 @@ begin
   with FOptions[i] do
   begin
     Document := FProjectTree.Documents[i];
+
     Options  := GetOptions;
     SetLength(FieldLists, Document.DataFiles.Count);
 
@@ -270,15 +271,19 @@ begin
     Document.Relations.OrderedWalk(@BuildFieldLists, @FOptions[i]);
   end;
 
-  TReportProjectValidation(Report).Options := FOptions;
+  with TReportProjectValidation(Report) do
+  begin
+    Options := FOptions;
+    DocumentFiles := FFileList.SelectedDocfileList;
+  end;
 end;
 
-function TFrame1.GetCaption: string;
+function TProjectValidationFrame2.GetCaption: string;
 begin
   result := 'Project Validation';
 end;
 
-constructor TFrame1.Create(TheOwner: TComponent);
+constructor TProjectValidationFrame2.Create(TheOwner: TComponent);
 var
   Option: TEpiToolsProjectValidateOption;
 begin
@@ -346,7 +351,7 @@ begin
   end;
 end;
 
-destructor TFrame1.Destroy;
+destructor TProjectValidationFrame2.Destroy;
 var
   L: TStringList;
   i: Integer;

@@ -1,5 +1,5 @@
 object ReportForm: TReportForm
-  Left = 2036
+  Left = 1239
   Height = 484
   Top = 424
   Width = 679

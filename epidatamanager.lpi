@@ -289,6 +289,7 @@
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_types"/>
       </Unit17>
       <Unit18>
         <Filename Value="import/import_structure_form.pas"/>
@@ -325,12 +326,10 @@
       <Unit23>
         <Filename Value="reports/report_fieldlist.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_fieldlist"/>
       </Unit23>
       <Unit24>
         <Filename Value="reports/report_valuelabellist.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_valuelabellist"/>
       </Unit24>
       <Unit25>
         <Filename Value="reports/report_combinedlist.pas"/>
@@ -360,12 +359,10 @@
       <Unit29>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_fieldlist_extended"/>
       </Unit29>
       <Unit30>
         <Filename Value="reports/report_project_overview.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_project_overview"/>
       </Unit30>
       <Unit31>
         <Filename Value="shortcuts.pas"/>
@@ -476,6 +473,7 @@
         <ComponentName Value="ValidateDoubleEntryForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="validate_double_entry_form"/>
       </Unit47>
       <Unit48>
         <Filename Value="reports/report_double_entry_validation.pas"/>
@@ -495,6 +493,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -515,6 +514,7 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -526,6 +526,7 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_fieldframe"/>
       </Unit57>
       <Unit58>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -533,6 +534,7 @@
         <ComponentName Value="SectionPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_sectionframe"/>
       </Unit58>
       <Unit59>
         <Filename Value="designer/design_designmessenger.pas"/>
@@ -575,7 +577,6 @@
       <Unit67>
         <Filename Value="reports/report_counts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_counts"/>
       </Unit67>
       <Unit68>
         <Filename Value="reports/report_optionframe_counts.pas"/>
@@ -606,6 +607,7 @@
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="validate_double_entry_frame"/>
       </Unit72>
       <Unit73>
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
@@ -624,7 +626,6 @@
       <Unit75>
         <Filename Value="reports/report_codebook.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_codebook"/>
       </Unit75>
       <Unit76>
         <Filename Value="export/export_ddi_frame.pas"/>
@@ -659,6 +660,7 @@
         <ComponentName Value="ProjectValidationFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_project_validation_frame"/>
       </Unit81>
       <Unit82>
         <Filename Value="tools/recode_form.pas"/>
@@ -677,7 +679,6 @@
       <Unit84>
         <Filename Value="reports/report_export.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_export"/>
       </Unit84>
       <Unit85>
         <Filename Value="project/valuelabel_import_external.pas"/>
@@ -728,7 +729,7 @@
       <Unit92>
         <Filename Value="reports/report_project_validation_frame2.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Frame1"/>
+        <ComponentName Value="ProjectValidationFrame2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="report_project_validation_frame2"/>

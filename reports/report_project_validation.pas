@@ -75,7 +75,7 @@ end;
 
 class function TReportProjectValidation.ReportFrameClass: TCustomFrameClass;
 begin
-  result := TFrame1;
+  result := TProjectValidationFrame2;
 end;
 
 

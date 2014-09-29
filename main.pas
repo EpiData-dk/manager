@@ -598,63 +598,17 @@ begin
 end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
-var
-  F: TValidateDoubleEntryForm;
-  R: TReportDoubleEntryValidation;
 begin
-  try
-    F := TValidateDoubleEntryForm.Create(self);
-    F.SetBounds(0, 0, 600, 800);
-    F.Position := poMainFormCenter;
-
-    if F.ShowModal <> mrOK then exit;
-
-//    R := TReportDoubleEntryValidation.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
-    R.ReportOptions := F.ValidationOptions;
-
-    ShowReportForm(Self,
-      R.ReportTitle,
-      R.RunReport,
-      False
-    );
-  finally
-    R.Free;
-    F.Free;
-  end;
+  RunReportEx(TReportDoubleEntryValidation);
 end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
 var
   F: TForm;
-  Fr: TFrame1;
   O: TReportProjectValidateOptions;
   R: TReportProjectValidation;
 begin
   RunReportEx(TReportProjectValidation);
-{
-  try
-    F := TForm.Create(self);
-    F.SetBounds(0, 0, 600, 800);
-    F.Position := poMainFormCenter;
-    Fr := TFrame1.Create(F);
-
-    FR.Align := alClient;
-    Fr.Parent := F;
-
-    if F.ShowModal <> mrOK then exit;
-
-    R := TReportProjectValidation.Create(FR.FileList.SelectedList, TEpiReportTXTGenerator);
-    R.Options := FR.Options;
-
-    ShowReportForm(Self,
-      R.ReportTitle,
-      R.RunReport,
-      False
-    );
-  finally
-    R.Free;
-    F.Free;
-  end;    }
 end;
 
 procedure TMainForm.Button3Click(Sender: TObject);
@@ -988,23 +942,23 @@ var
   i: Integer;
 begin
   R := RunReport(TReportDoubleEntryValidation, false);
-  if Assigned(R) and
+ { if Assigned(R) and
      (
       (not Assigned(FActiveFrame)) or
       (not Assigned(FActiveFrame.EpiDocument))
      ) and
-     TEpiDocument(R.Documents.Objects[0]).Modified
+     R.DocumentFile.Document.Modified
   then
     begin
-      Fn := R.Documents[0] + '.doubleentry-verification.epx';
+      Fn := R.DocumentFile.FileName + '.doubleentry-verification.epx';
       i := 0;
       while FileExistsUTF8(Fn) do
       begin
         Inc(i);
-        Fn := R.Documents[0] + '.doubleentry-verification.' + IntToStr(i) + '.epx';
+        Fn := R.DocumentFile.FileName + '.doubleentry-verification.' + IntToStr(i) + '.epx';
       end;
 
-      TEpiDocument(R.Documents.Objects[0]).SaveToFile(fn);
+      R.DocumentFile.Document.SaveToFile(fn);
       ShowMessage('Validation saved to file:' + LineEnding +
                   Fn);
     end;
@@ -1016,7 +970,7 @@ begin
     if R.Documents[0] <> '(Not Saved)' then
       AddToRecent(R.Documents[0]);
     UpdateRecentFiles;
-  end;
+  end;       }
 
   R.Free;
 end;
@@ -1389,7 +1343,7 @@ begin
   then
     F.AddInitialDocumentFile(FActiveFrame.DocumentFile);
 
-{  if F.ShowModal = mrOK then
+  if F.ShowModal = mrOK then
     Result := F.Report;
 
   if not Assigned(Result) then exit;
@@ -1407,8 +1361,8 @@ begin
   Application.ProcessMessages;
 
   if FreeAfterRun then
-    FreeAndNil(Result);  }
-  F.ShowModal;
+    FreeAndNil(Result);
+
   F.Free;
 end;
 

@@ -34,6 +34,7 @@ type
     procedure DoBeginReport; override;
     procedure DoRunReport; override;
   public
+    class function ReportFrameClass: TCustomFrameClass; override;
     property ReportOptions: TReportDoubleEntryValidationOptions read FReportOptions write FReportOptions;
   end;
 
@@ -96,6 +97,11 @@ begin
 
     Generator.Line('');
   end;
+end;
+
+class function TReportDoubleEntryValidation.ReportFrameClass: TCustomFrameClass;
+begin
+  result := TValidateDoubleEntryFrame;
 end;
 
 end.

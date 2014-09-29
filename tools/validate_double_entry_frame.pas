@@ -5,67 +5,87 @@ unit validate_double_entry_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, CheckLst,
-  ExtCtrls, ActnList, report_types, report_base, epidocument, epicustombase,
-  types, projectfilelist_frame, manager_types;
+  Classes, SysUtils, fgl, FileUtil, Forms, Controls, ExtCtrls, ComCtrls,
+  StdCtrls, report_types, epiv_projecttreeview_frame, epiv_dataform_treeview,
+  projectfilelist_frame, epidocument, epicustombase, epirelations, contnrs,
+  report_double_entry_validation, epitools_val_dbl_entry, epiopenfile,
+  report_base;
 
 type
 
   { TValidateDoubleEntryFrame }
 
-  TValidateDoubleEntryFrame = class(TFrame, IReportOptionFrame, ICanCloseQuery)
-    CFExcludeTxtAction: TAction;
-    CmpFExcludeTextFBtn: TButton;
-    CFSelectNoneAction: TAction;
-    CFSelectAllNonKFAction: TAction;
-    KFMoveFieldDown: TAction;
-    KFMoveFieldUp: TAction;
-    KFAutoIncAction: TAction;
-    KFIndexAction: TAction;
-    KFNoneAction: TAction;
-    ActionList1: TActionList;
-    Bevel1: TBevel;
+  TValidateDoubleEntryFrame = class(TFrame, IReportFrame)
     CmpFAllNonKeyFBtn: TButton;
+    CmpFExcludeTextFBtn: TButton;
     CmpFNoneBtn: TButton;
-    CmpFCheckList: TCheckListBox;
-    GroupBox3: TGroupBox;
-    GroupBox4: TGroupBox;
+    CompareTab: TTabSheet;
+    FilePanel: TPanel;
+    KeyTab: TTabSheet;
     KFAutoIncBtn: TButton;
-    KFCheckList: TCheckListBox;
     KFIndexBtn: TButton;
     KFNoneBtn: TButton;
-    Label7: TLabel;
-    Label8: TLabel;
     OptionsChkGrp: TCheckGroup;
+    OptionsTab: TTabSheet;
+    PageControl: TPageControl;
     Panel1: TPanel;
-    SpeedButton1: TSpeedButton;
-    SpeedButton2: TSpeedButton;
-    procedure CFExcludeTxtActionExecute(Sender: TObject);
-    procedure CFSelectAllNonKFActionExecute(Sender: TObject);
-    procedure CFSelectNoneActionExecute(Sender: TObject);
-    procedure KFAutoIncActionExecute(Sender: TObject);
-    procedure KFIndexActionExecute(Sender: TObject);
-    procedure KFMoveFieldUpExecute(Sender: TObject);
-    procedure KFMoveFieldUpUpdate(Sender: TObject);
-    procedure KFNoneActionExecute(Sender: TObject);
+    Panel2: TPanel;
+    ProjectPanel: TPanel;
+    Splitter1: TSplitter;
+    Splitter2: TSplitter;
+    procedure CmpFAllNonKeyFBtnClick(Sender: TObject);
+    procedure CmpFExcludeTextFBtnClick(Sender: TObject);
+    procedure CmpFNoneBtnClick(Sender: TObject);
+    procedure FileListAddDoc(Sender: TObject; Document: TEpiDocument;
+      const Filename: string; const RowNo: Integer);
+    procedure FileListDocChange(Sender: TObject; Document: TEpiDocument;
+      const Filename: string; const RowNo: Integer);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure KFAutoIncBtnClick(Sender: TObject);
+    procedure KFIndexBtnClick(Sender: TObject);
+    procedure KFNoneBtnClick(Sender: TObject);
+    procedure ProjectGetText(Sender: TObject; const AObject: TEpiCustomBase;
+      ObjectType: TEpiVTreeNodeObjectType; const StaticText: boolean;
+      var NodeText: string);
+    procedure ProjectTreeSelected(Sender: TObject;
+      const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
+    procedure ProjectTreeSelecting(Sender: TObject; const OldObject,
+      NewObject: TEpiCustomBase; OldObjectType,
+      NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
   private
-    { private declarations }
-    FMainDoc: TEpiDocument;
-    FDupDoc: TEpiDocument;
-    procedure UpdateKeyFields;
-    procedure UpdateCompareFields;
-    procedure AddFieldHook(Const Sender, Initiator: TEpiCustomBase;
-      EventGroup: TEpiEventGroup;
-      EventType: Word; Data: Pointer);
+    FFileList: TProjectFileListFrame;
+    FProjectTree: TEpiVProjectTreeViewFrame;
+    FKeyTree: TDataFormTreeViewFrame;
+    FCompareTree: TDataFormTreeViewFrame;
+    FProjectCount: Integer;
+    FKeyTreeList: TObjectList;
+    FCompareTreeList: TObjectList;
+    FListCounter: Integer;
+    FValidationOptions: TReportDoubleEntryValidationOptions;
+    procedure DataFileTreeToCustomData(Const AObject: TEpiCustomBase);
+    procedure CustomDataToDataFileTree(Const AObject: TEpiCustomBase);
+    procedure BumpProjectCount(Const Value: Integer);
+    procedure AddCustomDataWalk(const Relation: TEpiMasterRelation;
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
+    procedure RemoveCustomDataWalk(const Relation: TEpiMasterRelation;
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
+  private
+    { Options Handling }
+    function  GetDEVOptions: TEpiToolsDblEntryValidateOptions;
+    procedure SetDEVOptions(Options: TEpiToolsDblEntryValidateOptions);
   public
-    { public declarations }
-    destructor Destroy; override;
-    function  GetFrameCaption: string;
-    procedure UpdateFrame(Selection: TStrings);
+    constructor Create(TheOwner: TComponent); override;
+    property ValidationOptions: TReportDoubleEntryValidationOptions read FValidationOptions;
+    property FileListFrame: TProjectFileListFrame read FFileList;
+  public
+    { IReportFrame }
+    procedure AddDocumentFile(const DocumentFile: TEpiDocumentFile);
+    procedure AddFiles(FileNames: TStrings);
     procedure ApplyReportOptions(Report: TReportBase);
-    function OkToAdvance(ProjectList: TProjectFileListFrame): boolean;
-    function OkToAdvanceText: string;
-    function CanClose: boolean;
+    function GetCaption: string;
   end;
 
 implementation
@@ -73,325 +93,501 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, report_double_entry_validation, epitools_val_dbl_entry,
-  epidatafilestypes, epiglobals, LCLIntf, manager_messages, LCLType,
-  main, math, LazUTF8, strutils, Dialogs;
+  settings2_var, epidatafiles, settings2,
+  epimiscutils, epidatafilestypes;
+
+const
+  KEYTREE_CUSTOMDATA = 'KEYTREE_CUSTOMDATA';
+  COMPARETREE_CUSTOMDATA = 'COMPARETREE_CUSTOMDATA';
+  DEV_OPTIONS_CUSTOMDATA = 'DEV_OPTIONS_CUSTOMDATA';
+
+type
+  PEpiToolsDblEntryValidateOptions = ^TEpiToolsDblEntryValidateOptions;
 
 { TValidateDoubleEntryFrame }
 
-procedure TValidateDoubleEntryFrame.KFNoneActionExecute(Sender: TObject);
-begin
-  KFCheckList.CheckAll(cbUnchecked, false, false);
-end;
-
-procedure TValidateDoubleEntryFrame.KFIndexActionExecute(Sender: TObject);
+procedure TValidateDoubleEntryFrame.CmpFAllNonKeyFBtnClick(Sender: TObject);
 var
-  i: Integer;
-begin
-  KFCheckList.CheckAll(cbUnchecked, false, false);
-
-  KFCheckList.Items.BeginUpdate;
-  for i := 0 to KFCheckList.Count - 1 do
-    if FMainDoc.DataFiles[0].KeyFields.FieldExists(TEpiField(KFCheckList.Items.Objects[i])) then
-      KFCheckList.Checked[i] := true;
-  KFCheckList.Items.EndUpdate;
-end;
-
-procedure TValidateDoubleEntryFrame.KFMoveFieldUpExecute(Sender: TObject);
-var
-  Idx1: Integer;
-  Idx2: Integer;
-  Chk1: Boolean;
-  Chk2: Boolean;
-begin
-  KFCheckList.Items.BeginUpdate;
-
-  Idx1 := KFCheckList.ItemIndex;
-  if Sender = KFMoveFieldUp then
-    Idx2 := Idx1 - 1
-  else
-    Idx2 := Idx1 + 1;
-
-  Chk1 := KFCheckList.Checked[Idx1];
-  Chk2 := KFCheckList.Checked[Idx2];
-
-  KFCheckList.Items.Exchange(Idx1, Idx2);
-  KFCheckList.ItemIndex := Idx2;
-
-  KFCheckList.Checked[Idx1] := Chk2;
-  KFCheckList.Checked[Idx2] := Chk1;
-  KFCheckList.Items.EndUpdate;
-end;
-
-procedure TValidateDoubleEntryFrame.KFMoveFieldUpUpdate(Sender: TObject);
-begin
-  if Sender = KFMoveFieldUp then
-    TAction(Sender).Enabled := KFCheckList.ItemIndex > 0
-  else
-    TAction(Sender).Enabled := KFCheckList.ItemIndex < (KFCheckList.Count - 1);
-end;
-
-procedure TValidateDoubleEntryFrame.KFAutoIncActionExecute(Sender: TObject);
-var
-  i: Integer;
-begin
-  KFCheckList.CheckAll(cbUnchecked, false, false);
-
-  KFCheckList.Items.BeginUpdate;
-  for i := 0 to KFCheckList.Count - 1 do
-    if TEpiField(KFCheckList.Items.Objects[i]).FieldType = ftAutoInc then
-      KFCheckList.Checked[i] := true;
-  KFCheckList.Items.EndUpdate;
-end;
-
-procedure TValidateDoubleEntryFrame.CFSelectAllNonKFActionExecute(Sender: TObject
-  );
-var
-  O: TObject;
-  Idx: Integer;
-  i: Integer;
-begin
-  CmpFCheckList.CheckAll(cbUnchecked, false, false);
-
-  CmpFCheckList.Items.BeginUpdate;
-  for i := 0 to CmpFCheckList.Count -1 do
-  begin
-    O := CmpFCheckList.Items.Objects[i];
-    Idx := KFCheckList.Items.IndexOfObject(O);
-    if not KFCheckList.Checked[Idx] then
-      CmpFCheckList.Checked[i] := true;
-  end;
-  CmpFCheckList.Items.EndUpdate;
-end;
-
-procedure TValidateDoubleEntryFrame.CFExcludeTxtActionExecute(Sender: TObject);
-var
-  i: Integer;
+  List: TList;
+  DF: TEpiDataFile;
   F: TEpiField;
+  NewList: TList;
 begin
-  CmpFCheckList.Items.BeginUpdate;
-  for i := 0 to CmpFCheckList.Count -1 do
-  begin
-    F := TEpiField(CmpFCheckList.Items.Objects[i]);
-    if F.FieldType in StringFieldTypes then
-      CmpFCheckList.Checked[i] := false;
-  end;
-  CmpFCheckList.Items.EndUpdate;
+  if FListCounter <> 2 then exit;
+  FCompareTree.SelectNone;
+
+  List := FKeyTree.SelectedList;
+  DF := FCompareTree.DataFile;
+
+  NewList := TList.Create;
+  for F in DF.Fields do
+    if List.IndexOf(F) < 0 then
+      NewList.Add(F);
+
+  FCompareTree.SelectedList := NewList;
+  List.Free;
+  NewList.Free;
 end;
 
-procedure TValidateDoubleEntryFrame.CFSelectNoneActionExecute(Sender: TObject);
+procedure TValidateDoubleEntryFrame.CmpFExcludeTextFBtnClick(Sender: TObject);
 begin
-  CmpFCheckList.CheckAll(cbUnchecked, false, false);
+  FCompareTree.SelectFieldTypes(StringFieldTypes, true);
 end;
 
-procedure TValidateDoubleEntryFrame.UpdateKeyFields;
+procedure TValidateDoubleEntryFrame.CmpFNoneBtnClick(Sender: TObject);
+begin
+  FCompareTree.SelectNone;
+end;
+{
+procedure TValidateDoubleEntryFrame.BitBtn1Click(Sender: TObject);
 var
-  MainDF: TEpiDataFile;
-  DupDF: TEpiDataFile;
+  L: TList;
+  MR: TEpiMasterRelation;
+  SelectFiles: TStringList;
+  MainDataFiles: TEpiDataFiles;
+  DuplDataFiles: TEpiDataFiles;
+  FieldList: TList;
   i: Integer;
-  F: TEpiField;
-  W: Integer;
+  j: Integer;
 begin
-  KFCheckList.Clear;
+  // Before anything else, make sure the lastes changed to the DataFileTree's
+  // are applied to the custom data.
+  DataFileTreeToCustomData(FProjectTree.SelectedObject);
 
-  MainDF := FMainDoc.DataFiles[0];
-  DupDF  := FDupDoc.DataFiles[0];
+  try
+    L := FProjectTree.CheckList;
+    if L.Count = 0 then exit;
 
-  W := 0;
-  for i := 0 to MainDF.Fields.Count - 1 do
-    if DupDF.Fields.ItemExistsByName(MainDF.Field[i].Name) then
-      W := Max(W, UTF8Length(MainDF.Field[i].Name));
+    SetLength(FValidationOptions, L.Count);
 
-  KFCheckList.Items.BeginUpdate;
-  for i := 0 to MainDF.Fields.Count - 1 do
-  begin
-    F := MainDF.Fields[i];
-    if DupDF.Fields.ItemExistsByName(F.Name) then
-      KFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text,
-      F);
-  end;
-  KFCheckList.Items.EndUpdate;
+    SelectFiles := FFileList.SelectedList;
+    MainDataFiles := TEpiDocument(SelectFiles.Objects[0]).DataFiles;
+    DuplDataFiles := TEpiDocument(SelectFiles.Objects[1]).DataFiles;
 
-  if (KFIndexAction.Update) and (KFIndexAction.Enabled) then
-    KFIndexAction.Execute
-  else if (KFAutoIncAction.Update) and (KFAutoIncAction.Enabled) then
-    KFAutoIncAction.Execute
-  else
-    KFCheckList.Selected[0] := true;
-end;
+    MR := TEpiMasterRelation(L.Items[0]);
+//    SwapDatafiles := false;
 
-procedure TValidateDoubleEntryFrame.UpdateCompareFields;
-var
-  MainDF: TEpiDataFile;
-  DupDF: TEpiDataFile;
-  i: Integer;
-  W: Integer;
-  F: TEpiField;
-begin
-  CmpFCheckList.Clear;
+//    if MainDataFiles.IndexOf(MR.Datafile) < 0 then
+//      SwapDatafiles := true;
 
-  MainDF := FMainDoc.DataFiles[0];
-  DupDF  := FDupDoc.DataFiles[0];
-
-  W := 0;
-  for i := 0 to MainDF.Fields.Count - 1 do
-    if DupDF.Fields.ItemExistsByName(MainDF.Field[i].Name) then
-      W := Max(W, UTF8Length(MainDF.Field[i].Name));
-
-
-  CmpFCheckList.Items.BeginUpdate;
-  for i := 0 to MainDF.Fields.Count - 1 do
-  begin
-    F := MainDF.Fields[i];
-    if DupDF.Fields.ItemExistsByName(F.Name) then
-      CmpFCheckList.AddItem(F.Name + DupeString(' ', W - UTF8Length(F.Name)) + ' - ' + F.Question.Text,
-      F);
-  end;
-  CmpFCheckList.Items.EndUpdate;
-end;
-
-procedure TValidateDoubleEntryFrame.AddFieldHook(const Sender,
-  Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
-  Data: Pointer);
-var
-  D: TEpiDataFile;
-  C: TEpiCustomControlItem;
-begin
-{  if (EventGroup <> eegCustomBase) then exit;
-
-  case TEpiCustomChangeEventType(EventType) of
-    ecceDestroy: ;
-    ecceUpdate: ;
-    ecceName:
+    for i := 0 to L.Count - 1 do
       begin
-        if not (Initiator is TEpiField) then exit;
+        MR := TEpiMasterRelation(L.Items[i]);
 
-        // TODO: We may be able to aboid this PostMessage if there is a hook
-        // in RuntimeDesignerFrame, looking for an added field!
-        if TEpiField(Initiator).Name = EpiDoubleEntryFieldName then
-          PostMessage(MainForm.Handle, LM_DESIGNER_ADD, WPARAM(Initiator), 0);
-        TEpiField(Initiator).UnRegisterOnChangeHook(@AddFieldHook);
-      end;
-    ecceAddItem:
-      begin
-        with TEpiField(Data) do
+        with FValidationOptions[i] do
         begin
-          if Initiator <> FMainDoc.DataFiles[0].Fields then exit;
+          MainDF := MR.Datafile;
+          DuplDF := TEpiDataFile(DuplDataFiles.GetItemByName(MR.Datafile.Name));
 
-          D := TEpiFields(Sender).DataFile;
-          C := D.ControlItem[D.ControlItems.Count - 1];
+          Keyfields := TEpiFields.Create(nil);
+          FieldList := TList(MR.FindCustomData(KEYTREE_CUSTOMDATA));
+          for j := 0 to FieldList.Count - 1 do
+            if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
+              KeyFields.AddItem(TEpiCustomItem(FieldList[j]));
 
-          RegisterOnChangeHook(@AddFieldHook, true);
-          BeginUpdate;
-          Top := C.Top + 20;
-          Left := C.Left;
-          EndUpdate;
+          Comparefields := TEpiFields.Create(nil);
+          FieldList := TList(MR.FindCustomData(COMPARETREE_CUSTOMDATA));
+          for j := 0 to FieldList.Count - 1 do
+            if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
+              Comparefields.AddItem(TEpiCustomItem(FieldList[j]));
         end;
       end;
-    ecceDelItem:
-      TEpiField(Data).UnRegisterOnChangeHook(@AddFieldHook);
-    ecceSetItem: ;
-    ecceSetTop: ;
-    ecceSetLeft: ;
-    ecceText: ;
-  end;             }
+  finally
+    L.Free;
+    SelectFiles.Free;
+  end;
+end;         }
+
+procedure TValidateDoubleEntryFrame.FileListAddDoc(Sender: TObject;
+  Document: TEpiDocument; const Filename: string; const RowNo: Integer);
+begin
+  BumpProjectCount(1);
+  FProjectTree.AddDocument(Document);
+  FProjectTree.CheckAll;
 end;
 
-destructor TValidateDoubleEntryFrame.Destroy;
+procedure TValidateDoubleEntryFrame.FileListDocChange(Sender: TObject;
+  Document: TEpiDocument; const Filename: string; const RowNo: Integer);
 begin
-  inherited Destroy;
+  if FFileList.StructureGrid.Cells[FFileList.IncludeCol.Index + 1, RowNo] = FFileList.IncludeCol.ValueChecked
+  then
+    begin
+      BumpProjectCount(1);
+      FProjectTree.AddDocument(Document);
+      FProjectTree.CheckAll;
+    end
+  else
+    begin
+      FProjectTree.RemoveDocument(Document);
+      BumpProjectCount(-1);
+      FProjectTree.CheckAll;
+    end;
 end;
 
-function TValidateDoubleEntryFrame.GetFrameCaption: string;
+procedure TValidateDoubleEntryFrame.FormClose(Sender: TObject;
+  var CloseAction: TCloseAction);
 begin
-  result := 'Select all fields identifying an observation';
+{  if ManagerSettings.SaveWindowPositions and
+     (CloseAction in [caHide, caFree])
+  then
+  begin
+    SaveFormPosition(Self, 'DoubleEntryForm');
+    SaveSplitterPosition(Splitter1, 'DoubleEntryForm_Splitter1');
+    SaveSplitterPosition(Splitter2, 'DoubleEntryForm_Splitter2');
+  end;     }
 end;
 
-procedure TValidateDoubleEntryFrame.UpdateFrame(Selection: TStrings);
+procedure TValidateDoubleEntryFrame.FormShow(Sender: TObject);
 begin
-  if Selection.Count <> 2 then
-    // Raise some error?
-    Exit;
+ { if ManagerSettings.SaveWindowPositions then
+  begin
+    LoadFormPosition(Self, 'DoubleEntryForm');
+    LoadSplitterPosition(Splitter1, 'DoubleEntryForm_Splitter1');
+    LoadSplitterPosition(Splitter2, 'DoubleEntryForm_Splitter2');
+  end;   }
+end;
 
-  FMainDoc := TEpiDocument(Selection.Objects[0]);
-  FDupDoc  := TEpiDocument(Selection.Objects[1]);
+procedure TValidateDoubleEntryFrame.KFAutoIncBtnClick(Sender: TObject);
+begin
+  FKeyTree.SelectNone;
+  FKeyTree.SelectFieldTypes([ftAutoInc], false);
+end;
 
-//  FMainDoc.DataFiles[0].Fields.RegisterOnChangeHook(@AddFieldHook, true);
+procedure TValidateDoubleEntryFrame.KFIndexBtnClick(Sender: TObject);
+begin
+  FKeyTree.SelectKey;
+end;
 
-  UpdateKeyFields;
-  UpdateCompareFields;
+procedure TValidateDoubleEntryFrame.KFNoneBtnClick(Sender: TObject);
+begin
+  FKeyTree.SelectNone;
+end;
+
+procedure TValidateDoubleEntryFrame.ProjectGetText(Sender: TObject;
+  const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
+  const StaticText: boolean; var NodeText: string);
+begin
+  if StaticText then Exit;
+
+  if (ObjectType = otFake) then
+    if (FProjectCount < 2) then
+      NodeText := 'Too few projects. Select two to compare!'
+    else
+      NodeText := 'Too many projects. Select two to compare!'
+end;
+
+procedure TValidateDoubleEntryFrame.ProjectTreeSelected(Sender: TObject;
+  const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
+begin
+  case ObjectType of
+    otEmpty:
+      Exit;
+    otFake:
+      begin
+        FKeyTree.DataFile := nil;
+        FCompareTree.DataFile := nil;
+        SetDEVOptions([]);
+      end;
+    otRelation:
+      if FProjectCount = 2 then
+        CustomDataToDataFileTree(AObject);
+    otProject:
+      Exit;
+  end;
+end;
+
+procedure TValidateDoubleEntryFrame.ProjectTreeSelecting(Sender: TObject;
+  const OldObject, NewObject: TEpiCustomBase; OldObjectType,
+  NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
+begin
+  if OldObjectType <> otRelation then exit;
+  if FProjectCount <> 2 then exit;
+
+  if NewObjectType <> otRelation then
+    begin
+      Allowed := false;
+      Exit;
+    end;
+
+  DataFileTreeToCustomData(OldObject);
+end;
+
+procedure TValidateDoubleEntryFrame.DataFileTreeToCustomData(
+  const AObject: TEpiCustomBase);
+
+  procedure UpdateCustomData(NewList: TList;
+    Const Key: String);
+  var
+    List: TList;
+  begin
+    List := TList(AObject.FindCustomData(Key));
+    List.Clear;
+    List.Assign(NewList);
+    NewList.Free;
+  end;
+
+var
+  Op: TEpiToolsDblEntryValidateOptions;
+  A: Integer;
+begin
+  UpdateCustomData(FKeyTree.SelectedList,     KEYTREE_CUSTOMDATA);
+  UpdateCustomData(FCompareTree.SelectedList, COMPARETREE_CUSTOMDATA);
+  Op := GetDEVOptions;
+  A := Integer(Op);
+  AObject.AddCustomData(DEV_OPTIONS_CUSTOMDATA, TObject(PtrInt(A)));
+end;
+
+procedure TValidateDoubleEntryFrame.CustomDataToDataFileTree(
+  const AObject: TEpiCustomBase);
+
+  procedure ApplyTree(Const DataformTree: TDataFormTreeViewFrame;
+    Const CustomDataName: string);
+  begin
+    DataformTree.DataFile := TEpiMasterRelation(AObject).Datafile;
+    DataformTree.SelectNone;
+    DataformTree.SelectedList := TList(AObject.FindCustomData(CustomDataName));
+  end;
+
+var
+  A: Integer;
+begin
+  ApplyTree(FKeyTree,     KEYTREE_CUSTOMDATA);
+  ApplyTree(FCompareTree, COMPARETREE_CUSTOMDATA);
+  A := Integer(PtrInt(AObject.FindCustomData(DEV_OPTIONS_CUSTOMDATA)));
+  SetDEVOptions(TEpiToolsDblEntryValidateOptions(A));
+end;
+
+procedure TValidateDoubleEntryFrame.BumpProjectCount(const Value: Integer);
+var
+  Method: TEpiRelationListExCallBack;
+  i: Integer;
+  SelectList: TStringList;
+
+  procedure BuildList;
+  var
+    i: integer;
+    L: TList;
+    DF: TEpiDataFile;
+    F: TEpiField;
+  begin
+    for DF in FProjectTree.Documents[0].DataFiles do
+    begin
+      L := TList.Create;
+      for F in DF.KeyFields do
+        L.Add(F);
+      FKeyTreeList.Add(L);
+
+      L := TList.Create;
+      for F in DF.Fields do
+        if not DF.KeyFields.FieldExists(F) then
+          L.Add(F);
+      FCompareTreeList.Add(L);
+    end;
+  end;
+
+  procedure ClearList;
+  begin
+    FKeyTreeList.Clear;
+    FCompareTreeList.Clear;
+  end;
+
+begin
+  Inc(FProjectCount, Value);
+
+  if FProjectCount = 2 then
+  begin
+    BuildList;
+    Method := @AddCustomDataWalk
+  end else begin
+    ClearList;
+    Method := @RemoveCustomDataWalk;
+  end;
+
+  SelectList := FFileList.SelectedList;
+  for i := 0 to SelectList.Count -1 do
+    begin
+      FListCounter := 0;
+      TEpiDocument(SelectList.Objects[i]).Relations.OrderedWalk(Method);
+    end;
+  SelectList.Free;
+end;
+
+procedure TValidateDoubleEntryFrame.AddCustomDataWalk(
+  const Relation: TEpiMasterRelation; const Depth: Cardinal;
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
+begin
+  Relation.AddCustomData(KEYTREE_CUSTOMDATA, FKeyTreeList[FListCounter]);
+  Relation.AddCustomData(COMPARETREE_CUSTOMDATA, FCompareTreeList[FListCounter]);
+  Inc(FListCounter);
+end;
+
+procedure TValidateDoubleEntryFrame.RemoveCustomDataWalk(
+  const Relation: TEpiMasterRelation; const Depth: Cardinal;
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
+begin
+  Relation.RemoveCustomData(KEYTREE_CUSTOMDATA);
+  Relation.RemoveCustomData(COMPARETREE_CUSTOMDATA);
+end;
+
+function TValidateDoubleEntryFrame.GetDEVOptions: TEpiToolsDblEntryValidateOptions;
+begin
+  Result := [];
+  if OptionsChkGrp.Checked[0] then Include(Result, devIgnoreDeleted);
+  if OptionsChkGrp.Checked[1] then Include(Result, devCaseSensitiveText);
+  if OptionsChkGrp.Checked[2] then Include(Result, devIgnoreMissingRecords);
+  if OptionsChkGrp.Checked[3] then Include(Result, devAddResultToField);
+end;
+
+procedure TValidateDoubleEntryFrame.SetDEVOptions(
+  Options: TEpiToolsDblEntryValidateOptions);
+begin
+  OptionsChkGrp.Checked[0] := (devIgnoreDeleted        in Options);
+  OptionsChkGrp.Checked[1] := (devCaseSensitiveText    in Options);
+  OptionsChkGrp.Checked[2] := (devIgnoreMissingRecords in Options);
+  OptionsChkGrp.Checked[3] := (devAddResultToField     in Options);
+end;
+
+procedure TValidateDoubleEntryFrame.AddDocumentFile(
+  const DocumentFile: TEpiDocumentFile);
+begin
+  FFileList.AddDocument(DocumentFile);
+end;
+
+procedure TValidateDoubleEntryFrame.AddFiles(FileNames: TStrings);
+begin
+  FFileList.AddFiles(FileNames);
 end;
 
 procedure TValidateDoubleEntryFrame.ApplyReportOptions(Report: TReportBase);
 var
-  KF: TEpiFields;
-  CF: TEpiFields;
+  L: TList;
+  MR: TEpiMasterRelation;
+  MainDataFiles: TEpiDataFiles;
+  DuplDataFiles: TEpiDataFiles;
+  FieldList: TList;
   i: Integer;
-  Options: TEpiToolsDblEntryValidateOptions;
+  j: Integer;
+  SelectFiles: TEpiDocumentFileList;
 begin
-  KF := TEpiFields.Create(nil);
-  for i := 0 to KFCheckList.Count - 1 do
-    if KFCheckList.Checked[i] then
-      KF.AddItem(TEpiField(KFCheckList.Items.Objects[i]));
+  // Before anything else, make sure the lastes changed to the DataFileTree's
+  // are applied to the custom data.
+  DataFileTreeToCustomData(FProjectTree.SelectedObject);
 
-  CF := TEpiFields.Create(nil);
-  for i := 0 to CmpFCheckList.Count - 1 do
-    if CmpFCheckList.Checked[i] then
-      CF.AddItem(TEpiField(CmpFCheckList.Items.Objects[i]));
+  try
+    L := FProjectTree.CheckList;
+    if L.Count = 0 then exit;
 
-  Options := [];
-  if OptionsChkGrp.Checked[0] then Include(Options, devIgnoreDeleted);
-  if OptionsChkGrp.Checked[1] then Include(Options, devCaseSensitiveText);
-  if OptionsChkGrp.Checked[2] then Include(Options, devIgnoreMissingRecords);
-  if OptionsChkGrp.Checked[3] then Include(Options, devAddResultToField);
+    SetLength(FValidationOptions, L.Count);
 
-{  with TReportDoubleEntryValidation(Report) do
-  begin
-    KeyFields := KF;
-    CompareFields := CF;
-    DblEntryValidateOptions := Options;
-  end;}
-end;
+    SelectFiles := FFileList.SelectedDocfileList;
+    MainDataFiles := SelectFiles[0].Document.DataFiles;
+    DuplDataFiles := SelectFiles[1].Document.DataFiles;
 
-function TValidateDoubleEntryFrame.OkToAdvance(
-  ProjectList: TProjectFileListFrame): boolean;
-begin
-  Result := ProjectList.SelectedList.Count = 2;
-end;
+    MR := TEpiMasterRelation(L.Items[0]);
+//    SwapDatafiles := false;
 
-function TValidateDoubleEntryFrame.OkToAdvanceText: string;
-begin
-  result :=
-    'You MUST select 2 files to compare!'
-end;
+//    if MainDataFiles.IndexOf(MR.Datafile) < 0 then
+//      SwapDatafiles := true;
 
-function TValidateDoubleEntryFrame.CanClose: boolean;
-var
-  KFChecked: Boolean;
-  Res: TModalResult;
-  i: Integer;
-begin
-  Result := true;
-  KFChecked := false;
+    for i := 0 to L.Count - 1 do
+      begin
+        MR := TEpiMasterRelation(L.Items[i]);
 
-  for i := 0 to KFCheckList.Count - 1 do
-    KFChecked := KFChecked or KFCheckList.Checked[i];
+        with FValidationOptions[i] do
+        begin
+          MainDF := MR.Datafile;
+          DuplDF := TEpiDataFile(DuplDataFiles.GetItemByName(MR.Datafile.Name));
 
-  if not KFChecked then
-  begin
-    Res := MessageDlg('Warning!',
-             'No Key Fields selected! The two files will be validated sequentially.' + LineEnding +
-             'Press Cancel to select Key Fields!',
-             mtWarning,
-             mbOKCancel,
-             0,
-             mbCancel
-           );
-    if Res = mrCancel then
-      Result := false
-    else
-      Result := true;
+          Keyfields := TEpiFields.Create(nil);
+          FieldList := TList(MR.FindCustomData(KEYTREE_CUSTOMDATA));
+          for j := 0 to FieldList.Count - 1 do
+            if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
+              KeyFields.AddItem(TEpiCustomItem(FieldList[j]));
+
+          Comparefields := TEpiFields.Create(nil);
+          FieldList := TList(MR.FindCustomData(COMPARETREE_CUSTOMDATA));
+          for j := 0 to FieldList.Count - 1 do
+            if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
+              Comparefields.AddItem(TEpiCustomItem(FieldList[j]));
+        end;
+      end;
+
+    with TReportDoubleEntryValidation(Report) do
+    begin
+      DocumentFile := SelectFiles[0];
+      ReportOptions := FValidationOptions;
+    end;
+
+  finally
+    L.Free;
+    SelectFiles.Free;
   end;
+
+end;
+
+constructor TValidateDoubleEntryFrame.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+
+  FProjectCount        := 0;
+  FValidationOptions   := nil;
+
+  FKeyTreeList         := TObjectList.create(true);
+  FCompareTreeList     := TObjectList.create(true);
+
+  FFileList := TProjectFileListFrame.Create(Self);
+  with FFileList do
+  begin
+    Align  := alClient;
+    Parent := FilePanel;
+
+    OnAfterAddToGrid         := @FileListAddDoc;
+    OnDocumentIncludedChange := @FileListDocChange;
+  end;
+
+  FProjectTree := TEpiVProjectTreeViewFrame.Create(Self);
+  with FProjectTree do
+  begin
+    Align              := alClient;
+    Parent             := ProjectPanel;
+
+    MinDocumentCount   := 2;
+    MaxDocumentCount   := 2;
+
+    AllowSelectProject := False;
+    CheckType          := pctIndividual;
+    DisplayMode        := pdmCommon;
+    EditCaption        := False;
+    EditStructure      := False;
+    ShowCheckBoxes     := True;
+    ShowHint           := True;
+    ShowProject        := False;
+    ShowRecordCount    := True;
+
+    OnTreeNodeSelected := @ProjectTreeSelected;
+    OnTreeNodeSelecting := @ProjectTreeSelecting;
+    OnGetText := @ProjectGetText;
+  end;
+
+  FKeyTree := TDataFormTreeViewFrame.Create(Self);
+  FKeyTree.Name := 'KeyTree';
+  FKeyTree.Align := alClient;
+  FKeyTree.Parent := KeyTab;
+  FKeyTree.ShowHeadings := false;
+
+  FCompareTree := TDataFormTreeViewFrame.Create(Self);
+  FCompareTree.Name := 'CompareTree';
+  FCompareTree.Align := alClient;
+  FCompareTree.Parent := CompareTab;
+  FCompareTree.ShowHeadings := false;
+
+  SetDEVOptions([]);
+  PageControl.ActivePage := KeyTab;
+end;
+
+function TValidateDoubleEntryFrame.GetCaption: string;
+begin
+  result := 'Double Entry Validation';
 end;
 
 end.
