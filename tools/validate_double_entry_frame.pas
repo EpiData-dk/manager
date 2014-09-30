@@ -514,7 +514,7 @@ begin
 
     with TReportDoubleEntryValidation(Report) do
     begin
-      DocumentFile := SelectFiles[0];
+      DocumentFiles := SelectFiles;
       ReportOptions := FValidationOptions;
     end;
 

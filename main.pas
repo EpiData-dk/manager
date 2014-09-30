@@ -923,9 +923,9 @@ begin
   R := RunReport(TReportProjectValidation, false);
 
   if Assigned(R) and
-     (R.DocumentFile.IsSaved)
+     (R.DocumentFiles[0].IsSaved)
   then
-    AddToRecent(R.DocumentFile.FileName);
+    AddToRecent(R.DocumentFiles[0].FileName);
 
   R.Free;
 end;

@@ -13,7 +13,7 @@ type
   { TReportBase }
   TReportBase = class
   private
-    FDocumentFile: TEpiDocumentFile;
+    FDocumentFiles: TEpiDocumentFileList;
     FGenerator: TEpiReportGeneratorBase;
   protected
     function    GetTitle: string; virtual; abstract;
@@ -26,7 +26,8 @@ type
     destructor  Destroy; override;
     function    RunReport: string;
     class function ReportFrameClass: TCustomFrameClass; virtual; abstract;
-    property    DocumentFile: TEpiDocumentFile read FDocumentFile write FDocumentFile;
+  public
+    property    DocumentFiles: TEpiDocumentFileList read FDocumentFiles write FDocumentFiles;
     property    ReportTitle: String read GetTitle;
   end;
   TReportBaseClass = class of TReportBase;
@@ -34,14 +35,10 @@ type
   { TReportFileListBase }
 
   TReportFileListBase = class(TReportBase)
-  private
-    FDocumentFiles: TEpiDocumentFileList;
   protected
     procedure DoRunReport; override;
     procedure DoDocumentReport(Const ADocumentFile: TEpiDocumentFile;
       Const Index: Integer); virtual;
-  public
-    property DocumentFiles: TEpiDocumentFileList read FDocumentFiles write FDocumentFiles;
   end;
 
 implementation
@@ -59,8 +56,14 @@ begin
 end;
 
 procedure TReportBase.DoRunReport;
+var
+  R: TEpiReportMainHeader;
 begin
-  //
+  R := TEpiReportMainHeader.Create(Generator);
+  TEpiReportMainHeader(R).ProjectList := DocumentFiles;
+  TEpiReportMainHeader(R).Title := GetTitle;
+  R.RunReport;
+  R.Free;
 end;
 
 procedure TReportBase.DoEndReport;
@@ -97,12 +100,6 @@ var
   i: Integer;
 begin
   inherited DoRunReport;
-
-  R := TEpiReportMainHeader.Create(Generator);
-  TEpiReportMainHeader(R).ProjectList := DocumentFiles;
-  TEpiReportMainHeader(R).Title := GetTitle;
-  R.RunReport;
-  R.Free;
 
   for i := 0 to DocumentFiles.Count - 1 do
     DoDocumentReport(DocumentFiles[i], i);

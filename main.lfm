@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = 534
+  Left = 277
   Height = 402
   Top = 370
   Width = 1001
@@ -77,6 +77,7 @@ object MainForm: TMainForm
       Caption = 'Project Valid'
       OnClick = Button2Click
       TabOrder = 2
+      Visible = False
     end
     object ExportBtn: TBitBtn
       AnchorSideLeft.Control = EnterDataBtn
@@ -116,6 +117,7 @@ object MainForm: TMainForm
       Caption = 'Dbl. Entry Val.'
       OnClick = Button1Click
       TabOrder = 5
+      Visible = False
     end
     object Button3: TButton
       Left = 704
@@ -126,6 +128,7 @@ object MainForm: TMainForm
       Caption = 'CountByID'
       OnClick = Button3Click
       TabOrder = 6
+      Visible = False
     end
     object DataFormBtn: TBitBtn
       AnchorSideLeft.Control = ProjectDetailsBtn
