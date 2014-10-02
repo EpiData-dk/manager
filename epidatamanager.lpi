@@ -199,6 +199,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -351,7 +352,6 @@
         <ComponentName Value="StaticReportsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="staticreports_form"/>
       </Unit28>
       <Unit29>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
@@ -508,6 +508,7 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>

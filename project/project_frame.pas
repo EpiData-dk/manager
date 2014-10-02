@@ -1072,6 +1072,8 @@ begin
     EditStructure       := true;
     ShowHint            := true;
     ShowProject         := true;
+    PopupMenu           := MainForm.DataformPopupMenu;
+
     OnDelete            := @ProjectTreeDelete;
     OnEdited            := @ProjectTreeEdited;
     OnEditing           := @ProjectTreeEditing;
