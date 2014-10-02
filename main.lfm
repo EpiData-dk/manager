@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 1805
+  Left = 569
   Height = 738
-  Top = 354
+  Top = 347
   Width = 1131
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -68,16 +68,6 @@ object MainForm: TMainForm
       PopupMenu = ProjectPopupMenu
       TabOrder = 1
     end
-    object Button2: TButton
-      Left = 917
-      Height = 25
-      Top = 8
-      Width = 91
-      Anchors = [akTop, akRight]
-      Caption = 'Project Valid'
-      OnClick = Button2Click
-      TabOrder = 2
-    end
     object ExportBtn: TBitBtn
       AnchorSideLeft.Control = EnterDataBtn
       AnchorSideLeft.Side = asrBottom
@@ -91,7 +81,7 @@ object MainForm: TMainForm
       AutoSize = True
       BorderSpacing.Left = 15
       GlyphShowMode = gsmAlways
-      TabOrder = 3
+      TabOrder = 2
     end
     object EnterDataBtn: TBitBtn
       AnchorSideLeft.Control = DocumentBtn
@@ -105,27 +95,7 @@ object MainForm: TMainForm
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
-      TabOrder = 4
-    end
-    object Button1: TButton
-      Left = 1013
-      Height = 25
-      Top = 8
-      Width = 104
-      Anchors = [akTop, akRight]
-      Caption = 'Dbl. Entry Val.'
-      OnClick = Button1Click
-      TabOrder = 5
-    end
-    object Button3: TButton
-      Left = 834
-      Height = 25
-      Top = 8
-      Width = 75
-      Anchors = [akTop, akRight]
-      Caption = 'CountByID'
-      OnClick = Button3Click
-      TabOrder = 6
+      TabOrder = 3
     end
     object DataFormBtn: TBitBtn
       AnchorSideLeft.Control = ProjectDetailsBtn
@@ -140,7 +110,7 @@ object MainForm: TMainForm
       BorderSpacing.Left = 15
       Caption = 'Dataform'
       OnClick = DataFormBtnClick
-      TabOrder = 7
+      TabOrder = 4
     end
     object DocumentBtn: TBitBtn
       AnchorSideLeft.Control = DataFormBtn
@@ -156,7 +126,7 @@ object MainForm: TMainForm
       Caption = 'Document'
       OnClick = DocumentBtnClick
       PopupMenu = DocumentPopupMenu
-      TabOrder = 8
+      TabOrder = 5
     end
   end
   object MainMenu1: TMainMenu

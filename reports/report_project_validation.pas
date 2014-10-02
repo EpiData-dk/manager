@@ -15,7 +15,7 @@ type
 
   { TReportProjectValidation }
 
-  TReportProjectValidation = class(TReportFileListBase, IReportFrameProvider)
+  TReportProjectValidation = class(TReportFileListBase)
   private
     FKeyFields: TEpiFields;
     FOptions: TReportProjectValidateOptions;
@@ -25,8 +25,6 @@ type
     procedure DoDocumentReport(const Doc: TEpiDocumentFile;
       const Index: Integer); override;
   public
-    { IReportFrameProvider }
-    function GetFrameClass: TCustomFrameClass;
     class function ReportFrameClass: TCustomFrameClass; override;
   public
     property Options: TReportProjectValidateOptions read FOptions write FOptions;
@@ -66,11 +64,6 @@ begin
   R.Option := Options[I];
   R.RunReport;
   R.Free;
-end;
-
-function TReportProjectValidation.GetFrameClass: TCustomFrameClass;
-begin
-  result := TProjectValidationFrame;
 end;
 
 class function TReportProjectValidation.ReportFrameClass: TCustomFrameClass;

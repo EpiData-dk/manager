@@ -82,9 +82,10 @@ begin
     0: FGeneratorClass := TEpiReportHTMLGenerator;
     1: FGeneratorClass := TEpiReportTXTGenerator;
   end;
-//  FReport := FReportClass.Create(FProjectList.SelectedList, FGeneratorClass);
+  FReport := FReportClass.Create(FGeneratorClass);
+  FReport.DocumentFiles := FProjectList.SelectedDocfileList;
 
-  if Assigned(FNextForm) then
+{  if Assigned(FNextForm) then
   begin
     Self.Hide;
     (FNextFrame as IReportOptionFrame).UpdateFrame(FProjectList.SelectedList);
@@ -94,7 +95,7 @@ begin
     else
       FreeAndNil(FReport);
     FNextForm.Free;
-  end;
+  end;   }
 end;
 
 procedure TStaticReportsForm.OkActionUpdate(Sender: TObject);
@@ -240,11 +241,11 @@ begin
   FReportClass := ReportClass;
   FReport := nil;
 
-  L := TStringList.Create;
-//  FakeReport := FReportClass.Create(L, TEpiReportTXTGenerator);
+//  L := TStringList.Create;
+  FakeReport := FReportClass.Create(TEpiReportTXTGenerator);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
 
-  if Supports(FakeReport, IReportFrameProvider) then
+{  if Supports(FakeReport, IReportFrameProvider) then
   begin
     OkBtn.Caption := 'Next';
 
@@ -260,9 +261,9 @@ begin
       if Supports(FNextFrame, ICanCloseQuery, Intf) then
         TOkCancelForm(FNextForm).CanCloseInt := Intf;
     end;
-  end;
+  end; }
 
-  L.Free;
+//  L.Free;
   FakeReport.Free;
 end;
 

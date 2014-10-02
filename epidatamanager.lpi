@@ -199,7 +199,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -272,7 +271,6 @@
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -302,7 +300,6 @@
       <Unit19>
         <Filename Value="manager_messages.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="manager_messages"/>
       </Unit19>
       <Unit20>
         <Filename Value="settings/settings_general_frame.pas"/>
@@ -328,12 +325,10 @@
       <Unit23>
         <Filename Value="reports/report_fieldlist.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_fieldlist"/>
       </Unit23>
       <Unit24>
         <Filename Value="reports/report_valuelabellist.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_valuelabellist"/>
       </Unit24>
       <Unit25>
         <Filename Value="reports/report_combinedlist.pas"/>
@@ -362,12 +357,10 @@
       <Unit29>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_fieldlist_extended"/>
       </Unit29>
       <Unit30>
         <Filename Value="reports/report_project_overview.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_project_overview"/>
       </Unit30>
       <Unit31>
         <Filename Value="shortcuts.pas"/>
@@ -482,7 +475,6 @@
       <Unit48>
         <Filename Value="reports/report_double_entry_validation.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_double_entry_validation"/>
       </Unit48>
       <Unit49>
         <Filename Value="reports/viewer_form.pas"/>
@@ -497,7 +489,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -518,7 +509,6 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -587,7 +577,6 @@
         <ComponentName Value="ReportOptionsFrameCounts"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_optionframe_counts"/>
       </Unit68>
       <Unit69>
         <Filename Value="reports/report_types.pas"/>
@@ -630,7 +619,6 @@
       <Unit75>
         <Filename Value="reports/report_codebook.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_codebook"/>
       </Unit75>
       <Unit76>
         <Filename Value="export/export_ddi_frame.pas"/>
@@ -683,7 +671,6 @@
       <Unit84>
         <Filename Value="reports/report_export.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_export"/>
       </Unit84>
       <Unit85>
         <Filename Value="project/valuelabel_import_external.pas"/>
@@ -716,7 +703,6 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_dataformframe"/>
       </Unit89>
       <Unit90>
         <Filename Value="tools/append_form2.pas"/>
@@ -731,7 +717,6 @@
         <ComponentName Value="CountByIdForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="count_by_id_form"/>
       </Unit91>
       <Unit92>
         <Filename Value="reports/report_project_validation_frame2.pas"/>
@@ -753,6 +738,7 @@
         <Filename Value="reports/report_counts_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CountByIdFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="report_counts_frame"/>
       </Unit94>

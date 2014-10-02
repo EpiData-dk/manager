@@ -6,7 +6,7 @@ object CountByIdFrame: TCountByIdFrame
   ClientHeight = 685
   ClientWidth = 936
   TabOrder = 0
-  DesignLeft = 1794
+  DesignLeft = 982
   DesignTop = 235
   object FilePanel: TPanel
     Left = 0

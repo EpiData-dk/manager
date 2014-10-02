@@ -16,9 +16,6 @@ type
 
   TMainForm = class(TForm)
     AppendAction: TAction;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
     DataFormBtn: TBitBtn;
     DocumentBtn: TBitBtn;
     EnterDataBtn: TBitBtn;
@@ -178,9 +175,6 @@ type
     PageControl1: TPageControl;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
@@ -356,7 +350,7 @@ end;
 
 procedure TMainForm.CountsReportActionExecute(Sender: TObject);
 begin
-  RunReport(TReportCounts);
+  RunReportEx(TReportCounts);
 end;
 
 procedure TMainForm.DataFormBtnClick(Sender: TObject);
@@ -595,21 +589,6 @@ begin
     if LocalDoc then
       DocFile.Free;
   end;
-end;
-
-procedure TMainForm.Button1Click(Sender: TObject);
-begin
-  RunReportEx(TReportDoubleEntryValidation);
-end;
-
-procedure TMainForm.Button2Click(Sender: TObject);
-begin
-  RunReportEx(TReportProjectValidation);
-end;
-
-procedure TMainForm.Button3Click(Sender: TObject);
-begin
-  RunReportEx(TReportCounts);
 end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);

@@ -9,10 +9,6 @@ uses
   Classes, Forms, report_base, projectfilelist_frame, epiopenfile;
 
 type
-  IReportFrameProvider = interface ['IReportFrameProvider']
-    function GetFrameClass: TCustomFrameClass;
-  end;
-
   IReportOptionFrame = interface ['IReportOptionFrame']
     function  GetFrameCaption: string;
     procedure UpdateFrame(Selection: TStrings);

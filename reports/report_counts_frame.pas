@@ -205,6 +205,7 @@ begin
     for F in FL do
       Options.FieldNames.Add(F.Name);
 
+    Report.DocumentFiles := FFileList.SelectedDocfileList;
     TReportCounts(Report).Options := Options;
   finally
     L.Free;
