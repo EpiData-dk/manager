@@ -22,7 +22,7 @@ type
     procedure ShowHintMsg(const Msg: string; Ctrl: TControl);
     procedure UpdateCaption(Const S: String); virtual;
   public
-    procedure ShiftToTabSheet(Const SheetNo: Byte); virtual; abstract;
+//    procedure ShiftToTabSheet(Const SheetNo: Byte); virtual; abstract;
     procedure SetDataFile(const ADataFile: TEpiDataFile); virtual;
     procedure SetRelation(const Relation: TEpiMasterRelation);
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;

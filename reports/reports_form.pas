@@ -31,6 +31,7 @@ type
     procedure LoadGlyphs;
   private
     { Events }
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure AddFilesClick(Sender: TObject);
     procedure OkClick(Sender: TObject);
@@ -49,6 +50,7 @@ implementation
 
 uses
   epiv_datamodule, epireport_generator_base, settings2_var,
+  settings2,
   epireport_generator_html, epireport_generator_txt;
 
 { TReportForm }
@@ -63,11 +65,20 @@ begin
   DM.Icons16.GetBitmap(19, AddFilesBtn.Glyph);
 end;
 
+procedure TReportForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, 'ReportsForm');
+end;
+
 procedure TReportForm.FormShow(Sender: TObject);
 begin
   LoadGlyphs;
   RadioGroup1.ItemIndex := ManagerSettings.ReportOutputFormat;
   Caption := IFrame.GetCaption;
+
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, 'ReportsForm');
 end;
 
 procedure TReportForm.AddFilesClick(Sender: TObject);
@@ -107,6 +118,7 @@ begin
   FFrame.Parent := Self;
 
   OnShow := @FormShow;
+  OnClose := @FormClose;
 
   AddFilesBtn.OnClick := @AddFilesClick;
   OkAction.OnExecute := @OkClick;

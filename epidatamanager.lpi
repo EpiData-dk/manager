@@ -337,7 +337,6 @@
       <Unit26>
         <Filename Value="reports/report_base.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_base"/>
       </Unit26>
       <Unit27>
         <Filename Value="utils/projectfilelist_frame.pas"/>
@@ -569,7 +568,6 @@
       <Unit67>
         <Filename Value="reports/report_counts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_counts"/>
       </Unit67>
       <Unit68>
         <Filename Value="reports/report_optionframe_counts.pas"/>
@@ -581,7 +579,6 @@
       <Unit69>
         <Filename Value="reports/report_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_types"/>
       </Unit69>
       <Unit70>
         <Filename Value="tools/dataset_form.pas"/>
@@ -600,7 +597,6 @@
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="validate_double_entry_frame"/>
       </Unit72>
       <Unit73>
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
@@ -645,7 +641,6 @@
       <Unit80>
         <Filename Value="reports/report_project_validation.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_project_validation"/>
       </Unit80>
       <Unit81>
         <Filename Value="reports/report_project_validation_frame.pas"/>
@@ -724,7 +719,6 @@
         <ComponentName Value="ProjectValidationFrame2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_project_validation_frame2"/>
       </Unit92>
       <Unit93>
         <Filename Value="reports/reports_form.pas"/>
@@ -740,7 +734,6 @@
         <ComponentName Value="CountByIdFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_counts_frame"/>
       </Unit94>
     </Units>
   </ProjectOptions>
