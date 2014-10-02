@@ -86,6 +86,7 @@ type
     procedure AddFiles(FileNames: TStrings);
     procedure ApplyReportOptions(Report: TReportBase);
     function GetCaption: string;
+    function CanPressOk: Boolean;
   end;
 
 implementation
@@ -273,7 +274,10 @@ begin
     if (FProjectCount < 2) then
       NodeText := 'Too few projects. Select two to compare!'
     else
+    if (FProjectCount > 2) then
       NodeText := 'Too many projects. Select two to compare!'
+    else
+      NodeText := 'The project does not have the same structure!'
 end;
 
 procedure TValidateDoubleEntryFrame.ProjectTreeSelected(Sender: TObject;
@@ -520,7 +524,7 @@ begin
 
   finally
     L.Free;
-    SelectFiles.Free;
+//    SelectFiles.Free;
   end;
 
 end;
@@ -588,6 +592,13 @@ end;
 function TValidateDoubleEntryFrame.GetCaption: string;
 begin
   result := 'Double Entry Validation';
+end;
+
+function TValidateDoubleEntryFrame.CanPressOk: Boolean;
+begin
+  result :=
+    (FProjectTree.DocumentCount = 2) and
+    (FProjectTree.SelectedObjectType in [otProject, otRelation]);
 end;
 
 end.

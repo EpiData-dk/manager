@@ -6,7 +6,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
   ClientHeight = 716
   ClientWidth = 806
   TabOrder = 0
-  DesignLeft = 723
+  DesignLeft = 472
   DesignTop = 250
   object FilePanel: TPanel
     Left = 0

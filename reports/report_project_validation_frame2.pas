@@ -66,6 +66,7 @@ type
     procedure ApplyReportOptions(Report: TReportBase);
     function  GetCaption: string;
     procedure AddDocumentFile(const DocumentFile: TEpiDocumentFile);
+    function CanPressOk: Boolean;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -242,6 +243,11 @@ end;
 procedure TProjectValidationFrame2.AddDocumentFile(const DocumentFile: TEpiDocumentFile);
 begin
   FFileList.AddDocument(DocumentFile);
+end;
+
+function TProjectValidationFrame2.CanPressOk: Boolean;
+begin
+  result := FProjectTree.DocumentCount > 0;
 end;
 
 procedure TProjectValidationFrame2.AddFiles(FileNames: TStrings);

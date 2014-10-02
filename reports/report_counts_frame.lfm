@@ -1,0 +1,53 @@
+object CountByIdFrame: TCountByIdFrame
+  Left = 0
+  Height = 685
+  Top = 0
+  Width = 936
+  ClientHeight = 685
+  ClientWidth = 936
+  TabOrder = 0
+  DesignLeft = 1794
+  DesignTop = 235
+  object FilePanel: TPanel
+    Left = 0
+    Height = 130
+    Top = 0
+    Width = 936
+    Align = alTop
+    Caption = 'FilePanel'
+    TabOrder = 0
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 6
+    Top = 130
+    Width = 936
+    Align = alTop
+    ResizeAnchor = akTop
+  end
+  object ProjectPanel: TPanel
+    Left = 0
+    Height = 549
+    Top = 136
+    Width = 243
+    Align = alLeft
+    Caption = 'ProjectPanel'
+    TabOrder = 2
+  end
+  object Splitter2: TSplitter
+    Left = 243
+    Height = 549
+    Top = 136
+    Width = 5
+  end
+  object FieldListPanel: TPanel
+    Left = 248
+    Height = 549
+    Top = 136
+    Width = 688
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 4
+  end
+end

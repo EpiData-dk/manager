@@ -33,7 +33,7 @@ type
 implementation
 
 uses
-  epireport_report_countbyid, report_optionframe_counts;
+  epireport_report_countbyid, report_counts_frame;
 
 
 resourcestring
@@ -68,7 +68,7 @@ end;
 
 class function TReportCounts.ReportFrameClass: TCustomFrameClass;
 begin
-  result := nil;
+  result := TCountByIdFrame;
 end;
 
 end.

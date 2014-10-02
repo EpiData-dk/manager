@@ -603,38 +603,13 @@ begin
 end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
-var
-  F: TForm;
-  O: TReportProjectValidateOptions;
-  R: TReportProjectValidation;
 begin
   RunReportEx(TReportProjectValidation);
 end;
 
 procedure TMainForm.Button3Click(Sender: TObject);
-var
-  F: TCountByIdForm;
-  R: TReportCounts;
 begin
-  try
-    F := TCountByIdForm.Create(self);
-    F.SetBounds(0, 0, 600, 800);
-    F.Position := poMainFormCenter;
-
-    if F.ShowModal <> mrOK then exit;
-
-//    R := TReportCounts.Create(F.FileListFrame.SelectedList, TEpiReportTXTGenerator);
-    R.Options := F.Options;
-
-    ShowReportForm(Self,
-      R.ReportTitle,
-      R.RunReport,
-      False
-    );
-  finally
-    R.Free;
-    F.Free;
-  end;
+  RunReportEx(TReportCounts);
 end;
 
 procedure TMainForm.CloseProjectActionExecute(Sender: TObject);
@@ -918,9 +893,8 @@ end;
 procedure TMainForm.ValidationReportActionExecute(Sender: TObject);
 var
   R: TReportBase;
-  Fn: String;
 begin
-  R := RunReport(TReportProjectValidation, false);
+  R := RunReportEx(TReportProjectValidation, false);
 
   if Assigned(R) and
      (R.DocumentFiles[0].IsSaved)
@@ -941,36 +915,36 @@ var
   Fn: String;
   i: Integer;
 begin
-  R := RunReport(TReportDoubleEntryValidation, false);
- { if Assigned(R) and
+  R := RunReportEx(TReportDoubleEntryValidation, false);
+  if Assigned(R) and
      (
       (not Assigned(FActiveFrame)) or
       (not Assigned(FActiveFrame.EpiDocument))
      ) and
-     R.DocumentFile.Document.Modified
+     R.DocumentFiles[0].Document.Modified
   then
     begin
-      Fn := R.DocumentFile.FileName + '.doubleentry-verification.epx';
+      Fn := R.DocumentFiles[0].FileName + '.doubleentry-verification.epx';
       i := 0;
       while FileExistsUTF8(Fn) do
       begin
         Inc(i);
-        Fn := R.DocumentFile.FileName + '.doubleentry-verification.' + IntToStr(i) + '.epx';
+        Fn := R.DocumentFiles[0].FileName + '.doubleentry-verification.' + IntToStr(i) + '.epx';
       end;
 
-      R.DocumentFile.Document.SaveToFile(fn);
+      R.DocumentFiles[0].Document.SaveToFile(fn);
       ShowMessage('Validation saved to file:' + LineEnding +
                   Fn);
     end;
 
   if Assigned(R) then
   begin
-    if R.Documents[1] <> '(Not Saved)' then
-      AddToRecent(R.Documents[1]);
-    if R.Documents[0] <> '(Not Saved)' then
-      AddToRecent(R.Documents[0]);
+    if R.DocumentFiles[1].IsSaved then
+      AddToRecent(R.DocumentFiles[1].FileName);
+    if R.DocumentFiles[0].IsSaved then
+      AddToRecent(R.DocumentFiles[0].FileName);
     UpdateRecentFiles;
-  end;       }
+  end;
 
   R.Free;
 end;
@@ -1343,27 +1317,30 @@ begin
   then
     F.AddInitialDocumentFile(FActiveFrame.DocumentFile);
 
-  if F.ShowModal = mrOK then
-    Result := F.Report;
+  try
+    if F.ShowModal = mrOK then
+      Result := F.Report;
 
-  if not Assigned(Result) then exit;
+    if not Assigned(Result) then exit;
 
-  Screen.Cursor := crHourGlass;
-  Application.ProcessMessages;
-  S := Result.RunReport;
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
+    S := Result.RunReport;
 
-  ShowReportForm(Self,
-    'Report of: ' + Result.ReportTitle,
-    S,
-    F.RadioGroup1.ItemIndex = 0);
+    ShowReportForm(Self,
+      'Report of: ' + Result.ReportTitle,
+      S,
+      F.RadioGroup1.ItemIndex = 0);
 
-  Screen.Cursor := crDefault;
-  Application.ProcessMessages;
+    Screen.Cursor := crDefault;
+    Application.ProcessMessages;
 
-  if FreeAfterRun then
-    FreeAndNil(Result);
+    if FreeAfterRun then
+      FreeAndNil(Result);
 
-  F.Free;
+  finally
+    F.Free;
+  end;
 end;
 
 {$IFDEF EPI_IPC_TEST}

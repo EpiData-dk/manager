@@ -41,7 +41,7 @@ type
 implementation
 
 uses
-  validate_double_entry_frame,
+  validate_double_entry_frame, epireport_report_projectheading,
   epireport_report_doubleentryvalidate;
 
 resourcestring
@@ -82,8 +82,19 @@ end;
 procedure TReportDoubleEntryValidation.DoRunReport;
 var
   RO: TReportDoubleEntryValidationOption;
+  R: TEpiReportProjectHeader;
 begin
   inherited DoRunReport;
+
+  Generator.Line('');
+
+  R := TEpiReportProjectHeader.Create(Generator);
+  R.Document := DocumentFiles[0].Document;
+  R.Filename := DocumentFiles[0].FileName;
+  R.FileNo   := 1;
+  R.RunReport;
+  R.Free;
+
   Generator.Line('');
 
   // All required information is present in the ReportOptions.

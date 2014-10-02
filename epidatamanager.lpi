@@ -180,7 +180,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="94">
+    <Units Count="95">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -199,6 +199,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -271,6 +272,7 @@
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -300,6 +302,7 @@
       <Unit19>
         <Filename Value="manager_messages.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="manager_messages"/>
       </Unit19>
       <Unit20>
         <Filename Value="settings/settings_general_frame.pas"/>
@@ -494,6 +497,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -514,6 +518,7 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -582,6 +587,7 @@
         <ComponentName Value="ReportOptionsFrameCounts"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_optionframe_counts"/>
       </Unit68>
       <Unit69>
         <Filename Value="reports/report_types.pas"/>
@@ -710,6 +716,7 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_dataformframe"/>
       </Unit89>
       <Unit90>
         <Filename Value="tools/append_form2.pas"/>
@@ -724,6 +731,7 @@
         <ComponentName Value="CountByIdForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="count_by_id_form"/>
       </Unit91>
       <Unit92>
         <Filename Value="reports/report_project_validation_frame2.pas"/>
@@ -741,6 +749,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="reports_form"/>
       </Unit93>
+      <Unit94>
+        <Filename Value="reports/report_counts_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CountByIdFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_counts_frame"/>
+      </Unit94>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

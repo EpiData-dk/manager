@@ -21,11 +21,14 @@ type
     function OkToAdvanceText: string;
   end;
 
+  { IReportFrame }
+
   IReportFrame = interface ['IReportFrame']
-    function  GetCaption: string;
-    procedure ApplyReportOptions(Report: TReportBase);
-    procedure AddFiles(FileNames: TStrings);
     procedure AddDocumentFile(Const DocumentFile: TEpiDocumentFile);
+    procedure AddFiles(FileNames: TStrings);
+    procedure ApplyReportOptions(Report: TReportBase);
+    function  GetCaption: string;
+    function  CanPressOk: Boolean;
   end;
 
 implementation

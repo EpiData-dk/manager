@@ -6,19 +6,23 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, report_base, epidocument, report_types, epiopenfile;
+  Buttons, ComCtrls, ActnList, report_base, epidocument, report_types,
+  epiopenfile;
 
 type
 
   { TReportForm }
 
   TReportForm = class(TForm)
+    OkAction: TAction;
+    ActionList1: TActionList;
     AddFilesBtn: TBitBtn;
     BitBtn2: TBitBtn;
     OkBtn: TBitBtn;
     Panel1: TPanel;
     ProgressBar1: TProgressBar;
     RadioGroup1: TRadioGroup;
+    procedure OkActionUpdate(Sender: TObject);
   private
     FReportClass: TReportBaseClass;
     FReport: TReportBase;
@@ -44,10 +48,15 @@ implementation
 {$R *.lfm}
 
 uses
-  epiv_datamodule, epireport_generator_base,
+  epiv_datamodule, epireport_generator_base, settings2_var,
   epireport_generator_html, epireport_generator_txt;
 
 { TReportForm }
+
+procedure TReportForm.OkActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := IFrame.CanPressOk;
+end;
 
 procedure TReportForm.LoadGlyphs;
 begin
@@ -57,6 +66,7 @@ end;
 procedure TReportForm.FormShow(Sender: TObject);
 begin
   LoadGlyphs;
+  RadioGroup1.ItemIndex := ManagerSettings.ReportOutputFormat;
   Caption := IFrame.GetCaption;
 end;
 
@@ -99,7 +109,7 @@ begin
   OnShow := @FormShow;
 
   AddFilesBtn.OnClick := @AddFilesClick;
-  OkBtn.OnClick       := @OkClick;
+  OkAction.OnExecute := @OkClick;
 end;
 
 procedure TReportForm.AddInitialDocumentFile(const DocFile: TEpiDocumentFile);
