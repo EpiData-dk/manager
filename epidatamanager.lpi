@@ -508,7 +508,6 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -727,7 +726,6 @@
         <ComponentName Value="ReportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="reports_form"/>
       </Unit93>
       <Unit94>
         <Filename Value="reports/report_counts_frame.pas"/>

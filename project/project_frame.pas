@@ -106,6 +106,8 @@ type
     procedure ProjectTreeSelecting(Sender: TObject; const OldObject,
       NewObject: TEpiCustomBase; OldObjectType,
       NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
+    procedure ProjectTreeShowPopupMenu(Sender: TObject;
+      const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
   private
     { Relation Handling }
     procedure KeyFieldEvent(const Sender: TEpiCustomBase;
@@ -752,6 +754,20 @@ begin
     Allowed := IFrame.DeActivate(true);
 end;
 
+procedure TProjectFrame.ProjectTreeShowPopupMenu(Sender: TObject;
+  const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
+begin
+  case ObjectType of
+    otEmpty,
+    otFake:
+      Exit;
+    otRelation:
+      MainForm.DataformPopupMenu.PopUp;
+    otProject:
+      MainForm.ProjectPopupMenu.PopUp;
+  end;
+end;
+
 procedure TProjectFrame.KeyFieldEvent(const Sender: TEpiCustomBase;
   const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
@@ -1072,7 +1088,6 @@ begin
     EditStructure       := true;
     ShowHint            := true;
     ShowProject         := true;
-    PopupMenu           := MainForm.DataformPopupMenu;
 
     OnDelete            := @ProjectTreeDelete;
     OnEdited            := @ProjectTreeEdited;
@@ -1080,6 +1095,7 @@ begin
     OnError             := @ProjectTreeError;
     OnGetHint           := @ProjectTreeGetHint;
     OnNewRelation       := @ProjectTreeNewRelation;
+    OnShowPopupMenu     := @ProjectTreeShowPopupMenu;
     OnTreeNodeSelected  := @ProjectTreeSelected;
     OnTreeNodeSelecting := @ProjectTreeSelecting;
   end;
