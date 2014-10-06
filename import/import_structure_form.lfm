@@ -1,5 +1,5 @@
 object ImportStructureForm: TImportStructureForm
-  Left = 1945
+  Left = 1323
   Height = 524
   Top = 334
   Width = 595
