@@ -490,6 +490,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -510,6 +511,7 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>

@@ -1216,6 +1216,7 @@ begin
       );
 
     FDesignPanel.Surface.Select(FDesignPanel);
+    FDesignPanel.Surface.SelectionChange;
     FDesignPanel.Surface.UpdateDesigner;
   finally
     ImpStructurForm.Free;
