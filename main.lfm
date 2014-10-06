@@ -60,10 +60,10 @@ object MainForm: TMainForm
       Left = 126
       Height = 27
       Top = 6
-      Width = 56
+      Width = 101
       AutoSize = True
       BorderSpacing.Left = 15
-      Caption = 'Project'
+      Caption = 'Define Project'
       OnClick = ProjectDetailsBtnClick
       PopupMenu = ProjectPopupMenu
       TabOrder = 1
@@ -73,7 +73,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 475
+      Left = 520
       Height = 27
       Top = 6
       Width = 65
@@ -88,7 +88,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 379
+      Left = 424
       Height = 27
       Top = 6
       Width = 81
@@ -102,7 +102,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 197
+      Left = 242
       Height = 27
       Top = 6
       Width = 73
@@ -117,7 +117,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 285
+      Left = 330
       Height = 27
       Top = 6
       Width = 79

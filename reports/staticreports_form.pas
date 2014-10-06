@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, StdCtrls, ComCtrls, ActnList, projectfilelist_frame, report_base,
-  epidocument, report_types;
+  Buttons, ComCtrls, ActnList, projectfilelist_frame, report_base,
+  epidocument, report_types, epiopenfile;
 
 type
 
@@ -52,6 +52,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; ReportClass: TReportBaseClass);
     procedure   AddInitialDocument(Const FileName: string; Const Doc: TEpiDocument);
+    procedure   AddInitialDocument(Const DocFile: TEpiDocumentFile);
     class procedure RestoreDefaultPos;
     property    Report: TReportBase read FReport;
   end;
@@ -84,18 +85,6 @@ begin
   end;
   FReport := FReportClass.Create(FGeneratorClass);
   FReport.DocumentFiles := FProjectList.SelectedDocfileList;
-
-{  if Assigned(FNextForm) then
-  begin
-    Self.Hide;
-    (FNextFrame as IReportOptionFrame).UpdateFrame(FProjectList.SelectedList);
-    ModalResult := FNextForm.ShowModal;
-    if ModalResult = mrOK then
-      (FNextFrame as IReportOptionFrame).ApplyReportOptions(FReport)
-    else
-      FreeAndNil(FReport);
-    FNextForm.Free;
-  end;   }
 end;
 
 procedure TStaticReportsForm.OkActionUpdate(Sender: TObject);
@@ -271,6 +260,12 @@ procedure TStaticReportsForm.AddInitialDocument(const FileName: string;
   const Doc: TEpiDocument);
 begin
   FProjectList.AddDocument(FileName, Doc);
+end;
+
+procedure TStaticReportsForm.AddInitialDocument(const DocFile: TEpiDocumentFile
+  );
+begin
+  FProjectList.AddDocument(DocFile);
 end;
 
 class procedure TStaticReportsForm.RestoreDefaultPos;

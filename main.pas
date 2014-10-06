@@ -1252,12 +1252,7 @@ begin
   if Assigned(FActiveFrame) and
      Assigned(FActiveFrame.EpiDocument)
   then
-  begin
-    S := '(Not Saved)';
-    if Assigned(FActiveFrame.DocumentFile) { ProjectFileName <> ''} then
-      S := FActiveFrame.DocumentFile.FileName; // ProjectFileName;
-    F.AddInitialDocument(S, FActiveFrame.EpiDocument);
-  end;
+    F.AddInitialDocument(FActiveFrame.DocumentFile);
 
   if F.ShowModal = mrOK then
     Result := F.Report;
