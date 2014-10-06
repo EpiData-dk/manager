@@ -402,6 +402,7 @@
         <ComponentName Value="ExportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="export_form"/>
       </Unit36>
       <Unit37>
         <Filename Value="export/export_stata_frame.pas"/>
@@ -696,6 +697,7 @@
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_studyunit_frame"/>
       </Unit88>
       <Unit89>
         <Filename Value="designer/design_properties_dataformframe.pas"/>

@@ -120,7 +120,7 @@ object StudyUnitFrame: TStudyUnitFrame
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
         BorderSpacing.Right = 10
-        OnEditingDone = StudyEditingDone
+        OnEditingDone = TitleEditEditingDone
         TabOrder = 0
       end
       object AbstractMemo: TMemo

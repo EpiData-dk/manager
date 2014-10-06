@@ -62,6 +62,7 @@ type
     VersionEdit: TEdit;
     procedure BitBtn1Click(Sender: TObject);
     procedure StudyEditingDone(Sender: TObject);
+    procedure TitleEditEditingDone(Sender: TObject);
   private
     { private declarations }
     FStudy: TEpiStudy;
@@ -73,6 +74,7 @@ type
       EventType: Word; Data: Pointer);
     procedure RegisterHooks;
     procedure UnRegisterHooks;
+    function  ValidateTitle: boolean;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; StudyInfo: TEpiStudy;
@@ -102,6 +104,14 @@ end;
 procedure TStudyUnitFrame.StudyEditingDone(Sender: TObject);
 begin
   FStudy.Modified := true;
+end;
+
+procedure TStudyUnitFrame.TitleEditEditingDone(Sender: TObject);
+begin
+  if not ValidateTitle then exit;
+
+  StudyEditingDone(Sender);
+  FStudy.Title.Text := TitleEdit.Text;
 end;
 
 procedure TStudyUnitFrame.StudyHook(const Sender: TEpiCustomBase;
@@ -143,6 +153,18 @@ begin
     begin
       FStudy.Title.UnRegisterOnChangeHook(@StudyTitleHook);
       FStudy.UnRegisterOnChangeHook(@StudyHook);
+    end;
+end;
+
+function TStudyUnitFrame.ValidateTitle: boolean;
+begin
+  Result := true;
+
+  if trim(TitleEdit.Text) = '' then
+    begin
+      ShowMessage('Title cannot be empty!');
+      Result := false;
+      Exit;
     end;
 end;
 
@@ -253,12 +275,7 @@ begin
       if not Result then exit;
     end;
 
-  if trim(TitleEdit.Text) = '' then
-    begin
-      ShowMessage('Title cannot be empty!');
-      Result := false;
-      Exit;
-    end;
+  if not ValidateTitle then exit(false);
 
   with FStudy do
   begin
