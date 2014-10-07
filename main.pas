@@ -392,7 +392,7 @@ var
   Exporter: TEpiExport;
   S: String;
   ASettings: TEpiExportSetting;
-  FileList: TStringList;
+  FileList: TEpiDocumentFileList;
   R: TReportExport;
   FS: TFileStreamUTF8;
   ReportText: String;
@@ -420,10 +420,13 @@ begin
       FS := nil;
       if ExportReportChkBox.Checked then
       begin
-        FileList := TStringList.Create;
-        FileList.AddObject(Doc.FileName, ExportSetting.Doc);
-// TODO        R := TReportExport.Create(FileList, TEpiReportTXTGenerator);
+        FileList := TEpiDocumentFileList.Create;
+        FileList.Add(Doc);
+
+        R := TReportExport.Create(TEpiReportTXTGenerator);
+        R.DocumentFiles := FileList;
         R.ExportSettings := ExportSetting;
+
         ReportTitle := R.ReportTitle;
         ReportText := R.RunReport;
 
@@ -435,7 +438,7 @@ begin
       end;
 
       S := 'Export Succeeded' + LineEnding + LineEnding;
-      S += 'Project: ' + Fn + LineEnding;
+      S += 'Project: ' + Doc.FileName + LineEnding;
 
       ASettings := ExportSetting;
       while Assigned(ASettings) do
