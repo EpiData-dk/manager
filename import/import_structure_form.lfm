@@ -1,7 +1,7 @@
 object ImportStructureForm: TImportStructureForm
-  Left = 1323
+  Left = 1941
   Height = 524
-  Top = 334
+  Top = 316
   Width = 595
   Caption = 'Import Structure From...'
   ClientHeight = 524
@@ -18,7 +18,7 @@ object ImportStructureForm: TImportStructureForm
     Align = alBottom
     ClientHeight = 42
     ClientWidth = 595
-    TabOrder = 0
+    TabOrder = 1
     object OkBtn: TBitBtn
       AnchorSideRight.Control = OkApplyPanel
       AnchorSideRight.Side = asrBottom
@@ -34,7 +34,7 @@ object ImportStructureForm: TImportStructureForm
       BorderSpacing.Right = 10
       Kind = bkOK
       ModalResult = 1
-      TabOrder = 0
+      TabOrder = 3
     end
     object CancelBtn: TBitBtn
       AnchorSideRight.Control = OkBtn
@@ -50,7 +50,7 @@ object ImportStructureForm: TImportStructureForm
       BorderSpacing.Right = 10
       Kind = bkCancel
       ModalResult = 2
-      TabOrder = 1
+      TabOrder = 2
     end
     object OpenBtn: TBitBtn
       AnchorSideLeft.Control = OkApplyPanel
@@ -65,7 +65,7 @@ object ImportStructureForm: TImportStructureForm
       Anchors = [akLeft, akBottom]
       AutoSize = True
       BorderSpacing.Left = 10
-      TabOrder = 2
+      TabOrder = 0
     end
     object OpenCBBtn: TBitBtn
       AnchorSideLeft.Control = OpenBtn
@@ -80,7 +80,7 @@ object ImportStructureForm: TImportStructureForm
       BorderSpacing.Left = 10
       Caption = 'Add Clipboard'
       OnClick = OpenCBBtnClick
-      TabOrder = 3
+      TabOrder = 1
     end
   end
   object OptionsPanel: TPanel
@@ -91,7 +91,7 @@ object ImportStructureForm: TImportStructureForm
     Align = alTop
     ClientHeight = 144
     ClientWidth = 595
-    TabOrder = 1
+    TabOrder = 0
     object ValueLabelsRenameGrpBox: TRadioGroup
       AnchorSideLeft.Control = FieldsRenameGrpBox
       AnchorSideLeft.Side = asrBottom
@@ -123,7 +123,7 @@ object ImportStructureForm: TImportStructureForm
         'Keep First, drop all other'
         'Rename'
       )
-      TabOrder = 0
+      TabOrder = 1
     end
     object Label1: TLabel
       AnchorSideLeft.Control = OptionsPanel
@@ -164,7 +164,7 @@ object ImportStructureForm: TImportStructureForm
         'Keep First, drop all other'
         'Rename'
       )
-      TabOrder = 1
+      TabOrder = 0
     end
   end
   object ActionList1: TActionList

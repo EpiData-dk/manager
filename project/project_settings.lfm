@@ -1,5 +1,5 @@
 object ProjectSettingsForm: TProjectSettingsForm
-  Left = 697
+  Left = 651
   Height = 378
   Top = 388
   Width = 627
@@ -21,7 +21,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 627
-    TabOrder = 0
+    TabOrder = 2
     object BitBtn1: TBitBtn
       Left = 449
       Height = 34
@@ -59,7 +59,7 @@ object ProjectSettingsForm: TProjectSettingsForm
     DefaultItemHeight = 18
     ReadOnly = True
     ScrollBars = ssAutoBoth
-    TabOrder = 1
+    TabOrder = 0
     OnChange = ProjectSettingsViewChange
     OnChanging = ProjectSettingsViewChanging
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]

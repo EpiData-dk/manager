@@ -1,5 +1,5 @@
 object ReportForm: TReportForm
-  Left = 808
+  Left = 464
   Height = 544
   Top = 382
   Width = 814
@@ -72,7 +72,7 @@ object ReportForm: TReportForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
-      TabOrder = 1
+      TabOrder = 3
     end
     object BitBtn2: TBitBtn
       AnchorSideTop.Control = OkBtn
@@ -104,7 +104,7 @@ object ReportForm: TReportForm
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Right = 10
-      TabOrder = 3
+      TabOrder = 1
       Visible = False
     end
   end

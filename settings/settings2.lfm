@@ -1,5 +1,5 @@
 object SettingsForm: TSettingsForm
-  Left = 844
+  Left = 667
   Height = 443
   Top = 245
   Width = 611
@@ -20,7 +20,7 @@ object SettingsForm: TSettingsForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 611
-    TabOrder = 0
+    TabOrder = 2
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
@@ -36,7 +36,7 @@ object SettingsForm: TSettingsForm
       Caption = 'Cancel'
       Kind = bkCancel
       ModalResult = 2
-      TabOrder = 0
+      TabOrder = 1
     end
     object BitBtn2: TBitBtn
       AnchorSideTop.Control = Panel1
@@ -54,7 +54,7 @@ object SettingsForm: TSettingsForm
       Default = True
       Kind = bkOK
       ModalResult = 1
-      TabOrder = 1
+      TabOrder = 2
     end
     object Button1: TButton
       AnchorSideLeft.Control = Panel1
@@ -69,7 +69,7 @@ object SettingsForm: TSettingsForm
       BorderSpacing.Left = 10
       Caption = 'Restore Defaults'
       OnClick = Button1Click
-      TabOrder = 2
+      TabOrder = 0
     end
   end
   object SettingsView: TTreeView
@@ -81,7 +81,7 @@ object SettingsForm: TSettingsForm
     DefaultItemHeight = 18
     ReadOnly = True
     ScrollBars = ssAutoBoth
-    TabOrder = 1
+    TabOrder = 0
     OnChange = SettingsViewChange
     OnChanging = SettingsViewChanging
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]

@@ -1,7 +1,7 @@
 object AlignmentForm: TAlignmentForm
-  Left = 923
+  Left = 2050
   Height = 316
-  Top = 351
+  Top = 298
   Width = 355
   Caption = 'Alignment'
   ChildSizing.LeftRightSpacing = 5
@@ -25,7 +25,7 @@ object AlignmentForm: TAlignmentForm
   LCLVersion = '1.3'
   object SidesgrpBox: TGroupBox
     Left = 5
-    Height = 73
+    Height = 74
     Hint = 'Align controls according to sides'
     Top = 5
     Width = 345
@@ -37,7 +37,7 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 56
+    ClientHeight = 57
     ClientWidth = 341
     ParentShowHint = False
     ShowHint = True
@@ -46,7 +46,7 @@ object AlignmentForm: TAlignmentForm
       Left = 57
       Height = 12
       Hint = 'Align Left'
-      Top = 22
+      Top = 23
       Width = 12
       AutoSize = True
       BorderSpacing.Left = 5
@@ -60,7 +60,7 @@ object AlignmentForm: TAlignmentForm
       Left = 126
       Height = 12
       Hint = 'Align Top'
-      Top = 22
+      Top = 23
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -73,7 +73,7 @@ object AlignmentForm: TAlignmentForm
       Left = 195
       Height = 12
       Hint = 'Align Bottom'
-      Top = 22
+      Top = 23
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -87,7 +87,7 @@ object AlignmentForm: TAlignmentForm
       Left = 264
       Height = 12
       Hint = 'Align Right'
-      Top = 22
+      Top = 23
       Width = 12
       AutoSize = True
       BorderSpacing.Right = 5
@@ -102,7 +102,7 @@ object AlignmentForm: TAlignmentForm
     Left = 5
     Height = 74
     Hint = 'Center controls'
-    Top = 83
+    Top = 84
     Width = 345
     Caption = 'Center:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
@@ -143,7 +143,7 @@ object AlignmentForm: TAlignmentForm
     Left = 5
     Height = 74
     Hint = 'Calculate even distance between controls'
-    Top = 162
+    Top = 163
     Width = 345
     Caption = 'Even distance:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
@@ -182,9 +182,9 @@ object AlignmentForm: TAlignmentForm
   end
   object FixedDistGrpBox: TGroupBox
     Left = 5
-    Height = 70
+    Height = 69
     Hint = 'Set fixed distance between controls'
-    Top = 241
+    Top = 242
     Width = 345
     Caption = 'Fixed distance:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
@@ -193,7 +193,7 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 53
+    ClientHeight = 52
     ClientWidth = 341
     ParentShowHint = False
     ShowHint = True
@@ -202,7 +202,7 @@ object AlignmentForm: TAlignmentForm
       Left = 106
       Height = 12
       Hint = 'Fixed vertical distance between controls'
-      Top = 21
+      Top = 20
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
@@ -215,14 +215,14 @@ object AlignmentForm: TAlignmentForm
       Left = 224
       Height = 12
       Hint = 'Fixed horizontal distance between controls'
-      Top = 21
+      Top = 20
       Width = 12
       AutoSize = True
       GlyphShowMode = gsmAlways
       OnClick = FixedDistHorzBtnClick
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
+      TabOrder = 2
     end
     object SpinEdit1: TSpinEdit
       AnchorSideLeft.Control = FixedDistVertBtn
@@ -233,12 +233,12 @@ object AlignmentForm: TAlignmentForm
       AnchorSideBottom.Side = asrBottom
       Left = 123
       Height = 25
-      Top = 8
+      Top = 7
       Width = 50
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5
       MinValue = 1
-      TabOrder = 2
+      TabOrder = 1
       Value = 1
     end
     object SpinEdit2: TSpinEdit
@@ -248,7 +248,7 @@ object AlignmentForm: TAlignmentForm
       AnchorSideBottom.Side = asrBottom
       Left = 241
       Height = 25
-      Top = 8
+      Top = 7
       Width = 50
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5

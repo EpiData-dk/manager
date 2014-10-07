@@ -101,7 +101,7 @@ object ExportForm: TExportForm
           BorderSpacing.Top = 5
           Caption = 'All records'
           Checked = True
-          TabOrder = 0
+          TabOrder = 1
           TabStop = True
         end
         object RangeRBtn: TRadioButton
@@ -115,7 +115,7 @@ object ExportForm: TExportForm
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
           Caption = 'Range'
-          TabOrder = 1
+          TabOrder = 2
         end
         object FromRecordEdit: TEdit
           AnchorSideLeft.Control = RangeRBtn
@@ -132,7 +132,7 @@ object ExportForm: TExportForm
           BorderSpacing.Right = 10
           OnClick = FromRecordEditClick
           OnKeyPress = FromRecordEditKeyPress
-          TabOrder = 2
+          TabOrder = 3
         end
         object ToRecordEdit: TEdit
           AnchorSideLeft.Control = Label2
@@ -149,7 +149,7 @@ object ExportForm: TExportForm
           BorderSpacing.Right = 10
           OnClick = FromRecordEditClick
           OnKeyPress = FromRecordEditKeyPress
-          TabOrder = 3
+          TabOrder = 4
         end
         object Label2: TLabel
           AnchorSideTop.Control = FromRecordEdit
@@ -172,7 +172,7 @@ object ExportForm: TExportForm
           BorderSpacing.Left = 10
           BorderSpacing.Top = 20
           Caption = 'Export deleted records'
-          TabOrder = 4
+          TabOrder = 5
         end
         object NoneRecordsRadioBtn: TRadioButton
           AnchorSideLeft.Control = GroupBox1
@@ -184,7 +184,7 @@ object ExportForm: TExportForm
           BorderSpacing.Left = 10
           BorderSpacing.Top = 5
           Caption = 'None (structure only)'
-          TabOrder = 5
+          TabOrder = 0
         end
       end
       object FieldGrpBox: TGroupBox

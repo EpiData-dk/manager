@@ -1,7 +1,7 @@
 object ValidateDoubleEntryForm: TValidateDoubleEntryForm
-  Left = 612
+  Left = 1876
   Height = 685
-  Top = 289
+  Top = 209
   Width = 896
   Caption = 'ValidateDoubleEntryForm'
   ClientHeight = 685

@@ -18,7 +18,7 @@ object KeyFieldsForm: TKeyFieldsForm
     Align = alBottom
     ClientHeight = 43
     ClientWidth = 509
-    TabOrder = 0
+    TabOrder = 1
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
@@ -35,7 +35,7 @@ object KeyFieldsForm: TKeyFieldsForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
-      TabOrder = 0
+      TabOrder = 3
     end
     object BitBtn2: TBitBtn
       AnchorSideTop.Control = Panel1
@@ -52,7 +52,7 @@ object KeyFieldsForm: TKeyFieldsForm
       DefaultCaption = True
       Kind = bkCancel
       ModalResult = 2
-      TabOrder = 1
+      TabOrder = 2
     end
     object ShowRecordsBtn: TButton
       AnchorSideLeft.Control = Panel1
@@ -66,7 +66,7 @@ object KeyFieldsForm: TKeyFieldsForm
       BorderSpacing.Left = 10
       Caption = 'List Records'
       OnClick = ShowRecordsBtnClick
-      TabOrder = 2
+      TabOrder = 1
     end
     object AddIndexFieldBtn: TButton
       AnchorSideLeft.Control = ShowRecordsBtn
@@ -80,7 +80,7 @@ object KeyFieldsForm: TKeyFieldsForm
       Action = AddIndexFieldAction
       AutoSize = True
       BorderSpacing.Left = 5
-      TabOrder = 3
+      TabOrder = 0
     end
   end
   object ScrollBox1: TScrollBox
@@ -93,7 +93,7 @@ object KeyFieldsForm: TKeyFieldsForm
     Align = alClient
     ClientHeight = 462
     ClientWidth = 507
-    TabOrder = 1
+    TabOrder = 0
     object Label1: TLabel
       AnchorSideLeft.Control = ScrollBox1
       AnchorSideBottom.Control = TopBevel

@@ -1,5 +1,5 @@
 object SectionPropertiesFrame: TSectionPropertiesFrame
-  Left = 744
+  Left = 690
   Height = 509
   Top = 298
   Width = 588
@@ -35,7 +35,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         Caption = 'Groups access:'
         ClientHeight = 153
         ClientWidth = 558
-        TabOrder = 1
+        TabOrder = 2
         object GroupAvailableListBox: TListBox
           AnchorSideTop.Control = Label5
           AnchorSideTop.Side = asrBottom
@@ -232,7 +232,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
         BorderSpacing.Right = 10
-        TabOrder = 2
+        TabOrder = 1
       end
       object Label9: TLabel
         AnchorSideLeft.Control = NameEdit

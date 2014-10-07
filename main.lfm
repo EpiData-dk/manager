@@ -22,7 +22,7 @@ object MainForm: TMainForm
     ParentShowHint = False
     ShowHint = True
     ShowTabs = False
-    TabOrder = 0
+    TabOrder = 1
   end
   object ProcessToolPanel: TPanel
     Left = 0
@@ -34,7 +34,7 @@ object MainForm: TMainForm
     ClientWidth = 1131
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 1
+    TabOrder = 0
     object DefineProjectBtn: TButton
       AnchorSideLeft.Control = ProcessToolPanel
       AnchorSideTop.Control = ProcessToolPanel
@@ -81,7 +81,7 @@ object MainForm: TMainForm
       AutoSize = True
       BorderSpacing.Left = 15
       GlyphShowMode = gsmAlways
-      TabOrder = 2
+      TabOrder = 5
     end
     object EnterDataBtn: TBitBtn
       AnchorSideLeft.Control = DocumentBtn
@@ -95,7 +95,7 @@ object MainForm: TMainForm
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
-      TabOrder = 3
+      TabOrder = 4
     end
     object DataFormBtn: TBitBtn
       AnchorSideLeft.Control = ProjectDetailsBtn
@@ -110,7 +110,7 @@ object MainForm: TMainForm
       BorderSpacing.Left = 15
       Caption = 'Dataform'
       OnClick = DataFormBtnClick
-      TabOrder = 4
+      TabOrder = 2
     end
     object DocumentBtn: TBitBtn
       AnchorSideLeft.Control = DataFormBtn
@@ -126,7 +126,7 @@ object MainForm: TMainForm
       Caption = 'Document'
       OnClick = DocumentBtnClick
       PopupMenu = DocumentPopupMenu
-      TabOrder = 5
+      TabOrder = 3
     end
   end
   object MainMenu1: TMainMenu

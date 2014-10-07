@@ -1,5 +1,5 @@
 object ReportViewerForm: TReportViewerForm
-  Left = 637
+  Left = 627
   Height = 517
   Top = 255
   Width = 651
@@ -19,7 +19,7 @@ object ReportViewerForm: TReportViewerForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 651
-    TabOrder = 0
+    TabOrder = 1
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
@@ -35,7 +35,7 @@ object ReportViewerForm: TReportViewerForm
       DefaultCaption = True
       Kind = bkClose
       ModalResult = 11
-      TabOrder = 0
+      TabOrder = 1
     end
     object BitBtn2: TBitBtn
       AnchorSideLeft.Control = Panel1
@@ -84,7 +84,7 @@ object ReportViewerForm: TReportViewerForm
         39FFBD6E3BFFBB6D3AFFBB6B38EFBB703ECBB6693554FFFFFF00
       }
       OnClick = BitBtn2Click
-      TabOrder = 1
+      TabOrder = 0
     end
   end
   object Memo1: TMemo
@@ -97,7 +97,7 @@ object ReportViewerForm: TReportViewerForm
     Font.Name = 'Courier New'
     ParentFont = False
     ScrollBars = ssAutoBoth
-    TabOrder = 1
+    TabOrder = 0
   end
   object SaveDialog1: TSaveDialog
     left = 80

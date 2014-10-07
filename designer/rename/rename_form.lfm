@@ -19,13 +19,13 @@ object RenameForm: TRenameForm
     AnchorSideBottom.Side = asrBottom
     Left = 195
     Height = 25
-    Top = 73
+    Top = 70
     Width = 80
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 15
     BorderSpacing.Right = 25
     Enabled = False
-    TabOrder = 0
+    TabOrder = 1
     Text = 'V'
   end
   object Edit2: TEdit
@@ -36,12 +36,12 @@ object RenameForm: TRenameForm
     AnchorSideBottom.Side = asrBottom
     Left = 195
     Height = 25
-    Top = 108
+    Top = 105
     Width = 80
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 10
     Enabled = False
-    TabOrder = 1
+    TabOrder = 3
     Text = 'Section'
   end
   object Edit3: TEdit
@@ -52,12 +52,12 @@ object RenameForm: TRenameForm
     AnchorSideBottom.Side = asrBottom
     Left = 195
     Height = 25
-    Top = 143
+    Top = 140
     Width = 80
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 10
     Enabled = False
-    TabOrder = 2
+    TabOrder = 5
     Text = 'Header'
   end
   object Panel1: TPanel
@@ -68,7 +68,7 @@ object RenameForm: TRenameForm
     Align = alBottom
     ClientHeight = 44
     ClientWidth = 300
-    TabOrder = 3
+    TabOrder = 6
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
@@ -113,13 +113,13 @@ object RenameForm: TRenameForm
     AnchorSideTop.Side = asrCenter
     Left = 25
     Height = 22
-    Top = 74
+    Top = 71
     Width = 63
     BorderSpacing.Left = 25
     BorderSpacing.Top = 10
     Caption = 'Fields:'
     OnChange = CheckBox1Change
-    TabOrder = 4
+    TabOrder = 0
   end
   object CheckBox2: TCheckBox
     Tag = 2
@@ -128,12 +128,12 @@ object RenameForm: TRenameForm
     AnchorSideTop.Side = asrCenter
     Left = 25
     Height = 22
-    Top = 109
+    Top = 106
     Width = 83
     BorderSpacing.Top = 15
     Caption = 'Sections:'
     OnChange = CheckBox1Change
-    TabOrder = 5
+    TabOrder = 2
   end
   object CheckBox3: TCheckBox
     Tag = 3
@@ -142,19 +142,19 @@ object RenameForm: TRenameForm
     AnchorSideTop.Side = asrCenter
     Left = 25
     Height = 22
-    Top = 144
+    Top = 141
     Width = 88
     BorderSpacing.Top = 15
     Caption = 'Headings:'
     OnChange = CheckBox1Change
-    TabOrder = 6
+    TabOrder = 4
   end
   object Label4: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideLeft.Side = asrCenter
     AnchorSideTop.Control = Owner
     Left = 26
-    Height = 33
+    Height = 30
     Top = 10
     Width = 249
     Alignment = taCenter
@@ -172,7 +172,7 @@ object RenameForm: TRenameForm
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 10
-    Top = 48
+    Top = 45
     Width = 280
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10

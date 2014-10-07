@@ -6,8 +6,8 @@ object ValueLabelGridFrame: TValueLabelGridFrame
   ClientHeight = 502
   ClientWidth = 494
   TabOrder = 0
-  DesignLeft = 979
-  DesignTop = 314
+  DesignLeft = 1923
+  DesignTop = 264
   object ToolBar1: TToolBar
     Left = 0
     Height = 26

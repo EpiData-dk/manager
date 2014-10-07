@@ -17,7 +17,7 @@ object RecodeForm: TRecodeForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 250
-    TabOrder = 0
+    TabOrder = 1
     object BitBtn1: TBitBtn
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
@@ -34,7 +34,7 @@ object RecodeForm: TRecodeForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
-      TabOrder = 0
+      TabOrder = 1
     end
     object BitBtn2: TBitBtn
       AnchorSideTop.Control = Panel1
@@ -51,7 +51,7 @@ object RecodeForm: TRecodeForm
       DefaultCaption = True
       Kind = bkCancel
       ModalResult = 2
-      TabOrder = 1
+      TabOrder = 0
     end
   end
   object Panel2: TPanel
@@ -62,7 +62,7 @@ object RecodeForm: TRecodeForm
     Align = alClient
     ClientHeight = 131
     ClientWidth = 250
-    TabOrder = 1
+    TabOrder = 0
     object Label1: TLabel
       AnchorSideLeft.Control = Panel2
       AnchorSideBottom.Control = Edit1
@@ -101,7 +101,7 @@ object RecodeForm: TRecodeForm
       BorderSpacing.Top = 10
       Caption = 'Default value'
       OnClick = CheckBox1Click
-      TabOrder = 0
+      TabOrder = 2
     end
     object Edit1: TEdit
       AnchorSideTop.Control = Panel2
@@ -117,7 +117,7 @@ object RecodeForm: TRecodeForm
       BorderSpacing.Right = 10
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 1
+      TabOrder = 0
     end
     object Edit2: TEdit
       AnchorSideTop.Control = Edit1
@@ -134,7 +134,7 @@ object RecodeForm: TRecodeForm
       BorderSpacing.Right = 10
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 2
+      TabOrder = 1
     end
   end
 end

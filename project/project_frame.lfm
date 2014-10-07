@@ -13,17 +13,17 @@ object ProjectFrame: TProjectFrame
     Left = 0
     Height = 638
     Top = 0
-    Width = 211
+    Width = 187
     Align = alLeft
     BevelOuter = bvNone
     ClientHeight = 638
-    ClientWidth = 211
+    ClientWidth = 187
     TabOrder = 0
     object ToolBar1: TToolBar
       Left = 0
       Height = 22
       Top = 0
-      Width = 207
+      Width = 187
       AutoSize = True
       ButtonHeight = 20
       ButtonWidth = 20
@@ -113,12 +113,12 @@ object ProjectFrame: TProjectFrame
     Position = 50
     Smooth = True
     Step = 1
-    TabOrder = 1
+    TabOrder = 2
     Visible = False
     BarShowText = True
   end
   object Splitter1: TSplitter
-    Left = 211
+    Left = 187
     Height = 638
     Top = 0
     Width = 5

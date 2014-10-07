@@ -1,7 +1,7 @@
 object ValueLabelDataImport: TValueLabelDataImport
-  Left = 372
+  Left = 1816
   Height = 382
-  Top = 267
+  Top = 295
   Width = 615
   Caption = 'ValueLabelDataImport'
   ClientHeight = 382
@@ -86,7 +86,7 @@ object ValueLabelDataImport: TValueLabelDataImport
       Kind = bkOK
       ModalResult = 1
       OnClick = OkBtnClick
-      TabOrder = 1
+      TabOrder = 4
     end
     object BitBtn2: TBitBtn
       AnchorSideTop.Control = OkBtn
@@ -103,7 +103,7 @@ object ValueLabelDataImport: TValueLabelDataImport
       DefaultCaption = True
       Kind = bkCancel
       ModalResult = 2
-      TabOrder = 2
+      TabOrder = 3
     end
     object ProgressBar1: TProgressBar
       AnchorSideLeft.Control = AddCBBtn
@@ -118,7 +118,7 @@ object ValueLabelDataImport: TValueLabelDataImport
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Right = 10
-      TabOrder = 3
+      TabOrder = 2
       Visible = False
     end
     object AddCBBtn: TBitBtn
@@ -170,7 +170,7 @@ object ValueLabelDataImport: TValueLabelDataImport
         92FFD1A06CF5D09E6DF6CC965FDAC479427EB2673C09FFFFFF00
       }
       OnClick = AddCBBtnClick
-      TabOrder = 4
+      TabOrder = 1
     end
   end
 end

@@ -1,7 +1,7 @@
 object StaticReportsForm: TStaticReportsForm
-  Left = 612
+  Left = 1881
   Height = 516
-  Top = 574
+  Top = 249
   Width = 595
   Caption = 'StaticReportsForm'
   ClientHeight = 516
@@ -20,7 +20,7 @@ object StaticReportsForm: TStaticReportsForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 595
-    TabOrder = 0
+    TabOrder = 1
     object AddFilesBtn: TBitBtn
       AnchorSideLeft.Control = Panel1
       AnchorSideTop.Control = Panel1
@@ -50,7 +50,7 @@ object StaticReportsForm: TStaticReportsForm
       Default = True
       Kind = bkOK
       ModalResult = 1
-      TabOrder = 1
+      TabOrder = 3
     end
     object BitBtn2: TBitBtn
       AnchorSideTop.Control = OkBtn
@@ -82,7 +82,7 @@ object StaticReportsForm: TStaticReportsForm
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Right = 10
-      TabOrder = 3
+      TabOrder = 1
       Visible = False
     end
   end
@@ -110,7 +110,7 @@ object StaticReportsForm: TStaticReportsForm
       'Website (HTML)'
       'Text'
     )
-    TabOrder = 1
+    TabOrder = 0
   end
   object ActionList1: TActionList
     Images = DM.Icons16
