@@ -779,7 +779,6 @@ var
 
 begin
   DetailFields := TEPiFields(MasterField.FindCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY));
-  SelfInitiated := (Sender = Initiator);
 
   case EventGroup of
     eegCustomBase:

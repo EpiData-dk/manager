@@ -649,7 +649,6 @@ var
   T: Integer;
   Str: String;
   i: Integer;
-  Fn: string;
 begin
   try
     F := nil;

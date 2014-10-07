@@ -372,21 +372,22 @@ begin
         Inc(KFCount);
     end;
 
-    if (KFCount < DataFile.KeyFields.Count)
+    if (KFCount < DataFile.KeyFields.Count) and
+       (Document.DataFiles[0].Size > 0)
     then
-    begin
-      FProjectList.StructureGrid.Objects[
-        FProjectList.FileNameCol.Index + 1,
-        RowNo
-      ] := TObject(1);
+      begin
+        FProjectList.StructureGrid.Objects[
+          FProjectList.FileNameCol.Index + 1,
+          RowNo
+        ] := TObject(1);
 
-      Fn := ExtractFileName(Filename);
+        Fn := ExtractFileName(Filename);
 
-      FProjectList.ReportError(
-        Fn + ': Importing data is only possible when the imported' +
-        'dataset has the same fields (name + type) as the defined keyfields!'
-      );
-    end;
+        FProjectList.ReportError(
+          Fn + ': Importing data is only possible when the imported' +
+          'dataset has the same fields (name + type) as the defined keyfields!'
+        );
+      end;
   end;
 end;
 
