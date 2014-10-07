@@ -23,6 +23,8 @@ type
     KeyFieldsAction: TAction;
     ProjectPasswordAction: TAction;
     OpenProjectAction: TAction;
+    NewProjectToolBtn: TToolButton;
+    ToolButton2: TToolButton;
     ValueLabelEditorAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
@@ -168,7 +170,7 @@ uses
   valuelabelseditor_form2, LazFileUtils,
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
-  align_form, RegExpr, project_studyunit_frame, epidatafilestypes,
+  align_form, RegExpr, project_studyunit_frame,
   design_properties_form;
 
 { TProjectFrame }
@@ -477,7 +479,6 @@ end;
 
 function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
 var
-  TmpDoc: TEpiDocument;
   i: Integer;
 begin
   Result := false;
@@ -774,10 +775,7 @@ procedure TProjectFrame.KeyFieldEvent(const Sender: TEpiCustomBase;
 var
   MasterField: TEpiField absolute Sender;
   DetailFields: TEpiFields;
-  SelfInitiated: Boolean;
-  i: Integer;
   DetailField: TEpiField;
-  ParentField: TEpiField;
 
 begin
   DetailFields := TEPiFields(MasterField.FindCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY));
@@ -1166,8 +1164,6 @@ begin
 end;
 
 procedure TProjectFrame.UpdateFrame;
-var
-  TN: TTreeNode;
 begin
   UpdateShortCuts;
 
@@ -1226,7 +1222,6 @@ end;
 function TProjectFrame.Import(const FromCB: boolean): boolean;
 var
   Frame: TRuntimeDesignFrame;
-  TN: TTreeNode;
   MR: TEpiMasterRelation;
 begin
   // Assumes the user want to open new project with direct import.
@@ -1236,9 +1231,9 @@ begin
   FProjectTreeView.SelectedObject := MR;
   Frame := TRuntimeDesignFrame(MR.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
   if FromCB then
-    Frame.ImportCBAction.Execute
+    Result := Frame.ImportCBAction.Execute
   else
-    Frame.ImportAction.Execute;
+    Result := Frame.ImportAction.Execute;
 end;
 
 procedure TProjectFrame.CreateNewProject;
@@ -1266,6 +1261,8 @@ begin
     SetPasswordPopupMenuItem.Action       := ProjectPasswordAction;
     StudyInfoPopupMenuItem.Action         := StudyInformationAction;
   end;
+
+  NewProjectToolBtn.Action := MainForm.NewProjectAction;
   FActiveFrame.AssignActionLinks;
 end;
 

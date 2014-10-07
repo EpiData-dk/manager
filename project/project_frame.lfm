@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 658
   ClientWidth = 778
   TabOrder = 0
-  DesignLeft = 418
-  DesignTop = 164
+  DesignLeft = 1758
+  DesignTop = 322
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
@@ -35,59 +35,71 @@ object ProjectFrame: TProjectFrame
       TabOrder = 0
       Transparent = True
       object OpenProjectToolBtn: TToolButton
-        Left = 2
+        Left = 27
         Top = 1
         Action = OpenProjectAction
         ParentShowHint = False
         ShowHint = True
       end
       object ToolButton1: TToolButton
-        Left = 22
+        Left = 47
         Top = 1
         Width = 5
         Caption = 'ToolButton1'
         Style = tbsDivider
       end
       object SaveProjectToolBtn: TToolButton
-        Left = 27
+        Left = 52
         Top = 1
         Action = SaveProjectAction
         ParentShowHint = False
         ShowHint = True
       end
       object SaveProjectAsToolBtn: TToolButton
-        Left = 47
+        Left = 72
         Top = 1
         Action = SaveProjectAsAction
         ParentShowHint = False
         ShowHint = True
       end
       object ToolButton4: TToolButton
-        Left = 67
+        Left = 92
         Top = 1
         Width = 5
         Caption = 'ToolButton4'
         Style = tbsDivider
       end
       object AddDataFormToolBtn: TToolButton
-        Left = 72
+        Left = 97
         Top = 1
         Action = NewDataFormAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteDataFormToolBtn: TToolButton
-        Left = 92
+        Left = 117
         Top = 1
         Action = DeleteDataFormAction
         ParentShowHint = False
         ShowHint = True
       end
       object ToolButton7: TToolButton
-        Left = 112
+        Left = 137
         Top = 1
         Width = 5
         Caption = 'ToolButton7'
+        Style = tbsDivider
+      end
+      object NewProjectToolBtn: TToolButton
+        Left = 2
+        Top = 1
+        Caption = 'NewProjectToolBtn'
+      end
+      object ToolButton2: TToolButton
+        Left = 22
+        Top = 1
+        Width = 5
+        Caption = 'ToolButton2'
         Style = tbsDivider
       end
     end
