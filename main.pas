@@ -27,6 +27,8 @@ type
     DataformPropertiesPopupMenuItem: TMenuItem;
     MenuItem34: TMenuItem;
     DataformPopupMenu: TPopupMenu;
+    ProjectDetailsBtn: TBitBtn;
+    SelectProjectBtn: TBitBtn;
     VLSetFromDataAction: TAction;
     ImportCBInNewProjectAction: TAction;
     MenuItem13: TMenuItem;
@@ -67,7 +69,6 @@ type
     RecentFilesSubPopupMenu: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
-    ProjectDetailsBtn: TButton;
     CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
     KeyFieldsMenuItem: TMenuItem;
@@ -127,7 +128,6 @@ type
     EntryClientMenuItem: TMenuItem;
     PackMenuItem: TMenuItem;
     RecentFilesSubMenu: TMenuItem;
-    DefineProjectBtn: TButton;
     HelpMenuDivider1: TMenuItem;
     ProcessToolPanel: TPanel;
     TutorialSubMenu: TMenuItem;
@@ -183,7 +183,7 @@ type
     procedure CountsReportActionExecute(Sender: TObject);
     procedure DataFormBtnClick(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
-    procedure DefineProjectBtnClick(Sender: TObject);
+    procedure SelectProjectBtnClick(Sender: TObject);
     procedure DocumentBtnClick(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
     procedure ExportActionExecute(Sender: TObject);
@@ -273,6 +273,7 @@ implementation
 {$R *.lfm}
 
 uses
+  epiv_datamodule,
   LCLProc, LCLIntf, LazUTF8Classes,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   epimiscutils,
@@ -289,7 +290,6 @@ uses
   valuelabel_import_data,
   append_form, epitools_append,
   validate_double_entry_form,
-  epiv_datamodule,
   count_by_id_form,
   report_project_validation_frame2, reports_form;
 
@@ -366,7 +366,7 @@ begin
   RestoreDefaultPos;
 end;
 
-procedure TMainForm.DefineProjectBtnClick(Sender: TObject);
+procedure TMainForm.SelectProjectBtnClick(Sender: TObject);
 begin
   UpdateRecentFiles;
   DefineProjectPopupMenu.PopUp;
@@ -1203,8 +1203,10 @@ procedure TMainForm.LoadGlyphs;
 begin
   DM.Icons16.GetBitmap(17, ExportBtn.Glyph);
   DM.Icons16.GetBitmap(39, EnterDataBtn.Glyph);
+  DM.Icons16.GetBitmap(41, SelectProjectBtn.Glyph);
   DM.Icons16.GetBitmap(43, DocumentBtn.Glyph);
   DM.Icons16.GetBitmap(44, DataFormBtn.Glyph);
+  DM.Icons16.GetBitmap(45, ProjectDetailsBtn.Glyph);
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);

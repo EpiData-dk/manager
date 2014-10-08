@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = 1621
+  Left = 787
   Height = 738
   Top = 287
   Width = 1131
@@ -35,7 +35,83 @@ object MainForm: TMainForm
     ParentShowHint = False
     ShowHint = True
     TabOrder = 0
-    object DefineProjectBtn: TButton
+    object ExportBtn: TBitBtn
+      AnchorSideLeft.Control = EnterDataBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 523
+      Height = 27
+      Top = 6
+      Width = 65
+      Action = ExportAction
+      AutoSize = True
+      BorderSpacing.Left = 15
+      GlyphShowMode = gsmAlways
+      TabOrder = 3
+    end
+    object EnterDataBtn: TBitBtn
+      AnchorSideLeft.Control = DocumentBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 427
+      Height = 27
+      Top = 6
+      Width = 81
+      Action = StartEntryClientAction
+      AutoSize = True
+      BorderSpacing.Left = 15
+      TabOrder = 2
+    end
+    object DataFormBtn: TBitBtn
+      AnchorSideLeft.Control = ProjectDetailsBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 245
+      Height = 27
+      Top = 6
+      Width = 73
+      AutoSize = True
+      BorderSpacing.Left = 15
+      Caption = 'Dataform'
+      OnClick = DataFormBtnClick
+      TabOrder = 0
+    end
+    object DocumentBtn: TBitBtn
+      AnchorSideLeft.Control = DataFormBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 333
+      Height = 27
+      Top = 6
+      Width = 79
+      AutoSize = True
+      BorderSpacing.Left = 15
+      Caption = 'Document'
+      OnClick = DocumentBtnClick
+      PopupMenu = DocumentPopupMenu
+      TabOrder = 1
+    end
+    object ProjectDetailsBtn: TBitBtn
+      AnchorSideLeft.Control = SelectProjectBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 126
+      Height = 27
+      Top = 6
+      Width = 104
+      AutoSize = True
+      BorderSpacing.Left = 15
+      Caption = 'Project Details'
+      OnClick = ProjectDetailsBtnClick
+      PopupMenu = ProjectPopupMenu
+      TabOrder = 4
+    end
+    object SelectProjectBtn: TBitBtn
       AnchorSideLeft.Control = ProcessToolPanel
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
@@ -46,87 +122,11 @@ object MainForm: TMainForm
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = '&Select Project'
-      OnClick = DefineProjectBtnClick
+      OnClick = SelectProjectBtnClick
       ParentShowHint = False
       PopupMenu = DefineProjectPopupMenu
       ShowHint = True
-      TabOrder = 0
-    end
-    object ProjectDetailsBtn: TButton
-      AnchorSideLeft.Control = DefineProjectBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 126
-      Height = 27
-      Top = 6
-      Width = 101
-      AutoSize = True
-      BorderSpacing.Left = 15
-      Caption = 'Define Project'
-      OnClick = ProjectDetailsBtnClick
-      PopupMenu = ProjectPopupMenu
-      TabOrder = 1
-    end
-    object ExportBtn: TBitBtn
-      AnchorSideLeft.Control = EnterDataBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 520
-      Height = 27
-      Top = 6
-      Width = 65
-      Action = ExportAction
-      AutoSize = True
-      BorderSpacing.Left = 15
-      GlyphShowMode = gsmAlways
       TabOrder = 5
-    end
-    object EnterDataBtn: TBitBtn
-      AnchorSideLeft.Control = DocumentBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 424
-      Height = 27
-      Top = 6
-      Width = 81
-      Action = StartEntryClientAction
-      AutoSize = True
-      BorderSpacing.Left = 15
-      TabOrder = 4
-    end
-    object DataFormBtn: TBitBtn
-      AnchorSideLeft.Control = ProjectDetailsBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 242
-      Height = 27
-      Top = 6
-      Width = 73
-      AutoSize = True
-      BorderSpacing.Left = 15
-      Caption = 'Dataform'
-      OnClick = DataFormBtnClick
-      TabOrder = 2
-    end
-    object DocumentBtn: TBitBtn
-      AnchorSideLeft.Control = DataFormBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 330
-      Height = 27
-      Top = 6
-      Width = 79
-      AutoSize = True
-      BorderSpacing.Left = 15
-      Caption = 'Document'
-      OnClick = DocumentBtnClick
-      PopupMenu = DocumentPopupMenu
-      TabOrder = 3
     end
   end
   object MainMenu1: TMainMenu
@@ -573,8 +573,8 @@ object MainForm: TMainForm
   end
   object DefineProjectPopupMenu: TPopupMenu
     Images = DM.Icons16
-    left = 64
-    top = 56
+    left = 80
+    top = 64
     object MenuItem7: TMenuItem
       Action = NewProjectAction
       Bitmap.Data = {
