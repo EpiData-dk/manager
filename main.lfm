@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 787
+  Left = 1643
   Height = 738
-  Top = 287
+  Top = 266
   Width = 1131
   ActiveControl = ProcessToolPanel
   Caption = 'MainForm'
@@ -419,6 +419,7 @@ object MainForm: TMainForm
     object NewProjectAction: TAction
       Category = 'File'
       Caption = '&New Project'
+      Hint = 'New Project'
       ImageIndex = 41
       OnExecute = NewProjectActionExecute
       ShortCut = 16462
