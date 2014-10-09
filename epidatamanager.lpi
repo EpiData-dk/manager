@@ -337,7 +337,6 @@
       <Unit26>
         <Filename Value="reports/report_base.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_base"/>
       </Unit26>
       <Unit27>
         <Filename Value="utils/projectfilelist_frame.pas"/>
@@ -399,6 +398,7 @@
         <ComponentName Value="ExportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="export_form"/>
       </Unit36>
       <Unit37>
         <Filename Value="export/export_stata_frame.pas"/>
@@ -488,6 +488,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -530,6 +531,7 @@
       <Unit59>
         <Filename Value="designer/design_designmessenger.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designmessenger"/>
       </Unit59>
       <Unit60>
         <Filename Value="designer/design_commander.pas"/>
@@ -568,7 +570,6 @@
       <Unit67>
         <Filename Value="reports/report_counts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_counts"/>
       </Unit67>
       <Unit68>
         <Filename Value="reports/report_optionframe_counts.pas"/>
@@ -584,6 +585,7 @@
       <Unit70>
         <Filename Value="tools/dataset_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="dataset_form"/>
       </Unit70>
       <Unit71>
         <Filename Value="utils/ok_cancel_form.pas"/>
