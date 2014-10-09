@@ -89,7 +89,7 @@ var
   FileNames: TStrings;
 begin
   FileNames := TStringList.Create;
-  DM.OpenDlgEpiFiles(FileNames);
+  DM.OpenDlgImportFiles(FileNames);
   IFrame.AddFiles(FileNames);
   FileNames.Free;
 end;
