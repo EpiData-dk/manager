@@ -199,6 +199,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -271,7 +272,6 @@
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -585,7 +585,6 @@
       <Unit70>
         <Filename Value="tools/dataset_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="dataset_form"/>
       </Unit70>
       <Unit71>
         <Filename Value="utils/ok_cancel_form.pas"/>
@@ -600,6 +599,7 @@
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="validate_double_entry_frame"/>
       </Unit72>
       <Unit73>
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
@@ -722,6 +722,7 @@
         <ComponentName Value="ProjectValidationFrame2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_project_validation_frame2"/>
       </Unit92>
       <Unit93>
         <Filename Value="reports/reports_form.pas"/>

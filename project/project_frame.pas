@@ -710,6 +710,7 @@ var
   Frame: TRuntimeDesignFrame;
 begin
   Relation.Datafile.Caption.Text := 'Dataform ' + IntToStr(FrameCount);
+
   Frame := DoNewRuntimeFrame(Relation);
   Frame.Activate;
   Frame.DeActivate(true);

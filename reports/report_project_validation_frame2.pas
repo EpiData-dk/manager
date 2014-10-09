@@ -36,10 +36,16 @@ type
     procedure BuildFieldLists(const ARelation: TEpiMasterRelation;
       const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
       Data: Pointer = nil);
+    procedure CmpFAllNonKeyFBtnClick(Sender: TObject);
+    procedure CmpFExcludeTextFBtnClick(Sender: TObject);
+    procedure CmpFNoneBtnClick(Sender: TObject);
     procedure FileListAddDoc(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
     procedure FileListDocChange(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
+    procedure KFAutoIncBtnClick(Sender: TObject);
+    procedure KFIndexBtnClick(Sender: TObject);
+    procedure KFNoneBtnClick(Sender: TObject);
     procedure ProjectTreeSelected(Sender: TObject;
       const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
     procedure ProjectTreeSelecting(Sender: TObject; const OldObject,
@@ -49,7 +55,7 @@ type
     FFileList: TProjectFileListFrame;
     FProjectTree: TEpiVProjectTreeViewFrame;
     FSortTree: TEpiVFieldList;
-    FCompareTree: TDataFormTreeViewFrame;
+    FValidateTree: TDataFormTreeViewFrame;
     FFieldListIndex: Integer;
     function  GetOptions: TEpiToolsProjectValidateOptions;
     procedure AddCustomDataWalk(const Relation: TEpiMasterRelation;
@@ -116,6 +122,35 @@ begin
   Inc(FFieldListIndex);
 end;
 
+procedure TProjectValidationFrame2.CmpFAllNonKeyFBtnClick(Sender: TObject);
+var
+  SFields: TEpiFields;
+  F: TEpiField;
+  NonKeyFields: TList;
+begin
+  if FProjectTree.SelectedObjectType <> otRelation then Exit;
+
+  NonKeyFields := TList.Create;
+  SFields := FSortTree.CheckedList;
+
+  for F in TEpiMasterRelation(FProjectTree.SelectedObject).Datafile.Fields do
+    if not SFields.ItemExistsByName(F.Name) then
+      NonKeyFields.Add(F);
+
+  FValidateTree.SelectedList := NonKeyFields;
+  NonKeyFields.Free;
+end;
+
+procedure TProjectValidationFrame2.CmpFExcludeTextFBtnClick(Sender: TObject);
+begin
+  FValidateTree.SelectFieldTypes(StringFieldTypes, true);
+end;
+
+procedure TProjectValidationFrame2.CmpFNoneBtnClick(Sender: TObject);
+begin
+  FValidateTree.SelectNone;
+end;
+
 procedure TProjectValidationFrame2.FileListAddDoc(Sender: TObject; Document: TEpiDocument;
   const Filename: string; const RowNo: Integer);
 begin
@@ -135,8 +170,51 @@ begin
     DocumentRemoved(Document);
 end;
 
+procedure TProjectValidationFrame2.KFAutoIncBtnClick(Sender: TObject);
+var
+  Fs: TEpiFields;
+  F: TEpiField;
+begin
+  if FSortTree.Locked then exit;
+  if FProjectTree.SelectedObjectType <> otRelation then exit;
+
+  Fs := TEpiFields.Create(nil);
+  Fs.ItemOwner := false;
+  for F in TEpiMasterRelation(FProjectTree.SelectedObject).Datafile.Fields do
+    if F.FieldType = ftAutoInc then
+      Fs.AddItem(F);
+
+  FSortTree.CheckedList := Fs;
+  Fs.Free;
+end;
+
+procedure TProjectValidationFrame2.KFIndexBtnClick(Sender: TObject);
+var
+  F: TEpiFields;
+begin
+  if FSortTree.Locked then exit;
+  if FProjectTree.SelectedObjectType <> otRelation then exit;
+
+  F := TEpiMasterRelation(FProjectTree.SelectedObject).Datafile.KeyFields;
+  if Assigned(F) then
+    FSortTree.CheckedList := F;
+end;
+
+procedure TProjectValidationFrame2.KFNoneBtnClick(Sender: TObject);
+var
+  F: TEpiFields;
+begin
+  if FSortTree.Locked then exit;
+
+  F := TEpiFields.Create(nil);
+  FSortTree.CheckedList := F;
+  F.Free;
+end;
+
 procedure TProjectValidationFrame2.ProjectTreeSelected(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
+var
+  DoLock: Boolean;
 begin
   if ObjectType <> otRelation then exit;
 
@@ -145,8 +223,8 @@ begin
   FSortTree.Locked        := (TEpiMasterRelation(AObject).DetailRelations.Count > 0) or
                              (AObject is TEpiDetailRelation);
 
-  FCompareTree.DataFile   := TEpiMasterRelation(AObject).Datafile;
-  FCompareTree.SelectedList := TList(AObject.FindCustomData(COMPARE_FIELDS_KEY));
+  FValidateTree.DataFile   := TEpiMasterRelation(AObject).Datafile;
+  FValidateTree.SelectedList := TList(AObject.FindCustomData(COMPARE_FIELDS_KEY));
 end;
 
 procedure TProjectValidationFrame2.ProjectTreeSelecting(Sender: TObject; const OldObject,
@@ -185,7 +263,7 @@ begin
     Exit;
 
   AssignFields(TEpiFields(OldObject.FindCustomData(SORT_FIELDS_KEY)), FSortTree.CheckedList);
-  AssignList(TList(OldObject.FindCustomData(COMPARE_FIELDS_KEY)), FCompareTree.SelectedList);
+  AssignList(TList(OldObject.FindCustomData(COMPARE_FIELDS_KEY)), FValidateTree.SelectedList);
 end;
 
 function TProjectValidationFrame2.GetOptions: TEpiToolsProjectValidateOptions;
@@ -335,8 +413,8 @@ begin
     ShowMoveButtons    := True;
   end;
 
-  FCompareTree := TDataFormTreeViewFrame.Create(Self);
-  with FCompareTree do
+  FValidateTree := TDataFormTreeViewFrame.Create(Self);
+  with FValidateTree do
   begin
     Align              := alClient;
     Parent             := ValidateTab;
