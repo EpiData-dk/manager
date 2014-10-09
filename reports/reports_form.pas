@@ -74,7 +74,10 @@ end;
 procedure TReportForm.FormShow(Sender: TObject);
 begin
   LoadGlyphs;
-  RadioGroup1.ItemIndex := ManagerSettings.ReportOutputFormat;
+  case ManagerSettings.ReportOutputFormat of
+    0: RadioGroup1.ItemIndex := 1;
+    1: RadioGroup1.ItemIndex := 0;
+  end;
   Caption := IFrame.GetCaption;
 
   if ManagerSettings.SaveWindowPositions then
@@ -96,8 +99,8 @@ var
   FGeneratorClass: TEpiReportGeneratorBaseClass;
 begin
   case RadioGroup1.ItemIndex of
-    0: FGeneratorClass := TEpiReportHTMLGenerator;
-    1: FGeneratorClass := TEpiReportTXTGenerator;
+    0: FGeneratorClass := TEpiReportTXTGenerator;
+    1: FGeneratorClass := TEpiReportHTMLGenerator;
   end;
   FReport := FReportClass.Create(FGeneratorClass);
   IFrame.ApplyReportOptions(FReport);
