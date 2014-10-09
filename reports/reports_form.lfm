@@ -1,11 +1,12 @@
 object ReportForm: TReportForm
-  Left = 1842
+  Left = 2010
   Height = 548
-  Top = 212
+  Top = 220
   Width = 581
   Caption = 'ReportForm'
   ClientHeight = 548
   ClientWidth = 581
+  Position = poMainFormCenter
   LCLVersion = '1.3'
   object RadioGroup1: TRadioGroup
     Left = 5

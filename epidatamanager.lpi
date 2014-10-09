@@ -199,7 +199,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -345,6 +344,7 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -352,7 +352,6 @@
         <ComponentName Value="StaticReportsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="staticreports_form"/>
       </Unit28>
       <Unit29>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
@@ -489,7 +488,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -599,7 +597,6 @@
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="validate_double_entry_frame"/>
       </Unit72>
       <Unit73>
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
@@ -738,6 +735,7 @@
         <ComponentName Value="CountByIdFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_counts_frame"/>
       </Unit94>
     </Units>
   </ProjectOptions>

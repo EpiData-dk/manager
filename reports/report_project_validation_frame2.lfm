@@ -46,9 +46,9 @@ object ProjectValidationFrame2: TProjectValidationFrame2
     Height = 547
     Top = 136
     Width = 529
-    ActivePage = ValidateTab
+    ActivePage = SortTab
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 4
     object SortTab: TTabSheet
       Caption = 'List by'

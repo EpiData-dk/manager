@@ -433,6 +433,8 @@ begin
 
     EndUpdate;
   end;
+
+  PageControl.ActivePage := SortTab;
 end;
 
 destructor TProjectValidationFrame2.Destroy;
