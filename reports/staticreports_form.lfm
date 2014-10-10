@@ -88,11 +88,12 @@ object StaticReportsForm: TStaticReportsForm
   end
   object RadioGroup1: TRadioGroup
     Left = 5
-    Height = 85
-    Top = 376
+    Height = 51
+    Top = 410
     Width = 585
     Align = alBottom
     AutoFill = True
+    AutoSize = True
     BorderSpacing.Around = 5
     Caption = 'Output Format:'
     ChildSizing.LeftRightSpacing = 6
@@ -102,13 +103,14 @@ object StaticReportsForm: TStaticReportsForm
     ChildSizing.ShrinkHorizontal = crsScaleChilds
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 1
-    ClientHeight = 68
+    ChildSizing.ControlsPerLine = 2
+    ClientHeight = 34
     ClientWidth = 581
+    Columns = 2
     ItemIndex = 0
     Items.Strings = (
-      'Website (HTML)'
       'Text'
+      'Website (HTML)'
     )
     TabOrder = 0
   end

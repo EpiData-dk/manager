@@ -1,22 +1,22 @@
 object RuntimeDesignFrame: TRuntimeDesignFrame
   Left = 0
-  Height = 582
+  Height = 626
   Top = 0
-  Width = 812
-  ClientHeight = 582
-  ClientWidth = 812
+  Width = 1101
+  ClientHeight = 626
+  ClientWidth = 1101
   TabOrder = 0
   DesignLeft = 1724
   DesignTop = 230
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
-    Top = 556
-    Width = 812
+    Top = 600
+    Width = 1101
     Align = alBottom
     BevelOuter = bvNone
     ClientHeight = 26
-    ClientWidth = 812
+    ClientWidth = 1101
     TabOrder = 3
     object SectionsPanel: TPanel
       AnchorSideLeft.Control = RecordsPanel
@@ -166,14 +166,14 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 377
       Height = 24
       Top = 2
-      Width = 53
+      Width = 342
       Alignment = taLeftJustify
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 2
       BorderSpacing.Right = 2
       BevelOuter = bvLowered
       ClientHeight = 24
-      ClientWidth = 53
+      ClientWidth = 342
       Color = clWindow
       ParentColor = False
       TabOrder = 4
@@ -194,7 +194,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       AnchorSideLeft.Control = FieldNamePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = DefaultValuePanel
-      Left = 432
+      Left = 721
       Height = 24
       Top = 2
       Width = 88
@@ -225,7 +225,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       AnchorSideLeft.Control = FieldTypePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = ValueLabelPanel
-      Left = 522
+      Left = 811
       Height = 24
       Top = 2
       Width = 55
@@ -256,7 +256,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       AnchorSideLeft.Control = DefaultValuePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = RangePanel
-      Left = 579
+      Left = 868
       Height = 24
       Top = 2
       Width = 80
@@ -287,7 +287,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       AnchorSideLeft.Control = ValueLabelPanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = KeyPanel
-      Left = 661
+      Left = 950
       Height = 24
       Top = 2
       Width = 60
@@ -318,7 +318,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       AnchorSideLeft.Control = RangePanel
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = ExtendedPanel
-      Left = 723
+      Left = 1012
       Height = 24
       Top = 2
       Width = 35
@@ -350,7 +350,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = StatusBarPanel
       AnchorSideRight.Side = asrBottom
-      Left = 760
+      Left = 1049
       Height = 24
       Top = 2
       Width = 50
@@ -382,95 +382,45 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
   end
   object Panel1: TPanel
-    Left = 547
-    Height = 534
+    Left = 836
+    Height = 578
     Top = 22
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 532
+    ClientHeight = 576
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
-    object Label1: TLabel
-      Left = 11
-      Height = 15
-      Top = 38
-      Width = 42
-      Caption = 'Label1'
-      ParentColor = False
-    end
-    object Label2: TLabel
-      Left = 11
-      Height = 15
-      Top = 118
-      Width = 42
-      Caption = 'Label1'
-      ParentColor = False
-    end
-    object Label3: TLabel
-      Left = 11
-      Height = 15
-      Top = 198
-      Width = 42
-      Caption = 'Label1'
-      ParentColor = False
-    end
-    object Label4: TLabel
-      Left = 11
-      Height = 15
-      Top = 294
-      Width = 42
-      Caption = 'Label1'
-      ParentColor = False
-    end
-    object Label5: TLabel
-      Left = 11
-      Height = 15
-      Top = 378
-      Width = 42
-      Caption = 'Label5'
-      ParentColor = False
+    object Memo1: TMemo
+      Left = 8
+      Height = 314
+      Top = 8
+      Width = 248
+      Anchors = [akTop, akLeft, akRight]
+      Lines.Strings = (
+        'Memo1'
+      )
+      ReadOnly = True
+      ScrollBars = ssAutoBoth
+      TabOrder = 0
+      WantReturns = False
     end
     object Button1: TButton
-      Left = 124
+      Left = 83
       Height = 25
-      Top = 470
-      Width = 115
-      Caption = 'Save DF As XML'
+      Top = 374
+      Width = 75
+      Caption = 'Button1'
       OnClick = Button1Click
-      TabOrder = 0
-    end
-    object Label6: TLabel
-      Left = 11
-      Height = 15
-      Top = 454
-      Width = 42
-      Caption = 'Label6'
-      ParentColor = False
-    end
-    object Label7: TLabel
-      Left = 75
-      Height = 15
-      Top = 77
-      Width = 42
-      Caption = 'Label7'
-      ParentColor = False
-    end
-    object Label8: TLabel
-      Left = 80
-      Height = 15
-      Top = 162
-      Width = 42
-      Caption = 'Label8'
-      ParentColor = False
+      TabOrder = 1
     end
   end
   object Splitter1: TSplitter
-    Left = 542
-    Height = 534
+    Left = 831
+    Height = 578
     Top = 22
     Width = 5
     Align = alRight
@@ -480,18 +430,18 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     Left = 0
     Height = 22
     Top = 0
-    Width = 812
+    Width = 1101
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
     ClientHeight = 22
-    ClientWidth = 812
+    ClientWidth = 1101
     TabOrder = 0
     object DesignerToolBar: TToolBar
       Left = 0
       Height = 22
       Top = 0
-      Width = 812
+      Width = 1101
       Align = alClient
       AutoSize = True
       ButtonHeight = 20

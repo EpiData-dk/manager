@@ -72,7 +72,11 @@ procedure TStaticReportsForm.FormShow(Sender: TObject);
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'StaticReportsForm');
-  RadioGroup1.ItemIndex := ManagerSettings.ReportOutputFormat;
+
+  case ManagerSettings.ReportOutputFormat of
+    0: RadioGroup1.ItemIndex := 1;
+    1: RadioGroup1.ItemIndex := 0;
+  end;
 end;
 
 procedure TStaticReportsForm.OkActionExecute(Sender: TObject);
@@ -80,8 +84,8 @@ var
   FGeneratorClass: TEpiReportGeneratorBaseClass;
 begin
   case RadioGroup1.ItemIndex of
-    0: FGeneratorClass := TEpiReportHTMLGenerator;
-    1: FGeneratorClass := TEpiReportTXTGenerator;
+    0: FGeneratorClass := TEpiReportTXTGenerator;
+    1: FGeneratorClass := TEpiReportHTMLGenerator;
   end;
   FReport := FReportClass.Create(FGeneratorClass);
   FReport.DocumentFiles := FProjectList.SelectedDocfileList;

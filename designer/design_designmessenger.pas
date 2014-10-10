@@ -54,7 +54,9 @@ function TDesignMessenger.IsDesignMessage(ASender: TControl;
 var
   Ctrl: TControl;
   P: TPoint;
+  S: String;
 begin
+  S := '';
   case AMessage.Msg of
     LM_MOUSEWHEEL:
       // Handle MouseWheel, since on (especially) windows this is not handle
@@ -82,10 +84,23 @@ begin
           GetParentForm(FFrame).BringToFront;
           Result := inherited IsDesignMessage(ASender, AMessage);
         end;
-      end
+
+        case AMessage.Msg of
+          LM_LBUTTONDOWN:  S := 'LM_LBUTTONDOWN';
+          LM_LBUTTONUP:    S := 'LM_LBUTTONUP';
+          LM_RBUTTONDOWN:  S := 'LM_RBUTTONDOWN';
+          LM_RBUTTONUP:    S := 'LM_RBUTTONUP';
+        end;
+      end;
+    LM_LBUTTONDBLCLK:      S := 'LM_LBUTTONDBLCLK';
+    LM_RBUTTONDBLCLK:      S := 'LM_RBUTTONDBLCLK';
   else
     Result := inherited IsDesignMessage(ASender, AMessage);
   end;
+
+//  if S <> '' then
+//    FFrame.Memo1.Append('TDesignMessenger.IsDesignMessage: ' + S);
+
   if Result then
     AMessage.Result := 1;
 end;

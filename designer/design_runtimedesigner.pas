@@ -16,9 +16,11 @@ type
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame, IProjectFrame)
+    Button1: TButton;
     DefineKeyAction: TAction;
     DataformPropertiesAction: TAction;
     ImportCBAction: TAction;
+    Memo1: TMemo;
     RenameControlsAction: TAction;
     RecodeDataAction: TAction;
     ClearDataAction: TAction;
@@ -118,7 +120,6 @@ type
     DesignControlPopUpMenu: TPopupMenu;
     EditControlAction: TAction;
     DesignerActionList: TActionList;
-    Button1: TButton;
     CurrentSectionLabel: TLabel;
     CurrentSectionPanel: TPanel;
     DefaultValueLabel: TLabel;
@@ -135,14 +136,6 @@ type
     FieldTypePanel: TPanel;
     KeyLabel: TLabel;
     KeyPanel: TPanel;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Label7: TLabel;
-    Label8: TLabel;
     NewAutoIncMenu: TMenuItem;
     NewBooleanMenu: TMenuItem;
     NewDMYTodayFieldMenu: TMenuItem;
@@ -2334,8 +2327,6 @@ var
   EpiCtrl: TEpiCustomControlItem;
   Selection: TJvDesignObjectArray;
 begin
-  Label4.Caption := 'Selection Count: ' + IntToStr(FDesignPanel.Surface.Count);
-
   if (FCreatingControl) and
      (not FSettingDataFile)
   then
@@ -2636,14 +2627,8 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.Button1Click(Sender: TObject);
-var
-  Fs: TFileStream;
-  S: String;
 begin
-  Fs := TFileStream.Create('/tmp/df.xml', fmCreate);
-  S := DataFile.SaveToXml('', 0);
-  Fs.Write(S[1], Length(S));
-  Fs.Free;
+  Memo1.Clear;
 end;
 
 procedure TRuntimeDesignFrame.ClearDataActionExecute(Sender: TObject);

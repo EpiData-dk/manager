@@ -91,26 +91,13 @@ end;
 function TDesignController.MouseDown(Button: TMouseButton; X, Y: Integer;
   TheMessage: TLMMouse): Boolean;
 begin
-  if TheMessage.Msg = LM_LBUTTONDBLCLK then
-  begin
-    FFrame.Label8.Caption := 'DblClick';
-  end;
-
   Result := inherited MouseDown(Button, X, Y, TheMessage);
-  if Assigned(FFrame) then
-    FFrame.Label1.Caption := 'Mouse (1): X = ' + IntToStr(X) + ' | Y = ' + IntToStr(Y);
-
-  if Assigned(FFrame) then
-    FFrame.Label2.Caption := 'Mouse (2): X = ' + IntToStr(TheMessage.XPos) + ' | Y = ' + IntToStr(TheMessage.YPos);
 end;
 
 function TDesignController.MouseMove(X, Y: Integer; TheMessage: TLMMouse
   ): Boolean;
 begin
   Result := inherited MouseMove(X, Y, TheMessage);
-
-  if Assigned(FFrame) then
-    FFrame.Label1.Caption := 'Mouse (1): X = ' + IntToStr(X) + ' | Y = ' + IntToStr(Y);
 end;
 
 function TDesignController.MouseUp(Button: TMouseButton; X, Y: Integer;
@@ -133,12 +120,6 @@ begin
     dmCreate:
       FFrame.ShowPropertiesForm(true);
   end;
-
-  if Assigned(FFrame) then
-    FFrame.Label1.Caption := 'Mouse (1): X = ' + IntToStr(X) + ' | Y = ' + IntToStr(Y);
-
-  if Assigned(FFrame) then
-    FFrame.Label2.Caption := 'Mouse (2): X = ' + IntToStr(TheMessage.XPos) + ' | Y = ' + IntToStr(TheMessage.YPos);
 end;
 
 function TDesignController.GetDragRect: TRect;

@@ -139,65 +139,6 @@ procedure TValidateDoubleEntryFrame.CmpFNoneBtnClick(Sender: TObject);
 begin
   FCompareTree.SelectNone;
 end;
-{
-procedure TValidateDoubleEntryFrame.BitBtn1Click(Sender: TObject);
-var
-  L: TList;
-  MR: TEpiMasterRelation;
-  SelectFiles: TStringList;
-  MainDataFiles: TEpiDataFiles;
-  DuplDataFiles: TEpiDataFiles;
-  FieldList: TList;
-  i: Integer;
-  j: Integer;
-begin
-  // Before anything else, make sure the lastes changed to the DataFileTree's
-  // are applied to the custom data.
-  DataFileTreeToCustomData(FProjectTree.SelectedObject);
-
-  try
-    L := FProjectTree.CheckList;
-    if L.Count = 0 then exit;
-
-    SetLength(FValidationOptions, L.Count);
-
-    SelectFiles := FFileList.SelectedList;
-    MainDataFiles := TEpiDocument(SelectFiles.Objects[0]).DataFiles;
-    DuplDataFiles := TEpiDocument(SelectFiles.Objects[1]).DataFiles;
-
-    MR := TEpiMasterRelation(L.Items[0]);
-//    SwapDatafiles := false;
-
-//    if MainDataFiles.IndexOf(MR.Datafile) < 0 then
-//      SwapDatafiles := true;
-
-    for i := 0 to L.Count - 1 do
-      begin
-        MR := TEpiMasterRelation(L.Items[i]);
-
-        with FValidationOptions[i] do
-        begin
-          MainDF := MR.Datafile;
-          DuplDF := TEpiDataFile(DuplDataFiles.GetItemByName(MR.Datafile.Name));
-
-          Keyfields := TEpiFields.Create(nil);
-          FieldList := TList(MR.FindCustomData(KEYTREE_CUSTOMDATA));
-          for j := 0 to FieldList.Count - 1 do
-            if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
-              KeyFields.AddItem(TEpiCustomItem(FieldList[j]));
-
-          Comparefields := TEpiFields.Create(nil);
-          FieldList := TList(MR.FindCustomData(COMPARETREE_CUSTOMDATA));
-          for j := 0 to FieldList.Count - 1 do
-            if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
-              Comparefields.AddItem(TEpiCustomItem(FieldList[j]));
-        end;
-      end;
-  finally
-    L.Free;
-    SelectFiles.Free;
-  end;
-end;         }
 
 procedure TValidateDoubleEntryFrame.FileListAddDoc(Sender: TObject;
   Document: TEpiDocument; const Filename: string; const RowNo: Integer);
@@ -488,10 +429,6 @@ begin
     DuplDataFiles := SelectFiles[1].Document.DataFiles;
 
     MR := TEpiMasterRelation(L.Items[0]);
-//    SwapDatafiles := false;
-
-//    if MainDataFiles.IndexOf(MR.Datafile) < 0 then
-//      SwapDatafiles := true;
 
     for i := 0 to L.Count - 1 do
       begin
