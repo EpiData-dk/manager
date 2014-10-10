@@ -15,7 +15,7 @@ object StudyUnitFrame: TStudyUnitFrame
     Width = 659
     ActivePage = TitleSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 3
     TabOrder = 0
     TabPosition = tpRight
     object WelcomeSheet: TTabSheet
@@ -283,11 +283,11 @@ object StudyUnitFrame: TStudyUnitFrame
         ButtonWidth = 23
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
+        CharCase = ecNormal
         NumGlyphs = 1
         MaxLength = 10
         OnEditingDone = StudyEditingDone
         TabOrder = 2
-        Text = '  -  -    '
       end
       object ToDateEdit: TDateEdit
         AnchorSideLeft.Control = Label16
@@ -304,11 +304,11 @@ object StudyUnitFrame: TStudyUnitFrame
         DateOrder = doDMY
         ButtonWidth = 23
         BorderSpacing.Left = 10
+        CharCase = ecNormal
         NumGlyphs = 1
         MaxLength = 10
         OnEditingDone = StudyEditingDone
         TabOrder = 3
-        Text = '  -  -    '
       end
       object Label16: TLabel
         AnchorSideLeft.Control = FromDateEdit

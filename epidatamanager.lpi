@@ -52,6 +52,7 @@
             </Options>
           </Linking>
           <Other>
+            <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -84,6 +85,7 @@
             </Debugging>
           </Linking>
           <Other>
+            <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -121,6 +123,7 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dEPI_DEBUG1"/>
+            <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -691,6 +694,7 @@
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_studyunit_frame"/>
       </Unit88>
       <Unit89>
         <Filename Value="designer/design_properties_dataformframe.pas"/>
@@ -759,6 +763,7 @@
     <Other>
       <CustomOptions Value="-dEPI_DEBUG1
 -dMEM_LEAK_FINDER1"/>
+      <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteBefore>
