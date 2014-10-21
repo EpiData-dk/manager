@@ -14,7 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="7"/>
+      <BuildNr Value="8"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
@@ -46,11 +46,6 @@
             <Debugging>
               <DebugInfoType Value="dsDwarf2Set"/>
             </Debugging>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
           </Linking>
           <Other>
             <ExecuteBefore>
@@ -199,6 +194,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -344,7 +340,6 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -399,6 +394,7 @@
         <ComponentName Value="ExportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="export_form"/>
       </Unit36>
       <Unit37>
         <Filename Value="export/export_stata_frame.pas"/>
@@ -413,10 +409,12 @@
         <ComponentName Value="CustomValueLabelFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_customvaluelabel_frame"/>
       </Unit38>
       <Unit39>
         <Filename Value="export/export_frame_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="export_frame_types"/>
       </Unit39>
       <Unit40>
         <Filename Value="export/export_csv_frame.pas"/>
@@ -583,6 +581,7 @@
       <Unit70>
         <Filename Value="tools/dataset_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="dataset_form"/>
       </Unit70>
       <Unit71>
         <Filename Value="utils/ok_cancel_form.pas"/>
@@ -637,6 +636,7 @@
         <ComponentName Value="ExportEPXFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_epx_frame"/>
       </Unit79>
       <Unit80>
         <Filename Value="reports/report_project_validation.pas"/>
@@ -719,7 +719,6 @@
         <ComponentName Value="ProjectValidationFrame2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_project_validation_frame2"/>
       </Unit92>
       <Unit93>
         <Filename Value="reports/reports_form.pas"/>
@@ -727,7 +726,6 @@
         <ComponentName Value="ReportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="reports_form"/>
       </Unit93>
       <Unit94>
         <Filename Value="reports/report_counts_frame.pas"/>
@@ -735,7 +733,6 @@
         <ComponentName Value="CountByIdFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_counts_frame"/>
       </Unit94>
     </Units>
   </ProjectOptions>

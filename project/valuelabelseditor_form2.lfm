@@ -52,32 +52,6 @@ object ValueLabelEditor2: TValueLabelEditor2
         OnClick = ToolButton1Click
       end
     end
-    object VLSetsTree: TVirtualStringTree
-      Left = 0
-      Height = 551
-      Top = 26
-      Width = 210
-      Align = alClient
-      DefaultText = 'Node'
-      Font.Color = clWindowText
-      Header.AutoSizeIndex = 0
-      Header.Columns = <>
-      Header.DefaultHeight = 17
-      Header.MainColumn = -1
-      Images = DM.Icons16
-      ParentFont = False
-      RootNodeCount = 3
-      ScrollBarOptions.ScrollBars = ssAutoBoth
-      TabOrder = 1
-      TreeOptions.MiscOptions = [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnDblClick]
-      OnFocusChanging = VLSetsTreeFocusChanging
-      OnGetText = VLSetsTreeGetText
-      OnGetImageIndex = VLSetsTreeGetImageIndex
-      OnInitChildren = VLSetsTreeInitChildren
-      OnInitNode = VLSetsTreeInitNode
-      OnKeyDown = VLSetsTreeKeyDown
-      OnNewText = VLSetsTreeNewText
-    end
   end
   object Splitter1: TSplitter
     Left = 210

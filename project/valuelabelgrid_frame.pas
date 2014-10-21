@@ -470,6 +470,8 @@ begin
   inherited Create(TheOwner);
 
   FVLG := TVirtualStringTree.Create(Self);
+  FVLG.BeginUpdate;
+
   with VLG do
   begin
     Align := alClient;
@@ -529,6 +531,8 @@ begin
     Height := 25;
     MainColumn := 2;
   end;
+
+  FVLG.BeginUpdate;
 end;
 
 destructor TValueLabelGridFrame.Destroy;

@@ -4,6 +4,6 @@ object ExportEPXFrame: TExportEPXFrame
   Top = 0
   Width = 320
   TabOrder = 0
-  DesignLeft = 966
-  DesignTop = 350
+  DesignLeft = 2368
+  DesignTop = 321
 end
