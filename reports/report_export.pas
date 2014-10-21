@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, report_base, epidocument, epidatafiles, epiexportsettings,
-  epiopenfile;
+  epiopenfile, Forms;
 
 type
 
@@ -21,7 +21,9 @@ type
     procedure DoDocumentReport(const Doc: TEpiDocumentFile;
       const Index: Integer); override;
   public
+    class function ReportFrameClass: TCustomFrameClass; override;
     property ExportSettings: TEpiExportSetting read FExportSettings write FExportSettings;
+
   end;
 
 implementation
@@ -134,6 +136,11 @@ begin
   TEpiReportStudyInfo(R).Document := Doc.Document;
   R.RunReport;
   R.Free;
+end;
+
+class function TReportExport.ReportFrameClass: TCustomFrameClass;
+begin
+  result := nil;
 end;
 
 
