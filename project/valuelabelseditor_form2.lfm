@@ -1,7 +1,7 @@
 object ValueLabelEditor2: TValueLabelEditor2
-  Left = 1832
+  Left = 1975
   Height = 627
-  Top = 324
+  Top = 386
   Width = 818
   Caption = 'Valuelabel Editor'
   ClientHeight = 627

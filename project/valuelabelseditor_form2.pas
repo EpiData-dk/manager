@@ -529,12 +529,12 @@ begin
     TreeOptions.MiscOptions := [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnDblClick];
 
     OnFocusChanging := @VLSetsTreeFocusChanging;
-    OnGetText := @VLSetsTreeGetText;
+    OnGetText       := @VLSetsTreeGetText;
     OnGetImageIndex := @VLSetsTreeGetImageIndex;
-    OnInitChildren := @VLSetsTreeInitChildren;
-    OnInitNode := @VLSetsTreeInitNode;
-    OnKeyDown := @VLSetsTreeKeyDown;
-    OnNewText := @VLSetsTreeNewText;
+    OnInitChildren  := @VLSetsTreeInitChildren;
+    OnInitNode      := @VLSetsTreeInitNode;
+    OnKeyDown       := @VLSetsTreeKeyDown;
+    OnNewText       := @VLSetsTreeNewText;
 
     Align := alClient;
     Parent := Panel1;

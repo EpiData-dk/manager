@@ -1269,7 +1269,7 @@ begin
   ShowReportForm(Self,
     'Report of: ' + Result.ReportTitle,
     S,
-    F.RadioGroup1.ItemIndex = 0);
+    F.RadioGroup1.ItemIndex = 1);
 
   Screen.Cursor := crDefault;
   Application.ProcessMessages;
@@ -1307,7 +1307,7 @@ begin
     ShowReportForm(Self,
       'Report of: ' + Result.ReportTitle,
       S,
-      F.RadioGroup1.ItemIndex = 0);
+      F.RadioGroup1.ItemIndex = 1);
 
     Screen.Cursor := crDefault;
     Application.ProcessMessages;

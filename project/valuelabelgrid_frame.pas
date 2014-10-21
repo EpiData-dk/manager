@@ -380,6 +380,7 @@ begin
     VLG.RootNodeCount := FValueLabelSet.Count
   else
     VLG.RootNodeCount := 0;
+  VLG.Invalidate;
 end;
 
 procedure TValueLabelGridFrame.EventHook(const Sender,
