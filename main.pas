@@ -385,7 +385,6 @@ end;
 procedure TMainForm.ExportActionExecute(Sender: TObject);
 var
   IsLocalDoc: boolean;
-  Fn: string;
   Doc: TEpiDocumentFile;
   ExportForm: TExportForm;
   Settings: TEpiExportSetting;
@@ -1270,7 +1269,7 @@ begin
   ShowReportForm(Self,
     'Report of: ' + Result.ReportTitle,
     S,
-    F.RadioGroup1.ItemIndex = 0);
+    F.RadioGroup1.ItemIndex = 1);
 
   Screen.Cursor := crDefault;
   Application.ProcessMessages;
@@ -1308,7 +1307,7 @@ begin
     ShowReportForm(Self,
       'Report of: ' + Result.ReportTitle,
       S,
-      F.RadioGroup1.ItemIndex = 0);
+      F.RadioGroup1.ItemIndex = 1);
 
     Screen.Cursor := crDefault;
     Application.ProcessMessages;

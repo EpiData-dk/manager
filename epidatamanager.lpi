@@ -339,6 +339,7 @@
       <Unit26>
         <Filename Value="reports/report_base.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_base"/>
       </Unit26>
       <Unit27>
         <Filename Value="utils/projectfilelist_frame.pas"/>
@@ -379,6 +380,7 @@
         <ComponentName Value="ValueLabelGridFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="valuelabelgrid_frame"/>
       </Unit33>
       <Unit34>
         <Filename Value="project/valuelabelseditor_form2.pas"/>
@@ -386,6 +388,7 @@
         <ComponentName Value="ValueLabelEditor2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabelseditor_form2"/>
       </Unit34>
       <Unit35>
         <Filename Value="settings/settings_export.pas"/>
@@ -669,6 +672,7 @@
       <Unit84>
         <Filename Value="reports/report_export.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_export"/>
       </Unit84>
       <Unit85>
         <Filename Value="project/valuelabel_import_external.pas"/>

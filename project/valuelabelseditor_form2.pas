@@ -27,7 +27,6 @@ type
     AddBtn: TToolButton;
     DelBtn: TToolButton;
     ToolButton1: TToolButton;
-    VLSetsTree: TVirtualStringTree;
     procedure DelBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -38,6 +37,9 @@ type
     procedure MenuItem3Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
+  private
+    { VLSetsTree }
+    VLSetsTree: TVirtualStringTree;
     procedure VLSetsTreeFocusChanging(Sender: TBaseVirtualTree; OldNode,
       NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
       var Allowed: Boolean);
@@ -93,7 +95,7 @@ implementation
 
 uses
   Main, settings2_var, settings2, LCLIntf, LCLType, epimiscutils,
-  valuelabel_import_external;
+  valuelabel_import_external, epiv_datamodule;
 
 var
   Editor: TValueLabelEditor2 = nil;
@@ -514,8 +516,31 @@ end;
 constructor TValueLabelEditor2.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+
+  VLSetsTree := TVirtualStringTree.Create(Self);
+
+  with VLSetsTree do
+  begin
+    Images := DM.Icons16;
+    ScrollBarOptions.ScrollBars := ssAutoBoth;
+    TabOrder := 1;
+    NodeDataSize := SizeOf(TEpiValueLabelSet);
+
+    TreeOptions.MiscOptions := [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnDblClick];
+
+    OnFocusChanging := @VLSetsTreeFocusChanging;
+    OnGetText       := @VLSetsTreeGetText;
+    OnGetImageIndex := @VLSetsTreeGetImageIndex;
+    OnInitChildren  := @VLSetsTreeInitChildren;
+    OnInitNode      := @VLSetsTreeInitNode;
+    OnKeyDown       := @VLSetsTreeKeyDown;
+    OnNewText       := @VLSetsTreeNewText;
+
+    Align := alClient;
+    Parent := Panel1;
+  end;
+
   FLocalUpdating := false;
-  VLSetsTree.NodeDataSize := SizeOf(TEpiValueLabelSet);
 end;
 
 destructor TValueLabelEditor2.Destroy;

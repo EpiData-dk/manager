@@ -380,6 +380,7 @@ begin
     VLG.RootNodeCount := FValueLabelSet.Count
   else
     VLG.RootNodeCount := 0;
+  VLG.Invalidate;
 end;
 
 procedure TValueLabelGridFrame.EventHook(const Sender,
@@ -470,6 +471,8 @@ begin
   inherited Create(TheOwner);
 
   FVLG := TVirtualStringTree.Create(Self);
+  FVLG.BeginUpdate;
+
   with VLG do
   begin
     Align := alClient;
@@ -529,6 +532,8 @@ begin
     Height := 25;
     MainColumn := 2;
   end;
+
+  FVLG.BeginUpdate;
 end;
 
 destructor TValueLabelGridFrame.Destroy;
