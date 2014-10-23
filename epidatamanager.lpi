@@ -14,6 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
+      <BuildNr Value="1"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="RC2"/>
@@ -52,7 +53,6 @@
             </Options>
           </Linking>
           <Other>
-            <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -85,7 +85,6 @@
             </Debugging>
           </Linking>
           <Other>
-            <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -123,7 +122,6 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dEPI_DEBUG1"/>
-            <CompilerPath Value="$(CompPath)"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -193,7 +191,6 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="main"/>
       </Unit1>
       <Unit2>
         <Filename Value="project/project_frame.pas"/>
@@ -372,7 +369,6 @@
         <ComponentName Value="FieldValueLabelEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="field_valuelabelseditor_form"/>
       </Unit32>
       <Unit33>
         <Filename Value="project/valuelabelgrid_frame.pas"/>
@@ -380,7 +376,6 @@
         <ComponentName Value="ValueLabelGridFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="valuelabelgrid_frame"/>
       </Unit33>
       <Unit34>
         <Filename Value="project/valuelabelseditor_form2.pas"/>
@@ -523,7 +518,6 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_fieldframe"/>
       </Unit57>
       <Unit58>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -535,7 +529,6 @@
       <Unit59>
         <Filename Value="designer/design_designmessenger.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designmessenger"/>
       </Unit59>
       <Unit60>
         <Filename Value="designer/design_commander.pas"/>
@@ -766,7 +759,6 @@
     <Other>
       <CustomOptions Value="-dEPI_DEBUG1
 -dMEM_LEAK_FINDER1"/>
-      <CompilerPath Value="$(CompPath)"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteBefore>
