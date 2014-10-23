@@ -23,9 +23,11 @@ type
     { StringTree privates }
     FVLG: TVirtualStringTree;
     procedure DoAddLine;
+    procedure VLGChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VLGChecking(Sender: TBaseVirtualTree; Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
     procedure VLGEdited(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
     procedure VLGEditor(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
+    procedure VLGFocusChanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
     procedure VLGFocusChanging(Sender: TBaseVirtualTree; OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex; var Allowed: Boolean);
     procedure VLGGetNodeText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure VLGInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -222,6 +224,13 @@ begin
   VLG.EndUpdate;
 end;
 
+procedure TValueLabelGridFrame.VLGChecked(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+begin
+  // TODO: This should not be nessesary, somethings is f*cked with the VLG.
+  VLG.Invalidate;
+end;
+
 procedure TValueLabelGridFrame.VLGChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
 begin
@@ -247,6 +256,13 @@ begin
   EL := TValidatedStringEditLink.Create;
   EL.Editor := Self;
   EditLink := EL;
+end;
+
+procedure TValueLabelGridFrame.VLGFocusChanged(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex);
+begin
+  // TODO: This should not be nessesary, somethings is f*cked with the VLG.
+  VLG.Invalidate;
 end;
 
 procedure TValueLabelGridFrame.VLGFocusChanging(Sender: TBaseVirtualTree; OldNode,
@@ -346,10 +362,6 @@ end;
 
 procedure TValueLabelGridFrame.VLGUTF8KeyPress(Sender: TObject;
   var UTF8Key: TUTF8Char);
-var
-  Len: integer;
-  CharCode: Word;
-  Msg: TLMKeyDown;
 begin
   if UTF8Key = Char(VK_SPACE) then exit;
   if UTF8Key = Char(VK_RETURN) then exit;
@@ -487,9 +499,11 @@ begin
     OnGetText       := @VLGGetNodeText;
     OnNewText       := @VLGSetNodeText;
     OnFocusChanging := @VLGFocusChanging;
+    OnFocusChanged := @VLGFocusChanged;
     OnKeyDown       := @VLGKeyDown;
     OnUTF8KeyPress  := @VLGUTF8KeyPress;
     OnChecking      := @VLGChecking;
+    OnChecked := @VLGChecked;
     OnCreateEditor  := @VLGEditor;
     OnEdited        := @VLGEdited;
   end;
@@ -509,14 +523,14 @@ begin
     with Columns.Add do
     begin
       Text := 'Value';
-      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus];
+      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus, coEditable];
       Width := 20;
     end;
 
     with Columns.Add do
     begin
       Text := 'Label';
-      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus];
+      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus, coEditable];
       Width := 40;
     end;
 
@@ -524,7 +538,7 @@ begin
     begin
       Alignment := taCenter;
       Text := 'Missing';
-      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coVisible];
+      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coVisible, coEditable];
       CheckBox := true;
       Width := 70;
     end;
