@@ -28,6 +28,9 @@ const
   // Last ValueLabelEditor message... always update when inserting new messages.!
   LM_VLEDIT_LAST       = LM_VLEDIT_FOCUSCHECK;
 
+  // Value Label Grid message
+  LM_VLG_NEWVALUELABEL = LM_VLEDIT_LAST + 1;      // Send message to GridFrame to start adding new valuelabel.
+
 implementation
 
 end.

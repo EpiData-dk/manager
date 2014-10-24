@@ -273,7 +273,7 @@ var
 begin
   Result := false;
 
-  if not FileExistsUTF8(FileName) then exit;
+  if FileName = '' then exit;
 
   try
     Ini := GetIniFile(FileName);

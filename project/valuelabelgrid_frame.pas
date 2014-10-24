@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, VirtualTrees, epivaluelabels,
-  epidatafilestypes, LCLType, ComCtrls, design_types, epicustombase;
+  epidatafilestypes, LCLType, ComCtrls, design_types, epicustombase, LMessages,
+  manager_messages;
 
 type
 
@@ -14,7 +15,6 @@ type
 
   TValueLabelGridFrame = class(TFrame)
     DelLineBtn: TToolButton;
-    ImageList1: TImageList;
     NewLineBtn: TToolButton;
     ToolBar1: TToolBar;
     procedure DelLineBtnClick(Sender: TObject);
@@ -48,6 +48,7 @@ type
     procedure NodeError(Node: PVirtualNode; Column: TColumnIndex; Const Msg: string);
     procedure DoShowHintMsg(Ctrl: TControl; Const Msg: String); overload;
     procedure DoShowHintMsg(R: TRect; Const Msg: string); overload;
+    procedure LM_NewValueLabel(Var Msg: TLMessage); message LM_VLG_NEWVALUELABEL;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -63,7 +64,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Dialogs, LCLProc, epimiscutils, Math, LCLIntf, LMessages;
+  Graphics, Dialogs, LCLProc, epimiscutils, Math, LCLIntf, Clipbrd;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -88,6 +89,20 @@ procedure TValidatedStringEditLink.KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   FEditor.DoShowHintMsg(nil, '');
+
+  if (FColumn = 1) and
+     (Key = VK_N) and
+     (Shift = [ssCtrlOS]) and
+     // Doing an EndEdit, will trigger the VLGEdited method, but it only acts
+     // if Column = 0, so we may safely send a postmessage here!
+     (FTree.EndEditNode)
+  then
+    PostMessage(FEditor.Handle, LM_VLG_NEWVALUELABEL, 0, 0);
+
+  if (Key = VK_C) and
+     (Shift = [ssCtrlOS])
+  then
+    Edit.CopyToClipboard;
 end;
 
 constructor TValidatedStringEditLink.Create;
@@ -143,7 +158,7 @@ end;
 procedure TValueLabelGridFrame.NewLineBtnClick(Sender: TObject);
 begin
   DoAddLine;
-  VLG.SetFocus;
+//  VLG.SetFocus;
 end;
 
 procedure TValueLabelGridFrame.DelLineBtnClick(Sender: TObject);
@@ -188,40 +203,57 @@ begin
 
   VLG.BeginUpdate;
 
-  Last := VLG.GetLast();
-  FValueLabelSet.NewValueLabel;
-  Node := VLG.GetLast();
+  try
+    Last := VLG.GetLast();
 
-  if FValueLabelSet.LabelType in [ftFloat,ftInteger] then
-  begin
-    if Assigned(Last) then
-    begin
-      if FValueLabelSet.LabelType = ftInteger then
-        VLG.Text[Node, 0] := FloatToStr(StrToInt(ValueLabelFromNode(Last).ValueAsString) + 1)
-      else begin
-        if Assigned(VLG.GetPrevious(Last)) then
-        begin
-          V2 := StrToFloat(ValueLabelFromNode(Last).ValueAsString);
-          V1 := StrToFloat(ValueLabelFromNode(VLG.GetPrevious(Last)).ValueAsString);
-          VLG.Text[Node, 0] := FloatToStr(V2 + (V2 - V1));
-        end else begin
-          V1 := StrToFloat(ValueLabelFromNode(Last).ValueAsString) * 2;
-          if SameValue(V1, 0) then
-            VLG.Text[Node, 0] := '1'
-          else
-            VLG.Text[Node, 0] := FloatToStr(V1);
-        end;
+    if Assigned(Last) and
+       (VLG.Text[Last, 1] = '')
+    then
+      begin
+        DoShowHintMsg(VLG.GetDisplayRect(Last, 1, true),
+          'Please enter a label or delete entry before making a new!'
+        );
+        Exit;
       end;
-    end
-    else
-      VLG.Text[Node, 0] := '0';
+
+    FValueLabelSet.NewValueLabel;
+    Node := VLG.GetLast();
+
+    if FValueLabelSet.LabelType in [ftFloat,ftInteger] then
+    begin
+      if Assigned(Last) then
+      begin
+        if FValueLabelSet.LabelType = ftInteger then
+          VLG.Text[Node, 0] := FloatToStr(StrToInt(ValueLabelFromNode(Last).ValueAsString) + 1)
+        else begin
+          if Assigned(VLG.GetPrevious(Last)) then
+          begin
+            V2 := StrToFloat(ValueLabelFromNode(Last).ValueAsString);
+            V1 := StrToFloat(ValueLabelFromNode(VLG.GetPrevious(Last)).ValueAsString);
+            VLG.Text[Node, 0] := FloatToStr(V2 + (V2 - V1));
+          end else begin
+            V1 := StrToFloat(ValueLabelFromNode(Last).ValueAsString) * 2;
+            if SameValue(V1, 0) then
+              VLG.Text[Node, 0] := '1'
+            else
+              VLG.Text[Node, 0] := FloatToStr(V1);
+          end;
+        end;
+      end
+      else
+        VLG.Text[Node, 0] := '1';
+    end;
+
+  {  VLG.FocusedNode := Node;
+    VLG.FocusedColumn := 1;
+    VLG.Selected[Node] := true;}
+
+    if Assigned(Node) then
+      VLG.EditNode(Node, 1);
+
+  finally
+    VLG.EndUpdate;
   end;
-
-  VLG.FocusedNode := Node;
-  VLG.FocusedColumn := 0;
-  VLG.Selected[Node] := true;
-
-  VLG.EndUpdate;
 end;
 
 procedure TValueLabelGridFrame.VLGChecked(Sender: TBaseVirtualTree;
@@ -324,9 +356,16 @@ begin
       end;
     VK_N:
       begin
-        if not (Shift = [ssCtrl]) then exit;
+        if not (Shift = [ssCtrlOS]) then exit;
 
         DoAddLine;
+        Key := VK_UNKNOWN;
+      end;
+    VK_C:
+      begin
+        if not (Shift = [ssCtrlOS]) then exit;
+
+        Clipboard.AsText := VLG.Text[VLG.FocusedNode, VLG.FocusedColumn];
         Key := VK_UNKNOWN;
       end;
   end;
@@ -476,6 +515,11 @@ begin
   Ctrl.Parent := VLG;
   DoShowHintMsg(Ctrl, Msg);
   Ctrl.Free;
+end;
+
+procedure TValueLabelGridFrame.LM_NewValueLabel(var Msg: TLMessage);
+begin
+  DoAddLine;
 end;
 
 constructor TValueLabelGridFrame.Create(TheOwner: TComponent);
