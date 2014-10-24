@@ -15,6 +15,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    RecentFilesActionList: TActionList;
     AppendAction: TAction;
     DataFormBtn: TBitBtn;
     DocumentBtn: TBitBtn;
@@ -183,6 +184,8 @@ type
     procedure CountsReportActionExecute(Sender: TObject);
     procedure DataFormBtnClick(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
+    procedure RecentFilesActionListUpdate(AAction: TBasicAction;
+      var Handled: Boolean);
     procedure SelectProjectBtnClick(Sender: TObject);
     procedure DocumentBtnClick(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
@@ -290,8 +293,11 @@ uses
   valuelabel_import_data,
   append_form, epitools_append,
   validate_double_entry_form,
-  count_by_id_form,
+  count_by_id_form, manager_globals,
   report_project_validation_frame2, reports_form;
+
+type
+  TAccessActionList = class(TActionList);
 
 { TMainForm }
 
@@ -364,6 +370,15 @@ end;
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
 begin
   RestoreDefaultPos;
+end;
+
+procedure TMainForm.RecentFilesActionListUpdate(AAction: TBasicAction;
+  var Handled: Boolean);
+begin
+  if Screen.ActiveCustomForm <> MainForm then
+    RecentFilesActionList.State := asSuspended
+  else
+    RecentFilesActionList.State := asNormal;
 end;
 
 procedure TMainForm.SelectProjectBtnClick(Sender: TObject);
@@ -1364,10 +1379,10 @@ end;
 
 procedure TMainForm.LMOpenRecent(var Msg: TLMessage);
 var
-  Item: TMenuItem;
+  A: TAction;
 begin
-  Item := TMenuItem(Msg.WParam);
-  DoOpenProject(ExpandFileNameUTF8(Item.Caption));
+  A := TAction(Msg.WParam);
+  DoOpenProject(ExpandFileNameUTF8(A.Caption));
   UpdateProcessToolbar;
 end;
 
@@ -1408,33 +1423,38 @@ var
   i: Integer;
   K: Word;
   Shift: TShiftState;
+  A: TAction;
 begin
-  ShortCutToKey(M_OpenRecent, K, Shift);
-
   LoadRecentFilesIni(GetRecentIniFileName);
+
   RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
   RecentFilesSubMenu.Clear;
   RecentFilesSubPopupMenu.Visible := RecentFilesSubMenu.Visible;
   RecentFilesSubPopupMenu.Clear;
 
-  for i := 0 to RecentFiles.Count - 1 do
+  for i := 0 to MaxRecentFiles - 1 do
   begin
     // Main menu
+    A := TAction(RecentFilesActionList.Actions[i]);
+
+    // Disable actions if the list of recentfiles is not long enough.
+    if i >= RecentFiles.Count then
+    begin
+      A.Enabled := false;
+      Continue;
+    end;
+
+    A.Enabled := true;
+    A.Caption := RecentFiles[i];
+
     Mi := TMenuItem.Create(RecentFilesSubMenu);
     Mi.Name := 'recent' + inttostr(i);
-    Mi.Caption := RecentFiles[i];
-    Mi.OnClick := @OpenRecentMenuItemClick;
-    if i < 9 then
-      Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
+    Mi.Action := A;
     RecentFilesSubMenu.Add(Mi);
 
     // Popup menu
     Mi := TMenuItem.Create(RecentFilesSubPopupMenu);
-    Mi.Name := 'recent' + inttostr(i);
-    Mi.Caption := RecentFiles[i];
-    Mi.OnClick := @OpenRecentMenuItemClick;
-    if i < 9 then
-      Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
+    Mi.Action := A;
     RecentFilesSubPopupMenu.Add(Mi);
   end;
 end;
@@ -1469,9 +1489,26 @@ begin
 end;
 
 constructor TMainForm.Create(TheOwner: TComponent);
+var
+  i: Integer;
+  A: TAction;
+  K: Word;
+  Shift: TShiftState;
 begin
   inherited Create(TheOwner);
+
   FActiveFrame := nil;
+
+  ShortCutToKey(M_OpenRecent, K, Shift);
+  for i := 1 to MaxRecentFiles do
+  begin
+    A := TAction.Create(RecentFilesActionList);
+    A.ShortCut := KeyToShortCut(VK_1 + (i - 1), Shift);
+    A.Enabled  := false;
+    A.OnExecute := @OpenRecentMenuItemClick;
+
+    TAccessActionList(RecentFilesActionList).AddAction(A);
+  end;
 
   {$IFDEF EPI_IPC_TEST}
   SetupIPC;

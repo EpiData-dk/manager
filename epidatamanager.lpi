@@ -198,6 +198,7 @@
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="managerprocs"/>
       </Unit3>
       <Unit4>
         <Filename Value="project/project_settings.pas"/>
@@ -358,6 +359,7 @@
       <Unit31>
         <Filename Value="shortcuts.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="shortcuts"/>
       </Unit31>
       <Unit32>
         <Filename Value="designer/field_valuelabelseditor_form.pas"/>
@@ -365,6 +367,7 @@
         <ComponentName Value="FieldValueLabelEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="field_valuelabelseditor_form"/>
       </Unit32>
       <Unit33>
         <Filename Value="project/valuelabelgrid_frame.pas"/>
@@ -380,6 +383,7 @@
         <ComponentName Value="ValueLabelEditor2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabelseditor_form2"/>
       </Unit34>
       <Unit35>
         <Filename Value="settings/settings_export.pas"/>
@@ -458,6 +462,7 @@
       <Unit46>
         <Filename Value="utils/manager_globals.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="manager_globals"/>
       </Unit46>
       <Unit47>
         <Filename Value="tools/validate_double_entry_form.pas"/>
@@ -514,6 +519,7 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_fieldframe"/>
       </Unit57>
       <Unit58>
         <Filename Value="designer/design_properties_sectionframe.pas"/>

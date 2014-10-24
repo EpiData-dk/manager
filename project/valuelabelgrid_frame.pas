@@ -244,12 +244,10 @@ begin
         VLG.Text[Node, 0] := '1';
     end;
 
-  {  VLG.FocusedNode := Node;
+    VLG.FocusedNode := Node;
     VLG.FocusedColumn := 1;
-    VLG.Selected[Node] := true;}
-
-    if Assigned(Node) then
-      VLG.EditNode(Node, 1);
+    VLG.Selected[Node] := true;
+    VLG.EditNode(Node, 1);
 
   finally
     VLG.EndUpdate;
@@ -374,6 +372,7 @@ end;
 procedure TValueLabelGridFrame.VLGSendPostEdit(Data: PtrInt);
 begin
   VLG.FocusedColumn := 1;
+  VLG.FocusedNode   := PVirtualNode(Data);
   VLG.EditNode(PVirtualNode(Data), 1);
 end;
 

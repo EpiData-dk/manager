@@ -9,6 +9,7 @@ uses
 
 const
   DesignControlCustomDataKey = 'DesignControlCustomDataKey';
+  MaxRecentFiles = 9;
 
 function GlobalCopyList: TFPList;
 function GlobalCopyListClear: TFPList;
