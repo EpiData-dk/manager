@@ -1181,6 +1181,8 @@ begin
 end;
 
 procedure TFieldPropertiesFrame.ValueLabelComboBoxChange(Sender: TObject);
+var
+  VL: TEpiValueLabelSet;
 begin
   ValueLabelSettingGrpBox.Enabled :=
     (not ComboIgnoreSelected(ValueLabelComboBox)) and
@@ -1192,10 +1194,20 @@ begin
     ShowHintMsg('Warning: Selected value label set is not compatible with all fields',
       ValueLabelComboBox);
 
+  AddEditValueLabelBtn.Caption := 'Edit';
+
+  AddEditValueLabelBtn.Enabled :=
+    (not ComboIgnoreSelected(ValueLabelComboBox));
+
   If ComboNoneSelected(ValueLabelComboBox) then
-    AddEditValueLabelBtn.Caption := 'New'
-  else
-    AddEditValueLabelBtn.Caption := 'Edit';
+    AddEditValueLabelBtn.Caption := 'New';
+
+  VL := TEpiValueLabelSet(ComboSelectedObject(ValueLabelComboBox));
+  if (not ComboIgnoreSelected(ValueLabelComboBox)) and
+     (Assigned(VL)) and
+     (VL.LabelScope = vlsExternal)
+  then
+    AddEditValueLabelBtn.Caption := 'View';
 end;
 
 procedure TFieldPropertiesFrame.RegisterValueLabelHook;

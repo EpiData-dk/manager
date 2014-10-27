@@ -49,6 +49,10 @@ implementation
 uses
   LCLIntf, LMessages, epidocument, settings2_var, settings2;
 
+const
+  rsFormCaption = 'Field Valuelabel Editor';
+
+
   { TFieldValueLabelEditor }
 
 procedure TFieldValueLabelEditor.OkBtnClick(Sender: TObject);
@@ -106,6 +110,11 @@ begin
   ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
   ValueLabelNameEdit.Enabled := (ValueLabelSet.LabelScope = vlsInternal);
 
+  Caption := rsFormCaption + BoolToStr(ValueLabelSet.LabelScope = vlsInternal,
+    '',
+    ' (View Only)'
+  );
+
   FGridFrame.VLG.SetFocus;
 
   if FGridFrame.ValueLabelSet.Count > 0 then // assume existing VL set.
@@ -162,6 +171,11 @@ procedure TFieldValueLabelEditor.SetValueLabelSet(AValue: TEpiValueLabelSet);
 begin
   if FGridFrame.ValueLabelSet = AValue then Exit;
   FGridFrame.ValueLabelSet := AValue;
+
+{  if AValue.LabelScope = vlsExternal then
+  begin
+
+  end;}
 end;
 
 function TFieldValueLabelEditor.GetValueLabelSet: TEpiValueLabelSet;

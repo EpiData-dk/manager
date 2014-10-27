@@ -41,6 +41,7 @@ type
     RangeRBtn: TRadioButton;
     BasicSheet: TTabSheet;
     procedure BitBtn3Click(Sender: TObject);
+    procedure DataFileComboBoxDropDown(Sender: TObject);
     procedure DataFileComboBoxSelect(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
@@ -50,12 +51,14 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FromRecordEditKeyPress(Sender: TObject; var Key: char);
   private
+    FOldDataFormIndex: Integer;
     FExportSetting: TEpiExportSetting;
     FActiveSheet: TTabSheet;
     IFrame: IExportSettingsPresenterFrame;
     FDoc: TEpiDocument;
     FFileName: string;
     procedure UpdateDataFileCombo;
+    procedure UpdateExportFileName;
     procedure LoadGlyphs;
   public
     { public declarations }
@@ -75,7 +78,7 @@ implementation
 uses
   epieximtypes, epimiscutils,
   settings2, settings2_var, LCLType, epidatafilestypes,
-  epiv_datamodule;
+  epiv_datamodule, LazUTF8;
 
 type
   TAccessFileNameEdit = class(TFileNameEdit)
@@ -171,6 +174,11 @@ begin
   OrderedDataFiles.Free;
 end;
 
+procedure TExportForm.UpdateExportFileName;
+begin
+
+end;
+
 procedure TExportForm.LoadGlyphs;
 begin
   DM.Icons16.GetBitmap(19, TAccessFileNameEdit(ExportFileNameEdit).Button.Glyph);
@@ -244,6 +252,7 @@ begin
     4: S := 'DDI';
     5: S := 'EPX';
   end;
+  ExportTypeCombo.AdjustSize;
   ExportTypeCombo.ItemIndex := ExportTypeCombo.Items.IndexOf(S);
   ExportTypeComboSelect(ExportTypeCombo);
 
@@ -307,9 +316,39 @@ begin
   end;
 end;
 
+procedure TExportForm.DataFileComboBoxDropDown(Sender: TObject);
+begin
+  FOldDataFormIndex := DataFileComboBox.ItemIndex;
+end;
+
 procedure TExportForm.DataFileComboBoxSelect(Sender: TObject);
+var
+  DF: TEpiDataFile;
+  DFCaption: String;
+  P: SizeInt;
+  FName: TCaption;
 begin
   DFTreeViewFrame.DataFile := TEpiDataFile(DataFileComboBox.Items.Objects[DataFileComboBox.ItemIndex]);
+
+  //  Add dataform captions:
+  if FOldDataFormIndex < 0 then exit;
+
+  FName := ExportFileNameEdit.Text;
+  DF := TEpiDataFile(DataFileComboBox.Items.Objects[FOldDataFormIndex]);
+  DFCaption := '_' + StringReplace(DF.Caption.Text, ' ', '_', [rfReplaceAll]);
+
+
+  P := Pos(DFCaption, FName);
+  if P > 0 then
+  begin
+    Delete(FName, P, Length(DFCaption));
+
+    DF := TEpiDataFile(DataFileComboBox.Items.Objects[DataFileComboBox.ItemIndex]);
+    DFCaption := '_' + StringReplace(DF.Caption.Text, ' ', '_', [rfReplaceAll]);
+    Insert(DFCaption, FName, P);
+
+    ExportFileNameEdit.Text := FName;
+  end;
 end;
 
 constructor TExportForm.Create(TheOwner: TComponent; const Doc: TEpiDocument;
@@ -326,6 +365,7 @@ begin
 
   LoadGlyphs;
 
+  FOldDataFormIndex := -1;
   FExportSetting := nil;
   FActiveSheet := nil;
   DialogFilters := [];
@@ -336,7 +376,8 @@ begin
   // Export File Name
   ExportFileNameEdit.Filter := GetEpiDialogFilter(DialogFilters + [dfAll]);
   ExportFileNameEdit.InitialDir := ManagerSettings.WorkingDirUTF8;
-  ExportFileNameEdit.FileName := ChangeFileExt(FFileName, '_' + IntToStr(FDoc.CycleNo) + '.test');
+  ExportFileNameEdit.FileName := ChangeFileExt(FFileName,
+    '_' + StringReplace(Doc.DataFiles[0].Caption.Text, ' ', '_', [rfReplaceAll]) + '_' + IntToStr(FDoc.CycleNo) + '.test');
 
   // Export types and their frames
   for i := 0 to RegisterList.Count - 1 do

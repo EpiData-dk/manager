@@ -1421,8 +1421,6 @@ procedure TMainForm.UpdateRecentFiles;
 var
   Mi: TMenuItem;
   i: Integer;
-  K: Word;
-  Shift: TShiftState;
   A: TAction;
 begin
   LoadRecentFilesIni(GetRecentIniFileName);

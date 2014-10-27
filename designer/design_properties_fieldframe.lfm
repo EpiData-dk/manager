@@ -1,5 +1,5 @@
 object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 765
+  Left = 733
   Height = 682
   Top = 113
   Width = 545
