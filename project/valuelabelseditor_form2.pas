@@ -190,6 +190,9 @@ end;
 procedure TValueLabelEditor2.VLSetsTreeGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
+var
+  VL: TEpiValueLabelSet;
+  S: String;
 begin
   if Node^.Parent = Sender.RootNode then
   begin
@@ -197,8 +200,15 @@ begin
       CellText := 'Internal'
     else
       CellText := 'External';
-  end else
-    CellText := ValueLabelSetFromNode(Node).Name;
+  end else begin
+    VL := ValueLabelSetFromNode(Node);
+    S := VL.Name;
+
+    if VL.LabelScope = vlsExternal then
+      S := S + ' (' + VL.ExtFileName + ')';
+
+    CellText := S;
+  end;
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeInitChildren(Sender: TBaseVirtualTree;
