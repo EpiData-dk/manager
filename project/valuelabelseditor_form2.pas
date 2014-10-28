@@ -61,7 +61,7 @@ type
     FGridFrame: TValueLabelGridFrame;
     FValueLabelSets: TEpiValueLabelSets;
     procedure DoAddNewValueLabelSet(FieldType: TEpiFieldType);
-    procedure DoDeleteValueLabelSet(Node: PVirtualNode);
+    procedure DoDeleteValueLabelSet(Node: PVirtualNode; IgnoreWarning: boolean);
     procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
     function  ValueLabelSetFromNode(Node: PVirtualNode): TEpiValueLabelSet;
     procedure LMEditNode(var Message: TLMessage); message LM_VLEDIT_STARTEDIT;
@@ -253,7 +253,7 @@ begin
       end;
     VK_DELETE:
       begin
-        DoDeleteValueLabelSet(VLSetsTree.FocusedNode);
+        DoDeleteValueLabelSet(VLSetsTree.FocusedNode, (Shift = [ssShift]));
         Key := VK_UNKNOWN;
       end;
   end;
@@ -312,7 +312,7 @@ end;
 
 procedure TValueLabelEditor2.DelBtnClick(Sender: TObject);
 begin
-  DoDeleteValueLabelSet(VLSetsTree.FocusedNode);
+  DoDeleteValueLabelSet(VLSetsTree.FocusedNode, false);
 end;
 
 procedure TValueLabelEditor2.FormCloseQuery(Sender: TObject;
@@ -369,7 +369,8 @@ begin
   PostMessage(Self.Handle, LM_VLEDIT_STARTEDIT, WParam(Node), 0);
 end;
 
-procedure TValueLabelEditor2.DoDeleteValueLabelSet(Node: PVirtualNode);
+procedure TValueLabelEditor2.DoDeleteValueLabelSet(Node: PVirtualNode;
+  IgnoreWarning: boolean);
 var
   VL: TEpiValueLabelSet;
   NewNode: PVirtualNode;
@@ -380,9 +381,13 @@ begin
   FLocalUpdating := true;
 
   VL := ValueLabelSetFromNode(Node);
-  if MessageDlg('Warning',
-    format('Are you sure you want to delete "%s"?', [VL.Name]),
-    mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
+
+  if (Not IgnoreWarning) and
+     (MessageDlg('Warning',
+        format('Are you sure you want to delete "%s"?', [VL.Name]),
+        mtWarning, mbYesNo, 0, mbNo) = mrNo)
+  then
+    Exit;
 
   NewNode := VLSetsTree.GetNextSibling(Node);
   if not Assigned(NewNode) then
