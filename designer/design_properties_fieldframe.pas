@@ -1195,19 +1195,26 @@ begin
       ValueLabelComboBox);
 
   AddEditValueLabelBtn.Caption := 'Edit';
+  AddEditValueLabelBtn.Hint    := 'Edit Valuelabel';
 
   AddEditValueLabelBtn.Enabled :=
     (not ComboIgnoreSelected(ValueLabelComboBox));
 
   If ComboNoneSelected(ValueLabelComboBox) then
+  begin
     AddEditValueLabelBtn.Caption := 'New';
+    AddEditValueLabelBtn.Hint    := 'Create New Valuelabel';
+  end;
 
   VL := TEpiValueLabelSet(ComboSelectedObject(ValueLabelComboBox));
   if (not ComboIgnoreSelected(ValueLabelComboBox)) and
      (Assigned(VL)) and
      (VL.LabelScope = vlsExternal)
   then
-    AddEditValueLabelBtn.Caption := 'View';
+    begin
+      AddEditValueLabelBtn.Caption := 'View';
+      AddEditValueLabelBtn.Hint    := 'Can only be edited in the External file';
+    end;
 end;
 
 procedure TFieldPropertiesFrame.RegisterValueLabelHook;
