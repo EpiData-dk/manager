@@ -44,6 +44,7 @@ type
     procedure AddFile(Const FileName: String);
     procedure AddFiles(Const Files: TStrings);
     function  ShowDialog(): boolean;
+    procedure LoadGlyphs;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; Const ValueLabelSets: TEpiValueLabelSets);
@@ -55,7 +56,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiv_documentfile, LazFileUtils, epimiscutils;
+  epiv_documentfile, LazFileUtils, epimiscutils, epiv_datamodule;
 
 { TExtVLSetForm }
 
@@ -188,21 +189,24 @@ end;
 procedure TExtVLSetForm.BitBtn1Click(Sender: TObject);
 var
   VL: TEpiValueLabelSet;
-  DocFile: TEpiDocumentFile;
   i: Integer;
 begin
+  Screen.Cursor := crHourGlass;
+  Application.ProcessMessages;
+
   for i := 1 to StringGrid1.RowCount - 1 do
   begin
     if StringGrid1.Cells[0, i] = '0' then continue;
 
-    VL      := TEpiValueLabelSet(StringGrid1.Objects[0, i]);
-    DocFile := TEpiDocumentFile(StringGrid1.Objects[1, i]);
-
+    VL := TEpiValueLabelSet(StringGrid1.Objects[0, i]);
     VL := TEpiValueLabelSet(VL.Clone(FValueLabelSets));
     VL.ExtFileName := StringGrid1.Cells[1, i];
     VL.LabelScope  := vlsExternal;
     FValueLabelSets.AddItem(VL);
   end;
+
+  Screen.Cursor := crDefault;
+  Application.ProcessMessages;
 end;
 
 procedure TExtVLSetForm.BitBtn3Click(Sender: TObject);
@@ -236,8 +240,12 @@ procedure TExtVLSetForm.AddFiles(const Files: TStrings);
 var
   i: Integer;
 begin
+  Screen.Cursor := crHourGlass;
+  Application.ProcessMessages;
   for i := 0 to Files.Count - 1 do
     AddFile(Files[i]);
+  Screen.Cursor := crDefault;
+  Application.ProcessMessages;
 end;
 
 function TExtVLSetForm.ShowDialog: boolean;
@@ -253,12 +261,19 @@ begin
   Dlg.Free;
 end;
 
+procedure TExtVLSetForm.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(19, BitBtn3.Glyph);
+end;
+
 constructor TExtVLSetForm.Create(TheOwner: TComponent;
   const ValueLabelSets: TEpiValueLabelSets);
 begin
   inherited Create(TheOwner);
   FValueLabelSets := ValueLabelSets;
   FDocFiles := TList.Create;
+
+  LoadGlyphs;
 end;
 
 destructor TExtVLSetForm.Destroy;

@@ -379,6 +379,7 @@
         <ComponentName Value="ValueLabelEditor2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabelseditor_form2"/>
       </Unit34>
       <Unit35>
         <Filename Value="settings/settings_export.pas"/>
@@ -393,6 +394,7 @@
         <ComponentName Value="ExportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="export_form"/>
       </Unit36>
       <Unit37>
         <Filename Value="export/export_stata_frame.pas"/>
@@ -668,6 +670,7 @@
         <ComponentName Value="ExtVLSetForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabel_import_external"/>
       </Unit85>
       <Unit86>
         <Filename Value="project/valuelabel_import_data.pas"/>
