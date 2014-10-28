@@ -295,8 +295,8 @@ begin
   if FileExistsUTF8(ExportFileNameEdit.FileName) then
   begin
     Msg :=
-      'A file named "' + ExtractFileName(ExportFileNameEdit.FileName) + '" already exits!' + LineEnding +
-      'Replacing this file will also replace any addition files this export may create (eg. .csv/.log files)' + LineEnding +
+      'A file named "' + ExtractFileName(ExportFileNameEdit.FileName) + '" already exists!' + LineEnding +
+      'Replacing this file will also replace any additional files this export may create (eg. .csv/.log files)' + LineEnding +
       LineEnding +
       'Do you wish to replace the existing file(s)?';
 
