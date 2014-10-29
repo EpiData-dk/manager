@@ -184,6 +184,7 @@ type
     procedure CountsReportActionExecute(Sender: TObject);
     procedure DataFormBtnClick(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
+    procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure RecentFilesActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
     procedure SelectProjectBtnClick(Sender: TObject);
@@ -370,6 +371,17 @@ end;
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
 begin
   RestoreDefaultPos;
+end;
+
+procedure TMainForm.FormDropFiles(Sender: TObject;
+  const FileNames: array of String);
+var
+  S: TString;
+begin
+  if Length(FileNames) = 0 then Exit;
+
+  S := TString.Create(FileNames[0]);
+  PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, WPARAM(S), 0);
 end;
 
 procedure TMainForm.RecentFilesActionListUpdate(AAction: TBasicAction;

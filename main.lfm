@@ -4,12 +4,14 @@ object MainForm: TMainForm
   Top = 305
   Width = 1131
   ActiveControl = ProcessToolPanel
+  AllowDropFiles = True
   Caption = 'MainForm'
   ClientHeight = 715
   ClientWidth = 1131
   Menu = MainMenu1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnDropFiles = FormDropFiles
   OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '1.3'
