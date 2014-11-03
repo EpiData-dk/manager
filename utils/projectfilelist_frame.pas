@@ -76,26 +76,22 @@ type
   private
     { columns }
     FCreatedCol: TGridColumn;
-    FFieldsCol: TGridColumn;
+    FDataFormCol: TGridColumn;
     FFileNameCol: TGridColumn;
     FIncludeCol: TGridColumn;
     FLastEditCol: TGridColumn;
-    FNameCol: TGridColumn;
-    FRecordsCol: TGridColumn;
-    FSectionsCol: TGridColumn;
+    FStudyTitleCol: TGridColumn;
     FVersionCol: TGridColumn;
     FCycleCol: TGridColumn;
   public
-    property FileNameCol: TGridColumn read FFileNameCol;
-    property IncludeCol:  TGridColumn read FIncludeCol;
-    property CreatedCol:  TGridColumn read FCreatedCol;
-    property LastEditCol: TGridColumn read FLastEditCol;
-    property NameCol:     TGridColumn read FNameCol;
-    property SectionsCol: TGridColumn read FSectionsCol;
-    property FieldsCol:   TGridColumn read FFieldsCol;
-    property RecordsCol:  TGridColumn read FRecordsCol;
-    property VersionCol:  TGridColumn read FVersionCol;
-    property CycleCol:    TGridColumn read FCycleCol;
+    property FileNameCol:   TGridColumn read FFileNameCol;
+    property IncludeCol:    TGridColumn read FIncludeCol;
+    property DataFormCol:   TGridColumn read FDataFormCol;
+    property CreatedCol:    TGridColumn read FCreatedCol;
+    property LastEditCol:   TGridColumn read FLastEditCol;
+    property StudyTitleCol: TGridColumn read FStudyTitleCol;
+    property VersionCol:    TGridColumn read FVersionCol;
+    property CycleCol:      TGridColumn read FCycleCol;
   end;
 
 implementation
@@ -173,20 +169,20 @@ begin
       else
         Cells[LastEditCol.Index + 1, Idx] := 'N/A';
     end;
-    with Doc.DataFiles[0] do
+    with Doc do
     begin
-      // Sections
-      Cells[SectionsCol.Index + 1, Idx] := IntToStr(Sections.Count);
+      // Dataforms
+      Cells[DataFormCol.Index + 1, Idx]   := IntToStr(DataFiles.Count);
       // Fields
-      Cells[FieldsCol.Index + 1, Idx]   := IntToStr(Fields.Count);
+//      Cells[FieldsCol.Index + 1, Idx]   := IntToStr(Fields.Count);
       // Records
-      Cells[RecordsCol.Index + 1, Idx]  := IntToStr(Size);
+//      Cells[RecordsCol.Index + 1, Idx]  := IntToStr(Size);
       // Version info
-      Cells[VersionCol.Index + 1, Idx]  := Doc.Study.Version;
+      Cells[VersionCol.Index + 1, Idx]    := Study.Version;
       // Cycle
-      Cells[CycleCol.Index + 1, Idx]    := IntToStr(Doc.CycleNo);
+      Cells[CycleCol.Index + 1, Idx]      := IntToStr(Doc.CycleNo);
       // Info
-      Cells[NameCol.Index + 1, Idx]     := Caption.Text;
+      Cells[StudyTitleCol.Index + 1, Idx] := Study.Title.Text;
     end;
   end;
   FDocList.AddObject(FileName, Doc);
@@ -300,10 +296,10 @@ end;
 
 procedure TProjectFileListFrame.DoReportError(const Msg: string);
 begin
-  if not ErrorListBox.Visible then
+{  if not ErrorListBox.Visible then
     ErrorListBox.Visible := true;
 
-  ErrorListBox.Items.Add(Msg);
+  ErrorListBox.Items.Add(Msg);    }
 end;
 
 procedure TProjectFileListFrame.SetOnAfterImportFile(
@@ -420,17 +416,17 @@ begin
   FIncludeCol.Title.Caption := 'Include';
   FIncludeCol.ButtonStyle := cbsCheckboxColumn;
 
-  FFieldsCol := StructureGrid.Columns.Add;
-  FFieldsCol.Title.Caption := 'Fields';
-  FFieldsCol.ReadOnly := true;
+  FDataFormCol := StructureGrid.Columns.Add;
+  FDataFormCol.Title.Caption := 'Dataforms';
+  FDataFormCol.ReadOnly := true;
 
-  FSectionsCol := StructureGrid.Columns.Add;
+{  FSectionsCol := StructureGrid.Columns.Add;
   FSectionsCol.Title.Caption := 'Sections';
   FSectionsCol.ReadOnly := true;
 
   FRecordsCol := StructureGrid.Columns.Add;
   FRecordsCol.Title.Caption := 'Records';
-  FRecordsCol.ReadOnly := true;
+  FRecordsCol.ReadOnly := true;   }
 
   FCreatedCol := StructureGrid.Columns.Add;
   FCreatedCol.Title.Caption := 'Created';
@@ -448,9 +444,9 @@ begin
   FCycleCol.Title.Caption := 'Cycle';
   FCycleCol.ReadOnly := true;
 
-  FNameCol := StructureGrid.Columns.Add;
-  FNameCol.Title.Caption := 'Project Title';
-  FNameCol.ReadOnly := true;
+  FStudyTitleCol := StructureGrid.Columns.Add;
+  FStudyTitleCol.Title.Caption := 'Project Title';
+  FStudyTitleCol.ReadOnly := true;
 end;
 
 destructor TProjectFileListFrame.Destroy;
