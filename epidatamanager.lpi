@@ -14,7 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="8"/>
+      <BuildNr Value="9"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
@@ -291,7 +291,6 @@
         <ComponentName Value="ImportStructureForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="import_structure_form"/>
       </Unit18>
       <Unit19>
         <Filename Value="manager_messages.pas"/>
@@ -333,6 +332,7 @@
       <Unit26>
         <Filename Value="reports/report_base.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_base"/>
       </Unit26>
       <Unit27>
         <Filename Value="utils/projectfilelist_frame.pas"/>
@@ -356,6 +356,7 @@
       <Unit30>
         <Filename Value="reports/report_project_overview.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_project_overview"/>
       </Unit30>
       <Unit31>
         <Filename Value="shortcuts.pas"/>
@@ -575,7 +576,6 @@
       <Unit69>
         <Filename Value="reports/report_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_types"/>
       </Unit69>
       <Unit70>
         <Filename Value="tools/dataset_form.pas"/>
@@ -594,7 +594,6 @@
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="validate_double_entry_frame"/>
       </Unit72>
       <Unit73>
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
@@ -717,7 +716,6 @@
         <ComponentName Value="ProjectValidationFrame2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_project_validation_frame2"/>
       </Unit92>
       <Unit93>
         <Filename Value="reports/reports_form.pas"/>
@@ -732,7 +730,6 @@
         <ComponentName Value="CountByIdFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_counts_frame"/>
       </Unit94>
     </Units>
   </ProjectOptions>

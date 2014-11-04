@@ -361,8 +361,14 @@ procedure TValidateDoubleEntryFrame.AddCustomDataWalk(
   const Relation: TEpiMasterRelation; const Depth: Cardinal;
   const Index: Cardinal; var aContinue: boolean; Data: Pointer);
 begin
-  Relation.AddCustomData(KEYTREE_CUSTOMDATA, FKeyTreeList[FListCounter]);
-  Relation.AddCustomData(COMPARETREE_CUSTOMDATA, FCompareTreeList[FListCounter]);
+  // A/V will happend if Two odd-sized datafiles are selected, and the small one is
+  // first.
+  if FListCounter < FKeyTreeList.Count then
+  begin
+    Relation.AddCustomData(KEYTREE_CUSTOMDATA, FKeyTreeList[FListCounter]);
+    Relation.AddCustomData(COMPARETREE_CUSTOMDATA, FCompareTreeList[FListCounter]);
+  end;
+
   Inc(FListCounter);
 end;
 
