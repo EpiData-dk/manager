@@ -223,7 +223,7 @@ type
     FRelatesComponentsList: TList;
     procedure ClearRelates;
     procedure UpdateRelates; overload;
-    procedure UpdateRelates(Relates: TEpiRelates); overload;
+    procedure UpdateRelates(Relates: TEpiValueRelates); overload;
     function  DoAddNewRelate: pointer;
     procedure AddRelationsToCombo(Combo: TComboBox);
 
@@ -718,9 +718,9 @@ end;
 
 procedure TFieldPropertiesFrame.UpdateRelates;
 var
-  Relates: TEpiRelates;
+  Relates: TEpiValueRelates;
   F: TEpiField;
-  FRelates: TEpiRelates;
+  FRelates: TEpiValueRelates;
   SelectIgnoreCombo: Boolean;
   i: Integer;
   j: Integer;
@@ -784,7 +784,7 @@ begin
   UpdateRelates(Relates);
 end;
 
-procedure TFieldPropertiesFrame.UpdateRelates(Relates: TEpiRelates);
+procedure TFieldPropertiesFrame.UpdateRelates(Relates: TEpiValueRelates);
 var
   i: Integer;
 begin
@@ -828,7 +828,7 @@ begin
     AnchorToNeighbour(akRight, 5, RelateValueBevel);
     AnchorVerticalCenterTo(GDC);
     OnUTF8KeyPress := @JumpEditUTF8KeyPress;
-    Hint := 'Specify value or use "." to indicate all other values';
+    Hint := 'Specify value or use "*" to indicate all other values';
     ShowHint := true;
     ParentShowHint := false;
     Parent := RelateScrollBox;
@@ -1920,7 +1920,7 @@ var
   Calc: TEpiCalculation;
   I1, I2: EpiInteger;
   F1, F2: Extended;
-  NRelate: TEpiRelate;
+  NRelate: TEpiValueRelate;
 
   procedure SwapInt(var LowI, HighI: EpiInteger);
   var
@@ -2189,7 +2189,7 @@ begin
       for i := 0 to FieldCount -1  do
       begin
         Fields[i].Relates.Free;
-        Fields[i].Relates := TEpiRelates.Create(Fields[i]);
+        Fields[i].Relates := TEpiValueRelates.Create(Fields[i]);
         Fields[i].Relates.ItemOwner := true;
 
         for j := 0 to FRelatesComponentsList.Count - 1 do
