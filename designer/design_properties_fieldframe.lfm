@@ -1,7 +1,7 @@
 object FieldPropertiesFrame: TFieldPropertiesFrame
   Left = 2105
   Height = 652
-  Top = 93
+  Top = 127
   Width = 439
   ClientHeight = 652
   ClientWidth = 439
