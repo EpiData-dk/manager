@@ -359,6 +359,7 @@ implementation
 {$R *.lfm}
 
 uses
+  lazutf8sysutils,
   JvDesignImp, design_designpanel,
   Graphics, design_designcontroller, design_designmessenger,
   main, JvDesignUtils, settings2_var,
@@ -2783,6 +2784,7 @@ var
   j: Integer;
   P: TPoint;
   z: Integer;
+  T1,T2,T3: TDateTime;
 begin
   FDesignPanel.Active := true;
   Datafile.Sections.RegisterOnChangeHook(@SectionsChangeEvent, true);
@@ -2794,7 +2796,9 @@ begin
   TJvDesignSelector(Surface.Selector).HandleWidth := 4;
 
   FSettingDataFile := true;
+
   MainForm.BeginUpdatingForm;
+  T1 := Now;
   With DataFile do
   begin
     for i := 0 to Sections.Count - 1 do
@@ -2822,7 +2826,15 @@ begin
         end;
     end;
   end;
+  T2 := Now;
   MainForm.EndUpdatingForm;
+  T3 := Now;
+
+  if IsConsole then
+  begin
+    WriteLn('T1 -> T2: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
+    WriteLn('T2 -> T3: ', FormatDateTime('NN:SS:ZZZ', T3-T2));
+  end;
 
   Controller.ClearDragRect;
   Surface.Select(FDesignPanel);

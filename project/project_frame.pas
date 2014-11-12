@@ -480,6 +480,8 @@ end;
 function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
 var
   i: Integer;
+  T1: TDateTime;
+  T2: TDateTime;
 begin
   Result := false;
   try
@@ -488,11 +490,15 @@ begin
     FDocumentFile.OnLoadError := @LoadError;
     FDocumentFile.DataDirectory := ManagerSettings.WorkingDirUTF8;
     FDocumentFile.BackupDirectory := '';
+    T1 := Now;
     if not FDocumentFile.OpenFile(AFileName) then
     begin
       FreeAndNil(FDocumentFile);
       Exit;
     end;
+    T2 := Now;
+    if IsConsole then
+      WriteLn('LoadProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
   except
     FreeAndNil(FDocumentFile);
     // If ever this happens then it is because something not right happened
@@ -1179,7 +1185,8 @@ begin
   T1 := Now;
   Result := DoOpenProject(AFileName);
   T2 := now;
-//  ShowMessage('Open Time: ' + FormatDateTime('NN:SS:ZZZ', T2-T1));
+  if IsConsole then
+    WriteLn('ProjectFrame.OpenProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
 end;
 
 function TProjectFrame.SaveProject(const ForceSaveAs: boolean): boolean;
