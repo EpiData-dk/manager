@@ -1,6 +1,7 @@
 unit design_designmover;
 
 {$mode objfpc}{$H+}
+{.$DEFINE DESIGNER_GUIDES}
 
 interface
 
@@ -24,9 +25,17 @@ type
     procedure PaintDragRects; override;
   {$ENDIF}
   private
+    FOuterRect: TRect;
+    procedure CalcOuterDragRect;
+    procedure CalcOuterPaintRect;
+    procedure PaintOuterRect;
+  private
     function DragRectsInParent: boolean;
   protected
+    procedure CalcDragRects; override;
+    procedure CalcPaintRects; override;
     procedure ApplyDragRects; override;
+    procedure PaintDragRects; override;
   public
     constructor Create(AOwner: TJvDesignSurface); override;
     destructor Destroy; override;
@@ -38,7 +47,9 @@ type
 implementation
 
 uses
-  design_commander, manager_globals, LCLIntf, Graphics, forms;
+  design_commander, manager_globals, LCLIntf, Graphics, forms,
+  math,
+  JvDesignUtils;
 
 type
 
@@ -155,6 +166,40 @@ begin
 end;
 {$ENDIF}
 
+procedure TDesignMover.CalcOuterDragRect;
+var
+  i: Integer;
+begin
+  {$IFDEF DESIGNER_GUIDES}
+  FOuterRect := Rect(MaxInt, MaxInt, -MaxInt, -MaxInt);
+  for i := Low(FDragRects) to High(FDragRects) do
+  begin
+    FOuterRect.Left   := Min(FOuterRect.Left, FDragRects[i].Left);
+    FOuterRect.Top    := Min(FOuterRect.Top, FDragRects[i].Top);
+    FOuterRect.Right  := Max(FOuterRect.Right, FDragRects[i].Right);
+    FOuterRect.Bottom := Max(FOuterRect.Bottom, FDragRects[i].Bottom);
+  end;
+  {$ENDIF}
+end;
+
+procedure TDesignMover.CalcOuterPaintRect;
+var
+  ScreenPoint: TPoint;
+begin
+  {$IFDEF DESIGNER_GUIDES}
+  with Surface.Selection[0] do
+    ScreenPoint := Parent.ClientToScreen(Point(0, 0));
+  OffsetRect(FOuterRect, ScreenPoint.X, ScreenPoint.Y);
+  {$ENDIF}
+end;
+
+procedure TDesignMover.PaintOuterRect;
+begin
+  {$IFDEF DESIGNER_GUIDES}
+  DesignPaintRubberbandRect(Surface.Container, FOuterRect, psDot);
+  {$ENDIF}
+end;
+
 function TDesignMover.DragRectsInParent: boolean;
 var
   C: TWinControl;
@@ -184,6 +229,18 @@ begin
   end;
 end;
 
+procedure TDesignMover.CalcDragRects;
+begin
+  inherited CalcDragRects;
+  CalcOuterDragRect;
+end;
+
+procedure TDesignMover.CalcPaintRects;
+begin
+  inherited CalcPaintRects;
+  CalcOuterPaintRect;
+end;
+
 procedure TDesignMover.ApplyDragRects;
 var
   L: TCustomCommandList;
@@ -205,6 +262,13 @@ begin
     end;
 
   inherited ApplyDragRects;
+end;
+
+procedure TDesignMover.PaintDragRects;
+begin
+  inherited PaintDragRects;
+  if Length(FDragRects) > 1 then
+    PaintOuterRect;
 end;
 
 constructor TDesignMover.Create(AOwner: TJvDesignSurface);

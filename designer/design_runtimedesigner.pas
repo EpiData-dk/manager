@@ -7,9 +7,9 @@ interface
 uses
   Classes, SysUtils, FileUtil, PrintersDlgs, Forms, Controls, ComCtrls,
   ExtCtrls, StdCtrls, JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
-  Buttons, manager_messages, epidatafilestypes, design_properties_form, types,
-  epicustombase, epidocument, epivaluelabels, design_types, project_types,
-  epirelations;
+  Buttons, Dialogs, manager_messages, epidatafilestypes, design_properties_form,
+  types, epicustombase, epidocument, epivaluelabels, design_types,
+  project_types, epirelations;
 
 type
 
@@ -309,7 +309,7 @@ type
       FixedDist: integer);
   public
     procedure AlignControls(Const AAlignMent: TDesignControlsAlignment;
-      Const FixedDist: integer = -1);
+      Const FixedDist: integer = -1); overload;
   private
     { Other }
     FMayHandleShortcuts: boolean;
@@ -364,7 +364,7 @@ uses
   Graphics, design_designcontroller, design_designmessenger,
   main, JvDesignUtils, settings2_var,
   manager_globals, managerprocs, Clipbrd, math,
-  Dialogs, import_structure_form, epimiscutils,
+  import_structure_form, epimiscutils,
   dataset_form,
   LCLType, shortcuts, settings2,
   Printers, OSPrinters, strutils,

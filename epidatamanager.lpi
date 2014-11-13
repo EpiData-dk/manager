@@ -488,7 +488,6 @@
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_control_field"/>
       </Unit51>
       <Unit52>
         <Filename Value="designer/design_control_heading.pas"/>
@@ -509,6 +508,7 @@
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designcontroller"/>
       </Unit56>
       <Unit57>
         <Filename Value="designer/design_properties_fieldframe.pas"/>
@@ -542,6 +542,7 @@
       <Unit62>
         <Filename Value="designer/design_designmover.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designmover"/>
       </Unit62>
       <Unit63>
         <Filename Value="designer/design_designsizer.pas"/>
@@ -688,7 +689,6 @@
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_studyunit_frame"/>
       </Unit88>
       <Unit89>
         <Filename Value="designer/design_properties_dataformframe.pas"/>
@@ -696,7 +696,6 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_dataformframe"/>
       </Unit89>
       <Unit90>
         <Filename Value="tools/append_form2.pas"/>
