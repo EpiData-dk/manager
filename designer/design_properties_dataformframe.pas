@@ -46,6 +46,7 @@ type
     AfterRecordSheet: TTabSheet;
     procedure AddRelateBtnClick(Sender: TObject);
     procedure AllowedRecordsEditKeyPress(Sender: TObject; var Key: char);
+    procedure PageControl1Change(Sender: TObject);
     procedure RadioButton1Click(Sender: TObject);
     procedure RemoveRelateBtnClick(Sender: TObject);
   private
@@ -102,6 +103,14 @@ procedure TDataformPropertiesFrame.AllowedRecordsEditKeyPress(Sender: TObject; v
   );
 begin
   if not (Key in ['0'..'9', #8]) then Key := #0;
+end;
+
+procedure TDataformPropertiesFrame.PageControl1Change(Sender: TObject);
+begin
+  if Assigned(Relation) and
+     Assigned(DataFile)
+  then
+    UpdateVisibility;
 end;
 
 procedure TDataformPropertiesFrame.AddRelateBtnClick(Sender: TObject);

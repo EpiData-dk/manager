@@ -171,7 +171,9 @@ uses
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
-  design_properties_form;
+  design_properties_form,
+  gtk2
+  ;
 
 { TProjectFrame }
 
@@ -360,17 +362,21 @@ end;
 procedure TProjectFrame.SaveDlgTypeChange(Sender: TObject);
 var
   Dlg: TSaveDialog absolute Sender;
+  Fn: String;
 begin
   case Dlg.FilterIndex of
     1: Dlg.DefaultExt := 'epx';
     2: Dlg.DefaultExt := 'epz';
   end;
 
-  // TODO : Must be changed when supporting multiple desinger frames (take only the topmost/first datafile).
-{  if (Dlg.FileName = '') and
-     (Assigned(DocumentFile)) and
-     (TRuntimeDesignFrame(ActiveFrame).ImportedFileName <> '') then
-    Dlg.FileName := ChangeFileExt(TRuntimeDesignFrame(ActiveFrame).ImportedFileName, Dlg.DefaultExt); }
+  Dlg.FileName := ChangeFileExt(Dlg.FileName, Dlg.DefaultExt);
+
+  {$IFDEF LINUX}
+  Fn := ExtractFileName(Dlg.FileName);
+  gtk_file_chooser_set_current_name(
+    PGtkFileChooser(Dlg.Handle),
+    PChar(FN));
+  {$ENDIF}
 end;
 
 procedure TProjectFrame.SaveProjectAsActionExecute(Sender: TObject);
