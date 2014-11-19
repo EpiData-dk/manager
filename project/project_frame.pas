@@ -495,7 +495,6 @@ begin
     FDocumentFile.OnProgress := @DocumentProgress;
     FDocumentFile.OnLoadError := @LoadError;
     FDocumentFile.DataDirectory := ManagerSettings.WorkingDirUTF8;
-    FDocumentFile.BackupDirectory := '';
     T1 := Now;
     if not FDocumentFile.OpenFile(AFileName) then
     begin
