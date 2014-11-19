@@ -540,7 +540,7 @@ begin
   UpdateEpiControl;
 
   // Update DesignerSurface selection.
-  Surface.UpdateDesigner;
+ // Surface.UpdateDesigner;
 end;
 
 procedure TDesignField.FixupCopyControl;

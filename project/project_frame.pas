@@ -171,8 +171,8 @@ uses
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
-  design_properties_form,
-  gtk2
+  design_properties_form
+  {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
 { TProjectFrame }

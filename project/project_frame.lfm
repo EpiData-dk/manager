@@ -43,6 +43,7 @@ object ProjectFrame: TProjectFrame
       end
       object ToolButton1: TToolButton
         Left = 47
+        Height = 20
         Top = 1
         Width = 5
         Caption = 'ToolButton1'
@@ -64,6 +65,7 @@ object ProjectFrame: TProjectFrame
       end
       object ToolButton4: TToolButton
         Left = 92
+        Height = 20
         Top = 1
         Width = 5
         Caption = 'ToolButton4'
@@ -85,6 +87,7 @@ object ProjectFrame: TProjectFrame
       end
       object ToolButton7: TToolButton
         Left = 137
+        Height = 20
         Top = 1
         Width = 5
         Caption = 'ToolButton7'
@@ -97,6 +100,7 @@ object ProjectFrame: TProjectFrame
       end
       object ToolButton2: TToolButton
         Left = 22
+        Height = 20
         Top = 1
         Width = 5
         Caption = 'ToolButton2'

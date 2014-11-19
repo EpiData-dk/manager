@@ -27,11 +27,30 @@
         </MacroValues>
         <CompilerOptions>
           <Version Value="11"/>
-          <Parsing>
-            <SyntaxOptions>
-              <UseAnsiStrings Value="False"/>
-            </SyntaxOptions>
-          </Parsing>
+          <Target>
+            <Filename Value="epidatamanager"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <TargetCPU Value="i386"/>
+            <TargetOS Value="win32"/>
+            <Optimizations>
+              <OptimizationLevel Value="0"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <DebugInfoType Value="dsDwarf2Set"/>
+            </Debugging>
+          </Linking>
+          <Other>
+            <CustomOptions Value="-dEPI_DEBUG1
+-dMEM_LEAK_FINDER1"/>
+          </Other>
         </CompilerOptions>
       </Item2>
       <Item3 Name="Linux i386">
@@ -47,6 +66,7 @@
           </SearchPaths>
           <CodeGeneration>
             <TargetCPU Value="i386"/>
+            <TargetOS Value="linux"/>
             <Optimizations>
               <OptimizationLevel Value="0"/>
             </Optimizations>
@@ -469,6 +489,7 @@
       <Unit46>
         <Filename Value="utils/manager_globals.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="manager_globals"/>
       </Unit46>
       <Unit47>
         <Filename Value="tools/validate_double_entry_form.pas"/>
@@ -494,10 +515,12 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_control_field"/>
       </Unit51>
       <Unit52>
         <Filename Value="designer/design_control_heading.pas"/>
@@ -551,6 +574,7 @@
       <Unit62>
         <Filename Value="designer/design_designmover.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designmover"/>
       </Unit62>
       <Unit63>
         <Filename Value="designer/design_designsizer.pas"/>
@@ -704,7 +728,6 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_dataformframe"/>
       </Unit89>
       <Unit90>
         <Filename Value="tools/append_form2.pas"/>

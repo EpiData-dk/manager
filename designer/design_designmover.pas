@@ -246,6 +246,8 @@ var
   L: TCustomCommandList;
   i: Integer;
   MC: TMoveCommand;
+  T1: TDateTime;
+  T2: TDateTime;
 begin
   if Surface.Count > 1 then
   begin
@@ -261,7 +263,11 @@ begin
       L.AddCommand(MC);
     end;
 
+  T1 := Now;
   inherited ApplyDragRects;
+  T2 := Now;
+  if IsConsole then
+    WriteLn('ApplyDragRects: ', FormatDateTime('NN:SS:ZZZZ', T2-T1));
 end;
 
 procedure TDesignMover.PaintDragRects;
