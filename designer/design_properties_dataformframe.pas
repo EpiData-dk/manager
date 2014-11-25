@@ -46,6 +46,7 @@ type
     AfterRecordSheet: TTabSheet;
     procedure AddRelateBtnClick(Sender: TObject);
     procedure NoLimitRadioBtnClick(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
     procedure RemoveRelateBtnClick(Sender: TObject);
   private
     { Relate }
@@ -56,6 +57,7 @@ type
     procedure AddRelationsToCombo(Combo: TComboBox);
   private
     { AfterRecord }
+    FAfterRecordIndex: Integer;
     procedure UpdateAfterRecordRadioBoxVisibility;
     procedure UpdateAfterRecordRadioBoxContent;
   private
@@ -181,6 +183,12 @@ begin
   MaskEdit1.Enabled := Fixed;
 
   LocalUpdateAfterRecordGroup;
+end;
+
+procedure TDataformPropertiesFrame.PageControl1Change(Sender: TObject);
+begin
+  if PageControl1.ActivePage = AfterRecordSheet then
+    AfterRecordGrpBox.ItemIndex := FAfterRecordIndex;
 end;
 
 procedure TDataformPropertiesFrame.RemoveRelateBtnClick(Sender: TObject);
@@ -365,6 +373,7 @@ begin
   end; }
 
   AfterRecordGrpBox.ItemIndex := Idx;
+  FAfterRecordIndex := Idx;
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
