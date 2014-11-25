@@ -722,14 +722,18 @@ var
 begin
   Relation.Datafile.Caption.Text := 'Dataform ' + IntToStr(FrameCount);
 
+  if Relation.InheritsFrom(TEpiDetailRelation)
+  then
+    begin
+      Relation.Datafile.AfterRecordState := arsNewRecord;
+      BindKeyFields(TEpiDetailRelation(Relation));
+    end;
+
+
   Frame := DoNewRuntimeFrame(Relation);
   Frame.Activate;
   Frame.DeActivate(true);
   Relation.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Frame);
-
-  if Relation.InheritsFrom(TEpiDetailRelation)
-  then
-    BindKeyFields(TEpiDetailRelation(Relation));
 end;
 
 procedure TProjectFrame.ProjectTreeSelected(Sender: TObject;

@@ -32,8 +32,8 @@ type
     MaskEdit1: TMaskEdit;
     NameEdit: TEdit;
     PageControl1: TPageControl;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
+    NoLimitRadioBtn: TRadioButton;
+    FixedLimitRadioBtn: TRadioButton;
     AfterRecordGrpBox: TRadioGroup;
     RelateScrollBox: TScrollBox;
     RelatesGrpBox: TGroupBox;
@@ -45,9 +45,7 @@ type
     BasicSheet: TTabSheet;
     AfterRecordSheet: TTabSheet;
     procedure AddRelateBtnClick(Sender: TObject);
-    procedure AllowedRecordsEditKeyPress(Sender: TObject; var Key: char);
-    procedure PageControl1Change(Sender: TObject);
-    procedure RadioButton1Click(Sender: TObject);
+    procedure NoLimitRadioBtnClick(Sender: TObject);
     procedure RemoveRelateBtnClick(Sender: TObject);
   private
     { Relate }
@@ -56,6 +54,10 @@ type
     procedure UpdateRelate;
     function  DoAddNewRelate: Pointer;
     procedure AddRelationsToCombo(Combo: TComboBox);
+  private
+    { AfterRecord }
+    procedure UpdateAfterRecordRadioBoxVisibility;
+    procedure UpdateAfterRecordRadioBoxContent;
   private
     procedure DataFileCaptionHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
@@ -88,7 +90,16 @@ implementation
 uses
   epirelations;
 
+const
+  AfterRecordStateCaption: array[TEpiDataFileAfterRecordState] of string =
+    ('New Record',
+     'Return to parent',
+     'Return to parent on Max records',
+     'Stay on record'
+    );
+
 type
+  TAfterRecordStates = set of TEpiDataFileAfterRecordState;
 
   TRelateComponents = record
     ValueEdit: TEdit;
@@ -99,28 +110,77 @@ type
 
 { TDataformPropertiesFrame }
 
-procedure TDataformPropertiesFrame.AllowedRecordsEditKeyPress(Sender: TObject; var Key: char
-  );
-begin
-  if not (Key in ['0'..'9', #8]) then Key := #0;
-end;
-
-procedure TDataformPropertiesFrame.PageControl1Change(Sender: TObject);
-begin
-  if Assigned(Relation) and
-     Assigned(DataFile)
-  then
-    UpdateVisibility;
-end;
-
 procedure TDataformPropertiesFrame.AddRelateBtnClick(Sender: TObject);
 begin
   PRelateComponents(DoAddNewRelate)^.GotoCombo.SetFocus;
 end;
 
-procedure TDataformPropertiesFrame.RadioButton1Click(Sender: TObject);
+procedure TDataformPropertiesFrame.NoLimitRadioBtnClick(Sender: TObject);
+var
+  Fixed: Boolean;
+
+  procedure AddToGrpBox(States: TAfterRecordStates);
+  var
+    S: TEpiDataFileAfterRecordState;
+  begin
+    for S in States do
+      AfterRecordGrpBox.Items.AddObject(
+        AfterRecordStateCaption[S],
+        TObject(PtrInt(S))
+      );
+  end;
+
+  procedure SelectItem(State: TEpiDataFileAfterRecordState);
+  var
+    Obj: TObject;
+    Idx: Integer;
+  begin
+    Obj := TObject(PtrInt(State));
+    Idx := AfterRecordGrpBox.Items.IndexOfObject(Obj);
+    AfterRecordGrpBox.ItemIndex := Idx;
+  end;
+
+  procedure LocalUpdateAfterRecordGroup;
+  var
+    DefaultState: TEpiDataFileAfterRecordState;
+    Count: Integer;
+  begin
+    AfterRecordGrpBox.Items.Clear;
+
+    Count := StrToInt(Trim(MaskEdit1.EditText));
+
+    // 1:1
+    if (Fixed) and (Count = 1)
+    then
+      begin
+        AddToGrpBox([arsStayOnRecord, arsReturnToParent]);
+        DefaultState := arsReturnToParent;
+      end;
+
+    // 1:X
+    if (Fixed) and (Count > 1)
+    then
+      begin
+        AddToGrpBox([arsReturnToParent, arsReturnToParentOnMax]);
+        DefaultState := arsReturnToParentOnMax;
+      end;
+
+    // 1:inf
+    if (not Fixed)
+    then
+      begin
+        AddToGrpBox([arsNewRecord, arsReturnToParent]);
+        DefaultState := arsNewRecord;
+      end;
+
+    SelectItem(DefaultState);
+  end;
+
 begin
-  MaskEdit1.Enabled := (Sender = RadioButton2);
+  Fixed := (Sender = FixedLimitRadioBtn);
+  MaskEdit1.Enabled := Fixed;
+
+  LocalUpdateAfterRecordGroup;
 end;
 
 procedure TDataformPropertiesFrame.RemoveRelateBtnClick(Sender: TObject);
@@ -245,6 +305,68 @@ begin
   UpdateCaption('DataForm Properties: ' + DataFile.Caption.Text);
 end;
 
+procedure TDataformPropertiesFrame.UpdateAfterRecordRadioBoxVisibility;
+var
+  DetailRelation: TEpiDetailRelation;
+
+  procedure AddToGrpBox(States: TAfterRecordStates);
+  var
+    S: TEpiDataFileAfterRecordState;
+  begin
+    for S in States do
+      AfterRecordGrpBox.Items.AddObject(
+        AfterRecordStateCaption[S],
+        TObject(PtrInt(S))
+      );
+  end;
+
+begin
+  if Relation.InheritsFrom(TEpiDetailRelation) then
+  begin
+    DetailRelation := TEpiDetailRelation(Relation);
+
+    AfterRecordGrpBox.Items.Clear;
+
+    // 1:1
+    if DetailRelation.MaxRecordCount = 1 then AddToGrpBox([arsStayOnRecord, arsReturnToParent]);
+
+    // 1:X
+    if DetailRelation.MaxRecordCount > 1 then AddToGrpBox([arsReturnToParent, arsReturnToParentOnMax]);
+
+    // 1:inf
+    if DetailRelation.MaxRecordCount = 0 then AddToGrpBox([arsNewRecord, arsReturnToParent]);
+
+    AfterRecordGrpBox.Visible := true;
+  end else
+    AfterRecordGrpBox.Visible := false;
+end;
+
+procedure TDataformPropertiesFrame.UpdateAfterRecordRadioBoxContent;
+var
+  Obj: TObject;
+  Idx: Integer;
+begin
+  if not Relation.InheritsFrom(TEpiDetailRelation)
+  then
+    Exit;
+
+  Obj := TObject(PtrInt(DataFile.AfterRecordState));
+  Idx := AfterRecordGrpBox.Items.IndexOfObject(Obj);
+{  if Idx = -1 then
+  begin
+    case TEpiDetailRelation(Relation).MaxRecordCount of
+      0: Obj := TObject(PtrInt(arsNewRecord));
+      1: Obj := TObject(PtrInt(arsReturnToParent));
+    else
+      Obj := TObject(PtrInt(arsReturnToParentOnMax));
+    end;
+
+    Idx := AfterRecordGrpBox.Items.IndexOfObject(Obj);
+  end; }
+
+  AfterRecordGrpBox.ItemIndex := Idx;
+end;
+
 procedure TDataformPropertiesFrame.UpdateVisibility;
 var
   MasterDF: TEpiDataFile;
@@ -255,11 +377,12 @@ begin
   if ChildRecGrpBox.Visible then
   begin
     MasterDF := TEpiDetailRelation(Relation).MasterRelation.Datafile;
-    ChildRecGrpBox.Enabled := (MasterDF.KeyFields.Count < DataFile.KeyFields.Count);
+//    ChildRecGrpBox.Enabled := (MasterDF.KeyFields.Count <= DataFile.KeyFields.Count);
   end;
 
-  RelatesGrpBox.Enabled     := (Relation.DetailRelations.Count > 0);
-  AfterRecordGrpBox.Visible := Relation.InheritsFrom(TEpiDetailRelation);
+  UpdateAfterRecordRadioBoxVisibility;
+
+  RelatesGrpBox.Visible     := (Relation.DetailRelations.Count > 0);
 end;
 
 procedure TDataformPropertiesFrame.UpdateContent;
@@ -273,15 +396,15 @@ begin
   if ChildRecGrpBox.Visible then
     if ChildRecGrpBox.Enabled then
       begin
-        if (TEpiDetailRelation(Relation).MaxRecordCount = 0) then
-          RadioButton1.Checked := true
-        else
-          RadioButton2.Checked := true;
         MaskEdit1.Text := IntToStr(TEpiDetailRelation(Relation).MaxRecordCount);
+        if (TEpiDetailRelation(Relation).MaxRecordCount = 0) then
+          NoLimitRadioBtn.Checked := true
+        else
+          FixedLimitRadioBtn.Checked := true;
       end
     else
       begin
-        RadioButton2.Checked := true;
+        FixedLimitRadioBtn.Checked := true;
         MaskEdit1.Text := '1';
       end;
 
@@ -289,11 +412,7 @@ begin
   //  AfterRecord
   // ********************
   UpdateRelate;
-
-  case DataFile.AfterRecordState of
-    arsNewRecord:      AfterRecordGrpBox.ItemIndex := 0;
-    arsReturnToParent: AfterRecordGrpBox.ItemIndex := 1;
-  end;
+  UpdateAfterRecordRadioBoxContent;
 end;
 
 procedure TDataformPropertiesFrame.RegisterDataFileCaptionHook;
@@ -352,7 +471,7 @@ begin
 
   S := Trim(MaskEdit1.Text);
   if (ChildRecGrpBox.Visible) and
-     (RadioButton2.Checked) and
+     (FixedLimitRadioBtn.Checked) and
      (
       (S = '') or
       (StrToInt(S) = 0)
@@ -385,7 +504,7 @@ begin
   if ChildRecGrpBox.Visible then
   with TEpiDetailRelation(Relation) do
   begin
-    if RadioButton1.Checked then
+    if NoLimitRadioBtn.Checked then
       MaxRecordCount := 0
     else
       MaxRecordCount := StrToInt(Trim(MaskEdit1.Text));
@@ -405,10 +524,23 @@ begin
       NRelate.DetailRelation := TEpiDetailRelation(ComboSelectedObject(GotoCombo));
   end;
 
-  Case AfterRecordGrpBox.ItemIndex of
+  if Relation.InheritsFrom(TEpiDetailRelation) then
+    DataFile.AfterRecordState :=
+      TEpiDataFileAfterRecordState(
+        PtrInt(
+            AfterRecordGrpBox.Items.Objects[
+              AfterRecordGrpBox.ItemIndex
+            ]
+        )
+      )
+  else
+    // "Master" datafile is ALWAYS new record state.
+    DataFile.AfterRecordState := arsNewRecord;
+
+{  Case AfterRecordGrpBox.ItemIndex of
     0: DataFile.AfterRecordState := arsNewRecord;
     1: DataFile.AfterRecordState := arsReturnToParent;
-  end;
+  end;}
 end;
 
 constructor TDataformPropertiesFrame.Create(TheOwner: TComponent);

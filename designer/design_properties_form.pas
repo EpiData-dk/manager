@@ -271,53 +271,59 @@ var
 begin
   if not ValidateControls then exit;
 
-  if Length(Objects) = 0 then
-  begin
-    ShowEmptyPage;
-    Exit;
-  end;
+  try
+    BeginFormUpdate;
 
-  AClassType := Objects[0].ClassType;
-  for i := Low(Objects)+1 to High(Objects) do
-  begin
-    if Objects[i].ClassType <> AClassType then
+    if Length(Objects) = 0 then
     begin
       ShowEmptyPage;
       Exit;
     end;
-  end;
 
-  if not Supports(Objects[0], IDesignEpiControl) then
-  begin
-    ShowEmptyPage;
-    Exit;
-  end;
+    AClassType := Objects[0].ClassType;
+    for i := Low(Objects)+1 to High(Objects) do
+    begin
+      if Objects[i].ClassType <> AClassType then
+      begin
+        ShowEmptyPage;
+        Exit;
+      end;
+    end;
 
-  if Assigned(FFrame) and (FFrame.ClassType <> (Objects[0] as IDesignEpiControl).DesignFrameClass) then
-  begin
-    FFrame.Free;
-    NewFrame((Objects[0] as IDesignEpiControl).DesignFrameClass);
-  end else
-  if (not Assigned(FFrame)) then
-  begin
-    NewFrame((Objects[0] as IDesignEpiControl).DesignFrameClass);
-  end;
+    if not Supports(Objects[0], IDesignEpiControl) then
+    begin
+      ShowEmptyPage;
+      Exit;
+    end;
 
-  UnregisterHooks;
+    if Assigned(FFrame) and (FFrame.ClassType <> (Objects[0] as IDesignEpiControl).DesignFrameClass) then
+    begin
+      FFrame.Free;
+      NewFrame((Objects[0] as IDesignEpiControl).DesignFrameClass);
+    end else
+    if (not Assigned(FFrame)) then
+    begin
+      NewFrame((Objects[0] as IDesignEpiControl).DesignFrameClass);
+    end;
 
-  SetLength(EpiCtrlItemArray, Length(Objects));
-  for i := Low(Objects) to High(Objects) do
-    EpiCtrlItemArray[i] := (Objects[i] as IDesignEpiControl).EpiControl;
+    UnregisterHooks;
 
-  RegisterHooks;
+    SetLength(EpiCtrlItemArray, Length(Objects));
+    for i := Low(Objects) to High(Objects) do
+      EpiCtrlItemArray[i] := (Objects[i] as IDesignEpiControl).EpiControl;
 
-  if Assigned(FFrame)
-  then
-  with (FFrame as IDesignPropertiesFrame) do
-  begin
-    SetDataFile(Relation.Datafile);
-    SetRelation(Relation);
-    SetEpiControls(EpiCtrlItemArray);
+    RegisterHooks;
+
+    if Assigned(FFrame)
+    then
+    with (FFrame as IDesignPropertiesFrame) do
+    begin
+      SetDataFile(Relation.Datafile);
+      SetRelation(Relation);
+      SetEpiControls(EpiCtrlItemArray);
+    end;
+  finally
+    EndFormUpdate;
   end;
 end;
 
