@@ -206,7 +206,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="95">
+    <Units Count="97">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -766,6 +766,18 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit94>
+      <Unit95>
+        <Filename Value="designer/properties/propetiesform2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="propetiesform2"/>
+      </Unit95>
+      <Unit96>
+        <Filename Value="designer/properties/fieldproperties_frame2.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FieldPropertiesFrame2"/>
+        <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="fieldproperties_frame2"/>
+      </Unit96>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -775,7 +787,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename;designer/properties"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

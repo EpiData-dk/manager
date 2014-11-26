@@ -35,6 +35,7 @@ type
     CalcFieldLabel: TLabel;
     CalcSheet: TTabSheet;
     FieldTypeImage: TImage;
+    Label27: TLabel;
     ZeroFilledChkBox: TCheckBox;
     GotoDataformLabel: TLabel;
     RelateValueBevel: TBevel;

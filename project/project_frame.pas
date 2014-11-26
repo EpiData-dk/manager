@@ -171,7 +171,7 @@ uses
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
-  design_properties_form
+  design_properties_form, propetiesform2
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -1083,8 +1083,11 @@ begin
   FDataFileTreeViewCaptionUpdating := false;
 
   AlignForm := TAlignmentForm.Create(self);
+
   PropertiesForm := TPropertiesForm.Create(self);
   PropertiesForm.OnShowHintMsg := @ShowHintMsg;
+
+  PropertiesForm2 := TPropertiesForm2.Create(Self);
 
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.AutoHide := true;
