@@ -1087,8 +1087,6 @@ begin
   PropertiesForm := TPropertiesForm.Create(self);
   PropertiesForm.OnShowHintMsg := @ShowHintMsg;
 
-  PropertiesForm2 := TPropertiesForm2.Create(Self);
-
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.AutoHide := true;
   FHintWindow.HideInterval := 5 * 1000;

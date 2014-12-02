@@ -365,7 +365,7 @@ uses
   main, JvDesignUtils, settings2_var,
   manager_globals, managerprocs, Clipbrd, math,
   import_structure_form, epimiscutils,
-  dataset_form, propetiesform2,
+  dataset_form,
   LCLType, shortcuts, settings2,
   Printers, OSPrinters, strutils,
   design_control_section,
@@ -1447,6 +1447,7 @@ begin
       TDesignHeading(Result).EpiControl := Heading;
   finally
     Controller.ClearDragRect;
+    Surface.UpdateDesigner;
   end;
 end;
 
@@ -1476,6 +1477,7 @@ begin
       TDesignField(Result).EpiControl := Field;
   finally
     Controller.ClearDragRect;
+    Surface.UpdateDesigner;
   end;
 end;
 
@@ -1502,6 +1504,7 @@ begin
       TDesignSection(Result).EpiControl := Section;
   finally
     Controller.ClearDragRect;
+    Surface.UpdateDesigner;
   end;
 end;
 
@@ -2373,10 +2376,7 @@ begin
     Selection := FDesignPanel.Surface.Selected;
 
   if Assigned(PropertiesForm) and (not FSettingDataFile) then
-  begin
     PropertiesForm.UpdateSelection(Selection, Relation);
-    PropertiesForm2.UpdateSelection(Selection, Relation);
-  end;
 
   UpdateStatusbar(Selection);
 end;
@@ -2931,8 +2931,6 @@ begin
 
   PropertiesForm.Show;
   PropertiesForm.SetFocus;
-
-  PropertiesForm2.Show;
 
   if NewControl then
     PropertiesForm.SetFocusOnNew;

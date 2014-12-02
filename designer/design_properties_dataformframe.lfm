@@ -240,7 +240,6 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           MaxLength = 4
           TabOrder = 2
           EditMask = '9999;1; '
-          Text = '    '
           SpaceChar = ' '
         end
       end
@@ -314,7 +313,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       ClientWidth = 520
       object RelatesGrpBox: TGroupBox
         Left = 10
-        Height = 261
+        Height = 175
         Top = 10
         Width = 500
         BorderSpacing.Left = 10
@@ -322,19 +321,19 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Continue on:'
-        ClientHeight = 244
+        ClientHeight = 158
         ClientWidth = 496
         TabOrder = 0
         object RelateScrollBox: TScrollBox
           Left = 0
-          Height = 244
+          Height = 158
           Top = 0
           Width = 496
           HorzScrollBar.Page = 117
           VertScrollBar.Page = 59
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 244
+          ClientHeight = 158
           ClientWidth = 496
           TabOrder = 0
           object RelateOrderLabel: TLabel
@@ -472,7 +471,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
             AnchorSideBottom.Control = RelateScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 88
-            Height = 194
+            Height = 108
             Top = 48
             Width = 3
             Anchors = [akTop, akLeft, akBottom]
@@ -486,7 +485,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
             AnchorSideBottom.Control = RelateScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 436
-            Height = 194
+            Height = 108
             Top = 48
             Width = 3
             Anchors = [akTop, akRight, akBottom]
@@ -536,8 +535,8 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       end
       object AfterRecordGrpBox: TRadioGroup
         Left = 10
-        Height = 62
-        Top = 281
+        Height = 148
+        Top = 195
         Width = 500
         AutoFill = True
         AutoSize = True
@@ -554,7 +553,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 45
+        ClientHeight = 131
         ClientWidth = 496
         Columns = 2
         Items.Strings = (

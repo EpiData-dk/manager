@@ -187,8 +187,8 @@ end;
 
 procedure TDataformPropertiesFrame.PageControl1Change(Sender: TObject);
 begin
-  if PageControl1.ActivePage = AfterRecordSheet then
-    AfterRecordGrpBox.ItemIndex := FAfterRecordIndex;
+{  if PageControl1.ActivePage = AfterRecordSheet then
+    AfterRecordGrpBox.ItemIndex := FAfterRecordIndex;}
 end;
 
 procedure TDataformPropertiesFrame.RemoveRelateBtnClick(Sender: TObject);

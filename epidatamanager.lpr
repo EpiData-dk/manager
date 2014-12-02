@@ -54,8 +54,7 @@ uses
   valuelabel_import_data, project_types, project_studyunit_frame,
   design_properties_dataformframe, append_form, append_form2, 
   epiv_projecttreeview_frame, epiv_datamodule, count_by_id_form, 
-report_project_validation_frame2, reports_form, report_counts_frame, 
-propetiesform2, fieldproperties_frame2;
+report_project_validation_frame2, reports_form, report_counts_frame;
 
 {$R *.res}
 
