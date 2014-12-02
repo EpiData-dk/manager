@@ -1,6 +1,7 @@
 unit main;
 
 {$mode objfpc}{$H+}
+{$codepage utf8}
 
 interface
 
@@ -295,7 +296,8 @@ uses
   append_form, epitools_append,
   validate_double_entry_form,
   count_by_id_form, manager_globals,
-  report_project_validation_frame2, reports_form;
+  report_project_validation_frame2, reports_form,
+  checkversionform;
 
 type
   TAccessActionList = class(TActionList);
@@ -517,8 +519,13 @@ var
   StableScore: Integer;
   TestScore: Integer;
   S: String;
+  F: TCheckVersionForm;
 begin
-  ManagerVersion := GetEpiVersion(HINSTANCE);
+  F := TCheckVersionForm.Create(Self);
+  F.ShowModal;
+  F.Free;
+
+{  ManagerVersion := GetEpiVersion(HINSTANCE);
   if not CheckVersionOnline('epidatamanager', Stable, Test, Response) then
   begin
     ShowMessage(
@@ -549,7 +556,7 @@ begin
       S := S + Format('New test version available: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo])
     else
       S := S + Format('Latest test version: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
-  ShowMessage(S);
+  ShowMessage(S);   }
 end;
 
 procedure TMainForm.ActionList1Update(AAction: TBasicAction;
