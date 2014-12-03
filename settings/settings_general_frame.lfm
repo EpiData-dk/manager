@@ -6,8 +6,8 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   ClientHeight = 389
   ClientWidth = 488
   TabOrder = 0
-  DesignLeft = 1741
-  DesignTop = 275
+  DesignLeft = 678
+  DesignTop = 305
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrCenter
@@ -136,5 +136,62 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     BorderSpacing.Top = 10
     Caption = 'Show A4 guidelines'
     TabOrder = 2
+  end
+  object CheckUpdateGrpBox: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = AssociateBtn
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 82
+    Top = 214
+    Width = 468
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Program Updates'
+    ClientHeight = 65
+    ClientWidth = 464
+    TabOrder = 7
+    object AutomaticUpdatesChkBox: TCheckBox
+      Left = 8
+      Height = 22
+      Top = 8
+      Width = 212
+      Caption = 'Check for new versions online'
+      OnChange = AutomaticUpdatesChkBoxChange
+      TabOrder = 0
+    end
+    object DaysBetweenUpdatedEdit: TMaskEdit
+      AnchorSideLeft.Control = Label2
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideBottom.Control = Label2
+      AnchorSideBottom.Side = asrBottom
+      Left = 158
+      Height = 25
+      Top = 30
+      Width = 32
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 15
+      CharCase = ecNormal
+      MaxLength = 2
+      TabOrder = 1
+      EditMask = '99;0; '
+      SpaceChar = ' '
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = AutomaticUpdatesChkBox
+      AnchorSideTop.Control = AutomaticUpdatesChkBox
+      AnchorSideTop.Side = asrBottom
+      Left = 8
+      Height = 15
+      Top = 40
+      Width = 135
+      BorderSpacing.Top = 10
+      Caption = 'Days between check:'
+      ParentColor = False
+    end
   end
 end

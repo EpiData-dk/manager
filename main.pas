@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, StdCtrls, Buttons,
+  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
   project_frame, LMessages, manager_messages, epidocument, report_base,
   episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile;
 
@@ -237,6 +237,7 @@ type
     procedure UpdateShortCuts;
     procedure UpdateSettings;
     procedure LoadGlyphs;
+    procedure CheckForUpdates(Data: PtrInt);
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(Const ReadOnly: boolean;
       out LocalDoc: boolean): TEpiDocumentFile;
@@ -313,6 +314,9 @@ begin
 
   UpdateSettings;
   UpdateRecentFiles;
+
+  Application.QueueAsyncCall(@CheckForUpdates, 0);
+//  CheckForUpdates;
 end;
 
 procedure TMainForm.ImportCBInNewProjectActionExecute(Sender: TObject);
@@ -509,23 +513,13 @@ end;
 
 procedure TMainForm.CheckVersionActionExecute(Sender: TObject);
 var
-  ManagerVersion: TEpiVersionInfo;
-  Stable: TEpiVersionInfo;
-  Test: TEpiVersionInfo;
-  Response: string;
-  NewStable: Boolean;
-  NewTest: Boolean;
-  EntryScore: Integer;
-  StableScore: Integer;
-  TestScore: Integer;
-  S: String;
   F: TCheckVersionForm;
 begin
   F := TCheckVersionForm.Create(Self);
   F.ShowModal;
   F.Free;
-
-{  ManagerVersion := GetEpiVersion(HINSTANCE);
+         {
+  ManagerVersion := GetEpiVersion(HINSTANCE);
   if not CheckVersionOnline('epidatamanager', Stable, Test, Response) then
   begin
     ShowMessage(
@@ -556,7 +550,7 @@ begin
       S := S + Format('New test version available: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo])
     else
       S := S + Format('Latest test version: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
-  ShowMessage(S);   }
+  ShowMessage(S);  }
 end;
 
 procedure TMainForm.ActionList1Update(AAction: TBasicAction;
@@ -1240,6 +1234,30 @@ begin
   DM.Icons16.GetBitmap(43, DocumentBtn.Glyph);
   DM.Icons16.GetBitmap(44, DataFormBtn.Glyph);
   DM.Icons16.GetBitmap(45, ProjectDetailsBtn.Glyph);
+end;
+
+procedure TMainForm.CheckForUpdates(Data: PtrInt);
+var
+  F: TCheckVersionForm;
+  D: Extended;
+  N: TDateTime;
+begin
+  // User does not want to show updates.
+  if not ManagerSettings.CheckForUpdates then exit;
+
+  // Check if it is time to search for updates.
+  D := (ManagerSettings.LastUpdateCheck + ManagerSettings.DaysBetweenChecks);
+  N := Now;
+
+  if (ManagerSettings.LastUpdateCheck + ManagerSettings.DaysBetweenChecks) >= Now
+  then
+    Exit;
+
+  F := TCheckVersionForm.Create(Self);
+  F.ShowModal;
+  F.Free;
+
+  ManagerSettings.LastUpdateCheck := Now;
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);

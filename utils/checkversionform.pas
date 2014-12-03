@@ -13,7 +13,6 @@ type
   { TCheckVersionForm }
 
   TCheckVersionForm = class(TForm)
-    procedure DownloadLinkMouseLeave(Sender: TObject);
   private
     CurrentVersionCaption: TLabel;
     CurrentVersionInfo: TLabel;
@@ -26,8 +25,14 @@ type
 
     CheckVersionOnlineChkBox: TCheckBoxThemed;
     CloseBtn: TBitBtn;
+    procedure CloseBtnClick(Sender: TObject);
     procedure DownloadLinkClick(Sender: TObject);
     procedure DownloadLinkMouseEnter(Sender: TObject);
+    procedure DownloadLinkMouseLeave(Sender: TObject);
+    procedure ShowForm(Sender: TObject);
+  private
+    procedure CreateControls;
+    procedure UpdateVersions;
   public
     constructor Create(TheOwner: TComponent); override;
   end;
@@ -35,7 +40,8 @@ type
 implementation
 
 uses
-  Controls, Graphics, LCLIntf;
+  Controls, Graphics, LCLIntf, ExtCtrls, epiversionutils, Dialogs,
+  settings2_var;
 
 
 const
@@ -45,14 +51,9 @@ const
 
 { TCheckVersionForm }
 
-procedure TCheckVersionForm.DownloadLinkMouseEnter(Sender: TObject);
+procedure TCheckVersionForm.CloseBtnClick(Sender: TObject);
 begin
-  Screen.Cursor := crHandPoint;
-end;
-
-procedure TCheckVersionForm.DownloadLinkMouseLeave(Sender: TObject);
-begin
-  Screen.Cursor := crDefault;
+  ManagerSettings.CheckForUpdates := CheckVersionOnlineChkBox.Checked;
 end;
 
 procedure TCheckVersionForm.DownloadLinkClick(Sender: TObject);
@@ -70,9 +71,36 @@ begin
   OpenURL(URL);
 end;
 
-constructor TCheckVersionForm.Create(TheOwner: TComponent);
+procedure TCheckVersionForm.DownloadLinkMouseEnter(Sender: TObject);
 begin
-  inherited CreateNew(TheOwner);
+  Screen.Cursor := crHandPoint;
+end;
+
+procedure TCheckVersionForm.DownloadLinkMouseLeave(Sender: TObject);
+begin
+  Screen.Cursor := crDefault;
+end;
+
+procedure TCheckVersionForm.ShowForm(Sender: TObject);
+begin
+  UpdateVersions;
+  CloseBtn.SetFocus;
+end;
+
+procedure TCheckVersionForm.CreateControls;
+var
+  Image: TImage;
+begin
+  Image := TImage.Create(Self);
+  with Image do
+  begin
+    Width := 64;
+    Height := 64;
+    AnchorParallel(akTop, 10, Self);
+    AnchorParallel(akLeft, 10, Self);
+    Picture.Icon := Application.Icon;
+    Parent := Self;
+  end;
 
   CurrentVersionCaption := TLabel.Create(Self);
   with CurrentVersionCaption do
@@ -80,8 +108,8 @@ begin
     Caption := 'Current Virsion:';
     AutoSize := true;
     Anchors := [];
-    AnchorParallel(akTop, 10, Self);
-    AnchorParallel(akLeft, 10, Self);
+    AnchorParallel(akTop,   0, Image);
+    AnchorToNeighbour(akLeft, 15, Image);
     Parent := Self
   end;
 
@@ -103,7 +131,7 @@ begin
     AutoSize := true;
     Anchors := [];
     AnchorToNeighbour(akTop, 10, CurrentVersionCaption);
-    AnchorParallel(akLeft, 10, Self);
+    AnchorParallel(akLeft, 0, CurrentVersionCaption);
     Parent := Self
   end;
 
@@ -132,7 +160,7 @@ begin
     AutoSize := true;
     Anchors := [];
     AnchorToNeighbour(akTop, 10, PublicVersionCaption);
-    AnchorParallel(akLeft, 10, Self);
+    AnchorParallel(akLeft, 0, CurrentVersionCaption);
     Parent := Self
   end;
 
@@ -162,7 +190,8 @@ begin
     ShowHint := true;
     AutoSize := true;
     AnchorToNeighbour(akTop, 10, TestVersionCaption);
-    AnchorParallel(akLeft, 10, Self);
+    AnchorParallel(akLeft, 0, Image);
+    Checked := ManagerSettings.CheckForUpdates;
     Parent := Self
   end;
 
@@ -174,10 +203,46 @@ begin
     Anchors := [];
     AnchorParallel(akBottom, 10, Self);
     AnchorParallel(akRight, 10, Self);
+    OnClick := @CloseBtnClick;
     Parent := Self;
   end;
+end;
 
-  DefaultControl := CloseBtn;
+procedure TCheckVersionForm.UpdateVersions;
+var
+  ManagerVersion: TEpiVersionInfo;
+  Stable: TEpiVersionInfo;
+  Test: TEpiVersionInfo;
+  Response: string;
+begin
+  ManagerVersion := GetEpiVersion(HINSTANCE);
+  if not CheckVersionOnline('epidatamanager', Stable, Test, Response) then
+  begin
+    ShowMessage(
+      'ERROR: Could not find version information.' + LineEnding +
+      'Response: ' + Response);
+    exit;
+  end;
+
+  with ManagerVersion do
+    CurrentVersionInfo.Caption := Format('%d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
+
+  With Stable do
+    PublicVersionInfo.Caption := Format('%d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
+
+  With Test do
+    TestVersionInfo.Caption := Format('%d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
+end;
+
+
+constructor TCheckVersionForm.Create(TheOwner: TComponent);
+begin
+  inherited CreateNew(TheOwner);
+
+  CreateControls;
+  Caption := 'Check Version';
+
+  OnShow := @ShowForm;
 end;
 
 end.

@@ -146,6 +146,9 @@ begin
       WriteBool(Sec, 'ShowWorkToolbar', ShowWorkToolBar);
       WriteBool(Sec, 'ShowA4GuideLines', ShowA4GuideLines);
       WriteBool(Sec, 'MultipleInstances', MultipleInstances);
+      WriteBool(Sec, 'CheckForUpdates', CheckForUpdates);
+      WriteInteger(Sec, 'DaysBetweenChecks', DaysBetweenChecks);
+      WriteDateTime(Sec, 'LastUpdateCheck', LastUpdateCheck);
 
       Sec := 'fonts';
       WriteString(sec, 'FieldFontName', FieldFont.Name);
@@ -327,6 +330,9 @@ begin
       ShowWorkToolBar     := ReadBool(Sec, 'ShowWorkToolBar', ShowWorkToolBar);
       ShowA4GuideLines    := ReadBool(Sec, 'ShowA4GuideLines', ShowA4GuideLines);
       MultipleInstances   := ReadBool(Sec, 'MultipleInstances', MultipleInstances);
+      CheckForUpdates     := ReadBool(Sec, 'CheckForUpdates', CheckForUpdates);
+      DaysBetweenChecks   := ReadInteger(Sec, 'DaysBetweenChecks', DaysBetweenChecks);
+      LastUpdateCheck     := ReadDateTime(Sec, 'LastUpdateCheck', LastUpdateCheck);
 
       // Export:
       Sec := 'export';
@@ -687,6 +693,9 @@ const
     PasteSpecialType:      1;     // Heading.
     SaveType:              0;     // epx format.
     ImportCasing:          fncAsIs;
+    CheckForUpdates:       true;
+    DaysBetweenChecks:     7;
+    LastUpdateCheck:       0;
 
     // Visual design:
     DefaultRightPosition:  400;

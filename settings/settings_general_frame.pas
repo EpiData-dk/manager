@@ -6,13 +6,17 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Dialogs, EditBtn,
-  ExtCtrls, settings2_interface, settings2_var;
+  ExtCtrls, MaskEdit, settings2_interface, settings2_var;
 
 type
 
   { TSettings_GeneralFrame }
 
   TSettings_GeneralFrame = class(TFrame, ISettingsFrame)
+    AutomaticUpdatesChkBox: TCheckBox;
+    CheckUpdateGrpBox: TGroupBox;
+    Label2: TLabel;
+    DaysBetweenUpdatedEdit: TMaskEdit;
     ShowA4LinesChkBox: TCheckBox;
     UnAssociateBtn: TButton;
     AssociateBtn: TButton;
@@ -23,6 +27,7 @@ type
     SaveWindowPositionsChkBox: TCheckBox;
     ShowWorkToolBarChkBox: TCheckBox;
     procedure AssociateBtnClick(Sender: TObject);
+    procedure AutomaticUpdatesChkBoxChange(Sender: TObject);
     procedure UnAssociateBtnClick(Sender: TObject);
   private
     { private declarations }
@@ -86,6 +91,11 @@ begin
 {$ENDIF}
 end;
 
+procedure TSettings_GeneralFrame.AutomaticUpdatesChkBoxChange(Sender: TObject);
+begin
+  DaysBetweenUpdatedEdit.Enabled := TCheckBox(Sender).Checked;
+end;
+
 procedure TSettings_GeneralFrame.UnAssociateBtnClick(Sender: TObject);
 {$IFDEF WINDOWS}
 var
@@ -137,18 +147,30 @@ begin
     ShowWorkToolBarChkBox.Checked     := ShowWorkToolBar;
     ShowA4LinesChkBox.Checked         := ShowA4GuideLines;
     MultipleInstanceChkbox.Checked    := MultipleInstances;
+    AutomaticUpdatesChkBox.Checked    := CheckForUpdates;
+    DaysBetweenUpdatedEdit.EditText   := IntToStr(DaysBetweenChecks);
   end;
+
+  AutomaticUpdatesChkBoxChange(AutomaticUpdatesChkBox);
 end;
 
 function TSettings_GeneralFrame.ApplySettings: boolean;
 begin
   with FData^ do
   begin
+    if AutomaticUpdatesChkBox.Checked and
+       (Trim(DaysBetweenUpdatedEdit.EditText) = '')
+    then
+      Exit(false);
+
     SaveType            := DefaultSaveTypeComboBox.ItemIndex;
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;
     ShowWorkToolBar     := ShowWorkToolBarChkBox.Checked;
     MultipleInstances   := MultipleInstanceChkbox.Checked;
     ShowA4GuideLines    := ShowA4LinesChkBox.Checked;
+    CheckForUpdates     := AutomaticUpdatesChkBox.Checked;
+    if CheckForUpdates then
+      DaysBetweenChecks   := StrToInt(Trim(DaysBetweenUpdatedEdit.EditText));;
   end;
   Result := true;
 end;
