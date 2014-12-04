@@ -90,13 +90,28 @@ end;
 procedure TCheckVersionForm.CreateControls;
 var
   Image: TImage;
+  WebLabel: TLabel;
 begin
+  WebLabel := TLabel.Create(Self);
+  with WebLabel do
+  begin
+    Caption := 'www.epidata.dk';
+    Font.Bold := true;
+    Font.Underline := true;
+    AnchorHorizontalCenterTo(Self);
+    AnchorParallel(akTop, 10, Self);
+    OnClick := @DownloadLinkClick;
+    OnMouseEnter := @DownloadLinkMouseEnter;
+    OnMouseLeave := @DownloadLinkMouseLeave;
+    Parent := Self;
+  end;
+
   Image := TImage.Create(Self);
   with Image do
   begin
     Width := 64;
     Height := 64;
-    AnchorParallel(akTop, 10, Self);
+    AnchorToNeighbour(akTop, 10, WebLabel);
     AnchorParallel(akLeft, 10, Self);
     Picture.Icon := Application.Icon;
     Parent := Self;
@@ -105,7 +120,7 @@ begin
   CurrentVersionCaption := TLabel.Create(Self);
   with CurrentVersionCaption do
   begin
-    Caption := 'Current Virsion:';
+    Caption := 'Current Version:';
     AutoSize := true;
     Anchors := [];
     AnchorParallel(akTop,   0, Image);
@@ -201,8 +216,8 @@ begin
     Kind := bkClose;
     AutoSize := true;
     Anchors := [];
-    AnchorParallel(akBottom, 10, Self);
-    AnchorParallel(akRight, 10, Self);
+    AnchorParallel(akLeft, 0, CurrentVersionInfo);
+    AnchorVerticalCenterTo(CheckVersionOnlineChkBox);
     OnClick := @CloseBtnClick;
     Parent := Self;
   end;
@@ -239,8 +254,14 @@ constructor TCheckVersionForm.Create(TheOwner: TComponent);
 begin
   inherited CreateNew(TheOwner);
 
+  Position := poMainFormCenter;
+
   CreateControls;
-  Caption := 'Check Version';
+  Caption := 'EpiData Manager';
+  AutoSize := true;
+
+  BorderStyle := bsDialog;
+  BorderSpacing.InnerBorder := 5;
 
   OnShow := @ShowForm;
 end;

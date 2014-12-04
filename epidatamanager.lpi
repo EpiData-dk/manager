@@ -268,7 +268,6 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -298,7 +297,6 @@
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -335,7 +333,6 @@
         <ComponentName Value="Settings_GeneralFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_general_frame"/>
       </Unit20>
       <Unit21>
         <Filename Value="tools/toolsform.pas"/>
@@ -536,6 +533,7 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
