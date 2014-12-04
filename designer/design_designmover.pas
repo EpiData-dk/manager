@@ -21,8 +21,6 @@ type
     procedure ApplyDarwinHack;
     procedure RemoveDarwinHack;
     procedure MoverPaint(Sender: TObject);
-  protected
-    procedure PaintDragRects; override;
   {$ENDIF}
   private
     FOuterRect: TRect;
@@ -159,11 +157,6 @@ begin
     end;
   end;
 end;
-
-procedure TDesignMover.PaintDragRects;
-begin
-  FDesignPanel.Invalidate;
-end;
 {$ENDIF}
 
 procedure TDesignMover.CalcOuterDragRect;
@@ -272,7 +265,11 @@ end;
 
 procedure TDesignMover.PaintDragRects;
 begin
+  {$IFNDEF DARWIN}
   inherited PaintDragRects;
+  {$ELSE}
+  FDesignPanel.Invalidate;
+  {$ENDIF}
   if Length(FDragRects) > 1 then
     PaintOuterRect;
 end;

@@ -225,6 +225,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -533,7 +534,6 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -571,6 +571,7 @@
       <Unit62>
         <Filename Value="designer/design_designmover.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designmover"/>
       </Unit62>
       <Unit63>
         <Filename Value="designer/design_designsizer.pas"/>
@@ -763,7 +764,6 @@
       <Unit95>
         <Filename Value="utils/checkversionform.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="checkversionform"/>
       </Unit95>
     </Units>
   </ProjectOptions>
