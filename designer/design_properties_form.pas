@@ -17,6 +17,7 @@ type
     EpiCtrlItemArray: TEpiCustomControlItemArray;
     FFrame: TCustomFrame;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
+    procedure SetOnShowHintMsg(AValue: TDesignFrameShowHintEvent);
     procedure UpdateCaption(const S: string);
     procedure EpiCtrlChangeHook(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
@@ -39,7 +40,7 @@ type
     procedure ReloadControls;
     procedure SetFocusOnNew;
     function  ValidateControls: boolean;
-    property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
+    property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write SetOnShowHintMsg;
   public
     class procedure RestoreDefaultPos(F: TPropertiesForm);
   end;
@@ -142,6 +143,12 @@ end;
 procedure TPropertiesForm.UpdateCaption(const S: string);
 begin
   Caption := S;
+end;
+
+procedure TPropertiesForm.SetOnShowHintMsg(AValue: TDesignFrameShowHintEvent);
+begin
+  if FOnShowHintMsg = AValue then Exit;
+  FOnShowHintMsg := AValue;
 end;
 
 procedure TPropertiesForm.EpiCtrlChangeHook(const Sender,

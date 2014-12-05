@@ -2852,10 +2852,10 @@ begin
   if Value then
   begin
     FDesignPanel.Active := true;
-    PropertiesForm.OnShowHintMsg := @ShowHintMsg
+//    PropertiesForm.OnShowHintMsg := @ShowHintMsg
   end
   else begin
-    PropertiesForm.OnShowHintMsg := nil;
+//    PropertiesForm.OnShowHintMsg := nil;
     FDesignPanel.Active := false;
   end;
 end;

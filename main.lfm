@@ -365,6 +365,10 @@ object MainForm: TMainForm
       object MenuItem33: TMenuItem
         Action = AppendAction
       end
+      object ClearAllDataFormsMenuItem: TMenuItem
+        Caption = 'Clear All Dataforms'
+        OnClick = ClearAllDataFormsMenuItemClick
+      end
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
       end
@@ -760,8 +764,8 @@ object MainForm: TMainForm
   end
   object DataformPopupMenu: TPopupMenu
     Images = DM.Icons16
-    left = 224
-    top = 56
+    left = 248
+    top = 64
     object KeyFieldsPopupMenuItem: TMenuItem
       Caption = 'KeyFields'
     end

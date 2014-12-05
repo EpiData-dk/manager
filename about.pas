@@ -17,14 +17,14 @@ type
     AboutPageControl: TPageControl;
     ButtonPanel: TPanel;
     CloseButton: TBitBtn;
+    CoreRevisionLabel: TLabel;
     CoreVersionLabel: TLabel;
     FPCVersionLabel: TLabel;
     Image1: TImage;
-    CoreRevisionLabel: TLabel;
-    Memo1: TMemo;
-    Panel1: TPanel;
-    PlatformLabel: TLabel;
     ManagerRevisionLabel: TLabel;
+    Memo1: TMemo;
+    PlatformLabel: TLabel;
+    Shape1: TShape;
     VersionLabel: TLabel;
     VersionPage: TTabSheet;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -114,8 +114,8 @@ end;
 
 procedure TAboutForm.VersionPageResize(Sender: TObject);
 begin
-  Panel1.Left := (VersionPage.Width div 2) - (Panel1.Width div 2);
-  Panel1.Top  := (VersionPage.Height div 2) - (Panel1.Height div 2);
+  //Panel1.Left := (VersionPage.Width div 2) - (Panel1.Width div 2);
+  //Panel1.Top  := (VersionPage.Height div 2) - (Panel1.Height div 2);
 end;
 
 class procedure TAboutForm.RestoreDefaultPos;

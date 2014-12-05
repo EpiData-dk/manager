@@ -67,7 +67,7 @@ type
     procedure AddToRecent(Const AFileName: string);
     // Common for open/create
     procedure CommonProjectInit;
-    function  DoNewDataForm(ParentRelation: TEpiMasterRelation): TEpiDataFile;
+    function  DoNewDataForm(ParentRelation: TEpiMasterRelation): TEpiMasterRelation;
     function  DoNewRuntimeFrame(Relation: TEpiMasterRelation): TRuntimeDesignFrame;
     // open existing
     function  DoSaveProject(AFileName: string): boolean;
@@ -185,7 +185,9 @@ begin
   if FProjectTreeView.SelectedObjectType = otRelation then
     MR := TEpiMasterRelation(FProjectTreeView.SelectedObject);
 
-  DoNewDataForm(MR);
+  MR := DoNewDataForm(MR);
+  if Assigned(MR) then
+    FProjectTreeView.SelectedObject := MR;
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -287,6 +289,7 @@ begin
   );
 
   FProjectTreeView.DeleteRelation(Relation);
+  PropertiesForm.UpdateSelection(nil, nil);
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
@@ -537,7 +540,7 @@ begin
 end;
 
 function TProjectFrame.DoNewDataForm(ParentRelation: TEpiMasterRelation
-  ): TEpiDataFile;
+  ): TEpiMasterRelation;
 var
   MR: TEpiMasterRelation;
   Df: TEpiDataFile;
@@ -571,7 +574,7 @@ begin
     end;
   end;
 
-  FProjectTreeView.CreateRelation(ParentRelation);
+  Result := FProjectTreeView.CreateRelation(ParentRelation);
 end;
 
 function TProjectFrame.DoNewRuntimeFrame(Relation: TEpiMasterRelation
@@ -685,8 +688,11 @@ begin
 end;
 
 procedure TProjectFrame.ProjectTreeDelete(const Relation: TEpiMasterRelation);
+var
+  Frame: TCustomFrame;
 begin
-  Relation.FindCustomData(PROJECT_RUNTIMEFRAME_KEY).Free;
+  Frame := TCustomFrame(Relation.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
+  Frame.Free;
 end;
 
 procedure TProjectFrame.ProjectTreeEdited(Sender: TObject;

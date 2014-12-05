@@ -560,12 +560,15 @@ end;
 procedure AddToRecent(const AFilename: string);
 var
   Idx: Integer;
+  Fn: String;
 begin
-  Idx := RecentFiles.IndexOf(AFilename);
+  Fn := ExpandFileNameUTF8(AFilename);
+
+  Idx := RecentFiles.IndexOf(Fn);
   if (Idx >= 0) then
     RecentFiles.Move(Idx, 0)
   else
-    RecentFiles.Insert(0, AFilename);
+    RecentFiles.Insert(0, Fn);
   if RecentFiles.Count > 10 then
     RecentFiles.Delete(10);
 

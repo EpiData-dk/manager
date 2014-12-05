@@ -27,7 +27,7 @@ type
     DataformPropertiesMenuItem: TMenuItem;
     MenuItem1: TMenuItem;
     DataformPropertiesPopupMenuItem: TMenuItem;
-    MenuItem34: TMenuItem;
+    ClearAllDataFormsMenuItem: TMenuItem;
     DataformPopupMenu: TPopupMenu;
     ProjectDetailsBtn: TBitBtn;
     SelectProjectBtn: TBitBtn;
@@ -178,6 +178,7 @@ type
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
+    procedure ClearAllDataFormsMenuItemClick(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
     procedure CloseProjectActionUpdate(Sender: TObject);
     procedure CodeBookReportActionExecute(Sender: TObject);
@@ -298,7 +299,7 @@ uses
   validate_double_entry_form,
   count_by_id_form, manager_globals,
   report_project_validation_frame2, reports_form,
-  checkversionform;
+  epiv_checkversionform;
 
 type
   TAccessActionList = class(TActionList);
@@ -516,41 +517,24 @@ var
   F: TCheckVersionForm;
 begin
   F := TCheckVersionForm.Create(Self);
+  F.Caption := 'EpiData Manager';
+  F.CheckBoxValue := ManagerSettings.CheckForUpdates;
   F.ShowModal;
+  ManagerSettings.CheckForUpdates := F.CheckBoxValue;
   F.Free;
-         {
-  ManagerVersion := GetEpiVersion(HINSTANCE);
-  if not CheckVersionOnline('epidatamanager', Stable, Test, Response) then
-  begin
-    ShowMessage(
-      'ERROR: Could not find version information.' + LineEnding +
-      'Response: ' + Response);
-    exit;
-  end;
+end;
 
-  with ManagerVersion do
-    EntryScore  := (VersionNo * 10000) + (MajorRev * 100) + (MinorRev);
-  With Stable do
-    StableScore := (VersionNo * 10000) + (MajorRev * 100) + (MinorRev);
-  With Test do
-    TestScore   := (VersionNo * 10000) + (MajorRev * 100) + (MinorRev);
+procedure TMainForm.ClearAllDataFormsMenuItemClick(Sender: TObject);
+var
+  Doc: TEpiDocument;
+  DF: TEpiDataFile;
+begin
+  if not Assigned(FActiveFrame) then exit;
+  if not Assigned(FActiveFrame.DocumentFile) then exit;
+  Doc := FActiveFrame.DocumentFile.Document;
 
-  NewStable     := (StableScore - EntryScore) > 0;
-  NewTest       := (TestScore   - EntryScore) > 0;
-
-  with ManagerVersion do
-    S := Format('Current Version: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]) + LineEnding;
-  with Stable do
-    if NewStable then
-      S := S + Format('New public release available: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]) + LineEnding
-    else
-      S := S + Format('Latest public release: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]) + LineEnding;
-   with Test do
-     if NewTest then
-      S := S + Format('New test version available: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo])
-    else
-      S := S + Format('Latest test version: %d.%d.%d.%d', [VersionNo, MajorRev, MinorRev, BuildNo]);
-  ShowMessage(S);  }
+  for DF in Doc.DataFiles do
+    DF.Size := 0;
 end;
 
 procedure TMainForm.ActionList1Update(AAction: TBasicAction;
@@ -1171,6 +1155,10 @@ begin
   // Dataform:
   DataformMenu.Visible      := Assigned(FActiveFrame);
 
+
+  // TOOLS:
+  ClearAllDataFormsMenuItem.Visible := {$IFDEF EPI_DEVELOPMENT}true;{$ELSE}false;{$ENDIF}
+
   // Document:
   BrowseDataMenuItem.Visible := Assigned(FActiveFrame);
   MenuItem4.Visible          := Assigned(FActiveFrame);
@@ -1253,9 +1241,7 @@ begin
   then
     Exit;
 
-  F := TCheckVersionForm.Create(Self);
-  F.ShowModal;
-  F.Free;
+  CheckVersionAction.Execute;
 
   ManagerSettings.LastUpdateCheck := Now;
 end;

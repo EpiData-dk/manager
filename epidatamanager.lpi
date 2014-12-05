@@ -14,7 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="13"/>
+      <BuildNr Value="15"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
@@ -206,7 +206,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="96">
+    <Units Count="95">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -255,6 +255,7 @@
         <ComponentName Value="AboutForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="about"/>
       </Unit7>
       <Unit8>
         <Filename Value="project/project_settings_general_frame.pas"/>
@@ -269,6 +270,7 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -312,10 +314,12 @@
         <ComponentName Value="DesignPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_properties_baseframe"/>
       </Unit16>
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_types"/>
       </Unit17>
       <Unit18>
         <Filename Value="import/import_structure_form.pas"/>
@@ -514,6 +518,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_field.pas"/>
@@ -534,6 +539,7 @@
       <Unit55>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -571,7 +577,6 @@
       <Unit62>
         <Filename Value="designer/design_designmover.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designmover"/>
       </Unit62>
       <Unit63>
         <Filename Value="designer/design_designsizer.pas"/>
@@ -718,6 +723,7 @@
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_studyunit_frame"/>
       </Unit88>
       <Unit89>
         <Filename Value="designer/design_properties_dataformframe.pas"/>
@@ -725,6 +731,7 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_dataformframe"/>
       </Unit89>
       <Unit90>
         <Filename Value="tools/append_form2.pas"/>
@@ -761,10 +768,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit94>
-      <Unit95>
-        <Filename Value="utils/checkversionform.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit95>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -789,7 +792,8 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dEPI_DEBUG1
--dMEM_LEAK_FINDER1"/>
+-dMEM_LEAK_FINDER1
+-dEPI_DEVELOPMENT"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteBefore>

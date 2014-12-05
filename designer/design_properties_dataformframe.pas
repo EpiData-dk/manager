@@ -64,11 +64,14 @@ type
     procedure DataFileCaptionHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
+    procedure DataFileHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
     procedure DoUpdateCaption;
     procedure UpdateVisibility;
     procedure UpdateContent;
-    procedure RegisterDataFileCaptionHook;
-    procedure UnRegisterDataFileCaptionHook;
+    procedure RegisterDataFileHooks;
+    procedure UnRegisterDataFileHooks;
   private
     { Helpers }
     function ComboSelectedObject(Combo: TComboBox): TObject;
@@ -308,6 +311,18 @@ begin
   CaptionEdit.Text := DataFile.Caption.Text;
 end;
 
+procedure TDataformPropertiesFrame.DataFileHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if (Initiator <> DataFile) then exit;
+  if (EventGroup <> eegCustomBase) then exit;
+  if (Word(ecceDestroy) <> EventType) then exit;
+
+  UnRegisterDataFileHooks;
+  SetDataFile(nil);
+end;
+
 procedure TDataformPropertiesFrame.DoUpdateCaption;
 begin
   UpdateCaption('DataForm Properties: ' + DataFile.Caption.Text);
@@ -424,14 +439,16 @@ begin
   UpdateAfterRecordRadioBoxContent;
 end;
 
-procedure TDataformPropertiesFrame.RegisterDataFileCaptionHook;
+procedure TDataformPropertiesFrame.RegisterDataFileHooks;
 begin
+  DataFile.RegisterOnChangeHook(@DataFileHook, true);
   DataFile.Caption.RegisterOnChangeHook(@DataFileCaptionHook, true);
 end;
 
-procedure TDataformPropertiesFrame.UnRegisterDataFileCaptionHook;
+procedure TDataformPropertiesFrame.UnRegisterDataFileHooks;
 begin
   DataFile.Caption.UnRegisterOnChangeHook(@DataFileCaptionHook);
+  DataFile.UnRegisterOnChangeHook(@DataFileHook);
 end;
 
 function TDataformPropertiesFrame.ComboSelectedObject(Combo: TComboBox
@@ -563,7 +580,7 @@ end;
 destructor TDataformPropertiesFrame.Destroy;
 begin
   if Assigned(DataFile) then
-    UnRegisterDataFileCaptionHook;
+    UnRegisterDataFileHooks;
   inherited Destroy;
 end;
 
@@ -577,7 +594,7 @@ begin
   if not Assigned(DataFile) then exit;
   if not Assigned(Relation) then exit;
 
-  RegisterDataFileCaptionHook;
+  RegisterDataFileHooks;
 
   UpdateVisibility;
   UpdateContent;

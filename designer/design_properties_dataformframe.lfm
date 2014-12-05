@@ -249,7 +249,6 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           MaxLength = 4
           TabOrder = 2
           EditMask = '9999;1; '
-          Text = '    '
           SpaceChar = ' '
         end
       end
