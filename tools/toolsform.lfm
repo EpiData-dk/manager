@@ -1,7 +1,7 @@
 object ToolsForm: TToolsForm
-  Left = 1959
+  Left = 717
   Height = 544
-  Top = 300
+  Top = 261
   Width = 448
   Caption = 'ToolsForm'
   ClientHeight = 544

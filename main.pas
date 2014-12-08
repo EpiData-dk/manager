@@ -296,8 +296,7 @@ uses
   report_export, epireport_generator_txt,
   valuelabel_import_data,
   append_form, epitools_append,
-  validate_double_entry_form,
-  count_by_id_form, manager_globals,
+  manager_globals,
   report_project_validation_frame2, reports_form,
   epiv_checkversionform;
 
@@ -1543,11 +1542,15 @@ end;
 procedure TMainForm.RestoreDefaultPos;
 begin
   TProjectFrame.RestoreDefaultPos(FActiveFrame);
-  TSettingsForm.RestoreDefaultPos;
-  TPrepareDoubleEntryForm.RestoreDefaultPos;
+
   TAboutForm.RestoreDefaultPos;
-  TToolsForm.RestoreDefaultPos;
+  TAppendForm.RestoreDefaultPos;
   TExportForm.RestoreDefaultPos;
+  TPrepareDoubleEntryForm.RestoreDefaultPos;
+  TSettingsForm.RestoreDefaultPos;
+  TStaticReportsForm.RestoreDefaultPos;
+  TToolsForm.RestoreDefaultPos;
+  TValueLabelDataImport.RestoreDefaultPos;
 
   ReportFormRestoreDefaultPos;
 

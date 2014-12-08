@@ -135,6 +135,7 @@ begin
     UnlockRealizeBounds;
   end;
   SaveFormPosition(F, F.ClassName);
+  TExtVLSetForm.RestoreDefaultPos;
 
   if F <> Editor then F.Free;
 end;
@@ -563,11 +564,8 @@ var
   i: Integer;
 begin
   if Assigned(FValueLabelSets) then
-  begin // Unregister old hooks.
+  // Unregister old hooks.
     FValueLabelSets.UnRegisterOnChangeHook(@ValueLabelsHook);
-{    for i := 0 to FValueLabelSets.Count - 1 do
-      FValueLabelSets[i].UnRegisterOnChangeHook(@ValueLabelsHook);}
-  end;
 
   inherited Destroy;
   Editor := nil;

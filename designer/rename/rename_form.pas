@@ -28,13 +28,19 @@ type
     procedure CheckBox1Change(Sender: TObject);
   private
     FDataFile: TEpiDataFile;
+    procedure CloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure ShowForm(Sender: TObject);
   public
     constructor Create(TheOwner: TComponent; Const DataFile: TEpiDataFile);
+    class procedure RestoreDefaultPos;
   end;
 
 implementation
 
 {$R *.lfm}
+
+uses
+  settings2_var, settings2;
 
 { TRenameForm }
 
@@ -45,6 +51,18 @@ begin
     2: Edit2.Enabled := TCheckBox(Sender).Checked;
     3: Edit3.Enabled := TCheckBox(Sender).Checked;
   end;
+end;
+
+procedure TRenameForm.CloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, Self.ClassName);
+end;
+
+procedure TRenameForm.ShowForm(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, Self.ClassName);
 end;
 
 procedure TRenameForm.BitBtn1Click(Sender: TObject);
@@ -153,6 +171,25 @@ constructor TRenameForm.Create(TheOwner: TComponent;
 begin
   inherited Create(TheOwner);
   FDataFile := DataFile;
+
+  OnShow := @ShowForm;
+  OnCloseQuery := @CloseQuery;
+end;
+
+class procedure TRenameForm.RestoreDefaultPos;
+var
+  F: TForm;
+begin
+  F := TForm.Create(nil);
+  with F do
+  begin
+    Width := 300;
+    Height := 230;
+    Left := 400;
+    Top := 400;
+  end;
+  SaveFormPosition(F, TRenameForm.ClassName);
+  F.Free;
 end;
 
 end.

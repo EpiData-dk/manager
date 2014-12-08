@@ -22,6 +22,7 @@ object AlignmentForm: TAlignmentForm
   OnCloseQuery = FormCloseQuery
   OnKeyDown = FormKeyDown
   OnShow = FormShow
+  Position = poOwnerFormCenter
   LCLVersion = '1.3'
   object SidesgrpBox: TGroupBox
     Left = 5

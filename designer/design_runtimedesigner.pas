@@ -2922,6 +2922,8 @@ end;
 class procedure TRuntimeDesignFrame.RestoreDefaultPos(F: TRuntimeDesignFrame);
 begin
   TImportStructureForm.RestoreDefaultPos;
+  TRenameForm.RestoreDefaultPos;
+  TRecodeForm.RestoreDefaultPos;
   DataSetViewerFormRestoreDefaultPos;
 end;
 

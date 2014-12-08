@@ -38,6 +38,7 @@ type
   public
     constructor Create(TheOwner: TComponent; ReportClass: TReportBaseClass);
     procedure AddInitialDocumentFile(Const DocFile: TEpiDocumentFile);
+    procedure RestoreDefaultPos;
     property  Report: TReportBase read FReport;
   end;
 
@@ -130,6 +131,23 @@ end;
 procedure TReportForm.AddInitialDocumentFile(const DocFile: TEpiDocumentFile);
 begin
   IFrame.AddDocumentFile(DocFile);
+end;
+
+procedure TReportForm.RestoreDefaultPos;
+var
+  F: TForm;
+begin
+  F := TForm.Create(nil);
+  with F do
+  begin
+    Width := 600;
+    Height := 800;
+    Left := 300;
+    Top := 200;
+  end;
+
+  SaveFormPosition(F, 'ReportsForm');
+  F.Free;
 end;
 
 end.

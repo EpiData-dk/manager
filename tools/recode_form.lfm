@@ -8,6 +8,7 @@ object RecodeForm: TRecodeForm
   ClientWidth = 250
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
   LCLVersion = '1.3'
   object Panel1: TPanel
     Left = 0

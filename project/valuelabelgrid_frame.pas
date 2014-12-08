@@ -64,7 +64,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Dialogs, LCLProc, epimiscutils, Math, LCLIntf, Clipbrd;
+  Graphics, Dialogs, LCLProc, epimiscutils, Math, LCLIntf, Clipbrd, StdCtrls;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -536,17 +536,19 @@ begin
     NodeDataSize := SizeOF(PEpiValueLabel);
     WantTabs := true;
     TabStop := true;
+    ScrollBarOptions.AlwaysVisible := true;
+    ScrollBarOptions.ScrollBars := ssAutoBoth;
 
     // Events:
     OnInitNode      := @VLGInitNode;
     OnGetText       := @VLGGetNodeText;
     OnNewText       := @VLGSetNodeText;
     OnFocusChanging := @VLGFocusChanging;
-    OnFocusChanged := @VLGFocusChanged;
+    OnFocusChanged  := @VLGFocusChanged;
     OnKeyDown       := @VLGKeyDown;
     OnUTF8KeyPress  := @VLGUTF8KeyPress;
     OnChecking      := @VLGChecking;
-    OnChecked := @VLGChecked;
+    OnChecked       := @VLGChecked;
     OnCreateEditor  := @VLGEditor;
     OnEdited        := @VLGEdited;
   end;
@@ -554,9 +556,9 @@ begin
   with VLG.TreeOptions do
   begin
     AnimationOptions := [];
-    AutoOptions := [];
-    MiscOptions := [toCheckSupport, toEditable, toGridExtensions, toWheelPanning, toEditOnDblClick];
-    PaintOptions := [toShowHorzGridLines, toShowVertGridLines, toThemeAware];
+    AutoOptions      := [];
+    MiscOptions      := [toCheckSupport, toEditable, toGridExtensions, toWheelPanning, toEditOnDblClick];
+    PaintOptions     := [toShowHorzGridLines, toShowVertGridLines, toThemeAware];
     SelectionOptions := [toExtendedFocus, toRightClickSelect, toCenterScrollIntoView];
   end;
 

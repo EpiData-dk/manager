@@ -39,7 +39,7 @@ uses
   export_customvaluelabel_frame, export_frame_types, export_csv_frame,
   export_customtext_frame, export_spss_frame, export_sas_frame,
   prepare_double_entry_form, project_keyfields_form, manager_globals,
-  validate_double_entry_form, report_double_entry_validation,
+  report_double_entry_validation,
   design_runtimedesigner, design_control_field, design_control_heading,
   design_control_section, design_designpanel, design_properties_form,
   design_designcontroller, design_properties_fieldframe,
@@ -53,7 +53,7 @@ uses
   rename_form, report_export, valuelabel_import_external,
   valuelabel_import_data, project_types, project_studyunit_frame,
   design_properties_dataformframe, append_form, append_form2, 
-  epiv_projecttreeview_frame, epiv_datamodule, count_by_id_form, 
+  epiv_projecttreeview_frame, epiv_datamodule, 
   report_project_validation_frame2, reports_form, report_counts_frame,
   lazcontrols;
 

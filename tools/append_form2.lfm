@@ -1,7 +1,7 @@
 object AppendForm2: TAppendForm2
-  Left = 504
+  Left = 514
   Height = 719
-  Top = 92
+  Top = 329
   Width = 906
   Caption = 'AppendForm2'
   ClientHeight = 719

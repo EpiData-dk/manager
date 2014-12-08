@@ -68,9 +68,6 @@ uses
 { TToolsForm }
 
 procedure TToolsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-var
-  i: Integer;
-
 
   procedure RecurseAddDF(Node: PVirtualNode);
   var

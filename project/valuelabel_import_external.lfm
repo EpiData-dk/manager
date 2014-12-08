@@ -1,12 +1,14 @@
 object ExtVLSetForm: TExtVLSetForm
-  Left = 1859
+  Left = 512
   Height = 334
-  Top = 351
+  Top = 368
   Width = 840
   Caption = 'External Value Label Sets'
   ClientHeight = 334
   ClientWidth = 840
+  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
+  Position = poMainFormCenter
   LCLVersion = '1.3'
   object StringGrid1: TStringGrid
     Left = 0

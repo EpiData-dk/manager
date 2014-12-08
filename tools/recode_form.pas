@@ -25,6 +25,7 @@ type
     procedure CheckBox1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure FormShow(Sender: TObject);
   private
     FField: TEpiField;
     procedure SetField(AValue: TEpiField);
@@ -33,13 +34,14 @@ type
     procedure ApplyRecode();
     function DoError(Const Msg: string): boolean;
   public
+    class procedure RestoreDefaultPos;
     property Field: TEpiField read FField write SetField;
   end;
 
 implementation
 
 uses
-  epiconvertutils, epidatafilestypes;
+  epiconvertutils, epidatafilestypes, settings2_var, settings2;
 
 {$R *.lfm}
 
@@ -70,6 +72,15 @@ begin
      CheckBox1.Checked or
      CheckContent(Edit2, false)
     );
+
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, Self.ClassName);
+end;
+
+procedure TRecodeForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, Self.ClassName);
 end;
 
 procedure TRecodeForm.SetField(AValue: TEpiField);
@@ -148,6 +159,22 @@ function TRecodeForm.DoError(const Msg: string): boolean;
 begin
   ShowMessage(Msg);
   Result := false;
+end;
+
+class procedure TRecodeForm.RestoreDefaultPos;
+var
+  F: TRecodeForm;
+begin
+  F := TRecodeForm.Create(nil);
+  with F do
+  begin
+    Width := 250;
+    Height := 180;
+    Left := 100;
+    Top := 100;
+  end;
+  SaveFormPosition(F, F.ClassName);
+  F.Free;
 end;
 
 end.

@@ -28,6 +28,7 @@ type
     procedure FileProgress(const Sender: TEpiCustomBase;
       ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
       var Canceled: Boolean);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure StringGrid1GetCellHint(Sender: TObject; ACol, ARow: Integer;
       var HintText: String);
@@ -49,6 +50,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent; Const ValueLabelSets: TEpiValueLabelSets);
     destructor Destroy; override;
+    class procedure RestoreDefaultPos;
   end;
 
 implementation
@@ -56,12 +58,19 @@ implementation
 {$R *.lfm}
 
 uses
-  epiv_documentfile, LazFileUtils, epimiscutils, epiv_datamodule;
+  epiv_documentfile, LazFileUtils, epimiscutils, epiv_datamodule,
+  settings2_var, settings2;
+
+const
+  FormName = 'ExternalValueLabelSetForm';
 
 { TExtVLSetForm }
 
 procedure TExtVLSetForm.FormShow(Sender: TObject);
 begin
+  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, FormName);
+
   if not ShowDialog() then close;
 end;
 
@@ -186,6 +195,12 @@ begin
   end;
 end;
 
+procedure TExtVLSetForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, FormName);
+end;
+
 procedure TExtVLSetForm.BitBtn1Click(Sender: TObject);
 var
   VL: TEpiValueLabelSet;
@@ -285,6 +300,22 @@ begin
   FDocFiles.Clear;
   FDocFiles.Free;
   inherited Destroy;
+end;
+
+class procedure TExtVLSetForm.RestoreDefaultPos;
+var
+  F: TForm;
+begin
+  F := TForm.Create(nil);
+  with F do
+  begin
+    Width := 800;
+    Height := 350;
+    Left := 300;
+    Top := 300;
+  end;
+  SaveFormPosition(F, FormName);
+  F.Free;
 end;
 
 end.

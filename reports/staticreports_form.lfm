@@ -1,7 +1,7 @@
 object StaticReportsForm: TStaticReportsForm
-  Left = 1881
+  Left = 797
   Height = 516
-  Top = 249
+  Top = 299
   Width = 595
   Caption = 'StaticReportsForm'
   ClientHeight = 516

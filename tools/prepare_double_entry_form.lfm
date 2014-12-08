@@ -1,7 +1,7 @@
 object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
-  Left = 1976
+  Left = 816
   Height = 305
-  Top = 326
+  Top = 396
   Width = 523
   Caption = 'Prepare copy for second independent entry'
   ClientHeight = 305

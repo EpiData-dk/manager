@@ -58,6 +58,7 @@ type
   public
     constructor Create(TheOwner: TComponent); override;
     procedure CreateSelectedList(var ResultList: TStrings);
+    class procedure RestoreDefaultPos;
     property MainProject: TEpiDocumentFile read FMainProject write SetMainProject;
     property AppendProject: TEpiDocumentFile read FAppendProject;
   end;
@@ -363,6 +364,23 @@ begin
   for i := 0 to AFCheckList.Count - 1 do
     if AFCheckList.Checked[i] then
       ResultList.Add(TEPiField(AFCheckList.Items.Objects[i]).Name);
+end;
+
+class procedure TAppendForm.RestoreDefaultPos;
+var
+  F: TForm;
+begin
+  F := TForm.Create(nil);
+  with F do
+  begin
+    Width := 600;
+    Height := 600;
+    Left := 250;
+    Top  := 250;
+  end;
+
+  SaveFormPosition(F, 'AppendForm');
+  F.Free;
 end;
 
 { TAppendHandler }

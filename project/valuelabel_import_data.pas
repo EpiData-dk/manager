@@ -66,6 +66,7 @@ type
       aState: TGridDrawState);
     procedure EditorCloseUp(Sender: TObject);
     procedure SetDocFile(AValue: TEpiDocumentFile);
+    procedure LoadGlyphs;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -83,7 +84,7 @@ implementation
 uses
   epimiscutils, settings2_var, settings2,
   LCLType, epitools_integritycheck,
-  epistringutils;
+  epistringutils, epiv_datamodule;
 
 const
   FormName = 'ValueLabelDataImport';
@@ -421,6 +422,12 @@ begin
   UpdateCaption;
 end;
 
+procedure TValueLabelDataImport.LoadGlyphs;
+begin
+  DM.Icons16.GetBitmap(19, AddFilesBtn.Glyph);
+  DM.Icons16.GetBitmap(19, AddCBBtn.Glyph);
+end;
+
 procedure TValueLabelDataImport.PrepareCanvas(sender: TObject; aCol,
   aRow: Integer; aState: TGridDrawState);
 var
@@ -609,6 +616,8 @@ var
   SG: TStringGrid;
 begin
   inherited Create(TheOwner);
+  LoadGlyphs;
+
   FProjectFileListFrame := TProjectFileListFrame.Create(Self);
   FProjectFileListFrame.Align := alClient;
   FProjectFileListFrame.Parent := Self;
