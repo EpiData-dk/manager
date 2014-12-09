@@ -531,13 +531,10 @@ begin
   with VLG do
   begin
     Align := alClient;
-    Parent := Self;
     Color := clWindow;
     NodeDataSize := SizeOF(PEpiValueLabel);
     WantTabs := true;
     TabStop := true;
-    ScrollBarOptions.AlwaysVisible := true;
-    ScrollBarOptions.ScrollBars := ssAutoBoth;
 
     // Events:
     OnInitNode      := @VLGInitNode;
@@ -551,48 +548,51 @@ begin
     OnChecked       := @VLGChecked;
     OnCreateEditor  := @VLGEditor;
     OnEdited        := @VLGEdited;
-  end;
 
-  with VLG.TreeOptions do
-  begin
-    AnimationOptions := [];
-    AutoOptions      := [];
-    MiscOptions      := [toCheckSupport, toEditable, toGridExtensions, toWheelPanning, toEditOnDblClick];
-    PaintOptions     := [toShowHorzGridLines, toShowVertGridLines, toThemeAware];
-    SelectionOptions := [toExtendedFocus, toRightClickSelect, toCenterScrollIntoView];
-  end;
-
-  with VLG.Header do
-  begin
-    Options := [hoAutoResize, hoColumnResize, hoDblClickResize, hoVisible];
-    with Columns.Add do
+    with TreeOptions do
     begin
-      Text := 'Value';
-      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus, coEditable];
-      Width := 20;
+      AnimationOptions := [];
+      AutoOptions      := [];
+      MiscOptions      := [toCheckSupport, toEditable, toGridExtensions, toWheelPanning, toEditOnDblClick];
+      PaintOptions     := [toShowHorzGridLines, toShowVertGridLines, toThemeAware];
+      SelectionOptions := [toExtendedFocus, toRightClickSelect, toCenterScrollIntoView];
+      StringOptions    := [toAutoAcceptEditChange];
     end;
 
-    with Columns.Add do
+    with Header do
     begin
-      Text := 'Label';
-      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus, coEditable];
-      Width := 40;
+      Options := [hoAutoResize, hoColumnResize, hoDblClickResize, hoVisible];
+      with Columns.Add do
+      begin
+        Text := 'Value';
+        Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus, coEditable];
+        Width := 20;
+      end;
+
+      with Columns.Add do
+      begin
+        Text := 'Label';
+        Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coVisible, coAllowFocus, coEditable];
+        Width := 40;
+      end;
+
+      with Columns.Add do
+      begin
+        Alignment := taCenter;
+        Text := 'Missing';
+        Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coVisible, coEditable];
+        CheckBox := true;
+        Width := 70;
+      end;
+      AutoSizeIndex := 1;
+      Height := 25;
+      MainColumn := 2;
     end;
 
-    with Columns.Add do
-    begin
-      Alignment := taCenter;
-      Text := 'Missing';
-      Options := [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coVisible, coEditable];
-      CheckBox := true;
-      Width := 70;
-    end;
-    AutoSizeIndex := 1;
-    Height := 25;
-    MainColumn := 2;
+    Parent := Self;
   end;
 
-  FVLG.BeginUpdate;
+  FVLG.EndUpdate;
 end;
 
 destructor TValueLabelGridFrame.Destroy;
