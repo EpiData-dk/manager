@@ -748,6 +748,7 @@
         <ComponentName Value="CountByIdFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="report_counts_frame"/>
       </Unit92>
     </Units>
   </ProjectOptions>
