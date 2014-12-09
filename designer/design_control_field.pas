@@ -77,14 +77,6 @@ begin
   // Manually add ValueLabelSet, this is not done in cloning.
   FField.ValueLabelSet        := CopyField.ValueLabelSet;
   FField.ValueLabelWriteField := CopyField.ValueLabelWriteField;
-
-  // Must be fixed during DOFixupCopyControl
-//  FField.Calculation := CopyField.Calculation;
-//  FField.Jumps       := CopyField.Jumps;
-//  FField.Comparison  := CopyField.Comparison;
-//  CopyField.Calculation := nil;
-//  CopyField.Jumps       := nil;
-//  CopyField.Comparison  := nil;
 end;
 
 procedure TDesignField.WriteField(Stream: TStream);
@@ -96,9 +88,8 @@ begin
 
   CopyField.ValueLabelSet := FField.ValueLabelSet;
   CopyField.ValueLabelWriteField := FField.ValueLabelWriteField;
-//  CopyField.Calculation          := FField.Calculation;
-//  CopyField.Jumps                := FField.Jumps;
-//  CopyField.Comparison           := FField.Comparison;
+  // Wipe data content on copy!
+  CopyField.ResetData;
 
   GlobalCopyList.Add(CopyField);
   Stream.Write(CopyField, Sizeof(Pointer));
