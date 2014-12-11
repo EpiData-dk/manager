@@ -33,6 +33,8 @@ type
     procedure SetDragRect(ARect: TRect);
     procedure ClearDragRect;
     property Clicked;
+  public
+    property Frame: TRuntimeDesignFrame read FFrame;
   end;
 
 

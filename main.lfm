@@ -706,8 +706,8 @@ object MainForm: TMainForm
   end
   object ProjectPopupMenu: TPopupMenu
     Images = DM.Icons16
-    left = 136
-    top = 160
+    left = 128
+    top = 184
     object ValueLabelEditorPopupMenuItem: TMenuItem
       Caption = 'ValueLabelEditor'
     end

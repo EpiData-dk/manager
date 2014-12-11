@@ -20,6 +20,10 @@ type
     DefineKeyAction: TAction;
     DataformPropertiesAction: TAction;
     ImportCBAction: TAction;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
     Memo1: TMemo;
     RenameControlsAction: TAction;
     RecodeDataAction: TAction;
@@ -310,6 +314,11 @@ type
   public
     procedure AlignControls(Const AAlignMent: TDesignControlsAlignment;
       Const FixedDist: integer = -1); overload;
+
+  public
+    { Snapping methods }
+    function GetSnappingControl(AlignPostion: TAnchorKind; PositionValue: Integer;
+      AParent: TWinControl): TControl;
   private
     { Other }
     FMayHandleShortcuts: boolean;
@@ -1873,6 +1882,46 @@ procedure TRuntimeDesignFrame.AlignControls(
   const AAlignMent: TDesignControlsAlignment; const FixedDist: integer);
 begin
   DoAlignControls(AAlignMent, FixedDist);
+end;
+
+function TRuntimeDesignFrame.GetSnappingControl(AlignPostion: TAnchorKind;
+  PositionValue: Integer; AParent: TWinControl): TControl;
+var
+  Section: TEpiSection;
+  Ctrl: TControl;
+  BestControl: TControl;
+  F: TEpiField;
+begin
+  Result := nil;
+  Section := TEpiSection((AParent as IDesignEpiControl).EpiControl);
+
+  if Section.Fields.Count > 0 then
+  begin
+    BestControl := nil;
+
+    for F in Section.Fields do
+    begin
+      Ctrl := ControlFromEpiControl(F);
+
+      case AlignPostion of
+        akTop:
+          if Abs(Ctrl.Top - PositionValue) <= ManagerSettings.SnappingThresHold then
+            Result := Ctrl;
+
+        akLeft:
+          if Abs(Ctrl.Left - PositionValue) <= ManagerSettings.SnappingThresHold then
+            Result := Ctrl;
+
+        akRight:
+          if Abs(Ctrl.BoundsRect.Right - PositionValue) <= ManagerSettings.SnappingThresHold then
+            Result := Ctrl;
+
+        akBottom:
+          if Abs(Ctrl.BoundsRect.Bottom - PositionValue) <= ManagerSettings.SnappingThresHold then
+            Result := Ctrl;
+      end;
+    end;
+  end;
 end;
 
 procedure TRuntimeDesignFrame.UpdateShortcuts;

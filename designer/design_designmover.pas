@@ -1,13 +1,13 @@
 unit design_designmover;
 
 {$mode objfpc}{$H+}
-{.$DEFINE DESIGNER_GUIDES}
+{$DEFINE DESIGNER_GUIDES}
 
 interface
 
 uses
   Classes, SysUtils, types, JvDesignImp, JvDesignSurface, LCLType,
-  controls;
+  controls, design_runtimedesigner;
 
 type
 
@@ -23,12 +23,16 @@ type
     procedure MoverPaint(Sender: TObject);
   {$ENDIF}
   private
+    FFrame: TRuntimeDesignFrame;
+    FOuterControls: Array[TAnchorKind] of TControl;
     FOuterRect: TRect;
     procedure CalcOuterDragRect;
     procedure CalcOuterPaintRect;
     procedure PaintOuterRect;
+    procedure CalcOuterDragControls;
   private
     function DragRectsInParent: boolean;
+    procedure AdjustDragRects;
   protected
     procedure CalcDragRects; override;
     procedure CalcPaintRects; override;
@@ -46,8 +50,7 @@ implementation
 
 uses
   design_commander, manager_globals, LCLIntf, Graphics, forms,
-  math,
-  JvDesignUtils;
+  math, design_designcontroller, JvDesignUtils;
 
 type
 
@@ -55,13 +58,14 @@ type
 
   TMoveCommand = class(TCustomCommand)
   private
+    FSurface: TJvDesignSurface;
     FBoundsRect: TRect;
     FControl: TControl;
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation);
        override;
   public
-    constructor Create(Const Ctrl: TControl);
+    constructor Create(Const Ctrl: TControl; Const Surface: TJvDesignSurface);
     procedure ReDo; override;
     procedure Undo; override;
   end;
@@ -80,20 +84,18 @@ begin
     Free;
 end;
 
-constructor TMoveCommand.Create(const Ctrl: TControl);
+constructor TMoveCommand.Create(const Ctrl: TControl;
+  const Surface: TJvDesignSurface);
 begin
   FBoundsRect := Ctrl.BoundsRect;
   FControl := Ctrl;
+  FSurface := Surface;
   Ctrl.FreeNotification(Self);
 end;
 
 procedure TMoveCommand.ReDo;
-var
-  R: TRect;
 begin
-  R := FControl.BoundsRect;
-  FControl.BoundsRect := FBoundsRect;
-  FBoundsRect := R;
+  Undo;
 end;
 
 procedure TMoveCommand.Undo;
@@ -103,6 +105,8 @@ begin
   R := FControl.BoundsRect;
   FControl.BoundsRect := FBoundsRect;
   FBoundsRect := R;
+
+  FSurface.UpdateDesigner;
 end;
 
 { TDesignMover }
@@ -162,17 +166,16 @@ end;
 procedure TDesignMover.CalcOuterDragRect;
 var
   i: Integer;
+  P: TPoint;
 begin
-  {$IFDEF DESIGNER_GUIDES}
-  FOuterRect := Rect(MaxInt, MaxInt, -MaxInt, -MaxInt);
-  for i := Low(FDragRects) to High(FDragRects) do
-  begin
-    FOuterRect.Left   := Min(FOuterRect.Left, FDragRects[i].Left);
-    FOuterRect.Top    := Min(FOuterRect.Top, FDragRects[i].Top);
-    FOuterRect.Right  := Max(FOuterRect.Right, FDragRects[i].Right);
-    FOuterRect.Bottom := Max(FOuterRect.Bottom, FDragRects[i].Bottom);
-  end;
-  {$ENDIF}
+  FOuterRect := Rect(
+    FOuterControls[akLeft].Left,
+    FOuterControls[akTop].Top,
+    FOuterControls[akRight].BoundsRect.Right,
+    FOuterControls[akBottom].BoundsRect.Bottom
+    );
+  P := GetMouseDelta;
+  OffsetRect(FOuterRect, P.X, P.Y);
 end;
 
 procedure TDesignMover.CalcOuterPaintRect;
@@ -189,8 +192,33 @@ end;
 procedure TDesignMover.PaintOuterRect;
 begin
   {$IFDEF DESIGNER_GUIDES}
-  DesignPaintRubberbandRect(Surface.Container, FOuterRect, psDot);
+//  DesignPaintRubberbandRect(Surface.Container, FOuterRect, psSolid);
   {$ENDIF}
+end;
+
+procedure TDesignMover.CalcOuterDragControls;
+var
+  i: Integer;
+begin
+  FOuterControls[akTop]    := Surface.Selection[0];
+  FOuterControls[akLeft]   := Surface.Selection[0];
+  FOuterControls[akRight]  := Surface.Selection[0];
+  FOuterControls[akBottom] := Surface.Selection[0];
+
+  for i := 1 to Surface.Count - 1 do
+  begin
+    if FOuterControls[akTop].Top > Surface.Selection[i].Top then
+      FOuterControls[akTop] := Surface.Selection[i];
+
+    if FOuterControls[akLeft].Left > Surface.Selection[i].Left then
+      FOuterControls[akLeft] := Surface.Selection[i];
+
+    if FOuterControls[akRight].BoundsRect.Right < Surface.Selection[i].BoundsRect.Right then
+      FOuterControls[akRight] := Surface.Selection[i];
+
+    if FOuterControls[akBottom].BoundsRect.Bottom < Surface.Selection[i].BoundsRect.Bottom then
+      FOuterControls[akBottom] := Surface.Selection[i];
+  end;
 end;
 
 function TDesignMover.DragRectsInParent: boolean;
@@ -222,10 +250,72 @@ begin
   end;
 end;
 
+procedure TDesignMover.AdjustDragRects;
+var
+  TopCtrl: TControl;
+  BtmCtrl: TControl;
+  LeftCtrl: TControl;
+  RightCtrl: TControl;
+  Y: Integer;
+  X: Integer;
+  I: Integer;
+  WinCtrl: TWinControl;
+  Ctrl: TControl;
+begin
+  // TODO:
+  //  1) Ask design panel for the closes napping control according to Top, Bot., Left and Right
+  //  2) Adjust ALL dragrects accoring to outerrect
+  //  3) Adjustment is prioritized:
+  //   a) if only a single border is able to snap (within snapping distance), then use thar border.
+  //   b) if two or more borders are able to snap use the following priority:
+  //    *) Top, Left, Bottom, Right
+
+  WinCtrl := Surface.Container;
+
+  for i := 0 to WinCtrl.ControlCount - 1 do
+    begin
+      Ctrl := WinCtrl.Controls[i];
+
+      if [csNoDesignSelectable, csNoDesignVisible] * Ctrl.ControlStyle <> [] then
+        Continue;
+    end;
+  {
+
+  TopCtrl   := FFrame.GetSnappingControl(akTop,    FOuterRect.Top,    FOuterControls[akTop].Parent);
+  LeftCtrl  := FFrame.GetSnappingControl(akLeft,   FOuterRect.Left,   FOuterControls[akLeft].Parent);
+  BtmCtrl   := FFrame.GetSnappingControl(akBottom, FOuterRect.Bottom, FOuterControls[akBottom].Parent);
+  RightCtrl := FFrame.GetSnappingControl(akRight,  FOuterRect.Right,  FOuterControls[akRight].Parent);
+
+  X := 0;
+  Y := 0;
+
+  if Assigned(TopCtrl) then
+    Y := (TopCtrl.Top - FOuterRect.Top)
+  else
+  if Assigned(BtmCtrl) then
+    Y := (BtmCtrl.BoundsRect.Bottom - FOuterRect.Bottom);
+
+  if Assigned(LeftCtrl) then
+    X := (LeftCtrl.Left - FOuterRect.Left)
+  else
+  if Assigned(RightCtrl) then
+    X := (RightCtrl.BoundsRect.Right - FOuterRect.Right);
+
+  FFrame.Label1.Caption := 'Top: ' + FOuterControls[akTop].Name;
+  FFrame.Label2.Caption := 'Left: ' + FOuterControls[akLeft].Name;
+  FFrame.Label3.Caption := 'Right: ' + FOuterControls[akRight].Name;
+  FFrame.Label4.Caption := 'Bottom: ' + FOuterControls[akBottom].Name;     }
+
+
+  for I := Low(FDragRects) to High(FDragRects) do
+    OffsetRect(FDragRects[i], X, Y);
+end;
+
 procedure TDesignMover.CalcDragRects;
 begin
   inherited CalcDragRects;
   CalcOuterDragRect;
+  AdjustDragRects;
 end;
 
 procedure TDesignMover.CalcPaintRects;
@@ -242,6 +332,7 @@ var
   T1: TDateTime;
   T2: TDateTime;
 begin
+  // Create command for Undo/Redo functionality
   if Surface.Count > 1 then
   begin
     L := TMoveCommandList.Create;
@@ -252,9 +343,12 @@ begin
 
   for i := 0 to Surface.Count - 1 do
     begin
-      MC := TMoveCommand.Create(Surface.Selection[i]);
+      MC := TMoveCommand.Create(Surface.Selection[i], Surface);
       L.AddCommand(MC);
     end;
+
+  // Adjust dragrects to "snap" to other controls.
+//  AdjustDragRects;
 
   T1 := Now;
   inherited ApplyDragRects;
@@ -275,8 +369,13 @@ begin
 end;
 
 constructor TDesignMover.Create(AOwner: TJvDesignSurface);
+var
+  Kind: TAnchorKind;
 begin
   inherited Create(AOwner);
+  FFrame := TDesignController(Surface.Controller).Frame;
+
+  CalcOuterDragControls;
   {$IFDEF DARWIN}
   ApplyDarwinHack;
   {$ENDIF}
@@ -291,15 +390,13 @@ begin
 end;
 
 procedure TDesignMover.MouseMove(Shift: TShiftState; X, Y: Integer);
-var
-  FCapture: HWND;
 begin
   inherited MouseMove(Shift, X, Y);
 
-  {$IFNDEF LINUX}
   // Changing the cursor in linux f*cks with mouse capture, hence
   // if the mouse is released OUTSIDE the program drag/drop is
   // seriously misbehaving afterwards.
+  {$IFNDEF LINUX}
   if DragRectsInParent
   then
     Screen.Cursor := crDrag

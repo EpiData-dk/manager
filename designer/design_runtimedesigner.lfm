@@ -396,7 +396,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     TabOrder = 1
     object Memo1: TMemo
       Left = 8
-      Height = 314
+      Height = 138
       Top = 8
       Width = 248
       Anchors = [akTop, akLeft, akRight]
@@ -409,13 +409,45 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       WantReturns = False
     end
     object Button1: TButton
-      Left = 83
+      Left = 168
       Height = 25
-      Top = 374
+      Top = 168
       Width = 75
       Caption = 'Button1'
       OnClick = Button1Click
       TabOrder = 1
+    end
+    object Label1: TLabel
+      Left = 32
+      Height = 15
+      Top = 352
+      Width = 42
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 32
+      Height = 15
+      Top = 393
+      Width = 42
+      Caption = 'Label2'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 32
+      Height = 15
+      Top = 439
+      Width = 42
+      Caption = 'Label3'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 32
+      Height = 15
+      Top = 481
+      Width = 42
+      Caption = 'Label4'
+      ParentColor = False
     end
   end
   object Splitter1: TSplitter
