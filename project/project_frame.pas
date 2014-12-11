@@ -505,8 +505,8 @@ begin
       Exit;
     end;
     T2 := Now;
-    if IsConsole then
-      WriteLn('LoadProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
+//    if IsConsole then
+//      WriteLn('LoadProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
   except
     FreeAndNil(FDocumentFile);
     // If ever this happens then it is because something not right happened
@@ -1201,8 +1201,8 @@ begin
   T1 := Now;
   Result := DoOpenProject(AFileName);
   T2 := now;
-  if IsConsole then
-    WriteLn('ProjectFrame.OpenProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
+//  if IsConsole then
+//    WriteLn('ProjectFrame.OpenProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
 end;
 
 function TProjectFrame.SaveProject(const ForceSaveAs: boolean): boolean;

@@ -14,7 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="16"/>
+      <BuildNr Value="17"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
@@ -225,6 +225,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -261,7 +262,6 @@
         <ComponentName Value="ProjectSettings_BackupFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_settings_general_frame"/>
       </Unit8>
       <Unit9>
         <Filename Value="settings/settings2.pas"/>
@@ -269,7 +269,6 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -277,7 +276,6 @@
         <ComponentName Value="Settings_VisualDesign"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_visualdesign_frame"/>
       </Unit10>
       <Unit11>
         <Filename Value="settings/settings_fielddefinitions_frame.pas"/>
@@ -300,7 +298,6 @@
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -492,7 +489,6 @@
       <Unit46>
         <Filename Value="utils/manager_globals.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="manager_globals"/>
       </Unit46>
       <Unit47>
         <Filename Value="reports/report_double_entry_validation.pas"/>
@@ -536,7 +532,6 @@
       <Unit55>
         <Filename Value="designer/design_designcontroller.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designcontroller"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_properties_fieldframe.pas"/>
@@ -559,7 +554,6 @@
       <Unit59>
         <Filename Value="designer/design_commander.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_commander"/>
       </Unit59>
       <Unit60>
         <Filename Value="designer/design_properties_emptyframe.pas"/>
@@ -576,7 +570,6 @@
       <Unit62>
         <Filename Value="designer/design_designsizer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designsizer"/>
       </Unit62>
       <Unit63>
         <Filename Value="designer/design_designbander.pas"/>
@@ -778,7 +771,7 @@
       </Debugging>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG
+      <CustomOptions Value="-dEPI_DEBUG1
 -dMEM_LEAK_FINDER1
 -dEPI_DEVELOPMENT"/>
       <ExecuteBefore>

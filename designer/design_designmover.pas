@@ -50,7 +50,7 @@ implementation
 
 uses
   design_commander, manager_globals, LCLIntf, Graphics, forms,
-  math, design_designcontroller, JvDesignUtils;
+  math, design_designcontroller, JvDesignUtils, settings2_var;
 
 type
 
@@ -252,63 +252,97 @@ end;
 
 procedure TDesignMover.AdjustDragRects;
 var
-  TopCtrl: TControl;
-  BtmCtrl: TControl;
-  LeftCtrl: TControl;
-  RightCtrl: TControl;
   Y: Integer;
   X: Integer;
   I: Integer;
   WinCtrl: TWinControl;
   Ctrl: TControl;
+  SnapDist: Integer;
+  CtrlBound: TRect;
+  BestTopDiff: Integer;
+  BestLeftDiff: Integer;
+  BestRightDiff: Integer;
+  BestBtmDiff: Integer;
+  TopDiff: Integer;
+  LeftDiff: Integer;
+  RightDiff: Integer;
+  BtmDiff: Integer;
+  j: Integer;
 begin
-  // TODO:
-  //  1) Ask design panel for the closes napping control according to Top, Bot., Left and Right
-  //  2) Adjust ALL dragrects accoring to outerrect
-  //  3) Adjustment is prioritized:
-  //   a) if only a single border is able to snap (within snapping distance), then use thar border.
-  //   b) if two or more borders are able to snap use the following priority:
-  //    *) Top, Left, Bottom, Right
+  if not ManagerSettings.SnapFields then exit;
 
-  WinCtrl := Surface.Container;
+  WinCtrl := Surface.Selection[0].Parent;
+  SnapDist := ManagerSettings.SnappingThresHold;
+
+  BestTopDiff   := MaxInt;
+  BestLeftDiff  := MaxInt;
+  BestRightDiff := MaxInt;
+  BestBtmDiff   := MaxInt;
 
   for i := 0 to WinCtrl.ControlCount - 1 do
     begin
       Ctrl := WinCtrl.Controls[i];
 
-      if [csNoDesignSelectable, csNoDesignVisible] * Ctrl.ControlStyle <> [] then
+         // Exclude selected controls
+      if Surface.Selector.IsSelected(Ctrl) or
+         // Exclude controls with special properties.
+         ([csNoDesignSelectable, csNoDesignVisible] * Ctrl.ControlStyle <> [])
+      then
         Continue;
-    end;
-  {
 
-  TopCtrl   := FFrame.GetSnappingControl(akTop,    FOuterRect.Top,    FOuterControls[akTop].Parent);
-  LeftCtrl  := FFrame.GetSnappingControl(akLeft,   FOuterRect.Left,   FOuterControls[akLeft].Parent);
-  BtmCtrl   := FFrame.GetSnappingControl(akBottom, FOuterRect.Bottom, FOuterControls[akBottom].Parent);
-  RightCtrl := FFrame.GetSnappingControl(akRight,  FOuterRect.Right,  FOuterControls[akRight].Parent);
+      CtrlBound := Ctrl.BoundsRect;
+
+      for j := Low(FDragRects) to High(FDragRects) do
+        begin
+          TopDiff   := -(FDragRects[j].Top - CtrlBound.Top);
+          LeftDiff  := -(FDragRects[j].Left - CtrlBound.Left);
+          RightDiff := -(FDragRects[j].Right - CtrlBound.Right);
+          BtmDiff   := -(FDragRects[j].Bottom - CtrlBound.Bottom);
+
+          if (Abs(TopDiff) <= SnapDist) and
+             (Abs(TopDiff) < BestTopDiff)
+          then
+            BestTopDiff := TopDiff;
+
+          if (Abs(LeftDiff) <= SnapDist) and
+             (Abs(LeftDiff) < BestLeftDiff)
+          then
+            BestLeftDiff := LeftDiff;
+
+          if (Abs(RightDiff) <= SnapDist) and
+             (Abs(RightDiff) < BestRightDiff)
+          then
+            BestRightDiff := RightDiff;
+
+          if (Abs(BtmDiff) <= SnapDist) and
+             (Abs(BtmDiff) < BestBtmDiff)
+          then
+            BestBtmDiff := BtmDiff;
+        end;
+    end;  //   for i := 0 to WinCtrl.ControlCount - 1 do
 
   X := 0;
   Y := 0;
 
-  if Assigned(TopCtrl) then
-    Y := (TopCtrl.Top - FOuterRect.Top)
-  else
-  if Assigned(BtmCtrl) then
-    Y := (BtmCtrl.BoundsRect.Bottom - FOuterRect.Bottom);
+  if (BestTopDiff <> MaxInt) or
+     (BestBtmDiff <> MaxInt)
+  then
+    if Abs(BestBtmDiff) < Abs(BestTopDiff) then
+      Y := BestBtmDiff
+    else
+      Y := BestTopDiff;
 
-  if Assigned(LeftCtrl) then
-    X := (LeftCtrl.Left - FOuterRect.Left)
-  else
-  if Assigned(RightCtrl) then
-    X := (RightCtrl.BoundsRect.Right - FOuterRect.Right);
+  if (BestLeftDiff <> MaxInt) or
+     (BestRightDiff <> MaxInt)
+  then
+    if Abs(BestRightDiff) < Abs(BestLeftDiff) then
+      X := BestRightDiff
+    else
+      X := BestLeftDiff;
 
-  FFrame.Label1.Caption := 'Top: ' + FOuterControls[akTop].Name;
-  FFrame.Label2.Caption := 'Left: ' + FOuterControls[akLeft].Name;
-  FFrame.Label3.Caption := 'Right: ' + FOuterControls[akRight].Name;
-  FFrame.Label4.Caption := 'Bottom: ' + FOuterControls[akBottom].Name;     }
-
-
-  for I := Low(FDragRects) to High(FDragRects) do
-    OffsetRect(FDragRects[i], X, Y);
+  if (X <> 0) or (Y <> 0) then
+    for I := Low(FDragRects) to High(FDragRects) do
+      OffsetRect(FDragRects[i], X, Y);
 end;
 
 procedure TDesignMover.CalcDragRects;
@@ -347,14 +381,11 @@ begin
       L.AddCommand(MC);
     end;
 
-  // Adjust dragrects to "snap" to other controls.
-//  AdjustDragRects;
-
   T1 := Now;
   inherited ApplyDragRects;
   T2 := Now;
-  if IsConsole then
-    WriteLn('ApplyDragRects: ', FormatDateTime('NN:SS:ZZZZ', T2-T1));
+//  if IsConsole then
+//    WriteLn('ApplyDragRects: ', FormatDateTime('NN:SS:ZZZZ', T2-T1));
 end;
 
 procedure TDesignMover.PaintDragRects;

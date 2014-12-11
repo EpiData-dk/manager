@@ -449,6 +449,22 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Caption = 'Label4'
       ParentColor = False
     end
+    object Label5: TLabel
+      Left = 31
+      Height = 15
+      Top = 514
+      Width = 42
+      Caption = 'Label5'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      Left = 33
+      Height = 15
+      Top = 545
+      Width = 42
+      Caption = 'Label6'
+      ParentColor = False
+    end
   end
   object Splitter1: TSplitter
     Left = 831

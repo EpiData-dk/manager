@@ -24,6 +24,8 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     Memo1: TMemo;
     RenameControlsAction: TAction;
     RecodeDataAction: TAction;
@@ -2884,8 +2886,8 @@ begin
 
   if IsConsole then
   begin
-    WriteLn('T1 -> T2: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
-    WriteLn('T2 -> T3: ', FormatDateTime('NN:SS:ZZZ', T3-T2));
+//    WriteLn('T1 -> T2: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
+//    WriteLn('T2 -> T3: ', FormatDateTime('NN:SS:ZZZ', T3-T2));
   end;
 
   Controller.ClearDragRect;
