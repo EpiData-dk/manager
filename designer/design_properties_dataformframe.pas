@@ -45,8 +45,8 @@ type
     BasicSheet: TTabSheet;
     AfterRecordSheet: TTabSheet;
     procedure AddRelateBtnClick(Sender: TObject);
+    procedure MaskEdit1EditingDone(Sender: TObject);
     procedure NoLimitRadioBtnClick(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
     procedure RemoveRelateBtnClick(Sender: TObject);
   private
     { Relate }
@@ -120,6 +120,11 @@ begin
   PRelateComponents(DoAddNewRelate)^.GotoCombo.SetFocus;
 end;
 
+procedure TDataformPropertiesFrame.MaskEdit1EditingDone(Sender: TObject);
+begin
+  NoLimitRadioBtnClick(FixedLimitRadioBtn);
+end;
+
 procedure TDataformPropertiesFrame.NoLimitRadioBtnClick(Sender: TObject);
 var
   Fixed: Boolean;
@@ -149,13 +154,18 @@ var
   var
     DefaultState: TEpiDataFileAfterRecordState;
     Count: Integer;
+    S: String;
   begin
     AfterRecordGrpBox.Items.Clear;
 
-    Count := StrToInt(Trim(MaskEdit1.EditText));
+    S := Trim(MaskEdit1.EditText);
+    if S <> '' then
+      Count := StrToInt(S)
+    else
+      Count := 1;
 
     // 1:1
-    if (Fixed) and (Count = 1)
+    if (Fixed) and (Count <= 1)
     then
       begin
         AddToGrpBox([arsStayOnRecord, arsReturnToParent]);
@@ -186,12 +196,6 @@ begin
   MaskEdit1.Enabled := Fixed;
 
   LocalUpdateAfterRecordGroup;
-end;
-
-procedure TDataformPropertiesFrame.PageControl1Change(Sender: TObject);
-begin
-{  if PageControl1.ActivePage = AfterRecordSheet then
-    AfterRecordGrpBox.ItemIndex := FAfterRecordIndex;}
 end;
 
 procedure TDataformPropertiesFrame.RemoveRelateBtnClick(Sender: TObject);

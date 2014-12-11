@@ -15,7 +15,6 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     Align = alClient
     TabIndex = 0
     TabOrder = 0
-    OnChange = PageControl1Change
     object BasicSheet: TTabSheet
       Caption = 'Basic'
       ClientHeight = 469
@@ -248,7 +247,9 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           Enabled = False
           MaxLength = 4
           TabOrder = 2
+          OnEditingDone = MaskEdit1EditingDone
           EditMask = '9999;1; '
+          Text = '    '
           SpaceChar = ' '
         end
       end

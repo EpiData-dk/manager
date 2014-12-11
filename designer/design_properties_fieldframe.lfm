@@ -1,7 +1,7 @@
 object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 2105
+  Left = 760
   Height = 625
-  Top = 127
+  Top = 266
   Width = 501
   ClientHeight = 625
   ClientWidth = 501
@@ -2073,14 +2073,6 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         ParentColor = False
       end
     end
-  end
-  object Label27: TLabel
-    Left = 19
-    Height = 15
-    Top = 12
-    Width = 50
-    Caption = 'Label27'
-    ParentColor = False
   end
   object ActionList1: TActionList
     left = 206

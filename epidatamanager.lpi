@@ -716,6 +716,7 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_dataformframe"/>
       </Unit88>
       <Unit89>
         <Filename Value="tools/append_form2.pas"/>
