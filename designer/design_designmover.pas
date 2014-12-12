@@ -2,6 +2,7 @@ unit design_designmover;
 
 {$mode objfpc}{$H+}
 {$DEFINE DESIGNER_GUIDES}
+{.$DEFINE DARWIN}
 
 interface
 
@@ -30,11 +31,17 @@ type
     procedure CalcOuterPaintRect;
     procedure PaintOuterRect;
     procedure CalcOuterDragControls;
-  private
-    YCtrl: TControl;
-    XCtrl: TControl;
     function DragRectsInParent: boolean;
+  private
+    { Snapping }
+    YCtrl: TControl;
+    YAnchor: TAnchorKind;
+    YRect: TRect;
+    XCtrl: TControl;
+    XAnchor: TAnchorKind;
+    XRect: TRect;
     procedure AdjustDragRects;
+    procedure PaintSnappingLines;
   protected
     procedure CalcDragRects; override;
     procedure CalcPaintRects; override;
@@ -146,7 +153,7 @@ var
 begin
   if Assigned(FOldPaint) then FOldPaint(Sender);
 
-  L := Length(FDragRects);
+{  L := Length(FDragRects);
   if L = 0 then exit;
 
   with FDesignPanel.Canvas do
@@ -161,7 +168,8 @@ begin
       ARect.BottomRight := FDesignPanel.ScreenToClient(FDragRects[i].BottomRight);
       Rectangle(ARect);
     end;
-  end;
+  end; }
+  PaintSnappingLines;
 end;
 {$ENDIF}
 
@@ -274,6 +282,10 @@ var
   BestBtmCtrl: TControl;
   BestLeftCtrl: TControl;
   BestRightCtrl: TControl;
+  BestTopRect: TRect;
+  BestBtmRect: TRect;
+  BestLeftRect: TRect;
+  BestRightRect: TRect;
 begin
   if not ManagerSettings.SnapFields then exit;
 
@@ -313,6 +325,7 @@ begin
           begin
             BestTopDiff := TopDiff;
             BestTopCtrl := Ctrl;
+            BestTopRect := FDragRects[j];
           end;
 
           if (Abs(BtmDiff) <= SnapDist) and
@@ -321,6 +334,7 @@ begin
           begin
             BestBtmDiff := BtmDiff;
             BestBtmCtrl := Ctrl;
+            BestBtmRect := FDragRects[j];
           end;
 
           if (Abs(LeftDiff) <= SnapDist) and
@@ -329,6 +343,7 @@ begin
           begin
             BestLeftDiff := LeftDiff;
             BestLeftCtrl := Ctrl;
+            BestLeftRect := FDragRects[j];
           end;
 
           if (Abs(RightDiff) <= SnapDist) and
@@ -337,44 +352,143 @@ begin
           begin
             BestRightDiff := RightDiff;
             BestRightCtrl := Ctrl;
+            BestRightRect := FDragRects[j];
           end;
         end;
     end;  //   for i := 0 to WinCtrl.ControlCount - 1 do
 
   X := 0;
   Y := 0;
+  FillByte(XRect, SizeOf(TRect), 0);
+  FillByte(XRect, SizeOf(TRect), 0);
 
   if (BestTopDiff <> MaxInt) or
      (BestBtmDiff <> MaxInt)
   then
+  begin
     if Abs(BestBtmDiff) < Abs(BestTopDiff) then
     begin
-      Y := BestBtmDiff;
-      YCtrl := BestBtmCtrl;
+      Y       := BestBtmDiff;
+      YCtrl   := BestBtmCtrl;
+      YAnchor := akBottom;
+      YRect   := BestBtmRect;
     end
     else
     begin
-      Y := BestTopDiff;
-      YCtrl := BestTopCtrl;
+      Y       := BestTopDiff;
+      YCtrl   := BestTopCtrl;
+      YAnchor := akTop;
+      YRect   := BestTopRect;
     end;
+  end;
 
   if (BestLeftDiff <> MaxInt) or
      (BestRightDiff <> MaxInt)
   then
+  begin
     if Abs(BestRightDiff) < Abs(BestLeftDiff) then
     begin
       X := BestRightDiff;
       XCtrl := BestRightCtrl;
+      XAnchor := akRight;
+      XRect   := BestRightRect;
     end
     else
     begin
       X := BestLeftDiff;
-      XCtrl := BestLeftCtrlS;
+      XCtrl := BestLeftCtrl;
+      XAnchor := akLeft;
+      XRect   := BestLeftRect;
     end;
 
+  end;
+
   if (X <> 0) or (Y <> 0) then
+  begin
+    OffsetRect(XRect, X, Y);
+    OffsetRect(YRect, X, Y);
     for I := Low(FDragRects) to High(FDragRects) do
       OffsetRect(FDragRects[i], X, Y);
+  end;
+end;
+
+procedure TDesignMover.PaintSnappingLines;
+var
+  X1: LongInt;
+  X2: LongInt;
+  Y1: Integer;
+  Y2: LongInt;
+  DC: HDC;
+  C: TCanvas;
+  aHWND: HWND;
+begin
+  if (not Assigned(XCtrl)) and
+     (not Assigned(YCtrl))
+  then
+    Exit;
+
+  if Assigned(XCtrl) then
+    aHWND := XCtrl.Parent.Handle
+  else
+    aHWND := YCtrl.Parent.Handle;
+
+
+  DC := GetDC(aHWND);
+  try
+    C := TCanvas.Create;
+    with C do
+    try
+      Handle := DC;
+      Pen.Style := psDash;
+      Pen.Mode := pmNotXor;
+      Brush.Style := bsClear;
+
+      if Assigned(XCtrl) then
+      begin
+        case XAnchor of
+          akLeft:  X1 := XCtrl.Left;
+          akRight: X1 := XCtrl.BoundsRect.Right;
+        end;
+        X2 := X1;
+
+        if XCtrl.Top < XRect.Top then
+        begin
+          Y1 := XCtrl.Top;
+          Y2 := XRect.Bottom;
+        end else begin
+          Y1 := XRect.Top;
+          Y2 := XCtrl.BoundsRect.Bottom;
+        end;
+        Pen.Color := clRed;
+        Line(X1, Y1, X2, Y2);
+      end;
+
+      if Assigned(YCtrl) then
+      begin
+        case XAnchor of
+          akTop:    Y1 := YCtrl.Top;
+          akBottom: Y1 := YCtrl.BoundsRect.Bottom;
+        end;
+        Y2 := Y1;
+
+        if YCtrl.Left < YRect.Left then
+        begin
+          X1 := YCtrl.Left;
+          X2 := YRect.Right;
+        end else begin
+          X1 := YRect.Left;
+          X2 := YCtrl.BoundsRect.Right;
+        end;
+        Pen.Color := clBlue;
+        Line(X1, Y1, X2, Y2);
+      end;
+
+    finally
+      C.Free;
+    end;
+  finally
+    ReleaseDC(aHWND, DC);
+  end;
 end;
 
 procedure TDesignMover.CalcDragRects;
@@ -424,9 +538,11 @@ procedure TDesignMover.PaintDragRects;
 begin
   {$IFNDEF DARWIN}
   inherited PaintDragRects;
+  PaintSnappingLines;
   {$ELSE}
   FDesignPanel.Invalidate;
   {$ENDIF}
+
   if Length(FDragRects) > 1 then
     PaintOuterRect;
 end;
