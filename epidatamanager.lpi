@@ -225,7 +225,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -404,6 +403,7 @@
         <ComponentName Value="ValueLabelGridFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="valuelabelgrid_frame"/>
       </Unit33>
       <Unit34>
         <Filename Value="project/valuelabelseditor_form2.pas"/>
@@ -507,7 +507,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit49>
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>

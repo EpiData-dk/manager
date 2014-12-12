@@ -31,6 +31,8 @@ type
     procedure PaintOuterRect;
     procedure CalcOuterDragControls;
   private
+    YCtrl: TControl;
+    XCtrl: TControl;
     function DragRectsInParent: boolean;
     procedure AdjustDragRects;
   protected
@@ -268,6 +270,10 @@ var
   RightDiff: Integer;
   BtmDiff: Integer;
   j: Integer;
+  BestTopCtrl: TControl;
+  BestBtmCtrl: TControl;
+  BestLeftCtrl: TControl;
+  BestRightCtrl: TControl;
 begin
   if not ManagerSettings.SnapFields then exit;
 
@@ -278,6 +284,8 @@ begin
   BestLeftDiff  := MaxInt;
   BestRightDiff := MaxInt;
   BestBtmDiff   := MaxInt;
+  XCtrl         := nil;
+  YCtrl         := nil;
 
   for i := 0 to WinCtrl.ControlCount - 1 do
     begin
@@ -302,22 +310,34 @@ begin
           if (Abs(TopDiff) <= SnapDist) and
              (Abs(TopDiff) < BestTopDiff)
           then
+          begin
             BestTopDiff := TopDiff;
-
-          if (Abs(LeftDiff) <= SnapDist) and
-             (Abs(LeftDiff) < BestLeftDiff)
-          then
-            BestLeftDiff := LeftDiff;
-
-          if (Abs(RightDiff) <= SnapDist) and
-             (Abs(RightDiff) < BestRightDiff)
-          then
-            BestRightDiff := RightDiff;
+            BestTopCtrl := Ctrl;
+          end;
 
           if (Abs(BtmDiff) <= SnapDist) and
              (Abs(BtmDiff) < BestBtmDiff)
           then
+          begin
             BestBtmDiff := BtmDiff;
+            BestBtmCtrl := Ctrl;
+          end;
+
+          if (Abs(LeftDiff) <= SnapDist) and
+             (Abs(LeftDiff) < BestLeftDiff)
+          then
+          begin
+            BestLeftDiff := LeftDiff;
+            BestLeftCtrl := Ctrl;
+          end;
+
+          if (Abs(RightDiff) <= SnapDist) and
+             (Abs(RightDiff) < BestRightDiff)
+          then
+          begin
+            BestRightDiff := RightDiff;
+            BestRightCtrl := Ctrl;
+          end;
         end;
     end;  //   for i := 0 to WinCtrl.ControlCount - 1 do
 
@@ -328,17 +348,29 @@ begin
      (BestBtmDiff <> MaxInt)
   then
     if Abs(BestBtmDiff) < Abs(BestTopDiff) then
-      Y := BestBtmDiff
+    begin
+      Y := BestBtmDiff;
+      YCtrl := BestBtmCtrl;
+    end
     else
+    begin
       Y := BestTopDiff;
+      YCtrl := BestTopCtrl;
+    end;
 
   if (BestLeftDiff <> MaxInt) or
      (BestRightDiff <> MaxInt)
   then
     if Abs(BestRightDiff) < Abs(BestLeftDiff) then
-      X := BestRightDiff
+    begin
+      X := BestRightDiff;
+      XCtrl := BestRightCtrl;
+    end
     else
+    begin
       X := BestLeftDiff;
+      XCtrl := BestLeftCtrlS;
+    end;
 
   if (X <> 0) or (Y <> 0) then
     for I := Low(FDragRects) to High(FDragRects) do
