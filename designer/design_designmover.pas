@@ -50,6 +50,7 @@ type
   public
     constructor Create(AOwner: TJvDesignSurface); override;
     destructor Destroy; override;
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer
        ); override;
@@ -359,7 +360,7 @@ begin
 
   X := 0;
   Y := 0;
-  FillByte(XRect, SizeOf(TRect), 0);
+  FillByte(YRect, SizeOf(TRect), 0);
   FillByte(XRect, SizeOf(TRect), 0);
 
   if (BestTopDiff <> MaxInt) or
@@ -388,15 +389,15 @@ begin
   begin
     if Abs(BestRightDiff) < Abs(BestLeftDiff) then
     begin
-      X := BestRightDiff;
-      XCtrl := BestRightCtrl;
+      X       := BestRightDiff;
+      XCtrl   := BestRightCtrl;
       XAnchor := akRight;
       XRect   := BestRightRect;
     end
     else
     begin
-      X := BestLeftDiff;
-      XCtrl := BestLeftCtrl;
+      X       := BestLeftDiff;
+      XCtrl   := BestLeftCtrl;
       XAnchor := akLeft;
       XRect   := BestLeftRect;
     end;
@@ -432,14 +433,13 @@ begin
   else
     aHWND := YCtrl.Parent.Handle;
 
-
-  DC := GetDC(aHWND);
+  DC := GetDesignerDC(aHWND);
   try
     C := TCanvas.Create;
     with C do
     try
       Handle := DC;
-      Pen.Style := psDash;
+      Pen.Style := psSolid;
       Pen.Mode := pmNotXor;
       Brush.Style := bsClear;
 
@@ -465,7 +465,7 @@ begin
 
       if Assigned(YCtrl) then
       begin
-        case XAnchor of
+        case YAnchor of
           akTop:    Y1 := YCtrl.Top;
           akBottom: Y1 := YCtrl.BoundsRect.Bottom;
         end;
@@ -566,6 +566,13 @@ begin
   RemoveDarwinHack;
   {$ENDIF}
   inherited Destroy;
+end;
+
+procedure TDesignMover.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  inherited MouseDown(Button, Shift, X, Y);
+//  PaintSnappingLines;
 end;
 
 procedure TDesignMover.MouseMove(Shift: TShiftState; X, Y: Integer);
