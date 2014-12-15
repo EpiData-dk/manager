@@ -150,6 +150,8 @@ begin
 end;
 
 procedure TAlignmentForm.LoadGlyphs;
+var
+  LConstraints: TSizeConstraints;
 begin
   DM.Icons16.GetBitmap(23, CenterHorzBtn.Glyph);
   DM.Icons16.GetBitmap(24, CenterVertBtn.Glyph);
@@ -161,6 +163,22 @@ begin
   DM.Icons16.GetBitmap(28, FixedDistVertBtn.Glyph);
   DM.Icons16.GetBitmap(29, TopAlignBtn.Glyph);
   DM.Icons16.GetBitmap(30, BottomAlignBtn.Glyph);
+
+  {$IFDEF DARWIN}
+  LConstraints := LeftAlignBtn.Constraints;
+  LConstraints.MinHeight := 28;
+  LConstraints.MinWidth := 28;
+
+  TopAlignBtn.Constraints.Assign(LConstraints);
+  BottomAlignBtn.Constraints.Assign(LConstraints);
+  RightAlignBtn.Constraints.Assign(LConstraints);
+  CenterVertBtn.Constraints.Assign(LConstraints);
+  CenterHorzBtn.Constraints.Assign(LConstraints);
+  EvenDistVertBtn.Constraints.Assign(LConstraints);
+  EvenDistHorzBtn.Constraints.Assign(LConstraints);
+  FixedDistVertBtn.Constraints.Assign(LConstraints);
+  FixedDistHorzBtn.Constraints.Assign(LConstraints);
+  {$ENDIF}
 end;
 
 constructor TAlignmentForm.Create(TheOwner: TComponent);

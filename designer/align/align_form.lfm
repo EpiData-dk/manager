@@ -1,8 +1,8 @@
 object AlignmentForm: TAlignmentForm
-  Left = 2050
-  Height = 316
-  Top = 298
-  Width = 355
+  Left = 637
+  Height = 323
+  Top = 448
+  Width = 415
   Caption = 'Alignment'
   ChildSizing.LeftRightSpacing = 5
   ChildSizing.TopBottomSpacing = 5
@@ -14,8 +14,8 @@ object AlignmentForm: TAlignmentForm
   ChildSizing.ShrinkVertical = crsHomogenousChildResize
   ChildSizing.Layout = cclLeftToRightThenTopToBottom
   ChildSizing.ControlsPerLine = 1
-  ClientHeight = 316
-  ClientWidth = 355
+  ClientHeight = 323
+  ClientWidth = 415
   Constraints.MinHeight = 230
   Constraints.MinWidth = 300
   KeyPreview = True
@@ -26,10 +26,10 @@ object AlignmentForm: TAlignmentForm
   LCLVersion = '1.3'
   object SidesgrpBox: TGroupBox
     Left = 5
-    Height = 74
+    Height = 75
     Hint = 'Align controls according to sides'
     Top = 5
-    Width = 345
+    Width = 405
     Caption = 'Sides:'
     ChildSizing.VerticalSpacing = 5
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
@@ -38,32 +38,31 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 57
-    ClientWidth = 341
+    ClientHeight = 53
+    ClientWidth = 397
     ParentShowHint = False
     ShowHint = True
     TabOrder = 0
     object LeftAlignBtn: TBitBtn
-      Left = 57
-      Height = 12
+      Left = 20
+      Height = 22
       Hint = 'Align Left'
-      Top = 23
-      Width = 12
-      AutoSize = True
-      BorderSpacing.Left = 5
+      Top = 16
+      Width = 75
       GlyphShowMode = gsmAlways
+      Layout = blGlyphTop
       OnClick = LeftAlignBtnClick
+      ParentBidiMode = False
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
     end
     object TopAlignBtn: TBitBtn
-      Left = 126
-      Height = 12
+      Left = 115
+      Height = 22
       Hint = 'Align Top'
-      Top = 23
-      Width = 12
-      AutoSize = True
+      Top = 16
+      Width = 75
       GlyphShowMode = gsmAlways
       OnClick = TopAlignBtnClick
       ParentShowHint = False
@@ -71,12 +70,11 @@ object AlignmentForm: TAlignmentForm
       TabOrder = 1
     end
     object BottomAlignBtn: TBitBtn
-      Left = 195
-      Height = 12
+      Left = 210
+      Height = 22
       Hint = 'Align Bottom'
-      Top = 23
-      Width = 12
-      AutoSize = True
+      Top = 16
+      Width = 75
       GlyphShowMode = gsmAlways
       OnClick = BottomAlignBtnClick
       ParentShowHint = False
@@ -85,13 +83,11 @@ object AlignmentForm: TAlignmentForm
     end
     object RightAlignBtn: TBitBtn
       AnchorSideRight.Side = asrBottom
-      Left = 264
-      Height = 12
+      Left = 305
+      Height = 22
       Hint = 'Align Right'
-      Top = 23
-      Width = 12
-      AutoSize = True
-      BorderSpacing.Right = 5
+      Top = 16
+      Width = 75
       GlyphShowMode = gsmAlways
       OnClick = RightAlignBtnClick
       ParentShowHint = False
@@ -101,10 +97,10 @@ object AlignmentForm: TAlignmentForm
   end
   object CenterGrpBox: TGroupBox
     Left = 5
-    Height = 74
+    Height = 75
     Hint = 'Center controls'
-    Top = 84
-    Width = 345
+    Top = 85
+    Width = 405
     Caption = 'Center:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
     ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
@@ -112,28 +108,28 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 57
-    ClientWidth = 341
+    ClientHeight = 53
+    ClientWidth = 397
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
     object CenterVertBtn: TBitBtn
-      Left = 106
-      Height = 12
+      Left = 83
+      Height = 22
       Hint = 'Center Vertical'
-      Top = 23
-      Width = 12
+      Top = 16
+      Width = 75
       AutoSize = True
       GlyphShowMode = gsmAlways
       OnClick = CenterVertBtnClick
       TabOrder = 0
     end
     object CenterHorzBtn: TBitBtn
-      Left = 224
-      Height = 12
+      Left = 241
+      Height = 22
       Hint = 'Center Horizontal'
-      Top = 23
-      Width = 12
+      Top = 16
+      Width = 75
       AutoSize = True
       GlyphShowMode = gsmAlways
       OnClick = CenterHorzBtnClick
@@ -142,10 +138,10 @@ object AlignmentForm: TAlignmentForm
   end
   object EvenDistGrpBox: TGroupBox
     Left = 5
-    Height = 74
+    Height = 75
     Hint = 'Calculate even distance between controls'
-    Top = 163
-    Width = 345
+    Top = 165
+    Width = 405
     Caption = 'Even distance:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
     ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
@@ -153,28 +149,28 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 57
-    ClientWidth = 341
+    ClientHeight = 53
+    ClientWidth = 397
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
     object EvenDistVertBtn: TBitBtn
-      Left = 106
-      Height = 12
+      Left = 83
+      Height = 22
       Hint = 'Even vertical distance between controls'
-      Top = 23
-      Width = 12
+      Top = 16
+      Width = 75
       AutoSize = True
       GlyphShowMode = gsmAlways
       OnClick = EvenDistVertBtnClick
       TabOrder = 0
     end
     object EvenDistHorzBtn: TBitBtn
-      Left = 224
-      Height = 12
+      Left = 241
+      Height = 22
       Hint = 'Even horizontal distance between controls'
-      Top = 23
-      Width = 12
+      Top = 16
+      Width = 75
       AutoSize = True
       GlyphShowMode = gsmAlways
       OnClick = EvenDistHorzBtnClick
@@ -183,10 +179,10 @@ object AlignmentForm: TAlignmentForm
   end
   object FixedDistGrpBox: TGroupBox
     Left = 5
-    Height = 69
+    Height = 73
     Hint = 'Set fixed distance between controls'
-    Top = 242
-    Width = 345
+    Top = 245
+    Width = 405
     Caption = 'Fixed distance:'
     ChildSizing.EnlargeHorizontal = crsHomogenousSpaceResize
     ChildSizing.EnlargeVertical = crsHomogenousSpaceResize
@@ -194,17 +190,17 @@ object AlignmentForm: TAlignmentForm
     ChildSizing.ShrinkVertical = crsHomogenousSpaceResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 4
-    ClientHeight = 52
-    ClientWidth = 341
+    ClientHeight = 51
+    ClientWidth = 397
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
     object FixedDistVertBtn: TBitBtn
-      Left = 106
-      Height = 12
+      Left = 83
+      Height = 22
       Hint = 'Fixed vertical distance between controls'
-      Top = 20
-      Width = 12
+      Top = 15
+      Width = 75
       AutoSize = True
       GlyphShowMode = gsmAlways
       OnClick = FixedDistVertBtnClick
@@ -213,11 +209,11 @@ object AlignmentForm: TAlignmentForm
       TabOrder = 0
     end
     object FixedDistHorzBtn: TBitBtn
-      Left = 224
-      Height = 12
+      Left = 241
+      Height = 22
       Hint = 'Fixed horizontal distance between controls'
-      Top = 20
-      Width = 12
+      Top = 15
+      Width = 75
       AutoSize = True
       GlyphShowMode = gsmAlways
       OnClick = FixedDistHorzBtnClick
@@ -230,13 +226,10 @@ object AlignmentForm: TAlignmentForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = FixedDistVertBtn
       AnchorSideTop.Side = asrCenter
-      AnchorSideBottom.Control = FixedDistVertBtn
-      AnchorSideBottom.Side = asrBottom
-      Left = 123
-      Height = 25
-      Top = 7
+      Left = 163
+      Height = 16
+      Top = 18
       Width = 50
-      Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5
       MinValue = 1
       TabOrder = 1
@@ -245,13 +238,12 @@ object AlignmentForm: TAlignmentForm
     object SpinEdit2: TSpinEdit
       AnchorSideLeft.Control = FixedDistHorzBtn
       AnchorSideLeft.Side = asrBottom
-      AnchorSideBottom.Control = FixedDistHorzBtn
-      AnchorSideBottom.Side = asrBottom
-      Left = 241
-      Height = 25
-      Top = 7
+      AnchorSideTop.Control = FixedDistHorzBtn
+      AnchorSideTop.Side = asrCenter
+      Left = 321
+      Height = 16
+      Top = 18
       Width = 50
-      Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 5
       MinValue = 1
       TabOrder = 3
