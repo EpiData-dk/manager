@@ -15,7 +15,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideBottom.Side = asrBottom
     Left = 10
     Height = 15
-    Top = 152
+    Top = 184
     Width = 112
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 10
@@ -31,7 +31,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Side = asrBottom
     Left = 147
     Height = 29
-    Top = 138
+    Top = 170
     Width = 331
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 25
@@ -68,11 +68,11 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   end
   object MultipleInstanceChkbox: TCheckBox
     AnchorSideLeft.Control = Owner
-    AnchorSideTop.Control = ShowA4LinesChkBox
+    AnchorSideTop.Control = SnapControlsChkBox
     AnchorSideTop.Side = asrBottom
     Left = 10
     Height = 22
-    Top = 106
+    Top = 138
     Width = 251
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
@@ -85,7 +85,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrCenter
     Left = 10
     Height = 15
-    Top = 183
+    Top = 215
     Width = 199
     BorderSpacing.Left = 10
     Caption = 'Associate filetypes (.epx, .epz):'
@@ -96,7 +96,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Control = AssociateBtn
     Left = 297
     Height = 27
-    Top = 177
+    Top = 209
     Width = 97
     Anchors = [akTop, akRight]
     AutoSize = True
@@ -113,7 +113,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Side = asrBottom
     Left = 404
     Height = 27
-    Top = 177
+    Top = 209
     Width = 74
     Anchors = [akTop, akRight]
     AutoSize = True
@@ -145,7 +145,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 82
-    Top = 214
+    Top = 246
     Width = 468
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
@@ -193,5 +193,18 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
       Caption = 'Days between check:'
       ParentColor = False
     end
+  end
+  object SnapControlsChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ShowA4LinesChkBox
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 22
+    Top = 106
+    Width = 112
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Snap controls'
+    TabOrder = 8
   end
 end
