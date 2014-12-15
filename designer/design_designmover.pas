@@ -433,7 +433,11 @@ begin
   else
     aHWND := YCtrl.Parent.Handle;
 
+  {$IFNDEF DARWIN}
   DC := GetDesignerDC(aHWND);
+  {$ELSE}
+  DC := GetDC(aHWND);
+  {$ENDIF}
   try
     C := TCanvas.Create;
     with C do

@@ -150,8 +150,10 @@ begin
 end;
 
 procedure TAlignmentForm.LoadGlyphs;
+{$IFDEF DARWIN}
 var
   LConstraints: TSizeConstraints;
+  {$ENDIF}
 begin
   DM.Icons16.GetBitmap(23, CenterHorzBtn.Glyph);
   DM.Icons16.GetBitmap(24, CenterVertBtn.Glyph);
