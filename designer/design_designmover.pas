@@ -153,30 +153,13 @@ var
   i: Integer;
 begin
   if Assigned(FOldPaint) then FOldPaint(Sender);
-
-{  L := Length(FDragRects);
-  if L = 0 then exit;
-
-  with FDesignPanel.Canvas do
-  begin
-    Pen.Style := psDash;
-    Pen.Color := clBlack;
-    Brush.Style := bsClear;
-
-    for i := 0 to L - 1 do
-    begin
-      ARect.TopLeft := FDesignPanel.ScreenToClient(FDragRects[i].TopLeft);
-      ARect.BottomRight := FDesignPanel.ScreenToClient(FDragRects[i].BottomRight);
-      Rectangle(ARect);
-    end;
-  end; }
+  inherited PaintDragRects;
   PaintSnappingLines;
 end;
 {$ENDIF}
 
 procedure TDesignMover.CalcOuterDragRect;
 var
-  i: Integer;
   P: TPoint;
 begin
   FOuterRect := Rect(
