@@ -727,6 +727,7 @@ begin
           end;
 
         MainForm.EndUpdatingForm;
+        UpdateDesigner;
       end;
   end else
   if ClipBoardHasText then
