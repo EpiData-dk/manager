@@ -55,7 +55,7 @@ uses
   design_properties_dataformframe, append_form, append_form2, 
   epiv_projecttreeview_frame, epiv_datamodule, 
   report_project_validation_frame2, reports_form, report_counts_frame,
-  lazcontrols;
+  lazcontrols, design_control_memo;
 
 {$R *.res}
 

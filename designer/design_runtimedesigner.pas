@@ -382,6 +382,7 @@ uses
   design_control_section,
   design_control_field,
   design_control_heading,
+  design_control_memo,
   design_control_extender,
   align_form,
   recode_form,
@@ -2357,7 +2358,8 @@ end;
 
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
-  //
+  FAddClass := 'TDesignMemo';
+  DoToogleBtn(Sender);
 end;
 
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
@@ -2416,6 +2418,10 @@ begin
         end;
       if Ctrl is TDesignSection then
         EpiCtrl := DataFile.NewSection;
+
+      if Ctrl is TDesignMemo then
+        EpiCtrl := DataFile.NewSection;
+
 
       ApplyCommonCtrlSetting(Ctrl, EpiCtrl);
       FCreatingControl := false;
