@@ -638,6 +638,7 @@ begin
     Cbl.Free;
     FPopUpPoint := Point(-1, -1);
     MainForm.EndUpdatingForm;
+    Surface.SelectionChange;
   end;
 end;
 

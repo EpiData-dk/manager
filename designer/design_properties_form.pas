@@ -247,7 +247,7 @@ begin
   OnCloseQuery := @FormCloseQuery;
 
   DefaultControl := ApplyBtn;
-  KeyPreview := true;
+//  KeyPreview := true;
   EndFormUpdate;
 end;
 

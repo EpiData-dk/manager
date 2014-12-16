@@ -225,6 +225,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -275,7 +276,6 @@
         <ComponentName Value="Settings_VisualDesign"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_visualdesign_frame"/>
       </Unit10>
       <Unit11>
         <Filename Value="settings/settings_fielddefinitions_frame.pas"/>
@@ -312,6 +312,7 @@
         <ComponentName Value="DesignPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_properties_baseframe"/>
       </Unit16>
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
@@ -334,7 +335,6 @@
         <ComponentName Value="Settings_GeneralFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_general_frame"/>
       </Unit20>
       <Unit21>
         <Filename Value="tools/toolsform.pas"/>
@@ -508,6 +508,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit49>
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
@@ -528,6 +529,7 @@
       <Unit54>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit54>
       <Unit55>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -539,6 +541,7 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_fieldframe"/>
       </Unit56>
       <Unit57>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -565,6 +568,7 @@
       <Unit61>
         <Filename Value="designer/design_designmover.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designmover"/>
       </Unit61>
       <Unit62>
         <Filename Value="designer/design_designsizer.pas"/>
@@ -584,7 +588,6 @@
         <ComponentName Value="AlignmentForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="align_form"/>
       </Unit65>
       <Unit66>
         <Filename Value="reports/report_counts.pas"/>
