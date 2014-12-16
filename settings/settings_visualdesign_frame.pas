@@ -13,10 +13,13 @@ type
   { TSettings_VisualDesign }
 
   TSettings_VisualDesign = class(TFrame, ISettingsFrame)
+    SnapControlChkBox: TCheckBox;
+    ShowSnapLinesChkBox: TCheckBox;
     DefaultRightPosEdit: TMaskEdit;
     DistGrpBox: TGroupBox;
     FieldFieldEdit: TMaskEdit;
     FieldLabelEdit: TMaskEdit;
+    SanppingGrpBox: TGroupBox;
     Label3: TLabel;
     Label5: TLabel;
     Label6: TLabel;
@@ -27,6 +30,7 @@ type
     PositionsGrpBox: TGroupBox;
     OutputFormatRadioGrp: TRadioGroup;
     ScrollBox1: TScrollBox;
+    procedure SnapControlChkBoxClick(Sender: TObject);
   private
     { private declarations }
     FData: PManagerSettings;
@@ -46,6 +50,11 @@ uses
 
 { TSettings_VisualDesign }
 
+procedure TSettings_VisualDesign.SnapControlChkBoxClick(Sender: TObject);
+begin
+  ShowSnapLinesChkBox.Enabled := SnapControlChkBox.Checked;
+end;
+
 procedure TSettings_VisualDesign.SetSettings(Data: PManagerSettings);
 begin
   FData := Data;
@@ -57,6 +66,8 @@ begin
     FieldFieldEdit.Text               := IntToStr(SpaceBtwFieldField);
     FieldLabelEdit.Text               := IntToStr(SpaceBtwFieldLabel);
     LabelLabelEdit.Text               := IntToStr(SpaceBtwLabelLabel);
+    SnapControlChkBox.Checked         := SnapFields;
+    ShowSnapLinesChkBox.Checked       := ShowSnapLines;
 
     OutputFormatRadioGrp.ItemIndex := ReportOutputFormat;
   end;
@@ -66,7 +77,7 @@ function TSettings_VisualDesign.ApplySettings: boolean;
 var
   S: String;
 begin
-  // Visual desing:
+  // Visual design:
   with FData^ do
   begin
     S := Trim(DefaultRightPosEdit.Text);
@@ -86,6 +97,8 @@ begin
       SpaceBtwLabelLabel := StrToInt(S);
 
     ReportOutputFormat := OutputFormatRadioGrp.ItemIndex;
+    SnapFields         := SnapControlChkBox.Checked;
+    ShowSnapLines      := ShowSnapLinesChkBox.Checked;
   end;
   Result := true;
 end;

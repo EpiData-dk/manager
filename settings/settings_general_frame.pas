@@ -14,7 +14,6 @@ type
 
   TSettings_GeneralFrame = class(TFrame, ISettingsFrame)
     AutomaticUpdatesChkBox: TCheckBox;
-    SnapControlsChkBox: TCheckBox;
     CheckUpdateGrpBox: TGroupBox;
     Label2: TLabel;
     DaysBetweenUpdatedEdit: TMaskEdit;
@@ -150,7 +149,6 @@ begin
     MultipleInstanceChkbox.Checked    := MultipleInstances;
     AutomaticUpdatesChkBox.Checked    := CheckForUpdates;
     DaysBetweenUpdatedEdit.EditText   := IntToStr(DaysBetweenChecks);
-    SnapControlsChkBox.Checked        := SnapFields;
   end;
 
   AutomaticUpdatesChkBoxChange(AutomaticUpdatesChkBox);
@@ -170,7 +168,6 @@ begin
     ShowWorkToolBar     := ShowWorkToolBarChkBox.Checked;
     MultipleInstances   := MultipleInstanceChkbox.Checked;
     ShowA4GuideLines    := ShowA4LinesChkBox.Checked;
-    SnapFields          := SnapControlsChkBox.Checked;
     CheckForUpdates     := AutomaticUpdatesChkBox.Checked;
     if CheckForUpdates then
       DaysBetweenChecks   := StrToInt(Trim(DaysBetweenUpdatedEdit.EditText));;

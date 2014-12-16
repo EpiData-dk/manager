@@ -110,6 +110,7 @@ begin
       WriteInteger(Sec, 'DefaultLabelPosition',  DefaultLabelPosition);
       WriteBool   (Sec, 'SnapFields',            SnapFields);
       WriteInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
+      WriteBool   (Sec, 'ShowSnapLines',         ShowSnapLines);
       WriteInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
       WriteInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
       WriteInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
@@ -294,6 +295,7 @@ begin
       DefaultLabelPosition  := ReadInteger(Sec, 'DefaultLabelPosition',  DefaultLabelPosition);
       SnapFields            := ReadBool   (Sec, 'SnapFields',            SnapFields);
       SnappingThresHold     := ReadInteger(Sec, 'SnappingThresHold',     SnappingThresHold);
+      ShowSnapLines         := ReadBool   (Sec, 'ShowSnapLines',         ShowSnapLines);
       SpaceBtwFieldField    := ReadInteger(Sec, 'SpaceBtwFieldField',    SpaceBtwFieldField);
       SpaceBtwFieldLabel    := ReadInteger(Sec, 'SpaceBtwFieldLabel',    SpaceBtwFieldLabel);
       SpaceBtwLabelLabel    := ReadInteger(Sec, 'SpaceBtwLabelLabel',    SpaceBtwLabelLabel);
@@ -705,6 +707,7 @@ const
     DefaultLabelPosition:  20;
     SnapFields:            true;
     SnappingThresHold:     10;
+    ShowSnapLines:         true;
     SpaceBtwFieldField:    10;
     SpaceBtwFieldLabel:    25;
     SpaceBtwLabelLabel:    5;

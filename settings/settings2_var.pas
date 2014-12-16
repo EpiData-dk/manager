@@ -33,6 +33,7 @@ type
     DefaultLabelPosition:  Integer;
     SnapFields:            boolean;
     SnappingThresHold:     Integer;
+    ShowSnapLines:         boolean;
     SpaceBtwFieldField:    Integer;
     SpaceBtwFieldLabel:    Integer;
     SpaceBtwLabelLabel:    Integer;

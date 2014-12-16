@@ -147,10 +147,6 @@ begin
 end;
 
 procedure TDesignMover.MoverPaint(Sender: TObject);
-var
-  ARect: TRect;
-  L: Integer;
-  i: Integer;
 begin
   if Assigned(FOldPaint) then FOldPaint(Sender);
   inherited PaintDragRects;
@@ -406,6 +402,8 @@ var
   C: TCanvas;
   aHWND: HWND;
 begin
+  if not ManagerSettings.ShowSnapLines then exit;
+
   if (not Assigned(XCtrl)) and
      (not Assigned(YCtrl))
   then

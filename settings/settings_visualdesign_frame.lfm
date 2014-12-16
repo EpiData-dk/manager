@@ -1,23 +1,23 @@
 object Settings_VisualDesign: TSettings_VisualDesign
   Left = 0
-  Height = 675
+  Height = 581
   Top = 0
-  Width = 660
-  ClientHeight = 675
-  ClientWidth = 660
+  Width = 719
+  ClientHeight = 581
+  ClientWidth = 719
   TabOrder = 0
-  DesignLeft = 1991
-  DesignTop = 197
+  DesignLeft = 684
+  DesignTop = 321
   object ScrollBox1: TScrollBox
     Left = 0
-    Height = 675
+    Height = 581
     Top = 0
-    Width = 660
-    HorzScrollBar.Page = 658
-    VertScrollBar.Page = 673
+    Width = 719
+    HorzScrollBar.Page = 694
+    VertScrollBar.Page = 437
     Align = alClient
-    ClientHeight = 673
-    ClientWidth = 658
+    ClientHeight = 579
+    ClientWidth = 717
     TabOrder = 0
     object DistGrpBox: TGroupBox
       AnchorSideLeft.Control = ScrollBox1
@@ -28,7 +28,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 10
       Height = 117
       Top = 120
-      Width = 638
+      Width = 697
       Anchors = [akTop, akLeft, akRight]
       AutoSize = True
       BorderSpacing.Left = 10
@@ -36,7 +36,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       BorderSpacing.InnerBorder = 5
       Caption = 'Vertical distances:'
       ClientHeight = 100
-      ClientWidth = 634
+      ClientWidth = 693
       TabOrder = 1
       object Label5: TLabel
         AnchorSideLeft.Control = DistGrpBox
@@ -45,7 +45,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
         Left = 10
         Height = 15
         Top = 10
-        Width = 74
+        Width = 73
         BorderSpacing.Left = 10
         Caption = 'Field - Field:'
         ParentColor = False
@@ -69,7 +69,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
         Left = 10
         Height = 15
         Top = 40
-        Width = 80
+        Width = 79
         BorderSpacing.Left = 10
         Caption = 'Field - Label:'
         ParentColor = False
@@ -81,7 +81,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
         Left = 156
         Height = 25
         Top = 5
-        Width = 468
+        Width = 527
         Anchors = [akTop, akLeft, akRight]
         AutoSelect = False
         BorderSpacing.Top = 5
@@ -101,7 +101,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
         Left = 156
         Height = 25
         Top = 35
-        Width = 468
+        Width = 527
         Anchors = [akTop, akLeft, akRight]
         AutoSelect = False
         BorderSpacing.Top = 5
@@ -121,7 +121,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
         Left = 156
         Height = 25
         Top = 65
-        Width = 468
+        Width = 527
         Anchors = [akTop, akLeft, akRight]
         AutoSelect = False
         BorderSpacing.Top = 5
@@ -142,14 +142,14 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 10
       Height = 100
       Top = 10
-      Width = 638
+      Width = 697
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       BorderSpacing.Right = 10
       Caption = 'Positions:'
       ClientHeight = 83
-      ClientWidth = 634
+      ClientWidth = 693
       TabOrder = 0
       object Label3: TLabel
         AnchorSideLeft.Control = PositionsGrpBox
@@ -169,7 +169,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
         Left = 174
         Height = 25
         Top = 10
-        Width = 438
+        Width = 497
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
         BorderSpacing.Right = 22
@@ -189,7 +189,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
         Left = 174
         Height = 25
         Top = 45
-        Width = 438
+        Width = 497
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
         BorderSpacing.Right = 22
@@ -223,7 +223,7 @@ object Settings_VisualDesign: TSettings_VisualDesign
       Left = 10
       Height = 89
       Top = 247
-      Width = 638
+      Width = 697
       Anchors = [akTop, akLeft, akRight]
       AutoFill = True
       BorderSpacing.Left = 10
@@ -239,12 +239,59 @@ object Settings_VisualDesign: TSettings_VisualDesign
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
       ChildSizing.ControlsPerLine = 1
       ClientHeight = 72
-      ClientWidth = 634
+      ClientWidth = 693
       Items.Strings = (
         'Website (HTML)'
         'Text'
       )
       TabOrder = 2
+    end
+    object SanppingGrpBox: TGroupBox
+      AnchorSideLeft.Control = ScrollBox1
+      AnchorSideTop.Control = OutputFormatRadioGrp
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = ScrollBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 91
+      Top = 346
+      Width = 697
+      Anchors = [akTop, akLeft, akRight]
+      AutoSize = True
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 10
+      Caption = 'Snapping'
+      ClientHeight = 74
+      ClientWidth = 693
+      TabOrder = 3
+      object SnapControlChkBox: TCheckBox
+        AnchorSideLeft.Control = SanppingGrpBox
+        AnchorSideTop.Control = SanppingGrpBox
+        Left = 10
+        Height = 22
+        Top = 10
+        Width = 112
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Snap controls'
+        OnClick = SnapControlChkBoxClick
+        TabOrder = 0
+      end
+      object ShowSnapLinesChkBox: TCheckBox
+        AnchorSideLeft.Control = SnapControlChkBox
+        AnchorSideTop.Control = SnapControlChkBox
+        AnchorSideTop.Side = asrBottom
+        Left = 20
+        Height = 22
+        Top = 42
+        Width = 153
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Bottom = 10
+        Caption = 'Show snapping lines'
+        TabOrder = 1
+      end
     end
   end
 end
