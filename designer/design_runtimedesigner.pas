@@ -1881,6 +1881,7 @@ begin
     LastRight := EBounds.Right;
   end;
   EnableAutoSizing;
+  FDesignPanel.Surface.UpdateDesigner;
 end;
 
 procedure TRuntimeDesignFrame.AlignControls(
