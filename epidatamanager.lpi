@@ -299,7 +299,6 @@
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -336,7 +335,6 @@
         <ComponentName Value="Settings_GeneralFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_general_frame"/>
       </Unit20>
       <Unit21>
         <Filename Value="tools/toolsform.pas"/>
@@ -510,7 +508,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit49>
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
@@ -568,7 +565,6 @@
       <Unit61>
         <Filename Value="designer/design_designmover.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designmover"/>
       </Unit61>
       <Unit62>
         <Filename Value="designer/design_designsizer.pas"/>
@@ -722,6 +718,7 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_dataformframe"/>
       </Unit88>
       <Unit89>
         <Filename Value="tools/append_form2.pas"/>
@@ -754,7 +751,6 @@
       <Unit93>
         <Filename Value="designer/design_control_memo.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_control_memo"/>
       </Unit93>
     </Units>
   </ProjectOptions>

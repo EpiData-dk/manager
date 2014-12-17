@@ -1,24 +1,24 @@
 object DataformPropertiesFrame: TDataformPropertiesFrame
-  Left = 466
-  Height = 502
-  Top = 313
-  Width = 735
-  ClientHeight = 502
-  ClientWidth = 735
+  Left = 811
+  Height = 469
+  Top = 331
+  Width = 498
+  ClientHeight = 469
+  ClientWidth = 498
   LCLVersion = '1.3'
   object PageControl1: TPageControl
     Left = 0
-    Height = 502
+    Height = 469
     Top = 0
-    Width = 735
+    Width = 498
     ActivePage = BasicSheet
     Align = alClient
     TabIndex = 0
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 469
-      ClientWidth = 729
+      ClientHeight = 436
+      ClientWidth = 492
       object SectionGroupAccessGroupBox: TGroupBox
         AnchorSideTop.Control = ChildRecGrpBox
         AnchorSideTop.Side = asrBottom
@@ -27,12 +27,12 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         Left = 10
         Height = 170
         Top = 203
-        Width = 709
+        Width = 472
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Top = 10
         Caption = 'Groups access:'
         ClientHeight = 153
-        ClientWidth = 705
+        ClientWidth = 468
         TabOrder = 3
         Visible = False
         object GroupAvailableListBox: TListBox
@@ -44,13 +44,13 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           Left = 6
           Height = 126
           Top = 22
-          Width = 333
+          Width = 214
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 2
           BorderSpacing.Right = 5
           BorderSpacing.Bottom = 5
           ItemHeight = 0
-          ScrollWidth = 331
+          ScrollWidth = 212
           Sorted = True
           TabOrder = 0
           TopIndex = -1
@@ -62,16 +62,16 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = SectionGroupAccessGroupBox
           AnchorSideBottom.Side = asrBottom
-          Left = 374
+          Left = 255
           Height = 126
           Top = 22
-          Width = 326
+          Width = 208
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 7
           BorderSpacing.Top = 2
           BorderSpacing.Bottom = 5
           ItemHeight = 0
-          ScrollWidth = 324
+          ScrollWidth = 206
           Sorted = True
           TabOrder = 1
           TopIndex = -1
@@ -90,7 +90,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           AnchorSideLeft.Control = GroupAvailableListBox
           AnchorSideLeft.Side = asrBottom
           AnchorSideRight.Control = GroupAssignedListBox
-          Left = 344
+          Left = 225
           Height = 22
           Top = 87
           Width = 23
@@ -135,7 +135,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         object Label6: TLabel
           AnchorSideLeft.Control = GroupAssignedListBox
           AnchorSideTop.Control = SectionGroupAccessGroupBox
-          Left = 374
+          Left = 255
           Height = 15
           Top = 5
           Width = 62
@@ -147,7 +147,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           AnchorSideLeft.Control = GroupAvailableListBox
           AnchorSideLeft.Side = asrBottom
           AnchorSideRight.Control = GroupAvailableListBox
-          Left = 344
+          Left = 225
           Height = 22
           Top = 55
           Width = 23
@@ -199,14 +199,14 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         Left = 10
         Height = 76
         Top = 117
-        Width = 709
+        Width = 472
         Anchors = [akTop, akLeft, akRight]
         AutoSize = True
         BorderSpacing.Top = 10
         Caption = 'Number of child records:'
         ChildSizing.ControlsPerLine = 1
         ClientHeight = 59
-        ClientWidth = 705
+        ClientWidth = 468
         TabOrder = 2
         object NoLimitRadioBtn: TRadioButton
           Left = 0
@@ -249,7 +249,6 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           TabOrder = 2
           OnEditingDone = MaskEdit1EditingDone
           EditMask = '9999;1; '
-          Text = '    '
           SpaceChar = ' '
         end
       end
@@ -262,7 +261,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         Left = 10
         Height = 25
         Top = 82
-        Width = 709
+        Width = 472
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -292,7 +291,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         Left = 10
         Height = 25
         Top = 30
-        Width = 709
+        Width = 472
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
@@ -319,32 +318,32 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
       ChildSizing.ShrinkVertical = crsHomogenousChildResize
       ChildSizing.Layout = cclLeftToRightThenTopToBottom
-      ClientHeight = 469
-      ClientWidth = 729
+      ClientHeight = 436
+      ClientWidth = 492
       object RelatesGrpBox: TGroupBox
         Left = 10
-        Height = 337
+        Height = 347
         Top = 10
-        Width = 645
+        Width = 472
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         BorderSpacing.Bottom = 10
         Caption = 'Continue on:'
-        ClientHeight = 320
-        ClientWidth = 641
+        ClientHeight = 330
+        ClientWidth = 468
         TabOrder = 0
         object RelateScrollBox: TScrollBox
           Left = 0
-          Height = 320
+          Height = 330
           Top = 0
-          Width = 641
+          Width = 468
           HorzScrollBar.Page = 117
           VertScrollBar.Page = 59
           Align = alClient
           BorderStyle = bsNone
-          ClientHeight = 320
-          ClientWidth = 641
+          ClientHeight = 330
+          ClientWidth = 468
           TabOrder = 0
           object RelateOrderLabel: TLabel
             AnchorSideLeft.Control = RelateScrollBox
@@ -378,7 +377,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
             AnchorSideTop.Side = asrCenter
             AnchorSideRight.Control = RemoveRelateBtn
             AnchorSideBottom.Control = RelateTopBevel
-            Left = 589
+            Left = 416
             Height = 22
             Top = 16
             Width = 22
@@ -429,7 +428,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
             AnchorSideRight.Control = RelateScrollBox
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Side = asrCenter
-            Left = 614
+            Left = 441
             Height = 22
             Top = 16
             Width = 22
@@ -481,7 +480,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
             AnchorSideBottom.Control = RelateScrollBox
             AnchorSideBottom.Side = asrBottom
             Left = 88
-            Height = 270
+            Height = 280
             Top = 48
             Width = 3
             Anchors = [akTop, akLeft, akBottom]
@@ -494,8 +493,8 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
             AnchorSideRight.Control = AddRelateBtn
             AnchorSideBottom.Control = RelateScrollBox
             AnchorSideBottom.Side = asrBottom
-            Left = 581
-            Height = 270
+            Left = 408
+            Height = 280
             Top = 48
             Width = 3
             Anchors = [akTop, akRight, akBottom]
@@ -510,7 +509,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
             Left = 10
             Height = 5
             Top = 41
-            Width = 621
+            Width = 448
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Left = 10
             BorderSpacing.Right = 10
@@ -534,7 +533,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
             AnchorSideRight.Control = GotoDataFormBevel
             AnchorSideRight.Side = asrBottom
             AnchorSideBottom.Control = RelateTopBevel
-            Left = 581
+            Left = 408
             Height = 18
             Top = 21
             Width = 3
@@ -545,9 +544,9 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       end
       object AfterRecordGrpBox: TRadioGroup
         Left = 10
-        Height = 63
-        Top = 357
-        Width = 645
+        Height = 59
+        Top = 367
+        Width = 472
         AutoFill = True
         AutoSize = True
         BorderSpacing.Left = 10
@@ -563,8 +562,8 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 46
-        ClientWidth = 641
+        ClientHeight = 42
+        ClientWidth = 468
         Columns = 2
         Items.Strings = (
           'FillText...'

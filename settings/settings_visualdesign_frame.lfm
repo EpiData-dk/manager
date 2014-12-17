@@ -1,297 +1,281 @@
 object Settings_VisualDesign: TSettings_VisualDesign
   Left = 0
-  Height = 581
+  Height = 525
   Top = 0
-  Width = 719
-  ClientHeight = 581
-  ClientWidth = 719
+  Width = 565
+  ClientHeight = 525
+  ClientWidth = 565
   TabOrder = 0
   DesignLeft = 684
   DesignTop = 321
-  object ScrollBox1: TScrollBox
-    Left = 0
-    Height = 581
-    Top = 0
-    Width = 719
-    HorzScrollBar.Page = 694
-    VertScrollBar.Page = 437
-    Align = alClient
-    ClientHeight = 579
-    ClientWidth = 717
+  object SanppingGrpBox: TGroupBox
+    AnchorSideLeft.Control = PositionsGrpBox
+    AnchorSideTop.Control = OutputFormatRadioGrp
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = PositionsGrpBox
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 91
+    Top = 346
+    Width = 535
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Snapping'
+    ClientHeight = 74
+    ClientWidth = 531
     TabOrder = 0
-    object DistGrpBox: TGroupBox
-      AnchorSideLeft.Control = ScrollBox1
+    object SnapControlChkBox: TCheckBox
+      AnchorSideLeft.Control = SanppingGrpBox
+      AnchorSideTop.Control = SanppingGrpBox
+      Left = 10
+      Height = 22
+      Top = 10
+      Width = 112
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Snap controls'
+      OnClick = SnapControlChkBoxClick
+      TabOrder = 0
+    end
+    object ShowSnapLinesChkBox: TCheckBox
+      AnchorSideLeft.Control = SnapControlChkBox
+      AnchorSideTop.Control = SnapControlChkBox
+      AnchorSideTop.Side = asrBottom
+      Left = 20
+      Height = 22
+      Top = 42
+      Width = 153
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      BorderSpacing.Bottom = 10
+      Caption = 'Show snapping lines'
+      TabOrder = 1
+    end
+  end
+  object OutputFormatRadioGrp: TRadioGroup
+    AnchorSideLeft.Control = PositionsGrpBox
+    AnchorSideTop.Control = DistGrpBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = PositionsGrpBox
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 89
+    Top = 247
+    Width = 535
+    Anchors = [akTop, akLeft, akRight]
+    AutoFill = True
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Output Format:'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.TopBottomSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 72
+    ClientWidth = 531
+    Items.Strings = (
+      'Website (HTML)'
+      'Text'
+    )
+    TabOrder = 1
+  end
+  object DistGrpBox: TGroupBox
+    AnchorSideLeft.Control = PositionsGrpBox
+    AnchorSideTop.Control = PositionsGrpBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = PositionsGrpBox
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 117
+    Top = 120
+    Width = 545
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Top = 10
+    BorderSpacing.InnerBorder = 5
+    Caption = 'Vertical distances:'
+    ClientHeight = 100
+    ClientWidth = 541
+    TabOrder = 2
+    object Label5: TLabel
+      AnchorSideLeft.Control = DistGrpBox
+      AnchorSideTop.Control = FieldFieldEdit
+      AnchorSideTop.Side = asrCenter
+      Left = 10
+      Height = 15
+      Top = 10
+      Width = 73
+      BorderSpacing.Left = 10
+      Caption = 'Field - Field:'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      AnchorSideLeft.Control = DistGrpBox
+      AnchorSideTop.Control = LabelLabelEdit
+      AnchorSideTop.Side = asrCenter
+      Left = 10
+      Height = 15
+      Top = 70
+      Width = 85
+      BorderSpacing.Left = 10
+      Caption = 'Label - Label:'
+      ParentColor = False
+    end
+    object Label7: TLabel
+      AnchorSideLeft.Control = DistGrpBox
+      AnchorSideTop.Control = FieldLabelEdit
+      AnchorSideTop.Side = asrCenter
+      Left = 10
+      Height = 15
+      Top = 40
+      Width = 79
+      BorderSpacing.Left = 10
+      Caption = 'Field - Label:'
+      ParentColor = False
+    end
+    object FieldFieldEdit: TMaskEdit
+      AnchorSideTop.Control = DistGrpBox
+      AnchorSideRight.Control = DistGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 156
+      Height = 25
+      Top = 5
+      Width = 375
+      Anchors = [akTop, akLeft, akRight]
+      AutoSelect = False
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      CharCase = ecNormal
+      MaxLength = 3
+      TabOrder = 0
+      EditMask = '999;1;_'
+      Text = '   '
+      SpaceChar = '_'
+    end
+    object FieldLabelEdit: TMaskEdit
+      AnchorSideTop.Control = FieldFieldEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = DistGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 156
+      Height = 25
+      Top = 35
+      Width = 375
+      Anchors = [akTop, akLeft, akRight]
+      AutoSelect = False
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      CharCase = ecNormal
+      MaxLength = 3
+      TabOrder = 1
+      EditMask = '999;1;_'
+      Text = '   '
+      SpaceChar = '_'
+    end
+    object LabelLabelEdit: TMaskEdit
+      AnchorSideTop.Control = FieldLabelEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = DistGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 156
+      Height = 25
+      Top = 65
+      Width = 375
+      Anchors = [akTop, akLeft, akRight]
+      AutoSelect = False
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      CharCase = ecNormal
+      MaxLength = 3
+      TabOrder = 2
+      EditMask = '999;1;_'
+      Text = '   '
+      SpaceChar = '_'
+    end
+  end
+  object PositionsGrpBox: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 100
+    Top = 10
+    Width = 545
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Positions:'
+    ClientHeight = 83
+    ClientWidth = 541
+    TabOrder = 3
+    object Label3: TLabel
+      AnchorSideLeft.Control = PositionsGrpBox
+      AnchorSideTop.Side = asrCenter
+      Left = 10
+      Height = 15
+      Top = 16
+      Width = 132
+      BorderSpacing.Left = 10
+      Caption = 'Default Field &Position'
+      ParentColor = False
+    end
+    object DefaultRightPosEdit: TMaskEdit
       AnchorSideTop.Control = PositionsGrpBox
+      AnchorSideRight.Control = PositionsGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 174
+      Height = 25
+      Top = 10
+      Width = 345
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 22
+      CharCase = ecNormal
+      MaxLength = 3
+      TabOrder = 0
+      EditMask = '999;1;_'
+      Text = '   '
+      SpaceChar = '_'
+    end
+    object LabelLeftPosition: TMaskEdit
+      AnchorSideLeft.Control = DefaultRightPosEdit
+      AnchorSideTop.Control = DefaultRightPosEdit
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = PositionsGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 10
-      Height = 117
-      Top = 120
-      Width = 697
+      Left = 174
+      Height = 25
+      Top = 45
+      Width = 345
       Anchors = [akTop, akLeft, akRight]
-      AutoSize = True
-      BorderSpacing.Left = 10
       BorderSpacing.Top = 10
-      BorderSpacing.InnerBorder = 5
-      Caption = 'Vertical distances:'
-      ClientHeight = 100
-      ClientWidth = 693
+      BorderSpacing.Right = 22
+      CharCase = ecNormal
+      MaxLength = 3
       TabOrder = 1
-      object Label5: TLabel
-        AnchorSideLeft.Control = DistGrpBox
-        AnchorSideTop.Control = FieldFieldEdit
-        AnchorSideTop.Side = asrCenter
-        Left = 10
-        Height = 15
-        Top = 10
-        Width = 73
-        BorderSpacing.Left = 10
-        Caption = 'Field - Field:'
-        ParentColor = False
-      end
-      object Label6: TLabel
-        AnchorSideLeft.Control = DistGrpBox
-        AnchorSideTop.Control = LabelLabelEdit
-        AnchorSideTop.Side = asrCenter
-        Left = 10
-        Height = 15
-        Top = 70
-        Width = 85
-        BorderSpacing.Left = 10
-        Caption = 'Label - Label:'
-        ParentColor = False
-      end
-      object Label7: TLabel
-        AnchorSideLeft.Control = DistGrpBox
-        AnchorSideTop.Control = FieldLabelEdit
-        AnchorSideTop.Side = asrCenter
-        Left = 10
-        Height = 15
-        Top = 40
-        Width = 79
-        BorderSpacing.Left = 10
-        Caption = 'Field - Label:'
-        ParentColor = False
-      end
-      object FieldFieldEdit: TMaskEdit
-        AnchorSideTop.Control = DistGrpBox
-        AnchorSideRight.Control = DistGrpBox
-        AnchorSideRight.Side = asrBottom
-        Left = 156
-        Height = 25
-        Top = 5
-        Width = 527
-        Anchors = [akTop, akLeft, akRight]
-        AutoSelect = False
-        BorderSpacing.Top = 5
-        BorderSpacing.Right = 10
-        CharCase = ecNormal
-        MaxLength = 3
-        TabOrder = 0
-        EditMask = '999;1;_'
-        Text = '   '
-        SpaceChar = '_'
-      end
-      object FieldLabelEdit: TMaskEdit
-        AnchorSideTop.Control = FieldFieldEdit
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = DistGrpBox
-        AnchorSideRight.Side = asrBottom
-        Left = 156
-        Height = 25
-        Top = 35
-        Width = 527
-        Anchors = [akTop, akLeft, akRight]
-        AutoSelect = False
-        BorderSpacing.Top = 5
-        BorderSpacing.Right = 10
-        CharCase = ecNormal
-        MaxLength = 3
-        TabOrder = 1
-        EditMask = '999;1;_'
-        Text = '   '
-        SpaceChar = '_'
-      end
-      object LabelLabelEdit: TMaskEdit
-        AnchorSideTop.Control = FieldLabelEdit
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = DistGrpBox
-        AnchorSideRight.Side = asrBottom
-        Left = 156
-        Height = 25
-        Top = 65
-        Width = 527
-        Anchors = [akTop, akLeft, akRight]
-        AutoSelect = False
-        BorderSpacing.Top = 5
-        BorderSpacing.Right = 10
-        CharCase = ecNormal
-        MaxLength = 3
-        TabOrder = 2
-        EditMask = '999;1;_'
-        Text = '   '
-        SpaceChar = '_'
-      end
+      EditMask = '999;1;_'
+      Text = '   '
+      SpaceChar = '_'
     end
-    object PositionsGrpBox: TGroupBox
-      AnchorSideLeft.Control = ScrollBox1
-      AnchorSideTop.Control = ScrollBox1
-      AnchorSideRight.Control = ScrollBox1
-      AnchorSideRight.Side = asrBottom
+    object Label8: TLabel
+      AnchorSideLeft.Control = PositionsGrpBox
+      AnchorSideTop.Control = LabelLeftPosition
+      AnchorSideTop.Side = asrCenter
       Left = 10
-      Height = 100
-      Top = 10
-      Width = 697
-      Anchors = [akTop, akLeft, akRight]
+      Height = 15
+      Top = 50
+      Width = 138
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
-      BorderSpacing.Right = 10
-      Caption = 'Positions:'
-      ClientHeight = 83
-      ClientWidth = 693
-      TabOrder = 0
-      object Label3: TLabel
-        AnchorSideLeft.Control = PositionsGrpBox
-        AnchorSideTop.Side = asrCenter
-        Left = 10
-        Height = 15
-        Top = 16
-        Width = 132
-        BorderSpacing.Left = 10
-        Caption = 'Default Field &Position'
-        ParentColor = False
-      end
-      object DefaultRightPosEdit: TMaskEdit
-        AnchorSideTop.Control = PositionsGrpBox
-        AnchorSideRight.Control = PositionsGrpBox
-        AnchorSideRight.Side = asrBottom
-        Left = 174
-        Height = 25
-        Top = 10
-        Width = 497
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Top = 10
-        BorderSpacing.Right = 22
-        CharCase = ecNormal
-        MaxLength = 3
-        TabOrder = 0
-        EditMask = '999;1;_'
-        Text = '   '
-        SpaceChar = '_'
-      end
-      object LabelLeftPosition: TMaskEdit
-        AnchorSideLeft.Control = DefaultRightPosEdit
-        AnchorSideTop.Control = DefaultRightPosEdit
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = PositionsGrpBox
-        AnchorSideRight.Side = asrBottom
-        Left = 174
-        Height = 25
-        Top = 45
-        Width = 497
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Top = 10
-        BorderSpacing.Right = 22
-        CharCase = ecNormal
-        MaxLength = 3
-        TabOrder = 1
-        EditMask = '999;1;_'
-        Text = '   '
-        SpaceChar = '_'
-      end
-      object Label8: TLabel
-        AnchorSideLeft.Control = PositionsGrpBox
-        AnchorSideTop.Control = LabelLeftPosition
-        AnchorSideTop.Side = asrCenter
-        Left = 10
-        Height = 15
-        Top = 50
-        Width = 138
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 10
-        Caption = 'Default Label Position'
-        ParentColor = False
-      end
-    end
-    object OutputFormatRadioGrp: TRadioGroup
-      AnchorSideLeft.Control = ScrollBox1
-      AnchorSideTop.Control = DistGrpBox
-      AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = ScrollBox1
-      AnchorSideRight.Side = asrBottom
-      Left = 10
-      Height = 89
-      Top = 247
-      Width = 697
-      Anchors = [akTop, akLeft, akRight]
-      AutoFill = True
-      BorderSpacing.Left = 10
-      BorderSpacing.Top = 10
-      BorderSpacing.Right = 10
-      Caption = 'Output Format:'
-      ChildSizing.LeftRightSpacing = 6
-      ChildSizing.TopBottomSpacing = 6
-      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-      ChildSizing.EnlargeVertical = crsHomogenousChildResize
-      ChildSizing.ShrinkHorizontal = crsScaleChilds
-      ChildSizing.ShrinkVertical = crsScaleChilds
-      ChildSizing.Layout = cclLeftToRightThenTopToBottom
-      ChildSizing.ControlsPerLine = 1
-      ClientHeight = 72
-      ClientWidth = 693
-      Items.Strings = (
-        'Website (HTML)'
-        'Text'
-      )
-      TabOrder = 2
-    end
-    object SanppingGrpBox: TGroupBox
-      AnchorSideLeft.Control = ScrollBox1
-      AnchorSideTop.Control = OutputFormatRadioGrp
-      AnchorSideTop.Side = asrBottom
-      AnchorSideRight.Control = ScrollBox1
-      AnchorSideRight.Side = asrBottom
-      Left = 10
-      Height = 91
-      Top = 346
-      Width = 697
-      Anchors = [akTop, akLeft, akRight]
-      AutoSize = True
-      BorderSpacing.Left = 10
-      BorderSpacing.Top = 10
-      BorderSpacing.Right = 10
-      Caption = 'Snapping'
-      ClientHeight = 74
-      ClientWidth = 693
-      TabOrder = 3
-      object SnapControlChkBox: TCheckBox
-        AnchorSideLeft.Control = SanppingGrpBox
-        AnchorSideTop.Control = SanppingGrpBox
-        Left = 10
-        Height = 22
-        Top = 10
-        Width = 112
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 10
-        Caption = 'Snap controls'
-        OnClick = SnapControlChkBoxClick
-        TabOrder = 0
-      end
-      object ShowSnapLinesChkBox: TCheckBox
-        AnchorSideLeft.Control = SnapControlChkBox
-        AnchorSideTop.Control = SnapControlChkBox
-        AnchorSideTop.Side = asrBottom
-        Left = 20
-        Height = 22
-        Top = 42
-        Width = 153
-        BorderSpacing.Left = 10
-        BorderSpacing.Top = 10
-        BorderSpacing.Bottom = 10
-        Caption = 'Show snapping lines'
-        TabOrder = 1
-      end
+      Caption = 'Default Label Position'
+      ParentColor = False
     end
   end
 end

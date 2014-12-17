@@ -29,7 +29,6 @@ type
     LabelLeftPosition: TMaskEdit;
     PositionsGrpBox: TGroupBox;
     OutputFormatRadioGrp: TRadioGroup;
-    ScrollBox1: TScrollBox;
     procedure SnapControlChkBoxClick(Sender: TObject);
   private
     { private declarations }
@@ -71,6 +70,7 @@ begin
 
     OutputFormatRadioGrp.ItemIndex := ReportOutputFormat;
   end;
+  SnapControlChkBoxClick(SnapControlChkBox);
 end;
 
 function TSettings_VisualDesign.ApplySettings: boolean;

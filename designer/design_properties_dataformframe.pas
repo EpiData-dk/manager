@@ -379,38 +379,22 @@ begin
 
   Obj := TObject(PtrInt(DataFile.AfterRecordState));
   Idx := AfterRecordGrpBox.Items.IndexOfObject(Obj);
-{  if Idx = -1 then
-  begin
-    case TEpiDetailRelation(Relation).MaxRecordCount of
-      0: Obj := TObject(PtrInt(arsNewRecord));
-      1: Obj := TObject(PtrInt(arsReturnToParent));
-    else
-      Obj := TObject(PtrInt(arsReturnToParentOnMax));
-    end;
-
-    Idx := AfterRecordGrpBox.Items.IndexOfObject(Obj);
-  end; }
-
   AfterRecordGrpBox.ItemIndex := Idx;
   FAfterRecordIndex := Idx;
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
-var
-  MasterDF: TEpiDataFile;
 begin
   SectionGroupAccessGroupBox.Visible := false;
   ChildRecGrpBox.Visible := Relation.InheritsFrom(TEpiDetailRelation);
 
-  if ChildRecGrpBox.Visible then
-  begin
-    MasterDF := TEpiDetailRelation(Relation).MasterRelation.Datafile;
-//    ChildRecGrpBox.Enabled := (MasterDF.KeyFields.Count <= DataFile.KeyFields.Count);
-  end;
-
   UpdateAfterRecordRadioBoxVisibility;
 
   RelatesGrpBox.Visible     := (Relation.DetailRelations.Count > 0);
+
+  AfterRecordSheet.TabVisible :=
+    (Relation.DetailRelations.Count > 0) OR
+    (Relation.InheritsFrom(TEpiDetailRelation));
 end;
 
 procedure TDataformPropertiesFrame.UpdateContent;
@@ -566,11 +550,6 @@ begin
   else
     // "Master" datafile is ALWAYS new record state.
     DataFile.AfterRecordState := arsNewRecord;
-
-{  Case AfterRecordGrpBox.ItemIndex of
-    0: DataFile.AfterRecordState := arsNewRecord;
-    1: DataFile.AfterRecordState := arsReturnToParent;
-  end;}
 end;
 
 constructor TDataformPropertiesFrame.Create(TheOwner: TComponent);
@@ -612,8 +591,6 @@ begin
 end;
 
 function TDataformPropertiesFrame.ApplyChanges: boolean;
-var
-  S: String;
 begin
   result := true;
 
