@@ -146,6 +146,7 @@ type
     destructor  Destroy; override;
     procedure   CloseQuery(var CanClose: boolean);
     procedure   UpdateFrame;
+    procedure   UpdateStatusBar;
     function    OpenProject(Const AFileName: string): boolean;
     function    SaveProject(Const ForceSaveAs: boolean): boolean;
     function    Import(Const FromCB: boolean): boolean;
@@ -1191,6 +1192,12 @@ begin
 
   TStudyUnitFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
   EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
+end;
+
+procedure TProjectFrame.UpdateStatusBar;
+begin
+  if Assigned(FActiveFrame) then
+    FActiveFrame.UpdateStatusbar;
 end;
 
 function TProjectFrame.OpenProject(const AFileName: string): boolean;

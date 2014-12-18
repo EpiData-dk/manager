@@ -316,11 +316,6 @@ type
   public
     procedure AlignControls(Const AAlignMent: TDesignControlsAlignment;
       Const FixedDist: integer = -1); overload;
-
-  public
-    { Snapping methods }
-    function GetSnappingControl(AlignPostion: TAnchorKind; PositionValue: Integer;
-      AParent: TWinControl): TControl;
   private
     { Other }
     FMayHandleShortcuts: boolean;
@@ -331,7 +326,7 @@ type
     procedure UpdateControls;
     procedure UpdateInterface;
     procedure SelectControl(AAction: TDesignSelectAction);
-    procedure UpdateStatusbar(ControlList: TJvDesignObjectArray);
+    procedure UpdateStatusbar(ControlList: TJvDesignObjectArray); overload;
     procedure UpdateStatusbarSizes;
     procedure DeleteControls(ForceDelete: boolean);
     procedure RelationHook(Const Sender, Initiator: TEpiCustomBase;
@@ -349,6 +344,7 @@ type
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     procedure   UpdateFrame;
+    procedure   UpdateStatusBar; overload;
     procedure   ShowPropertiesForm(NewControl: boolean);
     function    IsShortCut(var Message: TLMKey): boolean;
     function ValidateControls: boolean;
@@ -1890,46 +1886,6 @@ begin
   DoAlignControls(AAlignMent, FixedDist);
 end;
 
-function TRuntimeDesignFrame.GetSnappingControl(AlignPostion: TAnchorKind;
-  PositionValue: Integer; AParent: TWinControl): TControl;
-var
-  Section: TEpiSection;
-  Ctrl: TControl;
-  BestControl: TControl;
-  F: TEpiField;
-begin
-  Result := nil;
-  Section := TEpiSection((AParent as IDesignEpiControl).EpiControl);
-
-  if Section.Fields.Count > 0 then
-  begin
-    BestControl := nil;
-
-    for F in Section.Fields do
-    begin
-      Ctrl := ControlFromEpiControl(F);
-
-      case AlignPostion of
-        akTop:
-          if Abs(Ctrl.Top - PositionValue) <= ManagerSettings.SnappingThresHold then
-            Result := Ctrl;
-
-        akLeft:
-          if Abs(Ctrl.Left - PositionValue) <= ManagerSettings.SnappingThresHold then
-            Result := Ctrl;
-
-        akRight:
-          if Abs(Ctrl.BoundsRect.Right - PositionValue) <= ManagerSettings.SnappingThresHold then
-            Result := Ctrl;
-
-        akBottom:
-          if Abs(Ctrl.BoundsRect.Bottom - PositionValue) <= ManagerSettings.SnappingThresHold then
-            Result := Ctrl;
-      end;
-    end;
-  end;
-end;
-
 procedure TRuntimeDesignFrame.UpdateShortcuts;
 begin
   NewIntFieldAction.ShortCut           := D_NewIntField;
@@ -2977,6 +2933,11 @@ begin
     UpdateShortcuts;
   UpdateControls;
   UpdateInterface;
+end;
+
+procedure TRuntimeDesignFrame.UpdateStatusBar;
+begin
+  UpdateStatusbar(FDesignPanel.Surface.Selected);
 end;
 
 class procedure TRuntimeDesignFrame.RestoreDefaultPos(F: TRuntimeDesignFrame);

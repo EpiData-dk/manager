@@ -14,6 +14,7 @@ type
 
   IProjectFrame = interface['IProjectFrame']
     procedure UpdateFrame;
+    procedure UpdateStatusbar;
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
     procedure AssignActionLinks;

@@ -225,6 +225,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -508,6 +509,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit49>
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
@@ -706,6 +708,7 @@
       <Unit86>
         <Filename Value="project/project_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="project_types"/>
       </Unit86>
       <Unit87>
         <Filename Value="project/project_studyunit_frame.pas"/>
@@ -713,6 +716,7 @@
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_studyunit_frame"/>
       </Unit87>
       <Unit88>
         <Filename Value="designer/design_properties_dataformframe.pas"/>

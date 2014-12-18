@@ -186,6 +186,7 @@ type
     procedure CountsReportActionExecute(Sender: TObject);
     procedure DataFormBtnClick(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure RecentFilesActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
@@ -377,6 +378,12 @@ end;
 procedure TMainForm.DefaultWindowPosActionExecute(Sender: TObject);
 begin
   RestoreDefaultPos;
+end;
+
+procedure TMainForm.FormActivate(Sender: TObject);
+begin
+  if Assigned(FActiveFrame) then
+    FActiveFrame.UpdateStatusBar;
 end;
 
 procedure TMainForm.FormDropFiles(Sender: TObject;

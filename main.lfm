@@ -9,6 +9,7 @@ object MainForm: TMainForm
   ClientHeight = 635
   ClientWidth = 886
   Menu = MainMenu1
+  OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDropFiles = FormDropFiles

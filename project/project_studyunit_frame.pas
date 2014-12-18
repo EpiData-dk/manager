@@ -81,6 +81,7 @@ type
       Const IsNew: boolean = false);
     destructor Destroy; override;
     procedure UpdateFrame;
+    procedure UpdateStatusbar;
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
     procedure AssignActionLinks;
@@ -224,6 +225,11 @@ end;
 procedure TStudyUnitFrame.UpdateFrame;
 begin
   // Empty... (so far).
+end;
+
+procedure TStudyUnitFrame.UpdateStatusbar;
+begin
+  // DO nothing;
 end;
 
 procedure TStudyUnitFrame.Activate;
