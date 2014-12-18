@@ -540,7 +540,10 @@ procedure TMainForm.ActionList1Update(AAction: TBasicAction;
   var Handled: Boolean);
 begin
   if Screen.ActiveCustomForm <> MainForm then
-    ActionList1.State := asSuspended
+  begin
+    ActionList1.State := asSuspended;
+    MainMenu1.ShortcutHandled := false;
+  end
   else
     ActionList1.State := asNormal;
 end;
