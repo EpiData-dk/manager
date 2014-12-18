@@ -14,7 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="20"/>
+      <BuildNr Value="21"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
