@@ -17,6 +17,7 @@ type
     CheckUpdateGrpBox: TGroupBox;
     Label2: TLabel;
     DaysBetweenUpdatedEdit: TMaskEdit;
+    OutputFormatRadioGrp: TRadioGroup;
     ShowA4LinesChkBox: TCheckBox;
     UnAssociateBtn: TButton;
     AssociateBtn: TButton;
@@ -149,6 +150,8 @@ begin
     MultipleInstanceChkbox.Checked    := MultipleInstances;
     AutomaticUpdatesChkBox.Checked    := CheckForUpdates;
     DaysBetweenUpdatedEdit.EditText   := IntToStr(DaysBetweenChecks);
+
+    OutputFormatRadioGrp.ItemIndex := ReportOutputFormat;
   end;
 
   AutomaticUpdatesChkBoxChange(AutomaticUpdatesChkBox);
@@ -162,6 +165,8 @@ begin
        (Trim(DaysBetweenUpdatedEdit.EditText) = '')
     then
       Exit(false);
+
+    ReportOutputFormat := OutputFormatRadioGrp.ItemIndex;
 
     SaveType            := DefaultSaveTypeComboBox.ItemIndex;
     SaveWindowPositions := SaveWindowPositionsChkBox.Checked;

@@ -28,7 +28,6 @@ type
     LabelLabelEdit: TMaskEdit;
     LabelLeftPosition: TMaskEdit;
     PositionsGrpBox: TGroupBox;
-    OutputFormatRadioGrp: TRadioGroup;
     procedure SnapControlChkBoxClick(Sender: TObject);
   private
     { private declarations }
@@ -68,7 +67,6 @@ begin
     SnapControlChkBox.Checked         := SnapFields;
     ShowSnapLinesChkBox.Checked       := ShowSnapLines;
 
-    OutputFormatRadioGrp.ItemIndex := ReportOutputFormat;
   end;
   SnapControlChkBoxClick(SnapControlChkBox);
 end;
@@ -96,7 +94,6 @@ begin
     if not((S = '') or (StrToInt(S) <= 0)) then
       SpaceBtwLabelLabel := StrToInt(S);
 
-    ReportOutputFormat := OutputFormatRadioGrp.ItemIndex;
     SnapFields         := SnapControlChkBox.Checked;
     ShowSnapLines      := ShowSnapLinesChkBox.Checked;
   end;

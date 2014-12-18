@@ -1,13 +1,13 @@
 object Settings_GeneralFrame: TSettings_GeneralFrame
   Left = 0
-  Height = 389
+  Height = 470
   Top = 0
-  Width = 488
-  ClientHeight = 389
-  ClientWidth = 488
+  Width = 594
+  ClientHeight = 470
+  ClientWidth = 594
   TabOrder = 0
-  DesignLeft = 866
-  DesignTop = 329
+  DesignLeft = 509
+  DesignTop = 315
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Side = asrCenter
@@ -32,7 +32,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 147
     Height = 29
     Top = 138
-    Width = 331
+    Width = 437
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 25
     BorderSpacing.Top = 10
@@ -94,7 +94,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
   object UnAssociateBtn: TButton
     AnchorSideTop.Control = AssociateBtn
     AnchorSideRight.Control = AssociateBtn
-    Left = 297
+    Left = 403
     Height = 27
     Top = 177
     Width = 97
@@ -111,7 +111,7 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 404
+    Left = 510
     Height = 27
     Top = 177
     Width = 74
@@ -146,14 +146,14 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
     Left = 10
     Height = 82
     Top = 214
-    Width = 468
+    Width = 574
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
     Caption = 'Program Updates'
     ClientHeight = 65
-    ClientWidth = 464
+    ClientWidth = 570
     TabOrder = 7
     object AutomaticUpdatesChkBox: TCheckBox
       Left = 8
@@ -193,5 +193,35 @@ object Settings_GeneralFrame: TSettings_GeneralFrame
       Caption = 'Days between check:'
       ParentColor = False
     end
+  end
+  object OutputFormatRadioGrp: TRadioGroup
+    AnchorSideLeft.Control = CheckUpdateGrpBox
+    AnchorSideTop.Control = CheckUpdateGrpBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = CheckUpdateGrpBox
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 89
+    Top = 306
+    Width = 574
+    Anchors = [akTop, akLeft, akRight]
+    AutoFill = True
+    BorderSpacing.Top = 10
+    Caption = 'Output Format:'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.TopBottomSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 72
+    ClientWidth = 570
+    Items.Strings = (
+      'Website (HTML)'
+      'Text'
+    )
+    TabOrder = 8
   end
 end
