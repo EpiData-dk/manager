@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 568
+  Left = 802
   Height = 658
-  Top = 247
+  Top = 318
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -12,6 +12,7 @@ object MainForm: TMainForm
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   OnDropFiles = FormDropFiles
   OnShow = FormShow
   Position = poScreenCenter

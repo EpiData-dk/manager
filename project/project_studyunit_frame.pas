@@ -326,6 +326,7 @@ begin
     RedoMenuItem.Action              := nil;
     // -
     CutMenuItem.Action               := nil;
+//    CutMenuItem.ShortCut             := 0;
     CopyMenuItem.Action              := nil;
     PasteMenuItem.Action             := nil;
     // -

@@ -187,6 +187,8 @@ type
     procedure DataFormBtnClick(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormChanged(Sender: TObject; Form: TCustomForm);
+    procedure FormDestroy(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
     procedure RecentFilesActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
@@ -386,6 +388,25 @@ begin
     FActiveFrame.UpdateStatusBar;
 end;
 
+procedure TMainForm.FormChanged(Sender: TObject; Form: TCustomForm);
+begin
+  if (Form <> Self) then
+  begin
+    ActionList1.State := asSuspended;
+    RecentFilesActionList.State := asSuspended
+  end
+  else
+  begin
+    ActionList1.State := asNormal;
+    RecentFilesActionList.State := asNormal;
+  end;
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+begin
+  Screen.RemoveAllHandlersOfObject(Self);
+end;
+
 procedure TMainForm.FormDropFiles(Sender: TObject;
   const FileNames: array of String);
 var
@@ -400,10 +421,10 @@ end;
 procedure TMainForm.RecentFilesActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
-  if Screen.ActiveCustomForm <> MainForm then
+{  if Screen.ActiveCustomForm <> MainForm then
     RecentFilesActionList.State := asSuspended
   else
-    RecentFilesActionList.State := asNormal;
+    RecentFilesActionList.State := asNormal;      }
 end;
 
 procedure TMainForm.SelectProjectBtnClick(Sender: TObject);
@@ -546,13 +567,9 @@ end;
 procedure TMainForm.ActionList1Update(AAction: TBasicAction;
   var Handled: Boolean);
 begin
-  if Screen.ActiveCustomForm <> MainForm then
-  begin
-    ActionList1.State := asSuspended;
-    MainMenu1.ShortcutHandled := false;
-  end
-  else
-    ActionList1.State := asNormal;
+  // Hack to force short-cut handling of menuitems not be catched when form is not selected.
+  MainMenu1.ShortcutHandled :=
+    (ActionList1.State = asNormal);
 end;
 
 procedure TMainForm.AppendActionExecute(Sender: TObject);
@@ -635,6 +652,7 @@ var
   i: Integer;
 begin
   Modified := false;
+  Screen.AddHandlerActiveFormChanged(@FormChanged);
 
   if Assigned(StartupFiles) then
   begin
