@@ -27,7 +27,7 @@ begin
   P_NewDataForm                := KeyToShortCut(VK_UNKNOWN, []);
   P_DelDataForm                := KeyToShortCut(VK_UNKNOWN, []);
   P_ProjectSettings            := KeyToShortCut(VK_P, [ssMeta, ssShift]);
-  P_StartValueLabelEditor      := KeyToShortCut(VK_V, [ssMeta]);
+  P_StartValueLabelEditor      := KeyToShortCut(VK_V, [ssAlt]);
   P_OpenProject                := KeyToShortCut(VK_UNKNOWN, []);  // this overlaps with M_OpenProject!?!?!
   P_KeyFields                  := KeyToShortCut(VK_UNKNOWN, []);
 
