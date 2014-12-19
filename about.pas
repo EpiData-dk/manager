@@ -30,7 +30,6 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure VersionPageResize(Sender: TObject);
   private
     { private declarations }
   public
@@ -110,12 +109,6 @@ procedure TAboutForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   if ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, Self.ClassName);
-end;
-
-procedure TAboutForm.VersionPageResize(Sender: TObject);
-begin
-  //Panel1.Left := (VersionPage.Width div 2) - (Panel1.Width div 2);
-  //Panel1.Top  := (VersionPage.Height div 2) - (Panel1.Height div 2);
 end;
 
 class procedure TAboutForm.RestoreDefaultPos;

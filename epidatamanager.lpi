@@ -225,7 +225,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -255,6 +254,7 @@
         <ComponentName Value="AboutForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="about"/>
       </Unit7>
       <Unit8>
         <Filename Value="project/project_settings_general_frame.pas"/>
@@ -390,7 +390,6 @@
       <Unit31>
         <Filename Value="shortcuts.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="shortcuts"/>
       </Unit31>
       <Unit32>
         <Filename Value="designer/field_valuelabelseditor_form.pas"/>
@@ -565,7 +564,6 @@
       <Unit61>
         <Filename Value="designer/design_designmover.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designmover"/>
       </Unit61>
       <Unit62>
         <Filename Value="designer/design_designsizer.pas"/>
@@ -585,7 +583,6 @@
         <ComponentName Value="AlignmentForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="align_form"/>
       </Unit65>
       <Unit66>
         <Filename Value="reports/report_counts.pas"/>
@@ -713,7 +710,6 @@
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_studyunit_frame"/>
       </Unit87>
       <Unit88>
         <Filename Value="designer/design_properties_dataformframe.pas"/>
