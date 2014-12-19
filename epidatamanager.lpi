@@ -14,7 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="21"/>
+      <BuildNr Value="22"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
@@ -526,7 +526,6 @@
       <Unit54>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit54>
       <Unit55>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -703,7 +702,6 @@
       <Unit86>
         <Filename Value="project/project_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="project_types"/>
       </Unit86>
       <Unit87>
         <Filename Value="project/project_studyunit_frame.pas"/>
@@ -711,7 +709,6 @@
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_studyunit_frame"/>
       </Unit87>
       <Unit88>
         <Filename Value="designer/design_properties_dataformframe.pas"/>
