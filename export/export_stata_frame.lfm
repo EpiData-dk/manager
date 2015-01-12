@@ -43,7 +43,7 @@ object ExportStataFrame: TExportStataFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 20
-    Height = 4
+    Height = 17
     Top = 58
     Width = 476
     Anchors = [akTop, akLeft, akRight]

@@ -81,6 +81,8 @@ end;
 
 function TExportStataFrame.UpdateExportSetting(Setting: TEpiExportSetting): boolean;
 begin
+  Result := true;
+
   with TEpiStataExportSetting(Setting) do
   begin
     Version := TEpiStataVersion(PtrUInt(VersionComboBox.Items.Objects[VersionComboBox.ItemIndex]));
