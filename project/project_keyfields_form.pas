@@ -258,14 +258,21 @@ var
   SelectedField: TEpiField;
   Idx: Integer;
 begin
-  SelectedField := TEpiField(Combo.Items.Objects[Combo.ItemIndex]);
+  SelectedField := nil;
+  Idx := Combo.ItemIndex;
+
+  if (Idx > -1) then
+    SelectedField := TEpiField(Combo.Items.Objects[Idx]);
 
   Combo.Items.BeginUpdate;
 
   AddFieldsToCombo(Combo);
 
-  Idx := Combo.Items.IndexOfObject(SelectedField);
-  Combo.ItemIndex := Idx;
+  if Assigned(SelectedField) then
+  begin
+    Idx := Combo.Items.IndexOfObject(SelectedField);
+    Combo.ItemIndex := Idx;
+  end;
 
   Combo.Items.EndUpdate;
 end;
