@@ -9,7 +9,7 @@ object KeyFieldsForm: TKeyFieldsForm
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poOwnerFormCenter
-  LCLVersion = '1.3'
+  LCLVersion = '1.5'
   object Panel1: TPanel
     Left = 0
     Height = 43

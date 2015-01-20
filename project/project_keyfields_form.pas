@@ -44,17 +44,20 @@ type
   private
     { private declarations }
     FIndexChecker: TEpiIntegrityChecker;
-    FKeyList: TList;
+    FFixedKeyList: TList;
+    FDynamicKeyList: TList;
     FHintWindow: THintWindow;
     FRelation: TEpiMasterRelation;
     FValueLabelSets: TEpiValueLabelSets;
     function  DoAddNewKey: TComboBox;
     function  DoDeleteKey: boolean;
-    function GetDataFile: TEpiDataFile;
+    function  GetDataFile: TEpiDataFile;
     procedure SetItemIndexOnField(Combo: TComboBox; Field: TEpiField);
     procedure AddFieldsToCombo(Combo: TComboBox);
     procedure ComboSelect(Sender: TObject);
+    procedure UpdateComboContent(Const Combo: TComboBox);
     function  GetFieldList: TEpiFields;
+    function  FieldSelected(Field: TEpiField): Boolean;
     procedure IndexCheckError;
     function  PerformIndexCheck(Out FailedRecords: TBoundArray;
       out FailedValues: TBoundArray): Boolean;
@@ -152,7 +155,7 @@ end;
 
 procedure TKeyFieldsForm.AddNewIndexActionExecute(Sender: TObject);
 begin
-  DoAddNewKey;
+  FDynamicKeyList.Add(DoAddNewKey);
 end;
 
 procedure TKeyFieldsForm.AddNewIndexActionUpdate(Sender: TObject);
@@ -169,7 +172,7 @@ procedure TKeyFieldsForm.DeleteIndexActionUpdate(Sender: TObject);
 var
   Cmb: TComboBox;
 begin
-  Cmb := TComboBox(FKeyList.Last);
+  Cmb := TComboBox(FDynamicKeyList.Last);
 
   TAction(Sender).Enabled :=
     Assigned(Cmb) and
@@ -235,8 +238,36 @@ begin
 end;
 
 procedure TKeyFieldsForm.ComboSelect(Sender: TObject);
+var
+  Cmb: TComboBox;
+  i: Integer;
 begin
   IndexCheckError;
+
+  for i := 0 to FDynamicKeyList.Count -1 do
+  begin
+    Cmb := TComboBox(FDynamicKeyList[i]);
+    if Cmb = Sender then Continue;
+
+    UpdateComboContent(Cmb);
+  end;
+end;
+
+procedure TKeyFieldsForm.UpdateComboContent(const Combo: TComboBox);
+var
+  SelectedField: TEpiField;
+  Idx: Integer;
+begin
+  SelectedField := TEpiField(Combo.Items.Objects[Combo.ItemIndex]);
+
+  Combo.Items.BeginUpdate;
+
+  AddFieldsToCombo(Combo);
+
+  Idx := Combo.Items.IndexOfObject(SelectedField);
+  Combo.ItemIndex := Idx;
+
+  Combo.Items.EndUpdate;
 end;
 
 function TKeyFieldsForm.GetFieldList: TEpiFields;
@@ -245,13 +276,31 @@ var
   Cmb: TComboBox;
 begin
   Result := TEpiFields.Create(nil);
-  for i := 0 to FKeyList.Count - 1 do
+
+  for i := 0 to FFixedKeyList.Count - 1 do
   begin
-    Cmb := TComboBox(FKeyList[i]);
+    Cmb := TComboBox(FFixedKeyList[i]);
     if Cmb.ItemIndex = -1 then  continue;
 
     Result.AddItem(TEpiField(Cmb.Items.Objects[Cmb.ItemIndex]));
   end;
+
+  for i := 0 to FDynamicKeyList.Count - 1 do
+  begin
+    Cmb := TComboBox(FDynamicKeyList[i]);
+    if Cmb.ItemIndex = -1 then  continue;
+
+    Result.AddItem(TEpiField(Cmb.Items.Objects[Cmb.ItemIndex]));
+  end;
+end;
+
+function TKeyFieldsForm.FieldSelected(Field: TEpiField): Boolean;
+var
+  FieldList: TEpiFields;
+begin
+  FieldList := GetFieldList;
+  Result := FieldList.FieldExists(Field);
+  FieldList.Free;
 end;
 
 procedure TKeyFieldsForm.IndexCheckError;
@@ -265,7 +314,7 @@ begin
   begin
     ShowError('Warning: Index not uniquely defined!' + LineEnding +
               'Use "List Records" to get a list of affected records (' + IntToStr(Length(FailedRecords)) + ').',
-              TComboBox(FKeyList.Last));
+              TComboBox(FDynamicKeyList.Last));
     ShowRecordsBtn.Enabled := true;
   end else
     ShowRecordsBtn.Enabled := false;
@@ -297,9 +346,9 @@ var
   FailedValues: TBoundArray;
 begin
   FieldList := TEpiFields.Create(nil);
-  for i := 0 to FKeyList.Count - 1 do
+  for i := 0 to FDynamicKeyList.Count - 1 do
   begin
-    Cmb := TComboBox(FKeyList[i]);
+    Cmb := TComboBox(FDynamicKeyList[i]);
     if Cmb.ItemIndex = -1 then  continue;
 
     FieldList.AddItem(TEpiField(Cmb.Items.Objects[Cmb.ItemIndex]));
@@ -320,15 +369,22 @@ begin
 end;
 
 function TKeyFieldsForm.DoAddNewKey: TComboBox;
+var
+  TopCtrl: TControl;
 begin
   result := TComboBox.Create(ScrollBox1);
 
   with result do
   begin
-    if FKeyList.Count = 0 then
-      AnchorToNeighbour(akTop, 3, TopBevel)
+    if FDynamicKeyList.Count = 0 then
+      if FFixedKeyList.Count = 0 then
+        TopCtrl := TopBevel
+      else
+        TopCtrl := TControl(FFixedKeyList.Last)
     else
-      AnchorToNeighbour(akTop, 3, TControl(FKeyList.Last));
+      TopCtrl := TControl(FDynamicKeyList.Last);
+
+    AnchorToNeighbour(akTop, 3, TopCtrl);
     AnchorParallel(akLeft, 0, TopBevel);
     AnchorToNeighbour(akRight, 5, RightBevel);
     AddFieldsToCombo(result);
@@ -337,8 +393,6 @@ begin
 
     Parent := ScrollBox1;
   end;
-  FKeyList.Add(Result);
-
   AddIndexComboBtn.AnchorVerticalCenterTo(result);
 end;
 
@@ -346,15 +400,23 @@ function TKeyFieldsForm.DoDeleteKey: boolean;
 var
   Cmb: TComboBox;
 begin
-  Cmb := TComboBox(FKeyList.Last);
-  FKeyList.Delete(FKeyList.Count - 1);
+  Result := true;
 
-  if FKeyList.Count = 0  then
+  Cmb := TComboBox(FDynamicKeyList.Last);
+  FDynamicKeyList.Delete(FDynamicKeyList.Count - 1);
+
+  if FDynamicKeyList.Count = 0  then
   begin
-    AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
-    AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
+    if FFixedKeyList.Count = 0 then
+    begin
+      AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
+      AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
+    end else
+    AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FFixedKeyList.Last));
   end else
-    AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FKeyList.Last));
+    AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FDynamicKeyList.Last));
+
+  ComboSelect(Cmb);
   Cmb.Free;
 
   IndexCheckError;
@@ -389,6 +451,11 @@ begin
       MasterDF := TEpiDetailRelation(MR).MasterRelation.Datafile;
       Combo.Enabled := not (MasterDF.KeyFields.ItemExistsByName(Field.Name));
     end;
+
+    if Combo.Enabled then
+      FDynamicKeyList.Add(Combo)
+    else
+      FFixedKeyList.Add(Combo);
   end;
 end;
 
@@ -397,21 +464,26 @@ var
   Flds: TEpiFields;
   F: TEpiField;
 begin
+  Combo.Items.BeginUpdate;
   Combo.Clear;
 
   Flds := DataFile.Fields;
   for F in Flds do
   begin
-    if (not DataFile.KeyFields.FieldExists(F)) and
+    if (
+        (not DataFile.KeyFields.FieldExists(F)) and
         (
          (F.FieldType in AutoUpdateFieldTypes) or
          (F.EntryMode = emNoEnter)
         )
+       ) or
+       (FieldSelected(F))
     then
       Continue;
 
     Combo.AddItem(F.Name + BoolToStr(F.Question.Text <> '', ': ' + F.Question.Text, ''), F);
   end;
+  Combo.Items.EndUpdate;
 end;
 
 
@@ -452,7 +524,8 @@ begin
   FValueLabelSets := ARelation.Datafile.ValueLabels;
 
   FIndexChecker := TEpiIntegrityChecker.Create;
-  FKeyList := TList.Create;
+  FFixedKeyList := TList.Create;
+  FDynamicKeyList := TList.Create;
 
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.HideInterval := 5 * 1000;
@@ -469,7 +542,8 @@ end;
 
 destructor TKeyFieldsForm.Destroy;
 begin
-  FKeyList.Free;
+  FFixedKeyList.Free;
+  FDynamicKeyList.Free;
   FHintWindow.Free;
   FIndexChecker.Free;
   inherited Destroy;
