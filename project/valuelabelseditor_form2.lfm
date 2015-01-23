@@ -11,7 +11,7 @@ object ValueLabelEditor2: TValueLabelEditor2
   OnDeactivate = FormDeactivate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.3'
+  LCLVersion = '1.5'
   object Panel1: TPanel
     Left = 0
     Height = 577
@@ -35,19 +35,19 @@ object ValueLabelEditor2: TValueLabelEditor2
         Left = 3
         Top = 2
         AutoSize = True
-        Caption = 'Add'
         DropdownMenu = PopupMenu1
+        ImageIndex = 31
         OnClick = AddBtnClick
         Style = tbsDropDown
       end
       object DelBtn: TToolButton
-        Left = 48
+        Left = 38
         Top = 2
-        Caption = 'Delete'
+        ImageIndex = 32
         OnClick = DelBtnClick
       end
       object ToolButton1: TToolButton
-        Left = 98
+        Left = 61
         Top = 2
         Caption = 'External...'
         OnClick = ToolButton1Click

@@ -535,6 +535,7 @@ begin
     NodeDataSize := SizeOF(PEpiValueLabel);
     WantTabs := true;
     TabStop := true;
+    EditDelay := 0;
 
     // Events:
     OnInitNode      := @VLGInitNode;

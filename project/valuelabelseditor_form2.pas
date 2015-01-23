@@ -40,6 +40,8 @@ type
   private
     { VLSetsTree }
     VLSetsTree: TVirtualStringTree;
+    procedure VLSetsEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var Allowed: Boolean);
     procedure VLSetsTreeFocusChanging(Sender: TBaseVirtualTree; OldNode,
       NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex;
       var Allowed: Boolean);
@@ -156,6 +158,17 @@ begin
   ExtImporter := TExtVLSetForm.Create(Self, ValueLabelSets);
   ExtImporter.ShowModal;
   ExtImporter.Free;
+end;
+
+procedure TValueLabelEditor2.VLSetsEditing(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+var
+  VLSet: TEpiValueLabelSet;
+begin
+  VLSet := ValueLabelSetFromNode(Node);
+  Allowed :=
+    (Assigned(VLSet)) and
+    (VLSet.LabelScope = vlsInternal);
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeFocusChanging(Sender: TBaseVirtualTree;
@@ -440,8 +453,6 @@ var
   Node: PVirtualNode;
 begin
   Node := PVirtualNode(Message.WParam);
-  if ValueLabelSetFromNode(Node).LabelScope = vlsExternal then exit;
-
   VLSetsTree.Selected[Node] := true;
   VLSetsTree.EditNode(Node, -1);
 end;
@@ -541,9 +552,19 @@ begin
     ScrollBarOptions.ScrollBars := ssAutoBoth;
     TabOrder := 1;
     NodeDataSize := SizeOf(TEpiValueLabelSet);
+    EditDelay := 0;
 
-    TreeOptions.MiscOptions := [toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnDblClick];
+    with TreeOptions do
+    begin
+      AnimationOptions := [];
+      AutoOptions      := [];
+      MiscOptions      := [toEditable, toFullRepaintOnResize, toWheelPanning, toEditOnDblClick];
+      PaintOptions     := [toShowButtons, toShowDropmark, toShowRoot, toShowTreeLines, toThemeAware, toUseBlendedImages];
+      SelectionOptions := [toFullRowSelect, toRightClickSelect];
+      StringOptions    := [toAutoAcceptEditChange];
+    end;
 
+    OnEditing := @VLSetsEditing;
     OnFocusChanging := @VLSetsTreeFocusChanging;
     OnGetText       := @VLSetsTreeGetText;
     OnGetImageIndex := @VLSetsTreeGetImageIndex;
