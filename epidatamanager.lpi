@@ -261,6 +261,7 @@
         <ComponentName Value="ProjectSettings_BackupFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_general_frame"/>
       </Unit8>
       <Unit9>
         <Filename Value="settings/settings2.pas"/>
@@ -268,6 +269,7 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
