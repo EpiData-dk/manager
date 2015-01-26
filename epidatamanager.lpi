@@ -14,10 +14,10 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="24"/>
+      <BuildNr Value="25"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
+      <StringTable ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
@@ -396,7 +396,6 @@
         <ComponentName Value="FieldValueLabelEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="field_valuelabelseditor_form"/>
       </Unit32>
       <Unit33>
         <Filename Value="project/valuelabelgrid_frame.pas"/>
@@ -404,7 +403,6 @@
         <ComponentName Value="ValueLabelGridFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="valuelabelgrid_frame"/>
       </Unit33>
       <Unit34>
         <Filename Value="project/valuelabelseditor_form2.pas"/>
@@ -412,7 +410,6 @@
         <ComponentName Value="ValueLabelEditor2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="valuelabelseditor_form2"/>
       </Unit34>
       <Unit35>
         <Filename Value="settings/settings_export.pas"/>
@@ -513,7 +510,6 @@
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_control_field"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_heading.pas"/>
@@ -541,7 +537,6 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_fieldframe"/>
       </Unit56>
       <Unit57>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
