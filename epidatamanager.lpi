@@ -261,6 +261,7 @@
         <ComponentName Value="ProjectSettings_BackupFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_settings_general_frame"/>
       </Unit8>
       <Unit9>
         <Filename Value="settings/settings2.pas"/>
@@ -268,6 +269,7 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -396,7 +398,6 @@
         <ComponentName Value="FieldValueLabelEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="field_valuelabelseditor_form"/>
       </Unit32>
       <Unit33>
         <Filename Value="project/valuelabelgrid_frame.pas"/>
@@ -404,7 +405,6 @@
         <ComponentName Value="ValueLabelGridFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="valuelabelgrid_frame"/>
       </Unit33>
       <Unit34>
         <Filename Value="project/valuelabelseditor_form2.pas"/>
@@ -513,7 +513,6 @@
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_control_field"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_heading.pas"/>
@@ -541,7 +540,6 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_fieldframe"/>
       </Unit56>
       <Unit57>
         <Filename Value="designer/design_properties_sectionframe.pas"/>

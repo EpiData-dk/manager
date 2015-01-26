@@ -587,7 +587,8 @@ begin
   if Node.Text = 'Project Defaults' then
   begin
     SettingsView.Selected := SettingsView.Items.FindNodeWithText('Project Defaults').GetFirstChild;
-    Exit;
+    Node := SettingsView.Selected;
+//    Exit;
   end;
 
   FActiveFrame := TFrame(Node.Data);
@@ -770,7 +771,7 @@ const
     ExportDDIRenameVariables: false;
     ExportDDIRenameVariablesPrefix: 'V';
     ExportDDISectionCaptionIsQText: false;
-    ExportDDILanguageISO:  '';
+    ExportDDILanguageISO:  'en';
     // - EPX
     ExportEPXValueLabels:  true;
 
