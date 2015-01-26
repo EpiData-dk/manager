@@ -27,6 +27,7 @@ type
     AddBtn: TToolButton;
     DelBtn: TToolButton;
     ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
     procedure DelBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);

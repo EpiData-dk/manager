@@ -63,8 +63,23 @@ uses
   managerprocs, Graphics, main, LCLIntf, LCLType, manager_messages,
   design_properties_fieldframe, JvDesignSurface, epidocument,
   epistringutils, manager_globals, settings2_var,
-
   CustomTimer;
+
+
+function Surface(Self: TControl): TJvDesignSurface;
+var
+  CurrControl: TControl;
+begin
+  CurrControl := Self;
+  while Assigned(CurrControl) and
+        (not (CurrControl is TJvDesignPanel))
+  do
+    CurrControl := CurrControl.Parent;
+
+  if Assigned(CurrControl) then
+    result := TJvDesignPanel(CurrControl).Surface;
+end;
+
 
 { TDesignField }
 
@@ -158,23 +173,14 @@ procedure TDesignField.OnFieldChange(const Sender, Initiator: TEpiCustomBase;
 var
   S: String;
 begin
-{  if (csDestroying in ComponentState) then
-  begin
-    UpdateValueLabelConnection(FField.ValueLabelSet, nil);
-    FProjectSettings.UnRegisterOnChangeHook(@OnProjectSettingsChange);
-    FProjectSettings := nil;
-    FField.UnRegisterOnChangeHook(@OnFieldChange);
-    FField := nil;
-
-    exit;
-  end;   }
-
-  // TODO: Jump, Compare, Calculation changes (displayed as hint!
   if EventGroup = eegFields then
     case TEpiFieldsChangeEventType(EventType) of
       efceSetDecimal,
       efceSetLength:
-        SetBounds(Left, Top, 0, 0);
+        begin
+          SetBounds(Left, Top, 0, 0);
+          Surface(Self).UpdateDesigner;
+        end;
       efceSetLeft,
       efceSetTop: ;
       efceShowValueLabel:
@@ -245,10 +251,28 @@ end;
 procedure TDesignField.OnValueLabelSetChange(const Sender,
   Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
+var
+  MaxLen: LongInt;
 begin
   if (csDestroying in ComponentState) then exit;
+  if (Initiator <> FField.ValueLabelSet) then exit;
 
-  if Initiator <> FField.ValueLabelSet then exit;
+  if (EventGroup = eegValueLabelSet) then
+  case TEpiValueLabelSetChangeEvent(EventType) of
+    evlsMaxValueLength:
+      begin
+        // Show a hint if valuelabel does not fit anymore and change valuelabel to NIL.
+        MaxLen := FField.ValueLabelSet.MaxValueLength;
+
+        if (MaxLen <= FField.Length) then Exit;
+
+        DoShowHint('Warning: Valuelabel set is no longer compatible with length of field!');
+
+        UpdateValueLabelConnection(FField.ValueLabelSet, nil);
+        FField.ValueLabelSet := nil;
+      end;
+  end;
+
   UpdateControl;
 end;
 
@@ -480,21 +504,6 @@ begin
 end;
 
 procedure TDesignField.SetBounds(ALeft, ATop, AWidth, AHeight: integer);
-
-  function Surface: TJvDesignSurface;
-  var
-    CurrControl: TControl;
-  begin
-    CurrControl := Self;
-    while Assigned(CurrControl) and
-          (not (CurrControl is TJvDesignPanel))
-    do
-      CurrControl := CurrControl.Parent;
-
-    if Assigned(CurrControl) then
-      result := TJvDesignPanel(CurrControl).Surface;
-  end;
-
 var
   S: Char;
   SideBuf: Integer;
@@ -531,6 +540,9 @@ begin
   UpdateEpiControl;
 
   // Update DesignerSurface selection.
+  // TC (2015-01-26): No! This forces a cascade of AutoSizing call each time controls are
+  // moved! If many controls are selected and moved, this has a LARGE impact on visual
+  // performance!
  // Surface.UpdateDesigner;
 end;
 

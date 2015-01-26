@@ -225,7 +225,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -327,7 +326,6 @@
       <Unit19>
         <Filename Value="manager_messages.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="manager_messages"/>
       </Unit19>
       <Unit20>
         <Filename Value="settings/settings_general_frame.pas"/>
@@ -489,7 +487,6 @@
         <ComponentName Value="KeyFieldsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="project_keyfields_form"/>
       </Unit45>
       <Unit46>
         <Filename Value="utils/manager_globals.pas"/>
@@ -516,6 +513,7 @@
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_control_field"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_heading.pas"/>
@@ -543,6 +541,7 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_fieldframe"/>
       </Unit56>
       <Unit57>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -697,7 +696,6 @@
         <ComponentName Value="ExtVLSetForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="valuelabel_import_external"/>
       </Unit84>
       <Unit85>
         <Filename Value="project/valuelabel_import_data.pas"/>

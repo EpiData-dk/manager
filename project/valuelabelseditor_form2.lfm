@@ -47,10 +47,18 @@ object ValueLabelEditor2: TValueLabelEditor2
         OnClick = DelBtnClick
       end
       object ToolButton1: TToolButton
-        Left = 61
+        Left = 71
         Top = 2
         Caption = 'External...'
         OnClick = ToolButton1Click
+      end
+      object ToolButton2: TToolButton
+        Left = 61
+        Height = 22
+        Top = 2
+        Width = 10
+        Caption = 'ToolButton2'
+        Style = tbsDivider
       end
     end
   end
