@@ -49,7 +49,7 @@ implementation
 
 uses
   epidatafilestypes, epiv_documentfile, settings2, settings2_var,
-  epiv_datamodule;
+  epiv_datamodule, main;
 
 type
   TAccessFileNameEdit = class(TFileNameEdit)
@@ -136,6 +136,10 @@ begin
     DocFile.Free;
     Exit;
   end;
+
+  settings2.AddToRecent(FN);
+  MainForm.UpdateRecentFiles;
+
   ShowMessage('Adapted file for Double Entry saved successfully:' + LineEnding +
     FN);
   DocFile.Free;
