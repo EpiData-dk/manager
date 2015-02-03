@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList, Controls,
-  Dialogs, epidocument, epidatafiles, epicustombase, epirelations,
+  Dialogs, epidocument, epidatafiles, epicustombase, epirelations, epirelates,
   manager_messages, LMessages, Menus, epiv_documentfile, types,
   design_runtimedesigner, project_types, epiv_projecttreeview_frame;
 
@@ -545,6 +545,7 @@ function TProjectFrame.DoNewDataForm(ParentRelation: TEpiMasterRelation
 var
   MR: TEpiMasterRelation;
   Df: TEpiDataFile;
+  Rel: TEpiRelate;
 begin
   Result := nil;
   Df := nil;
@@ -576,6 +577,12 @@ begin
   end;
 
   Result := FProjectTreeView.CreateRelation(ParentRelation);
+
+  if Assigned(ParentRelation) then
+  begin
+    Rel := ParentRelation.Datafile.Relates.NewRelate;
+    Rel.DetailRelation := Result;
+  end;
 end;
 
 function TProjectFrame.DoNewRuntimeFrame(Relation: TEpiMasterRelation
