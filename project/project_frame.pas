@@ -1184,7 +1184,21 @@ begin
 end;
 
 class procedure TProjectFrame.RestoreDefaultPos(F: TProjectFrame);
+var
+  Splitter: TSplitter;
 begin
+  if Assigned(F) then
+  begin
+    Splitter := F.Splitter1;
+    Splitter.SetSplitterPosition(180);
+  end else begin
+    Splitter := TSplitter.Create(nil);
+    Splitter.Left := 180;
+  end;
+  SaveSplitterPosition(Splitter, 'ProjectSplitter');
+  if not Assigned(F) then
+    Splitter.Free;
+
   RestoreDefaultPosValueLabelEditor2;
   TProjectSettingsForm.RestoreDefaultPos;
   TKeyFieldsForm.RestoreDefaultPos;
