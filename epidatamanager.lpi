@@ -226,7 +226,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -270,7 +269,6 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -292,6 +290,7 @@
         <ComponentName Value="Settings_PathsFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="settings_advanced_frame"/>
       </Unit12>
       <Unit13>
         <Filename Value="settings/settings2_interface.pas"/>
@@ -336,6 +335,7 @@
         <ComponentName Value="Settings_GeneralFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="settings_general_frame"/>
       </Unit20>
       <Unit21>
         <Filename Value="tools/toolsform.pas"/>
