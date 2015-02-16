@@ -15,10 +15,10 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="26"/>
+      <BuildNr Value="27"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
+      <StringTable ProductVersion="" SpecialBuild="ADMIN"/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
@@ -207,7 +207,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="94">
+    <Units Count="97">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -226,6 +226,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -269,7 +270,6 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -299,7 +299,6 @@
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -643,7 +642,6 @@
         <ComponentName Value="ExportDDIFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_ddi_frame"/>
       </Unit75>
       <Unit76>
         <Filename Value="designer/design_control_extender.pas"/>
@@ -753,6 +751,28 @@
         <Filename Value="designer/design_control_memo.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit93>
+      <Unit94>
+        <Filename Value="admin/admin_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AdminForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="admin_form"/>
+      </Unit94>
+      <Unit95>
+        <Filename Value="admin/admin_user_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="UserAdminForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="admin_user_form"/>
+      </Unit95>
+      <Unit96>
+        <Filename Value="admin/admin_group_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="GroupAdminForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="admin_group_form"/>
+      </Unit96>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -762,7 +782,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
+      <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename;admin"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <CodeGeneration>

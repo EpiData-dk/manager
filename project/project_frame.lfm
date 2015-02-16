@@ -197,6 +197,11 @@ object ProjectFrame: TProjectFrame
       Caption = 'Study Information...'
       OnExecute = StudyInformationActionExecute
     end
+    object AdminAction: TAction
+      Category = 'Project'
+      Caption = 'Admin...'
+      OnExecute = AdminActionExecute
+    end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu
     Images = DM.Icons16

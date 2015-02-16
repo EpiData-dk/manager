@@ -15,6 +15,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    AdminAction: TAction;
     MenuItem1: TMenuItem;
     ProjectRecentFilesDropDownMenu: TPopupMenu;
     ProgressBar1: TProgressBar;
@@ -42,6 +43,7 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure AdminActionExecute(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
     procedure DocumentProgress(const Sender: TEpiCustomBase;
@@ -172,7 +174,7 @@ uses
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
-  design_properties_form
+  design_properties_form, admin_form
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -291,6 +293,15 @@ begin
 
   FProjectTreeView.DeleteRelation(Relation);
   PropertiesForm.UpdateSelection(nil, nil);
+end;
+
+procedure TProjectFrame.AdminActionExecute(Sender: TObject);
+var
+  F: TAdminForm;
+begin
+  F := TAdminForm.Create(self);
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
@@ -1282,6 +1293,7 @@ begin
     // Project
     ProjectPropertiesMenuItem.Action := ProjectSettingsAction;
     ValueLabelsMenuItem.Action       := ValueLabelEditorAction;
+    AdminMenuItem.Action             := AdminAction;
     ProjectPasswordMenuItem.Action   := ProjectPasswordAction;
     StudyInfoMenuItem.Action         := StudyInformationAction;
 

@@ -16,6 +16,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    AdminMenuItem: TMenuItem;
     RecentFilesActionList: TActionList;
     AppendAction: TAction;
     DataFormBtn: TBitBtn;
