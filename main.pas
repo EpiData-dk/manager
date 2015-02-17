@@ -191,8 +191,6 @@ type
     procedure FormChanged(Sender: TObject; Form: TCustomForm);
     procedure FormDestroy(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
-    procedure RecentFilesActionListUpdate(AAction: TBasicAction;
-      var Handled: Boolean);
     procedure SelectProjectBtnClick(Sender: TObject);
     procedure DocumentBtnClick(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
@@ -320,7 +318,6 @@ begin
   UpdateRecentFiles;
 
   Application.QueueAsyncCall(@CheckForUpdates, 0);
-//  CheckForUpdates;
 end;
 
 procedure TMainForm.ImportCBInNewProjectActionExecute(Sender: TObject);
@@ -344,6 +341,7 @@ begin
 
   if CanClose and ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, 'MainForm');
+
   SaveSettingToIni(GetIniFileName);
 end;
 
@@ -417,15 +415,6 @@ begin
 
   S := TString.Create(FileNames[0]);
   PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, WPARAM(S), 0);
-end;
-
-procedure TMainForm.RecentFilesActionListUpdate(AAction: TBasicAction;
-  var Handled: Boolean);
-begin
-{  if Screen.ActiveCustomForm <> MainForm then
-    RecentFilesActionList.State := asSuspended
-  else
-    RecentFilesActionList.State := asNormal;      }
 end;
 
 procedure TMainForm.SelectProjectBtnClick(Sender: TObject);

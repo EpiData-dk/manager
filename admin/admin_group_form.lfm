@@ -1,23 +1,23 @@
 object AdminGroupForm: TAdminGroupForm
   Left = 689
-  Height = 513
+  Height = 515
   Top = 392
-  Width = 563
+  Width = 523
   Caption = 'Group Properties'
-  ClientHeight = 513
-  ClientWidth = 563
+  ClientHeight = 515
+  ClientWidth = 523
   LCLVersion = '1.5'
   object Panel2: TPanel
     Left = 0
     Height = 50
-    Top = 463
-    Width = 563
+    Top = 465
+    Width = 523
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 563
+    ClientWidth = 523
     TabOrder = 0
     object BitBtn1: TBitBtn
-      Left = 489
+      Left = 449
       Height = 32
       Top = 8
       Width = 54
@@ -30,7 +30,7 @@ object AdminGroupForm: TAdminGroupForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 393
+      Left = 353
       Height = 34
       Top = 8
       Width = 81
@@ -45,17 +45,17 @@ object AdminGroupForm: TAdminGroupForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 463
+    Height = 465
     Top = 0
-    Width = 563
+    Width = 523
     ActivePage = BasicSheet
     Align = alClient
     TabIndex = 0
     TabOrder = 1
     object BasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 430
-      ClientWidth = 557
+      ClientHeight = 432
+      ClientWidth = 517
       object Label3: TLabel
         Left = 24
         Height = 15
@@ -68,16 +68,16 @@ object AdminGroupForm: TAdminGroupForm
         Left = 24
         Height = 25
         Top = 44
-        Width = 353
+        Width = 473
         Anchors = [akTop, akLeft, akRight]
         TabOrder = 0
         Text = 'Admins'
       end
       object CheckGroup2: TCheckGroup
         Left = 24
-        Height = 219
+        Height = 320
         Top = 96
-        Width = 353
+        Width = 473
         Anchors = [akTop, akLeft, akRight, akBottom]
         AutoFill = True
         Caption = 'Management Rights:'
@@ -89,8 +89,8 @@ object AdminGroupForm: TAdminGroupForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 202
-        ClientWidth = 349
+        ClientHeight = 303
+        ClientWidth = 469
         Columns = 2
         Items.Strings = (
           'Edit structure'

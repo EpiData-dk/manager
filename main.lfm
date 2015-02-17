@@ -791,7 +791,6 @@ object MainForm: TMainForm
     end
   end
   object RecentFilesActionList: TActionList
-    OnUpdate = RecentFilesActionListUpdate
     left = 488
     top = 336
   end

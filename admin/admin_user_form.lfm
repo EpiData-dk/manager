@@ -1,23 +1,23 @@
 object AdminUserForm: TAdminUserForm
   Left = 861
-  Height = 513
+  Height = 435
   Top = 337
-  Width = 499
+  Width = 351
   Caption = 'User Properties'
-  ClientHeight = 513
-  ClientWidth = 499
+  ClientHeight = 435
+  ClientWidth = 351
   LCLVersion = '1.5'
   object Panel2: TPanel
     Left = 0
     Height = 50
-    Top = 463
-    Width = 499
+    Top = 385
+    Width = 351
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 499
+    ClientWidth = 351
     TabOrder = 0
     object BitBtn1: TBitBtn
-      Left = 425
+      Left = 277
       Height = 32
       Top = 8
       Width = 54
@@ -27,10 +27,11 @@ object AdminUserForm: TAdminUserForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
+      OnClick = BitBtn1Click
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 329
+      Left = 181
       Height = 34
       Top = 8
       Width = 81
@@ -45,17 +46,17 @@ object AdminUserForm: TAdminUserForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 463
+    Height = 385
     Top = 0
-    Width = 499
+    Width = 351
     ActivePage = BasicSheet
     Align = alClient
     TabIndex = 0
     TabOrder = 1
     object BasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 430
-      ClientWidth = 493
+      ClientHeight = 352
+      ClientWidth = 345
       object Label5: TLabel
         Left = 24
         Height = 15
@@ -64,14 +65,13 @@ object AdminUserForm: TAdminUserForm
         Caption = 'Login:'
         ParentColor = False
       end
-      object Edit4: TEdit
+      object LoginEdit: TEdit
         Left = 24
         Height = 25
         Top = 52
-        Width = 451
+        Width = 303
         Anchors = [akTop, akLeft, akRight]
         TabOrder = 0
-        Text = 'torsten'
       end
       object Label6: TLabel
         Left = 24
@@ -81,14 +81,13 @@ object AdminUserForm: TAdminUserForm
         Caption = 'Name:'
         ParentColor = False
       end
-      object Edit5: TEdit
+      object FullnameEdit: TEdit
         Left = 24
         Height = 25
         Top = 120
-        Width = 451
+        Width = 303
         Anchors = [akTop, akLeft, akRight]
         TabOrder = 1
-        Text = 'Torsten Christiansen'
       end
       object Label7: TLabel
         Left = 24
@@ -98,11 +97,11 @@ object AdminUserForm: TAdminUserForm
         Caption = 'Expires:'
         ParentColor = False
       end
-      object DateEdit2: TDateEdit
+      object ExpiresDateEdit: TDateEdit
         Left = 24
         Height = 25
         Top = 208
-        Width = 452
+        Width = 304
         CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
         OKCaption = 'OK'
         CancelCaption = 'Cancel'
@@ -115,10 +114,11 @@ object AdminUserForm: TAdminUserForm
         TabOrder = 2
       end
       object CheckBoxThemed2: TCheckBoxThemed
-        Left = 316
+        Left = 263
         Height = 19
         Top = 176
         Width = 59
+        Anchors = [akTop, akRight]
         Caption = 'Never'
         Checked = True
         State = cbChecked
@@ -133,15 +133,14 @@ object AdminUserForm: TAdminUserForm
         Caption = 'Last login:'
         ParentColor = False
       end
-      object Edit6: TEdit
+      object LastLoginEdit: TEdit
         Left = 25
         Height = 25
         Top = 281
-        Width = 450
+        Width = 302
         Anchors = [akTop, akLeft, akRight]
-        Enabled = False
+        ReadOnly = True
         TabOrder = 4
-        Text = '16/02/2015 13:55:00'
       end
     end
     object GroupsSheet: TTabSheet

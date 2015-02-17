@@ -299,7 +299,7 @@ procedure TProjectFrame.AdminActionExecute(Sender: TObject);
 var
   F: TAdminForm;
 begin
-  F := TAdminForm.Create(self);
+  F := TAdminForm.Create(self, EpiDocument.Admin);
   F.ShowModal;
   F.Free;
 end;

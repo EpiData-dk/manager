@@ -1,11 +1,12 @@
 object AdminForm: TAdminForm
-  Left = 531
+  Left = 579
   Height = 659
-  Top = 252
+  Top = 241
   Width = 867
   Caption = 'User/Group Administration'
   ClientHeight = 659
   ClientWidth = 867
+  OnShow = FormShow
   LCLVersion = '1.5'
   object Panel1: TPanel
     Left = 0
@@ -45,7 +46,7 @@ object AdminForm: TAdminForm
         ParentFont = False
       end
     end
-    object StringGrid1: TStringGrid
+    object UserGrid: TStringGrid
       Left = 1
       Height = 175
       Top = 58
@@ -54,67 +55,34 @@ object AdminForm: TAdminForm
       AutoEdit = False
       AutoFillColumns = True
       ColCount = 4
+      Columns = <      
+        item
+          Title.Caption = 'login'
+          Width = 215
+        end      
+        item
+          Title.Caption = 'Name'
+          Width = 215
+        end      
+        item
+          Title.Caption = 'Expires'
+          Width = 215
+        end      
+        item
+          Title.Caption = 'Last login'
+          Width = 218
+        end>
+      ExtendedSelect = False
       FixedCols = 0
-      RowCount = 4
+      RowCount = 1
       TabOrder = 1
       TitleStyle = tsNative
-      OnDblClick = StringGrid1DblClick
+      OnDblClick = EditUserActionExecute
       ColWidths = (
         215
         215
         215
         218
-      )
-      Cells = (
-        16
-        0
-        0
-        'login'
-        0
-        1
-        'torsten'
-        0
-        2
-        'jens'
-        0
-        3
-        'hans'
-        1
-        0
-        'Name'
-        1
-        1
-        'Torsten Christiansen'
-        1
-        2
-        'Jens Lauritsen'
-        1
-        3
-        'Hans Rieder'
-        2
-        0
-        'Expire'
-        2
-        1
-        '(neven)'
-        2
-        2
-        '17/02/2015'
-        2
-        3
-        '17/02/2015'
-        3
-        0
-        'Last login'
-        3
-        1
-        '16/02/2015 13:55:00'
-        3
-        2
-        '16/02/2015 13:54:00'
-        3
-        3
-        '16/02/2015 13:53:00'
       )
     end
     object ToolBar1: TToolBar
@@ -128,21 +96,17 @@ object AdminForm: TAdminForm
       object ToolButton1: TToolButton
         Left = 1
         Top = 2
-        Caption = 'ToolButton1'
-        ImageIndex = 31
+        Action = NewUserAction
       end
       object ToolButton2: TToolButton
         Left = 24
         Top = 2
-        Caption = 'ToolButton2'
-        ImageIndex = 32
+        Action = DeleteUserAction
       end
       object ToolButton3: TToolButton
         Left = 55
         Top = 2
-        Caption = 'ToolButton3'
-        ImageIndex = 13
-        OnClick = StringGrid1DblClick
+        Action = EditUserAction
       end
       object ToolButton7: TToolButton
         Left = 47
@@ -192,7 +156,7 @@ object AdminForm: TAdminForm
         ParentFont = False
       end
     end
-    object StringGrid2: TStringGrid
+    object GroupGrid: TStringGrid
       Left = 1
       Height = 311
       Top = 58
@@ -201,34 +165,22 @@ object AdminForm: TAdminForm
       AutoEdit = False
       AutoFillColumns = True
       ColCount = 2
+      Columns = <      
+        item
+          Title.Caption = 'Name'
+          Width = 212
+        end      
+        item
+          Title.Caption = 'Management Rights'
+          Width = 213
+        end>
       FixedCols = 0
-      RowCount = 3
+      RowCount = 1
       TabOrder = 1
-      OnDblClick = StringGrid2DblClick
+      TitleStyle = tsNative
       ColWidths = (
         212
         213
-      )
-      Cells = (
-        6
-        0
-        0
-        'Name'
-        0
-        1
-        'Admins'
-        0
-        2
-        'Entry Personel'
-        1
-        0
-        'Management Rights'
-        1
-        1
-        '(all)'
-        1
-        2
-        '(none)'
       )
     end
     object ToolBar2: TToolBar
@@ -242,21 +194,17 @@ object AdminForm: TAdminForm
       object ToolButton4: TToolButton
         Left = 1
         Top = 2
-        Caption = 'ToolButton1'
-        ImageIndex = 31
+        Action = NewGroupAction
       end
       object ToolButton5: TToolButton
         Left = 24
         Top = 2
-        Caption = 'ToolButton2'
-        ImageIndex = 32
+        Action = DeleteGroupAction
       end
       object ToolButton6: TToolButton
         Left = 55
         Top = 2
-        Caption = 'ToolButton3'
-        ImageIndex = 13
-        OnClick = StringGrid2DblClick
+        Action = EditGroupAction
       end
       object ToolButton8: TToolButton
         Left = 47
@@ -313,7 +261,7 @@ object AdminForm: TAdminForm
         ParentFont = False
       end
     end
-    object StringGrid3: TStringGrid
+    object UserGroupGrid: TStringGrid
       Left = 1
       Height = 311
       Top = 58
@@ -322,27 +270,22 @@ object AdminForm: TAdminForm
       AutoEdit = False
       AutoFillColumns = True
       ColCount = 2
+      Columns = <      
+        item
+          Title.Caption = 'login'
+          Width = 214
+        end      
+        item
+          Title.Caption = 'Name'
+          Width = 215
+        end>
       FixedCols = 0
-      RowCount = 2
+      RowCount = 1
       TabOrder = 1
+      TitleStyle = tsNative
       ColWidths = (
         214
         215
-      )
-      Cells = (
-        4
-        0
-        0
-        'login'
-        0
-        1
-        'torsten'
-        1
-        0
-        'Name'
-        1
-        1
-        'Torsten Christiansen'
       )
     end
     object ToolBar3: TToolBar
@@ -356,14 +299,12 @@ object AdminForm: TAdminForm
       object ToolButton9: TToolButton
         Left = 1
         Top = 2
-        Caption = 'ToolButton1'
-        ImageIndex = 31
+        Action = AddUserToGroupAction
       end
       object ToolButton10: TToolButton
         Left = 24
         Top = 2
-        Caption = 'ToolButton2'
-        ImageIndex = 32
+        Action = RemoveUserFromGroupAction
       end
     end
   end
@@ -398,5 +339,58 @@ object AdminForm: TAdminForm
     Align = alTop
     Beveled = True
     ResizeAnchor = akTop
+  end
+  object ActionList1: TActionList
+    Images = DM.Icons16
+    left = 472
+    top = 136
+    object NewUserAction: TAction
+      Category = 'User'
+      Caption = 'NewUserAction'
+      ImageIndex = 31
+      OnExecute = NewUserActionExecute
+    end
+    object DeleteUserAction: TAction
+      Category = 'User'
+      Caption = 'DeleteUserAction'
+      ImageIndex = 32
+      OnExecute = DeleteUserActionExecute
+    end
+    object EditUserAction: TAction
+      Category = 'User'
+      Caption = 'EditUserAction'
+      ImageIndex = 13
+      OnExecute = EditUserActionExecute
+    end
+    object NewGroupAction: TAction
+      Category = 'Group'
+      Caption = 'NewGroupAction'
+      ImageIndex = 31
+      OnExecute = NewGroupActionExecute
+    end
+    object DeleteGroupAction: TAction
+      Category = 'Group'
+      Caption = 'DeleteGroupAction'
+      ImageIndex = 32
+      OnExecute = DeleteGroupActionExecute
+    end
+    object EditGroupAction: TAction
+      Category = 'Group'
+      Caption = 'EditGroupAction'
+      ImageIndex = 13
+      OnExecute = EditGroupActionExecute
+    end
+    object AddUserToGroupAction: TAction
+      Category = 'UserToGroup'
+      Caption = 'AddUserToGroupAction'
+      ImageIndex = 31
+      OnExecute = AddUserToGroupActionExecute
+    end
+    object RemoveUserFromGroupAction: TAction
+      Category = 'UserToGroup'
+      Caption = 'RemoveUserFromGroupAction'
+      ImageIndex = 32
+      OnExecute = RemoveUserFromGroupActionExecute
+    end
   end
 end
