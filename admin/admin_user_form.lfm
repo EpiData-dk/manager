@@ -1,120 +1,23 @@
-object UserAdminForm: TUserAdminForm
-  Left = 668
-  Height = 387
-  Top = 367
-  Width = 398
-  Caption = 'UserAdminForm'
-  ClientHeight = 387
-  ClientWidth = 398
+object AdminUserForm: TAdminUserForm
+  Left = 861
+  Height = 513
+  Top = 337
+  Width = 499
+  Caption = 'User Properties'
+  ClientHeight = 513
+  ClientWidth = 499
   LCLVersion = '1.5'
-  object Panel1: TPanel
-    Left = 0
-    Height = 337
-    Top = 0
-    Width = 398
-    Align = alClient
-    ClientHeight = 337
-    ClientWidth = 398
-    TabOrder = 0
-    object Label1: TLabel
-      Left = 24
-      Height = 15
-      Top = 20
-      Width = 38
-      Caption = 'Login:'
-      ParentColor = False
-    end
-    object Edit1: TEdit
-      Left = 24
-      Height = 25
-      Top = 52
-      Width = 350
-      Anchors = [akTop, akLeft, akRight]
-      TabOrder = 0
-      Text = 'torsten'
-    end
-    object Label2: TLabel
-      Left = 24
-      Height = 15
-      Top = 92
-      Width = 43
-      Caption = 'Name:'
-      ParentColor = False
-    end
-    object Edit2: TEdit
-      Left = 24
-      Height = 25
-      Top = 120
-      Width = 350
-      Anchors = [akTop, akLeft, akRight]
-      TabOrder = 1
-      Text = 'Torsten Christiansen'
-    end
-    object Label3: TLabel
-      Left = 24
-      Height = 15
-      Top = 176
-      Width = 50
-      Caption = 'Expires:'
-      ParentColor = False
-    end
-    object DateEdit1: TDateEdit
-      Left = 24
-      Height = 25
-      Top = 208
-      Width = 351
-      CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
-      OKCaption = 'OK'
-      CancelCaption = 'Cancel'
-      DateOrder = doNone
-      ButtonWidth = 23
-      Anchors = [akTop, akLeft, akRight]
-      NumGlyphs = 1
-      Enabled = False
-      MaxLength = 0
-      TabOrder = 2
-    end
-    object CheckBoxThemed1: TCheckBoxThemed
-      Left = 316
-      Height = 19
-      Top = 176
-      Width = 59
-      Caption = 'Never'
-      Checked = True
-      State = cbChecked
-      TabOrder = 3
-      OnChange = CheckBoxThemed1Change
-    end
-    object Label4: TLabel
-      Left = 24
-      Height = 15
-      Top = 256
-      Width = 65
-      Caption = 'Last login:'
-      ParentColor = False
-    end
-    object Edit3: TEdit
-      Left = 25
-      Height = 25
-      Top = 281
-      Width = 349
-      Anchors = [akTop, akLeft, akRight]
-      Enabled = False
-      TabOrder = 4
-      Text = '16/02/2015 13:55:00'
-    end
-  end
   object Panel2: TPanel
     Left = 0
     Height = 50
-    Top = 337
-    Width = 398
+    Top = 463
+    Width = 499
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 398
-    TabOrder = 1
+    ClientWidth = 499
+    TabOrder = 0
     object BitBtn1: TBitBtn
-      Left = 324
+      Left = 425
       Height = 32
       Top = 8
       Width = 54
@@ -127,7 +30,7 @@ object UserAdminForm: TUserAdminForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 228
+      Left = 329
       Height = 34
       Top = 8
       Width = 81
@@ -138,6 +41,111 @@ object UserAdminForm: TUserAdminForm
       Kind = bkCancel
       ModalResult = 2
       TabOrder = 1
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 463
+    Top = 0
+    Width = 499
+    ActivePage = BasicSheet
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 1
+    object BasicSheet: TTabSheet
+      Caption = 'Basic'
+      ClientHeight = 430
+      ClientWidth = 493
+      object Label5: TLabel
+        Left = 24
+        Height = 15
+        Top = 20
+        Width = 38
+        Caption = 'Login:'
+        ParentColor = False
+      end
+      object Edit4: TEdit
+        Left = 24
+        Height = 25
+        Top = 52
+        Width = 451
+        Anchors = [akTop, akLeft, akRight]
+        TabOrder = 0
+        Text = 'torsten'
+      end
+      object Label6: TLabel
+        Left = 24
+        Height = 15
+        Top = 92
+        Width = 43
+        Caption = 'Name:'
+        ParentColor = False
+      end
+      object Edit5: TEdit
+        Left = 24
+        Height = 25
+        Top = 120
+        Width = 451
+        Anchors = [akTop, akLeft, akRight]
+        TabOrder = 1
+        Text = 'Torsten Christiansen'
+      end
+      object Label7: TLabel
+        Left = 24
+        Height = 15
+        Top = 176
+        Width = 50
+        Caption = 'Expires:'
+        ParentColor = False
+      end
+      object DateEdit2: TDateEdit
+        Left = 24
+        Height = 25
+        Top = 208
+        Width = 452
+        CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+        OKCaption = 'OK'
+        CancelCaption = 'Cancel'
+        DateOrder = doNone
+        ButtonWidth = 23
+        Anchors = [akTop, akLeft, akRight]
+        NumGlyphs = 1
+        Enabled = False
+        MaxLength = 0
+        TabOrder = 2
+      end
+      object CheckBoxThemed2: TCheckBoxThemed
+        Left = 316
+        Height = 19
+        Top = 176
+        Width = 59
+        Caption = 'Never'
+        Checked = True
+        State = cbChecked
+        TabOrder = 3
+        OnChange = CheckBoxThemed1Change
+      end
+      object Label8: TLabel
+        Left = 24
+        Height = 15
+        Top = 256
+        Width = 65
+        Caption = 'Last login:'
+        ParentColor = False
+      end
+      object Edit6: TEdit
+        Left = 25
+        Height = 25
+        Top = 281
+        Width = 450
+        Anchors = [akTop, akLeft, akRight]
+        Enabled = False
+        TabOrder = 4
+        Text = '16/02/2015 13:55:00'
+      end
+    end
+    object GroupsSheet: TTabSheet
+      Caption = 'Groups'
     end
   end
 end

@@ -6,20 +6,22 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, CheckBoxThemed, Forms, Controls, Graphics,
-  Dialogs, ExtCtrls, StdCtrls, EditBtn, Buttons, epiadmin;
+  Dialogs, ExtCtrls, StdCtrls, EditBtn, Buttons, ComCtrls, epiadmin;
 
 type
 
-  { TGroupAdminForm }
+  { TAdminGroupForm }
 
-  TGroupAdminForm = class(TForm)
+  TAdminGroupForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    CheckGroup1: TCheckGroup;
-    Edit2: TEdit;
-    Label2: TLabel;
-    Panel1: TPanel;
+    CheckGroup2: TCheckGroup;
+    Edit3: TEdit;
+    Label3: TLabel;
+    PageControl1: TPageControl;
     Panel2: TPanel;
+    BasicSheet: TTabSheet;
+    UsersSheet: TTabSheet;
   private
     { private declarations }
   public
@@ -27,7 +29,7 @@ type
   end;
 
 var
-  GroupAdminForm: TGroupAdminForm;
+  AdminGroupForm: TAdminGroupForm;
 
 implementation
 
