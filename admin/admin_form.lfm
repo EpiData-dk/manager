@@ -72,12 +72,14 @@ object AdminForm: TAdminForm
           Title.Caption = 'Last login'
           Width = 218
         end>
+      DragMode = dmAutomatic
       ExtendedSelect = False
       FixedCols = 0
       RowCount = 1
       TabOrder = 1
       TitleStyle = tsNative
       OnDblClick = EditUserActionExecute
+      OnStartDrag = UserGridStartDrag
       ColWidths = (
         215
         215
@@ -283,6 +285,8 @@ object AdminForm: TAdminForm
       RowCount = 1
       TabOrder = 1
       TitleStyle = tsNative
+      OnDragDrop = UserGroupGridDragDrop
+      OnDragOver = UserGroupGridDragOver
       ColWidths = (
         214
         215

@@ -27,6 +27,7 @@ object AdminGroupForm: TAdminGroupForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
+      OnClick = BitBtn1Click
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
@@ -64,7 +65,7 @@ object AdminGroupForm: TAdminGroupForm
         Caption = 'Name:'
         ParentColor = False
       end
-      object Edit3: TEdit
+      object CaptionEdit: TEdit
         Left = 24
         Height = 25
         Top = 44
@@ -73,7 +74,7 @@ object AdminGroupForm: TAdminGroupForm
         TabOrder = 0
         Text = 'Admins'
       end
-      object CheckGroup2: TCheckGroup
+      object ManageRightsChkGrp: TCheckGroup
         Left = 24
         Height = 320
         Top = 96

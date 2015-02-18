@@ -33,7 +33,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename;admin"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -62,7 +62,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename;admin"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -98,7 +98,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename;admin"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -132,7 +132,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename;admin"/>
             <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -398,6 +398,7 @@
         <ComponentName Value="FieldValueLabelEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="field_valuelabelseditor_form"/>
       </Unit32>
       <Unit33>
         <Filename Value="project/valuelabelgrid_frame.pas"/>
@@ -405,6 +406,7 @@
         <ComponentName Value="ValueLabelGridFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="valuelabelgrid_frame"/>
       </Unit33>
       <Unit34>
         <Filename Value="project/valuelabelseditor_form2.pas"/>
@@ -412,6 +414,7 @@
         <ComponentName Value="ValueLabelEditor2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="valuelabelseditor_form2"/>
       </Unit34>
       <Unit35>
         <Filename Value="settings/settings_export.pas"/>
