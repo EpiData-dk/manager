@@ -107,6 +107,19 @@ object AdminGroupForm: TAdminGroupForm
     end
     object UsersSheet: TTabSheet
       Caption = 'Users'
+      ClientHeight = 432
+      ClientWidth = 517
+      object UserChkLstBox: TCheckListBox
+        Left = 10
+        Height = 412
+        Top = 10
+        Width = 497
+        Align = alClient
+        BorderSpacing.Around = 10
+        ItemHeight = 0
+        TabOrder = 0
+        TopIndex = -1
+      end
     end
   end
 end

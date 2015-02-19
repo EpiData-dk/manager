@@ -1,23 +1,23 @@
 object AdminUserForm: TAdminUserForm
-  Left = 861
-  Height = 435
-  Top = 337
-  Width = 351
+  Left = 879
+  Height = 407
+  Top = 370
+  Width = 423
   Caption = 'User Properties'
-  ClientHeight = 435
-  ClientWidth = 351
+  ClientHeight = 407
+  ClientWidth = 423
   LCLVersion = '1.5'
   object Panel2: TPanel
     Left = 0
     Height = 50
-    Top = 385
-    Width = 351
+    Top = 357
+    Width = 423
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 351
+    ClientWidth = 423
     TabOrder = 0
     object BitBtn1: TBitBtn
-      Left = 277
+      Left = 349
       Height = 32
       Top = 8
       Width = 54
@@ -31,7 +31,7 @@ object AdminUserForm: TAdminUserForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 181
+      Left = 253
       Height = 34
       Top = 8
       Width = 81
@@ -46,105 +46,207 @@ object AdminUserForm: TAdminUserForm
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 385
+    Height = 357
     Top = 0
-    Width = 351
+    Width = 423
     ActivePage = BasicSheet
     Align = alClient
     TabIndex = 0
     TabOrder = 1
     object BasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 352
-      ClientWidth = 345
+      ClientHeight = 324
+      ClientWidth = 417
       object Label5: TLabel
-        Left = 24
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = BasicSheet
+        Left = 10
         Height = 15
-        Top = 20
+        Top = 10
         Width = 38
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Caption = 'Login:'
         ParentColor = False
       end
       object LoginEdit: TEdit
-        Left = 24
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = Label5
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = BasicSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
         Height = 25
-        Top = 52
-        Width = 303
+        Top = 30
+        Width = 397
         Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
         TabOrder = 0
       end
       object Label6: TLabel
-        Left = 24
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = PasswordEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
         Height = 15
-        Top = 92
+        Top = 120
         Width = 43
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Caption = 'Name:'
         ParentColor = False
       end
       object FullnameEdit: TEdit
-        Left = 24
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = Label6
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = BasicSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
         Height = 25
-        Top = 120
-        Width = 303
+        Top = 140
+        Width = 397
         Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
         TabOrder = 1
       end
       object Label7: TLabel
-        Left = 24
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = FullnameEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
         Height = 15
-        Top = 176
+        Top = 175
         Width = 50
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Caption = 'Expires:'
         ParentColor = False
       end
       object ExpiresDateEdit: TDateEdit
-        Left = 24
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = Label7
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = BasicSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
         Height = 25
-        Top = 208
-        Width = 304
+        Top = 195
+        Width = 397
         CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
         OKCaption = 'OK'
         CancelCaption = 'Cancel'
         DateOrder = doNone
         ButtonWidth = 23
         Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
         NumGlyphs = 1
-        Enabled = False
         MaxLength = 0
         TabOrder = 2
       end
-      object CheckBoxThemed2: TCheckBoxThemed
-        Left = 263
+      object NeverExpireChkBox: TCheckBoxThemed
+        AnchorSideTop.Control = Label7
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = ExpiresDateEdit
+        AnchorSideRight.Side = asrBottom
+        Left = 348
         Height = 19
-        Top = 176
+        Top = 173
         Width = 59
         Anchors = [akTop, akRight]
         Caption = 'Never'
-        Checked = True
-        State = cbChecked
         TabOrder = 3
         OnChange = CheckBoxThemed1Change
       end
       object Label8: TLabel
-        Left = 24
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = ExpiresDateEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
         Height = 15
-        Top = 256
+        Top = 230
         Width = 65
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
         Caption = 'Last login:'
         ParentColor = False
       end
       object LastLoginEdit: TEdit
-        Left = 25
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = Label8
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = BasicSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
         Height = 25
-        Top = 281
-        Width = 302
+        Top = 250
+        Width = 397
         Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
         ReadOnly = True
         TabOrder = 4
+      end
+      object Label1: TLabel
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = LoginEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 65
+        Width = 59
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Password'
+        ParentColor = False
+      end
+      object PasswordEdit: TEditButton
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = Label1
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = BasicSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Top = 85
+        Width = 397
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
+        ButtonCaption = '...'
+        ButtonWidth = 23
+        DirectInput = False
+        EchoMode = emPassword
+        MaxLength = 0
+        NumGlyphs = 1
+        OnButtonClick = PasswordEditButtonClick
+        PasswordChar = '*'
+        TabOrder = 5
       end
     end
     object GroupsSheet: TTabSheet
       Caption = 'Groups'
+      ClientHeight = 324
+      ClientWidth = 417
+      object GroupChkLstBox: TCheckListBox
+        Left = 10
+        Height = 304
+        Top = 10
+        Width = 397
+        Align = alClient
+        BorderSpacing.Around = 10
+        ItemHeight = 0
+        TabOrder = 0
+        TopIndex = -1
+      end
     end
   end
 end

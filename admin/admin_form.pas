@@ -57,22 +57,33 @@ type
     procedure EditGroupActionExecute(Sender: TObject);
     procedure EditUserActionExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure GroupGridSelection(Sender: TObject; aCol, aRow: Integer);
     procedure NewGroupActionExecute(Sender: TObject);
     procedure NewUserActionExecute(Sender: TObject);
     procedure RemoveUserFromGroupActionExecute(Sender: TObject);
+    procedure UserGridMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure UserGridMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
+    procedure UserGridMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure UserGridStartDrag(Sender: TObject; var DragObject: TDragObject);
     procedure UserGroupGridDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure UserGroupGridDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
   private
-    { private declarations }
     FAdmin: TEpiAdmin;
     procedure FillGrids;
     procedure FillUserGrid;
     procedure FillGroupGrid;
+    procedure FillUsersToGroupGrid;
 
   { User methods }
   private
+    FMouseDown: Boolean;
+    FDragging: Boolean;
+    FStartPos: TPoint;
+    FSelection: TGridRect;
     function UserFromGrid: TEpiUser;
     function ShowUserForm(Const User: TEpiUser): TModalResult;
 
@@ -96,11 +107,12 @@ uses
 
 type
 
-  { TImageDragObject }
+  { TUsersDragObject }
 
-  TImageDragObject = class(TDragControlObject)
+  TUsersDragObject = class(TDragControlObject)
   private
     FDragImages: TDragImageList;
+    FUsers: TEpiUsers;
   protected
     function GetDragImages: TDragImageList; override;
   public
@@ -110,22 +122,26 @@ type
 
 { TImageDragObject }
 
-function TImageDragObject.GetDragImages: TDragImageList;
+function TUsersDragObject.GetDragImages: TDragImageList;
 begin
   Result := FDragImages;
 end;
 
-constructor TImageDragObject.Create(AControl: TControl);
+constructor TUsersDragObject.Create(AControl: TControl);
 var
   Bitmap: TBitmap;
 begin
   inherited Create(AControl);
   FDragImages := TDragImageList.Create(AControl);
+  FUsers      := TEpiUsers.Create(nil);
+  FUsers.ItemOwner := false;
+
   AlwaysShowDragImages := True;
 end;
 
-destructor TImageDragObject.Destroy;
+destructor TUsersDragObject.Destroy;
 begin
+  FUsers.Free;
   FDragImages.Free;
   inherited Destroy;
 end;
@@ -144,8 +160,72 @@ begin
 end;
 
 procedure TAdminForm.RemoveUserFromGroupActionExecute(Sender: TObject);
+var
+  T: LongInt;
+  B: LongInt;
+  Group: TEpiGroup;
+  User: TEpiUser;
+  I: LongInt;
 begin
-  //
+  T := UserGroupGrid.Selection.Top;
+  B := UserGroupGrid.Selection.Bottom;
+
+  if (T = 0) and (B = 0) then exit;
+
+  Group := GroupFromGrid;
+  if not Assigned(Group) then exit;
+
+  for I := T to B do
+  begin
+    User := TEpiUser(UserGroupGrid.Objects[0, I]);
+    User.Groups.RemoveItem(Group);
+  end;
+  FillUsersToGroupGrid;
+end;
+
+procedure TAdminForm.UserGridMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  ACol: Longint;
+  ARow: Longint;
+begin
+  FMouseDown := true;
+  FDragging := false;
+  FStartPos := Point(X, Y);
+
+  UserGrid.MouseToCell(X, Y, ACol, ARow);
+  FSelection := UserGrid.Selection;
+  if (ARow < FSelection.Top) or
+     (ARow > FSelection.Bottom)
+  then
+  begin
+    // The click was outside the selection - hence just the one cell need to be dragged.
+    FSelection.Top    := ARow;
+    FSelection.Bottom := ARow;
+  end;
+end;
+
+procedure TAdminForm.UserGridMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  if FDragging then exit;
+  if not FMouseDown then exit;
+  if (Shift <> [ssLeft]) then exit;
+
+  if (Abs(FStartPos.X - X) > 5) or
+     (Abs(FStartPos.Y - Y) > 5)
+  then
+    begin
+      UserGrid.BeginDrag(true, -1);
+      FDragging := true;
+    end;
+end;
+
+procedure TAdminForm.UserGridMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  FMouseDown := false;
+  FDragging := false;
 end;
 
 procedure TAdminForm.UserGridStartDrag(Sender: TObject;
@@ -158,12 +238,17 @@ var
   R: TRect;
   T: LongInt;
   B: LongInt;
+  i: LongInt;
 begin
-  DragObject := TImageDragObject.Create(Sender as TControl);
-  with TImageDragObject(DragObject) do
+  T := FSelection.Top;
+  B := FSelection.Bottom;
+  if (T = 0) and (B = 0) then Exit;
+
+  DragObject := TUsersDragObject.Create(Sender as TControl);
+  with TUsersDragObject(DragObject) do
   begin
-    T := UserGrid.Selection.Top;
-    B := UserGrid.Selection.Bottom;
+    for i := T to B do
+      FUsers.AddItem(Admin.Users[i - 1]);
 
     CR := UserGrid.CellRect(0, T);
     W := CR.Right - CR.Left;
@@ -183,36 +268,41 @@ begin
     Bitmap.Canvas.CopyRect(R, UserGrid.Canvas, CR);
     FDragImages.Add(Bitmap, nil);
     Bitmap.Free;
-
-    CR := UserGrid.CellRect(0,2);
-    Bitmap := TBitmap.Create;
-    Bitmap.Width := W;
-    Bitmap.Height := H;
-    Bitmap.Canvas.CopyRect(R, UserGrid.Canvas, CR);
-    FDragImages.Add(Bitmap, nil);
-    Bitmap.Free;
   end;
 end;
 
 procedure TAdminForm.UserGroupGridDragDrop(Sender, Source: TObject; X,
   Y: Integer);
+var
+  Udo: TUsersDragObject;
+  Group: TEpiGroup;
+  User: TEpiUser;
 begin
-  //
+  Group := GroupFromGrid;
+  if not Assigned(Group) then exit;
+
+  Udo := TUsersDragObject(Source);
+  for User in Udo.FUsers do
+    if User.Groups.IndexOf(Group) < 0 then
+      User.Groups.AddItem(Group);
+
+  FillUsersToGroupGrid;
 end;
 
 procedure TAdminForm.UserGroupGridDragOver(Sender, Source: TObject; X,
   Y: Integer; State: TDragState; var Accept: Boolean);
 begin
-  Accept := (TImageDragObject(Source).Control = UserGrid);
+  Accept :=
+    (Source is TUsersDragObject) and
+    (TUsersDragObject(Source).Control = UserGrid) and
+    (Assigned(GroupFromGrid))
 end;
 
 procedure TAdminForm.FillGrids;
 begin
-  // Fill Users:
   FillUserGrid;
-
-  // Fill Groups:
   FillGroupGrid;
+  FillUsersToGroupGrid;
 end;
 
 procedure TAdminForm.FillUserGrid;
@@ -229,10 +319,14 @@ begin
     UserGrid.Cells[1, Idx] := User.FullName;
 
     if User.ExpireDate > 0 then
-      UserGrid.Cells[2, Idx] := DateToStr(User.ExpireDate);
+      UserGrid.Cells[2, Idx] := DateToStr(User.ExpireDate)
+    else
+      UserGrid.Cells[2, Idx] := '(never)';
 
     if User.LastLogin > 0 then
-      UserGrid.Cells[3, Idx] := DateToStr(User.LastLogin);
+      UserGrid.Cells[3, Idx] := DateTimeToStr(User.LastLogin)
+    else
+      UserGrid.Cells[3, Idx] := '(N/A)';
 
     Inc(Idx);
   end;
@@ -255,6 +349,35 @@ begin
   end;
 end;
 
+procedure TAdminForm.FillUsersToGroupGrid;
+var
+  Group: TEpiGroup;
+  User: TEpiUser;
+  LocalUsers: TEpiUsers;
+  Idx: Integer;
+begin
+  Group := GroupFromGrid;
+  if not Assigned(Group) then Exit;
+
+  LocalUsers := TEpiUsers.Create(nil);
+  LocalUsers.ItemOwner := false;
+
+  for User in Admin.Users do
+    if User.Groups.IndexOf(Group) >= 0 then
+      LocalUsers.AddItem(User);
+
+  Idx := 1;
+  UserGroupGrid.RowCount := LocalUsers.Count + 1;
+  for User In LocalUsers do
+  begin
+    UserGroupGrid.Cells[0, Idx] := User.Login;
+    UserGroupGrid.Cells[1, Idx] := User.FullName;
+    UserGroupGrid.Objects[0, Idx] := User;
+    Inc(Idx);
+  end;
+  LocalUsers.Free;
+end;
+
 function TAdminForm.UserFromGrid: TEpiUser;
 begin
   Result := nil;
@@ -270,6 +393,7 @@ begin
 
   F := TAdminUserForm.Create(Self);
   F.User := User;
+  F.AdminGroups := Admin.Groups;
   Result := F.ShowModal;
   F.Free;
 end;
@@ -289,6 +413,7 @@ begin
 
   F := TAdminGroupForm.Create(Self);
   F.Group := Group;
+  F.AdminUsers := Admin.Users;
   Result := F.ShowModal;
   F.Free;
 end;
@@ -329,6 +454,7 @@ begin
     Exit;
 
   FillGroupGrid;
+  FillUsersToGroupGrid;
 end;
 
 procedure TAdminForm.DeleteGroupActionExecute(Sender: TObject);
@@ -354,8 +480,27 @@ begin
 end;
 
 procedure TAdminForm.AddUserToGroupActionExecute(Sender: TObject);
+var
+  T: LongInt;
+  B: LongInt;
+  User: TEpiUser;
+  Group: TEpiGroup;
+  i: LongInt;
 begin
-  //
+  T := UserGrid.Selection.Top;
+  B := UserGrid.Selection.Bottom;
+
+  if (T = 0) or (B = 0) then exit;
+  Group := GroupFromGrid;
+  if not Assigned(Group) then exit;
+
+  for i := T to B do
+  begin
+    User := Admin.Users[i-1];
+    if User.Groups.IndexOf(Group) < 0 then
+      User.Groups.AddItem(Group);
+  end;
+  FillUsersToGroupGrid;
 end;
 
 procedure TAdminForm.EditUserActionExecute(Sender: TObject);
@@ -369,6 +514,11 @@ end;
 procedure TAdminForm.FormShow(Sender: TObject);
 begin
   FillGrids;
+end;
+
+procedure TAdminForm.GroupGridSelection(Sender: TObject; aCol, aRow: Integer);
+begin
+  FillUsersToGroupGrid;
 end;
 
 procedure TAdminForm.NewGroupActionExecute(Sender: TObject);

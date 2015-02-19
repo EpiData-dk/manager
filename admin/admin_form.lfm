@@ -72,13 +72,15 @@ object AdminForm: TAdminForm
           Title.Caption = 'Last login'
           Width = 218
         end>
-      DragMode = dmAutomatic
       ExtendedSelect = False
       FixedCols = 0
       RowCount = 1
       TabOrder = 1
       TitleStyle = tsNative
       OnDblClick = EditUserActionExecute
+      OnMouseDown = UserGridMouseDown
+      OnMouseMove = UserGridMouseMove
+      OnMouseUp = UserGridMouseUp
       OnStartDrag = UserGridStartDrag
       ColWidths = (
         215
@@ -176,10 +178,14 @@ object AdminForm: TAdminForm
           Title.Caption = 'Management Rights'
           Width = 213
         end>
+      ExtendedSelect = False
       FixedCols = 0
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goSmoothScroll]
       RowCount = 1
       TabOrder = 1
       TitleStyle = tsNative
+      OnDblClick = EditGroupActionExecute
+      OnSelection = GroupGridSelection
       ColWidths = (
         212
         213

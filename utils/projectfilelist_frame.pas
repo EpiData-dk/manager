@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Grids, ComCtrls,
-  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile;
+  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile, epiadmin;
 
 type
 
@@ -54,7 +54,9 @@ type
     procedure  DoSelectionChanged;
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  DoAfterImportFile(Document: TEpiDocument; Const FileName: string);
-    procedure  RecImportPassword(Sender: TObject; var Login: string; var Password: string);
+    procedure  RecImportPassword(Sender: TObject;
+      RequestType: TEpiRequestPasswordType;
+      var Login: string; var Password: string);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -350,7 +352,8 @@ begin
 end;
 
 procedure TProjectFileListFrame.RecImportPassword(Sender: TObject;
-  var Login: string; var Password: string);
+  RequestType: TEpiRequestPasswordType; var Login: string; var Password: string
+  );
 begin
   Login := '';
   Password :=
