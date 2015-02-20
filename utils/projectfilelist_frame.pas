@@ -54,9 +54,10 @@ type
     procedure  DoSelectionChanged;
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  DoAfterImportFile(Document: TEpiDocument; Const FileName: string);
-    procedure  RecImportPassword(Sender: TObject;
+    function  RecImportPassword(Sender: TObject;
       RequestType: TEpiRequestPasswordType;
-      var Login: string; var Password: string);
+      RequestNo:   Integer;
+      var Login: string; var Password: string): TEpiRequestPasswordResponse;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -351,14 +352,19 @@ begin
     FOnAfterImportFile(Self, Document, FileName);
 end;
 
-procedure TProjectFileListFrame.RecImportPassword(Sender: TObject;
-  RequestType: TEpiRequestPasswordType; var Login: string; var Password: string
-  );
+function TProjectFileListFrame.RecImportPassword(Sender: TObject;
+  RequestType: TEpiRequestPasswordType; RequestNo: Integer; var Login: string;
+  var Password: string): TEpiRequestPasswordResponse;
 begin
   Login := '';
   Password :=
     PasswordBox('IMPORTANT!',
     ' Password needed for "' + ExtractFileName(FCurrentFile) + '":');
+
+  if (RequestNo < 3) then
+    Result := rprAskOnFail
+  else
+    Result := rprStopOnFail;
 end;
 
 procedure TProjectFileListFrame.StructureGridCheckboxToggled(sender: TObject;

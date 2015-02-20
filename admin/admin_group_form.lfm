@@ -15,7 +15,7 @@ object AdminGroupForm: TAdminGroupForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 523
-    TabOrder = 0
+    TabOrder = 1
     object BitBtn1: TBitBtn
       Left = 449
       Height = 32
@@ -49,10 +49,10 @@ object AdminGroupForm: TAdminGroupForm
     Height = 465
     Top = 0
     Width = 523
-    ActivePage = BasicSheet
+    ActivePage = UsersSheet
     Align = alClient
-    TabIndex = 0
-    TabOrder = 1
+    TabIndex = 1
+    TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
       ClientHeight = 432

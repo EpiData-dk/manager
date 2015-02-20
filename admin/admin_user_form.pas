@@ -14,7 +14,7 @@ type
   { TAdminUserForm }
 
   TAdminUserForm = class(TForm)
-    BitBtn1: TBitBtn;
+    OkBtn: TBitBtn;
     BitBtn2: TBitBtn;
     NeverExpireChkBox: TCheckBoxThemed;
     GroupChkLstBox: TCheckListBox;
@@ -32,7 +32,7 @@ type
     Panel2: TPanel;
     BasicSheet: TTabSheet;
     GroupsSheet: TTabSheet;
-    procedure BitBtn1Click(Sender: TObject);
+    procedure OkBtnClick(Sender: TObject);
     procedure CheckBoxThemed1Change(Sender: TObject);
     procedure PasswordEditButtonClick(Sender: TObject);
   private
@@ -87,10 +87,11 @@ begin
     begin
       PasswordEdit.Text := PW1;
       FPasswordModified := true;
+      OkBtn.Enabled     := true;
     end;
 end;
 
-procedure TAdminUserForm.BitBtn1Click(Sender: TObject);
+procedure TAdminUserForm.OkBtnClick(Sender: TObject);
 var
   Group: TEpiGroup;
   i: Integer;
@@ -131,6 +132,8 @@ begin
   ExpiresDateEdit.Date := User.ExpireDate;
 
   PasswordEdit.Text    := User.Password;
+  if (User.Password = '') then
+    OkBtn.Enabled := false;
 
   if User.LastLogin > 0 then
     LastLoginEdit.Text := DateTimeToStr(User.LastLogin);

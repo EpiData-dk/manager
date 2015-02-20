@@ -15,8 +15,8 @@ object AdminUserForm: TAdminUserForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 423
-    TabOrder = 0
-    object BitBtn1: TBitBtn
+    TabOrder = 1
+    object OkBtn: TBitBtn
       Left = 349
       Height = 32
       Top = 8
@@ -27,7 +27,7 @@ object AdminUserForm: TAdminUserForm
       DefaultCaption = True
       Kind = bkOK
       ModalResult = 1
-      OnClick = BitBtn1Click
+      OnClick = OkBtnClick
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
@@ -52,7 +52,7 @@ object AdminUserForm: TAdminUserForm
     ActivePage = BasicSheet
     Align = alClient
     TabIndex = 0
-    TabOrder = 1
+    TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
       ClientHeight = 324
@@ -148,7 +148,7 @@ object AdminUserForm: TAdminUserForm
         BorderSpacing.Right = 10
         NumGlyphs = 1
         MaxLength = 0
-        TabOrder = 2
+        TabOrder = 4
       end
       object NeverExpireChkBox: TCheckBoxThemed
         AnchorSideTop.Control = Label7
@@ -192,7 +192,7 @@ object AdminUserForm: TAdminUserForm
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
         ReadOnly = True
-        TabOrder = 4
+        TabOrder = 5
       end
       object Label1: TLabel
         AnchorSideLeft.Control = BasicSheet
@@ -229,7 +229,7 @@ object AdminUserForm: TAdminUserForm
         NumGlyphs = 1
         OnButtonClick = PasswordEditButtonClick
         PasswordChar = '*'
-        TabOrder = 5
+        TabOrder = 2
       end
     end
     object GroupsSheet: TTabSheet
