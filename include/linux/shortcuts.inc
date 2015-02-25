@@ -88,5 +88,13 @@ begin
   V_GRID_DeleteRow                := KeyToShortCut(VK_DELETE, []);
   V_GRID_DeleteRow_Fast           := KeyToShortCut(VK_DELETE, [ssShift]);
   V_GRID_InsertRow                := KeyToShortCut(VK_INSERT, []);
+
+  A_NewGroup                      := KeyToShortCut(VK_G, [ssCtrl]);
+  A_NewUser                       := KeyToShortCut(VK_U, [ssCtrl]);
+  A_DeleteGroup                   := KeyToShortCut(VK_UNKNOWN, []);
+  A_DeleteUser                    := KeyToShortCut(VK_UNKNOWN, []);
+  A_AddUserToGroup                := KeyToShortCut(VK_UNKNOWN, []);
+  A_RemoveUserFromGroup           := KeyToShortCut(VK_UNKNOWN, []);
+
 end;
 

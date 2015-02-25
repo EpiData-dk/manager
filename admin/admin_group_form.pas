@@ -50,8 +50,17 @@ procedure TAdminGroupForm.BitBtn1Click(Sender: TObject);
 var
   User: TEpiUser;
   i: Integer;
+  Item: TEpiManagerRight;
 begin
   Group.Caption.Text := CaptionEdit.Text;
+
+  Group.ManageRights := [];
+  for i := 0 to ManageRightsChkGrp.Items.Count - 1 do
+  begin
+    Item := TEpiManagerRight(PtrInt(ManageRightsChkGrp.Items.Objects[I]));
+    if ManageRightsChkGrp.Checked[i] then
+      Group.ManageRights := Group.ManageRights + [Item];
+  end;
 
   for i := 0 to UserChkLstBox.Count - 1 do
   begin
@@ -70,8 +79,15 @@ begin
 end;
 
 procedure TAdminGroupForm.FillRights;
+var
+  Item: TEpiManagerRight;
+  I: Integer;
 begin
-  // TODO
+  for I := 0 to ManageRightsChkGrp.Items.Count - 1 do
+  begin
+    Item := TEpiManagerRight(PtrInt(ManageRightsChkGrp.Items.Objects[I]));
+    ManageRightsChkGrp.Checked[I] := (Item in Group.ManageRights);
+  end;
 end;
 
 procedure TAdminGroupForm.FillUserList;
@@ -97,12 +113,25 @@ begin
 
   CaptionEdit.Text := Group.Caption.Text;
 
+  FillRights;
   FillUserList;
+  CaptionEdit.SetFocus;
 end;
 
 constructor TAdminGroupForm.Create(TheOwner: TComponent);
+var
+  Item: TEpiManagerRight;
 begin
   inherited Create(TheOwner);
+
+  ManageRightsChkGrp.Items.BeginUpdate;
+  ManageRightsChkGrp.Items.Clear;
+
+  for Item in TEpiManagerRight do
+    ManageRightsChkGrp.Items.AddObject(EpiManagerRightCaptions[Item], TObject(PtrInt(Item)));
+
+  ManageRightsChkGrp.Items.EndUpdate;
+
 
   OnShow := @FormShow;
 end;

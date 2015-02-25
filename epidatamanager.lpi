@@ -9,7 +9,7 @@
       <Title Value="EpiData Manager"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
-      <Icon Value="0"/>
+      <Icon Value="-1"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
@@ -372,7 +372,6 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>

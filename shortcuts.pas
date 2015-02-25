@@ -92,6 +92,12 @@ var
   V_GRID_InsertRow:
     TShortCut;
 
+  // Admin form
+  A_NewGroup, A_NewUser,
+  A_DeleteGroup, A_DeleteUser,
+  A_AddUserToGroup, A_RemoveUserFromGroup:
+    TShortCut;
+
 implementation
 
 uses

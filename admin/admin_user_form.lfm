@@ -83,6 +83,7 @@ object AdminUserForm: TAdminUserForm
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
+        OnKeyDown = LoginEditKeyDown
         TabOrder = 0
       end
       object Label6: TLabel
@@ -112,7 +113,7 @@ object AdminUserForm: TAdminUserForm
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         BorderSpacing.Right = 10
-        TabOrder = 1
+        TabOrder = 2
       end
       object Label7: TLabel
         AnchorSideLeft.Control = BasicSheet
@@ -228,8 +229,9 @@ object AdminUserForm: TAdminUserForm
         MaxLength = 0
         NumGlyphs = 1
         OnButtonClick = PasswordEditButtonClick
+        OnKeyDown = PasswordEditKeyDown
         PasswordChar = '*'
-        TabOrder = 2
+        TabOrder = 1
       end
     end
     object GroupsSheet: TTabSheet

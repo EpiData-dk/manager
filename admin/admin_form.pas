@@ -77,6 +77,7 @@ type
     procedure FillUserGrid;
     procedure FillGroupGrid;
     procedure FillUsersToGroupGrid;
+    procedure UpdateShortcuts;
 
   { User methods }
   private
@@ -103,7 +104,7 @@ implementation
 {$R *.lfm}
 
 uses
-  admin_user_form, admin_group_form, types;
+  admin_user_form, admin_group_form, types, shortcuts;
 
 type
 
@@ -378,6 +379,16 @@ begin
   LocalUsers.Free;
 end;
 
+procedure TAdminForm.UpdateShortcuts;
+begin
+  NewGroupAction.ShortCut            := A_NewGroup;
+  NewUserAction.ShortCut             := A_NewUser;
+  DeleteGroupAction.ShortCut         := A_DeleteGroup;
+  DeleteUserAction.ShortCut          := A_DeleteUser;
+  AddUserToGroupAction.ShortCut      := A_AddUserToGroup;
+  RemoveUserFromGroupAction.ShortCut := A_RemoveUserFromGroup;
+end;
+
 function TAdminForm.UserFromGrid: TEpiUser;
 begin
   Result := nil;
@@ -513,6 +524,7 @@ end;
 
 procedure TAdminForm.FormShow(Sender: TObject);
 begin
+  UpdateShortcuts;
   FillGrids;
 end;
 

@@ -5,7 +5,7 @@ unit admin_user_form;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, CheckBoxThemed, Forms, Controls, Graphics,
+  Classes, SysUtils, types, FileUtil, CheckBoxThemed, Forms, Controls, Graphics,
   Dialogs, ExtCtrls, StdCtrls, ComboEx, EditBtn, Buttons, ComCtrls, CheckLst,
   epiadmin;
 
@@ -32,17 +32,26 @@ type
     Panel2: TPanel;
     BasicSheet: TTabSheet;
     GroupsSheet: TTabSheet;
+    procedure LoginEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure OkBtnClick(Sender: TObject);
     procedure CheckBoxThemed1Change(Sender: TObject);
     procedure PasswordEditButtonClick(Sender: TObject);
+    procedure PasswordEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    FHintWindow: THintWindow;
+    procedure ShowHint(Const Ctrl: TControl; Const Msg: String);
   private
     FPasswordModified: Boolean;
     FAdminGroups: TEpiGroups;
     FUser: TEpiUser;
+    procedure PasswordEditOpen(Data: PtrInt);
     procedure FormShow(Sender: TObject);
     procedure FillGroupList;
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     property User: TEpiUser read FUser write FUser;
     property AdminGroups: TEpiGroups read FAdminGroups write FAdminGroups;
   end;
@@ -50,6 +59,9 @@ type
 implementation
 
 {$R *.lfm}
+
+uses
+  LCLType;
 
 { TAdminUserForm }
 
@@ -91,12 +103,52 @@ begin
     end;
 end;
 
+procedure TAdminUserForm.PasswordEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_RETURN) then
+    Application.QueueAsyncCall(@PasswordEditOpen, 0);
+end;
+
+procedure TAdminUserForm.ShowHint(const Ctrl: TControl; const Msg: String);
+var
+  R: types.TRect;
+  P: TPoint;
+begin
+  if (Msg = '') and (Ctrl = nil) then
+  begin
+    FHintWindow.Hide;
+    Exit;
+  end;
+
+  R := FHintWindow.CalcHintRect(0, Msg, nil);
+  P := Ctrl.ClientToScreen(Point(0, Ctrl.Height + 2));
+  OffsetRect(R, P.X, P.Y);
+  FHintWindow.ActivateHint(R, Msg);
+end;
+
+procedure TAdminUserForm.PasswordEditOpen(Data: PtrInt);
+begin
+  PasswordEditButtonClick(nil);
+end;
+
 procedure TAdminUserForm.OkBtnClick(Sender: TObject);
 var
   Group: TEpiGroup;
   i: Integer;
 begin
-  // TODO: Check for login etc...
+  if (not User.ValidateRename(LoginEdit.Text, false))
+  then
+    begin
+      ShowHint(
+        LoginEdit,
+        'Login invalid or already exists!' + LineEnding +
+        'The login must consist of the characters: A-Z, a-z and/or 0-9'
+      );
+      ModalResult := mrNone;
+      Exit;
+    end;
+
   User.Login      := LoginEdit.Text;
   User.FullName   := FullnameEdit.Text;
   User.ExpireDate := ExpiresDateEdit.Date;
@@ -120,6 +172,13 @@ begin
   end;
 end;
 
+procedure TAdminUserForm.LoginEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = VK_RETURN) then
+    LoginEdit.Parent.SelectNext(LoginEdit, true, true);
+end;
+
 procedure TAdminUserForm.FormShow(Sender: TObject);
 begin
   PageControl1.ActivePage := BasicSheet;
@@ -136,9 +195,12 @@ begin
     OkBtn.Enabled := false;
 
   if User.LastLogin > 0 then
-    LastLoginEdit.Text := DateTimeToStr(User.LastLogin);
+    LastLoginEdit.Text := DateTimeToStr(User.LastLogin)
+  else
+    LastLoginEdit.Text := '(N/A)';
 
   FillGroupList;
+  LoginEdit.SetFocus;
 end;
 
 procedure TAdminUserForm.FillGroupList;
@@ -163,7 +225,17 @@ begin
   inherited Create(TheOwner);
   FPasswordModified := false;
 
+  FHintWindow       := THintWindow.Create(Self);
+  FHintWindow.AutoHide     := true;
+  FHintWindow.HideInterval := 2500;  //2.5 secs.
+
   OnShow := @FormShow;
+end;
+
+destructor TAdminUserForm.Destroy;
+begin
+  FHintWindow.Free;
+  inherited Destroy;
 end;
 
 end.

@@ -49,9 +49,9 @@ object AdminGroupForm: TAdminGroupForm
     Height = 465
     Top = 0
     Width = 523
-    ActivePage = UsersSheet
+    ActivePage = BasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
