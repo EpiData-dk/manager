@@ -14,7 +14,8 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <BuildNr Value="25"/>
+      <RevisionNr Value="1"/>
+      <BuildNr Value="26"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -289,7 +290,6 @@
         <ComponentName Value="Settings_PathsFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_advanced_frame"/>
       </Unit12>
       <Unit13>
         <Filename Value="settings/settings2_interface.pas"/>
@@ -334,7 +334,6 @@
         <ComponentName Value="Settings_GeneralFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_general_frame"/>
       </Unit20>
       <Unit21>
         <Filename Value="tools/toolsform.pas"/>
