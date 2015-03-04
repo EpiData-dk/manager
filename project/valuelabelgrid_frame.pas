@@ -72,10 +72,10 @@ type
   { TValidatedStringEditLink }
 
   TValidatedStringEditLink = class(TStringEditLink, IVTEditLink)
-    procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FEditor: TValueLabelGridFrame;
     FInitialText: string;
+    procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   public
     constructor Create; override;
     function BeginEdit: Boolean; override; stdcall;
