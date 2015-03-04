@@ -97,7 +97,11 @@ begin
      // if Column = 0, so we may safely send a postmessage here!
      (FTree.EndEditNode)
   then
-    PostMessage(FEditor.Handle, LM_VLG_NEWVALUELABEL, 0, 0);
+    begin
+      PostMessage(FEditor.Handle, LM_VLG_NEWVALUELABEL, 0, 0);
+      Key := VK_UNKNOWN;
+      Shift := [];
+    end;
 
   if (Key = VK_C) and
      (Shift = [ssCtrlOS])
