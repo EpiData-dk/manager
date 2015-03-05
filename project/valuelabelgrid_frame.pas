@@ -100,7 +100,6 @@ begin
     begin
       PostMessage(FEditor.Handle, LM_VLG_NEWVALUELABEL, 0, 0);
       Key := VK_UNKNOWN;
-      Shift := [];
     end;
 
   if (Key = VK_C) and

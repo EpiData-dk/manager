@@ -230,6 +230,7 @@
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="managerprocs"/>
       </Unit3>
       <Unit4>
         <Filename Value="project/project_settings.pas"/>
@@ -269,6 +270,7 @@
         <ComponentName Value="SettingsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="settings2"/>
       </Unit9>
       <Unit10>
         <Filename Value="settings/settings_visualdesign_frame.pas"/>
@@ -294,10 +296,12 @@
       <Unit13>
         <Filename Value="settings/settings2_interface.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="settings2_interface"/>
       </Unit13>
       <Unit14>
         <Filename Value="settings/settings2_var.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="settings2_var"/>
       </Unit14>
       <Unit15>
         <Filename Value="designer/design_properties_headingframe.pas"/>
@@ -404,7 +408,6 @@
         <ComponentName Value="ValueLabelGridFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="valuelabelgrid_frame"/>
       </Unit33>
       <Unit34>
         <Filename Value="project/valuelabelseditor_form2.pas"/>
@@ -426,6 +429,7 @@
         <ComponentName Value="ExportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="export_form"/>
       </Unit36>
       <Unit37>
         <Filename Value="export/export_stata_frame.pas"/>
@@ -433,6 +437,7 @@
         <ComponentName Value="ExportStataFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="export_stata_frame"/>
       </Unit37>
       <Unit38>
         <Filename Value="export/export_customvaluelabel_frame.pas"/>
