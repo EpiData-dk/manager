@@ -507,6 +507,7 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit49>
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
@@ -773,7 +774,7 @@
       </Debugging>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG1
+      <CustomOptions Value="-dEPI_DEBUG
 -dMEM_LEAK_FINDER1
 -dEPI_DEVELOPMENT"/>
       <ExecuteBefore>

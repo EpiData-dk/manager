@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 802
+  Left = 230
   Height = 658
-  Top = 318
+  Top = 273
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
   Caption = 'MainForm'
-  ClientHeight = 635
+  ClientHeight = 658
   ClientWidth = 886
   Menu = MainMenu1
   OnActivate = FormActivate
@@ -19,7 +19,7 @@ object MainForm: TMainForm
   LCLVersion = '1.5'
   object PageControl1: TPageControl
     Left = 0
-    Height = 597
+    Height = 620
     Top = 38
     Width = 886
     Align = alClient
@@ -44,10 +44,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 523
-      Height = 27
-      Top = 6
-      Width = 65
+      Left = 572
+      Height = 22
+      Top = 8
+      Width = 78
       Action = ExportAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -59,10 +59,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 427
-      Height = 27
-      Top = 6
-      Width = 81
+      Left = 467
+      Height = 22
+      Top = 8
+      Width = 90
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -73,10 +73,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 245
-      Height = 27
-      Top = 6
-      Width = 73
+      Left = 264
+      Height = 22
+      Top = 8
+      Width = 84
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Dataform'
@@ -88,10 +88,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 333
-      Height = 27
-      Top = 6
-      Width = 79
+      Left = 363
+      Height = 22
+      Top = 8
+      Width = 89
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Document'
@@ -104,10 +104,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 126
-      Height = 27
-      Top = 6
-      Width = 104
+      Left = 135
+      Height = 22
+      Top = 8
+      Width = 114
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -120,9 +120,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 27
-      Top = 6
-      Width = 100
+      Height = 22
+      Top = 8
+      Width = 109
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = '&Select Project'
@@ -137,6 +137,18 @@ object MainForm: TMainForm
     Images = DM.Icons16
     left = 264
     top = 400
+    object AppleMenuItem: TMenuItem
+      Caption = 'epidatamanager'
+      object MenuItem35: TMenuItem
+        Action = ShowAboutAction
+      end
+      object MenuItem36: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem37: TMenuItem
+        Action = SettingsAction
+      end
+    end
     object FileMenuItem: TMenuItem
       Caption = '&File'
       OnClick = FileMenuItemClick
@@ -434,7 +446,7 @@ object MainForm: TMainForm
     end
     object SettingsAction: TAction
       Category = 'Edit'
-      Caption = 'Preferences'
+      Caption = 'Preferences...'
       Hint = 'Settings'
       OnExecute = SettingsActionExecute
     end

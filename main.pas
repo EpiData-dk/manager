@@ -16,6 +16,10 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    AppleMenuItem: TMenuItem;
+    MenuItem35: TMenuItem;
+    MenuItem36: TMenuItem;
+    MenuItem37: TMenuItem;
     RecentFilesActionList: TActionList;
     AppendAction: TAction;
     DataFormBtn: TBitBtn;
@@ -651,6 +655,16 @@ var
   Fn: String;
   i: Integer;
 begin
+  {$IFDEF darwin}
+  AppleMenuItem.Visible := true;
+  AppleMenuItem.Caption := #$EF#$A3#$BF;
+  {$ELSE}
+  AppleMenuItem.Visible := false;
+  {$ENDIF}
+  AboutMenuItem.Visible := not (AppleMenuItem.Visible);
+  HelpMenuDivider3.Visible := not (AppleMenuItem.Visible);
+  SettingsMenuItem.Visible := not (AppleMenuItem.Visible);
+
   Modified := false;
   Screen.AddHandlerActiveFormChanged(@FormChanged);
 
