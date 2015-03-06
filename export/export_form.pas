@@ -376,8 +376,14 @@ begin
   // Export File Name
   ExportFileNameEdit.Filter := GetEpiDialogFilter(DialogFilters + [dfAll]);
   ExportFileNameEdit.InitialDir := ManagerSettings.WorkingDirUTF8;
-  ExportFileNameEdit.FileName := ChangeFileExt(FFileName,
-    '_' + StringReplace(Doc.DataFiles[0].Caption.Text, ' ', '_', [rfReplaceAll]) + '_' + IntToStr(FDoc.CycleNo) + '.test');
+
+  if (Doc.DataFiles.Count > 1) then
+    ExportFileNameEdit.FileName := ChangeFileExt(FFileName,
+      '_' + StringReplace(Doc.DataFiles[0].Caption.Text, ' ', '_', [rfReplaceAll]) +
+      '_' + IntToStr(FDoc.CycleNo) + '.test')
+  else
+    ExportFileNameEdit.FileName := ChangeFileExt(FFileName,
+      '_' + IntToStr(FDoc.CycleNo) + '.test');
 
   // Export types and their frames
   for i := 0 to RegisterList.Count - 1 do
