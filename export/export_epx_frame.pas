@@ -26,6 +26,7 @@ type
     function GetExportName: string;
     function GetFileDialogExtensions: TEpiDialogFilters;
     function ExportHeadings: boolean;
+    function ExportRelated: boolean;
     function CheckExportAllowed(Const Setting: TEpiExportSetting;
       Const Doc: TEpiDocument;
       out ErrorText: string): boolean;
@@ -77,6 +78,11 @@ end;
 function TExportEPXFrame.ExportHeadings: boolean;
 begin
   Result := true;
+end;
+
+function TExportEPXFrame.ExportRelated: boolean;
+begin
+  result := true;
 end;
 
 function TExportEPXFrame.CheckExportAllowed(const Setting: TEpiExportSetting;

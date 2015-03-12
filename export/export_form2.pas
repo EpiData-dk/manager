@@ -16,7 +16,7 @@ type
 
   TExportForm2 = class(TForm)
     AllRecordRBtn: TRadioButton;
-    BitBtn1: TBitBtn;
+    OkBtn: TBitBtn;
     BitBtn2: TBitBtn;
     ProjectOptionsChkGrp: TCheckGroup;
     DirectoryEdit1: TDirectoryEdit;
@@ -40,6 +40,7 @@ type
     Splitter2: TSplitter;
     ToRecordEdit: TEdit;
     procedure ExportTypeComboSelect(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure ProjectOptionsChkGrpItemClick(Sender: TObject; Index: integer);
   private
@@ -125,6 +126,18 @@ begin
 
   UpdateFileNameExtensions;
   FDataFormViewer.ShowHeadings := IFrame.ExportHeadings;
+  ProjectOptionsChkGrp.CheckEnabled[3] := IFrame.ExportRelated;
+  if (ProjectOptionsChkGrp.Checked[3]) and (not IFrame.ExportRelated) then
+  begin
+    ProjectOptionsChkGrp.Checked[3] := false;
+    ProjectOptionsChkGrpItemClick(ProjectOptionsChkGrp, 3);
+  end;
+end;
+
+procedure TExportForm2.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    SaveFormPosition(Self, Self.ClassName);
 end;
 
 procedure TExportForm2.FormShow(Sender: TObject);
@@ -150,6 +163,7 @@ begin
   ProjectOptionsChkGrp.Checked[0] := false;
   ProjectOptionsChkGrp.Checked[1] := ManagerSettings.ExportDeleted;
   ProjectOptionsChkGrp.Checked[2] := ManagerSettings.ExportCreateReport;
+  ProjectOptionsChkGrp.Checked[3] := false;
 
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);
@@ -160,6 +174,16 @@ procedure TExportForm2.ProjectOptionsChkGrpItemClick(Sender: TObject;
 begin
   // If exporting structure there is no need to add options for ranges, etc.
   DataformRecordGrpBox.Enabled := (not ProjectOptionsChkGrp.Checked[0]);
+  ProjectOptionsChkGrp.CheckEnabled[1] := (not ProjectOptionsChkGrp.Checked[0]);
+
+  if (ProjectOptionsChkGrp.Checked[3]) then
+  begin
+    FProjectTree.CheckType :=  pctTriState;
+    FDataFormViewer.KeyFieldsSelectState := kssAlwaysSelected;
+  end else begin
+    FProjectTree.CheckType :=  pctIndividual;
+    FDataFormViewer.KeyFieldsSelectState := kssCustomSelected;
+  end;
 end;
 
 procedure TExportForm2.SetDocumentFile(AValue: TEpiDocumentFile);

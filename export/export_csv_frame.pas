@@ -44,6 +44,7 @@ type
     procedure SetSettings(Data: PManagerSettings);
     function ApplySettings: boolean;
     function ExportHeadings: boolean;
+    function ExportRelated: boolean;
     function CheckExportAllowed(Const Setting: TEpiExportSetting;
       Const Doc: TEpiDocument;
       out ErrorText: string): boolean;
@@ -168,6 +169,11 @@ begin
 end;
 
 function TExportCSVFrame.ExportHeadings: boolean;
+begin
+  result := false;
+end;
+
+function TExportCSVFrame.ExportRelated: boolean;
 begin
   result := false;
 end;

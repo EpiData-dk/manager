@@ -39,6 +39,7 @@ type
     procedure SetSettings(Data: PManagerSettings);
     function  ApplySettings: boolean;
     function ExportHeadings: boolean;
+    function ExportRelated: boolean;
     function CheckExportAllowed(Const Setting: TEpiExportSetting;
       Const Doc: TEpiDocument;
       out ErrorText: string): boolean;
@@ -195,6 +196,12 @@ end;
 function TExportDDIFrame.ExportHeadings: boolean;
 begin
   result := true;
+end;
+
+function TExportDDIFrame.ExportRelated: boolean;
+begin
+  // TODO: DDI can handle related, but we do not support it at the moment
+  result := false;
 end;
 
 function TExportDDIFrame.CheckExportAllowed(const Setting: TEpiExportSetting;
