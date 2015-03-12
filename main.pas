@@ -7,9 +7,10 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
-  project_frame, LMessages, manager_messages, epidocument, report_base,
-  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile;
+  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons, project_frame,
+  LMessages, StdCtrls, manager_messages, epidocument, report_base,
+  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc,
+  epiopenfile;
 
 type
 
@@ -17,6 +18,7 @@ type
 
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
+    Button1: TButton;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
     MenuItem37: TMenuItem;
@@ -181,6 +183,7 @@ type
     PageControl1: TPageControl;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure ClearAllDataFormsMenuItemClick(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
@@ -305,7 +308,7 @@ uses
   append_form, epitools_append,
   manager_globals,
   report_project_validation_frame2, reports_form,
-  epiv_checkversionform;
+  epiv_checkversionform, export_form2;
 
 type
   TAccessActionList = class(TActionList);
@@ -632,6 +635,30 @@ begin
     Handler.Free;
     if LocalDoc then
       DocFile.Free;
+  end;
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+var
+  local: boolean;
+  DF: TEpiDocumentFile;
+  F: TExportForm2;
+begin
+  try
+    DF := ToolsCheckOpenFile(false, local);
+
+    if (not Assigned(DF)) then
+      Exit;
+
+    F := TExportForm2.Create(Self);
+    F.DocumentFile := DF;
+    F.ShowModal;
+    F.Free;
+
+
+  finally
+    if local then
+      DF.Free;
   end;
 end;
 

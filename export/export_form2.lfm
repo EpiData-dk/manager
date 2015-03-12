@@ -1,0 +1,311 @@
+object ExportForm2: TExportForm2
+  Left = 576
+  Height = 602
+  Top = 323
+  Width = 687
+  Caption = 'ExportForm2'
+  ClientHeight = 602
+  ClientWidth = 687
+  OnShow = FormShow
+  LCLVersion = '1.5'
+  object ExportPG: TPageControl
+    Left = 0
+    Height = 552
+    Top = 0
+    Width = 687
+    ActivePage = ExportTabSheet
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 0
+    object ExportTabSheet: TTabSheet
+      Caption = 'Export'
+      ClientHeight = 519
+      ClientWidth = 681
+      object Panel3: TPanel
+        Left = 0
+        Height = 136
+        Top = 0
+        Width = 681
+        Align = alTop
+        BorderWidth = 10
+        ClientHeight = 136
+        ClientWidth = 681
+        TabOrder = 0
+        object ExportTypeCombo: TComboBox
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = ProjectOptionsChkGrp
+          AnchorSideRight.Control = ProjectOptionsChkGrp
+          Left = 120
+          Height = 29
+          Top = 11
+          Width = 343
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Right = 20
+          ItemHeight = 0
+          OnSelect = ExportTypeComboSelect
+          Style = csDropDownList
+          TabOrder = 0
+        end
+        object Label1: TLabel
+          AnchorSideTop.Side = asrBottom
+          AnchorSideBottom.Control = DirectoryEdit1
+          AnchorSideBottom.Side = asrBottom
+          Left = 8
+          Height = 15
+          Top = 66
+          Width = 85
+          Anchors = [akLeft, akBottom]
+          Caption = 'Export folder:'
+          ParentColor = False
+        end
+        object DirectoryEdit1: TDirectoryEdit
+          AnchorSideTop.Control = ProjectOptionsChkGrp
+          AnchorSideTop.Side = asrCenter
+          AnchorSideRight.Control = ProjectOptionsChkGrp
+          AnchorSideBottom.Side = asrCenter
+          Left = 120
+          Height = 25
+          Top = 56
+          Width = 343
+          ShowHidden = False
+          ButtonWidth = 23
+          NumGlyphs = 1
+          Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Top = 10
+          BorderSpacing.Right = 20
+          MaxLength = 0
+          TabOrder = 1
+        end
+        object Label3: TLabel
+          AnchorSideBottom.Control = ExportTypeCombo
+          AnchorSideBottom.Side = asrBottom
+          Left = 8
+          Height = 15
+          Top = 25
+          Width = 32
+          Anchors = [akLeft, akBottom]
+          Caption = 'Type:'
+          ParentColor = False
+        end
+        object ProjectOptionsChkGrp: TCheckGroup
+          AnchorSideTop.Control = Panel3
+          AnchorSideRight.Control = Panel3
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = Panel3
+          AnchorSideBottom.Side = asrBottom
+          Left = 483
+          Height = 114
+          Top = 11
+          Width = 187
+          Anchors = [akTop, akRight, akBottom]
+          AutoFill = True
+          AutoSize = True
+          Caption = 'Project Options:'
+          ChildSizing.LeftRightSpacing = 6
+          ChildSizing.TopBottomSpacing = 6
+          ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+          ChildSizing.EnlargeVertical = crsHomogenousChildResize
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclLeftToRightThenTopToBottom
+          ChildSizing.ControlsPerLine = 1
+          ClientHeight = 97
+          ClientWidth = 183
+          Items.Strings = (
+            'Export Structure Only'
+            'Export Deleted records'
+            'Create Export Report'
+          )
+          OnItemClick = ProjectOptionsChkGrpItemClick
+          TabOrder = 2
+          Data = {
+            03000000020202
+          }
+        end
+        object FileNameEdit1: TFileNameEdit
+          AnchorSideTop.Control = DirectoryEdit1
+          AnchorSideTop.Side = asrBottom
+          AnchorSideRight.Control = ProjectOptionsChkGrp
+          AnchorSideBottom.Control = ProjectOptionsChkGrp
+          AnchorSideBottom.Side = asrBottom
+          Left = 120
+          Height = 25
+          Top = 100
+          Width = 343
+          FilterIndex = 0
+          HideDirectories = False
+          ButtonWidth = 23
+          NumGlyphs = 1
+          Anchors = [akLeft, akRight, akBottom]
+          BorderSpacing.Top = 10
+          BorderSpacing.Right = 20
+          MaxLength = 0
+          TabOrder = 3
+        end
+        object Label4: TLabel
+          AnchorSideBottom.Control = FileNameEdit1
+          AnchorSideBottom.Side = asrBottom
+          Left = 8
+          Height = 15
+          Top = 110
+          Width = 61
+          Anchors = [akLeft, akBottom]
+          Caption = 'Filename:'
+          ParentColor = False
+        end
+      end
+      object ProjectPanel: TPanel
+        Left = 0
+        Height = 383
+        Top = 136
+        Width = 243
+        Align = alLeft
+        TabOrder = 1
+      end
+      object DataformPageCtrl: TPageControl
+        Left = 248
+        Height = 383
+        Top = 136
+        Width = 433
+        ActivePage = FieldListSheet
+        Align = alClient
+        TabIndex = 0
+        TabOrder = 2
+        object FieldListSheet: TTabSheet
+          Caption = 'Export Fields'
+        end
+        object OptionsTab: TTabSheet
+          Caption = 'Dataform Options'
+          ClientHeight = 350
+          ClientWidth = 427
+          object DataformRecordGrpBox: TGroupBox
+            AnchorSideLeft.Control = OptionsTab
+            AnchorSideTop.Control = OptionsTab
+            AnchorSideRight.Control = OptionsTab
+            AnchorSideRight.Side = asrBottom
+            Left = 10
+            Height = 132
+            Top = 10
+            Width = 407
+            Anchors = [akTop, akLeft, akRight]
+            BorderSpacing.Left = 10
+            BorderSpacing.Top = 10
+            BorderSpacing.Right = 10
+            Caption = 'Selected Records'
+            ClientHeight = 115
+            ClientWidth = 403
+            TabOrder = 0
+            object AllRecordRBtn: TRadioButton
+              AnchorSideLeft.Control = DataformRecordGrpBox
+              AnchorSideTop.Side = asrBottom
+              Left = 10
+              Height = 22
+              Top = 8
+              Width = 91
+              BorderSpacing.Left = 10
+              BorderSpacing.Top = 5
+              Caption = 'All records'
+              Checked = True
+              TabOrder = 0
+              TabStop = True
+            end
+            object RangeRBtn: TRadioButton
+              AnchorSideLeft.Control = DataformRecordGrpBox
+              AnchorSideTop.Control = AllRecordRBtn
+              AnchorSideTop.Side = asrBottom
+              Left = 10
+              Height = 22
+              Top = 35
+              Width = 64
+              BorderSpacing.Left = 10
+              BorderSpacing.Top = 5
+              Caption = 'Range'
+              TabOrder = 1
+            end
+            object FromRecordEdit: TEdit
+              AnchorSideLeft.Control = RangeRBtn
+              AnchorSideTop.Control = RangeRBtn
+              AnchorSideTop.Side = asrBottom
+              AnchorSideRight.Control = Label2
+              Left = 30
+              Height = 25
+              Top = 67
+              Width = 157
+              Anchors = [akTop, akLeft, akRight]
+              BorderSpacing.Left = 20
+              BorderSpacing.Top = 10
+              BorderSpacing.Right = 10
+              TabOrder = 2
+            end
+            object ToRecordEdit: TEdit
+              AnchorSideLeft.Control = Label2
+              AnchorSideLeft.Side = asrBottom
+              AnchorSideTop.Control = FromRecordEdit
+              AnchorSideRight.Control = DataformRecordGrpBox
+              AnchorSideRight.Side = asrBottom
+              Left = 220
+              Height = 25
+              Top = 67
+              Width = 173
+              Anchors = [akTop, akLeft, akRight]
+              BorderSpacing.Left = 10
+              BorderSpacing.Right = 10
+              TabOrder = 3
+            end
+            object Label2: TLabel
+              AnchorSideTop.Control = FromRecordEdit
+              AnchorSideTop.Side = asrCenter
+              Left = 197
+              Height = 15
+              Top = 72
+              Width = 13
+              Anchors = [akTop]
+              Caption = 'to'
+              ParentColor = False
+            end
+          end
+        end
+      end
+      object Splitter2: TSplitter
+        Left = 243
+        Height = 383
+        Top = 136
+        Width = 5
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 552
+    Width = 687
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 687
+    TabOrder = 1
+    object BitBtn1: TBitBtn
+      Left = 493
+      Height = 30
+      Top = 8
+      Width = 75
+      Anchors = [akTop, akRight]
+      Default = True
+      DefaultCaption = True
+      Kind = bkOK
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 581
+      Height = 30
+      Top = 8
+      Width = 91
+      Anchors = [akTop, akRight]
+      Cancel = True
+      DefaultCaption = True
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+end

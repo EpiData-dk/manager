@@ -1,7 +1,7 @@
 object ExportForm: TExportForm
-  Left = 559
+  Left = 1977
   Height = 506
-  Top = 392
+  Top = 118
   Width = 672
   ActiveControl = BitBtn3
   Caption = 'Export...'
@@ -215,10 +215,10 @@ object ExportForm: TExportForm
           AnchorSideTop.Control = NoneBitBtn
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = NoneBitBtn
-          Left = 199
-          Height = 32
-          Top = 1
-          Width = 51
+          Left = 197
+          Height = 34
+          Top = 0
+          Width = 53
           Anchors = [akTop, akRight]
           AutoSize = True
           BorderSpacing.Right = 10
@@ -249,7 +249,7 @@ object ExportForm: TExportForm
           Left = 5
           Height = 29
           Top = 4
-          Width = 189
+          Width = 187
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 5
           BorderSpacing.Right = 5
@@ -342,10 +342,10 @@ object ExportForm: TExportForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn4
-      Left = 511
-      Height = 32
-      Top = 4
-      Width = 54
+      Left = 509
+      Height = 34
+      Top = 3
+      Width = 56
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10

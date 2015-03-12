@@ -71,6 +71,9 @@ type
 
 procedure RegisterExportFrame(CFC: TCustomFrameClass; ESC: TEpiExportSettingClass);
 
+var
+  RegisterList: TList = nil;
+
 implementation
 
 {$R *.lfm}
@@ -81,12 +84,6 @@ uses
   epiv_datamodule, LazUTF8;
 
 type
-  TAccessFileNameEdit = class(TFileNameEdit)
-  public
-    property Button;
-  end;
-
-type
   TFrameRec = record
     CFC: TCustomFrameClass;
     ESC: TEpiExportSettingClass;
@@ -94,8 +91,11 @@ type
   end;
   PFrameRec = ^TFrameRec;
 
-var
-  RegisterList: TList = nil;
+type
+  TAccessFileNameEdit = class(TFileNameEdit)
+  public
+    property Button;
+  end;
 
 procedure RegisterExportFrame(CFC: TCustomFrameClass; ESC: TEpiExportSettingClass
   );
