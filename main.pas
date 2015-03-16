@@ -652,13 +652,15 @@ begin
 
     F := TExportForm2.Create(Self);
     F.DocumentFile := DF;
-    F.ShowModal;
-    F.Free;
+    if F.ShowModal <> mrOK then exit;
+
+    Exporter := TEpiExport.Create;
 
 
   finally
     if local then
       DF.Free;
+    F.Free;
   end;
 end;
 

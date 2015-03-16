@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="32"/>
+      <BuildNr Value="33"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
@@ -444,7 +444,6 @@
       <Unit39>
         <Filename Value="export/export_frame_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="export_frame_types"/>
       </Unit39>
       <Unit40>
         <Filename Value="export/export_csv_frame.pas"/>
