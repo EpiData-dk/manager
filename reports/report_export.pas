@@ -57,7 +57,7 @@ begin
   Generator.TableCell('Content:', 0, 0);
   Generator.TableCell('Filename:', 1, 0);
   Generator.TableCell('Report', 0, 1);
-  Generator.TableCell(ChangeFileExt(ExportSettings.ExportFileName, '.log'), 1, 1);
+{  Generator.TableCell(ChangeFileExt(ExportSettings.ExportFileName, '.log'), 1, 1);
 
   RowNo := 2;
   TmpSetting := ExportSettings;
@@ -71,7 +71,7 @@ begin
 
     Inc(RowNo);
     TmpSetting := TmpSetting.AdditionalExportSettings;
-  end;
+  end;                             }
 
   Generator.TableFooter('');
 end;
@@ -100,7 +100,7 @@ begin
   Generator.Line('');
 
   TmpDoc := TEpiExport.PrepareExportDocument(ExportSettings);
-  Df := TmpDoc.DataFiles[ExportSettings.DataFileIndex];
+//  Df := TmpDoc.DataFiles[ExportSettings.DataFileIndex];
 
   R := TEpiReportControlList.Create(Generator);
   with TEpiReportControlList(R) do

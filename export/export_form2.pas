@@ -5,10 +5,10 @@
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   ComCtrls, StdCtrls, EditBtn, Buttons, epiv_dataform_treeview,
   epiv_projecttreeview_frame, epiopenfile, epidocument, export_frame_types,
-  types, epicustombase, epidatafiles, epirelations;
+  types, epicustombase, epidatafiles, epirelations, epiexportsettings;
 
 type
 
@@ -16,13 +16,14 @@ type
 
   TExportForm2 = class(TForm)
     AllRecordRBtn: TRadioButton;
+    ProjectFileNameEdit: TFileNameEdit;
     OkBtn: TBitBtn;
     BitBtn2: TBitBtn;
     ProjectOptionsChkGrp: TCheckGroup;
-    DirectoryEdit1: TDirectoryEdit;
+    ExportFolderEdit: TDirectoryEdit;
     ExportTypeCombo: TComboBox;
     FieldListSheet: TTabSheet;
-    FileNameEdit1: TFileNameEdit;
+    DataformFileNameEdit: TFileNameEdit;
     FromRecordEdit: TEdit;
     DataformRecordGrpBox: TGroupBox;
     Label1: TLabel;
@@ -42,7 +43,10 @@ type
     procedure ExportTypeComboSelect(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
+    procedure OkBtnClick(Sender: TObject);
     procedure ProjectOptionsChkGrpItemClick(Sender: TObject; Index: integer);
+    procedure RangeEditEnter(Sender: TObject);
+    procedure RangeEditKeyPress(Sender: TObject; var Key: char);
   private
     { Document }
     FDocumentFile: TEpiDocumentFile;
@@ -63,6 +67,8 @@ type
     FDataFormViewer: TDataFormTreeViewFrame;
   private
     { Other }
+    FExportSetting: TEpiExportSetting;
+    FActiveSheet: TTabSheet;
     IFrame: IExportSettingsPresenterFrame;
     function GetExportFileName(Const DF: TEpiDataFile): string;
     procedure UpdateFileNameExtensions;
@@ -73,6 +79,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     property DocumentFile: TEpiDocumentFile read FDocumentFile write SetDocumentFile;
+    property ExportSetting: TEpiExportSetting read FExportSetting;
   end;
 
 implementation
@@ -80,11 +87,17 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafilestypes, epieximtypes, export_form, epiexportsettings,
+  epidatafilestypes, epieximtypes, export_form,
   epimiscutils, settings2_var, settings2;
 
 const
   EXPORT_CUSTOMDATA = 'EXPORT_CUSTOMDATA';
+
+  ProjChkStructIdx  = 0;
+  ProjChkDeletedIdx = 1;
+  ProjChkReportIdx  = 2;
+  ProjChkSingleIdx  = 3;
+
 
 type
   TFrameRec = record
@@ -104,8 +117,6 @@ type
 { TExportForm2 }
 
 procedure TExportForm2.ExportTypeComboSelect(Sender: TObject);
-const
-  FActiveSheet: TTabSheet = nil;
 var
   Frame: TCustomFrame;
   P: SizeInt;
@@ -126,11 +137,12 @@ begin
 
   UpdateFileNameExtensions;
   FDataFormViewer.ShowHeadings := IFrame.ExportHeadings;
-  ProjectOptionsChkGrp.CheckEnabled[3] := IFrame.ExportRelated;
-  if (ProjectOptionsChkGrp.Checked[3]) and (not IFrame.ExportRelated) then
+
+  ProjectOptionsChkGrp.CheckEnabled[ProjChkSingleIdx] := IFrame.ExportRelated;
+  if (ProjectOptionsChkGrp.Checked[ProjChkSingleIdx]) and (not IFrame.ExportRelated) then
   begin
-    ProjectOptionsChkGrp.Checked[3] := false;
-    ProjectOptionsChkGrpItemClick(ProjectOptionsChkGrp, 3);
+    ProjectOptionsChkGrp.Checked[ProjChkSingleIdx] := false;
+    ProjectOptionsChkGrpItemClick(ProjectOptionsChkGrp, ProjChkSingleIdx);
   end;
 end;
 
@@ -160,30 +172,123 @@ begin
   ExportTypeComboSelect(ExportTypeCombo);
 
   // Project options:
-  ProjectOptionsChkGrp.Checked[0] := false;
-  ProjectOptionsChkGrp.Checked[1] := ManagerSettings.ExportDeleted;
-  ProjectOptionsChkGrp.Checked[2] := ManagerSettings.ExportCreateReport;
-  ProjectOptionsChkGrp.Checked[3] := false;
+  ProjectOptionsChkGrp.Checked[ProjChkStructIdx]  := false;
+  ProjectOptionsChkGrp.Checked[ProjChkDeletedIdx] := ManagerSettings.ExportDeleted;
+  ProjectOptionsChkGrp.Checked[ProjChkReportIdx]  := ManagerSettings.ExportCreateReport;
+  ProjectOptionsChkGrp.Checked[ProjChkSingleIdx]  := false;
 
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);
 end;
 
+procedure TExportForm2.OkBtnClick(Sender: TObject);
+var
+  Rec: PFrameRec;
+  RelationList: TList;
+  Relation: TEpiMasterRelation;
+  DFSetting: TEpiExportDatafileSettings;
+  DatafileRec: TDatafileRec;
+  FakeBool: Boolean;
+  i: Integer;
+  j: Integer;
+begin
+  ProjectTreeSelecting(nil, FProjectTree.SelectedObject, nil, otRelation, otRelation, FakeBool);
+
+  Rec := PFrameRec(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex]);
+
+  FExportSetting := Rec^.ESC.Create;
+  with FExportSetting do
+  begin
+    Doc           := FDocumentFile.Document;
+    ExportDeleted := ProjectOptionsChkGrp.Checked[ProjChkDeletedIdx];
+    Encoding      := ManagerSettings.ExportEncoding;
+
+    RelationList := FProjectTree.CheckList;
+
+    for i := 0 to RelationList.Count - 1 do
+    begin
+      Relation    := TEpiMasterRelation(RelationList[i]);
+      DatafileRec := TDatafileRec(Relation.FindCustomData(EXPORT_CUSTOMDATA));
+
+      DFSetting := TEpiExportDatafileSettings.Create;
+      DFSetting.DatafileName   := Relation.Datafile.Name;
+      DFSetting.FromRecord     := DatafileRec.StartRec - 1;
+      DFSetting.ToRecord       := DatafileRec.EndRec - 1;
+
+      for j := 0 to DatafileRec.SelectedItems.Count - 1 do
+        DFSetting.ExportItems.Add(TEpiCustomItem(DatafileRec.SelectedItems[j]).Name);
+
+      if (DFSetting.FromRecord < 0) then DFSetting.FromRecord := 0;
+      if (DFSetting.ToRecord < 0)   then DFSetting.ToRecord   := Relation.Datafile.Size - 1;
+
+      DFSetting.ExportFileName := ExpandFileNameUTF8(ExportFolderEdit.Directory + DirectorySeparator + DatafileRec.Filename);
+
+      DatafileSettings.Add(DFSetting);
+    end;
+  end;
+
+  IFrame.UpdateExportSetting(FExportSetting);
+
+  {  if FileExistsUTF8(ExportFileNameEdit.FileName) then
+   begin
+     Msg :=
+       'A file named "' + ExtractFileName(ExportFileNameEdit.FileName) + '" already exists!' + LineEnding +
+       'Replacing this file will also replace any additional files this export may create (eg. .csv/.log files)' + LineEnding +
+       LineEnding +
+       'Do you wish to replace the existing file(s)?';
+
+     Res := MessageDlg(
+       'Warning!',
+       Msg,
+       mtWarning,
+       mbYesNo,
+       0,
+       mbNo);
+
+     if Res = mrNo then
+     begin
+       ModalResult := mrNone;
+       Exit;
+     end;
+   end;}
+
+end;
+
 procedure TExportForm2.ProjectOptionsChkGrpItemClick(Sender: TObject;
   Index: integer);
+var
+  TmpChk: Boolean;
 begin
   // If exporting structure there is no need to add options for ranges, etc.
-  DataformRecordGrpBox.Enabled := (not ProjectOptionsChkGrp.Checked[0]);
-  ProjectOptionsChkGrp.CheckEnabled[1] := (not ProjectOptionsChkGrp.Checked[0]);
+  DataformRecordGrpBox.Enabled := (not ProjectOptionsChkGrp.Checked[ProjChkStructIdx]);
+  ProjectOptionsChkGrp.CheckEnabled[ProjChkDeletedIdx] := (not ProjectOptionsChkGrp.Checked[ProjChkStructIdx]);
 
-  if (ProjectOptionsChkGrp.Checked[3]) then
+  if (Index = ProjChkSingleIdx) then
   begin
-    FProjectTree.CheckType :=  pctTriState;
-    FDataFormViewer.KeyFieldsSelectState := kssAlwaysSelected;
-  end else begin
-    FProjectTree.CheckType :=  pctIndividual;
-    FDataFormViewer.KeyFieldsSelectState := kssCustomSelected;
+    TmpChk := ProjectOptionsChkGrp.Checked[ProjChkSingleIdx];
+
+    if (TmpChk) then
+    begin
+      FProjectTree.CheckType :=  pctTriState;
+      FDataFormViewer.KeyFieldsSelectState := kssAlwaysSelected;
+    end else begin
+      FProjectTree.CheckType :=  pctIndividual;
+      FDataFormViewer.KeyFieldsSelectState := kssCustomSelected;
+    end;
+
+    ProjectFileNameEdit.Visible  := TmpChk;
+    DataformFileNameEdit.Visible := (not TmpChk);
   end;
+end;
+
+procedure TExportForm2.RangeEditEnter(Sender: TObject);
+begin
+  RangeRBtn.Checked := true;
+end;
+
+procedure TExportForm2.RangeEditKeyPress(Sender: TObject; var Key: char);
+begin
+  if not (Key in [Char('0')..Char('9'), #8]) then Key := #0;
 end;
 
 procedure TExportForm2.SetDocumentFile(AValue: TEpiDocumentFile);
@@ -192,6 +297,11 @@ begin
   FDocumentFile := AValue;
 
   DocumentFile.Document.Relations.OrderedWalk(@CreateCustomData);
+  ProjectFileNameEdit.FileName :=
+    ChangeFileExt(
+      ExtractFileName(FDocumentFile.FileName),
+      '_' + IntToStr(FDocumentFile.Document.CycleNo) + '.tmp'
+    );
 
   FProjectTree.AddDocument(FDocumentFile.Document);
   FProjectTree.CheckAll;
@@ -211,7 +321,7 @@ begin
 
   Rec := TDatafileRec(AObject.FindCustomData(EXPORT_CUSTOMDATA));
   FDataFormViewer.SelectedList := Rec.SelectedItems;
-  FileNameEdit1.FileName       := Rec.Filename;
+  DataformFileNameEdit.FileName       := Rec.Filename;
   if (Rec.StartRec = -1) and (Rec.EndRec = -1) then
   begin
     AllRecordRBtn.Checked := true;
@@ -239,7 +349,7 @@ begin
   Relation := TEpiMasterRelation(OldObject);
 
   Rec := TDatafileRec(Relation.FindCustomData(EXPORT_CUSTOMDATA));
-  Rec.Filename      := FileNameEdit1.FileName;
+  Rec.Filename      := DataformFileNameEdit.FileName;
   Rec.SelectedItems := FDataFormViewer.SelectedList;
   if AllRecordRBtn.Checked then
   begin
@@ -295,8 +405,10 @@ begin
   // Delete the "*" part of "*.<ext>"
   Delete(Ext, 1, 1);
 
+  ProjectFileNameEdit.FileName := ChangeFileExt(ProjectFileNameEdit.FileName, Ext);
   FDocumentFile.Document.Relations.OrderedWalk(@ChangeExt, @Ext);
-  FileNameEdit1.FileName := TDatafileRec(FProjectTree.SelectedObject.FindCustomData(EXPORT_CUSTOMDATA)).Filename;
+
+  DataformFileNameEdit.FileName := TDatafileRec(FProjectTree.SelectedObject.FindCustomData(EXPORT_CUSTOMDATA)).Filename;
 end;
 
 procedure TExportForm2.ChangeExt(const Relation: TEpiMasterRelation;
@@ -322,7 +434,10 @@ var
 begin
   inherited Create(TheOwner);
 
-  DirectoryEdit1.Directory := ManagerSettings.WorkingDirUTF8;
+  ProjectFileNameEdit.Visible := False;
+  DataformFileNameEdit.Visible := True;
+
+  ExportFolderEdit.Directory := ManagerSettings.WorkingDirUTF8;
   DataformPageCtrl.ActivePage := FieldListSheet;
 
   FProjectTree := TEpiVProjectTreeViewFrame.Create(Self);

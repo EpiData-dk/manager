@@ -64,6 +64,7 @@ function TExportSPSSFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
 var
   CSVSettings: TEpiCSVExportSetting;
+  i: Integer;
 begin
   result := (FFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
 
@@ -71,10 +72,16 @@ begin
 
   CSVSettings := TEpiCSVExportSetting.Create;
   CSVSettings.Assign(Setting);
-  CSVSettings.ExportFileName := ChangeFileExt(Setting.ExportFileName, '.txt');
+
+  for i := 0 to CSVSettings.DatafileSettings.Count - 1 do
+  with CSVSettings.DatafileSettings[i] do
+  begin
+    ExportFileName := ChangeFileExt(ExportFileName, '.csv');
+    Setting.DatafileSettings[i].AdditionalExportSettings := CSVSettings.DatafileSettings[i];
+  end;
+
   CSVSettings.FieldSeparator := TEpiSPSSExportSetting(Setting).Delimiter;
   Setting.AdditionalExportSettings := CSVSettings;
-
 end;
 
 function TExportSPSSFrame.GetFrameCaption: string;

@@ -31,7 +31,6 @@ type
     SeparatorGrpBox: TGroupBox;
   private
     { private declarations }
-//    FTextExport: TFrame;
     FData:       PManagerSettings;
   public
     { public declarations }
@@ -63,9 +62,9 @@ constructor TExportCSVFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-  FieldSepEdit.Text := ',';
-  DateSepEdit.Text := DefaultFormatSettings.DateSeparator;
-  TimeSepEdit.Text := DefaultFormatSettings.TimeSeparator;
+  FieldSepEdit.Text   := ',';
+  DateSepEdit.Text    := DefaultFormatSettings.DateSeparator;
+  TimeSepEdit.Text    := DefaultFormatSettings.TimeSeparator;
   DecimalSepEdit.Text := DefaultFormatSettings.DecimalSeparator;
 
   with NewLineCmbBox.Items do
@@ -75,14 +74,6 @@ begin
     AddObject('Mac' {$IFDEF DARWIN}+ ' (System)'{$ENDIF}, TString.Create(#13));
     AddObject('Windows' {$IFDEF WINDOWS}+ ' (System)'{$ENDIF}, TString.Create(#13#10));
   end;
-
-{  // Custom Text Frame;
-  FTextExport := TExportCustomTextFrame.Create(self);
-  FTextExport.Parent := Self;
-  FTextExport.AnchorToNeighbour(akTop, 10, NewLineCmbBox);
-  FTextExport.AnchorParallel(akLeft, 20, Self);
-  FTextExport.AnchorParallel(akRight, 20, Self);
-  FTextExport.AnchorParallel(akBottom, 10, Self);     }
 
   // SETUP ACCORDING TO MANAGERSETTINGS.
   SetSettings(@ManagerSettings);
@@ -121,7 +112,7 @@ begin
     ByteOrderMark     := ByteOrderMarkCheckBox.Checked;
   end;
 
-  result := true; // (FTextExport as IExportSettingsFrame).UpdateExportSetting(Setting);
+  result := true;
 end;
 
 function TExportCSVFrame.GetFileDialogExtensions: TEpiDialogFilters;

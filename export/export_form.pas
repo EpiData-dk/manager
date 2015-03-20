@@ -133,7 +133,7 @@ begin
   with FExportSetting do
   begin
     Doc := FDoc;
-    ExportFileName := ExportFileNameEdit.Text;
+{    ExportFileName := ExportFileNameEdit.Text;
     DataFileIndex := FDoc.DataFiles.IndexOf(SelectedDF);
     ExportDeleted := ExportDeletedChkBox.Checked;
 
@@ -151,7 +151,7 @@ begin
     Encoding := TEpiEncoding(PtrUInt(EncodingCmbBox.Items.Objects[EncodingCmbBox.ItemIndex]));
     Fields.Free;
 
-    Fields := DFTreeViewFrame.SelectedList;
+    Fields := DFTreeViewFrame.SelectedList;}
   end;
   (Rec^.Frame as IExportSettingsPresenterFrame).UpdateExportSetting(FExportSetting);
 end;

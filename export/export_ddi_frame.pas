@@ -107,6 +107,7 @@ function TExportDDIFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
 var
   CSVSettings: TEpiCSVExportSetting;
+  i: Integer;
 begin
   (ValueLabelFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
   with TEpiDDIExportSetting(Setting) do
@@ -125,8 +126,12 @@ begin
 
   CSVSettings := TEpiCSVExportSetting.Create;
   CSVSettings.Assign(Setting);
-
   (CSVFrame as IExportSettingsPresenterFrame).UpdateExportSetting(CSVSettings);
+
+  for i := 0 to CSVSettings.DatafileSettings.Count - 1 do
+  with CSVSettings.DatafileSettings[i] do
+    ExportFileName := ChangeFileExt(ExportFileName, '.csv');
+
   Setting.AdditionalExportSettings := CSVSettings;
 end;
 

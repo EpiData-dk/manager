@@ -497,8 +497,8 @@ begin
         ReportTitle := R.ReportTitle;
         ReportText := R.RunReport;
 
-        FS := TFileStreamUTF8.Create(ChangeFileExt(ExportSetting.ExportFileName, '.log'), fmCreate);
-        FS.Write(ReportText[1], Length(ReportText));
+//        FS := TFileStreamUTF8.Create(ChangeFileExt(ExportSetting.ExportFileName, '.log'), fmCreate);
+//        FS.Write(ReportText[1], Length(ReportText));
 
         R.Free;
         FileList.Free;
@@ -510,7 +510,7 @@ begin
       ASettings := ExportSetting;
       while Assigned(ASettings) do
       begin
-        S += 'Export: ' + ASettings.ExportFileName + LineEnding;
+//        S += 'Export: ' + ASettings.ExportFileName + LineEnding;
         ASettings := ASettings.AdditionalExportSettings;
       end;
 
@@ -522,8 +522,8 @@ begin
       if Assigned(FS) then
         ShowReportForm(Self, ReportTitle, ReportText);
 
-      if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
-        AddToRecent(ExportForm.ExportSetting.ExportFileName);
+//      if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
+//        AddToRecent(ExportForm.ExportSetting.ExportFileName);
 
       FS.Free;
     end;
@@ -643,7 +643,14 @@ var
   local: boolean;
   DF: TEpiDocumentFile;
   F: TExportForm2;
+  Settings: TEpiExportSetting;
+  Exporter: TEpiExport;
 begin
+  Exporter := nil;
+  DF := nil;
+  F := nil;
+  Settings := nil;
+
   try
     DF := ToolsCheckOpenFile(false, local);
 
@@ -654,13 +661,17 @@ begin
     F.DocumentFile := DF;
     if F.ShowModal <> mrOK then exit;
 
+    Settings := F.ExportSetting;
+
     Exporter := TEpiExport.Create;
-
-
+    Exporter.Export(Settings);
   finally
+    Exporter.Free;
+
     if local then
       DF.Free;
     F.Free;
+    Settings.Free;
   end;
 end;
 

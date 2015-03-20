@@ -60,12 +60,20 @@ function TExportSASFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
 var
   CSVSettings: TEpiCSVExportSetting;
+  i: Integer;
 begin
   result := (FFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
 
+  TEpiCSVExportSetting.ClassParent;
   CSVSettings := TEpiCSVExportSetting.Create;
   CSVSettings.Assign(Setting);
-  CSVSettings.ExportFileName := ChangeFileExt(Setting.ExportFileName, '.txt');
+
+  for i := 0 to CSVSettings.DatafileSettings.Count - 1 do
+  with CSVSettings.DatafileSettings[i] do
+  begin
+    ExportFileName := ChangeFileExt(ExportFileName, '.csv');
+    Setting.DatafileSettings[i].AdditionalExportSettings := CSVSettings.DatafileSettings[i];
+  end;
 
   Setting.AdditionalExportSettings := CSVSettings;
 end;
