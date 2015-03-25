@@ -35,15 +35,16 @@ object ExportForm2: TExportForm2
         ClientWidth = 725
         TabOrder = 0
         object ProjectFileNameEdit: TFileNameEdit
+          AnchorSideLeft.Control = ExportFolderEdit
           AnchorSideTop.Control = ExportFolderEdit
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = ProjectOptionsChkGrp
           AnchorSideBottom.Control = ProjectOptionsChkGrp
           AnchorSideBottom.Side = asrBottom
-          Left = 120
+          Left = 98
           Height = 25
           Top = 103
-          Width = 383
+          Width = 397
           FilterIndex = 0
           HideDirectories = False
           ButtonWidth = 23
@@ -52,16 +53,16 @@ object ExportForm2: TExportForm2
           BorderSpacing.Top = 10
           BorderSpacing.Right = 20
           MaxLength = 0
-          TabOrder = 4
+          TabOrder = 3
         end
         object ExportTypeCombo: TComboBox
-          AnchorSideLeft.Side = asrBottom
+          AnchorSideLeft.Control = ExportFolderEdit
           AnchorSideTop.Control = ProjectOptionsChkGrp
           AnchorSideRight.Control = ProjectOptionsChkGrp
-          Left = 120
+          Left = 98
           Height = 29
           Top = 11
-          Width = 383
+          Width = 397
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Right = 20
           ItemHeight = 0
@@ -82,18 +83,21 @@ object ExportForm2: TExportForm2
           ParentColor = False
         end
         object ExportFolderEdit: TDirectoryEdit
+          AnchorSideLeft.Control = Label1
+          AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = ProjectOptionsChkGrp
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = ProjectOptionsChkGrp
           AnchorSideBottom.Side = asrCenter
-          Left = 120
+          Left = 98
           Height = 25
           Top = 57
-          Width = 383
+          Width = 397
           ShowHidden = False
           ButtonWidth = 23
           NumGlyphs = 1
           Anchors = [akTop, akLeft, akRight]
+          BorderSpacing.Left = 5
           BorderSpacing.Top = 10
           BorderSpacing.Right = 20
           MaxLength = 0
@@ -116,14 +120,14 @@ object ExportForm2: TExportForm2
           AnchorSideRight.Side = asrBottom
           AnchorSideBottom.Control = Panel3
           AnchorSideBottom.Side = asrBottom
-          Left = 523
+          Left = 515
           Height = 117
           Top = 11
-          Width = 191
+          Width = 199
           Anchors = [akTop, akRight, akBottom]
           AutoFill = True
           AutoSize = True
-          Caption = 'Project Options:'
+          Caption = 'Export Options'
           ChildSizing.LeftRightSpacing = 6
           ChildSizing.TopBottomSpacing = 6
           ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
@@ -133,29 +137,30 @@ object ExportForm2: TExportForm2
           ChildSizing.Layout = cclLeftToRightThenTopToBottom
           ChildSizing.ControlsPerLine = 1
           ClientHeight = 100
-          ClientWidth = 187
+          ClientWidth = 195
           Items.Strings = (
-            'Export Structure Only'
+            'No Data (Structure Only)'
             'Include Deleted records'
             'Create Export Report'
             'Export to single file'
           )
           OnItemClick = ProjectOptionsChkGrpItemClick
-          TabOrder = 2
+          TabOrder = 4
           Data = {
             0400000002020200
           }
         end
         object DataformFileNameEdit: TFileNameEdit
+          AnchorSideLeft.Control = ExportFolderEdit
           AnchorSideTop.Control = ExportFolderEdit
           AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = ProjectOptionsChkGrp
           AnchorSideBottom.Control = ProjectOptionsChkGrp
           AnchorSideBottom.Side = asrBottom
-          Left = 120
+          Left = 98
           Height = 25
           Top = 103
-          Width = 383
+          Width = 397
           FilterIndex = 0
           HideDirectories = False
           ButtonWidth = 23
@@ -164,7 +169,7 @@ object ExportForm2: TExportForm2
           BorderSpacing.Top = 10
           BorderSpacing.Right = 20
           MaxLength = 0
-          TabOrder = 3
+          TabOrder = 2
         end
         object Label4: TLabel
           AnchorSideBottom.Control = DataformFileNameEdit
@@ -194,7 +199,7 @@ object ExportForm2: TExportForm2
         ActivePage = FieldListSheet
         Align = alClient
         TabIndex = 0
-        TabOrder = 2
+        TabOrder = 3
         object FieldListSheet: TTabSheet
           Caption = 'Export Fields'
         end
@@ -210,14 +215,14 @@ object ExportForm2: TExportForm2
             Left = 10
             Height = 132
             Top = 10
-            Width = 474
+            Width = 451
             Anchors = [akTop, akLeft, akRight]
             BorderSpacing.Left = 10
             BorderSpacing.Top = 10
             BorderSpacing.Right = 10
             Caption = 'Selected Records'
             ClientHeight = 115
-            ClientWidth = 470
+            ClientWidth = 447
             TabOrder = 0
             object AllRecordRBtn: TRadioButton
               AnchorSideLeft.Control = DataformRecordGrpBox
@@ -254,7 +259,7 @@ object ExportForm2: TExportForm2
               Left = 30
               Height = 25
               Top = 67
-              Width = 190
+              Width = 178
               Anchors = [akTop, akLeft, akRight]
               BorderSpacing.Left = 20
               BorderSpacing.Top = 10
@@ -269,10 +274,10 @@ object ExportForm2: TExportForm2
               AnchorSideTop.Control = FromRecordEdit
               AnchorSideRight.Control = DataformRecordGrpBox
               AnchorSideRight.Side = asrBottom
-              Left = 253
+              Left = 241
               Height = 25
               Top = 67
-              Width = 207
+              Width = 196
               Anchors = [akTop, akLeft, akRight]
               BorderSpacing.Left = 10
               BorderSpacing.Right = 10
@@ -283,7 +288,7 @@ object ExportForm2: TExportForm2
             object Label2: TLabel
               AnchorSideTop.Control = FromRecordEdit
               AnchorSideTop.Side = asrCenter
-              Left = 230
+              Left = 218
               Height = 15
               Top = 72
               Width = 13

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, epidatafilestypes, Graphics, epieximtypes,
-  epiexportsettings, Forms;
+  epiexportsettings, Forms, manager_types;
 
 type
   TManagerSettings = record
@@ -67,6 +67,7 @@ type
     ExportDeleted:         boolean;
     ExportEncoding:        TEpiEncoding;
     ExportCreateReport:    boolean;
+    ExportPostFix:         TExportPostFix;
 
     // - Stata:
     ExportStataVersion:    TEpiStataVersion;

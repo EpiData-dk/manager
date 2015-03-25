@@ -70,9 +70,16 @@ type
     FExportSetting: TEpiExportSetting;
     FActiveSheet: TTabSheet;
     IFrame: IExportSettingsPresenterFrame;
+    function GetExportDirectory: string;
     function GetExportFileName(Const DF: TEpiDataFile): string;
+    function GetExportReport: Boolean;
+    function GetExportSingleFile: Boolean;
     procedure UpdateFileNameExtensions;
+    procedure UpdateSelectedItems;
     procedure ChangeExt(const Relation: TEpiMasterRelation;
+      const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
+    procedure ChangeSelectedItems(const Relation: TEpiMasterRelation;
       const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
       Data: Pointer = nil);
   public
@@ -80,6 +87,9 @@ type
     constructor Create(TheOwner: TComponent); override;
     property DocumentFile: TEpiDocumentFile read FDocumentFile write SetDocumentFile;
     property ExportSetting: TEpiExportSetting read FExportSetting;
+    property ExportReport: Boolean read GetExportReport;
+    property ExportSingleFile: Boolean read GetExportSingleFile;
+    property ExportDirectory: string read GetExportDirectory;
   end;
 
 implementation
@@ -88,7 +98,7 @@ implementation
 
 uses
   epidatafilestypes, epieximtypes, export_form,
-  epimiscutils, settings2_var, settings2;
+  epimiscutils, settings2_var, settings2, manager_types;
 
 const
   EXPORT_CUSTOMDATA = 'EXPORT_CUSTOMDATA';
@@ -110,6 +120,7 @@ type
   TDatafileRec = class
     Filename: String;
     SelectedItems: TList;
+    AllRecord: Boolean;
     StartRec: Integer;
     EndRec: Integer;
   end;
@@ -136,7 +147,9 @@ begin
   if not Supports(Frame, IExportSettingsPresenterFrame, IFrame) then exit;
 
   UpdateFileNameExtensions;
+
   FDataFormViewer.ShowHeadings := IFrame.ExportHeadings;
+  UpdateSelectedItems;
 
   ProjectOptionsChkGrp.CheckEnabled[ProjChkSingleIdx] := IFrame.ExportRelated;
   if (ProjectOptionsChkGrp.Checked[ProjChkSingleIdx]) and (not IFrame.ExportRelated) then
@@ -149,7 +162,10 @@ end;
 procedure TExportForm2.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
   if ManagerSettings.SaveWindowPositions then
+  begin
     SaveFormPosition(Self, Self.ClassName);
+    SaveSplitterPosition(Splitter2, Self.ClassName);
+  end;
 end;
 
 procedure TExportForm2.FormShow(Sender: TObject);
@@ -178,7 +194,10 @@ begin
   ProjectOptionsChkGrp.Checked[ProjChkSingleIdx]  := false;
 
   if ManagerSettings.SaveWindowPositions then
+  begin
     LoadFormPosition(Self, Self.ClassName);
+    LoadSplitterPosition(Splitter2, Self.ClassName);
+  end;
 end;
 
 procedure TExportForm2.OkBtnClick(Sender: TObject);
@@ -191,6 +210,9 @@ var
   FakeBool: Boolean;
   i: Integer;
   j: Integer;
+  ConflictFileNames: TStringList;
+  Msg: String;
+  Res: TModalResult;
 begin
   ProjectTreeSelecting(nil, FProjectTree.SelectedObject, nil, otRelation, otRelation, FakeBool);
 
@@ -212,46 +234,88 @@ begin
 
       DFSetting := TEpiExportDatafileSettings.Create;
       DFSetting.DatafileName   := Relation.Datafile.Name;
-      DFSetting.FromRecord     := DatafileRec.StartRec - 1;
-      DFSetting.ToRecord       := DatafileRec.EndRec - 1;
+
+      if ProjectOptionsChkGrp.Checked[ProjChkStructIdx] then
+      begin
+        DFSetting.FromRecord   := 0;
+        DFSetting.ToRecord     := -1;
+      end else begin
+        if DatafileRec.AllRecord then
+        begin
+          DFSetting.FromRecord := 0;
+          DFSetting.ToRecord   := Relation.Datafile.Size - 1;
+        end else begin
+          DFSetting.FromRecord := DatafileRec.StartRec - 1;
+          DFSetting.ToRecord   := DatafileRec.EndRec - 1;
+        end;
+      end;
 
       for j := 0 to DatafileRec.SelectedItems.Count - 1 do
         DFSetting.ExportItems.Add(TEpiCustomItem(DatafileRec.SelectedItems[j]).Name);
 
-      if (DFSetting.FromRecord < 0) then DFSetting.FromRecord := 0;
-      if (DFSetting.ToRecord < 0)   then DFSetting.ToRecord   := Relation.Datafile.Size - 1;
-
-      DFSetting.ExportFileName := ExpandFileNameUTF8(ExportFolderEdit.Directory + DirectorySeparator + DatafileRec.Filename);
+      // If exporting as single project (DDI, EPX) do not add filenames to DatafileSetting - this will
+      // make sure that SanityCheck does not create unwanted filestreams.
+      if (not ProjectOptionsChkGrp.Checked[ProjChkSingleIdx]) then
+        DFSetting.ExportFileName := ExpandFileNameUTF8(ExportFolderEdit.Directory + DirectorySeparator + DatafileRec.Filename);
 
       DatafileSettings.Add(DFSetting);
     end;
-  end;
 
+    if FExportSetting.InheritsFrom(TEpiCustomCompleteProjectExportSetting) then
+    with TEpiCustomCompleteProjectExportSetting(FExportSetting) do
+    begin
+      ExportFileName := ExpandFileNameUTF8(ExportFolderEdit.Directory + DirectorySeparator + ProjectFileNameEdit.FileName);
+      ExportCompleteProject := ProjectOptionsChkGrp.Checked[ProjChkSingleIdx];
+    end;
+  end;
   IFrame.UpdateExportSetting(FExportSetting);
 
-  {  if FileExistsUTF8(ExportFileNameEdit.FileName) then
-   begin
-     Msg :=
-       'A file named "' + ExtractFileName(ExportFileNameEdit.FileName) + '" already exists!' + LineEnding +
-       'Replacing this file will also replace any additional files this export may create (eg. .csv/.log files)' + LineEnding +
-       LineEnding +
-       'Do you wish to replace the existing file(s)?';
+  ConflictFileNames := TStringList.Create;
 
-     Res := MessageDlg(
-       'Warning!',
-       Msg,
-       mtWarning,
-       mbYesNo,
-       0,
-       mbNo);
+  if (ProjectOptionsChkGrp.Checked[ProjChkSingleIdx]) and
+     (FileExistsUTF8(TEpiCustomCompleteProjectExportSetting(FExportSetting).ExportFileName))
+  then
+    ConflictFileNames.Add(ProjectFileNameEdit.FileName);
 
-     if Res = mrNo then
-     begin
-       ModalResult := mrNone;
-       Exit;
-     end;
-   end;}
+  for i := 0 to FExportSetting.DatafileSettings.Count -1 do
+  begin
+    DFSetting := FExportSetting.DatafileSettings[i];
 
+    while Assigned(DFSetting) do
+    begin
+      if FileExistsUTF8(DFSetting.ExportFileName) then
+        ConflictFileNames.Add(ExtractFileName(DFSetting.ExportFileName));
+
+      DFSetting := DFSetting.AdditionalExportSettings;
+    end;
+  end;
+
+  if ConflictFileNames.Count > 0 then
+  begin
+    Msg :=
+      'Replace existing file(s)?' + LineEnding +
+      LineEnding +
+      '(in folder): ' + ExportFolderEdit.Directory + LineEnding +
+      LineEnding;
+
+
+    for i := 0 to ConflictFileNames.Count - 1 do
+      Msg += ConflictFileNames[i] + LineEnding;
+
+    Res := MessageDlg(
+      'Warning!',
+      Msg,
+      mtWarning,
+      mbYesNo,
+      0,
+      mbNo);
+
+    if Res = mrNo then
+    begin
+      ModalResult := mrNone;
+      Exit;
+    end;
+  end;
 end;
 
 procedure TExportForm2.ProjectOptionsChkGrpItemClick(Sender: TObject;
@@ -261,7 +325,12 @@ var
 begin
   // If exporting structure there is no need to add options for ranges, etc.
   DataformRecordGrpBox.Enabled := (not ProjectOptionsChkGrp.Checked[ProjChkStructIdx]);
+
   ProjectOptionsChkGrp.CheckEnabled[ProjChkDeletedIdx] := (not ProjectOptionsChkGrp.Checked[ProjChkStructIdx]);
+  DataformRecordGrpBox.Enabled := (not ProjectOptionsChkGrp.Checked[ProjChkStructIdx]);
+
+  if (ProjectOptionsChkGrp.Checked[ProjChkStructIdx]) then
+    ProjectOptionsChkGrp.Checked[ProjChkDeletedIdx] := false;
 
   if (Index = ProjChkSingleIdx) then
   begin
@@ -269,7 +338,7 @@ begin
 
     if (TmpChk) then
     begin
-      FProjectTree.CheckType :=  pctTriState;
+      FProjectTree.CheckType :=  pctCascadeTopDown;
       FDataFormViewer.KeyFieldsSelectState := kssAlwaysSelected;
     end else begin
       FProjectTree.CheckType :=  pctIndividual;
@@ -297,11 +366,7 @@ begin
   FDocumentFile := AValue;
 
   DocumentFile.Document.Relations.OrderedWalk(@CreateCustomData);
-  ProjectFileNameEdit.FileName :=
-    ChangeFileExt(
-      ExtractFileName(FDocumentFile.FileName),
-      '_' + IntToStr(FDocumentFile.Document.CycleNo) + '.tmp'
-    );
+  ProjectFileNameEdit.FileName := GetExportFileName(nil);
 
   FProjectTree.AddDocument(FDocumentFile.Document);
   FProjectTree.CheckAll;
@@ -320,14 +385,17 @@ begin
   FDataFormViewer.DataFile := TEpiMasterRelation(AObject).Datafile;
 
   Rec := TDatafileRec(AObject.FindCustomData(EXPORT_CUSTOMDATA));
-  FDataFormViewer.SelectedList := Rec.SelectedItems;
-  DataformFileNameEdit.FileName       := Rec.Filename;
-  if (Rec.StartRec = -1) and (Rec.EndRec = -1) then
+  FDataFormViewer.SelectedList  := Rec.SelectedItems;
+  DataformFileNameEdit.FileName := Rec.Filename;
+  if (Rec.AllRecord) then
   begin
     AllRecordRBtn.Checked := true;
+    FromRecordEdit.Text   := '';
+    ToRecordEdit.Text     := '';
   end else begin
-    FromRecordEdit.Text := IntToStr(Rec.StartRec);
-    ToRecordEdit.Text   := IntToStr(Rec.EndRec);
+    RangeRBtn.Checked     := true;
+    FromRecordEdit.Text   := IntToStr(Rec.StartRec);
+    ToRecordEdit.Text     := IntToStr(Rec.EndRec);
   end;
 end;
 
@@ -353,11 +421,11 @@ begin
   Rec.SelectedItems := FDataFormViewer.SelectedList;
   if AllRecordRBtn.Checked then
   begin
-    Rec.StartRec := -1;
-    Rec.EndRec   := -1;
+    Rec.AllRecord := true;
   end else begin
-    Rec.StartRec := StrToInt(FromRecordEdit.Text);
-    Rec.EndRec   := StrToInt(ToRecordEdit.Text);
+    Rec.AllRecord := false;
+    Rec.StartRec := StrToIntDef(FromRecordEdit.Text, 1);
+    Rec.EndRec   := StrToIntDef(ToRecordEdit.Text,   Relation.Datafile.Size);
   end;
 end;
 
@@ -371,23 +439,50 @@ begin
   Rec := TDatafileRec.Create;
 
   Rec.Filename      := GetExportFileName(Relation.Datafile);
+  Rec.AllRecord     := true;
   Rec.StartRec      := -1;
   Rec.EndRec        := -1;
   Rec.SelectedItems := TList.Create;
-
-  for Item in Relation.Datafile.ControlItems do
-    Rec.SelectedItems.Add(Item);
 
   Relation.AddCustomData(EXPORT_CUSTOMDATA, TObject(Rec));
 end;
 
 function TExportForm2.GetExportFileName(const DF: TEpiDataFile): string;
 begin
-  Result :=
-    ChangeFileExt(ExtractFileName(FDocumentFile.FileName), '') +
-    '_' + DF.Caption.Text +
-    '_' + IntToStr(FDocumentFile.Document.CycleNo) +
-    '.tmp';
+  Result := ChangeFileExt(ExtractFileName(FDocumentFile.FileName), '');
+
+  if Assigned(DF) and (DF.Caption.Text <> '') then
+    Result += '_' + DF.Caption.Text;
+
+  case ManagerSettings.ExportPostFix of
+    // Do nothing
+    epProjectOnly: ;
+
+    // Add cycle no:
+    epAddCycle:
+      Result += '_' + IntToStr(FDocumentFile.Document.CycleNo);
+
+    // Add current date:
+    epAddDate:
+      Result += '_' + DateToStr(Now);
+  end;
+
+  Result += '.tmp';
+end;
+
+function TExportForm2.GetExportDirectory: string;
+begin
+  result := ExportFolderEdit.Directory;
+end;
+
+function TExportForm2.GetExportReport: Boolean;
+begin
+  result := ProjectOptionsChkGrp.Checked[ProjChkReportIdx];
+end;
+
+function TExportForm2.GetExportSingleFile: Boolean;
+begin
+  result := ProjectOptionsChkGrp.Checked[ProjChkSingleIdx];
 end;
 
 procedure TExportForm2.UpdateFileNameExtensions;
@@ -411,6 +506,12 @@ begin
   DataformFileNameEdit.FileName := TDatafileRec(FProjectTree.SelectedObject.FindCustomData(EXPORT_CUSTOMDATA)).Filename;
 end;
 
+procedure TExportForm2.UpdateSelectedItems;
+begin
+  FDocumentFile.Document.Relations.OrderedWalk(@ChangeSelectedItems);
+  FDataFormViewer.SelectedList := TDatafileRec(FProjectTree.SelectedObject.FindCustomData(EXPORT_CUSTOMDATA)).SelectedItems;
+end;
+
 procedure TExportForm2.ChangeExt(const Relation: TEpiMasterRelation;
   const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
   Data: Pointer);
@@ -424,21 +525,40 @@ begin
   Rec.Filename := ChangeFileExt(Rec.Filename, Ext);
 end;
 
+procedure TExportForm2.ChangeSelectedItems(const Relation: TEpiMasterRelation;
+  const Depth: Cardinal; const Index: Cardinal; var aContinue: boolean;
+  Data: Pointer);
+var
+  Rec: TDatafileRec;
+  Item: TEpiCustomControlItem;
+begin
+  Rec := TDatafileRec(Relation.FindCustomData(EXPORT_CUSTOMDATA));
+  Rec.SelectedItems.Clear;
+
+  // EPX format
+  if IFrame.ExportHeadings then
+    for Item in Relation.Datafile.ControlItems do
+      Rec.SelectedItems.Add(Item)
+  else
+    for Item in Relation.Datafile.ControlItems do
+      if (not Item.InheritsFrom(TEpiHeading)) then
+        Rec.SelectedItems.Add(Item)
+end;
+
 constructor TExportForm2.Create(TheOwner: TComponent);
 var
   Rec: PFrameRec;
   Tab: TTabSheet;
   Frame: TCustomFrame;
-  DialogFilters: TEpiDialogFilters;
   i: Integer;
 begin
   inherited Create(TheOwner);
 
-  ProjectFileNameEdit.Visible := False;
+  ProjectFileNameEdit.Visible  := False;
   DataformFileNameEdit.Visible := True;
 
-  ExportFolderEdit.Directory := ManagerSettings.WorkingDirUTF8;
-  DataformPageCtrl.ActivePage := FieldListSheet;
+  ExportFolderEdit.Directory   := ManagerSettings.WorkingDirUTF8;
+  DataformPageCtrl.ActivePage  := FieldListSheet;
 
   FProjectTree := TEpiVProjectTreeViewFrame.Create(Self);
   with FProjectTree do
@@ -468,9 +588,8 @@ begin
   begin
     Align              := alClient;
     Parent             := FieldListSheet;
-
-    ShowHeadings := true;
-    ShowFieldTypes := AllFieldTypes;
+    ShowHeadings       := true;
+    ShowFieldTypes     := AllFieldTypes;
   end;
 
   // Export types and their frames
@@ -490,7 +609,6 @@ begin
     begin
       Tab.Caption := GetFrameCaption;
       ExportTypeCombo.AddItem(GetExportName, TObject(Rec));
-      DialogFilters := DialogFilters + GetFileDialogExtensions;
     end;
   end;
 end;

@@ -6,8 +6,8 @@ object Settings_ExportFrame: TSettings_ExportFrame
   ClientHeight = 350
   ClientWidth = 465
   TabOrder = 0
-  DesignLeft = 467
-  DesignTop = 362
+  DesignLeft = 950
+  DesignTop = 307
   object ExportTypeCombo: TComboBox
     AnchorSideLeft.Control = Label1
     AnchorSideLeft.Side = asrBottom
@@ -87,5 +87,31 @@ object Settings_ExportFrame: TSettings_ExportFrame
     Width = 157
     Caption = 'Create Export Report'
     TabOrder = 3
+  end
+  object RadioGroup1: TRadioGroup
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ExportReportChkBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 20
+    Height = 17
+    Top = 183
+    Width = 425
+    Anchors = [akTop, akLeft, akRight]
+    AutoFill = True
+    AutoSize = True
+    BorderSpacing.Left = 20
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 20
+    Caption = 'Export Filename:'
+    ChildSizing.LeftRightSpacing = 6
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.EnlargeVertical = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsScaleChilds
+    ChildSizing.ShrinkVertical = crsScaleChilds
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    TabOrder = 4
   end
 end

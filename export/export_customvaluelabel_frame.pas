@@ -34,6 +34,7 @@ begin
   begin
     ExportValueLabels := ExportValueLabelsChkBox.Checked;
   end;
+  Result := true;
 end;
 
 end.

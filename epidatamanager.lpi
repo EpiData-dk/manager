@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="34"/>
+      <BuildNr Value="37"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
@@ -425,7 +425,6 @@
         <ComponentName Value="ExportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="export_form"/>
       </Unit36>
       <Unit37>
         <Filename Value="export/export_stata_frame.pas"/>
@@ -433,7 +432,6 @@
         <ComponentName Value="ExportStataFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_stata_frame"/>
       </Unit37>
       <Unit38>
         <Filename Value="export/export_customvaluelabel_frame.pas"/>
@@ -446,7 +444,6 @@
       <Unit39>
         <Filename Value="export/export_frame_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="export_frame_types"/>
       </Unit39>
       <Unit40>
         <Filename Value="export/export_csv_frame.pas"/>
@@ -454,7 +451,6 @@
         <ComponentName Value="ExportCSVFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_csv_frame"/>
       </Unit40>
       <Unit41>
         <Filename Value="export/export_customtext_frame.pas"/>
@@ -462,7 +458,6 @@
         <ComponentName Value="ExportCustomTextFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_customtext_frame"/>
       </Unit41>
       <Unit42>
         <Filename Value="export/export_spss_frame.pas"/>
@@ -470,7 +465,6 @@
         <ComponentName Value="ExportSPSSFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_spss_frame"/>
       </Unit42>
       <Unit43>
         <Filename Value="export/export_sas_frame.pas"/>
@@ -478,7 +472,6 @@
         <ComponentName Value="ExportSASFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_sas_frame"/>
       </Unit43>
       <Unit44>
         <Filename Value="tools/prepare_double_entry_form.pas"/>
@@ -650,7 +643,6 @@
         <ComponentName Value="ExportDDIFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_ddi_frame"/>
       </Unit75>
       <Unit76>
         <Filename Value="designer/design_control_extender.pas"/>

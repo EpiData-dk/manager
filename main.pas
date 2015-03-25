@@ -6,11 +6,11 @@ unit main;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons, project_frame,
-  LMessages, StdCtrls, manager_messages, epidocument, report_base,
-  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc,
-  epiopenfile;
+  Classes, SysUtils, fgl, FileUtil, LResources, Forms, Controls, Graphics,
+  Dialogs, Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
+  project_frame, LMessages, StdCtrls, manager_messages, epidocument,
+  report_base, episervice_ipc, episervice_ipctypes, epiexportsettings,
+  simpleipc, epiopenfile;
 
 type
 
@@ -645,6 +645,13 @@ var
   F: TExportForm2;
   Settings: TEpiExportSetting;
   Exporter: TEpiExport;
+  R: TReportExport;
+  S: String;
+  FileList: TEpiDocumentFileList;
+  FS: TFileStreamUTF8;
+  ReportTitle: String;
+  ReportText: String;
+  i: Integer;
 begin
   Exporter := nil;
   DF := nil;
@@ -664,7 +671,55 @@ begin
     Settings := F.ExportSetting;
 
     Exporter := TEpiExport.Create;
-    Exporter.Export(Settings);
+    if not Exporter.Export(Settings) then
+      ShowMessage('Export Failed.')
+    else begin
+      FS := nil;
+
+      if F.ExportReport then
+      begin
+        FileList := TEpiDocumentFileList.Create;
+        FileList.Add(DF);
+
+        R := TReportExport.Create(TEpiReportTXTGenerator);
+        R.DocumentFiles := FileList;
+        R.ExportSettings := Settings;
+        R.ReportFileName := F.ExportDirectory + DirectorySeparator + ChangeFileExt(ExtractFileName(DF.FileName), '.log');
+        // Canonicalize filename (remove "..", "//", "\\" etc....
+        R.ReportFileName := ExpandFileNameUTF8(R.ReportFileName);
+
+        ReportTitle := R.ReportTitle;
+        ReportText := R.RunReport;
+
+        FS := TFileStreamUTF8.Create(R.ReportFileName, fmCreate);
+        FS.Write(ReportText[1], Length(ReportText));
+
+        R.Free;
+        FileList.Free;
+      end;
+
+      S := 'Export Succeeded' + LineEnding + LineEnding;
+      S += 'Project: ' + DF.FileName + LineEnding;
+
+      if Assigned(FS) then
+        S += 'Report: ' + FS.FileName;
+
+      ShowMessage(TrimRight(S));
+
+      if F.ExportReport then
+        ShowReportForm(Self, ReportTitle, ReportText);
+
+      if (Settings is TEpiEPXExportSetting) then
+        if F.ExportSingleFile then
+          AddToRecent(TEpiEPXExportSetting(Settings).ExportFileName)
+        else
+          for i := 0 to Settings.DatafileSettings.Count - 1 do
+            AddToRecent(Settings.DatafileSettings[i].ExportFileName);
+
+      FS.Free;
+
+      UpdateRecentFiles;
+    end;
   finally
     Exporter.Free;
 

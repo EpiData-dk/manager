@@ -38,7 +38,7 @@ type
 implementation
 
 uses
-  export_form;
+  export_form, epiv_documentfile;
 
 {$R *.lfm}
 
@@ -57,7 +57,8 @@ end;
 function TExportEPXFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
 begin
-  Frame.UpdateExportSetting(Setting);
+  TEpiEPXExportSetting(Setting).DocumentClass := TDocumentFile;
+  Result := Frame.UpdateExportSetting(Setting);
 end;
 
 function TExportEPXFrame.GetFrameCaption: string;
