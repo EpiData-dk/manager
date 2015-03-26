@@ -42,7 +42,7 @@ implementation
 {$R *.lfm}
 
 uses
-  export_customvaluelabel_frame, epieximtypes, export_form,
+  export_form2, export_customvaluelabel_frame, epieximtypes,
   epiversionutils, settings2;
 
 { TExportStataFrame }

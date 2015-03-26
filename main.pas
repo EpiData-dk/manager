@@ -18,7 +18,6 @@ type
 
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
-    Button1: TButton;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
     MenuItem37: TMenuItem;
@@ -301,7 +300,7 @@ uses
   report_fieldlist_extended, report_project_overview,
   report_counts, report_double_entry_validation,
   report_codebook, report_project_validation,
-  shortcuts, export_form, prepare_double_entry_form,
+  shortcuts, prepare_double_entry_form,
   managerprocs, process, epiv_documentfile,
   report_export, epireport_generator_txt,
   valuelabel_import_data,
@@ -451,7 +450,7 @@ begin
 end;
 
 procedure TMainForm.ExportActionExecute(Sender: TObject);
-var
+{var
   IsLocalDoc: boolean;
   Doc: TEpiDocumentFile;
   ExportForm: TExportForm;
@@ -463,9 +462,9 @@ var
   R: TReportExport;
   FS: TFileStreamUTF8;
   ReportText: String;
-  ReportTitle: String;
+  ReportTitle: String; }
 begin
-  Settings := nil;
+  {Settings := nil;
   Exporter := nil;
   ExportForm := nil;
 
@@ -533,7 +532,7 @@ begin
     Settings.Free;
   end;
   if IsLocalDoc then
-    Doc.Free;
+    Doc.Free;  }
 end;
 
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
@@ -1682,7 +1681,7 @@ begin
 
   TAboutForm.RestoreDefaultPos;
   TAppendForm.RestoreDefaultPos;
-  TExportForm.RestoreDefaultPos;
+  TExportForm2.RestoreDefaultPos;
   TPrepareDoubleEntryForm.RestoreDefaultPos;
   TSettingsForm.RestoreDefaultPos;
   TStaticReportsForm.RestoreDefaultPos;

@@ -38,7 +38,7 @@ type
 implementation
 
 uses
-  export_form, epiv_documentfile;
+  export_form2, epiv_documentfile;
 
 {$R *.lfm}
 

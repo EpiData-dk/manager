@@ -39,7 +39,7 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form, export_customvaluelabel_frame;
+  export_form2, export_customvaluelabel_frame;
 
 { TExportSASFrame }
 

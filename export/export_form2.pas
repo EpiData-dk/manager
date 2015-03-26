@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   ComCtrls, StdCtrls, EditBtn, Buttons, epiv_dataform_treeview,
-  epiv_projecttreeview_frame, epiopenfile, epidocument, export_frame_types,
-  types, epicustombase, epidatafiles, epirelations, epiexportsettings;
+  epiv_projecttreeview_frame, epiopenfile, export_frame_types,
+  epicustombase, epidatafiles, epirelations, epiexportsettings;
 
 type
 
@@ -85,6 +85,7 @@ type
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
+    class procedure RestoreDefaultPos;
     property DocumentFile: TEpiDocumentFile read FDocumentFile write SetDocumentFile;
     property ExportSetting: TEpiExportSetting read FExportSetting;
     property ExportReport: Boolean read GetExportReport;
@@ -92,13 +93,18 @@ type
     property ExportDirectory: string read GetExportDirectory;
   end;
 
+procedure RegisterExportFrame(CFC: TCustomFrameClass; ESC: TEpiExportSettingClass);
+
 implementation
 
 {$R *.lfm}
 
 uses
-  epidatafilestypes, epieximtypes, export_form,
+  epidatafilestypes, epieximtypes,
   epimiscutils, settings2_var, settings2, manager_types;
+
+var
+  RegisterList: TList = nil;
 
 const
   EXPORT_CUSTOMDATA = 'EXPORT_CUSTOMDATA';
@@ -124,6 +130,23 @@ type
     StartRec: Integer;
     EndRec: Integer;
   end;
+
+procedure RegisterExportFrame(CFC: TCustomFrameClass;
+  ESC: TEpiExportSettingClass);
+var
+  Rec: PFrameRec;
+begin
+  if not Assigned(RegisterList) then
+    RegisterList := TList.Create;
+
+  if (CFC <> nil) and (not Supports(CFC, IExportSettingsPresenterFrame)) then
+    Exit;
+
+  Rec := new(PFrameRec);
+  Rec^.CFC := CFC;
+  Rec^.ESC := ESC;
+  RegisterList.Add(Rec);
+end;
 
 { TExportForm2 }
 
@@ -365,6 +388,8 @@ begin
   if FDocumentFile = AValue then Exit;
   FDocumentFile := AValue;
 
+  ExportFolderEdit.Directory   := ExtractFilePath(DocumentFile.FileName);
+
   DocumentFile.Document.Relations.OrderedWalk(@CreateCustomData);
   ProjectFileNameEdit.FileName := GetExportFileName(nil);
 
@@ -557,7 +582,6 @@ begin
   ProjectFileNameEdit.Visible  := False;
   DataformFileNameEdit.Visible := True;
 
-  ExportFolderEdit.Directory   := ManagerSettings.WorkingDirUTF8;
   DataformPageCtrl.ActivePage  := FieldListSheet;
 
   FProjectTree := TEpiVProjectTreeViewFrame.Create(Self);
@@ -612,6 +636,26 @@ begin
     end;
   end;
 end;
+
+class procedure TExportForm2.RestoreDefaultPos;
+var
+  Aform: TForm;
+begin
+  Aform := TForm.Create(nil);
+  Aform.Width := 600;
+  Aform.Height := 650;
+  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
+  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
+  SaveFormPosition(Aform, TExportForm2.ClassName);
+  AForm.free;
+end;
+
+finalization
+  begin
+    while RegisterList.Count > 0 do
+      FreeMem(RegisterList.Extract(RegisterList.Last));
+    RegisterList.Free;
+  end;
 
 end.
 

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 637
+  Left = 765
   Height = 658
-  Top = 306
+  Top = 282
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -131,20 +131,6 @@ object MainForm: TMainForm
       PopupMenu = DefineProjectPopupMenu
       ShowHint = True
       TabOrder = 5
-    end
-    object Button1: TButton
-      AnchorSideLeft.Control = ExportBtn
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ProcessToolPanel
-      AnchorSideTop.Side = asrCenter
-      Left = 598
-      Height = 25
-      Top = 7
-      Width = 75
-      BorderSpacing.Left = 10
-      Caption = 'Export2'
-      OnClick = Button1Click
-      TabOrder = 6
     end
   end
   object MainMenu1: TMainMenu
@@ -552,7 +538,7 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Export...'
       ImageIndex = 17
-      OnExecute = ExportActionExecute
+      OnExecute = Button1Click
     end
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'

@@ -1,9 +1,9 @@
 object ExportForm2: TExportForm2
-  Left = 628
+  Left = 702
   Height = 632
-  Top = 276
+  Top = 233
   Width = 731
-  Caption = 'ExportForm2'
+  Caption = 'Export...'
   ClientHeight = 632
   ClientWidth = 731
   OnCloseQuery = FormCloseQuery

@@ -54,7 +54,7 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form, epistringutils, export_customtext_frame;
+  export_form2, epistringutils, export_customtext_frame;
 
 { TExportCSVFrame }
 

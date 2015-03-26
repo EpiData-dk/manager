@@ -50,7 +50,7 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form,
+  export_form2,
   export_customvaluelabel_frame,
   export_csv_frame,
   settings2, epi_iso639, epistringutils;
