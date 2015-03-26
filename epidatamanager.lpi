@@ -14,8 +14,8 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <RevisionNr Value="2"/>
-      <BuildNr Value="28"/>
+      <RevisionNr Value="3"/>
+      <BuildNr Value="39"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion=""/>
@@ -226,7 +226,6 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -426,7 +425,6 @@
         <ComponentName Value="ExportStataFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_stata_frame"/>
       </Unit36>
       <Unit37>
         <Filename Value="export/export_customvaluelabel_frame.pas"/>
@@ -445,7 +443,6 @@
         <ComponentName Value="ExportCSVFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_csv_frame"/>
       </Unit39>
       <Unit40>
         <Filename Value="export/export_customtext_frame.pas"/>
@@ -460,7 +457,6 @@
         <ComponentName Value="ExportSPSSFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_spss_frame"/>
       </Unit41>
       <Unit42>
         <Filename Value="export/export_sas_frame.pas"/>
@@ -468,7 +464,6 @@
         <ComponentName Value="ExportSASFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_sas_frame"/>
       </Unit42>
       <Unit43>
         <Filename Value="tools/prepare_double_entry_form.pas"/>
@@ -505,7 +500,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit48>
       <Unit49>
         <Filename Value="designer/design_control_field.pas"/>
@@ -522,12 +516,10 @@
       <Unit52>
         <Filename Value="designer/design_designpanel.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designpanel"/>
       </Unit52>
       <Unit53>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit53>
       <Unit54>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -595,7 +587,6 @@
         <ComponentName Value="ReportOptionsFrameCounts"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_optionframe_counts"/>
       </Unit66>
       <Unit67>
         <Filename Value="reports/report_types.pas"/>
@@ -643,7 +634,6 @@
         <ComponentName Value="ExportDDIFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_ddi_frame"/>
       </Unit74>
       <Unit75>
         <Filename Value="designer/design_control_extender.pas"/>
@@ -659,7 +649,6 @@
         <ComponentName Value="ExportEPXFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="export_epx_frame"/>
       </Unit77>
       <Unit78>
         <Filename Value="reports/report_project_validation.pas"/>
@@ -760,9 +749,7 @@
         <ComponentName Value="ExportForm2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="export_form2"/>
       </Unit93>
-    </Units>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
