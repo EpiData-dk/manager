@@ -115,8 +115,6 @@ var
   Doc: TEpiDocument;
   DF: TEpiDataFile;
   F: TEpiField;
-  lF: TEpiField;
-  Idx: Integer;
 begin
   CheckListBox1.Items.BeginUpdate;
   Doc := TEpiDocument(Selection.Objects[0]);

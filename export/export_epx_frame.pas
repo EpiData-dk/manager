@@ -26,6 +26,7 @@ type
     function GetExportName: string;
     function GetFileDialogExtensions: TEpiDialogFilters;
     function ExportHeadings: boolean;
+    function ExportRelated: boolean;
     function CheckExportAllowed(Const Setting: TEpiExportSetting;
       Const Doc: TEpiDocument;
       out ErrorText: string): boolean;
@@ -37,7 +38,7 @@ type
 implementation
 
 uses
-  export_form;
+  export_form2, epiv_documentfile;
 
 {$R *.lfm}
 
@@ -56,7 +57,8 @@ end;
 function TExportEPXFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
 begin
-  Frame.UpdateExportSetting(Setting);
+  TEpiEPXExportSetting(Setting).DocumentClass := TDocumentFile;
+  Result := Frame.UpdateExportSetting(Setting);
 end;
 
 function TExportEPXFrame.GetFrameCaption: string;
@@ -77,6 +79,11 @@ end;
 function TExportEPXFrame.ExportHeadings: boolean;
 begin
   Result := true;
+end;
+
+function TExportEPXFrame.ExportRelated: boolean;
+begin
+  result := true;
 end;
 
 function TExportEPXFrame.CheckExportAllowed(const Setting: TEpiExportSetting;

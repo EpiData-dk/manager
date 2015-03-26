@@ -15,7 +15,7 @@ object ExportStataFrame: TExportStataFrame
     Left = 20
     Height = 15
     Top = 27
-    Width = 51
+    Width = 47
     BorderSpacing.Left = 20
     Caption = 'Version:'
     ParentColor = False
@@ -26,10 +26,10 @@ object ExportStataFrame: TExportStataFrame
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 81
+    Left = 77
     Height = 29
     Top = 20
-    Width = 415
+    Width = 419
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 20

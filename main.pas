@@ -6,10 +6,11 @@ unit main;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
-  project_frame, LMessages, manager_messages, epidocument, report_base,
-  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile;
+  Classes, SysUtils, fgl, FileUtil, LResources, Forms, Controls, Graphics,
+  Dialogs, Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
+  project_frame, LMessages, StdCtrls, manager_messages, epidocument,
+  report_base, episervice_ipc, episervice_ipctypes, epiexportsettings,
+  simpleipc, epiopenfile;
 
 type
 
@@ -181,6 +182,7 @@ type
     PageControl1: TPageControl;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure ClearAllDataFormsMenuItemClick(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
@@ -194,12 +196,9 @@ type
     procedure FormChanged(Sender: TObject; Form: TCustomForm);
     procedure FormDestroy(Sender: TObject);
     procedure FormDropFiles(Sender: TObject; const FileNames: array of String);
-    procedure RecentFilesActionListUpdate(AAction: TBasicAction;
-      var Handled: Boolean);
     procedure SelectProjectBtnClick(Sender: TObject);
     procedure DocumentBtnClick(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
-    procedure ExportActionExecute(Sender: TObject);
     procedure ExtendedListReportActionExecute(Sender: TObject);
     procedure FileMenuItemClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -298,14 +297,12 @@ uses
   report_fieldlist_extended, report_project_overview,
   report_counts, report_double_entry_validation,
   report_codebook, report_project_validation,
-  shortcuts, export_form, prepare_double_entry_form,
+  shortcuts, prepare_double_entry_form,
   managerprocs, process, epiv_documentfile,
   report_export, epireport_generator_txt,
-  valuelabel_import_data,
-  append_form, epitools_append,
-  manager_globals,
-  report_project_validation_frame2, reports_form,
-  epiv_checkversionform;
+  valuelabel_import_data,  append_form, epitools_append,
+  manager_globals, reports_form,
+  epiv_checkversionform, export_form2;
 
 type
   TAccessActionList = class(TActionList);
@@ -422,15 +419,6 @@ begin
   PostMessage(Self.Handle, LM_MAIN_OPENPROJECT, WPARAM(S), 0);
 end;
 
-procedure TMainForm.RecentFilesActionListUpdate(AAction: TBasicAction;
-  var Handled: Boolean);
-begin
-{  if Screen.ActiveCustomForm <> MainForm then
-    RecentFilesActionList.State := asSuspended
-  else
-    RecentFilesActionList.State := asNormal;      }
-end;
-
 procedure TMainForm.SelectProjectBtnClick(Sender: TObject);
 begin
   UpdateRecentFiles;
@@ -445,92 +433,6 @@ end;
 procedure TMainForm.EpiDataTutorialsMenuItemClick(Sender: TObject);
 begin
   OpenURL('http://epidata.info/dokuwiki/doku.php?id=training:start');
-end;
-
-procedure TMainForm.ExportActionExecute(Sender: TObject);
-var
-  IsLocalDoc: boolean;
-  Doc: TEpiDocumentFile;
-  ExportForm: TExportForm;
-  Settings: TEpiExportSetting;
-  Exporter: TEpiExport;
-  S: String;
-  ASettings: TEpiExportSetting;
-  FileList: TEpiDocumentFileList;
-  R: TReportExport;
-  FS: TFileStreamUTF8;
-  ReportText: String;
-  ReportTitle: String;
-begin
-  Settings := nil;
-  Exporter := nil;
-  ExportForm := nil;
-
-  Doc := ToolsCheckOpenFile(True, IsLocalDoc);
-  if not Assigned(Doc) then exit;
-
-  try
-    ExportForm := TExportForm.Create(Self, Doc.Document, Doc.FileName);
-    if ExportForm.ShowModal <> mrOK then exit;
-
-    Settings := ExportForm.ExportSetting;
-
-    Exporter := TEpiExport.Create;
-    if not Exporter.Export(Settings) then
-      ShowMessage('Export Failed.')
-    else
-    with ExportForm do
-    begin
-      FS := nil;
-      if ExportReportChkBox.Checked then
-      begin
-        FileList := TEpiDocumentFileList.Create;
-        FileList.Add(Doc);
-
-        R := TReportExport.Create(TEpiReportTXTGenerator);
-        R.DocumentFiles := FileList;
-        R.ExportSettings := ExportSetting;
-
-        ReportTitle := R.ReportTitle;
-        ReportText := R.RunReport;
-
-        FS := TFileStreamUTF8.Create(ChangeFileExt(ExportSetting.ExportFileName, '.log'), fmCreate);
-        FS.Write(ReportText[1], Length(ReportText));
-
-        R.Free;
-        FileList.Free;
-      end;
-
-      S := 'Export Succeeded' + LineEnding + LineEnding;
-      S += 'Project: ' + Doc.FileName + LineEnding;
-
-      ASettings := ExportSetting;
-      while Assigned(ASettings) do
-      begin
-        S += 'Export: ' + ASettings.ExportFileName + LineEnding;
-        ASettings := ASettings.AdditionalExportSettings;
-      end;
-
-      if Assigned(FS) then
-        S += 'Report: ' + FS.FileName;
-
-      ShowMessage(TrimRight(S));
-
-      if Assigned(FS) then
-        ShowReportForm(Self, ReportTitle, ReportText);
-
-      if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
-        AddToRecent(ExportForm.ExportSetting.ExportFileName);
-
-      FS.Free;
-    end;
-  finally
-    ExportForm.Free;
-    Exporter.Free;
-    Settings.Free;
-  end;
-  if IsLocalDoc then
-    Doc.Free;
 end;
 
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
@@ -632,6 +534,98 @@ begin
     Handler.Free;
     if LocalDoc then
       DocFile.Free;
+  end;
+end;
+
+procedure TMainForm.Button1Click(Sender: TObject);
+var
+  local: boolean;
+  DF: TEpiDocumentFile;
+  F: TExportForm2;
+  Settings: TEpiExportSetting;
+  Exporter: TEpiExport;
+  R: TReportExport;
+  S: String;
+  FileList: TEpiDocumentFileList;
+  FS: TFileStreamUTF8;
+  ReportTitle: String;
+  ReportText: String;
+  i: Integer;
+begin
+  Exporter := nil;
+  DF := nil;
+  F := nil;
+  Settings := nil;
+
+  try
+    DF := ToolsCheckOpenFile(false, local);
+
+    if (not Assigned(DF)) then
+      Exit;
+
+    F := TExportForm2.Create(Self);
+    F.DocumentFile := DF;
+    if F.ShowModal <> mrOK then exit;
+
+    Settings := F.ExportSetting;
+
+    Exporter := TEpiExport.Create;
+    if not Exporter.Export(Settings) then
+      ShowMessage('Export Failed.')
+    else begin
+      FS := nil;
+
+      if F.ExportReport then
+      begin
+        FileList := TEpiDocumentFileList.Create;
+        FileList.Add(DF);
+
+        R := TReportExport.Create(TEpiReportTXTGenerator);
+        R.DocumentFiles := FileList;
+        R.ExportSettings := Settings;
+        R.ReportFileName := F.ExportDirectory + DirectorySeparator + ChangeFileExt(ExtractFileName(DF.FileName), '.log');
+        // Canonicalize filename (remove "..", "//", "\\" etc....
+        R.ReportFileName := ExpandFileNameUTF8(R.ReportFileName);
+
+        ReportTitle := R.ReportTitle;
+        ReportText := R.RunReport;
+
+        FS := TFileStreamUTF8.Create(R.ReportFileName, fmCreate);
+        FS.Write(ReportText[1], Length(ReportText));
+
+        R.Free;
+        FileList.Free;
+      end;
+
+      S := 'Export Succeeded' + LineEnding + LineEnding;
+      S += 'Project: ' + DF.FileName + LineEnding;
+
+      if Assigned(FS) then
+        S += 'Report: ' + FS.FileName;
+
+      ShowMessage(TrimRight(S));
+
+      if F.ExportReport then
+        ShowReportForm(Self, ReportTitle, ReportText);
+
+      if (Settings is TEpiEPXExportSetting) then
+        if F.ExportSingleFile then
+          AddToRecent(TEpiEPXExportSetting(Settings).ExportFileName)
+        else
+          for i := 0 to Settings.DatafileSettings.Count - 1 do
+            AddToRecent(Settings.DatafileSettings[i].ExportFileName);
+
+      FS.Free;
+
+      UpdateRecentFiles;
+    end;
+  finally
+    Exporter.Free;
+
+    if local then
+      DF.Free;
+    F.Free;
+    Settings.Free;
   end;
 end;
 
@@ -1587,7 +1581,7 @@ begin
 
   TAboutForm.RestoreDefaultPos;
   TAppendForm.RestoreDefaultPos;
-  TExportForm.RestoreDefaultPos;
+  TExportForm2.RestoreDefaultPos;
   TPrepareDoubleEntryForm.RestoreDefaultPos;
   TSettingsForm.RestoreDefaultPos;
   TStaticReportsForm.RestoreDefaultPos;

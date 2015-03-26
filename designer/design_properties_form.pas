@@ -264,7 +264,6 @@ procedure TPropertiesForm.UpdateSelection(Objects: TJvDesignObjectArray;
 var
   AClassType: TClass;
   i: Integer;
-  Item: TEpiCustomItem;
 
   procedure NewFrame(FrameClass: TCustomFrameClass);
   begin

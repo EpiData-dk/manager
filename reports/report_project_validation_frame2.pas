@@ -400,7 +400,7 @@ begin
     Parent             := ProjectPanel;
 
     AllowSelectProject := False;
-    CheckType          := pctCascade;
+    CheckType          := pctCascadeBottomUp;
     DisplayMode        := pdmSeperate;
     EditCaption        := False;
     EditStructure      := False;

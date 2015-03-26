@@ -125,7 +125,7 @@ object MainForm: TMainForm
       Width = 100
       AutoSize = True
       BorderSpacing.Left = 10
-      Caption = '&Select Project'
+      Caption = 'Se&lect Project'
       OnClick = SelectProjectBtnClick
       ParentShowHint = False
       PopupMenu = DefineProjectPopupMenu
@@ -538,7 +538,7 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Export...'
       ImageIndex = 17
-      OnExecute = ExportActionExecute
+      OnExecute = Button1Click
     end
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'
@@ -800,7 +800,6 @@ object MainForm: TMainForm
     end
   end
   object RecentFilesActionList: TActionList
-    OnUpdate = RecentFilesActionListUpdate
     left = 488
     top = 336
   end

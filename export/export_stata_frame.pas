@@ -31,6 +31,7 @@ type
     procedure SetSettings(Data: PManagerSettings);
     function  ApplySettings: boolean;
     function ExportHeadings: boolean;
+    function ExportRelated: boolean;
     function CheckExportAllowed(Const Setting: TEpiExportSetting;
       Const Doc: TEpiDocument;
       out ErrorText: string): boolean;
@@ -41,7 +42,7 @@ implementation
 {$R *.lfm}
 
 uses
-  export_customvaluelabel_frame, epieximtypes, export_form,
+  export_form2, export_customvaluelabel_frame, epieximtypes,
   epiversionutils, settings2;
 
 { TExportStataFrame }
@@ -138,6 +139,11 @@ begin
 end;
 
 function TExportStataFrame.ExportHeadings: boolean;
+begin
+  result := false;
+end;
+
+function TExportStataFrame.ExportRelated: boolean;
 begin
   result := false;
 end;

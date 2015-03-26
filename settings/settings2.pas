@@ -61,7 +61,7 @@ implementation
 
 uses
   settings2_interface, settings2_var, epidatafilestypes,
-  IniFiles, epieximtypes,
+  IniFiles, epieximtypes, manager_types,
   managerprocs,
 
   // settings
@@ -188,6 +188,7 @@ begin
       WriteBool(sec, 'ExportDeleted', ExportDeleted);
       WriteInteger(sec, 'ExportEncoding', Integer(ExportEncoding));
       WriteBool(sec, 'ExportCreateReport', ExportCreateReport);
+      WriteInteger(sec, 'ExportPostFix', Integer(ExportPostFix));
 
       Sec := 'exportstata';
       WriteInteger(sec, 'ExportStataVersion', Integer(ExportStataVersion));
@@ -342,6 +343,7 @@ begin
       ExportDeleted          := ReadBool(sec, 'ExportDeleted', ExportDeleted);
       ExportEncoding         := TEpiEncoding(ReadInteger(sec, 'ExportEncoding', Integer(ExportEncoding)));
       ExportCreateReport     := ReadBool(sec, 'ExportCreateReport', ExportCreateReport);
+      ExportPostFix          := TExportPostFix(ReadInteger(sec, 'ExportPostFix', Integer(ExportPostFix)));
 
       Sec := 'exportstata';
       ExportStataVersion     := TEpiStataVersion(ReadInteger(sec, 'ExportStataVersion', Integer(ExportStataVersion)));
@@ -744,6 +746,7 @@ const
     ExportDeleted:         false;
     ExportEncoding:        eeUTF8;
     ExportCreateReport:    true;
+    ExportPostFix:         epAddDate;
 
     // - Stata:
     ExportStataVersion:    dta8;   // Default to Version 8
