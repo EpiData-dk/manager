@@ -473,6 +473,8 @@ begin
 end;
 
 function TExportForm2.GetExportFileName(const DF: TEpiDataFile): string;
+var
+  LFormatSettings: TFormatSettings;
 begin
   Result := ChangeFileExt(ExtractFileName(FDocumentFile.FileName), '');
 
@@ -489,7 +491,11 @@ begin
 
     // Add current date:
     epAddDate:
-      Result += '_' + DateToStr(Now);
+      begin
+        LFormatSettings := DefaultFormatSettings;
+        LFormatSettings.DateSeparator := '-';
+        Result += '_' + DateToStr(Now, LFormatSettings);
+      end;
   end;
 
   Result += '.tmp';
