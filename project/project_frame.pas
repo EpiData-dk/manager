@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList, Controls,
-  Dialogs, epidocument, epidatafiles, epicustombase, epirelations,
+  Dialogs, epidocument, epidatafiles, epicustombase, epirelations, epirelates,
   manager_messages, LMessages, Menus, epiv_documentfile, types,
   design_runtimedesigner, project_types, epiv_projecttreeview_frame;
 
@@ -556,6 +556,7 @@ function TProjectFrame.DoNewDataForm(ParentRelation: TEpiMasterRelation
 var
   MR: TEpiMasterRelation;
   Df: TEpiDataFile;
+  Rel: TEpiRelate;
 begin
   Result := nil;
   Df := nil;
@@ -587,6 +588,12 @@ begin
   end;
 
   Result := FProjectTreeView.CreateRelation(ParentRelation);
+
+  if Assigned(ParentRelation) then
+  begin
+    Rel := ParentRelation.Datafile.Relates.NewRelate;
+    Rel.DetailRelation := Result;
+  end;
 end;
 
 function TProjectFrame.DoNewRuntimeFrame(Relation: TEpiMasterRelation
@@ -1188,7 +1195,21 @@ begin
 end;
 
 class procedure TProjectFrame.RestoreDefaultPos(F: TProjectFrame);
+var
+  Splitter: TSplitter;
 begin
+  if Assigned(F) then
+  begin
+    Splitter := F.Splitter1;
+    Splitter.SetSplitterPosition(180);
+  end else begin
+    Splitter := TSplitter.Create(nil);
+    Splitter.Left := 180;
+  end;
+  SaveSplitterPosition(Splitter, 'ProjectSplitter');
+  if not Assigned(F) then
+    Splitter.Free;
+
   RestoreDefaultPosValueLabelEditor2;
   TProjectSettingsForm.RestoreDefaultPos;
   TKeyFieldsForm.RestoreDefaultPos;

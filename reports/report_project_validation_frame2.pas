@@ -116,7 +116,8 @@ begin
 
     List := TList(Relation.FindCustomData(COMPARE_FIELDS_KEY));
     for i := 0 to List.Count -1 do
-      CompareFields.Add(TEpiField(List[i]).Name);
+      if (TObject(List[i]) is TEpiField) then
+        CompareFields.Add(TEpiField(List[i]).Name);
   end;
 
   Inc(FFieldListIndex);
@@ -338,8 +339,17 @@ var
   DocCount: Integer;
   i: Integer;
   FOptions: TReportProjectValidateOptions;
+  FakeBool: Boolean;
 
 begin
+  // Before anything else, make sure changes in "List By" and "Validate Fields"
+  // are correcte assigned to CustomData.
+  ProjectTreeSelecting(Nil,
+    FProjectTree.SelectedObject, nil,
+    FProjectTree.SelectedObjectType, otRelation,
+    FakeBool
+  );
+
   DocCount := FProjectTree.DocumentCount;
   SetLength(FOptions, DocCount);
 
@@ -390,7 +400,7 @@ begin
     Parent             := ProjectPanel;
 
     AllowSelectProject := False;
-    CheckType          := pctCascade;
+    CheckType          := pctCascadeBottomUp;
     DisplayMode        := pdmSeperate;
     EditCaption        := False;
     EditStructure      := False;

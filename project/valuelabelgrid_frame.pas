@@ -72,10 +72,10 @@ type
   { TValidatedStringEditLink }
 
   TValidatedStringEditLink = class(TStringEditLink, IVTEditLink)
-    procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FEditor: TValueLabelGridFrame;
     FInitialText: string;
+    procedure KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   public
     constructor Create; override;
     function BeginEdit: Boolean; override; stdcall;
@@ -97,7 +97,10 @@ begin
      // if Column = 0, so we may safely send a postmessage here!
      (FTree.EndEditNode)
   then
-    PostMessage(FEditor.Handle, LM_VLG_NEWVALUELABEL, 0, 0);
+    begin
+      PostMessage(FEditor.Handle, LM_VLG_NEWVALUELABEL, 0, 0);
+      Key := VK_UNKNOWN;
+    end;
 
   if (Key = VK_C) and
      (Shift = [ssCtrlOS])

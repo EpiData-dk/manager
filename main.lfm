@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 802
+  Left = 765
   Height = 658
-  Top = 318
+  Top = 282
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -125,7 +125,7 @@ object MainForm: TMainForm
       Width = 100
       AutoSize = True
       BorderSpacing.Left = 10
-      Caption = '&Select Project'
+      Caption = 'Se&lect Project'
       OnClick = SelectProjectBtnClick
       ParentShowHint = False
       PopupMenu = DefineProjectPopupMenu
@@ -137,6 +137,18 @@ object MainForm: TMainForm
     Images = DM.Icons16
     left = 264
     top = 400
+    object AppleMenuItem: TMenuItem
+      Caption = 'epidatamanager'
+      object MenuItem35: TMenuItem
+        Action = ShowAboutAction
+      end
+      object MenuItem36: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem37: TMenuItem
+        Action = SettingsAction
+      end
+    end
     object FileMenuItem: TMenuItem
       Caption = '&File'
       OnClick = FileMenuItemClick
@@ -294,7 +306,7 @@ object MainForm: TMainForm
       end
     end
     object DataformMenu: TMenuItem
-      Caption = 'Dataform'
+      Caption = 'D&ataform'
       object KeyFieldsMenuItem: TMenuItem
         Caption = 'KeyFields'
       end
@@ -315,7 +327,7 @@ object MainForm: TMainForm
       end
     end
     object MenuItem21: TMenuItem
-      Caption = 'Document'
+      Caption = '&Document'
       object MenuItem2: TMenuItem
         Caption = 'Report Structure'
         object ProjectOverviewReportMenuItem: TMenuItem
@@ -437,7 +449,7 @@ object MainForm: TMainForm
     end
     object SettingsAction: TAction
       Category = 'Edit'
-      Caption = 'Preferences'
+      Caption = 'Preferences...'
       Hint = 'Settings'
       OnExecute = SettingsActionExecute
     end
@@ -529,7 +541,7 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Export...'
       ImageIndex = 17
-      OnExecute = ExportActionExecute
+      OnExecute = Button1Click
     end
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'

@@ -17,6 +17,10 @@ type
 
   TMainForm = class(TForm)
     AdminMenuItem: TMenuItem;
+    AppleMenuItem: TMenuItem;
+    MenuItem35: TMenuItem;
+    MenuItem36: TMenuItem;
+    MenuItem37: TMenuItem;
     RecentFilesActionList: TActionList;
     AppendAction: TAction;
     DataFormBtn: TBitBtn;
@@ -293,14 +297,12 @@ uses
   report_fieldlist_extended, report_project_overview,
   report_counts, report_double_entry_validation,
   report_codebook, report_project_validation,
-  shortcuts, export_form, prepare_double_entry_form,
+  shortcuts, prepare_double_entry_form,
   managerprocs, process, epiv_documentfile,
   report_export, epireport_generator_txt,
-  valuelabel_import_data,
-  append_form, epitools_append,
-  manager_globals,
-  report_project_validation_frame2, reports_form,
-  epiv_checkversionform;
+  valuelabel_import_data,  append_form, epitools_append,
+  manager_globals, reports_form,
+  epiv_checkversionform, export_form2;
 
 type
   TAccessActionList = class(TActionList);
@@ -433,92 +435,6 @@ begin
   OpenURL('http://epidata.info/dokuwiki/doku.php?id=training:start');
 end;
 
-procedure TMainForm.ExportActionExecute(Sender: TObject);
-var
-  IsLocalDoc: boolean;
-  Doc: TEpiDocumentFile;
-  ExportForm: TExportForm;
-  Settings: TEpiExportSetting;
-  Exporter: TEpiExport;
-  S: String;
-  ASettings: TEpiExportSetting;
-  FileList: TEpiDocumentFileList;
-  R: TReportExport;
-  FS: TFileStreamUTF8;
-  ReportText: String;
-  ReportTitle: String;
-begin
-  Settings := nil;
-  Exporter := nil;
-  ExportForm := nil;
-
-  Doc := ToolsCheckOpenFile(True, IsLocalDoc);
-  if not Assigned(Doc) then exit;
-
-  try
-    ExportForm := TExportForm.Create(Self, Doc.Document, Doc.FileName);
-    if ExportForm.ShowModal <> mrOK then exit;
-
-    Settings := ExportForm.ExportSetting;
-
-    Exporter := TEpiExport.Create;
-    if not Exporter.Export(Settings) then
-      ShowMessage('Export Failed.')
-    else
-    with ExportForm do
-    begin
-      FS := nil;
-      if ExportReportChkBox.Checked then
-      begin
-        FileList := TEpiDocumentFileList.Create;
-        FileList.Add(Doc);
-
-        R := TReportExport.Create(TEpiReportTXTGenerator);
-        R.DocumentFiles := FileList;
-        R.ExportSettings := ExportSetting;
-
-        ReportTitle := R.ReportTitle;
-        ReportText := R.RunReport;
-
-        FS := TFileStreamUTF8.Create(ChangeFileExt(ExportSetting.ExportFileName, '.log'), fmCreate);
-        FS.Write(ReportText[1], Length(ReportText));
-
-        R.Free;
-        FileList.Free;
-      end;
-
-      S := 'Export Succeeded' + LineEnding + LineEnding;
-      S += 'Project: ' + Doc.FileName + LineEnding;
-
-      ASettings := ExportSetting;
-      while Assigned(ASettings) do
-      begin
-        S += 'Export: ' + ASettings.ExportFileName + LineEnding;
-        ASettings := ASettings.AdditionalExportSettings;
-      end;
-
-      if Assigned(FS) then
-        S += 'Report: ' + FS.FileName;
-
-      ShowMessage(TrimRight(S));
-
-      if Assigned(FS) then
-        ShowReportForm(Self, ReportTitle, ReportText);
-
-      if (ExportForm.ExportSetting is TEpiEPXExportSetting) then
-        AddToRecent(ExportForm.ExportSetting.ExportFileName);
-
-      FS.Free;
-    end;
-  finally
-    ExportForm.Free;
-    Exporter.Free;
-    Settings.Free;
-  end;
-  if IsLocalDoc then
-    Doc.Free;
-end;
-
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportFieldListExtended).Free;
@@ -641,6 +557,16 @@ var
   Fn: String;
   i: Integer;
 begin
+  {$IFDEF darwin}
+  AppleMenuItem.Visible := true;
+  AppleMenuItem.Caption := #$EF#$A3#$BF;
+  {$ELSE}
+  AppleMenuItem.Visible := false;
+  {$ENDIF}
+  AboutMenuItem.Visible := not (AppleMenuItem.Visible);
+  HelpMenuDivider3.Visible := not (AppleMenuItem.Visible);
+  SettingsMenuItem.Visible := not (AppleMenuItem.Visible);
+
   Modified := false;
   Screen.AddHandlerActiveFormChanged(@FormChanged);
 
@@ -1563,7 +1489,7 @@ begin
 
   TAboutForm.RestoreDefaultPos;
   TAppendForm.RestoreDefaultPos;
-  TExportForm.RestoreDefaultPos;
+  TExportForm2.RestoreDefaultPos;
   TPrepareDoubleEntryForm.RestoreDefaultPos;
   TSettingsForm.RestoreDefaultPos;
   TStaticReportsForm.RestoreDefaultPos;

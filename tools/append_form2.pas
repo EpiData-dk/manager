@@ -86,7 +86,7 @@ begin
   FProjectTree.Align := alClient;
   FProjectTree.Parent := ProjectTreePanel;
   FProjectTree.AllowSelectProject := false;
-  FProjectTree.CheckType := pctCascade;
+  FProjectTree.CheckType := pctCascadeBottomUp;
   FProjectTree.EditStructure := true;
   FProjectTree.EditCaption := true;
   FProjectTree.ShowCheckBoxes := true;

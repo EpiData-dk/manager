@@ -35,7 +35,7 @@ uses
   report_combinedlist, report_base, projectfilelist_frame, staticreports_form,
   report_fieldlist_extended, report_project_overview, shortcuts,
   field_valuelabelseditor_form, valuelabelgrid_frame, valuelabelseditor_form2,
-  settings_export, export_form, export_stata_frame,
+  settings_export, export_stata_frame,
   export_customvaluelabel_frame, export_frame_types, export_csv_frame,
   export_customtext_frame, export_spss_frame, export_sas_frame,
   prepare_double_entry_form, project_keyfields_form, manager_globals,
@@ -55,8 +55,9 @@ uses
   design_properties_dataformframe, append_form, append_form2, 
   epiv_projecttreeview_frame, epiv_datamodule, 
   report_project_validation_frame2, reports_form, report_counts_frame,
-  lazcontrols, design_control_memo, admin_form, admin_user_form, 
-admin_group_form;
+  lazcontrols, design_control_memo, export_form2,
+  admin_form, admin_user_form, 
+  admin_group_form;
 
 {$R *.res}
 

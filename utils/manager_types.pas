@@ -10,6 +10,20 @@ type
     function CanClose: boolean;
   end;
 
+  TExportPostFix = (
+    epProjectOnly,
+    epAddCycle,
+    epAddDate
+  );
+
+
+const
+  ExportPostFixCaptions: array[TExportPostFix] of string = (
+    'Project Only',
+    'Add Cycle',
+    'Add Date'
+  );
+
 implementation
 
 end.

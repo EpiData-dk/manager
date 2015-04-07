@@ -28,6 +28,7 @@ type
     procedure SetSettings(Data: PManagerSettings);
     function ApplySettings: boolean;
     function ExportHeadings: boolean;
+    function ExportRelated: boolean;
     function CheckExportAllowed(Const Setting: TEpiExportSetting;
       Const Doc: TEpiDocument;
       out ErrorText: string): boolean;
@@ -38,7 +39,7 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form, export_customvaluelabel_frame;
+  export_form2, export_customvaluelabel_frame;
 
 { TExportSASFrame }
 
@@ -59,12 +60,20 @@ function TExportSASFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
 var
   CSVSettings: TEpiCSVExportSetting;
+  i: Integer;
 begin
   result := (FFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
 
+  TEpiCSVExportSetting.ClassParent;
   CSVSettings := TEpiCSVExportSetting.Create;
   CSVSettings.Assign(Setting);
-  CSVSettings.ExportFileName := ChangeFileExt(Setting.ExportFileName, '.txt');
+
+  for i := 0 to CSVSettings.DatafileSettings.Count - 1 do
+  with CSVSettings.DatafileSettings[i] do
+  begin
+    ExportFileName := ChangeFileExt(ExportFileName, '.csv');
+    Setting.DatafileSettings[i].AdditionalExportSettings := CSVSettings.DatafileSettings[i];
+  end;
 
   Setting.AdditionalExportSettings := CSVSettings;
 end;
@@ -97,6 +106,11 @@ begin
 end;
 
 function TExportSASFrame.ExportHeadings: boolean;
+begin
+  result := false;
+end;
+
+function TExportSASFrame.ExportRelated: boolean;
 begin
   result := false;
 end;

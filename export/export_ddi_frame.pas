@@ -39,6 +39,7 @@ type
     procedure SetSettings(Data: PManagerSettings);
     function  ApplySettings: boolean;
     function ExportHeadings: boolean;
+    function ExportRelated: boolean;
     function CheckExportAllowed(Const Setting: TEpiExportSetting;
       Const Doc: TEpiDocument;
       out ErrorText: string): boolean;
@@ -49,7 +50,7 @@ implementation
 {$R *.lfm}
 
 uses
-  export_form,
+  export_form2,
   export_customvaluelabel_frame,
   export_csv_frame,
   settings2, epi_iso639, epistringutils;
@@ -106,6 +107,7 @@ function TExportDDIFrame.UpdateExportSetting(Setting: TEpiExportSetting
   ): boolean;
 var
   CSVSettings: TEpiCSVExportSetting;
+  i: Integer;
 begin
   (ValueLabelFrame as IExportSettingsFrame).UpdateExportSetting(Setting);
   with TEpiDDIExportSetting(Setting) do
@@ -124,8 +126,12 @@ begin
 
   CSVSettings := TEpiCSVExportSetting.Create;
   CSVSettings.Assign(Setting);
-
   (CSVFrame as IExportSettingsPresenterFrame).UpdateExportSetting(CSVSettings);
+
+  for i := 0 to CSVSettings.DatafileSettings.Count - 1 do
+  with CSVSettings.DatafileSettings[i] do
+    ExportFileName := ChangeFileExt(ExportFileName, '.csv');
+
   Setting.AdditionalExportSettings := CSVSettings;
 end;
 
@@ -195,6 +201,12 @@ end;
 function TExportDDIFrame.ExportHeadings: boolean;
 begin
   result := true;
+end;
+
+function TExportDDIFrame.ExportRelated: boolean;
+begin
+  // TODO: DDI can handle related, but we do not support it at the moment
+  result := false;
 end;
 
 function TExportDDIFrame.CheckExportAllowed(const Setting: TEpiExportSetting;

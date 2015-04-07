@@ -15,6 +15,7 @@ type
   TReportExport = class(TReportFileListBase)
   private
     FExportSettings: TEpiExportSetting;
+    FReportFileName: string;
     procedure CreateFileTable;
   protected
     function GetTitle: string; override;
@@ -23,7 +24,7 @@ type
   public
     class function ReportFrameClass: TCustomFrameClass; override;
     property ExportSettings: TEpiExportSetting read FExportSettings write FExportSettings;
-
+    property ReportFileName: string read FReportFileName write FReportFileName;
   end;
 
 implementation
@@ -40,38 +41,67 @@ resourcestring
 
 procedure TReportExport.CreateFileTable;
 var
-  TmpSetting: TEpiExportSetting;
   Rows: Integer;
   Ext: String;
   RowNo: Integer;
+  TmpSetting: TEpiExportDatafileSettings;
+  ProjSettings: TEpiCustomCompleteProjectExportSetting;
+  i: Integer;
+  IsCompleteProject: Boolean;
 begin
-  TmpSetting := ExportSettings;
   Rows := 2;
-  while Assigned(TmpSetting) do
+
+  IsCompleteProject :=
+    ExportSettings.InheritsFrom(TEpiCustomCompleteProjectExportSetting) and
+    (TEpiCustomCompleteProjectExportSetting(ExportSettings).ExportCompleteProject);
+
+  if IsCompleteProject then
   begin
     Inc(Rows);
-    TmpSetting := TmpSetting.AdditionalExportSettings;
-  end;
+    ProjSettings := TEpiCustomCompleteProjectExportSetting(ExportSettings);
+  end
+  else
+    for i := 0 to ExportSettings.DatafileSettings.Count -1 do
+    begin
+      TmpSetting := ExportSettings.DatafileSettings[i];
+      while Assigned(TmpSetting) do
+      begin
+        Inc(Rows);
+        TmpSetting := TmpSetting.AdditionalExportSettings;
+      end;
+    end;
+
   Generator.TableHeader('Files created:', 2, Rows);
 
   Generator.TableCell('Content:', 0, 0);
   Generator.TableCell('Filename:', 1, 0);
   Generator.TableCell('Report', 0, 1);
-  Generator.TableCell(ChangeFileExt(ExportSettings.ExportFileName, '.log'), 1, 1);
+  Generator.TableCell(ReportFileName, 1, 1);
 
   RowNo := 2;
-  TmpSetting := ExportSettings;
-  while Assigned(TmpSetting) do
-  begin
-    Ext := ExtractFileExt(TmpSetting.ExportFileName);
-    Delete(Ext, 1, 1);
+  if IsCompleteProject then
+    begin
+      Ext := ExtractFileExt(ProjSettings.ExportFileName);
+      Delete(Ext, 1, 1);
+      Generator.TableCell(Ext, 0, RowNo);
+      Generator.TableCell(ProjSettings.ExportFileName, 1, RowNo);
+    end
+  else
+    for i := 0 to ExportSettings.DatafileSettings.Count -1 do
+    begin
+      TmpSetting := ExportSettings.DatafileSettings[i];
+      while Assigned(TmpSetting) do
+      begin
+        Ext := ExtractFileExt(TmpSetting.ExportFileName);
+        Delete(Ext, 1, 1);
 
-    Generator.TableCell(Ext, 0, RowNo);
-    Generator.TableCell(TmpSetting.ExportFileName, 1, RowNo);
+        Generator.TableCell(Ext, 0, RowNo);
+        Generator.TableCell(TmpSetting.ExportFileName, 1, RowNo);
 
-    Inc(RowNo);
-    TmpSetting := TmpSetting.AdditionalExportSettings;
-  end;
+        Inc(RowNo);
+        TmpSetting := TmpSetting.AdditionalExportSettings;
+      end;
+    end;
 
   Generator.TableFooter('');
 end;
@@ -88,6 +118,7 @@ var
   TmpDoc: TEpiDocument;
   Df: TEpiDataFile;
   i: Integer;
+  DFSettings: TEpiExportDatafileSettings;
 begin
   inherited DoDocumentReport(Doc, Index);
 
@@ -99,8 +130,39 @@ begin
 
   Generator.Line('');
 
+  for i := 0 to ExportSettings.DatafileSettings.Count - 1 do
+  begin
+    DFSettings := ExportSettings.DatafileSettings[i];
+    DF         := ExportSettings.PreparedDoc.DataFiles.GetDataFileByName(DFSettings.DatafileName);
+
+    Generator.Section('Dataform: ' + DF.Caption.Text);
+
+    if (DFSettings.ToRecord - DFSettings.FromRecord) < 0 then
+      Generator.Line('Exported records: Structure only')
+    else
+    if (DFSettings.ToRecord - DFSettings.FromRecord) = 0 then
+      Generator.Line('Exported record: no. ' + IntToStr(DFSettings.FromRecord + 1))
+    else
+      Generator.Line('Exported records: ' + IntToStr(DFSettings.FromRecord + 1) + ' - ' + IntToStr(DFSettings.ToRecord + 1));
+    Generator.Line('');
+
+    R := TEpiReportControlList.Create(Generator);
+    with TEpiReportControlList(R) do
+    begin
+      TableHeader                := 'Exported Items:';
+
+      ControlItems               := Df.ControlItems;
+      ControlItemsAreSubItemized := false;
+      ExtendedList               := true;
+    end;
+    R.RunReport;
+    R.Free;
+    Generator.Line('');
+  end;
+
+{
   TmpDoc := TEpiExport.PrepareExportDocument(ExportSettings);
-  Df := TmpDoc.DataFiles[ExportSettings.DataFileIndex];
+//  Df := TmpDoc.DataFiles[ExportSettings.DataFileIndex];
 
   R := TEpiReportControlList.Create(Generator);
   with TEpiReportControlList(R) do
@@ -125,8 +187,8 @@ begin
   R.RunReport;
   R.Free;
   TmpDoc.Free;
-
-  Generator.Line('');
+                     }
+//  Generator.Line('');
 
   CreateFileTable;
 

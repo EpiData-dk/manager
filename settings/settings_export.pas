@@ -5,7 +5,7 @@ unit settings_export;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, ExtCtrls,
   settings2_interface, settings2_var;
 
 type
@@ -19,6 +19,7 @@ type
     ExportTypeCombo: TComboBox;
     Label1: TLabel;
     Label5: TLabel;
+    RadioGroup1: TRadioGroup;
   private
     { private declarations }
     FData: PManagerSettings;
@@ -34,11 +35,13 @@ implementation
 {$R *.lfm}
 
 uses
-  epieximtypes;
+  epieximtypes, manager_types;
 
 { TSettings_ExportFrame }
 
 constructor TSettings_ExportFrame.Create(TheOwner: TComponent);
+var
+  PostFix: TExportPostFix;
 begin
   inherited Create(TheOwner);
   with ExportTypeCombo.Items do
@@ -73,6 +76,11 @@ begin
     AddObject('Korean (CP949)',         TObject(eeCP949));
     AddObject('Japanes (CP932)',        TObject(eeCP932));
   end;
+
+  RadioGroup1.Items.BeginUpdate;
+  for PostFix in TExportPostFix do
+    RadioGroup1.Items.AddObject(ExportPostFixCaptions[PostFix], TObject(PtrUInt(PostFix)));
+  RadioGroup1.Items.EndUpdate;
 end;
 
 procedure TSettings_ExportFrame.SetSettings(Data: PManagerSettings);
@@ -82,6 +90,7 @@ begin
   begin
     ExportTypeCombo.ItemIndex   := ExportTypeCombo.Items.IndexOfObject(TObject(PtrUInt(ExportType)));
     EncodingCmbBox.ItemIndex    := EncodingCmbBox.Items.IndexOfObject(TObject(PtrUInt(ExportEncoding)));
+    RadioGroup1.ItemIndex       := RadioGroup1.Items.IndexOfObject(TObject(PtrUInt(ExportPostFix)));
     ExportDeletedChkBox.Checked := ExportDeleted;
     ExportReportChkBox.Checked  := ExportCreateReport;
   end;
@@ -91,10 +100,11 @@ function TSettings_ExportFrame.ApplySettings: boolean;
 begin
   with FData ^ do
   begin
-    ExportType     := PtrUInt(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex]);
-    ExportEncoding := TEpiEncoding(PtrUInt(EncodingCmbBox.Items.Objects[EncodingCmbBox.ItemIndex]));
-    ExportDeleted  := ExportDeletedChkBox.Checked;
+    ExportType         := PtrUInt(ExportTypeCombo.Items.Objects[ExportTypeCombo.ItemIndex]);
+    ExportEncoding     := TEpiEncoding(PtrUInt(EncodingCmbBox.Items.Objects[EncodingCmbBox.ItemIndex]));
+    ExportDeleted      := ExportDeletedChkBox.Checked;
     ExportCreateReport := ExportReportChkBox.Checked;
+    ExportPostFix      := TExportPostFix(PtrUInt(RadioGroup1.Items.Objects[RadioGroup1.ItemIndex]));
   end;
   result := true;
 end;

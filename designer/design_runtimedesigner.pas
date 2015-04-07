@@ -596,11 +596,9 @@ procedure TRuntimeDesignFrame.PasteAsField(Ft: TEpiFieldType);
 var
   Cbl: TStringList;
   P: TPoint;
-  Controller: TDesignController;
   Surface: TJvDesignSurface;
   i: Integer;
   F: TDesignField;
-  H: Integer;
   Pt: TPoint;
 begin
   Cbl := TStringList.Create;
@@ -744,7 +742,6 @@ procedure TRuntimeDesignFrame.PasteAsHeadingActionExecute(Sender: TObject);
 var
   Cbl: TStringList;
   P: TPoint;
-  Controller: TDesignController;
   Surface: TJvDesignSurface;
   i: Integer;
   L: TDesignHeading;
@@ -866,7 +863,6 @@ end;
 procedure TRuntimeDesignFrame.SelectAllActionExecute(Sender: TObject);
 var
   i: Integer;
-  ctrl: TControl;
 begin
   With FDesignPanel.Surface do
   begin
@@ -989,12 +985,7 @@ Const
 var
   i: Integer;
   VLSet: TEpiValueLabelSet;
-  VLSetOld: TEpiValueLabelSet;
-  NSection: TEpiSection;
   P: TPoint;
-  Selected: TWinControl;
-  C: TEpiCustomControlItem;
-  j: Integer;
 
 
   function NewFieldName(Const OldName: string): string;
@@ -1249,7 +1240,6 @@ var
   ATop: Integer;
   ABot: Integer;
   i: Integer;
-  S: String;
   Sz: TSize;
 
   procedure SetFont(Const AFont: TFont);
@@ -1522,7 +1512,6 @@ function TRuntimeDesignFrame.NewShortCutDesignField(Ft: TEpiFieldType;
   ShowPropertiesForm: boolean): TControl;
 var
   P: TPoint;
-  KeyCode: Word;
 begin
   P := FindNewPostion(TDesignField);
   FLastSelectedFieldType := ft;
@@ -1540,7 +1529,6 @@ function TRuntimeDesignFrame.NewShortCutDesignHeading(
   ShowPropertiesForm: boolean): TControl;
 var
   P: TPoint;
-  KeyCode: Word;
 begin
   P := FindNewPostion(TDesignHeading);
   Result := NewDesignHeading(P, nil, FDesignPanel.Surface.SelectedContainer);
@@ -1574,7 +1562,6 @@ end;
 procedure TRuntimeDesignFrame.DoSelectFields(const Field: TEpiField;
   const SelectType: TDesignSelectType; const Section: TEpiSection);
 var
-  i: Integer;
   CmpField: TEpiField;
   Selector: TJvDesignCustomSelector;
 begin
@@ -1666,13 +1653,7 @@ procedure TRuntimeDesignFrame.DoAlignControls(
 var
   Objs: TJvDesignObjectArray;
   L: Integer;
-  AlignVal: Integer;
   i: Integer;
-  ALeft: Integer;
-  ATop: Integer;
-  ABot: Integer;
-  ARight: Integer;
-  ATotRight: Integer;
   ACenterHorz: Integer;
   ACenterVert: Integer;
   ATotalCtrlHeight: Integer;
@@ -1683,7 +1664,6 @@ var
   LastRight: Integer;
   ABounds: TRect;
   EBounds: TRect;
-  ATotLeft: Integer;
   ASideBounds: TRect;
   ESideBounds: TRect;
   P: TWinControl;
@@ -2801,8 +2781,6 @@ var
   F: TEpiField;
   H: TEpiHeading;
   j: Integer;
-  P: TPoint;
-  z: Integer;
   T1,T2,T3: TDateTime;
 begin
   FDesignPanel.Active := true;
@@ -2877,8 +2855,6 @@ begin
 end;
 
 constructor TRuntimeDesignFrame.Create(TheOwner: TComponent);
-var
-  ScrollBox: TJvDesignScrollBox;
 begin
   inherited Create(TheOwner);
   FDesignScrollBox := TJvDesignScrollBox.Create(self);
@@ -2984,10 +2960,10 @@ begin
   Show;
   BringToFront;
   FDesignPanel.Surface.Active := true;
-  DesignerActionList.State := asNormal;
-  MayHandleShortcuts := true;
   FDesignPanel.Surface.Select(FDesignPanel);
   FDesignPanel.Surface.SelectionChange;
+  MayHandleShortcuts := true;
+//  DesignerActionList.State := asNormal;
 
   UpdateFrame;
 //  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate End');
