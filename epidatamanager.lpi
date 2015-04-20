@@ -372,6 +372,7 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>

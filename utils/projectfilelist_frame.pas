@@ -38,6 +38,7 @@ type
     FOnAfterAddToGrid: TProjectFileListGridEvent;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
+    FOnControlItemPosition: TEpiControlItemPosition;
     FOnDocumentIncludedChange: TProjectFileListGridEvent;
     FOnSelectionChanged: TNotifyEvent;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
@@ -48,6 +49,8 @@ type
     procedure  SetOnAfterImportFile(const AValue: TProjectListFileEvent);
     procedure  SetOnBeforeImportFile(const AValue: TProjectListFileEvent);
   protected
+    procedure ControlPosition(const Sender: TObject;
+      const ControlItem: TEpiCustomControlItem; var ATop, ALeft: Integer);
     procedure  DoAfterGridEvent(Const Filename: string; Const Document: TEpiDocument;
       Const RowNo: Integer);
     procedure  DoIncludedChange(Const RowNo: Integer);
