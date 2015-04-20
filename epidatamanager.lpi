@@ -9,7 +9,6 @@
       <Title Value="EpiData Manager"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
-      <Icon Value="-1"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
@@ -757,7 +756,6 @@
         <ComponentName Value="AdminForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="admin_form"/>
       </Unit94>
       <Unit95>
         <Filename Value="admin/admin_user_form.pas"/>
@@ -765,7 +763,6 @@
         <ComponentName Value="AdminUserForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="admin_user_form"/>
       </Unit95>
       <Unit96>
         <Filename Value="admin/admin_group_form.pas"/>
@@ -773,7 +770,6 @@
         <ComponentName Value="AdminGroupForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="admin_group_form"/>
       </Unit96>
       <Unit97>
         <Filename Value="export/export_form2.pas"/>
@@ -781,7 +777,6 @@
         <ComponentName Value="ExportForm2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="export_form2"/>
       </Unit97>
     </Units>
   </ProjectOptions>

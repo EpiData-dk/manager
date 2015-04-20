@@ -435,6 +435,98 @@ begin
   OpenURL('http://epidata.info/dokuwiki/doku.php?id=training:start');
 end;
 
+procedure TMainForm.ExportActionExecute(Sender: TObject);
+var
+  local: boolean;
+  DF: TEpiDocumentFile;
+  F: TExportForm2;
+  Settings: TEpiExportSetting;
+  Exporter: TEpiExport;
+  R: TReportExport;
+  S: String;
+  FileList: TEpiDocumentFileList;
+  FS: TFileStreamUTF8;
+  ReportTitle: String;
+  ReportText: String;
+  i: Integer;
+begin
+  Exporter := nil;
+  DF := nil;
+  F := nil;
+  Settings := nil;
+
+  try
+    DF := ToolsCheckOpenFile(false, local);
+
+    if (not Assigned(DF)) then
+      Exit;
+
+    F := TExportForm2.Create(Self);
+    F.DocumentFile := DF;
+    if F.ShowModal <> mrOK then exit;
+
+    Settings := F.ExportSetting;
+
+    Exporter := TEpiExport.Create;
+    if not Exporter.Export(Settings) then
+      ShowMessage('Export Failed.')
+    else begin
+      FS := nil;
+
+      if F.ExportReport then
+      begin
+        FileList := TEpiDocumentFileList.Create;
+        FileList.Add(DF);
+
+        R := TReportExport.Create(TEpiReportTXTGenerator);
+        R.DocumentFiles := FileList;
+        R.ExportSettings := Settings;
+        R.ReportFileName := F.ExportDirectory + DirectorySeparator + ChangeFileExt(ExtractFileName(DF.FileName), '.log');
+        // Canonicalize filename (remove "..", "//", "\\" etc....
+        R.ReportFileName := ExpandFileNameUTF8(R.ReportFileName);
+
+        ReportTitle := R.ReportTitle;
+        ReportText := R.RunReport;
+
+        FS := TFileStreamUTF8.Create(R.ReportFileName, fmCreate);
+        FS.Write(ReportText[1], Length(ReportText));
+
+        R.Free;
+        FileList.Free;
+      end;
+
+      S := 'Export Succeeded' + LineEnding + LineEnding;
+      S += 'Project: ' + DF.FileName + LineEnding;
+
+      if Assigned(FS) then
+        S += 'Report: ' + FS.FileName;
+
+      ShowMessage(TrimRight(S));
+
+      if F.ExportReport then
+        ShowReportForm(Self, ReportTitle, ReportText);
+
+      if (Settings is TEpiEPXExportSetting) then
+        if F.ExportSingleFile then
+          AddToRecent(TEpiEPXExportSetting(Settings).ExportFileName)
+        else
+          for i := 0 to Settings.DatafileSettings.Count - 1 do
+            AddToRecent(Settings.DatafileSettings[i].ExportFileName);
+
+      FS.Free;
+
+      UpdateRecentFiles;
+    end;
+  finally
+    Exporter.Free;
+
+    if local then
+      DF.Free;
+    F.Free;
+    Settings.Free;
+  end;
+end;
+
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportFieldListExtended).Free;
