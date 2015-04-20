@@ -64,6 +64,8 @@ type
       aState: TCheckboxState);
     procedure ImportDataColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex,
       tIndex: Integer);
+    procedure ControlItemPosition(const Sender: TObject;
+      const ControlItem: TEpiCustomControlItem; var ATop, ALeft: Integer);
     procedure ImportHook(Const Sender, Initiator: TEpiCustomBase;
       EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
@@ -300,8 +302,8 @@ begin
   FLastRecYPos := -1;
   FLastEpiCtrl := nil;
 
-  CurrentDataFile := Doc.DataFiles[Doc.DataFiles.Count - 1];
-  CurrentDataFile.MainSection.RegisterOnChangeHook(@ImportHook);
+//  CurrentDataFile := Doc.DataFiles[Doc.DataFiles.Count - 1];
+//  CurrentDataFile.MainSection.RegisterOnChangeHook(@ImportHook);
 end;
 
 procedure TImportStructureForm.AfterLoad(Sender: TObject; Doc: TEpiDocument;
@@ -316,8 +318,8 @@ begin
   Ext := ExtractFileExt(FN);
   if (Ext = '.epx') or (Ext = '.epz') then exit;
 
-  CurrentDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
-  CurrentDataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
+//  CurrentDataFile.MainSection.Fields.UnRegisterOnChangeHook(@ImportHook);
+//  CurrentDataFile.MainSection.Headings.UnRegisterOnChangeHook(@ImportHook);
 end;
 
 procedure TImportStructureForm.SetDataFile(AValue: TEpiDataFile);
@@ -506,6 +508,114 @@ begin
     Dec(FImportDataSelectedIndex);
 end;
 
+procedure TImportStructureForm.ControlItemPosition(const Sender: TObject;
+  const ControlItem: TEpiCustomControlItem; var ATop, ALeft: Integer);
+const
+  FieldHeigth =
+    {$IFDEF WINDOWS}
+      21
+    {$ELSE}
+      {$IFDEF DARWIN}
+      22
+      {$ELSE}
+        {$IFDEF LINUX}
+      27
+        {$ENDIF}
+    {$ENDIF}
+  {$ENDIF};
+
+  HeadingHeigth =
+    {$IFDEF WINDOWS}
+      14
+    {$ELSE}
+      {$IFDEF DARWIN}
+      17
+      {$ELSE}
+        {$IFDEF LINUX}
+      18
+        {$ENDIF}
+    {$ENDIF}
+  {$ENDIF};
+var
+  Cls: TControlClass;
+  Pt: TPoint;
+  S: Char;
+begin
+  if FLastEpiCtrl = nil then
+  begin
+    Pt := Point(ManagerSettings.DefaultLabelPosition, 5);
+    if ControlItem is TEpiField then
+      Pt.X := ManagerSettings.DefaultRightPosition;
+  end else begin
+    if (FLastRecYPos > 0) and (FLastRecYPos = ATop) then
+    begin
+      Pt.Y := FLastEpiCtrl.Top;
+
+      if (FLastEpiCtrl is TEpiField) then
+      begin
+        S := '4';
+        if TEpiField(FLastEpiCtrl).FieldType in StringFieldTypes then
+          S := 'W';
+
+        if (ControlItem is TEpiField) then
+          Pt.X := FLastEpiCtrl.Left +
+                  FDesignerBox.Canvas.GetTextWidth(S) * TEpiField(FLastEpiCtrl).Length + 15 +       // This calculates right side of previous placed control (with 5px margin)
+                  FDesignerBox.Canvas.GetTextWidth(TEpiField(ControlItem).Question.Text) + 5 +      // This gives a rough estimate of the width of the Question text (5px margin)
+                  FDesignerBox.Canvas.GetTextWidth(TEpiField(ControlItem).Name) + 5                 // This gives a rough estimate of the width of the Name (if shown).
+        else
+          Pt.X := FLastEpiCtrl.Left +
+                  FDesignerBox.Canvas.GetTextWidth(S) * TEpiField(FLastEpiCtrl).Length + 15;        // This calculates right side of previous placed control (with 5px margin)
+      end else begin
+        if (ControlItem is TEpiField) then
+          Pt.X := FLastEpiCtrl.Left +
+                  FDesignerBox.Canvas.GetTextWidth(TEpiHeading(FLastEpiCtrl).Caption.Text) + 10 +
+                  FDesignerBox.Canvas.GetTextWidth(TEpiField(ControlItem).Question.Text) + 5 +      // This gives a rough estimate of the width of the Question text (5px margin)
+                  FDesignerBox.Canvas.GetTextWidth(TEpiField(ControlItem).Name) + 5                 // This gives a rough estimate of the width of the Name (if shown).
+        else
+          Pt.X := FLastEpiCtrl.Left +
+                  FDesignerBox.Canvas.GetTextWidth(TEpiHeading(FLastEpiCtrl).Caption.Text) + 10;
+      end;
+    end else begin
+      if (FLastEpiCtrl is TEpiField) then
+      begin
+        Pt.Y := FLastEpiCtrl.Top + FieldHeigth;
+        if (ControlItem is TEpiField) then
+        begin
+          Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldField;
+          Pt.X := ManagerSettings.DefaultRightPosition;
+        end else begin
+          Pt.Y := Pt.Y  + ManagerSettings.SpaceBtwFieldLabel;
+          Pt.X := ManagerSettings.DefaultLabelPosition;
+        end;
+      end;
+      if (FLastEpiCtrl is TEpiHeading) then
+      begin
+        Pt.Y := FLastEpiCtrl.Top + HeadingHeigth;
+        if (ControlItem is TEpiField) then
+        begin
+          Pt.Y := Pt.Y + ManagerSettings.SpaceBtwFieldLabel;
+          Pt.X := ManagerSettings.DefaultRightPosition;
+        end else begin
+          Pt.Y := Pt.Y + ManagerSettings.SpaceBtwLabelLabel;
+          Pt.X := ManagerSettings.DefaultLabelPosition;
+        end;
+      end;
+    end;
+  end;
+
+//  with TEpiCustomControlItem(Initiator) do
+//  begin
+    // Top not yet adjusted for pixel position...
+    FLastRecYPos := ATop;
+
+//    BeginUpdate;
+    ATop := Pt.Y;
+    ALeft := Pt.X;
+//    EndUpdate;
+//  end;
+  FLastEpiCtrl := ControlItem;
+end;
+
 procedure TImportStructureForm.ImportDataCheckBoxToogle(sender: TObject; aCol,
   aRow: Integer; aState: TCheckboxState);
 var
@@ -553,6 +663,7 @@ begin
     OnBeforeImportFile := @BeforeLoad;
     OnAfterImportFile  := @AfterLoad;
     OnAfterAddToGrid := @AfterAddToGrid;
+    OnControlItemPosition := @ControlItemPosition;
 
     StructureGrid.Options  := StructureGrid.Options + [goCellHints];
     StructureGrid.ShowHint := true;
