@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Grids, ComCtrls,
-  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile;
+  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile, epieximtypes;
 
 type
 
@@ -38,6 +38,7 @@ type
     FOnAfterAddToGrid: TProjectFileListGridEvent;
     FOnAfterImportFile: TProjectListFileEvent;
     FOnBeforeImportFile: TProjectListFileEvent;
+    FOnControlItemPosition: TEpiControlItemPosition;
     FOnDocumentIncludedChange: TProjectFileListGridEvent;
     FOnSelectionChanged: TNotifyEvent;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
@@ -48,6 +49,8 @@ type
     procedure  SetOnAfterImportFile(const AValue: TProjectListFileEvent);
     procedure  SetOnBeforeImportFile(const AValue: TProjectListFileEvent);
   protected
+    procedure ControlPosition(const Sender: TObject;
+      const ControlItem: TEpiCustomControlItem; var ATop, ALeft: Integer);
     procedure  DoAfterGridEvent(Const Filename: string; Const Document: TEpiDocument;
       Const RowNo: Integer);
     procedure  DoIncludedChange(Const RowNo: Integer);
@@ -69,6 +72,7 @@ type
     property    OnSelectionChanged: TNotifyEvent read FOnSelectionChanged write FOnSelectionChanged;
     property    OnDocumentIncludedChange: TProjectFileListGridEvent read FOnDocumentIncludedChange write FOnDocumentIncludedChange;
     property    OnAfterAddToGrid: TProjectFileListGridEvent read FOnAfterAddToGrid write FOnAfterAddToGrid;
+    property    OnControlItemPosition: TEpiControlItemPosition read FOnControlItemPosition write FOnControlItemPosition;
     property    SelectedList: TStringList read GetSelectedList;
     property    SelectedDocfileList: TEpiDocumentFileList read GetSelectedDocfileList;
     property    DocList: TStringList read FDocList;
@@ -216,6 +220,8 @@ begin
   Importer.ImportCasing := ManagerSettings.ImportCasing;
   Importer.OnProgress := @Progress;
   Importer.OnClipBoardRead := @ClipboardRead;
+  Importer.OnControlItemPosition := @ControlPosition;
+
   FCurrentFile := FileName;
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
 
@@ -314,6 +320,13 @@ procedure TProjectFileListFrame.SetOnBeforeImportFile(
 begin
   if FOnBeforeImportFile = AValue then exit;
   FOnBeforeImportFile := AValue;
+end;
+
+procedure TProjectFileListFrame.ControlPosition(const Sender: TObject;
+  const ControlItem: TEpiCustomControlItem; var ATop, ALeft: Integer);
+begin
+  if Assigned(OnControlItemPosition) then
+    OnControlItemPosition(Sender, ControlItem, ATop, ALeft)
 end;
 
 procedure TProjectFileListFrame.DoAfterGridEvent(const Filename: string;
