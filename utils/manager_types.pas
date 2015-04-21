@@ -5,6 +5,9 @@ unit manager_types;
 
 interface
 
+uses
+  epiadmin;
+
 type
   ICanCloseQuery = interface['ICanCloseQuery']
     function CanClose: boolean;
@@ -15,6 +18,8 @@ type
     epAddCycle,
     epAddDate
   );
+
+  TGetUserEvent = function (Sender: TObject): TEpiUser of object;
 
 
 const

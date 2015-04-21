@@ -5,7 +5,7 @@ unit managerprocs;
 interface
 
 uses
-  Classes, SysUtils, epidocument, epiopenfile;
+  Classes, SysUtils, epidocument, epiopenfile, epiadmin;
 
 procedure ReadClipBoard(ClipBoardLine: TStrings);
 procedure CopyAndBackup(Const AFileName: string);
@@ -14,6 +14,8 @@ function GetIniFileName: string;
 function GetRecentIniFileName: string;
 procedure ParseCommandLineOpts;
 function GetRandomComponentName: string;
+
+function UserIsAuthorized(Const User: TEpiUser; Const RequiredRights: TEpiManagerRights): boolean;
 
 
 
@@ -231,6 +233,15 @@ begin
   //  - And the chance of creating to equal component name are very-very-very unlikely.
   CreateGUID(GUID);
   Result := '_' + StringsReplace(GUIDToString(GUID), ['{','}','-'], ['','',''], [rfReplaceAll]);
+end;
+
+function UserIsAuthorized(const User: TEpiUser;
+  const RequiredRights: TEpiManagerRights): boolean;
+begin
+  result := true;
+  if not Assigned(User) then exit;
+
+  result := User.Groups.HasRights(RequiredRights);
 end;
 
 finalization

@@ -1,29 +1,29 @@
 object ProjectFrame: TProjectFrame
   Left = 0
-  Height = 658
+  Height = 678
   Top = 0
-  Width = 778
-  ClientHeight = 658
-  ClientWidth = 778
+  Width = 991
+  ClientHeight = 678
+  ClientWidth = 991
   TabOrder = 0
-  DesignLeft = 720
-  DesignTop = 216
+  DesignLeft = 484
+  DesignTop = 251
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
-    Height = 638
+    Height = 658
     Top = 0
     Width = 187
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 638
+    ClientHeight = 658
     ClientWidth = 187
     TabOrder = 0
     object ToolBar1: TToolBar
       Left = 0
       Height = 22
       Top = 0
-      Width = 183
+      Width = 187
       AutoSize = True
       ButtonHeight = 20
       ButtonWidth = 20
@@ -111,8 +111,8 @@ object ProjectFrame: TProjectFrame
   object ProgressBar1: TProgressBar
     Left = 0
     Height = 20
-    Top = 638
-    Width = 778
+    Top = 658
+    Width = 991
     Align = alBottom
     Position = 50
     Smooth = True
@@ -123,10 +123,56 @@ object ProjectFrame: TProjectFrame
   end
   object Splitter1: TSplitter
     Left = 187
-    Height = 638
+    Height = 658
     Top = 0
     Width = 5
     Beveled = True
+  end
+  object Panel1: TPanel
+    Left = 726
+    Height = 658
+    Top = 0
+    Width = 265
+    Align = alRight
+    BevelInner = bvLowered
+    BorderWidth = 3
+    BorderStyle = bsSingle
+    ClientHeight = 656
+    ClientWidth = 263
+    ParentColor = False
+    TabOrder = 3
+    object Label1: TLabel
+      Left = 32
+      Height = 15
+      Top = 32
+      Width = 42
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 32
+      Height = 15
+      Top = 72
+      Width = 42
+      Caption = 'Label2'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 32
+      Height = 15
+      Top = 104
+      Width = 42
+      Caption = 'Label3'
+      ParentColor = False
+    end
+  end
+  object Splitter2: TSplitter
+    Left = 721
+    Height = 658
+    Top = 0
+    Width = 5
+    Align = alRight
+    ResizeAnchor = akRight
   end
   object ActionList1: TActionList
     Images = DM.Icons16

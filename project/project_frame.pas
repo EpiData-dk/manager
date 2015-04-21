@@ -7,8 +7,9 @@ interface
 uses
   Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList, Controls,
   Dialogs, epidocument, epidatafiles, epicustombase, epirelations, epirelates,
-  manager_messages, LMessages, Menus, epiv_documentfile, types,
-  design_runtimedesigner, project_types, epiv_projecttreeview_frame;
+  epiadmin, manager_messages, LMessages, Menus, StdCtrls, epiv_documentfile,
+  types, design_runtimedesigner, project_types, epiv_projecttreeview_frame,
+  manager_types;
 
 type
 
@@ -16,10 +17,15 @@ type
 
   TProjectFrame = class(TFrame)
     AdminAction: TAction;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     MenuItem1: TMenuItem;
+    Panel1: TPanel;
     ProjectRecentFilesDropDownMenu: TPopupMenu;
     ProgressBar1: TProgressBar;
     Splitter1: TSplitter;
+    Splitter2: TSplitter;
     StudyInformationAction: TAction;
     KeyFieldsAction: TAction;
     ProjectPasswordAction: TAction;
@@ -139,6 +145,11 @@ type
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     procedure UpdateRecentFilesDropDown;
+
+  { Authorization }
+  private
+    function GetAuthorizedUser(Sender: TObject): TEpiUser;
+
   public
     { Access/Helper methods }
     function SelectDataformIfNotSelected: Boolean;
@@ -307,7 +318,8 @@ end;
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
 begin
   DeleteDataFormAction.Enabled :=
-    FProjectTreeView.SelectedObjectType = otRelation;
+    (UserIsAuthorized(FDocumentFile.AuthedUser, [earStructure])) and
+    (FProjectTreeView.SelectedObjectType = otRelation);
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -503,6 +515,9 @@ var
   i: Integer;
   T1: TDateTime;
   T2: TDateTime;
+  G: TEpiGroup;
+  Rights: TEpiManagerRights;
+  R: TEpiManagerRight;
 begin
   Result := false;
   try
@@ -539,6 +554,23 @@ begin
       if Assigned(FActiveFrame) then FreeAndNil(FActiveFrame);
       raise
     end;
+
+    if Assigned(FDocumentFile.AuthedUser) then
+    begin
+      Label1.Caption := 'User: ' + FDocumentFile.AuthedUser.FullName;
+      Label2.Caption := 'Groups: ';
+      Rights := [];
+      for G in FDocumentFile.AuthedUser.Groups do
+      begin
+        Label2.Caption := Label2.Caption + G.Caption.Text + ',';
+        Rights := Rights + G.ManageRights;
+      end;
+      Label3.Caption := 'Combined rights: ' + LineEnding;
+      for R in Rights do
+        Label3.Caption := Label3.Caption + ' *' + EpiManagerRightCaptions[R] + LineEnding;
+    end
+    else
+      Label1.Caption := 'No auth';
 
 
     FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
@@ -607,6 +639,7 @@ begin
   Result.Parent := Self;
   Result.Relation := Relation;
   Result.DeActivate(true);
+  Result.OnGetUser := @GetAuthorizedUser;
 end;
 
 procedure TProjectFrame.DoCreateNewProject;
@@ -1072,6 +1105,11 @@ begin
       Mi.ShortCut := KeyToShortCut(VK_1 + i, Shift);
     ProjectRecentFilesDropDownMenu.Items.Add(Mi);
   end;
+end;
+
+function TProjectFrame.GetAuthorizedUser(Sender: TObject): TEpiUser;
+begin
+  result := FDocumentFile.AuthedUser;
 end;
 
 function TProjectFrame.SelectDataformIfNotSelected: Boolean;

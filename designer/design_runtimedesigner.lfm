@@ -1,17 +1,17 @@
 object RuntimeDesignFrame: TRuntimeDesignFrame
   Left = 0
-  Height = 626
+  Height = 592
   Top = 0
   Width = 1101
-  ClientHeight = 626
+  ClientHeight = 592
   ClientWidth = 1101
   TabOrder = 0
-  DesignLeft = 669
-  DesignTop = 457
+  DesignLeft = 1969
+  DesignTop = 304
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
-    Top = 600
+    Top = 566
     Width = 1101
     Align = alBottom
     BevelOuter = bvNone
@@ -36,10 +36,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object SectionsLabel: TLabel
         AnchorSideLeft.Control = SectionsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 59
+        Left = 63
         Height = 15
         Top = 4
-        Width = 82
+        Width = 89
         BorderSpacing.Left = 2
         Caption = 'SectionsLabel'
         Color = clDefault
@@ -50,7 +50,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 55
+        Width = 59
         Caption = 'Sections:'
         Color = clDefault
         ParentColor = False
@@ -77,7 +77,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 117
+        Width = 130
         Caption = 'CurrentSectionLabel'
         Color = clDefault
         ParentColor = False
@@ -99,10 +99,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object RecordsLabel: TLabel
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 56
+        Left = 58
         Height = 15
         Top = 4
-        Width = 79
+        Width = 84
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         Color = clDefault
@@ -113,7 +113,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 52
+        Width = 54
         Caption = 'Records:'
         Color = clDefault
         ParentColor = False
@@ -141,7 +141,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 43
         Height = 15
         Top = 4
-        Width = 66
+        Width = 69
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         Color = clDefault
@@ -182,7 +182,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 93
+        Width = 101
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         Color = clDefault
@@ -213,7 +213,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 86
+        Width = 90
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         Color = clDefault
@@ -244,7 +244,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 103
+        Width = 115
         BorderSpacing.Left = 2
         Caption = 'DefaultValueLabel'
         Color = clDefault
@@ -275,7 +275,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 94
+        Width = 103
         BorderSpacing.Left = 2
         Caption = 'ValueLabelLabel'
         Color = clDefault
@@ -306,7 +306,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 68
+        Width = 74
         BorderSpacing.Left = 2
         Caption = 'RangeLabel'
         Color = clDefault
@@ -337,7 +337,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 54
+        Width = 56
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         Color = clDefault
@@ -383,14 +383,14 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   end
   object Panel1: TPanel
     Left = 836
-    Height = 578
+    Height = 544
     Top = 22
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 576
+    ClientHeight = 542
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
@@ -421,7 +421,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 352
-      Width = 38
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
@@ -429,7 +429,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 393
-      Width = 38
+      Width = 42
       Caption = 'Label2'
       ParentColor = False
     end
@@ -437,7 +437,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 439
-      Width = 38
+      Width = 42
       Caption = 'Label3'
       ParentColor = False
     end
@@ -445,7 +445,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 481
-      Width = 38
+      Width = 42
       Caption = 'Label4'
       ParentColor = False
     end
@@ -453,7 +453,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 31
       Height = 15
       Top = 514
-      Width = 38
+      Width = 42
       Caption = 'Label5'
       ParentColor = False
     end
@@ -461,14 +461,14 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 33
       Height = 15
       Top = 545
-      Width = 38
+      Width = 42
       Caption = 'Label6'
       ParentColor = False
     end
   end
   object Splitter1: TSplitter
     Left = 831
-    Height = 578
+    Height = 544
     Top = 22
     Width = 5
     Align = alRight
@@ -620,8 +620,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object EditToolButton: TToolButton
         Left = 301
+        Hint = 'Edit...'
         Top = 1
-        Action = EditControlAction
+        Caption = 'Edit'
+        ImageIndex = 13
         ParentShowHint = False
         ShowHint = True
       end
@@ -688,8 +690,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object ExportToolButton: TToolButton
         Left = 31
+        Hint = 'Print Dataform'
         Top = 1
-        Action = PrintDataFormAction
+        Caption = '&Print Dataform'
+        ImageIndex = 22
         ParentShowHint = False
         ShowHint = True
       end
@@ -723,18 +727,11 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
     end
   end
-  object DesignerActionList: TActionList
+  object AuthorizedDesignerActionList: TActionList
     Images = DM.Icons16
-    OnUpdate = DesignerActionListUpdate
-    left = 344
-    top = 240
-    object EditControlAction: TAction
-      Category = 'Edit'
-      Caption = 'Edit'
-      Hint = 'Edit...'
-      ImageIndex = 13
-      OnExecute = EditControlActionExecute
-    end
+    OnUpdate = AuthorizedDesignerActionListUpdate
+    left = 416
+    top = 160
     object DeleteControlAction: TAction
       Category = 'Edit'
       Caption = 'Delete'
@@ -944,16 +941,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = RedoActionExecute
       OnUpdate = RedoActionUpdate
     end
-    object ViewDatasetAction: TAction
-      Caption = 'Browse Data'
-      OnExecute = ViewDatasetActionExecute
-    end
-    object PrintDataFormAction: TAction
-      Caption = '&Print Dataform'
-      Hint = 'Print Dataform'
-      ImageIndex = 22
-      OnExecute = PrintDataFormActionExecute
-    end
     object SelectAllAction: TAction
       Category = 'Select'
       Caption = 'SelectAllAction'
@@ -1045,11 +1032,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Import data and structure from clipboard'
       ImageIndex = 18
       OnExecute = ImportCBActionExecute
-    end
-    object DataformPropertiesAction: TAction
-      Category = 'Edit'
-      Caption = 'Dataform Properties'
-      OnExecute = DataformPropertiesActionExecute
     end
     object DefineKeyAction: TAction
       Caption = 'Define Key'
@@ -1496,7 +1478,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     left = 232
     top = 304
     object EditPopupMenuItem: TMenuItem
-      Action = EditControlAction
+      Caption = 'Edit'
       Bitmap.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
         20000000000000040000640000006400000000000000000000007F4C04FF7F4C
@@ -1534,6 +1516,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         04FF7F4C04F57E4B0355FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
       GlyphShowMode = gsmSystem
+      Hint = 'Edit...'
+      ImageIndex = 13
     end
     object PopupMenuDivider1: TMenuItem
       Caption = '-'
@@ -1844,5 +1828,30 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   object PrintDialog1: TPrintDialog
     left = 156
     top = 178
+  end
+  object NonAuthorizedDesignerActionList: TActionList
+    Images = DM.Icons16
+    left = 416
+    top = 248
+    object ViewDatasetAction: TAction
+      Caption = 'Browse Data'
+      OnExecute = ViewDatasetActionExecute
+    end
+    object PrintDataFormAction: TAction
+      Caption = '&Print Dataform'
+      Hint = 'Print Dataform'
+      ImageIndex = 22
+      OnExecute = PrintDataFormActionExecute
+    end
+    object EditControlAction: TAction
+      Caption = 'Edit'
+      Hint = 'Edit...'
+      ImageIndex = 13
+      OnExecute = EditControlActionExecute
+    end
+    object DataformPropertiesAction: TAction
+      Caption = 'Dataform Properties'
+      OnExecute = DataformPropertiesActionExecute
+    end
   end
 end

@@ -9,16 +9,20 @@ uses
   ExtCtrls, StdCtrls, JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
   Buttons, Dialogs, manager_messages, epidatafilestypes, design_properties_form,
   types, epicustombase, epidocument, epivaluelabels, design_types,
-  project_types, epirelations;
+  project_types, epirelations, epiadmin, manager_types;
 
 type
 
   { TRuntimeDesignFrame }
 
   TRuntimeDesignFrame = class(TFrame, IProjectFrame)
+    DataformPropertiesAction: TAction;
+    EditControlAction: TAction;
+    PrintDataFormAction: TAction;
+    ViewDatasetAction: TAction;
+    NonAuthorizedDesignerActionList: TActionList;
     Button1: TButton;
     DefineKeyAction: TAction;
-    DataformPropertiesAction: TAction;
     ImportCBAction: TAction;
     Label1: TLabel;
     Label2: TLabel;
@@ -90,7 +94,6 @@ type
     NewFloatFieldAction: TAction;
     NewIntFieldFastAction: TAction;
     NewIntFieldAction: TAction;
-    PrintDataFormAction: TAction;
     StringToolButton: TToolButton;
     TestToolButton: TToolButton;
     TimeToolButton: TToolButton;
@@ -99,7 +102,6 @@ type
     ToolButton5: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
-    ViewDatasetAction: TAction;
     UndoAction: TAction;
     ImportAction: TAction;
     SelectNextAction: TAction;
@@ -124,8 +126,7 @@ type
     DeleteControlAction: TAction;
     DeletePopupMenuItem: TMenuItem;
     DesignControlPopUpMenu: TPopupMenu;
-    EditControlAction: TAction;
-    DesignerActionList: TActionList;
+    AuthorizedDesignerActionList: TActionList;
     CurrentSectionLabel: TLabel;
     CurrentSectionPanel: TPanel;
     DefaultValueLabel: TLabel;
@@ -185,7 +186,7 @@ type
     procedure DeleteControlActionExecute(Sender: TObject);
     procedure DeleteControlFastActionExecute(Sender: TObject);
     procedure DesignControlPopUpMenuPopup(Sender: TObject);
-    procedure DesignerActionListUpdate(AAction: TBasicAction;
+    procedure AuthorizedDesignerActionListUpdate(AAction: TBasicAction;
       var Handled: Boolean);
     procedure EditControlActionExecute(Sender: TObject);
     procedure ExpandPageActionExecute(Sender: TObject);
@@ -354,6 +355,11 @@ type
     property DesignPanel: TJvDesignPanel read FDesignPanel;
     property DesignScrollBar: TJvDesignScrollBox read FDesignScrollBox;
     property MayHandleShortcuts: boolean read FMayHandleShortcuts write SetMayHandleShortcuts;
+  private
+    FOnGetUser: TGetUserEvent;
+    function DoGetUser: TEpiUser;
+  public
+    property OnGetUser: TGetUserEvent read FOnGetUser write FOnGetUser;
   public
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
@@ -1920,7 +1926,8 @@ var
 begin
   if FMayHandleShortcuts = AValue then Exit;
   FMayHandleShortcuts := AValue;
-  DesignerActionListUpdate(nil, handled);
+
+  AuthorizedDesignerActionListUpdate(nil, handled);
 end;
 
 procedure TRuntimeDesignFrame.SetRelation(AValue: TEpiMasterRelation);
@@ -1949,9 +1956,21 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.UpdateInterface;
+var
+  Authorized: Boolean;
 begin
   with DateToolButton do
     Tag := Ord(ManagerSettings.DefaultDateType);
+
+  Authorized := UserIsAuthorized(DoGetUser, [earStructure]);
+  IntToolButton.Enabled     := Authorized;
+  FloatToolButton.Enabled   := Authorized;
+  StringToolButton.Enabled  := Authorized;
+  DateToolButton.Enabled    := Authorized;
+  TimeToolButton.Enabled    := Authorized;
+  OtherToolButton.Enabled   := Authorized;
+  HeadingToolButton.Enabled := Authorized;
+  SectionToolButton.Enabled := Authorized;
 end;
 
 procedure TRuntimeDesignFrame.SelectControl(AAction: TDesignSelectAction);
@@ -2564,16 +2583,21 @@ begin
   end;
 end;
 
-procedure TRuntimeDesignFrame.DesignerActionListUpdate(AAction: TBasicAction;
+procedure TRuntimeDesignFrame.AuthorizedDesignerActionListUpdate(AAction: TBasicAction;
   var Handled: Boolean);
 begin
   if (Screen.ActiveCustomForm <> MainForm) or
      (not Visible) or
      (not MayHandleShortcuts)
   then
-    DesignerActionList.State := asSuspended
+    AuthorizedDesignerActionList.State := asSuspended
   else
-    DesignerActionList.State := asNormal;
+    AuthorizedDesignerActionList.State := asNormal;
+
+  if Assigned(AAction) and
+     (TAction(AAction).ActionList = AuthorizedDesignerActionList)
+  then
+    TAction(AAction).Enabled := UserIsAuthorized(DoGetUser, [earStructure]);
 end;
 
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
@@ -2621,7 +2645,8 @@ begin
   lEnabled :=
     (lEnabled) and
     (FDesignPanel.Surface.Count > 0) and
-    (not FDesignPanel.Surface.Selector.IsSelected(FDesignPanel));
+    (not FDesignPanel.Surface.Selector.IsSelected(FDesignPanel)) and
+    (UserIsAuthorized(DoGetUser, [earStructure]));
 
   TAction(Sender).Enabled := lEnabled;
 end;
@@ -2940,7 +2965,7 @@ begin
   result :=
     // Only execute our actionlist if mainform is active!
     (Screen.ActiveCustomForm = MainForm) and
-    (DesignerActionList.IsShortCut(Message)) and
+    (AuthorizedDesignerActionList.IsShortCut(Message)) and
     (MayHandleShortcuts);
 
   // Else ready for implementing a larger Short-cut editor.
@@ -2954,6 +2979,14 @@ begin
      result := PropertiesForm.ValidateControls;
 end;
 
+function TRuntimeDesignFrame.DoGetUser: TEpiUser;
+begin
+  result := nil;
+
+  if Assigned(OnGetUser) then
+    Result := OnGetUser(Self);
+end;
+
 procedure TRuntimeDesignFrame.Activate;
 begin
 //  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate Start');
@@ -2963,7 +2996,7 @@ begin
   FDesignPanel.Surface.Select(FDesignPanel);
   FDesignPanel.Surface.SelectionChange;
   MayHandleShortcuts := true;
-//  DesignerActionList.State := asNormal;
+//  AuthorizedDesignerActionList.State := asNormal;
 
   UpdateFrame;
 //  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate End');
@@ -2976,7 +3009,7 @@ begin
   if not Result then exit;
 
   FDesignPanel.Surface.Active := false;
-  DesignerActionList.State := asSuspended;
+  AuthorizedDesignerActionList.State := asSuspended;
   MayHandleShortcuts := false;
   UpdateFrame;
   if aHide then
