@@ -5,7 +5,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
   Width = 588
   ClientHeight = 509
   ClientWidth = 588
-  LCLVersion = '1.3'
+  LCLVersion = '1.5'
   object SectionPageControl: TPageControl
     Left = 0
     Height = 509

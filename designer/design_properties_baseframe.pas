@@ -15,10 +15,12 @@ type
   TDesignPropertiesFrame = class(TFrame)
   private
     FDataFile: TEpiDataFile;
+    FReadOnly: Boolean;
     FRelation: TEpiMasterRelation;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FOnUpdateCaption: TGetStrProc;
   protected
+    procedure SetReadOnly(AValue: Boolean); virtual;
     procedure ShowHintMsg(const Msg: string; Ctrl: TControl);
     procedure UpdateCaption(Const S: String); virtual;
   public
@@ -29,11 +31,18 @@ type
     property  OnUpdateCaption: TGetStrProc read FOnUpdateCaption write FOnUpdateCaption;
     property  DataFile: TEpiDataFile read FDataFile;
     property  Relation: TEpiMasterRelation read FRelation;
+    property  ReadOnly: Boolean read FReadOnly write SetReadOnly;
   end;
 
 implementation
 
 { DesignPropertiesFrame }
+
+procedure TDesignPropertiesFrame.SetReadOnly(AValue: Boolean);
+begin
+  if FReadOnly = AValue then Exit;
+  FReadOnly := AValue;
+end;
 
 procedure TDesignPropertiesFrame.ShowHintMsg(const Msg: string; Ctrl: TControl);
 begin

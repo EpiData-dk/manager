@@ -1,11 +1,11 @@
 object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 760
+  Left = 2059
   Height = 625
-  Top = 266
+  Top = 245
   Width = 501
   ClientHeight = 625
   ClientWidth = 501
-  LCLVersion = '1.3'
+  LCLVersion = '1.5'
   object FieldPageControl: TPageControl
     AnchorSideLeft.Control = Owner
     Left = 0

@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 592
   ClientWidth = 1101
   TabOrder = 0
-  DesignLeft = 1969
-  DesignTop = 304
+  DesignLeft = 1920
+  DesignTop = 168
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
@@ -620,10 +620,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object EditToolButton: TToolButton
         Left = 301
-        Hint = 'Edit...'
         Top = 1
-        Caption = 'Edit'
-        ImageIndex = 13
+        Action = EditControlAction
         ParentShowHint = False
         ShowHint = True
       end
@@ -811,12 +809,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = PasteAsDateActionExecute
       OnUpdate = PasteAsUpdate
     end
-    object SelectNextAction: TAction
-      Category = 'Select'
-      Caption = 'Select Next'
-      Hint = 'Select Next Control'
-      OnExecute = SelectNextActionExecute
-    end
     object ImportAction: TAction
       Caption = 'Import file...'
       Hint = 'Import data and structure from files'
@@ -890,31 +882,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = DeleteControlFastActionExecute
       OnUpdate = CutCopyControlUpdate
     end
-    object SelectPgDnAction: TAction
-      Category = 'Select'
-      Caption = 'SelectPgDnAction'
-      OnExecute = SelectPgDnActionExecute
-    end
-    object SelectPriorAction: TAction
-      Category = 'Select'
-      Caption = 'SelectPriorAction'
-      OnExecute = SelectPriorActionExecute
-    end
-    object SelectPgUpAction: TAction
-      Category = 'Select'
-      Caption = 'SelectPgUpAction'
-      OnExecute = SelectPgUpActionExecute
-    end
-    object SelectFirstAction: TAction
-      Category = 'Select'
-      Caption = 'SelectFirstAction'
-      OnExecute = SelectFirstActionExecute
-    end
-    object SelectLastAction: TAction
-      Category = 'Select'
-      Caption = 'SelectLastAction'
-      OnExecute = SelectLastActionExecute
-    end
     object NewTimeFieldAction: TAction
       Category = 'NewControls'
       Caption = 'NewTimeFieldAction'
@@ -940,11 +907,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Redo last action'
       OnExecute = RedoActionExecute
       OnUpdate = RedoActionUpdate
-    end
-    object SelectAllAction: TAction
-      Category = 'Select'
-      Caption = 'SelectAllAction'
-      OnExecute = SelectAllActionExecute
     end
     object AlignLeftAction: TAction
       Category = 'Align'
@@ -981,30 +943,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ImageIndex = 28
       OnExecute = ShowAlignFormActionExecute
     end
-    object SelectAllIntsAction: TAction
-      Category = 'Select'
-      Caption = 'All Integer Fields'
-      ImageIndex = 2
-      OnExecute = SelectAllIntsActionExecute
-    end
-    object SelectAllFloatsAction: TAction
-      Category = 'Select'
-      Caption = 'All Float Fields'
-      ImageIndex = 3
-      OnExecute = SelectAllFloatsActionExecute
-    end
-    object SelectAllStringsAction: TAction
-      Category = 'Select'
-      Caption = 'All String Fields'
-      ImageIndex = 6
-      OnExecute = SelectAllStringsActionExecute
-    end
-    object SelectAllBoolsAction: TAction
-      Category = 'Select'
-      Caption = 'All Boolean Fields'
-      ImageIndex = 1
-      OnExecute = SelectAllBoolsActionExecute
-    end
     object ExpandPageAction: TAction
       Caption = 'Extend Page'
       ImageIndex = 14
@@ -1032,10 +970,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Import data and structure from clipboard'
       ImageIndex = 18
       OnExecute = ImportCBActionExecute
-    end
-    object DefineKeyAction: TAction
-      Caption = 'Define Key'
-      OnExecute = DefineKeyActionExecute
     end
   end
   object OtherFieldsPopup: TPopupMenu
@@ -1831,6 +1765,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   end
   object NonAuthorizedDesignerActionList: TActionList
     Images = DM.Icons16
+    OnUpdate = NonAuthorizedDesignerActionListUpdate
     left = 416
     top = 248
     object ViewDatasetAction: TAction
@@ -1852,6 +1787,70 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     object DataformPropertiesAction: TAction
       Caption = 'Dataform Properties'
       OnExecute = DataformPropertiesActionExecute
+    end
+    object SelectNextAction: TAction
+      Category = 'Select'
+      Caption = 'Select Next'
+      Hint = 'Select Next Control'
+      OnExecute = SelectNextActionExecute
+    end
+    object SelectPgDnAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPgDnAction'
+      OnExecute = SelectPgDnActionExecute
+    end
+    object SelectPriorAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPriorAction'
+      OnExecute = SelectPriorActionExecute
+    end
+    object SelectPgUpAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPgUpAction'
+      OnExecute = SelectPgUpActionExecute
+    end
+    object SelectFirstAction: TAction
+      Category = 'Select'
+      Caption = 'SelectFirstAction'
+      OnExecute = SelectFirstActionExecute
+    end
+    object SelectLastAction: TAction
+      Category = 'Select'
+      Caption = 'SelectLastAction'
+      OnExecute = SelectLastActionExecute
+    end
+    object SelectAllAction: TAction
+      Category = 'Select'
+      Caption = 'SelectAllAction'
+      OnExecute = SelectAllActionExecute
+    end
+    object SelectAllIntsAction: TAction
+      Category = 'Select'
+      Caption = 'All Integer Fields'
+      ImageIndex = 2
+      OnExecute = SelectAllIntsActionExecute
+    end
+    object SelectAllFloatsAction: TAction
+      Category = 'Select'
+      Caption = 'All Float Fields'
+      ImageIndex = 3
+      OnExecute = SelectAllFloatsActionExecute
+    end
+    object SelectAllStringsAction: TAction
+      Category = 'Select'
+      Caption = 'All String Fields'
+      ImageIndex = 6
+      OnExecute = SelectAllStringsActionExecute
+    end
+    object SelectAllBoolsAction: TAction
+      Category = 'Select'
+      Caption = 'All Boolean Fields'
+      ImageIndex = 1
+      OnExecute = SelectAllBoolsActionExecute
+    end
+    object DefineKeyAction: TAction
+      Caption = 'Define Key'
+      OnExecute = DefineKeyActionExecute
     end
   end
 end

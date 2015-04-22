@@ -56,8 +56,10 @@ type
       ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
       var Canceled: Boolean);
     procedure NewDataFormActionExecute(Sender: TObject);
+    procedure NewDataFormActionUpdate(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure ProjectPasswordActionExecute(Sender: TObject);
+    procedure ProjectPasswordActionUpdate(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectActionUpdate(Sender: TObject);
@@ -202,6 +204,11 @@ begin
   MR := DoNewDataForm(MR);
   if Assigned(MR) then
     FProjectTreeView.SelectedObject := MR;
+end;
+
+procedure TProjectFrame.NewDataFormActionUpdate(Sender: TObject);
+begin
+  NewDataFormAction.Enabled := (UserIsAuthorized(FDocumentFile.AuthedUser, [earStructure]));
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -357,6 +364,12 @@ begin
       MessageDlg(Header, 'Password successfully reset!', mtInformation, [mbOK], 0);
   end else
     MessageDlg(Header, 'The two passwords are not identical!' + LineEnding + 'Password NOT set.', mtError, [mbOK], 0);
+end;
+
+procedure TProjectFrame.ProjectPasswordActionUpdate(Sender: TObject);
+begin
+  ProjectPasswordAction.Enabled :=
+    (EpiDocument.Admin.Users.Count > 0);
 end;
 
 procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);

@@ -79,6 +79,8 @@ type
     { Validate and Apply }
     function  InternalValidate: Boolean;
     procedure InternalApply;
+  protected
+    procedure SetReadOnly(AValue: Boolean); override;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -550,6 +552,16 @@ begin
   else
     // "Master" datafile is ALWAYS new record state.
     DataFile.AfterRecordState := arsNewRecord;
+end;
+
+procedure TDataformPropertiesFrame.SetReadOnly(AValue: Boolean);
+var
+  i: Integer;
+begin
+  inherited SetReadOnly(AValue);
+
+  for i := 0 to PageControl1.PageCount - 1 do
+    PageControl1.Pages[i].Enabled := (not ReadOnly);
 end;
 
 constructor TDataformPropertiesFrame.Create(TheOwner: TComponent);

@@ -307,6 +307,7 @@
         <ComponentName Value="HeadingPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_headingframe"/>
       </Unit15>
       <Unit16>
         <Filename Value="designer/design_properties_baseframe.pas"/>
@@ -314,10 +315,12 @@
         <ComponentName Value="DesignPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_properties_baseframe"/>
       </Unit16>
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_types"/>
       </Unit17>
       <Unit18>
         <Filename Value="import/import_structure_form.pas"/>
@@ -489,6 +492,7 @@
         <ComponentName Value="KeyFieldsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="project_keyfields_form"/>
       </Unit45>
       <Unit46>
         <Filename Value="utils/manager_globals.pas"/>
@@ -516,6 +520,7 @@
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_control_field"/>
       </Unit50>
       <Unit51>
         <Filename Value="designer/design_control_heading.pas"/>
@@ -532,10 +537,12 @@
       <Unit54>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_properties_form"/>
       </Unit54>
       <Unit55>
         <Filename Value="designer/design_designcontroller.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designcontroller"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_properties_fieldframe.pas"/>
@@ -543,6 +550,7 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_fieldframe"/>
       </Unit56>
       <Unit57>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -550,10 +558,12 @@
         <ComponentName Value="SectionPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_sectionframe"/>
       </Unit57>
       <Unit58>
         <Filename Value="designer/design_designmessenger.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designmessenger"/>
       </Unit58>
       <Unit59>
         <Filename Value="designer/design_commander.pas"/>
@@ -565,10 +575,12 @@
         <ComponentName Value="EmptyPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_emptyframe"/>
       </Unit60>
       <Unit61>
         <Filename Value="designer/design_designmover.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="design_designmover"/>
       </Unit61>
       <Unit62>
         <Filename Value="designer/design_designsizer.pas"/>
@@ -723,6 +735,7 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="design_properties_dataformframe"/>
       </Unit88>
       <Unit89>
         <Filename Value="tools/append_form2.pas"/>
@@ -807,7 +820,7 @@
       </Debugging>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG
+      <CustomOptions Value="-dEPI_DEBUG1
 -dMEM_LEAK_FINDER1
 -dEPI_DEVELOPMENT"/>
       <ExecuteBefore>

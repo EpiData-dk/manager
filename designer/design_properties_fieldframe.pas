@@ -242,6 +242,8 @@ type
     procedure InternalApplyChanges;
     procedure EditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure JumpEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+  protected
+    procedure SetReadOnly(AValue: Boolean); override;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -2316,6 +2318,16 @@ begin
     exit
   else
     EditUTF8KeyPress(Sender, UTF8Key);
+end;
+
+procedure TFieldPropertiesFrame.SetReadOnly(AValue: Boolean);
+var
+  i: Integer;
+begin
+  inherited SetReadOnly(AValue);
+
+  for i := 0 to FieldPageControl.PageCount - 1 do
+    FieldPageControl.Pages[i].Enabled := (not ReadOnly);
 end;
 
 constructor TFieldPropertiesFrame.Create(TheOwner: TComponent);

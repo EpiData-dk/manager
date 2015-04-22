@@ -209,6 +209,8 @@ type
     procedure NewStringFieldFastActionExecute(Sender: TObject);
     procedure NewTimeFieldActionExecute(Sender: TObject);
     procedure NewTimeFieldFastActionExecute(Sender: TObject);
+    procedure NonAuthorizedDesignerActionListUpdate(AAction: TBasicAction;
+      var Handled: Boolean);
     procedure PasteAsDateActionExecute(Sender: TObject);
     procedure PasteAsFloatActionExecute(Sender: TObject);
     procedure PasteAsIntActionExecute(Sender: TObject);
@@ -358,6 +360,7 @@ type
   private
     FOnGetUser: TGetUserEvent;
     function DoGetUser: TEpiUser;
+    procedure LMUserAuthorized(var Msg: TLMessage); message LM_DESIGNER_USER_AUTHED;
   public
     property OnGetUser: TGetUserEvent read FOnGetUser write FOnGetUser;
   public
@@ -565,6 +568,18 @@ begin
   NewShortCutDesignField(ftTime, false);
 end;
 
+procedure TRuntimeDesignFrame.NonAuthorizedDesignerActionListUpdate(
+  AAction: TBasicAction; var Handled: Boolean);
+begin
+  if (Screen.ActiveCustomForm <> MainForm) or
+     (not Visible) or
+     (not MayHandleShortcuts)
+  then
+    NonAuthorizedDesignerActionList.State := asSuspended
+  else
+    NonAuthorizedDesignerActionList.State := asNormal;
+end;
+
 procedure TRuntimeDesignFrame.PasteAsDateActionExecute(Sender: TObject);
 begin
   PasteAsField(ManagerSettings.DefaultDateType);
@@ -588,6 +603,7 @@ end;
 procedure TRuntimeDesignFrame.PasteAsUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
+    (UserIsAuthorized(DoGetUser, [earStructure])) and
     (ClipBoardHasText) and
      (
       ((FDesignPanel.Surface.Count = 1) and
@@ -791,7 +807,10 @@ end;
 procedure TRuntimeDesignFrame.PasteControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) {and
+    (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) and
+    (UserIsAuthorized(DoGetUser, [earStructure]));
+
+    {and
      (
       ((FDesignPanel.Surface.Count = 1) and
        (csAcceptsControls in FDesignPanel.Surface.Selection[0].ControlStyle)
@@ -1928,6 +1947,7 @@ begin
   FMayHandleShortcuts := AValue;
 
   AuthorizedDesignerActionListUpdate(nil, handled);
+  NonAuthorizedDesignerActionListUpdate(nil, handled);
 end;
 
 procedure TRuntimeDesignFrame.SetRelation(AValue: TEpiMasterRelation);
@@ -2782,6 +2802,7 @@ var
   F: TKeyFieldsForm;
 begin
   F := TKeyFieldsForm.Create(Self, Relation);
+  F.ReadOnly := not UserIsAuthorized(DoGetUser, [earStructure]);
   F.ShowModal;
   F.Free;
 
@@ -2953,6 +2974,7 @@ procedure TRuntimeDesignFrame.ShowPropertiesForm(NewControl: boolean);
 begin
   if not Assigned(PropertiesForm) then exit;
 
+  PropertiesForm.ReadOnly := (not UserIsAuthorized(DoGetUser, [earStructure]));
   PropertiesForm.Show;
   PropertiesForm.SetFocus;
 
@@ -2985,6 +3007,14 @@ begin
 
   if Assigned(OnGetUser) then
     Result := OnGetUser(Self);
+end;
+
+procedure TRuntimeDesignFrame.LMUserAuthorized(var Msg: TLMessage);
+begin
+  if UserIsAuthorized(DoGetUser, [earStructure]) then
+    Msg.Result := 1
+  else
+    Msg.Result := 0;
 end;
 
 procedure TRuntimeDesignFrame.Activate;

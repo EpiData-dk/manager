@@ -10,8 +10,9 @@ uses
 const
   // Designer messages
   LM_DESIGNER_ADD      = LM_USER+1;                 // WParam = EpiCtrl;
+  LM_DESIGNER_USER_AUTHED = LM_DESIGNER_ADD + 1;    // No input. Result = 0: user not authorized, Result > 0: user authorized
   // Last Designer message... always update when inserting new messages.!
-  LM_DESIGNER_LAST     = LM_DESIGNER_ADD;
+  LM_DESIGNER_LAST     = LM_DESIGNER_USER_AUTHED;
 
   // Main messages
   LM_MAIN_OPENPROJECT  = LM_DESIGNER_LAST    + 1;   // WParam = TString object containing the filename. Has been checked for exisistence. (TString object MUST BE FREED at the message handler).

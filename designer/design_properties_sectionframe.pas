@@ -36,6 +36,8 @@ type
     procedure UpdateVisibility;
     procedure UpdateContent;
     procedure DoUpdateCaption;
+  protected
+    procedure SetReadOnly(AValue: Boolean); override;
   public
     { public declarations }
     procedure FocusOnNewControl;
@@ -95,6 +97,16 @@ begin
 
   S := EpiCutString(S, 20);
   UpdateCaption('Sections Properties: ' + S);
+end;
+
+procedure TSectionPropertiesFrame.SetReadOnly(AValue: Boolean);
+var
+  i: Integer;
+begin
+  inherited SetReadOnly(AValue);
+
+  for i := 0 to SectionPageControl.PageCount - 1 do
+    SectionPageControl.Pages[i].Enabled := (not ReadOnly);
 end;
 
 procedure TSectionPropertiesFrame.FocusOnNewControl;

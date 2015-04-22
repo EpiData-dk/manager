@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 678
   ClientWidth = 991
   TabOrder = 0
-  DesignLeft = 484
-  DesignTop = 251
+  DesignLeft = 1944
+  DesignTop = 74
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
@@ -201,6 +201,7 @@ object ProjectFrame: TProjectFrame
       Hint = 'New Relate DataForm'
       ImageIndex = 31
       OnExecute = NewDataFormActionExecute
+      OnUpdate = NewDataFormActionUpdate
     end
     object DeleteDataFormAction: TAction
       Category = 'DataForm'
@@ -233,6 +234,7 @@ object ProjectFrame: TProjectFrame
       Category = 'Project'
       Caption = 'Set Password'
       OnExecute = ProjectPasswordActionExecute
+      OnUpdate = ProjectPasswordActionUpdate
     end
     object KeyFieldsAction: TAction
       Category = 'Project'

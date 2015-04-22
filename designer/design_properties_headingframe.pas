@@ -25,6 +25,8 @@ type
     procedure UpdateVisibility;
     procedure UpdateContent;
     procedure DoUpdateCaption;
+  protected
+    procedure SetReadOnly(AValue: Boolean); override;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -85,6 +87,13 @@ begin
 
   S := EpiCutString(S, 20);
   UpdateCaption('Heading Properties: ' + S);
+end;
+
+procedure THeadingPropertiesFrame.SetReadOnly(AValue: Boolean);
+begin
+  inherited SetReadOnly(AValue);
+
+  Self.Enabled := (not ReadOnly);
 end;
 
 constructor THeadingPropertiesFrame.Create(TheOwner: TComponent);

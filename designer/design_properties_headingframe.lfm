@@ -5,7 +5,7 @@ object HeadingPropertiesFrame: THeadingPropertiesFrame
   Width = 570
   ClientHeight = 374
   ClientWidth = 570
-  LCLVersion = '1.1'
+  LCLVersion = '1.5'
   object Label9: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -70,7 +70,7 @@ object HeadingPropertiesFrame: THeadingPropertiesFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 10
-    Height = 4
+    Height = 17
     Top = 106
     Width = 550
     Anchors = [akTop, akLeft, akRight]

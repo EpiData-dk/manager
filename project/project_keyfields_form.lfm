@@ -24,10 +24,10 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 444
-      Height = 32
-      Top = 5
-      Width = 54
+      Left = 442
+      Height = 34
+      Top = 4
+      Width = 56
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -41,7 +41,7 @@ object KeyFieldsForm: TKeyFieldsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 358
+      Left = 356
       Height = 34
       Top = 4
       Width = 81
@@ -80,6 +80,7 @@ object KeyFieldsForm: TKeyFieldsForm
       Action = AddIndexFieldAction
       AutoSize = True
       BorderSpacing.Left = 5
+      Enabled = False
       TabOrder = 0
     end
   end

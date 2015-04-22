@@ -47,6 +47,7 @@ type
     FFixedKeyList: TList;
     FDynamicKeyList: TList;
     FHintWindow: THintWindow;
+    FReadOnly: boolean;
     FRelation: TEpiMasterRelation;
     FValueLabelSets: TEpiValueLabelSets;
     function  DoAddNewKey: TComboBox;
@@ -55,6 +56,7 @@ type
     procedure SetItemIndexOnField(Combo: TComboBox; Field: TEpiField);
     procedure AddFieldsToCombo(Combo: TComboBox);
     procedure ComboSelect(Sender: TObject);
+    procedure SetReadOnly(AValue: boolean);
     procedure UpdateComboContent(Const Combo: TComboBox);
     function  GetFieldList: TEpiFields;
     function  FieldSelected(Field: TEpiField): Boolean;
@@ -71,6 +73,7 @@ type
     constructor Create(TheOwner: TComponent;
       ARelation: TEpiMasterRelation);
     destructor Destroy; override;
+    property ReadOnly: boolean read FReadOnly write SetReadOnly;
     class procedure RestoreDefaultPos;
   end;
 
@@ -251,6 +254,14 @@ begin
 
     UpdateComboContent(Cmb);
   end;
+end;
+
+procedure TKeyFieldsForm.SetReadOnly(AValue: boolean);
+begin
+  if FReadOnly = AValue then Exit;
+  FReadOnly := AValue;
+
+  ScrollBox1.Enabled := (not ReadOnly);
 end;
 
 procedure TKeyFieldsForm.UpdateComboContent(const Combo: TComboBox);
