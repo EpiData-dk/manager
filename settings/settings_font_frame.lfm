@@ -14,15 +14,18 @@ object SettingsFontFrame: TSettingsFontFrame
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 10
-    Height = 102
+    Height = 97
     Top = 10
     Width = 685
     Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
+    BorderSpacing.Bottom = 10
     Caption = 'Fonts:'
-    ClientHeight = 85
+    ChildSizing.TopBottomSpacing = 10
+    ClientHeight = 80
     ClientWidth = 681
     TabOrder = 0
     object FieldFontEditBtn: TEditButton
@@ -35,10 +38,10 @@ object SettingsFontFrame: TSettingsFontFrame
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 10
       ButtonWidth = 23
-      CharCase = ecNormal
       MaxLength = 0
       NumGlyphs = 1
       OnButtonClick = FontChangeClick
+      PasswordChar = #0
       TabOrder = 0
     end
     object Label2: TLabel
@@ -49,7 +52,7 @@ object SettingsFontFrame: TSettingsFontFrame
       Left = 10
       Height = 15
       Top = 20
-      Width = 159
+      Width = 158
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = 'Questions / Field Names:'
@@ -68,10 +71,10 @@ object SettingsFontFrame: TSettingsFontFrame
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Top = 10
       ButtonWidth = 23
-      CharCase = ecNormal
       MaxLength = 0
       NumGlyphs = 1
       OnButtonClick = FontChangeClick
+      PasswordChar = #0
       TabOrder = 1
     end
     object Label10: TLabel
@@ -137,7 +140,7 @@ object SettingsFontFrame: TSettingsFontFrame
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 202
-    Top = 122
+    Top = 117
     Width = 685
     Anchors = [akTop, akLeft, akRight]
     AutoSize = True
@@ -145,6 +148,7 @@ object SettingsFontFrame: TSettingsFontFrame
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
     Caption = 'Heading Fonts'
+    ChildSizing.TopBottomSpacing = 10
     ClientHeight = 185
     ClientWidth = 681
     TabOrder = 1
@@ -175,10 +179,10 @@ object SettingsFontFrame: TSettingsFontFrame
       BorderSpacing.Left = 20
       BorderSpacing.Top = 10
       ButtonWidth = 23
-      CharCase = ecNormal
       MaxLength = 0
       NumGlyphs = 1
       OnButtonClick = FontChangeClick
+      PasswordChar = #0
       TabOrder = 0
     end
     object HeadingColourBtn1: TColorButton
@@ -230,10 +234,10 @@ object SettingsFontFrame: TSettingsFontFrame
       BorderSpacing.Left = 20
       BorderSpacing.Top = 10
       ButtonWidth = 23
-      CharCase = ecNormal
       MaxLength = 0
       NumGlyphs = 1
       OnButtonClick = FontChangeClick
+      PasswordChar = #0
       TabOrder = 1
     end
     object HeadingColourBtn2: TColorButton
@@ -285,10 +289,10 @@ object SettingsFontFrame: TSettingsFontFrame
       BorderSpacing.Left = 20
       BorderSpacing.Top = 10
       ButtonWidth = 23
-      CharCase = ecNormal
       MaxLength = 0
       NumGlyphs = 1
       OnButtonClick = FontChangeClick
+      PasswordChar = #0
       TabOrder = 2
     end
     object HeadingColourBtn3: TColorButton
@@ -340,10 +344,10 @@ object SettingsFontFrame: TSettingsFontFrame
       BorderSpacing.Left = 20
       BorderSpacing.Top = 10
       ButtonWidth = 23
-      CharCase = ecNormal
       MaxLength = 0
       NumGlyphs = 1
       OnButtonClick = FontChangeClick
+      PasswordChar = #0
       TabOrder = 3
     end
     object HeadingColourBtn4: TColorButton
@@ -398,10 +402,10 @@ object SettingsFontFrame: TSettingsFontFrame
       BorderSpacing.Top = 10
       BorderSpacing.Bottom = 10
       ButtonWidth = 23
-      CharCase = ecNormal
       MaxLength = 0
       NumGlyphs = 1
       OnButtonClick = FontChangeClick
+      PasswordChar = #0
       TabOrder = 4
     end
     object HeadingColourBtn5: TColorButton
