@@ -244,7 +244,6 @@
         <ComponentName Value="ProjectSettings_FieldFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_settings_field_frame"/>
       </Unit5>
       <Unit6>
         <Filename Value="project/project_settings_interface.pas"/>
@@ -277,7 +276,6 @@
         <ComponentName Value="Settings_VisualDesign"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_visualdesign_frame"/>
       </Unit10>
       <Unit11>
         <Filename Value="settings/settings_fielddefinitions_frame.pas"/>
@@ -318,7 +316,6 @@
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_types"/>
       </Unit17>
       <Unit18>
         <Filename Value="import/import_structure_form.pas"/>
@@ -374,7 +371,6 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -482,11 +478,11 @@
         <ComponentName Value="KeyFieldsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="project_keyfields_form"/>
       </Unit44>
       <Unit45>
         <Filename Value="utils/manager_globals.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="manager_globals"/>
       </Unit45>
       <Unit46>
         <Filename Value="reports/report_double_entry_validation.pas"/>
@@ -505,11 +501,11 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="design_runtimedesigner"/>
       </Unit48>
       <Unit49>
         <Filename Value="designer/design_control_field.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_control_field"/>
       </Unit49>
       <Unit50>
         <Filename Value="designer/design_control_heading.pas"/>
@@ -537,7 +533,6 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_fieldframe"/>
       </Unit55>
       <Unit56>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -630,7 +625,6 @@
         <ComponentName Value="SettingsFontFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="settings_font_frame"/>
       </Unit72>
       <Unit73>
         <Filename Value="reports/report_codebook.pas"/>
