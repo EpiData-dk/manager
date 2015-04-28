@@ -167,6 +167,7 @@ begin
 
   if Result then
     FInitialText := '';
+  end;
 
   Result := Result and inherited;
 end;
@@ -265,7 +266,8 @@ begin
     VLG.FocusedNode := Node;
     VLG.FocusedColumn := 1;
     VLG.Selected[Node] := true;
-    VLG.EditNode(Node, 1);
+
+    Application.QueueAsyncCall(@VLGSendPostEdit, PtrInt(Node));
 
   finally
     VLG.EndUpdate;
@@ -392,6 +394,21 @@ end;
 
 procedure TValueLabelGridFrame.VLGSendPostEdit(Data: PtrInt);
 begin
+  {$IFDEF MSWINDOWS}
+  //   ===  relevant for FieldValueEditorForm   ===
+  // Note: When pressing CTRL+N with VLG in editing mode, the following happens:
+  // 1: When the Edit is hiding (in EndEdit) the form recieves focus, and apparently
+  //    in windows, this forwards the focus to the form edit.
+  // 2: When the "PostEdit" message get here, we call the EditNode, which in turn calls
+  // 3: KillFocus on the form edit, which calls
+  // 4: OnEditingDone. This method in turns sets focus to the VLG here (for reasons, this OnEditingDone MUST
+  //    call VLG.SetFocus) which changes focus from the TValidatedStringEdit to the VLG.
+  //
+  // Therefore on Windows focus should be removed from the form edit and set to the VLG, such
+  // that when the VLG enters edit mode, the focus remains on the TValidatedStringEdit
+
+  VLG.SetFocus;
+  {$ENDIF}
   VLG.FocusedColumn := 1;
   VLG.FocusedNode   := PVirtualNode(Data);
   VLG.EditNode(PVirtualNode(Data), 1);
