@@ -167,7 +167,6 @@ begin
 
   if Result then
     FInitialText := '';
-  end;
 
   Result := Result and inherited;
 end;
