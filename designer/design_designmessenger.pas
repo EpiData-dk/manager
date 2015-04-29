@@ -15,6 +15,7 @@ type
   TDesignMessenger = class(TJvDesignDesignerMessenger)
   private
     FFrame: TRuntimeDesignFrame;
+    procedure ShowPropertiesForm(Data: PtrInt);
   protected
     procedure SetContainer(AValue: TWinControl); override;
   public
@@ -29,6 +30,11 @@ uses
 
 { TDesignMessenger }
 
+procedure TDesignMessenger.ShowPropertiesForm(Data: PtrInt);
+begin
+  TRuntimeDesignFrame(Data).ShowPropertiesForm(true);
+end;
+
 procedure TDesignMessenger.SetContainer(AValue: TWinControl);
 begin
   inherited SetContainer(AValue);
@@ -40,7 +46,9 @@ begin
       AValue := AValue.Parent;
 
   if Assigned(AValue) then
-    FFrame := TRuntimeDesignFrame(AValue);
+    FFrame := TRuntimeDesignFrame(AValue)
+  else
+    FFrame := nil;
 end;
 
 function TDesignMessenger.IsDesignMessage(ASender: TControl;
@@ -81,7 +89,10 @@ begin
           // -> proceeding may allow additional controls to be created etc.
           Result := true
         else begin
-          GetParentForm(FFrame).BringToFront;
+          if (AMessage.msg = LM_LBUTTONDOWN) or
+             (AMessage.msg = LM_RBUTTONDOWN)
+          then
+            GetParentForm(FFrame).BringToFront;
           Result := inherited IsDesignMessage(ASender, AMessage);
         end;
 
@@ -92,14 +103,24 @@ begin
           LM_RBUTTONUP:    S := 'LM_RBUTTONUP';
         end;
       end;
-    LM_LBUTTONDBLCLK:      S := 'LM_LBUTTONDBLCLK';
-    LM_RBUTTONDBLCLK:      S := 'LM_RBUTTONDBLCLK';
+    LM_LBUTTONDBLCLK,
+    LM_RBUTTONDBLCLK:
+      begin
+        case AMessage.Msg of
+          LM_LBUTTONDBLCLK: S := 'LM_RBUTTONDBLCLK';
+          LM_RBUTTONDBLCLK: S := 'LM_LBUTTONDBLCLK';
+        end;
+        {$IFNDEF LINUX}
+        Application.QueueAsyncCall(@ShowPropertiesForm, PtrInt(FFrame));
+        {$ENDIF}
+      end;
   else
     Result := inherited IsDesignMessage(ASender, AMessage);
   end;
 
-//  if S <> '' then
-//    FFrame.Memo1.Append('TDesignMessenger.IsDesignMessage: ' + S);
+{  if (S <> '')
+  then
+    WriteLn('TDesignMessenger.IsDesignMessage: ' + S);     }
 
   if Result then
     AMessage.Result := 1;

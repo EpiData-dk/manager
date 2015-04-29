@@ -244,16 +244,26 @@ procedure TKeyFieldsForm.ComboSelect(Sender: TObject);
 var
   Cmb: TComboBox;
   i: Integer;
+const
+  // "Selecting" is needed in MAC, because setting the ItemIndex in UpdateComboContent
+  // fires additional OnSelect events, hence creating a loop. This is not the case
+  // on other platforms apparently...
+  Selecting: boolean = false;
 begin
+  if Selecting then exit;
+
   IndexCheckError;
 
+  Selecting := true;
   for i := 0 to FDynamicKeyList.Count -1 do
   begin
+    WriteLn('ComboSelect: ', i);
     Cmb := TComboBox(FDynamicKeyList[i]);
     if Cmb = Sender then Continue;
 
     UpdateComboContent(Cmb);
   end;
+  Selecting := false;
 end;
 
 procedure TKeyFieldsForm.SetReadOnly(AValue: boolean);

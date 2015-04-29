@@ -17,7 +17,6 @@ type
     CancelBtn: TBitBtn;
     OkBtn: TBitBtn;
     Panel2: TPanel;
-    ValueLabelNameEdit: TEdit;
     Label1: TLabel;
     Panel1: TPanel;
     Panel3: TPanel;
@@ -27,10 +26,10 @@ type
     procedure OkBtnClick(Sender: TObject);
     procedure ValueLabelNameEditEditingDone(Sender: TObject);
   private
+    ValueLabelNameEdit: TEdit;
     FGridFrame: TValueLabelGridFrame;
     FHintWindow: THintWindow;
     FValueLabelSets: TEpiValueLabelSets;
-    FFieldType: TEpiFieldType;
     function GetValueLabelSet: TEpiValueLabelSet;
     procedure SetValueLabelSet(AValue: TEpiValueLabelSet);
     procedure ShowHintMsg(Sender: TObject; Ctrl: TControl; Const Msg: String);
@@ -52,8 +51,7 @@ uses
 const
   rsFormCaption = 'Field Valuelabel Editor';
 
-
-  { TFieldValueLabelEditor }
+{ TFieldValueLabelEditor }
 
 procedure TFieldValueLabelEditor.OkBtnClick(Sender: TObject);
 var
@@ -188,6 +186,16 @@ constructor TFieldValueLabelEditor.Create(TheOwner: TComponent;
 begin
   inherited Create(TheOwner);
   FValueLabelSets := ValueLabelSets;
+
+  ValueLabelNameEdit := TEdit.Create(Self);
+  with ValueLabelNameEdit do
+  begin
+    AnchorToNeighbour(akLeft, 10, Label1);
+    AnchorParallel(akRight, 10, Panel3);
+    AnchorVerticalCenterTo(Panel3);
+    Parent := Panel3;
+    OnEditingDone := @ValueLabelNameEditEditingDone;
+  end;
 
   FGridFrame := TValueLabelGridFrame.Create(Self);
   with FGridFrame do
