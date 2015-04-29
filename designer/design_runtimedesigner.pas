@@ -9,7 +9,7 @@ uses
   ExtCtrls, StdCtrls, JvDesignSurface, epidatafiles, LMessages, ActnList, Menus,
   Buttons, Dialogs, manager_messages, epidatafilestypes, design_properties_form,
   types, epicustombase, epidocument, epivaluelabels, design_types,
-  project_types, epirelations, epiadmin, manager_types;
+  project_types, epidatafilerelations, epiadmin, manager_types;
 
 type
 

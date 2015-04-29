@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, epicustombase, design_types,
-  epidatafiles, epirelations;
+  epidatafiles, epidatafilerelations;
 
 type
 

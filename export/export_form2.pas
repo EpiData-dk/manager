@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, LazFileUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   ComCtrls, StdCtrls, EditBtn, Buttons, epiv_dataform_treeview,
   epiv_projecttreeview_frame, epiopenfile, export_frame_types,
-  epicustombase, epidatafiles, epirelations, epiexportsettings;
+  epicustombase, epidatafiles, epidatafilerelations, epiexportsettings;
 
 type
 

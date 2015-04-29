@@ -261,7 +261,7 @@ implementation
 uses
   epimiscutils, typinfo, epiranges, epiconvertutils,
   epistringutils, LazUTF8, field_valuelabelseditor_form,
-  valuelabelseditor_form2, math, epirelations, epiv_datamodule;
+  valuelabelseditor_form2, math, epidatafilerelations, epiv_datamodule;
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';

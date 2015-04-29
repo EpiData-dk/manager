@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, JvDesignSurface, design_types, epicustombase,
-  Controls, epirelations;
+  Controls, epidatafilerelations;
 
 type
 

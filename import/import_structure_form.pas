@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Buttons, ActnList, Grids, StdCtrls, ShellCtrls, epicustombase,
-  epidatafiles, projectfilelist_frame, epidocument, epirelations;
+  epidatafiles, projectfilelist_frame, epidocument, epidatafilerelations;
 
 type
 

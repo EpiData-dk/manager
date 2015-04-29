@@ -5,7 +5,7 @@ unit report_codebook;
 interface
 
 uses
-  Classes, SysUtils, report_base, epidocument, epidatafiles, epirelations,
+  Classes, SysUtils, report_base, epidocument, epidatafiles, epidatafilerelations,
   epiopenfile;
 
 type

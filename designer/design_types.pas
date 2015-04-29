@@ -6,7 +6,7 @@ unit design_types;
 interface
 
 uses
-  Classes, SysUtils, epicustombase, Controls, Forms, epidatafiles, epirelations;
+  Classes, SysUtils, epicustombase, Controls, Forms, epidatafiles, epidatafilerelations;
 
 type
   { IDesignEpiControl }

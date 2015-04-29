@@ -95,7 +95,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epirelations;
+  epidatafilerelations;
 
 const
   AfterRecordStateCaption: array[TEpiDataFileAfterRecordState] of string =

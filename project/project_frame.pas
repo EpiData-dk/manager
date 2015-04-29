@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList, Controls,
-  Dialogs, epidocument, epidatafiles, epicustombase, epirelations, epirelates,
+  Dialogs, epidocument, epidatafiles, epicustombase, epidatafilerelations, epirelates,
   epiadmin, manager_messages, LMessages, Menus, StdCtrls, epiv_documentfile,
   types, design_runtimedesigner, project_types, epiv_projecttreeview_frame,
   manager_types;

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, fgl, FileUtil, Forms, Controls, ExtCtrls, ComCtrls,
   StdCtrls, report_types, epiv_projecttreeview_frame, epiv_dataform_treeview,
-  projectfilelist_frame, epidocument, epicustombase, epirelations, contnrs,
+  projectfilelist_frame, epidocument, epicustombase, epidatafilerelations, contnrs,
   report_double_entry_validation, epitools_val_dbl_entry, epiopenfile,
   report_base;
 
