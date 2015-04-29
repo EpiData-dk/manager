@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, Grids, StdCtrls, ComCtrls, ActnList, epiadmin, epicustombase;
+  Buttons, Grids, StdCtrls, ComCtrls, ActnList, epiadmin, epicustombase,
+  VirtualTrees;
 
 type
 
@@ -36,7 +37,6 @@ type
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     UserGrid: TStringGrid;
-    GroupGrid: TStringGrid;
     UserGroupGrid: TStringGrid;
     ToolBar1: TToolBar;
     ToolBar2: TToolBar;
@@ -54,7 +54,6 @@ type
     procedure AddUserToGroupActionExecute(Sender: TObject);
     procedure DeleteGroupActionExecute(Sender: TObject);
     procedure DeleteUserActionExecute(Sender: TObject);
-    procedure EditGroupActionExecute(Sender: TObject);
     procedure EditUserActionExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure GroupGridSelection(Sender: TObject; aCol, aRow: Integer);
@@ -88,8 +87,9 @@ type
     function UserFromGrid: TEpiUser;
     function ShowUserForm(Const User: TEpiUser): TModalResult;
 
-  { Group methods }
+  { Group vars/methods }
   private
+    FGroupVST: TVirtualStringTree;
     function GroupFromGrid: TEpiGroup;
     function ShowGroupForm(Const Group: TEpiGroup): TModalResult;
 
@@ -104,7 +104,7 @@ implementation
 {$R *.lfm}
 
 uses
-  admin_user_form, admin_group_form, types, shortcuts;
+  admin_user_form, admin_group_form, types, shortcuts, epiv_datamodule;
 
 type
 
@@ -337,8 +337,17 @@ procedure TAdminForm.FillGroupGrid;
 var
   Idx: Integer;
   Group: TEpiGroup;
+
 begin
-  Idx := 1;
+  FGroupVST.BeginUpdate;
+  FGroupVST.Clear;
+
+  FGroupVST.AddChild(nil, Admin.AdminRelation.Group);
+
+
+  FGroupVST.EndUpdate;
+
+{  Idx := 1;
 
   GroupGrid.RowCount := Admin.Groups.Count + 1;
   for Group in Admin.Groups do
@@ -347,7 +356,7 @@ begin
     GroupGrid.Cells[1, Idx] := '';
 
     Inc(Idx);
-  end;
+  end; }
 end;
 
 procedure TAdminForm.FillUsersToGroupGrid;
@@ -411,9 +420,9 @@ end;
 
 function TAdminForm.GroupFromGrid: TEpiGroup;
 begin
-  Result := nil;
+{  Result := nil;
   if GroupGrid.RowCount <= 1 then Exit;
-  Result := Admin.Groups[GroupGrid.Row - 1];
+  Result := Admin.Groups[GroupGrid.Row - 1];         }
 end;
 
 function TAdminForm.ShowGroupForm(const Group: TEpiGroup): TModalResult;
@@ -434,6 +443,62 @@ begin
   inherited Create(TheOwner);
 
   FAdmin := AAdmin;
+
+  FGroupVST := TVirtualStringTree.Create(Self);
+  with FGroupVST do
+  begin
+    BeginUpdate;
+
+    with TreeOptions do
+    begin
+      AnimationOptions := [];
+      AutoOptions      := [];
+      MiscOptions      := [toFullRepaintOnResize, toGridExtensions,
+                           toToggleOnDblClick, toWheelPanning];
+      PaintOptions     := [toShowButtons, toShowDropmark, toShowRoot,
+                           toShowTreeLines, toThemeAware, toUseBlendedImages];
+      SelectionOptions := [toExtendedFocus, toFullRowSelect];
+      StringOptions    := [];
+    end;
+
+    with Header do
+    begin
+      Options := [hoAutoResize, hoColumnResize, hoDblClickResize, hoVisible,
+                  hoFullRepaintOnResize];
+
+      with Columns.Add do
+      begin
+        Text := 'Caption';
+        CheckBox   := false;
+        CheckState := csUncheckedNormal;
+        CheckType  := ctCheckBox;
+        Options    := [coAllowClick, coEnabled, coParentBidiMode,
+                       coParentColor, coResizable, coShowDropMark, coVisible,
+                       coSmartResize, coAllowFocus];
+        Width      := 150;
+      end;
+
+      with Columns.Add do
+      begin
+        Text := 'Rights';
+        CheckBox   := false;
+        CheckState := csUncheckedNormal;
+        CheckType  := ctCheckBox;
+        Options    := [coAllowClick, coEnabled, coParentBidiMode,
+                       coParentColor, coResizable, coShowDropMark, coVisible,
+                       coSmartResize, coAllowFocus];
+      end;
+
+      MainColumn := 0;
+      AutoSizeIndex := 1;
+    end;
+
+    Align := alClient;
+    Parent := Panel2;
+
+    EndUpdate;
+  end;
+  FGroupVST.Images := DM.Icons16;
 end;
 
 procedure TAdminForm.DeleteUserActionExecute(Sender: TObject);
@@ -457,15 +522,6 @@ begin
       User.Free;
       FillUserGrid;
     end;
-end;
-
-procedure TAdminForm.EditGroupActionExecute(Sender: TObject);
-begin
-  if ShowGroupForm(GroupFromGrid) = mrCancel then
-    Exit;
-
-  FillGroupGrid;
-  FillUsersToGroupGrid;
 end;
 
 procedure TAdminForm.DeleteGroupActionExecute(Sender: TObject);

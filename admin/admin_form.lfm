@@ -1,7 +1,7 @@
 object AdminForm: TAdminForm
-  Left = 579
+  Left = 562
   Height = 659
-  Top = 241
+  Top = 265
   Width = 867
   Caption = 'User/Group Administration'
   ClientHeight = 659
@@ -160,37 +160,6 @@ object AdminForm: TAdminForm
         ParentFont = False
       end
     end
-    object GroupGrid: TStringGrid
-      Left = 1
-      Height = 311
-      Top = 58
-      Width = 427
-      Align = alClient
-      AutoEdit = False
-      AutoFillColumns = True
-      ColCount = 2
-      Columns = <      
-        item
-          Title.Caption = 'Name'
-          Width = 212
-        end      
-        item
-          Title.Caption = 'Management Rights'
-          Width = 213
-        end>
-      ExtendedSelect = False
-      FixedCols = 0
-      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goSmoothScroll]
-      RowCount = 1
-      TabOrder = 1
-      TitleStyle = tsNative
-      OnDblClick = EditGroupActionExecute
-      OnSelection = GroupGridSelection
-      ColWidths = (
-        212
-        213
-      )
-    end
     object ToolBar2: TToolBar
       Left = 1
       Height = 26
@@ -198,7 +167,7 @@ object AdminForm: TAdminForm
       Width = 427
       Caption = 'ToolBar2'
       Images = DM.Icons16
-      TabOrder = 2
+      TabOrder = 1
       object ToolButton4: TToolButton
         Left = 1
         Top = 2
@@ -388,7 +357,6 @@ object AdminForm: TAdminForm
       Category = 'Group'
       Caption = 'EditGroupAction'
       ImageIndex = 13
-      OnExecute = EditGroupActionExecute
     end
     object AddUserToGroupAction: TAction
       Category = 'UserToGroup'
