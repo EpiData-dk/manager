@@ -23,7 +23,7 @@ implementation
 
 
 uses
-  epireport_base, epireport_report_fieldlist,
+  epireport_base, epireport_report_fieldlist, epidatafilerelations_helper,
   epireport_types, epireport_report_controllist;
 
 resourcestring

@@ -100,7 +100,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafilestypes, epieximtypes,
+  epidatafilestypes, epieximtypes, epidatafilerelations_helper,
   epimiscutils, settings2_var, settings2, manager_types;
 
 var

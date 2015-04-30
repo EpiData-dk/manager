@@ -26,7 +26,8 @@ type
 implementation
 
 uses
-  epireport_base, epireport_report_controllist, epireport_report_fieldinfo;
+  epireport_base, epireport_report_controllist, epireport_report_fieldinfo,
+  epidatafilerelations_helper;
 
 
 resourcestring

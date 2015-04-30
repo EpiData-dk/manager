@@ -1,7 +1,7 @@
 object AdminForm: TAdminForm
-  Left = 562
+  Left = 722
   Height = 659
-  Top = 265
+  Top = 401
   Width = 867
   Caption = 'User/Group Administration'
   ClientHeight = 659
@@ -357,6 +357,7 @@ object AdminForm: TAdminForm
       Category = 'Group'
       Caption = 'EditGroupAction'
       ImageIndex = 13
+      OnExecute = EditGroupActionExecute
     end
     object AddUserToGroupAction: TAction
       Category = 'UserToGroup'

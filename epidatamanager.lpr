@@ -57,7 +57,7 @@ uses
   report_project_validation_frame2, reports_form, report_counts_frame,
   lazcontrols, design_control_memo, export_form2,
   admin_form, admin_user_form, 
-  admin_group_form;
+  admin_group_form, admin_authenticator;
 
 {$R *.res}
 

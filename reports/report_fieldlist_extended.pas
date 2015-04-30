@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  epireport_report_fieldlist;
+  epireport_report_fieldlist, epidatafilerelations_helper;
 
 
 resourcestring

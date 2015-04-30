@@ -207,7 +207,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="98">
+    <Units Count="99">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -314,12 +314,10 @@
         <ComponentName Value="DesignPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_properties_baseframe"/>
       </Unit16>
       <Unit17>
         <Filename Value="designer/design_types.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_types"/>
       </Unit17>
       <Unit18>
         <Filename Value="import/import_structure_form.pas"/>
@@ -327,7 +325,6 @@
         <ComponentName Value="ImportStructureForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="import_structure_form"/>
       </Unit18>
       <Unit19>
         <Filename Value="manager_messages.pas"/>
@@ -346,7 +343,6 @@
         <ComponentName Value="ToolsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="toolsform"/>
       </Unit21>
       <Unit22>
         <Filename Value="reports/reportgenerator.pas"/>
@@ -358,6 +354,7 @@
       <Unit23>
         <Filename Value="reports/report_fieldlist.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_fieldlist"/>
       </Unit23>
       <Unit24>
         <Filename Value="reports/report_valuelabellist.pas"/>
@@ -388,6 +385,7 @@
       <Unit29>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="report_fieldlist_extended"/>
       </Unit29>
       <Unit30>
         <Filename Value="reports/report_project_overview.pas"/>
@@ -491,7 +489,6 @@
         <ComponentName Value="KeyFieldsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="project_keyfields_form"/>
       </Unit45>
       <Unit46>
         <Filename Value="utils/manager_globals.pas"/>
@@ -535,7 +532,6 @@
       <Unit54>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit54>
       <Unit55>
         <Filename Value="designer/design_designcontroller.pas"/>
@@ -547,7 +543,6 @@
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_fieldframe"/>
       </Unit56>
       <Unit57>
         <Filename Value="designer/design_properties_sectionframe.pas"/>
@@ -672,7 +667,6 @@
       <Unit79>
         <Filename Value="reports/report_project_validation.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_project_validation"/>
       </Unit79>
       <Unit80>
         <Filename Value="reports/report_project_validation_frame.pas"/>
@@ -730,7 +724,6 @@
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="design_properties_dataformframe"/>
       </Unit88>
       <Unit89>
         <Filename Value="tools/append_form2.pas"/>
@@ -760,7 +753,6 @@
         <ComponentName Value="CountByIdFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_counts_frame"/>
       </Unit92>
       <Unit93>
         <Filename Value="designer/design_control_memo.pas"/>
@@ -787,6 +779,7 @@
         <ComponentName Value="AdminGroupForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="admin_group_form"/>
       </Unit96>
       <Unit97>
         <Filename Value="export/export_form2.pas"/>
@@ -796,6 +789,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="export_form2"/>
       </Unit97>
+      <Unit98>
+        <Filename Value="admin/admin_authenticator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="admin_authenticator"/>
+      </Unit98>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

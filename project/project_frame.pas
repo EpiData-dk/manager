@@ -181,13 +181,13 @@ implementation
 {$R *.lfm}
 
 uses
-  Clipbrd, epimiscutils,
+  Clipbrd, epimiscutils, admin_authenticator,
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2, LazFileUtils,
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
-  design_properties_form, admin_form
+  design_properties_form, admin_form, epidatafilerelations_helper
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -483,6 +483,8 @@ procedure TProjectFrame.CommonProjectInit;
 var
   Frame: TStudyUnitFrame;
 begin
+  Authenticator := TAuthenticator.Create(FDocumentFile);
+
   UpdateCaption;
   UpdateShortCuts;
   InitBackupTimer;
@@ -685,8 +687,10 @@ begin
 
   PropertiesForm.Free;
 
+
   FActiveFrame := nil;
   FreeAndNil(FBackupTimer);
+  FreeAndNil(Authenticator);
   FreeAndNil(FDocumentFile);
 
   Modified := false;

@@ -85,7 +85,7 @@ implementation
 
 uses
   settings2_var, epidatafilestypes, epireport_report_projectvalidator,
-  epimiscutils;
+  epimiscutils, epidatafilerelations_helper;
 
 const
   SORT_FIELDS_KEY = 'SORT_FIELDS_KEY';

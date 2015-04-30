@@ -95,7 +95,7 @@ implementation
 
 uses
   settings2_var, epidatafiles, settings2,
-  epimiscutils, epidatafilestypes;
+  epimiscutils, epidatafilestypes, epidatafilerelations_helper;
 
 const
   KEYTREE_CUSTOMDATA = 'KEYTREE_CUSTOMDATA';
@@ -304,7 +304,7 @@ end;
 
 procedure TValidateDoubleEntryFrame.BumpProjectCount(const Value: Integer);
 var
-  Method: TEpiRelationListExCallBack;
+  Method: TEpiDatafileRelationListCallBack;
   i: Integer;
   SelectList: TStringList;
 

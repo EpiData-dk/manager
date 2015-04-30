@@ -54,9 +54,9 @@ type
     procedure AddUserToGroupActionExecute(Sender: TObject);
     procedure DeleteGroupActionExecute(Sender: TObject);
     procedure DeleteUserActionExecute(Sender: TObject);
+    procedure EditGroupActionExecute(Sender: TObject);
     procedure EditUserActionExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure GroupGridSelection(Sender: TObject; aCol, aRow: Integer);
     procedure NewGroupActionExecute(Sender: TObject);
     procedure NewUserActionExecute(Sender: TObject);
     procedure RemoveUserFromGroupActionExecute(Sender: TObject);
@@ -89,10 +89,23 @@ type
 
   { Group vars/methods }
   private
+    FUpdatingGroupVST: boolean;
     FGroupVST: TVirtualStringTree;
-    function GroupFromGrid: TEpiGroup;
-    function ShowGroupForm(Const Group: TEpiGroup): TModalResult;
+    function GroupFromNode(Const Node: PVirtualNode): TEpiGroup;
+    function GroupFromSelectedNode: TEpiGroup;
+    function RelationFromNode(Const Node: PVirtualNode): TEpiGroupRelation;
+    function RelationFromSelectedNode: TEpiGroupRelation;
 
+    function ShowGroupForm(Const Group: TEpiGroup): TModalResult;
+    procedure GetGroupGridText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+    procedure GroupBeforeItemErase(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
+      var ItemColor: TColor; var EraseAction: TItemEraseAction);
+    procedure GroupDblClick(Sender: TObject);
+    procedure GroupFocusChanged(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex);
+    procedure GroupFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; AAdmin: TEpiAdmin);
@@ -104,7 +117,8 @@ implementation
 {$R *.lfm}
 
 uses
-  admin_user_form, admin_group_form, types, shortcuts, epiv_datamodule;
+  admin_user_form, admin_group_form, types, shortcuts, epiv_datamodule,
+  admin_authenticator;
 
 type
 
@@ -173,7 +187,7 @@ begin
 
   if (T = 0) and (B = 0) then exit;
 
-  Group := GroupFromGrid;
+  Group := GroupFromSelectedNode;
   if not Assigned(Group) then exit;
 
   for I := T to B do
@@ -279,7 +293,7 @@ var
   Group: TEpiGroup;
   User: TEpiUser;
 begin
-  Group := GroupFromGrid;
+  Group := GroupFromSelectedNode;
   if not Assigned(Group) then exit;
 
   Udo := TUsersDragObject(Source);
@@ -296,7 +310,7 @@ begin
   Accept :=
     (Source is TUsersDragObject) and
     (TUsersDragObject(Source).Control = UserGrid) and
-    (Assigned(GroupFromGrid))
+    (Assigned(GroupFromSelectedNode))
 end;
 
 procedure TAdminForm.FillGrids;
@@ -338,25 +352,28 @@ var
   Idx: Integer;
   Group: TEpiGroup;
 
+  procedure AddRecusive(Root: PVirtualNode; Const Relation: TEpiGroupRelation);
+  var
+    R: TEpiGroupRelation;
+  begin
+    Root := FGroupVST.AddChild(Root, Relation);
+
+    for R in Relation.GroupRelations do
+      AddRecusive(Root, R);
+  end;
+
 begin
+  FUpdatingGroupVST := true;
+
   FGroupVST.BeginUpdate;
   FGroupVST.Clear;
 
-  FGroupVST.AddChild(nil, Admin.AdminRelation.Group);
+  AddRecusive(nil, Admin.AdminRelation);
 
-
+  FGroupVST.FullExpand();
   FGroupVST.EndUpdate;
 
-{  Idx := 1;
-
-  GroupGrid.RowCount := Admin.Groups.Count + 1;
-  for Group in Admin.Groups do
-  begin
-    GroupGrid.Cells[0, Idx] := Group.Caption.Text;
-    GroupGrid.Cells[1, Idx] := '';
-
-    Inc(Idx);
-  end; }
+  FUpdatingGroupVST := false;
 end;
 
 procedure TAdminForm.FillUsersToGroupGrid;
@@ -365,9 +382,14 @@ var
   User: TEpiUser;
   LocalUsers: TEpiUsers;
   Idx: Integer;
+const
+  CaptionText = 'Users in group: ';
 begin
-  Group := GroupFromGrid;
+  Group := GroupFromSelectedNode;
   if not Assigned(Group) then Exit;
+
+
+  Label2.Caption := CaptionText + Group.Caption.Text;
 
   LocalUsers := TEpiUsers.Create(nil);
   LocalUsers.ItemOwner := false;
@@ -386,6 +408,8 @@ begin
     Inc(Idx);
   end;
   LocalUsers.Free;
+
+  UserGroupGrid.Enabled := Authenticator.UserInGroup(Group, true);
 end;
 
 procedure TAdminForm.UpdateShortcuts;
@@ -418,11 +442,43 @@ begin
   F.Free;
 end;
 
-function TAdminForm.GroupFromGrid: TEpiGroup;
+function TAdminForm.GroupFromNode(const Node: PVirtualNode): TEpiGroup;
+var
+  R: TEpiGroupRelation;
 begin
-{  Result := nil;
-  if GroupGrid.RowCount <= 1 then Exit;
-  Result := Admin.Groups[GroupGrid.Row - 1];         }
+  Result := nil;
+
+  R := RelationFromNode(Node);
+  if Assigned(R) then
+    Result := R.Group;
+end;
+
+function TAdminForm.GroupFromSelectedNode: TEpiGroup;
+var
+  R: TEpiGroupRelation;
+begin
+  Result := nil;
+
+  R := RelationFromSelectedNode;
+  if Assigned(R) then
+    Result := R.Group;
+end;
+
+function TAdminForm.RelationFromNode(const Node: PVirtualNode
+  ): TEpiGroupRelation;
+begin
+  result := nil;
+
+  if Assigned(Node) then
+    Result := TEpiGroupRelation(FGroupVST.GetNodeData(Node)^);
+end;
+
+function TAdminForm.RelationFromSelectedNode: TEpiGroupRelation;
+begin
+  Result := nil;
+
+  if Assigned(FGroupVST.FocusedNode) then
+    result := RelationFromNode(FGroupVST.FocusedNode);
 end;
 
 function TAdminForm.ShowGroupForm(const Group: TEpiGroup): TModalResult;
@@ -438,6 +494,59 @@ begin
   F.Free;
 end;
 
+procedure TAdminForm.GetGroupGridText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: String);
+begin
+  case Column of
+    0: CellText := GroupFromNode(Node).Caption.Text;
+    1: CellText := '(not implemented)';
+  end;
+end;
+
+procedure TAdminForm.GroupBeforeItemErase(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
+  var ItemColor: TColor; var EraseAction: TItemEraseAction);
+var
+  G: TEpiGroup;
+begin
+  G := GroupFromNode(Node);
+
+  if (G = Admin.Admins) or
+     (not Authenticator.UserInGroup(G, true))
+  then
+    begin
+      ItemColor := clLtGray;
+      EraseAction := eaColor;
+    end;
+end;
+
+procedure TAdminForm.GroupDblClick(Sender: TObject);
+begin
+  ShowGroupForm(GroupFromSelectedNode);
+end;
+
+procedure TAdminForm.GroupFocusChanged(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex);
+begin
+  FillUsersToGroupGrid;
+end;
+
+procedure TAdminForm.GroupFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+var
+  G: TEpiGroup;
+begin
+  if (FUpdatingGroupVST) or
+     (csDestroying in ComponentState)
+  then
+    Exit;
+
+  if not Assigned(Node) then exit;
+
+  G := GroupFromNode(Node);
+  G.Free;
+end;
+
 constructor TAdminForm.Create(TheOwner: TComponent; AAdmin: TEpiAdmin);
 begin
   inherited Create(TheOwner);
@@ -449,12 +558,14 @@ begin
   begin
     BeginUpdate;
 
+    NodeDataSize := SizeOf(Pointer);
+
     with TreeOptions do
     begin
       AnimationOptions := [];
       AutoOptions      := [];
       MiscOptions      := [toFullRepaintOnResize, toGridExtensions,
-                           toToggleOnDblClick, toWheelPanning];
+                           toWheelPanning];
       PaintOptions     := [toShowButtons, toShowDropmark, toShowRoot,
                            toShowTreeLines, toThemeAware, toUseBlendedImages];
       SelectionOptions := [toExtendedFocus, toFullRowSelect];
@@ -496,6 +607,12 @@ begin
     Align := alClient;
     Parent := Panel2;
 
+    OnBeforeItemErase := @GroupBeforeItemErase;
+    OnDblClick     := @GroupDblClick;
+    OnFocusChanged := @GroupFocusChanged;
+    OnFreeNode     := @GroupFreeNode;
+    OnGetText      := @GetGroupGridText;
+
     EndUpdate;
   end;
   FGroupVST.Images := DM.Icons16;
@@ -524,26 +641,36 @@ begin
     end;
 end;
 
+procedure TAdminForm.EditGroupActionExecute(Sender: TObject);
+begin
+  ShowGroupForm(GroupFromSelectedNode);
+end;
+
 procedure TAdminForm.DeleteGroupActionExecute(Sender: TObject);
 var
   Group: TEpiGroup;
 begin
-  Group := GroupFromGrid;
+  Group := GroupFromSelectedNode;
   if not Assigned(Group) then exit;
+
+  if Group = Admin.Admins then
+    begin
+      ShowMessage('The Admin group cannot be deleted.');
+      Exit;
+    end;
 
   if MessageDlg('Warning',
        'Are you sure you want to delete the group:' + LineEnding +
-         Group.Caption.Text,
+         Group.Caption.Text + LineEnding +
+         LineEnding +
+         'This also deletes the groups under this group!',
        mtWarning,
        mbYesNo,
        0,
        mbNo
      ) = mrYes
   then
-    begin
-      Group.Free;
-      FillGroupGrid;
-    end;
+    FGroupVST.DeleteNode(FGroupVST.FocusedNode);
 end;
 
 procedure TAdminForm.AddUserToGroupActionExecute(Sender: TObject);
@@ -558,7 +685,7 @@ begin
   B := UserGrid.Selection.Bottom;
 
   if (T = 0) or (B = 0) then exit;
-  Group := GroupFromGrid;
+  Group := GroupFromNode(nil);
   if not Assigned(Group) then exit;
 
   for i := T to B do
@@ -584,20 +711,21 @@ begin
   FillGrids;
 end;
 
-procedure TAdminForm.GroupGridSelection(Sender: TObject; aCol, aRow: Integer);
-begin
-  FillUsersToGroupGrid;
-end;
-
 procedure TAdminForm.NewGroupActionExecute(Sender: TObject);
 var
   Group: TEpiGroup;
+  R: TEpiGroupRelation;
 begin
   Group := Admin.Groups.NewGroup;
   if ShowGroupForm(Group) = mrCancel then
     Group.Free
-  else
+  else begin
+    R := RelationFromSelectedNode;
+    R := R.GroupRelations.NewGroupRelation;
+    R.Group := Group;
+
     FillGroupGrid;
+  end;
 end;
 
 end.
