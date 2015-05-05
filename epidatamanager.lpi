@@ -218,7 +218,6 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="main"/>
       </Unit1>
       <Unit2>
         <Filename Value="project/project_frame.pas"/>
@@ -226,12 +225,10 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="managerprocs"/>
       </Unit3>
       <Unit4>
         <Filename Value="project/project_settings.pas"/>
@@ -354,7 +351,6 @@
       <Unit23>
         <Filename Value="reports/report_fieldlist.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_fieldlist"/>
       </Unit23>
       <Unit24>
         <Filename Value="reports/report_valuelabellist.pas"/>
@@ -385,7 +381,6 @@
       <Unit29>
         <Filename Value="reports/report_fieldlist_extended.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_fieldlist_extended"/>
       </Unit29>
       <Unit30>
         <Filename Value="reports/report_project_overview.pas"/>
@@ -511,7 +506,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit49>
       <Unit50>
         <Filename Value="designer/design_control_field.pas"/>
@@ -621,7 +615,6 @@
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="validate_double_entry_frame"/>
       </Unit71>
       <Unit72>
         <Filename Value="project/project_settings_autoincrement_frame.pas"/>
@@ -640,7 +633,6 @@
       <Unit74>
         <Filename Value="reports/report_codebook.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="report_codebook"/>
       </Unit74>
       <Unit75>
         <Filename Value="export/export_ddi_frame.pas"/>
@@ -738,7 +730,6 @@
         <ComponentName Value="ProjectValidationFrame2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="report_project_validation_frame2"/>
       </Unit90>
       <Unit91>
         <Filename Value="reports/reports_form.pas"/>
@@ -764,7 +755,6 @@
         <ComponentName Value="AdminForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="admin_form"/>
       </Unit94>
       <Unit95>
         <Filename Value="admin/admin_user_form.pas"/>
@@ -779,7 +769,6 @@
         <ComponentName Value="AdminGroupForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="admin_group_form"/>
       </Unit96>
       <Unit97>
         <Filename Value="export/export_form2.pas"/>
@@ -787,12 +776,10 @@
         <ComponentName Value="ExportForm2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="export_form2"/>
       </Unit97>
       <Unit98>
         <Filename Value="admin/admin_authenticator.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="admin_authenticator"/>
       </Unit98>
     </Units>
   </ProjectOptions>

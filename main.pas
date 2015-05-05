@@ -235,7 +235,7 @@ type
     procedure ProjectModified(Sender: TObject);
     procedure OpenTutorialMenuItemClick(Sender: TObject);
     procedure LoadTutorials;
-    function  DoCloseProject: boolean;
+    function  DoCloseProject(Const ForceClose: boolean = false): boolean;
     procedure NewProjectFrame;
     procedure DoNewProject;
     procedure DoOpenProject(Const AFileName: string);
@@ -1078,12 +1078,14 @@ begin
   FileList.Free;
 end;
 
-function TMainForm.DoCloseProject: boolean;
+function TMainForm.DoCloseProject(const ForceClose: boolean): boolean;
 begin
   result := true;
   if Assigned(FActiveFrame) then
   begin
-    FActiveFrame.CloseQuery(result);
+    if (not ForceClose) then
+      FActiveFrame.CloseQuery(result);
+
     if not Result then exit;
 
     PageControl1.ActivePage.Free;
@@ -1439,7 +1441,11 @@ procedure TMainForm.LMOpenRecent(var Msg: TLMessage);
 var
   A: TAction;
 begin
-  A := TAction(Msg.WParam);
+  if Msg.WParam = 0 then
+    A := TAction(RecentFilesActionList.Actions[Msg.LParam])
+  else
+    A := TAction(Msg.WParam);
+
   DoOpenProject(ExpandFileNameUTF8(A.Caption));
   UpdateProcessToolbar;
 end;

@@ -81,6 +81,7 @@ object AdminForm: TAdminForm
       OnMouseDown = UserGridMouseDown
       OnMouseMove = UserGridMouseMove
       OnMouseUp = UserGridMouseUp
+      OnPrepareCanvas = UserGridPrepareCanvas
       OnStartDrag = UserGridStartDrag
       ColWidths = (
         215
@@ -262,6 +263,8 @@ object AdminForm: TAdminForm
       TitleStyle = tsNative
       OnDragDrop = UserGroupGridDragDrop
       OnDragOver = UserGroupGridDragOver
+      OnPrepareCanvas = UserGroupGridPrepareCanvas
+      OnSelectCell = UserGroupGridSelectCell
       ColWidths = (
         214
         215

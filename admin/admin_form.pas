@@ -66,10 +66,16 @@ type
       Y: Integer);
     procedure UserGridMouseUp(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
+    procedure UserGridPrepareCanvas(sender: TObject; aCol, aRow: Integer;
+      aState: TGridDrawState);
     procedure UserGridStartDrag(Sender: TObject; var DragObject: TDragObject);
     procedure UserGroupGridDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure UserGroupGridDragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
+    procedure UserGroupGridPrepareCanvas(sender: TObject; aCol, aRow: Integer;
+      aState: TGridDrawState);
+    procedure UserGroupGridSelectCell(Sender: TObject; aCol, aRow: Integer;
+      var CanSelect: Boolean);
   private
     FAdmin: TEpiAdmin;
     procedure FillGrids;
@@ -143,8 +149,6 @@ begin
 end;
 
 constructor TUsersDragObject.Create(AControl: TControl);
-var
-  Bitmap: TBitmap;
 begin
   inherited Create(AControl);
   FDragImages := TDragImageList.Create(AControl);
@@ -181,6 +185,7 @@ var
   Group: TEpiGroup;
   User: TEpiUser;
   I: LongInt;
+  UserList: TEpiUsers;
 begin
   T := UserGroupGrid.Selection.Top;
   B := UserGroupGrid.Selection.Bottom;
@@ -190,11 +195,51 @@ begin
   Group := GroupFromSelectedNode;
   if not Assigned(Group) then exit;
 
+
+  // Build the list of selected users:
+  UserList := TEpiUsers.Create(nil);
   for I := T to B do
   begin
     User := TEpiUser(UserGroupGrid.Objects[0, I]);
-    User.Groups.RemoveItem(Group);
+    if Authenticator.UserInGroup(User, Group, false)
+    then
+      UserList.AddItem(User);
   end;
+
+  // You cannot delete the last member of Admin group, unless this is the last
+  // person in the whole project.
+  if (Group = Admin.Admins) and
+     (UserList.Count = Group.Users.Count)
+  then
+    begin
+      ShowMessage(
+        'You cannot remove all members of the Admin group!' + LineEnding +
+        'At least 1 person must exist in this group!'
+      );
+      Exit;
+    end;
+
+  // You cannot remove yourself from the group, if this is highest group
+  // in the hieracy you have access to.
+  if (Group <> Admin.Admins) and
+     Authenticator.AuthedUserInGroup(Group, false) and
+     (not
+       Authenticator.AuthedUserInGroup(
+         Authenticator.RelationFromGroup(Group).ParentRelation.Group,
+         true
+       )
+     )
+  then
+    begin
+      ShowMessage(
+        'You cannot remove youself from this group!'
+      );
+      Exit;
+    end;
+
+  for User in UserList do
+    User.Groups.RemoveItem(Group);
+
   FillUsersToGroupGrid;
 end;
 
@@ -241,6 +286,24 @@ procedure TAdminForm.UserGridMouseUp(Sender: TObject; Button: TMouseButton;
 begin
   FMouseDown := false;
   FDragging := false;
+end;
+
+procedure TAdminForm.UserGridPrepareCanvas(sender: TObject; aCol,
+  aRow: Integer; aState: TGridDrawState);
+var
+  User: TEpiUser;
+  G: TEpiGroup;
+  Res: Boolean;
+begin
+  if aRow = 0 then exit;
+  User := TEpiUser(UserGrid.Objects[0, aRow]);
+
+  Res := true;
+  for G in User.Groups do
+    Res := Res and Authenticator.AuthedUserInGroup(G, false);
+
+  if (not Res) then
+    UserGrid.Canvas.Font.Color := clInactiveCaption;
 end;
 
 procedure TAdminForm.UserGridStartDrag(Sender: TObject;
@@ -306,11 +369,48 @@ end;
 
 procedure TAdminForm.UserGroupGridDragOver(Sender, Source: TObject; X,
   Y: Integer; State: TDragState; var Accept: Boolean);
+var
+  User: TEpiUser;
+  Group: TEpiGroup;
 begin
+  Accept := true;
+  Group  := GroupFromSelectedNode;
+
+  if (Source is TUsersDragObject) then
+    with TUsersDragObject(Source) do
+      for User in FUsers do
+        Accept := Accept and (not Authenticator.UserInGroup(User, Group, true));
+
   Accept :=
+    Accept and
     (Source is TUsersDragObject) and
     (TUsersDragObject(Source).Control = UserGrid) and
-    (Assigned(GroupFromSelectedNode))
+    (Assigned(GroupFromSelectedNode));
+end;
+
+procedure TAdminForm.UserGroupGridPrepareCanvas(sender: TObject; aCol,
+  aRow: Integer; aState: TGridDrawState);
+var
+  Group: TEpiGroup;
+  User: TEpiUser;
+begin
+  User := TEpiUser(UserGroupGrid.Objects[0, aRow]);
+  Group := GroupFromSelectedNode;
+
+  if (not Authenticator.UserInGroup(User, Group, false)) then
+    UserGroupGrid.Canvas.Font.Color := clInactiveCaption;
+end;
+
+procedure TAdminForm.UserGroupGridSelectCell(Sender: TObject; aCol,
+  aRow: Integer; var CanSelect: Boolean);
+var
+  User: TEpiUser;
+  Group: TEpiGroup;
+begin
+  User := TEpiUser(UserGroupGrid.Objects[0, aRow]);
+  Group := GroupFromSelectedNode;
+
+  CanSelect := Authenticator.UserInGroup(User, Group, false);
 end;
 
 procedure TAdminForm.FillGrids;
@@ -330,6 +430,7 @@ begin
   UserGrid.RowCount := Admin.Users.Count + 1;
   for User in Admin.Users do
   begin
+    UserGrid.Objects[0, Idx] := User;
     UserGrid.Cells[0, Idx] := User.Login;
     UserGrid.Cells[1, Idx] := User.FullName;
 
@@ -380,36 +481,44 @@ procedure TAdminForm.FillUsersToGroupGrid;
 var
   Group: TEpiGroup;
   User: TEpiUser;
-  LocalUsers: TEpiUsers;
   Idx: Integer;
+
+  procedure FillRecursively(Const Group: TEpiGroup);
+  var
+    R, P: TEpiGroupRelation;
+  begin
+    P := nil;
+    R := Authenticator.RelationFromGroup(Group);
+    if Assigned(R) then
+      P := R.ParentRelation;
+
+    // Fill in users top-down.
+    if Assigned(P) then
+      FillRecursively(P.Group);
+
+    Idx := UserGroupGrid.RowCount;
+    UserGroupGrid.RowCount := UserGroupGrid.RowCount + Group.Users.Count;
+    for User In Group.Users do
+    begin
+      UserGroupGrid.Cells[0, Idx] := User.Login;
+      UserGroupGrid.Cells[1, Idx] := User.FullName;
+      UserGroupGrid.Objects[0, Idx] := User;
+      Inc(Idx);
+    end;
+  end;
+
 const
   CaptionText = 'Users in group: ';
 begin
   Group := GroupFromSelectedNode;
   if not Assigned(Group) then Exit;
 
-
   Label2.Caption := CaptionText + Group.Caption.Text;
+  UserGroupGrid.RowCount := 1;
 
-  LocalUsers := TEpiUsers.Create(nil);
-  LocalUsers.ItemOwner := false;
+  FillRecursively(Group);
 
-  for User in Admin.Users do
-    if User.Groups.IndexOf(Group) >= 0 then
-      LocalUsers.AddItem(User);
-
-  Idx := 1;
-  UserGroupGrid.RowCount := LocalUsers.Count + 1;
-  for User In LocalUsers do
-  begin
-    UserGroupGrid.Cells[0, Idx] := User.Login;
-    UserGroupGrid.Cells[1, Idx] := User.FullName;
-    UserGroupGrid.Objects[0, Idx] := User;
-    Inc(Idx);
-  end;
-  LocalUsers.Free;
-
-  UserGroupGrid.Enabled := Authenticator.UserInGroup(Group, true);
+  UserGroupGrid.Enabled := Authenticator.AuthedUserInGroup(Group, true);
 end;
 
 procedure TAdminForm.UpdateShortcuts;
@@ -426,7 +535,8 @@ function TAdminForm.UserFromGrid: TEpiUser;
 begin
   Result := nil;
   if UserGrid.RowCount <= 1 then Exit;
-  Result := Admin.Users[UserGrid.Row - 1];
+
+  Result := TEpiUser(UserGrid.Objects[0, UserGrid.Row]);
 end;
 
 function TAdminForm.ShowUserForm(const User: TEpiUser): TModalResult;
@@ -513,7 +623,7 @@ begin
   G := GroupFromNode(Node);
 
   if (G = Admin.Admins) or
-     (not Authenticator.UserInGroup(G, true))
+     (not Authenticator.AuthedUserInGroup(G, true))
   then
     begin
       ItemColor := clLtGray;
@@ -621,14 +731,41 @@ end;
 procedure TAdminForm.DeleteUserActionExecute(Sender: TObject);
 var
   User: TEpiUser;
+  S: String;
 begin
   User := UserFromGrid;
 
   if not Assigned(User) then exit;
 
-  if MessageDlg('Warning',
-       'Are you sure you want to delete the user:' + LineEnding +
-         User.FullName + ' (' + User.Login + ')',
+  // You cannot delete yourself, unless this is the last account. Otherwise
+  // the whole security model will fail.
+  if (Admin.Users.Count > 1) and
+     (Authenticator.AuthedUser = User)
+  then
+    begin
+      ShowMessage(
+        'You cannot delete yourself as a user!' + LineEnding +
+        'To delete this account do the following:' + LineEnding +
+        LineEnding +
+        ' 1) Create a new account' + LineEnding +
+        ' 2) Login with new account' + LineEnding +
+        ' 3) Delete this account'
+      );
+      Exit;
+    end;
+
+  if (Admin.Users.Count = 1) then
+    S := 'Deleting the last user will restore the project to an' + LineEnding +
+         'un-encrypted state!' + LineEnding +
+         LineEnding +
+         'Continue?'
+  else
+    S := 'Are you sure you want to delete the user:' + LineEnding +
+         User.FullName + ' (' + User.Login + ')';
+
+  if MessageDlg(
+       'Warning',
+       S,
        mtWarning,
        mbYesNo,
        0,
@@ -706,9 +843,13 @@ begin
 end;
 
 procedure TAdminForm.FormShow(Sender: TObject);
+var
+  User: TEpiUser;
 begin
   UpdateShortcuts;
   FillGrids;
+  FGroupVST.FocusedNode := FGroupVST.GetFirst();
+  FGroupVST.Selected[FGroupVST.FocusedNode] := true;
 end;
 
 procedure TAdminForm.NewGroupActionExecute(Sender: TObject);

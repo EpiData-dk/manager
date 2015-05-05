@@ -5,7 +5,7 @@ unit admin_authenticator;
 interface
 
 uses
-  Classes, SysUtils, epiopenfile, epiadmin;
+  Classes, SysUtils, epiopenfile, epiadmin, epicustombase;
 
 type
 
@@ -15,17 +15,22 @@ type
   private
     FDocumentFile: TEpiDocumentFile;
     function GetAuthedUser: TEpiUser;
-    function RelationFromGroup(Const Group: TEpiGroup): TEpiGroupRelation;
     procedure InitGroupWalk(
         Const Relation: TEpiGroupRelation;
         Const Depth: Cardinal;
         Const Index: Cardinal;
         var aContinue: boolean;
         Data: Pointer = nil);
+    procedure NewRelationHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
   public
     constructor Create(Const ADocumentFile: TEpiDocumentFile);
     function    IsAuthorized(Const RequiredRights: TEpiManagerRights): Boolean;
-    function    UserInGroup(Const Group: TEpiGroup; Const CheckInheritance: boolean): boolean;
+    function    UserInGroup(Const User: TEpiUser; Const Group: TEpiGroup;
+        Const CheckInheritance: boolean): boolean;
+    function    AuthedUserInGroup(Const Group: TEpiGroup; Const CheckInheritance: boolean): boolean;
+    function    RelationFromGroup(Const Group: TEpiGroup): TEpiGroupRelation;
 
   public
     property DocumentFile: TEpiDocumentFile read FDocumentFile;
@@ -34,7 +39,6 @@ type
 
 var
   Authenticator: TAuthenticator;
-
 
 
 implementation
@@ -49,7 +53,11 @@ const
 
 function TAuthenticator.GetAuthedUser: TEpiUser;
 begin
-  result := DocumentFile.AuthedUser;
+  result := nil;
+  if (Self = nil) then exit;
+
+  if Assigned(DocumentFile) then
+    result := DocumentFile.AuthedUser;
 end;
 
 function TAuthenticator.RelationFromGroup(const Group: TEpiGroup
@@ -65,6 +73,21 @@ begin
   Relation.Group.AddCustomData(AUTH_GROUP_KEY, Relation);
 end;
 
+procedure TAuthenticator.NewRelationHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+var
+  Group: TEpiGroup;
+begin
+  if not (Initiator is TEpiGroupRelation) then exit;
+  if (EventGroup <> eegGroupRelations) then exit;
+
+  Group := TEpiGroup(Data);
+
+  if Assigned(Group) then
+    Group.AddCustomData(AUTH_GROUP_KEY, Initiator);
+end;
+
 constructor TAuthenticator.Create(const ADocumentFile: TEpiDocumentFile);
 var
   R: TEpiGroupRelation;
@@ -75,36 +98,52 @@ begin
   R.Group.AddCustomData(AUTH_GROUP_KEY, R);
 
   R.GroupRelations.OrderedWalk(@InitGroupWalk, nil);
+  R.RegisterOnChangeHook(@NewRelationHook, true);
 end;
 
 function TAuthenticator.IsAuthorized(const RequiredRights: TEpiManagerRights
   ): Boolean;
 begin
   result := true;
+  if (Self = nil) then exit;
+
   if not Assigned(AuthedUser) then exit;
 
   result := AuthedUser.Groups.HasRights(RequiredRights);
 end;
 
-function TAuthenticator.UserInGroup(const Group: TEpiGroup;
-  const CheckInheritance: boolean): boolean;
+function TAuthenticator.UserInGroup(const User: TEpiUser;
+  const Group: TEpiGroup; const CheckInheritance: boolean): boolean;
 var
   Parent: TEpiGroupRelation;
 begin
   result := false;
+  if (Self = nil) then exit;
 
-  if (not Assigned(AuthedUser)) then
+  if (not Assigned(User)) then
     Exit;
 
-  result := (AuthedUser.Groups.IndexOf(Group) >= 0);
+  result := (User.Groups.IndexOf(Group) >= 0);
 
   if CheckInheritance then
   begin
     Parent := RelationFromGroup(Group).ParentRelation;
 
     if Assigned(Parent) then
-      Result := Result or UserInGroup(Parent.Group, CheckInheritance);
+      Result := Result or UserInGroup(User, Parent.Group, CheckInheritance);
   end;
+end;
+
+function TAuthenticator.AuthedUserInGroup(const Group: TEpiGroup;
+  const CheckInheritance: boolean): boolean;
+begin
+  result := false;
+  if (Self = nil) then exit;
+
+  if (not Assigned(AuthedUser)) then
+    Exit;
+
+  Result := UserInGroup(AuthedUser, Group, CheckInheritance);
 end;
 
 end.

@@ -187,7 +187,8 @@ uses
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
-  design_properties_form, admin_form, epidatafilerelations_helper
+  design_properties_form, admin_form, epidatafilerelations_helper,
+  admin_user_form
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -208,7 +209,7 @@ end;
 
 procedure TProjectFrame.NewDataFormActionUpdate(Sender: TObject);
 begin
-  NewDataFormAction.Enabled := (UserIsAuthorized(FDocumentFile.AuthedUser, [earStructure]));
+  NewDataFormAction.Enabled := Authenticator.IsAuthorized([earStructure]);
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -316,7 +317,53 @@ end;
 procedure TProjectFrame.AdminActionExecute(Sender: TObject);
 var
   F: TAdminForm;
+  User: TEpiUser;
+
+  function ShowUserForm: TModalResult;
+  var
+    F: TAdminUserForm;
+  begin
+    F := TAdminUserForm.Create(Self);
+    F.User := User;
+    F.AdminGroups := EpiDocument.Admin.Groups;
+    Result := F.ShowModal;
+    F.Free;
+  end;
+
 begin
+  if (EpiDocument.Admin.Users.Count = 0) then
+    begin
+      ShowMessage(
+        'This project is not yet setup for user administration!' + LineEnding +
+        LineEnding +
+        'Next you will be asked to create a new user,' + LineEnding +
+        'which will automatically be added to the' + LineEnding +
+        'Administrators group!' + LineEnding +
+        LineEnding +
+        'Afterward you will have to re-open the project' + LineEnding +
+        'and login with the new user!'
+      );
+
+      User := EpiDocument.Admin.NewUser;
+      if ShowUserForm <> mrOK then
+        begin
+          User.Free;
+          Exit;
+        end;
+
+      User.Groups.AddItem(EpiDocument.Admin.Admins);
+      if (not SaveProject(false)) then
+      begin
+        User.Free;
+        Exit;
+      end;
+
+      PostMessage(MainForm.Handle, LM_MAIN_CLOSEPROJECT, 1, 0);
+      PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, 0, 0);
+      Exit;
+    end;
+
+
   F := TAdminForm.Create(self, EpiDocument.Admin);
   F.ShowModal;
   F.Free;
