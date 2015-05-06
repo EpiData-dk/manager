@@ -6,7 +6,7 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 678
   ClientWidth = 991
   TabOrder = 0
-  DesignLeft = 1944
+  DesignLeft = 603
   DesignTop = 74
   object ProjectPanel: TPanel
     Cursor = crIBeam

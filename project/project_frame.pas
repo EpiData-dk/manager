@@ -318,6 +318,8 @@ procedure TProjectFrame.AdminActionExecute(Sender: TObject);
 var
   F: TAdminForm;
   User: TEpiUser;
+  S: String;
+  Res: TModalResult;
 
   function ShowUserForm: TModalResult;
   var
@@ -333,16 +335,23 @@ var
 begin
   if (EpiDocument.Admin.Users.Count = 0) then
     begin
-      ShowMessage(
+      S :=
         'This project is not yet setup for user administration!' + LineEnding +
         LineEnding +
         'Next you will be asked to create a new user,' + LineEnding +
         'which will automatically be added to the' + LineEnding +
         'Administrators group!' + LineEnding +
         LineEnding +
-        'Afterward you will have to re-open the project' + LineEnding +
-        'and login with the new user!'
-      );
+        'Afterwards the project will save and re-open.' + LineEnding +
+        'Then login with the new user!';
+
+      Res := MessageDlg('Warning',
+                          S, mtWarning,
+                          mbOKCancel, 0,
+                          mbCancel
+                        );
+      if (Res <> mrOK) then
+        Exit;
 
       User := EpiDocument.Admin.NewUser;
       if ShowUserForm <> mrOK then

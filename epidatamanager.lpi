@@ -218,6 +218,7 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="main"/>
       </Unit1>
       <Unit2>
         <Filename Value="project/project_frame.pas"/>
@@ -225,6 +226,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -755,6 +757,7 @@
         <ComponentName Value="AdminForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="admin_form"/>
       </Unit94>
       <Unit95>
         <Filename Value="admin/admin_user_form.pas"/>
@@ -762,6 +765,7 @@
         <ComponentName Value="AdminUserForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="admin_user_form"/>
       </Unit95>
       <Unit96>
         <Filename Value="admin/admin_group_form.pas"/>

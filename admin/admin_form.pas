@@ -101,6 +101,8 @@ type
     function GroupFromSelectedNode: TEpiGroup;
     function RelationFromNode(Const Node: PVirtualNode): TEpiGroupRelation;
     function RelationFromSelectedNode: TEpiGroupRelation;
+    function NodeFromRelation(Const Relation: TEpiGroupRelation): PVirtualNode;
+    procedure FocusAndSelectNode(Const Node: PVirtualNode);
 
     function ShowGroupForm(Const Group: TEpiGroup): TModalResult;
     procedure GetGroupGridText(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -125,6 +127,9 @@ implementation
 uses
   admin_user_form, admin_group_form, types, shortcuts, epiv_datamodule,
   admin_authenticator;
+
+const
+  ADMIN_FORM_NODE_KEY = 'ADMIN_FORM_NODE_KEY';
 
 type
 
@@ -458,6 +463,7 @@ var
     R: TEpiGroupRelation;
   begin
     Root := FGroupVST.AddChild(Root, Relation);
+    Relation.AddCustomData(ADMIN_FORM_NODE_KEY, TObject(Root));
 
     for R in Relation.GroupRelations do
       AddRecusive(Root, R);
@@ -589,6 +595,18 @@ begin
 
   if Assigned(FGroupVST.FocusedNode) then
     result := RelationFromNode(FGroupVST.FocusedNode);
+end;
+
+function TAdminForm.NodeFromRelation(const Relation: TEpiGroupRelation
+  ): PVirtualNode;
+begin
+  result := PVirtualNode(Relation.FindCustomData(ADMIN_FORM_NODE_KEY));
+end;
+
+procedure TAdminForm.FocusAndSelectNode(const Node: PVirtualNode);
+begin
+  FGroupVST.FocusedNode := Node;
+  FGroupVST.Selected[Node] := true;
 end;
 
 function TAdminForm.ShowGroupForm(const Group: TEpiGroup): TModalResult;
@@ -848,8 +866,7 @@ var
 begin
   UpdateShortcuts;
   FillGrids;
-  FGroupVST.FocusedNode := FGroupVST.GetFirst();
-  FGroupVST.Selected[FGroupVST.FocusedNode] := true;
+  FocusAndSelectNode(FGroupVST.GetFirst());
 end;
 
 procedure TAdminForm.NewGroupActionExecute(Sender: TObject);
@@ -866,6 +883,7 @@ begin
     R.Group := Group;
 
     FillGroupGrid;
+    FocusAndSelectNode(NodeFromRelation(R));
   end;
 end;
 

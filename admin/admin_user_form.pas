@@ -108,6 +108,9 @@ procedure TAdminUserForm.PasswordEditKeyDown(Sender: TObject; var Key: Word;
 begin
   if (Key = VK_RETURN) then
     Application.QueueAsyncCall(@PasswordEditOpen, 0);
+
+  if (Key = VK_TAB) and (Shift = [ssShift]) then
+    Key := VK_TAB;
 end;
 
 procedure TAdminUserForm.ShowHint(const Ctrl: TControl; const Msg: String);
