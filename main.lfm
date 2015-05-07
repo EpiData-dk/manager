@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 420
+  Left = 372
   Height = 658
-  Top = 290
+  Top = 326
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True

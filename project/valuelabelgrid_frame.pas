@@ -64,7 +64,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Dialogs, LCLProc, epimiscutils, Math, LCLIntf, Clipbrd, StdCtrls;
+  Graphics, Dialogs, LazUTF8, epimiscutils, Math, LCLIntf, Clipbrd, StdCtrls, strutils;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -124,6 +124,7 @@ function TValidatedStringEditLink.EndEdit: Boolean; stdcall;
 var
   I: integer;
   F: Extended;
+  S: TCaption;
 begin
   Result := not FStopping;
 
@@ -132,20 +133,34 @@ begin
     // Type check
     case Editor.FValueLabelSet.LabelType of
       ftInteger:
-        result := TryStrToInt(Edit.Text, I);
+        begin
+          S := Edit.Text;
+          result := TryStrToInt(S, I);
+        end;
       ftFloat:
-        result := TryStrToFloat(Edit.Text, F);
+        begin
+          S := StringsReplace(
+                 Edit.Text,
+                 [',','.'],
+                 [DefaultFormatSettings.DecimalSeparator, DefaultFormatSettings.DecimalSeparator],
+                 [rfReplaceAll]
+          );
+          result := TryStrToFloat(S, F);
+        end;
+      ftString:
+        S := Edit.Text;
     end;
+
     if not Result then
-      FEditor.DoShowHintMsg(Edit, '"' + Edit.Text + '" is not a valid ' + LowerCase(EpiTypeNames[Editor.FValueLabelSet.LabelType]));
+      FEditor.DoShowHintMsg(Edit, '"' + S + '" is not a valid ' + LowerCase(EpiTypeNames[Editor.FValueLabelSet.LabelType]));
 
     // Check for existing value
     if Result and
-       (Edit.Text <> FInitialText) and
-       (Editor.FValueLabelSet.ValueLabelExists[Edit.Text])
+       (S <> FInitialText) and
+       (Editor.FValueLabelSet.ValueLabelExists[S])
     then
     begin
-      FEditor.DoShowHintMsg(Edit, 'Value "' + Edit.Text + '" already exists!');
+      FEditor.DoShowHintMsg(Edit, 'Value "' + S + '" already exists!');
       Result := false;
     end;
   end;
@@ -250,7 +265,8 @@ begin
     VLG.FocusedNode := Node;
     VLG.FocusedColumn := 1;
     VLG.Selected[Node] := true;
-    VLG.EditNode(Node, 1);
+
+    Application.QueueAsyncCall(@VLGSendPostEdit, PtrInt(Node));
 
   finally
     VLG.EndUpdate;
@@ -336,7 +352,10 @@ begin
   DoShowHintMsg(nil, '');
 
   // External valuelabels do not need shortcut keys
-  if FValueLabelSet.LabelScope = vlsExternal then exit;
+  if Assigned(FValueLabelSet) and
+     (FValueLabelSet.LabelScope = vlsExternal)
+  then
+    Exit;
 
   case Key of
     VK_RETURN:
@@ -374,6 +393,21 @@ end;
 
 procedure TValueLabelGridFrame.VLGSendPostEdit(Data: PtrInt);
 begin
+  {$IFDEF MSWINDOWS}
+  //   ===  relevant for FieldValueEditorForm   ===
+  // Note: When pressing CTRL+N with VLG in editing mode, the following happens:
+  // 1: When the Edit is hiding (in EndEdit) the form recieves focus, and apparently
+  //    in windows, this forwards the focus to the form edit.
+  // 2: When the "PostEdit" message get here, we call the EditNode, which in turn calls
+  // 3: KillFocus on the form edit, which calls
+  // 4: OnEditingDone. This method in turns sets focus to the VLG here (for reasons, this OnEditingDone MUST
+  //    call VLG.SetFocus) which changes focus from the TValidatedStringEdit to the VLG.
+  //
+  // Therefore on Windows focus should be removed from the form edit and set to the VLG, such
+  // that when the VLG enters edit mode, the focus remains on the TValidatedStringEdit
+
+  VLG.SetFocus;
+  {$ENDIF}
   VLG.FocusedColumn := 1;
   VLG.FocusedNode   := PVirtualNode(Data);
   VLG.EditNode(PVirtualNode(Data), 1);
@@ -383,6 +417,7 @@ procedure TValueLabelGridFrame.VLGSetNodeText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; const NewText: String);
 var
   VL: TEpiCustomValueLabel;
+  S: String;
 begin
   VL := ValueLabelFromNode(Node);
 
@@ -391,7 +426,15 @@ begin
     case Column of
       0: case FValueLabelSet.LabelType of
            ftInteger:     TEpiIntValueLabel(VL).Value := StrToInt(NewText);
-           ftFloat:       TEpiFloatValueLabel(Vl).Value := StrToFloat(NewText);
+           ftFloat:       begin
+                            S := StringsReplace(
+                                   NewText,
+                                   [',','.'],
+                                   [DefaultFormatSettings.DecimalSeparator, DefaultFormatSettings.DecimalSeparator],
+                                   [rfReplaceAll]
+                            );
+                            TEpiFloatValueLabel(Vl).Value := StrToFloat(S);
+                          end;
            ftString:      TEpiStringValueLabel(VL).Value := NewText;
            ftUpperString: TEpiStringValueLabel(VL).Value := UTF8UpperCase(NewText);
          end;
