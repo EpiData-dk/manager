@@ -1,7 +1,7 @@
 object AdminForm: TAdminForm
-  Left = 722
+  Left = 902
   Height = 659
-  Top = 209
+  Top = 324
   Width = 867
   Caption = 'User/Group Administration'
   ClientHeight = 659

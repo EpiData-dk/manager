@@ -26,6 +26,12 @@ type
       EventType: Word; Data: Pointer);
   public
     constructor Create(Const ADocumentFile: TEpiDocumentFile);
+    // Check if Master user is in a higher group than OtherUser. Returns true if
+    // at least one such hierachy is found.
+    function    CheckUserHierachy(Const MasterUser, OtherUser: TEpiUser): boolean;
+    // Check if Authenticated user is in a higher group than OtherUser. Returns true if
+    // at least one such hierachy is found.
+    function    CheckAuthedUserHierachy(Const OtherUser: TEpiUser): boolean;
     function    IsAuthorized(Const RequiredRights: TEpiManagerRights): Boolean;
     function    UserInGroup(Const User: TEpiUser; Const Group: TEpiGroup;
         Const CheckInheritance: boolean): boolean;
@@ -101,6 +107,24 @@ begin
   R.RegisterOnChangeHook(@NewRelationHook, true);
 end;
 
+function TAuthenticator.CheckUserHierachy(const MasterUser, OtherUser: TEpiUser
+  ): boolean;
+var
+  G: TEpiGroup;
+begin
+  result := false;
+
+  for G in OtherUser.Groups do
+    result := result or
+              UserInGroup(MasterUser, G, true);
+end;
+
+function TAuthenticator.CheckAuthedUserHierachy(const OtherUser: TEpiUser
+  ): boolean;
+begin
+  result := CheckUserHierachy(AuthedUser, OtherUser);
+end;
+
 function TAuthenticator.IsAuthorized(const RequiredRights: TEpiManagerRights
   ): Boolean;
 begin
@@ -121,6 +145,9 @@ begin
   if (Self = nil) then exit;
 
   if (not Assigned(User)) then
+    Exit;
+
+  if (not Assigned(Group)) then
     Exit;
 
   result := (User.Groups.IndexOf(Group) >= 0);

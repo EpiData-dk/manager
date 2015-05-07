@@ -44,6 +44,9 @@ implementation
 
 {$R *.lfm}
 
+uses
+  admin_authenticator;
+
 { TAdminGroupForm }
 
 procedure TAdminGroupForm.BitBtn1Click(Sender: TObject);
@@ -82,26 +85,56 @@ procedure TAdminGroupForm.FillRights;
 var
   Item: TEpiManagerRight;
   I: Integer;
+  R: TEpiGroupRelation;
+  P: TEpiGroupRelation;
+  ParentGroup: TEpiGroup;
 begin
+  R := Authenticator.RelationFromGroup(Group);
+  P := R.ParentRelation;
+
+  ParentGroup := nil;
+  if Assigned(P) then
+    ParentGroup := P.Group;
+
   for I := 0 to ManageRightsChkGrp.Items.Count - 1 do
   begin
     Item := TEpiManagerRight(PtrInt(ManageRightsChkGrp.Items.Objects[I]));
-    ManageRightsChkGrp.Checked[I] := (Item in Group.ManageRights);
+
+    ManageRightsChkGrp.Checked[I]      := (Item in Group.ManageRights);
+
+                                          // AuthedUserInGroup will return false if ParentGroup = nil,
+                                          // hence evaluation after "and" is NOT done.
+    ManageRightsChkGrp.CheckEnabled[I] := Authenticator.AuthedUserInGroup(ParentGroup, true) and
+                                          (Item in ParentGroup.ManageRights);
   end;
 end;
 
 procedure TAdminGroupForm.FillUserList;
 var
   User: TEpiUser;
+  Idx: Integer;
+  R: TEpiGroupRelation;
+  P: TEpiGroupRelation;
+  ParentGroup: TEpiGroup;
 begin
   UserChkLstBox.Items.BeginUpdate;
   UserChkLstBox.Items.Clear;
 
+  R := Authenticator.RelationFromGroup(Group);
+  P := R.ParentRelation;
+
+  ParentGroup := nil;
+  if Assigned(P) then
+    ParentGroup := P.Group;
+
   for User in AdminUsers do
   begin
     UserChkLstBox.AddItem(User.FullName + ' (' + User.Login + ')', User);
-    if User.Groups.IndexOf(Group) >= 0 then
-      UserChkLstBox.Checked[UserChkLstBox.Count - 1] := true;
+    Idx := UserChkLstBox.Count - 1;
+
+    UserChkLstBox.Checked[Idx]     := Authenticator.UserInGroup(User, Group, true);
+    UserChkLstBox.ItemEnabled[Idx] := Authenticator.UserInGroup(User, Group, false) and
+                                      Authenticator.AuthedUserInGroup(Group, true);
   end;
 
   UserChkLstBox.Items.BeginUpdate;
@@ -131,7 +164,6 @@ begin
     ManageRightsChkGrp.Items.AddObject(EpiManagerRightCaptions[Item], TObject(PtrInt(Item)));
 
   ManageRightsChkGrp.Items.EndUpdate;
-
 
   OnShow := @FormShow;
 end;

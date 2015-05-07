@@ -17,10 +17,10 @@ object AdminGroupForm: TAdminGroupForm
     ClientWidth = 523
     TabOrder = 1
     object BitBtn1: TBitBtn
-      Left = 449
-      Height = 32
+      Left = 447
+      Height = 34
       Top = 8
-      Width = 54
+      Width = 56
       Anchors = [akTop, akRight]
       AutoSize = True
       Default = True
@@ -90,19 +90,8 @@ object AdminGroupForm: TAdminGroupForm
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 2
-        ClientHeight = 303
-        ClientWidth = 469
         Columns = 2
-        Items.Strings = (
-          'Edit structure'
-          'Translate project'
-          'User/Group administration'
-          'Reset password'
-        )
         TabOrder = 1
-        Data = {
-          0400000003030303
-        }
       end
     end
     object UsersSheet: TTabSheet

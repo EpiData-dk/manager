@@ -297,17 +297,12 @@ procedure TAdminForm.UserGridPrepareCanvas(sender: TObject; aCol,
   aRow: Integer; aState: TGridDrawState);
 var
   User: TEpiUser;
-  G: TEpiGroup;
-  Res: Boolean;
 begin
   if aRow = 0 then exit;
   User := TEpiUser(UserGrid.Objects[0, aRow]);
 
-  Res := true;
-  for G in User.Groups do
-    Res := Res and Authenticator.AuthedUserInGroup(G, false);
-
-  if (not Res) then
+  if (not Authenticator.CheckUserHierachy(Authenticator.AuthedUser, User))
+  then
     UserGrid.Canvas.Font.Color := clInactiveCaption;
 end;
 
@@ -755,6 +750,9 @@ begin
 
   if not Assigned(User) then exit;
 
+  if (not Authenticator.CheckAuthedUserHierachy(User)) then
+    Exit;
+
   // You cannot delete yourself, unless this is the last account. Otherwise
   // the whole security model will fail.
   if (Admin.Users.Count > 1) and
@@ -835,20 +833,24 @@ var
   User: TEpiUser;
   Group: TEpiGroup;
   i: LongInt;
+  FUsers: TEpiUsers;
 begin
   T := UserGrid.Selection.Top;
   B := UserGrid.Selection.Bottom;
 
   if (T = 0) or (B = 0) then exit;
-  Group := GroupFromNode(nil);
+  Group := GroupFromSelectedNode;
   if not Assigned(Group) then exit;
 
+  FUsers := TEpiUsers.Create(nil);
+  FUsers.ItemOwner := false;
   for i := T to B do
-  begin
-    User := Admin.Users[i-1];
-    if User.Groups.IndexOf(Group) < 0 then
+    FUsers.AddItem(TEpiUser(UserGrid.Objects[0, i]));
+
+  for User in FUsers do
+    if (not Authenticator.UserInGroup(User, Group, true)) then
       User.Groups.AddItem(Group);
-  end;
+
   FillUsersToGroupGrid;
 end;
 
@@ -861,8 +863,6 @@ begin
 end;
 
 procedure TAdminForm.FormShow(Sender: TObject);
-var
-  User: TEpiUser;
 begin
   UpdateShortcuts;
   FillGrids;
@@ -875,13 +875,14 @@ var
   R: TEpiGroupRelation;
 begin
   Group := Admin.Groups.NewGroup;
-  if ShowGroupForm(Group) = mrCancel then
-    Group.Free
-  else begin
-    R := RelationFromSelectedNode;
-    R := R.GroupRelations.NewGroupRelation;
-    R.Group := Group;
+  R := RelationFromSelectedNode;
+  R := R.GroupRelations.NewGroupRelation;
+  R.Group := Group;
 
+  if ShowGroupForm(Group) = mrCancel then
+  begin
+    Group.Free
+  end else begin
     FillGroupGrid;
     FocusAndSelectNode(NodeFromRelation(R));
   end;
