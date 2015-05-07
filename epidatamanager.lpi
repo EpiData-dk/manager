@@ -218,7 +218,6 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="main"/>
       </Unit1>
       <Unit2>
         <Filename Value="project/project_frame.pas"/>
@@ -785,7 +784,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="4">
+    <Exceptions Count="5">
       <Item1>
         <Name Value="EAbort"/>
       </Item1>
@@ -798,6 +797,9 @@
       <Item4>
         <Name Value="EDuplicate"/>
       </Item4>
+      <Item5>
+        <Name Value="EKeyNotFoundException"/>
+      </Item5>
     </Exceptions>
   </Debugging>
 </CONFIG>
