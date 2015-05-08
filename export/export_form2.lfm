@@ -29,40 +29,31 @@ object ExportForm2: TExportForm2
         Top = 0
         Width = 725
         Align = alTop
-        AutoSize = True
         BorderWidth = 10
         ClientHeight = 139
         ClientWidth = 725
         TabOrder = 0
-        object ProjectFileNameEdit: TFileNameEdit
+        object ProjectFileNameEdit: TEdit
           AnchorSideLeft.Control = ExportFolderEdit
-          AnchorSideTop.Control = ExportFolderEdit
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = ProjectOptionsChkGrp
-          AnchorSideBottom.Control = ProjectOptionsChkGrp
+          AnchorSideRight.Control = ExportFolderEdit
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = Panel3
           AnchorSideBottom.Side = asrBottom
-          Left = 98
+          Left = 101
           Height = 25
           Top = 103
-          Width = 397
-          FilterIndex = 0
-          HideDirectories = False
-          ButtonWidth = 23
-          NumGlyphs = 1
+          Width = 394
           Anchors = [akLeft, akRight, akBottom]
-          BorderSpacing.Top = 10
-          BorderSpacing.Right = 20
-          MaxLength = 0
-          TabOrder = 3
+          TabOrder = 4
         end
         object ExportTypeCombo: TComboBox
           AnchorSideLeft.Control = ExportFolderEdit
           AnchorSideTop.Control = ProjectOptionsChkGrp
           AnchorSideRight.Control = ProjectOptionsChkGrp
-          Left = 98
+          Left = 101
           Height = 29
           Top = 11
-          Width = 397
+          Width = 394
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Right = 20
           ItemHeight = 0
@@ -71,10 +62,11 @@ object ExportForm2: TExportForm2
           TabOrder = 0
         end
         object Label1: TLabel
+          AnchorSideLeft.Control = Panel3
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = ExportFolderEdit
           AnchorSideBottom.Side = asrBottom
-          Left = 8
+          Left = 11
           Height = 15
           Top = 67
           Width = 85
@@ -89,10 +81,10 @@ object ExportForm2: TExportForm2
           AnchorSideTop.Side = asrCenter
           AnchorSideRight.Control = ProjectOptionsChkGrp
           AnchorSideBottom.Side = asrCenter
-          Left = 98
+          Left = 101
           Height = 25
           Top = 57
-          Width = 397
+          Width = 394
           ShowHidden = False
           ButtonWidth = 23
           NumGlyphs = 1
@@ -104,9 +96,10 @@ object ExportForm2: TExportForm2
           TabOrder = 1
         end
         object Label3: TLabel
+          AnchorSideLeft.Control = Panel3
           AnchorSideBottom.Control = ExportTypeCombo
           AnchorSideBottom.Side = asrBottom
-          Left = 8
+          Left = 11
           Height = 15
           Top = 25
           Width = 32
@@ -145,42 +138,34 @@ object ExportForm2: TExportForm2
             'Export to single file'
           )
           OnItemClick = ProjectOptionsChkGrpItemClick
-          TabOrder = 4
+          TabOrder = 2
           Data = {
             0400000002020200
           }
         end
-        object DataformFileNameEdit: TFileNameEdit
-          AnchorSideLeft.Control = ExportFolderEdit
-          AnchorSideTop.Control = ExportFolderEdit
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = ProjectOptionsChkGrp
-          AnchorSideBottom.Control = ProjectOptionsChkGrp
-          AnchorSideBottom.Side = asrBottom
-          Left = 98
-          Height = 25
-          Top = 103
-          Width = 397
-          FilterIndex = 0
-          HideDirectories = False
-          ButtonWidth = 23
-          NumGlyphs = 1
-          Anchors = [akLeft, akRight, akBottom]
-          BorderSpacing.Top = 10
-          BorderSpacing.Right = 20
-          MaxLength = 0
-          TabOrder = 2
-        end
         object Label4: TLabel
-          AnchorSideBottom.Control = DataformFileNameEdit
+          AnchorSideLeft.Control = Panel3
           AnchorSideBottom.Side = asrBottom
-          Left = 8
+          Left = 11
           Height = 15
           Top = 113
           Width = 61
           Anchors = [akLeft, akBottom]
           Caption = 'Filename:'
           ParentColor = False
+        end
+        object DataformFilenameEdit: TEdit
+          AnchorSideLeft.Control = ExportFolderEdit
+          AnchorSideRight.Control = ExportFolderEdit
+          AnchorSideRight.Side = asrBottom
+          AnchorSideBottom.Control = Panel3
+          AnchorSideBottom.Side = asrBottom
+          Left = 101
+          Height = 25
+          Top = 103
+          Width = 394
+          Anchors = [akLeft, akRight]
+          TabOrder = 3
         end
       end
       object ProjectPanel: TPanel

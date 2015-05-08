@@ -218,7 +218,6 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="main"/>
       </Unit1>
       <Unit2>
         <Filename Value="project/project_frame.pas"/>
@@ -327,7 +326,6 @@
       <Unit19>
         <Filename Value="manager_messages.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="manager_messages"/>
       </Unit19>
       <Unit20>
         <Filename Value="settings/settings_general_frame.pas"/>
@@ -398,7 +396,6 @@
         <ComponentName Value="FieldValueLabelEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="field_valuelabelseditor_form"/>
       </Unit32>
       <Unit33>
         <Filename Value="project/valuelabelgrid_frame.pas"/>
@@ -406,7 +403,6 @@
         <ComponentName Value="ValueLabelGridFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="valuelabelgrid_frame"/>
       </Unit33>
       <Unit34>
         <Filename Value="project/valuelabelseditor_form2.pas"/>
@@ -503,7 +499,6 @@
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <UnitName Value="design_runtimedesigner"/>
       </Unit48>
       <Unit49>
         <Filename Value="designer/design_control_field.pas"/>
@@ -524,12 +519,10 @@
       <Unit53>
         <Filename Value="designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_properties_form"/>
       </Unit53>
       <Unit54>
         <Filename Value="designer/design_designcontroller.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designcontroller"/>
       </Unit54>
       <Unit55>
         <Filename Value="designer/design_properties_fieldframe.pas"/>
@@ -548,7 +541,6 @@
       <Unit57>
         <Filename Value="designer/design_designmessenger.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designmessenger"/>
       </Unit57>
       <Unit58>
         <Filename Value="designer/design_commander.pas"/>
@@ -572,7 +564,6 @@
       <Unit62>
         <Filename Value="designer/design_designbander.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="design_designbander"/>
       </Unit62>
       <Unit63>
         <Filename Value="include/win32/initfont.inc"/>
