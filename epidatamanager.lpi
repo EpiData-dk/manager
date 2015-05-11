@@ -172,7 +172,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="-i=~/.config/epidata/epidatamanager/trunk.ini -r=~/.config/epidata/recent.trunk.ini"/>
+        <CommandLineParams Value="-i=~/.config/epidata/epidatamanager/admin.ini -r=~/.config/epidata/recent.admin.ini"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>

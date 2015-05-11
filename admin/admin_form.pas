@@ -227,7 +227,8 @@ begin
   // You cannot remove yourself from the group, if this is highest group
   // in the hieracy you have access to.
   if (Group <> Admin.Admins) and
-     Authenticator.AuthedUserInGroup(Group, false) and
+     (UserList.IndexOf(Authenticator.AuthedUser) >= 0) and
+     (Authenticator.AuthedUserInGroup(Group, false)) and
      (not
        Authenticator.AuthedUserInGroup(
          Authenticator.RelationFromGroup(Group).ParentRelation.Group,
@@ -245,6 +246,7 @@ begin
   for User in UserList do
     User.Groups.RemoveItem(Group);
 
+  UserList.Free;
   FillUsersToGroupGrid;
 end;
 
@@ -301,7 +303,7 @@ begin
   if aRow = 0 then exit;
   User := TEpiUser(UserGrid.Objects[0, aRow]);
 
-  if (not Authenticator.CheckUserHierachy(Authenticator.AuthedUser, User))
+  if (not Authenticator.CheckAuthedUserHierachy(User, true))
   then
     UserGrid.Canvas.Font.Color := clInactiveCaption;
 end;
@@ -750,7 +752,7 @@ begin
 
   if not Assigned(User) then exit;
 
-  if (not Authenticator.CheckAuthedUserHierachy(User)) then
+  if (not Authenticator.CheckAuthedUserHierachy(User, true)) then
     Exit;
 
   // You cannot delete yourself, unless this is the last account. Otherwise

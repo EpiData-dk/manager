@@ -26,12 +26,16 @@ type
       EventType: Word; Data: Pointer);
   public
     constructor Create(Const ADocumentFile: TEpiDocumentFile);
-    // Check if Master user is in a higher group than OtherUser. Returns true if
-    // at least one such hierachy is found.
-    function    CheckUserHierachy(Const MasterUser, OtherUser: TEpiUser): boolean;
-    // Check if Authenticated user is in a higher group than OtherUser. Returns true if
-    // at least one such hierachy is found.
-    function    CheckAuthedUserHierachy(Const OtherUser: TEpiUser): boolean;
+    // Check if Master user is in a higher group than OtherUser.
+    //   If AllGroups = false: Returns true if at least one such hierachy is found.
+    //   If AllGroups = true:  Returns true if all such hierachies are found.
+    function    CheckUserHierachy(Const MasterUser, OtherUser: TEpiUser;
+      Const AllGroups: boolean): boolean;
+    // Check if Authenticated user is in a higher group than OtherUser.
+    //   If AllGroups = false: Returns true if at least one such hierachy is found.
+    //   If AllGroups = true:  Returns true if all such hierachies are found.
+    function    CheckAuthedUserHierachy(Const OtherUser: TEpiUser;
+      Const AllGroups: boolean): boolean;
     function    IsAuthorized(Const RequiredRights: TEpiManagerRights): Boolean;
     function    UserInGroup(Const User: TEpiUser; Const Group: TEpiGroup;
         Const CheckInheritance: boolean): boolean;
@@ -107,22 +111,27 @@ begin
   R.RegisterOnChangeHook(@NewRelationHook, true);
 end;
 
-function TAuthenticator.CheckUserHierachy(const MasterUser, OtherUser: TEpiUser
-  ): boolean;
+function TAuthenticator.CheckUserHierachy(const MasterUser,
+  OtherUser: TEpiUser; const AllGroups: boolean): boolean;
 var
   G: TEpiGroup;
 begin
   result := false;
 
-  for G in OtherUser.Groups do
-    result := result or
-              UserInGroup(MasterUser, G, true);
+  if AllGroups then
+    for G in OtherUser.Groups do
+      result := result and
+                UserInGroup(MasterUser, G, true)
+  else
+    for G in OtherUser.Groups do
+      result := result or
+                UserInGroup(MasterUser, G, true);
 end;
 
-function TAuthenticator.CheckAuthedUserHierachy(const OtherUser: TEpiUser
-  ): boolean;
+function TAuthenticator.CheckAuthedUserHierachy(const OtherUser: TEpiUser;
+  const AllGroups: boolean): boolean;
 begin
-  result := CheckUserHierachy(AuthedUser, OtherUser);
+  result := CheckUserHierachy(AuthedUser, OtherUser, AllGroups);
 end;
 
 function TAuthenticator.IsAuthorized(const RequiredRights: TEpiManagerRights
