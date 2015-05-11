@@ -249,6 +249,7 @@ object ProjectFrame: TProjectFrame
       Category = 'Project'
       Caption = 'Admin...'
       OnExecute = AdminActionExecute
+      OnUpdate = AdminActionUpdate
     end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu

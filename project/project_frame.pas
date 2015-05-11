@@ -50,6 +50,7 @@ type
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
     procedure AdminActionExecute(Sender: TObject);
+    procedure AdminActionUpdate(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
     procedure DocumentProgress(const Sender: TEpiCustomBase;
@@ -372,10 +373,14 @@ begin
       Exit;
     end;
 
-
   F := TAdminForm.Create(self, EpiDocument.Admin);
   F.ShowModal;
   F.Free;
+end;
+
+procedure TProjectFrame.AdminActionUpdate(Sender: TObject);
+begin
+  AdminAction.Enabled := Authenticator.IsAuthorized([earUsers]);
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);

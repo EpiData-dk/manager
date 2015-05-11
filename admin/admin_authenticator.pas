@@ -116,16 +116,20 @@ function TAuthenticator.CheckUserHierachy(const MasterUser,
 var
   G: TEpiGroup;
 begin
-  result := false;
-
   if AllGroups then
-    for G in OtherUser.Groups do
-      result := result and
-                UserInGroup(MasterUser, G, true)
+    begin
+      Result := true;
+      for G in OtherUser.Groups do
+        result := result and
+                  UserInGroup(MasterUser, G, true);
+    end
   else
-    for G in OtherUser.Groups do
-      result := result or
-                UserInGroup(MasterUser, G, true);
+    begin
+      result := false;
+      for G in OtherUser.Groups do
+        result := result or
+                  UserInGroup(MasterUser, G, true);
+    end;
 end;
 
 function TAuthenticator.CheckAuthedUserHierachy(const OtherUser: TEpiUser;

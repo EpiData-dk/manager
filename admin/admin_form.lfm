@@ -337,12 +337,14 @@ object AdminForm: TAdminForm
       Caption = 'DeleteUserAction'
       ImageIndex = 32
       OnExecute = DeleteUserActionExecute
+      OnUpdate = EditUserActionUpdate
     end
     object EditUserAction: TAction
       Category = 'User'
       Caption = 'EditUserAction'
       ImageIndex = 13
       OnExecute = EditUserActionExecute
+      OnUpdate = EditUserActionUpdate
     end
     object NewGroupAction: TAction
       Category = 'Group'

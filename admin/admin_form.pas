@@ -56,6 +56,7 @@ type
     procedure DeleteUserActionExecute(Sender: TObject);
     procedure EditGroupActionExecute(Sender: TObject);
     procedure EditUserActionExecute(Sender: TObject);
+    procedure EditUserActionUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure NewGroupActionExecute(Sender: TObject);
     procedure NewUserActionExecute(Sender: TObject);
@@ -850,7 +851,10 @@ begin
     FUsers.AddItem(TEpiUser(UserGrid.Objects[0, i]));
 
   for User in FUsers do
-    if (not Authenticator.UserInGroup(User, Group, true)) then
+    if (not Authenticator.UserInGroup(User, Group, true)) and
+       (Authenticator.CheckAuthedUserHierachy(User, true)) and
+       (Authenticator.AuthedUserInGroup(Group, true))
+    then
       User.Groups.AddItem(Group);
 
   FillUsersToGroupGrid;
@@ -858,10 +862,19 @@ end;
 
 procedure TAdminForm.EditUserActionExecute(Sender: TObject);
 begin
+  if not Authenticator.CheckAuthedUserHierachy(UserFromGrid, true)
+  then
+    Exit;
+
   if ShowUserForm(UserFromGrid) = mrCancel then
     Exit;
 
   FillGrids;
+end;
+
+procedure TAdminForm.EditUserActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.CheckAuthedUserHierachy(UserFromGrid, true);
 end;
 
 procedure TAdminForm.FormShow(Sender: TObject);
