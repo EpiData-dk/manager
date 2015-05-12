@@ -327,9 +327,10 @@ var
     F: TAdminUserForm;
   begin
     F := TAdminUserForm.Create(Self);
-    F.User := User;
-    F.AdminGroups := EpiDocument.Admin.Groups;
-    Result := F.ShowModal;
+    F.User  := User;
+    F.Admin := EpiDocument.Admin;
+    F.ShowGroups := false;
+    Result  := F.ShowModal;
     F.Free;
   end;
 

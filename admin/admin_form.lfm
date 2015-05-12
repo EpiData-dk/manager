@@ -300,10 +300,10 @@ object AdminForm: TAdminForm
     ClientWidth = 867
     TabOrder = 4
     object BitBtn1: TBitBtn
-      Left = 778
+      Left = 780
       Height = 34
       Top = 8
-      Width = 73
+      Width = 71
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True

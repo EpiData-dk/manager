@@ -7,31 +7,29 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, CheckBoxThemed, Forms, Controls, Graphics,
   Dialogs, ExtCtrls, StdCtrls, ComboEx, EditBtn, Buttons, ComCtrls, CheckLst,
-  epiadmin, LCLType, epistringutils;
+  epiadmin, LCLType, VirtualTrees, epistringutils;
 
 type
 
   { TAdminUserForm }
 
   TAdminUserForm = class(TForm)
-    OkBtn: TBitBtn;
-    BitBtn2: TBitBtn;
-    NeverExpireChkBox: TCheckBoxThemed;
-    GroupChkLstBox: TCheckListBox;
-    PasswordEdit: TEditButton;
     ExpiresDateEdit: TDateEdit;
-    Label1: TLabel;
-    LoginEdit: TEdit;
     FullnameEdit: TEdit;
-    LastLoginEdit: TEdit;
+    Label1: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
-    PageControl1: TPageControl;
+    LastLoginEdit: TEdit;
+    LoginEdit: TEdit;
+    NeverExpireChkBox: TCheckBoxThemed;
+    OkBtn: TBitBtn;
+    BitBtn2: TBitBtn;
+    Panel1: TPanel;
     Panel2: TPanel;
-    BasicSheet: TTabSheet;
-    GroupsSheet: TTabSheet;
+    PasswordEdit: TEditButton;
+    Splitter1: TSplitter;
     procedure InputFormShow(Sender: TObject);
     procedure LoginEditKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -46,17 +44,38 @@ type
     procedure ShowHint(Const Ctrl: TControl; Const Msg: String);
     procedure ShowPasswordBoxes(Const KeyData: TString);
   private
+    FShowGroups: Boolean;
     FPasswordModified: Boolean;
-    FAdminGroups: TEpiGroups;
+    FAdmin: TEpiAdmin;
     FUser: TEpiUser;
     procedure PasswordEditOpen(Data: PtrInt);
     procedure FormShow(Sender: TObject);
+
+  { Groups }
+  private
+    FGroupVST: TVirtualStringTree;
+    FUpdatingGroupVST: Boolean;
     procedure FillGroupList;
+    // VST Aux methods
+    function RelationFromNode(Node: PVirtualNode): TEpiGroupRelation;
+    function GroupFromNode(Node: PVirtualNode): TEpiGroup;
+    function NodeFromRealtion(Const Relation: TEpiGroupRelation): PVirtualNode;
+
+    // VST Methods
+    procedure GetGroupText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+    procedure GroupBeforeItemErase(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
+      var ItemColor: TColor; var EraseAction: TItemEraseAction);
+    procedure GroupChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure GroupChecking(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      var NewState: TCheckState; var Allowed: Boolean);
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
     property User: TEpiUser read FUser write FUser;
-    property AdminGroups: TEpiGroups read FAdminGroups write FAdminGroups;
+    property Admin: TEpiAdmin read FAdmin write FAdmin;
+    property ShowGroups: Boolean read FShowGroups write FShowGroups;
   end;
 
 implementation
@@ -64,10 +83,13 @@ implementation
 {$R *.lfm}
 
 uses
-  ButtonPanel, LazUTF8, math;
+  ButtonPanel, LazUTF8, math, admin_authenticator;
 
 var
   InputFormEdit: TEdit;
+
+const
+  ADMIN_USERFORM_NODE_KEY = 'ADMIN_USERFORM_NODE_KEY';
 
 
 { TAdminUserForm }
@@ -231,9 +253,6 @@ begin
 end;
 
 procedure TAdminUserForm.OkBtnClick(Sender: TObject);
-var
-  Group: TEpiGroup;
-  i: Integer;
 begin
   if (not User.ValidateRename(LoginEdit.Text, false))
   then
@@ -253,21 +272,6 @@ begin
 
   if FPasswordModified then
     User.Password   := PasswordEdit.Text;
-
-  for i := 0 to GroupChkLstBox.Count - 1 do
-  begin
-    Group := TEpiGroup(GroupChkLstBox.Items.Objects[i]);
-
-    if (GroupChkLstBox.Checked[i]) and
-       (User.Groups.IndexOf(Group) < 0)
-    then
-      User.Groups.AddItem(Group);
-
-    if (not GroupChkLstBox.Checked[i]) and
-       (User.Groups.IndexOf(Group) >= 0)
-    then
-      User.Groups.RemoveItem(Group);
-  end;
 end;
 
 procedure TAdminUserForm.LoginEditKeyDown(Sender: TObject; var Key: Word;
@@ -284,8 +288,6 @@ end;
 
 procedure TAdminUserForm.FormShow(Sender: TObject);
 begin
-  PageControl1.ActivePage := BasicSheet;
-
   // Fill content!
   LoginEdit.Text       := User.Login;
   FullnameEdit.Text    := User.FullName;
@@ -302,35 +304,231 @@ begin
   else
     LastLoginEdit.Text := '(N/A)';
 
-  FillGroupList;
+  if (not ShowGroups) then
+    begin
+      FGroupVST.Visible := false;
+      Splitter1.Visible := false;
+      Panel1.Align := alClient;
+    end
+  else
+    FillGroupList;
+
   LoginEdit.SetFocus;
 end;
 
 procedure TAdminUserForm.FillGroupList;
 var
+  Idx: Integer;
   Group: TEpiGroup;
-begin
-  GroupChkLstBox.Items.BeginUpdate;
-  GroupChkLstBox.Items.Clear;
 
-  for Group in AdminGroups do
+  procedure AddRecusive(Root: PVirtualNode; Const Relation: TEpiGroupRelation);
+  var
+    R: TEpiGroupRelation;
   begin
-    GroupChkLstBox.AddItem(GRoup.Caption.Text, GRoup);
-    if User.Groups.IndexOf(Group) >= 0 then
-      GroupChkLstBox.Checked[GroupChkLstBox.Count - 1] := true;
+    Root := FGroupVST.AddChild(Root, Relation);
+    Relation.AddCustomData(ADMIN_USERFORM_NODE_KEY, TObject(Root));
+
+    FGroupVST.CheckType[Root] := ctCheckBox;
+
+    if Authenticator.UserInGroup(User, Relation.Group, true) then
+      FGroupVST.CheckState[Root] := csMixedNormal;
+
+    if Authenticator.UserInGroup(User, Relation.Group, false) then
+      FGroupVST.CheckState[Root] := csCheckedNormal;
+
+    for R in Relation.GroupRelations do
+      AddRecusive(Root, R);
   end;
 
-  GroupChkLstBox.Items.BeginUpdate;
+begin
+  FUpdatingGroupVST := true;
+
+  FGroupVST.BeginUpdate;
+  FGroupVST.Clear;
+
+  AddRecusive(nil, Admin.AdminRelation);
+
+  FGroupVST.FullExpand();
+  FGroupVST.EndUpdate;
+
+  FUpdatingGroupVST := false;
+end;
+
+function TAdminUserForm.RelationFromNode(Node: PVirtualNode): TEpiGroupRelation;
+begin
+  result := TEpiGroupRelation(FGroupVST.GetNodeData(Node)^);
+end;
+
+function TAdminUserForm.GroupFromNode(Node: PVirtualNode): TEpiGroup;
+begin
+  result := RelationFromNode(Node).Group;
+end;
+
+function TAdminUserForm.NodeFromRealtion(const Relation: TEpiGroupRelation
+  ): PVirtualNode;
+begin
+  result := PVirtualNode(Relation.FindCustomData(ADMIN_USERFORM_NODE_KEY));
+end;
+
+procedure TAdminUserForm.GetGroupText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: String);
+begin
+  case Column of
+    0: CellText := GroupFromNode(Node).Caption.Text;
+    1: CellText := 'Not Implemented';
+  end;
+end;
+
+procedure TAdminUserForm.GroupBeforeItemErase(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
+  var ItemColor: TColor; var EraseAction: TItemEraseAction);
+var
+  G: TEpiGroup;
+begin
+  G := GroupFromNode(Node);
+
+  if (G = Admin.Admins) or
+     (not Authenticator.AuthedUserInGroup(G, true))
+  then
+    begin
+      ItemColor := clLtGray;
+      EraseAction := eaColor;
+    end;
+end;
+
+procedure TAdminUserForm.GroupChecked(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+var
+  G: TEpiGroup;
+  R: TEpiGroupRelation;
+  Child: TEpiGroupRelation;
+begin
+  if FUpdatingGroupVST then exit;
+
+  G := GroupFromNode(Node);
+  R := RelationFromNode(Node);
+
+  for Child in R.GroupRelations do
+    begin
+      if Sender.CheckState[Node] = csCheckedNormal then
+        Sender.CheckState[NodeFromRealtion(Child)] := csMixedNormal
+      else
+        Sender.CheckState[NodeFromRealtion(Child)] := csCheckedNormal;
+    end;
+end;
+
+procedure TAdminUserForm.GroupChecking(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
+var
+  G: TEpiGroup;
+begin
+  if FUpdatingGroupVST then exit;
+
+  G := GroupFromNode(Node);
+
+  if (G <> Admin.Admins) and
+     (Authenticator.AuthedUserInGroup(G, false)) and
+     (not
+       Authenticator.AuthedUserInGroup(
+         Authenticator.RelationFromGroup(G).ParentRelation.Group,
+         true
+       )
+     )
+  then
+    begin
+      Allowed := false;
+      Exit;
+    end;
+
+  if ((G = Admin.Admins) and (User = Authenticator.AuthedUser))
+     or
+     (not Authenticator.AuthedUserInGroup(G, true))
+  then
+    begin
+      Allowed := false;
+      Exit;
+    end;
+
+  if (Sender.CheckState[Node^.Parent] in [csCheckedNormal, csMixedNormal]) and
+     (Sender.CheckState[Node] = csMixedNormal) then
+    begin
+      Allowed := false;
+      Exit;
+    end;
 end;
 
 constructor TAdminUserForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FPasswordModified := false;
+  FShowGroups       := false;
 
   FHintWindow       := THintWindow.Create(Self);
   FHintWindow.AutoHide     := true;
   FHintWindow.HideInterval := 2500;  //2.5 secs.
+
+  FGroupVST := TVirtualStringTree.Create(Self);
+  with FGroupVST do
+  begin
+    BeginUpdate;
+
+    NodeDataSize := SizeOf(Pointer);
+
+    with TreeOptions do
+    begin
+      AnimationOptions := [];
+      AutoOptions      := [];
+      MiscOptions      := [toCheckSupport, toFullRepaintOnResize, toGridExtensions,
+                           toWheelPanning];
+      PaintOptions     := [toShowButtons, toShowDropmark, toShowRoot,
+                           toShowTreeLines, toThemeAware, toUseBlendedImages];
+      SelectionOptions := [toExtendedFocus, toFullRowSelect, toAlwaysSelectNode];
+      StringOptions    := [];
+    end;
+
+    with Header do
+    begin
+      Options := [hoAutoResize, hoColumnResize, hoDblClickResize, hoVisible,
+                  hoFullRepaintOnResize];
+
+      with Columns.Add do
+      begin
+        Text := 'Caption';
+        CheckBox   := True;
+        CheckState := csUncheckedNormal;
+        CheckType  := ctCheckBox;
+        Options    := [coAllowClick, coEnabled, coParentBidiMode,
+                       coParentColor, coResizable, coShowDropMark, coVisible,
+                       coSmartResize, coAllowFocus];
+        Width      := 150;
+      end;
+
+      with Columns.Add do
+      begin
+        Text := 'Rights';
+        CheckBox   := false;
+        CheckState := csUncheckedNormal;
+        CheckType  := ctNone;
+        Options    := [coAllowClick, coEnabled, coParentBidiMode,
+                       coParentColor, coResizable, coShowDropMark, coVisible,
+                       coSmartResize, coAllowFocus];
+      end;
+
+      MainColumn := 0;
+      AutoSizeIndex := 1;
+    end;
+
+    Align := alClient;
+    Parent := Self;
+
+    OnBeforeItemErase := @GroupBeforeItemErase;
+    OnChecked         := @GroupChecked;
+    OnChecking        := @GroupChecking;
+    OnGetText         := @GetGroupText;
+
+    EndUpdate;
+  end;
 
   OnShow := @FormShow;
 end;

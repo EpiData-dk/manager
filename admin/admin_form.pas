@@ -550,8 +550,9 @@ begin
   if not Assigned(User) then exit;
 
   F := TAdminUserForm.Create(Self);
-  F.User := User;
-  F.AdminGroups := Admin.Groups;
+  F.User  := User;
+  F.Admin := Admin;
+  F.ShowGroups := true;
   Result := F.ShowModal;
   F.Free;
 end;
@@ -615,7 +616,6 @@ begin
 
   F := TAdminGroupForm.Create(Self);
   F.Group := Group;
-  F.AdminUsers := Admin.Users;
   Result := F.ShowModal;
   F.Free;
 end;
