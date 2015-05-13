@@ -46,7 +46,6 @@ uses
 
 procedure TAdminGroupForm.BitBtn1Click(Sender: TObject);
 var
-  User: TEpiUser;
   i: Integer;
   Item: TEpiManagerRight;
 begin

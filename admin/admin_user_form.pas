@@ -290,10 +290,19 @@ procedure TAdminUserForm.FormShow(Sender: TObject);
 begin
   // Fill content!
   LoginEdit.Text       := User.Login;
+  LoginEdit.Enabled    := Authenticator.CheckAuthedUserHierachy(User, true);
+
   FullnameEdit.Text    := User.FullName;
+  FullnameEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
+
+  PasswordEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true) or
+                          Authenticator.IsAuthorized([earPassword]);
 
   NeverExpireChkBox.Checked := (User.ExpireDate = 0);
-  ExpiresDateEdit.Date := User.ExpireDate;
+  NeverExpireChkBox.Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
+
+  ExpiresDateEdit.Date    := User.ExpireDate;
+  ExpiresDateEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
 
   PasswordEdit.Text    := User.Password;
   if (User.Password = '') then
@@ -313,13 +322,11 @@ begin
   else
     FillGroupList;
 
-  LoginEdit.SetFocus;
+  if LoginEdit.CanFocus then
+    LoginEdit.SetFocus;
 end;
 
 procedure TAdminUserForm.FillGroupList;
-var
-  Idx: Integer;
-  Group: TEpiGroup;
 
   procedure AddRecusive(Root: PVirtualNode; Const Relation: TEpiGroupRelation);
   var
@@ -427,7 +434,22 @@ begin
 
   G := GroupFromNode(Node);
 
-  if (G <> Admin.Admins) and
+  // You must be "owner" of group AND "owner" of user,
+  // otherwise you cannot assign user to group.
+  if not
+      (
+       Authenticator.AuthedUserInGroup(G, true, true) and
+       Authenticator.CheckAuthedUserHierachy(User, false)
+      )
+  then
+    begin
+      Allowed := false;
+      Exit;
+    end;
+
+  // You cannot remove yourself from the group, if this is highest group
+  // in the hieracy you have access to.
+  if (User = Authenticator.AuthedUser) and
      (Authenticator.AuthedUserInGroup(G, false)) and
      (not
        Authenticator.AuthedUserInGroup(
@@ -440,6 +462,7 @@ begin
       Allowed := false;
       Exit;
     end;
+
 
   if ((G = Admin.Admins) and (User = Authenticator.AuthedUser))
      or

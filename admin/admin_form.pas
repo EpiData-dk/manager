@@ -54,6 +54,7 @@ type
     procedure AddUserToGroupActionExecute(Sender: TObject);
     procedure DeleteGroupActionExecute(Sender: TObject);
     procedure DeleteUserActionExecute(Sender: TObject);
+    procedure DeleteUserActionUpdate(Sender: TObject);
     procedure EditGroupActionExecute(Sender: TObject);
     procedure EditUserActionExecute(Sender: TObject);
     procedure EditUserActionUpdate(Sender: TObject);
@@ -304,9 +305,13 @@ begin
   if aRow = 0 then exit;
   User := TEpiUser(UserGrid.Objects[0, aRow]);
 
-  if (not Authenticator.CheckAuthedUserHierachy(User, true))
+  if (not Authenticator.CheckAuthedUserHierachy(User, false))
   then
     UserGrid.Canvas.Font.Color := clInactiveCaption;
+
+  if (User = Authenticator.AuthedUser)
+  then
+    UserGrid.Canvas.Brush.Color := clGradientActiveCaption;
 end;
 
 procedure TAdminForm.UserGridStartDrag(Sender: TObject;
@@ -797,6 +802,11 @@ begin
     end;
 end;
 
+procedure TAdminForm.DeleteUserActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.CheckAuthedUserHierachy(UserFromGrid, true);
+end;
+
 procedure TAdminForm.EditGroupActionExecute(Sender: TObject);
 begin
   ShowGroupForm(GroupFromSelectedNode);
@@ -862,7 +872,7 @@ end;
 
 procedure TAdminForm.EditUserActionExecute(Sender: TObject);
 begin
-  if not Authenticator.CheckAuthedUserHierachy(UserFromGrid, true)
+  if (not Authenticator.CheckAuthedUserHierachy(UserFromGrid, false))
   then
     Exit;
 
@@ -874,7 +884,7 @@ end;
 
 procedure TAdminForm.EditUserActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := Authenticator.CheckAuthedUserHierachy(UserFromGrid, true);
+  TAction(Sender).Enabled := Authenticator.CheckAuthedUserHierachy(UserFromGrid, false);
 end;
 
 procedure TAdminForm.FormShow(Sender: TObject);

@@ -30,16 +30,25 @@ type
     //   If AllGroups = false: Returns true if at least one such hierachy is found.
     //   If AllGroups = true:  Returns true if all such hierachies are found.
     function    CheckUserHierachy(Const MasterUser, OtherUser: TEpiUser;
-      Const AllGroups: boolean): boolean;
+      Const AllGroups: boolean): boolean; overload;
     // Check if Authenticated user is in a higher group than OtherUser.
     //   If AllGroups = false: Returns true if at least one such hierachy is found.
     //   If AllGroups = true:  Returns true if all such hierachies are found.
     function    CheckAuthedUserHierachy(Const OtherUser: TEpiUser;
-      Const AllGroups: boolean): boolean;
+      Const AllGroups: boolean): boolean; overload;
+
+    // Check if Master is higher in the hierachy that Other user, just
+    // for this group. MasterUser MUST belong (or be in a higher group) to Group.
+    function    CheckUserHierachy(Const MasterUser, OtherUser: TEpiUser;
+      Const Group: TEpiGroup): boolean; overload;
+    function    CheckAuthedUserHierachy(Const OtherUser: TEpiUser;
+      Const Group: TEpiGroup): boolean; overload;
+
     function    IsAuthorized(Const RequiredRights: TEpiManagerRights): Boolean;
     function    UserInGroup(Const User: TEpiUser; Const Group: TEpiGroup;
-        Const CheckInheritance: boolean): boolean;
-    function    AuthedUserInGroup(Const Group: TEpiGroup; Const CheckInheritance: boolean): boolean;
+        Const CheckInheritance: Boolean; Const InhertanceUpTree: boolean = true): boolean;
+    function    AuthedUserInGroup(Const Group: TEpiGroup; Const CheckInheritance: boolean;
+        Const InhertanceUpTree: boolean = true): boolean;
     function    RelationFromGroup(Const Group: TEpiGroup): TEpiGroupRelation;
 
   public
@@ -125,7 +134,9 @@ begin
     end
   else
     begin
-      result := false;
+      // If Other user is not member of a group, ALL other users
+      // are potential "owners".
+      result := (OtherUser.Groups.Count = 0);
       for G in OtherUser.Groups do
         result := result or
                   UserInGroup(MasterUser, G, true);
@@ -136,6 +147,19 @@ function TAuthenticator.CheckAuthedUserHierachy(const OtherUser: TEpiUser;
   const AllGroups: boolean): boolean;
 begin
   result := CheckUserHierachy(AuthedUser, OtherUser, AllGroups);
+end;
+
+function TAuthenticator.CheckUserHierachy(const MasterUser,
+  OtherUser: TEpiUser; const Group: TEpiGroup): boolean;
+begin
+  result := UserInGroup(MasterUser, Group, true, true) and
+            UserInGroup(OtherUser, Group, true, false);
+end;
+
+function TAuthenticator.CheckAuthedUserHierachy(const OtherUser: TEpiUser;
+  const Group: TEpiGroup): boolean;
+begin
+  result := CheckUserHierachy(AuthedUser, OtherUser, Group);
 end;
 
 function TAuthenticator.IsAuthorized(const RequiredRights: TEpiManagerRights
@@ -150,9 +174,10 @@ begin
 end;
 
 function TAuthenticator.UserInGroup(const User: TEpiUser;
-  const Group: TEpiGroup; const CheckInheritance: boolean): boolean;
+  const Group: TEpiGroup; const CheckInheritance: Boolean;
+  const InhertanceUpTree: boolean): boolean;
 var
-  Parent: TEpiGroupRelation;
+  R: TEpiGroupRelation;
 begin
   result := false;
   if (Self = nil) then exit;
@@ -167,15 +192,25 @@ begin
 
   if CheckInheritance then
   begin
-    Parent := RelationFromGroup(Group).ParentRelation;
+    if InhertanceUpTree
+    then
+      begin
+        R := RelationFromGroup(Group).ParentRelation;
 
-    if Assigned(Parent) then
-      Result := Result or UserInGroup(User, Parent.Group, CheckInheritance);
+        if Assigned(R) then
+          Result := Result or UserInGroup(User, R.Group, CheckInheritance, InhertanceUpTree);
+      end
+    else
+      begin
+        for R in RelationFromGroup(Group).GroupRelations do
+          Result := Result or UserInGroup(User, R.Group, CheckInheritance, InhertanceUpTree);
+
+      end;
   end;
 end;
 
 function TAuthenticator.AuthedUserInGroup(const Group: TEpiGroup;
-  const CheckInheritance: boolean): boolean;
+  const CheckInheritance: boolean; const InhertanceUpTree: boolean): boolean;
 begin
   result := false;
   if (Self = nil) then exit;
@@ -183,7 +218,7 @@ begin
   if (not Assigned(AuthedUser)) then
     Exit;
 
-  Result := UserInGroup(AuthedUser, Group, CheckInheritance);
+  Result := UserInGroup(AuthedUser, Group, CheckInheritance, InhertanceUpTree);
 end;
 
 end.
