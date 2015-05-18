@@ -2388,7 +2388,9 @@ end;
 procedure TFieldPropertiesFrame.FocusOnNewControl;
 begin
   FieldPageControl.ActivePage := BasicSheet;
-  QuestionEdit.SetFocus;
+
+  if QuestionEdit.CanFocus then
+    QuestionEdit.SetFocus;
 end;
 
 procedure TFieldPropertiesFrame.ResetControls;

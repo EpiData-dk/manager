@@ -16,14 +16,14 @@ type
 
   TExportForm2 = class(TForm)
     AllRecordRBtn: TRadioButton;
-    ProjectFileNameEdit: TFileNameEdit;
+    DataformFilenameEdit: TEdit;
+    ProjectFileNameEdit: TEdit;
     OkBtn: TBitBtn;
     BitBtn2: TBitBtn;
     ProjectOptionsChkGrp: TCheckGroup;
     ExportFolderEdit: TDirectoryEdit;
     ExportTypeCombo: TComboBox;
     FieldListSheet: TTabSheet;
-    DataformFileNameEdit: TFileNameEdit;
     FromRecordEdit: TEdit;
     DataformRecordGrpBox: TGroupBox;
     Label1: TLabel;
@@ -100,7 +100,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafilestypes, epieximtypes, epidatafilerelations_helper,
+  epidatafilestypes, epieximtypes, epidatafilerelations_helper, LazUTF8,
   epimiscutils, settings2_var, settings2, manager_types;
 
 var
@@ -287,7 +287,7 @@ begin
     if FExportSetting.InheritsFrom(TEpiCustomCompleteProjectExportSetting) then
     with TEpiCustomCompleteProjectExportSetting(FExportSetting) do
     begin
-      ExportFileName := ExpandFileNameUTF8(ExportFolderEdit.Directory + DirectorySeparator + ProjectFileNameEdit.FileName);
+      ExportFileName := ExpandFileNameUTF8(ExportFolderEdit.Directory + DirectorySeparator + ProjectFileNameEdit.Text);
       ExportCompleteProject := ProjectOptionsChkGrp.Checked[ProjChkSingleIdx];
     end;
   end;
@@ -298,7 +298,7 @@ begin
   if (ProjectOptionsChkGrp.Checked[ProjChkSingleIdx]) and
      (FileExistsUTF8(TEpiCustomCompleteProjectExportSetting(FExportSetting).ExportFileName))
   then
-    ConflictFileNames.Add(ProjectFileNameEdit.FileName);
+    ConflictFileNames.Add(ProjectFileNameEdit.Text);
 
   for i := 0 to FExportSetting.DatafileSettings.Count -1 do
   begin
@@ -391,7 +391,7 @@ begin
   ExportFolderEdit.Directory   := ExtractFilePath(DocumentFile.FileName);
 
   DocumentFile.Document.Relations.OrderedWalk(@CreateCustomData);
-  ProjectFileNameEdit.FileName := GetExportFileName(nil);
+  ProjectFileNameEdit.Text := GetExportFileName(nil);
 
   FProjectTree.AddDocument(FDocumentFile.Document);
   FProjectTree.CheckAll;
@@ -411,7 +411,7 @@ begin
 
   Rec := TDatafileRec(AObject.FindCustomData(EXPORT_CUSTOMDATA));
   FDataFormViewer.SelectedList  := Rec.SelectedItems;
-  DataformFileNameEdit.FileName := Rec.Filename;
+  DataformFileNameEdit.Text     := Rec.Filename;
   if (Rec.AllRecord) then
   begin
     AllRecordRBtn.Checked := true;
@@ -442,7 +442,7 @@ begin
   Relation := TEpiMasterRelation(OldObject);
 
   Rec := TDatafileRec(Relation.FindCustomData(EXPORT_CUSTOMDATA));
-  Rec.Filename      := DataformFileNameEdit.FileName;
+  Rec.Filename      := DataformFileNameEdit.Text;
   Rec.SelectedItems := FDataFormViewer.SelectedList;
   if AllRecordRBtn.Checked then
   begin
@@ -531,10 +531,11 @@ begin
   // Delete the "*" part of "*.<ext>"
   Delete(Ext, 1, 1);
 
-  ProjectFileNameEdit.FileName := ChangeFileExt(ProjectFileNameEdit.FileName, Ext);
+  ProjectFileNameEdit.Text := ChangeFileExt(ProjectFileNameEdit.Text, Ext);
   FDocumentFile.Document.Relations.OrderedWalk(@ChangeExt, @Ext);
 
-  DataformFileNameEdit.FileName := TDatafileRec(FProjectTree.SelectedObject.FindCustomData(EXPORT_CUSTOMDATA)).Filename;
+  DataformFileNameEdit.Text := TDatafileRec(FProjectTree.SelectedObject.FindCustomData(EXPORT_CUSTOMDATA)).Filename;
+//  DataformFileNameEdit.Filter   := GetEpiDialogFilter(IFrame.GetFileDialogExtensions);
 end;
 
 procedure TExportForm2.UpdateSelectedItems;
