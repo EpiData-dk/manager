@@ -215,6 +215,7 @@ object ProjectFrame: TProjectFrame
       Category = 'Project'
       Caption = 'Properties'
       OnExecute = ProjectSettingsActionExecute
+      OnUpdate = ProjectSettingsActionUpdate
       ShortCut = 32848
     end
     object ValueLabelEditorAction: TAction

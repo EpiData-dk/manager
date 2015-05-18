@@ -260,7 +260,7 @@ implementation
 
 uses
   epimiscutils, typinfo, epiranges, epiconvertutils,
-  epistringutils, LazUTF8, field_valuelabelseditor_form,
+  epistringutils, LazUTF8, field_valuelabelseditor_form, admin_authenticator, epiadmin,
   valuelabelseditor_form2, math, epidatafilerelations, epiv_datamodule;
 
 resourcestring
@@ -1216,6 +1216,13 @@ begin
     begin
       AddEditValueLabelBtn.Caption := 'View';
       AddEditValueLabelBtn.Hint    := 'Can only be edited in the External file';
+    end;
+
+  if (not Authenticator.IsAuthorized([earStructure]))
+  then
+    begin
+      AddEditValueLabelBtn.Caption := 'View';
+      AddEditValueLabelBtn.Hint    := 'You are not authorized to edit the Value Label Set';
     end;
 end;
 
@@ -2327,7 +2334,22 @@ begin
   inherited SetReadOnly(AValue);
 
   for i := 0 to FieldPageControl.PageCount - 1 do
-    FieldPageControl.Pages[i].Enabled := (not ReadOnly);
+    if (FieldPageControl.Pages[i] = BasicSheet) then
+      Continue
+    else
+      FieldPageControl.Pages[i].Enabled := (not ReadOnly);
+
+
+  NameEdit.Enabled                := not ReadOnly;
+  QuestionEdit.Enabled            := not ReadOnly;
+
+  LengthEdit.Enabled              := not ReadOnly;
+  DecimalsEdit.Enabled            := not ReadOnly;
+
+  ValueLabelComboBox.Enabled      := not ReadOnly;
+
+  RangesGrpBox.Enabled            := not ReadOnly;
+  UpdateModeRadioGrp.Enabled      := not ReadOnly;
 end;
 
 constructor TFieldPropertiesFrame.Create(TheOwner: TComponent);

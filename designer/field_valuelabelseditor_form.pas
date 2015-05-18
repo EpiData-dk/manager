@@ -46,7 +46,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLIntf, LMessages, epidocument, settings2_var, settings2;
+  LCLIntf, LMessages, epidocument, settings2_var, settings2, admin_authenticator, epiadmin;
 
 const
   rsFormCaption = 'Field Valuelabel Editor';
@@ -106,7 +106,8 @@ end;
 procedure TFieldValueLabelEditor.FormShow(Sender: TObject);
 begin
   ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
-  ValueLabelNameEdit.Enabled := (ValueLabelSet.LabelScope = vlsInternal);
+  ValueLabelNameEdit.Enabled := (ValueLabelSet.LabelScope = vlsInternal) and
+                                (Authenticator.IsAuthorized([earStructure]));
 
   Caption := rsFormCaption + BoolToStr(ValueLabelSet.LabelScope = vlsInternal,
     '',

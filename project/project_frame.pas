@@ -62,6 +62,7 @@ type
     procedure ProjectPasswordActionExecute(Sender: TObject);
     procedure ProjectPasswordActionUpdate(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
+    procedure ProjectSettingsActionUpdate(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectActionUpdate(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
@@ -321,6 +322,7 @@ var
   User: TEpiUser;
   S: String;
   Res: TModalResult;
+  MsgDlgType: TMsgDlgType;
 
   function ShowUserForm: TModalResult;
   var
@@ -337,23 +339,42 @@ var
 begin
   if (EpiDocument.Admin.Users.Count = 0) then
     begin
-      S :=
-        'This project is not yet setup for user administration!' + LineEnding +
-        LineEnding +
-        'Next you will be asked to create a new user,' + LineEnding +
-        'which will automatically be added to the' + LineEnding +
-        'Administrators group!' + LineEnding +
-        LineEnding +
-        'Afterwards the project will save and re-open.' + LineEnding +
-        'Then login with the new user!';
+      if (EpiDocument.PassWord <> '') then
+        begin
+          S := 'It is not possible to have a single-password project AND user administration active at the same time!' + LineEnding +
+               LineEnding +
+               'If you choose to continue the current password is reset and you will be asked to create a new user, which will automatically be added to the Administrators group!' + LineEnding +
+               LineEnding +
+               'Afterwards the project will save and re-open.' + LineEnding +
+               'Then login with the new user!' + LineEnding +
+               LineEnding +
+               'Continue?';
+          MsgDlgType := mtWarning;
+        end
+      else
+        begin
+          S :=
+            'This project is not yet setup for user administration!' + LineEnding +
+            LineEnding +
+            'Next you will be asked to create a new user,' + LineEnding +
+            'which will automatically be added to the' + LineEnding +
+            'Administrators group!' + LineEnding +
+            LineEnding +
+            'Afterwards the project will save and re-open.' + LineEnding +
+            'Then login with the new user!';
+          MsgDlgType := mtInformation;
+        end;
 
       Res := MessageDlg('Warning',
-                          S, mtWarning,
+                          S,
+                          MsgDlgType,
                           mbOKCancel, 0,
                           mbCancel
                         );
       if (Res <> mrOK) then
         Exit;
+
+      EpiDocument.PassWord := '';
 
       User := EpiDocument.Admin.NewUser;
       if ShowUserForm <> mrOK then
@@ -381,7 +402,7 @@ end;
 
 procedure TProjectFrame.AdminActionUpdate(Sender: TObject);
 begin
-  AdminAction.Enabled := Authenticator.IsAuthorized([earUsers]);
+  AdminAction.Enabled := Authenticator.IsAuthorized([earUsers])
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
@@ -448,6 +469,11 @@ begin
   TStudyUnitFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
   EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
   UpdateTimer;
+end;
+
+procedure TProjectFrame.ProjectSettingsActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earStructure]);
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
@@ -836,8 +862,10 @@ procedure TProjectFrame.ProjectTreeEditing(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
   var Allowed: Boolean);
 begin
-  Allowed := true;
-  (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).DeActivate(false);
+  Allowed := Authenticator.IsAuthorized([earStructure]);
+
+  if Allowed then
+    (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).DeActivate(false);
 end;
 
 procedure TProjectFrame.ProjectTreeError(const Msg: String);
