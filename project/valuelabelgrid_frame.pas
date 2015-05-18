@@ -26,6 +26,8 @@ type
     procedure VLGChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VLGChecking(Sender: TBaseVirtualTree; Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
     procedure VLGEdited(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
+    procedure VLGEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var Allowed: Boolean);
     procedure VLGEditor(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; out EditLink: IVTEditLink);
     procedure VLGFocusChanged(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex);
     procedure VLGFocusChanging(Sender: TBaseVirtualTree; OldNode, NewNode: PVirtualNode; OldColumn, NewColumn: TColumnIndex; var Allowed: Boolean);
@@ -64,7 +66,8 @@ implementation
 {$R *.lfm}
 
 uses
-  Graphics, Dialogs, LazUTF8, epimiscutils, Math, LCLIntf, Clipbrd, StdCtrls, strutils;
+  Graphics, Dialogs, LazUTF8, epimiscutils, Math, LCLIntf, Clipbrd, StdCtrls,
+  strutils, admin_authenticator, epiadmin;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -283,11 +286,14 @@ end;
 procedure TValueLabelGridFrame.VLGChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
 begin
-  if ValueLabelSet.LabelScope = vlsExternal then
-  begin
-    Allowed := false;
-    Exit;
-  end else
+  if (ValueLabelSet.LabelScope = vlsExternal) or
+     (not Authenticator.IsAuthorized([earStructure]))
+  then
+    begin
+      Allowed := false;
+      Exit;
+    end
+  else
     ValueLabelFromNode(Node).IsMissingValue := NewState in [csCheckedNormal, csCheckedPressed];
 end;
 
@@ -295,6 +301,12 @@ procedure TValueLabelGridFrame.VLGEdited(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
   if Column = 0 then Application.QueueAsyncCall(@VLGSendPostEdit, PtrInt(Node));
+end;
+
+procedure TValueLabelGridFrame.VLGEditing(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+begin
+  Allowed := Authenticator.IsAuthorized([earStructure]);
 end;
 
 procedure TValueLabelGridFrame.VLGEditor(Sender: TBaseVirtualTree;
@@ -454,6 +466,8 @@ begin
 end;
 
 procedure TValueLabelGridFrame.InternalSetup;
+var
+  Allowed: Boolean;
 begin
   if not Assigned(FValueLabelSet) then exit;
 
@@ -462,8 +476,10 @@ begin
   else
     VLG.TreeOptions.MiscOptions := VLG.TreeOptions.MiscOptions + [toEditable];
 
-  NewLineBtn.Enabled := (FValueLabelSet.LabelScope = vlsInternal);
-  DelLineBtn.Enabled := (FValueLabelSet.LabelScope = vlsInternal);
+  Allowed := (FValueLabelSet.LabelScope = vlsInternal) and (Authenticator.IsAuthorized([earStructure]));
+
+  NewLineBtn.Enabled := Allowed;
+  DelLineBtn.Enabled := Allowed;
 end;
 
 procedure TValueLabelGridFrame.UpdateGrid;
@@ -592,6 +608,7 @@ begin
     OnChecked       := @VLGChecked;
     OnCreateEditor  := @VLGEditor;
     OnEdited        := @VLGEdited;
+    OnEditing := @VLGEditing;
 
     with TreeOptions do
     begin

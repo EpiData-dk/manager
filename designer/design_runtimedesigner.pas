@@ -392,7 +392,8 @@ uses
   align_form,
   recode_form,
   rename_form,
-  project_keyfields_form;
+  project_keyfields_form,
+  admin_authenticator;
 
 { TRuntimeDesignFrame }
 
@@ -603,7 +604,7 @@ end;
 procedure TRuntimeDesignFrame.PasteAsUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    (UserIsAuthorized(DoGetUser, [earStructure])) and
+    (Authenticator.IsAuthorized([earStructure])) and
     (ClipBoardHasText) and
      (
       ((FDesignPanel.Surface.Count = 1) and
@@ -808,7 +809,7 @@ procedure TRuntimeDesignFrame.PasteControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
     (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) and
-    (UserIsAuthorized(DoGetUser, [earStructure]));
+    (Authenticator.IsAuthorized([earStructure]));
 
     {and
      (
@@ -1982,7 +1983,7 @@ begin
   with DateToolButton do
     Tag := Ord(ManagerSettings.DefaultDateType);
 
-  Authorized := UserIsAuthorized(DoGetUser, [earStructure]);
+  Authorized := Authenticator.IsAuthorized([earStructure]);
   IntToolButton.Enabled     := Authorized;
   FloatToolButton.Enabled   := Authorized;
   StringToolButton.Enabled  := Authorized;
@@ -2617,7 +2618,7 @@ begin
   if Assigned(AAction) and
      (TAction(AAction).ActionList = AuthorizedDesignerActionList)
   then
-    TAction(AAction).Enabled := UserIsAuthorized(DoGetUser, [earStructure]);
+    TAction(AAction).Enabled := Authenticator.IsAuthorized([earStructure]);
 end;
 
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
@@ -2666,7 +2667,7 @@ begin
     (lEnabled) and
     (FDesignPanel.Surface.Count > 0) and
     (not FDesignPanel.Surface.Selector.IsSelected(FDesignPanel)) and
-    (UserIsAuthorized(DoGetUser, [earStructure]));
+    (Authenticator.IsAuthorized([earStructure]));
 
   TAction(Sender).Enabled := lEnabled;
 end;
@@ -2802,7 +2803,7 @@ var
   F: TKeyFieldsForm;
 begin
   F := TKeyFieldsForm.Create(Self, Relation);
-  F.ReadOnly := not UserIsAuthorized(DoGetUser, [earStructure]);
+  F.ReadOnly := not Authenticator.IsAuthorized([earStructure]);
   F.ShowModal;
   F.Free;
 
@@ -2974,7 +2975,7 @@ procedure TRuntimeDesignFrame.ShowPropertiesForm(NewControl: boolean);
 begin
   if not Assigned(PropertiesForm) then exit;
 
-  PropertiesForm.ReadOnly := (not UserIsAuthorized(DoGetUser, [earStructure]));
+  PropertiesForm.ReadOnly := (not Authenticator.IsAuthorized([earStructure]));
   PropertiesForm.Show;
   PropertiesForm.SetFocus;
 
@@ -3011,7 +3012,7 @@ end;
 
 procedure TRuntimeDesignFrame.LMUserAuthorized(var Msg: TLMessage);
 begin
-  if UserIsAuthorized(DoGetUser, [earStructure]) then
+  if Authenticator.IsAuthorized([earStructure]) then
     Msg.Result := 1
   else
     Msg.Result := 0;

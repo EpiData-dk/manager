@@ -125,7 +125,7 @@ var
   S: TString;
 begin
   // For some reason the back-space and "ESC" key triggers UTF8KeyPress.
-  if (UTF8Key = #8) or (UTF8Key = #27) then exit;
+  if (UTF8Key < #32) then exit;
 
   S := TString.Create(UTF8Key);
   Application.QueueAsyncCall(@PasswordEditOpen, PtrInt(S));
@@ -154,13 +154,14 @@ var
   PW2: String;
   Header: String;
 
-  procedure ShowFirstInputForm();
+  function ShowFirstInputForm: boolean;
   var
     Form: TForm;
     Prompt: TLabel;
     MinEditWidth: integer;
     AMonitor: TMonitor;
   begin
+    result := false;
     Form := TForm(TForm.NewInstance);
     Form.DisableAutoSizing{$IFDEF DebugDisableAutoSizing}('ShowInputDialog'){$ENDIF};
     Form.CreateNew(nil, 0);
@@ -217,7 +218,10 @@ var
       Form.OnShow := @InputFormShow;
 
       if ShowModal = mrOk then
+      begin
         PW1 := InputFormEdit.Text;
+        Result := true;
+      end;
       Form.Free;
     end;
   end;
@@ -228,7 +232,8 @@ begin
   if Assigned(KeyData) then
     PW1 := KeyData.Str;
 
-  ShowFirstInputForm;
+  if (not ShowFirstInputForm) then
+    Exit;
 
   if PW1 <> '' then
     PW2 := PasswordBox(Header, 'Re-enter Password:');

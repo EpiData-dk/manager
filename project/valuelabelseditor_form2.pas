@@ -98,7 +98,7 @@ implementation
 
 uses
   Main, settings2_var, settings2, LCLIntf, LCLType, epimiscutils,
-  valuelabel_import_external, epiv_datamodule;
+  valuelabel_import_external, epiv_datamodule, epiadmin, admin_authenticator;
 
 var
   Editor: TValueLabelEditor2 = nil;
@@ -168,6 +168,7 @@ var
 begin
   VLSet := ValueLabelSetFromNode(Node);
   Allowed :=
+    (Authenticator.IsAuthorized([earStructure])) and
     (Assigned(VLSet)) and
     (VLSet.LabelScope = vlsInternal);
 end;
@@ -323,6 +324,10 @@ procedure TValueLabelEditor2.FormShow(Sender: TObject);
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);
+
+  AddBtn.Enabled := Authenticator.IsAuthorized([earStructure]);
+  DelBtn.Enabled := Authenticator.IsAuthorized([earStructure]);
+  ToolButton1.Enabled := Authenticator.IsAuthorized([earStructure]);
 end;
 
 procedure TValueLabelEditor2.DelBtnClick(Sender: TObject);

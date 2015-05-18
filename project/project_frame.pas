@@ -387,7 +387,7 @@ end;
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
 begin
   DeleteDataFormAction.Enabled :=
-    (UserIsAuthorized(FDocumentFile.AuthedUser, [earStructure])) and
+    (Authenticator.IsAuthorized([earStructure])) and
     (FProjectTreeView.SelectedObjectType = otRelation);
 end;
 
@@ -431,7 +431,7 @@ end;
 procedure TProjectFrame.ProjectPasswordActionUpdate(Sender: TObject);
 begin
   ProjectPasswordAction.Enabled :=
-    (EpiDocument.Admin.Users.Count > 0);
+    (EpiDocument.Admin.Users.Count = 0);
 end;
 
 procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);

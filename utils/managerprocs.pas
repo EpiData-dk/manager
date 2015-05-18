@@ -15,7 +15,7 @@ function GetRecentIniFileName: string;
 procedure ParseCommandLineOpts;
 function GetRandomComponentName: string;
 
-function UserIsAuthorized(Const User: TEpiUser; Const RequiredRights: TEpiManagerRights): boolean;
+//function UserIsAuthorized(Const User: TEpiUser; Const RequiredRights: TEpiManagerRights): boolean;
 
 
 

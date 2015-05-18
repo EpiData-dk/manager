@@ -13,9 +13,9 @@ object StudyUnitFrame: TStudyUnitFrame
     Height = 576
     Top = 0
     Width = 659
-    ActivePage = TabSheet7
+    ActivePage = WelcomeSheet
     Align = alClient
-    TabIndex = 6
+    TabIndex = 0
     TabOrder = 0
     TabPosition = tpRight
     object WelcomeSheet: TTabSheet
