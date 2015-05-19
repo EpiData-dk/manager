@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, epicustombase, design_types,
-  epidatafiles, epidatafilerelations;
+  epidatafiles, epidatafilerelations, epiadmin;
 
 type
 
@@ -19,6 +19,9 @@ type
     FRelation: TEpiMasterRelation;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
     FOnUpdateCaption: TGetStrProc;
+  protected
+    { Authentitcation }
+    function IsAuthorized(Right: TEpiManagerRight): boolean;
   protected
     procedure SetReadOnly(AValue: Boolean); virtual;
     procedure ShowHintMsg(const Msg: string; Ctrl: TControl);
@@ -36,7 +39,15 @@ type
 
 implementation
 
+uses
+  admin_authenticator;
+
 { DesignPropertiesFrame }
+
+function TDesignPropertiesFrame.IsAuthorized(Right: TEpiManagerRight): boolean;
+begin
+  result := Authenticator.IsAuthorized([Right]);
+end;
 
 procedure TDesignPropertiesFrame.SetReadOnly(AValue: Boolean);
 begin

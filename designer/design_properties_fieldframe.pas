@@ -242,8 +242,6 @@ type
     procedure InternalApplyChanges;
     procedure EditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure JumpEditUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
-  protected
-    procedure SetReadOnly(AValue: Boolean); override;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -259,8 +257,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epimiscutils, typinfo, epiranges, epiconvertutils,
-  epistringutils, LazUTF8, field_valuelabelseditor_form, admin_authenticator, epiadmin,
+  epimiscutils, typinfo, epiranges, epiconvertutils, epiadmin,
+  epistringutils, LazUTF8, field_valuelabelseditor_form, admin_authenticator,
   valuelabelseditor_form2, math, epidatafilerelations, epiv_datamodule;
 
 resourcestring
@@ -1392,33 +1390,43 @@ procedure TFieldPropertiesFrame.UpdateVisibility;
 begin
   // Visiblity
   // - basic
-  BasicSheet.Enabled              := not IsRelatedKeyField;
-  NameEdit.Enabled                := not (ManyFields or
+  BasicSheet.Enabled              := (not IsRelatedKeyField);
+  NameEdit.Enabled                := (not (ManyFields or
                                           IsReservedEpiFieldName(Field.Name) or
-                                          IsKeyField);
+                                          IsKeyField)) and
+                                     (IsAuthorized(earStructure));
+  QuestionEdit.Enabled            := (IsAuthorized(earStructure));
 
   FieldTypeImage.Visible          := FieldsHaveSameFieldType;
 
   LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes);
+  LengthEdit.Enabled              := (IsAuthorized(earStructure));
   if FieldsHaveFieldTypes(FloatFieldTypes) and FieldsHaveFieldTypes(IntFieldTypes + StringFieldTypes)
   then
     LengthEdit.Visible := false;
   LengthLabel.Visible             := LengthEdit.Visible;
 
   DecimalsEdit.Visible            := FieldsMustHaveFieldTypes(FloatFieldTypes);
+  DecimalsEdit.Enabled            := (IsAuthorized(earStructure));
   DecimalsLabel.Visible           := DecimalsEdit.Visible;
   if not DecimalsEdit.Visible then
     Bevel1.Left := QuestionEdit.Left + QuestionEdit.Width
   else
     Bevel1.Left := QuestionEdit.Left + ((QuestionEdit.Width - Bevel1.Width) div 2);
 
+  ValueLabelComboBox.Enabled      := (IsAuthorized(earStructure));
   ValueLabelGrpBox.Visible        := FieldsMustHaveFieldTypes(ValueLabelFieldTypes) and FieldsHaveSameFieldType;
+
+  UpdateModeRadioGrp.Enabled      := (IsAuthorized(earStructure));
   UpdateModeRadioGrp.Visible      := FieldsMustHaveFieldTypes(AutoUpdateFieldTypes);
+
+  RangesGrpBox.Enabled            := (IsAuthorized(earStructure));
   RangesGrpBox.Visible            := FieldsMustHaveFieldTypes(RangeFieldTypes) and FieldsHaveSameFieldType;
 
   // - extended
   ExtendedSheet.TabVisible        := not FieldsMustHaveFieldTypes(AutoFieldTypes);
-  ExtendedSheet.Enabled           := not IsRelatedKeyField;
+  ExtendedSheet.Enabled           := (not IsRelatedKeyField) and (IsAuthorized(earStructure));
+
   EntryRadioGroup.Visible         := FieldsMustHaveFieldTypes(EntryModeFieldTypes);
   ConfirmEntryChkBox.Visible      := FieldsMustHaveFieldTypes(ConfirmEntryFieldTypes);
   AutoValuesGrpBox.Visible        := FieldsMustHaveFieldTypes(RepeatValueFieldTypes + DefaultValueFieldTypes);
@@ -1431,21 +1439,23 @@ begin
 
   // - jumps
   JumpSheet.TabVisible            := FieldsMustHaveFieldTypes(JumpsFieldTypes) and FieldsHaveSameFieldType;
-  JumpSheet.Enabled               := not IsRelatedKeyField;
+  JumpSheet.Enabled               := (not IsRelatedKeyField) and (IsAuthorized(earStructure));
   UseJumpsCombo.Visible           := ManyFields;
   UseJumpsLabel.Visible           := ManyFields;
 
   // - relates
   RelateSheet.TabVisible          := (not (IsKeyField or IsRelatedKeyField)) and
                                      (Relation.DetailRelations.Count > 0);
+  RelateSheet.Enabled             := (IsAuthorized(earStructure));
 
   // - calc
-  CalcSheet.Enabled               := not IsRelatedKeyField;
+  CalcSheet.Enabled               := (not IsRelatedKeyField) and (IsAuthorized(earStructure));
   CalcUnchangedRadioBtn.Visible   := ManyFields;
   CalcSheet.TabVisible            := (not FieldsMustHaveFieldTypes(AutoFieldTypes));
 
   // - notes
   NotesSheet.Visible              := FieldsMustHaveFieldTypes(NotesFieldTypes);
+  NotesSheet.Enabled              := (IsAuthorized(earStructure));
 end;
 
 procedure TFieldPropertiesFrame.UpdateContent;
@@ -2325,31 +2335,6 @@ begin
     exit
   else
     EditUTF8KeyPress(Sender, UTF8Key);
-end;
-
-procedure TFieldPropertiesFrame.SetReadOnly(AValue: Boolean);
-var
-  i: Integer;
-begin
-  inherited SetReadOnly(AValue);
-
-  for i := 0 to FieldPageControl.PageCount - 1 do
-    if (FieldPageControl.Pages[i] = BasicSheet) then
-      Continue
-    else
-      FieldPageControl.Pages[i].Enabled := (not ReadOnly);
-
-
-  NameEdit.Enabled                := not ReadOnly;
-  QuestionEdit.Enabled            := not ReadOnly;
-
-  LengthEdit.Enabled              := not ReadOnly;
-  DecimalsEdit.Enabled            := not ReadOnly;
-
-  ValueLabelComboBox.Enabled      := not ReadOnly;
-
-  RangesGrpBox.Enabled            := not ReadOnly;
-  UpdateModeRadioGrp.Enabled      := not ReadOnly;
 end;
 
 constructor TFieldPropertiesFrame.Create(TheOwner: TComponent);

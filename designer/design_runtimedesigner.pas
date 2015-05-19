@@ -243,6 +243,7 @@ type
     procedure UndoActionExecute(Sender: TObject);
     procedure UndoActionUpdate(Sender: TObject);
     procedure ViewDatasetActionExecute(Sender: TObject);
+    procedure ViewDatasetActionUpdate(Sender: TObject);
   private
     FPopUpPoint: TPoint;
     FActiveButton: TToolButton;
@@ -2355,6 +2356,11 @@ begin
     Self,
     'View Dataset: ' + DataFile.Caption.Text,
     DataFile);
+end;
+
+procedure TRuntimeDesignFrame.ViewDatasetActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earData]);
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);

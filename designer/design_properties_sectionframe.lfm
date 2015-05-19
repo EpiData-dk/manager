@@ -1,16 +1,16 @@
 object SectionPropertiesFrame: TSectionPropertiesFrame
-  Left = 690
-  Height = 509
-  Top = 298
-  Width = 588
-  ClientHeight = 509
-  ClientWidth = 588
+  Left = 876
+  Height = 445
+  Top = 373
+  Width = 497
+  ClientHeight = 445
+  ClientWidth = 497
   LCLVersion = '1.5'
   object SectionPageControl: TPageControl
     Left = 0
-    Height = 509
+    Height = 445
     Top = 0
-    Width = 588
+    Width = 497
     ActivePage = SectionBasicSheet
     Align = alClient
     ShowTabs = False
@@ -18,23 +18,26 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
     TabOrder = 0
     object SectionBasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 503
-      ClientWidth = 582
+      ClientHeight = 439
+      ClientWidth = 491
       object SectionGroupAccessGroupBox: TGroupBox
         AnchorSideLeft.Control = NameEdit
         AnchorSideTop.Control = CaptionEdit
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = NameEdit
         AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = SectionBasicSheet
+        AnchorSideBottom.Side = asrBottom
         Left = 10
-        Height = 170
-        Top = 101
-        Width = 562
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Top = 5
+        Height = 323
+        Top = 106
+        Width = 471
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Top = 10
+        BorderSpacing.Bottom = 10
         Caption = 'Groups access:'
-        ClientHeight = 153
-        ClientWidth = 558
+        ClientHeight = 306
+        ClientWidth = 467
         TabOrder = 2
         object GroupAvailableListBox: TListBox
           AnchorSideTop.Control = Label5
@@ -43,15 +46,15 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideBottom.Control = SectionGroupAccessGroupBox
           AnchorSideBottom.Side = asrBottom
           Left = 6
-          Height = 126
+          Height = 279
           Top = 22
-          Width = 257
+          Width = 211
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Top = 2
           BorderSpacing.Right = 5
           BorderSpacing.Bottom = 5
           ItemHeight = 0
-          ScrollWidth = 255
+          ScrollWidth = 209
           Sorted = True
           TabOrder = 0
           TopIndex = -1
@@ -63,16 +66,16 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
           AnchorSideTop.Side = asrBottom
           AnchorSideBottom.Control = SectionGroupAccessGroupBox
           AnchorSideBottom.Side = asrBottom
-          Left = 298
-          Height = 126
+          Left = 252
+          Height = 279
           Top = 22
-          Width = 253
+          Width = 208
           Anchors = [akTop, akLeft, akRight, akBottom]
           BorderSpacing.Left = 7
           BorderSpacing.Top = 2
           BorderSpacing.Bottom = 5
           ItemHeight = 0
-          ScrollWidth = 251
+          ScrollWidth = 206
           Sorted = True
           TabOrder = 1
           TopIndex = -1
@@ -88,14 +91,15 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
           ParentColor = False
         end
         object GrpRightsMoveLeft: TSpeedButton
-          AnchorSideLeft.Control = GroupAvailableListBox
-          AnchorSideLeft.Side = asrBottom
+          AnchorSideLeft.Control = SectionGroupAccessGroupBox
+          AnchorSideLeft.Side = asrCenter
+          AnchorSideTop.Control = Bevel1
+          AnchorSideTop.Side = asrBottom
           AnchorSideRight.Control = GroupAssignedListBox
-          Left = 268
+          Left = 222
           Height = 22
-          Top = 87
+          Top = 166
           Width = 23
-          Anchors = [akTop]
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
             2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -136,7 +140,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         object Label6: TLabel
           AnchorSideLeft.Control = GroupAssignedListBox
           AnchorSideTop.Control = SectionGroupAccessGroupBox
-          Left = 298
+          Left = 252
           Height = 15
           Top = 5
           Width = 62
@@ -145,14 +149,15 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
           ParentColor = False
         end
         object GrpRightsMoveRight: TSpeedButton
-          AnchorSideLeft.Control = GroupAvailableListBox
-          AnchorSideLeft.Side = asrBottom
+          AnchorSideLeft.Control = SectionGroupAccessGroupBox
+          AnchorSideLeft.Side = asrCenter
           AnchorSideRight.Control = GroupAvailableListBox
-          Left = 268
+          AnchorSideBottom.Control = Bevel1
+          Left = 222
           Height = 22
-          Top = 55
+          Top = 134
           Width = 23
-          Anchors = [akTop]
+          Anchors = [akLeft, akBottom]
           Glyph.Data = {
             36040000424D3604000000000000360000002800000010000000100000000100
             2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
@@ -190,6 +195,19 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
             FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
           }
         end
+        object Bevel1: TBevel
+          AnchorSideLeft.Control = SectionGroupAccessGroupBox
+          AnchorSideLeft.Side = asrCenter
+          AnchorSideBottom.Control = GroupAvailableListBox
+          AnchorSideBottom.Side = asrCenter
+          Left = 223
+          Height = 10
+          Top = 156
+          Width = 20
+          Anchors = [akLeft, akBottom]
+          Shape = bsSpacer
+          Style = bsRaised
+        end
       end
       object NameEdit: TEdit
         AnchorSideLeft.Control = SectionBasicSheet
@@ -200,7 +218,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         Left = 10
         Height = 25
         Top = 27
-        Width = 562
+        Width = 471
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -227,7 +245,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         Left = 10
         Height = 25
         Top = 71
-        Width = 562
+        Width = 471
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -251,7 +269,7 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
         AnchorSideRight.Side = asrBottom
         AnchorSideBottom.Control = Label4
         AnchorSideBottom.Side = asrBottom
-        Left = 556
+        Left = 465
         Height = 16
         Top = 9
         Width = 16

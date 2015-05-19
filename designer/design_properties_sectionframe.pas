@@ -14,6 +14,7 @@ type
   { TSectionPropertiesFrame }
 
   TSectionPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
+    Bevel1: TBevel;
     Image1: TImage;
     Label4: TLabel;
     Label5: TLabel;
@@ -36,8 +37,6 @@ type
     procedure UpdateVisibility;
     procedure UpdateContent;
     procedure DoUpdateCaption;
-  protected
-    procedure SetReadOnly(AValue: Boolean); override;
   public
     { public declarations }
     procedure FocusOnNewControl;
@@ -51,7 +50,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, LazUTF8, epistringutils, epiv_datamodule;
+  epidatafiles, LazUTF8, epistringutils, epiv_datamodule, epiadmin;
 
 { TSectionPropertiesFrame }
 
@@ -59,15 +58,13 @@ procedure TSectionPropertiesFrame.UpdateVisibility;
 begin
   NameEdit.Enabled :=
     (Length(FSections) = 1) and
-    (FSections[0].Name <> 'MAIN');
+    (FSections[0].Name <> 'MAIN') and
+    (IsAuthorized(earStructure));
+
   CaptionEdit.Enabled := NameEdit.Enabled;
 
-  {$IFNDEF EPI_DEBUG}
-  SectionGroupAccessGroupBox.Visible := false;
-  SectionGroupAccessGroupBox.Enabled := false;
-  {$ELSE}
-  SectionGroupAccessGroupBox.Visible := true;
-  {$ENDIF}
+  SectionGroupAccessGroupBox.Enabled :=
+    IsAuthorized(earSections);
 end;
 
 procedure TSectionPropertiesFrame.UpdateContent;
@@ -84,6 +81,8 @@ begin
         CaptionEdit.Text := '';
         break;
       end;
+
+//  TEpiSection(FSections[i]).GroupRights;
 end;
 
 procedure TSectionPropertiesFrame.DoUpdateCaption;
@@ -99,15 +98,6 @@ begin
   UpdateCaption('Sections Properties: ' + S);
 end;
 
-procedure TSectionPropertiesFrame.SetReadOnly(AValue: Boolean);
-var
-  i: Integer;
-begin
-  inherited SetReadOnly(AValue);
-
-  for i := 0 to SectionPageControl.PageCount - 1 do
-    SectionPageControl.Pages[i].Enabled := (not ReadOnly);
-end;
 
 procedure TSectionPropertiesFrame.FocusOnNewControl;
 begin
