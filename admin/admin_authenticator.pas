@@ -14,6 +14,7 @@ type
   TAuthenticator = class
   private
     FDocumentFile: TEpiDocumentFile;
+    function GetAdmin: TEpiAdmin;
     function GetAuthedUser: TEpiUser;
     procedure InitGroupWalk(
         Const Relation: TEpiGroupRelation;
@@ -54,6 +55,7 @@ type
   public
     property DocumentFile: TEpiDocumentFile read FDocumentFile;
     property AuthedUser: TEpiUser read GetAuthedUser;
+    property Admin: TEpiAdmin read GetAdmin;
   end;
 
 var
@@ -69,6 +71,11 @@ const
   AUTH_GROUP_KEY = 'AUTH_GROUP_KEY';
 
 { TAuthenticator }
+
+function TAuthenticator.GetAdmin: TEpiAdmin;
+begin
+  result := FDocumentFile.Document.Admin;
+end;
 
 function TAuthenticator.GetAuthedUser: TEpiUser;
 begin

@@ -207,7 +207,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="99">
+    <Units Count="100">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -781,6 +781,13 @@
         <Filename Value="admin/admin_authenticator.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit98>
+      <Unit99>
+        <Filename Value="designer/design_properties_groupassign_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="GroupsAssignFrame"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit99>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

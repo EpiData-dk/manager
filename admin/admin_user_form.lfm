@@ -1,23 +1,23 @@
 object AdminUserForm: TAdminUserForm
-  Left = 732
-  Height = 380
-  Top = 369
-  Width = 717
+  Left = 1097
+  Height = 381
+  Top = 328
+  Width = 519
   Caption = 'User Properties'
-  ClientHeight = 380
-  ClientWidth = 717
+  ClientHeight = 381
+  ClientWidth = 519
   LCLVersion = '1.5'
   object Panel2: TPanel
     Left = 0
     Height = 50
-    Top = 330
-    Width = 717
+    Top = 331
+    Width = 519
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 717
+    ClientWidth = 519
     TabOrder = 2
     object OkBtn: TBitBtn
-      Left = 641
+      Left = 443
       Height = 34
       Top = 8
       Width = 56
@@ -31,7 +31,7 @@ object AdminUserForm: TAdminUserForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 547
+      Left = 349
       Height = 34
       Top = 8
       Width = 81
@@ -46,11 +46,11 @@ object AdminUserForm: TAdminUserForm
   end
   object Panel1: TPanel
     Left = 0
-    Height = 330
+    Height = 331
     Top = 0
     Width = 312
     Align = alLeft
-    ClientHeight = 330
+    ClientHeight = 331
     ClientWidth = 312
     TabOrder = 0
     object Label5: TLabel
@@ -227,7 +227,7 @@ object AdminUserForm: TAdminUserForm
   end
   object Splitter1: TSplitter
     Left = 312
-    Height = 330
+    Height = 331
     Top = 0
     Width = 5
   end

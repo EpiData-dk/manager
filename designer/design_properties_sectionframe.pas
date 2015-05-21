@@ -14,31 +14,26 @@ type
   { TSectionPropertiesFrame }
 
   TSectionPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
-    Bevel1: TBevel;
     Image1: TImage;
     Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
     Label9: TLabel;
     NameEdit: TEdit;
     CaptionEdit: TEdit;
-    SectionGroupAccessGroupBox: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
-    GroupAvailableListBox: TListBox;
-    GroupAssignedListBox: TListBox;
-    SectionPageControl: TPageControl;
-    GrpRightsMoveRight: TSpeedButton;
-    GrpRightsMoveLeft: TSpeedButton;
-    SectionBasicSheet: TTabSheet;
+    Panel1: TPanel;
   private
     { private declarations }
     FSections: TEpiCustomControlItemArray;
     procedure UpdateVisibility;
     procedure UpdateContent;
     procedure DoUpdateCaption;
+  private
+    { Group Rights }
+    FGroupAssignFrame: TFrame;
   public
     { public declarations }
+    constructor Create(TheOwner: TComponent); override;
     procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     procedure ResetControls;
@@ -50,7 +45,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, LazUTF8, epistringutils, epiv_datamodule, epiadmin;
+  epidatafiles, LazUTF8, epistringutils, epiv_datamodule, epiadmin,
+  design_properties_groupassign_frame, admin_authenticator;
 
 { TSectionPropertiesFrame }
 
@@ -63,8 +59,9 @@ begin
 
   CaptionEdit.Enabled := NameEdit.Enabled;
 
-  SectionGroupAccessGroupBox.Enabled :=
-    IsAuthorized(earSections);
+  Label1.Visible            := Authenticator.Admin.Users.Count > 0;
+  FGroupAssignFrame.Visible := Label1.Visible;
+  FGroupAssignFrame.Enabled := IsAuthorized(earSections);
 end;
 
 procedure TSectionPropertiesFrame.UpdateContent;
@@ -82,7 +79,8 @@ begin
         break;
       end;
 
-//  TEpiSection(FSections[i]).GroupRights;
+
+
 end;
 
 procedure TSectionPropertiesFrame.DoUpdateCaption;
@@ -96,6 +94,22 @@ begin
 
   S := EpiCutString(S, 20);
   UpdateCaption('Sections Properties: ' + S);
+end;
+
+constructor TSectionPropertiesFrame.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+
+  DisableAutoSizing;
+
+  FGroupAssignFrame := TGroupsAssignFrame.Create(Self);
+  FGroupAssignFrame.Parent := Panel1;
+  FGroupAssignFrame.AnchorToNeighbour(akTop, 10, Label1);
+  FGroupAssignFrame.AnchorParallel(akLeft, 10, Panel1);
+  FGroupAssignFrame.AnchorParallel(akRight, 10, Panel1);
+  FGroupAssignFrame.AnchorParallel(akBottom, 10, Panel1);
+
+  EnableAutoSizing;
 end;
 
 

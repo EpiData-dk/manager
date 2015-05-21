@@ -522,7 +522,7 @@ begin
 
       with Columns.Add do
       begin
-        Text := 'Caption';
+        Text := 'Group';
         CheckBox   := True;
         CheckState := csUncheckedNormal;
         CheckType  := ctCheckBox;
