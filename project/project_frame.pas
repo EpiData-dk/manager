@@ -402,7 +402,7 @@ end;
 
 procedure TProjectFrame.AdminActionUpdate(Sender: TObject);
 begin
-  AdminAction.Enabled := Authenticator.IsAuthorized([earUsers])
+  AdminAction.Enabled := Authenticator.IsAuthorized([earUsers]);
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);

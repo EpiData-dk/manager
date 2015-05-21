@@ -2360,7 +2360,7 @@ end;
 
 procedure TRuntimeDesignFrame.ViewDatasetActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := Authenticator.IsAuthorized([earData]);
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earViewData]);
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);

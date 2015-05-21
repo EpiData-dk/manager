@@ -1,7 +1,7 @@
 object AdminForm: TAdminForm
-  Left = 522
+  Left = 891
   Height = 698
-  Top = 316
+  Top = 360
   Width = 953
   Caption = 'User/Group Administration'
   ClientHeight = 698
@@ -78,11 +78,7 @@ object AdminForm: TAdminForm
       TabOrder = 1
       TitleStyle = tsNative
       OnDblClick = EditUserActionExecute
-      OnMouseDown = UserGridMouseDown
-      OnMouseMove = UserGridMouseMove
-      OnMouseUp = UserGridMouseUp
       OnPrepareCanvas = UserGridPrepareCanvas
-      OnStartDrag = UserGridStartDrag
       ColWidths = (
         237
         237
@@ -239,37 +235,6 @@ object AdminForm: TAdminForm
         ParentFont = False
       end
     end
-    object UserGroupGrid: TStringGrid
-      Left = 1
-      Height = 350
-      Top = 58
-      Width = 517
-      Align = alClient
-      AutoEdit = False
-      AutoFillColumns = True
-      ColCount = 2
-      Columns = <      
-        item
-          Title.Caption = 'login'
-          Width = 257
-        end      
-        item
-          Title.Caption = 'Name'
-          Width = 258
-        end>
-      FixedCols = 0
-      RowCount = 1
-      TabOrder = 1
-      TitleStyle = tsNative
-      OnDragDrop = UserGroupGridDragDrop
-      OnDragOver = UserGroupGridDragOver
-      OnPrepareCanvas = UserGroupGridPrepareCanvas
-      OnSelectCell = UserGroupGridSelectCell
-      ColWidths = (
-        257
-        258
-      )
-    end
     object ToolBar3: TToolBar
       Left = 1
       Height = 26
@@ -277,7 +242,8 @@ object AdminForm: TAdminForm
       Width = 517
       Caption = 'ToolBar3'
       Images = DM.Icons16
-      TabOrder = 2
+      TabOrder = 1
+      Visible = False
       object ToolButton9: TToolButton
         Left = 1
         Top = 2
@@ -351,12 +317,14 @@ object AdminForm: TAdminForm
       Caption = 'NewGroupAction'
       ImageIndex = 31
       OnExecute = NewGroupActionExecute
+      OnUpdate = NewGroupActionUpdate
     end
     object DeleteGroupAction: TAction
       Category = 'Group'
       Caption = 'DeleteGroupAction'
       ImageIndex = 32
       OnExecute = DeleteGroupActionExecute
+      OnUpdate = DeleteGroupActionUpdate
     end
     object EditGroupAction: TAction
       Category = 'Group'

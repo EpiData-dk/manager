@@ -61,7 +61,7 @@ begin
 
   Label1.Visible            := Authenticator.Admin.Users.Count > 0;
   FGroupAssignFrame.Visible := Label1.Visible;
-  FGroupAssignFrame.Enabled := IsAuthorized(earSections);
+  FGroupAssignFrame.Enabled := IsAuthorized(earGroups);
 end;
 
 procedure TSectionPropertiesFrame.UpdateContent;

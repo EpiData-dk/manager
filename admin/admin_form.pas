@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, Grids, StdCtrls, ComCtrls, ActnList, epiadmin, epicustombase,
-  VirtualTrees;
+  Buttons, Grids, StdCtrls, ComCtrls, ActnList, CheckLst, epiadmin,
+  epicustombase, VirtualTrees;
 
 type
 
@@ -37,7 +37,6 @@ type
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     UserGrid: TStringGrid;
-    UserGroupGrid: TStringGrid;
     ToolBar1: TToolBar;
     ToolBar2: TToolBar;
     ToolBar3: TToolBar;
@@ -53,6 +52,7 @@ type
     ToolButton9: TToolButton;
     procedure AddUserToGroupActionExecute(Sender: TObject);
     procedure DeleteGroupActionExecute(Sender: TObject);
+    procedure DeleteGroupActionUpdate(Sender: TObject);
     procedure DeleteUserActionExecute(Sender: TObject);
     procedure DeleteUserActionUpdate(Sender: TObject);
     procedure EditGroupActionExecute(Sender: TObject);
@@ -60,37 +60,21 @@ type
     procedure EditUserActionUpdate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure NewGroupActionExecute(Sender: TObject);
+    procedure NewGroupActionUpdate(Sender: TObject);
     procedure NewUserActionExecute(Sender: TObject);
     procedure RemoveUserFromGroupActionExecute(Sender: TObject);
-    procedure UserGridMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure UserGridMouseMove(Sender: TObject; Shift: TShiftState; X,
-      Y: Integer);
-    procedure UserGridMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
     procedure UserGridPrepareCanvas(sender: TObject; aCol, aRow: Integer;
       aState: TGridDrawState);
-    procedure UserGridStartDrag(Sender: TObject; var DragObject: TDragObject);
-    procedure UserGroupGridDragDrop(Sender, Source: TObject; X, Y: Integer);
-    procedure UserGroupGridDragOver(Sender, Source: TObject; X, Y: Integer;
-      State: TDragState; var Accept: Boolean);
-    procedure UserGroupGridPrepareCanvas(sender: TObject; aCol, aRow: Integer;
-      aState: TGridDrawState);
-    procedure UserGroupGridSelectCell(Sender: TObject; aCol, aRow: Integer;
-      var CanSelect: Boolean);
   private
     FAdmin: TEpiAdmin;
     procedure FillGrids;
     procedure FillUserGrid;
     procedure FillGroupGrid;
-    procedure FillUsersToGroupGrid;
+    procedure FillUsersInGroupGrid;
     procedure UpdateShortcuts;
 
   { User methods }
   private
-    FMouseDown: Boolean;
-    FDragging: Boolean;
-    FStartPos: TPoint;
     FSelection: TGridRect;
     function UserFromGrid: TEpiUser;
     function ShowUserForm(Const User: TEpiUser): TModalResult;
@@ -116,6 +100,24 @@ type
     procedure GroupFocusChanged(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex);
     procedure GroupFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+
+  { Users in Group vars/methods }
+  private
+    FUpdatingUserInGroupVST: boolean;
+    FUserInGroupVST: TVirtualStringTree;
+    function UsersInGroup_UserFromNode(Const Node: PVirtualNode): TEpiUser;
+
+    procedure UsersInGroupBeforeItemErase(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
+      var ItemColor: TColor; var EraseAction: TItemEraseAction);
+    procedure UsersInGroupChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure UsersInGroupChecking(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
+    procedure UsersInGroupGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+    procedure UsersInGroupInitNode(Sender: TBaseVirtualTree; ParentNode,
+      Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+
   public
     { public declarations }
     constructor Create(TheOwner: TComponent; AAdmin: TEpiAdmin);
@@ -132,45 +134,6 @@ uses
 
 const
   ADMIN_FORM_NODE_KEY = 'ADMIN_FORM_NODE_KEY';
-
-type
-
-  { TUsersDragObject }
-
-  TUsersDragObject = class(TDragControlObject)
-  private
-    FDragImages: TDragImageList;
-    FUsers: TEpiUsers;
-  protected
-    function GetDragImages: TDragImageList; override;
-  public
-    constructor Create(AControl: TControl); override;
-    destructor Destroy; override;
-  end;
-
-{ TImageDragObject }
-
-function TUsersDragObject.GetDragImages: TDragImageList;
-begin
-  Result := FDragImages;
-end;
-
-constructor TUsersDragObject.Create(AControl: TControl);
-begin
-  inherited Create(AControl);
-  FDragImages := TDragImageList.Create(AControl);
-  FUsers      := TEpiUsers.Create(nil);
-  FUsers.ItemOwner := false;
-
-  AlwaysShowDragImages := True;
-end;
-
-destructor TUsersDragObject.Destroy;
-begin
-  FUsers.Free;
-  FDragImages.Free;
-  inherited Destroy;
-end;
 
 { TAdminForm }
 
@@ -194,7 +157,7 @@ var
   I: LongInt;
   UserList: TEpiUsers;
 begin
-  T := UserGroupGrid.Selection.Top;
+{  T := UserGroupGrid.Selection.Top;
   B := UserGroupGrid.Selection.Bottom;
 
   if (T = 0) and (B = 0) then exit;
@@ -249,52 +212,7 @@ begin
     User.Groups.RemoveItem(Group);
 
   UserList.Free;
-  FillUsersToGroupGrid;
-end;
-
-procedure TAdminForm.UserGridMouseDown(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-var
-  ACol: Longint;
-  ARow: Longint;
-begin
-  FMouseDown := true;
-  FDragging := false;
-  FStartPos := Point(X, Y);
-
-  UserGrid.MouseToCell(X, Y, ACol, ARow);
-  FSelection := UserGrid.Selection;
-  if (ARow < FSelection.Top) or
-     (ARow > FSelection.Bottom)
-  then
-  begin
-    // The click was outside the selection - hence just the one cell need to be dragged.
-    FSelection.Top    := ARow;
-    FSelection.Bottom := ARow;
-  end;
-end;
-
-procedure TAdminForm.UserGridMouseMove(Sender: TObject; Shift: TShiftState; X,
-  Y: Integer);
-begin
-  if FDragging then exit;
-  if not FMouseDown then exit;
-  if (Shift <> [ssLeft]) then exit;
-
-  if (Abs(FStartPos.X - X) > 5) or
-     (Abs(FStartPos.Y - Y) > 5)
-  then
-    begin
-      UserGrid.BeginDrag(true, -1);
-      FDragging := true;
-    end;
-end;
-
-procedure TAdminForm.UserGridMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-begin
-  FMouseDown := false;
-  FDragging := false;
+  FillUsersInGroupGrid;   }
 end;
 
 procedure TAdminForm.UserGridPrepareCanvas(sender: TObject; aCol,
@@ -314,93 +232,8 @@ begin
     UserGrid.Canvas.Brush.Color := clGradientActiveCaption;
 end;
 
-procedure TAdminForm.UserGridStartDrag(Sender: TObject;
-  var DragObject: TDragObject);
-var
-  CR: TRect;
-  W: Integer;
-  H: Integer;
-  Bitmap: TBitmap;
-  R: TRect;
-  T: LongInt;
-  B: LongInt;
-  i: LongInt;
-begin
-  T := FSelection.Top;
-  B := FSelection.Bottom;
-  if (T = 0) and (B = 0) then Exit;
-
-  DragObject := TUsersDragObject.Create(Sender as TControl);
-  with TUsersDragObject(DragObject) do
-  begin
-    for i := T to B do
-      FUsers.AddItem(Admin.Users[i - 1]);
-
-    CR := UserGrid.CellRect(0, T);
-    W := CR.Right - CR.Left;
-
-    CR.Bottom := UserGrid.CellRect(0, B).Bottom;
-    H := CR.Bottom - CR.Top;
-
-    FDragImages.Width := W;
-    FDragImages.Height := H;
-    FDragImages.DragHotspot := Point(W, H);
-
-    R := Rect(0, 0, W, H);
-
-    Bitmap := TBitmap.Create;
-    Bitmap.Width := W;
-    Bitmap.Height := H;
-    Bitmap.Canvas.CopyRect(R, UserGrid.Canvas, CR);
-    FDragImages.Add(Bitmap, nil);
-    Bitmap.Free;
-  end;
-end;
-
-procedure TAdminForm.UserGroupGridDragDrop(Sender, Source: TObject; X,
-  Y: Integer);
-var
-  Udo: TUsersDragObject;
-  Group: TEpiGroup;
-  User: TEpiUser;
-begin
-  Group := GroupFromSelectedNode;
-  if not Assigned(Group) then exit;
-
-  Udo := TUsersDragObject(Source);
-  for User in Udo.FUsers do
-    if User.Groups.IndexOf(Group) < 0 then
-      User.Groups.AddItem(Group);
-
-  FillUsersToGroupGrid;
-end;
-
-procedure TAdminForm.UserGroupGridDragOver(Sender, Source: TObject; X,
-  Y: Integer; State: TDragState; var Accept: Boolean);
-var
-  User: TEpiUser;
-  Group: TEpiGroup;
-begin
-  Accept := true;
-  Group  := GroupFromSelectedNode;
-
-  if (Source is TUsersDragObject) then
-    with TUsersDragObject(Source) do
-      for User in FUsers do
-        Accept := Accept and (not Authenticator.UserInGroup(User, Group, true));
-
-  Accept :=
-    Accept and
-    (Source is TUsersDragObject) and
-    (TUsersDragObject(Source).Control = UserGrid) and
-    (Assigned(GroupFromSelectedNode));
-end;
-
-procedure TAdminForm.UserGroupGridPrepareCanvas(sender: TObject; aCol,
+{procedure TAdminForm.UserGroupGridPrepareCanvas(sender: TObject; aCol,
   aRow: Integer; aState: TGridDrawState);
-var
-  Group: TEpiGroup;
-  User: TEpiUser;
 begin
   User := TEpiUser(UserGroupGrid.Objects[0, aRow]);
   Group := GroupFromSelectedNode;
@@ -419,13 +252,13 @@ begin
   Group := GroupFromSelectedNode;
 
   CanSelect := Authenticator.UserInGroup(User, Group, false);
-end;
+end;                                                              }
 
 procedure TAdminForm.FillGrids;
 begin
   FillUserGrid;
   FillGroupGrid;
-  FillUsersToGroupGrid;
+  FillUsersInGroupGrid;
 end;
 
 procedure TAdminForm.FillUserGrid;
@@ -486,48 +319,22 @@ begin
   FUpdatingGroupVST := false;
 end;
 
-procedure TAdminForm.FillUsersToGroupGrid;
-var
-  Group: TEpiGroup;
-  User: TEpiUser;
-  Idx: Integer;
-
-  procedure FillRecursively(Const Group: TEpiGroup);
-  var
-    R, P: TEpiGroupRelation;
-  begin
-    P := nil;
-    R := Authenticator.RelationFromGroup(Group);
-    if Assigned(R) then
-      P := R.ParentRelation;
-
-    // Fill in users top-down.
-    if Assigned(P) then
-      FillRecursively(P.Group);
-
-    Idx := UserGroupGrid.RowCount;
-    UserGroupGrid.RowCount := UserGroupGrid.RowCount + Group.Users.Count;
-    for User In Group.Users do
-    begin
-      UserGroupGrid.Cells[0, Idx] := User.Login;
-      UserGroupGrid.Cells[1, Idx] := User.FullName;
-      UserGroupGrid.Objects[0, Idx] := User;
-      Inc(Idx);
-    end;
-  end;
-
+procedure TAdminForm.FillUsersInGroupGrid;
 const
   CaptionText = 'Users in group: ';
+var
+  G: TEpiGroup;
 begin
-  Group := GroupFromSelectedNode;
-  if not Assigned(Group) then Exit;
+  FUpdatingUserInGroupVST := true;
 
-  Label2.Caption := CaptionText + Group.Caption.Text;
-  UserGroupGrid.RowCount := 1;
+  FUserInGroupVST.RootNodeCount := Admin.Users.Count;
+  FUserInGroupVST.ReinitChildren(nil, true);
 
-  FillRecursively(Group);
+  G := GroupFromSelectedNode;
+  if Assigned(G) then
+    Label2.Caption := CaptionText + G.Caption.Text;
 
-  UserGroupGrid.Enabled := Authenticator.AuthedUserInGroup(Group, true);
+  FUpdatingUserInGroupVST := false;
 end;
 
 procedure TAdminForm.UpdateShortcuts;
@@ -660,7 +467,8 @@ end;
 procedure TAdminForm.GroupFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
-  FillUsersToGroupGrid;
+  FillUsersInGroupGrid;
+  FUserInGroupVST.InvalidateChildren(nil, true);
 end;
 
 procedure TAdminForm.GroupFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -676,6 +484,114 @@ begin
 
   G := GroupFromNode(Node);
   G.Free;
+end;
+
+function TAdminForm.UsersInGroup_UserFromNode(const Node: PVirtualNode
+  ): TEpiUser;
+begin
+  result := TEpiUser(FUserInGroupVST.GetNodeData(Node)^);
+end;
+
+procedure TAdminForm.UsersInGroupBeforeItemErase(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
+  var ItemColor: TColor; var EraseAction: TItemEraseAction);
+var
+  User: TEpiUser;
+  Group: TEpiGroup;
+  Allowed: Boolean;
+begin
+  User := UsersInGroup_UserFromNode(Node);
+  Group := GroupFromSelectedNode;
+
+  Allowed :=
+     (User <> Authenticator.AuthedUser) and
+     (Authenticator.AuthedUserInGroup(Group, true));
+
+  if (Sender.CheckState[Node] = csMixedNormal) or
+     (not Allowed)
+  then
+    begin
+      ItemColor := clLtGray;
+      EraseAction := eaColor;
+      Exit;
+    end;
+end;
+
+procedure TAdminForm.UsersInGroupChecked(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+var
+  User: TEpiUser;
+  Group: TEpiGroup;
+begin
+  if FUpdatingUserInGroupVST then exit;
+
+  User := UsersInGroup_UserFromNode(Node);
+  Group := GroupFromSelectedNode;
+
+  if Sender.CheckState[Node] = csCheckedNormal then
+    User.Groups.AddItem(Group)
+  else
+    User.Groups.RemoveItem(Group);
+end;
+
+procedure TAdminForm.UsersInGroupChecking(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
+var
+  User: TEpiUser;
+  Group: TEpiGroup;
+begin
+  if FUpdatingUserInGroupVST then
+    begin
+      Allowed := true;
+      Exit;
+    end;
+
+  // Cannot remove inherited users
+  if (Sender.CheckState[Node] = csMixedNormal) then
+    begin
+      Allowed := false;
+      Exit;
+    end;
+
+  User := UsersInGroup_UserFromNode(Node);
+  Group := GroupFromSelectedNode;
+
+  Allowed :=
+     (User <> Authenticator.AuthedUser) and
+     (Authenticator.AuthedUserInGroup(Group, true));
+end;
+
+procedure TAdminForm.UsersInGroupGetText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: String);
+begin
+  case Column of
+    0: CellText := UsersInGroup_UserFromNode(Node).Login;
+    1: CellText := UsersInGroup_UserFromNode(Node).FullName;
+  end;
+end;
+
+procedure TAdminForm.UsersInGroupInitNode(Sender: TBaseVirtualTree; ParentNode,
+  Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+var
+  User: TEpiUser;
+  Group: TEpiGroup;
+begin
+  InitialStates := [];
+
+  User := Admin.Users[Node^.Index];
+  Group := GroupFromSelectedNode;
+
+  Pointer(Sender.GetNodeData(Node)^) := User;
+  Sender.CheckType[Node] := ctCheckBox;
+
+  if Authenticator.UserInGroup(User, Group, false) then
+    Sender.CheckState[Node] := csCheckedNormal
+  else
+  if Authenticator.UserInGroup(User, Group, True) then
+    Sender.CheckState[Node] := csMixedNormal
+  else
+    Sender.CheckState[Node] := csUncheckedNormal;
 end;
 
 constructor TAdminForm.Create(TheOwner: TComponent; AAdmin: TEpiAdmin);
@@ -746,7 +662,70 @@ begin
 
     EndUpdate;
   end;
-  FGroupVST.Images := DM.Icons16;
+
+  FUserInGroupVST := TVirtualStringTree.Create(Self);
+  with FUserInGroupVST do
+  begin
+    BeginUpdate;
+
+    NodeDataSize := SizeOf(Pointer);
+
+    with TreeOptions do
+    begin
+      AnimationOptions := [];
+      AutoOptions      := [];
+      MiscOptions      := [toFullRepaintOnResize, toGridExtensions, toCheckSupport,
+                           toWheelPanning];
+      PaintOptions     := [toShowButtons, toShowVertGridLines, toFullVertGridLines,
+                           toShowHorzGridLines,
+                           toThemeAware, toUseBlendedImages];
+      SelectionOptions := [toExtendedFocus, toFullRowSelect];
+      StringOptions    := [];
+    end;
+
+    with Header do
+    begin
+      Options := [hoAutoResize, hoColumnResize, hoDblClickResize, hoVisible,
+                  hoFullRepaintOnResize];
+
+      with Columns.Add do
+      begin
+        Text := 'Login';
+        CheckBox   := true;
+        CheckState := csUncheckedNormal;
+        CheckType  := ctCheckBox;
+        Options    := [coAllowClick, coEnabled, coParentBidiMode,
+                       coParentColor, coResizable, coShowDropMark, coVisible,
+                       coSmartResize, coAllowFocus];
+        Width      := 150;
+      end;
+
+      with Columns.Add do
+      begin
+        Text := 'Name';
+        CheckBox   := false;
+        CheckState := csUncheckedNormal;
+        CheckType  := ctCheckBox;
+        Options    := [coAllowClick, coEnabled, coParentBidiMode,
+                       coParentColor, coResizable, coShowDropMark, coVisible,
+                       coSmartResize, coAllowFocus];
+      end;
+
+      MainColumn := 0;
+      AutoSizeIndex := 1;
+    end;
+
+    Align := alClient;
+    Parent := Panel3;
+
+    OnBeforeItemErase := @UsersInGroupBeforeItemErase;
+    OnChecked         := @UsersInGroupChecked;
+    OnChecking        := @UsersInGroupChecking;
+    OnGetText         := @UsersInGroupGetText;
+    OnInitNode        := @UsersInGroupInitNode;
+
+    EndUpdate;
+  end;
 end;
 
 procedure TAdminForm.DeleteUserActionExecute(Sender: TObject);
@@ -839,6 +818,18 @@ begin
     FGroupVST.DeleteNode(FGroupVST.FocusedNode);
 end;
 
+procedure TAdminForm.DeleteGroupActionUpdate(Sender: TObject);
+var
+  Group: TEpiGroup;
+begin
+  Group := GroupFromSelectedNode;
+
+  TAction(Sender).Enabled :=
+    Authenticator.IsAuthorized([earGroups]) and
+    Authenticator.AuthedUserInGroup(Group, true) and
+    (not Authenticator.AuthedUserInGroup(Group, false));
+end;
+
 procedure TAdminForm.AddUserToGroupActionExecute(Sender: TObject);
 var
   T: LongInt;
@@ -867,7 +858,7 @@ begin
     then
       User.Groups.AddItem(Group);
 
-  FillUsersToGroupGrid;
+  FillUsersInGroupGrid;
 end;
 
 procedure TAdminForm.EditUserActionExecute(Sender: TObject);
@@ -911,6 +902,17 @@ begin
     FillGroupGrid;
     FocusAndSelectNode(NodeFromRelation(R));
   end;
+end;
+
+procedure TAdminForm.NewGroupActionUpdate(Sender: TObject);
+var
+  Group: TEpiGroup;
+begin
+  Group := GroupFromSelectedNode;
+
+  TAction(Sender).Enabled :=
+    Authenticator.IsAuthorized([earGroups]) and
+    Authenticator.AuthedUserInGroup(Group, true);
 end;
 
 end.
