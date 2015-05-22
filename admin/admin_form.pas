@@ -438,7 +438,7 @@ procedure TAdminForm.GetGroupGridText(Sender: TBaseVirtualTree;
 begin
   case Column of
     0: CellText := GroupFromNode(Node).Caption.Text;
-    1: CellText := '(not implemented)';
+    1: CellText := Authenticator.PrintGroupRights(GroupFromNode(Node), true);
   end;
 end;
 

@@ -52,6 +52,13 @@ type
         Const InhertanceUpTree: boolean = true): boolean;
     function    RelationFromGroup(Const Group: TEpiGroup): TEpiGroupRelation;
 
+    // Get a list of effective rights for a user based on all groups
+    // - if abbriviated, the list will contain a comma delimited list of single characters
+    function  PrintUserRights(Const User: TEpiUser; Abbriviated: boolean): string;
+
+    // Get a list of rights for a group
+    // - if abbriviated, the list will contain a comma delimited list of single characters
+    function  PrintGroupRights(Const Group: TEpiGroup; Abbriviated: boolean): string;
   public
     property DocumentFile: TEpiDocumentFile read FDocumentFile;
     property AuthedUser: TEpiUser read GetAuthedUser;
@@ -90,6 +97,49 @@ function TAuthenticator.RelationFromGroup(const Group: TEpiGroup
   ): TEpiGroupRelation;
 begin
   result := TEpiGroupRelation(Group.FindCustomData(AUTH_GROUP_KEY));
+end;
+
+function TAuthenticator.PrintUserRights(const User: TEpiUser;
+  Abbriviated: boolean): string;
+var
+  G: TEpiGroup;
+  Rights: TEpiManagerRights;
+  R: TEpiManagerRight;
+begin
+  for G in User.Groups do
+    Rights := Rights + G.ManageRights;
+
+  Result := '';
+  if Abbriviated then
+    for R in Rights do
+      Result += EpiManagerRightCaptionsShort[R] + ', '
+  else
+    for R in Rights do
+      Result += EpiManagerRightCaptions[R] + LineEnding;
+
+  if Abbriviated then
+    Delete(Result, Length(Result) - 1, 2)
+  else
+    Result := TrimRight(Result);
+end;
+
+function TAuthenticator.PrintGroupRights(const Group: TEpiGroup;
+  Abbriviated: boolean): string;
+var
+  R: TEpiManagerRight;
+begin
+  Result := '';
+  if Abbriviated then
+    for R in Group.ManageRights do
+      Result += EpiManagerRightCaptionsShort[R] + ', '
+  else
+    for R in Group.ManageRights do
+      Result += EpiManagerRightCaptions[R] + LineEnding;
+
+  if Abbriviated then
+    Delete(Result, Length(Result) - 1, 2)
+  else
+    Result := TrimRight(Result);
 end;
 
 procedure TAuthenticator.InitGroupWalk(const Relation: TEpiGroupRelation;
