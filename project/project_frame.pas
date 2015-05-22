@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList, Controls,
   Dialogs, epidocument, epidatafiles, epicustombase, epirelations, epirelates,
   manager_messages, LMessages, Menus, epiv_documentfile, types,
-  design_runtimedesigner, project_types, epiv_projecttreeview_frame;
+  design_runtimedesigner, project_types, epiv_projecttreeview_frame,
+  core_logger;
 
 type
 
@@ -25,6 +26,8 @@ type
     OpenProjectAction: TAction;
     NewProjectToolBtn: TToolButton;
     ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
     ValueLabelEditorAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
@@ -55,7 +58,13 @@ type
     procedure SaveProjectActionUpdate(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
     procedure StudyInformationActionExecute(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
+  private
+    { Core Logger }
+    FCoreLoggerForm: TCoreLogger;
+    procedure ShowCoreLogger;
+    procedure CreateCoreLogger;
   private
     { private declarations }
     FDocumentFile: TDocumentFile;
@@ -77,6 +86,7 @@ type
       Data: Pointer = nil);
     function  DoOpenProject(Const AFileName: string): boolean;
     // create new
+    function  DoCreateNewDocumentFile: TDocumentFile;
     function  DoCreateNewDocument: TEpiDocument;
     procedure DoCreateNewProject;
     procedure DoCloseProject;
@@ -393,15 +403,30 @@ begin
   FProjectTreeView.SelectedObject := EpiDocument;
 end;
 
+procedure TProjectFrame.ToolButton5Click(Sender: TObject);
+begin
+  ShowCoreLogger;
+end;
+
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
 begin
   ShowValueLabelEditor2(EpiDocument.ValueLabelSets);
 end;
 
+procedure TProjectFrame.ShowCoreLogger;
+begin
+  if Assigned(FCoreLoggerForm) then
+    FCoreLoggerForm.Show;
+end;
+
+procedure TProjectFrame.CreateCoreLogger;
+begin
+  FCoreLoggerForm := TCoreLogger.Create(Self);
+end;
+
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
-  FDocumentFile := TDocumentFile.Create;
-  Result := FDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
+  Result := DoCreateNewDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
 
   with Result.ProjectSettings, ManagerSettings do
   begin
@@ -495,10 +520,8 @@ var
 begin
   Result := false;
   try
-    FDocumentFile := TDocumentFile.Create;
-    FDocumentFile.OnProgress := @DocumentProgress;
-    FDocumentFile.OnLoadError := @LoadError;
-    FDocumentFile.DataDirectory := ManagerSettings.WorkingDirUTF8;
+    DoCreateNewDocumentFile;
+
     T1 := Now;
     if not FDocumentFile.OpenFile(AFileName) then
     begin
@@ -538,6 +561,17 @@ begin
     UpdateCaption;
   finally
   end;
+end;
+
+function TProjectFrame.DoCreateNewDocumentFile: TDocumentFile;
+begin
+  FDocumentFile := TDocumentFile.Create;
+  FDocumentFile.OnDocumentChangeEvent := @FCoreLoggerForm.DocumentHook;
+  FDocumentFile.OnProgress            := @DocumentProgress;
+  FDocumentFile.OnLoadError           := @LoadError;
+  FDocumentFile.DataDirectory         := ManagerSettings.WorkingDirUTF8;
+
+  Result := FDocumentFile;
 end;
 
 function TProjectFrame.DoNewDataForm(ParentRelation: TEpiMasterRelation
@@ -1129,6 +1163,8 @@ begin
   end;
   FProjectTreeView.Align  := alClient;
   FProjectTreeView.Parent := ProjectPanel;
+
+  CreateCoreLogger;
 
   UpdateRecentFilesDropDown;
   LoadSplitterPosition(Splitter1, 'ProjectSplitter');

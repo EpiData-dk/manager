@@ -1,0 +1,20 @@
+object CoreLogger: TCoreLogger
+  Left = 906
+  Height = 476
+  Top = 352
+  Width = 792
+  Caption = 'Core Logger'
+  ClientHeight = 476
+  ClientWidth = 792
+  Position = poMainFormCenter
+  LCLVersion = '1.5'
+  object Memo1: TMemo
+    Left = 0
+    Height = 476
+    Top = 0
+    Width = 792
+    Align = alClient
+    ScrollBars = ssAutoBoth
+    TabOrder = 0
+  end
+end
