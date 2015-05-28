@@ -211,7 +211,7 @@ end;
 
 procedure TProjectFrame.NewDataFormActionUpdate(Sender: TObject);
 begin
-  NewDataFormAction.Enabled := Authenticator.IsAuthorized([earStructure]);
+  NewDataFormAction.Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -408,7 +408,7 @@ end;
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
 begin
   DeleteDataFormAction.Enabled :=
-    (Authenticator.IsAuthorized([earStructure])) and
+    (Authenticator.IsAuthorized([earDefineProject])) and
     (FProjectTreeView.SelectedObjectType = otRelation);
 end;
 
@@ -473,7 +473,7 @@ end;
 
 procedure TProjectFrame.ProjectSettingsActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := Authenticator.IsAuthorized([earStructure]);
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
@@ -862,7 +862,7 @@ procedure TProjectFrame.ProjectTreeEditing(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
   var Allowed: Boolean);
 begin
-  Allowed := Authenticator.IsAuthorized([earStructure]);
+  Allowed := Authenticator.IsAuthorized([earDefineProject]);
 
   if Allowed then
     (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).DeActivate(false);

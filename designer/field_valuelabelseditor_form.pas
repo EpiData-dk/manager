@@ -107,7 +107,7 @@ procedure TFieldValueLabelEditor.FormShow(Sender: TObject);
 begin
   ValueLabelNameEdit.Text := FGridFrame.ValueLabelSet.Name;
   ValueLabelNameEdit.Enabled := (ValueLabelSet.LabelScope = vlsInternal) and
-                                (Authenticator.IsAuthorized([earStructure]));
+                                (Authenticator.IsAuthorized([earDefineProject]));
 
   Caption := rsFormCaption + BoolToStr(ValueLabelSet.LabelScope = vlsInternal,
     '',

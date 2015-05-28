@@ -168,7 +168,7 @@ var
 begin
   VLSet := ValueLabelSetFromNode(Node);
   Allowed :=
-    (Authenticator.IsAuthorized([earStructure])) and
+    (Authenticator.IsAuthorized([earDefineProject])) and
     (Assigned(VLSet)) and
     (VLSet.LabelScope = vlsInternal);
 end;
@@ -325,9 +325,9 @@ begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);
 
-  AddBtn.Enabled := Authenticator.IsAuthorized([earStructure]);
-  DelBtn.Enabled := Authenticator.IsAuthorized([earStructure]);
-  ToolButton1.Enabled := Authenticator.IsAuthorized([earStructure]);
+  AddBtn.Enabled := Authenticator.IsAuthorized([earDefineProject]);
+  DelBtn.Enabled := Authenticator.IsAuthorized([earDefineProject]);
+  ToolButton1.Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
 procedure TValueLabelEditor2.DelBtnClick(Sender: TObject);

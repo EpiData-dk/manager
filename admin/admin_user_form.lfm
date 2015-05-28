@@ -1,7 +1,7 @@
 object AdminUserForm: TAdminUserForm
-  Left = 1097
+  Left = 697
   Height = 381
-  Top = 328
+  Top = 380
   Width = 519
   Caption = 'User Properties'
   ClientHeight = 381
@@ -81,7 +81,6 @@ object AdminUserForm: TAdminUserForm
       TabOrder = 0
     end
     object Label6: TLabel
-      AnchorSideTop.Control = PasswordEdit
       AnchorSideTop.Side = asrBottom
       Left = 10
       Height = 15
@@ -141,7 +140,7 @@ object AdminUserForm: TAdminUserForm
       BorderSpacing.Right = 10
       NumGlyphs = 1
       MaxLength = 0
-      TabOrder = 3
+      TabOrder = 4
     end
     object NeverExpireChkBox: TCheckBoxThemed
       AnchorSideTop.Control = Label7
@@ -154,7 +153,7 @@ object AdminUserForm: TAdminUserForm
       Width = 59
       Anchors = [akTop, akRight]
       Caption = 'Never'
-      TabOrder = 4
+      TabOrder = 3
       OnChange = CheckBoxThemed1Change
     end
     object Label8: TLabel
@@ -198,7 +197,7 @@ object AdminUserForm: TAdminUserForm
       Caption = 'Password'
       ParentColor = False
     end
-    object PasswordEdit: TEditButton
+    object PasswordEdit: TEdit
       AnchorSideLeft.Control = Panel1
       AnchorSideTop.Control = Label1
       AnchorSideTop.Side = asrBottom
@@ -206,21 +205,15 @@ object AdminUserForm: TAdminUserForm
       AnchorSideRight.Side = asrBottom
       Left = 11
       Height = 25
-      Top = 85
+      Top = 90
       Width = 290
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
-      BorderSpacing.Top = 5
+      BorderSpacing.Top = 10
       BorderSpacing.Right = 10
-      ButtonCaption = '...'
-      ButtonWidth = 23
-      DirectInput = False
       EchoMode = emPassword
-      MaxLength = 0
-      NumGlyphs = 1
-      OnButtonClick = PasswordEditButtonClick
+      OnExit = PasswordEditExit
       OnKeyDown = PasswordEditKeyDown
-      OnUTF8KeyPress = PasswordEditUTF8KeyPress
       PasswordChar = '*'
       TabOrder = 1
     end

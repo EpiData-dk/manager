@@ -106,7 +106,13 @@ type
     FUpdatingUserInGroupVST: boolean;
     FUserInGroupVST: TVirtualStringTree;
     function UsersInGroup_UserFromNode(Const Node: PVirtualNode): TEpiUser;
-
+    procedure UsersInGroupRemoveUserFromChildGroups(
+        Const Relation: TEpiGroupRelation;
+        Const Depth: Cardinal;
+        Const Index: Cardinal;
+        var aContinue: boolean;
+        Data: Pointer = nil
+      );
     procedure UsersInGroupBeforeItemErase(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
       var ItemColor: TColor; var EraseAction: TItemEraseAction);
@@ -130,7 +136,7 @@ implementation
 
 uses
   admin_user_form, admin_group_form, types, shortcuts, epiv_datamodule,
-  admin_authenticator;
+  admin_authenticator, epigrouprelation_helper;
 
 const
   ADMIN_FORM_NODE_KEY = 'ADMIN_FORM_NODE_KEY';
@@ -367,6 +373,9 @@ begin
   F.ShowGroups := true;
   Result := F.ShowModal;
   F.Free;
+
+  if Result = mrOK then
+    FillUsersInGroupGrid;
 end;
 
 function TAdminForm.GroupFromNode(const Node: PVirtualNode): TEpiGroup;
@@ -492,6 +501,18 @@ begin
   result := TEpiUser(FUserInGroupVST.GetNodeData(Node)^);
 end;
 
+procedure TAdminForm.UsersInGroupRemoveUserFromChildGroups(
+  const Relation: TEpiGroupRelation; const Depth: Cardinal;
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
+var
+  User: TEpiUser;
+begin
+  User := TEpiUser(Data);
+
+  if (User.Groups.IndexOf(Relation.Group) >= 0) then
+    User.Groups.RemoveItem(Relation.Group);
+end;
+
 procedure TAdminForm.UsersInGroupBeforeItemErase(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
   var ItemColor: TColor; var EraseAction: TItemEraseAction);
@@ -529,7 +550,15 @@ begin
   Group := GroupFromSelectedNode;
 
   if Sender.CheckState[Node] = csCheckedNormal then
+  begin
+    if Authenticator.UserInGroup(User, Group, true, false) then
+      Authenticator.RelationFromGroup(Group).GroupRelations.OrderedWalk(
+        @UsersInGroupRemoveUserFromChildGroups,
+        User
+      );
+
     User.Groups.AddItem(Group)
+  end
   else
     User.Groups.RemoveItem(Group);
 end;

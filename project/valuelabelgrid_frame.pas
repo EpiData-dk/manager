@@ -287,7 +287,7 @@ procedure TValueLabelGridFrame.VLGChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
 begin
   if (ValueLabelSet.LabelScope = vlsExternal) or
-     (not Authenticator.IsAuthorized([earStructure]))
+     (not Authenticator.IsAuthorized([earDefineProject]))
   then
     begin
       Allowed := false;
@@ -306,7 +306,7 @@ end;
 procedure TValueLabelGridFrame.VLGEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
-  Allowed := Authenticator.IsAuthorized([earStructure]);
+  Allowed := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
 procedure TValueLabelGridFrame.VLGEditor(Sender: TBaseVirtualTree;
@@ -476,7 +476,7 @@ begin
   else
     VLG.TreeOptions.MiscOptions := VLG.TreeOptions.MiscOptions + [toEditable];
 
-  Allowed := (FValueLabelSet.LabelScope = vlsInternal) and (Authenticator.IsAuthorized([earStructure]));
+  Allowed := (FValueLabelSet.LabelScope = vlsInternal) and (Authenticator.IsAuthorized([earDefineProject]));
 
   NewLineBtn.Enabled := Allowed;
   DelLineBtn.Enabled := Allowed;

@@ -15,12 +15,14 @@ type
   TAdminGroupForm = class(TForm)
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
-    ManageRightsChkGrp: TCheckGroup;
+    Panel1: TPanel;
+    ProjectContentDesignChkGrp: TCheckGroup;
+    AssignProjectrightsChkGrp: TCheckGroup;
+    UserManagementChkGrp: TCheckGroup;
+    DataAccessChkGrp: TCheckGroup;
     CaptionEdit: TEdit;
     Label3: TLabel;
-    PageControl1: TPageControl;
     Panel2: TPanel;
-    BasicSheet: TTabSheet;
     procedure BitBtn1Click(Sender: TObject);
   private
     FGroup: TEpiGroup;
@@ -45,28 +47,58 @@ uses
 { TAdminGroupForm }
 
 procedure TAdminGroupForm.BitBtn1Click(Sender: TObject);
+
+  procedure AccumulateRights(var Rights: TEpiManagerRights; Const ChkGrp: TCheckGroup);
+  var
+    i: Integer;
+    Item: TEpiManagerRight;
+  begin
+    for i := 0 to ChkGrp.Items.Count - 1 do
+    begin
+      Item := TEpiManagerRight(PtrInt(ChkGrp.Items.Objects[I]));
+      if ChkGrp.Checked[i] then
+        Include(Rights, Item);
+    end;
+  end;
+
 var
-  i: Integer;
-  Item: TEpiManagerRight;
+  lRights: TEpiManagerRights;
 begin
   Group.Caption.Text := CaptionEdit.Text;
 
-  Group.ManageRights := [];
-  for i := 0 to ManageRightsChkGrp.Items.Count - 1 do
-  begin
-    Item := TEpiManagerRight(PtrInt(ManageRightsChkGrp.Items.Objects[I]));
-    if ManageRightsChkGrp.Checked[i] then
-      Group.ManageRights := Group.ManageRights + [Item];
-  end;
+  lRights := [];
+  AccumulateRights(lRights, ProjectContentDesignChkGrp);
+  AccumulateRights(lRights, AssignProjectrightsChkGrp);
+  AccumulateRights(lRights, UserManagementChkGrp);
+  AccumulateRights(lRights, DataAccessChkGrp);
+
+  Group.ManageRights := lRights;
 end;
 
 procedure TAdminGroupForm.FillRights;
 var
-  Item: TEpiManagerRight;
-  I: Integer;
   R: TEpiGroupRelation;
   P: TEpiGroupRelation;
   ParentGroup: TEpiGroup;
+
+  procedure FillChkGrp(Const ChkGrp: TCheckGroup);
+  var
+    I: Integer;
+    Item: TEpiManagerRight;
+  begin
+    for I := 0 to ChkGrp.Items.Count - 1 do
+    begin
+      Item := TEpiManagerRight(PtrInt(ChkGrp.Items.Objects[I]));
+
+      ChkGrp.Checked[I]      := (Item in Group.ManageRights);
+
+                                            // AuthedUserInGroup will return false if ParentGroup = nil,
+                                            // hence evaluation after "and" is NOT done.
+      ChkGrp.CheckEnabled[I] := Authenticator.AuthedUserInGroup(ParentGroup, true) and
+                                            (Item in ParentGroup.ManageRights);
+    end;
+  end;
+
 begin
   R := Authenticator.RelationFromGroup(Group);
   P := R.ParentRelation;
@@ -75,23 +107,15 @@ begin
   if Assigned(P) then
     ParentGroup := P.Group;
 
-  for I := 0 to ManageRightsChkGrp.Items.Count - 1 do
-  begin
-    Item := TEpiManagerRight(PtrInt(ManageRightsChkGrp.Items.Objects[I]));
 
-    ManageRightsChkGrp.Checked[I]      := (Item in Group.ManageRights);
-
-                                          // AuthedUserInGroup will return false if ParentGroup = nil,
-                                          // hence evaluation after "and" is NOT done.
-    ManageRightsChkGrp.CheckEnabled[I] := Authenticator.AuthedUserInGroup(ParentGroup, true) and
-                                          (Item in ParentGroup.ManageRights);
-  end;
+  FillChkGrp(ProjectContentDesignChkGrp);
+  FillChkGrp(AssignProjectrightsChkGrp);
+  FillChkGrp(UserManagementChkGrp);
+  FillChkGrp(DataAccessChkGrp);
 end;
 
 procedure TAdminGroupForm.FormShow(Sender: TObject);
 begin
-  PageControl1.ActivePage := BasicSheet;
-
   CaptionEdit.Text := Group.Caption.Text;
 
   FillRights;
@@ -106,13 +130,16 @@ var
 begin
   inherited Create(TheOwner);
 
-  ManageRightsChkGrp.Items.BeginUpdate;
-  ManageRightsChkGrp.Items.Clear;
+  ProjectContentDesignChkGrp.Items.AddObject(EpiManagerRightCaptions[earDefineProject], TObject(earDefineProject));
+  ProjectContentDesignChkGrp.Items.AddObject(EpiManagerRightCaptions[earTranslate], TObject(earTranslate));
 
-  for Item in TEpiManagerRight do
-    ManageRightsChkGrp.Items.AddObject(EpiManagerRightCaptions[Item], TObject(PtrInt(Item)));
+  AssignProjectrightsChkGrp.Items.AddObject(EpiManagerRightCaptions[earGroups], TObject(earGroups));
 
-  ManageRightsChkGrp.Items.EndUpdate;
+  UserManagementChkGrp.Items.AddObject(EpiManagerRightCaptions[earUsers], TObject(earUsers));
+  UserManagementChkGrp.Items.AddObject(EpiManagerRightCaptions[earPassword], TObject(earPassword));
+
+  DataAccessChkGrp.Items.AddObject(EpiManagerRightCaptions[earExtentendedData], TObject(earExtentendedData));
+  DataAccessChkGrp.Items.AddObject(EpiManagerRightCaptions[earViewData], TObject(earViewData));
 
   OnShow := @FormShow;
 end;

@@ -239,7 +239,7 @@ var
 begin
   Show;
 
-  Allowed := Authenticator.IsAuthorized([earStructure]);
+  Allowed := Authenticator.IsAuthorized([earDefineProject]);
   for i := 0 to PageControl1.PageCount - 1 do
     PageControl1.Pages[i].Enabled := Allowed;
 end;

@@ -1216,7 +1216,7 @@ begin
       AddEditValueLabelBtn.Hint    := 'Can only be edited in the External file';
     end;
 
-  if (not Authenticator.IsAuthorized([earStructure]))
+  if (not Authenticator.IsAuthorized([earDefineProject]))
   then
     begin
       AddEditValueLabelBtn.Caption := 'View';
@@ -1394,38 +1394,38 @@ begin
   NameEdit.Enabled                := (not (ManyFields or
                                           IsReservedEpiFieldName(Field.Name) or
                                           IsKeyField)) and
-                                     (IsAuthorized(earStructure));
-  QuestionEdit.Enabled            := (IsAuthorized(earStructure));
+                                     (IsAuthorized(earDefineProject));
+  QuestionEdit.Enabled            := (IsAuthorized(earDefineProject));
 
   FieldTypeImage.Visible          := FieldsHaveSameFieldType;
 
   LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes);
-  LengthEdit.Enabled              := (IsAuthorized(earStructure));
+  LengthEdit.Enabled              := (IsAuthorized(earDefineProject));
   if FieldsHaveFieldTypes(FloatFieldTypes) and FieldsHaveFieldTypes(IntFieldTypes + StringFieldTypes)
   then
     LengthEdit.Visible := false;
   LengthLabel.Visible             := LengthEdit.Visible;
 
   DecimalsEdit.Visible            := FieldsMustHaveFieldTypes(FloatFieldTypes);
-  DecimalsEdit.Enabled            := (IsAuthorized(earStructure));
+  DecimalsEdit.Enabled            := (IsAuthorized(earDefineProject));
   DecimalsLabel.Visible           := DecimalsEdit.Visible;
   if not DecimalsEdit.Visible then
     Bevel1.Left := QuestionEdit.Left + QuestionEdit.Width
   else
     Bevel1.Left := QuestionEdit.Left + ((QuestionEdit.Width - Bevel1.Width) div 2);
 
-  ValueLabelComboBox.Enabled      := (IsAuthorized(earStructure));
+  ValueLabelComboBox.Enabled      := (IsAuthorized(earDefineProject));
   ValueLabelGrpBox.Visible        := FieldsMustHaveFieldTypes(ValueLabelFieldTypes) and FieldsHaveSameFieldType;
 
-  UpdateModeRadioGrp.Enabled      := (IsAuthorized(earStructure));
+  UpdateModeRadioGrp.Enabled      := (IsAuthorized(earDefineProject));
   UpdateModeRadioGrp.Visible      := FieldsMustHaveFieldTypes(AutoUpdateFieldTypes);
 
-  RangesGrpBox.Enabled            := (IsAuthorized(earStructure));
+  RangesGrpBox.Enabled            := (IsAuthorized(earDefineProject));
   RangesGrpBox.Visible            := FieldsMustHaveFieldTypes(RangeFieldTypes) and FieldsHaveSameFieldType;
 
   // - extended
   ExtendedSheet.TabVisible        := not FieldsMustHaveFieldTypes(AutoFieldTypes);
-  ExtendedSheet.Enabled           := (not IsRelatedKeyField) and (IsAuthorized(earStructure));
+  ExtendedSheet.Enabled           := (not IsRelatedKeyField) and (IsAuthorized(earDefineProject));
 
   EntryRadioGroup.Visible         := FieldsMustHaveFieldTypes(EntryModeFieldTypes);
   ConfirmEntryChkBox.Visible      := FieldsMustHaveFieldTypes(ConfirmEntryFieldTypes);
@@ -1439,23 +1439,23 @@ begin
 
   // - jumps
   JumpSheet.TabVisible            := FieldsMustHaveFieldTypes(JumpsFieldTypes) and FieldsHaveSameFieldType;
-  JumpSheet.Enabled               := (not IsRelatedKeyField) and (IsAuthorized(earStructure));
+  JumpSheet.Enabled               := (not IsRelatedKeyField) and (IsAuthorized(earDefineProject));
   UseJumpsCombo.Visible           := ManyFields;
   UseJumpsLabel.Visible           := ManyFields;
 
   // - relates
   RelateSheet.TabVisible          := (not (IsKeyField or IsRelatedKeyField)) and
                                      (Relation.DetailRelations.Count > 0);
-  RelateSheet.Enabled             := (IsAuthorized(earStructure));
+  RelateSheet.Enabled             := (IsAuthorized(earDefineProject));
 
   // - calc
-  CalcSheet.Enabled               := (not IsRelatedKeyField) and (IsAuthorized(earStructure));
+  CalcSheet.Enabled               := (not IsRelatedKeyField) and (IsAuthorized(earDefineProject));
   CalcUnchangedRadioBtn.Visible   := ManyFields;
   CalcSheet.TabVisible            := (not FieldsMustHaveFieldTypes(AutoFieldTypes));
 
   // - notes
   NotesSheet.Visible              := FieldsMustHaveFieldTypes(NotesFieldTypes);
-  NotesSheet.Enabled              := (IsAuthorized(earStructure));
+  NotesSheet.Enabled              := (IsAuthorized(earDefineProject));
 end;
 
 procedure TFieldPropertiesFrame.UpdateContent;

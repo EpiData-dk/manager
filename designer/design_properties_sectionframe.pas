@@ -55,7 +55,7 @@ begin
   NameEdit.Enabled :=
     (Length(FSections) = 1) and
     (FSections[0].Name <> 'MAIN') and
-    (IsAuthorized(earStructure));
+    (IsAuthorized(earDefineProject));
 
   CaptionEdit.Enabled := NameEdit.Enabled;
 
