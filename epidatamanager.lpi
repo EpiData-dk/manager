@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="45"/>
+      <BuildNr Value="46"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="ADMIN"/>
@@ -823,7 +823,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="5">
+    <Exceptions Count="6">
       <Item1>
         <Name Value="EAbort"/>
       </Item1>
@@ -839,6 +839,9 @@
       <Item5>
         <Name Value="EEpiBadPassword"/>
       </Item5>
+      <Item6>
+        <Name Value="EEpiPasswordCanceled"/>
+      </Item6>
     </Exceptions>
   </Debugging>
 </CONFIG>
