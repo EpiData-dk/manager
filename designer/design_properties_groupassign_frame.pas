@@ -16,17 +16,24 @@ type
   private
     FAdmin: TEpiAdmin;
     FGroupRights: TEpiGroupRights;
+    procedure SetAdmin(AValue: TEpiAdmin);
     procedure SetGroupRights(AValue: TEpiGroupRights);
   { VST }
   private
     FVst: TVirtualStringTree;
-    procedure GetGroupText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+
+    function  RelationFromNode(Const Node: PVirtualNode): TEpiGroupRelation;
+    procedure RelationToNode(Const Node: PVirtualNode; Const Relation: TEpiGroupRelation);
+
+    procedure VSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
-    procedure InitNode(Sender: TBaseVirtualTree; ParentNode,
+    procedure VSTInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      var ChildCount: Cardinal);
+    procedure VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
   public
     constructor Create(TheOwner: TComponent); override;
-    property Admin: TEpiAdmin read FAdmin write FAdmin;
+    property Admin: TEpiAdmin read FAdmin write SetAdmin;
     property GroupRights: TEpiGroupRights read FGroupRights write SetGroupRights;
   end;
 
@@ -36,33 +43,76 @@ implementation
 
 { TGroupsAssignFrame }
 
+procedure TGroupsAssignFrame.SetAdmin(AValue: TEpiAdmin);
+begin
+  if FAdmin = AValue then Exit;
+  FAdmin := AValue;
+
+  if Assigned(GroupRights) and
+     (FVst.RootNodeCount = 0)
+  then
+    FVst.RootNodeCount := 1;
+end;
+
 procedure TGroupsAssignFrame.SetGroupRights(AValue: TEpiGroupRights);
 begin
   if FGroupRights = AValue then Exit;
   FGroupRights := AValue;
 
-  FVst.RootNodeCount := 1;
+  if Assigned(Admin) and
+     (FVst.RootNodeCount = 0)
+  then
+    FVst.RootNodeCount := 1;
 end;
 
-procedure TGroupsAssignFrame.GetGroupText(Sender: TBaseVirtualTree;
+function TGroupsAssignFrame.RelationFromNode(const Node: PVirtualNode
+  ): TEpiGroupRelation;
+begin
+  Result := TEpiGroupRelation(FVst.GetNodeData(Node)^);
+end;
+
+procedure TGroupsAssignFrame.RelationToNode(const Node: PVirtualNode;
+  const Relation: TEpiGroupRelation);
+begin
+  TEpiGroupRelation(FVst.GetNodeData(Node)^) := Relation;
+end;
+
+procedure TGroupsAssignFrame.VSTGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
+var
+  GR: TEpiGroupRight;
 begin
   case Column of
-    0: CellText := 'G';
-    1: CellText := 'ALL';
+    0: CellText := RelationFromNode(Node).Group.Caption.Text;
+    1: begin
+         GR := GroupRights.GroupRightFromGroup(RelationFromNode(Node).Group);
+//         if Assigned(GR) then
+//           CellText := Write(S, GR.EntryRights);
+         CellText := 'test';
+       end;
   end;
 end;
 
-procedure TGroupsAssignFrame.InitNode(Sender: TBaseVirtualTree; ParentNode,
+procedure TGroupsAssignFrame.VSTInitChildren(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; var ChildCount: Cardinal);
+begin
+  ChildCount := RelationFromNode(Node).GroupRelations.Count;
+end;
+
+procedure TGroupsAssignFrame.VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
   if (not Assigned(ParentNode)) then
   begin
-
+    RelationToNode(Node, Admin.AdminRelation);
   end else begin
-
+    RelationToNode(Node, RelationFromNode(ParentNode).GroupRelation[Node^.Index]);
   end;
+
+  Include(InitialStates, ivsExpanded);
+  if RelationFromNode(Node).GroupRelations.Count > 0 then;
+    Include(InitialStates, ivsHasChildren);
 end;
 
 constructor TGroupsAssignFrame.Create(TheOwner: TComponent);
@@ -122,11 +172,12 @@ begin
     Align := alClient;
     Parent := Self;
 
-    OnInitNode := @InitNode;
+    OnInitChildren := @VSTInitChildren;
+    OnInitNode := @VSTInitNode;
 //    OnBeforeItemErase := @GroupBeforeItemErase;
 //    OnChecked         := @GroupChecked;
 //    OnChecking        := @GroupChecking;
-    OnGetText := @GetGroupText;
+    OnGetText := @VSTGetText;
 
     EndUpdate;
   end;

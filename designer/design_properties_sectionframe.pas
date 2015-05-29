@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, Buttons,
-  ExtCtrls, epicustombase, design_types, design_properties_baseframe;
+  ExtCtrls, epicustombase, design_types, design_properties_baseframe, design_properties_groupassign_frame;
 
 type
 
@@ -19,9 +19,11 @@ type
     Label9: TLabel;
     NameEdit: TEdit;
     CaptionEdit: TEdit;
-    Label1: TLabel;
     Label2: TLabel;
+    PageControl1: TPageControl;
     Panel1: TPanel;
+    BasicSheet: TTabSheet;
+    RightsSheet: TTabSheet;
   private
     { private declarations }
     FSections: TEpiCustomControlItemArray;
@@ -30,7 +32,7 @@ type
     procedure DoUpdateCaption;
   private
     { Group Rights }
-    FGroupAssignFrame: TFrame;
+    FGroupAssignFrame: TGroupsAssignFrame;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -46,7 +48,7 @@ implementation
 
 uses
   epidatafiles, LazUTF8, epistringutils, epiv_datamodule, epiadmin,
-  design_properties_groupassign_frame, admin_authenticator;
+  admin_authenticator;
 
 { TSectionPropertiesFrame }
 
@@ -59,18 +61,20 @@ begin
 
   CaptionEdit.Enabled := NameEdit.Enabled;
 
-  Label1.Visible            := Authenticator.Admin.Users.Count > 0;
-  FGroupAssignFrame.Visible := Label1.Visible;
+  RightsSheet.Visible := Authenticator.Admin.Users.Count > 0;
+  PageControl1.ShowTabs := RightsSheet.Visible;
   FGroupAssignFrame.Enabled := IsAuthorized(earGroups);
 end;
 
 procedure TSectionPropertiesFrame.UpdateContent;
 var
   i: Integer;
+  S: TEpiSection;
 begin
   NameEdit.Text := FSections[0].Name;
   CaptionEdit.Text := TEpiSection(FSections[0]).Caption.Text;
   DM.Icons16.GetBitmap(DM.GetImageIndex(TEpiSection(FSections[0])), Image1.Picture.Bitmap);
+
 
   for i := Low(FSections)+1 to High(FSections) do
     if TEpiSection(FSections[i]).Caption.Text <> CaptionEdit.Text then
@@ -80,6 +84,15 @@ begin
       end;
 
 
+  if Length(FSections) = 0 then exit;
+
+  S := TEpiSection(FSections[0]);
+
+  FGroupAssignFrame.Admin := Authenticator.Admin;
+  FGroupAssignFrame.GroupRights := S.GroupRights;
+
+//  for i := Low(FSections)+1 to High(FSections) do
+//    if TEpiSection(FSections[i]).GroupRights.;
 
 end;
 
@@ -103,11 +116,9 @@ begin
   DisableAutoSizing;
 
   FGroupAssignFrame := TGroupsAssignFrame.Create(Self);
-  FGroupAssignFrame.Parent := Panel1;
-  FGroupAssignFrame.AnchorToNeighbour(akTop, 10, Label1);
-  FGroupAssignFrame.AnchorParallel(akLeft, 10, Panel1);
-  FGroupAssignFrame.AnchorParallel(akRight, 10, Panel1);
-  FGroupAssignFrame.AnchorParallel(akBottom, 10, Panel1);
+  FGroupAssignFrame.Parent := RightsSheet;
+  FGroupAssignFrame.Align := alClient;
+  FGroupAssignFrame.BorderSpacing.Around := 10;
 
   EnableAutoSizing;
 end;
@@ -115,7 +126,9 @@ end;
 
 procedure TSectionPropertiesFrame.FocusOnNewControl;
 begin
-  CaptionEdit.SetFocus;
+  PageControl1.ActivePage := BasicSheet;
+  if CaptionEdit.CanFocus then
+    CaptionEdit.SetFocus;
 end;
 
 procedure TSectionPropertiesFrame.SetEpiControls(
