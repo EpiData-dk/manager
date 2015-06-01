@@ -25,6 +25,9 @@ type
     function  RelationFromNode(Const Node: PVirtualNode): TEpiGroupRelation;
     procedure RelationToNode(Const Node: PVirtualNode; Const Relation: TEpiGroupRelation);
 
+    procedure VSTChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure VSTChecking(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      var NewState: TCheckState; var Allowed: Boolean);
     procedure VSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure VSTInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -77,6 +80,18 @@ begin
   TEpiGroupRelation(FVst.GetNodeData(Node)^) := Relation;
 end;
 
+procedure TGroupsAssignFrame.VSTChecked(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+begin
+
+end;
+
+procedure TGroupsAssignFrame.VSTChecking(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
+begin
+
+end;
+
 procedure TGroupsAssignFrame.VSTGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
@@ -102,17 +117,22 @@ end;
 
 procedure TGroupsAssignFrame.VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+var
+  Relation: TEpiGroupRelation;
 begin
   if (not Assigned(ParentNode)) then
-  begin
-    RelationToNode(Node, Admin.AdminRelation);
-  end else begin
-    RelationToNode(Node, RelationFromNode(ParentNode).GroupRelation[Node^.Index]);
-  end;
+    Relation := Admin.AdminRelation;
+  else
+    Relation := RelationFromNode(ParentNode).GroupRelation[Node^.Index];
+
+  RelationToNode(Node, Relation);
 
   Include(InitialStates, ivsExpanded);
   if RelationFromNode(Node).GroupRelations.Count > 0 then;
     Include(InitialStates, ivsHasChildren);
+
+  if GroupRights.GroupRightFromGroup(Relation.Group) then
+    Sender.CheckState[Node] := csCheckedNormal;
 end;
 
 constructor TGroupsAssignFrame.Create(TheOwner: TComponent);
@@ -173,11 +193,11 @@ begin
     Parent := Self;
 
     OnInitChildren := @VSTInitChildren;
-    OnInitNode := @VSTInitNode;
+    OnInitNode     := @VSTInitNode;
 //    OnBeforeItemErase := @GroupBeforeItemErase;
-//    OnChecked         := @GroupChecked;
-//    OnChecking        := @GroupChecking;
-    OnGetText := @VSTGetText;
+    OnChecked      := @VSTChecked;
+    OnChecking     := @VSTChecking;
+    OnGetText      := @VSTGetText;
 
     EndUpdate;
   end;

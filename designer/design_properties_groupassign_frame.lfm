@@ -1,9 +1,9 @@
 object GroupsAssignFrame: TGroupsAssignFrame
   Left = 0
-  Height = 232
+  Height = 426
   Top = 0
-  Width = 365
+  Width = 401
   TabOrder = 0
-  DesignLeft = 696
-  DesignTop = 406
+  DesignLeft = 1081
+  DesignTop = 252
 end

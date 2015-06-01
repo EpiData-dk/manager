@@ -140,7 +140,6 @@ type
     procedure TimedBackup(Sender: TObject);
     procedure UpdateShortCuts;
   private
-//    FFileName: string;
     procedure LoadError(const Sender: TEpiCustomBase; ErrorType: Word;
       Data: Pointer; out Continue: boolean);
     function GetEpiDocument: TEpiDocument;
