@@ -121,7 +121,7 @@ var
   Relation: TEpiGroupRelation;
 begin
   if (not Assigned(ParentNode)) then
-    Relation := Admin.AdminRelation;
+    Relation := Admin.AdminRelation
   else
     Relation := RelationFromNode(ParentNode).GroupRelation[Node^.Index];
 
@@ -131,7 +131,7 @@ begin
   if RelationFromNode(Node).GroupRelations.Count > 0 then;
     Include(InitialStates, ivsHasChildren);
 
-  if GroupRights.GroupRightFromGroup(Relation.Group) then
+  if Assigned(GroupRights.GroupRightFromGroup(Relation.Group)) then
     Sender.CheckState[Node] := csCheckedNormal;
 end;
 
