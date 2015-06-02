@@ -20,22 +20,15 @@ type
     NameEdit: TEdit;
     CaptionEdit: TEdit;
     Label2: TLabel;
-    PageControl1: TPageControl;
     Panel1: TPanel;
-    BasicSheet: TTabSheet;
-    RightsSheet: TTabSheet;
   private
     { private declarations }
     FSections: TEpiCustomControlItemArray;
     procedure UpdateVisibility;
     procedure UpdateContent;
     procedure DoUpdateCaption;
-  private
-    { Group Rights }
-    FGroupAssignFrame: TGroupsAssignFrame;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent); override;
     procedure FocusOnNewControl;
     procedure SetEpiControls(EpiControls: TEpiCustomControlItemArray);
     procedure ResetControls;
@@ -60,10 +53,6 @@ begin
     (IsAuthorized(earDefineProject));
 
   CaptionEdit.Enabled := NameEdit.Enabled;
-
-  RightsSheet.Visible := Authenticator.Admin.Users.Count > 0;
-  PageControl1.ShowTabs := RightsSheet.Visible;
-  FGroupAssignFrame.Enabled := IsAuthorized(earGroups);
 end;
 
 procedure TSectionPropertiesFrame.UpdateContent;
@@ -82,18 +71,6 @@ begin
         CaptionEdit.Text := '';
         break;
       end;
-
-
-  if Length(FSections) = 0 then exit;
-
-  S := TEpiSection(FSections[0]);
-
-  FGroupAssignFrame.Admin := Authenticator.Admin;
-  FGroupAssignFrame.GroupRights := S.GroupRights;
-
-//  for i := Low(FSections)+1 to High(FSections) do
-//    if TEpiSection(FSections[i]).GroupRights.;
-
 end;
 
 procedure TSectionPropertiesFrame.DoUpdateCaption;
@@ -109,24 +86,8 @@ begin
   UpdateCaption('Sections Properties: ' + S);
 end;
 
-constructor TSectionPropertiesFrame.Create(TheOwner: TComponent);
-begin
-  inherited Create(TheOwner);
-
-  DisableAutoSizing;
-
-  FGroupAssignFrame := TGroupsAssignFrame.Create(Self);
-  FGroupAssignFrame.Parent := RightsSheet;
-  FGroupAssignFrame.Align := alClient;
-  FGroupAssignFrame.BorderSpacing.Around := 10;
-
-  EnableAutoSizing;
-end;
-
-
 procedure TSectionPropertiesFrame.FocusOnNewControl;
 begin
-  PageControl1.ActivePage := BasicSheet;
   if CaptionEdit.CanFocus then
     CaptionEdit.SetFocus;
 end;

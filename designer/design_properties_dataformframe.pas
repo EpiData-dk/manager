@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, Spin,
   MaskEdit, ComCtrls, ExtCtrls, design_properties_baseframe, design_types,
-  epicustombase, epidatafiles, epirelates;
+  epicustombase, epidatafiles, epirelates, design_properties_groupassign_frame;
 
 type
 
@@ -20,14 +20,8 @@ type
     CaptionEdit: TEdit;
     GotoDataFormBevel: TBevel;
     GotoDataformLabel: TLabel;
-    GroupAssignedListBox: TListBox;
-    GroupAvailableListBox: TListBox;
     ChildRecGrpBox: TGroupBox;
-    GrpRightsMoveLeft: TSpeedButton;
-    GrpRightsMoveRight: TSpeedButton;
     Label1: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
     Label9: TLabel;
     MaskEdit1: TMaskEdit;
     NameEdit: TEdit;
@@ -41,9 +35,9 @@ type
     RelateValueBevel: TBevel;
     RelateOrderLabel: TLabel;
     RemoveRelateBtn: TSpeedButton;
-    SectionGroupAccessGroupBox: TGroupBox;
     BasicSheet: TTabSheet;
     AfterRecordSheet: TTabSheet;
+    RightsTabSheet: TTabSheet;
     procedure AddRelateBtnClick(Sender: TObject);
     procedure MaskEdit1EditingDone(Sender: TObject);
     procedure NoLimitRadioBtnClick(Sender: TObject);
@@ -60,6 +54,11 @@ type
     FAfterRecordIndex: Integer;
     procedure UpdateAfterRecordRadioBoxVisibility;
     procedure UpdateAfterRecordRadioBoxContent;
+  private
+    { Group Rights }
+    FGroupAssignFrame: TGroupsAssignFrame;
+    procedure UpdateGroupAssignFrameVisibility;
+    procedure UpdateGroupAssignFrameContent;
   private
     procedure DataFileCaptionHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
@@ -95,7 +94,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafilerelations;
+  epidatafilerelations, admin_authenticator;
 
 const
   AfterRecordStateCaption: array[TEpiDataFileAfterRecordState] of string =
@@ -385,9 +384,18 @@ begin
   FAfterRecordIndex := Idx;
 end;
 
+procedure TDataformPropertiesFrame.UpdateGroupAssignFrameVisibility;
+begin
+  RightsTabSheet.Visible := Assigned(Authenticator.AuthedUser);
+end;
+
+procedure TDataformPropertiesFrame.UpdateGroupAssignFrameContent;
+begin
+//  FGroupAssignFrame.GroupRights := DataFile.;
+end;
+
 procedure TDataformPropertiesFrame.UpdateVisibility;
 begin
-  SectionGroupAccessGroupBox.Visible := false;
   ChildRecGrpBox.Visible := Relation.InheritsFrom(TEpiDetailRelation);
 
   UpdateAfterRecordRadioBoxVisibility;
@@ -397,6 +405,8 @@ begin
   AfterRecordSheet.TabVisible :=
     (Relation.DetailRelations.Count > 0) OR
     (Relation.InheritsFrom(TEpiDetailRelation));
+
+  UpdateGroupAssignFrameVisibility;
 end;
 
 procedure TDataformPropertiesFrame.UpdateContent;
@@ -427,6 +437,7 @@ begin
   // ********************
   UpdateRelate;
   UpdateAfterRecordRadioBoxContent;
+  UpdateGroupAssignFrameContent;
 end;
 
 procedure TDataformPropertiesFrame.RegisterDataFileHooks;
@@ -570,6 +581,11 @@ begin
   PageControl1.ActivePage := BasicSheet;
 
   FRelatesComponentsList := TList.Create;
+
+  FGroupAssignFrame := TGroupsAssignFrame.Create(Self);
+  FGroupAssignFrame.Align := alClient;
+  FGroupAssignFrame.BorderSpacing.Around := 10;
+  FGroupAssignFrame.Parent := RightsTabSheet;
 end;
 
 destructor TDataformPropertiesFrame.Destroy;

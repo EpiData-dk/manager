@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ValEdit, epiadmin, VirtualTrees,
-  epirights;
+  epirights, Graphics;
 
 type
 
@@ -25,6 +25,12 @@ type
     function  RelationFromNode(Const Node: PVirtualNode): TEpiGroupRelation;
     procedure RelationToNode(Const Node: PVirtualNode; Const Relation: TEpiGroupRelation);
 
+    procedure VSTAfterCellPaint(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+      const CellRect: TRect);
+    procedure VSTBeforeItemErase(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
+      var ItemColor: TColor; var EraseAction: TItemEraseAction);
     procedure VSTChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VSTChecking(Sender: TBaseVirtualTree; Node: PVirtualNode;
       var NewState: TCheckState; var Allowed: Boolean);
@@ -34,6 +40,7 @@ type
       var ChildCount: Cardinal);
     procedure VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+    procedure VSTNodeClick(Sender: TBaseVirtualTree; const HitInfo: THitInfo);
   public
     constructor Create(TheOwner: TComponent); override;
     property Admin: TEpiAdmin read FAdmin write SetAdmin;
@@ -43,6 +50,9 @@ type
 implementation
 
 {$R *.lfm}
+
+uses
+  CheckBoxThemed, Themes;
 
 { TGroupsAssignFrame }
 
@@ -80,6 +90,49 @@ begin
   TEpiGroupRelation(FVst.GetNodeData(Node)^) := Relation;
 end;
 
+procedure TGroupsAssignFrame.VSTAfterCellPaint(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  const CellRect: TRect);
+var
+  Details: TThemedElementDetails;
+  X, Y: Integer;
+  R: TRect;
+  G: TEpiGroup;
+  GR: TEpiGroupRight;
+  Checked: Boolean;
+
+const
+  CHECKBOX_SIZE = 13;
+
+begin
+  if Column = 0 then exit;
+
+  { Paint Check boxes by ourselves - since VT's only allow for one checkbox column }
+  G  := RelationFromNode(Node).Group;
+  GR := GroupRights.GroupRightFromGroup(G);
+  Checked := false;
+
+  if (Assigned(GR)) then
+    Checked := (TEpiEntryRight(Column - 1) in GR.EntryRights);
+
+  if Checked then
+    Details := ThemeServices.GetElementDetails(tbCheckBoxCheckedNormal)
+  else
+    Details := ThemeServices.GetElementDetails(tbCheckBoxUncheckedNormal);
+
+  X := CellRect.Left + (CellRect.Right - CellRect.Left - CHECKBOX_SIZE) div 2;
+  Y := CellRect.Top + (CellRect.Bottom - CellRect.Top - CHECKBOX_SIZE) div 2;
+  R := Rect(X, Y, X + CHECKBOX_SIZE, Y + CHECKBOX_SIZE);
+  ThemeServices.DrawElement(TargetCanvas.Handle, Details, R);
+end;
+
+procedure TGroupsAssignFrame.VSTBeforeItemErase(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
+  var ItemColor: TColor; var EraseAction: TItemEraseAction);
+begin
+  //
+end;
+
 procedure TGroupsAssignFrame.VSTChecked(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
 begin
@@ -95,17 +148,11 @@ end;
 procedure TGroupsAssignFrame.VSTGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
-var
-  GR: TEpiGroupRight;
 begin
   case Column of
     0: CellText := RelationFromNode(Node).Group.Caption.Text;
-    1: begin
-         GR := GroupRights.GroupRightFromGroup(RelationFromNode(Node).Group);
-//         if Assigned(GR) then
-//           CellText := Write(S, GR.EntryRights);
-         CellText := 'test';
-       end;
+  else
+    CellText := '';
   end;
 end;
 
@@ -131,11 +178,40 @@ begin
   if RelationFromNode(Node).GroupRelations.Count > 0 then;
     Include(InitialStates, ivsHasChildren);
 
+  Sender.CheckType[node] := ctCheckBox;
+
   if Assigned(GroupRights.GroupRightFromGroup(Relation.Group)) then
     Sender.CheckState[Node] := csCheckedNormal;
 end;
 
+procedure TGroupsAssignFrame.VSTNodeClick(Sender: TBaseVirtualTree;
+  const HitInfo: THitInfo);
+var
+  Idx: Integer;
+  G: TEpiGroup;
+  GR: TEpiGroupRight;
+  Item: TEpiEntryRight;
+begin
+  if (HitInfo.HitColumn = 0) then exit;
+  if (hiNowhere in HitInfo.HitPositions) then exit;
+
+  G := RelationFromNode(HitInfo.HitNode).Group;
+  GR := GroupRights.GroupRightFromGroup(G);
+  if not Assigned(GR) then
+    begin
+      GR := GroupRights.NewGroupRight;
+      GR.Group := G;
+    end;
+
+  Item := TEpiEntryRight(HitInfo.HitColumn - 1);
+  GR.EntryRights := GR.EntryRights + [Item];
+
+  Sender.InvalidateNode(HitInfo.HitNode);
+end;
+
 constructor TGroupsAssignFrame.Create(TheOwner: TComponent);
+var
+  Item: TEpiEntryRight;
 begin
   inherited Create(TheOwner);
 
@@ -171,33 +247,38 @@ begin
         Options    := [coAllowClick, coEnabled, coParentBidiMode,
                        coParentColor, coResizable, coVisible,
                        coSmartResize, coAllowFocus];
-        Width      := 150;
       end;
 
-      with Columns.Add do
+      for Item in TEpiEntryRights do
       begin
-        Text := 'Rights';
-        CheckBox   := false;
-        CheckState := csUncheckedNormal;
-        CheckType  := ctNone;
-        Options    := [coAllowClick, coEnabled, coParentBidiMode,
-                       coParentColor, coResizable, coVisible,
-                       coSmartResize, coAllowFocus];
+        with Columns.Add do
+        begin
+          Text       := EpiEntryRightCaption[Item];
+          CheckBox   := false;
+          Options    := [coAllowClick, coEnabled, coParentBidiMode,
+                         coParentColor, coResizable, coVisible,
+                         coSmartResize, coAllowFocus];
+        end;
       end;
 
       MainColumn := 0;
-      AutoSizeIndex := 1;
+      AutoSizeIndex := 0;
     end;
 
     Align := alClient;
     Parent := Self;
 
-    OnInitChildren := @VSTInitChildren;
-    OnInitNode     := @VSTInitNode;
-//    OnBeforeItemErase := @GroupBeforeItemErase;
-    OnChecked      := @VSTChecked;
-    OnChecking     := @VSTChecking;
-    OnGetText      := @VSTGetText;
+    OnAfterCellPaint  := @VSTAfterCellPaint;
+    OnBeforeItemErase := @VSTBeforeItemErase;
+
+    OnChecked         := @VSTChecked;
+    OnChecking        := @VSTChecking;
+
+    OnInitChildren    := @VSTInitChildren;
+    OnInitNode        := @VSTInitNode;
+    OnGetText         := @VSTGetText;
+
+    OnNodeClick       := @VSTNodeClick;
 
     EndUpdate;
   end;

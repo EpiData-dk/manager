@@ -6,98 +6,80 @@ object SectionPropertiesFrame: TSectionPropertiesFrame
   ClientHeight = 427
   ClientWidth = 549
   LCLVersion = '1.5'
-  object PageControl1: TPageControl
+  object Panel1: TPanel
     Left = 0
     Height = 427
     Top = 0
     Width = 549
-    ActivePage = RightsSheet
     Align = alClient
-    TabIndex = 1
+    BevelOuter = bvNone
+    ClientHeight = 427
+    ClientWidth = 549
     TabOrder = 0
-    object BasicSheet: TTabSheet
-      Caption = 'BasicSheet'
-      ClientHeight = 394
-      ClientWidth = 543
-      object Panel1: TPanel
-        Left = 0
-        Height = 394
-        Top = 0
-        Width = 543
-        Align = alClient
-        BevelOuter = bvNone
-        ClientHeight = 394
-        ClientWidth = 543
-        TabOrder = 0
-        object Image1: TImage
-          AnchorSideRight.Control = NameEdit
-          AnchorSideRight.Side = asrBottom
-          AnchorSideBottom.Control = Label4
-          AnchorSideBottom.Side = asrBottom
-          Left = 517
-          Height = 16
-          Top = 9
-          Width = 16
-          Anchors = [akRight, akBottom]
-        end
-        object Label9: TLabel
-          AnchorSideLeft.Control = NameEdit
-          AnchorSideTop.Control = NameEdit
-          AnchorSideTop.Side = asrBottom
-          Left = 10
-          Height = 15
-          Top = 62
-          Width = 53
-          BorderSpacing.Top = 10
-          Caption = 'Caption:'
-          ParentColor = False
-        end
-        object CaptionEdit: TEdit
-          AnchorSideLeft.Control = Panel1
-          AnchorSideTop.Control = Label9
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = Panel1
-          AnchorSideRight.Side = asrBottom
-          Left = 10
-          Height = 25
-          Top = 79
-          Width = 523
-          Anchors = [akTop, akLeft, akRight]
-          BorderSpacing.Left = 10
-          BorderSpacing.Top = 2
-          BorderSpacing.Right = 10
-          TabOrder = 0
-        end
-        object Label4: TLabel
-          AnchorSideLeft.Control = NameEdit
-          Left = 10
-          Height = 15
-          Top = 10
-          Width = 43
-          BorderSpacing.Top = 10
-          Caption = 'Name:'
-          ParentColor = False
-        end
-        object NameEdit: TEdit
-          AnchorSideLeft.Control = Panel1
-          AnchorSideTop.Control = Label4
-          AnchorSideTop.Side = asrBottom
-          AnchorSideRight.Control = Panel1
-          AnchorSideRight.Side = asrBottom
-          Left = 10
-          Height = 25
-          Top = 27
-          Width = 523
-          Anchors = [akTop, akLeft, akRight]
-          BorderSpacing.Left = 10
-          BorderSpacing.Top = 2
-          BorderSpacing.Right = 10
-          TabOrder = 1
-        end
-      end
+    object Image1: TImage
+      AnchorSideRight.Control = NameEdit
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Label4
+      AnchorSideBottom.Side = asrBottom
+      Left = 523
+      Height = 16
+      Top = 9
+      Width = 16
+      Anchors = [akRight, akBottom]
     end
-    object RightsSheet: TTabSheet
-      Caption = 'Group Rights'
+    object Label9: TLabel
+      AnchorSideLeft.Control = NameEdit
+      AnchorSideTop.Control = NameEdit
+      AnchorSideTop.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 62
+      Width = 53
+      BorderSpacing.Top = 10
+      Caption = 'Caption:'
+      ParentColor = False
+    end
+    object CaptionEdit: TEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label9
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 25
+      Top = 79
+      Width = 529
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 10
+      TabOrder = 0
+    end
+    object Label4: TLabel
+      AnchorSideLeft.Control = NameEdit
+      Left = 10
+      Height = 15
+      Top = 10
+      Width = 43
+      BorderSpacing.Top = 10
+      Caption = 'Name:'
+      ParentColor = False
+    end
+    object NameEdit: TEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label4
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 25
+      Top = 27
+      Width = 529
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 10
+      TabOrder = 1
     end
   end
 end
