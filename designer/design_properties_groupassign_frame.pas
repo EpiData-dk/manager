@@ -5,8 +5,8 @@ unit design_properties_groupassign_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, ValEdit, epiadmin, VirtualTrees,
-  epirights, Graphics;
+  Classes, SysUtils, types, FileUtil, Forms, Controls, epiadmin,
+  VirtualTrees, epirights, Graphics;
 
 type
 
@@ -18,10 +18,16 @@ type
     FGroupRights: TEpiGroupRights;
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure SetGroupRights(AValue: TEpiGroupRights);
+
   { VST }
   private
     FVst: TVirtualStringTree;
+    FCheckBoxWidth: Integer;
+    FCheckBoxHeight: Integer;
 
+    function  CanCheck(Node: PVirtualNode; Right: TEpiEntryRight): boolean;
+    procedure NodeCheck(Node: PVirtualNode; Right: TEpiEntryRight; Value: Boolean);
+    function  NodeChecked(Node: PVirtualNode; Right: TEpiEntryRight): boolean;
     function  RelationFromNode(Const Node: PVirtualNode): TEpiGroupRelation;
     procedure RelationToNode(Const Node: PVirtualNode; Const Relation: TEpiGroupRelation);
 
@@ -34,6 +40,7 @@ type
     procedure VSTChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VSTChecking(Sender: TBaseVirtualTree; Node: PVirtualNode;
       var NewState: TCheckState; var Allowed: Boolean);
+    procedure VSTFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure VSTInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode;
@@ -43,6 +50,8 @@ type
     procedure VSTNodeClick(Sender: TBaseVirtualTree; const HitInfo: THitInfo);
   public
     constructor Create(TheOwner: TComponent); override;
+    procedure ApplyChanges;
+    function ValidateChanges: boolean;
     property Admin: TEpiAdmin read FAdmin write SetAdmin;
     property GroupRights: TEpiGroupRights read FGroupRights write SetGroupRights;
   end;
@@ -52,42 +61,136 @@ implementation
 {$R *.lfm}
 
 uses
-  CheckBoxThemed, Themes;
+  Themes;
+
+type
+  TCheckedRecord = record
+    GroupRelation: TEpiGroupRelation;
+    CreateChecked: boolean;
+    ReadChecked:   boolean;
+    UpdateChecked: boolean;
+    DeleteChecked: boolean;
+  end;
+  PCheckedRecord = ^TCheckedRecord;
+
 
 { TGroupsAssignFrame }
 
 procedure TGroupsAssignFrame.SetAdmin(AValue: TEpiAdmin);
 begin
-  if FAdmin = AValue then Exit;
   FAdmin := AValue;
 
   if Assigned(GroupRights) and
      (FVst.RootNodeCount = 0)
   then
-    FVst.RootNodeCount := 1;
+    FVst.RootNodeCount := 1
+  else
+    FVst.ReinitNode(nil, true);
+
+  FVst.Invalidate;
 end;
 
 procedure TGroupsAssignFrame.SetGroupRights(AValue: TEpiGroupRights);
 begin
-  if FGroupRights = AValue then Exit;
   FGroupRights := AValue;
 
   if Assigned(Admin) and
      (FVst.RootNodeCount = 0)
   then
-    FVst.RootNodeCount := 1;
+    FVst.RootNodeCount := 1
+  else
+    FVst.ReinitNode(nil, true);
+
+  FVst.Invalidate;
+end;
+
+function TGroupsAssignFrame.CanCheck(Node: PVirtualNode; Right: TEpiEntryRight
+  ): boolean;
+begin
+  // TODO!
+  result := true;
+end;
+
+procedure TGroupsAssignFrame.NodeCheck(Node: PVirtualNode;
+  Right: TEpiEntryRight; Value: Boolean);
+var
+  CR: PCheckedRecord;
+begin
+  if (not Assigned(Node)) then exit;
+  if (not CanCheck(Node, Right)) then exit;
+
+  CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+
+  case Right of
+    eerRead:   CR^.ReadChecked   := Value;
+    eerUpdate: CR^.UpdateChecked := Value;
+    eerCreate: CR^.CreateChecked := Value;
+    eerDelete: CR^.DeleteChecked := Value;
+  end;
+
+  if Value then
+    FVst.CheckState[Node] := csCheckedNormal;
+
+  if (Right > eerRead) and
+     (Value)
+  then
+    NodeCheck(Node, Pred(Right), Value);
+
+  if (Right < eerDelete) and
+     (not Value)
+  then
+    NodeCheck(Node, Succ(Right), Value);
+
+  FVst.InvalidateNode(Node);
+
+  if Value
+  then
+    NodeCheck(FVst.NodeParent[Node], Right, Value)
+  else
+    for Node in FVst.ChildNodes(Node) do
+      NodeCheck(Node, Right, Value)
+end;
+
+function TGroupsAssignFrame.NodeChecked(Node: PVirtualNode;
+  Right: TEpiEntryRight): boolean;
+var
+  CR: PCheckedRecord;
+begin
+  CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+
+  case Right of
+    eerRead:   Result := CR^.ReadChecked;
+    eerUpdate: Result := CR^.UpdateChecked;
+    eerCreate: Result := CR^.CreateChecked;
+    eerDelete: Result := CR^.DeleteChecked;
+  end;
 end;
 
 function TGroupsAssignFrame.RelationFromNode(const Node: PVirtualNode
   ): TEpiGroupRelation;
 begin
-  Result := TEpiGroupRelation(FVst.GetNodeData(Node)^);
+  Result := PCheckedRecord(FVst.GetNodeData(Node)^)^.GroupRelation;
 end;
 
 procedure TGroupsAssignFrame.RelationToNode(const Node: PVirtualNode;
   const Relation: TEpiGroupRelation);
+var
+  CheckedRecord: PCheckedRecord;
+  GR: TEpiGroupRight;
 begin
-  TEpiGroupRelation(FVst.GetNodeData(Node)^) := Relation;
+  CheckedRecord := New(PCheckedRecord);
+  GR := GroupRights.GroupRightFromGroup(Relation.Group);
+
+  with CheckedRecord^ do
+  begin
+    GroupRelation := Relation;
+    ReadChecked   := Assigned(GR) and (eerRead   in GR.EntryRights);
+    UpdateChecked := Assigned(GR) and (eerUpdate in GR.EntryRights);
+    CreateChecked := Assigned(GR) and (eerCreate in GR.EntryRights);
+    DeleteChecked := Assigned(GR) and (eerDelete in GR.EntryRights);
+  end;
+
+  PCheckedRecord(FVst.GetNodeData(Node)^) := CheckedRecord;
 end;
 
 procedure TGroupsAssignFrame.VSTAfterCellPaint(Sender: TBaseVirtualTree;
@@ -97,32 +200,28 @@ var
   Details: TThemedElementDetails;
   X, Y: Integer;
   R: TRect;
-  G: TEpiGroup;
-  GR: TEpiGroupRight;
   Checked: Boolean;
-
-const
-  CHECKBOX_SIZE = 13;
+  Sz: TSize;
 
 begin
   if Column = 0 then exit;
 
   { Paint Check boxes by ourselves - since VT's only allow for one checkbox column }
-  G  := RelationFromNode(Node).Group;
-  GR := GroupRights.GroupRightFromGroup(G);
-  Checked := false;
-
-  if (Assigned(GR)) then
-    Checked := (TEpiEntryRight(Column - 1) in GR.EntryRights);
+  Checked := NodeChecked(Node, TEpiEntryRight(Column - 1));
 
   if Checked then
     Details := ThemeServices.GetElementDetails(tbCheckBoxCheckedNormal)
   else
     Details := ThemeServices.GetElementDetails(tbCheckBoxUncheckedNormal);
 
-  X := CellRect.Left + (CellRect.Right - CellRect.Left - CHECKBOX_SIZE) div 2;
-  Y := CellRect.Top + (CellRect.Bottom - CellRect.Top - CHECKBOX_SIZE) div 2;
-  R := Rect(X, Y, X + CHECKBOX_SIZE, Y + CHECKBOX_SIZE);
+  Sz := ThemeServices.GetDetailSize(Details);
+
+  FCheckBoxHeight := Sz.cy;
+  FCheckBoxWidth  := SZ.cx;
+
+  X := CellRect.Left + (CellRect.Right - CellRect.Left - FCheckBoxWidth) div 2;
+  Y := CellRect.Top + (CellRect.Bottom - CellRect.Top - FCheckBoxHeight) div 2;
+  R := Rect(X, Y, X + FCheckBoxWidth, Y + FCheckBoxHeight);
   ThemeServices.DrawElement(TargetCanvas.Handle, Details, R);
 end;
 
@@ -135,14 +234,27 @@ end;
 
 procedure TGroupsAssignFrame.VSTChecked(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
+var
+  Item: TEpiEntryRight;
 begin
-
+  if Sender.CheckState[Node] = csUncheckedNormal then
+    for Item in TEpiEntryRights do
+      NodeCheck(Node, Item, false);
 end;
 
 procedure TGroupsAssignFrame.VSTChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
 begin
 
+end;
+
+procedure TGroupsAssignFrame.VSTFreeNode(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+var
+  CR: PCheckedRecord;
+begin
+  CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+  Dispose(CR);
 end;
 
 procedure TGroupsAssignFrame.VSTGetText(Sender: TBaseVirtualTree;
@@ -181,32 +293,25 @@ begin
   Sender.CheckType[node] := ctCheckBox;
 
   if Assigned(GroupRights.GroupRightFromGroup(Relation.Group)) then
-    Sender.CheckState[Node] := csCheckedNormal;
+    Sender.CheckState[Node] := csCheckedNormal
+  else
+    Sender.CheckState[Node] := csUncheckedNormal;
 end;
 
 procedure TGroupsAssignFrame.VSTNodeClick(Sender: TBaseVirtualTree;
   const HitInfo: THitInfo);
 var
-  Idx: Integer;
-  G: TEpiGroup;
-  GR: TEpiGroupRight;
   Item: TEpiEntryRight;
+  Node: PVirtualNode;
 begin
   if (HitInfo.HitColumn = 0) then exit;
   if (hiNowhere in HitInfo.HitPositions) then exit;
 
-  G := RelationFromNode(HitInfo.HitNode).Group;
-  GR := GroupRights.GroupRightFromGroup(G);
-  if not Assigned(GR) then
-    begin
-      GR := GroupRights.NewGroupRight;
-      GR.Group := G;
-    end;
-
+  Node := HitInfo.HitNode;
   Item := TEpiEntryRight(HitInfo.HitColumn - 1);
-  GR.EntryRights := GR.EntryRights + [Item];
 
-  Sender.InvalidateNode(HitInfo.HitNode);
+  if CanCheck(Node, Item) then
+    NodeCheck(Node, Item, not NodeChecked(Node, Item));
 end;
 
 constructor TGroupsAssignFrame.Create(TheOwner: TComponent);
@@ -220,7 +325,7 @@ begin
   begin
     BeginUpdate;
 
-    NodeDataSize := SizeOf(Pointer);
+    NodeDataSize := SizeOf(PCheckedRecord);
 
     with TreeOptions do
     begin
@@ -274,14 +379,61 @@ begin
     OnChecked         := @VSTChecked;
     OnChecking        := @VSTChecking;
 
+    OnFreeNode        := @VSTFreeNode;
+    OnGetText         := @VSTGetText;
     OnInitChildren    := @VSTInitChildren;
     OnInitNode        := @VSTInitNode;
-    OnGetText         := @VSTGetText;
 
     OnNodeClick       := @VSTNodeClick;
 
     EndUpdate;
   end;
+end;
+
+procedure TGroupsAssignFrame.ApplyChanges;
+var
+  Node: PVirtualNode;
+  CR: PCheckedRecord;
+  GR: TEpiGroupRight;
+  Rights: TEpiEntryRights;
+begin
+  for Node in FVst.Nodes() do
+    begin
+      CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+      GR := TEpiGroupRight(GroupRights.GroupRightFromGroup(CR^.GroupRelation.Group));
+
+      case FVst.CheckState[Node] of
+        csUncheckedNormal:
+          begin
+            if Assigned(GR) then
+              GR.Free;
+          end;
+
+        csCheckedNormal:
+          begin
+            if (not Assigned(GR)) then
+              begin
+                GR := GroupRights.NewGroupRight;
+                GR.Group := CR^.GroupRelation.Group;
+              end;
+
+            Rights := [];
+            if CR^.ReadChecked   then Include(Rights, eerRead);
+            if CR^.UpdateChecked then Include(Rights, eerUpdate);
+            if CR^.CreateChecked then Include(Rights, eerCreate);
+            if CR^.DeleteChecked then Include(Rights, eerDelete);
+
+            GR.EntryRights := Rights;
+          end
+      else
+        // Should not happen
+      end;
+    end;
+end;
+
+function TGroupsAssignFrame.ValidateChanges: boolean;
+begin
+  result := true;
 end;
 
 end.

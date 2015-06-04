@@ -1285,6 +1285,8 @@ begin
   FProjectTreeView.Align  := alClient;
   FProjectTreeView.Parent := ProjectPanel;
 
+  Panel1.Visible := false;
+
   UpdateRecentFilesDropDown;
   LoadSplitterPosition(Splitter1, 'ProjectSplitter');
 end;

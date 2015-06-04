@@ -391,7 +391,8 @@ end;
 
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameContent;
 begin
-//  FGroupAssignFrame.GroupRights := DataFile.;
+  FGroupAssignFrame.Admin       := Authenticator.Admin;
+  FGroupAssignFrame.GroupRights := DataFile.GroupRights;
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
@@ -512,6 +513,12 @@ begin
   // ********************
   //  AfterRecord
   // ********************
+
+  // ********************
+  //  Group Righst
+  // ********************
+  Result := Result and
+            FGroupAssignFrame.ValidateChanges;
 end;
 
 procedure TDataformPropertiesFrame.InternalApply;
@@ -563,6 +570,11 @@ begin
   else
     // "Master" datafile is ALWAYS new record state.
     DataFile.AfterRecordState := arsNewRecord;
+
+  // ********************
+  //  Group Righst
+  // ********************
+  FGroupAssignFrame.ApplyChanges;
 end;
 
 procedure TDataformPropertiesFrame.SetReadOnly(AValue: Boolean);
