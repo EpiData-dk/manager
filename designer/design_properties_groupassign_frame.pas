@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, types, FileUtil, Forms, Controls, epiadmin,
-  VirtualTrees, epirights, Graphics;
+  VirtualTrees, epirights, Graphics, epidatafilerelations, epidatafiles;
 
 type
 
@@ -21,6 +21,7 @@ type
 
   { VST }
   private
+    FDataFileRelation: TEpiMasterRelation;
     FVst: TVirtualStringTree;
     FCheckBoxWidth: Integer;
     FCheckBoxHeight: Integer;
@@ -30,13 +31,14 @@ type
     function  NodeChecked(Node: PVirtualNode; Right: TEpiEntryRight): boolean;
     function  RelationFromNode(Const Node: PVirtualNode): TEpiGroupRelation;
     procedure RelationToNode(Const Node: PVirtualNode; Const Relation: TEpiGroupRelation);
+    procedure SetDataFileRelation(AValue: TEpiMasterRelation);
 
     procedure VSTAfterCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       const CellRect: TRect);
-    procedure VSTBeforeItemErase(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
-      var ItemColor: TColor; var EraseAction: TItemEraseAction);
+    procedure VSTBeforeCellPaint(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+      CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
     procedure VSTChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VSTChecking(Sender: TBaseVirtualTree; Node: PVirtualNode;
       var NewState: TCheckState; var Allowed: Boolean);
@@ -53,6 +55,7 @@ type
     procedure ApplyChanges;
     function ValidateChanges: boolean;
     property Admin: TEpiAdmin read FAdmin write SetAdmin;
+    property DataFileRelation: TEpiMasterRelation read FDataFileRelation write SetDataFileRelation;
     property GroupRights: TEpiGroupRights read FGroupRights write SetGroupRights;
   end;
 
@@ -193,6 +196,12 @@ begin
   PCheckedRecord(FVst.GetNodeData(Node)^) := CheckedRecord;
 end;
 
+procedure TGroupsAssignFrame.SetDataFileRelation(AValue: TEpiMasterRelation);
+begin
+  if FDataFileRelation = AValue then Exit;
+  FDataFileRelation := AValue;
+end;
+
 procedure TGroupsAssignFrame.VSTAfterCellPaint(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   const CellRect: TRect);
@@ -225,11 +234,36 @@ begin
   ThemeServices.DrawElement(TargetCanvas.Handle, Details, R);
 end;
 
-procedure TGroupsAssignFrame.VSTBeforeItemErase(Sender: TBaseVirtualTree;
-  TargetCanvas: TCanvas; Node: PVirtualNode; const ItemRect: TRect;
-  var ItemColor: TColor; var EraseAction: TItemEraseAction);
+procedure TGroupsAssignFrame.VSTBeforeCellPaint(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
+var
+  Detail: TEpiDetailRelation;
+  MasterDF: TEpiDataFile;
+  MasterGRs: TEpiGroupRights;
+  Item: TEpiEntryRight;
+  GR: TEpiGroupRight;
 begin
   //
+  if (not DataFileRelation.InheritsFrom(TEpiDetailRelation)) then
+    Exit;
+
+  if (CellPaintMode = cpmGetContentMargin) then Exit;
+
+  Detail := TEpiDetailRelation(DataFileRelation);
+  MasterDF := Detail.MasterRelation.Datafile;
+  MasterGRs := MasterDF.GroupRights;
+
+  GR := MasterGRs.GroupRightFromGroup(RelationFromNode(Node).Group);
+  Item := TEpiEntryRight(Column - 1);
+
+  if (Assigned(GR)) and
+     (Item in GR.EntryRights)
+  then
+    begin
+      TargetCanvas.Brush.Color := clInactiveCaption;
+      TargetCanvas.FillRect(CellRect);
+    end;
 end;
 
 procedure TGroupsAssignFrame.VSTChecked(Sender: TBaseVirtualTree;
@@ -237,9 +271,9 @@ procedure TGroupsAssignFrame.VSTChecked(Sender: TBaseVirtualTree;
 var
   Item: TEpiEntryRight;
 begin
-  if Sender.CheckState[Node] = csUncheckedNormal then
-    for Item in TEpiEntryRights do
-      NodeCheck(Node, Item, false);
+//  if Sender.CheckState[Node] = csUncheckedNormal then
+//    for Item in TEpiEntryRights do
+//      NodeCheck(Node, Item, false);
 end;
 
 procedure TGroupsAssignFrame.VSTChecking(Sender: TBaseVirtualTree;
@@ -289,13 +323,6 @@ begin
   Include(InitialStates, ivsExpanded);
   if RelationFromNode(Node).GroupRelations.Count > 0 then;
     Include(InitialStates, ivsHasChildren);
-
-  Sender.CheckType[node] := ctCheckBox;
-
-  if Assigned(GroupRights.GroupRightFromGroup(Relation.Group)) then
-    Sender.CheckState[Node] := csCheckedNormal
-  else
-    Sender.CheckState[Node] := csUncheckedNormal;
 end;
 
 procedure TGroupsAssignFrame.VSTNodeClick(Sender: TBaseVirtualTree;
@@ -346,9 +373,9 @@ begin
       with Columns.Add do
       begin
         Text := 'Group';
-        CheckBox   := True;
+        CheckBox   := false;
         CheckState := csUncheckedNormal;
-        CheckType  := ctCheckBox;
+        CheckType  := ctNone;
         Options    := [coAllowClick, coEnabled, coParentBidiMode,
                        coParentColor, coResizable, coVisible,
                        coSmartResize, coAllowFocus];
@@ -374,7 +401,7 @@ begin
     Parent := Self;
 
     OnAfterCellPaint  := @VSTAfterCellPaint;
-    OnBeforeItemErase := @VSTBeforeItemErase;
+    OnBeforeCellPaint := @VSTBeforeCellPaint;
 
     OnChecked         := @VSTChecked;
     OnChecking        := @VSTChecking;
@@ -399,35 +426,32 @@ var
 begin
   for Node in FVst.Nodes() do
     begin
+      Rights := [];
       CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+
+      if CR^.ReadChecked   then Include(Rights, eerRead);
+      if CR^.UpdateChecked then Include(Rights, eerUpdate);
+      if CR^.CreateChecked then Include(Rights, eerCreate);
+      if CR^.DeleteChecked then Include(Rights, eerDelete);
+
       GR := TEpiGroupRight(GroupRights.GroupRightFromGroup(CR^.GroupRelation.Group));
 
-      case FVst.CheckState[Node] of
-        csUncheckedNormal:
-          begin
-            if Assigned(GR) then
-              GR.Free;
-          end;
+      if (Rights = []) and
+         (Assigned(GR))
+      then
+        GR.Free;
 
-        csCheckedNormal:
-          begin
-            if (not Assigned(GR)) then
-              begin
-                GR := GroupRights.NewGroupRight;
-                GR.Group := CR^.GroupRelation.Group;
-              end;
+      if (Rights <> [])
+      then
+        begin
+          if (not Assigned(GR)) then
+            begin
+              GR := GroupRights.NewGroupRight;
+              GR.Group := CR^.GroupRelation.Group;
+            end;
 
-            Rights := [];
-            if CR^.ReadChecked   then Include(Rights, eerRead);
-            if CR^.UpdateChecked then Include(Rights, eerUpdate);
-            if CR^.CreateChecked then Include(Rights, eerCreate);
-            if CR^.DeleteChecked then Include(Rights, eerDelete);
-
-            GR.EntryRights := Rights;
-          end
-      else
-        // Should not happen
-      end;
+          GR.EntryRights := Rights;
+        end;
     end;
 end;
 

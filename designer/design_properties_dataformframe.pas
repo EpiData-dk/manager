@@ -392,6 +392,7 @@ end;
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameContent;
 begin
   FGroupAssignFrame.Admin       := Authenticator.Admin;
+  FGroupAssignFrame.DataFileRelation := Relation;
   FGroupAssignFrame.GroupRights := DataFile.GroupRights;
 end;
 
