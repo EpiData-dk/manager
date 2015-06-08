@@ -5,19 +5,21 @@ unit design_properties_groupassign_frame;
 interface
 
 uses
-  Classes, SysUtils, types, FileUtil, Forms, Controls, epiadmin,
-  VirtualTrees, epirights, Graphics, epidatafilerelations, epidatafiles;
+  Classes, SysUtils, types, FileUtil, Forms, Controls, epiadmin, VirtualTrees,
+  epirights, Graphics, StdCtrls, ExtCtrls, epidatafilerelations, epidatafiles;
 
 type
 
   { TGroupsAssignFrame }
 
   TGroupsAssignFrame = class(TFrame)
+    Button1: TButton;
   private
     FAdmin: TEpiAdmin;
     FGroupRights: TEpiGroupRights;
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure SetGroupRights(AValue: TEpiGroupRights);
+    procedure CopyParentRightsBtnClick(Sender: TObject);
 
   { VST }
   private
@@ -39,9 +41,6 @@ type
     procedure VSTBeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
-    procedure VSTChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VSTChecking(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      var NewState: TCheckState; var Allowed: Boolean);
     procedure VSTFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
@@ -78,6 +77,38 @@ type
 
 
 { TGroupsAssignFrame }
+
+procedure TGroupsAssignFrame.CopyParentRightsBtnClick(Sender: TObject);
+var
+  Detail: TEpiDetailRelation;
+  MasterDF: TEpiDataFile;
+  MasterGRs: TEpiGroupRights;
+  GR: TEpiGroupRight;
+  Item: TEpiEntryRight;
+  Node: PVirtualNode;
+
+begin
+  Detail := TEpiDetailRelation(DataFileRelation);
+  MasterDF := Detail.MasterRelation.Datafile;
+  MasterGRs := MasterDF.GroupRights;
+
+  FVst.BeginUpdate;
+
+  // This unchecks all!
+  NodeCheck(FVst.GetFirst(), eerRead, false);
+
+  for Node in FVst.Nodes() do
+    begin
+      GR := MasterGRs.GroupRightFromGroup(RelationFromNode(Node).Group);
+
+      if (Assigned(GR))
+      then
+        for Item in GR.EntryRights do
+          NodeCheck(Node, Item, true);
+    end;
+
+  FVst.EndUpdate;
+end;
 
 procedure TGroupsAssignFrame.SetAdmin(AValue: TEpiAdmin);
 begin
@@ -244,7 +275,6 @@ var
   Item: TEpiEntryRight;
   GR: TEpiGroupRight;
 begin
-  //
   if (not DataFileRelation.InheritsFrom(TEpiDetailRelation)) then
     Exit;
 
@@ -264,22 +294,6 @@ begin
       TargetCanvas.Brush.Color := clInactiveCaption;
       TargetCanvas.FillRect(CellRect);
     end;
-end;
-
-procedure TGroupsAssignFrame.VSTChecked(Sender: TBaseVirtualTree;
-  Node: PVirtualNode);
-var
-  Item: TEpiEntryRight;
-begin
-//  if Sender.CheckState[Node] = csUncheckedNormal then
-//    for Item in TEpiEntryRights do
-//      NodeCheck(Node, Item, false);
-end;
-
-procedure TGroupsAssignFrame.VSTChecking(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
-begin
-
 end;
 
 procedure TGroupsAssignFrame.VSTFreeNode(Sender: TBaseVirtualTree;
@@ -397,14 +411,13 @@ begin
       AutoSizeIndex := 0;
     end;
 
-    Align := alClient;
     Parent := Self;
+
+    AnchorAsAlign(alTop,   0);
+    AnchorToNeighbour(akBottom, 10, Button1);
 
     OnAfterCellPaint  := @VSTAfterCellPaint;
     OnBeforeCellPaint := @VSTBeforeCellPaint;
-
-    OnChecked         := @VSTChecked;
-    OnChecking        := @VSTChecking;
 
     OnFreeNode        := @VSTFreeNode;
     OnGetText         := @VSTGetText;
@@ -415,6 +428,8 @@ begin
 
     EndUpdate;
   end;
+
+  Button1.OnClick := @CopyParentRightsBtnClick;
 end;
 
 procedure TGroupsAssignFrame.ApplyChanges;

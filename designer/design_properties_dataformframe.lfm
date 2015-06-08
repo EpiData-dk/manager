@@ -1,7 +1,7 @@
 object DataformPropertiesFrame: TDataformPropertiesFrame
-  Left = 672
+  Left = 1156
   Height = 546
-  Top = 289
+  Top = 322
   Width = 545
   ClientHeight = 546
   ClientWidth = 545
@@ -78,6 +78,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           TabOrder = 2
           OnEditingDone = MaskEdit1EditingDone
           EditMask = '9999;1; '
+          Text = '    '
           SpaceChar = ' '
         end
       end
@@ -167,7 +168,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           Height = 238
           Top = 0
           Width = 515
-          HorzScrollBar.Page = 107
+          HorzScrollBar.Page = 117
           VertScrollBar.Page = 59
           Align = alClient
           BorderStyle = bsNone

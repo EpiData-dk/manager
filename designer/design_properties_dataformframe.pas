@@ -94,7 +94,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafilerelations, admin_authenticator;
+  epidatafilerelations, admin_authenticator, epiadmin;
 
 const
   AfterRecordStateCaption: array[TEpiDataFileAfterRecordState] of string =
@@ -387,6 +387,7 @@ end;
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameVisibility;
 begin
   RightsTabSheet.Visible := Assigned(Authenticator.AuthedUser);
+  RightsTabSheet.Enabled := IsAuthorized(earGroups);;
 end;
 
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameContent;
@@ -398,6 +399,8 @@ end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
 begin
+  BasicSheet.Enabled := IsAuthorized(earDefineProject);
+
   ChildRecGrpBox.Visible := Relation.InheritsFrom(TEpiDetailRelation);
 
   UpdateAfterRecordRadioBoxVisibility;
@@ -407,6 +410,8 @@ begin
   AfterRecordSheet.TabVisible :=
     (Relation.DetailRelations.Count > 0) OR
     (Relation.InheritsFrom(TEpiDetailRelation));
+  AfterRecordSheet.Enabled := IsAuthorized(earDefineProject);;
+
 
   UpdateGroupAssignFrameVisibility;
 end;
@@ -582,10 +587,10 @@ procedure TDataformPropertiesFrame.SetReadOnly(AValue: Boolean);
 var
   i: Integer;
 begin
-  inherited SetReadOnly(AValue);
+  {inherited SetReadOnly(AValue);
 
   for i := 0 to PageControl1.PageCount - 1 do
-    PageControl1.Pages[i].Enabled := (not ReadOnly);
+    PageControl1.Pages[i].Enabled := (not ReadOnly);    }
 end;
 
 constructor TDataformPropertiesFrame.Create(TheOwner: TComponent);
