@@ -728,6 +728,9 @@ object MainForm: TMainForm
     object ValueLabelEditorPopupMenuItem: TMenuItem
       Caption = 'ValueLabelEditor'
     end
+    object AdminPopupMenuItem: TMenuItem
+      Caption = 'Admin'
+    end
     object SetPasswordPopupMenuItem: TMenuItem
       Caption = 'Password'
     end

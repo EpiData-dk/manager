@@ -18,6 +18,7 @@ type
   TMainForm = class(TForm)
     AdminMenuItem: TMenuItem;
     AppleMenuItem: TMenuItem;
+    AdminPopupMenuItem: TMenuItem;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
     MenuItem37: TMenuItem;

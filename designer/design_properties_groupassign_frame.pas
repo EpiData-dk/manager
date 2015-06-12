@@ -231,6 +231,8 @@ procedure TGroupsAssignFrame.SetDataFileRelation(AValue: TEpiMasterRelation);
 begin
   if FDataFileRelation = AValue then Exit;
   FDataFileRelation := AValue;
+
+  Button1.Enabled := FDataFileRelation.InheritsFrom(TEpiDetailRelation);
 end;
 
 procedure TGroupsAssignFrame.VSTAfterCellPaint(Sender: TBaseVirtualTree;

@@ -1467,6 +1467,7 @@ begin
     // --project details popup-menu
     ProjectPropertiesPopupMenuItem.Action := ProjectSettingsAction;
     ValueLabelEditorPopupMenuItem.Action  := ValueLabelEditorAction;
+    AdminPopupMenuItem.Action             := AdminAction;
     SetPasswordPopupMenuItem.Action       := ProjectPasswordAction;
     StudyInfoPopupMenuItem.Action         := StudyInformationAction;
   end;
