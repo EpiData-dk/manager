@@ -48,6 +48,8 @@ type
       var ChildCount: Cardinal);
     procedure VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+    procedure VSTKeyAction(Sender: TBaseVirtualTree; var CharCode: Word;
+      var Shift: TShiftState; var DoDefault: Boolean);
     procedure VSTNodeClick(Sender: TBaseVirtualTree; const HitInfo: THitInfo);
   public
     constructor Create(TheOwner: TComponent); override;
@@ -63,7 +65,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Themes;
+  Themes, LCLType;
 
 type
   TCheckedRecord = record
@@ -341,6 +343,27 @@ begin
     Include(InitialStates, ivsHasChildren);
 end;
 
+procedure TGroupsAssignFrame.VSTKeyAction(Sender: TBaseVirtualTree;
+  var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
+var
+  Item: TEpiEntryRight;
+begin
+  if (FVst.FocusedColumn <= 0) or
+     (FVst.FocusedColumn > (Integer(High(TEpiEntryRight))) + 1) or
+     (not Assigned(FVst.FocusedNode))
+  then
+    Exit;
+
+  if (CharCode = VK_SPACE) and (Shift = []) then
+    begin
+      DoDefault := false;
+      Item := TEpiEntryRight(FVst.FocusedColumn - 1);
+
+      if CanCheck(FVst.FocusedNode, Item) then
+        NodeCheck(FVst.FocusedNode, Item, not NodeChecked(FVst.FocusedNode, Item));
+    end;
+end;
+
 procedure TGroupsAssignFrame.VSTNodeClick(Sender: TBaseVirtualTree;
   const HitInfo: THitInfo);
 var
@@ -374,8 +397,7 @@ begin
     begin
       AnimationOptions := [];
       AutoOptions      := [];
-      MiscOptions      := [toCheckSupport, toFullRepaintOnResize, toGridExtensions,
-                           toWheelPanning];
+      MiscOptions      := [toFullRepaintOnResize, toGridExtensions, toWheelPanning];
       PaintOptions     := [toShowButtons, toShowRoot, toShowTreeLines, toThemeAware, toUseBlendedImages];
       SelectionOptions := [toExtendedFocus, toFullRowSelect, toAlwaysSelectNode];
       StringOptions    := [];
@@ -403,6 +425,7 @@ begin
         begin
           Text       := EpiEntryRightCaption[Item];
           CheckBox   := false;
+          CheckType  := ctNone;
           Options    := [coAllowClick, coEnabled, coParentBidiMode,
                          coParentColor, coResizable, coVisible,
                          coSmartResize, coAllowFocus];
@@ -425,6 +448,8 @@ begin
     OnGetText         := @VSTGetText;
     OnInitChildren    := @VSTInitChildren;
     OnInitNode        := @VSTInitNode;
+
+    OnKeyAction       := @VSTKeyAction;
 
     OnNodeClick       := @VSTNodeClick;
 

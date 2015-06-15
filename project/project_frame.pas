@@ -389,6 +389,7 @@ begin
         Exit;
       end;
 
+      EpiDocument.Admin.Created := Now;
       PostMessage(MainForm.Handle, LM_MAIN_CLOSEPROJECT, 1, 0);
       PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, 0, 0);
       Exit;

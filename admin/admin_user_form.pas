@@ -193,6 +193,8 @@ begin
 end;
 
 procedure TAdminUserForm.OkBtnClick(Sender: TObject);
+var
+  Node: PVirtualNode;
 begin
   if (not User.ValidateRename(LoginEdit.Text, false))
   then
@@ -212,6 +214,10 @@ begin
 
   if FPasswordModified then
     User.Password   := PasswordEdit.Text;
+
+  User.Groups.Clear;
+  for Node in FGroupVST.CheckedNodes() do
+    User.Groups.AddItem(GroupFromNode(Node));
 end;
 
 procedure TAdminUserForm.LoginEditKeyDown(Sender: TObject; var Key: Word;
@@ -380,6 +386,16 @@ begin
       Exit;
     end;
 
+  // Special case for admins in admin group!
+  if ((G = Admin.Admins) and (User = Authenticator.AuthedUser))
+     or
+     (not Authenticator.AuthedUserInGroup(G, true))
+  then
+    begin
+      Allowed := false;
+      Exit;
+    end;
+
   // You cannot remove yourself from the group, if this is highest group
   // in the hieracy you have access to.
   if (User = Authenticator.AuthedUser) and
@@ -390,16 +406,6 @@ begin
          true
        )
      )
-  then
-    begin
-      Allowed := false;
-      Exit;
-    end;
-
-
-  if ((G = Admin.Admins) and (User = Authenticator.AuthedUser))
-     or
-     (not Authenticator.AuthedUserInGroup(G, true))
   then
     begin
       Allowed := false;

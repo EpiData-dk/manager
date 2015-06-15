@@ -183,10 +183,10 @@ object AdminGroupForm: TAdminGroupForm
       Left = 21
       Height = 15
       Top = 21
-      Width = 53
+      Width = 86
       BorderSpacing.Left = 20
       BorderSpacing.Top = 20
-      Caption = 'Caption:'
+      Caption = 'Group Name:'
       ParentColor = False
     end
   end
