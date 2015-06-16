@@ -310,12 +310,14 @@ var
 
   procedure BuildList;
   var
-    i: integer;
     L: TList;
     DF: TEpiDataFile;
     F: TEpiField;
+    DFs: TEpiDataFiles;
   begin
-    for DF in FProjectTree.Documents[0].DataFiles do
+    DFs := FProjectTree.Documents[0].Relations.GetOrderedDataFiles;
+
+    for DF in DFs do
     begin
       L := TList.Create;
       for F in DF.KeyFields do
@@ -328,6 +330,8 @@ var
           L.Add(F);
       FCompareTreeList.Add(L);
     end;
+
+    DFs.Free;
   end;
 
   procedure ClearList;
