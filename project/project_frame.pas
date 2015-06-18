@@ -91,6 +91,7 @@ type
     procedure DoCreateNewProject;
     procedure DoCloseProject;
     procedure EpiDocumentModified(Sender: TObject);
+    procedure UpdateDefaultExtension(Const Dlg: TOpenDialog);
     procedure SaveDlgTypeChange(Sender: TObject);
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
@@ -378,10 +379,7 @@ var
   Dlg: TSaveDialog absolute Sender;
   Fn: String;
 begin
-  case Dlg.FilterIndex of
-    1: Dlg.DefaultExt := 'epx';
-    2: Dlg.DefaultExt := 'epz';
-  end;
+  UpdateDefaultExtension(Dlg);
 
   Dlg.FileName := ChangeFileExt(Dlg.FileName, Dlg.DefaultExt);
 
@@ -676,6 +674,14 @@ begin
   // Activates/Deactivates timed backup.
   if Assigned(FBackupTimer) and Assigned(EpiDocument) then
     FBackupTimer.Enabled := EpiDocument.Modified;
+end;
+
+procedure TProjectFrame.UpdateDefaultExtension(const Dlg: TOpenDialog);
+begin
+  case Dlg.FilterIndex of
+    1: Dlg.DefaultExt := 'epx';
+    2: Dlg.DefaultExt := 'epz';
+  end;
 end;
 
 procedure TProjectFrame.SetModified(const AValue: Boolean);
@@ -1281,15 +1287,14 @@ begin
     Dlg := TSaveDialog.Create(Self);
     Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
     Dlg.FilterIndex := ManagerSettings.SaveType + 1;
+    UpdateDefaultExtension(Dlg);
 
     if DocumentFile.IsSaved then
     begin
       Dlg.InitialDir := ExtractFilePath(DocumentFile.FileName);
       Dlg.FileName := DocumentFile.FileName
-    end else begin
+    end else
       Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-      SaveDlgTypeChange(Dlg);
-    end;
 
     Dlg.OnTypeChange := @SaveDlgTypeChange;
     Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];

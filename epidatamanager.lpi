@@ -160,7 +160,7 @@
       </Item5>
       <SharedMatrixOptions Count="2">
         <Item1 ID="452080431331" Modes="Win32,Win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
-        <Item2 ID="637697368399" Value="-WG"/>
+        <Item2 ID="637697368399" Modes="Win32,Win64" Value="-WG"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -218,6 +218,7 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="main"/>
       </Unit1>
       <Unit2>
         <Filename Value="project/project_frame.pas"/>
@@ -225,6 +226,7 @@
         <ComponentName Value="ProjectFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="project_frame"/>
       </Unit2>
       <Unit3>
         <Filename Value="utils/managerprocs.pas"/>
@@ -370,6 +372,7 @@
         <ComponentName Value="ProjectFileListFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="projectfilelist_frame"/>
       </Unit27>
       <Unit28>
         <Filename Value="reports/staticreports_form.pas"/>
@@ -716,6 +719,7 @@
         <ComponentName Value="AppendForm2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="append_form2"/>
       </Unit88>
       <Unit89>
         <Filename Value="reports/report_project_validation_frame2.pas"/>
