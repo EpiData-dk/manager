@@ -207,7 +207,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="100">
+    <Units Count="101">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -788,6 +788,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit99>
+      <Unit100>
+        <Filename Value="tools/core_logger.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="CoreLogger"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit100>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

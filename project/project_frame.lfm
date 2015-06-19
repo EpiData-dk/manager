@@ -86,7 +86,7 @@ object ProjectFrame: TProjectFrame
         ShowHint = True
       end
       object ToolButton7: TToolButton
-        Left = 137
+        Left = 145
         Height = 20
         Top = 1
         Width = 5
@@ -105,6 +105,21 @@ object ProjectFrame: TProjectFrame
         Width = 5
         Caption = 'ToolButton2'
         Style = tbsDivider
+      end
+      object ToolButton3: TToolButton
+        Left = 137
+        Height = 20
+        Top = 1
+        Width = 8
+        Caption = 'ToolButton3'
+        Style = tbsSeparator
+      end
+      object ToolButton5: TToolButton
+        Left = 150
+        Top = 1
+        Caption = 'ToolButton5'
+        ImageIndex = 37
+        OnClick = ToolButton5Click
       end
     end
   end
