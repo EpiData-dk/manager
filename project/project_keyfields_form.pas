@@ -254,7 +254,6 @@ begin
   Selecting := true;
   for i := 0 to FDynamicKeyList.Count -1 do
   begin
-    WriteLn('ComboSelect: ', i);
     Cmb := TComboBox(FDynamicKeyList[i]);
     if Cmb = Sender then Continue;
 
