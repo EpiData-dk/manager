@@ -9,7 +9,7 @@ uses
   Dialogs, epidocument, epidatafiles, epicustombase, epidatafilerelations, epirelates,
   epiadmin, manager_messages, LMessages, Menus, StdCtrls, epiv_documentfile,
   types, design_runtimedesigner, project_types, epiv_projecttreeview_frame,
-  manager_types;
+  manager_types, core_logger;
 
 type
 
@@ -32,6 +32,8 @@ type
     OpenProjectAction: TAction;
     NewProjectToolBtn: TToolButton;
     ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton5: TToolButton;
     ValueLabelEditorAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
@@ -67,7 +69,13 @@ type
     procedure SaveProjectActionUpdate(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
     procedure StudyInformationActionExecute(Sender: TObject);
+    procedure ToolButton5Click(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
+  private
+    { Core Logger }
+    FCoreLoggerForm: TCoreLogger;
+    procedure ShowCoreLogger;
+    procedure CreateCoreLogger;
   private
     { private declarations }
     FDocumentFile: TDocumentFile;
@@ -89,10 +97,12 @@ type
       Data: Pointer = nil);
     function  DoOpenProject(Const AFileName: string): boolean;
     // create new
+    function  DoCreateNewDocumentFile: TDocumentFile;
     function  DoCreateNewDocument: TEpiDocument;
     procedure DoCreateNewProject;
     procedure DoCloseProject;
     procedure EpiDocumentModified(Sender: TObject);
+    procedure UpdateDefaultExtension(Const Dlg: TOpenDialog);
     procedure SaveDlgTypeChange(Sender: TObject);
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
@@ -492,10 +502,7 @@ var
   Dlg: TSaveDialog absolute Sender;
   Fn: String;
 begin
-  case Dlg.FilterIndex of
-    1: Dlg.DefaultExt := 'epx';
-    2: Dlg.DefaultExt := 'epz';
-  end;
+  UpdateDefaultExtension(Dlg);
 
   Dlg.FileName := ChangeFileExt(Dlg.FileName, Dlg.DefaultExt);
 
@@ -517,15 +524,30 @@ begin
   FProjectTreeView.SelectedObject := EpiDocument;
 end;
 
+procedure TProjectFrame.ToolButton5Click(Sender: TObject);
+begin
+  ShowCoreLogger;
+end;
+
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
 begin
   ShowValueLabelEditor2(EpiDocument.ValueLabelSets);
 end;
 
+procedure TProjectFrame.ShowCoreLogger;
+begin
+  if Assigned(FCoreLoggerForm) then
+    FCoreLoggerForm.Show;
+end;
+
+procedure TProjectFrame.CreateCoreLogger;
+begin
+  FCoreLoggerForm := TCoreLogger.Create(Self);
+end;
+
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
-  FDocumentFile := TDocumentFile.Create;
-  Result := FDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
+  Result := DoCreateNewDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
 
   with Result.ProjectSettings, ManagerSettings do
   begin
@@ -624,10 +646,8 @@ var
 begin
   Result := false;
   try
-    FDocumentFile := TDocumentFile.Create;
-    FDocumentFile.OnProgress := @DocumentProgress;
-    FDocumentFile.OnLoadError := @LoadError;
-    FDocumentFile.DataDirectory := ManagerSettings.WorkingDirUTF8;
+    DoCreateNewDocumentFile;
+
     T1 := Now;
     if not FDocumentFile.OpenFile(AFileName) then
     begin
@@ -684,6 +704,17 @@ begin
     UpdateCaption;
   finally
   end;
+end;
+
+function TProjectFrame.DoCreateNewDocumentFile: TDocumentFile;
+begin
+  FDocumentFile := TDocumentFile.Create;
+  FDocumentFile.OnDocumentChangeEvent := @FCoreLoggerForm.DocumentHook;
+  FDocumentFile.OnProgress            := @DocumentProgress;
+  FDocumentFile.OnLoadError           := @LoadError;
+  FDocumentFile.DataDirectory         := ManagerSettings.WorkingDirUTF8;
+
+  Result := FDocumentFile;
 end;
 
 function TProjectFrame.DoNewDataForm(ParentRelation: TEpiMasterRelation
@@ -791,6 +822,14 @@ begin
   // Activates/Deactivates timed backup.
   if Assigned(FBackupTimer) and Assigned(EpiDocument) then
     FBackupTimer.Enabled := EpiDocument.Modified;
+end;
+
+procedure TProjectFrame.UpdateDefaultExtension(const Dlg: TOpenDialog);
+begin
+  case Dlg.FilterIndex of
+    1: Dlg.DefaultExt := 'epx';
+    2: Dlg.DefaultExt := 'epz';
+  end;
 end;
 
 procedure TProjectFrame.SetModified(const AValue: Boolean);
@@ -1286,6 +1325,8 @@ begin
   FProjectTreeView.Align  := alClient;
   FProjectTreeView.Parent := ProjectPanel;
 
+  CreateCoreLogger;
+
   Panel1.Visible := false;
 
   UpdateRecentFilesDropDown;
@@ -1403,15 +1444,14 @@ begin
     Dlg := TSaveDialog.Create(Self);
     Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
     Dlg.FilterIndex := ManagerSettings.SaveType + 1;
+    UpdateDefaultExtension(Dlg);
 
     if DocumentFile.IsSaved then
     begin
       Dlg.InitialDir := ExtractFilePath(DocumentFile.FileName);
       Dlg.FileName := DocumentFile.FileName
-    end else begin
+    end else
       Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
-      SaveDlgTypeChange(Dlg);
-    end;
 
     Dlg.OnTypeChange := @SaveDlgTypeChange;
     Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
