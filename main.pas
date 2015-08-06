@@ -601,7 +601,9 @@ begin
       S += 'Project: ' + DF.FileName + LineEnding;
 
       if Assigned(FS) then
-        S += 'Report: ' + FS.FileName;
+        S += 'Report: ' + FS.FileName + LineEnding;
+
+      S += LineEnding + Settings.StaticEndNote;
 
       ShowMessage(TrimRight(S));
 
