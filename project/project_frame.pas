@@ -9,25 +9,29 @@ uses
   Dialogs, epidocument, epidatafiles, epicustombase, epidatafilerelations, epirelates,
   epiadmin, manager_messages, LMessages, Menus, StdCtrls, epiv_documentfile,
   types, design_runtimedesigner, project_types, epiv_projecttreeview_frame,
-  manager_types, core_logger;
+  manager_types;
 
 type
 
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    AdminAction: TAction;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     MenuItem1: TMenuItem;
+    Panel1: TPanel;
     ProjectRecentFilesDropDownMenu: TPopupMenu;
     ProgressBar1: TProgressBar;
     Splitter1: TSplitter;
+    Splitter2: TSplitter;
     StudyInformationAction: TAction;
     KeyFieldsAction: TAction;
     ProjectPasswordAction: TAction;
     OpenProjectAction: TAction;
     NewProjectToolBtn: TToolButton;
     ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
-    ToolButton5: TToolButton;
     ValueLabelEditorAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
@@ -45,26 +49,25 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    procedure AdminActionExecute(Sender: TObject);
+    procedure AdminActionUpdate(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
     procedure DocumentProgress(const Sender: TEpiCustomBase;
       ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
       var Canceled: Boolean);
     procedure NewDataFormActionExecute(Sender: TObject);
+    procedure NewDataFormActionUpdate(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
     procedure ProjectPasswordActionExecute(Sender: TObject);
+    procedure ProjectPasswordActionUpdate(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
+    procedure ProjectSettingsActionUpdate(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
     procedure SaveProjectActionUpdate(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
     procedure StudyInformationActionExecute(Sender: TObject);
-    procedure ToolButton5Click(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
-  private
-    { Core Logger }
-    FCoreLoggerForm: TCoreLogger;
-    procedure ShowCoreLogger;
-    procedure CreateCoreLogger;
   private
     { private declarations }
     FDocumentFile: TDocumentFile;
@@ -86,12 +89,10 @@ type
       Data: Pointer = nil);
     function  DoOpenProject(Const AFileName: string): boolean;
     // create new
-    function  DoCreateNewDocumentFile: TDocumentFile;
     function  DoCreateNewDocument: TEpiDocument;
     procedure DoCreateNewProject;
     procedure DoCloseProject;
     procedure EpiDocumentModified(Sender: TObject);
-    procedure UpdateDefaultExtension(Const Dlg: TOpenDialog);
     procedure SaveDlgTypeChange(Sender: TObject);
     procedure SetModified(const AValue: Boolean);
     procedure SetOnModified(const AValue: TNotifyEvent);
@@ -139,7 +140,6 @@ type
     procedure TimedBackup(Sender: TObject);
     procedure UpdateShortCuts;
   private
-//    FFileName: string;
     procedure LoadError(const Sender: TEpiCustomBase; ErrorType: Word;
       Data: Pointer; out Continue: boolean);
     function GetEpiDocument: TEpiDocument;
@@ -148,6 +148,11 @@ type
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
     procedure OpenRecentMenuItemClick(Sender: TObject);
     procedure UpdateRecentFilesDropDown;
+
+  { Authorization }
+  private
+    function GetAuthorizedUser(Sender: TObject): TEpiUser;
+
   public
     { Access/Helper methods }
     function SelectDataformIfNotSelected: Boolean;
@@ -177,13 +182,14 @@ implementation
 {$R *.lfm}
 
 uses
-  Clipbrd, epimiscutils,
+  Clipbrd, epimiscutils, admin_authenticator,
   main, settings2, settings2_var, epistringutils,
   valuelabelseditor_form2, LazFileUtils,
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
-  design_properties_form
+  design_properties_form, admin_form, epidatafilerelations_helper,
+  admin_user_form
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -200,6 +206,11 @@ begin
   MR := DoNewDataForm(MR);
   if Assigned(MR) then
     FProjectTreeView.SelectedObject := MR;
+end;
+
+procedure TProjectFrame.NewDataFormActionUpdate(Sender: TObject);
+begin
+  NewDataFormAction.Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -304,10 +315,101 @@ begin
   PropertiesForm.UpdateSelection(nil, nil);
 end;
 
+procedure TProjectFrame.AdminActionExecute(Sender: TObject);
+var
+  F: TAdminForm;
+  User: TEpiUser;
+  S: String;
+  Res: TModalResult;
+  MsgDlgType: TMsgDlgType;
+
+  function ShowUserForm: TModalResult;
+  var
+    F: TAdminUserForm;
+  begin
+    F := TAdminUserForm.Create(Self);
+    F.User  := User;
+    F.Admin := EpiDocument.Admin;
+    F.ShowGroups := false;
+    Result  := F.ShowModal;
+    F.Free;
+  end;
+
+begin
+  if (EpiDocument.Admin.Users.Count = 0) then
+    begin
+      if (EpiDocument.PassWord <> '') then
+        begin
+          S := 'It is not possible to have a single-password project AND user administration active at the same time!' + LineEnding +
+               LineEnding +
+               'If you choose to continue the current password is reset and you will be asked to create a new user, which will automatically be added to the Administrators group!' + LineEnding +
+               LineEnding +
+               'Afterwards the project will save and re-open.' + LineEnding +
+               'Then login with the new user!' + LineEnding +
+               LineEnding +
+               'Continue?';
+          MsgDlgType := mtWarning;
+        end
+      else
+        begin
+          S :=
+            'This project is not yet setup for user administration!' + LineEnding +
+            LineEnding +
+            'Next you will be asked to create a new user,' + LineEnding +
+            'which will automatically be added to the' + LineEnding +
+            'Administrators group!' + LineEnding +
+            LineEnding +
+            'Afterwards the project will save and re-open.' + LineEnding +
+            'Then login with the new user!';
+          MsgDlgType := mtInformation;
+        end;
+
+      Res := MessageDlg('Warning',
+                          S,
+                          MsgDlgType,
+                          mbOKCancel, 0,
+                          mbCancel
+                        );
+      if (Res <> mrOK) then
+        Exit;
+
+      EpiDocument.PassWord := '';
+
+      User := EpiDocument.Admin.NewUser;
+      if ShowUserForm <> mrOK then
+        begin
+          User.Free;
+          Exit;
+        end;
+
+      User.Groups.AddItem(EpiDocument.Admin.Admins);
+      if (not SaveProject(false)) then
+      begin
+        User.Free;
+        Exit;
+      end;
+
+      EpiDocument.Admin.Created := Now;
+      PostMessage(MainForm.Handle, LM_MAIN_CLOSEPROJECT, 1, 0);
+      PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, 0, 0);
+      Exit;
+    end;
+
+  F := TAdminForm.Create(self, EpiDocument.Admin);
+  F.ShowModal;
+  F.Free;
+end;
+
+procedure TProjectFrame.AdminActionUpdate(Sender: TObject);
+begin
+  AdminAction.Enabled := Authenticator.IsAuthorized([earUsers]);
+end;
+
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
 begin
   DeleteDataFormAction.Enabled :=
-    FProjectTreeView.SelectedObjectType = otRelation;
+    (Authenticator.IsAuthorized([earDefineProject])) and
+    (FProjectTreeView.SelectedObjectType = otRelation);
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -347,6 +449,12 @@ begin
     MessageDlg(Header, 'The two passwords are not identical!' + LineEnding + 'Password NOT set.', mtError, [mbOK], 0);
 end;
 
+procedure TProjectFrame.ProjectPasswordActionUpdate(Sender: TObject);
+begin
+  ProjectPasswordAction.Enabled :=
+    (EpiDocument.Admin.Users.Count = 0);
+end;
+
 procedure TProjectFrame.ProjectSettingsActionExecute(Sender: TObject);
 var
   ProjectSettings: TProjectSettingsForm;
@@ -361,6 +469,11 @@ begin
   TStudyUnitFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
   EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
   UpdateTimer;
+end;
+
+procedure TProjectFrame.ProjectSettingsActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
 procedure TProjectFrame.SaveProjectActionExecute(Sender: TObject);
@@ -379,7 +492,10 @@ var
   Dlg: TSaveDialog absolute Sender;
   Fn: String;
 begin
-  UpdateDefaultExtension(Dlg);
+  case Dlg.FilterIndex of
+    1: Dlg.DefaultExt := 'epx';
+    2: Dlg.DefaultExt := 'epz';
+  end;
 
   Dlg.FileName := ChangeFileExt(Dlg.FileName, Dlg.DefaultExt);
 
@@ -401,30 +517,15 @@ begin
   FProjectTreeView.SelectedObject := EpiDocument;
 end;
 
-procedure TProjectFrame.ToolButton5Click(Sender: TObject);
-begin
-  ShowCoreLogger;
-end;
-
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
 begin
   ShowValueLabelEditor2(EpiDocument.ValueLabelSets);
 end;
 
-procedure TProjectFrame.ShowCoreLogger;
-begin
-  if Assigned(FCoreLoggerForm) then
-    FCoreLoggerForm.Show;
-end;
-
-procedure TProjectFrame.CreateCoreLogger;
-begin
-  FCoreLoggerForm := TCoreLogger.Create(Self);
-end;
-
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
-  Result := DoCreateNewDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
+  FDocumentFile := TDocumentFile.Create;
+  Result := FDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
 
   with Result.ProjectSettings, ManagerSettings do
   begin
@@ -470,6 +571,8 @@ procedure TProjectFrame.CommonProjectInit;
 var
   Frame: TStudyUnitFrame;
 begin
+  Authenticator := TAuthenticator.Create(FDocumentFile);
+
   UpdateCaption;
   UpdateShortCuts;
   InitBackupTimer;
@@ -515,11 +618,16 @@ var
   i: Integer;
   T1: TDateTime;
   T2: TDateTime;
+  G: TEpiGroup;
+  Rights: TEpiManagerRights;
+  R: TEpiManagerRight;
 begin
   Result := false;
   try
-    DoCreateNewDocumentFile;
-
+    FDocumentFile := TDocumentFile.Create;
+    FDocumentFile.OnProgress := @DocumentProgress;
+    FDocumentFile.OnLoadError := @LoadError;
+    FDocumentFile.DataDirectory := ManagerSettings.WorkingDirUTF8;
     T1 := Now;
     if not FDocumentFile.OpenFile(AFileName) then
     begin
@@ -550,6 +658,23 @@ begin
       raise
     end;
 
+    if Assigned(FDocumentFile.AuthedUser) then
+    begin
+      Label1.Caption := 'User: ' + FDocumentFile.AuthedUser.FullName;
+      Label2.Caption := 'Groups: ';
+      Rights := [];
+      for G in FDocumentFile.AuthedUser.Groups do
+      begin
+        Label2.Caption := Label2.Caption + G.Caption.Text + ',';
+        Rights := Rights + G.ManageRights;
+      end;
+      Label3.Caption := 'Combined rights: ' + LineEnding;
+      for R in Rights do
+        Label3.Caption := Label3.Caption + ' *' + EpiManagerRightCaptions[R] + LineEnding;
+    end
+    else
+      Label1.Caption := 'No auth';
+
 
     FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
     EpiDocument.Modified := false;
@@ -559,17 +684,6 @@ begin
     UpdateCaption;
   finally
   end;
-end;
-
-function TProjectFrame.DoCreateNewDocumentFile: TDocumentFile;
-begin
-  FDocumentFile := TDocumentFile.Create;
-  FDocumentFile.OnDocumentChangeEvent := @FCoreLoggerForm.DocumentHook;
-  FDocumentFile.OnProgress            := @DocumentProgress;
-  FDocumentFile.OnLoadError           := @LoadError;
-  FDocumentFile.DataDirectory         := ManagerSettings.WorkingDirUTF8;
-
-  Result := FDocumentFile;
 end;
 
 function TProjectFrame.DoNewDataForm(ParentRelation: TEpiMasterRelation
@@ -628,6 +742,7 @@ begin
   Result.Parent := Self;
   Result.Relation := Relation;
   Result.DeActivate(true);
+  Result.OnGetUser := @GetAuthorizedUser;
 end;
 
 procedure TProjectFrame.DoCreateNewProject;
@@ -660,8 +775,10 @@ begin
 
   PropertiesForm.Free;
 
+
   FActiveFrame := nil;
   FreeAndNil(FBackupTimer);
+  FreeAndNil(Authenticator);
   FreeAndNil(FDocumentFile);
 
   Modified := false;
@@ -674,14 +791,6 @@ begin
   // Activates/Deactivates timed backup.
   if Assigned(FBackupTimer) and Assigned(EpiDocument) then
     FBackupTimer.Enabled := EpiDocument.Modified;
-end;
-
-procedure TProjectFrame.UpdateDefaultExtension(const Dlg: TOpenDialog);
-begin
-  case Dlg.FilterIndex of
-    1: Dlg.DefaultExt := 'epx';
-    2: Dlg.DefaultExt := 'epz';
-  end;
 end;
 
 procedure TProjectFrame.SetModified(const AValue: Boolean);
@@ -753,8 +862,10 @@ procedure TProjectFrame.ProjectTreeEditing(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType;
   var Allowed: Boolean);
 begin
-  Allowed := true;
-  (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).DeActivate(false);
+  Allowed := Authenticator.IsAuthorized([earDefineProject]);
+
+  if Allowed then
+    (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).DeActivate(false);
 end;
 
 procedure TProjectFrame.ProjectTreeError(const Msg: String);
@@ -1103,6 +1214,11 @@ begin
   end;
 end;
 
+function TProjectFrame.GetAuthorizedUser(Sender: TObject): TEpiUser;
+begin
+  result := FDocumentFile.AuthedUser;
+end;
+
 function TProjectFrame.SelectDataformIfNotSelected: Boolean;
 begin
   Result := true;
@@ -1169,8 +1285,6 @@ begin
   end;
   FProjectTreeView.Align  := alClient;
   FProjectTreeView.Parent := ProjectPanel;
-
-  CreateCoreLogger;
 
   Panel1.Visible := false;
 
@@ -1289,14 +1403,15 @@ begin
     Dlg := TSaveDialog.Create(Self);
     Dlg.Filter := GetEpiDialogFilter([dfEPX, dfEPZ]);
     Dlg.FilterIndex := ManagerSettings.SaveType + 1;
-    UpdateDefaultExtension(Dlg);
 
     if DocumentFile.IsSaved then
     begin
       Dlg.InitialDir := ExtractFilePath(DocumentFile.FileName);
       Dlg.FileName := DocumentFile.FileName
-    end else
+    end else begin
       Dlg.InitialDir := ManagerSettings.WorkingDirUTF8;
+      SaveDlgTypeChange(Dlg);
+    end;
 
     Dlg.OnTypeChange := @SaveDlgTypeChange;
     Dlg.Options := Dlg.Options + [ofOverwritePrompt, ofExtensionDifferent];
@@ -1346,12 +1461,14 @@ begin
     // Project
     ProjectPropertiesMenuItem.Action := ProjectSettingsAction;
     ValueLabelsMenuItem.Action       := ValueLabelEditorAction;
+    AdminMenuItem.Action             := AdminAction;
     ProjectPasswordMenuItem.Action   := ProjectPasswordAction;
     StudyInfoMenuItem.Action         := StudyInformationAction;
 
     // --project details popup-menu
     ProjectPropertiesPopupMenuItem.Action := ProjectSettingsAction;
     ValueLabelEditorPopupMenuItem.Action  := ValueLabelEditorAction;
+    AdminPopupMenuItem.Action             := AdminAction;
     SetPasswordPopupMenuItem.Action       := ProjectPasswordAction;
     StudyInfoPopupMenuItem.Action         := StudyInformationAction;
   end;
