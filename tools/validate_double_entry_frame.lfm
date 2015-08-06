@@ -6,8 +6,8 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
   ClientHeight = 580
   ClientWidth = 907
   TabOrder = 0
-  DesignLeft = 883
-  DesignTop = 443
+  DesignLeft = 568
+  DesignTop = 291
   object FilePanel: TPanel
     Left = 0
     Height = 130
@@ -46,9 +46,9 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     Height = 444
     Top = 136
     Width = 659
-    ActivePage = CompareTab
+    ActivePage = OptionsTab
     Align = alClient
-    TabIndex = 1
+    TabIndex = 2
     TabOrder = 4
     object KeyTab: TTabSheet
       Caption = 'Join by'
@@ -57,11 +57,11 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
       object Panel1: TPanel
         Left = 0
         Height = 42
-        Top = 505
-        Width = 552
+        Top = 369
+        Width = 653
         Align = alBottom
         ClientHeight = 42
-        ClientWidth = 552
+        ClientWidth = 653
         TabOrder = 0
         object KFNoneBtn: TButton
           AnchorSideLeft.Control = Panel1
@@ -88,31 +88,14 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
           Left = 57
           Height = 27
           Top = 8
-          Width = 46
+          Width = 34
           AutoSize = True
           BorderSpacing.Left = 5
-          Caption = 'Index'
+          Caption = 'Key'
           OnClick = KFIndexBtnClick
           ParentShowHint = False
           ShowHint = True
           TabOrder = 1
-        end
-        object KFAutoIncBtn: TButton
-          AnchorSideLeft.Control = KFIndexBtn
-          AnchorSideLeft.Side = asrBottom
-          AnchorSideTop.Control = KFNoneBtn
-          AnchorSideTop.Side = asrCenter
-          Left = 108
-          Height = 27
-          Top = 8
-          Width = 60
-          AutoSize = True
-          BorderSpacing.Left = 5
-          Caption = 'AutoInc'
-          OnClick = KFAutoIncBtnClick
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 2
         end
       end
     end
@@ -192,7 +175,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
         Left = 10
         Height = 117
         Top = 10
-        Width = 532
+        Width = 633
         Align = alCustom
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
@@ -210,7 +193,7 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
         ClientHeight = 100
-        ClientWidth = 528
+        ClientWidth = 629
         Items.Strings = (
           'Exclude deleted records'
           'Ignore case in text fields'
