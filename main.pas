@@ -992,6 +992,7 @@ begin
   try
     F := TValueLabelDataImport.Create(Self);
     F.DocFile := DocFile;
+    F.ValueLabelSets := Docfile.Document.ValueLabelSets;
     F.ShowModal;
   finally
     if (Docfile.Document.Modified) and

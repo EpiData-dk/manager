@@ -28,6 +28,8 @@ type
     DelBtn: TToolButton;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
+    ToolButton3: TToolButton;
+    ToolButton4: TToolButton;
     procedure DelBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -38,6 +40,7 @@ type
     procedure MenuItem3Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
   private
     { VLSetsTree }
     VLSetsTree: TVirtualStringTree;
@@ -98,7 +101,7 @@ implementation
 
 uses
   Main, settings2_var, settings2, LCLIntf, LCLType, epimiscutils,
-  valuelabel_import_external, epiv_datamodule;
+  valuelabel_import_external, epiv_datamodule, valuelabel_import_data;
 
 var
   Editor: TValueLabelEditor2 = nil;
@@ -159,6 +162,17 @@ begin
   ExtImporter := TExtVLSetForm.Create(Self, ValueLabelSets);
   ExtImporter.ShowModal;
   ExtImporter.Free;
+end;
+
+procedure TValueLabelEditor2.ToolButton3Click(Sender: TObject);
+var
+  F: TValueLabelDataImport;
+begin
+  if not FGridFrame.ValidateGridEntries then exit;
+
+  F := TValueLabelDataImport.Create(Self);
+  F.ValueLabelSets := ValueLabelSets;
+  F.ShowModal;
 end;
 
 procedure TValueLabelEditor2.VLSetsEditing(Sender: TBaseVirtualTree;
