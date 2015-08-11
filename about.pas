@@ -78,7 +78,7 @@ end;
 
 function GetProgramInfo: string;
 begin
-  Result := 'EpiData Manager' + LineEnding +
+  Result := 'EpiData Manager: ' + FormatDateTime('(YYYY/MM/DD - HH:NN:SS)', Now) + LineEnding +
             ManagerVersionCaption + ' ' + RevisionCaption + LineEnding +
             CoreVersionCaption + ' ' + CoreRevisionCaption + LineEnding +
             FPCCaption + LineEnding +

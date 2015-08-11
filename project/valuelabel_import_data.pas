@@ -55,8 +55,8 @@ type
     FValueFieldColumn: TGridColumn;
     FLabelFieldColumn: TGridColumn;
     FMissingFieldColumn: TGridColumn;
+    FValueLabelSets: TEpiValueLabelSets;
     procedure AsyncEditorMode(Data: PtrInt);
-    function  GetValueLabelSets: TEpiValueLabelSets;
     procedure ProjectFileListCallBack(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
     procedure SelectedItem(Sender: TObject);
@@ -67,11 +67,12 @@ type
     procedure EditorCloseUp(Sender: TObject);
     procedure SetDocFile(AValue: TEpiDocumentFile);
     procedure LoadGlyphs;
+    procedure SetValueLabelSets(AValue: TEpiValueLabelSets);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     class procedure RestoreDefaultPos;
-    property ValueLabelSets: TEpiValueLabelSets read GetValueLabelSets;
+    property ValueLabelSets: TEpiValueLabelSets read FValueLabelSets write SetValueLabelSets;
     property DocFile: TEpiDocumentFile read FDocFile write SetDocFile;
   end;
 
@@ -254,7 +255,14 @@ begin
 end;
 
 procedure TValueLabelDataImport.AsyncEditorMode(Data: PtrInt);
+var
+  SG: TStringGrid;
+  lEditor: TWinControl;
 begin
+  SG := FProjectFileListFrame.StructureGrid;
+  SelectEditor(SG, SG.Col, SG.Row, lEditor);
+  SG.Editor := lEditor;
+
   FProjectFileListFrame.StructureGrid.EditorMode := Boolean(Data);
 
   if not Boolean(Data) then
@@ -264,20 +272,13 @@ begin
   end;
 end;
 
-function TValueLabelDataImport.GetValueLabelSets: TEpiValueLabelSets;
-begin
-  result := nil;
-
-  if Assigned(DocFile) then
-    result := DocFile.Document.ValueLabelSets;
-end;
-
 procedure TValueLabelDataImport.OkBtnClick(Sender: TObject);
 begin
   // Do Checks for correct choices
   FImportCount := 0;
   FSuccesImportList.Clear;
-  FSuccesImportList.Add('Project: ' + ExtractFileName(FDocFile.FileName));
+  if Assigned(DocFile) then
+    FSuccesImportList.Add('Project: ' + ExtractFileName(FDocFile.FileName));
 
   Screen.Cursor := crHourGlass;
   Application.ProcessMessages;
@@ -426,6 +427,14 @@ procedure TValueLabelDataImport.LoadGlyphs;
 begin
   DM.Icons16.GetBitmap(19, AddFilesBtn.Glyph);
   DM.Icons16.GetBitmap(19, AddCBBtn.Glyph);
+end;
+
+procedure TValueLabelDataImport.SetValueLabelSets(AValue: TEpiValueLabelSets);
+begin
+  if FValueLabelSets = AValue then Exit;
+  FValueLabelSets := AValue;
+
+  UpdateCaption;
 end;
 
 procedure TValueLabelDataImport.PrepareCanvas(sender: TObject; aCol,

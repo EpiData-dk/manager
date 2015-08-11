@@ -22,7 +22,6 @@ type
     CompareTab: TTabSheet;
     FilePanel: TPanel;
     KeyTab: TTabSheet;
-    KFAutoIncBtn: TButton;
     KFIndexBtn: TButton;
     KFNoneBtn: TButton;
     OptionsChkGrp: TCheckGroup;
@@ -42,7 +41,6 @@ type
       const Filename: string; const RowNo: Integer);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
-    procedure KFAutoIncBtnClick(Sender: TObject);
     procedure KFIndexBtnClick(Sender: TObject);
     procedure KFNoneBtnClick(Sender: TObject);
     procedure ProjectGetText(Sender: TObject; const AObject: TEpiCustomBase;
@@ -187,12 +185,6 @@ begin
     LoadSplitterPosition(Splitter1, 'DoubleEntryForm_Splitter1');
     LoadSplitterPosition(Splitter2, 'DoubleEntryForm_Splitter2');
   end;   }
-end;
-
-procedure TValidateDoubleEntryFrame.KFAutoIncBtnClick(Sender: TObject);
-begin
-  FKeyTree.SelectNone;
-  FKeyTree.SelectFieldTypes([ftAutoInc], false);
 end;
 
 procedure TValidateDoubleEntryFrame.KFIndexBtnClick(Sender: TObject);

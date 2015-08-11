@@ -106,6 +106,37 @@ uses
   epiimport, LCLProc, epimiscutils, Dialogs, managerprocs, epiv_documentfile,
   settings2_var, Clipbrd, LCLIntf, LCLType;
 
+
+type
+
+  { TImportedDocumentFile }
+
+  TImportedDocumentFile = class(TDocumentFile)
+  private
+    FImportedFileName: string;
+  protected
+    function GetFileName: string; override;
+  public
+    constructor Create; override;
+  end;
+
+{ TImportedDocumentFile }
+
+function TImportedDocumentFile.GetFileName: string;
+begin
+  if FImportedFileName = '' then
+    Result := inherited GetFileName
+  else
+    Result := FImportedFileName;
+end;
+
+constructor TImportedDocumentFile.Create;
+begin
+  inherited Create;
+  FImportedFileName := '';
+end;
+
+
 { TProjectFileListFrame }
 
 procedure TProjectFileListFrame.StructureGridColRowMoved(Sender: TObject;
@@ -226,7 +257,7 @@ begin
   Ext := ExtractFileExt(UTF8LowerCase(FileName));
 
   try
-    DocFile := TDocumentFile.Create;
+    DocFile := TImportedDocumentFile.Create;
     Res := False;
 
     if (ext = '.rec') or (ext = '.dta') then
@@ -245,6 +276,7 @@ begin
         Importer.ImportRec(FileName , DataFile, true);
       end;
       DoAfterImportFile(Doc, FileName);
+      TImportedDocumentFile(DocFile).FImportedFileName := FileName;
       Res := true;
     end
     else if (ext = '.epx') or (ext = '.epz') then
@@ -268,6 +300,11 @@ begin
       DoBeforeImportFile(Doc, FileName);
       Importer.ImportTxt(FileName, DataFile, true);
       DoAfterImportFile(Doc, FileName);
+
+      if FileName = '' then
+        TImportedDocumentFile(DocFile).FImportedFileName := '(from clipboard)'
+      else
+        TImportedDocumentFile(DocFile).FImportedFileName := FileName;
       Res := true;
     end;
 

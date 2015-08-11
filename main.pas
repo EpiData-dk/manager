@@ -601,7 +601,9 @@ begin
       S += 'Project: ' + DF.FileName + LineEnding;
 
       if Assigned(FS) then
-        S += 'Report: ' + FS.FileName;
+        S += 'Report: ' + FS.FileName + LineEnding;
+
+      S += LineEnding + Settings.StaticEndNote;
 
       ShowMessage(TrimRight(S));
 
@@ -990,6 +992,7 @@ begin
   try
     F := TValueLabelDataImport.Create(Self);
     F.DocFile := DocFile;
+    F.ValueLabelSets := Docfile.Document.ValueLabelSets;
     F.ShowModal;
   finally
     if (Docfile.Document.Modified) and

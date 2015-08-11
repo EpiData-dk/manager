@@ -268,8 +268,19 @@ begin
 end;
 
 function TProjectValidationFrame2.GetOptions: TEpiToolsProjectValidateOptions;
+var
+  i: Integer;
+  Opt: TEpiToolsProjectValidateOption;
 begin
   result := EpiProjectValidationOptionsAll;
+
+  for i := 0 to OptionsChkGrp.Items.Count -1 do
+  begin
+    if OptionsChkGrp.Checked[i] then Continue;
+
+    Opt := TEpiToolsProjectValidateOption(PtrInt(OptionsChkGrp.Items.Objects[i]));
+    Exclude(Result, Opt);
+  end;
 end;
 
 procedure TProjectValidationFrame2.AddCustomDataWalk(const Relation: TEpiMasterRelation;

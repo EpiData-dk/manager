@@ -1,7 +1,7 @@
 object ValueLabelEditor2: TValueLabelEditor2
-  Left = 620
+  Left = 618
   Height = 627
-  Top = 283
+  Top = 275
   Width = 818
   Caption = 'Valuelabel Editor'
   ClientHeight = 627
@@ -16,20 +16,22 @@ object ValueLabelEditor2: TValueLabelEditor2
     Left = 0
     Height = 577
     Top = 0
-    Width = 210
+    Width = 219
     Align = alLeft
     BevelOuter = bvNone
     ClientHeight = 577
-    ClientWidth = 210
+    ClientWidth = 219
     TabOrder = 0
     object ToolBar1: TToolBar
       Left = 0
       Height = 26
       Top = 0
-      Width = 210
+      Width = 219
       EdgeBorders = [ebLeft, ebTop, ebRight, ebBottom]
       Images = DM.Icons16
+      ParentShowHint = False
       ShowCaptions = True
+      ShowHint = True
       TabOrder = 0
       object AddBtn: TToolButton
         Left = 3
@@ -60,10 +62,26 @@ object ValueLabelEditor2: TValueLabelEditor2
         Caption = 'ToolButton2'
         Style = tbsDivider
       end
+      object ToolButton3: TToolButton
+        Left = 148
+        Hint = 'Import Data from projects as Value Labels'
+        Top = 2
+        AutoSize = True
+        Caption = 'Import...'
+        OnClick = ToolButton3Click
+      end
+      object ToolButton4: TToolButton
+        Left = 143
+        Height = 22
+        Top = 2
+        Width = 5
+        Caption = 'ToolButton4'
+        Style = tbsDivider
+      end
     end
   end
   object Splitter1: TSplitter
-    Left = 210
+    Left = 219
     Height = 577
     Top = 0
     Width = 5

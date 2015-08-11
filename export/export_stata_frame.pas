@@ -61,12 +61,14 @@ begin
   with VersionComboBox.Items do
   begin
     Clear;
-    AddObject('Stata 4',      TObject(dta4));
-    AddObject('Stata 5, 6',   TObject(dta6));
-    AddObject('Stata 7',      TObject(dta7));
-    AddObject('Stata 8, 9',   TObject(dta8));
-    AddObject('Stata 10, 11', TObject(dta10));
-    AddObject('Stata 12',     TObject(dta12));
+    AddObject(EpiStataVersionToString(dta4), TObject(dta4));
+    AddObject(EpiStataVersionToString(dta6), TObject(dta6));
+    AddObject(EpiStataVersionToString(dta7), TObject(dta7));
+    AddObject(EpiStataVersionToString(dta8), TObject(dta8));
+    AddObject(EpiStataVersionToString(dta10), TObject(dta10));
+    AddObject(EpiStataVersionToString(dta12), TObject(dta12));
+    AddObject(EpiStataVersionToString(dta13), TObject(dta13));
+    AddObject(EpiStataVersionToString(dta14), TObject(dta14));
   end;
 
   with FieldNamingRGrp.Items do
