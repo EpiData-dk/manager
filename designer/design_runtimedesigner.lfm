@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 626
   ClientWidth = 1101
   TabOrder = 0
-  DesignLeft = 669
-  DesignTop = 457
+  DesignLeft = 703
+  DesignTop = 428
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
@@ -36,10 +36,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object SectionsLabel: TLabel
         AnchorSideLeft.Control = SectionsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 59
+        Left = 51
         Height = 15
         Top = 4
-        Width = 82
+        Width = 72
         BorderSpacing.Left = 2
         Caption = 'SectionsLabel'
         Color = clDefault
@@ -50,7 +50,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 55
+        Width = 47
         Caption = 'Sections:'
         Color = clDefault
         ParentColor = False
@@ -77,7 +77,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 117
+        Width = 107
         Caption = 'CurrentSectionLabel'
         Color = clDefault
         ParentColor = False
@@ -99,10 +99,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object RecordsLabel: TLabel
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 56
+        Left = 49
         Height = 15
         Top = 4
-        Width = 79
+        Width = 70
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         Color = clDefault
@@ -113,7 +113,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 52
+        Width = 45
         Caption = 'Records:'
         Color = clDefault
         ParentColor = False
@@ -138,10 +138,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object FieldsLabel: TLabel
         AnchorSideLeft.Control = FieldsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 43
+        Left = 37
         Height = 15
         Top = 4
-        Width = 66
+        Width = 58
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         Color = clDefault
@@ -152,7 +152,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 39
+        Width = 33
         Caption = 'Fields:'
         Color = clDefault
         ParentColor = False
@@ -182,7 +182,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 93
+        Width = 85
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         Color = clDefault
@@ -213,7 +213,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 86
+        Width = 79
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         Color = clDefault
@@ -244,7 +244,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 103
+        Width = 95
         BorderSpacing.Left = 2
         Caption = 'DefaultValueLabel'
         Color = clDefault
@@ -275,7 +275,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 94
+        Width = 85
         BorderSpacing.Left = 2
         Caption = 'ValueLabelLabel'
         Color = clDefault
@@ -306,7 +306,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 68
+        Width = 61
         BorderSpacing.Left = 2
         Caption = 'RangeLabel'
         Color = clDefault
@@ -337,7 +337,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 54
+        Width = 47
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         Color = clDefault
@@ -367,9 +367,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object ExtendedLabel: TLabel
         AnchorSideLeft.Control = ExtendedPanel
         Left = 3
-        Height = 15
+        Height = 16
         Top = 4
-        Width = 104
+        Width = 86
         BorderSpacing.Left = 2
         Caption = 'ExtendedLabel'
         Color = clDefault
@@ -390,15 +390,15 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 576
-    ClientWidth = 263
+    ClientHeight = 574
+    ClientWidth = 261
     ParentColor = False
     TabOrder = 1
     object Memo1: TMemo
       Left = 8
       Height = 138
       Top = 8
-      Width = 248
+      Width = 246
       Anchors = [akTop, akLeft, akRight]
       Lines.Strings = (
         'Memo1'
@@ -421,7 +421,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 352
-      Width = 38
+      Width = 34
       Caption = 'Label1'
       ParentColor = False
     end
@@ -429,7 +429,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 393
-      Width = 38
+      Width = 34
       Caption = 'Label2'
       ParentColor = False
     end
@@ -437,7 +437,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 439
-      Width = 38
+      Width = 34
       Caption = 'Label3'
       ParentColor = False
     end
@@ -445,7 +445,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 481
-      Width = 38
+      Width = 34
       Caption = 'Label4'
       ParentColor = False
     end
@@ -453,7 +453,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 31
       Height = 15
       Top = 514
-      Width = 38
+      Width = 34
       Caption = 'Label5'
       ParentColor = False
     end
@@ -461,7 +461,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 33
       Height = 15
       Top = 545
-      Width = 38
+      Width = 34
       Caption = 'Label6'
       ParentColor = False
     end
