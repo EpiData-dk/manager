@@ -2827,9 +2827,13 @@ begin
 
       if S <> MainSection then
       begin
-        EnableAutoSizing;
+        // This should help on very long dataforms to not have problems with
+        // autosizing to many controls.
+        if Fields.Count > 200 then
+          EnableAutoSizing;
         Selected := NewDesignSection(Bounds(S.Left, S.Top, S.Width, S.Height), S);
-        DisableAutoSizing;
+        if Fields.Count > 200 then
+          DisableAutoSizing;
       end
       else
         Selected := FDesignPanel;
