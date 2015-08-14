@@ -320,6 +320,7 @@ type
     { Other }
     FMayHandleShortcuts: boolean;
     FRelation: TEpiMasterRelation;
+    function  GetChildCount: Integer;
     function  GetRelation: TEpiMasterRelation;
     procedure SetMayHandleShortcuts(AValue: boolean);
     procedure UpdateShortcuts;
@@ -1866,6 +1867,28 @@ begin
   DoAlignControls(AAlignMent, FixedDist);
 end;
 
+function TRuntimeDesignFrame.GetChildCount: Integer;
+
+  function RecursiveChildCount(WC: TWinControl): Integer;
+  var
+    i: Integer;
+    C: TControl;
+  begin
+    Result := 0;
+    for i := 0 to WC.ControlCount - 1 do
+      begin
+        C := TControl(WC.Controls[i]);
+        if C is TWinControl then
+          Inc(Result, RecursiveChildCount(TWinControl(C)));
+
+      end;
+    Inc(Result, ControlCount);
+  end;
+
+begin
+  Result := RecursiveChildCount(Self);
+end;
+
 procedure TRuntimeDesignFrame.UpdateShortcuts;
 begin
   NewIntFieldAction.ShortCut           := D_NewIntField;
@@ -2794,7 +2817,7 @@ begin
 
   FSettingDataFile := true;
 
-  MainForm.BeginUpdatingForm;
+  DisableAutoSizing;
   T1 := Now;
   With DataFile do
   begin
@@ -2803,7 +2826,15 @@ begin
       S := Section[i];
 
       if S <> MainSection then
-        Selected := NewDesignSection(Bounds(S.Left, S.Top, S.Width, S.Height), S)
+      begin
+        // This should help on very long dataforms to not have problems with
+        // autosizing to many controls.
+        if Fields.Count > 200 then
+          EnableAutoSizing;
+        Selected := NewDesignSection(Bounds(S.Left, S.Top, S.Width, S.Height), S);
+        if Fields.Count > 200 then
+          DisableAutoSizing;
+      end
       else
         Selected := FDesignPanel;
 
@@ -2824,7 +2855,8 @@ begin
     end;
   end;
   T2 := Now;
-  MainForm.EndUpdatingForm;
+//  Showmessage('Control count: ' + IntToStr(GetChildCount));
+  EnableAutoSizing;
   T3 := Now;
 
   if IsConsole then
