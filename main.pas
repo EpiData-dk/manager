@@ -603,7 +603,7 @@ begin
       if Assigned(FS) then
         S += 'Report: ' + FS.FileName + LineEnding;
 
-      S += LineEnding + Settings.StaticEndNote;
+//      S += LineEnding + Settings.StaticEndNote;
 
       ShowMessage(TrimRight(S));
 
