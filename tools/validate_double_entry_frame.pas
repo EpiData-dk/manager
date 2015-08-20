@@ -452,6 +452,8 @@ begin
           for j := 0 to FieldList.Count - 1 do
             if TEpiCustomItem(FieldList[j]).InheritsFrom(TEpiField) then   // Sort out sections!
               Comparefields.AddItem(TEpiCustomItem(FieldList[j]));
+
+          ValidateOptions := TEpiToolsDblEntryValidateOptions(Integer(PtrInt(MR.FindCustomData(DEV_OPTIONS_CUSTOMDATA))));
         end;
       end;
 

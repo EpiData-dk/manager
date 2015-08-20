@@ -746,7 +746,7 @@ const
     ExportDeleted:         false;
     ExportEncoding:        eeUTF8;
     ExportCreateReport:    true;
-    ExportPostFix:         epAddDate;
+    ExportPostFix:         epProjectOnly;
 
     // - Stata:
     ExportStataVersion:    dta8;   // Default to Version 8
