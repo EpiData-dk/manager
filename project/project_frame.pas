@@ -656,9 +656,9 @@ begin
 
   // Close Alignment Form.
   AlignForm.DesignFrame := nil;
-  AlignForm.Hide;
 
-  PropertiesForm.Free;
+  FreeAndNil(AlignForm);
+  FreeAndNil(PropertiesForm);
 
   FActiveFrame := nil;
   FreeAndNil(FBackupTimer);
