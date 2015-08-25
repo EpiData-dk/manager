@@ -688,10 +688,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object ExportToolButton: TToolButton
         Left = 31
-        Hint = 'Print Dataform'
         Top = 1
-        Caption = '&Print Dataform'
-        ImageIndex = 22
+        Action = PrintDataFormAction
         ParentShowHint = False
         ShowHint = True
       end
@@ -1412,7 +1410,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     left = 232
     top = 304
     object EditPopupMenuItem: TMenuItem
-      Caption = 'Edit'
+      Action = EditControlAction
       Bitmap.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100
         20000000000000040000640000006400000000000000000000007F4C04FF7F4C
@@ -1450,8 +1448,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         04FF7F4C04F57E4B0355FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
       GlyphShowMode = gsmSystem
-      Hint = 'Edit...'
-      ImageIndex = 13
     end
     object PopupMenuDivider1: TMenuItem
       Caption = '-'

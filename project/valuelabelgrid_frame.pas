@@ -364,7 +364,10 @@ begin
   DoShowHintMsg(nil, '');
 
   // External valuelabels do not need shortcut keys
-  if FValueLabelSet.LabelScope = vlsExternal then exit;
+  if Assigned(FValueLabelSet) and
+     (FValueLabelSet.LabelScope = vlsExternal)
+  then
+    Exit;
 
   case Key of
     VK_RETURN:

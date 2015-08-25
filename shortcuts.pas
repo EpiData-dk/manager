@@ -36,7 +36,8 @@ var
   P_ProjectSettings,
   P_StartValueLabelEditor,
   P_OpenProject,
-  P_KeyFields:
+  P_KeyFields,
+  P_Admin:
     TShortCut;
 
   // Designer Frame

@@ -635,7 +635,7 @@ begin
     AnchorToNeighbour(akRight, 5, JumpGotoBevel);
     AnchorVerticalCenterTo(GFC);
     OnUTF8KeyPress := @JumpEditUTF8KeyPress;
-    Hint := 'Specify value or use "." to indicate all other values';
+    Hint := 'Specify value or use "*" to indicate all other values';
     ShowHint := true;
     ParentShowHint := false;
     Parent := JumpScrollBox;
@@ -1833,13 +1833,20 @@ begin
       if TEdit(ValueEdit).Text = '' then
         Exit(DoError('Empty jump value!', TEdit(ValueEdit)));
 
-      // This allow for using '.' as an "On any value" specifier.
+      // This allow for using '*' as an "On any value" specifier.
       if TEdit(ValueEdit).Text <> TEpiJump.DefaultOnAnyValue then
         with TEdit(ValueEdit) do
         case Field.FieldType of
           ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), TEdit(ValueEdit)));
           ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), TEdit(ValueEdit)));
           ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format(rsNotAValidType, ['float', Text]), TEdit(ValueEdit)));
+
+          ftDMYDate,
+          ftMDYDate,
+          ftYMDDate: ;
+
+          ftTime: ;
+
           ftString,
           ftUpperString:  ;
         end;

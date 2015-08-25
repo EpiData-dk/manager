@@ -478,7 +478,10 @@ var
 begin
   Result := ChangeFileExt(ExtractFileName(FDocumentFile.FileName), '');
 
-  if Assigned(DF) and (DF.Caption.Text <> '') then
+  if (FDocumentFile.Document.DataFiles.Count > 1) and
+     (Assigned(DF)) and
+     (DF.Caption.Text <> '')
+  then
     Result += '_' + DF.Caption.Text;
 
   case ManagerSettings.ExportPostFix of

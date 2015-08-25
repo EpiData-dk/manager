@@ -237,7 +237,6 @@ object ProjectFrame: TProjectFrame
       Category = 'Project'
       Caption = 'Value labels...'
       OnExecute = ValueLabelEditorActionExecute
-      ShortCut = 32854
     end
     object OpenProjectAction: TAction
       Category = 'File'

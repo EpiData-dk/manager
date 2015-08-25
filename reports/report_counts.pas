@@ -51,6 +51,7 @@ var
   R: TEpiReportCountById;
   S: String;
   i: Integer;
+  DF: TEpiDataFile;
 begin
   inherited DoRunReport;
 
@@ -62,6 +63,7 @@ begin
   R := TEpiReportCountById.Create(Generator);
   R.DataFiles := Options.DataFiles;
   R.FieldNames := Options.FieldNames;
+  R.DocumentFiles := DocumentFiles;
   R.RunReport;
   R.Free;
 end;

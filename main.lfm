@@ -1,12 +1,12 @@
 object MainForm: TMainForm
-  Left = 537
-  Height = 693
-  Top = 338
+  Left = 665
+  Height = 658
+  Top = 306
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
   Caption = 'MainForm'
-  ClientHeight = 670
+  ClientHeight = 635
   ClientWidth = 886
   Menu = MainMenu1
   OnActivate = FormActivate
@@ -19,7 +19,7 @@ object MainForm: TMainForm
   LCLVersion = '1.5'
   object PageControl1: TPageControl
     Left = 0
-    Height = 632
+    Height = 597
     Top = 38
     Width = 886
     Align = alClient
@@ -306,7 +306,7 @@ object MainForm: TMainForm
       end
     end
     object DataformMenu: TMenuItem
-      Caption = 'D&ataform'
+      Caption = 'Dataform'
       object KeyFieldsMenuItem: TMenuItem
         Caption = 'KeyFields'
       end
@@ -511,6 +511,7 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Pack Datafiles'
       OnExecute = PackActionExecute
+      OnUpdate = ExtendedDataAuthActionUpdate
     end
     object ReportGeneratorAction: TAction
       Category = 'Tools'
@@ -542,11 +543,13 @@ object MainForm: TMainForm
       Caption = 'Export...'
       ImageIndex = 17
       OnExecute = ExportActionExecute
+      OnUpdate = ExtendedDataAuthActionUpdate
     end
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'
       Caption = 'Prepare Double Entry'
       OnExecute = PrepareDoubleEntryActionExecute
+      OnUpdate = ExtendedDataAuthActionUpdate
     end
     object VerifyDoubleEntryAction: TAction
       Category = 'Reports'
@@ -584,11 +587,13 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Value Labels from Data'
       OnExecute = VLSetFromDataActionExecute
+      OnUpdate = DefineProjectAuthActionUpdate
     end
     object AppendAction: TAction
       Category = 'Tools'
       Caption = 'Append'
       OnExecute = AppendActionExecute
+      OnUpdate = ExtendedDataAuthActionUpdate
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

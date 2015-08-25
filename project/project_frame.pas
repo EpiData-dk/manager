@@ -408,6 +408,11 @@ begin
   F := TAdminForm.Create(self, EpiDocument.Admin);
   F.ShowModal;
   F.Free;
+
+  // This line is neede because the mainform sets shortcut handled to false during "showmodal",
+  // and the check on the mainform MUST be there or else the mainmenu will fire actions due to
+  // catching keyboard shortcuts.
+  MainForm.MainMenu1.ShortcutHandled := true;
 end;
 
 procedure TProjectFrame.AdminActionUpdate(Sender: TObject);
@@ -802,14 +807,14 @@ begin
 
   // Close Alignment Form.
   AlignForm.DesignFrame := nil;
-  AlignForm.Hide;
 
-  PropertiesForm.Free;
+  FreeAndNil(AlignForm);
+  FreeAndNil(PropertiesForm);
 
 
   FActiveFrame := nil;
   FreeAndNil(FBackupTimer);
-  FreeAndNil(Authenticator);
+  //FreeAndNil(Authenticator);
   FreeAndNil(FDocumentFile);
 
   Modified := false;
@@ -1209,6 +1214,7 @@ begin
   ValueLabelEditorAction.ShortCut := P_StartValueLabelEditor;
   OpenProjectAction.ShortCut      := P_OpenProject;
   KeyFieldsAction.ShortCut        := P_KeyFields;
+  AdminAction.ShortCut            := P_Admin;
 end;
 
 function TProjectFrame.GetEpiDocument: TEpiDocument;

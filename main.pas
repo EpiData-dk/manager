@@ -9,7 +9,8 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
   project_frame, LMessages, manager_messages, epidocument, report_base,
-  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile;
+  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile,
+  epiadmin;
 
 type
 
@@ -226,6 +227,8 @@ type
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure VLSetFromDataActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
+    procedure ExtendedDataAuthActionUpdate(Sender: TObject);
+    procedure DefineProjectAuthActionUpdate(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -248,7 +251,8 @@ type
     procedure CheckForUpdates(Data: PtrInt);
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(Const ReadOnly: boolean;
-      out LocalDoc: boolean): TEpiDocumentFile;
+      out LocalDoc: boolean; Const RequiredRights: TEpiManagerRights;
+      const AuthErrorMessage: String): TEpiDocumentFile;
     function  RunReport(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
     function  RunReportEx(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
   private
@@ -303,7 +307,8 @@ uses
   report_export, epireport_generator_txt,
   valuelabel_import_data,  append_form, epitools_append,
   manager_globals, reports_form,
-  epiv_checkversionform, export_form2;
+  epiv_checkversionform, export_form2,
+  admin_authenticator;
 
 type
   TAccessActionList = class(TActionList);
@@ -457,7 +462,8 @@ begin
   Settings := nil;
 
   try
-    DF := ToolsCheckOpenFile(false, local);
+    DF := ToolsCheckOpenFile(false, local, [earExtentendedData],
+      'You are not authorized to use Export!');
 
     if (not Assigned(DF)) then
       Exit;
@@ -581,12 +587,14 @@ var
   S: String;
 
 begin
-  DocFile := ToolsCheckOpenFile(false, LocalDoc);
+  DocFile := ToolsCheckOpenFile(false, LocalDoc, [earExtentendedData],
+    'You are not authorized to use Append');
   if not Assigned(DocFile) then exit;
 
   AppendForm := nil;
   AppendTool := nil;
   ResultList := nil;
+  Handler    := nil;
 
   try
     AppendForm := TAppendForm.Create(self);
@@ -699,7 +707,8 @@ var
 begin
   try
     F := nil;
-    Doc := ToolsCheckOpenFile(False, LocalDoc);
+    Doc := ToolsCheckOpenFile(False, LocalDoc, [earExtentendedData],
+      'You are not authorized to use Pack');
     if not Assigned(Doc) then exit;
 
     EpiDoc := Doc.Document;
@@ -758,7 +767,8 @@ var
   Local: boolean;
   Doc: TEpiDocumentFile;
 begin
-  Doc := ToolsCheckOpenFile(True, Local);
+  Doc := ToolsCheckOpenFile(True, Local, [earExtentendedData],
+    'You are not authorized to use Prepare Double Entry');
   if Assigned(Doc) then
   begin
     PrepareDoubleEntry(Doc);
@@ -985,7 +995,8 @@ var
   Dlg: TSaveDialog;
   Fn: String;
 begin
-  Docfile := ToolsCheckOpenFile(false, LocalDoc);
+  Docfile := ToolsCheckOpenFile(false, LocalDoc, [earDefineProject],
+    'You are not authorized to use ValueLabel from Data');
   if not Assigned(DocFile) then exit;
 
   try
@@ -1019,6 +1030,16 @@ end;
 procedure TMainForm.WebTutorialsMenuItem12Click(Sender: TObject);
 begin
   OpenURL(ManagerSettings.TutorialURLUTF8);
+end;
+
+procedure TMainForm.ExtendedDataAuthActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earExtentendedData]);
+end;
+
+procedure TMainForm.DefineProjectAuthActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
 procedure TMainForm.SetCaption;
@@ -1290,7 +1311,8 @@ begin
 end;
 
 function TMainForm.ToolsCheckOpenFile(const ReadOnly: boolean; out
-  LocalDoc: boolean): TEpiDocumentFile;
+  LocalDoc: boolean; const RequiredRights: TEpiManagerRights;
+  const AuthErrorMessage: String): TEpiDocumentFile;
 var
   Dlg: TOpenDialog;
 begin
@@ -1312,10 +1334,23 @@ begin
       Exit;
     end;
 
+    Authenticator := TAuthenticator.Create(Result);
     AddToRecent(Result.FileName);
     LocalDoc := true;
     Dlg.Free;
   end;
+
+  if (not Authenticator.IsAuthorized(RequiredRights))
+  then
+    begin
+      MessageDlg('Error',
+        AuthErrorMessage,
+        mtError,
+        [mbOK],
+        0
+      );
+      FreeAndNil(Result);
+    end;
 end;
 
 function TMainForm.RunReport(ReportClass: TReportBaseClass;

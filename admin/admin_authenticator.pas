@@ -5,7 +5,7 @@ unit admin_authenticator;
 interface
 
 uses
-  Classes, SysUtils, epiopenfile, epiadmin, epicustombase;
+  Classes, SysUtils, epiopenfile, epiadmin, epicustombase, epidocument;
 
 type
 
@@ -13,6 +13,7 @@ type
 
   TAuthenticator = class
   private
+    FDocument: TEpiDocument;
     FDocumentFile: TEpiDocumentFile;
     function GetAdmin: TEpiAdmin;
     function GetAuthedUser: TEpiUser;
@@ -25,8 +26,12 @@ type
     procedure NewRelationHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
+    procedure DocumentHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
   public
     constructor Create(Const ADocumentFile: TEpiDocumentFile);
+    destructor Destroy; override;
     // Check if Master user is in a higher group than OtherUser.
     //   If AllGroups = false: Returns true if at least one such hierachy is found.
     //   If AllGroups = true:  Returns true if all such hierachies are found.
@@ -164,17 +169,38 @@ begin
     Group.AddCustomData(AUTH_GROUP_KEY, Initiator);
 end;
 
+procedure TAuthenticator.DocumentHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if (Initiator <> FDocument) then exit;
+  if (EventGroup <> eegCustomBase) then exit;
+  if (TEpiCustomChangeEventType(EventType) <> ecceDestroy) then exit;
+
+  Self.Free;
+end;
+
 constructor TAuthenticator.Create(const ADocumentFile: TEpiDocumentFile);
 var
   R: TEpiGroupRelation;
 begin
   FDocumentFile := ADocumentFile;
+  FDocument     := FDocumentFile.Document;
+
+  FDocument.RegisterOnChangeHook(@DocumentHook, true);
 
   R := DocumentFile.Document.Admin.AdminRelation;
   R.Group.AddCustomData(AUTH_GROUP_KEY, R);
 
   R.GroupRelations.OrderedWalk(@InitGroupWalk, nil);
   R.RegisterOnChangeHook(@NewRelationHook, true);
+end;
+
+destructor TAuthenticator.Destroy;
+begin
+  Authenticator := nil;
+  FDocument.UnRegisterOnChangeHook(@DocumentHook);
+  inherited Destroy;
 end;
 
 function TAuthenticator.CheckUserHierachy(const MasterUser,

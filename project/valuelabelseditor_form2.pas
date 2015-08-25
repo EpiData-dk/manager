@@ -26,8 +26,10 @@ type
     ToolBar1: TToolBar;
     AddBtn: TToolButton;
     DelBtn: TToolButton;
-    ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
+    ExternalToolBtn: TToolButton;
+    Divider1: TToolButton;
+    ImportToolBtn: TToolButton;
+    Divider2: TToolButton;
     procedure DelBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -37,7 +39,8 @@ type
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem3Click(Sender: TObject);
     procedure AddBtnClick(Sender: TObject);
-    procedure ToolButton1Click(Sender: TObject);
+    procedure ExternalToolBtnClick(Sender: TObject);
+    procedure ImportToolBtnClick(Sender: TObject);
   private
     { VLSetsTree }
     VLSetsTree: TVirtualStringTree;
@@ -98,7 +101,8 @@ implementation
 
 uses
   Main, settings2_var, settings2, LCLIntf, LCLType, epimiscutils,
-  valuelabel_import_external, epiv_datamodule, epiadmin, admin_authenticator;
+  valuelabel_import_external, epiv_datamodule, epiadmin, admin_authenticator,
+  valuelabel_import_data;
 
 var
   Editor: TValueLabelEditor2 = nil;
@@ -150,7 +154,7 @@ begin
   DoAddNewValueLabelSet(ftInteger);
 end;
 
-procedure TValueLabelEditor2.ToolButton1Click(Sender: TObject);
+procedure TValueLabelEditor2.ExternalToolBtnClick(Sender: TObject);
 var
   ExtImporter: TExtVLSetForm;
 begin
@@ -159,6 +163,17 @@ begin
   ExtImporter := TExtVLSetForm.Create(Self, ValueLabelSets);
   ExtImporter.ShowModal;
   ExtImporter.Free;
+end;
+
+procedure TValueLabelEditor2.ImportToolBtnClick(Sender: TObject);
+var
+  F: TValueLabelDataImport;
+begin
+  if not FGridFrame.ValidateGridEntries then exit;
+
+  F := TValueLabelDataImport.Create(Self);
+  F.ValueLabelSets := ValueLabelSets;
+  F.ShowModal;
 end;
 
 procedure TValueLabelEditor2.VLSetsEditing(Sender: TBaseVirtualTree;
@@ -327,7 +342,8 @@ begin
 
   AddBtn.Enabled := Authenticator.IsAuthorized([earDefineProject]);
   DelBtn.Enabled := Authenticator.IsAuthorized([earDefineProject]);
-  ToolButton1.Enabled := Authenticator.IsAuthorized([earDefineProject]);
+  ExternalToolBtn.Enabled := Authenticator.IsAuthorized([earDefineProject]);
+  ImportToolBtn.Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
 procedure TValueLabelEditor2.DelBtnClick(Sender: TObject);
