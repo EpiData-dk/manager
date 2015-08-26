@@ -65,7 +65,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Themes, LCLType;
+  Themes, LCLType, admin_authenticator;
 
 type
   TCheckedRecord = record
@@ -142,9 +142,11 @@ end;
 
 function TGroupsAssignFrame.CanCheck(Node: PVirtualNode; Right: TEpiEntryRight
   ): boolean;
+var
+  Group: TEpiGroup;
 begin
-  // TODO!
-  result := true;
+  Group := RelationFromNode(Node).Group;
+  result := (earViewData in Group.ManageRights);
 end;
 
 procedure TGroupsAssignFrame.NodeCheck(Node: PVirtualNode;
@@ -278,8 +280,21 @@ var
   MasterGRs: TEpiGroupRights;
   Item: TEpiEntryRight;
   GR: TEpiGroupRight;
+  Group: TEpiGroup;
 begin
-  if (not DataFileRelation.InheritsFrom(TEpiDetailRelation)) then
+  // A group that has no VIEW rights on data, cannot be assigned a dataform
+  // entry right. Paint the cells accordingly.
+  Group := RelationFromNode(Node).Group;
+  if not (earViewData in Group.ManageRights) then
+    begin
+      TargetCanvas.Brush.Color := clMedGray;
+      TargetCanvas.FillRect(CellRect);
+      Exit;
+    end;
+
+  if (not DataFileRelation.InheritsFrom(TEpiDetailRelation)) or
+     (Column = 0)
+  then
     Exit;
 
   if (CellPaintMode = cpmGetContentMargin) then Exit;
@@ -288,14 +303,14 @@ begin
   MasterDF := Detail.MasterRelation.Datafile;
   MasterGRs := MasterDF.GroupRights;
 
-  GR := MasterGRs.GroupRightFromGroup(RelationFromNode(Node).Group);
+  GR := MasterGRs.GroupRightFromGroup(Group);
   Item := TEpiEntryRight(Column - 1);
 
   if (Assigned(GR)) and
      (Item in GR.EntryRights)
   then
     begin
-      TargetCanvas.Brush.Color := clInactiveCaption;
+      TargetCanvas.Brush.Color := clLtGray;
       TargetCanvas.FillRect(CellRect);
     end;
 end;
