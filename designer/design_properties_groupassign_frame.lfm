@@ -8,17 +8,48 @@ object GroupsAssignFrame: TGroupsAssignFrame
   TabOrder = 0
   DesignLeft = 1021
   DesignTop = 323
-  object Button1: TButton
-    AnchorSideLeft.Control = Owner
-    AnchorSideBottom.Control = Owner
-    AnchorSideBottom.Side = asrBottom
+  object Panel1: TPanel
     Left = 0
-    Height = 27
-    Top = 478
-    Width = 132
-    Anchors = [akLeft, akBottom]
-    AutoSize = True
-    Caption = 'Copy Parent Rights'
+    Height = 237
+    Top = 0
+    Width = 471
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 237
+    ClientWidth = 471
     TabOrder = 0
+    object Button1: TButton
+      AnchorSideLeft.Control = Panel1
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 0
+      Height = 27
+      Top = 205
+      Width = 132
+      Anchors = [akLeft, akBottom]
+      AutoSize = True
+      BorderSpacing.Bottom = 5
+      Caption = 'Copy Parent Rights'
+      TabOrder = 0
+    end
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 5
+    Top = 237
+    Width = 471
+    Align = alTop
+    Beveled = True
+    ResizeAnchor = akTop
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 263
+    Top = 242
+    Width = 471
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 2
   end
 end

@@ -14,6 +14,9 @@ type
 
   TGroupsAssignFrame = class(TFrame)
     Button1: TButton;
+    Panel1: TPanel;
+    Splitter1: TSplitter;
+    Panel2: TPanel;
   private
     FAdmin: TEpiAdmin;
     FGroupRights: TEpiGroupRights;
@@ -21,12 +24,12 @@ type
     procedure SetGroupRights(AValue: TEpiGroupRights);
     procedure CopyParentRightsBtnClick(Sender: TObject);
 
-  { VST }
+  { GroupRightsVST }
   private
     FDataFileRelation: TEpiMasterRelation;
-    FVst: TVirtualStringTree;
-    FCheckBoxWidth: Integer;
-    FCheckBoxHeight: Integer;
+    FGroupRightsVst: TVirtualStringTree;
+
+    procedure InitGroupVST;
 
     function  CanCheck(Node: PVirtualNode; Right: TEpiEntryRight): boolean;
     procedure NodeCheck(Node: PVirtualNode; Right: TEpiEntryRight; Value: Boolean);
@@ -35,22 +38,36 @@ type
     procedure RelationToNode(Const Node: PVirtualNode; Const Relation: TEpiGroupRelation);
     procedure SetDataFileRelation(AValue: TEpiMasterRelation);
 
-    procedure VSTAfterCellPaint(Sender: TBaseVirtualTree;
+    procedure GroupVSTAfterCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       const CellRect: TRect);
-    procedure VSTBeforeCellPaint(Sender: TBaseVirtualTree;
+    procedure GroupVSTBeforeCellPaint(Sender: TBaseVirtualTree;
       TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
-    procedure VSTFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure VSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+    procedure GroupVSTFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure GroupVSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
-    procedure VSTInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode;
+    procedure GroupVSTInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode;
       var ChildCount: Cardinal);
-    procedure VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
+    procedure GroupVSTInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-    procedure VSTKeyAction(Sender: TBaseVirtualTree; var CharCode: Word;
+    procedure GroupVSTKeyAction(Sender: TBaseVirtualTree; var CharCode: Word;
       var Shift: TShiftState; var DoDefault: Boolean);
-    procedure VSTNodeClick(Sender: TBaseVirtualTree; const HitInfo: THitInfo);
+    procedure GroupVSTNodeClick(Sender: TBaseVirtualTree; const HitInfo: THitInfo);
+
+  { UserRightsVST }
+  private
+    FUserRightsVst: TVirtualStringTree;
+
+    procedure InitUserVST;
+
+    procedure UserVSTAfterCellPaint(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+      const CellRect: TRect);
+    procedure UserVSTGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+    procedure UserVSTInitNode(Sender: TBaseVirtualTree; ParentNode,
+      Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
   public
     constructor Create(TheOwner: TComponent); override;
     procedure ApplyChanges;
@@ -77,6 +94,9 @@ type
   end;
   PCheckedRecord = ^TCheckedRecord;
 
+const
+  CHECKED_NODE_KEY = 'CHECKED_NODE_KEY';
+
 
 { TGroupsAssignFrame }
 
@@ -94,12 +114,12 @@ begin
   MasterDF := Detail.MasterRelation.Datafile;
   MasterGRs := MasterDF.GroupRights;
 
-  FVst.BeginUpdate;
+  FGroupRightsVst.BeginUpdate;
 
   // This unchecks all!
-  NodeCheck(FVst.GetFirst(), eerRead, false);
+  NodeCheck(FGroupRightsVst.GetFirst(), eerRead, false);
 
-  for Node in FVst.Nodes() do
+  for Node in FGroupRightsVst.Nodes() do
     begin
       GR := MasterGRs.GroupRightFromGroup(RelationFromNode(Node).Group);
 
@@ -109,35 +129,55 @@ begin
           NodeCheck(Node, Item, true);
     end;
 
-  FVst.EndUpdate;
+  FGroupRightsVst.EndUpdate;
+end;
+
+procedure TGroupsAssignFrame.InitGroupVST;
+begin
+  if Assigned(GroupRights) and
+     Assigned(Admin)
+  then
+    begin
+      if FGroupRightsVst.RootNodeCount > 0 then
+        FGroupRightsVst.ReinitNode(nil, true)
+      else
+        FGroupRightsVst.RootNodeCount := 1;
+    end
+  else
+    FGroupRightsVst.RootNodeCount := 0;
+
+  InitUserVST;
+  FGroupRightsVst.Invalidate;
 end;
 
 procedure TGroupsAssignFrame.SetAdmin(AValue: TEpiAdmin);
 begin
   FAdmin := AValue;
+  InitGroupVST;
 
-  if Assigned(GroupRights) and
-     (FVst.RootNodeCount = 0)
+{  if Assigned(GroupRights) and
+     (FGroupRightsVst.RootNodeCount = 0)
   then
-    FVst.RootNodeCount := 1
+    FGroupRightsVst.RootNodeCount := 1
   else
-    FVst.ReinitNode(nil, true);
+    FGroupRightsVst.ReinitNode(nil, true);
 
-  FVst.Invalidate;
+  FGroupRightsVst.Invalidate;  }
 end;
 
 procedure TGroupsAssignFrame.SetGroupRights(AValue: TEpiGroupRights);
 begin
   FGroupRights := AValue;
+  InitGroupVST;
 
-  if Assigned(Admin) and
-     (FVst.RootNodeCount = 0)
+{  if Assigned(Admin) and
+     (FGroupRightsVst.RootNodeCount = 0)
   then
-    FVst.RootNodeCount := 1
+    FGroupRightsVst.RootNodeCount := 1
   else
-    FVst.ReinitNode(nil, true);
+    FGroupRightsVst.ReinitNode(nil, true);
 
-  FVst.Invalidate;
+  FGroupRightsVst.Invalidate;}
 end;
 
 function TGroupsAssignFrame.CanCheck(Node: PVirtualNode; Right: TEpiEntryRight
@@ -157,7 +197,7 @@ begin
   if (not Assigned(Node)) then exit;
   if (not CanCheck(Node, Right)) then exit;
 
-  CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+  CR := PCheckedRecord(FGroupRightsVst.GetNodeData(Node)^);
 
   case Right of
     eerRead:   CR^.ReadChecked   := Value;
@@ -166,8 +206,8 @@ begin
     eerDelete: CR^.DeleteChecked := Value;
   end;
 
-  if Value then
-    FVst.CheckState[Node] := csCheckedNormal;
+//  if Value then
+//    FGroupRightsVst.CheckState[Node] := csCheckedNormal;
 
   if (Right > eerRead) and
      (Value)
@@ -179,13 +219,13 @@ begin
   then
     NodeCheck(Node, Succ(Right), Value);
 
-  FVst.InvalidateNode(Node);
+  FGroupRightsVst.InvalidateNode(Node);
 
   if Value
   then
-    NodeCheck(FVst.NodeParent[Node], Right, Value)
+    NodeCheck(FGroupRightsVst.NodeParent[Node], Right, Value)
   else
-    for Node in FVst.ChildNodes(Node) do
+    for Node in FGroupRightsVst.ChildNodes(Node) do
       NodeCheck(Node, Right, Value)
 end;
 
@@ -194,7 +234,7 @@ function TGroupsAssignFrame.NodeChecked(Node: PVirtualNode;
 var
   CR: PCheckedRecord;
 begin
-  CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+  CR := PCheckedRecord(FGroupRightsVst.GetNodeData(Node)^);
 
   case Right of
     eerRead:   Result := CR^.ReadChecked;
@@ -207,7 +247,7 @@ end;
 function TGroupsAssignFrame.RelationFromNode(const Node: PVirtualNode
   ): TEpiGroupRelation;
 begin
-  Result := PCheckedRecord(FVst.GetNodeData(Node)^)^.GroupRelation;
+  Result := PCheckedRecord(FGroupRightsVst.GetNodeData(Node)^)^.GroupRelation;
 end;
 
 procedure TGroupsAssignFrame.RelationToNode(const Node: PVirtualNode;
@@ -228,7 +268,8 @@ begin
     DeleteChecked := Assigned(GR) and (eerDelete in GR.EntryRights);
   end;
 
-  PCheckedRecord(FVst.GetNodeData(Node)^) := CheckedRecord;
+  PCheckedRecord(FGroupRightsVst.GetNodeData(Node)^) := CheckedRecord;
+  Relation.AddCustomData(CHECKED_NODE_KEY, TObject(Node));
 end;
 
 procedure TGroupsAssignFrame.SetDataFileRelation(AValue: TEpiMasterRelation);
@@ -239,7 +280,7 @@ begin
   Button1.Enabled := FDataFileRelation.InheritsFrom(TEpiDetailRelation);
 end;
 
-procedure TGroupsAssignFrame.VSTAfterCellPaint(Sender: TBaseVirtualTree;
+procedure TGroupsAssignFrame.GroupVSTAfterCellPaint(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   const CellRect: TRect);
 var
@@ -248,7 +289,8 @@ var
   R: TRect;
   Checked: Boolean;
   Sz: TSize;
-
+  FCheckBoxWidth: Integer;
+  FCheckBoxHeight: Integer;
 begin
   if Column = 0 then exit;
 
@@ -271,7 +313,7 @@ begin
   ThemeServices.DrawElement(TargetCanvas.Handle, Details, R);
 end;
 
-procedure TGroupsAssignFrame.VSTBeforeCellPaint(Sender: TBaseVirtualTree;
+procedure TGroupsAssignFrame.GroupVSTBeforeCellPaint(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
 var
@@ -315,16 +357,16 @@ begin
     end;
 end;
 
-procedure TGroupsAssignFrame.VSTFreeNode(Sender: TBaseVirtualTree;
+procedure TGroupsAssignFrame.GroupVSTFreeNode(Sender: TBaseVirtualTree;
   Node: PVirtualNode);
 var
   CR: PCheckedRecord;
 begin
-  CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+  CR := PCheckedRecord(FGroupRightsVst.GetNodeData(Node)^);
   Dispose(CR);
 end;
 
-procedure TGroupsAssignFrame.VSTGetText(Sender: TBaseVirtualTree;
+procedure TGroupsAssignFrame.GroupVSTGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
 begin
@@ -335,13 +377,13 @@ begin
   end;
 end;
 
-procedure TGroupsAssignFrame.VSTInitChildren(Sender: TBaseVirtualTree;
+procedure TGroupsAssignFrame.GroupVSTInitChildren(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var ChildCount: Cardinal);
 begin
   ChildCount := RelationFromNode(Node).GroupRelations.Count;
 end;
 
-procedure TGroupsAssignFrame.VSTInitNode(Sender: TBaseVirtualTree; ParentNode,
+procedure TGroupsAssignFrame.GroupVSTInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 var
   Relation: TEpiGroupRelation;
@@ -358,28 +400,28 @@ begin
     Include(InitialStates, ivsHasChildren);
 end;
 
-procedure TGroupsAssignFrame.VSTKeyAction(Sender: TBaseVirtualTree;
+procedure TGroupsAssignFrame.GroupVSTKeyAction(Sender: TBaseVirtualTree;
   var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
 var
   Item: TEpiEntryRight;
 begin
-  if (FVst.FocusedColumn <= 0) or
-     (FVst.FocusedColumn > (Integer(High(TEpiEntryRight))) + 1) or
-     (not Assigned(FVst.FocusedNode))
+  if (FGroupRightsVst.FocusedColumn <= 0) or
+     (FGroupRightsVst.FocusedColumn > (Integer(High(TEpiEntryRight))) + 1) or
+     (not Assigned(FGroupRightsVst.FocusedNode))
   then
     Exit;
 
   if (CharCode = VK_SPACE) and (Shift = []) then
     begin
       DoDefault := false;
-      Item := TEpiEntryRight(FVst.FocusedColumn - 1);
+      Item := TEpiEntryRight(FGroupRightsVst.FocusedColumn - 1);
 
-      if CanCheck(FVst.FocusedNode, Item) then
-        NodeCheck(FVst.FocusedNode, Item, not NodeChecked(FVst.FocusedNode, Item));
+      if CanCheck(FGroupRightsVst.FocusedNode, Item) then
+        NodeCheck(FGroupRightsVst.FocusedNode, Item, not NodeChecked(FGroupRightsVst.FocusedNode, Item));
     end;
 end;
 
-procedure TGroupsAssignFrame.VSTNodeClick(Sender: TBaseVirtualTree;
+procedure TGroupsAssignFrame.GroupVSTNodeClick(Sender: TBaseVirtualTree;
   const HitInfo: THitInfo);
 var
   Item: TEpiEntryRight;
@@ -392,7 +434,74 @@ begin
   Item := TEpiEntryRight(HitInfo.HitColumn - 1);
 
   if CanCheck(Node, Item) then
-    NodeCheck(Node, Item, not NodeChecked(Node, Item));
+    begin
+      NodeCheck(Node, Item, not NodeChecked(Node, Item));
+      FUserRightsVst.Invalidate;
+    end;
+end;
+
+procedure TGroupsAssignFrame.InitUserVST;
+begin
+  if Assigned(Admin) and
+     (FGroupRightsVst.RootNodeCount > 0)
+  then
+    FUserRightsVst.RootNodeCount := Admin.Users.Count
+  else
+    FUserRightsVst.RootNodeCount := 0;
+
+  FUserRightsVst.Invalidate;
+end;
+
+procedure TGroupsAssignFrame.UserVSTAfterCellPaint(Sender: TBaseVirtualTree;
+  TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  const CellRect: TRect);
+var
+  User: TEpiUser;
+  Checked: Boolean;
+  Details: TThemedElementDetails;
+  Sz: TSize;
+  FCheckBoxHeight: LongInt;
+  FCheckBoxWidth: LongInt;
+  X: Integer;
+  Y: Integer;
+  R: TRect;
+begin
+  if Column = 0 then exit;
+
+  { Paint Check boxes by ourselves - since VT's only allow for one checkbox column }
+  User := TEpiUser(Sender.GetNodeData(Node)^);
+  //TODO: Denne function skal omhandle data i FGroupRightsVst / PCheckedRecord i stedet!
+  Checked := (TEpiEntryRight(Column - 1) in  Authenticator.UserEntryRights(User, DataFileRelation.Datafile));
+
+  if Checked then
+    Details := ThemeServices.GetElementDetails(tbCheckBoxCheckedNormal)
+  else
+    Details := ThemeServices.GetElementDetails(tbCheckBoxUncheckedNormal);
+
+  Sz := ThemeServices.GetDetailSize(Details);
+
+  FCheckBoxHeight := Sz.cy;
+  FCheckBoxWidth  := SZ.cx;
+
+  X := CellRect.Left + (CellRect.Right - CellRect.Left - FCheckBoxWidth) div 2;
+  Y := CellRect.Top + (CellRect.Bottom - CellRect.Top - FCheckBoxHeight) div 2;
+  R := Rect(X, Y, X + FCheckBoxWidth, Y + FCheckBoxHeight);
+  ThemeServices.DrawElement(TargetCanvas.Handle, Details, R);
+end;
+
+procedure TGroupsAssignFrame.UserVSTGetText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: String);
+begin
+  if Column <> 0 then Exit;
+
+  CellText := TEpiUser(Sender.GetNodeData(Node)^).Login;
+end;
+
+procedure TGroupsAssignFrame.UserVSTInitNode(Sender: TBaseVirtualTree;
+  ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+begin
+  TEpiUser(Sender.GetNodeData(Node)^) := Admin.Users[Node^.Index];
 end;
 
 constructor TGroupsAssignFrame.Create(TheOwner: TComponent);
@@ -401,8 +510,8 @@ var
 begin
   inherited Create(TheOwner);
 
-  FVst := TVirtualStringTree.Create(self);
-  with FVst do
+  FGroupRightsVst := TVirtualStringTree.Create(self);
+  with FGroupRightsVst do
   begin
     BeginUpdate;
 
@@ -451,25 +560,96 @@ begin
       AutoSizeIndex := 0;
     end;
 
-    Parent := Self;
+    Parent := Panel1;
 
     AnchorAsAlign(alTop,   0);
     AnchorToNeighbour(akBottom, 10, Button1);
 
-    OnAfterCellPaint  := @VSTAfterCellPaint;
-    OnBeforeCellPaint := @VSTBeforeCellPaint;
+    OnAfterCellPaint  := @GroupVSTAfterCellPaint;
+    OnBeforeCellPaint := @GroupVSTBeforeCellPaint;
 
-    OnFreeNode        := @VSTFreeNode;
-    OnGetText         := @VSTGetText;
-    OnInitChildren    := @VSTInitChildren;
-    OnInitNode        := @VSTInitNode;
+    OnFreeNode        := @GroupVSTFreeNode;
+    OnGetText         := @GroupVSTGetText;
+    OnInitChildren    := @GroupVSTInitChildren;
+    OnInitNode        := @GroupVSTInitNode;
 
-    OnKeyAction       := @VSTKeyAction;
+    OnKeyAction       := @GroupVSTKeyAction;
 
-    OnNodeClick       := @VSTNodeClick;
+    OnNodeClick       := @GroupVSTNodeClick;
 
     EndUpdate;
   end;
+
+  FUserRightsVst := TVirtualStringTree.Create(self);
+  with FUserRightsVst do
+  begin
+    BeginUpdate;
+
+    NodeDataSize := SizeOf(TEpiUser);
+
+    with TreeOptions do
+    begin
+      AnimationOptions := [];
+      AutoOptions      := [];
+      MiscOptions      := [toFullRepaintOnResize, toGridExtensions, toWheelPanning];
+      PaintOptions     := [toShowButtons, toShowRoot, toShowTreeLines, toThemeAware, toUseBlendedImages];
+      SelectionOptions := [];
+      StringOptions    := [];
+    end;
+
+    with Header do
+    begin
+      Options := [hoAutoResize, hoColumnResize, hoDblClickResize, hoVisible,
+                  hoFullRepaintOnResize];
+
+      with Columns.Add do
+      begin
+        Text := 'User';
+        CheckBox   := false;
+        CheckState := csUncheckedNormal;
+        CheckType  := ctNone;
+        Options    := [coEnabled, coParentBidiMode,
+                       coParentColor, coResizable, coVisible,
+                       coSmartResize, coAllowFocus];
+      end;
+
+      for Item in TEpiEntryRights do
+      begin
+        with Columns.Add do
+        begin
+          Text       := EpiEntryRightCaption[Item];
+          CheckBox   := false;
+          CheckType  := ctNone;
+          Options    := [coEnabled, coParentBidiMode,
+                         coParentColor, coResizable, coVisible,
+                         coSmartResize, coAllowFocus];
+        end;
+      end;
+
+      MainColumn := 0;
+      AutoSizeIndex := 0;
+    end;
+
+    Parent := Panel2;
+
+    AnchorAsAlign(alBottom, 0);
+    AnchorParallel(akTop, 5, Panel2);
+
+    OnAfterCellPaint := @UserVSTAfterCellPaint;
+//    OnBeforeCellPaint := @GroupVSTBeforeCellPaint;
+
+//    OnFreeNode        := @GroupVSTFreeNode;
+    OnGetText := @UserVSTGetText;
+//    OnInitChildren    := @GroupVSTInitChildren;
+    OnInitNode := @UserVSTInitNode;
+
+//    OnKeyAction       := @GroupVSTKeyAction;
+
+//    OnNodeClick       := @GroupVSTNodeClick;
+
+    EndUpdate;
+  end;
+
 
   Button1.OnClick := @CopyParentRightsBtnClick;
 end;
@@ -481,10 +661,10 @@ var
   GR: TEpiGroupRight;
   Rights: TEpiEntryRights;
 begin
-  for Node in FVst.Nodes() do
+  for Node in FGroupRightsVst.Nodes() do
     begin
       Rights := [];
-      CR := PCheckedRecord(FVst.GetNodeData(Node)^);
+      CR := PCheckedRecord(FGroupRightsVst.GetNodeData(Node)^);
 
       if CR^.ReadChecked   then Include(Rights, eerRead);
       if CR^.UpdateChecked then Include(Rights, eerUpdate);
