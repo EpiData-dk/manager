@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, types, FileUtil, Forms, Controls, epiadmin, VirtualTrees,
-  epirights, Graphics, StdCtrls, ExtCtrls, epidatafilerelations, epidatafiles;
+  epirights, Graphics, StdCtrls, ExtCtrls, epidatafilerelations, epidatafiles,
+  epicustombase;
 
 type
 
@@ -23,6 +24,14 @@ type
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure SetGroupRights(AValue: TEpiGroupRights);
     procedure CopyParentRightsBtnClick(Sender: TObject);
+
+    procedure AdminChange(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+    procedure GroupCaptionChange(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+
 
   { GroupRightsVST }
   private
@@ -70,6 +79,7 @@ type
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     procedure ApplyChanges;
     function ValidateChanges: boolean;
     property Admin: TEpiAdmin read FAdmin write SetAdmin;
@@ -132,6 +142,30 @@ begin
   FGroupRightsVst.EndUpdate;
 end;
 
+procedure TGroupsAssignFrame.AdminChange(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if not (Initiator is TEpiGroupRelation) then exit;
+  if (EventGroup <> eegGroupRelations) then exit;
+  if not (TEpiGroupRelationChangeEvent(EventType) in [egrceSetGroup]) then exit;
+
+  TEpiGroup(Data).Caption.RegisterOnChangeHook(@GroupCaptionChange, true);
+
+  InitGroupVST;
+end;
+
+procedure TGroupsAssignFrame.GroupCaptionChange(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if not (Initiator is TEpiTranslatedText) then exit;
+  if (EventGroup <> eegCustomBase) then exit;
+  if (TEpiCustomChangeEventType(EventType) <> ecceText) then exit;
+
+  FGroupRightsVst.Invalidate;
+end;
+
 procedure TGroupsAssignFrame.InitGroupVST;
 begin
   if Assigned(GroupRights) and
@@ -153,31 +187,15 @@ end;
 procedure TGroupsAssignFrame.SetAdmin(AValue: TEpiAdmin);
 begin
   FAdmin := AValue;
+  FAdmin.RegisterOnChangeHook(@AdminChange, true);
+
   InitGroupVST;
-
-{  if Assigned(GroupRights) and
-     (FGroupRightsVst.RootNodeCount = 0)
-  then
-    FGroupRightsVst.RootNodeCount := 1
-  else
-    FGroupRightsVst.ReinitNode(nil, true);
-
-  FGroupRightsVst.Invalidate;  }
 end;
 
 procedure TGroupsAssignFrame.SetGroupRights(AValue: TEpiGroupRights);
 begin
   FGroupRights := AValue;
   InitGroupVST;
-
-{  if Assigned(Admin) and
-     (FGroupRightsVst.RootNodeCount = 0)
-  then
-    FGroupRightsVst.RootNodeCount := 1
-  else
-    FGroupRightsVst.ReinitNode(nil, true);
-
-  FGroupRightsVst.Invalidate;}
 end;
 
 function TGroupsAssignFrame.CanCheck(Node: PVirtualNode; Right: TEpiEntryRight
@@ -186,7 +204,8 @@ var
   Group: TEpiGroup;
 begin
   Group := RelationFromNode(Node).Group;
-  result := (earViewData in Group.ManageRights);
+  result := (earViewData in Group.ManageRights) and
+            (Group <> Admin.Admins);
 end;
 
 procedure TGroupsAssignFrame.NodeCheck(Node: PVirtualNode;
@@ -262,14 +281,14 @@ begin
   with CheckedRecord^ do
   begin
     GroupRelation := Relation;
-    ReadChecked   := Assigned(GR) and (eerRead   in GR.EntryRights);
-    UpdateChecked := Assigned(GR) and (eerUpdate in GR.EntryRights);
-    CreateChecked := Assigned(GR) and (eerCreate in GR.EntryRights);
-    DeleteChecked := Assigned(GR) and (eerDelete in GR.EntryRights);
+    ReadChecked   := (Assigned(GR) and (eerRead   in GR.EntryRights)) or (Relation.Group = Admin.Admins);
+    UpdateChecked := (Assigned(GR) and (eerUpdate in GR.EntryRights)) or (Relation.Group = Admin.Admins);
+    CreateChecked := (Assigned(GR) and (eerCreate in GR.EntryRights)) or (Relation.Group = Admin.Admins);
+    DeleteChecked := (Assigned(GR) and (eerDelete in GR.EntryRights)) or (Relation.Group = Admin.Admins);
   end;
 
   PCheckedRecord(FGroupRightsVst.GetNodeData(Node)^) := CheckedRecord;
-  Relation.AddCustomData(CHECKED_NODE_KEY, TObject(Node));
+  Relation.Group.AddCustomData(CHECKED_NODE_KEY, TObject(Node));
 end;
 
 procedure TGroupsAssignFrame.SetDataFileRelation(AValue: TEpiMasterRelation);
@@ -396,7 +415,7 @@ begin
   RelationToNode(Node, Relation);
 
   Include(InitialStates, ivsExpanded);
-  if RelationFromNode(Node).GroupRelations.Count > 0 then;
+  if RelationFromNode(Node).GroupRelations.Count > 0 then
     Include(InitialStates, ivsHasChildren);
 end;
 
@@ -465,13 +484,20 @@ var
   X: Integer;
   Y: Integer;
   R: TRect;
+  G: TEpiGroup;
+  GNode: PVirtualNode;
 begin
   if Column = 0 then exit;
 
   { Paint Check boxes by ourselves - since VT's only allow for one checkbox column }
   User := TEpiUser(Sender.GetNodeData(Node)^);
-  //TODO: Denne function skal omhandle data i FGroupRightsVst / PCheckedRecord i stedet!
-  Checked := (TEpiEntryRight(Column - 1) in  Authenticator.UserEntryRights(User, DataFileRelation.Datafile));
+
+  Checked := false;
+  for G in User.Groups do
+    begin
+      GNode := PVirtualNode(G.FindCustomData(CHECKED_NODE_KEY));
+      Checked := Checked or NodeChecked(GNode, (TEpiEntryRight(Column - 1)));
+    end;
 
   if Checked then
     Details := ThemeServices.GetElementDetails(tbCheckBoxCheckedNormal)
@@ -652,6 +678,14 @@ begin
 
 
   Button1.OnClick := @CopyParentRightsBtnClick;
+end;
+
+destructor TGroupsAssignFrame.Destroy;
+begin
+  if Assigned(Admin) then
+    Admin.UnRegisterOnChangeHook(@AdminChange);
+
+  inherited Destroy;
 end;
 
 procedure TGroupsAssignFrame.ApplyChanges;

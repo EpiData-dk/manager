@@ -65,8 +65,6 @@ type
     // Get a list of rights for a group
     // - if abbriviated, the list will contain a comma delimited list of single characters
     function  PrintGroupRights(Const Group: TEpiGroup; Abbriviated: boolean): string;
-
-    function UserEntryRights(Const User: TEpiUser; Const DataFile: TEpiDataFile): TEpiEntryRights;
   public
     property DocumentFile: TEpiDocumentFile read FDocumentFile;
     property AuthedUser: TEpiUser read GetAuthedUser;
@@ -148,33 +146,6 @@ begin
     Delete(Result, Length(Result) - 1, 2)
   else
     Result := TrimRight(Result);
-end;
-
-function TAuthenticator.UserEntryRights(const User: TEpiUser;
-  const DataFile: TEpiDataFile): TEpiEntryRights;
-var
-  G: TEpiGroup;
-  GR: TEpiGroupRight;
-begin
-  if (not Assigned(User)) then
-  begin
-    Result := EpiEntryRightsAll;
-    Exit;
-  end;
-
-  if (not Assigned(DataFile)) then
-  begin
-    Result := [];
-    Exit;
-  end;
-
-  Result := [];
-  for G in User.Groups do
-    begin
-      GR := DataFile.GroupRights.GroupRightFromGroup(G);
-      if Assigned(GR) then
-        Result := Result + GR.EntryRights;
-    end;
 end;
 
 procedure TAuthenticator.InitGroupWalk(const Relation: TEpiGroupRelation;
