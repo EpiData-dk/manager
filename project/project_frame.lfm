@@ -266,6 +266,20 @@ object ProjectFrame: TProjectFrame
       OnExecute = AdminActionExecute
       OnUpdate = AdminActionUpdate
     end
+    object DefineGroupsAction: TAction
+      Category = 'Admin'
+      Caption = 'Define Groups'
+      OnExecute = DefineGroupsActionExecute
+      OnUpdate = DefineGroupsActionUpdate
+    end
+    object DefineUsersAction: TAction
+      Category = 'Admin'
+      Caption = 'Define Users'
+    end
+    object DefineEntryRightsAction: TAction
+      Category = 'Admin'
+      Caption = 'Define Entry Rights'
+    end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu
     Images = DM.Icons16

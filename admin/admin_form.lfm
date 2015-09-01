@@ -1,37 +1,37 @@
 object AdminForm: TAdminForm
-  Left = 481
-  Height = 698
-  Top = 340
-  Width = 953
+  Left = 1951
+  Height = 769
+  Top = 77
+  Width = 1138
   Caption = 'User/Group Administration'
-  ClientHeight = 698
-  ClientWidth = 953
+  ClientHeight = 769
+  ClientWidth = 1138
   OnShow = FormShow
   LCLVersion = '1.5'
   object Panel1: TPanel
     Left = 0
     Height = 234
     Top = 0
-    Width = 953
+    Width = 1138
     Align = alTop
     BevelOuter = bvLowered
     ClientHeight = 234
-    ClientWidth = 953
+    ClientWidth = 1138
     TabOrder = 0
     object Panel5: TPanel
       Left = 1
       Height = 31
       Top = 1
-      Width = 951
+      Width = 1136
       Align = alTop
       AutoSize = True
       ClientHeight = 31
-      ClientWidth = 951
+      ClientWidth = 1136
       TabOrder = 0
       object Label1: TLabel
         AnchorSideLeft.Control = Panel5
         AnchorSideLeft.Side = asrCenter
-        Left = 447
+        Left = 540
         Height = 19
         Top = 6
         Width = 57
@@ -50,7 +50,7 @@ object AdminForm: TAdminForm
       Left = 1
       Height = 175
       Top = 58
-      Width = 951
+      Width = 1136
       Align = alClient
       AutoEdit = False
       AutoFillColumns = True
@@ -58,19 +58,19 @@ object AdminForm: TAdminForm
       Columns = <      
         item
           Title.Caption = 'login'
-          Width = 237
+          Width = 283
         end      
         item
           Title.Caption = 'Name'
-          Width = 237
+          Width = 283
         end      
         item
           Title.Caption = 'Expires'
-          Width = 237
+          Width = 283
         end      
         item
           Title.Caption = 'Last login'
-          Width = 238
+          Width = 285
         end>
       ExtendedSelect = False
       FixedCols = 0
@@ -80,17 +80,17 @@ object AdminForm: TAdminForm
       OnDblClick = EditUserActionExecute
       OnPrepareCanvas = UserGridPrepareCanvas
       ColWidths = (
-        237
-        237
-        237
-        238
+        283
+        283
+        283
+        285
       )
     end
     object ToolBar1: TToolBar
       Left = 1
       Height = 26
       Top = 32
-      Width = 951
+      Width = 1136
       Caption = 'ToolBar1'
       Images = DM.Icons16
       TabOrder = 2
@@ -121,12 +121,12 @@ object AdminForm: TAdminForm
   end
   object Panel2: TPanel
     Left = 0
-    Height = 409
+    Height = 480
     Top = 239
     Width = 429
     Align = alLeft
     BevelOuter = bvLowered
-    ClientHeight = 409
+    ClientHeight = 480
     ClientWidth = 429
     TabOrder = 1
     object Panel6: TPanel
@@ -192,35 +192,35 @@ object AdminForm: TAdminForm
   end
   object Splitter1: TSplitter
     Left = 429
-    Height = 409
+    Height = 480
     Top = 239
     Width = 5
     Beveled = True
   end
   object Panel3: TPanel
     Left = 434
-    Height = 409
+    Height = 480
     Top = 239
-    Width = 519
+    Width = 704
     Align = alClient
     BevelOuter = bvLowered
-    ClientHeight = 409
-    ClientWidth = 519
+    ClientHeight = 480
+    ClientWidth = 704
     TabOrder = 3
     object Panel7: TPanel
       Left = 1
       Height = 31
       Top = 1
-      Width = 517
+      Width = 702
       Align = alTop
       AutoSize = True
       ClientHeight = 31
-      ClientWidth = 517
+      ClientWidth = 702
       TabOrder = 0
       object Label2: TLabel
         AnchorSideLeft.Control = Panel7
         AnchorSideLeft.Side = asrCenter
-        Left = 190
+        Left = 283
         Height = 19
         Top = 6
         Width = 136
@@ -239,7 +239,7 @@ object AdminForm: TAdminForm
       Left = 1
       Height = 26
       Top = 32
-      Width = 517
+      Width = 702
       Caption = 'ToolBar3'
       Images = DM.Icons16
       TabOrder = 1
@@ -259,14 +259,14 @@ object AdminForm: TAdminForm
   object Panel4: TPanel
     Left = 0
     Height = 50
-    Top = 648
-    Width = 953
+    Top = 719
+    Width = 1138
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 953
+    ClientWidth = 1138
     TabOrder = 4
     object BitBtn1: TBitBtn
-      Left = 864
+      Left = 1049
       Height = 34
       Top = 8
       Width = 73
@@ -283,7 +283,7 @@ object AdminForm: TAdminForm
     Left = 0
     Height = 5
     Top = 234
-    Width = 953
+    Width = 1138
     Align = alTop
     Beveled = True
     ResizeAnchor = akTop

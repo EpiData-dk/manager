@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 665
+  Left = 617
   Height = 658
-  Top = 306
+  Top = 248
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -292,9 +292,6 @@ object MainForm: TMainForm
       object AdminMenuItem: TMenuItem
         Caption = 'Admin...'
       end
-      object ProjectPasswordMenuItem: TMenuItem
-        Caption = 'Set Password'
-      end
       object StudyInfoMenuItem: TMenuItem
         Caption = 'StudyInfo'
       end
@@ -303,6 +300,30 @@ object MainForm: TMainForm
       end
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
+      end
+    end
+    object UserAccessMenu: TMenuItem
+      Caption = 'User Access'
+      object ResetPasswordMenuItem: TMenuItem
+        Action = ResetPasswordAction
+      end
+      object DefineAccessMenuItem: TMenuItem
+        Caption = 'Define Access'
+        object ProjectPasswordMenuItem: TMenuItem
+          Caption = 'Set Password'
+        end
+        object DefineAccessDivider: TMenuItem
+          Caption = '-'
+        end
+        object DefineGroupsMenuItem: TMenuItem
+          Caption = 'DefineGroups'
+        end
+        object DefineUsersMenuItem: TMenuItem
+          Caption = 'DefineUsers'
+        end
+        object DefineEntryRightsMenuItem: TMenuItem
+          Caption = 'DefineEntryRights'
+        end
       end
     end
     object DataformMenu: TMenuItem
@@ -594,6 +615,11 @@ object MainForm: TMainForm
       Caption = 'Append'
       OnExecute = AppendActionExecute
       OnUpdate = ExtendedDataAuthActionUpdate
+    end
+    object ResetPasswordAction: TAction
+      Category = 'Admin'
+      Caption = 'Reset Password'
+      OnExecute = ResetPasswordActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

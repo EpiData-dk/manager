@@ -58,7 +58,7 @@ uses
   lazcontrols, design_control_memo, export_form2,
   admin_form, admin_user_form, 
   admin_group_form, admin_authenticator, design_properties_groupassign_frame,
-  core_logger;
+  core_logger, admin_groups_form;
 
 {$R *.res}
 

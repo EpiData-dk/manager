@@ -51,6 +51,9 @@ type
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
     ToolButton7: TToolButton;
+    DefineGroupsAction: TAction;
+    DefineUsersAction: TAction;
+    DefineEntryRightsAction: TAction;
     procedure AdminActionExecute(Sender: TObject);
     procedure AdminActionUpdate(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
@@ -71,6 +74,8 @@ type
     procedure StudyInformationActionExecute(Sender: TObject);
     procedure ToolButton5Click(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
+    procedure DefineGroupsActionUpdate(Sender: TObject);
+    procedure DefineGroupsActionExecute(Sender: TObject);
   private
     { Core Logger }
     FCoreLoggerForm: TCoreLogger;
@@ -199,7 +204,7 @@ uses
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
   design_properties_form, admin_form, epidatafilerelations_helper,
-  admin_user_form
+  admin_user_form, admin_groups_form
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -537,6 +542,16 @@ end;
 procedure TProjectFrame.ValueLabelEditorActionExecute(Sender: TObject);
 begin
   ShowValueLabelEditor2(EpiDocument.ValueLabelSets);
+end;
+
+procedure TProjectFrame.DefineGroupsActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earGroups]);
+end;
+
+procedure TProjectFrame.DefineGroupsActionExecute(Sender: TObject);
+begin
+  ShowDefineGroupsForm(Self, EpiDocument.Admin);
 end;
 
 procedure TProjectFrame.ShowCoreLogger;
@@ -1517,6 +1532,12 @@ begin
     AdminPopupMenuItem.Action             := AdminAction;
     SetPasswordPopupMenuItem.Action       := ProjectPasswordAction;
     StudyInfoPopupMenuItem.Action         := StudyInformationAction;
+
+
+    // User Access
+    DefineGroupsMenuItem.Action           := DefineGroupsAction;
+    DefineUsersMenuItem.Action            := DefineUsersAction;
+    DefineEntryRightsMenuItem.Action      := DefineEntryRightsAction;
   end;
 
   NewProjectToolBtn.Action := MainForm.NewProjectAction;

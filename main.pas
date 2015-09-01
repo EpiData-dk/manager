@@ -182,6 +182,14 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
+    UserAccessMenu: TMenuItem;
+    ResetPasswordMenuItem: TMenuItem;
+    DefineAccessMenuItem: TMenuItem;
+    DefineGroupsMenuItem: TMenuItem;
+    DefineUsersMenuItem: TMenuItem;
+    DefineEntryRightsMenuItem: TMenuItem;
+    DefineAccessDivider: TMenuItem;
+    ResetPasswordAction: TAction;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -229,6 +237,7 @@ type
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
     procedure ExtendedDataAuthActionUpdate(Sender: TObject);
     procedure DefineProjectAuthActionUpdate(Sender: TObject);
+    procedure ResetPasswordActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -1042,6 +1051,18 @@ begin
   TAction(Sender).Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
+procedure TMainForm.ResetPasswordActionExecute(Sender: TObject);
+var
+  DocFile: TEpiDocumentFile;
+  LocalDoc: boolean;
+begin
+  DocFile := ToolsCheckOpenFile(False, LocalDoc, [earPassword],
+    'You are not authorized to use Reset Password!');
+
+  if LocalDoc then
+    DocFile.Free;
+end;
+
 procedure TMainForm.SetCaption;
 begin
   Caption := 'EpiData Manager (v' + GetManagerVersion + ')';
@@ -1210,6 +1231,9 @@ begin
 
   // PROJECT:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
+
+  // USER ACCESS:
+  DefineAccessMenuItem.Visible := Assigned(FActiveFrame);
 
   // Dataform:
   DataformMenu.Visible      := Assigned(FActiveFrame);
