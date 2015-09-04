@@ -14,6 +14,8 @@ type
     Const FileName: string) of object;
   TProjectFileListGridEvent = procedure (Sender: TObject; Document: TEpiDocument;
     Const Filename: string; Const RowNo: Integer) of object;
+  TProjectFileListGridMoveEvent = procedure (Sender: TObject; Document: TEpiDocument;
+    Const FromRow, ToRow: Integer) of object;
 
   { TProjectFileListFrame }
 
@@ -41,6 +43,7 @@ type
     FOnControlItemPosition: TEpiControlItemPosition;
     FOnDocumentIncludedChange: TProjectFileListGridEvent;
     FOnSelectionChanged: TNotifyEvent;
+    FOnDocumentMoved: TProjectFileListGridMoveEvent;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedDocfileList: TEpiDocumentFileList;
     function   GetSelectedList: TStringList;
@@ -53,6 +56,7 @@ type
       const ControlItem: TEpiCustomControlItem; var ATop, ALeft: Integer);
     procedure  DoAfterGridEvent(Const Filename: string; Const Document: TEpiDocument;
       Const RowNo: Integer);
+    procedure  DoGridMoveEvent(Document: TEpiDocument; Const FromRow, ToRow: Integer);
     procedure  DoIncludedChange(Const RowNo: Integer);
     procedure  DoSelectionChanged;
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
@@ -73,6 +77,7 @@ type
     property    OnDocumentIncludedChange: TProjectFileListGridEvent read FOnDocumentIncludedChange write FOnDocumentIncludedChange;
     property    OnAfterAddToGrid: TProjectFileListGridEvent read FOnAfterAddToGrid write FOnAfterAddToGrid;
     property    OnControlItemPosition: TEpiControlItemPosition read FOnControlItemPosition write FOnControlItemPosition;
+    property    OnDocumentMoved: TProjectFileListGridMoveEvent read FOnDocumentMoved write FOnDocumentMoved;
     property    SelectedList: TStringList read GetSelectedList;
     property    SelectedDocfileList: TEpiDocumentFileList read GetSelectedDocfileList;
     property    DocList: TStringList read FDocList;
@@ -141,10 +146,16 @@ end;
 
 procedure TProjectFileListFrame.StructureGridColRowMoved(Sender: TObject;
   IsColumn: Boolean; sIndex, tIndex: Integer);
+var
+  Doc: TEpiDocument;
 begin
   if IsColumn then exit;
 
+  Doc := TEpiDocument(FDocList.Objects[sIndex - 1]);
   FDocList.Move(sIndex - 1, tIndex - 1);
+  FDocFileList.Move(sIndex - 1, tIndex - 1);
+
+  DoGridMoveEvent(Doc, sIndex, tIndex);
 end;
 
 procedure TProjectFileListFrame.ClipboardRead(ClipBoardLine: TStrings);
@@ -371,6 +382,13 @@ procedure TProjectFileListFrame.DoAfterGridEvent(const Filename: string;
 begin
   if Assigned(FOnAfterAddToGrid) then
     FOnAfterAddToGrid(Self, Document, Filename, RowNo);
+end;
+
+procedure TProjectFileListFrame.DoGridMoveEvent(Document: TEpiDocument;
+  const FromRow, ToRow: Integer);
+begin
+  if Assigned(OnDocumentMoved) then
+    OnDocumentMoved(Self, Document, FromRow, ToRow);
 end;
 
 procedure TProjectFileListFrame.DoIncludedChange(const RowNo: Integer);
