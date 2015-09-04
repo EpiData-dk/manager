@@ -1,7 +1,7 @@
 object DataformPropertiesFrame: TDataformPropertiesFrame
-  Left = 1156
+  Left = 2546
   Height = 546
-  Top = 322
+  Top = 231
   Width = 545
   ClientHeight = 546
   ClientWidth = 545

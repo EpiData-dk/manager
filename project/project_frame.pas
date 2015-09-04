@@ -76,6 +76,9 @@ type
     procedure ValueLabelEditorActionExecute(Sender: TObject);
     procedure DefineGroupsActionUpdate(Sender: TObject);
     procedure DefineGroupsActionExecute(Sender: TObject);
+    procedure DefineUsersActionExecute(Sender: TObject);
+    procedure DefineUsersActionUpdate(Sender: TObject);
+    procedure DefineEntryRightsActionExecute(Sender: TObject);
   private
     { Core Logger }
     FCoreLoggerForm: TCoreLogger;
@@ -204,7 +207,7 @@ uses
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
   design_properties_form, admin_form, epidatafilerelations_helper,
-  admin_user_form, admin_groups_form
+  admin_user_form, admin_groups_form, admin_users_form, admin_entryrights_form
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -552,6 +555,21 @@ end;
 procedure TProjectFrame.DefineGroupsActionExecute(Sender: TObject);
 begin
   ShowDefineGroupsForm(Self, EpiDocument.Admin);
+end;
+
+procedure TProjectFrame.DefineUsersActionExecute(Sender: TObject);
+begin
+  ShowDefineUsersForm(Self, EpiDocument.Admin);
+end;
+
+procedure TProjectFrame.DefineUsersActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earUsers]);
+end;
+
+procedure TProjectFrame.DefineEntryRightsActionExecute(Sender: TObject);
+begin
+  ShowDefineEntryRightsForm(Self, EpiDocument);
 end;
 
 procedure TProjectFrame.ShowCoreLogger;

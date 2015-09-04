@@ -36,6 +36,8 @@ type
     procedure AddGroupActionUpdate(Sender: TObject);
     procedure DeleteGroupActionUpdate(Sender: TObject);
     procedure DeleteGroupActionExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
   private
     FAdmin: TEpiAdmin;
     procedure FormChanged(Sender: TObject; Form: TCustomForm);
@@ -92,6 +94,7 @@ type
 
 
     { Other }
+    procedure UpdateUsersCaption(Const Group: TEpiGroup);
     procedure InitUserVST;
     procedure UsersResetChecks(Const Group: TEpiGroup);
     function  UserFromNode(Node: PVirtualNode): TEpiUser;
@@ -112,7 +115,8 @@ implementation
 {$R *.lfm}
 
 uses
-  admin_group_form, admin_authenticator, epigrouprelation_helper;
+  admin_group_form, admin_authenticator, epigrouprelation_helper,
+  settings2, settings2_var;
 
 var
   DefineGroupsForm: TDefineGroupsForm = nil;
@@ -175,12 +179,6 @@ var
 begin
   Group := CurrentGroup;
 
-  {if Group = Admin.Admins then
-    begin
-      ShowMessage('The Admin group cannot be deleted.');
-      Exit;
-    end; }
-
   if MessageDlg('Warning',
        'Are you sure you want to delete the group:' + LineEnding +
          Group.Caption.Text + LineEnding +
@@ -193,6 +191,27 @@ begin
      ) = mrYes
   then
     FGroupVST.DeleteNode(FGroupVST.FocusedNode);
+end;
+
+procedure TDefineGroupsForm.FormShow(Sender: TObject);
+begin
+  if ManagerSettings.SaveWindowPositions then
+  begin
+    LoadFormPosition(Self, Self.ClassName);
+    LoadSplitterPosition(Splitter1, Self.ClassName);
+  end;
+end;
+
+procedure TDefineGroupsForm.FormCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+begin
+  CanClose := true;
+  if ManagerSettings.SaveWindowPositions
+  then
+    begin
+      SaveFormPosition(Self, Self.ClassName);
+      SaveSplitterPosition(Splitter1, Self.ClassName);
+    end;
 end;
 
 procedure TDefineGroupsForm.FormChanged(Sender: TObject; Form: TCustomForm);
@@ -280,8 +299,12 @@ end;
 
 procedure TDefineGroupsForm.GroupFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
+var
+  G: TEpiGroup;
 begin
-  UsersResetChecks(GroupRelationFromNode(Node).Group);
+  G := GroupRelationFromNode(Node).Group;
+  UsersResetChecks(G);
+  UpdateUsersCaption(G);
 end;
 
 procedure TDefineGroupsForm.GroupFreeNode(Sender: TBaseVirtualTree;
@@ -471,6 +494,14 @@ begin
   TEpiUser(Sender.GetNodeData(Node)^) := User;
 
   Sender.CheckType[Node] := ctCheckBox;
+end;
+
+procedure TDefineGroupsForm.UpdateUsersCaption(const Group: TEpiGroup);
+const
+  CaptionText = 'Users in group: ';
+begin
+  if Assigned(Group) then
+    Label2.Caption := CaptionText + Group.Caption.Text;
 end;
 
 procedure TDefineGroupsForm.InitUserVST;

@@ -190,6 +190,8 @@ type
     DefineEntryRightsMenuItem: TMenuItem;
     DefineAccessDivider: TMenuItem;
     ResetPasswordAction: TAction;
+    MenuItem34: TMenuItem;
+    RemoveAdminMenuItem: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -238,6 +240,7 @@ type
     procedure ExtendedDataAuthActionUpdate(Sender: TObject);
     procedure DefineProjectAuthActionUpdate(Sender: TObject);
     procedure ResetPasswordActionExecute(Sender: TObject);
+    procedure RemoveAdminMenuItemClick(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -1058,6 +1061,23 @@ var
 begin
   DocFile := ToolsCheckOpenFile(False, LocalDoc, [earPassword],
     'You are not authorized to use Reset Password!');
+
+  if LocalDoc then
+    DocFile.Free;
+end;
+
+procedure TMainForm.RemoveAdminMenuItemClick(Sender: TObject);
+var
+  LocalDoc: boolean;
+  Docfile: TEpiDocumentFile;
+begin
+  Docfile := ToolsCheckOpenFile(false, LocalDoc, [earUsers, earGroups, earDefineProject],
+    'You are not authorised to Reset the Administration'
+  );
+
+//  Docfile.Document.Admin.ResetAll;
+  if Assigned(Docfile) then
+    ShowMessage('Currently not implemented!');
 
   if LocalDoc then
     DocFile.Free;

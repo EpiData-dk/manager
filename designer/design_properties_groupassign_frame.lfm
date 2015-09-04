@@ -6,8 +6,8 @@ object GroupsAssignFrame: TGroupsAssignFrame
   ClientHeight = 505
   ClientWidth = 471
   TabOrder = 0
-  DesignLeft = 1021
-  DesignTop = 323
+  DesignLeft = 2655
+  DesignTop = 255
   object Panel1: TPanel
     Left = 0
     Height = 237

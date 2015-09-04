@@ -275,10 +275,13 @@ object ProjectFrame: TProjectFrame
     object DefineUsersAction: TAction
       Category = 'Admin'
       Caption = 'Define Users'
+      OnExecute = DefineUsersActionExecute
+      OnUpdate = DefineUsersActionUpdate
     end
     object DefineEntryRightsAction: TAction
       Category = 'Admin'
       Caption = 'Define Entry Rights'
+      OnExecute = DefineEntryRightsActionExecute
     end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu

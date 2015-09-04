@@ -325,6 +325,13 @@ object MainForm: TMainForm
           Caption = 'DefineEntryRights'
         end
       end
+      object MenuItem34: TMenuItem
+        Caption = '-'
+      end
+      object RemoveAdminMenuItem: TMenuItem
+        Caption = 'Remove User/Group Administration'
+        OnClick = RemoveAdminMenuItemClick
+      end
     end
     object DataformMenu: TMenuItem
       Caption = 'Dataform'

@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="51"/>
+      <BuildNr Value="52"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="ADMIN"/>
@@ -212,7 +212,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="102">
+    <Units Count="104">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -804,8 +804,23 @@
         <Filename Value="admin/admin_groups_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DefineGroupsForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit101>
+      <Unit102>
+        <Filename Value="admin/admin_users_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DefineUsersForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit102>
+      <Unit103>
+        <Filename Value="admin/admin_entryrights_form.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DefineEntryRightsForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit103>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
