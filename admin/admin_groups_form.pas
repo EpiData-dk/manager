@@ -176,6 +176,7 @@ end;
 procedure TDefineGroupsForm.DeleteGroupActionExecute(Sender: TObject);
 var
   Group: TEpiGroup;
+  NewNode: PVirtualNode;
 begin
   Group := CurrentGroup;
 
@@ -190,7 +191,12 @@ begin
        mbNo
      ) = mrYes
   then
-    FGroupVST.DeleteNode(FGroupVST.FocusedNode);
+    begin
+      NewNode := FGroupVST.NodeParent[FGroupVST.FocusedNode];
+      FGroupVST.DeleteNode(FGroupVST.FocusedNode);
+      FGroupVST.FocusedNode := NewNode;
+      FGroupVST.Selected[NewNode] := true;
+    end;
 end;
 
 procedure TDefineGroupsForm.FormShow(Sender: TObject);
@@ -302,6 +308,8 @@ procedure TDefineGroupsForm.GroupFocusChanged(Sender: TBaseVirtualTree;
 var
   G: TEpiGroup;
 begin
+  if not Assigned(Node) then exit;
+
   G := GroupRelationFromNode(Node).Group;
   UsersResetChecks(G);
   UpdateUsersCaption(G);

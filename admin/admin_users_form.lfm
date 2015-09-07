@@ -1,13 +1,14 @@
 object DefineUsersForm: TDefineUsersForm
-  Left = 620
+  Left = 2205
   Height = 357
-  Top = 386
+  Top = 255
   Width = 752
   Caption = 'DefineUsersForm'
   ClientHeight = 357
   ClientWidth = 752
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
+  Position = poDefault
   LCLVersion = '1.5'
   object Panel4: TPanel
     Left = 0

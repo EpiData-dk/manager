@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   Buttons, StdCtrls, ComCtrls, epiv_projecttreeview_frame, epidocument,
-  epicustombase;
+  epicustombase, design_properties_groupassign_frame, epidatafilerelations;
 
 type
 
@@ -19,6 +19,7 @@ type
     Panel2: TPanel;
     Splitter1: TSplitter;
     Panel3: TPanel;
+    procedure ProjectTreeDelete(const Relation: TEpiMasterRelation);
   private
     FDocument: TEpiDocument;
     procedure SetDocument(AValue: TEpiDocument);
@@ -34,6 +35,10 @@ type
     procedure ProjectTreeNodeSelecting(Sender: TObject; const OldObject,
       NewObject: TEpiCustomBase; OldObjectType,
       NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
+
+  { Group Rights }
+  private
+    FGroupRightsFrame: TGroupsAssignFrame;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -45,6 +50,9 @@ procedure ShowDefineEntryRightsForm(Owner: TComponent; Document: TEpiDocument);
 implementation
 
 {$R *.lfm}
+
+uses
+  Themes, epiadmin;
 
 var
   DefineEntryRightsForm: TDefineEntryRightsForm = nil;
@@ -60,25 +68,36 @@ end;
 
 { TDefineEntryRightsForm }
 
+procedure TDefineEntryRightsForm.ProjectTreeDelete(
+  const Relation: TEpiMasterRelation);
+begin
+  //
+end;
+
 procedure TDefineEntryRightsForm.SetDocument(AValue: TEpiDocument);
 begin
   if FDocument = AValue then Exit;
   FDocument := AValue;
 
   FProjectTreeView.AddDocument(FDocument);
+  FGroupRightsFrame.Admin := FDocument.Admin;
+  FProjectTreeView.SelectedObject := FDocument.Relations[0];
 end;
 
 procedure TDefineEntryRightsForm.ProjectTreeNodeSelected(Sender: TObject;
   const AObject: TEpiCustomBase; ObjectType: TEpiVTreeNodeObjectType);
+var
+  MR: TEpiMasterRelation;
 begin
-
+  MR := TEpiMasterRelation(AObject);
+  FGroupRightsFrame.DataFileRelation := MR;
 end;
 
 procedure TDefineEntryRightsForm.ProjectTreeNodeSelecting(Sender: TObject;
   const OldObject, NewObject: TEpiCustomBase; OldObjectType,
   NewObjectType: TEpiVTreeNodeObjectType; var Allowed: Boolean);
 begin
-
+  Allowed := true;
 end;
 
 constructor TDefineEntryRightsForm.Create(TheOwner: TComponent);
@@ -101,11 +120,19 @@ begin
     EditCaption := false;
     EditStructure := false;
 
+    OnDelete := @ProjectTreeDelete;
     OnTreeNodeSelected := @ProjectTreeNodeSelected;
     OnTreeNodeSelecting := @ProjectTreeNodeSelecting;
 
     Align := alClient;
     Parent := Panel2;
+  end;
+
+  FGroupRightsFrame := TGroupsAssignFrame.Create(Self);
+  with FGroupRightsFrame do
+  begin
+    Align := alClient;
+    Parent := Panel3;
   end;
 end;
 

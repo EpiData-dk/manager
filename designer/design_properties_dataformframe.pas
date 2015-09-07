@@ -394,7 +394,6 @@ procedure TDataformPropertiesFrame.UpdateGroupAssignFrameContent;
 begin
   FGroupAssignFrame.Admin       := Authenticator.Admin;
   FGroupAssignFrame.DataFileRelation := Relation;
-  FGroupAssignFrame.GroupRights := DataFile.GroupRights;
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
@@ -523,8 +522,8 @@ begin
   // ********************
   //  Group Righst
   // ********************
-  Result := Result and
-            FGroupAssignFrame.ValidateChanges;
+  Result := Result {and
+            FGroupAssignFrame.ValidateChanges};
 end;
 
 procedure TDataformPropertiesFrame.InternalApply;
@@ -580,7 +579,7 @@ begin
   // ********************
   //  Group Righst
   // ********************
-  FGroupAssignFrame.ApplyChanges;
+//  FGroupAssignFrame.ApplyChanges;
 end;
 
 procedure TDataformPropertiesFrame.SetReadOnly(AValue: Boolean);

@@ -1,13 +1,14 @@
 object DefineGroupsForm: TDefineGroupsForm
-  Left = 2033
+  Left = 2072
   Height = 502
-  Top = 356
+  Top = 271
   Width = 898
   Caption = 'Define Groups'
   ClientHeight = 502
   ClientWidth = 898
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
+  Position = poDefault
   LCLVersion = '1.5'
   object Panel2: TPanel
     Left = 0
