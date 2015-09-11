@@ -30,6 +30,9 @@ type
     procedure GroupCaptionChange(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
+    procedure GroupRightHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
 
 
   { GroupRightsVST }
@@ -74,7 +77,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Themes, LCLType, admin_authenticator;
+  Themes, LCLType, admin_authenticator, epicustomrelations;
 
 const
   CHECKED_NODE_KEY = 'CHECKED_NODE_KEY';
@@ -119,11 +122,12 @@ procedure TGroupsAssignFrame.AdminChange(const Sender: TEpiCustomBase;
   Data: Pointer);
 begin
   if (Initiator is TEpiGroupRelation) and
-     (EventGroup = eegGroupRelations) and
-     (TEpiGroupRelationChangeEvent(EventType) = egrceSetGroup)
+     (EventGroup = eegRelations) and
+     (TEpiCustomRelationEvent(EventType) = ecreAssignObject)
   then
+    with PEpiCustomRelationAssignObjectData(Data)^ do
     begin
-      TEpiGroup(Data).Caption.RegisterOnChangeHook(@GroupCaptionChange, true);
+      TEpiGroup(ObjectData).Caption.RegisterOnChangeHook(@GroupCaptionChange, true);
       InitGroupVST;
     end;
 
@@ -132,6 +136,16 @@ begin
      (TEpiCustomChangeEventType(EventType) = ecceDelItem)
   then
     InitGroupVST;
+
+
+  if (Initiator is TEpiAdmin) and
+     (EventGroup = eegCustomBase) and
+     (TEpiCustomChangeEventType(EventType) = ecceDestroy)
+  then
+    begin
+      Admin.UnRegisterOnChangeHook(@AdminChange);
+      Admin := nil;
+    end;
 end;
 
 procedure TGroupsAssignFrame.GroupCaptionChange(const Sender: TEpiCustomBase;
@@ -145,8 +159,21 @@ begin
   FGroupRightsVst.Invalidate;
 end;
 
+procedure TGroupsAssignFrame.GroupRightHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if not (Initiator is TEpiGroupRight) then exit;
+  if (EventGroup <> eegRights) then exit;
+  if (TEpiGroupRightEvent(EventType) <> egreSetEntryRights) then exit;
+
+  FGroupRightsVst.Invalidate;
+end;
+
 procedure TGroupsAssignFrame.InitGroupVST;
 begin
+  if (csDestroying in ComponentState) then exit;
+
   if Assigned(FGroupRights) and
      Assigned(Admin)
   then
@@ -163,17 +190,32 @@ begin
 end;
 
 procedure TGroupsAssignFrame.SetAdmin(AValue: TEpiAdmin);
+var
+  G: TEpiGroup;
 begin
   FAdmin := AValue;
-  FAdmin.RegisterOnChangeHook(@AdminChange, true);
+
+  if Assigned(Admin) then
+  begin
+    FAdmin.RegisterOnChangeHook(@AdminChange, true);
+
+    for G in Admin.Groups do
+      G.Caption.RegisterOnChangeHook(@GroupCaptionChange, true);
+  end;
 
   InitGroupVST;
 end;
 
 procedure TGroupsAssignFrame.SetGroupRights(AValue: TEpiGroupRights);
 begin
+  if Assigned(FGroupRights) then
+    FGroupRights.UnRegisterOnChangeHook(@GroupRightHook);
+
   FGroupRights := AValue;
   InitGroupVST;
+
+  if Assigned(FGroupRights) then
+    FGroupRights.RegisterOnChangeHook(@GroupRightHook, true);
 end;
 
 function TGroupsAssignFrame.CanCheck(Node: PVirtualNode; Right: TEpiEntryRight
@@ -241,16 +283,7 @@ end;
 
 procedure TGroupsAssignFrame.RelationToNode(const Node: PVirtualNode;
   const Relation: TEpiGroupRelation);
-var
-  GR: TEpiGroupRight;
 begin
-  GR := FGroupRights.GroupRightFromGroup(Relation.Group);
-  if not Assigned(GR) then
-  begin
-    GR := DataFileRelation.Datafile.GroupRights.NewGroupRight;
-    GR.Group := Relation.Group;
-  end;
-
   TEpiGroupRelation(FGroupRightsVst.GetNodeData(Node)^) := Relation;
   Relation.Group.AddCustomData(CHECKED_NODE_KEY, TObject(Node));
 end;

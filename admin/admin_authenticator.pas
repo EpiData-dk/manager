@@ -78,7 +78,7 @@ var
 implementation
 
 uses
-  epigrouprelation_helper;
+  epicustomrelations, epigrouprelation_helper;
 
 const
   AUTH_GROUP_KEY = 'AUTH_GROUP_KEY';
@@ -162,9 +162,10 @@ var
   Group: TEpiGroup;
 begin
   if not (Initiator is TEpiGroupRelation) then exit;
-  if (EventGroup <> eegGroupRelations) then exit;
+  if (EventGroup <> eegRelations) then exit;
+  if (TEpiCustomRelationEvent(EventType) <> ecreAssignObject) then exit;
 
-  Group := TEpiGroup(Data);
+  Group := TEpiGroup(PEpiCustomRelationAssignObjectData(Data)^.ObjectData);
 
   if Assigned(Group) then
     Group.AddCustomData(AUTH_GROUP_KEY, Initiator);

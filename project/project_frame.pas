@@ -170,7 +170,7 @@ type
   { Authorization }
   private
     function GetAuthorizedUser(Sender: TObject): TEpiUser;
-
+    function IsProjectSetupForAdmin: Boolean;
   public
     { Access/Helper methods }
     function SelectDataformIfNotSelected: Boolean;
@@ -348,7 +348,6 @@ var
     F := TAdminUserForm.Create(Self);
     F.User  := User;
     F.Admin := EpiDocument.Admin;
-    F.ShowGroups := false;
     Result  := F.ShowModal;
     F.Free;
   end;
@@ -554,12 +553,14 @@ end;
 
 procedure TProjectFrame.DefineGroupsActionExecute(Sender: TObject);
 begin
-  ShowDefineGroupsForm(Self, EpiDocument.Admin);
+  if IsProjectSetupForAdmin then
+    ShowDefineGroupsForm(Self, EpiDocument.Admin);
 end;
 
 procedure TProjectFrame.DefineUsersActionExecute(Sender: TObject);
 begin
-  ShowDefineUsersForm(Self, EpiDocument.Admin);
+  if IsProjectSetupForAdmin then
+    ShowDefineUsersForm(Self, EpiDocument.Admin);
 end;
 
 procedure TProjectFrame.DefineUsersActionUpdate(Sender: TObject);
@@ -569,7 +570,8 @@ end;
 
 procedure TProjectFrame.DefineEntryRightsActionExecute(Sender: TObject);
 begin
-  ShowDefineEntryRightsForm(Self, EpiDocument);
+  if IsProjectSetupForAdmin then
+    ShowDefineEntryRightsForm(Self, EpiDocument);
 end;
 
 procedure TProjectFrame.ShowCoreLogger;
@@ -1247,7 +1249,9 @@ begin
   ValueLabelEditorAction.ShortCut := P_StartValueLabelEditor;
   OpenProjectAction.ShortCut      := P_OpenProject;
   KeyFieldsAction.ShortCut        := P_KeyFields;
-  AdminAction.ShortCut            := P_Admin;
+  DefineEntryRightsAction.ShortCut := P_EntryRight;
+  DefineGroupsAction.ShortCut      := P_Groups;
+  DefineUsersAction.ShortCut       := P_Users;
 end;
 
 function TProjectFrame.GetEpiDocument: TEpiDocument;
@@ -1295,6 +1299,90 @@ end;
 function TProjectFrame.GetAuthorizedUser(Sender: TObject): TEpiUser;
 begin
   result := FDocumentFile.AuthedUser;
+end;
+
+function TProjectFrame.IsProjectSetupForAdmin: Boolean;
+var
+  S: String;
+  MsgDlgType: TMsgDlgType;
+  Res: TModalResult;
+  User: TEpiUser;
+
+  function ShowUserForm: TModalResult;
+  var
+    F: TAdminUserForm;
+  begin
+    F := TAdminUserForm.Create(Self);
+    F.User  := User;
+    F.Admin := EpiDocument.Admin;
+    Result  := F.ShowModal;
+    F.Free;
+  end;
+
+begin
+  Result := true;
+
+  if (EpiDocument.Admin.Users.Count = 0) then
+    begin
+      Result := false;
+
+      if (EpiDocument.PassWord <> '') then
+        begin
+          S := 'It is not possible to have a single-password project AND user administration active at the same time!' + LineEnding +
+               LineEnding +
+               'If you choose to continue the current password is reset and you will be asked to create a new user, which will automatically be added to the Administrators group!' + LineEnding +
+               LineEnding +
+               'Afterwards the project will save and re-open.' + LineEnding +
+               'Then login with the new user!' + LineEnding +
+               LineEnding +
+               'Continue?';
+          MsgDlgType := mtWarning;
+        end
+      else
+        begin
+          S :=
+            'This project is not yet setup for user administration!' + LineEnding +
+            LineEnding +
+            'Next you will be asked to create a new user,' + LineEnding +
+            'which will automatically be added to the' + LineEnding +
+            'Administrators group!' + LineEnding +
+            LineEnding +
+            'Afterwards the project will save and re-open.' + LineEnding +
+            'Then login with the new user!';
+          MsgDlgType := mtInformation;
+        end;
+
+      Res := MessageDlg('Warning',
+                          S,
+                          MsgDlgType,
+                          mbOKCancel, 0,
+                          mbCancel
+                        );
+      if (Res <> mrOK) then
+        Exit;
+
+      EpiDocument.PassWord := '';
+
+      User := EpiDocument.Admin.NewUser;
+      if ShowUserForm <> mrOK then
+        begin
+          User.Free;
+          Exit;
+        end;
+
+      User.Groups.AddItem(EpiDocument.Admin.Admins);
+      if (not SaveProject(false)) then
+      begin
+        User.Free;
+        Exit;
+      end;
+
+      EpiDocument.Admin.Created := Now;
+      PostMessage(MainForm.Handle, LM_MAIN_CLOSEPROJECT, 1, 0);
+      PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, 0, 0);
+
+      Exit;
+    end;
 end;
 
 function TProjectFrame.SelectDataformIfNotSelected: Boolean;

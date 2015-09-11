@@ -56,7 +56,7 @@ type
     procedure UpdateAfterRecordRadioBoxContent;
   private
     { Group Rights }
-    FGroupAssignFrame: TGroupsAssignFrame;
+//    FGroupAssignFrame: TGroupsAssignFrame;
     procedure UpdateGroupAssignFrameVisibility;
     procedure UpdateGroupAssignFrameContent;
   private
@@ -386,14 +386,14 @@ end;
 
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameVisibility;
 begin
-  RightsTabSheet.Visible := Assigned(Authenticator.AuthedUser);
-  RightsTabSheet.Enabled := IsAuthorized(earGroups);;
+  //RightsTabSheet.Visible := Assigned(Authenticator.AuthedUser);
+//  RightsTabSheet.Enabled := IsAuthorized(earGroups);;
 end;
 
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameContent;
 begin
-  FGroupAssignFrame.Admin       := Authenticator.Admin;
-  FGroupAssignFrame.DataFileRelation := Relation;
+//  FGroupAssignFrame.Admin       := Authenticator.Admin;
+//  FGroupAssignFrame.DataFileRelation := Relation;
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
@@ -599,10 +599,10 @@ begin
 
   FRelatesComponentsList := TList.Create;
 
-  FGroupAssignFrame := TGroupsAssignFrame.Create(Self);
+{  FGroupAssignFrame := TGroupsAssignFrame.Create(Self);
   FGroupAssignFrame.Align := alClient;
   FGroupAssignFrame.BorderSpacing.Around := 10;
-  FGroupAssignFrame.Parent := RightsTabSheet;
+  FGroupAssignFrame.Parent := RightsTabSheet;    }
 end;
 
 destructor TDataformPropertiesFrame.Destroy;

@@ -179,9 +179,6 @@ begin
     eegFields:
       DoEvent(TEpiFieldsChangeEventType(EventType), Data);
 
-    eegGroups:                                              ;
-//      DoEvent(TEpiCustomChangeEventType(EventType), Data);
-
     eegHeading:
       DoEvent(TEpiHeadingChangeEvent(EventType), Data);
 

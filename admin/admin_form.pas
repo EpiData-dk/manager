@@ -370,7 +370,6 @@ begin
   F := TAdminUserForm.Create(Self);
   F.User  := User;
   F.Admin := Admin;
-  F.ShowGroups := true;
   Result := F.ShowModal;
   F.Free;
 

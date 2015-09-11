@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, ActnList, VirtualTrees, epiadmin;
+  Buttons, ComCtrls, ActnList, StdCtrls, VirtualTrees, epiadmin;
 
 type
 
@@ -24,6 +24,8 @@ type
     AddUserAction: TAction;
     DeleteUserAction: TAction;
     EditUserAction: TAction;
+    Panel6: TPanel;
+    Label4: TLabel;
     procedure EditUserActionExecute(Sender: TObject);
     procedure AddUserActionExecute(Sender: TObject);
     procedure DeleteUserActionUpdate(Sender: TObject);
@@ -260,7 +262,6 @@ begin
   F := TAdminUserForm.Create(Self);
   F.User  := User;
   F.Admin := Admin;
-  F.ShowGroups := true; //false;
   Result := F.ShowModal;
   F.Free;
 

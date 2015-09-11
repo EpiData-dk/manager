@@ -1,23 +1,23 @@
 object AdminUserForm: TAdminUserForm
-  Left = 697
-  Height = 381
-  Top = 380
-  Width = 519
+  Left = 853
+  Height = 368
+  Top = 359
+  Width = 327
   Caption = 'User Properties'
-  ClientHeight = 381
-  ClientWidth = 519
+  ClientHeight = 368
+  ClientWidth = 327
   LCLVersion = '1.5'
   object Panel2: TPanel
     Left = 0
     Height = 50
-    Top = 331
-    Width = 519
+    Top = 318
+    Width = 327
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 519
-    TabOrder = 2
+    ClientWidth = 327
+    TabOrder = 1
     object OkBtn: TBitBtn
-      Left = 443
+      Left = 251
       Height = 34
       Top = 8
       Width = 56
@@ -31,7 +31,7 @@ object AdminUserForm: TAdminUserForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 349
+      Left = 157
       Height = 34
       Top = 8
       Width = 81
@@ -46,12 +46,12 @@ object AdminUserForm: TAdminUserForm
   end
   object Panel1: TPanel
     Left = 0
-    Height = 331
+    Height = 318
     Top = 0
-    Width = 312
-    Align = alLeft
-    ClientHeight = 331
-    ClientWidth = 312
+    Width = 327
+    Align = alClient
+    ClientHeight = 318
+    ClientWidth = 327
     TabOrder = 0
     object Label5: TLabel
       Left = 10
@@ -72,7 +72,7 @@ object AdminUserForm: TAdminUserForm
       Left = 11
       Height = 25
       Top = 30
-      Width = 290
+      Width = 305
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 5
@@ -100,7 +100,7 @@ object AdminUserForm: TAdminUserForm
       Left = 11
       Height = 25
       Top = 140
-      Width = 290
+      Width = 305
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 5
@@ -128,7 +128,7 @@ object AdminUserForm: TAdminUserForm
       Left = 11
       Height = 25
       Top = 195
-      Width = 290
+      Width = 305
       CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
       OKCaption = 'OK'
       CancelCaption = 'Cancel'
@@ -147,7 +147,7 @@ object AdminUserForm: TAdminUserForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = ExpiresDateEdit
       AnchorSideRight.Side = asrBottom
-      Left = 242
+      Left = 257
       Height = 19
       Top = 173
       Width = 59
@@ -177,7 +177,7 @@ object AdminUserForm: TAdminUserForm
       Left = 11
       Height = 25
       Top = 250
-      Width = 290
+      Width = 305
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 5
@@ -206,7 +206,7 @@ object AdminUserForm: TAdminUserForm
       Left = 11
       Height = 25
       Top = 90
-      Width = 290
+      Width = 305
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -217,11 +217,5 @@ object AdminUserForm: TAdminUserForm
       PasswordChar = '*'
       TabOrder = 1
     end
-  end
-  object Splitter1: TSplitter
-    Left = 312
-    Height = 331
-    Top = 0
-    Width = 5
   end
 end
