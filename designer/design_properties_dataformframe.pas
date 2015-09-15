@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, Spin,
   MaskEdit, ComCtrls, ExtCtrls, design_properties_baseframe, design_types,
-  epicustombase, epidatafiles, epirelates, design_properties_groupassign_frame;
+  epicustombase, epidatafiles, epirelates, admin_users_accum_rights_frame;
 
 type
 
@@ -56,7 +56,7 @@ type
     procedure UpdateAfterRecordRadioBoxContent;
   private
     { Group Rights }
-//    FGroupAssignFrame: TGroupsAssignFrame;
+    FUserRightsFrame: TUsersAccumulatedRightsFrame;
     procedure UpdateGroupAssignFrameVisibility;
     procedure UpdateGroupAssignFrameContent;
   private
@@ -386,14 +386,14 @@ end;
 
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameVisibility;
 begin
-  //RightsTabSheet.Visible := Assigned(Authenticator.AuthedUser);
-//  RightsTabSheet.Enabled := IsAuthorized(earGroups);;
+  RightsTabSheet.Visible := Assigned(Authenticator.AuthedUser);
+//  RightsTabSheet.Enabled := IsAuthorized(earGroups);
 end;
 
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameContent;
 begin
-//  FGroupAssignFrame.Admin       := Authenticator.Admin;
-//  FGroupAssignFrame.DataFileRelation := Relation;
+  FUserRightsFrame.Admin    := Authenticator.Admin;
+  FUserRightsFrame.DataFile := DataFile;
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
@@ -599,10 +599,10 @@ begin
 
   FRelatesComponentsList := TList.Create;
 
-{  FGroupAssignFrame := TGroupsAssignFrame.Create(Self);
-  FGroupAssignFrame.Align := alClient;
-  FGroupAssignFrame.BorderSpacing.Around := 10;
-  FGroupAssignFrame.Parent := RightsTabSheet;    }
+  FUserRightsFrame := TUsersAccumulatedRightsFrame.Create(Self);
+  FUserRightsFrame.Align := alClient;
+  FUserRightsFrame.BorderSpacing.Around := 10;
+  FUserRightsFrame.Parent := RightsTabSheet;
 end;
 
 destructor TDataformPropertiesFrame.Destroy;

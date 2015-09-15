@@ -168,7 +168,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           Height = 238
           Top = 0
           Width = 515
-          HorzScrollBar.Page = 117
+          HorzScrollBar.Page = 107
           VertScrollBar.Page = 59
           Align = alClient
           BorderStyle = bsNone

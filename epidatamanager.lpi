@@ -207,7 +207,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="104">
+    <Units Count="105">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -816,6 +816,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit103>
+      <Unit104>
+        <Filename Value="admin/admin_users_accum_rights_frame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="UsersAccumulatedRightsFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit104>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
