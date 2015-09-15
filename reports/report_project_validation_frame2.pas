@@ -85,7 +85,7 @@ implementation
 
 uses
   settings2_var, epidatafilestypes, epireport_report_projectvalidator,
-  epimiscutils, epidatafilerelations_helper;
+  epimiscutils, epidatafilerelations_helper, epiadmin;
 
 const
   SORT_FIELDS_KEY = 'SORT_FIELDS_KEY';
@@ -402,6 +402,7 @@ begin
 
     OnAfterAddToGrid := @FileListAddDoc;
     OnDocumentIncludedChange := @FileListDocChange;
+    RequiredRights := [earReport];
   end;
 
   FProjectTree := TEpiVProjectTreeViewFrame.Create(Self);

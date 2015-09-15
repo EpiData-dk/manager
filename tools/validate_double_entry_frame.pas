@@ -92,7 +92,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, epidatafiles, settings2,
+  settings2_var, epidatafiles, settings2, epiadmin,
   epimiscutils, epidatafilestypes, epidatafilerelations_helper;
 
 const
@@ -486,6 +486,7 @@ begin
     Align  := alClient;
     Parent := FilePanel;
 
+    RequiredRights := [earReport];
     OnAfterAddToGrid         := @FileListAddDoc;
     OnDocumentIncludedChange := @FileListDocChange;
   end;

@@ -70,7 +70,7 @@ object ProjectValidationFrame2: TProjectValidationFrame2
           Left = 6
           Height = 27
           Top = 8
-          Width = 46
+          Width = 42
           AutoSize = True
           BorderSpacing.Left = 5
           BorderSpacing.Top = 5
@@ -85,10 +85,10 @@ object ProjectValidationFrame2: TProjectValidationFrame2
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = KFNoneBtn
           AnchorSideTop.Side = asrCenter
-          Left = 57
+          Left = 53
           Height = 27
           Top = 8
-          Width = 46
+          Width = 43
           AutoSize = True
           BorderSpacing.Left = 5
           Caption = 'Index'
@@ -102,10 +102,10 @@ object ProjectValidationFrame2: TProjectValidationFrame2
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = KFNoneBtn
           AnchorSideTop.Side = asrCenter
-          Left = 108
+          Left = 101
           Height = 27
           Top = 8
-          Width = 60
+          Width = 56
           AutoSize = True
           BorderSpacing.Left = 5
           Caption = 'AutoInc'

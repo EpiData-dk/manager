@@ -49,7 +49,8 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, epimiscutils, epidatafilerelations, report_counts;
+  settings2_var, epimiscutils, epidatafilerelations, report_counts,
+  epiadmin;
 
 { TCountByIdFrame }
 
@@ -233,6 +234,7 @@ begin
 
     OnAfterAddToGrid := @FileListAddDoc;
     OnDocumentIncludedChange := @FileListDocChange;
+    RequiredRights := [earReport];
   end;
 
   FProjectTree := TEpiVProjectTreeViewFrame.Create(Self);

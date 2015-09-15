@@ -265,6 +265,7 @@ begin
 
   try
     DocFile := TImportedDocumentFile.Create;
+    Auth := nil;
     Res := False;
 
     if (ext = '.rec') or (ext = '.dta') then
@@ -314,6 +315,8 @@ begin
         TImportedDocumentFile(DocFile).FImportedFileName := FileName;
       Res := true;
     end;
+
+    Auth := TAuthenticator.Create(DocFile);
 
     if (not Auth.IsAuthorized(RequiredRights)) then
     begin

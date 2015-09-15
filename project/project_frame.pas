@@ -56,6 +56,7 @@ type
     DefineEntryRightsAction: TAction;
     procedure AdminActionExecute(Sender: TObject);
     procedure AdminActionUpdate(Sender: TObject);
+    procedure DefineEntryRightsActionUpdate(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
     procedure DocumentProgress(const Sender: TEpiCustomBase;
@@ -425,6 +426,11 @@ end;
 procedure TProjectFrame.AdminActionUpdate(Sender: TObject);
 begin
   AdminAction.Enabled := Authenticator.IsAuthorized([earUsers]);
+end;
+
+procedure TProjectFrame.DefineEntryRightsActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earGroups]);
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);

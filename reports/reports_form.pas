@@ -90,8 +90,8 @@ var
   FileNames: TStrings;
 begin
   FileNames := TStringList.Create;
-  DM.OpenDlgImportFiles(FileNames);
-  IFrame.AddFiles(FileNames);
+  if DM.OpenDlgImportFiles(FileNames) then
+    IFrame.AddFiles(FileNames);
   FileNames.Free;
 end;
 
