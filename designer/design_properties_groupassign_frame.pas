@@ -123,7 +123,8 @@ procedure TGroupsAssignFrame.AdminChange(const Sender: TEpiCustomBase;
 begin
   if (Initiator is TEpiGroupRelation) and
      (EventGroup = eegRelations) and
-     (TEpiCustomRelationEvent(EventType) = ecreAssignObject)
+     (TEpiCustomRelationEvent(EventType) = ecreAssignObject) and
+     (Assigned(PEpiCustomRelationAssignObjectData(Data)^.ObjectData))
   then
     with PEpiCustomRelationAssignObjectData(Data)^ do
     begin

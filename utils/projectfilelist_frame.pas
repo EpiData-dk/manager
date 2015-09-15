@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Grids, ComCtrls,
-  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile, epiadmin, epieximtypes;
+  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile, epiadmin,
+  epieximtypes;
 
 type
 
@@ -41,6 +42,7 @@ type
     FOnControlItemPosition: TEpiControlItemPosition;
     FOnDocumentIncludedChange: TProjectFileListGridEvent;
     FOnSelectionChanged: TNotifyEvent;
+    FRequiredRights: TEpiManagerRights;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedDocfileList: TEpiDocumentFileList;
     function   GetSelectedList: TStringList;
@@ -80,6 +82,7 @@ type
     property    SelectedDocfileList: TEpiDocumentFileList read GetSelectedDocfileList;
     property    DocList: TStringList read FDocList;
     property    DocFileList: TList read FDocFileList;
+    property    RequiredRights: TEpiManagerRights read FRequiredRights write FRequiredRights;
   private
     { columns }
     FCreatedCol: TGridColumn;
@@ -107,7 +110,7 @@ implementation
 
 uses
   epiimport, LCLProc, epimiscutils, Dialogs, managerprocs, epiv_documentfile,
-  settings2_var, Clipbrd, LCLIntf, LCLType;
+  settings2_var, Clipbrd, LCLIntf, LCLType, admin_authenticator;
 
 
 type
@@ -249,6 +252,7 @@ var
   DataFile: TEpiDataFile;
   DocFile: TDocumentFile;
   Res: Boolean;
+  Auth: TAuthenticator;
 begin
   Importer := TEpiImport.Create;
   Importer.ImportCasing := ManagerSettings.ImportCasing;
@@ -309,6 +313,13 @@ begin
       else
         TImportedDocumentFile(DocFile).FImportedFileName := FileName;
       Res := true;
+    end;
+
+    if (not Auth.IsAuthorized(RequiredRights)) then
+    begin
+      Res := false;
+      ShowMessage('You are not authorised to open the file: ' + LineEnding +
+                  DocFile.FileName);
     end;
 
     if Res then
@@ -463,6 +474,9 @@ end;
 constructor TProjectFileListFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+
+  RequiredRights := [];
+
   FDocList := TStringList.Create;
   FDocFileList := TList.Create;
 

@@ -192,6 +192,7 @@ type
     ResetPasswordAction: TAction;
     MenuItem34: TMenuItem;
     RemoveAdminMenuItem: TMenuItem;
+    RemoveAdminAction: TAction;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -240,7 +241,11 @@ type
     procedure ExtendedDataAuthActionUpdate(Sender: TObject);
     procedure DefineProjectAuthActionUpdate(Sender: TObject);
     procedure ResetPasswordActionExecute(Sender: TObject);
-    procedure RemoveAdminMenuItemClick(Sender: TObject);
+    procedure ExportActionUpdate(Sender: TObject);
+    procedure ReportsAuthActionUpdate(Sender: TObject);
+    procedure PrepareDoubleEntryActionUpdate(Sender: TObject);
+    procedure RemoveAdminActionUpdate(Sender: TObject);
+    procedure RemoveAdminActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -264,7 +269,7 @@ type
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(Const ReadOnly: boolean;
       out LocalDoc: boolean; Const RequiredRights: TEpiManagerRights;
-      const AuthErrorMessage: String): TEpiDocumentFile;
+      const AuthErrorMessage: String; MustBeAdminGroup: boolean = false): TEpiDocumentFile;
     function  RunReport(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
     function  RunReportEx(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
   private
@@ -474,7 +479,7 @@ begin
   Settings := nil;
 
   try
-    DF := ToolsCheckOpenFile(false, local, [earExtentendedData],
+    DF := ToolsCheckOpenFile(false, local, [earExport],
       'You are not authorized to use Export!');
 
     if (not Assigned(DF)) then
@@ -779,7 +784,7 @@ var
   Local: boolean;
   Doc: TEpiDocumentFile;
 begin
-  Doc := ToolsCheckOpenFile(True, Local, [earExtentendedData],
+  Doc := ToolsCheckOpenFile(True, Local, [earPrepareDoubleEntry],
     'You are not authorized to use Prepare Double Entry');
   if Assigned(Doc) then
   begin
@@ -1066,13 +1071,36 @@ begin
     DocFile.Free;
 end;
 
-procedure TMainForm.RemoveAdminMenuItemClick(Sender: TObject);
-var
-  LocalDoc: boolean;
-  Docfile: TEpiDocumentFile;
+procedure TMainForm.ExportActionUpdate(Sender: TObject);
 begin
-  Docfile := ToolsCheckOpenFile(false, LocalDoc, [earUsers, earGroups, earDefineProject],
-    'You are not authorised to Reset the Administration'
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earExport]);
+end;
+
+procedure TMainForm.ReportsAuthActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earReport]);
+end;
+
+procedure TMainForm.PrepareDoubleEntryActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earPrepareDoubleEntry]);
+end;
+
+procedure TMainForm.RemoveAdminActionUpdate(Sender: TObject);
+begin
+  if Assigned(Authenticator) then
+    TAction(Sender).Enabled := Authenticator.AuthedUserInGroup(Authenticator.Admin.Admins, false, false)
+  else
+    TAction(Sender).Enabled := true;
+end;
+
+procedure TMainForm.RemoveAdminActionExecute(Sender: TObject);
+var
+  Docfile: TEpiDocumentFile;
+  LocalDoc: boolean;
+begin
+  Docfile := ToolsCheckOpenFile(false, LocalDoc, [],
+    'You are not authorised to Reset the Administration', true
   );
 
 //  Docfile.Document.Admin.ResetAll;
@@ -1356,7 +1384,7 @@ end;
 
 function TMainForm.ToolsCheckOpenFile(const ReadOnly: boolean; out
   LocalDoc: boolean; const RequiredRights: TEpiManagerRights;
-  const AuthErrorMessage: String): TEpiDocumentFile;
+  const AuthErrorMessage: String; MustBeAdminGroup: boolean): TEpiDocumentFile;
 var
   Dlg: TOpenDialog;
 begin
@@ -1384,7 +1412,8 @@ begin
     Dlg.Free;
   end;
 
-  if (not Authenticator.IsAuthorized(RequiredRights))
+  if (not Authenticator.IsAuthorized(RequiredRights)) or
+     (MustBeAdminGroup and (not Authenticator.AuthedUserInGroup(Authenticator.Admin.Admins, false, false)))
   then
     begin
       MessageDlg('Error',
@@ -1393,7 +1422,8 @@ begin
         [mbOK],
         0
       );
-      FreeAndNil(Result);
+      if LocalDoc then
+        FreeAndNil(Result);
     end;
 end;
 

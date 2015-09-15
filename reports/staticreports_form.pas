@@ -64,6 +64,7 @@ implementation
 uses
   settings2_var, settings2, epimiscutils, viewer_form,
   epireport_generator_html, epireport_generator_txt, epireport_generator_base,
+  epiadmin,
   ok_cancel_form, manager_types, epiv_datamodule;
 
 { TStaticReportsForm }
@@ -216,6 +217,7 @@ begin
   begin
     Align := alClient;
     Parent := Self;
+    RequiredRights := [earReport];
     OnSelectionChanged := @ProjectFileListChanged;
   end;
 end;
@@ -224,38 +226,13 @@ constructor TStaticReportsForm.Create(TheOwner: TComponent;
   ReportClass: TReportBaseClass);
 var
   FakeReport: TReportBase;
-  TabSheet: TTabSheet;
-  FC: TCustomFrameClass;
-  Intf: ICanCloseQuery;
-  L: TStringList;
 begin
   Create(TheOwner);
   FReportClass := ReportClass;
   FReport := nil;
 
-//  L := TStringList.Create;
   FakeReport := FReportClass.Create(TEpiReportTXTGenerator);
   Caption := 'Generate Report: ' + FakeReport.ReportTitle;
-
-{  if Supports(FakeReport, IReportFrameProvider) then
-  begin
-    OkBtn.Caption := 'Next';
-
-    FC := (FakeReport as IReportFrameProvider).GetFrameClass;
-    if Supports(FC, IReportOptionFrame) then
-    begin
-      FNextForm := TOkCancelForm.Create(self);
-      FNextFrame := FC.Create(FNextForm);
-      FNextFrame.Align := alClient;
-      FNextFrame.Parent := FNextForm;
-      FNextForm.Caption := (FNextFrame as IReportOptionFrame).GetFrameCaption;
-
-      if Supports(FNextFrame, ICanCloseQuery, Intf) then
-        TOkCancelForm(FNextForm).CanCloseInt := Intf;
-    end;
-  end; }
-
-//  L.Free;
   FakeReport.Free;
 end;
 

@@ -329,8 +329,7 @@ object MainForm: TMainForm
         Caption = '-'
       end
       object RemoveAdminMenuItem: TMenuItem
-        Caption = 'Remove User/Group Administration'
-        OnClick = RemoveAdminMenuItemClick
+        Action = RemoveAdminAction
       end
     end
     object DataformMenu: TMenuItem
@@ -550,49 +549,56 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Question List'
       OnExecute = QuestionListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ValueLabelListReportAction: TAction
       Category = 'Reports'
       Caption = 'Valuelabel List'
       OnExecute = ValueLabelListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ExtendedListReportAction: TAction
       Category = 'Reports'
       Caption = 'Extended List'
       OnExecute = ExtendedListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ProjectReportAction: TAction
       Category = 'Reports'
       Caption = 'Project Overview'
       OnExecute = ProjectReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ExportAction: TAction
       Category = 'Tools'
       Caption = 'Export...'
       ImageIndex = 17
       OnExecute = ExportActionExecute
-      OnUpdate = ExtendedDataAuthActionUpdate
+      OnUpdate = ExportActionUpdate
     end
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'
       Caption = 'Prepare Double Entry'
       OnExecute = PrepareDoubleEntryActionExecute
-      OnUpdate = ExtendedDataAuthActionUpdate
+      OnUpdate = PrepareDoubleEntryActionUpdate
     end
     object VerifyDoubleEntryAction: TAction
       Category = 'Reports'
       Caption = 'Compare Duplicate Files'
       OnExecute = VerifyDoubleEntryActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object CountsReportAction: TAction
       Category = 'Reports'
       Caption = 'Count records by Id'
       OnExecute = CountsReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object CodeBookReportAction: TAction
       Category = 'Reports'
       Caption = 'CodeBook'
       OnExecute = CodeBookReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ImportInNewProjectAction: TAction
       Category = 'File'
@@ -604,6 +610,7 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Data Content Validation'
       OnExecute = ValidationReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ImportCBInNewProjectAction: TAction
       Category = 'File'
@@ -627,6 +634,12 @@ object MainForm: TMainForm
       Category = 'Admin'
       Caption = 'Reset Password'
       OnExecute = ResetPasswordActionExecute
+    end
+    object RemoveAdminAction: TAction
+      Category = 'Admin'
+      Caption = 'Remove User/Group Administration'
+      OnExecute = RemoveAdminActionExecute
+      OnUpdate = RemoveAdminActionUpdate
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
