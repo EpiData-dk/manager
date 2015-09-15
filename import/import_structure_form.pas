@@ -93,7 +93,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epimiscutils, settings2_var,
+  epiimport, LCLProc, epimiscutils, settings2_var, epiadmin,
   epidatafilestypes, settings2, epiv_datamodule;
 
 { TImportStructureForm }
@@ -674,6 +674,8 @@ begin
     FDataCol := TGridColumn(StructureGrid.Columns.Insert(2));
     FDataCol.Title.Caption := 'Data';
     FDataCol.ButtonStyle := cbsCheckboxColumn;
+
+    RequiredRights := [earExport];
 
     Align := alClient;
     Parent := Self;
