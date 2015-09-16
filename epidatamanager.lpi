@@ -820,6 +820,7 @@
         <Filename Value="admin/admin_users_accum_rights_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="UsersAccumulatedRightsFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit104>
     </Units>

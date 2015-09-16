@@ -289,9 +289,6 @@ object MainForm: TMainForm
       object ValueLabelsMenuItem: TMenuItem
         Caption = 'ValueLabels'
       end
-      object AdminMenuItem: TMenuItem
-        Caption = 'Admin...'
-      end
       object StudyInfoMenuItem: TMenuItem
         Caption = 'StudyInfo'
       end
@@ -514,6 +511,7 @@ object MainForm: TMainForm
     object CloseProjectAction: TAction
       Category = 'File'
       Caption = '&Close Project'
+      Enabled = False
       ImageIndex = 42
       OnExecute = CloseProjectActionExecute
       OnUpdate = CloseProjectActionUpdate
@@ -778,9 +776,6 @@ object MainForm: TMainForm
     top = 184
     object ValueLabelEditorPopupMenuItem: TMenuItem
       Caption = 'ValueLabelEditor'
-    end
-    object AdminPopupMenuItem: TMenuItem
-      Caption = 'Admin'
     end
     object SetPasswordPopupMenuItem: TMenuItem
       Caption = 'Password'

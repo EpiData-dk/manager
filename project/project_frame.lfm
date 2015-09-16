@@ -160,7 +160,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 32
-      Width = 38
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
@@ -168,7 +168,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 72
-      Width = 38
+      Width = 42
       Caption = 'Label2'
       ParentColor = False
     end
@@ -176,7 +176,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 104
-      Width = 38
+      Width = 42
       Caption = 'Label3'
       ParentColor = False
     end
@@ -259,12 +259,6 @@ object ProjectFrame: TProjectFrame
       Category = 'Project'
       Caption = 'Study Information...'
       OnExecute = StudyInformationActionExecute
-    end
-    object AdminAction: TAction
-      Category = 'Project'
-      Caption = 'Admin...'
-      OnExecute = AdminActionExecute
-      OnUpdate = AdminActionUpdate
     end
     object DefineGroupsAction: TAction
       Category = 'Admin'

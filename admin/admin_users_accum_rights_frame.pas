@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Types, FileUtil, Forms, Controls, epidatafiles,
-  VirtualTrees, epiadmin, epirights, Graphics;
+  VirtualTrees, epiadmin, epirights, Graphics, epicustombase;
 
 type
 
@@ -38,8 +38,17 @@ type
     FDataFile: TEpiDataFile;
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure SetDataFile(AValue: TEpiDataFile);
+
+    procedure GroupRightsEventHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+    procedure UsersEventHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
+
   public
     constructor Create(TheOwner: TComponent); override;
+    destructor Destroy; override;
     property DataFile: TEpiDataFile read FDataFile write SetDataFile;
     property Admin: TEpiAdmin read FAdmin write SetAdmin;
   end;
@@ -52,6 +61,7 @@ uses
   Themes, admin_authenticator;
 
 { TUsersAccumulatedRightsFrame }
+
 
 procedure TUsersAccumulatedRightsFrame.InitUserRightsVST;
 begin
@@ -157,15 +167,64 @@ end;
 procedure TUsersAccumulatedRightsFrame.SetDataFile(AValue: TEpiDataFile);
 begin
   if FDataFile = AValue then Exit;
+
+  if Assigned(FDataFile) then
+    FDataFile.GroupRights.UnRegisterOnChangeHook(@GroupRightsEventHook);
+
   FDataFile := AValue;
 
+  if Assigned(FDataFile) then
+    FDataFile.GroupRights.RegisterOnChangeHook(@GroupRightsEventHook, true);
+
   InitUserRightsVST;
+end;
+
+procedure TUsersAccumulatedRightsFrame.GroupRightsEventHook(
+  const Sender: TEpiCustomBase; const Initiator: TEpiCustomBase;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if (EventGroup <> eegRights) then exit;
+  FUsersRightsVST.Invalidate;
+end;
+
+procedure TUsersAccumulatedRightsFrame.UsersEventHook(
+  const Sender: TEpiCustomBase; const Initiator: TEpiCustomBase;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  if (EventGroup <> eegCustomBase) then exit;
+  case TEpiCustomChangeEventType(EventType) of
+    ecceAddItem,
+    ecceDelItem:
+      begin
+        // A new user is added
+        if (Initiator = Admin.Users) then
+          InitUserRightsVST;
+
+        // A user was added to/deleted from a group
+        if (Initiator is TEpiGroups) then
+          FUsersRightsVST.Invalidate;
+      end;
+
+    ecceName:
+      begin
+        if not (Initiator is TEpiUser) then exit;
+        // A user login was changes
+        FUsersRightsVST.Invalidate;
+      end;
+  end;
 end;
 
 procedure TUsersAccumulatedRightsFrame.SetAdmin(AValue: TEpiAdmin);
 begin
   if FAdmin = AValue then Exit;
+
+  if Assigned(FAdmin) then
+    FAdmin.Users.UnRegisterOnChangeHook(@UsersEventHook);
+
   FAdmin := AValue;
+
+  if Assigned(FAdmin) then
+    FAdmin.Users.RegisterOnChangeHook(@UsersEventHook, true);
 
   InitUserRightsVST;
 end;
@@ -239,6 +298,14 @@ begin
 
     EndUpdate;
   end;
+end;
+
+destructor TUsersAccumulatedRightsFrame.Destroy;
+begin
+  if Assigned(Admin) then Admin.Users.UnRegisterOnChangeHook(@UsersEventHook);
+  if Assigned(DataFile) then DataFile.GroupRights.UnRegisterOnChangeHook(@GroupRightsEventHook);
+
+  inherited Destroy;
 end;
 
 end.

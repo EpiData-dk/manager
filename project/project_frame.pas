@@ -16,7 +16,6 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
-    AdminAction: TAction;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -54,8 +53,6 @@ type
     DefineGroupsAction: TAction;
     DefineUsersAction: TAction;
     DefineEntryRightsAction: TAction;
-    procedure AdminActionExecute(Sender: TObject);
-    procedure AdminActionUpdate(Sender: TObject);
     procedure DefineEntryRightsActionUpdate(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
@@ -332,100 +329,6 @@ begin
 
   FProjectTreeView.DeleteRelation(Relation);
   PropertiesForm.UpdateSelection(nil, nil);
-end;
-
-procedure TProjectFrame.AdminActionExecute(Sender: TObject);
-var
-  F: TAdminForm;
-  User: TEpiUser;
-  S: String;
-  Res: TModalResult;
-  MsgDlgType: TMsgDlgType;
-
-  function ShowUserForm: TModalResult;
-  var
-    F: TAdminUserForm;
-  begin
-    F := TAdminUserForm.Create(Self);
-    F.User  := User;
-    F.Admin := EpiDocument.Admin;
-    Result  := F.ShowModal;
-    F.Free;
-  end;
-
-begin
-  if (EpiDocument.Admin.Users.Count = 0) then
-    begin
-      if (EpiDocument.PassWord <> '') then
-        begin
-          S := 'It is not possible to have a single-password project AND user administration active at the same time!' + LineEnding +
-               LineEnding +
-               'If you choose to continue the current password is reset and you will be asked to create a new user, which will automatically be added to the Administrators group!' + LineEnding +
-               LineEnding +
-               'Afterwards the project will save and re-open.' + LineEnding +
-               'Then login with the new user!' + LineEnding +
-               LineEnding +
-               'Continue?';
-          MsgDlgType := mtWarning;
-        end
-      else
-        begin
-          S :=
-            'This project is not yet setup for user administration!' + LineEnding +
-            LineEnding +
-            'Next you will be asked to create a new user,' + LineEnding +
-            'which will automatically be added to the' + LineEnding +
-            'Administrators group!' + LineEnding +
-            LineEnding +
-            'Afterwards the project will save and re-open.' + LineEnding +
-            'Then login with the new user!';
-          MsgDlgType := mtInformation;
-        end;
-
-      Res := MessageDlg('Warning',
-                          S,
-                          MsgDlgType,
-                          mbOKCancel, 0,
-                          mbCancel
-                        );
-      if (Res <> mrOK) then
-        Exit;
-
-      EpiDocument.PassWord := '';
-
-      User := EpiDocument.Admin.NewUser;
-      if ShowUserForm <> mrOK then
-        begin
-          User.Free;
-          Exit;
-        end;
-
-      User.Groups.AddItem(EpiDocument.Admin.Admins);
-      if (not SaveProject(false)) then
-      begin
-        User.Free;
-        Exit;
-      end;
-
-      EpiDocument.Admin.Created := Now;
-      PostMessage(MainForm.Handle, LM_MAIN_CLOSEPROJECT, 1, 0);
-      PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, 0, 0);
-      Exit;
-    end;
-
-  F := TAdminForm.Create(self, EpiDocument.Admin);
-  F.ShowModal;
-  F.Free;
-
-  // This line is neede because the mainform sets shortcut handled to false during "showmodal",
-  // and the check on the mainform MUST be there or else the mainmenu will fire actions due to
-  // catching keyboard shortcuts.
-  MainForm.MainMenu1.ShortcutHandled := true;
-end;
-
-procedure TProjectFrame.AdminActionUpdate(Sender: TObject);
-begin
-  AdminAction.Enabled := Authenticator.IsAuthorized([earUsers]);
 end;
 
 procedure TProjectFrame.DefineEntryRightsActionUpdate(Sender: TObject);
@@ -1634,14 +1537,12 @@ begin
     // Project
     ProjectPropertiesMenuItem.Action := ProjectSettingsAction;
     ValueLabelsMenuItem.Action       := ValueLabelEditorAction;
-    AdminMenuItem.Action             := AdminAction;
     ProjectPasswordMenuItem.Action   := ProjectPasswordAction;
     StudyInfoMenuItem.Action         := StudyInformationAction;
 
     // --project details popup-menu
     ProjectPropertiesPopupMenuItem.Action := ProjectSettingsAction;
     ValueLabelEditorPopupMenuItem.Action  := ValueLabelEditorAction;
-    AdminPopupMenuItem.Action             := AdminAction;
     SetPasswordPopupMenuItem.Action       := ProjectPasswordAction;
     StudyInfoPopupMenuItem.Action         := StudyInformationAction;
 

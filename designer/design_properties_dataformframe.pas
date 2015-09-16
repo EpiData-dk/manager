@@ -386,7 +386,7 @@ end;
 
 procedure TDataformPropertiesFrame.UpdateGroupAssignFrameVisibility;
 begin
-  RightsTabSheet.Visible := Assigned(Authenticator.AuthedUser);
+  RightsTabSheet.TabVisible := Assigned(Authenticator.AuthedUser);
 //  RightsTabSheet.Enabled := IsAuthorized(earGroups);
 end;
 
