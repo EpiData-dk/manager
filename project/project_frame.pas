@@ -53,6 +53,7 @@ type
     DefineGroupsAction: TAction;
     DefineUsersAction: TAction;
     DefineEntryRightsAction: TAction;
+    DefineExtendedAccessAction: TAction;
     procedure DefineEntryRightsActionUpdate(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
@@ -77,6 +78,8 @@ type
     procedure DefineUsersActionExecute(Sender: TObject);
     procedure DefineUsersActionUpdate(Sender: TObject);
     procedure DefineEntryRightsActionExecute(Sender: TObject);
+    procedure DefineExtendedAccessActionExecute(Sender: TObject);
+    procedure DefineExtendedAccessActionUpdate(Sender: TObject);
   private
     { Core Logger }
     FCoreLoggerForm: TCoreLogger;
@@ -333,7 +336,9 @@ end;
 
 procedure TProjectFrame.DefineEntryRightsActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := Authenticator.IsAuthorized([earGroups]);
+  TAction(Sender).Enabled :=
+    Assigned(Authenticator.AuthedUser) and
+    Authenticator.IsAuthorized([earGroups]);
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
@@ -457,7 +462,9 @@ end;
 
 procedure TProjectFrame.DefineGroupsActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := Authenticator.IsAuthorized([earGroups]);
+  TAction(Sender).Enabled :=
+    Assigned(Authenticator.AuthedUser) and
+    Authenticator.IsAuthorized([earGroups]);
 end;
 
 procedure TProjectFrame.DefineGroupsActionExecute(Sender: TObject);
@@ -474,13 +481,25 @@ end;
 
 procedure TProjectFrame.DefineUsersActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := Authenticator.IsAuthorized([earUsers]);
+  TAction(Sender).Enabled :=
+    Assigned(Authenticator.AuthedUser) and
+    Authenticator.IsAuthorized([earUsers]);
 end;
 
 procedure TProjectFrame.DefineEntryRightsActionExecute(Sender: TObject);
 begin
   if IsProjectSetupForAdmin then
     ShowDefineEntryRightsForm(Self, EpiDocument);
+end;
+
+procedure TProjectFrame.DefineExtendedAccessActionExecute(Sender: TObject);
+begin
+ IsProjectSetupForAdmin;
+end;
+
+procedure TProjectFrame.DefineExtendedAccessActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := (Authenticator.Admin.Users.Count = 0);
 end;
 
 procedure TProjectFrame.ShowCoreLogger;
@@ -1537,7 +1556,6 @@ begin
     // Project
     ProjectPropertiesMenuItem.Action := ProjectSettingsAction;
     ValueLabelsMenuItem.Action       := ValueLabelEditorAction;
-    ProjectPasswordMenuItem.Action   := ProjectPasswordAction;
     StudyInfoMenuItem.Action         := StudyInformationAction;
 
     // --project details popup-menu
@@ -1548,6 +1566,11 @@ begin
 
 
     // User Access
+    // - Simple Password
+    SetSimplePasswordMenuItem.Action      := ProjectPasswordAction;
+
+    // - Extended Access
+    DefineExtendedAccessMenuItem.Action   := DefineExtendedAccessAction;
     DefineGroupsMenuItem.Action           := DefineGroupsAction;
     DefineUsersMenuItem.Action            := DefineUsersAction;
     DefineEntryRightsMenuItem.Action      := DefineEntryRightsAction;

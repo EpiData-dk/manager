@@ -31,6 +31,7 @@ type
     AddGroupAction: TAction;
     DeleteGroupAction: TAction;
     EditGroupAction: TAction;
+    CloseFormAction: TAction;
     procedure EditGroupActionExecute(Sender: TObject);
     procedure AddGroupActionExecute(Sender: TObject);
     procedure AddGroupActionUpdate(Sender: TObject);
@@ -38,11 +39,15 @@ type
     procedure DeleteGroupActionExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure CloseFormActionExecute(Sender: TObject);
   private
     FAdmin: TEpiAdmin;
     procedure FormChanged(Sender: TObject; Form: TCustomForm);
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure AssignAdminHooks;
+    procedure AdminResetHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
     procedure UsersHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
@@ -220,6 +225,11 @@ begin
     end;
 end;
 
+procedure TDefineGroupsForm.CloseFormActionExecute(Sender: TObject);
+begin
+  Close;
+end;
+
 procedure TDefineGroupsForm.FormChanged(Sender: TObject; Form: TCustomForm);
 begin
   if (Form <> Self) then
@@ -244,7 +254,19 @@ end;
 
 procedure TDefineGroupsForm.AssignAdminHooks;
 begin
+  Admin.RegisterOnChangeHook(@AdminResetHook, true);
   Admin.Users.RegisterOnChangeHook(@UsersHook, true);
+end;
+
+procedure TDefineGroupsForm.AdminResetHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if (EventGroup <> eegAdmin) and (TEpiAdminChangeEventType(EventType) <> eaceAdminResetting) then exit;
+
+  Admin.UnRegisterOnChangeHook(@AdminResetHook);
+  Admin.Users.UnRegisterOnChangeHook(@UsersHook);
+  Self.Free;
 end;
 
 procedure TDefineGroupsForm.UsersHook(const Sender: TEpiCustomBase;

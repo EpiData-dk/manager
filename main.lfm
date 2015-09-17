@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 617
+  Left = 471
   Height = 658
-  Top = 248
+  Top = 328
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -301,15 +301,21 @@ object MainForm: TMainForm
     end
     object UserAccessMenu: TMenuItem
       Caption = 'User Access'
-      object ResetPasswordMenuItem: TMenuItem
-        Action = ResetPasswordAction
-      end
-      object DefineAccessMenuItem: TMenuItem
-        Caption = 'Define Access'
-        object ProjectPasswordMenuItem: TMenuItem
-          Caption = 'Set Password'
+      object SinglePasswordMenuItem: TMenuItem
+        Caption = 'Single Password'
+        object SetSimplePasswordMenuItem: TMenuItem
+          Caption = 'SetSimplePassword'
         end
-        object DefineAccessDivider: TMenuItem
+        object RemoveSimplePasswordMenuItem: TMenuItem
+          Caption = 'RemoveSimplePassword'
+        end
+      end
+      object ExtendedAccessMenuItem: TMenuItem
+        Caption = 'Extended Access'
+        object DefineExtendedAccessMenuItem: TMenuItem
+          Caption = 'DefineExtededAccess'
+        end
+        object DefineAccessDivider1: TMenuItem
           Caption = '-'
         end
         object DefineGroupsMenuItem: TMenuItem
@@ -321,12 +327,18 @@ object MainForm: TMainForm
         object DefineEntryRightsMenuItem: TMenuItem
           Caption = 'DefineEntryRights'
         end
-      end
-      object MenuItem34: TMenuItem
-        Caption = '-'
-      end
-      object RemoveAdminMenuItem: TMenuItem
-        Action = RemoveAdminAction
+        object DefineAccessDivider2: TMenuItem
+          Caption = '-'
+        end
+        object ManagePasswordMenuItem: TMenuItem
+          Action = ManageUserPasswordAction
+        end
+        object MenuItem39: TMenuItem
+          Caption = '-'
+        end
+        object RemoveExtendedAccess: TMenuItem
+          Action = RemoveAdminAction
+        end
       end
     end
     object DataformMenu: TMenuItem
@@ -628,10 +640,11 @@ object MainForm: TMainForm
       OnExecute = AppendActionExecute
       OnUpdate = ExtendedDataAuthActionUpdate
     end
-    object ResetPasswordAction: TAction
+    object ManageUserPasswordAction: TAction
       Category = 'Admin'
-      Caption = 'Reset Password'
-      OnExecute = ResetPasswordActionExecute
+      Caption = 'Manage User Passwords'
+      OnExecute = ManageUserPasswordActionExecute
+      OnUpdate = ManageUserPasswordActionUpdate
     end
     object RemoveAdminAction: TAction
       Category = 'Admin'

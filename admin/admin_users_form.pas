@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, ActnList, StdCtrls, VirtualTrees, epiadmin;
+  Buttons, ComCtrls, ActnList, StdCtrls, VirtualTrees, epiadmin, epicustombase;
 
 type
 
@@ -36,6 +36,9 @@ type
     FAdmin: TEpiAdmin;
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure FormChanged(Sender: TObject; Form: TCustomForm);
+    procedure AdminResettingHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
 
   { Users }
   private
@@ -168,6 +171,8 @@ begin
   if FAdmin = AValue then Exit;
   FAdmin := AValue;
 
+  Admin.RegisterOnChangeHook(@AdminResettingHook, true);
+
   InitUserVST;
 end;
 
@@ -177,6 +182,16 @@ begin
     ActionList1.State := asSuspended
   else
     ActionList1.State := asNormal;
+end;
+
+procedure TDefineUsersForm.AdminResettingHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if (EventGroup <> eegAdmin) and (TEpiAdminChangeEventType(EventType) <> eaceAdminResetting) then exit;
+
+  Admin.UnRegisterOnChangeHook(@AdminResettingHook);
+  Self.Free;
 end;
 
 procedure TDefineUsersForm.UsersBeforeItemErase(Sender: TBaseVirtualTree;

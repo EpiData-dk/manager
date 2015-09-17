@@ -32,10 +32,14 @@ type
     procedure RelationChange(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
+    procedure AdminResetHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
   private
     FDocument: TEpiDocument;
     procedure SetDocument(AValue: TEpiDocument);
     procedure AddHooks;
+    procedure RemoveHooks;
 
 
   { Project Tree View }
@@ -141,6 +145,16 @@ begin
     end;
 end;
 
+procedure TDefineEntryRightsForm.AdminResetHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  if (EventGroup <> eegAdmin) and (TEpiAdminChangeEventType(EventType) <> eaceAdminResetting) then exit;
+
+  RemoveHooks;
+  Self.Free;
+end;
+
 procedure TDefineEntryRightsForm.SetDocument(AValue: TEpiDocument);
 begin
   if FDocument = AValue then Exit;
@@ -157,8 +171,16 @@ end;
 
 procedure TDefineEntryRightsForm.AddHooks;
 begin
+  FDocument.Admin.RegisterOnChangeHook(@AdminResetHook, true);
   FDocument.DataFiles.RegisterOnChangeHook(@DataFileCaptionChange, true);
   FDocument.Relations.RegisterOnChangeHook(@RelationChange, true);
+end;
+
+procedure TDefineEntryRightsForm.RemoveHooks;
+begin
+  FDocument.Admin.UnRegisterOnChangeHook(@AdminResetHook);
+  FDocument.DataFiles.UnRegisterOnChangeHook(@DataFileCaptionChange);
+  FDocument.Relations.UnRegisterOnChangeHook(@RelationChange);
 end;
 
 procedure TDefineEntryRightsForm.InitDataFormTree;

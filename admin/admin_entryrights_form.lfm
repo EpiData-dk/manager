@@ -1,7 +1,7 @@
 object DefineEntryRightsForm: TDefineEntryRightsForm
-  Left = 583
+  Left = 1997
   Height = 518
-  Top = 326
+  Top = 113
   Width = 821
   Caption = 'Define Entry Rights'
   ClientHeight = 518

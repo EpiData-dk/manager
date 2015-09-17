@@ -116,7 +116,7 @@ type
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
     ExportMenuItem: TMenuItem;
-    ProjectPasswordMenuItem: TMenuItem;
+    DefineExtendedAccessMenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
     ExtendedListReportAction: TAction;
@@ -181,16 +181,20 @@ type
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
     UserAccessMenu: TMenuItem;
-    ResetPasswordMenuItem: TMenuItem;
-    DefineAccessMenuItem: TMenuItem;
+    ManagePasswordMenuItem: TMenuItem;
+    ExtendedAccessMenuItem: TMenuItem;
     DefineGroupsMenuItem: TMenuItem;
     DefineUsersMenuItem: TMenuItem;
     DefineEntryRightsMenuItem: TMenuItem;
-    DefineAccessDivider: TMenuItem;
-    ResetPasswordAction: TAction;
-    MenuItem34: TMenuItem;
-    RemoveAdminMenuItem: TMenuItem;
+    DefineAccessDivider1: TMenuItem;
+    ManageUserPasswordAction: TAction;
+    DefineAccessDivider2: TMenuItem;
+    RemoveExtendedAccess: TMenuItem;
     RemoveAdminAction: TAction;
+    SinglePasswordMenuItem: TMenuItem;
+    SetSimplePasswordMenuItem: TMenuItem;
+    RemoveSimplePasswordMenuItem: TMenuItem;
+    MenuItem39: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -238,12 +242,13 @@ type
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
     procedure ExtendedDataAuthActionUpdate(Sender: TObject);
     procedure DefineProjectAuthActionUpdate(Sender: TObject);
-    procedure ResetPasswordActionExecute(Sender: TObject);
+    procedure ManageUserPasswordActionExecute(Sender: TObject);
     procedure ExportActionUpdate(Sender: TObject);
     procedure ReportsAuthActionUpdate(Sender: TObject);
     procedure PrepareDoubleEntryActionUpdate(Sender: TObject);
     procedure RemoveAdminActionUpdate(Sender: TObject);
     procedure RemoveAdminActionExecute(Sender: TObject);
+    procedure ManageUserPasswordActionUpdate(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -1057,13 +1062,13 @@ begin
   TAction(Sender).Enabled := Authenticator.IsAuthorized([earDefineProject]);
 end;
 
-procedure TMainForm.ResetPasswordActionExecute(Sender: TObject);
+procedure TMainForm.ManageUserPasswordActionExecute(Sender: TObject);
 var
   DocFile: TEpiDocumentFile;
   LocalDoc: boolean;
 begin
   DocFile := ToolsCheckOpenFile(False, LocalDoc, [earPassword],
-    'You are not authorized to use Reset Password!');
+    'You are not authorized to use Manage User Password!');
 
   if LocalDoc then
     DocFile.Free;
@@ -1096,17 +1101,47 @@ procedure TMainForm.RemoveAdminActionExecute(Sender: TObject);
 var
   Docfile: TEpiDocumentFile;
   LocalDoc: boolean;
+  S: String;
+  Res: TModalResult;
 begin
   Docfile := ToolsCheckOpenFile(false, LocalDoc, [],
     'You are not authorised to Reset the Administration', true
   );
 
-//  Docfile.Document.Admin.ResetAll;
-  if Assigned(Docfile) then
-    ShowMessage('Currently not implemented!');
+  if not Assigned(Docfile) then
+    Exit;
+
+
+  S := 'Resetting Users and Groups administration will de-crypt you project and' + LineEnding +
+       'it will no longer be secured.' + LineEnding +
+       LineEnding +
+       'Are you sure you want to remove User/Grop administration?';
+
+  Res := MessageDlg('Warning',
+                    S,
+                    mtWarning,
+                    mbYesNo,
+                    0,
+                    mbNo);
+
+  if Res = mrNo then exit;
+
+  Docfile.Document.Admin.ResetAll;
 
   if LocalDoc then
+  begin
+    AddToRecent(Docfile.FileName);
+    Docfile.SaveFile(Docfile.FileName);
     DocFile.Free;
+  end;
+end;
+
+procedure TMainForm.ManageUserPasswordActionUpdate(Sender: TObject);
+begin
+  if Assigned(FActiveFrame) and (Assigned(Authenticator)) then
+    TAction(Sender).Enabled := (Authenticator.Admin.Users.Count > 0) and (Authenticator.IsAuthorized([earPassword]))
+  else
+    TAction(Sender).Enabled := true;
 end;
 
 procedure TMainForm.SetCaption;
@@ -1279,7 +1314,15 @@ begin
   ProjectMenu.Visible       := Assigned(FActiveFrame);
 
   // USER ACCESS:
-  DefineAccessMenuItem.Visible := Assigned(FActiveFrame);
+  SinglePasswordMenuItem.Visible := Assigned(FActiveFrame);
+  DefineExtendedAccessMenuItem.Visible := Assigned(FActiveFrame);
+  // -
+  DefineAccessDivider1.Visible := Assigned(FActiveFrame);
+  DefineGroupsMenuItem.Visible := Assigned(FActiveFrame);
+  DefineUsersMenuItem.Visible := Assigned(FActiveFrame);
+  DefineEntryRightsMenuItem.Visible := Assigned(FActiveFrame);
+  // -
+  DefineAccessDivider2.Visible := Assigned(FActiveFrame);
 
   // Dataform:
   DataformMenu.Visible      := Assigned(FActiveFrame);
@@ -1420,8 +1463,11 @@ begin
         [mbOK],
         0
       );
+
       if LocalDoc then
-        FreeAndNil(Result);
+        FreeAndNil(Result)
+      else
+        Result := nil;
     end;
 end;
 

@@ -171,5 +171,10 @@ object DefineGroupsForm: TDefineGroupsForm
       ImageIndex = 13
       OnExecute = EditGroupActionExecute
     end
+    object CloseFormAction: TAction
+      Caption = 'Close'
+      OnExecute = CloseFormActionExecute
+      ShortCut = 27
+    end
   end
 end

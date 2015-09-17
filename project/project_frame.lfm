@@ -191,7 +191,7 @@ object ProjectFrame: TProjectFrame
   end
   object ActionList1: TActionList
     Images = DM.Icons16
-    left = 328
+    left = 336
     top = 224
     object SaveProjectAction: TAction
       Category = 'File'
@@ -277,6 +277,12 @@ object ProjectFrame: TProjectFrame
       Caption = 'Define Entry Rights'
       OnExecute = DefineEntryRightsActionExecute
       OnUpdate = DefineEntryRightsActionUpdate
+    end
+    object DefineExtendedAccessAction: TAction
+      Category = 'Admin'
+      Caption = 'Add User/Group Administration'
+      OnExecute = DefineExtendedAccessActionExecute
+      OnUpdate = DefineExtendedAccessActionUpdate
     end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu
