@@ -43,6 +43,7 @@ type
   { Users }
   private
     FUsersVST: TVirtualStringTree;
+    FPasswordReset: boolean;
 
     { VST Events }
     procedure UsersBeforeItemErase(Sender: TBaseVirtualTree;
@@ -52,17 +53,22 @@ type
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure UsersInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+    procedure UsersKeyAction(Sender: TBaseVirtualTree; var CharCode: Word;
+      var Shift: TShiftState; var DoDefault: Boolean);
     procedure UsersNodeDblClick(Sender: TBaseVirtualTree;
       const HitInfo: THitInfo);
 
     { Other }
+    procedure AsyncOpenUserForm(Data: PtrInt);
     procedure InitUserVST;
     function UserFromNode(Node: PVirtualNode): TEpiUser;
     function ShowUserForm(User: TEpiUser): TModalResult;
+    procedure SetPasswordReset(AValue: boolean);
   public
     constructor Create(TheOwner: TComponent); override;
     destructor  Destroy; override;
     property    Admin: TEpiAdmin read FAdmin write SetAdmin;
+    property    PasswordReset: boolean read FPasswordReset write SetPasswordReset;
   end;
 
 procedure ShowDefineUsersForm(Owner: TComponent; Admin: TEpiAdmin);
@@ -72,7 +78,8 @@ implementation
 {$R *.lfm}
 
 uses
-  admin_authenticator, admin_user_form, settings2, settings2_var;
+  admin_authenticator, admin_user_form, settings2, settings2_var,
+  LCLType;
 
 var
   DefineUsersForm: TDefineUsersForm = nil;
@@ -155,6 +162,10 @@ procedure TDefineUsersForm.FormShow(Sender: TObject);
 begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);
+
+  ToolBar1.Enabled := (not PasswordReset);
+  ToolBar1.Visible := (not PasswordReset);
+  Panel4.Visible   := (PasswordReset);
 end;
 
 procedure TDefineUsersForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
@@ -205,9 +216,18 @@ begin
 
   OrgItemColor := ItemColor;
 
-  if (not Authenticator.CheckAuthedUserHierachy(User, false))
-  then
-    ItemColor := clInactiveCaption;
+  if PasswordReset then
+    begin
+      if Authenticator.UserInGroup(User, Authenticator.Admin.Admins, false)
+      then
+        ItemColor := clInactiveCaption
+    end
+  else
+    begin
+      if (not Authenticator.CheckAuthedUserHierachy(User, false))
+      then
+        ItemColor := clInactiveCaption;
+    end;
 
   if (User = Authenticator.AuthedUser)
   then
@@ -244,10 +264,28 @@ begin
   TEpiUser(Sender.GetNodeData(Node)^) := Admin.Users[Node^.Index];
 end;
 
+procedure TDefineUsersForm.UsersKeyAction(Sender: TBaseVirtualTree;
+  var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
+begin
+  if (CharCode = VK_RETURN) and (Shift = []) then
+  begin
+    Application.QueueAsyncCall(@AsyncOpenUserForm, PtrInt(FUsersVST.FocusedNode));
+    DoDefault := false;
+  end;
+end;
+
 procedure TDefineUsersForm.UsersNodeDblClick(Sender: TBaseVirtualTree;
   const HitInfo: THitInfo);
 begin
   ShowUserForm(UserFromNode(HitInfo.HitNode));
+end;
+
+procedure TDefineUsersForm.AsyncOpenUserForm(Data: PtrInt);
+var
+  User: TEpiUser;
+begin
+  User := UserFromNode(PVirtualNode(Data));
+  ShowUserForm(User);
 end;
 
 procedure TDefineUsersForm.InitUserVST;
@@ -277,16 +315,24 @@ begin
   F := TAdminUserForm.Create(Self);
   F.User  := User;
   F.Admin := Admin;
+  F.PasswordReset := PasswordReset;
   Result := F.ShowModal;
   F.Free;
 
   FUsersVST.Invalidate;
 end;
 
+procedure TDefineUsersForm.SetPasswordReset(AValue: boolean);
+begin
+  if FPasswordReset = AValue then Exit;
+  FPasswordReset := AValue;
+end;
+
 constructor TDefineUsersForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   Screen.AddHandlerActiveFormChanged(@FormChanged);
+  PasswordReset := false;
 
   FUsersVST := TVirtualStringTree.Create(Self);
   with FUsersVST do
@@ -363,7 +409,8 @@ begin
     OnBeforeItemErase := @UsersBeforeItemErase;
     OnGetText         := @UsersGetText;
     OnInitNode        := @UsersInitNode;
-    OnNodeDblClick := @UsersNodeDblClick;
+    OnNodeDblClick    := @UsersNodeDblClick;
+    OnKeyAction := @UsersKeyAction;
 
     EndUpdate;
   end;

@@ -1,7 +1,7 @@
 object DefineUsersForm: TDefineUsersForm
-  Left = 850
+  Left = 501
   Height = 357
-  Top = 422
+  Top = 424
   Width = 752
   Caption = 'Define Users'
   ClientHeight = 357
@@ -19,7 +19,7 @@ object DefineUsersForm: TDefineUsersForm
     AutoSize = True
     ClientHeight = 31
     ClientWidth = 752
-    TabOrder = 2
+    TabOrder = 0
     object Label4: TLabel
       AnchorSideLeft.Control = Panel6
       AnchorSideLeft.Side = asrCenter
@@ -46,7 +46,7 @@ object DefineUsersForm: TDefineUsersForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 752
-    TabOrder = 0
+    TabOrder = 2
     object BitBtn1: TBitBtn
       Left = 663
       Height = 34

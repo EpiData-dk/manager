@@ -72,12 +72,15 @@ type
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure GroupInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode;
       var ChildCount: Cardinal);
+    procedure GroupKeyAction(Sender: TBaseVirtualTree; var CharCode: Word;
+      var Shift: TShiftState; var DoDefault: Boolean);
 
     { Other }
     procedure InitGroupVST;
     function  GroupRelationFromNode(Node: PVirtualNode): TEpiGroupRelation;
     function  CurrentGroup: TEpiGroup;
     function  ShowGroupForm(Const Group: TEpiGroup): TModalResult;
+    procedure AsyncOpenGroupForm(Data: PtrInt);
 
 
   { Users }
@@ -121,7 +124,7 @@ implementation
 
 uses
   admin_group_form, admin_authenticator, epigrouprelation_helper,
-  settings2, settings2_var;
+  settings2, settings2_var, LCLType;
 
 var
   DefineGroupsForm: TDefineGroupsForm = nil;
@@ -388,6 +391,16 @@ begin
   ChildCount := GroupRelationFromNode(Node).GroupRelations.Count;
 end;
 
+procedure TDefineGroupsForm.GroupKeyAction(Sender: TBaseVirtualTree;
+  var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
+begin
+  if (CharCode = VK_RETURN) and (Shift = []) then
+  begin
+    Application.QueueAsyncCall(@AsyncOpenGroupForm, PtrInt(CurrentGroup));
+    DoDefault := false;
+  end;
+end;
+
 procedure TDefineGroupsForm.InitGroupVST;
 begin
   if not Assigned(Admin) then exit;
@@ -424,6 +437,11 @@ begin
   F.Group := Group;
   Result := F.ShowModal;
   F.Free;
+end;
+
+procedure TDefineGroupsForm.AsyncOpenGroupForm(Data: PtrInt);
+begin
+  ShowGroupForm(TEpiGroup(Data));
 end;
 
 procedure TDefineGroupsForm.UserBeforeItemErase(
@@ -650,6 +668,7 @@ begin
     OnInitChildren    := @GroupInitChildren;
     OnFreeNode        := @GroupFreeNode;
     OnGetText         := @GroupGetText;
+    OnKeyAction := @GroupKeyAction;
 
     EndUpdate;
   end;

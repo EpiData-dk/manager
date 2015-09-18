@@ -1,7 +1,7 @@
 object DefineGroupsForm: TDefineGroupsForm
-  Left = 2072
+  Left = 447
   Height = 502
-  Top = 271
+  Top = 305
   Width = 898
   Caption = 'Define Groups'
   ClientHeight = 502
@@ -89,7 +89,7 @@ object DefineGroupsForm: TDefineGroupsForm
     Align = alBottom
     ClientHeight = 50
     ClientWidth = 898
-    TabOrder = 1
+    TabOrder = 3
     Visible = False
     object BitBtn1: TBitBtn
       Left = 809
@@ -113,7 +113,7 @@ object DefineGroupsForm: TDefineGroupsForm
     BevelOuter = bvLowered
     ClientHeight = 452
     ClientWidth = 464
-    TabOrder = 2
+    TabOrder = 1
     object Panel7: TPanel
       Left = 1
       Height = 31

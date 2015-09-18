@@ -328,7 +328,7 @@ uses
   valuelabel_import_data,  append_form, epitools_append,
   manager_globals, reports_form,
   epiv_checkversionform, export_form2,
-  admin_authenticator;
+  admin_authenticator, admin_users_form;
 
 type
   TAccessActionList = class(TActionList);
@@ -1066,12 +1066,24 @@ procedure TMainForm.ManageUserPasswordActionExecute(Sender: TObject);
 var
   DocFile: TEpiDocumentFile;
   LocalDoc: boolean;
+  F: TDefineUsersForm;
 begin
   DocFile := ToolsCheckOpenFile(False, LocalDoc, [earPassword],
     'You are not authorized to use Manage User Password!');
 
+  if not Assigned(DocFile) then exit;
+
+  F := TDefineUsersForm.Create(Self);
+  F.Admin := Authenticator.Admin;
+  F.PasswordReset := true;
+  F.ShowModal;
+
   if LocalDoc then
+  begin
+    AddToRecent(Docfile.FileName);
+    Docfile.SaveFile(Docfile.FileName);
     DocFile.Free;
+  end;
 end;
 
 procedure TMainForm.ExportActionUpdate(Sender: TObject);

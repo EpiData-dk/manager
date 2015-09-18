@@ -45,6 +45,7 @@ type
     FAdmin: TEpiAdmin;
     FUser: TEpiUser;
     FPasswordModified: Boolean;
+    FPasswordReset: boolean;
     procedure FocusUserForm(Data: PtrInt);
     procedure PasswordEditOpen(Data: PtrInt);
     procedure FormShow(Sender: TObject);
@@ -53,6 +54,7 @@ type
     destructor Destroy; override;
     property User: TEpiUser read FUser write FUser;
     property Admin: TEpiAdmin read FAdmin write FAdmin;
+    property PasswordReset: boolean read FPasswordReset write FPasswordReset;
   end;
 
 implementation
@@ -204,19 +206,28 @@ procedure TAdminUserForm.FormShow(Sender: TObject);
 begin
   // Fill content!
   LoginEdit.Text       := User.Login;
-  LoginEdit.Enabled    := Authenticator.CheckAuthedUserHierachy(User, true);
+  LoginEdit.Enabled    := Authenticator.CheckAuthedUserHierachy(User, true) and
+                          (not PasswordReset);
 
   FullnameEdit.Text    := User.FullName;
-  FullnameEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
+  FullnameEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true) and
+                          (not PasswordReset);
 
-  PasswordEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true) or
-                          Authenticator.IsAuthorized([earPassword]);
+  if PasswordReset then
+    begin
+      PasswordEdit.Enabled := Authenticator.IsAuthorized([earPassword]) and
+                              (not Authenticator.UserInGroup(User, Admin.Admins, false));
+    end
+  else
+    PasswordEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
 
   NeverExpireChkBox.Checked := (User.ExpireDate = 0);
-  NeverExpireChkBox.Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
+  NeverExpireChkBox.Enabled := Authenticator.CheckAuthedUserHierachy(User, true) and
+                               (not PasswordReset);
 
   ExpiresDateEdit.Date    := User.ExpireDate;
-  ExpiresDateEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
+  ExpiresDateEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true) and
+                             (not PasswordReset);
 
   PasswordEdit.Text    := User.Password;
   if (User.Password = '') then

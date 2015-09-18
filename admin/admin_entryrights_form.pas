@@ -249,31 +249,6 @@ constructor TDefineEntryRightsForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-{  FProjectTreeView := TEpiVProjectTreeViewFrame.Create(Self);
-  with FProjectTreeView do
-  begin
-    ShowCheckBoxes := false;
-    ShowHint := false;
-    ShowProject := false;
-    ShowRecordCount := false;
-
-    MinDocumentCount := 1;
-    MaxDocumentCount := 1;
-
-    AllowSelectProject := false;
-    DisplayMode := pdmCommon;
-    EditCaption := false;
-    EditStructure := false;
-
-    OnDelete := @ProjectTreeDelete;
-    OnTreeNodeSelected := @ProjectTreeNodeSelected;
-    OnTreeNodeSelecting := @ProjectTreeNodeSelecting;
-
-    Align := alClient;
-    Parent := Panel2;
-  end;                    }
-
-
   FDataFormsVST := TVirtualStringTree.Create(Self);
   with FDataFormsVST do
   begin
