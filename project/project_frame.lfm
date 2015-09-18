@@ -245,11 +245,11 @@ object ProjectFrame: TProjectFrame
       ImageIndex = 19
       OnExecute = OpenProjectActionExecute
     end
-    object ProjectPasswordAction: TAction
+    object SetProjectPasswordAction: TAction
       Category = 'Project'
       Caption = 'Set Password'
-      OnExecute = ProjectPasswordActionExecute
-      OnUpdate = ProjectPasswordActionUpdate
+      OnExecute = SetProjectPasswordActionExecute
+      OnUpdate = SetProjectPasswordActionUpdate
     end
     object KeyFieldsAction: TAction
       Category = 'Project'
@@ -283,6 +283,12 @@ object ProjectFrame: TProjectFrame
       Caption = 'Add User/Group Administration'
       OnExecute = DefineExtendedAccessActionExecute
       OnUpdate = DefineExtendedAccessActionUpdate
+    end
+    object RemoveProjectPassword: TAction
+      Category = 'Project'
+      Caption = 'Remove Password'
+      OnExecute = RemoveProjectPasswordExecute
+      OnUpdate = RemoveProjectPasswordUpdate
     end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu

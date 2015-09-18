@@ -27,7 +27,7 @@ type
     Splitter2: TSplitter;
     StudyInformationAction: TAction;
     KeyFieldsAction: TAction;
-    ProjectPasswordAction: TAction;
+    SetProjectPasswordAction: TAction;
     OpenProjectAction: TAction;
     NewProjectToolBtn: TToolButton;
     ToolButton2: TToolButton;
@@ -54,6 +54,7 @@ type
     DefineUsersAction: TAction;
     DefineEntryRightsAction: TAction;
     DefineExtendedAccessAction: TAction;
+    RemoveProjectPassword: TAction;
     procedure DefineEntryRightsActionUpdate(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
@@ -63,8 +64,8 @@ type
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure NewDataFormActionUpdate(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
-    procedure ProjectPasswordActionExecute(Sender: TObject);
-    procedure ProjectPasswordActionUpdate(Sender: TObject);
+    procedure SetProjectPasswordActionExecute(Sender: TObject);
+    procedure SetProjectPasswordActionUpdate(Sender: TObject);
     procedure ProjectSettingsActionExecute(Sender: TObject);
     procedure ProjectSettingsActionUpdate(Sender: TObject);
     procedure SaveProjectActionExecute(Sender: TObject);
@@ -80,6 +81,8 @@ type
     procedure DefineEntryRightsActionExecute(Sender: TObject);
     procedure DefineExtendedAccessActionExecute(Sender: TObject);
     procedure DefineExtendedAccessActionUpdate(Sender: TObject);
+    procedure RemoveProjectPasswordExecute(Sender: TObject);
+    procedure RemoveProjectPasswordUpdate(Sender: TObject);
   private
     { Core Logger }
     FCoreLoggerForm: TCoreLogger;
@@ -358,7 +361,7 @@ begin
   PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, WParam(Sender), 0);
 end;
 
-procedure TProjectFrame.ProjectPasswordActionExecute(Sender: TObject);
+procedure TProjectFrame.SetProjectPasswordActionExecute(Sender: TObject);
 var
   PW: String;
   PW2: String;
@@ -368,26 +371,42 @@ begin
   PW2 := '';
   Header := 'Set Project Password';
 
-  if not InputQuery(Header, 'Enter New Project Password' + LineEnding + '(Press enter to clear):', True, PW)
+  if (EpiDocument.PassWord <> '') then
+  begin
+    if not InputQuery(Header, 'Enter Current Project Password:', True, PW)
+    then
+      Exit;
+
+    if PW <> EpiDocument.PassWord then
+    begin
+      MessageDlg(Header, 'Incorrect Password', mtInformation, [mbOK], 0);
+      Exit;
+    end;
+  end;
+
+  PW := '';
+  if not InputQuery(Header, 'Enter New Project Password:', True, PW)
   then
     Exit;
-  if PW <> '' then
-    PW2 := PasswordBox(Header, 'Re-enter Password:');
 
+  if PW = '' then
+  begin
+    MessageDlg(Header, 'Empty passwords are not allowed!', mtInformation, [mbOK], 0);
+    Exit;
+  end;
+
+  PW2 := PasswordBox(Header, 'Re-enter Password:');
   if PW = PW2 then
   begin
     EpiDocument.PassWord := PW;
-    if PW <> '' then
-      MessageDlg(Header, 'Password successfully set!', mtInformation, [mbOK], 0)
-    else
-      MessageDlg(Header, 'Password successfully reset!', mtInformation, [mbOK], 0);
+    MessageDlg(Header, 'Password successfully set!', mtInformation, [mbOK], 0);
   end else
     MessageDlg(Header, 'The two passwords are not identical!' + LineEnding + 'Password NOT set.', mtError, [mbOK], 0);
 end;
 
-procedure TProjectFrame.ProjectPasswordActionUpdate(Sender: TObject);
+procedure TProjectFrame.SetProjectPasswordActionUpdate(Sender: TObject);
 begin
-  ProjectPasswordAction.Enabled :=
+  SetProjectPasswordAction.Enabled :=
     (EpiDocument.Admin.Users.Count = 0);
 end;
 
@@ -500,6 +519,31 @@ end;
 procedure TProjectFrame.DefineExtendedAccessActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled := (Authenticator.Admin.Users.Count = 0);
+end;
+
+procedure TProjectFrame.RemoveProjectPasswordExecute(Sender: TObject);
+var
+  Header: String;
+  PW: String;
+begin
+  Header := 'Remove Project Password';
+
+  if not InputQuery(Header, 'Enter Current Project Password:', True, PW)
+  then
+    Exit;
+
+  if PW = EpiDocument.PassWord then
+  begin
+    EpiDocument.PassWord := '';
+    MessageDlg(Header, 'Password successfully removed!', mtInformation, [mbOK], 0);
+  end
+  else
+    MessageDlg(Header, 'Incorrect Password', mtInformation, [mbOK], 0)
+end;
+
+procedure TProjectFrame.RemoveProjectPasswordUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := (EpiDocument.PassWord <> '') and (not Assigned(Authenticator.AuthedUser));
 end;
 
 procedure TProjectFrame.ShowCoreLogger;
@@ -1561,13 +1605,14 @@ begin
     // --project details popup-menu
     ProjectPropertiesPopupMenuItem.Action := ProjectSettingsAction;
     ValueLabelEditorPopupMenuItem.Action  := ValueLabelEditorAction;
-    SetPasswordPopupMenuItem.Action       := ProjectPasswordAction;
+    SetPasswordPopupMenuItem.Action       := SetProjectPasswordAction;
     StudyInfoPopupMenuItem.Action         := StudyInformationAction;
 
 
     // User Access
     // - Simple Password
-    SetSimplePasswordMenuItem.Action      := ProjectPasswordAction;
+    SetSimplePasswordMenuItem.Action      := SetProjectPasswordAction;
+    RemoveSimplePasswordMenuItem.Action   := RemoveProjectPassword;
 
     // - Extended Access
     DefineExtendedAccessMenuItem.Action   := DefineExtendedAccessAction;
