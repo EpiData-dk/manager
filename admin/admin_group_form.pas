@@ -125,24 +125,29 @@ begin
 end;
 
 constructor TAdminGroupForm.Create(TheOwner: TComponent);
-var
-  Item: TEpiManagerRight;
+
+  procedure AddItem(ChkGrp: TCheckGroup; Item: TEpiManagerRight);
+  begin
+    ChkGrp.Items.AddObject(EpiManagerRightCaptions[Item] + ' (' + EpiManagerRightCaptionsShort[Item] + ')',
+    TObject(PtrInt(Item)));
+  end;
+
 begin
   inherited Create(TheOwner);
 
-  ProjectContentDesignChkGrp.Items.AddObject(EpiManagerRightCaptions[earDefineProject], TObject(earDefineProject));
-  ProjectContentDesignChkGrp.Items.AddObject(EpiManagerRightCaptions[earPrepareDoubleEntry], TObject(earPrepareDoubleEntry));
-  ProjectContentDesignChkGrp.Items.AddObject(EpiManagerRightCaptions[earTranslate], TObject(earTranslate));
+  AddItem(ProjectContentDesignChkGrp, earDefineProject);
+  AddItem(ProjectContentDesignChkGrp, earPrepareDoubleEntry);
+  AddItem(ProjectContentDesignChkGrp, earTranslate);
 
-  AssignProjectrightsChkGrp.Items.AddObject(EpiManagerRightCaptions[earGroups], TObject(earGroups));
+  AddItem(AssignProjectrightsChkGrp, earGroups);
 
-  UserManagementChkGrp.Items.AddObject(EpiManagerRightCaptions[earUsers], TObject(earUsers));
-  UserManagementChkGrp.Items.AddObject(EpiManagerRightCaptions[earPassword], TObject(earPassword));
+  AddItem(UserManagementChkGrp, earUsers);
+  AddItem(UserManagementChkGrp, earPassword);
 
-  DataAccessChkGrp.Items.AddObject(EpiManagerRightCaptions[earExport], TObject(earExport));
-  DataAccessChkGrp.Items.AddObject(EpiManagerRightCaptions[earExtentendedData], TObject(earExtentendedData));
-  DataAccessChkGrp.Items.AddObject(EpiManagerRightCaptions[earViewData], TObject(earViewData));
-  DataAccessChkGrp.Items.AddObject(EpiManagerRightCaptions[earReport], TObject(earReport));
+  AddItem(DataAccessChkGrp, earExport);
+  AddItem(DataAccessChkGrp, earExtentendedData);
+  AddItem(DataAccessChkGrp, earViewData);
+  AddItem(DataAccessChkGrp, earReport);
 
   OnShow := @FormShow;
 end;
