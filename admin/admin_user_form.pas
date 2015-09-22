@@ -172,8 +172,6 @@ begin
 end;
 
 procedure TAdminUserForm.OkBtnClick(Sender: TObject);
-var
-  Node: PVirtualNode;
 begin
   if (not User.ValidateRename(LoginEdit.Text, false))
   then
