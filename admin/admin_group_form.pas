@@ -24,6 +24,7 @@ type
     Label3: TLabel;
     Panel2: TPanel;
     procedure BitBtn1Click(Sender: TObject);
+    procedure FormShowHint(Sender: TObject; HintInfo: PHintInfo);
   private
     FGroup: TEpiGroup;
     procedure FillRights;
@@ -73,6 +74,25 @@ begin
   AccumulateRights(lRights, DataAccessChkGrp);
 
   Group.ManageRights := lRights;
+end;
+
+procedure TAdminGroupForm.FormShowHint(Sender: TObject; HintInfo: PHintInfo);
+var
+  GrpBox: TCheckGroup;
+  I: Integer;
+  Item: TEpiManagerRight;
+  S: String;
+begin
+  GrpBox := TCheckGroup(HintInfo^.HintControl);
+  S := '';
+
+  for I := 0 to GrpBox.Items.Count - 1 do
+  begin
+    Item := TEpiManagerRight(PtrInt(GrpBox.Items.Objects[I]));
+    S += EpiManagerRightHint[Item] + LineEnding;
+  end;
+  TrimRight(S);
+  HintInfo^.HintStr := S;
 end;
 
 procedure TAdminGroupForm.FillRights;
@@ -135,15 +155,19 @@ constructor TAdminGroupForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
+  ProjectContentDesignChkGrp.OnShowHint := @FormShowHint;
   AddItem(ProjectContentDesignChkGrp, earDefineProject);
   AddItem(ProjectContentDesignChkGrp, earPrepareDoubleEntry);
   AddItem(ProjectContentDesignChkGrp, earTranslate);
 
+  AssignProjectrightsChkGrp.OnShowHint := @FormShowHint;
   AddItem(AssignProjectrightsChkGrp, earGroups);
 
+  UserManagementChkGrp.OnShowHint := @FormShowHint;
   AddItem(UserManagementChkGrp, earUsers);
   AddItem(UserManagementChkGrp, earPassword);
 
+  DataAccessChkGrp.OnShowHint := @FormShowHint;
   AddItem(DataAccessChkGrp, earExport);
   AddItem(DataAccessChkGrp, earExtentendedData);
   AddItem(DataAccessChkGrp, earViewData);

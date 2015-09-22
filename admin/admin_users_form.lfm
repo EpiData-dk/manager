@@ -112,5 +112,10 @@ object DefineUsersForm: TDefineUsersForm
       ImageIndex = 13
       OnExecute = EditUserActionExecute
     end
+    object CloseAction: TAction
+      Caption = 'CloseAction'
+      OnExecute = CloseActionExecute
+      ShortCut = 27
+    end
   end
 end

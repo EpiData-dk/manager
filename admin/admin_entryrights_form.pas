@@ -6,15 +6,17 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, StdCtrls, ComCtrls, epiv_projecttreeview_frame, epidocument,
-  epicustombase, design_properties_groupassign_frame, epidatafilerelations,
-  VirtualTrees;
+  Buttons, StdCtrls, ComCtrls, ActnList, epiv_projecttreeview_frame,
+  epidocument, epicustombase, design_properties_groupassign_frame,
+  epidatafilerelations, VirtualTrees;
 
 type
 
   { TDefineEntryRightsForm }
 
   TDefineEntryRightsForm = class(TForm)
+    CloseAction: TAction;
+    ActionList1: TActionList;
     Panel4: TPanel;
     BitBtn1: TBitBtn;
     Panel2: TPanel;
@@ -24,6 +26,7 @@ type
     Label4: TLabel;
     Panel7: TPanel;
     Label2: TLabel;
+    procedure CloseActionExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure DataFileCaptionChange(const Sender: TEpiCustomBase;
@@ -37,9 +40,11 @@ type
       EventType: Word; Data: Pointer);
   private
     FDocument: TEpiDocument;
+    procedure FormChanged(Sender: TObject; Form: TCustomForm);
     procedure SetDocument(AValue: TEpiDocument);
     procedure AddHooks;
     procedure RemoveHooks;
+    procedure UpdateEntryRightsCaption;
 
 
   { Project Tree View }
@@ -100,6 +105,11 @@ begin
   end;
 end;
 
+procedure TDefineEntryRightsForm.CloseActionExecute(Sender: TObject);
+begin
+  Close;
+end;
+
 procedure TDefineEntryRightsForm.FormCloseQuery(Sender: TObject;
   var CanClose: boolean);
 begin
@@ -121,6 +131,7 @@ begin
   if (TEpiCustomChangeEventType(EventType) <> ecceText) then exit;
 
   FDataFormsVST.Invalidate;
+  UpdateEntryRightsCaption;
 end;
 
 procedure TDefineEntryRightsForm.RelationChange(const Sender: TEpiCustomBase;
@@ -155,6 +166,15 @@ begin
   Self.Free;
 end;
 
+procedure TDefineEntryRightsForm.FormChanged(Sender: TObject; Form: TCustomForm
+  );
+begin
+  if (Form <> Self) then
+    ActionList1.State := asSuspended
+  else
+    ActionList1.State := asNormal;
+end;
+
 procedure TDefineEntryRightsForm.SetDocument(AValue: TEpiDocument);
 begin
   if FDocument = AValue then Exit;
@@ -163,10 +183,7 @@ begin
   AddHooks;
 
   InitDataFormTree;
-
-//  FProjectTreeView.AddDocument(FDocument);
   FGroupRightsFrame.Admin := FDocument.Admin;
-//  FProjectTreeView.SelectedObject := FDocument.Relations[0];
 end;
 
 procedure TDefineEntryRightsForm.AddHooks;
@@ -181,6 +198,13 @@ begin
   FDocument.Admin.UnRegisterOnChangeHook(@AdminResetHook);
   FDocument.DataFiles.UnRegisterOnChangeHook(@DataFileCaptionChange);
   FDocument.Relations.UnRegisterOnChangeHook(@RelationChange);
+end;
+
+procedure TDefineEntryRightsForm.UpdateEntryRightsCaption;
+const
+  ACaption = 'Entry Rights: ';
+begin
+  Label2.Caption := ACaption + FGroupRightsFrame.DataFileRelation.Datafile.Caption.Text;
 end;
 
 procedure TDefineEntryRightsForm.InitDataFormTree;
@@ -221,6 +245,7 @@ procedure TDefineEntryRightsForm.DataformFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
   FGroupRightsFrame.DataFileRelation := RelationFromNode(Node);
+  UpdateEntryRightsCaption;
 end;
 
 procedure TDefineEntryRightsForm.DataformInitNode(Sender: TBaseVirtualTree;
@@ -248,6 +273,7 @@ end;
 constructor TDefineEntryRightsForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  Screen.AddHandlerActiveFormChanged(@FormChanged);
 
   FDataFormsVST := TVirtualStringTree.Create(Self);
   with FDataFormsVST do
@@ -284,6 +310,7 @@ end;
 destructor TDefineEntryRightsForm.Destroy;
 begin
   DefineEntryRightsForm := nil;
+  Screen.RemoveHandlerActiveFormChanged(@FormChanged);
   inherited Destroy;
 end;
 

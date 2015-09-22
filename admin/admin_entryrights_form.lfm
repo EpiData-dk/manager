@@ -1,7 +1,7 @@
 object DefineEntryRightsForm: TDefineEntryRightsForm
-  Left = 1997
+  Left = 916
   Height = 518
-  Top = 113
+  Top = 313
   Width = 821
   Caption = 'Define Entry Rights'
   ClientHeight = 518
@@ -20,10 +20,10 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
     TabOrder = 0
     Visible = False
     object BitBtn1: TBitBtn
-      Left = 732
+      Left = 734
       Height = 34
       Top = 8
-      Width = 73
+      Width = 71
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True
@@ -115,6 +115,15 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
         ParentColor = False
         ParentFont = False
       end
+    end
+  end
+  object ActionList1: TActionList
+    left = 154
+    top = 175
+    object CloseAction: TAction
+      Caption = 'CloseAction'
+      OnExecute = CloseActionExecute
+      ShortCut = 27
     end
   end
 end

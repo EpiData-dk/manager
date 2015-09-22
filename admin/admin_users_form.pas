@@ -13,6 +13,7 @@ type
   { TDefineUsersForm }
 
   TDefineUsersForm = class(TForm)
+    CloseAction: TAction;
     Panel4: TPanel;
     BitBtn1: TBitBtn;
     ToolBar1: TToolBar;
@@ -26,12 +27,14 @@ type
     EditUserAction: TAction;
     Panel6: TPanel;
     Label4: TLabel;
+    procedure CloseActionExecute(Sender: TObject);
     procedure EditUserActionExecute(Sender: TObject);
     procedure AddUserActionExecute(Sender: TObject);
     procedure DeleteUserActionUpdate(Sender: TObject);
     procedure DeleteUserActionExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+    procedure Test(Sender: TVTHeader; Column: TColumnIndex);
   private
     FAdmin: TEpiAdmin;
     procedure SetAdmin(AValue: TEpiAdmin);
@@ -98,6 +101,11 @@ end;
 procedure TDefineUsersForm.EditUserActionExecute(Sender: TObject);
 begin
   ShowUserForm(UserFromNode(FUsersVST.FocusedNode));
+end;
+
+procedure TDefineUsersForm.CloseActionExecute(Sender: TObject);
+begin
+  Close;
 end;
 
 procedure TDefineUsersForm.AddUserActionExecute(Sender: TObject);
@@ -175,6 +183,11 @@ begin
   if ManagerSettings.SaveWindowPositions
   then
     SaveFormPosition(Self, Self.ClassName);
+end;
+
+procedure TDefineUsersForm.Test(Sender: TVTHeader; Column: TColumnIndex);
+begin
+  //
 end;
 
 procedure TDefineUsersForm.SetAdmin(AValue: TEpiAdmin);
@@ -296,7 +309,7 @@ begin
   FUsersVST.BeginUpdate;
   FUsersVST.RootNodeCount := Admin.Users.Count;
   FUsersVST.ReinitNode(nil, true);
-  FUsersVST.Header.AutoFitColumns(false, smaUseColumnOption);
+  FUsersVST.Header.AutoFitColumns(false, smaUseColumnOption, 0, 1);
   FUsersVST.EndUpdate;
 
   FUsersVST.FocusedNode := FUsersVST.GetFirst();
@@ -388,6 +401,7 @@ begin
         Options    := [coAllowClick, coEnabled, coParentBidiMode,
                        coParentColor, coResizable, coVisible,
                        coSmartResize, coAllowFocus];
+        Width      := 150;
       end;
 
       with Columns.Add do
@@ -398,6 +412,7 @@ begin
         Options    := [coAllowClick, coEnabled, coParentBidiMode,
                        coParentColor, coResizable, coVisible,
                        coSmartResize, coAllowFocus];
+        Width      := 150;
       end;
 
       MainColumn := 0;
@@ -410,6 +425,7 @@ begin
     OnBeforeItemErase := @UsersBeforeItemErase;
     OnGetText         := @UsersGetText;
     OnInitNode        := @UsersInitNode;
+    OnColumnResize := @Test;
     OnNodeDblClick    := @UsersNodeDblClick;
     OnKeyAction := @UsersKeyAction;
 
