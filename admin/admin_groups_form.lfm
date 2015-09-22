@@ -92,10 +92,10 @@ object DefineGroupsForm: TDefineGroupsForm
     TabOrder = 3
     Visible = False
     object BitBtn1: TBitBtn
-      Left = 809
+      Left = 808
       Height = 34
       Top = 8
-      Width = 73
+      Width = 74
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True
@@ -127,10 +127,10 @@ object DefineGroupsForm: TDefineGroupsForm
       object Label2: TLabel
         AnchorSideLeft.Control = Panel7
         AnchorSideLeft.Side = asrCenter
-        Left = 163
+        Left = 162
         Height = 19
         Top = 6
-        Width = 136
+        Width = 138
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         BorderSpacing.Bottom = 5

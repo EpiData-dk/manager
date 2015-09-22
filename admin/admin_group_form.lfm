@@ -17,10 +17,10 @@ object AdminGroupForm: TAdminGroupForm
     ClientWidth = 472
     TabOrder = 1
     object BitBtn1: TBitBtn
-      Left = 395
-      Height = 34
+      Left = 397
+      Height = 32
       Top = 8
-      Width = 57
+      Width = 55
       Anchors = [akTop, akRight]
       AutoSize = True
       Default = True
@@ -31,10 +31,10 @@ object AdminGroupForm: TAdminGroupForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 305
+      Left = 301
       Height = 34
       Top = 8
-      Width = 78
+      Width = 82
       Anchors = [akTop, akRight]
       AutoSize = True
       Cancel = True
@@ -191,7 +191,7 @@ object AdminGroupForm: TAdminGroupForm
       Left = 21
       Height = 15
       Top = 21
-      Width = 77
+      Width = 86
       BorderSpacing.Left = 20
       BorderSpacing.Top = 20
       Caption = 'Group Name:'

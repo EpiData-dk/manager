@@ -1,5 +1,5 @@
 object DefineEntryRightsForm: TDefineEntryRightsForm
-  Left = 916
+  Left = 773
   Height = 518
   Top = 313
   Width = 821
@@ -20,10 +20,10 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
     TabOrder = 0
     Visible = False
     object BitBtn1: TBitBtn
-      Left = 734
+      Left = 731
       Height = 34
       Top = 8
-      Width = 71
+      Width = 74
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True
@@ -55,10 +55,10 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
       object Label4: TLabel
         AnchorSideLeft.Control = Panel6
         AnchorSideLeft.Side = asrCenter
-        Left = 151
+        Left = 149
         Height = 19
         Top = 6
-        Width = 99
+        Width = 102
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         BorderSpacing.Bottom = 5
@@ -101,10 +101,10 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
       object Label2: TLabel
         AnchorSideLeft.Control = Panel7
         AnchorSideLeft.Side = asrCenter
-        Left = 148
+        Left = 147
         Height = 19
         Top = 6
-        Width = 115
+        Width = 117
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         BorderSpacing.Bottom = 5

@@ -1073,6 +1073,14 @@ begin
 
   if not Assigned(DocFile) then exit;
 
+  if (not Assigned(DocFile.AuthedUser)) then
+  begin
+    ShowMessage('This project is not using Extended Data Access!');
+    if LocalDoc then
+      DocFile.Free;
+    exit;
+  end;
+
   F := TDefineUsersForm.Create(Self);
   F.Admin := Authenticator.Admin;
   F.PasswordReset := true;

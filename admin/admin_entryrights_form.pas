@@ -160,7 +160,8 @@ procedure TDefineEntryRightsForm.AdminResetHook(const Sender: TEpiCustomBase;
   const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
   Data: Pointer);
 begin
-  if (EventGroup <> eegAdmin) and (TEpiAdminChangeEventType(EventType) <> eaceAdminResetting) then exit;
+  if (EventGroup <> eegAdmin) then exit;
+  if (TEpiAdminChangeEventType(EventType) <> eaceAdminResetting) then exit;
 
   RemoveHooks;
   Self.Free;
