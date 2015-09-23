@@ -143,7 +143,6 @@ type
     FieldTypePanel: TPanel;
     KeyLabel: TLabel;
     KeyPanel: TPanel;
-    NewAutoIncMenu: TMenuItem;
     NewBooleanMenu: TMenuItem;
     NewDMYTodayFieldMenu: TMenuItem;
     NewMDYTodayFieldMenu: TMenuItem;
@@ -169,6 +168,7 @@ type
     TodayDateSubMenu: TMenuItem;
     ValueLabelLabel: TLabel;
     ValueLabelPanel: TPanel;
+    AutoIncToolBtn: TToolButton;
     procedure AlignBottomActionExecute(Sender: TObject);
     procedure AlignLeftActionExecute(Sender: TObject);
     procedure AlignRightActionExecute(Sender: TObject);
