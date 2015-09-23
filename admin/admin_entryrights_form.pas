@@ -74,6 +74,7 @@ type
   end;
 
 procedure ShowDefineEntryRightsForm(Owner: TComponent; Document: TEpiDocument);
+procedure RestoreDefaultPosEntryRightsForm;
 
 implementation
 
@@ -92,6 +93,29 @@ begin
 
   DefineEntryRightsForm.Document := Document;
   DefineEntryRightsForm.Show;
+end;
+
+procedure RestoreDefaultPosEntryRightsForm;
+var
+  F: TForm;
+begin
+  if Assigned(DefineEntryRightsForm) then
+    F := DefineEntryRightsForm
+  else
+    F := TForm.Create(nil);
+
+  with F do
+  begin
+    LockRealizeBounds;
+    Width := 700;
+    Height := 700;
+    Left := 100;
+    Top := 100;
+    UnlockRealizeBounds;
+  end;
+  SaveFormPosition(F, F.ClassName);
+
+  if F <> DefineEntryRightsForm then F.Free;
 end;
 
 { TDefineEntryRightsForm }

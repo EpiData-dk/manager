@@ -1517,6 +1517,10 @@ begin
     Splitter.Free;
 
   RestoreDefaultPosValueLabelEditor2;
+  RestoreDefaultPosEntryRightsForm;
+  RestoreDefaultPosDefineUsersForm;
+  RestoreDefaultPosDefineGroupsForm;
+
   TProjectSettingsForm.RestoreDefaultPos;
   TKeyFieldsForm.RestoreDefaultPos;
   TAlignmentForm.RestoreDefaultPos;

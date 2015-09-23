@@ -48,10 +48,10 @@ object DefineUsersForm: TDefineUsersForm
     ClientWidth = 752
     TabOrder = 2
     object BitBtn1: TBitBtn
-      Left = 665
+      Left = 663
       Height = 34
       Top = 8
-      Width = 71
+      Width = 73
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True

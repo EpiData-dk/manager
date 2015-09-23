@@ -75,6 +75,7 @@ type
   end;
 
 procedure ShowDefineUsersForm(Owner: TComponent; Admin: TEpiAdmin);
+procedure RestoreDefaultPosDefineUsersForm;
 
 implementation
 
@@ -94,6 +95,29 @@ begin
 
   DefineUsersForm.Admin := Admin;
   DefineUsersForm.Show;
+end;
+
+procedure RestoreDefaultPosDefineUsersForm;
+var
+  F: TForm;
+begin
+  if Assigned(DefineUsersForm) then
+    F := DefineUsersForm
+  else
+    F := TForm.Create(nil);
+
+  with F do
+  begin
+    LockRealizeBounds;
+    Width := 700;
+    Height := 700;
+    Left := 100;
+    Top := 100;
+    UnlockRealizeBounds;
+  end;
+  SaveFormPosition(F, F.ClassName);
+
+  if F <> DefineUsersForm then F.Free;
 end;
 
 { TDefineUsersForm }

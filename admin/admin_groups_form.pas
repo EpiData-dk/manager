@@ -117,6 +117,7 @@ type
   end;
 
 procedure ShowDefineGroupsForm(Owner: TComponent; Admin: TEpiAdmin);
+procedure RestoreDefaultPosDefineGroupsForm;
 
 implementation
 
@@ -136,6 +137,29 @@ begin
 
   DefineGroupsForm.Admin := Admin;
   DefineGroupsForm.Show;
+end;
+
+procedure RestoreDefaultPosDefineGroupsForm;
+var
+  F: TForm;
+begin
+  if Assigned(DefineGroupsForm) then
+    F := DefineGroupsForm
+  else
+    F := TForm.Create(nil);
+
+  with F do
+  begin
+    LockRealizeBounds;
+    Width := 700;
+    Height := 700;
+    Left := 100;
+    Top := 100;
+    UnlockRealizeBounds;
+  end;
+  SaveFormPosition(F, F.ClassName);
+
+  if F <> DefineGroupsForm then F.Free;
 end;
 
 
