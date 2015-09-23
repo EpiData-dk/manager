@@ -1313,14 +1313,24 @@ begin
       else
         begin
           S :=
-            'This project is not yet setup for user administration!' + LineEnding +
+            'User/Group Administration adds complex access control to the project.' + LineEnding +
+            'If you only wish to encrypt data in the project press Cancel.' + LineEnding +
+            LineEnding +
+            'These steps are applied when You add User/Group Administration:' + LineEnding +
+            '1. Define the "main admin" (current step)' + LineEnding +
+            '   (login, name, password etc)' + LineEnding +
+            '2. When You Press "OK" the project file is saved' + LineEnding +
+            '3. The project is re-opened when you login as "main admin"' + LineEnding +
+            '4. You may then define groups and users.';
+
+{            'This project is not yet setup for user administration!' + LineEnding +
             LineEnding +
             'Next you will be asked to create a new user,' + LineEnding +
             'which will automatically be added to the' + LineEnding +
             'Administrators group!' + LineEnding +
             LineEnding +
             'Afterwards the project will save and re-open.' + LineEnding +
-            'Then login with the new user!';
+            'Then login with the new user!';    }
           MsgDlgType := mtInformation;
         end;
 
@@ -1349,10 +1359,19 @@ begin
         Exit;
       end;
 
+      Res := MessageDlg('Information',
+                        'User/Group Administration successfully added.' + LineEnding +
+                        'Re-open project as "main admin": ' + LineEnding +
+                        DocumentFile.FileName,
+                        mtInformation,
+                        mbOKCancel, 0,
+                        mbOK
+                       );
+
       EpiDocument.Admin.Created := Now;
       PostMessage(MainForm.Handle, LM_MAIN_CLOSEPROJECT, 1, 0);
-      PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, 0, 0);
-
+      if (Res = mrOK) then
+        PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, 0, 0);
       Exit;
     end;
 end;

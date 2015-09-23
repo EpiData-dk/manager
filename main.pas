@@ -277,11 +277,11 @@ type
     function  RunReportEx(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
   private
     { Messages }
-    procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
-    procedure LMOpenRecent(var Msg: TLMessage);   message LM_MAIN_OPENRECENT;
-    procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
-    procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
-    procedure LMImportToProject(var Msg: TLMessage); message LM_MAIN_IMPORTTONEW;
+    procedure LMOpenProject(var Msg: TLMessage);         message LM_MAIN_OPENPROJECT;
+    procedure LMOpenRecent(var Msg: TLMessage);          message LM_MAIN_OPENRECENT;
+    procedure LMNewProject(var Msg: TLMessage);          message LM_MAIN_NEWPROJECT;
+    procedure LMCloseProject(var Msg: TLMessage);        message LM_MAIN_CLOSEPROJECT;
+    procedure LMImportToProject(var Msg: TLMessage);     message LM_MAIN_IMPORTTONEW;
     // Message relaying...
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
@@ -1131,7 +1131,6 @@ begin
   if not Assigned(Docfile) then
     Exit;
 
-
   S := 'Resetting Users and Groups administration will de-crypt you project and' + LineEnding +
        'it will no longer be secured.' + LineEnding +
        LineEnding +
@@ -1145,6 +1144,15 @@ begin
                     mbNo);
 
   if Res = mrNo then exit;
+
+  S := 'By pressing OK you agree to remove User/Group Administration';
+  Res := MessageDlg('Confirm',
+                    S,
+                    mtConfirmation,
+                    mbOKCancel,
+                    0,
+                    mbCancel);
+  if Res = mrCancel then exit;
 
   Docfile.Document.Admin.ResetAll;
 

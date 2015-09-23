@@ -44,10 +44,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 528
+      Left = 523
       Height = 27
       Top = 6
-      Width = 66
+      Width = 65
       Action = ExportAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -59,7 +59,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 432
+      Left = 427
       Height = 27
       Top = 6
       Width = 81
@@ -73,10 +73,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 249
+      Left = 245
       Height = 27
       Top = 6
-      Width = 74
+      Width = 73
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Dataform'
@@ -88,7 +88,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 338
+      Left = 333
       Height = 27
       Top = 6
       Width = 79
@@ -104,10 +104,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 127
+      Left = 126
       Height = 27
       Top = 6
-      Width = 107
+      Width = 104
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -122,7 +122,7 @@ object MainForm: TMainForm
       Left = 11
       Height = 27
       Top = 6
-      Width = 101
+      Width = 100
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Se&lect Project'

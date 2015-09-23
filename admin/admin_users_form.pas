@@ -291,7 +291,9 @@ end;
 procedure TDefineUsersForm.UsersNodeDblClick(Sender: TBaseVirtualTree;
   const HitInfo: THitInfo);
 begin
-  ShowUserForm(UserFromNode(HitInfo.HitNode));
+  Application.QueueAsyncCall(@AsyncOpenUserForm, PtrInt(HitInfo.HitNode));
+
+//  ShowUserForm(UserFromNode(HitInfo.HitNode));
 end;
 
 procedure TDefineUsersForm.AsyncOpenUserForm(Data: PtrInt);
