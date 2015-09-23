@@ -34,9 +34,9 @@ type
     procedure DeleteUserActionExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
-    procedure Test(Sender: TVTHeader; Column: TColumnIndex);
   private
     FAdmin: TEpiAdmin;
+    procedure UpdateShortCuts;
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure FormChanged(Sender: TObject; Form: TCustomForm);
     procedure AdminResettingHook(const Sender: TEpiCustomBase;
@@ -56,8 +56,6 @@ type
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure UsersInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-    procedure UsersKeyAction(Sender: TBaseVirtualTree; var CharCode: Word;
-      var Shift: TShiftState; var DoDefault: Boolean);
     procedure UsersNodeDblClick(Sender: TBaseVirtualTree;
       const HitInfo: THitInfo);
 
@@ -83,7 +81,7 @@ implementation
 
 uses
   admin_authenticator, admin_user_form, settings2, settings2_var,
-  LCLType;
+  LCLType, shortcuts;
 
 var
   DefineUsersForm: TDefineUsersForm = nil;
@@ -195,6 +193,7 @@ begin
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, Self.ClassName);
 
+  UpdateShortCuts;
   ToolBar1.Enabled := (not PasswordReset);
   ToolBar1.Visible := (not PasswordReset);
   Panel4.Visible   := (PasswordReset);
@@ -209,9 +208,11 @@ begin
     SaveFormPosition(Self, Self.ClassName);
 end;
 
-procedure TDefineUsersForm.Test(Sender: TVTHeader; Column: TColumnIndex);
+procedure TDefineUsersForm.UpdateShortCuts;
 begin
-  //
+  AddUserAction.ShortCut    := AU_NewUser;
+  DeleteUserAction.ShortCut := AU_DeleteUser;
+  EditUserAction.ShortCut   := AU_EditUser;
 end;
 
 procedure TDefineUsersForm.SetAdmin(AValue: TEpiAdmin);
@@ -302,22 +303,10 @@ begin
   TEpiUser(Sender.GetNodeData(Node)^) := Admin.Users[Node^.Index];
 end;
 
-procedure TDefineUsersForm.UsersKeyAction(Sender: TBaseVirtualTree;
-  var CharCode: Word; var Shift: TShiftState; var DoDefault: Boolean);
-begin
-  if (CharCode = VK_RETURN) and (Shift = []) then
-  begin
-    Application.QueueAsyncCall(@AsyncOpenUserForm, PtrInt(FUsersVST.FocusedNode));
-    DoDefault := false;
-  end;
-end;
-
 procedure TDefineUsersForm.UsersNodeDblClick(Sender: TBaseVirtualTree;
   const HitInfo: THitInfo);
 begin
   Application.QueueAsyncCall(@AsyncOpenUserForm, PtrInt(HitInfo.HitNode));
-
-//  ShowUserForm(UserFromNode(HitInfo.HitNode));
 end;
 
 procedure TDefineUsersForm.AsyncOpenUserForm(Data: PtrInt);
@@ -451,9 +440,7 @@ begin
     OnBeforeItemErase := @UsersBeforeItemErase;
     OnGetText         := @UsersGetText;
     OnInitNode        := @UsersInitNode;
-    OnColumnResize := @Test;
     OnNodeDblClick    := @UsersNodeDblClick;
-    OnKeyAction := @UsersKeyAction;
 
     EndUpdate;
   end;

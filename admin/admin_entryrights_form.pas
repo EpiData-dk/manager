@@ -45,6 +45,7 @@ type
     procedure AddHooks;
     procedure RemoveHooks;
     procedure UpdateEntryRightsCaption;
+    procedure UpdateShortCuts;
 
 
   { Project Tree View }
@@ -230,6 +231,11 @@ const
   ACaption = 'Entry Rights: ';
 begin
   Label2.Caption := ACaption + FGroupRightsFrame.DataFileRelation.Datafile.Caption.Text;
+end;
+
+procedure TDefineEntryRightsForm.UpdateShortCuts;
+begin
+  // None so far...
 end;
 
 procedure TDefineEntryRightsForm.InitDataFormTree;

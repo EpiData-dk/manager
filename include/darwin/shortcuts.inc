@@ -98,5 +98,16 @@ begin
   A_DeleteUser                    := KeyToShortCut(VK_UNKNOWN, []);
   A_AddUserToGroup                := KeyToShortCut(VK_UNKNOWN, []);
   A_RemoveUserFromGroup           := KeyToShortCut(VK_UNKNOWN, []);
+
+  // Admin Groups:
+  AG_NewGroup                      := KeyToShortCut(VK_N, [ssMeta]);
+  AG_DeleteGroup                   := KeyToShortCut(VK_DELETE, []);
+  AG_EditGroup                     := KeyToShortCut(VK_RETURN, []);
+
+  // Admin Users:
+  AU_NewUser                       := KeyToShortCut(VK_N, [ssMeta]);
+  AU_DeleteUser                    := KeyToShortCut(VK_D, [ssMeta]);
+  AU_EditUser                      := KeyToShortCut(VK_RETURN, []);
+
 end;
 

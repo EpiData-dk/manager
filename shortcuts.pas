@@ -101,6 +101,18 @@ var
   A_AddUserToGroup, A_RemoveUserFromGroup:
     TShortCut;
 
+  // Admin Groups:
+  AG_NewGroup,
+  AG_DeleteGroup,
+  AG_EditGroup:
+    TShortCut;
+
+  // Admin Users:
+  AU_NewUser,
+  AU_DeleteUser,
+  AU_EditUser:
+    TShortCut;
+
 implementation
 
 uses

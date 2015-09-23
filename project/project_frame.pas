@@ -1213,14 +1213,14 @@ end;
 procedure TProjectFrame.UpdateShortCuts;
 begin
   // Project Frame
-  SaveProjectAction.ShortCut      := P_SaveProject;
-  SaveProjectAsAction.ShortCut    := P_SaveProjectAs;
-  NewDataFormAction.ShortCut      := P_NewDataForm;
-  DeleteDataFormAction.ShortCut   := P_DelDataForm;
-  ProjectSettingsAction.ShortCut  := P_ProjectSettings;
-  ValueLabelEditorAction.ShortCut := P_StartValueLabelEditor;
-  OpenProjectAction.ShortCut      := P_OpenProject;
-  KeyFieldsAction.ShortCut        := P_KeyFields;
+  SaveProjectAction.ShortCut       := P_SaveProject;
+  SaveProjectAsAction.ShortCut     := P_SaveProjectAs;
+  NewDataFormAction.ShortCut       := P_NewDataForm;
+  DeleteDataFormAction.ShortCut    := P_DelDataForm;
+  ProjectSettingsAction.ShortCut   := P_ProjectSettings;
+  ValueLabelEditorAction.ShortCut  := P_StartValueLabelEditor;
+  OpenProjectAction.ShortCut       := P_OpenProject;
+  KeyFieldsAction.ShortCut         := P_KeyFields;
   DefineEntryRightsAction.ShortCut := P_EntryRight;
   DefineGroupsAction.ShortCut      := P_Groups;
   DefineUsersAction.ShortCut       := P_Users;
