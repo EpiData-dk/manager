@@ -170,6 +170,7 @@ object DefineGroupsForm: TDefineGroupsForm
       Caption = 'Edit Group'
       ImageIndex = 13
       OnExecute = EditGroupActionExecute
+      OnUpdate = EditGroupActionUpdate
     end
     object CloseFormAction: TAction
       Caption = 'Close'

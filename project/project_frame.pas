@@ -55,7 +55,6 @@ type
     DefineEntryRightsAction: TAction;
     DefineExtendedAccessAction: TAction;
     RemoveProjectPassword: TAction;
-    procedure DefineEntryRightsActionUpdate(Sender: TObject);
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
     procedure DocumentProgress(const Sender: TEpiCustomBase;
@@ -79,6 +78,7 @@ type
     procedure DefineUsersActionExecute(Sender: TObject);
     procedure DefineUsersActionUpdate(Sender: TObject);
     procedure DefineEntryRightsActionExecute(Sender: TObject);
+    procedure DefineEntryRightsActionUpdate(Sender: TObject);
     procedure DefineExtendedAccessActionExecute(Sender: TObject);
     procedure DefineExtendedAccessActionUpdate(Sender: TObject);
     procedure RemoveProjectPasswordExecute(Sender: TObject);
@@ -340,8 +340,8 @@ end;
 procedure TProjectFrame.DefineEntryRightsActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    Assigned(Authenticator.AuthedUser) and
-    Authenticator.IsAuthorized([earGroups]);
+    Assigned(Authenticator.AuthedUser){ and
+    Authenticator.IsAuthorized([earGroups])};
 end;
 
 procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
@@ -482,8 +482,8 @@ end;
 procedure TProjectFrame.DefineGroupsActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
-    Assigned(Authenticator.AuthedUser) and
-    Authenticator.IsAuthorized([earGroups]);
+    Assigned(Authenticator.AuthedUser){ and
+    Authenticator.IsAuthorized([earGroups])};
 end;
 
 procedure TProjectFrame.DefineGroupsActionExecute(Sender: TObject);

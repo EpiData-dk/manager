@@ -40,6 +40,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure CloseFormActionExecute(Sender: TObject);
+    procedure EditGroupActionUpdate(Sender: TObject);
   private
     FAdmin: TEpiAdmin;
     procedure UpdateShortCuts;
@@ -189,7 +190,9 @@ end;
 
 procedure TDefineGroupsForm.AddGroupActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := Authenticator.AuthedUserInGroup(CurrentGroup, true);
+  TAction(Sender).Enabled :=
+    Authenticator.AuthedUserInGroup(CurrentGroup, true) and
+    Authenticator.IsAuthorized([earGroups]);
 end;
 
 procedure TDefineGroupsForm.DeleteGroupActionUpdate(Sender: TObject);
@@ -201,7 +204,8 @@ begin
   TAction(Sender).Enabled :=
     (Group <> Admin.Admins) and
     Authenticator.AuthedUserInGroup(Group, true) and
-    (not Authenticator.AuthedUserInGroup(Group, false));
+    (not Authenticator.AuthedUserInGroup(Group, false)) and
+    Authenticator.IsAuthorized([earGroups]);
 end;
 
 procedure TDefineGroupsForm.DeleteGroupActionExecute(Sender: TObject);
@@ -255,6 +259,11 @@ end;
 procedure TDefineGroupsForm.CloseFormActionExecute(Sender: TObject);
 begin
   Close;
+end;
+
+procedure TDefineGroupsForm.EditGroupActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earGroups]);;
 end;
 
 procedure TDefineGroupsForm.UpdateShortCuts;
@@ -357,7 +366,7 @@ end;
 procedure TDefineGroupsForm.GroupNodeDblClick(Sender: TBaseVirtualTree;
   const HitInfo: THitInfo);
 begin
-  ShowGroupForm(GroupRelationFromNode(HitInfo.HitNode).Group);
+  EditGroupAction.Execute;
 end;
 
 procedure TDefineGroupsForm.GroupFocusChanged(Sender: TBaseVirtualTree;

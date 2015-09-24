@@ -226,13 +226,13 @@ var
 begin
   Group := RelationFromNode(Node).Group;
   result := (earViewData in Group.ManageRights) and
-            (Group <> Admin.Admins);
+            (Group <> Admin.Admins) and
+            (Authenticator.IsAuthorized([earGroups]));
 end;
 
 procedure TGroupsAssignFrame.NodeCheck(Node: PVirtualNode;
   Right: TEpiEntryRight; Value: Boolean);
 var
-//  CR: PCheckedRecord;
   G: TEpiGroup;
   GR: TEpiGroupRight;
 begin
