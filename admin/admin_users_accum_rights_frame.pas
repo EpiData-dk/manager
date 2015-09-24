@@ -261,7 +261,7 @@ begin
 
       with Columns.Add do
       begin
-        Text := 'Login';
+        Text := 'User Login';
         CheckBox   := false;
         CheckType  := ctNone;
         Options    := [coEnabled, coParentBidiMode,

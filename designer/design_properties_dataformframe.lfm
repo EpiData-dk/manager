@@ -402,7 +402,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
       end
     end
     object RightsTabSheet: TTabSheet
-      Caption = 'User Entry Rights'
+      Caption = 'Current Entry Rights'
     end
   end
 end

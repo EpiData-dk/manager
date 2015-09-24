@@ -17,10 +17,10 @@ object AdminUserForm: TAdminUserForm
     ClientWidth = 327
     TabOrder = 1
     object OkBtn: TBitBtn
-      Left = 250
+      Left = 251
       Height = 34
       Top = 8
-      Width = 57
+      Width = 56
       Anchors = [akTop, akRight]
       AutoSize = True
       Default = True
@@ -31,10 +31,10 @@ object AdminUserForm: TAdminUserForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 160
+      Left = 157
       Height = 34
       Top = 8
-      Width = 78
+      Width = 81
       Anchors = [akTop, akRight]
       AutoSize = True
       Cancel = True
@@ -57,7 +57,7 @@ object AdminUserForm: TAdminUserForm
       Left = 10
       Height = 15
       Top = 10
-      Width = 35
+      Width = 38
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Login:'
@@ -77,6 +77,8 @@ object AdminUserForm: TAdminUserForm
       BorderSpacing.Left = 10
       BorderSpacing.Top = 5
       BorderSpacing.Right = 10
+      OnChange = LoginEditChange
+      OnExit = LoginEditExit
       OnKeyDown = LoginEditKeyDown
       TabOrder = 0
     end
@@ -85,7 +87,7 @@ object AdminUserForm: TAdminUserForm
       Left = 10
       Height = 15
       Top = 120
-      Width = 38
+      Width = 43
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Name:'
@@ -113,7 +115,7 @@ object AdminUserForm: TAdminUserForm
       Left = 10
       Height = 15
       Top = 175
-      Width = 48
+      Width = 50
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Expires:'
@@ -147,10 +149,10 @@ object AdminUserForm: TAdminUserForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = ExpiresDateEdit
       AnchorSideRight.Side = asrBottom
-      Left = 263
+      Left = 257
       Height = 19
       Top = 173
-      Width = 53
+      Width = 59
       Anchors = [akTop, akRight]
       Caption = 'Never'
       TabOrder = 3
@@ -162,7 +164,7 @@ object AdminUserForm: TAdminUserForm
       Left = 10
       Height = 15
       Top = 230
-      Width = 60
+      Width = 65
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Last login:'
@@ -191,7 +193,7 @@ object AdminUserForm: TAdminUserForm
       Left = 10
       Height = 15
       Top = 65
-      Width = 57
+      Width = 59
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       Caption = 'Password'

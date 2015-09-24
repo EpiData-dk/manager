@@ -1131,8 +1131,9 @@ begin
   if not Assigned(Docfile) then
     Exit;
 
-  S := 'Resetting Users and Groups administration will de-crypt you project and' + LineEnding +
-       'it will no longer be secured.' + LineEnding +
+  S := 'This will remove:' + LineEnding +
+       ' 1: Encryption of the project structure and content' + LineEnding +
+       ' 2: Requirement of user login' + LineEnding +
        LineEnding +
        'Are you sure you want to remove User/Grop administration?';
 

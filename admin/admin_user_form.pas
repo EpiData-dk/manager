@@ -37,6 +37,8 @@ type
     procedure PasswordEditExit(Sender: TObject);
     procedure PasswordEditKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure LoginEditChange(Sender: TObject);
+    procedure LoginEditExit(Sender: TObject);
   private
     FHintWindow: THintWindow;
     procedure ShowHint(Const Ctrl: TControl; Const Msg: String);
@@ -69,6 +71,9 @@ var
 
 const
   ADMIN_USERFORM_NODE_KEY = 'ADMIN_USERFORM_NODE_KEY';
+  LoginNameInvalid = 'Login invalid or already exists!' + LineEnding +
+                     'The login must consist of the characters: A-Z, a-z and/or 0-9' + LineEnding +
+                     ' and must not be empty';
 
 
 { TAdminUserForm }
@@ -105,6 +110,20 @@ begin
       else
         PasswordEdit.PerformTab(true);
     end;
+end;
+
+procedure TAdminUserForm.LoginEditChange(Sender: TObject);
+begin
+  if User.ValidateRename(LoginEdit.Text, false) then
+    LoginEdit.Color := clDefault
+  else
+    LoginEdit.Color := clRed;
+end;
+
+procedure TAdminUserForm.LoginEditExit(Sender: TObject);
+begin
+  if (not User.ValidateRename(LoginEdit.Text, false)) then
+    ShowHint(LoginEdit, LoginNameInvalid);
 end;
 
 procedure TAdminUserForm.ShowHint(const Ctrl: TControl; const Msg: String);
@@ -176,11 +195,7 @@ begin
   if (not User.ValidateRename(LoginEdit.Text, false))
   then
     begin
-      ShowHint(
-        LoginEdit,
-        'Login invalid or already exists!' + LineEnding +
-        'The login must consist of the characters: A-Z, a-z and/or 0-9'
-      );
+      ShowHint(LoginEdit, LoginNameInvalid);
       ModalResult := mrNone;
       Exit;
     end;

@@ -1322,15 +1322,6 @@ begin
             '2. When You Press "OK" the project file is saved' + LineEnding +
             '3. The project is re-opened when you login as "main admin"' + LineEnding +
             '4. You may then define groups and users.';
-
-{            'This project is not yet setup for user administration!' + LineEnding +
-            LineEnding +
-            'Next you will be asked to create a new user,' + LineEnding +
-            'which will automatically be added to the' + LineEnding +
-            'Administrators group!' + LineEnding +
-            LineEnding +
-            'Afterwards the project will save and re-open.' + LineEnding +
-            'Then login with the new user!';    }
           MsgDlgType := mtInformation;
         end;
 
@@ -1361,7 +1352,7 @@ begin
 
       Res := MessageDlg('Information',
                         'User/Group Administration successfully added.' + LineEnding +
-                        'Re-open project as "main admin": ' + LineEnding +
+                        'Re-open project as "' + User.Login + '": ' + LineEnding +
                         DocumentFile.FileName,
                         mtInformation,
                         mbOKCancel, 0,
