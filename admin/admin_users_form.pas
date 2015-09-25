@@ -345,6 +345,7 @@ begin
   F.User  := User;
   F.Admin := Admin;
   F.PasswordReset := PasswordReset;
+  F.ShowGroups := (not PasswordReset);
   Result := F.ShowModal;
   F.Free;
 
