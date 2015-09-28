@@ -53,6 +53,7 @@ type
     procedure FocusUserForm(Data: PtrInt);
     procedure PasswordEditOpen(Data: PtrInt);
     procedure FormShow(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
 
   { Groups }
   private
@@ -87,7 +88,7 @@ implementation
 {$R *.lfm}
 
 uses
-  ButtonPanel, LazUTF8, math, admin_authenticator;
+  ButtonPanel, LazUTF8, math, admin_authenticator, settings2, settings2_var;
 
 var
   InputFormEdit: TEdit;
@@ -248,6 +249,12 @@ end;
 
 procedure TAdminUserForm.FormShow(Sender: TObject);
 begin
+  if ManagerSettings.SaveWindowPositions then
+    begin
+      LoadFormPosition(Self, SElf.ClassName);
+      LoadSplitterPosition(Splitter1, Self.ClassName);
+    end;
+
   // Fill content!
   LoginEdit.Text       := User.Login;
   LoginEdit.Enabled    := Authenticator.CheckAuthedUserHierachy(User, true) and
@@ -292,6 +299,15 @@ begin
 
   if LoginEdit.CanFocus then
     LoginEdit.SetFocus;
+end;
+
+procedure TAdminUserForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+  if ManagerSettings.SaveWindowPositions then
+    begin
+      SaveFormPosition(Self, Self.ClassName);
+      SaveSplitterPosition(Splitter1, Self.ClassName);
+    end;
 end;
 
 procedure TAdminUserForm.FillGroupList;
@@ -504,7 +520,8 @@ begin
     EndUpdate;
   end;
 
-  OnShow := @FormShow;
+  OnShow       := @FormShow;
+  OnCloseQuery := @FormCloseQuery;
 end;
 
 destructor TAdminUserForm.Destroy;

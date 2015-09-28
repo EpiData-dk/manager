@@ -292,6 +292,7 @@ type
     function   CheckEntryClientOpenFile(Const FileName: string): boolean;
     procedure  CheckHasOpenFile(Const MsgType: TMessageType; Const Msg: string; out Ack: TMessageType);
     {$ENDIF}
+    procedure MainExceptionHandler(Sender: TObject; E: Exception);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -1656,6 +1657,23 @@ begin
     Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
 end;
 
+procedure TMainForm.MainExceptionHandler(Sender: TObject; E: Exception);
+var
+  Saved: Boolean;
+begin
+  ShowMessage('An unknown error occured within the program!' + LineEnding +
+              'An attempt to save the project will be made after this message!' + LineEnding +
+              'The error message is: ' + LineEnding +
+              LineEnding +
+              E.Message
+  );
+
+  Saved := FActiveFrame.SaveProject(false);
+  DoCloseProject(true);
+
+//  ShowMessage('Error Occured: ' + LineEnding + E.Message);
+end;
+
 {$IFDEF EPI_IPC_TEST}
 procedure TMainForm.SetupIPC;
 begin
@@ -1741,6 +1759,8 @@ var
   Shift: TShiftState;
 begin
   inherited Create(TheOwner);
+
+  Application.OnException := @MainExceptionHandler;
 
   FActiveFrame := nil;
 

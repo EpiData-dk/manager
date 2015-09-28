@@ -83,7 +83,7 @@ var
   Item: TEpiManagerRight;
   S: String;
 begin
-  GrpBox := TCheckGroup(HintInfo^.HintControl);
+{  GrpBox := TCheckGroup(HintInfo^.HintControl);
   S := '';
 
   for I := 0 to GrpBox.Items.Count - 1 do
@@ -92,7 +92,7 @@ begin
     S += EpiManagerRightHint[Item] + LineEnding;
   end;
   TrimRight(S);
-  HintInfo^.HintStr := S;
+  HintInfo^.HintStr := S;    }
 end;
 
 procedure TAdminGroupForm.FillRights;
@@ -116,6 +116,12 @@ var
                                             // hence evaluation after "and" is NOT done.
       ChkGrp.CheckEnabled[I] := Authenticator.AuthedUserInGroup(ParentGroup, true) and
                                             (Item in ParentGroup.ManageRights);
+
+      with TCheckBox(ChkGrp.Controls[I]) do
+      begin
+        ShowHint := true;
+        Hint := EpiManagerRightHint[Item];
+      end;
     end;
   end;
 

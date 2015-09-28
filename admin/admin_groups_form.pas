@@ -68,6 +68,9 @@ type
     procedure GroupFocusChanged(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex);
     procedure GroupFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure GroupGetHint(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; var LineBreakStyle: TVTTooltipLineBreakStyle;
+      var HintText: String);
     procedure GroupGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure GroupInitNode(Sender: TBaseVirtualTree; ParentNode,
@@ -397,6 +400,26 @@ begin
   G.Free;
 end;
 
+procedure TDefineGroupsForm.GroupGetHint(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex;
+  var LineBreakStyle: TVTTooltipLineBreakStyle; var HintText: String);
+var
+  Group: TEpiGroup;
+  Item: TEpiManagerRight;
+begin
+  Group := GroupRelationFromNode(Node).Group;
+
+  case Column of
+    0: HintText := Group.Caption.Text;
+    1: begin
+         HintText := '';
+         for Item in Group.ManageRights do
+           HintText += EpiManagerRightCaptionsShort[Item] + ': ' +
+                       StringReplace(EpiManagerRightCaptions[Item], '&', '', [rfReplaceAll]) + LineEnding;
+       end;
+  end;
+end;
+
 procedure TDefineGroupsForm.GroupGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: String);
@@ -660,7 +683,7 @@ begin
     with Header do
     begin
       Options := [hoAutoResize, hoColumnResize, hoDblClickResize, hoVisible,
-                  hoFullRepaintOnResize];
+                  hoShowHint, hoFullRepaintOnResize];
 
       with Columns.Add do
       begin
@@ -691,6 +714,8 @@ begin
 
     Align := alClient;
     Parent := Panel2;
+    ShowHint := true;
+    HintMode := hmHint;
 
     OnBeforeItemErase := @GroupBeforeItemErase;
     OnNodeDblClick    := @GroupNodeDblClick;
@@ -699,6 +724,7 @@ begin
     OnInitChildren    := @GroupInitChildren;
     OnFreeNode        := @GroupFreeNode;
     OnGetText         := @GroupGetText;
+    OnGetHint         := @GroupGetHint;
 
     EndUpdate;
   end;

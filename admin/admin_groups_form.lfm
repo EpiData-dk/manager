@@ -1,7 +1,7 @@
 object DefineGroupsForm: TDefineGroupsForm
-  Left = 447
+  Left = 766
   Height = 502
-  Top = 305
+  Top = 364
   Width = 898
   Caption = 'Define Groups'
   ClientHeight = 502

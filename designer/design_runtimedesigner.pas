@@ -2359,8 +2359,10 @@ end;
 
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
-  FAddClass := 'TDesignMemo';
-  DoToogleBtn(Sender);
+{  FAddClass := 'TDesignMemo';
+  DoToogleBtn(Sender);}
+  AlignForm.Free;
+  AlignForm.Show;
 end;
 
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);

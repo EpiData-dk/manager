@@ -1,7 +1,7 @@
 object AdminUserForm: TAdminUserForm
-  Left = 529
+  Left = 772
   Height = 462
-  Top = 400
+  Top = 234
   Width = 618
   Caption = 'User Properties'
   ClientHeight = 462
