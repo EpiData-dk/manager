@@ -5,7 +5,7 @@ unit viewer_form;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   Buttons, StdCtrls;
 
 type
@@ -42,7 +42,7 @@ implementation
 {$R *.lfm}
 
 uses
-  LCLType, LCLIntf, settings2, settings2_var;
+  LCLType, LCLIntf, settings2, settings2_var, LazFileUtils;
 
 var
   CompList: TList;
@@ -122,7 +122,6 @@ begin
 
     F := TReportViewerForm.Create(Owner);
     F.Caption := Caption;
-    F.Memo1.BringToFront;
     F.Memo1.Lines.BeginUpdate;
     F.Memo1.Text := ReportString;
     F.Memo1.Lines.EndUpdate;
