@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, StdCtrls, epiversionutils;
+  Buttons, ComCtrls, StdCtrls, epiversionutils, LazUTF8;
 
 type
 
@@ -55,6 +55,9 @@ procedure AddToRecent(Const AFilename: string);
 procedure InitFont(Font: TFont);
 procedure RestoreSettingsDefaults;
 
+function GetNextPrefixCharacter: string;
+procedure PutBackPrefixCharacter(Const Character: string);
+
 implementation
 
 {$R *.lfm}
@@ -76,6 +79,9 @@ uses
 
   // project settings
   project_settings_field_frame, project_settings_general_frame, project_settings_autoincrement_frame;
+
+var
+  PrefixesUsed: TBits = nil;
 
 function GetIniFile(Const FileName: String): TIniFile;
 begin
@@ -722,7 +728,7 @@ const
     FloatDecimalLength:    2;
     StringFieldLength:     20;
     DefaultDateType:       ftDMYDate;
-    FieldNamePrefix:       'V';
+    FieldNamePrefix:       'VSTPABCDEFGHJIKLMN';
     //    FieldNamingStyle:      fnFirstWord;
 
     // Advanced:
@@ -861,6 +867,28 @@ begin
   ManagerSettings.EntryClientDirUTF8 := SysToUTF8(ExtractFilePath(UTF8ToSys(Application.ExeName)));
 end;
 
+function GetNextPrefixCharacter: string;
+var
+  I: LongInt;
+begin
+  if not Assigned(PrefixesUsed) then
+    PrefixesUsed := TBits.Create(Length(ManagerSettings.FieldNamePrefix));
+
+  I := PrefixesUsed.FindFirstBit(false);
+  PrefixesUsed.Bits[I] := true;
+  Result := ManagerSettings.FieldNamePrefix[I+1];
+end;
+
+procedure PutBackPrefixCharacter(const Character: string);
+var
+  I: SizeInt;
+begin
+  I := Pos(Character[1], ManagerSettings.FieldNamePrefix) - 1;
+  if (I < 0) then exit;
+
+  PrefixesUsed.Bits[I] := false;
+end;
+
 {$I initfont.inc}
 
 initialization
@@ -882,7 +910,8 @@ begin
     HeadingFont4.Free;
     HeadingFont5.Free;
   end;
-  RecentFiles.Free
+  RecentFiles.Free;
+  PrefixesUsed.Free;
 end;
 
 end.
