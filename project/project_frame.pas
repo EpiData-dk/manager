@@ -1436,7 +1436,10 @@ begin
 
   CreateCoreLogger;
 
+  {$IFNDEF EPI_DEBUG}
+  Splitter2.Visible := False;
   Panel1.Visible := false;
+  {$ENDIF}
 
   UpdateRecentFilesDropDown;
   LoadSplitterPosition(Splitter1, 'ProjectSplitter');
