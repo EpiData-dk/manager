@@ -331,9 +331,6 @@ uses
   epiv_checkversionform, export_form2,
   admin_authenticator, admin_users_form;
 
-type
-  TAccessActionList = class(TActionList);
-
 { TMainForm }
 
 procedure TMainForm.FormShow(Sender: TObject);
@@ -1771,8 +1768,7 @@ begin
     A.ShortCut := KeyToShortCut(VK_1 + (i - 1), Shift);
     A.Enabled  := false;
     A.OnExecute := @OpenRecentMenuItemClick;
-
-    TAccessActionList(RecentFilesActionList).AddAction(A);
+    A.ActionList := RecentFilesActionList;
   end;
 
   {$IFDEF EPI_IPC_TEST}
