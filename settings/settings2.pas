@@ -875,6 +875,12 @@ begin
     PrefixesUsed := TBits.Create(Length(ManagerSettings.FieldNamePrefix));
 
   I := PrefixesUsed.FindFirstBit(false);
+  if I < 0 then
+  begin
+    PrefixesUsed.Clearall;
+    I := 0;
+  end;
+
   PrefixesUsed.Bits[I] := true;
   Result := ManagerSettings.FieldNamePrefix[I+1];
 end;
