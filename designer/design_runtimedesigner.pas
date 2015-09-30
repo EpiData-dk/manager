@@ -127,22 +127,7 @@ type
     DeletePopupMenuItem: TMenuItem;
     DesignControlPopUpMenu: TPopupMenu;
     AuthorizedDesignerActionList: TActionList;
-    CurrentSectionLabel: TLabel;
-    CurrentSectionPanel: TPanel;
-    DefaultValueLabel: TLabel;
-    DefaultValuePanel: TPanel;
     EditPopupMenuItem: TMenuItem;
-    ExtendedLabel: TLabel;
-    ExtendedPanel: TPanel;
-    FieldNameLabel: TLabel;
-    FieldNamePanel: TPanel;
-    FieldsLabel: TLabel;
-    FieldsPanel: TPanel;
-    FieldsStaticLabel: TLabel;
-    FieldTypeLabel: TLabel;
-    FieldTypePanel: TPanel;
-    KeyLabel: TLabel;
-    KeyPanel: TPanel;
     NewBooleanMenu: TMenuItem;
     NewDMYTodayFieldMenu: TMenuItem;
     NewMDYTodayFieldMenu: TMenuItem;
@@ -154,20 +139,9 @@ type
     PasteControPopupMenuItem: TMenuItem;
     PopupMenuDivider1: TMenuItem;
     PopupMenuDivider2: TMenuItem;
-    RangeLabel: TLabel;
-    RangePanel: TPanel;
-    RecordsLabel: TLabel;
-    RecordsPanel: TPanel;
-    RecordStaticLabel: TLabel;
-    SectionsLabel: TLabel;
-    SectionsPanel: TPanel;
-    SectionsStaticLabel: TLabel;
     Splitter1: TSplitter;
-    StatusBarPanel: TPanel;
     TimeSubMenu: TMenuItem;
     TodayDateSubMenu: TMenuItem;
-    ValueLabelLabel: TLabel;
-    ValueLabelPanel: TPanel;
     AutoIncToolBtn: TToolButton;
     procedure AlignBottomActionExecute(Sender: TObject);
     procedure AlignLeftActionExecute(Sender: TObject);
@@ -2131,80 +2105,8 @@ end;
 
 procedure TRuntimeDesignFrame.UpdateStatusbar(ControlList: TJvDesignObjectArray
   );
-var
-  EpiCtrl: TEpiCustomControlItem;
 begin
-  if not Assigned(DataFile) then exit;
-
-  // New "statusbar"
-  RecordsLabel.Caption := IntToStr(DataFile.Size);
-  SectionsLabel.Caption := IntToStr(DataFile.Sections.Count);
-
-  // TODO : Better statusbar with multiple selected controls!
-  if (Length(ControlList) = 1) and (Supports(ControlList[0], IDesignEpiControl)) then
-    EpiCtrl := (ControlList[0] as IDesignEpiControl).EpiControl
-  else
-    EpiCtrl := nil;
-
-
-  if Assigned(EpiCtrl) then
-    if (EpiCtrl is TEpiSection) then
-      CurrentSectionLabel.Caption := TEpiSection(EpiCtrl).Caption.Text
-    else
-      CurrentSectionLabel.Caption := TEpiSection(EpiCtrl.Owner.Owner).Caption.Text
-  else
-    CurrentSectionLabel.Caption := 'N/A';
-
-  FieldsLabel.Caption := IntToStr(DataFile.Fields.Count);
-
-  if Assigned(EpiCtrl) then
-    FieldNameLabel.Caption := EpiCtrl.Name
-  else
-    FieldNameLabel.Caption := 'N/A';
-
-  if EpiCtrl is TEpiField then
-  with TEpiField(EpiCtrl) do
-  begin
-    FieldTypeLabel.Caption    := EpiTypeNames[FieldType];
-    DefaultValueLabel.Caption := BoolToStr(HasDefaultValue, DefaultValueAsString, '');
-    if Assigned(ValueLabelSet) then
-      ValueLabelLabel.Caption := ValueLabelSet.Name
-    else
-      ValueLabelLabel.Caption := '';
-    RangeLabel.Caption        := BoolToStr(Assigned(Ranges), 'Range', '');
-    KeyLabel.Caption          := BoolToStr(DataFile.KeyFields.ItemExistsByName(Name), 'Key', '');
-    ExtendedLabel.Caption     := BoolToStr(Assigned(Jumps),       'J', ' ') +
-                                 BoolToStr(RepeatValue,           'R', ' ') +
-                                 BoolToStr(EntryMode=emMustEnter, 'M', '')  +
-                                 BoolToStr(EntryMode=emNoEnter,   'N', '')  +
-                                 BoolToStr(EntryMode=emDefault,   ' ', '')  +
-                                 BoolToStr(ConfirmEntry,          'F', ' ') +
-                                 BoolToStr(Assigned(Calculation), 'C', ' ');
-  end else begin
-    FieldTypeLabel.Caption    := '';
-    DefaultValueLabel.Caption := '';
-    ValueLabelLabel.Caption   := '';
-    RangeLabel.Caption        := '';
-    KeyLabel.Caption          := '';
-    ExtendedLabel.Caption     := '';
-  end;
-
-  UpdateStatusbarSizes;
-end;
-
-procedure TRuntimeDesignFrame.UpdateStatusbarSizes;
-const
-  PanelBorder = 2;
-
-  function TW(Lbl: TLabel): Integer;
-  begin
-    Result := StatusBarPanel.Canvas.TextWidth(Lbl.Caption);
-  end;
-
-begin
-  RecordsPanel.Width  := RecordsLabel.Left + TW(RecordsLabel) + PanelBorder;
-  SectionsPanel.Width := SectionsLabel.Left + TW(SectionsLabel) + PanelBorder;
-  FieldsPanel.Width   := FieldsLabel.Left + TW(FieldsLabel) + PanelBorder;
+  //
 end;
 
 procedure TRuntimeDesignFrame.DeleteControls(ForceDelete: boolean);
