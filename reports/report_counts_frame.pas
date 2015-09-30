@@ -52,7 +52,7 @@ implementation
 
 uses
   settings2_var, epimiscutils, epidatafilerelations, report_counts,
-  epiadmin;
+  epidatafilestypes, epiadmin;
 
 { TCountByIdFrame }
 
@@ -126,7 +126,8 @@ begin
       begin
         CompareField := MainDF.Fields.FieldByName[F.Name];
         if not Assigned(CompareField) then continue;
-        if (CompareField.FieldType <> f.FieldType) then continue;
+//        if (CompareField.FieldType <> F.FieldType) then continue;
+        if not ((NativeFieldTypeSetFromFieldType(CompareField.FieldType) = NativeFieldTypeSetFromFieldType(f.FieldType))) then continue;
 
         CompareList.Add(CompareField);
       end;

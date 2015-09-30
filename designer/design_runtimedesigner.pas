@@ -253,6 +253,7 @@ type
     FSettingDataFile: boolean;
     FCreatingControl: boolean;
     FCheckingClipBoard: boolean;
+    FFieldNamePrefix: String;
     procedure PasteAsField(Ft: TEpiFieldType);
     function ControlFromEpiControl(EpiCtrl: TEpiCustomControlItem): TControl;
     function FindNewPostion(NewControl: TControlClass): TPoint;
@@ -453,7 +454,8 @@ end;
 
 function TRuntimeDesignFrame.FieldNamePrefix: string;
 begin
-  Result := ManagerSettings.FieldNamePrefix;
+  //Result := ManagerSettings.FieldNamePrefix;
+  Result := FFieldNamePrefix;
 end;
 
 procedure TRuntimeDesignFrame.HeadingBtnClick(Sender: TObject);
@@ -2944,6 +2946,8 @@ end;
 constructor TRuntimeDesignFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+  FFieldNamePrefix := settings2.GetNextPrefixCharacter;
+
   FDesignScrollBox := TJvDesignScrollBox.Create(self);
   FDesignScrollBox.Align := alClient;
   FDesignScrollBox.OnMouseWheel := @DesignScrollBoxMouseWheel;
@@ -2982,6 +2986,7 @@ end;
 
 destructor TRuntimeDesignFrame.Destroy;
 begin
+  settings2.PutBackPrefixCharacter(FFieldNamePrefix);
   if Assigned(DataFile) then
   begin
     DataFile.Sections.UnRegisterOnChangeHook(@SectionsChangeEvent);
