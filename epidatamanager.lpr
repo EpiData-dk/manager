@@ -8,9 +8,9 @@ uses
   {$ENDIF}
 
   {$IFDEF UNIX}
-    {$IFDEF EPI_USEIPC}
+//    {$IFDEF EPI_USEIPC}
     cthreads,
-    {$ENDIF}
+//    {$ENDIF}
   clocale,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
@@ -57,7 +57,7 @@ uses
   export_form2, admin_form, admin_user_form, admin_group_form,
   admin_authenticator, design_properties_groupassign_frame, core_logger,
   admin_groups_form, admin_users_form, admin_entryrights_form, 
-admin_users_accum_rights_frame;
+  admin_users_accum_rights_frame, project_statusbar;
 
 {$R *.res}
 

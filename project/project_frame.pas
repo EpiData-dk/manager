@@ -9,7 +9,7 @@ uses
   Dialogs, epidocument, epidatafiles, epicustombase, epidatafilerelations, epirelates,
   epiadmin, manager_messages, LMessages, Menus, StdCtrls, epiv_documentfile,
   types, design_runtimedesigner, project_types, epiv_projecttreeview_frame,
-  manager_types, core_logger;
+  manager_types, core_logger, project_statusbar, epiv_custom_statusbar;
 
 type
 
@@ -171,6 +171,12 @@ type
     procedure OpenRecentMenuItemClick(Sender: TObject);
     procedure UpdateRecentFilesDropDown;
 
+  { StatusBar }
+  private
+    FStatusBar: TManagerStatusBar;
+    procedure DesignerUpdateStatusbar(Sender: TObject;
+      SelectionList: TEpiCustomList);
+
   { Authorization }
   private
     function GetAuthorizedUser(Sender: TObject): TEpiUser;
@@ -184,7 +190,7 @@ type
     destructor  Destroy; override;
     procedure   CloseQuery(var CanClose: boolean);
     procedure   UpdateFrame;
-    procedure   UpdateStatusBar;
+    procedure   UpdateStatusBar(Condition: TEpiVCustomStatusbarUpdateCondition = sucDefault);
     function    OpenProject(Const AFileName: string): boolean;
     function    SaveProject(Const ForceSaveAs: boolean): boolean;
     function    Import(Const FromCB: boolean): boolean;
@@ -610,6 +616,7 @@ begin
   UpdateCaption;
   UpdateShortCuts;
   InitBackupTimer;
+  FStatusBar.DocFile := DocumentFile;
 
   Frame := TStudyUnitFrame.Create(self, EpiDocument.Study, (not DocumentFile.IsSaved));
   Frame.Align := alClient;
@@ -628,9 +635,13 @@ begin
   Application.ProcessMessages;
 
   try
-    EpiDocument.IncCycleNo;
     Result := DocumentFile.SaveFile(AFileName);
-    AddToRecent(AFileName);
+    if Result then
+    begin
+      EpiDocument.IncCycleNo;
+      AddToRecent(AFileName);
+      UpdateStatusBar(sucSave);
+    end;
   finally
     Screen.Cursor := crDefault;
     Application.ProcessMessages;
@@ -786,6 +797,7 @@ begin
   Result.Relation := Relation;
   Result.DeActivate(true);
   Result.OnGetUser := @GetAuthorizedUser;
+  Result.OnUpdateStatusBarContent := @DesignerUpdateStatusbar;
 end;
 
 procedure TProjectFrame.DoCreateNewProject;
@@ -963,7 +975,10 @@ begin
   FActiveFrame.AssignActionLinks;
 
   if ObjectType = otRelation then
-    AlignForm.DesignFrame := TRuntimeDesignFrame(AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
+    begin
+      AlignForm.DesignFrame := TRuntimeDesignFrame(AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
+      FStatusBar.Datafile := TEpiMasterRelation(AObject).Datafile;
+    end;
 
   MainForm.DataFormBtn.Enabled := ObjectType = otRelation;
 end;
@@ -1268,6 +1283,12 @@ begin
   end;
 end;
 
+procedure TProjectFrame.DesignerUpdateStatusbar(Sender: TObject;
+  SelectionList: TEpiCustomList);
+begin
+  FStatusBar.Selection := SelectionList;
+end;
+
 function TProjectFrame.GetAuthorizedUser(Sender: TObject): TEpiUser;
 begin
   result := FDocumentFile.AuthedUser;
@@ -1314,7 +1335,7 @@ begin
         begin
           S :=
             'User/Group Administration adds complex access control to the project.' + LineEnding +
-            'If you only wish to encrypt data in the project press Cancel.' + LineEnding +
+            'Press Cancel if you only wished to encrypt data' + LineEnding +
             LineEnding +
             'These steps are applied when You add User/Group Administration:' + LineEnding +
             '1. Define the "main admin" (current step)' + LineEnding +
@@ -1395,6 +1416,11 @@ end;
 constructor TProjectFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+
+  FStatusBar := TManagerStatusBar.Create(Self);
+  FStatusBar.Parent := self;
+  FStatusBar.Align := alBottom;
+  FStatusBar.LoadSettings;
 
   FrameCount := 1;
   FActiveFrame := nil;
@@ -1530,10 +1556,10 @@ begin
   EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
 end;
 
-procedure TProjectFrame.UpdateStatusBar;
+procedure TProjectFrame.UpdateStatusBar(
+  Condition: TEpiVCustomStatusbarUpdateCondition);
 begin
-  if Assigned(FActiveFrame) then
-    FActiveFrame.UpdateStatusbar;
+  FStatusBar.Update(Condition);
 end;
 
 function TProjectFrame.OpenProject(const AFileName: string): boolean;

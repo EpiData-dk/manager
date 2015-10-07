@@ -23,12 +23,18 @@ object StudyUnitFrame: TStudyUnitFrame
       ClientHeight = 570
       ClientWidth = 546
       object BitBtn1: TBitBtn
-        Left = 423
+        AnchorSideRight.Control = WelcomeSheet
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = WelcomeSheet
+        AnchorSideBottom.Side = asrBottom
+        Left = 434
         Height = 28
-        Top = 527
+        Top = 532
         Width = 102
         Anchors = [akRight, akBottom]
         AutoSize = True
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
         Caption = '&Close Page'
         Glyph.Data = {
           36040000424D3604000000000000360000002800000010000000100000000100
@@ -70,21 +76,31 @@ object StudyUnitFrame: TStudyUnitFrame
         TabOrder = 0
       end
       object Memo1: TMemo
-        Left = 29
-        Height = 495
-        Top = 21
-        Width = 496
+        AnchorSideLeft.Control = WelcomeSheet
+        AnchorSideTop.Control = WelcomeSheet
+        AnchorSideRight.Control = WelcomeSheet
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = BitBtn1
+        Left = 10
+        Height = 512
+        Top = 10
+        Width = 526
         Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Around = 10
         Lines.Strings = (
           'Create single dataforms by using "dataform 1"'
           ''
-          'For relational datasets:'
-          '   1 Add dataforms with + on left side'
-          '   2 Define Key variables on first form'
-          '   3 Then add other related dataforms: one by one'
-          '       (after adding key on each)'
-          '   4 Then define criteria to execute a relate during entry from top to down.'
-          '   5 You do so by looking at attributes of the field controlling the flow of data entry.'
+          'For relational datasets select "dataform 1":'
+          '   1 Define Key variables on the first form'
+          '   2 Add other related dataforms and extend keys: one by one '
+          '   3 On each dataform define the following in properties of that dataform:'
+          '           The type relation (1:1, 1:x or 1:many)'
+          '           Where to continue after each dataform'
+          '   4 Test in EntryClient that the flow between dataforms is correct'
+          '      If you wish to change keys start again from the beginning with a new project'
+          '   5 Finalize the details of each dataform for alle fields.'
+          '        Including jumps from specific fields to other dataforms.'
+          ''
         )
         ReadOnly = True
         ScrollBars = ssAutoBoth

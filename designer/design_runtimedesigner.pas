@@ -307,7 +307,6 @@ type
     procedure UpdateInterface;
     procedure SelectControl(AAction: TDesignSelectAction);
     procedure UpdateStatusbar(ControlList: TJvDesignObjectArray); overload;
-    procedure UpdateStatusbarSizes;
     procedure DeleteControls(ForceDelete: boolean);
     procedure RelationHook(Const Sender, Initiator: TEpiCustomBase;
       EventGroup: TEpiEventGroup;
@@ -336,10 +335,12 @@ type
     property MayHandleShortcuts: boolean read FMayHandleShortcuts write SetMayHandleShortcuts;
   private
     FOnGetUser: TGetUserEvent;
+    FOnUpdateStatusBarContent: TUpdateStatusBarContent;
     function DoGetUser: TEpiUser;
     procedure LMUserAuthorized(var Msg: TLMessage); message LM_DESIGNER_USER_AUTHED;
   public
     property OnGetUser: TGetUserEvent read FOnGetUser write FOnGetUser;
+    property OnUpdateStatusBarContent: TUpdateStatusBarContent read FOnUpdateStatusBarContent write FOnUpdateStatusBarContent;
   public
     procedure Activate;
     function DeActivate(aHide: boolean): boolean;
@@ -1989,6 +1990,7 @@ begin
   StringToolButton.Enabled  := Authorized;
   DateToolButton.Enabled    := Authorized;
   TimeToolButton.Enabled    := Authorized;
+  AutoIncToolBtn.Enabled    := Authorized;
   OtherToolButton.Enabled   := Authorized;
   HeadingToolButton.Enabled := Authorized;
   SectionToolButton.Enabled := Authorized;
@@ -2105,8 +2107,20 @@ end;
 
 procedure TRuntimeDesignFrame.UpdateStatusbar(ControlList: TJvDesignObjectArray
   );
+var
+  Intf: IDesignEpiControl;
+  L: TEpiCustomList;
+  I: Integer;
 begin
-  //
+  if (not Assigned(OnUpdateStatusBarContent)) then
+    Exit;
+
+  L := TEpiCustomList.Create(nil);
+  for I := 0 to Length(ControlList) - 1 do
+    if Supports(ControlList[i], IDesignEpiControl, Intf) then
+      L.AddItem(Intf.EpiControl);
+
+  OnUpdateStatusBarContent(Self, L);
 end;
 
 procedure TRuntimeDesignFrame.DeleteControls(ForceDelete: boolean);

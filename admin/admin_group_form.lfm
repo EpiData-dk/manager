@@ -69,7 +69,7 @@ object AdminGroupForm: TAdminGroupForm
       BorderSpacing.Left = 20
       BorderSpacing.Top = 10
       BorderSpacing.Right = 20
-      Caption = 'Data Access:'
+      Caption = 'Data Access Manager:'
       ChildSizing.LeftRightSpacing = 6
       ChildSizing.TopBottomSpacing = 6
       ChildSizing.EnlargeHorizontal = crsHomogenousChildResize

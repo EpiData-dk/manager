@@ -190,7 +190,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object OtherToolButton: TToolButton
-        Left = 186
+        Left = 206
         Hint = 'Other Field Types...'
         Top = 1
         Caption = 'OtherToolButton'
@@ -350,7 +350,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object AutoIncToolBtn: TToolButton
         Tag = 2
-        Left = 206
+        Left = 186
         Hint = 'New Auto-Increment Field'
         Top = 1
         Caption = 'AutoIncToolBtn'

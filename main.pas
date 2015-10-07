@@ -1757,7 +1757,7 @@ var
 begin
   inherited Create(TheOwner);
 
-  Application.OnException := @MainExceptionHandler;
+//  Application.OnException := @MainExceptionHandler;
 
   FActiveFrame := nil;
 
