@@ -616,7 +616,11 @@ begin
   UpdateCaption;
   UpdateShortCuts;
   InitBackupTimer;
+  FStatusBar.Visible := true;
   FStatusBar.DocFile := DocumentFile;
+
+  Splitter1.Visible    := true;
+  ProjectPanel.Visible := true;
 
   Frame := TStudyUnitFrame.Create(self, EpiDocument.Study, (not DocumentFile.IsSaved));
   Frame.Align := alClient;
@@ -1420,6 +1424,7 @@ begin
   FStatusBar := TManagerStatusBar.Create(Self);
   FStatusBar.Parent := self;
   FStatusBar.Align := alBottom;
+  FStatusBar.Visible := false;
   FStatusBar.LoadSettings;
 
   FrameCount := 1;

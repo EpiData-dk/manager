@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 678
   ClientWidth = 991
   TabOrder = 0
-  DesignLeft = 689
-  DesignTop = 281
+  DesignLeft = 603
+  DesignTop = 190
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
@@ -19,6 +19,7 @@ object ProjectFrame: TProjectFrame
     ClientHeight = 658
     ClientWidth = 187
     TabOrder = 0
+    Visible = False
     object ToolBar1: TToolBar
       Left = 0
       Height = 22
@@ -142,6 +143,7 @@ object ProjectFrame: TProjectFrame
     Top = 0
     Width = 5
     Beveled = True
+    Visible = False
   end
   object Panel1: TPanel
     Left = 726
@@ -160,7 +162,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 32
-      Width = 42
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
     end
@@ -168,7 +170,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 72
-      Width = 42
+      Width = 43
       Caption = 'Label2'
       ParentColor = False
     end
@@ -176,7 +178,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 104
-      Width = 42
+      Width = 43
       Caption = 'Label3'
       ParentColor = False
     end
