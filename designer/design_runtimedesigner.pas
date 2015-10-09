@@ -2303,7 +2303,7 @@ end;
 
 procedure TRuntimeDesignFrame.ViewDatasetActionUpdate(Sender: TObject);
 begin
-  TAction(Sender).Enabled := Authenticator.IsAuthorized([earViewData]);
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earExtentendedData]);
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);

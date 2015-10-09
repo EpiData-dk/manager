@@ -176,7 +176,6 @@ begin
   DataAccessChkGrp.OnShowHint := @FormShowHint;
   AddItem(DataAccessChkGrp, earExport);
   AddItem(DataAccessChkGrp, earExtentendedData);
-  AddItem(DataAccessChkGrp, earViewData);
   AddItem(DataAccessChkGrp, earReport);
 
   OnShow := @FormShow;

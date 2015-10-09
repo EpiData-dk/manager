@@ -225,8 +225,7 @@ var
   Group: TEpiGroup;
 begin
   Group := RelationFromNode(Node).Group;
-  result := (earViewData in Group.ManageRights) and
-            (Group <> Admin.Admins) and
+  result := (Group <> Admin.Admins) and
             (Authenticator.IsAuthorized([earGroups]));
 end;
 
@@ -343,16 +342,6 @@ var
   GR: TEpiGroupRight;
   Group: TEpiGroup;
 begin
-  // A group that has no VIEW rights on data, cannot be assigned a dataform
-  // entry right. Paint the cells accordingly.
-  Group := RelationFromNode(Node).Group;
-  if not (earViewData in Group.ManageRights) then
-    begin
-      TargetCanvas.Brush.Color := clMedGray;
-      TargetCanvas.FillRect(CellRect);
-      Exit;
-    end;
-
   if (not DataFileRelation.InheritsFrom(TEpiDetailRelation)) or
      (Column = 0)
   then
@@ -360,6 +349,7 @@ begin
 
   if (CellPaintMode = cpmGetContentMargin) then Exit;
 
+  Group := RelationFromNode(Node).Group;
   Detail := TEpiDetailRelation(DataFileRelation);
   MasterDF := Detail.MasterRelation.Datafile;
   MasterGRs := MasterDF.GroupRights;
