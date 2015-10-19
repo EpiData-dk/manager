@@ -779,7 +779,7 @@ begin
   if Relation.InheritsFrom(TEpiDetailRelation)
   then
     begin
-      Relation.Datafile.AfterRecordState := arsNewRecord;
+      Relation.Datafile.AfterRecordState := arsReturnToParent;
       BindKeyFields(TEpiDetailRelation(Relation));
     end;
 
