@@ -39,6 +39,11 @@ type
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure SetDataFile(AValue: TEpiDataFile);
 
+
+    { Hooks }
+  private
+    procedure SetDatafileHooks;
+    procedure RemoveDatafileHooks;
     procedure DataFileFreeHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
@@ -169,29 +174,40 @@ end;
 procedure TUsersAccumulatedRightsFrame.SetDataFile(AValue: TEpiDataFile);
 begin
   if FDataFile = AValue then Exit;
-
-  if Assigned(FDataFile) then
-  begin
-    FDataFile.UnRegisterOnChangeHook(@DataFileFreeHook);
-    FDataFile.GroupRights.UnRegisterOnChangeHook(@GroupRightsEventHook);
-  end;
-
+  RemoveDatafileHooks;
   FDataFile := AValue;
+  SetDatafileHooks;
+  InitUserRightsVST;
+end;
 
+procedure TUsersAccumulatedRightsFrame.SetDatafileHooks;
+begin
   if Assigned(FDataFile) then
   begin
     FDataFile.RegisterOnChangeHook(@DataFileFreeHook, true);
     FDataFile.GroupRights.RegisterOnChangeHook(@GroupRightsEventHook, true);
   end;
+end;
 
-  InitUserRightsVST;
+procedure TUsersAccumulatedRightsFrame.RemoveDatafileHooks;
+begin
+  if Assigned(FDataFile) then
+  begin
+    FDataFile.UnRegisterOnChangeHook(@DataFileFreeHook);
+    FDataFile.GroupRights.UnRegisterOnChangeHook(@GroupRightsEventHook);
+  end;
 end;
 
 procedure TUsersAccumulatedRightsFrame.DataFileFreeHook(
   const Sender: TEpiCustomBase; const Initiator: TEpiCustomBase;
   EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
 begin
-  //
+  if (Initiator <> FDataFile) then exit;
+  if (EventGroup <> eegCustomBase) then exit;
+  if (TEpiCustomChangeEventType(EventType) <> ecceDestroy) then exit;
+
+  RemoveDatafileHooks;
+  FDataFile := nil;
 end;
 
 procedure TUsersAccumulatedRightsFrame.GroupRightsEventHook(
@@ -318,7 +334,7 @@ end;
 destructor TUsersAccumulatedRightsFrame.Destroy;
 begin
   if Assigned(Admin) then Admin.Users.UnRegisterOnChangeHook(@UsersEventHook);
-  if Assigned(DataFile) then DataFile.GroupRights.UnRegisterOnChangeHook(@GroupRightsEventHook);
+  RemoveDatafileHooks;
 
   inherited Destroy;
 end;
