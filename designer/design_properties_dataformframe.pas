@@ -552,8 +552,7 @@ begin
   // ********************
   //  AfterRecord
   // ********************
-  if FRelatesComponentsList.Count > 0 then
-    DataFile.Relates.ClearAndFree;
+  DataFile.Relates.ClearAndFree;
 
   for i := 0 to FRelatesComponentsList.Count - 1 do
   with Datafile.Relates do
