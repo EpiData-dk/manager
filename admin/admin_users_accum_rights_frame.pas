@@ -39,6 +39,9 @@ type
     procedure SetAdmin(AValue: TEpiAdmin);
     procedure SetDataFile(AValue: TEpiDataFile);
 
+    procedure DataFileFreeHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
     procedure GroupRightsEventHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
@@ -61,7 +64,6 @@ uses
   Themes, admin_authenticator;
 
 { TUsersAccumulatedRightsFrame }
-
 
 procedure TUsersAccumulatedRightsFrame.InitUserRightsVST;
 begin
@@ -169,14 +171,27 @@ begin
   if FDataFile = AValue then Exit;
 
   if Assigned(FDataFile) then
+  begin
+    FDataFile.UnRegisterOnChangeHook(@DataFileFreeHook);
     FDataFile.GroupRights.UnRegisterOnChangeHook(@GroupRightsEventHook);
+  end;
 
   FDataFile := AValue;
 
   if Assigned(FDataFile) then
+  begin
+    FDataFile.RegisterOnChangeHook(@DataFileFreeHook, true);
     FDataFile.GroupRights.RegisterOnChangeHook(@GroupRightsEventHook, true);
+  end;
 
   InitUserRightsVST;
+end;
+
+procedure TUsersAccumulatedRightsFrame.DataFileFreeHook(
+  const Sender: TEpiCustomBase; const Initiator: TEpiCustomBase;
+  EventGroup: TEpiEventGroup; EventType: Word; Data: Pointer);
+begin
+  //
 end;
 
 procedure TUsersAccumulatedRightsFrame.GroupRightsEventHook(
