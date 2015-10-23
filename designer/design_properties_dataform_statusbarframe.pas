@@ -25,18 +25,22 @@ type
     GroupBox1: TGroupBox;
     Edit2: TEdit;
     procedure AddNewLineClick(Sender: TObject);
+    procedure Edit2EditingDone(Sender: TObject);
     procedure RemoveLineClick(Sender: TObject);
   private
     { Lines }
     FStatubarComponentsList: TList;
-    function DoAddNewContentLine: Pointer;
-    procedure UpdateLines;
+    function  DoAddNewContentLine: Pointer;
+    procedure ClearGUI;
+    procedure UpdateGUI;
   private
     { Combo/Edit }
     procedure AddTypesToCombo(Combo: TComboBox);
     procedure AddFieldsToCombo(Combo: TComboBox);
     procedure ContentDropDownSelect(Sender: TObject);
     procedure TypeDropDownSelect(Sender: TObject);
+    procedure UpdateContentType(TypeCombo: TComboBox);
+    procedure ContentEditDone(Sender: TObject);
   private
     { Content String }
     procedure UpdateContentString;
@@ -50,6 +54,7 @@ type
       const Msg: String);
   private
     { Other }
+    FValidated: boolean;
     FDataFile: TEpiDataFile;
     procedure SetDataFile(AValue: TEpiDataFile);
   public
@@ -80,6 +85,14 @@ type
 procedure TStatusbarContentFrame.AddNewLineClick(Sender: TObject);
 begin
   DoAddNewContentLine;
+  if (FDataFile.Fields.Count > 0) then
+    UpdateContentString;
+end;
+
+procedure TStatusbarContentFrame.Edit2EditingDone(Sender: TObject);
+begin
+  if TEdit(Sender).Modified then
+    UpdateGUI;
 end;
 
 procedure TStatusbarContentFrame.RemoveLineClick(Sender: TObject);
@@ -120,6 +133,7 @@ begin
     Style := csDropDownList;
     Parent := Self;
     OnSelect := @ContentDropDownSelect;
+    ItemIndex := 0;
   end;
 
   ContentEdit := TEdit.Create(Self);
@@ -130,6 +144,7 @@ begin
     AnchorVerticalCenterTo(TypeDropDown);
     Text := '';
     Parent := Self;
+    OnEditingDone := @ContentEditDone;
   end;
 
   AddNewLine.AnchorVerticalCenterTo(TypeDropDown);
@@ -146,13 +161,31 @@ begin
   RRec^.ContentEdit     := ContentEdit;
 
   FStatubarComponentsList.Add(RRec);
-  TypeDropDownSelect(TypeDropDown);
+  UpdateContentType(TypeDropDown);
   Result := RRec;
 end;
 
-procedure TStatusbarContentFrame.UpdateLines;
+procedure TStatusbarContentFrame.ClearGUI;
 begin
-  FParser.ParseString(FDataFile.StatusbarContentString);
+  // Clear all previous visual controls
+  // - remove akTop, since AnchorVertical uses akTop and not akBottom.
+  AddNewLine.Anchors := AddNewLine.Anchors - [akTop];
+  AddNewLine.AnchorToNeighbour(akBottom, 3, TopBevel);
+  RemoveLine.Enabled := False;
+  while FStatubarComponentsList.Count > 0 do
+    with PStatusbarComponents(FStatubarComponentsList.Last)^ do
+    begin
+      TypeDropDown.Free;
+      ContentDropDown.Free;
+      ContentEdit.Free;
+      FStatubarComponentsList.Delete(FStatubarComponentsList.Count-1);
+    end;
+end;
+
+procedure TStatusbarContentFrame.UpdateGUI;
+begin
+  ClearGUI;
+  FValidated := FParser.ParseString(Edit2.Text);
 end;
 
 procedure TStatusbarContentFrame.AddTypesToCombo(Combo: TComboBox);
@@ -161,33 +194,45 @@ begin
 
   with Combo.Items do
   begin
-    AddObject('Data',    TObject(1));
-    AddObject('Text',    TObject(2));
-    AddObject('Field',   TObject(3));
-    AddObject('Caption', TObject(4));
+    AddObject('Data',    TObject(0));
+    AddObject('Text',    TObject(1));
+    AddObject('Field',   TObject(2));
+    AddObject('Caption', TObject(3));
   end;
 end;
 
 procedure TStatusbarContentFrame.AddFieldsToCombo(Combo: TComboBox);
+var
+  F: TEpiField;
 begin
+  Combo.Items.BeginUpdate;
 
+  for F in DataFile.Fields do
+    Combo.AddItem(F.Name, F);
+
+  Combo.Items.EndUpdate;
 end;
 
 procedure TStatusbarContentFrame.ContentDropDownSelect(Sender: TObject);
 begin
-
+  UpdateContentString;
 end;
 
 procedure TStatusbarContentFrame.TypeDropDownSelect(Sender: TObject);
+begin
+  UpdateContentType(TComboBox(Sender));
+  UpdateContentString;
+end;
+
+procedure TStatusbarContentFrame.UpdateContentType(TypeCombo: TComboBox);
 var
-  Combo: TComboBox absolute Sender;
   SBType: PtrInt;
   Rec: PStatusbarComponents;
 begin
-  SBType := PtrInt(Combo.Items.Objects[Combo.ItemIndex]);
-  Rec    := PStatusbarComponents(FStatubarComponentsList[Combo.Tag]);
+  SBType := PtrInt(TypeCombo.Items.Objects[TypeCombo.ItemIndex]);
+  Rec    := PStatusbarComponents(FStatubarComponentsList[TypeCombo.Tag]);
 
-  if SBType = 2 then
+  if SBType = 1 then
     begin
       Rec^.ContentEdit.Visible := true;
       Rec^.ContentDropDown.Visible := false;
@@ -199,9 +244,32 @@ begin
     end;
 end;
 
-procedure TStatusbarContentFrame.UpdateContentString;
+procedure TStatusbarContentFrame.ContentEditDone(Sender: TObject);
 begin
+  UpdateContentString;
+end;
 
+procedure TStatusbarContentFrame.UpdateContentString;
+var
+  S: String;
+  I: Integer;
+  Rec: PStatusbarComponents;
+begin
+  S := '';
+  for I := 0 to FStatubarComponentsList.Count - 1 do
+    begin
+      Rec := PStatusbarComponents(FStatubarComponentsList[i]);
+      with Rec^ do
+      begin
+        case TypeDropDown.ItemIndex of
+          0: S += '%d(' + TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex]).Name + ')';
+          1: S += ContentEdit.Text;
+          2: S += '%f(' + TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex]).Name + ')';
+          3: S += '%c(' + TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex]).Name + ')';
+        end;
+      end;
+    end;
+  Edit2.Text := S;
 end;
 
 procedure TStatusbarContentFrame.ParserIdentifier(Sender: TObject;
@@ -214,9 +282,9 @@ begin
   Rec := PStatusbarComponents(DoAddNewContentLine);
 
   case IdentType of
-    esiData:    Rec^.TypeDropDown.ItemIndex := 1;
+    esiData:    Rec^.TypeDropDown.ItemIndex := 0;
     esiField:   Rec^.TypeDropDown.ItemIndex := 2;
-    esiCaption: Rec^.TypeDropDown.ItemIndex := 4;
+    esiCaption: Rec^.TypeDropDown.ItemIndex := 3;
   end;
   TypeDropDownSelect(Rec^.TypeDropDown);
 
@@ -233,7 +301,7 @@ var
   Rec: PStatusbarComponents;
 begin
   Rec := PStatusbarComponents(DoAddNewContentLine);
-  Rec^.TypeDropDown.ItemIndex := 3;
+  Rec^.TypeDropDown.ItemIndex := 1;
   TypeDropDownSelect(Rec^.TypeDropDown);
 
   Rec^.ContentEdit.Text := S;
@@ -258,8 +326,9 @@ begin
   inherited Create(TheOwner);
 
   FStatubarComponentsList := TList.Create;
-  FParser                 := TEpiStatusbarStringParser.Create;
+  FValidated              := true;
 
+  FParser                 := TEpiStatusbarStringParser.Create;
   FParser.OnIdentifierFound := @ParserIdentifier;
   FParser.OnTextFound       := @ParserText;
   FParser.OnParseError      := @ParserErrorIdentifier;
@@ -267,7 +336,8 @@ end;
 
 procedure TStatusbarContentFrame.UpdateContent;
 begin
-  UpdateLines;
+  Edit2.Text := FDataFile.StatusbarContentString;
+  UpdateGUI;
 end;
 
 procedure TStatusbarContentFrame.ApplyContent;
@@ -277,7 +347,8 @@ end;
 
 function TStatusbarContentFrame.ValidateContent: Boolean;
 begin
-  result := true;
+  UpdateGUI;
+  result := FValidated;
 end;
 
 end.

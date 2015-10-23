@@ -21,7 +21,7 @@ implementation
 
 uses
   settings2_var, epiv_statusbar_item_recordcount, epiv_statusbar_item_cycleno,
-  epiv_statusbar_item_currentuser, epiv_statusbar_item_savetime,
+  epiv_statusbar_item_currentuser,{ epiv_statusbar_item_savetime, }
   epiv_statusbar_item_selectionnames;
 
 { TManagerStatusBar }

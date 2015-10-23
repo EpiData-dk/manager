@@ -831,6 +831,7 @@
         <Filename Value="designer/design_properties_dataform_statusbarframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="StatusbarContentFrame"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit106>
     </Units>

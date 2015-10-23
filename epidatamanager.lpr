@@ -9,7 +9,7 @@ uses
 
   {$IFDEF UNIX}
 //    {$IFDEF EPI_USEIPC}
-    cthreads,
+//    cthreads,
 //    {$ENDIF}
   clocale,
   {$ENDIF}
