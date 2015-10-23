@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, Spin,
   MaskEdit, ComCtrls, ExtCtrls, design_properties_baseframe, design_types,
-  epicustombase, epidatafiles, epirelates, admin_users_accum_rights_frame;
+  epicustombase, epidatafiles, epirelates, admin_users_accum_rights_frame, types,
+  design_properties_dataform_statusbarframe;
 
 type
 
@@ -38,6 +39,27 @@ type
     BasicSheet: TTabSheet;
     AfterRecordSheet: TTabSheet;
     RightsTabSheet: TTabSheet;
+    TabSheet1: TTabSheet;
+    RelateOrderLabel1: TLabel;
+    GotoDataformLabel1: TLabel;
+    AddRelateBtn1: TSpeedButton;
+    RemoveRelateBtn1: TSpeedButton;
+    RelateValueBevel1: TBevel;
+    GotoDataFormBevel1: TBevel;
+    RelateTopBevel1: TBevel;
+    Bevel6: TBevel;
+    Bevel8: TBevel;
+    ComboBox1: TComboBox;
+    ComboBox2: TComboBox;
+    ComboBox3: TComboBox;
+    ComboBox4: TComboBox;
+    ComboBox5: TComboBox;
+    Edit1: TEdit;
+    ComboBox6: TComboBox;
+    ComboBox7: TComboBox;
+    GroupBox1: TGroupBox;
+    Edit2: TEdit;
+    StatusbarContentSheet: TTabSheet;
     procedure AddRelateBtnClick(Sender: TObject);
     procedure MaskEdit1EditingDone(Sender: TObject);
     procedure NoLimitRadioBtnClick(Sender: TObject);
@@ -55,10 +77,14 @@ type
     procedure UpdateAfterRecordRadioBoxVisibility;
     procedure UpdateAfterRecordRadioBoxContent;
   private
-    { Group Rights }
+    { Accumulated User Rights }
     FUserRightsFrame: TUsersAccumulatedRightsFrame;
-    procedure UpdateGroupAssignFrameVisibility;
-    procedure UpdateGroupAssignFrameContent;
+    procedure UpdateUserRightsFrameVisibility;
+    procedure UpdateUserRightsFrameContent;
+  private
+    { Statusbar }
+    FStatusbarContentFrame: TStatusbarContentFrame;
+    procedure UpdateStatusbarFrameContent;
   private
     procedure DataFileCaptionHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
@@ -384,16 +410,20 @@ begin
   FAfterRecordIndex := Idx;
 end;
 
-procedure TDataformPropertiesFrame.UpdateGroupAssignFrameVisibility;
+procedure TDataformPropertiesFrame.UpdateUserRightsFrameVisibility;
 begin
   RightsTabSheet.TabVisible := Assigned(Authenticator.AuthedUser);
-//  RightsTabSheet.Enabled := IsAuthorized(earGroups);
 end;
 
-procedure TDataformPropertiesFrame.UpdateGroupAssignFrameContent;
+procedure TDataformPropertiesFrame.UpdateUserRightsFrameContent;
 begin
   FUserRightsFrame.Admin    := Authenticator.Admin;
   FUserRightsFrame.DataFile := DataFile;
+end;
+
+procedure TDataformPropertiesFrame.UpdateStatusbarFrameContent;
+begin
+  FStatusbarContentFrame.DataFile := Datafile;
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
@@ -412,7 +442,7 @@ begin
   AfterRecordSheet.Enabled := IsAuthorized(earDefineProject);;
 
 
-  UpdateGroupAssignFrameVisibility;
+  UpdateUserRightsFrameVisibility;
 end;
 
 procedure TDataformPropertiesFrame.UpdateContent;
@@ -443,7 +473,8 @@ begin
   // ********************
   UpdateRelate;
   UpdateAfterRecordRadioBoxContent;
-  UpdateGroupAssignFrameContent;
+  UpdateUserRightsFrameContent;
+  UpdateStatusbarFrameContent;
 end;
 
 procedure TDataformPropertiesFrame.RegisterDataFileHooks;
@@ -519,11 +550,7 @@ begin
   //  AfterRecord
   // ********************
 
-  // ********************
-  //  Group Righst
-  // ********************
-  Result := Result {and
-            FGroupAssignFrame.ValidateChanges};
+  Result := Result and FStatusbarContentFrame.ValidateContent;
 end;
 
 procedure TDataformPropertiesFrame.InternalApply;
@@ -575,10 +602,8 @@ begin
     // "Master" datafile is ALWAYS new record state.
     DataFile.AfterRecordState := arsNewRecord;
 
-  // ********************
-  //  Group Righst
-  // ********************
-//  FGroupAssignFrame.ApplyChanges;
+
+  FStatusbarContentFrame.ApplyContent;
 end;
 
 procedure TDataformPropertiesFrame.SetReadOnly(AValue: Boolean);
@@ -602,6 +627,10 @@ begin
   FUserRightsFrame.Align := alClient;
   FUserRightsFrame.BorderSpacing.Around := 10;
   FUserRightsFrame.Parent := RightsTabSheet;
+
+  FStatusbarContentFrame := TStatusbarContentFrame.Create(Self);
+  FStatusbarContentFrame.Align := alClient;
+  FStatusbarContentFrame.Parent := StatusbarContentSheet;
 end;
 
 destructor TDataformPropertiesFrame.Destroy;
