@@ -1,7 +1,7 @@
 object DataformPropertiesFrame: TDataformPropertiesFrame
-  Left = 2690
+  Left = 537
   Height = 578
-  Top = 59
+  Top = 230
   Width = 504
   ClientHeight = 578
   ClientWidth = 504
@@ -11,7 +11,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     Height = 578
     Top = 0
     Width = 504
-    ActivePage = TabSheet1
+    ActivePage = StatusbarContentSheet
     Align = alClient
     TabIndex = 3
     TabOrder = 0
@@ -28,14 +28,14 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         Left = 10
         Height = 76
         Top = 117
-        Width = 519
+        Width = 478
         Anchors = [akTop, akLeft, akRight]
         AutoSize = True
         BorderSpacing.Top = 10
         Caption = 'Number of child records:'
         ChildSizing.ControlsPerLine = 1
         ClientHeight = 59
-        ClientWidth = 515
+        ClientWidth = 474
         TabOrder = 2
         object NoLimitRadioBtn: TRadioButton
           Left = 0
@@ -91,7 +91,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         Left = 10
         Height = 25
         Top = 82
-        Width = 519
+        Width = 478
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 2
@@ -121,7 +121,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
         Left = 10
         Height = 25
         Top = 30
-        Width = 519
+        Width = 478
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
@@ -404,390 +404,8 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
     object RightsTabSheet: TTabSheet
       Caption = 'Current Entry Rights'
     end
-    object TabSheet1: TTabSheet
-      Caption = 'Statusbar'
-      ClientHeight = 545
-      ClientWidth = 498
-      object RelateOrderLabel1: TLabel
-        AnchorSideLeft.Control = TabSheet1
-        AnchorSideTop.Control = TabSheet1
-        AnchorSideBottom.Control = RelateTopBevel1
-        Left = 10
-        Height = 15
-        Top = 21
-        Width = 32
-        Anchors = [akLeft, akBottom]
-        BorderSpacing.Left = 10
-        BorderSpacing.Bottom = 5
-        Caption = 'Type:'
-        ParentColor = False
-      end
-      object GotoDataformLabel1: TLabel
-        AnchorSideLeft.Control = RelateValueBevel1
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideTop.Control = RelateOrderLabel1
-        AnchorSideTop.Side = asrCenter
-        Left = 152
-        Height = 15
-        Top = 21
-        Width = 51
-        BorderSpacing.Left = 5
-        BorderSpacing.Right = 5
-        Caption = 'Content'
-        ParentColor = False
-      end
-      object AddRelateBtn1: TSpeedButton
-        AnchorSideTop.Side = asrCenter
-        AnchorSideRight.Control = RemoveRelateBtn1
-        AnchorSideBottom.Control = RelateTopBevel1
-        Left = 446
-        Height = 22
-        Top = 16
-        Width = 22
-        Anchors = [akRight, akBottom]
-        BorderSpacing.Right = 3
-        BorderSpacing.Bottom = 3
-        Glyph.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFC00FFFFF700806D5EFF7B604BFF7D624DFF806D
-          5EFFFFFFF700FFFFFC00FDFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFB00FFFFF2007C614CFFECCEB5FFECCEB5FF7C61
-          4CFFFFFFF200FFFFFB00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFC00FFFFFB00FFFFF500FFFFED00856346FFEFCFB2FFCBAB8EFF8563
-          46FFFFFFEB00FFFFF500FFFFFB00FFFFFC00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFF800FFFFF200FFFFED00FFFFE6008E6342FFF6D0AEFFD2AC8AFF8E63
-          42FFFFFFE600FFFFED00FFFFF200FFFFF700FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00806D5EFF7C614DFF836248FF8A6343FF8E6342FFD2AC8AFFD4AB8AFF9063
-          41FF8E6342FF876246FF7E624AFF826D5EFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF007C614CFFE6CCB4FFD3B59CFFD4B497FFD5B395FFD4B294FFCFAC8BFFCFA9
-          89FFCCA688FFC6A487FFDCBEA3FF7E614CFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF007C614CFFEED4BCFFEFD2B7FFF2D2B5FFF1CFB2FFEDCFB2FFEFCFB2FFF5CF
-          B1FFF4CEB0FFEFCDB0FFEBCDB2FF7F634BFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00806D5EFF7A624CFF836248FF8A6343FF8A6343FFEDCFB4FFEDCFB4FF8C63
-          43FF8C6342FF856346FF7F634BFF816F5EFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFF700FFFFF200FFFFEB00FFFFE6008A6245FFECCEB5FFECCEB5FF8A62
-          45FFFFFFE600FFFFEB00FFFFF100FFFFF700FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFC00FFFFFB00FFFFF500FFFFED00836248FFEACEB6FFEACEB6FF8362
-          48FFFFFFEB00FFFFF500FFFFF900FFFFFC00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFB00FFFFF2007C614CFFE8CDB8FFE8CDB8FF7C61
-          4CFFFFFFF200FFFFFA00FFFFFF00FFFFFE00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFC00FFFFF700806D5EFF7C614CFF7C614CFF806D
-          5EFFFFFFF700FFFFFC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
-        OnClick = AddRelateBtnClick
-      end
-      object RemoveRelateBtn1: TSpeedButton
-        AnchorSideTop.Control = AddRelateBtn1
-        AnchorSideTop.Side = asrCenter
-        AnchorSideRight.Control = TabSheet1
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Side = asrCenter
-        Left = 471
-        Height = 22
-        Top = 16
-        Width = 22
-        Anchors = [akTop, akRight]
-        BorderSpacing.Right = 5
-        Color = clWhite
-        Glyph.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00806D5EFF7C614CFF806249FF816249FF816249FF816249FF816249FF8362
-          48FF816348FF816249FF7C614CFF806D5EFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF007C614CFFE6CCB4FFD1B69CFFD2B59AFFD1B398FFD2B295FFCBAB8EFFCBA9
-          8CFFC8A689FFC6A389FFDCBDA4FF7E614CFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF007C614CFFEED4BCFFEDD2B8FFEFD2B7FFEDCFB4FFEFCFB2FFEECEB1FFF1CF
-          B2FFF0CEB1FFEFCCB2FFEBCCB3FF7E614CFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00806D5EFF7C614CFF806249FF816249FF816249FF826449FF816348FF8362
-          48FF836248FF84624AFF7E614CFF806D5EFFFFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
-        OnClick = RemoveRelateBtnClick
-        ShowCaption = False
-      end
-      object RelateValueBevel1: TBevel
-        AnchorSideTop.Control = RelateTopBevel1
-        AnchorSideTop.Side = asrBottom
-        AnchorSideBottom.Control = GroupBox1
-        Left = 144
-        Height = 430
-        Top = 48
-        Width = 3
-        Anchors = [akTop, akLeft, akBottom]
-        BorderSpacing.Top = 2
-        BorderSpacing.Bottom = 2
-      end
-      object GotoDataFormBevel1: TBevel
-        AnchorSideTop.Control = RelateTopBevel1
-        AnchorSideTop.Side = asrBottom
-        AnchorSideRight.Control = AddRelateBtn1
-        AnchorSideBottom.Control = GroupBox1
-        Left = 438
-        Height = 430
-        Top = 48
-        Width = 3
-        Anchors = [akTop, akRight, akBottom]
-        BorderSpacing.Top = 2
-        BorderSpacing.Right = 5
-        BorderSpacing.Bottom = 2
-      end
-      object RelateTopBevel1: TBevel
-        AnchorSideLeft.Control = TabSheet1
-        AnchorSideRight.Control = TabSheet1
-        AnchorSideRight.Side = asrBottom
-        Left = 10
-        Height = 5
-        Top = 41
-        Width = 478
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 10
-        BorderSpacing.Right = 10
-      end
-      object Bevel6: TBevel
-        AnchorSideLeft.Control = RelateValueBevel1
-        AnchorSideTop.Control = RelateOrderLabel1
-        AnchorSideRight.Control = RelateValueBevel1
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = RelateTopBevel1
-        Left = 144
-        Height = 18
-        Top = 21
-        Width = 3
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        BorderSpacing.Bottom = 2
-      end
-      object Bevel8: TBevel
-        AnchorSideLeft.Control = GotoDataFormBevel1
-        AnchorSideTop.Control = RelateOrderLabel1
-        AnchorSideRight.Control = GotoDataFormBevel1
-        AnchorSideRight.Side = asrBottom
-        AnchorSideBottom.Control = RelateTopBevel1
-        Left = 438
-        Height = 18
-        Top = 21
-        Width = 3
-        Anchors = [akTop, akLeft, akRight, akBottom]
-        BorderSpacing.Bottom = 2
-      end
-      object ComboBox1: TComboBox
-        Left = 10
-        Height = 25
-        Top = 56
-        Width = 126
-        ItemHeight = 0
-        ItemIndex = 0
-        Items.Strings = (
-          'Data'
-          'Text'
-          'Field'
-          'Caption'
-        )
-        Style = csDropDownList
-        TabOrder = 0
-        Text = 'Data'
-      end
-      object ComboBox2: TComboBox
-        Left = 10
-        Height = 25
-        Top = 96
-        Width = 126
-        ItemHeight = 0
-        ItemIndex = 1
-        Items.Strings = (
-          'Data'
-          'Text'
-          'Field'
-          'Caption'
-        )
-        Style = csDropDownList
-        TabOrder = 1
-        Text = 'Text'
-      end
-      object ComboBox3: TComboBox
-        Left = 10
-        Height = 25
-        Top = 136
-        Width = 126
-        ItemHeight = 0
-        ItemIndex = 2
-        Items.Strings = (
-          'Data'
-          'Text'
-          'Field'
-          'Caption'
-        )
-        Style = csDropDownList
-        TabOrder = 2
-        Text = 'Field'
-      end
-      object ComboBox4: TComboBox
-        Left = 10
-        Height = 25
-        Top = 176
-        Width = 126
-        ItemHeight = 0
-        ItemIndex = 3
-        Items.Strings = (
-          'Data'
-          'Text'
-          'Field'
-          'Caption'
-        )
-        Style = csDropDownList
-        TabOrder = 3
-        Text = 'Caption'
-      end
-      object ComboBox5: TComboBox
-        AnchorSideLeft.Control = RelateValueBevel1
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideRight.Control = GotoDataFormBevel1
-        Left = 152
-        Height = 25
-        Top = 60
-        Width = 281
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 5
-        BorderSpacing.Right = 5
-        ItemHeight = 0
-        ItemIndex = 0
-        Items.Strings = (
-          'V1'
-          'V2'
-          'V3'
-          'V4'
-          'V5'
-          'V6'
-        )
-        Style = csDropDownList
-        TabOrder = 4
-        Text = 'V1'
-      end
-      object Edit1: TEdit
-        AnchorSideLeft.Control = RelateValueBevel1
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideRight.Control = GotoDataFormBevel1
-        Left = 152
-        Height = 25
-        Top = 100
-        Width = 281
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 5
-        BorderSpacing.Right = 5
-        TabOrder = 5
-        Text = '_'
-      end
-      object ComboBox6: TComboBox
-        AnchorSideLeft.Control = RelateValueBevel1
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideRight.Control = GotoDataFormBevel1
-        Left = 152
-        Height = 25
-        Top = 140
-        Width = 281
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 5
-        BorderSpacing.Right = 5
-        ItemHeight = 0
-        ItemIndex = 3
-        Items.Strings = (
-          'V1'
-          'V2'
-          'V3'
-          'V4'
-          'V5'
-          'V6'
-        )
-        Style = csDropDownList
-        TabOrder = 6
-        Text = 'V4'
-      end
-      object ComboBox7: TComboBox
-        AnchorSideLeft.Control = RelateValueBevel1
-        AnchorSideLeft.Side = asrBottom
-        AnchorSideRight.Control = GotoDataFormBevel1
-        Left = 152
-        Height = 25
-        Top = 176
-        Width = 281
-        Anchors = [akTop, akLeft, akRight]
-        BorderSpacing.Left = 5
-        BorderSpacing.Right = 5
-        ItemHeight = 0
-        ItemIndex = 2
-        Items.Strings = (
-          'V1'
-          'V2'
-          'V3'
-          'V4'
-          'V5'
-          'V6'
-        )
-        Style = csDropDownList
-        TabOrder = 7
-        Text = 'V3'
-      end
-      object GroupBox1: TGroupBox
-        Left = 0
-        Height = 65
-        Top = 480
-        Width = 498
-        Align = alBottom
-        Caption = 'Content String'
-        ClientHeight = 48
-        ClientWidth = 494
-        TabOrder = 8
-        object Edit2: TEdit
-          AnchorSideLeft.Control = GroupBox1
-          AnchorSideTop.Control = GroupBox1
-          AnchorSideTop.Side = asrCenter
-          AnchorSideRight.Control = GroupBox1
-          AnchorSideRight.Side = asrBottom
-          Left = 10
-          Height = 25
-          Top = 12
-          Width = 474
-          Anchors = [akTop, akLeft, akRight]
-          BorderSpacing.Left = 10
-          BorderSpacing.Right = 10
-          TabOrder = 0
-          Text = '%d(V1)_%f(V4)%c(V3)'
-        end
-      end
-    end
     object StatusbarContentSheet: TTabSheet
-      Caption = 'Statusbar2'
+      Caption = 'Statusbar'
     end
   end
 end
