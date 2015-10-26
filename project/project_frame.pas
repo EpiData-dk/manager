@@ -217,7 +217,8 @@ uses
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
   design_properties_form, admin_form, epidatafilerelations_helper,
-  admin_user_form, admin_groups_form, admin_users_form, admin_entryrights_form
+  admin_user_form, admin_groups_form, admin_users_form, admin_entryrights_form,
+  epiranges
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -660,6 +661,8 @@ var
 begin
   Frame := DoNewRuntimeFrame(Relation);
   Relation.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Frame);
+  if Depth > 0 then
+    BindKeyFields(TEpiDetailRelation(Relation));
 end;
 
 function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
@@ -1107,6 +1110,16 @@ begin
         efceZeroFilled:
           for DetailField in DetailFields do
             TEpiIntField(DetailField).ZeroFilled := TEpiIntField(MasterField).ZeroFilled;
+      end;
+
+    eegRange:
+      case TEpiRangeChangeEventType(EventType) of
+        erceSetStart:
+          for DetailField in DetailFields do
+            DetailField.Ranges[0].AsFloat[true] := MasterField.Ranges[0].AsFloat[true];
+        erceSetEnd:
+          for DetailField in DetailFields do
+            DetailField.Ranges[0].AsFloat[false] := MasterField.Ranges[0].AsFloat[false];
       end;
   end;
 end;
