@@ -1,0 +1,107 @@
+object SettingsStatusbar: TSettingsStatusbar
+  Left = 0
+  Height = 506
+  Top = 0
+  Width = 741
+  ClientHeight = 506
+  ClientWidth = 741
+  TabOrder = 0
+  DesignLeft = 559
+  DesignTop = 315
+  object Panel1: TPanel
+    Left = 0
+    Height = 34
+    Top = 0
+    Width = 741
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 34
+    ClientWidth = 741
+    TabOrder = 0
+    object CheckBox1: TCheckBox
+      Left = 8
+      Height = 22
+      Top = 8
+      Width = 22
+      TabOrder = 0
+    end
+    object Label1: TLabel
+      Left = 40
+      Height = 15
+      Top = 15
+      Width = 113
+      Caption = 'Statubar Element'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 248
+      Height = 15
+      Top = 15
+      Width = 55
+      Caption = 'Example'
+      ParentColor = False
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 468
+      Height = 22
+      Top = 8
+      Width = 23
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 496
+      Height = 22
+      Top = 8
+      Width = 23
+    end
+    object SpeedButton3: TSpeedButton
+      Left = 704
+      Height = 22
+      Top = 8
+      Width = 23
+    end
+  end
+  object ScrollBox1: TScrollBox
+    Left = 0
+    Height = 472
+    Top = 34
+    Width = 741
+    HorzScrollBar.Page = 694
+    VertScrollBar.Page = 456
+    Align = alClient
+    ClientHeight = 470
+    ClientWidth = 739
+    TabOrder = 1
+    object Bevel1: TBevel
+      Left = 32
+      Height = 448
+      Top = 8
+      Width = 6
+      Shape = bsFrame
+      Style = bsRaised
+    end
+    object Bevel2: TBevel
+      Left = 200
+      Height = 448
+      Top = 8
+      Width = 6
+      Shape = bsFrame
+      Style = bsRaised
+    end
+    object Bevel3: TBevel
+      Left = 448
+      Height = 448
+      Top = 8
+      Width = 6
+      Shape = bsFrame
+      Style = bsRaised
+    end
+    object Bevel4: TBevel
+      Left = 688
+      Height = 448
+      Top = 8
+      Width = 6
+      Shape = bsFrame
+      Style = bsRaised
+    end
+  end
+end

@@ -1572,6 +1572,7 @@ begin
 
   TStudyUnitFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
   EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
+  FStatusBar.LoadSettings;
 end;
 
 procedure TProjectFrame.UpdateStatusBar(

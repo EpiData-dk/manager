@@ -20,9 +20,7 @@ type
 implementation
 
 uses
-  settings2_var, epiv_statusbar_item_recordcount, epiv_statusbar_item_cycleno,
-  epiv_statusbar_item_currentuser,{ epiv_statusbar_item_savetime, }
-  epiv_statusbar_item_selectionnames;
+  settings2_var;
 
 { TManagerStatusBar }
 
@@ -33,28 +31,24 @@ end;
 
 procedure TManagerStatusBar.LoadSettings;
 var
-  i: Integer;
-  L: TList;
-  Item: TEpiVCustomStatusBarItem;
+  L: TStrings;
+  S: String;
+  Idx: Integer;
 begin
-//  ManagerSettings.;
+  Clear;
 
-  L := EpiV_GetCustomStatusBarItems;
-  if Assigned(L) then
-    for i := 0 to L.Count - 1 do
-      AddItem(TEpiVCustomStatusBarItemClass(L[i]).Create(Self));
+  L := TStringList.Create;
+  L.StrictDelimiter := true;
+  L.CommaText := ManagerSettings.StatusBarItemNames;
 
-{  for i := 0 to 3 do
-    begin
-      Item := TEpiVCustomStatusBarItem.Create(self);
-      if (I mod 2) = 1 then
-        Item.Resizable := true;
-      AddItem(Item);
-    end;
+  for S in L do
+  begin
+    Idx := EpiV_GetCustomStatusBarItems.IndexOf(S);
+    if (Idx < 0) then continue;
 
-  if Assigned(L) then
-    for i := 0 to L.Count - 1 do
-      AddItem(TEpiVCustomStatusBarItemClass(L[i]).Create(Self));  }
+    AddItem(TEpiVCustomStatusBarItemClass(EpiV_GetCustomStatusBarItems.Objects[Idx]).Create(Self));
+  end;
+  Resize;
 end;
 
 end.

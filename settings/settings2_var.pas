@@ -128,6 +128,10 @@ type
     OwnPublisher:          string;
     OwnFunding:            string;
 
+
+    // Statusbar:
+    StatusBarItemNames:    string;
+
     // Not shown in dialog.
     SelectedControlColour: Integer;
     LabelNamePrefix:       string;

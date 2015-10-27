@@ -72,6 +72,7 @@ uses
   settings_general_frame, settings_visualdesign_frame,
   settings_font_frame,
   settings_export,
+  settings_statusbar,
 
   // export
   export_csv_frame, export_stata_frame, export_sas_frame, export_spss_frame,
@@ -666,6 +667,7 @@ begin
     FindNodeWithText('Field Definitions').Data   := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
     FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
     FindNodeWithText('Fonts').Data               := Pointer(TSettingsFontFrame.Create(Self));
+    FindNodeWithText('Statusbar').Data           := Pointer(TSettingsStatusbar.Create(Self));
 
     // Export
     FindNodeWithText('Export').Data              := Pointer(TSettings_ExportFrame.Create(Self));
@@ -814,6 +816,7 @@ const
     OwnFunding:            '';
 
 
+    StatusBarItemNames:    'LastSaved,CurrentUser,SelectedNames';
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;

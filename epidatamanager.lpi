@@ -207,7 +207,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="107">
+    <Units Count="108">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -834,6 +834,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit106>
+      <Unit107>
+        <Filename Value="settings/settings_statusbar.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SettingsStatusbar"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit107>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
