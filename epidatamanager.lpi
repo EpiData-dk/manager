@@ -838,6 +838,7 @@
         <Filename Value="settings/settings_statusbar.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SettingsStatusbar"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit107>
     </Units>

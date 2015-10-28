@@ -6,18 +6,69 @@ object SettingsStatusbar: TSettingsStatusbar
   ClientHeight = 506
   ClientWidth = 741
   TabOrder = 0
-  DesignLeft = 559
-  DesignTop = 315
-  object Panel1: TPanel
+  DesignLeft = 792
+  DesignTop = 178
+  object ScrollBox1: TScrollBox
     Left = 0
-    Height = 34
-    Top = 0
+    Height = 472
+    Top = 34
     Width = 741
-    Align = alTop
-    BevelOuter = bvNone
-    ClientHeight = 34
-    ClientWidth = 741
+    HorzScrollBar.Page = 30
+    VertScrollBar.Page = 60
+    Align = alClient
+    ClientHeight = 470
+    ClientWidth = 739
     TabOrder = 0
+    object Bevel1: TBevel
+      AnchorSideTop.Control = ScrollBox1
+      AnchorSideBottom.Control = ScrollBox1
+      AnchorSideBottom.Side = asrBottom
+      Left = 32
+      Height = 460
+      Top = 5
+      Width = 6
+      Anchors = [akTop, akLeft, akBottom]
+      BorderSpacing.Top = 5
+      BorderSpacing.Bottom = 5
+      Shape = bsFrame
+      Style = bsRaised
+    end
+    object Bevel2: TBevel
+      AnchorSideTop.Control = Bevel1
+      AnchorSideBottom.Control = Bevel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 200
+      Height = 460
+      Top = 5
+      Width = 6
+      Anchors = [akTop, akLeft, akBottom]
+      Shape = bsFrame
+      Style = bsRaised
+    end
+    object Bevel3: TBevel
+      AnchorSideTop.Control = Bevel1
+      AnchorSideBottom.Control = Bevel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 448
+      Height = 460
+      Top = 5
+      Width = 6
+      Anchors = [akTop, akLeft, akBottom]
+      Shape = bsFrame
+      Style = bsRaised
+    end
+    object Bevel4: TBevel
+      AnchorSideTop.Control = Bevel1
+      AnchorSideBottom.Control = Bevel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 520
+      Height = 460
+      Top = 5
+      Width = 6
+      Anchors = [akTop, akLeft, akBottom]
+      Shape = bsFrame
+      Style = bsRaised
+    end
     object CheckBox1: TCheckBox
       Left = 8
       Height = 22
@@ -37,12 +88,12 @@ object SettingsStatusbar: TSettingsStatusbar
       Left = 248
       Height = 15
       Top = 15
-      Width = 55
+      Width = 57
       Caption = 'Example'
       ParentColor = False
     end
-    object SpeedButton1: TSpeedButton
-      Left = 468
+    object SpeedButton3: TSpeedButton
+      Left = 536
       Height = 22
       Top = 8
       Width = 23
@@ -53,55 +104,20 @@ object SettingsStatusbar: TSettingsStatusbar
       Top = 8
       Width = 23
     end
-    object SpeedButton3: TSpeedButton
-      Left = 704
+    object SpeedButton1: TSpeedButton
+      Left = 468
       Height = 22
       Top = 8
       Width = 23
     end
   end
-  object ScrollBox1: TScrollBox
+  object Panel1: TPanel
     Left = 0
-    Height = 472
-    Top = 34
+    Height = 34
+    Top = 0
     Width = 741
-    HorzScrollBar.Page = 694
-    VertScrollBar.Page = 456
-    Align = alClient
-    ClientHeight = 470
-    ClientWidth = 739
+    Align = alTop
+    BevelOuter = bvNone
     TabOrder = 1
-    object Bevel1: TBevel
-      Left = 32
-      Height = 448
-      Top = 8
-      Width = 6
-      Shape = bsFrame
-      Style = bsRaised
-    end
-    object Bevel2: TBevel
-      Left = 200
-      Height = 448
-      Top = 8
-      Width = 6
-      Shape = bsFrame
-      Style = bsRaised
-    end
-    object Bevel3: TBevel
-      Left = 448
-      Height = 448
-      Top = 8
-      Width = 6
-      Shape = bsFrame
-      Style = bsRaised
-    end
-    object Bevel4: TBevel
-      Left = 688
-      Height = 448
-      Top = 8
-      Width = 6
-      Shape = bsFrame
-      Style = bsRaised
-    end
   end
 end
