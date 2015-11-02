@@ -20,6 +20,8 @@ type
     ProjectPanel: TPanel;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
+    procedure FileListDocMoved(Sender: TObject; Document: TEpiDocument;
+      const FromRow, ToRow: Integer);
   private
     procedure FileListAddDoc(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
@@ -49,9 +51,16 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, epimiscutils, epirelations, report_counts;
+  settings2_var, epimiscutils, epirelations, report_counts, epidatafilestypes;
 
 { TCountByIdFrame }
+
+procedure TCountByIdFrame.FileListDocMoved(Sender: TObject;
+  Document: TEpiDocument; const FromRow, ToRow: Integer);
+begin
+  FProjectTree.MoveDocument(FromRow - 1, ToRow - 1);
+  FProjectTree.CheckAll;
+end;
 
 procedure TCountByIdFrame.FileListAddDoc(Sender: TObject;
   Document: TEpiDocument; const Filename: string; const RowNo: Integer);
@@ -60,34 +69,6 @@ begin
   FProjectTree.CheckAll;
   UpdateCommonFields;
 end;
-
-{procedure TCountByIdFrame.BitBtn1Click(Sender: TObject);
-var
-  L: TList;
-  FL: TEpiFields;
-  F: TEpiField;
-  i: Integer;
-begin
-  try
-    L := FProjectTree.CheckList;
-
-    FOptions.DataFiles := TEpiDataFiles.Create(nil);
-    FOptions.DataFiles.UniqueNames := false;
-    FOptions.DataFiles.Sorted := false;
-
-    for i := 0 to L.Count - 1 do
-      FOptions.DataFiles.AddItem(TEpiMasterRelation(L[i]).Datafile);
-
-    FOptions.FieldNames := TStringList.Create;
-    FL := FFieldList.CheckedList;
-    for F in FL do
-      FOptions.FieldNames.Add(F.Name);
-
-  finally
-    L.Free;
-    FL.Free;
-  end;
-end;                }
 
 procedure TCountByIdFrame.FileListDocChange(Sender: TObject;
   Document: TEpiDocument; const Filename: string; const RowNo: Integer);
@@ -144,7 +125,8 @@ begin
       begin
         CompareField := MainDF.Fields.FieldByName[F.Name];
         if not Assigned(CompareField) then continue;
-        if (CompareField.FieldType <> f.FieldType) then continue;
+//        if (CompareField.FieldType <> F.FieldType) then continue;
+        if not ((NativeFieldTypeSetFromFieldType(CompareField.FieldType) = NativeFieldTypeSetFromFieldType(f.FieldType))) then continue;
 
         CompareList.Add(CompareField);
       end;
@@ -233,6 +215,7 @@ begin
 
     OnAfterAddToGrid := @FileListAddDoc;
     OnDocumentIncludedChange := @FileListDocChange;
+    OnDocumentMoved := @FileListDocMoved;
   end;
 
   FProjectTree := TEpiVProjectTreeViewFrame.Create(Self);

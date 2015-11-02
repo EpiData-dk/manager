@@ -173,7 +173,7 @@ uses
   managerprocs, LCLType, LCLIntf, project_settings,
   shortcuts, project_keyfields_form,
   align_form, RegExpr, project_studyunit_frame,
-  design_properties_form
+  design_properties_form, epiranges
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -483,6 +483,8 @@ var
 begin
   Frame := DoNewRuntimeFrame(Relation);
   Relation.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Frame);
+  if Depth > 0 then
+    BindKeyFields(TEpiDetailRelation(Relation));
 end;
 
 function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
@@ -745,7 +747,7 @@ begin
   if Relation.InheritsFrom(TEpiDetailRelation)
   then
     begin
-      Relation.Datafile.AfterRecordState := arsNewRecord;
+      Relation.Datafile.AfterRecordState := arsReturnToParent;
       BindKeyFields(TEpiDetailRelation(Relation));
     end;
 
@@ -892,6 +894,16 @@ begin
         efceZeroFilled:
           for DetailField in DetailFields do
             TEpiIntField(DetailField).ZeroFilled := TEpiIntField(MasterField).ZeroFilled;
+      end;
+
+    eegRange:
+      case TEpiRangeChangeEventType(EventType) of
+        erceSetStart:
+          for DetailField in DetailFields do
+            DetailField.Ranges[0].AsFloat[true] := MasterField.Ranges[0].AsFloat[true];
+        erceSetEnd:
+          for DetailField in DetailFields do
+            DetailField.Ranges[0].AsFloat[false] := MasterField.Ranges[0].AsFloat[false];
       end;
   end;
 end;

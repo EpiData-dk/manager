@@ -62,7 +62,7 @@ implementation
 uses
   managerprocs, Graphics, main, LCLIntf, LCLType, manager_messages,
   design_properties_fieldframe, JvDesignSurface, epidocument,
-  epistringutils, manager_globals, settings2_var,
+  epistringutils, manager_globals, settings2_var, math,
   CustomTimer;
 
 
@@ -531,7 +531,7 @@ begin
     bsSingle: SideBuf := {$IFDEF MSWINDOWS} 7 {$ELSE} 6 {$ENDIF};
   end;
   //         Side buffer (pixel from controls left side to first character.
-  AWidth   := (SideBuf * 2) + Cv.GetTextWidth(S) * FField.Length;
+  AWidth   := (SideBuf * 2) + Cv.GetTextWidth(S) * Min(FField.Length, 50);
 
   // Inherited to set the correct bounds
   inherited SetBounds(ALeft, ATop, AWidth, GetControlClassDefaultSize.cy);
