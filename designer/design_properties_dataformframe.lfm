@@ -5,7 +5,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
   Width = 498
   ClientHeight = 469
   ClientWidth = 498
-  LCLVersion = '1.3'
+  LCLVersion = '1.5'
   object PageControl1: TPageControl
     Left = 0
     Height = 469
@@ -249,6 +249,7 @@ object DataformPropertiesFrame: TDataformPropertiesFrame
           TabOrder = 2
           OnEditingDone = MaskEdit1EditingDone
           EditMask = '9999;1; '
+          Text = '    '
           SpaceChar = ' '
         end
       end

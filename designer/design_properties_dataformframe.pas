@@ -568,7 +568,9 @@ end;
 
 procedure TDataformPropertiesFrame.FocusOnNewControl;
 begin
-  CaptionEdit.SetFocus;
+  PageControl1.ActivePage := BasicSheet;
+  if CaptionEdit.CanFocus then
+    CaptionEdit.SetFocus;
 end;
 
 procedure TDataformPropertiesFrame.SetEpiControls(EpiControls: TEpiCustomControlItemArray);
