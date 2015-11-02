@@ -934,10 +934,24 @@ begin
       case TEpiRangeChangeEventType(EventType) of
         erceSetStart:
           for DetailField in DetailFields do
-            DetailField.Ranges[0].AsFloat[true] := MasterField.Ranges[0].AsFloat[true];
+            begin
+              if (not Assigned(DetailField.Ranges)) then
+              begin
+                DetailField.Ranges := TEpiRanges.Create(DetailField);
+                DetailField.Ranges.NewRange;
+              end;
+              DetailField.Ranges[0].AsFloat[true] := MasterField.Ranges[0].AsFloat[true];
+            end;
         erceSetEnd:
           for DetailField in DetailFields do
+          begin
+            if (not Assigned(DetailField.Ranges)) then
+            begin
+              DetailField.Ranges := TEpiRanges.Create(DetailField);
+              DetailField.Ranges.NewRange;
+            end;
             DetailField.Ranges[0].AsFloat[false] := MasterField.Ranges[0].AsFloat[false];
+          end;
       end;
   end;
 end;
