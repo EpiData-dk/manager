@@ -1,7 +1,7 @@
 object AboutForm: TAboutForm
-  Left = 2496
+  Left = 1077
   Height = 370
-  Top = 369
+  Top = 291
   Width = 450
   ActiveControl = AboutPageControl
   Caption = 'About EpiData Manager'
