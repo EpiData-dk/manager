@@ -128,7 +128,6 @@ type
     OwnPublisher:          string;
     OwnFunding:            string;
 
-
     // Statusbar:
     StatusBarItemNames:    string;
 

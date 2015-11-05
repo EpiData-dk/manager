@@ -189,6 +189,10 @@ begin
       WriteInteger(sec, 'HeadingFontStyle5', Integer(HeadingFont5.Style));
       WriteInteger(sec, 'HeadingFontColour5', HeadingFont5.Color);
 
+  {    // Statusbar: }
+      Sec := 'statusbar';
+      WriteString(sec, 'StatusBarItemNames', StatusBarItemNames);
+
       // Export:
       Sec := 'export';
       WriteInteger(sec, 'ExportType', ExportType);
@@ -343,6 +347,10 @@ begin
       CheckForUpdates     := ReadBool(Sec, 'CheckForUpdates', CheckForUpdates);
       DaysBetweenChecks   := ReadInteger(Sec, 'DaysBetweenChecks', DaysBetweenChecks);
       LastUpdateCheck     := ReadDateTime(Sec, 'LastUpdateCheck', LastUpdateCheck);
+
+      {    // Statusbar: }
+      sec := 'statusbar';
+      StatusBarItemNames  := ReadString(sec, 'StatusBarItemNames', StatusBarItemNames);
 
       // Export:
       Sec := 'export';
