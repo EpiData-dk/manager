@@ -1585,8 +1585,13 @@ begin
   UpdateShortCuts;
 
   TStudyUnitFrame(EpiDocument.FindCustomData(PROJECT_RUNTIMEFRAME_KEY)).UpdateFrame;
-  EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
+
   FStatusBar.LoadSettings;
+  FStatusBar.DocFile := FDocumentFile;
+
+  EpiDocument.Relations.OrderedWalk(@RuntimeFrameUpdateFrameOrderedWalkCallBack);
+  if (FProjectTreeView.SelectedObjectType = otRelation) then
+    FStatusBar.Datafile := TEpiMasterRelation(FProjectTreeView.SelectedObject).Datafile;
 end;
 
 procedure TProjectFrame.UpdateStatusBar(

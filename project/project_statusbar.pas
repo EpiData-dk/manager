@@ -12,6 +12,8 @@ type
   { TManagerStatusBar }
 
   TManagerStatusBar = class(TEpiVCustomStatusBar)
+  protected
+    procedure Clear; override;
   public
     constructor Create(TheOwner: TComponent); override;
     procedure LoadSettings;
@@ -23,6 +25,14 @@ uses
   settings2_var;
 
 { TManagerStatusBar }
+
+procedure TManagerStatusBar.Clear;
+begin
+  inherited Clear;
+
+  DocFile := nil;
+  Datafile := nil;
+end;
 
 constructor TManagerStatusBar.Create(TheOwner: TComponent);
 begin
