@@ -322,6 +322,7 @@ procedure TDefineGroupsForm.UsersHook(const Sender: TEpiCustomBase;
 begin
   if not (EventGroup in [eegCustomBase, eegAdmin]) then exit;
 
+  // Event if a user is added/deleted
   if (Initiator is TEpiUsers) then
     case TEpiCustomChangeEventType(EventType) of
       ecceAddItem,
@@ -333,6 +334,7 @@ begin
         end;
     end;
 
+  // Event if properties of a user is changed
   if (Initiator is TEpiUser) then
     case EventGroup of
       eegCustomBase:
@@ -346,6 +348,16 @@ begin
           eaceUserSetFullName:
             FUsersVST.Invalidate;
         end;
+    end;
+
+  // Event if user<->group relationship has changed
+  if (Initiator is TEpiGroups) and
+     (EventGroup = eegCustomBase)
+  then
+    case TEpiCustomChangeEventType(EventType) of
+      ecceAddItem,
+      ecceDelItem:
+          UsersResetChecks(CurrentGroup);
     end;
 end;
 
