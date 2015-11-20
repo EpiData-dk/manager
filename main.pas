@@ -1161,7 +1161,8 @@ begin
     AddToRecent(Docfile.FileName);
     Docfile.SaveFile(Docfile.FileName);
     DocFile.Free;
-  end;
+  end else
+    FActiveFrame.UpdateStatusBar();
 end;
 
 procedure TMainForm.ManageUserPasswordActionUpdate(Sender: TObject);

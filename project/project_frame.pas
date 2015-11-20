@@ -1395,6 +1395,7 @@ begin
           Exit;
         end;
 
+      EpiDocument.Admin.InitAdmin;
       User.Groups.AddItem(EpiDocument.Admin.Admins);
       if (not SaveProject(false)) then
       begin

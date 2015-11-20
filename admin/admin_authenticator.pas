@@ -192,10 +192,12 @@ begin
   FDocument.RegisterOnChangeHook(@DocumentHook, true);
 
   R := DocumentFile.Document.Admin.AdminRelation;
-  R.Group.AddCustomData(AUTH_GROUP_KEY, R);
-
-  R.GroupRelations.OrderedWalk(@InitGroupWalk, nil);
-  R.RegisterOnChangeHook(@NewRelationHook, true);
+  if Assigned(R) then
+  begin
+    R.Group.AddCustomData(AUTH_GROUP_KEY, R);
+    R.GroupRelations.OrderedWalk(@InitGroupWalk, nil);
+    R.RegisterOnChangeHook(@NewRelationHook, true);
+  end;
 end;
 
 destructor TAuthenticator.Destroy;
