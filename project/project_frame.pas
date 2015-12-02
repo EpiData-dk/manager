@@ -1079,6 +1079,7 @@ begin
         efceSetTop,
         efceSetSize,
         efceData,
+        efceResetData,
         efceEntryMode,
         efceConfirmEntry:
           Exit;   // ignore
