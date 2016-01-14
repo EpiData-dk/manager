@@ -66,7 +66,7 @@ type
     function  RecImportPassword(Sender: TObject;
       RequestType: TEpiRequestPasswordType;
       RequestNo:   Integer;
-      var Login: string; var Password: string): TEpiRequestPasswordResponse;
+      var Login: UTF8String; var Password: UTF8String): TEpiRequestPasswordResponse;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -435,8 +435,8 @@ begin
 end;
 
 function TProjectFileListFrame.RecImportPassword(Sender: TObject;
-  RequestType: TEpiRequestPasswordType; RequestNo: Integer; var Login: string;
-  var Password: string): TEpiRequestPasswordResponse;
+  RequestType: TEpiRequestPasswordType; RequestNo: Integer;
+  var Login: UTF8String; var Password: UTF8String): TEpiRequestPasswordResponse;
 begin
   Login := '';
   Password :=
