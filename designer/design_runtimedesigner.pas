@@ -2295,6 +2295,8 @@ end;
 
 procedure TRuntimeDesignFrame.ViewDatasetActionExecute(Sender: TObject);
 begin
+  TEpiDocument(DataFile.RootOwner).Logger.LogSearch(nil);
+
   ShowDataSetViewerForm(
     Self,
     'View Dataset: ' + DataFile.Caption.Text,

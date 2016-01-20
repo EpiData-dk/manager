@@ -56,8 +56,6 @@ var
   F: TForm;
   V: TDatasetViewerFrame;
   FH: TFormHandler;
-  T1: TDateTime;
-  T2: TDateTime;
 begin
   FH := TFormHandler.Create;
 
@@ -67,13 +65,8 @@ begin
   F.OnShow    := @FH.ShowForm;
   F.KeyPreview := True;
 
-  T1 := Now;
   V := TDatasetViewerFrame.Create(F, DataFile);
   FH.Frame := V;
-  T2 := Now;
-
-//  ShowMessage('TDatasetViewerFrame.Create(F, DataFile): ' +
-//    FormatDateTime('NN:SS:ZZZZ', T2-T1));
 
   V.Align := alClient;
   V.Parent := F;

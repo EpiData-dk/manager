@@ -9,7 +9,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
   project_frame, LMessages, manager_messages, epidocument, report_base,
-  episervice_ipc, episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile,
+ { episervice_ipc,} episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile,
   epiadmin;
 
 type
@@ -18,6 +18,7 @@ type
 
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
+    ViewLogMenuItem: TMenuItem;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
     MenuItem37: TMenuItem;
@@ -1350,6 +1351,7 @@ begin
   DefineGroupsMenuItem.Visible := Assigned(FActiveFrame);
   DefineUsersMenuItem.Visible := Assigned(FActiveFrame);
   DefineEntryRightsMenuItem.Visible := Assigned(FActiveFrame);
+  ViewLogMenuItem.Visible := Assigned(FActiveFrame);
   // -
   DefineAccessDivider2.Visible := Assigned(FActiveFrame);
 

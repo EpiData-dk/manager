@@ -16,6 +16,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ViewLogAction: TAction;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -83,6 +84,7 @@ type
     procedure DefineExtendedAccessActionUpdate(Sender: TObject);
     procedure RemoveProjectPasswordExecute(Sender: TObject);
     procedure RemoveProjectPasswordUpdate(Sender: TObject);
+    procedure ViewLogActionExecute(Sender: TObject);
   private
     { Core Logger }
     FCoreLoggerForm: TCoreLogger;
@@ -551,6 +553,11 @@ end;
 procedure TProjectFrame.RemoveProjectPasswordUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled := (EpiDocument.PassWord <> '') and (not Assigned(Authenticator.AuthedUser));
+end;
+
+procedure TProjectFrame.ViewLogActionExecute(Sender: TObject);
+begin
+  //
 end;
 
 procedure TProjectFrame.ShowCoreLogger;

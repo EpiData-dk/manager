@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 678
   ClientWidth = 991
   TabOrder = 0
-  DesignLeft = 603
-  DesignTop = 190
+  DesignLeft = 515
+  DesignTop = 284
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
@@ -291,6 +291,11 @@ object ProjectFrame: TProjectFrame
       Caption = 'Remove Password'
       OnExecute = RemoveProjectPasswordExecute
       OnUpdate = RemoveProjectPasswordUpdate
+    end
+    object ViewLogAction: TAction
+      Category = 'Admin'
+      Caption = 'View Log'
+      OnExecute = ViewLogActionExecute
     end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu
