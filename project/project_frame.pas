@@ -9,7 +9,8 @@ uses
   Dialogs, epidocument, epidatafiles, epicustombase, epidatafilerelations, epirelates,
   epiadmin, manager_messages, LMessages, Menus, StdCtrls, epiv_documentfile,
   types, design_runtimedesigner, project_types, epiv_projecttreeview_frame,
-  manager_types, core_logger, project_statusbar, epiv_custom_statusbar;
+  manager_types, core_logger, project_statusbar, epiv_custom_statusbar,
+  admin_logviewer_frame;
 
 type
 
@@ -61,6 +62,7 @@ type
     procedure DocumentProgress(const Sender: TEpiCustomBase;
       ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
       var Canceled: Boolean);
+    procedure FrameClick(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure NewDataFormActionUpdate(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -306,6 +308,11 @@ begin
         end;
       end;
   end;
+end;
+
+procedure TProjectFrame.FrameClick(Sender: TObject);
+begin
+
 end;
 
 procedure TProjectFrame.DeleteDataFormActionExecute(Sender: TObject);
@@ -556,8 +563,17 @@ begin
 end;
 
 procedure TProjectFrame.ViewLogActionExecute(Sender: TObject);
+var
+  F: TForm;
+  LV: TLogViewerFrame;
 begin
-  //
+  F := TForm.CreateNew(Self);
+  LV := TLogViewerFrame.Create(F);
+  LV.Align := alClient;
+  LV.Parent := F;
+  LV.Document := EpiDocument;
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TProjectFrame.ShowCoreLogger;
@@ -717,6 +733,8 @@ begin
 
     if Assigned(FDocumentFile.AuthedUser) then
     begin
+      DoSaveProject(DocumentFile.FileName);
+
       Label1.Caption := 'User: ' + FDocumentFile.AuthedUser.FullName;
       Label2.Caption := 'Groups: ';
       Rights := [];
@@ -1709,6 +1727,7 @@ begin
     DefineGroupsMenuItem.Action           := DefineGroupsAction;
     DefineUsersMenuItem.Action            := DefineUsersAction;
     DefineEntryRightsMenuItem.Action      := DefineEntryRightsAction;
+    ViewLogMenuItem.Action                := ViewLogAction;
   end;
 
   NewProjectToolBtn.Action := MainForm.NewProjectAction;

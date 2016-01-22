@@ -5,6 +5,7 @@ object ProjectFrame: TProjectFrame
   Width = 991
   ClientHeight = 678
   ClientWidth = 991
+  OnClick = FrameClick
   TabOrder = 0
   DesignLeft = 515
   DesignTop = 284

@@ -1,0 +1,9 @@
+object LogViewerFrame: TLogViewerFrame
+  Left = 0
+  Height = 511
+  Top = 0
+  Width = 609
+  TabOrder = 0
+  DesignLeft = 656
+  DesignTop = 289
+end
