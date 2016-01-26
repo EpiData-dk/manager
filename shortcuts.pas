@@ -37,6 +37,7 @@ var
   P_StartValueLabelEditor,
   P_OpenProject,
   P_KeyFields,
+  P_ViewLog,
   P_Users,
   P_Groups,
   P_EntryRight:

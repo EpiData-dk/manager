@@ -30,6 +30,7 @@ begin
   P_StartValueLabelEditor      := KeyToShortCut(VK_V, [ssAlt]);
   P_OpenProject                := KeyToShortCut(VK_UNKNOWN, []);  // this overlaps with M_OpenProject!?!?!
   P_KeyFields                  := KeyToShortCut(VK_UNKNOWN, []);
+  P_ViewLog                    := KeyToShortCut(VK_L,       [ssCtrl]);
   P_Users                      := KeyToShortCut(VK_U, [ssCtrl]);
   P_Groups                     := KeyToShortCut(VK_G, [ssCtrl]);
   P_EntryRight                 := KeyToShortCut(VK_E, [ssCtrl]);

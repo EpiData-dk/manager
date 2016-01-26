@@ -1293,6 +1293,7 @@ begin
   ValueLabelEditorAction.ShortCut  := P_StartValueLabelEditor;
   OpenProjectAction.ShortCut       := P_OpenProject;
   KeyFieldsAction.ShortCut         := P_KeyFields;
+  ViewLogAction.ShortCut           := P_ViewLog;
   DefineEntryRightsAction.ShortCut := P_EntryRight;
   DefineGroupsAction.ShortCut      := P_Groups;
   DefineUsersAction.ShortCut       := P_Users;
