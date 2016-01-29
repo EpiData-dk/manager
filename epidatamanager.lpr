@@ -57,7 +57,7 @@ uses
   admin_groups_form, admin_users_form, admin_entryrights_form, 
   admin_users_accum_rights_frame, project_statusbar, 
 design_properties_dataform_statusbarframe, settings_statusbar, 
-admin_logviewer_frame;
+admin_logviewer_frame, empty_form;
 
 {$R *.res}
 

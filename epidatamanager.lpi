@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="75"/>
+      <BuildNr Value="77"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="" SpecialBuild="ADMIN"/>
@@ -160,7 +160,7 @@
       </Item5>
       <SharedMatrixOptions Count="2">
         <Item1 ID="452080431331" Modes="Win32,Win64" Type="IDEMacro" MacroName="LCLWidgetType" Value="win32"/>
-        <Item2 ID="637697368399" Value="-WG"/>
+        <Item2 ID="637697368399" Modes="Win32,Win64" Value="-WG"/>
       </SharedMatrixOptions>
     </BuildModes>
     <PublishOptions>
@@ -207,7 +207,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="109">
+    <Units Count="110">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -848,6 +848,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
       </Unit108>
+      <Unit109>
+        <Filename Value="utils/empty_form.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit109>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

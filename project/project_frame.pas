@@ -62,7 +62,6 @@ type
     procedure DocumentProgress(const Sender: TEpiCustomBase;
       ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
       var Canceled: Boolean);
-    procedure FrameClick(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure NewDataFormActionUpdate(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -222,7 +221,7 @@ uses
   align_form, RegExpr, project_studyunit_frame,
   design_properties_form, admin_form, epidatafilerelations_helper,
   admin_user_form, admin_groups_form, admin_users_form, admin_entryrights_form,
-  epiranges
+  epiranges, empty_form
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -308,11 +307,6 @@ begin
         end;
       end;
   end;
-end;
-
-procedure TProjectFrame.FrameClick(Sender: TObject);
-begin
-
 end;
 
 procedure TProjectFrame.DeleteDataFormActionExecute(Sender: TObject);
@@ -564,10 +558,11 @@ end;
 
 procedure TProjectFrame.ViewLogActionExecute(Sender: TObject);
 var
-  F: TForm;
   LV: TLogViewerFrame;
+  F: TPositionForm;
 begin
-  F := TForm.CreateNew(Self);
+  F := TPositionForm.Create(Self);
+  F.StorageName := 'LogViewer';
   LV := TLogViewerFrame.Create(F);
   LV.Align := alClient;
   LV.Parent := F;

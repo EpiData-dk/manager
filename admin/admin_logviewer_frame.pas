@@ -68,6 +68,9 @@ begin
             ltPack:         CellText := 'Pack';
             ltAppend:       CellText := 'Append';
             ltExport:       CellText := 'Export';
+            ltClose:        CellText := 'Closed';
+          else
+            CellText := 'Unimplemented Log Feaure';
           end;
         end;
 
@@ -103,6 +106,8 @@ begin
               CellText := 'Hostname = ' + FLogContent.AsString[Idx];
             ltSearch:
               CellTExt := 'Search string: ' + FLogContent.AsString[Idx];
+            ltClose:
+              CellText := 'Last Edit = ' + FLogContent.AsString[Idx];
 {            ltNone: ;
             ltNewRecord: ;
             ltEditRecord: ;
