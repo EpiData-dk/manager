@@ -23,7 +23,7 @@ implementation
 
 uses
   Clipbrd, FileUtil, settings2, settings2_var, forms, strutils,
-  epimiscutils, LCLVersion, LazUTF8, dialogs, controls;
+  epimiscutils, LCLVersion, LazUTF8, dialogs, controls, LazFileUtils;
 
 var
   IniFileName: string = '';
