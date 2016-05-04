@@ -286,7 +286,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiv_datamodule,
+  epiv_datamodule, LazFileUtils,
   LCLProc, LCLIntf, LazUTF8Classes,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   epimiscutils,

@@ -64,7 +64,7 @@ implementation
 
 uses
   settings2_interface, settings2_var, epidatafilestypes,
-  IniFiles, epieximtypes, manager_types,
+  IniFiles, epieximtypes, manager_types, LazFileUtils,
   managerprocs,
 
   // settings

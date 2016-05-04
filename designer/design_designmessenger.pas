@@ -59,12 +59,7 @@ function TDesignMessenger.IsDesignMessage(ASender: TControl;
     Result := Container.ScreenToClient(Mouse.CursorPos);
   end;
 
-var
-  Ctrl: TControl;
-  P: TPoint;
-  S: String;
 begin
-  S := '';
   case AMessage.Msg of
     LM_MOUSEWHEEL:
       // Handle MouseWheel, since on (especially) windows this is not handle
@@ -95,35 +90,14 @@ begin
             GetParentForm(FFrame).BringToFront;
           Result := inherited IsDesignMessage(ASender, AMessage);
         end;
-
-        case AMessage.Msg of
-          LM_LBUTTONDOWN:  S := 'LM_LBUTTONDOWN';
-          LM_LBUTTONUP:    S := 'LM_LBUTTONUP';
-          LM_RBUTTONDOWN:  S := 'LM_RBUTTONDOWN';
-          LM_RBUTTONUP:    S := 'LM_RBUTTONUP';
-        end;
       end;
-    LM_LBUTTONDBLCLK,
-    LM_RBUTTONDBLCLK:
-      begin
-        case AMessage.Msg of
-          LM_LBUTTONDBLCLK: S := 'LM_RBUTTONDBLCLK';
-          LM_RBUTTONDBLCLK: S := 'LM_LBUTTONDBLCLK';
-        end;
-        {$IFNDEF LINUX}
-        Application.QueueAsyncCall(@ShowPropertiesForm, PtrInt(FFrame));
-        {$ENDIF}
-      end;
+    LM_LBUTTONDBLCLK:
+      {$IFNDEF LINUX}
+      Application.QueueAsyncCall(@ShowPropertiesForm, PtrInt(FFrame));
+      {$ENDIF}
   else
     Result := inherited IsDesignMessage(ASender, AMessage);
   end;
-
-{  if (S <> '')
-  then
-    WriteLn('TDesignMessenger.IsDesignMessage: ' + S);     }
-
-  if Result then
-    AMessage.Result := 1;
 end;
 
 end.

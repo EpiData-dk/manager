@@ -512,11 +512,7 @@ begin
       L.AddCommand(MC);
     end;
 
-  T1 := Now;
   inherited ApplyDragRects;
-  T2 := Now;
-//  if IsConsole then
-//    WriteLn('ApplyDragRects: ', FormatDateTime('NN:SS:ZZZZ', T2-T1));
 end;
 
 procedure TDesignMover.PaintDragRects;

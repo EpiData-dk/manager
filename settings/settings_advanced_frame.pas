@@ -36,7 +36,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2, epimiscutils, strutils, LCLProc;
+  settings2, epimiscutils, strutils, LCLProc, LazFileUtils;
 
 
 { TSettings_PathsFrame }
