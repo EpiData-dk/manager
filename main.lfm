@@ -429,6 +429,10 @@ object MainForm: TMainForm
       object AboutMenuItem: TMenuItem
         Action = ShowAboutAction
       end
+      object MenuItem34: TMenuItem
+        Caption = 'EmailTest'
+        OnClick = MenuItem34Click
+      end
     end
   end
   object ActionList1: TActionList

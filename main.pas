@@ -180,6 +180,7 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
+    MenuItem34: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -225,6 +226,7 @@ type
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure VLSetFromDataActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
+    procedure MenuItem34Click(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -1022,6 +1024,18 @@ end;
 procedure TMainForm.WebTutorialsMenuItem12Click(Sender: TObject);
 begin
   OpenURL(ManagerSettings.TutorialURLUTF8);
+end;
+
+procedure TMainForm.MenuItem34Click(Sender: TObject);
+var
+  OD: TOpenDialog;
+begin
+  OD := TOpenDialog.Create(self);
+  if (not OD.Execute) then exit;
+
+  OpenURL('mailto:tc@epidata.dk?subject=my test&body=my attachment&attachment="' + OD.FileName + '"');
+
+  OD.Free;
 end;
 
 procedure TMainForm.SetCaption;
