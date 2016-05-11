@@ -15,8 +15,16 @@ type
 
   TProjectSettings_BackupFrame = class(TFrame, IProjectSettingsFrame, ISettingsFrame)
     BackupOnShutdownChkBox: TCheckBox;
+    EmailOnShutdownChkBox: TCheckBox;
+    EmailAddressEdit: TEdit;
+    EmailSubjectEdit: TEdit;
+    GroupBox1: TGroupBox;
     Label1: TLabel;
     BackupIntervalEdit: TMaskEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    EmailContentMemo: TMemo;
   private
     { private declarations }
     FProjectSettings: TEpiProjectSettings;
@@ -43,6 +51,14 @@ begin
 
   BackupIntervalEdit.Text        := IntToStr(FProjectSettings.BackupInterval);
   BackupOnShutdownChkBox.Checked := FProjectSettings.BackupOnShutdown;
+
+  EmailOnShutdownChkBox.Checked  := FProjectSettings.EmailOnShutdown;
+  if FProjectSettings.EmailOnShutdown then
+  begin
+    EmailAddressEdit.Text        := FProjectSettings.EmailAddress;
+    EmailSubjectEdit.Text        := FProjectSettings.EmailSubject;
+    EmailContentMemo.Lines.AddText(FProjectSettings.EmailContent);
+  end;
 end;
 
 procedure TProjectSettings_BackupFrame.SetSettings(Data: PManagerSettings);
@@ -53,6 +69,14 @@ begin
   begin
     BackupIntervalEdit.Text        := IntToStr(TimedRecoveryInterval);
     BackupOnShutdownChkBox.Checked := SaveBackup;
+
+    EmailOnShutdownChkBox.Checked  := EmailOnShutdown;
+    if EmailOnShutdown then
+    begin
+      EmailAddressEdit.Text        := EmailAddress;
+      EmailSubjectEdit.Text        := EmailSubject;
+      EmailContentMemo.Lines.AddText(EmailContent);
+    end;
   end;
 end;
 
@@ -75,6 +99,11 @@ begin
   begin
     FProjectSettings.BackupInterval   := I;
     FProjectSettings.BackupOnShutdown := BackupOnShutdownChkBox.Checked;
+
+    FProjectSettings.EmailOnShutdown := EmailOnShutdownChkBox.Checked;
+    FProjectSettings.EmailAddress    := EmailAddressEdit.Text;
+    FProjectSettings.EmailSubject    := EmailSubjectEdit.Text;
+    FProjectSettings.EmailContent    := EmailContentMemo.Lines.Text;
   end;
 
   if Assigned(FManagerSettings) then
@@ -82,8 +111,13 @@ begin
   begin
     TimedRecoveryInterval := I;
     SaveBackup            := BackupOnShutdownChkBox.Checked;
+
+    EmailOnShutdown := EmailOnShutdownChkBox.Checked;
+    EmailAddress    := EmailAddressEdit.Text;
+    EmailSubject    := EmailSubjectEdit.Text;
+    EmailContent    := EmailContentMemo.Lines.Text;
   end;
 end;
 
 end.
-
+

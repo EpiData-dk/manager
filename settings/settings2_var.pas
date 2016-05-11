@@ -104,6 +104,11 @@ type
     TimedRecoveryInterval: integer;
     SaveBackup:            boolean;
     AutoIncStart:          integer;
+    EmailOnShutdown:       Boolean;
+    EmailAddress:          UTF8String;
+    EmailContent:          UTF8String;
+    EmailSubject:          UTF8String;
+
     // - Fields:
     ShowNames:             boolean;
     ShowBorders:           boolean;

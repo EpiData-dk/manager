@@ -239,6 +239,11 @@ begin
       WriteInteger(Sec, 'TimedRecoveryInterval', TimedRecoveryInterval);
       WriteBool(Sec, 'SaveBackup', SaveBackup);
       WriteInteger(Sec, 'AutoIncStart', AutoIncStart);
+      WriteBool(Sec, 'EmailOnShutdown', EmailOnShutdown);
+      WriteString(Sec, 'EmailAddress', EmailAddress);
+      WriteString(Sec, 'EmailSubject', EmailSubject);
+      WriteString(Sec, 'EmailContent', EmailContent);
+
       // - Fields:
       Sec := 'ProjectFields';
       WriteBool(Sec, 'ShowNames', ShowNames);
@@ -437,6 +442,10 @@ begin
       TimedRecoveryInterval := ReadInteger(Sec, 'TimedRecoveryInterval', TimedRecoveryInterval);
       SaveBackup            := ReadBool(Sec, 'SaveBackup', SaveBackup);
       AutoIncStart          := ReadInteger(Sec, 'AutoIncStart', AutoIncStart);
+      EmailOnShutdown       := ReadBool(Sec, 'EmailOnShutdown', EmailOnShutdown);
+      EmailAddress          := ReadString(Sec, 'EmailAddress', EmailAddress);
+      EmailSubject          := ReadString(Sec, 'EmailSubject', EmailSubject);
+      EmailContent          := ReadString(Sec, 'EmailContent', EmailContent);
       // - Fields:
       Sec := 'ProjectFields';
       ShowNames             := ReadBool(Sec, 'ShowNames', ShowNames);
@@ -799,6 +808,10 @@ const
     TimedRecoveryInterval: 10;
     SaveBackup:            true;
     AutoIncStart:          1;
+    EmailOnShutdown:       false;
+    EmailAddress:          '';
+    EmailContent:          '';
+    EmailSubject:          '';
     // - Fields:
     ShowNames:             false;
     ShowBorders:           true;
