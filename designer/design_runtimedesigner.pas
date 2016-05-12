@@ -2870,6 +2870,8 @@ begin
   FDesignScrollBox := TJvDesignScrollBox.Create(self);
   FDesignScrollBox.Align := alClient;
   FDesignScrollBox.OnMouseWheel := @DesignScrollBoxMouseWheel;
+  FDesignScrollBox.VertScrollBar.Tracking := true;
+  FDesignScrollBox.HorzScrollBar.Tracking := true;
   FDesignScrollBox.Parent := Self;
 
   FDesignPanel := TDesignPanel.Create(Self);

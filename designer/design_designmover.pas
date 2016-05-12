@@ -272,8 +272,8 @@ var
     Result :=
       PtInRect(Parent, Child.TopLeft) or
       PtInRect(Parent, Child.BottomRight) or
-      PtInRect(Parent, Point(Child.Top,  Child.Right)) or
-      PtInRect(Parent, Point(Child.Left, Child.Bottom));
+      PtInRect(Parent, Point(Child.Right, Child.Top)) or
+      PtInRect(Parent, Point(Child.Left,  Child.Bottom));
   end;
 
 begin
