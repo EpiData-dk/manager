@@ -480,6 +480,7 @@ begin
   Handled := true;
 end;
 
+
 procedure TRuntimeDesignFrame.NewDateFieldActionExecute(Sender: TObject);
 begin
   NewShortCutDesignField(ftDMYDate, true);
