@@ -1,12 +1,12 @@
 object AdminUserForm: TAdminUserForm
-  Left = 772
+  Left = 738
   Height = 462
-  Top = 234
+  Top = 320
   Width = 618
   Caption = 'User Properties'
   ClientHeight = 462
   ClientWidth = 618
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
   object Panel2: TPanel
     Left = 0
     Height = 50

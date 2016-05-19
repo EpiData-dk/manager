@@ -69,6 +69,7 @@ begin
             ltAppend:       CellText := 'Append';
             ltExport:       CellText := 'Export';
             ltClose:        CellText := 'Closed';
+            ltNewPassword:  CellText := 'Reset Password';
           else
             CellText := 'Unimplemented Log Feaure';
           end;
