@@ -66,6 +66,12 @@ var
 begin
   S := '';
   case AMessage.Msg of
+    LM_MOUSEMOVE:
+      begin
+        with TLMMouseMove(AMessage) do
+          FFrame.Label1.Caption := Format('Mouse: (%d, %d)', [XPos, YPos]);
+        Result := inherited IsDesignMessage(ASender, AMessage);
+      end;
     LM_MOUSEWHEEL:
       // Handle MouseWheel, since on (especially) windows this is not handle
       // correctly using normal message chain.

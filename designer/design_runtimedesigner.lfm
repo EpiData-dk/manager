@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 626
   ClientWidth = 1060
   TabOrder = 0
-  DesignLeft = 609
-  DesignTop = 425
+  DesignLeft = 403
+  DesignTop = 242
   object StatusBarPanel: TPanel
     Left = 0
     Height = 26
@@ -409,58 +409,58 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       WantReturns = False
     end
     object Button1: TButton
-      Left = 168
+      Left = 152
       Height = 25
-      Top = 168
+      Top = 96
       Width = 75
       Caption = 'Button1'
       OnClick = Button1Click
       TabOrder = 1
     end
     object Label1: TLabel
-      Left = 32
+      Left = 17
       Height = 15
-      Top = 352
+      Top = 168
       Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
     object Label2: TLabel
-      Left = 32
+      Left = 17
       Height = 15
-      Top = 393
+      Top = 209
       Width = 42
       Caption = 'Label2'
       ParentColor = False
     end
     object Label3: TLabel
-      Left = 32
+      Left = 17
       Height = 15
-      Top = 439
+      Top = 255
       Width = 42
       Caption = 'Label3'
       ParentColor = False
     end
     object Label4: TLabel
-      Left = 32
+      Left = 17
       Height = 15
-      Top = 481
+      Top = 297
       Width = 42
       Caption = 'Label4'
       ParentColor = False
     end
     object Label5: TLabel
-      Left = 31
+      Left = 16
       Height = 15
-      Top = 514
+      Top = 330
       Width = 42
       Caption = 'Label5'
       ParentColor = False
     end
     object Label6: TLabel
-      Left = 33
+      Left = 18
       Height = 15
-      Top = 545
+      Top = 361
       Width = 42
       Caption = 'Label6'
       ParentColor = False

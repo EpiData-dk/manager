@@ -265,11 +265,33 @@ var
   BestTopRect: TRect;
   BestBtmRect: TRect;
   BestLeftRect: TRect;
-  BestRightRect: TRect;
+  BestRightRect, WinCtrlBound: TRect;
+
+  function BoundsInParent(Child, Parent: TRect): boolean;
+  begin
+    Result :=
+      PtInRect(Parent, Child.TopLeft) or
+      PtInRect(Parent, Child.BottomRight) or
+      PtInRect(Parent, Point(Child.Right, Child.Top)) or
+      PtInRect(Parent, Point(Child.Left,  Child.Bottom));
+  end;
+
 begin
   if not ManagerSettings.SnapFields then exit;
 
   WinCtrl := Surface.Selection[0].Parent;
+
+  // Get the scrolling wincontrol.
+  if (WinCtrl is TJvDesignPanel) then
+    begin
+      WinCtrlBound := WinCtrl.Parent.ClientRect;
+      with TScrollingWinControl(WinCtrl.Parent) do
+        OffsetRect(WinCtrlBound, HorzScrollBar.Position, VertScrollBar.Position)
+    end
+  else
+    WinCtrlBound := WinCtrl.ClientRect;
+
+
   SnapDist := ManagerSettings.SnappingThresHold;
 
   BestTopDiff   := MaxInt;
@@ -291,6 +313,8 @@ begin
         Continue;
 
       CtrlBound := Ctrl.BoundsRect;
+      if (not BoundsInParent(CtrlBound, WinCtrlBound)) then
+        Continue;
 
       for j := Low(FDragRects) to High(FDragRects) do
         begin
