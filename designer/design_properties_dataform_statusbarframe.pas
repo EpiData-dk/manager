@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, ExtCtrls,
-  epidatafiles, epitools_statusbarparser;
+  epidatafiles, epidatafilerelations, epitools_statusbarparser;
 
 type
 
@@ -56,13 +56,16 @@ type
     { Other }
     FValidated: boolean;
     FDataFile: TEpiDataFile;
+    FRelation: TEpiMasterRelation;
     procedure SetDataFile(AValue: TEpiDataFile);
+    procedure SetRelation(AValue: TEpiMasterRelation);
   public
     constructor Create(TheOwner: TComponent); override;
     procedure UpdateContent;
     procedure ApplyContent;
     function  ValidateContent: Boolean;
-    property  DataFile: TEpiDataFile read FDataFile write SetDataFile;
+//    property  DataFile: TEpiDataFile read FDataFile write SetDataFile;
+    property  Relation: TEpiMasterRelation read FRelation write SetRelation;
   end;
 
 implementation
@@ -70,7 +73,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Dialogs;
+  Dialogs, strutils;
 
 type
   TStatusbarComponents = record
@@ -186,6 +189,7 @@ procedure TStatusbarContentFrame.UpdateGUI;
 begin
   ClearGUI;
   FValidated := FParser.ParseString(Edit2.Text);
+  UpdateContentString;
 end;
 
 procedure TStatusbarContentFrame.AddTypesToCombo(Combo: TComboBox);
@@ -204,11 +208,28 @@ end;
 procedure TStatusbarContentFrame.AddFieldsToCombo(Combo: TComboBox);
 var
   F: TEpiField;
+  R: TEpiMasterRelation;
+  DF: TEpiDataFile;
+  S: String;
 begin
   Combo.Items.BeginUpdate;
 
-  for F in DataFile.Fields do
-    Combo.AddItem(F.Name, F);
+  R := Relation;
+  while Assigned(R) do
+    begin
+      DF := R.Datafile;
+
+      if (DF <> FDataFile) then
+        S := DF.Name + '.';
+
+      for F in DF.Fields do
+        Combo.AddItem(S + F.Name, F);
+
+      if (R is TEpiDetailRelation) then
+        R := TEpiDetailRelation(R).MasterRelation
+      else
+        R := nil;
+    end;
 
   Combo.Items.EndUpdate;
 end;
@@ -254,6 +275,14 @@ var
   S: String;
   I: Integer;
   Rec: PStatusbarComponents;
+
+  function AdjustedFieldName(F: TEpiField): String;
+  begin
+    Result := F.Name;
+    if (F.DataFile <> FDataFile) then
+      Result := F.DataFile.Name + '.' + Result;
+  end;
+
 begin
   S := '';
   for I := 0 to FStatubarComponentsList.Count - 1 do
@@ -262,10 +291,10 @@ begin
       with Rec^ do
       begin
         case TypeDropDown.ItemIndex of
-          0: S += '%d(' + TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex]).Name + ')';
+          0: S += '%d(' + AdjustedFieldName(TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex])) + ')';
           1: S += ContentEdit.Text;
-          2: S += '%f(' + TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex]).Name + ')';
-          3: S += '%c(' + TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex]).Name + ')';
+          2: S += '%f(' + AdjustedFieldName(TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex])) + ')';
+          3: S += '%c(' + AdjustedFieldName(TEpiField(ContentDropDown.Items.Objects[ContentDropDown.ItemIndex])) + ')';
         end;
       end;
     end;
@@ -278,6 +307,8 @@ var
   Rec: PStatusbarComponents;
   F: TEpiField;
   Idx: Integer;
+  DFName, FieldName: String;
+  R: TEpiMasterRelation;
 begin
   Rec := PStatusbarComponents(DoAddNewContentLine);
 
@@ -288,7 +319,26 @@ begin
   end;
   TypeDropDownSelect(Rec^.TypeDropDown);
 
-  F := DataFile.Fields.FieldByName[IdentName];
+  if Pos('.', IdentName) > 0 then
+    begin
+      DFName := ExtractWord(1, IdentName, ['.']);
+      FieldName  := ExtractWord(2, IdentName, ['.']);
+      R := Relation;
+
+      while Assigned(R) do
+        begin
+          if (R.Datafile.Name = DFName) then Break;
+
+          if (R is TEpiDetailRelation) then
+            R := TEpiDetailRelation(R).MasterRelation
+          else
+            R := nil;
+        end;
+      F := R.Datafile.Fields.FieldByName[FieldName];
+    end
+  else
+    F := FDataFile.Fields.FieldByName[IdentName];
+
   if Assigned(F) then
   begin
     Idx := Rec^.ContentDropDown.Items.IndexOfObject(F);
@@ -321,6 +371,14 @@ begin
   UpdateContent;
 end;
 
+procedure TStatusbarContentFrame.SetRelation(AValue: TEpiMasterRelation);
+begin
+  if FRelation = AValue then Exit;
+  FRelation := AValue;
+
+  SetDataFile(AValue.Datafile);
+end;
+
 constructor TStatusbarContentFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -342,7 +400,7 @@ end;
 
 procedure TStatusbarContentFrame.ApplyContent;
 begin
-  DataFile.StatusbarContentString := Edit2.Text;
+  FDataFile.StatusbarContentString := Edit2.Text;
 end;
 
 function TStatusbarContentFrame.ValidateContent: Boolean;

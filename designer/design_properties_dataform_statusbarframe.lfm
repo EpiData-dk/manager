@@ -6,8 +6,8 @@ object StatusbarContentFrame: TStatusbarContentFrame
   ClientHeight = 517
   ClientWidth = 475
   TabOrder = 0
-  DesignLeft = 1372
-  DesignTop = 219
+  DesignLeft = 1286
+  DesignTop = 359
   object RelateOrderLabel1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideBottom.Control = TopBevel

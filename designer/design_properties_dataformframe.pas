@@ -403,7 +403,7 @@ end;
 
 procedure TDataformPropertiesFrame.UpdateStatusbarFrameContent;
 begin
-  FStatusbarContentFrame.DataFile := Datafile;
+  FStatusbarContentFrame.Relation := Relation;
 end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
