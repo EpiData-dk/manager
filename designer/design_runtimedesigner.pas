@@ -2473,8 +2473,13 @@ var
   EpiCtrl: TEpiCustomControlItem;
 begin
   FPopUpPoint := TPopupMenu(Sender).PopupPoint;
-
   P := FDesignPanel.ScreenToClient(FPopUpPoint);
+
+  if (not FDesignPanel.Surface.Active) and
+     (MainForm.ProjectFrame.EditingProjectTree
+  then
+    Mainform.ProjectFrame.EditingProjectTree
+
   with FDesignPanel.Surface do
   begin
     Ctrl := FindControl(P.X, P.Y);
@@ -2488,7 +2493,7 @@ begin
       else
         Exit;
 
-    if not Selector.IsSelected(Ctrl) then
+    if (not Selector.IsSelected(Ctrl)) then
     begin
       Select(Ctrl);
       SelectionChange;
