@@ -164,6 +164,7 @@ type
     function    Import(Const FromCB: boolean): boolean;
     procedure   CreateNewProject;
     procedure   AssignActionLinks;
+    procedure   StopEditingProjectTree;
     property   DocumentFile: TDocumentFile read FDocumentFile;
     property   EpiDocument: TEpiDocument read GetEpiDocument;
     property   ActiveFrame: IProjectFrame read FActiveFrame;
@@ -1389,6 +1390,12 @@ begin
 
   NewProjectToolBtn.Action := MainForm.NewProjectAction;
   FActiveFrame.AssignActionLinks;
+end;
+
+procedure TProjectFrame.StopEditingProjectTree;
+begin
+  if EditingProjectTree then
+    FProjectTreeView.StopEditing;
 end;
 
 end.

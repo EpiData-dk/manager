@@ -36,10 +36,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object SectionsLabel: TLabel
         AnchorSideLeft.Control = SectionsStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 59
+        Left = 63
         Height = 15
         Top = 4
-        Width = 82
+        Width = 89
         BorderSpacing.Left = 2
         Caption = 'SectionsLabel'
         Color = clDefault
@@ -50,7 +50,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 55
+        Width = 59
         Caption = 'Sections:'
         Color = clDefault
         ParentColor = False
@@ -77,7 +77,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 117
+        Width = 130
         Caption = 'CurrentSectionLabel'
         Color = clDefault
         ParentColor = False
@@ -99,10 +99,10 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object RecordsLabel: TLabel
         AnchorSideLeft.Control = RecordStaticLabel
         AnchorSideLeft.Side = asrBottom
-        Left = 56
+        Left = 58
         Height = 15
         Top = 4
-        Width = 79
+        Width = 84
         BorderSpacing.Left = 2
         Caption = 'RecordsLabel'
         Color = clDefault
@@ -113,7 +113,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 2
         Height = 15
         Top = 4
-        Width = 52
+        Width = 54
         Caption = 'Records:'
         Color = clDefault
         ParentColor = False
@@ -141,7 +141,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 43
         Height = 15
         Top = 4
-        Width = 66
+        Width = 69
         BorderSpacing.Left = 2
         Caption = 'FieldsLabel'
         Color = clDefault
@@ -182,7 +182,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 93
+        Width = 101
         BorderSpacing.Left = 2
         Caption = 'FieldNameLabel'
         Color = clDefault
@@ -213,7 +213,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 86
+        Width = 90
         BorderSpacing.Left = 2
         Caption = 'FieldTypeLabel'
         Color = clDefault
@@ -244,7 +244,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 103
+        Width = 115
         BorderSpacing.Left = 2
         Caption = 'DefaultValueLabel'
         Color = clDefault
@@ -275,7 +275,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 94
+        Width = 103
         BorderSpacing.Left = 2
         Caption = 'ValueLabelLabel'
         Color = clDefault
@@ -306,7 +306,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 68
+        Width = 74
         BorderSpacing.Left = 2
         Caption = 'RangeLabel'
         Color = clDefault
@@ -337,7 +337,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 3
         Height = 15
         Top = 4
-        Width = 54
+        Width = 56
         BorderSpacing.Left = 2
         Caption = 'KeyLabel'
         Color = clDefault
@@ -421,7 +421,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 17
       Height = 15
       Top = 168
-      Width = 38
+      Width = 42
       Caption = 'Label1'
       ParentColor = False
     end
@@ -429,7 +429,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 17
       Height = 15
       Top = 209
-      Width = 38
+      Width = 42
       Caption = 'Label2'
       ParentColor = False
     end
@@ -437,7 +437,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 17
       Height = 15
       Top = 255
-      Width = 38
+      Width = 42
       Caption = 'Label3'
       ParentColor = False
     end
@@ -445,7 +445,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 17
       Height = 15
       Top = 297
-      Width = 38
+      Width = 42
       Caption = 'Label4'
       ParentColor = False
     end
@@ -453,7 +453,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 16
       Height = 15
       Top = 330
-      Width = 38
+      Width = 42
       Caption = 'Label5'
       ParentColor = False
     end
@@ -461,7 +461,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 18
       Height = 15
       Top = 361
-      Width = 38
+      Width = 42
       Caption = 'Label6'
       ParentColor = False
     end

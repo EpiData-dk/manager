@@ -2475,10 +2475,9 @@ begin
   FPopUpPoint := TPopupMenu(Sender).PopupPoint;
   P := FDesignPanel.ScreenToClient(FPopUpPoint);
 
-  if (not FDesignPanel.Surface.Active) and
-     (MainForm.ProjectFrame.EditingProjectTree
+  if (MainForm.ProjectFrame.EditingProjectTree)
   then
-    Mainform.ProjectFrame.EditingProjectTree
+    MainForm.ProjectFrame.StopEditingProjectTree;
 
   with FDesignPanel.Surface do
   begin
