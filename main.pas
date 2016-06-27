@@ -7,8 +7,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
-  project_frame, LMessages, manager_messages, epidocument, report_base,
+  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons, project_frame,
+  LMessages, StdCtrls, manager_messages, epidocument, report_base,
  { episervice_ipc,} episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile,
   epiadmin;
 
@@ -196,6 +196,9 @@ type
     SetSimplePasswordMenuItem: TMenuItem;
     RemoveSimplePasswordMenuItem: TMenuItem;
     MenuItem39: TMenuItem;
+    BetaPanel: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -298,6 +301,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     property  Modified: boolean read FModified write SetModified;
+    property  ProjectFrame: TProjectFrame read FActiveFrame;
     procedure RestoreDefaultPos;
     procedure UpdateRecentFiles;
     procedure AssignActionLinks;
