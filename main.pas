@@ -271,6 +271,7 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
     property  Modified: boolean read FModified write SetModified;
+    property  ProjectFrame: TProjectFrame read FActiveFrame;
     procedure RestoreDefaultPos;
     procedure UpdateRecentFiles;
     procedure AssignActionLinks;

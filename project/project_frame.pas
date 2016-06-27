@@ -129,6 +129,7 @@ type
     procedure TimedBackup(Sender: TObject);
     procedure UpdateShortCuts;
   private
+    function GetEditingProjectTree: boolean;
 //    FFileName: string;
     procedure LoadError(const Sender: TEpiCustomBase; ErrorType: Word;
       Data: Pointer; out Continue: boolean);
@@ -153,11 +154,13 @@ type
     function    Import(Const FromCB: boolean): boolean;
     procedure   CreateNewProject;
     procedure   AssignActionLinks;
+    procedure   StopEditingProjectTree;
     property   DocumentFile: TDocumentFile read FDocumentFile;
     property   EpiDocument: TEpiDocument read GetEpiDocument;
     property   ActiveFrame: IProjectFrame read FActiveFrame;
     property   Modified: Boolean read FModified write SetModified;
     property   OnModified: TNotifyEvent read FOnModified write SetOnModified;
+    property   EditingProjectTree: boolean read GetEditingProjectTree;
   public
     class procedure   RestoreDefaultPos(F: TProjectFrame);
   end;
@@ -1053,6 +1056,11 @@ begin
   KeyFieldsAction.ShortCut        := P_KeyFields;
 end;
 
+function TProjectFrame.GetEditingProjectTree: boolean;
+begin
+  result := FProjectTreeView.EditingCaption;
+end;
+
 function TProjectFrame.GetEpiDocument: TEpiDocument;
 begin
   result := nil;
@@ -1346,6 +1354,12 @@ begin
 
   NewProjectToolBtn.Action := MainForm.NewProjectAction;
   FActiveFrame.AssignActionLinks;
+end;
+
+procedure TProjectFrame.StopEditingProjectTree;
+begin
+  if EditingProjectTree then
+    FProjectTreeView.StopEditing;
 end;
 
 end.
