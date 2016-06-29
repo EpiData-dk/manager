@@ -10,7 +10,7 @@ uses
   Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons, project_frame,
   LMessages, StdCtrls, manager_messages, epidocument, report_base,
  { episervice_ipc,} episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile,
-  epiadmin;
+  epiadmin, LCLType;
 
 type
 
@@ -18,6 +18,8 @@ type
 
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
+    MenuItem34: TMenuItem;
+    StaticText1: TStaticText;
     ViewLogMenuItem: TMenuItem;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
@@ -198,7 +200,6 @@ type
     MenuItem39: TMenuItem;
     BetaPanel: TPanel;
     Label1: TLabel;
-    Label2: TLabel;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -321,7 +322,7 @@ uses
   LCLProc, LCLIntf, LazUTF8Classes,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   epimiscutils,
-  epicustombase, LCLType, UTF8Process,
+  epicustombase, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   report_fieldlist, report_valuelabellist,
   viewer_form, staticreports_form,
