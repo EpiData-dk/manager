@@ -121,8 +121,8 @@ begin
   result := true;
 end;
 
-initialization
-  RegisterExportFrame(TExportSASFrame, TEpiSASExportSetting);
+//initialization
+//  RegisterExportFrame(TExportSASFrame, TEpiSASExportSetting);
 
 end.
 

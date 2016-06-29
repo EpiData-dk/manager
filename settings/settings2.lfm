@@ -1,7 +1,7 @@
 object SettingsForm: TSettingsForm
-  Left = 667
+  Left = 2242
   Height = 443
-  Top = 245
+  Top = 353
   Width = 611
   ActiveControl = SettingsView
   Caption = 'Preferences'
@@ -10,7 +10,7 @@ object SettingsForm: TSettingsForm
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
   object Panel1: TPanel
     AnchorSideTop.Side = asrCenter
     Left = 0
@@ -25,10 +25,10 @@ object SettingsForm: TSettingsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn2
-      Left = 455
+      Left = 457
       Height = 34
       Top = 8
-      Width = 81
+      Width = 78
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -43,10 +43,10 @@ object SettingsForm: TSettingsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 546
+      Left = 545
       Height = 32
       Top = 9
-      Width = 54
+      Width = 55
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -92,12 +92,11 @@ object SettingsForm: TSettingsForm
       000000000000000000110000004669656C6420446566696E6974696F6E73FFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000000D0000005669737561
       6C2044657369676EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000
-      0005000000466F6E7473FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF060000000000
+      0005000000466F6E7473FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF050000000000
       000001060000004578706F7274FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000
       000000000000050000005374617461FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00
       000000000000000003000000435356FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00
       00000000000000000400000053505353FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-      00000000000000000003000000534153FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       00000000000000000003000000444449FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       00000000000000000003000000455058FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       0300000000000000011000000050726F6A6563742044656661756C7473FFFFFF
