@@ -178,10 +178,14 @@ begin
           SetBounds(Left, Top, 0, 0);
           Surface(Self).UpdateDesigner;
         end;
+
       efceSetLeft,
       efceSetTop: ;
+
+      efceEntryMode,
       efceShowValueLabel:
         UpdateControl;
+
       efceValueLabelSet:
         begin
           UpdateValueLabelConnection(TEpiValueLabelSet(Data), FField.ValueLabelSet);
@@ -395,6 +399,11 @@ begin
     BorderStyle := bsNone
   else
     BorderStyle := bsSingle;
+
+  if FField.EntryMode = emMustEnter then
+    Color := clRed
+  else
+    Color := clDefault;
 end;
 
 procedure TDesignField.SetParent(NewParent: TWinControl);

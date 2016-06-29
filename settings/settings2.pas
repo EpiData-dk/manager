@@ -691,7 +691,7 @@ begin
     FindNodeWithText('Stata').Data               := Pointer(TExportStataFrame.Create(Self));
     FindNodeWithText('CSV').Data                 := Pointer(TExportCSVFrame.Create(Self));
     FindNodeWithText('SPSS').Data                := Pointer(TExportSPSSFrame.Create(Self));
-    FindNodeWithText('SAS').Data                 := Pointer(TExportSASFrame.Create(Self));
+//    FindNodeWithText('SAS').Data                 := Pointer(TExportSASFrame.Create(Self));
     FindNodeWithText('DDI').Data                 := Pointer(TExportDDIFrame.Create(Self));
     FindNodeWithText('EPX').Data                 := Pointer(TExportEPXFrame.Create(Self));
 
