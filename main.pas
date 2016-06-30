@@ -18,7 +18,6 @@ type
 
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
-    MenuItem34: TMenuItem;
     StaticText1: TStaticText;
     ViewLogMenuItem: TMenuItem;
     MenuItem35: TMenuItem;
