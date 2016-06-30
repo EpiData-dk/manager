@@ -185,7 +185,6 @@ object MainForm: TMainForm
   end
   object MainMenu1: TMainMenu
     Images = DM.Icons16
-    OwnerDraw = True
     left = 264
     top = 400
     object AppleMenuItem: TMenuItem
