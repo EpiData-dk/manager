@@ -1253,12 +1253,16 @@ begin
   UpdateProcessToolbar;
   AssignActionLinks;
   SetCaption;
+
+  BetaPanel.Visible := true;
 end;
 
 procedure TMainForm.NewProjectFrame;
 var
   TabSheet: TTabSheet;
 begin
+  BetaPanel.Visible := false;
+
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
