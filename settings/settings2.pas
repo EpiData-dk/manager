@@ -63,7 +63,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_interface, settings2_var, epidatafilestypes,
+  settings2_interface, settings2_var, epidatafilestypes, LazFileUtils,
   IniFiles, epieximtypes, manager_types,
   managerprocs,
 
