@@ -86,23 +86,26 @@ end;
 procedure TDesignField.ReadField(Stream: TStream);
 var
   CopyField: TEpiField;
+  RefMap: TEpiReferenceMap;
 begin
   Stream.Read(CopyField, SizeOf(Pointer));
-  FField := TEpiField(CopyField.Clone(nil));
-  // Manually add ValueLabelSet, this is not done in cloning.
-  FField.ValueLabelSet        := CopyField.ValueLabelSet;
-  FField.ValueLabelWriteField := CopyField.ValueLabelWriteField;
+
+  RefMap := TEpiReferenceMap.Create;
+  FField := TEpiField(CopyField.Clone(nil, RefMap));
+  RefMap.FixupReferences;
+  RefMap.Free;
 end;
 
 procedure TDesignField.WriteField(Stream: TStream);
 var
   CopyField: TEpiField;
+  RefMap: TEpiReferenceMap;
 begin
-  CopyField := TEpiField(FField.Clone(nil));
-  // Manually add ValueLabelSet, this is not done in cloning.
+  RefMap := TEpiReferenceMap.Create;
+  CopyField := TEpiField(FField.Clone(nil, RefMap));
+  RefMap.FixupReferences;
+  RefMap.Free;
 
-  CopyField.ValueLabelSet := FField.ValueLabelSet;
-  CopyField.ValueLabelWriteField := FField.ValueLabelWriteField;
   // Wipe data content on copy!
   CopyField.ResetData;
 
@@ -444,14 +447,41 @@ begin
   Section := TEpiSection((Parent as IDesignEpiControl).EpiControl);
   if not Section.Fields.ValidateRename(FField.Name, false) then
     FField.Name := Section.Fields.GetUniqueItemName(TEpiField);
-  Section.Fields.AddItem(FField);
 
-{  if Assigned(FField.Jumps) then
-    FField.Jumps       := TEpiJumps(FField.Jumps.Clone(FField));}
-{  if Assigned(FField.Calculation) then
-    FField.Calculation := TEpiCalculation(FField.Calculation.Clone(FField));   }
-{  if Assigned(FField.Comparison) then
-    FField.Comparison  := TEpiComparison(FField.Comparison.Clone(FField));}
+  if Section.DataFile <> FField.DataFile then
+    { This is a cross-datafile copy, hence all field refering object should
+      be removed   }
+  begin
+    FField.ValueLabelWriteField := nil;
+
+    if Assigned(FField.Jumps) then
+    begin
+      FField.Jumps.Free;
+      FField.Jumps := nil;
+    end;
+
+    if Assigned(FField.Calculation) then
+    begin
+      FField.Calculation.Free;
+      FField.Calculation := nil;
+    end;
+
+    if Assigned(FField.Comparison) then
+    begin
+      FField.Comparison.Free;
+      FField.Comparison := nil;
+    end;
+
+    if Assigned(FField.Relates) then
+    begin
+      FField.Relates.Free;
+      FField.Relates := nil;
+    end;
+
+    DoShowHint('Field was pasted to a different dataform' + LineEnding +
+               'Jumps, Calculations, Comparisons and Relates have been reset!');
+  end;
+  Section.Fields.AddItem(FField);
 
   SetEpiControl(FField);
 end;

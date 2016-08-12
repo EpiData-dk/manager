@@ -109,7 +109,7 @@ implementation
 
 uses
   epiimport, LCLProc, epimiscutils, Dialogs, managerprocs, epiv_documentfile,
-  settings2_var, Clipbrd, LCLIntf, LCLType, LazUTF8, LazFileUtils;
+  settings2_var, Clipbrd, LCLIntf, LCLType, LazFileUtils, LazUTF8;
 
 
 type
