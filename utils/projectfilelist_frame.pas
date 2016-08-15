@@ -115,7 +115,7 @@ implementation
 
 uses
   epiimport, LCLProc, epimiscutils, Dialogs, managerprocs, epiv_documentfile,
-  settings2_var, Clipbrd, LCLIntf, LCLType, admin_authenticator, LazFileUtils;
+  settings2_var, Clipbrd, LCLIntf, LCLType, admin_authenticator, LazFileUtils, LazUTF8;
 
 
 type
