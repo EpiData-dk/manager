@@ -2117,8 +2117,11 @@ begin
     Exit;
 
   L := TEpiCustomList.Create(nil);
+  L.UniqueNames := false;
   for I := 0 to Length(ControlList) - 1 do
-    if Supports(ControlList[i], IDesignEpiControl, Intf) then
+    if Supports(ControlList[i], IDesignEpiControl, Intf) and
+       Assigned(Intf.EpiControl)
+    then
       L.AddItem(Intf.EpiControl);
 
   OnUpdateStatusBarContent(Self, L);
