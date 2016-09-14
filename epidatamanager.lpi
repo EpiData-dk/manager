@@ -14,8 +14,8 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
-      <RevisionNr Value="11"/>
-      <BuildNr Value="61"/>
+      <RevisionNr Value="12"/>
+      <BuildNr Value="62"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <Attributes pvaDebug="True"/>
