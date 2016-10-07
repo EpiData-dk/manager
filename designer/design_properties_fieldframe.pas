@@ -259,7 +259,8 @@ implementation
 uses
   epimiscutils, typinfo, epiranges, epiconvertutils, epiadmin,
   epistringutils, LazUTF8, field_valuelabelseditor_form, admin_authenticator,
-  valuelabelseditor_form2, math, epidatafilerelations, epiv_datamodule;
+  valuelabelseditor_form2, math, epidatafilerelations, epiv_datamodule,
+  epifields_helper;
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';
@@ -368,7 +369,12 @@ begin
   begin
     VL := ValueLabels[i];
 
-    case VL.LabelType of
+    DoAdd := Field.AcceptsValuelabelSet(VL,
+               StrToIntDef(LengthEdit.Text, (Field.Length - Field.Decimals - 1)),
+               StrToIntDef(DecimalsEdit.Text, Field.Decimals)
+             );
+
+{    case VL.LabelType of
       ftInteger:
         begin
           DoAdd := Field.FieldType in [ftInteger, ftFloat];
@@ -401,7 +407,7 @@ begin
             (DecL <= StrToIntDef(DecimalsEdit.Text, Field.Decimals));
         end;
       ftString:  DoAdd := Field.FieldType in [ftString, ftUpperString];
-    end;
+    end;}
 
     if DoAdd then
       ValueLabelComboBox.AddItem(VL.Name, VL)

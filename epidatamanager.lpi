@@ -16,10 +16,10 @@
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="1"/>
       <RevisionNr Value="2"/>
-      <BuildNr Value="87"/>
+      <BuildNr Value="88"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable ProductVersion="" SpecialBuild="ADMIN"/>
+      <StringTable SpecialBuild="ADMIN" ProductVersion="2.1.2.87"/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
