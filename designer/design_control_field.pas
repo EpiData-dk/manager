@@ -582,7 +582,7 @@ begin
   // TC (2015-01-26): No! This forces a cascade of AutoSizing call each time controls are
   // moved! If many controls are selected and moved, this has a LARGE impact on visual
   // performance!
- // Surface.UpdateDesigner;
+  //Surface.UpdateDesigner;
 end;
 
 procedure TDesignField.FixupCopyControl;

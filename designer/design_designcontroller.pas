@@ -18,6 +18,11 @@ type
     // A little cheating to be able to set the drag rect manually... needed
     // for applying a dataframe!
     FDragRect: TRect;
+    // For some odd reason GTK2 sends a a btn-down message to multiple components, regardsless
+    // of how we return the result in IsDesignMessage. In order to NOT create 2+ mousetools due to
+    // the extra messages, we do a check in our own DesignController to ensure that only a single
+    // tool is created on mouse down.
+    FMouseToolIsSet: Boolean;
   protected
     function DoCreateMouseTool(ADragMode: TJvDesignDragMode
        ): TJvDesignCustomMouseTool; override;
@@ -62,6 +67,11 @@ begin
   else
     Result := inherited DoCreateMouseTool(ADragMode);
   end;
+
+  FMouseToolIsSet := Assigned(Result);
+
+  if Assigned(REsult) then
+    Writeln('MouseTool = ', Result.ClassName);
 end;
 
 function TDesignController.KeyUp(AKeyCode: Cardinal): Boolean;
@@ -93,7 +103,8 @@ end;
 function TDesignController.MouseDown(Button: TMouseButton; X, Y: Integer;
   TheMessage: TLMMouse): Boolean;
 begin
-  Result := inherited MouseDown(Button, X, Y, TheMessage);
+  if (not FMouseToolIsSet) then
+    Result := inherited MouseDown(Button, X, Y, TheMessage);
 end;
 
 function TDesignController.MouseMove(X, Y: Integer; TheMessage: TLMMouse
@@ -112,6 +123,8 @@ begin
   end;
 
   Result := inherited MouseUp(Button, X, Y, TheMessage);
+  if (FMouseToolIsSet) then
+    FMouseToolIsSet := false;
 
   case DragMode of
     dmNone: ;
@@ -148,6 +161,7 @@ var
 begin
   inherited Create(ASurface);
   FDragRect := Rect(0,0,0,0);
+  FMouseToolIsSet := false;
 
   P := ASurface.Container;
   while (P <> nil) and (not (P is TRuntimeDesignFrame)) do
