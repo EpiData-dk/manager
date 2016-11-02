@@ -70,8 +70,8 @@ begin
 
   FMouseToolIsSet := Assigned(Result);
 
-  if Assigned(REsult) then
-    Writeln('MouseTool = ', Result.ClassName);
+{  if Assigned(REsult) then
+    Writeln('MouseTool = ', Result.ClassName); }
 end;
 
 function TDesignController.KeyUp(AKeyCode: Cardinal): Boolean;
