@@ -268,6 +268,8 @@ type
       AParent: TWinControl = nil): TControl;
     function NewDesignField(TopLeft: TPoint; Field: TEpiField = nil;
       AParent: TWinControl = nil): TControl;
+    function NewDesignMemo(ARect: TRect; Field: TEpiField = nil;
+      AParent: TWinControl = nil): TControl;
     function NewDesignSection(ARect: TRect; Section: TEpiSection = nil): TWinControl;
     { Design control via shortcuts }
     function NewShortCutDesignField(Ft: TEpiFieldType;
@@ -410,7 +412,9 @@ begin
   then
     FAddClass := '';
 
-  if FAddClass = 'TDesignField' then
+  if (FAddClass = 'TDesignField') or
+     (FAddClass = 'TDesignMemo')
+  then
     FLastSelectedFieldType := TEpiFieldType(FActiveButton.Tag);
 
   ioClass := FAddClass;
@@ -1472,15 +1476,48 @@ begin
 
     FCreatingControl := not Assigned(Field);
     Controller.SetDragRect(Rect(TopLeft.X, TopLeft.Y, 0, 0));
+
     Surface.AddClass := 'TDesignField';
     Surface.AddComponent;
-
-    Result := TDesignField(Surface.Selection[0]);
-    Result.PopupMenu := DesignControlPopUpMenu;
+    result := TDesignField(Surface.Selection[0]);
+    TDesignField(Result).PopupMenu := DesignControlPopUpMenu;
     TDesignField(Result).OnShowHint := @ShowHintMsg;
 
     if Assigned(Field) then
       TDesignField(Result).EpiControl := Field;
+  finally
+    Controller.ClearDragRect;
+    Surface.UpdateDesigner;
+  end;
+end;
+
+function TRuntimeDesignFrame.NewDesignMemo(ARect: TRect; Field: TEpiField;
+  AParent: TWinControl): TControl;
+var
+  Controller: TDesignController;
+  Surface: TJvDesignSurface;
+begin
+  Controller := TDesignController(FDesignPanel.Surface.Controller);
+  Surface    := FDesignPanel.Surface;
+
+  try
+    if Assigned(AParent) then
+      begin
+        ARect.TopLeft     := DesignClientToParent(ARect.TopLeft, AParent, FDesignPanel);
+        ARect.BottomRight := DesignClientToParent(ARect.BottomRight, AParent, FDesignPanel);
+      end;
+
+    FCreatingControl := not Assigned(Field);
+    Controller.SetDragRect(ARect);
+
+    Surface.AddClass := 'TDesignMemo';
+    Surface.AddComponent;
+    result := TDesignMemo(Surface.Selection[0]);
+    TDesignMemo(Result).PopupMenu := DesignControlPopUpMenu;
+//    TDesignMemo(Result).OnShowHint := @ShowHintMsg;
+
+    if Assigned(Field) then
+      TDesignMemo(Result).EpiControl := Field;
   finally
     Controller.ClearDragRect;
     Surface.UpdateDesigner;
@@ -2281,10 +2318,10 @@ end;
 
 procedure TRuntimeDesignFrame.TestToolButtonClick(Sender: TObject);
 begin
-{  FAddClass := 'TDesignMemo';
-  DoToogleBtn(Sender);}
-  AlignForm.Free;
-  AlignForm.Show;
+  FAddClass := 'TDesignMemo';
+  DoToogleBtn(Sender);
+//  AlignForm.Free;
+//  AlignForm.Show;
 end;
 
 procedure TRuntimeDesignFrame.UndoActionExecute(Sender: TObject);
@@ -2325,7 +2362,9 @@ begin
       MainForm.BeginUpdatingForm;
       Ctrl := FDesignPanel.Surface.Selection[0];
 
-      if Ctrl is TDesignField then
+      if (Ctrl is TDesignField) or
+         (Ctrl is TDesignMemo)
+      then
         begin
           EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewField(FLastSelectedFieldType);
           case FLastSelectedFieldType of
@@ -2343,16 +2382,18 @@ begin
           end;
           TEpiField(EpiCtrl).ShowValueLabel := ManagerSettings.ShowValuelabelText;
         end;
+
       if Ctrl is TDesignHeading then
         begin
           EpiCtrl := TEpiSection((Ctrl.Parent as IDesignEpiControl).EpiControl).NewHeading;
           TEpiHeading(EpiCtrl).Caption.Text := '(untitled)';
         end;
+
       if Ctrl is TDesignSection then
         EpiCtrl := DataFile.NewSection;
 
-      if Ctrl is TDesignMemo then
-        EpiCtrl := DataFile.NewSection;
+//      if Ctrl is TDesignMemo then
+//        EpiCtrl := DataFile.NewSection;
 
 
       ApplyCommonCtrlSetting(Ctrl, EpiCtrl);
@@ -2827,7 +2868,12 @@ begin
       for j := 0 to S.Fields.Count - 1 do
         begin
           F := S.Field[j];
-          NewDesignField(Point(F.Left, F.Top), F, Selected);
+
+          if F.FieldType = ftMemo then
+            with TEpiMemoField(F) do
+              NewDesignMemo(Rect(Left, Top, Left+Width, Top+Height), F, Selected)
+          else
+            NewDesignField(Point(F.Left, F.Top), F, Selected);
         end;
 
       for j := 0 to S.Headings.Count - 1 do

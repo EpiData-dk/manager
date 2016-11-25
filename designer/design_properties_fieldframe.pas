@@ -1405,7 +1405,7 @@ begin
 
   FieldTypeImage.Visible          := FieldsHaveSameFieldType;
 
-  LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes);
+  LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes - [ftMemo]);
   LengthEdit.Enabled              := (IsAuthorized(earDefineProject));
   if FieldsHaveFieldTypes(FloatFieldTypes) and FieldsHaveFieldTypes(IntFieldTypes + StringFieldTypes)
   then
@@ -1455,10 +1455,9 @@ begin
   RelateSheet.Enabled             := (IsAuthorized(earDefineProject));
 
   // - calc
-  CalcSheet.Enabled               := (not IsRelatedKeyField) and (IsAuthorized(earDefineProject));
+  CalcSheet.TabVisible            := (not IsRelatedKeyField) and FieldsMustHaveFieldTypes(CalculateFieldTypes);
+  CalcSheet.Enabled               := (IsAuthorized(earDefineProject));
   CalcUnchangedRadioBtn.Visible   := ManyFields;
-  CalcSheet.TabVisible            := (not FieldsMustHaveFieldTypes(AutoFieldTypes));
-
   // - notes
   NotesSheet.Visible              := FieldsMustHaveFieldTypes(NotesFieldTypes);
   NotesSheet.Enabled              := (IsAuthorized(earDefineProject));
