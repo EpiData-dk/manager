@@ -54,7 +54,7 @@ uses
   managerprocs, settings2_var, LCLIntf,
   LCLType, design_properties_fieldframe, epidocument, Graphics,
   epistringutils, epidatafilestypes,
-  manager_globals;
+  manager_globals, math;
 
 { TDesignMemo }
 
@@ -145,19 +145,20 @@ begin
   begin
     // LEFT
     Left := Self.Left;
-    if FQuestionLabel.Caption <> '' then
-      Left := FQuestionLabel.Left;
-    if FNameLabel.Caption <> '' then
-      Left := FNameLabel.Left;
-
-    // RIGHT
-    Right := Self.Left + Self.Width;
 
     // TOP
     Top := Self.Top;
+    if (FQuestionLabel.Caption <> '') then
+      Top := FQuestionLabel.Top;
+    if (FNameLabel.Caption <> '') then
+      Top := FNameLabel.Top;
+
+    // RIGHT
+    Right := Math.Max(Left + Self.Width,
+                      Left + (FQuestionLabel.Left + FQuestionLabel.Width));
 
     // BOTTOM
-    Bottom := Self.Top + Self.Height;
+    Bottom := Top + Self.Height;
   end;
 end;
 
@@ -184,9 +185,12 @@ begin
   lRect := AValue;
 
   if FQuestionLabel.Caption <> '' then
-    lRect.Left := (Left - FQuestionLabel.Left) + AValue.Left;
+    lRect.Top := (Top - FQuestionLabel.Left) + AValue.Top;
   if FNameLabel.Caption <> '' then
-    lRect.Left := (Left - FNameLabel.Left) + AValue.Left;
+    lRect.Top := (Top - FNameLabel.Top) + AValue.Top;
+
+  if (Left + (FQuestionLabel.Left + FQuestionLabel.Width) > Width) then
+    lRect.Right := Left + Width;
 
   BoundsRect := lRect;
 end;
@@ -212,13 +216,33 @@ begin
 end;
 
 procedure TDesignMemo.ReadMemo(Stream: TStream);
+var
+  CopyField: TEpiField;
+  RefMap: TEpiReferenceMap;
 begin
+  Stream.Read(CopyField, SizeOf(Pointer));
 
+  RefMap := TEpiReferenceMap.Create;
+  FMemoField := TEpiMemoField(CopyField.Clone(nil, RefMap));
+  RefMap.FixupReferences;
+  RefMap.Free;
 end;
 
 procedure TDesignMemo.WriteMemo(Stream: TStream);
+var
+  CopyField: TEpiField;
+  RefMap: TEpiReferenceMap;
 begin
+  RefMap := TEpiReferenceMap.Create;
+  CopyField := TEpiField(FMemoField.Clone(nil, RefMap));
+  RefMap.FixupReferences;
+  RefMap.Free;
 
+  // Wipe data content on copy!
+  CopyField.ResetData;
+
+  GlobalCopyList.Add(CopyField);
+  Stream.Write(CopyField, Sizeof(Pointer));
 end;
 
 function TDesignMemo.Surface: TJvDesignSurface;
@@ -249,8 +273,8 @@ begin
   inherited SetParent(NewParent);
   if [csDestroying{, csLoading}] * ComponentState <> [] then exit;
 
-  FQuestionLabel.Parent := NewParent;
   FNameLabel.Parent := NewParent;
+  FQuestionLabel.Parent := NewParent;
 
   if Fixup then
     DoFixupCopyControl;
@@ -259,11 +283,21 @@ end;
 procedure TDesignMemo.DefineProperties(Filer: TFiler);
 begin
   inherited DefineProperties(Filer);
+  Filer.DefineBinaryProperty('EpiField', @ReadMemo, @WriteMemo, Assigned(FMemoField));
 end;
 
 procedure TDesignMemo.DoFixupCopyControl;
+var
+  Section: TEpiSection;
 begin
-  //
+  Section := TEpiSection((Parent as IDesignEpiControl).EpiControl);
+
+  if not Section.Fields.ValidateRename(FMemoField.Name, false) then
+    FMemoField.Name := Section.Fields.GetUniqueItemName(TEpiField);
+
+  Section.Fields.AddItem(FMemoField);
+
+  SetEpiControl(FMemoField);
 end;
 
 constructor TDesignMemo.Create(AOwner: TComponent);
@@ -272,21 +306,21 @@ begin
 
   Name := GetRandomComponentName;
 
-  FQuestionLabel := TLabel.Create(Self);
-  FQuestionLabel.Anchors := [];
-  FQuestionLabel.AnchorToNeighbour(akRight, 5, Self);
-  FQuestionLabel.AnchorParallel(akTop, 0, Self);
-  FQuestionLabel.ParentFont := false;
-  FQuestionLabel.ControlStyle := FQuestionLabel.ControlStyle + [csNoDesignSelectable];
-  FQuestionLabel.SetSubComponent(true);
-
   FNameLabel := TLabel.Create(Self);
   FNameLabel.Anchors := [];
-  FNameLabel.AnchorToNeighbour(akRight, 5, FQuestionLabel);
-  FNameLabel.AnchorParallel(akTop, 0, FQuestionLabel);
+  FNameLabel.AnchorParallel(akLeft, 0, Self);
+  FNameLabel.AnchorToNeighbour(akBottom, 5, Self);
   FNameLabel.ParentFont := false;
   FNameLabel.ControlStyle := FNameLabel.ControlStyle + [csNoDesignSelectable];
   FNameLabel.SetSubComponent(true);
+
+  FQuestionLabel := TLabel.Create(Self);
+  FQuestionLabel.Anchors := [];
+  FQuestionLabel.AnchorToNeighbour(akLeft, 5, FNameLabel);
+  FQuestionLabel.AnchorParallel(akBottom, 0, FNameLabel);
+  FQuestionLabel.ParentFont := false;
+  FQuestionLabel.ControlStyle := FQuestionLabel.ControlStyle + [csNoDesignSelectable];
+  FQuestionLabel.SetSubComponent(true);
 
   AutoSize := false;
   ReadOnly := true;
@@ -305,8 +339,8 @@ begin
       FMemoField.Free;
     end;
 
-  FNameLabel.Anchors       := [];
   FQuestionLabel.Anchors   := [];
+  FNameLabel.Anchors       := [];
 
   inherited Destroy;
 end;
