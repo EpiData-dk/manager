@@ -143,6 +143,7 @@ type
     TimeSubMenu: TMenuItem;
     TodayDateSubMenu: TMenuItem;
     AutoIncToolBtn: TToolButton;
+    MemoToolButton: TToolButton;
     procedure AlignBottomActionExecute(Sender: TObject);
     procedure AlignLeftActionExecute(Sender: TObject);
     procedure AlignRightActionExecute(Sender: TObject);
@@ -218,6 +219,7 @@ type
     procedure UndoActionUpdate(Sender: TObject);
     procedure ViewDatasetActionExecute(Sender: TObject);
     procedure ViewDatasetActionUpdate(Sender: TObject);
+    procedure MemoBtnClick(Sender: TObject);
   private
     FPopUpPoint: TPoint;
     FActiveButton: TToolButton;
@@ -2026,6 +2028,7 @@ begin
   IntToolButton.Enabled     := Authorized;
   FloatToolButton.Enabled   := Authorized;
   StringToolButton.Enabled  := Authorized;
+  MemoToolButton.Enabled    := Authorized;
   DateToolButton.Enabled    := Authorized;
   TimeToolButton.Enabled    := Authorized;
   AutoIncToolBtn.Enabled    := Authorized;
@@ -2347,6 +2350,12 @@ end;
 procedure TRuntimeDesignFrame.ViewDatasetActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled := Authenticator.IsAuthorized([earExtentendedData]);
+end;
+
+procedure TRuntimeDesignFrame.MemoBtnClick(Sender: TObject);
+begin
+  FAddClass := 'TDesignMemo';
+  DoToogleBtn(Sender);
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);
