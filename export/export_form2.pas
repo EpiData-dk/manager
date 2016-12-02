@@ -100,9 +100,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafilestypes, epieximtypes, LazUTF8,
+  epidatafilestypes, epieximtypes,
   epimiscutils, settings2_var, settings2, manager_types;
-
 var
   RegisterList: TList = nil;
 
@@ -501,7 +500,7 @@ begin
       end;
   end;
 
-  Result += '.tmp';
+  Result := CanonicalizeFileName(Result) + '.tmp';
 end;
 
 function TExportForm2.GetExportDirectory: string;
