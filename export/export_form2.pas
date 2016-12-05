@@ -501,7 +501,7 @@ begin
       end;
   end;
 
-  Result += '.tmp';
+  Result := CanonicalizeFileName(Result) + '.tmp';
 end;
 
 function TExportForm2.GetExportDirectory: string;
