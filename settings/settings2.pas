@@ -837,7 +837,7 @@ const
     OwnFunding:            '';
 
 
-    StatusBarItemNames:    'LastSaved,CurrentUser,SelectedNames';
+    StatusBarItemNames:    'LastSaved,CurrentUser,SelectedNames,RecourdCount,CycleNo';
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;
