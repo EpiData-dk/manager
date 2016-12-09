@@ -16,8 +16,7 @@ type
     ScrollBox1: TScrollBox;
     Label1: TLabel;
     Label2: TLabel;
-    SpeedButton1: TSpeedButton;
-    SpeedButton2: TSpeedButton;
+    Img1: TImage;
     Bevel1: TBevel;
     Bevel2: TBevel;
     Bevel3: TBevel;
@@ -26,8 +25,8 @@ type
     Bevel6: TBevel;
     Bevel8: TBevel;
     Bevel9: TBevel;
+    Img2: TImage;
     Splitter1: TSplitter;
-    MainCB: TCheckBoxThemed;
     procedure IncludeCBChange(Sender: TObject);
   private
     FControlList: TStringList;
@@ -173,7 +172,7 @@ begin
 
     CB := TCheckBoxThemed.Create(Self);
     CB.Caption := '';
-    CB.AnchorParallel(akLeft, 0, MainCB);
+    CB.AnchorToCompanion(akRight, 5, Bevel1);
     CB.AnchorVerticalCenterTo(ExItem.Panel);
     CB.AutoSize := true;
     CB.Parent := ScrollBox1;
@@ -189,8 +188,8 @@ begin
     MoveUpBtn := TSpeedButton.Create(Self);
     MoveUpBtn.ShowCaption := false;
     MoveUpBtn.AnchorVerticalCenterTo(ExItem.Panel);
-    MoveUpBtn.AnchorParallel(akLeft, 0, SpeedButton1);
-    MoveUpBtn.AnchorParallel(akRight, 0, SpeedButton1);
+    MoveUpBtn.AnchorParallel(akLeft, 0, Img1);
+    MoveUpBtn.AnchorParallel(akRight, 0, Img1);
     MoveUpBtn.Height := 24;
     MoveUpBtn.Parent := ScrollBox1;
     MoveUpBtn.OnClick := @MoveUpClick;
@@ -200,8 +199,8 @@ begin
     MoveDownBtn := TSpeedButton.Create(Self);
     MoveDownBtn.ShowCaption := false;
     MoveDownBtn.AnchorVerticalCenterTo(ExItem.Panel);
-    MoveDownBtn.AnchorParallel(akLeft, 0, SpeedButton2);
-    MoveDownBtn.AnchorParallel(akRight, 0, SpeedButton2);
+    MoveDownBtn.AnchorParallel(akLeft, 0, Img2);
+    MoveDownBtn.AnchorParallel(akRight, 0, Img2);
     MoveDownBtn.Height := 24;
     MoveDownBtn.Parent := ScrollBox1;
     MoveDownBtn.OnClick := @MoveDownClick;
@@ -216,8 +215,8 @@ begin
     FControlList.AddObject(CSBClass.Name, TObject(Rec));
   end;
 
-  DM.Icons16.GetBitmap(35, SpeedButton1.Glyph);
-  DM.Icons16.GetBitmap(36, SpeedButton2.Glyph);
+  DM.Icons16.GetBitmap(35, Img1.Picture.Bitmap);
+  DM.Icons16.GetBitmap(36, Img2.Picture.Bitmap);
 end;
 
 destructor TSettingsStatusbar.Destroy;
