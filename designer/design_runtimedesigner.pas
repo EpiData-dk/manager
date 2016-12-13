@@ -459,6 +459,7 @@ begin
     if not Dlg.Execute then exit;
 
     ImportStructureAndData(Dlg.Files);
+    UpdateStatusBar;
   finally
     Dlg.Free;
   end;

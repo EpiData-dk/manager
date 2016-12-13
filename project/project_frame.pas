@@ -1349,6 +1349,7 @@ procedure TProjectFrame.DesignerUpdateStatusbar(Sender: TObject;
   SelectionList: TEpiCustomList);
 begin
   FStatusBar.Selection := SelectionList;
+  FStatusBar.Update();
 end;
 
 function TProjectFrame.GetAuthorizedUser(Sender: TObject): TEpiUser;
