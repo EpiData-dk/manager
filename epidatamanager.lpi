@@ -21,7 +21,8 @@
       <BuildNr Value="94"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable SpecialBuild="ADMIN" ProductVersion="2.1.2.87"/>
+      <Attributes pvaSpecialBuild="True"/>
+      <StringTable ProductVersion="" SpecialBuild="RC1"/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
