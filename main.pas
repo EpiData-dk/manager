@@ -6,11 +6,11 @@ unit main;
 interface
 
 uses
-  Classes, SysUtils, fgl, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons,
-  project_frame, LMessages, StdCtrls, manager_messages, epidocument,
-  report_base, episervice_ipc, episervice_ipctypes, epiexportsettings,
-  simpleipc, epiopenfile;
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  Menus, ComCtrls, ActnList, StdActns, ExtCtrls, Buttons, project_frame,
+  LMessages, StdCtrls, manager_messages, epidocument, report_base,
+ { episervice_ipc,} episervice_ipctypes, epiexportsettings, simpleipc, epiopenfile,
+  epiadmin, LCLType;
 
 type
 
@@ -18,6 +18,8 @@ type
 
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
+    StaticText1: TStaticText;
+    ViewLogMenuItem: TMenuItem;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
     MenuItem37: TMenuItem;
@@ -116,7 +118,7 @@ type
     PrepareDoubleEntryAction: TAction;
     ExportAction: TAction;
     ExportMenuItem: TMenuItem;
-    ProjectPasswordMenuItem: TMenuItem;
+    DefineExtendedAccessMenuItem: TMenuItem;
     ProjectOverviewReportMenuItem: TMenuItem;
     ProjectReportAction: TAction;
     ExtendedListReportAction: TAction;
@@ -180,10 +182,25 @@ type
     MainMenu1: TMainMenu;
     FileMenuItem: TMenuItem;
     PageControl1: TPageControl;
-    MenuItem34: TMenuItem;
+    UserAccessMenu: TMenuItem;
+    ManagePasswordMenuItem: TMenuItem;
+    ExtendedAccessMenuItem: TMenuItem;
+    DefineGroupsMenuItem: TMenuItem;
+    DefineUsersMenuItem: TMenuItem;
+    DefineEntryRightsMenuItem: TMenuItem;
+    DefineAccessDivider1: TMenuItem;
+    ManageUserPasswordAction: TAction;
+    DefineAccessDivider2: TMenuItem;
+    RemoveExtendedAccess: TMenuItem;
+    RemoveAdminAction: TAction;
+    SinglePasswordMenuItem: TMenuItem;
+    SetSimplePasswordMenuItem: TMenuItem;
+    RemoveSimplePasswordMenuItem: TMenuItem;
+    MenuItem39: TMenuItem;
+    BetaPanel: TPanel;
+    Label1: TLabel;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
     procedure ClearAllDataFormsMenuItemClick(Sender: TObject);
     procedure CloseProjectActionExecute(Sender: TObject);
@@ -200,6 +217,7 @@ type
     procedure SelectProjectBtnClick(Sender: TObject);
     procedure DocumentBtnClick(Sender: TObject);
     procedure EpiDataTutorialsMenuItemClick(Sender: TObject);
+    procedure ExportActionExecute(Sender: TObject);
     procedure ExtendedListReportActionExecute(Sender: TObject);
     procedure FileMenuItemClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -226,7 +244,15 @@ type
     procedure VerifyDoubleEntryActionExecute(Sender: TObject);
     procedure VLSetFromDataActionExecute(Sender: TObject);
     procedure WebTutorialsMenuItem12Click(Sender: TObject);
-    procedure MenuItem34Click(Sender: TObject);
+    procedure ExtendedDataAuthActionUpdate(Sender: TObject);
+    procedure DefineProjectAuthActionUpdate(Sender: TObject);
+    procedure ManageUserPasswordActionExecute(Sender: TObject);
+    procedure ExportActionUpdate(Sender: TObject);
+    procedure ReportsAuthActionUpdate(Sender: TObject);
+    procedure PrepareDoubleEntryActionUpdate(Sender: TObject);
+    procedure RemoveAdminActionUpdate(Sender: TObject);
+    procedure RemoveAdminActionExecute(Sender: TObject);
+    procedure ManageUserPasswordActionUpdate(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -237,7 +263,7 @@ type
     procedure ProjectModified(Sender: TObject);
     procedure OpenTutorialMenuItemClick(Sender: TObject);
     procedure LoadTutorials;
-    function  DoCloseProject: boolean;
+    function  DoCloseProject(Const ForceClose: boolean = false): boolean;
     procedure NewProjectFrame;
     procedure DoNewProject;
     procedure DoOpenProject(Const AFileName: string);
@@ -249,16 +275,17 @@ type
     procedure CheckForUpdates(Data: PtrInt);
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(Const ReadOnly: boolean;
-      out LocalDoc: boolean): TEpiDocumentFile;
+      out LocalDoc: boolean; Const RequiredRights: TEpiManagerRights;
+      const AuthErrorMessage: String; MustBeAdminGroup: boolean = false): TEpiDocumentFile;
     function  RunReport(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
     function  RunReportEx(ReportClass: TReportBaseClass; const FreeAfterRun: boolean = true): TReportBase;
   private
     { Messages }
-    procedure LMOpenProject(var Msg: TLMessage);  message LM_MAIN_OPENPROJECT;
-    procedure LMOpenRecent(var Msg: TLMessage);   message LM_MAIN_OPENRECENT;
-    procedure LMNewProject(var Msg: TLMessage);   message LM_MAIN_NEWPROJECT;
-    procedure LMCloseProject(var Msg: TLMessage); message LM_MAIN_CLOSEPROJECT;
-    procedure LMImportToProject(var Msg: TLMessage); message LM_MAIN_IMPORTTONEW;
+    procedure LMOpenProject(var Msg: TLMessage);         message LM_MAIN_OPENPROJECT;
+    procedure LMOpenRecent(var Msg: TLMessage);          message LM_MAIN_OPENRECENT;
+    procedure LMNewProject(var Msg: TLMessage);          message LM_MAIN_NEWPROJECT;
+    procedure LMCloseProject(var Msg: TLMessage);        message LM_MAIN_CLOSEPROJECT;
+    procedure LMImportToProject(var Msg: TLMessage);     message LM_MAIN_IMPORTTONEW;
     // Message relaying...
     procedure LMDesignerAdd(var Msg: TLMessage); message LM_DESIGNER_ADD;
   private
@@ -269,6 +296,7 @@ type
     function   CheckEntryClientOpenFile(Const FileName: string): boolean;
     procedure  CheckHasOpenFile(Const MsgType: TMessageType; Const Msg: string; out Ack: TMessageType);
     {$ENDIF}
+    procedure MainExceptionHandler(Sender: TObject; E: Exception);
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -293,7 +321,7 @@ uses
   LCLProc, LCLIntf, LazUTF8Classes,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   epimiscutils,
-  epicustombase, LCLType, UTF8Process,
+  epicustombase, UTF8Process,
   toolsform, epidatafiles, epistringutils, epiexport, reportgenerator,
   report_fieldlist, report_valuelabellist,
   viewer_form, staticreports_form,
@@ -305,10 +333,8 @@ uses
   report_export, epireport_generator_txt,
   valuelabel_import_data,  append_form, epitools_append,
   manager_globals, reports_form,
-  epiv_checkversionform, export_form2;
-
-type
-  TAccessActionList = class(TActionList);
+  epiv_checkversionform, export_form2,
+  admin_authenticator, admin_users_form;
 
 { TMainForm }
 
@@ -323,7 +349,6 @@ begin
   UpdateRecentFiles;
 
   Application.QueueAsyncCall(@CheckForUpdates, 0);
-//  CheckForUpdates;
 end;
 
 procedure TMainForm.ImportCBInNewProjectActionExecute(Sender: TObject);
@@ -347,6 +372,7 @@ begin
 
   if CanClose and ManagerSettings.SaveWindowPositions then
     SaveFormPosition(Self, 'MainForm');
+
   SaveSettingToIni(GetIniFileName);
 end;
 
@@ -439,6 +465,99 @@ begin
   OpenURL('http://epidata.info/dokuwiki/doku.php?id=training:start');
 end;
 
+procedure TMainForm.ExportActionExecute(Sender: TObject);
+var
+  local: boolean;
+  DF: TEpiDocumentFile;
+  F: TExportForm2;
+  Settings: TEpiExportSetting;
+  Exporter: TEpiExport;
+  R: TReportExport;
+  S: String;
+  FileList: TEpiDocumentFileList;
+  FS: TFileStreamUTF8;
+  ReportTitle: String;
+  ReportText: String;
+  i: Integer;
+begin
+  Exporter := nil;
+  DF := nil;
+  F := nil;
+  Settings := nil;
+
+  try
+    DF := ToolsCheckOpenFile(false, local, [earExport],
+      'You are not authorized to use Export!');
+
+    if (not Assigned(DF)) then
+      Exit;
+
+    F := TExportForm2.Create(Self);
+    F.DocumentFile := DF;
+    if F.ShowModal <> mrOK then exit;
+
+    Settings := F.ExportSetting;
+
+    Exporter := TEpiExport.Create;
+    if not Exporter.Export(Settings) then
+      ShowMessage('Export Failed.')
+    else begin
+      FS := nil;
+
+      if F.ExportReport then
+      begin
+        FileList := TEpiDocumentFileList.Create;
+        FileList.Add(DF);
+
+        R := TReportExport.Create(TEpiReportTXTGenerator);
+        R.DocumentFiles := FileList;
+        R.ExportSettings := Settings;
+        R.ReportFileName := F.ExportDirectory + DirectorySeparator + ChangeFileExt(ExtractFileName(DF.FileName), '.log');
+        // Canonicalize filename (remove "..", "//", "\\" etc....
+        R.ReportFileName := ExpandFileNameUTF8(R.ReportFileName);
+
+        ReportTitle := R.ReportTitle;
+        ReportText := R.RunReport;
+
+        FS := TFileStreamUTF8.Create(R.ReportFileName, fmCreate);
+        FS.Write(ReportText[1], Length(ReportText));
+
+        R.Free;
+        FileList.Free;
+      end;
+
+      S := 'Export Succeeded' + LineEnding + LineEnding;
+      S += 'Project: ' + DF.FileName + LineEnding;
+
+      if Assigned(FS) then
+        S += 'Report: ' + FS.FileName;
+
+      ShowMessage(TrimRight(S));
+
+      if F.ExportReport then
+        ShowReportForm(Self, ReportTitle, ReportText);
+
+      if (Settings is TEpiEPXExportSetting) then
+        if F.ExportSingleFile then
+          AddToRecent(TEpiEPXExportSetting(Settings).ExportFileName)
+        else
+          for i := 0 to Settings.DatafileSettings.Count - 1 do
+            AddToRecent(Settings.DatafileSettings[i].ExportFileName);
+
+      FS.Free;
+
+      UpdateRecentFiles;
+    end;
+  finally
+    Exporter.Free;
+
+    if local then
+      DF.Free;
+    F.Free;
+    Settings.Free;
+  end;
+end;
+
 procedure TMainForm.ExtendedListReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportFieldListExtended).Free;
@@ -492,12 +611,14 @@ var
   S: String;
 
 begin
-  DocFile := ToolsCheckOpenFile(false, LocalDoc);
+  DocFile := ToolsCheckOpenFile(false, LocalDoc, [earExtentendedData],
+    'You are not authorized to use Append');
   if not Assigned(DocFile) then exit;
 
   AppendForm := nil;
   AppendTool := nil;
   ResultList := nil;
+  Handler    := nil;
 
   try
     AppendForm := TAppendForm.Create(self);
@@ -538,100 +659,6 @@ begin
     Handler.Free;
     if LocalDoc then
       DocFile.Free;
-  end;
-end;
-
-procedure TMainForm.Button1Click(Sender: TObject);
-var
-  local: boolean;
-  DF: TEpiDocumentFile;
-  F: TExportForm2;
-  Settings: TEpiExportSetting;
-  Exporter: TEpiExport;
-  R: TReportExport;
-  S: String;
-  FileList: TEpiDocumentFileList;
-  FS: TFileStreamUTF8;
-  ReportTitle: String;
-  ReportText: String;
-  i: Integer;
-begin
-  Exporter := nil;
-  DF := nil;
-  F := nil;
-  Settings := nil;
-
-  try
-    DF := ToolsCheckOpenFile(false, local);
-
-    if (not Assigned(DF)) then
-      Exit;
-
-    F := TExportForm2.Create(Self);
-    F.DocumentFile := DF;
-    if F.ShowModal <> mrOK then exit;
-
-    Settings := F.ExportSetting;
-
-    Exporter := TEpiExport.Create;
-    if not Exporter.Export(Settings) then
-      ShowMessage('Export Failed.')
-    else begin
-      FS := nil;
-
-      if F.ExportReport then
-      begin
-        FileList := TEpiDocumentFileList.Create;
-        FileList.Add(DF);
-
-        R := TReportExport.Create(TEpiReportTXTGenerator);
-        R.DocumentFiles := FileList;
-        R.ExportSettings := Settings;
-        R.ReportFileName := F.ExportDirectory + DirectorySeparator + ChangeFileExt(ExtractFileName(DF.FileName), '.log');
-        // Canonicalize filename (remove "..", "//", "\\" etc....
-        R.ReportFileName := ExpandFileNameUTF8(R.ReportFileName);
-
-        ReportTitle := R.ReportTitle;
-        ReportText := R.RunReport;
-
-        FS := TFileStreamUTF8.Create(R.ReportFileName, fmCreate);
-        FS.Write(ReportText[1], Length(ReportText));
-
-        R.Free;
-        FileList.Free;
-      end;
-
-      S := 'Export Succeeded' + LineEnding + LineEnding;
-      S += 'Project: ' + DF.FileName + LineEnding;
-
-      if Assigned(FS) then
-        S += 'Report: ' + FS.FileName + LineEnding;
-
-      S += LineEnding + Settings.StaticEndNote;
-
-      ShowMessage(TrimRight(S));
-
-      if F.ExportReport then
-        ShowReportForm(Self, ReportTitle, ReportText);
-
-      if (Settings is TEpiEPXExportSetting) then
-        if F.ExportSingleFile then
-          AddToRecent(TEpiEPXExportSetting(Settings).ExportFileName)
-        else
-          for i := 0 to Settings.DatafileSettings.Count - 1 do
-            AddToRecent(Settings.DatafileSettings[i].ExportFileName);
-
-      FS.Free;
-
-      UpdateRecentFiles;
-    end;
-  finally
-    Exporter.Free;
-
-    if local then
-      DF.Free;
-    F.Free;
-    Settings.Free;
   end;
 end;
 
@@ -704,7 +731,8 @@ var
 begin
   try
     F := nil;
-    Doc := ToolsCheckOpenFile(False, LocalDoc);
+    Doc := ToolsCheckOpenFile(False, LocalDoc, [earExtentendedData],
+      'You are not authorized to use Pack');
     if not Assigned(Doc) then exit;
 
     EpiDoc := Doc.Document;
@@ -763,7 +791,8 @@ var
   Local: boolean;
   Doc: TEpiDocumentFile;
 begin
-  Doc := ToolsCheckOpenFile(True, Local);
+  Doc := ToolsCheckOpenFile(True, Local, [earPrepareDoubleEntry],
+    'You are not authorized to use Prepare Double Entry');
   if Assigned(Doc) then
   begin
     PrepareDoubleEntry(Doc);
@@ -990,13 +1019,13 @@ var
   Dlg: TSaveDialog;
   Fn: String;
 begin
-  Docfile := ToolsCheckOpenFile(false, LocalDoc);
+  Docfile := ToolsCheckOpenFile(false, LocalDoc, [earDefineProject],
+    'You are not authorized to use ValueLabel from Data');
   if not Assigned(DocFile) then exit;
 
   try
     F := TValueLabelDataImport.Create(Self);
     F.DocFile := DocFile;
-    F.ValueLabelSets := Docfile.Document.ValueLabelSets;
     F.ShowModal;
   finally
     if (Docfile.Document.Modified) and
@@ -1027,16 +1056,126 @@ begin
   OpenURL(ManagerSettings.TutorialURLUTF8);
 end;
 
-procedure TMainForm.MenuItem34Click(Sender: TObject);
-var
-  OD: TOpenDialog;
+procedure TMainForm.ExtendedDataAuthActionUpdate(Sender: TObject);
 begin
-  OD := TOpenDialog.Create(self);
-  if (not OD.Execute) then exit;
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earExtentendedData]);
+end;
 
-  OpenURL('mailto:tc@epidata.dk?subject=my test&body=my attachment&attachment="' + OD.FileName + '"');
+procedure TMainForm.DefineProjectAuthActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earDefineProject]);
+end;
 
-  OD.Free;
+procedure TMainForm.ManageUserPasswordActionExecute(Sender: TObject);
+var
+  DocFile: TEpiDocumentFile;
+  LocalDoc: boolean;
+  F: TDefineUsersForm;
+begin
+  DocFile := ToolsCheckOpenFile(False, LocalDoc, [earPassword],
+    'You are not authorized to use Manage User Password!');
+
+  if not Assigned(DocFile) then exit;
+
+  if (not Assigned(DocFile.AuthedUser)) then
+  begin
+    ShowMessage('This project is not using Extended Data Access!');
+    if LocalDoc then
+      DocFile.Free;
+    exit;
+  end;
+
+  F := TDefineUsersForm.Create(Self);
+  F.Admin := Authenticator.Admin;
+  F.PasswordReset := true;
+  F.ShowModal;
+
+  if LocalDoc then
+  begin
+    AddToRecent(Docfile.FileName);
+    Docfile.SaveFile(Docfile.FileName);
+    DocFile.Free;
+  end;
+end;
+
+procedure TMainForm.ExportActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earExport]);
+end;
+
+procedure TMainForm.ReportsAuthActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earReport]);
+end;
+
+procedure TMainForm.PrepareDoubleEntryActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := Authenticator.IsAuthorized([earPrepareDoubleEntry]);
+end;
+
+procedure TMainForm.RemoveAdminActionUpdate(Sender: TObject);
+begin
+  if Assigned(Authenticator) then
+    TAction(Sender).Enabled := Authenticator.AuthedUserInGroup(Authenticator.Admin.Admins, false, false)
+  else
+    TAction(Sender).Enabled := true;
+end;
+
+procedure TMainForm.RemoveAdminActionExecute(Sender: TObject);
+var
+  Docfile: TEpiDocumentFile;
+  LocalDoc: boolean;
+  S: String;
+  Res: TModalResult;
+begin
+  Docfile := ToolsCheckOpenFile(false, LocalDoc, [],
+    'You are not authorised to Reset the Administration', true
+  );
+
+  if not Assigned(Docfile) then
+    Exit;
+
+  S := 'This will remove:' + LineEnding +
+       ' 1: Encryption of the project structure and content' + LineEnding +
+       ' 2: Requirement of user login' + LineEnding +
+       LineEnding +
+       'Are you sure you want to remove User/Grop administration?';
+
+  Res := MessageDlg('Warning',
+                    S,
+                    mtWarning,
+                    mbYesNo,
+                    0,
+                    mbNo);
+
+  if Res = mrNo then exit;
+
+  S := 'By pressing OK you agree to remove User/Group Administration';
+  Res := MessageDlg('Confirm',
+                    S,
+                    mtConfirmation,
+                    mbOKCancel,
+                    0,
+                    mbCancel);
+  if Res = mrCancel then exit;
+
+  Docfile.Document.Admin.ResetAll;
+
+  if LocalDoc then
+  begin
+    AddToRecent(Docfile.FileName);
+    Docfile.SaveFile(Docfile.FileName);
+    DocFile.Free;
+  end else
+    FActiveFrame.UpdateStatusBar();
+end;
+
+procedure TMainForm.ManageUserPasswordActionUpdate(Sender: TObject);
+begin
+  if Assigned(FActiveFrame) and (Assigned(Authenticator)) then
+    TAction(Sender).Enabled := (Authenticator.Admin.Users.Count > 0) and (Authenticator.IsAuthorized([earPassword]))
+  else
+    TAction(Sender).Enabled := true;
 end;
 
 procedure TMainForm.SetCaption;
@@ -1097,12 +1236,14 @@ begin
   FileList.Free;
 end;
 
-function TMainForm.DoCloseProject: boolean;
+function TMainForm.DoCloseProject(const ForceClose: boolean): boolean;
 begin
   result := true;
   if Assigned(FActiveFrame) then
   begin
-    FActiveFrame.CloseQuery(result);
+    if (not ForceClose) then
+      FActiveFrame.CloseQuery(result);
+
     if not Result then exit;
 
     PageControl1.ActivePage.Free;
@@ -1112,12 +1253,16 @@ begin
   UpdateProcessToolbar;
   AssignActionLinks;
   SetCaption;
+
+  BetaPanel.Visible := true;
 end;
 
 procedure TMainForm.NewProjectFrame;
 var
   TabSheet: TTabSheet;
 begin
+  BetaPanel.Visible := false;
+
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;
   TabSheet.Name := 'TabSheet' + IntToStr(TabNameCount);
@@ -1205,6 +1350,18 @@ begin
 
   // PROJECT:
   ProjectMenu.Visible       := Assigned(FActiveFrame);
+
+  // USER ACCESS:
+  SinglePasswordMenuItem.Visible := Assigned(FActiveFrame);
+  DefineExtendedAccessMenuItem.Visible := Assigned(FActiveFrame);
+  // -
+  DefineAccessDivider1.Visible := Assigned(FActiveFrame);
+  DefineGroupsMenuItem.Visible := Assigned(FActiveFrame);
+  DefineUsersMenuItem.Visible := Assigned(FActiveFrame);
+  DefineEntryRightsMenuItem.Visible := Assigned(FActiveFrame);
+  ViewLogMenuItem.Visible := Assigned(FActiveFrame);
+  // -
+  DefineAccessDivider2.Visible := Assigned(FActiveFrame);
 
   // Dataform:
   DataformMenu.Visible      := Assigned(FActiveFrame);
@@ -1306,7 +1463,8 @@ begin
 end;
 
 function TMainForm.ToolsCheckOpenFile(const ReadOnly: boolean; out
-  LocalDoc: boolean): TEpiDocumentFile;
+  LocalDoc: boolean; const RequiredRights: TEpiManagerRights;
+  const AuthErrorMessage: String; MustBeAdminGroup: boolean): TEpiDocumentFile;
 var
   Dlg: TOpenDialog;
 begin
@@ -1328,10 +1486,28 @@ begin
       Exit;
     end;
 
+    Authenticator := TAuthenticator.Create(Result);
     AddToRecent(Result.FileName);
     LocalDoc := true;
     Dlg.Free;
   end;
+
+  if (not Authenticator.IsAuthorized(RequiredRights)) or
+     (MustBeAdminGroup and (not Authenticator.AuthedUserInGroup(Authenticator.Admin.Admins, false, false)))
+  then
+    begin
+      MessageDlg('Error',
+        AuthErrorMessage,
+        mtError,
+        [mbOK],
+        0
+      );
+
+      if LocalDoc then
+        FreeAndNil(Result)
+      else
+        Result := nil;
+    end;
 end;
 
 function TMainForm.RunReport(ReportClass: TReportBaseClass;
@@ -1458,7 +1634,11 @@ procedure TMainForm.LMOpenRecent(var Msg: TLMessage);
 var
   A: TAction;
 begin
-  A := TAction(Msg.WParam);
+  if Msg.WParam = 0 then
+    A := TAction(RecentFilesActionList.Actions[Msg.LParam])
+  else
+    A := TAction(Msg.WParam);
+
   DoOpenProject(ExpandFileNameUTF8(A.Caption));
   UpdateProcessToolbar;
 end;
@@ -1484,6 +1664,23 @@ begin
   if Assigned(FActiveFrame) then
   with Msg do
     Result := SendMessage(FActiveFrame.Handle, Msg, WParam, LParam);
+end;
+
+procedure TMainForm.MainExceptionHandler(Sender: TObject; E: Exception);
+var
+  Saved: Boolean;
+begin
+  ShowMessage('An unknown error occured within the program!' + LineEnding +
+              'An attempt to save the project will be made after this message!' + LineEnding +
+              'The error message is: ' + LineEnding +
+              LineEnding +
+              E.Message
+  );
+
+  Saved := FActiveFrame.SaveProject(false);
+  DoCloseProject(true);
+
+//  ShowMessage('Error Occured: ' + LineEnding + E.Message);
 end;
 
 {$IFDEF EPI_IPC_TEST}
@@ -1572,6 +1769,8 @@ var
 begin
   inherited Create(TheOwner);
 
+//  Application.OnException := @MainExceptionHandler;
+
   FActiveFrame := nil;
 
   ShortCutToKey(M_OpenRecent, K, Shift);
@@ -1581,8 +1780,7 @@ begin
     A.ShortCut := KeyToShortCut(VK_1 + (i - 1), Shift);
     A.Enabled  := false;
     A.OnExecute := @OpenRecentMenuItemClick;
-
-    TAccessActionList(RecentFilesActionList).AddAction(A);
+    A.ActionList := RecentFilesActionList;
   end;
 
   {$IFDEF EPI_IPC_TEST}

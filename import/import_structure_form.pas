@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, Buttons, ActnList, Grids, StdCtrls, ShellCtrls, epicustombase,
-  epidatafiles, projectfilelist_frame, epidocument, epirelations;
+  epidatafiles, projectfilelist_frame, epidocument, epidatafilerelations;
 
 type
 
@@ -93,7 +93,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epiimport, LCLProc, epimiscutils, settings2_var,
+  epiimport, LCLProc, epimiscutils, settings2_var, epiadmin,
   epidatafilestypes, settings2, epiv_datamodule;
 
 { TImportStructureForm }
@@ -674,6 +674,8 @@ begin
     FDataCol := TGridColumn(StructureGrid.Columns.Insert(2));
     FDataCol.Title.Caption := 'Data';
     FDataCol.ButtonStyle := cbsCheckboxColumn;
+
+    RequiredRights := [earExport];
 
     Align := alClient;
     Parent := Self;

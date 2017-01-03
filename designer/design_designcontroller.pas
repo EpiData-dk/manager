@@ -50,17 +50,58 @@ uses
   main, manager_globals, design_designmover, design_designsizer,
   design_designbander;
 
+type
+
+  { TFakeMouseTool }
+
+  TFakeMouseTool = class(TJvDesignMouseTool)
+  public
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+    procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+  end;
+
+{ TFakeMouseTool }
+
+procedure TFakeMouseTool.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  //
+end;
+
+procedure TFakeMouseTool.MouseMove(Shift: TShiftState; X, Y: Integer);
+begin
+  //
+end;
+
+procedure TFakeMouseTool.MouseUp(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  //
+end;
+
 { TDesignController }
 
 function TDesignController.DoCreateMouseTool(ADragMode: TJvDesignDragMode
   ): TJvDesignCustomMouseTool;
 begin
+  Result := nil;
   case ADragMode of
-//    dmNone: ;
+    dmNone: ;
     dmMove:
-      result := TDesignMover.Create(Surface);
+      begin
+        if SendMessage(Frame.Handle, LM_DESIGNER_USER_AUTHED, 0, 0) > 0 then
+          result := TDesignMover.Create(Surface)
+        else
+          result := TFakeMouseTool.Create(Surface);
+      end;
     dmResize:
-      result := TDesignSizer.CreateSizer(Surface, HandleID);
+      begin
+        if SendMessage(Frame.Handle, LM_DESIGNER_USER_AUTHED, 0, 0) > 0 then
+          result := TDesignSizer.CreateSizer(Surface, HandleID)
+        else
+          result := TFakeMouseTool.Create(Surface);
+      end;
     dmSelect,
     dmCreate:
       result := TDesignBander.Create(Surface);
@@ -70,8 +111,8 @@ begin
 
   FMouseToolIsSet := Assigned(Result);
 
-  if Assigned(REsult) then
-    Writeln('MouseTool = ', Result.ClassName);
+//  if Assigned(REsult) then
+//    Writeln('MouseTool = ', Result.ClassName);
 end;
 
 function TDesignController.KeyUp(AKeyCode: Cardinal): Boolean;
@@ -133,7 +174,7 @@ begin
     dmResize: ;
     dmSelect: ;
     dmCreate:
-      FFrame.ShowPropertiesForm(true);
+      fFrame.ShowPropertiesForm(true);
   end;
 end;
 

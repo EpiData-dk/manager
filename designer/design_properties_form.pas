@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, JvDesignSurface, design_types, epicustombase,
-  Controls, epirelations;
+  Controls, epidatafilerelations;
 
 type
 
@@ -17,7 +17,10 @@ type
     EpiCtrlItemArray: TEpiCustomControlItemArray;
     FFrame: TCustomFrame;
     FOnShowHintMsg: TDesignFrameShowHintEvent;
+    FReadOnly: boolean;
+    function GetReadOnly: boolean;
     procedure SetOnShowHintMsg(AValue: TDesignFrameShowHintEvent);
+    procedure SetReadOnly(AValue: boolean);
     procedure UpdateCaption(const S: string);
     procedure EpiCtrlChangeHook(Const Sender, Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
@@ -42,6 +45,7 @@ type
     function  ValidateControls: boolean;
     property  OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write SetOnShowHintMsg;
   public
+    property  ReadOnly: boolean read GetReadOnly write SetReadOnly;
     class procedure RestoreDefaultPos(F: TPropertiesForm);
   end;
 
@@ -149,6 +153,17 @@ procedure TPropertiesForm.SetOnShowHintMsg(AValue: TDesignFrameShowHintEvent);
 begin
   if FOnShowHintMsg = AValue then Exit;
   FOnShowHintMsg := AValue;
+end;
+
+function TPropertiesForm.GetReadOnly: boolean;
+begin
+  result := FReadOnly;
+end;
+
+procedure TPropertiesForm.SetReadOnly(AValue: boolean);
+begin
+  FReadOnly := AValue;
+  TDesignPropertiesFrame(FFrame).ReadOnly := ReadOnly;
 end;
 
 procedure TPropertiesForm.EpiCtrlChangeHook(const Sender,
@@ -327,6 +342,7 @@ begin
       SetDataFile(Relation.Datafile);
       SetRelation(Relation);
       SetEpiControls(EpiCtrlItemArray);
+      TDesignPropertiesFrame(FFrame).ReadOnly := FReadOnly;
     end;
   finally
     EndFormUpdate;
@@ -361,7 +377,9 @@ end;
 
 procedure TPropertiesForm.SetFocusOnNew;
 begin
-  if Showing then
+  if Showing and
+     (not ReadOnly)
+  then
     (FFrame as IDesignPropertiesFrame).FocusOnNewControl;
 end;
 

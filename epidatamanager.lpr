@@ -8,9 +8,7 @@ uses
   {$ENDIF}
 
   {$IFDEF UNIX}
-    {$IFDEF EPI_USEIPC}
-    cthreads,
-    {$ENDIF}
+  cthreads,
   clocale,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
@@ -29,17 +27,16 @@ uses
 
   project_settings, project_settings_interface, project_settings_general_frame,
   project_settings_field_frame, UniqueInstanceRaw,
-  epidatacore, design_properties_headingframe, design_properties_baseframe,
-  design_types, import_structure_form, manager_messages, toolsform,
-  reportgenerator, report_fieldlist, viewer_form, report_valuelabellist,
-  report_combinedlist, report_base, projectfilelist_frame, staticreports_form,
+  design_properties_headingframe, design_properties_baseframe, design_types,
+  import_structure_form, manager_messages, toolsform, reportgenerator,
+  report_fieldlist, viewer_form, report_valuelabellist, report_combinedlist,
+  report_base, projectfilelist_frame, staticreports_form,
   report_fieldlist_extended, report_project_overview, shortcuts,
   field_valuelabelseditor_form, valuelabelgrid_frame, valuelabelseditor_form2,
-  settings_export, export_stata_frame,
-  export_customvaluelabel_frame, export_frame_types, export_csv_frame,
-  export_customtext_frame, export_spss_frame, export_sas_frame,
-  prepare_double_entry_form, project_keyfields_form, manager_globals,
-  report_double_entry_validation,
+  settings_export, export_stata_frame, export_customvaluelabel_frame,
+  export_frame_types, export_csv_frame, export_customtext_frame,
+  export_spss_frame, export_sas_frame, prepare_double_entry_form,
+  project_keyfields_form, manager_globals, report_double_entry_validation,
   design_runtimedesigner, design_control_field, design_control_heading,
   design_control_section, design_designpanel, design_properties_form,
   design_designcontroller, design_properties_fieldframe,
@@ -52,10 +49,15 @@ uses
   report_project_validation, report_project_validation_frame, recode_form,
   rename_form, report_export, valuelabel_import_external,
   valuelabel_import_data, project_types, project_studyunit_frame,
-  design_properties_dataformframe, append_form, append_form2, 
-  epiv_projecttreeview_frame, epiv_datamodule, 
+  design_properties_dataformframe, append_form, append_form2,
+  epiv_projecttreeview_frame, epiv_datamodule, epidatacore,
   report_project_validation_frame2, reports_form, report_counts_frame,
-  lazcontrols, design_control_memo, export_form2, core_logger;
+  lazcontrols, design_control_memo, export_form2, admin_form, admin_user_form,
+  admin_group_form, admin_authenticator, design_properties_groupassign_frame,
+  core_logger, admin_groups_form, admin_users_form, admin_entryrights_form,
+  admin_users_accum_rights_frame, project_statusbar,
+  design_properties_dataform_statusbarframe, settings_statusbar,
+  admin_logviewer_frame, empty_form;
 
 {$R *.res}
 

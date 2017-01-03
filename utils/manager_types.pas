@@ -5,6 +5,9 @@ unit manager_types;
 
 interface
 
+uses
+  epiadmin, epicustombase;
+
 type
   ICanCloseQuery = interface['ICanCloseQuery']
     function CanClose: boolean;
@@ -16,6 +19,9 @@ type
     epAddDate
   );
 
+  TGetUserEvent = function (Sender: TObject): TEpiUser of object;
+  TUpdateStatusBarContent = procedure (Sender: TObject;
+    SelectionList: TEpiCustomList) of object;
 
 const
   ExportPostFixCaptions: array[TExportPostFix] of string = (

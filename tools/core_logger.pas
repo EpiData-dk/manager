@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, StdCtrls,
   Grids, epicustombase, epidocument, epiadmin, episettings, epistudy,
-  epidatafiles, epiranges, epivaluelabels, epirelations;
+  epidatafiles, epiranges, epivaluelabels;
 
 type
 
@@ -178,9 +178,6 @@ begin
 
     eegFields:
       DoEvent(TEpiFieldsChangeEventType(EventType), Data);
-
-    eegGroups:                                              ;
-//      DoEvent(TEpiCustomChangeEventType(EventType), Data);
 
     eegHeading:
       DoEvent(TEpiHeadingChangeEvent(EventType), Data);

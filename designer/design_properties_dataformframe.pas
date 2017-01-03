@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, Spin,
   MaskEdit, ComCtrls, ExtCtrls, design_properties_baseframe, design_types,
-  epicustombase, epidatafiles, epirelates;
+  epicustombase, epidatafiles, epirelates, admin_users_accum_rights_frame, types,
+  design_properties_dataform_statusbarframe;
 
 type
 
@@ -20,14 +21,8 @@ type
     CaptionEdit: TEdit;
     GotoDataFormBevel: TBevel;
     GotoDataformLabel: TLabel;
-    GroupAssignedListBox: TListBox;
-    GroupAvailableListBox: TListBox;
     ChildRecGrpBox: TGroupBox;
-    GrpRightsMoveLeft: TSpeedButton;
-    GrpRightsMoveRight: TSpeedButton;
     Label1: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
     Label9: TLabel;
     MaskEdit1: TMaskEdit;
     NameEdit: TEdit;
@@ -41,9 +36,10 @@ type
     RelateValueBevel: TBevel;
     RelateOrderLabel: TLabel;
     RemoveRelateBtn: TSpeedButton;
-    SectionGroupAccessGroupBox: TGroupBox;
     BasicSheet: TTabSheet;
     AfterRecordSheet: TTabSheet;
+    RightsTabSheet: TTabSheet;
+    StatusbarContentSheet: TTabSheet;
     procedure AddRelateBtnClick(Sender: TObject);
     procedure MaskEdit1EditingDone(Sender: TObject);
     procedure NoLimitRadioBtnClick(Sender: TObject);
@@ -60,6 +56,15 @@ type
     FAfterRecordIndex: Integer;
     procedure UpdateAfterRecordRadioBoxVisibility;
     procedure UpdateAfterRecordRadioBoxContent;
+  private
+    { Accumulated User Rights }
+    FUserRightsFrame: TUsersAccumulatedRightsFrame;
+    procedure UpdateUserRightsFrameVisibility;
+    procedure UpdateUserRightsFrameContent;
+  private
+    { Statusbar }
+    FStatusbarContentFrame: TStatusbarContentFrame;
+    procedure UpdateStatusbarFrameContent;
   private
     procedure DataFileCaptionHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
@@ -79,6 +84,8 @@ type
     { Validate and Apply }
     function  InternalValidate: Boolean;
     procedure InternalApply;
+  protected
+    procedure SetReadOnly(AValue: Boolean); override;
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
@@ -93,7 +100,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epirelations;
+  epidatafilerelations, admin_authenticator, epiadmin;
 
 const
   AfterRecordStateCaption: array[TEpiDataFileAfterRecordState] of string =
@@ -383,9 +390,26 @@ begin
   FAfterRecordIndex := Idx;
 end;
 
+procedure TDataformPropertiesFrame.UpdateUserRightsFrameVisibility;
+begin
+  RightsTabSheet.TabVisible := Assigned(Authenticator.AuthedUser);
+end;
+
+procedure TDataformPropertiesFrame.UpdateUserRightsFrameContent;
+begin
+  FUserRightsFrame.Admin    := Authenticator.Admin;
+  FUserRightsFrame.DataFile := DataFile;
+end;
+
+procedure TDataformPropertiesFrame.UpdateStatusbarFrameContent;
+begin
+  FStatusbarContentFrame.Relation := Relation;
+end;
+
 procedure TDataformPropertiesFrame.UpdateVisibility;
 begin
-  SectionGroupAccessGroupBox.Visible := false;
+  BasicSheet.Enabled := IsAuthorized(earDefineProject);
+
   ChildRecGrpBox.Visible := Relation.InheritsFrom(TEpiDetailRelation);
 
   UpdateAfterRecordRadioBoxVisibility;
@@ -395,6 +419,10 @@ begin
   AfterRecordSheet.TabVisible :=
     (Relation.DetailRelations.Count > 0) OR
     (Relation.InheritsFrom(TEpiDetailRelation));
+  AfterRecordSheet.Enabled := IsAuthorized(earDefineProject);;
+
+
+  UpdateUserRightsFrameVisibility;
 end;
 
 procedure TDataformPropertiesFrame.UpdateContent;
@@ -425,6 +453,8 @@ begin
   // ********************
   UpdateRelate;
   UpdateAfterRecordRadioBoxContent;
+  UpdateUserRightsFrameContent;
+  UpdateStatusbarFrameContent;
 end;
 
 procedure TDataformPropertiesFrame.RegisterDataFileHooks;
@@ -499,6 +529,8 @@ begin
   // ********************
   //  AfterRecord
   // ********************
+
+  Result := Result and FStatusbarContentFrame.ValidateContent;
 end;
 
 procedure TDataformPropertiesFrame.InternalApply;
@@ -549,6 +581,19 @@ begin
   else
     // "Master" datafile is ALWAYS new record state.
     DataFile.AfterRecordState := arsNewRecord;
+
+
+  FStatusbarContentFrame.ApplyContent;
+end;
+
+procedure TDataformPropertiesFrame.SetReadOnly(AValue: Boolean);
+var
+  i: Integer;
+begin
+  {inherited SetReadOnly(AValue);
+
+  for i := 0 to PageControl1.PageCount - 1 do
+    PageControl1.Pages[i].Enabled := (not ReadOnly);    }
 end;
 
 constructor TDataformPropertiesFrame.Create(TheOwner: TComponent);
@@ -557,6 +602,15 @@ begin
   PageControl1.ActivePage := BasicSheet;
 
   FRelatesComponentsList := TList.Create;
+
+  FUserRightsFrame := TUsersAccumulatedRightsFrame.Create(Self);
+  FUserRightsFrame.Align := alClient;
+  FUserRightsFrame.BorderSpacing.Around := 10;
+  FUserRightsFrame.Parent := RightsTabSheet;
+
+  FStatusbarContentFrame := TStatusbarContentFrame.Create(Self);
+  FStatusbarContentFrame.Align := alClient;
+  FStatusbarContentFrame.Parent := StatusbarContentSheet;
 end;
 
 destructor TDataformPropertiesFrame.Destroy;

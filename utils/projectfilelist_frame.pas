@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Grids, ComCtrls,
-  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile, epieximtypes;
+  ExtCtrls, epidocument, epidatafiles, epicustombase, epiopenfile, epiadmin,
+  epieximtypes;
 
 type
 
@@ -44,6 +45,7 @@ type
     FOnDocumentIncludedChange: TProjectFileListGridEvent;
     FOnSelectionChanged: TNotifyEvent;
     FOnDocumentMoved: TProjectFileListGridMoveEvent;
+    FRequiredRights: TEpiManagerRights;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedDocfileList: TEpiDocumentFileList;
     function   GetSelectedList: TStringList;
@@ -61,7 +63,10 @@ type
     procedure  DoSelectionChanged;
     procedure  DoBeforeImportFile(Document: TEpiDocument; Const FileName: string);
     procedure  DoAfterImportFile(Document: TEpiDocument; Const FileName: string);
-    procedure  RecImportPassword(Sender: TObject; var Login: string; var Password: string);
+    function  RecImportPassword(Sender: TObject;
+      RequestType: TEpiRequestPasswordType;
+      RequestNo:   Integer;
+      var Login: UTF8String; var Password: UTF8String): TEpiRequestPasswordResponse;
   public
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
@@ -82,6 +87,7 @@ type
     property    SelectedDocfileList: TEpiDocumentFileList read GetSelectedDocfileList;
     property    DocList: TStringList read FDocList;
     property    DocFileList: TList read FDocFileList;
+    property    RequiredRights: TEpiManagerRights read FRequiredRights write FRequiredRights;
   private
     { columns }
     FCreatedCol: TGridColumn;
@@ -109,7 +115,7 @@ implementation
 
 uses
   epiimport, LCLProc, epimiscutils, Dialogs, managerprocs, epiv_documentfile,
-  settings2_var, Clipbrd, LCLIntf, LCLType, LazFileUtils, LazUTF8;
+  settings2_var, Clipbrd, LCLIntf, LCLType, admin_authenticator, LazFileUtils, LazUTF8;
 
 
 type
@@ -257,6 +263,7 @@ var
   DataFile: TEpiDataFile;
   DocFile: TDocumentFile;
   Res: Boolean;
+  Auth: TAuthenticator;
 begin
   Importer := TEpiImport.Create;
   Importer.ImportCasing := ManagerSettings.ImportCasing;
@@ -269,6 +276,7 @@ begin
 
   try
     DocFile := TImportedDocumentFile.Create;
+    Auth := nil;
     Res := False;
 
     if (ext = '.rec') or (ext = '.dta') then
@@ -317,6 +325,15 @@ begin
       else
         TImportedDocumentFile(DocFile).FImportedFileName := FileName;
       Res := true;
+    end;
+
+    Auth := TAuthenticator.Create(DocFile);
+
+    if (not Auth.IsAuthorized(RequiredRights)) then
+    begin
+      Res := false;
+      ShowMessage('You are not authorised to open the file: ' + LineEnding +
+                  DocFile.FileName);
     end;
 
     if Res then
@@ -417,13 +434,19 @@ begin
     FOnAfterImportFile(Self, Document, FileName);
 end;
 
-procedure TProjectFileListFrame.RecImportPassword(Sender: TObject;
-  var Login: string; var Password: string);
+function TProjectFileListFrame.RecImportPassword(Sender: TObject;
+  RequestType: TEpiRequestPasswordType; RequestNo: Integer;
+  var Login: UTF8String; var Password: UTF8String): TEpiRequestPasswordResponse;
 begin
   Login := '';
   Password :=
     PasswordBox('IMPORTANT!',
     ' Password needed for "' + ExtractFileName(FCurrentFile) + '":');
+
+  if (RequestNo < 3) then
+    Result := rprAskOnFail
+  else
+    Result := rprStopOnFail;
 end;
 
 procedure TProjectFileListFrame.StructureGridCheckboxToggled(sender: TObject;
@@ -472,6 +495,9 @@ end;
 constructor TProjectFileListFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
+
+  RequiredRights := [];
+
   FDocList := TStringList.Create;
   FDocFileList := TList.Create;
 

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, fgl, FileUtil, Forms, Controls, ExtCtrls, ComCtrls,
   StdCtrls, report_types, epiv_projecttreeview_frame, epiv_dataform_treeview,
-  projectfilelist_frame, epidocument, epicustombase, epirelations, contnrs,
+  projectfilelist_frame, epidocument, epicustombase, epidatafilerelations, contnrs,
   report_double_entry_validation, epitools_val_dbl_entry, epiopenfile,
   report_base;
 
@@ -92,8 +92,8 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2_var, epidatafiles, settings2,
-  epimiscutils, epidatafilestypes;
+  settings2_var, epidatafiles, settings2, epiadmin,
+  epimiscutils, epidatafilestypes, epidatafilerelations_helper;
 
 const
   KEYTREE_CUSTOMDATA = 'KEYTREE_CUSTOMDATA';
@@ -296,7 +296,7 @@ end;
 
 procedure TValidateDoubleEntryFrame.BumpProjectCount(const Value: Integer);
 var
-  Method: TEpiRelationListExCallBack;
+  Method: TEpiDatafileRelationListCallBack;
   i: Integer;
   SelectList: TStringList;
 
@@ -486,6 +486,7 @@ begin
     Align  := alClient;
     Parent := FilePanel;
 
+    RequiredRights := [earReport];
     OnAfterAddToGrid         := @FileListAddDoc;
     OnDocumentIncludedChange := @FileListDocChange;
   end;

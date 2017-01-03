@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, StdCtrls, Buttons, VirtualTrees,
-  epidocument, epidatafiles, epirelations, contnrs;
+  epidocument, epidatafiles, epidatafilerelations, contnrs;
 
 type
 
@@ -174,7 +174,7 @@ procedure TToolsForm.DataFileTreeViewInitNode(Sender: TBaseVirtualTree;
   ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 var
   MR: TEpiMasterRelation;
-  RelationList: TEpiRelationList;
+  RelationList: TEpiDatafileRelationList;
 begin
   if ParentNode = nil then
     RelationList := EpiDocument.Relations

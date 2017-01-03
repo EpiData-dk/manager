@@ -63,8 +63,8 @@ begin
   case AMessage.Msg of
     LM_MOUSEMOVE:
       begin
-        with TLMMouseMove(AMessage) do
-          FFrame.Label1.Caption := Format('Mouse: (%d, %d)', [XPos, YPos]);
+//        with TLMMouseMove(AMessage) do
+//          FFrame.Label1.Caption := Format('Mouse: (%d, %d)', [XPos, YPos]);
         Result := inherited IsDesignMessage(ASender, AMessage);
       end;
     LM_MOUSEWHEEL:

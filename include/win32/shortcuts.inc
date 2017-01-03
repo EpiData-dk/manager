@@ -30,6 +30,10 @@ begin
   P_StartValueLabelEditor      := KeyToShortCut(VK_V, [ssAlt]);
   P_OpenProject                := KeyToShortCut(VK_UNKNOWN, []);  // this overlaps with M_OpenProject!?!?!
   P_KeyFields                  := KeyToShortCut(VK_UNKNOWN, []);
+  P_ViewLog                    := KeyToShortCut(VK_L,       [ssCtrl]);
+  P_Users                      := KeyToShortCut(VK_U, [ssCtrl]);
+  P_Groups                     := KeyToShortCut(VK_G, [ssCtrl]);
+  P_EntryRight                 := KeyToShortCut(VK_E, [ssCtrl]);
 
   // Designer Frame
   D_NewIntField                := KeyToShortCut(VK_1, []);
@@ -89,5 +93,22 @@ begin
   V_GRID_DeleteRow                := KeyToShortCut(VK_DELETE, []);
   V_GRID_DeleteRow_Fast           := KeyToShortCut(VK_DELETE, [ssShift]);
   V_GRID_InsertRow                := KeyToShortCut(VK_INSERT, []);
+
+  A_NewGroup                      := KeyToShortCut(VK_G, [ssCtrl]);
+  A_NewUser                       := KeyToShortCut(VK_U, [ssCtrl]);
+  A_DeleteGroup                   := KeyToShortCut(VK_UNKNOWN, []);
+  A_DeleteUser                    := KeyToShortCut(VK_UNKNOWN, []);
+  A_AddUserToGroup                := KeyToShortCut(VK_UNKNOWN, []);
+  A_RemoveUserFromGroup           := KeyToShortCut(VK_UNKNOWN, []);
+
+  // Admin Groups:
+  AG_NewGroup                      := KeyToShortCut(VK_N, [ssCtrl]);
+  AG_DeleteGroup                   := KeyToShortCut(VK_DELETE, []);
+  AG_EditGroup                     := KeyToShortCut(VK_RETURN, []);
+
+  // Admin Users:
+  AU_NewUser                       := KeyToShortCut(VK_N, [ssCtrl]);
+  AU_DeleteUser                    := KeyToShortCut(VK_DELETE, []);
+  AU_EditUser                      := KeyToShortCut(VK_RETURN, []);
 end;
 

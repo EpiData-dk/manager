@@ -80,6 +80,7 @@ object KeyFieldsForm: TKeyFieldsForm
       Action = AddIndexFieldAction
       AutoSize = True
       BorderSpacing.Left = 5
+      Enabled = False
       TabOrder = 0
     end
   end

@@ -1,7 +1,7 @@
 object ValueLabelEditor2: TValueLabelEditor2
-  Left = 618
+  Left = 578
   Height = 627
-  Top = 275
+  Top = 337
   Width = 818
   Caption = 'Valuelabel Editor'
   ClientHeight = 627
@@ -48,34 +48,35 @@ object ValueLabelEditor2: TValueLabelEditor2
         ImageIndex = 32
         OnClick = DelBtnClick
       end
-      object ToolButton1: TToolButton
+      object ExternalToolBtn: TToolButton
         Left = 71
         Top = 2
+        AutoSize = True
         Caption = 'External...'
-        OnClick = ToolButton1Click
+        OnClick = ExternalToolBtnClick
       end
-      object ToolButton2: TToolButton
+      object Divider1: TToolButton
         Left = 61
         Height = 22
         Top = 2
         Width = 10
-        Caption = 'ToolButton2'
+        Caption = 'Divider1'
         Style = tbsDivider
       end
-      object ToolButton3: TToolButton
+      object ImportToolBtn: TToolButton
         Left = 148
         Hint = 'Import Data from projects as Value Labels'
         Top = 2
         AutoSize = True
         Caption = 'Import...'
-        OnClick = ToolButton3Click
+        OnClick = ImportToolBtnClick
       end
-      object ToolButton4: TToolButton
+      object Divider2: TToolButton
         Left = 143
         Height = 22
         Top = 2
         Width = 5
-        Caption = 'ToolButton4'
+        Caption = 'Divider2'
         Style = tbsDivider
       end
     end

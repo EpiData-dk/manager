@@ -14,9 +14,6 @@ type
   private
     FField: TEpiField;
     FOnShowHint: TDesignFrameShowHintEvent;
-    FWidth: Integer;
-    FHeight: Integer;
-    FInitialized: boolean;
     FProjectSettings: TEpiProjectSettings;
     FNameLabel: TLabel;
     FQuestionLabel: TLabel;

@@ -36,7 +36,11 @@ var
   P_ProjectSettings,
   P_StartValueLabelEditor,
   P_OpenProject,
-  P_KeyFields:
+  P_KeyFields,
+  P_ViewLog,
+  P_Users,
+  P_Groups,
+  P_EntryRight:
     TShortCut;
 
   // Designer Frame
@@ -90,6 +94,24 @@ var
   // - grid
   V_GRID_DeleteRow, V_GRID_DeleteRow_Fast,
   V_GRID_InsertRow:
+    TShortCut;
+
+  // Admin form
+  A_NewGroup, A_NewUser,
+  A_DeleteGroup, A_DeleteUser,
+  A_AddUserToGroup, A_RemoveUserFromGroup:
+    TShortCut;
+
+  // Admin Groups:
+  AG_NewGroup,
+  AG_DeleteGroup,
+  AG_EditGroup:
+    TShortCut;
+
+  // Admin Users:
+  AU_NewUser,
+  AU_DeleteUser,
+  AU_EditUser:
     TShortCut;
 
 implementation

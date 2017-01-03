@@ -1,7 +1,7 @@
 object ImportStructureForm: TImportStructureForm
-  Left = 615
+  Left = 867
   Height = 524
-  Top = 298
+  Top = 368
   Width = 595
   Caption = 'Import Structure From...'
   ClientHeight = 524

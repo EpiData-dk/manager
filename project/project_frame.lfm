@@ -1,24 +1,25 @@
 object ProjectFrame: TProjectFrame
   Left = 0
-  Height = 658
+  Height = 678
   Top = 0
-  Width = 778
-  ClientHeight = 658
-  ClientWidth = 778
+  Width = 991
+  ClientHeight = 678
+  ClientWidth = 991
   TabOrder = 0
-  DesignLeft = 2169
-  DesignTop = 277
+  DesignLeft = 2006
+  DesignTop = 290
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
-    Height = 638
+    Height = 658
     Top = 0
     Width = 187
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 638
+    ClientHeight = 658
     ClientWidth = 187
     TabOrder = 0
+    Visible = False
     object ToolBar1: TToolBar
       Left = 0
       Height = 22
@@ -126,8 +127,8 @@ object ProjectFrame: TProjectFrame
   object ProgressBar1: TProgressBar
     Left = 0
     Height = 20
-    Top = 638
-    Width = 778
+    Top = 658
+    Width = 991
     Align = alBottom
     Position = 50
     Smooth = True
@@ -138,14 +139,61 @@ object ProjectFrame: TProjectFrame
   end
   object Splitter1: TSplitter
     Left = 187
-    Height = 638
+    Height = 658
     Top = 0
     Width = 5
     Beveled = True
+    Visible = False
+  end
+  object Panel1: TPanel
+    Left = 726
+    Height = 658
+    Top = 0
+    Width = 265
+    Align = alRight
+    BevelInner = bvLowered
+    BorderWidth = 3
+    BorderStyle = bsSingle
+    ClientHeight = 656
+    ClientWidth = 263
+    ParentColor = False
+    TabOrder = 3
+    object Label1: TLabel
+      Left = 32
+      Height = 15
+      Top = 32
+      Width = 38
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 32
+      Height = 15
+      Top = 72
+      Width = 38
+      Caption = 'Label2'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 32
+      Height = 15
+      Top = 104
+      Width = 38
+      Caption = 'Label3'
+      ParentColor = False
+    end
+  end
+  object Splitter2: TSplitter
+    Left = 721
+    Height = 658
+    Top = 0
+    Width = 5
+    Align = alRight
+    ResizeAnchor = akRight
   end
   object ActionList1: TActionList
     Images = DM.Icons16
-    left = 328
+    left = 336
     top = 224
     object SaveProjectAction: TAction
       Category = 'File'
@@ -170,6 +218,7 @@ object ProjectFrame: TProjectFrame
       Hint = 'New Relate DataForm'
       ImageIndex = 31
       OnExecute = NewDataFormActionExecute
+      OnUpdate = NewDataFormActionUpdate
     end
     object DeleteDataFormAction: TAction
       Category = 'DataForm'
@@ -183,13 +232,13 @@ object ProjectFrame: TProjectFrame
       Category = 'Project'
       Caption = 'Properties'
       OnExecute = ProjectSettingsActionExecute
+      OnUpdate = ProjectSettingsActionUpdate
       ShortCut = 32848
     end
     object ValueLabelEditorAction: TAction
       Category = 'Project'
       Caption = 'Value labels...'
       OnExecute = ValueLabelEditorActionExecute
-      ShortCut = 32854
     end
     object OpenProjectAction: TAction
       Category = 'File'
@@ -198,10 +247,11 @@ object ProjectFrame: TProjectFrame
       ImageIndex = 19
       OnExecute = OpenProjectActionExecute
     end
-    object ProjectPasswordAction: TAction
+    object SetProjectPasswordAction: TAction
       Category = 'Project'
       Caption = 'Set Password'
-      OnExecute = ProjectPasswordActionExecute
+      OnExecute = SetProjectPasswordActionExecute
+      OnUpdate = SetProjectPasswordActionUpdate
     end
     object KeyFieldsAction: TAction
       Category = 'Project'
@@ -211,6 +261,41 @@ object ProjectFrame: TProjectFrame
       Category = 'Project'
       Caption = 'Study Information...'
       OnExecute = StudyInformationActionExecute
+    end
+    object DefineGroupsAction: TAction
+      Category = 'Admin'
+      Caption = 'Define Groups'
+      OnExecute = DefineGroupsActionExecute
+      OnUpdate = DefineGroupsActionUpdate
+    end
+    object DefineUsersAction: TAction
+      Category = 'Admin'
+      Caption = 'Define Users'
+      OnExecute = DefineUsersActionExecute
+      OnUpdate = DefineUsersActionUpdate
+    end
+    object DefineEntryRightsAction: TAction
+      Category = 'Admin'
+      Caption = 'Define Entry Rights'
+      OnExecute = DefineEntryRightsActionExecute
+      OnUpdate = DefineEntryRightsActionUpdate
+    end
+    object DefineExtendedAccessAction: TAction
+      Category = 'Admin'
+      Caption = 'Add User/Group Administration'
+      OnExecute = DefineExtendedAccessActionExecute
+      OnUpdate = DefineExtendedAccessActionUpdate
+    end
+    object RemoveProjectPassword: TAction
+      Category = 'Project'
+      Caption = 'Remove Password'
+      OnExecute = RemoveProjectPasswordExecute
+      OnUpdate = RemoveProjectPasswordUpdate
+    end
+    object ViewLogAction: TAction
+      Category = 'Admin'
+      Caption = 'View Log'
+      OnExecute = ViewLogActionExecute
     end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu

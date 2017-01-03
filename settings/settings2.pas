@@ -72,6 +72,7 @@ uses
   settings_general_frame, settings_visualdesign_frame,
   settings_font_frame,
   settings_export,
+  settings_statusbar,
 
   // export
   export_csv_frame, export_stata_frame, export_sas_frame, export_spss_frame,
@@ -188,6 +189,10 @@ begin
       WriteInteger(sec, 'HeadingFontStyle5', Integer(HeadingFont5.Style));
       WriteInteger(sec, 'HeadingFontColour5', HeadingFont5.Color);
 
+  {    // Statusbar: }
+      Sec := 'statusbar';
+      WriteString(sec, 'StatusBarItemNames', StatusBarItemNames);
+
       // Export:
       Sec := 'export';
       WriteInteger(sec, 'ExportType', ExportType);
@@ -234,6 +239,11 @@ begin
       WriteInteger(Sec, 'TimedRecoveryInterval', TimedRecoveryInterval);
       WriteBool(Sec, 'SaveBackup', SaveBackup);
       WriteInteger(Sec, 'AutoIncStart', AutoIncStart);
+      WriteBool(Sec, 'EmailOnShutdown', EmailOnShutdown);
+      WriteString(Sec, 'EmailAddress', EmailAddress);
+      WriteString(Sec, 'EmailSubject', EmailSubject);
+      WriteString(Sec, 'EmailContent', EmailContent);
+
       // - Fields:
       Sec := 'ProjectFields';
       WriteBool(Sec, 'ShowNames', ShowNames);
@@ -343,6 +353,10 @@ begin
       DaysBetweenChecks   := ReadInteger(Sec, 'DaysBetweenChecks', DaysBetweenChecks);
       LastUpdateCheck     := ReadDateTime(Sec, 'LastUpdateCheck', LastUpdateCheck);
 
+      {    // Statusbar: }
+      sec := 'statusbar';
+      StatusBarItemNames  := ReadString(sec, 'StatusBarItemNames', StatusBarItemNames);
+
       // Export:
       Sec := 'export';
       ExportType             := ReadInteger(sec, 'ExportType', ExportType);
@@ -428,6 +442,10 @@ begin
       TimedRecoveryInterval := ReadInteger(Sec, 'TimedRecoveryInterval', TimedRecoveryInterval);
       SaveBackup            := ReadBool(Sec, 'SaveBackup', SaveBackup);
       AutoIncStart          := ReadInteger(Sec, 'AutoIncStart', AutoIncStart);
+      EmailOnShutdown       := ReadBool(Sec, 'EmailOnShutdown', EmailOnShutdown);
+      EmailAddress          := ReadString(Sec, 'EmailAddress', EmailAddress);
+      EmailSubject          := ReadString(Sec, 'EmailSubject', EmailSubject);
+      EmailContent          := ReadString(Sec, 'EmailContent', EmailContent);
       // - Fields:
       Sec := 'ProjectFields';
       ShowNames             := ReadBool(Sec, 'ShowNames', ShowNames);
@@ -666,6 +684,7 @@ begin
     FindNodeWithText('Field Definitions').Data   := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
     FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
     FindNodeWithText('Fonts').Data               := Pointer(TSettingsFontFrame.Create(Self));
+    FindNodeWithText('Statusbar').Data           := Pointer(TSettingsStatusbar.Create(Self));
 
     // Export
     FindNodeWithText('Export').Data              := Pointer(TSettings_ExportFrame.Create(Self));
@@ -789,6 +808,10 @@ const
     TimedRecoveryInterval: 10;
     SaveBackup:            true;
     AutoIncStart:          1;
+    EmailOnShutdown:       false;
+    EmailAddress:          '';
+    EmailContent:          '';
+    EmailSubject:          '';
     // - Fields:
     ShowNames:             false;
     ShowBorders:           true;
@@ -814,6 +837,7 @@ const
     OwnFunding:            '';
 
 
+    StatusBarItemNames:    'LastSaved,CurrentUser,SelectedNames,RecourdCount,CycleNo';
 
     // Not shown in dialog.
     SelectedControlColour: $00B6F5F5;

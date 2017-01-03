@@ -1,396 +1,23 @@
 object RuntimeDesignFrame: TRuntimeDesignFrame
   Left = 0
-  Height = 626
+  Height = 564
   Top = 0
-  Width = 1060
-  ClientHeight = 626
-  ClientWidth = 1060
+  Width = 897
+  ClientHeight = 564
+  ClientWidth = 897
   TabOrder = 0
-  DesignLeft = 403
-  DesignTop = 242
-  object StatusBarPanel: TPanel
-    Left = 0
-    Height = 26
-    Top = 600
-    Width = 1060
-    Align = alBottom
-    BevelOuter = bvNone
-    ClientHeight = 26
-    ClientWidth = 1060
-    TabOrder = 3
-    object SectionsPanel: TPanel
-      AnchorSideLeft.Control = RecordsPanel
-      AnchorSideLeft.Side = asrBottom
-      Left = 104
-      Height = 24
-      Top = 2
-      Width = 96
-      Alignment = taLeftJustify
-      BorderSpacing.Left = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 96
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 0
-      object SectionsLabel: TLabel
-        AnchorSideLeft.Control = SectionsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 63
-        Height = 15
-        Top = 4
-        Width = 89
-        BorderSpacing.Left = 2
-        Caption = 'SectionsLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-      object SectionsStaticLabel: TLabel
-        Left = 2
-        Height = 15
-        Top = 4
-        Width = 59
-        Caption = 'Sections:'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object CurrentSectionPanel: TPanel
-      AnchorSideLeft.Control = SectionsPanel
-      AnchorSideLeft.Side = asrBottom
-      Left = 202
-      Height = 24
-      Top = 2
-      Width = 96
-      Alignment = taLeftJustify
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 96
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 1
-      object CurrentSectionLabel: TLabel
-        Left = 3
-        Height = 15
-        Top = 4
-        Width = 130
-        Caption = 'CurrentSectionLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object RecordsPanel: TPanel
-      Left = 2
-      Height = 24
-      Top = 2
-      Width = 100
-      Alignment = taLeftJustify
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 100
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 2
-      object RecordsLabel: TLabel
-        AnchorSideLeft.Control = RecordStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 58
-        Height = 15
-        Top = 4
-        Width = 84
-        BorderSpacing.Left = 2
-        Caption = 'RecordsLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-      object RecordStaticLabel: TLabel
-        Left = 2
-        Height = 15
-        Top = 4
-        Width = 54
-        Caption = 'Records:'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object FieldsPanel: TPanel
-      AnchorSideLeft.Control = CurrentSectionPanel
-      AnchorSideLeft.Side = asrBottom
-      Left = 300
-      Height = 24
-      Top = 2
-      Width = 75
-      Alignment = taLeftJustify
-      BorderSpacing.Left = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 75
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 3
-      object FieldsLabel: TLabel
-        AnchorSideLeft.Control = FieldsStaticLabel
-        AnchorSideLeft.Side = asrBottom
-        Left = 43
-        Height = 15
-        Top = 4
-        Width = 69
-        BorderSpacing.Left = 2
-        Caption = 'FieldsLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-      object FieldsStaticLabel: TLabel
-        Left = 2
-        Height = 15
-        Top = 4
-        Width = 39
-        Caption = 'Fields:'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object FieldNamePanel: TPanel
-      AnchorSideLeft.Control = FieldsPanel
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = FieldTypePanel
-      Left = 377
-      Height = 24
-      Top = 2
-      Width = 301
-      Alignment = taLeftJustify
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 301
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 4
-      object FieldNameLabel: TLabel
-        AnchorSideLeft.Control = FieldNamePanel
-        Left = 3
-        Height = 15
-        Top = 4
-        Width = 101
-        BorderSpacing.Left = 2
-        Caption = 'FieldNameLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object FieldTypePanel: TPanel
-      AnchorSideLeft.Control = FieldNamePanel
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = DefaultValuePanel
-      Left = 680
-      Height = 24
-      Top = 2
-      Width = 88
-      Alignment = taLeftJustify
-      Anchors = [akTop, akRight]
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 88
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 5
-      object FieldTypeLabel: TLabel
-        AnchorSideLeft.Control = FieldTypePanel
-        Left = 3
-        Height = 15
-        Top = 4
-        Width = 90
-        BorderSpacing.Left = 2
-        Caption = 'FieldTypeLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object DefaultValuePanel: TPanel
-      AnchorSideLeft.Control = FieldTypePanel
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = ValueLabelPanel
-      Left = 770
-      Height = 24
-      Top = 2
-      Width = 55
-      Alignment = taLeftJustify
-      Anchors = [akTop, akRight]
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 55
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 6
-      object DefaultValueLabel: TLabel
-        AnchorSideLeft.Control = DefaultValuePanel
-        Left = 3
-        Height = 15
-        Top = 4
-        Width = 115
-        BorderSpacing.Left = 2
-        Caption = 'DefaultValueLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object ValueLabelPanel: TPanel
-      AnchorSideLeft.Control = DefaultValuePanel
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = RangePanel
-      Left = 827
-      Height = 24
-      Top = 2
-      Width = 80
-      Alignment = taLeftJustify
-      Anchors = [akTop, akRight]
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 80
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 7
-      object ValueLabelLabel: TLabel
-        AnchorSideLeft.Control = ValueLabelPanel
-        Left = 3
-        Height = 15
-        Top = 4
-        Width = 103
-        BorderSpacing.Left = 2
-        Caption = 'ValueLabelLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object RangePanel: TPanel
-      AnchorSideLeft.Control = ValueLabelPanel
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = KeyPanel
-      Left = 909
-      Height = 24
-      Top = 2
-      Width = 60
-      Alignment = taLeftJustify
-      Anchors = [akTop, akRight]
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 60
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 8
-      object RangeLabel: TLabel
-        AnchorSideLeft.Control = RangePanel
-        Left = 3
-        Height = 15
-        Top = 4
-        Width = 74
-        BorderSpacing.Left = 2
-        Caption = 'RangeLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object KeyPanel: TPanel
-      AnchorSideLeft.Control = RangePanel
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = ExtendedPanel
-      Left = 971
-      Height = 24
-      Top = 2
-      Width = 35
-      Alignment = taLeftJustify
-      Anchors = [akTop, akRight]
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 35
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 9
-      object KeyLabel: TLabel
-        AnchorSideLeft.Control = KeyPanel
-        Left = 3
-        Height = 15
-        Top = 4
-        Width = 56
-        BorderSpacing.Left = 2
-        Caption = 'KeyLabel'
-        Color = clDefault
-        ParentColor = False
-        Transparent = False
-      end
-    end
-    object ExtendedPanel: TPanel
-      AnchorSideLeft.Control = KeyPanel
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = StatusBarPanel
-      AnchorSideRight.Side = asrBottom
-      Left = 1008
-      Height = 24
-      Top = 2
-      Width = 50
-      Alignment = taLeftJustify
-      Anchors = [akTop, akRight]
-      BorderSpacing.Left = 2
-      BorderSpacing.Right = 2
-      BevelOuter = bvLowered
-      ClientHeight = 24
-      ClientWidth = 50
-      Color = clWindow
-      ParentColor = False
-      TabOrder = 10
-      object ExtendedLabel: TLabel
-        AnchorSideLeft.Control = ExtendedPanel
-        Left = 3
-        Height = 15
-        Top = 4
-        Width = 104
-        BorderSpacing.Left = 2
-        Caption = 'ExtendedLabel'
-        Color = clDefault
-        Font.Height = -13
-        Font.Name = 'DejaVu Sans Mono'
-        ParentColor = False
-        ParentFont = False
-        Transparent = False
-      end
-    end
-  end
+  DesignLeft = 654
+  DesignTop = 441
   object Panel1: TPanel
-    Left = 795
-    Height = 578
+    Left = 632
+    Height = 542
     Top = 22
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 576
+    ClientHeight = 540
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
@@ -409,66 +36,66 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       WantReturns = False
     end
     object Button1: TButton
-      Left = 152
+      Left = 168
       Height = 25
-      Top = 96
+      Top = 168
       Width = 75
       Caption = 'Button1'
       OnClick = Button1Click
       TabOrder = 1
     end
     object Label1: TLabel
-      Left = 17
+      Left = 32
       Height = 15
-      Top = 168
-      Width = 42
+      Top = 352
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
     end
     object Label2: TLabel
-      Left = 17
+      Left = 32
       Height = 15
-      Top = 209
-      Width = 42
+      Top = 393
+      Width = 43
       Caption = 'Label2'
       ParentColor = False
     end
     object Label3: TLabel
-      Left = 17
+      Left = 32
       Height = 15
-      Top = 255
-      Width = 42
+      Top = 439
+      Width = 43
       Caption = 'Label3'
       ParentColor = False
     end
     object Label4: TLabel
-      Left = 17
+      Left = 32
       Height = 15
-      Top = 297
-      Width = 42
+      Top = 481
+      Width = 43
       Caption = 'Label4'
       ParentColor = False
     end
     object Label5: TLabel
-      Left = 16
+      Left = 31
       Height = 15
-      Top = 330
-      Width = 42
+      Top = 514
+      Width = 43
       Caption = 'Label5'
       ParentColor = False
     end
     object Label6: TLabel
-      Left = 18
+      Left = 33
       Height = 15
-      Top = 361
-      Width = 42
+      Top = 545
+      Width = 43
       Caption = 'Label6'
       ParentColor = False
     end
   end
   object Splitter1: TSplitter
-    Left = 790
-    Height = 578
+    Left = 627
+    Height = 542
     Top = 22
     Width = 5
     Align = alRight
@@ -478,18 +105,18 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     Left = 0
     Height = 22
     Top = 0
-    Width = 1060
+    Width = 897
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
     ClientHeight = 22
-    ClientWidth = 1060
+    ClientWidth = 897
     TabOrder = 0
     object DesignerToolBar: TToolBar
       Left = 0
       Height = 22
       Top = 0
-      Width = 1060
+      Width = 897
       Align = alClient
       AutoSize = True
       ButtonHeight = 20
@@ -553,7 +180,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object DateToolButton: TToolButton
         Tag = 4
-        Left = 146
+        Left = 166
         Hint = 'New DMY Field'
         Top = 1
         Caption = 'New DMY Field'
@@ -563,7 +190,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object OtherToolButton: TToolButton
-        Left = 206
+        Left = 226
         Hint = 'Other Field Types...'
         Top = 1
         Caption = 'OtherToolButton'
@@ -573,7 +200,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider2: TToolButton
-        Left = 226
+        Left = 246
         Height = 20
         Top = 1
         Width = 10
@@ -582,7 +209,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object HeadingToolButton: TToolButton
         Tag = 5
-        Left = 236
+        Left = 256
         Hint = 'New Heading'
         Top = 1
         Caption = 'New Heading'
@@ -592,7 +219,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider3: TToolButton
-        Left = 256
+        Left = 276
         Height = 20
         Top = 1
         Width = 5
@@ -601,7 +228,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object SectionToolButton: TToolButton
         Tag = 6
-        Left = 261
+        Left = 281
         Hint = 'New Section'
         Top = 1
         Caption = 'New Section'
@@ -611,7 +238,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider4: TToolButton
-        Left = 311
+        Left = 331
         Height = 20
         Top = 1
         Width = 10
@@ -619,28 +246,28 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Style = tbsDivider
       end
       object EditToolButton: TToolButton
-        Left = 321
+        Left = 341
         Top = 1
         Action = EditControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteToolButton: TToolButton
-        Left = 341
+        Left = 361
         Top = 1
         Action = DeleteControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteAllToolButton: TToolButton
-        Left = 361
+        Left = 381
         Top = 1
         Action = DeleteAllAction
         ParentShowHint = False
         ShowHint = True
       end
       object Divider5: TToolButton
-        Left = 381
+        Left = 401
         Height = 20
         Top = 1
         Width = 10
@@ -648,7 +275,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Style = tbsDivider
       end
       object Divider6: TToolButton
-        Left = 411
+        Left = 431
         Height = 20
         Top = 1
         Width = 10
@@ -656,7 +283,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Style = tbsDivider
       end
       object TestToolButton: TToolButton
-        Left = 421
+        Tag = 14
+        Left = 441
         Top = 1
         Caption = 'TestToolButton'
         ImageIndex = 0
@@ -664,7 +292,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object TimeToolButton: TToolButton
         Tag = 10
-        Left = 166
+        Left = 186
         Hint = 'New Time Field'
         Top = 1
         Caption = 'TimeToolButton'
@@ -702,19 +330,19 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Style = tbsDivider
       end
       object ToolButton5: TToolButton
-        Left = 391
+        Left = 411
         Top = 1
         Action = ShowAlignFormAction
         ImageIndex = 23
       end
       object ToolButton6: TToolButton
-        Left = 291
+        Left = 311
         Hint = 'Extend dataform'
         Top = 1
         Action = ExpandPageAction
       end
       object ToolButton7: TToolButton
-        Left = 281
+        Left = 301
         Height = 20
         Top = 1
         Width = 10
@@ -723,27 +351,28 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object AutoIncToolBtn: TToolButton
         Tag = 2
-        Left = 186
+        Left = 206
         Hint = 'New Auto-Increment Field'
         Top = 1
         Caption = 'AutoIncToolBtn'
         ImageIndex = 7
         OnClick = FieldBtnClick
       end
+      object MemoToolButton: TToolButton
+        Tag = 14
+        Left = 146
+        Top = 1
+        Caption = 'MemoToolButton'
+        ImageIndex = 50
+        OnClick = MemoBtnClick
+      end
     end
   end
-  object DesignerActionList: TActionList
+  object AuthorizedDesignerActionList: TActionList
     Images = DM.Icons16
-    OnUpdate = DesignerActionListUpdate
-    left = 344
-    top = 240
-    object EditControlAction: TAction
-      Category = 'Edit'
-      Caption = 'Edit'
-      Hint = 'Edit...'
-      ImageIndex = 13
-      OnExecute = EditControlActionExecute
-    end
+    OnUpdate = AuthorizedDesignerActionListUpdate
+    left = 416
+    top = 160
     object DeleteControlAction: TAction
       Category = 'Edit'
       Caption = 'Delete'
@@ -823,12 +452,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = PasteAsDateActionExecute
       OnUpdate = PasteAsUpdate
     end
-    object SelectNextAction: TAction
-      Category = 'Select'
-      Caption = 'Select Next'
-      Hint = 'Select Next Control'
-      OnExecute = SelectNextActionExecute
-    end
     object ImportAction: TAction
       Caption = 'Import file...'
       Hint = 'Import data and structure from files'
@@ -902,31 +525,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = DeleteControlFastActionExecute
       OnUpdate = CutCopyControlUpdate
     end
-    object SelectPgDnAction: TAction
-      Category = 'Select'
-      Caption = 'SelectPgDnAction'
-      OnExecute = SelectPgDnActionExecute
-    end
-    object SelectPriorAction: TAction
-      Category = 'Select'
-      Caption = 'SelectPriorAction'
-      OnExecute = SelectPriorActionExecute
-    end
-    object SelectPgUpAction: TAction
-      Category = 'Select'
-      Caption = 'SelectPgUpAction'
-      OnExecute = SelectPgUpActionExecute
-    end
-    object SelectFirstAction: TAction
-      Category = 'Select'
-      Caption = 'SelectFirstAction'
-      OnExecute = SelectFirstActionExecute
-    end
-    object SelectLastAction: TAction
-      Category = 'Select'
-      Caption = 'SelectLastAction'
-      OnExecute = SelectLastActionExecute
-    end
     object NewTimeFieldAction: TAction
       Category = 'NewControls'
       Caption = 'NewTimeFieldAction'
@@ -952,21 +550,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Redo last action'
       OnExecute = RedoActionExecute
       OnUpdate = RedoActionUpdate
-    end
-    object ViewDatasetAction: TAction
-      Caption = 'Browse Data'
-      OnExecute = ViewDatasetActionExecute
-    end
-    object PrintDataFormAction: TAction
-      Caption = '&Print Dataform'
-      Hint = 'Print Dataform'
-      ImageIndex = 22
-      OnExecute = PrintDataFormActionExecute
-    end
-    object SelectAllAction: TAction
-      Category = 'Select'
-      Caption = 'SelectAllAction'
-      OnExecute = SelectAllActionExecute
     end
     object AlignLeftAction: TAction
       Category = 'Align'
@@ -1003,30 +586,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       ImageIndex = 28
       OnExecute = ShowAlignFormActionExecute
     end
-    object SelectAllIntsAction: TAction
-      Category = 'Select'
-      Caption = 'All Integer Fields'
-      ImageIndex = 2
-      OnExecute = SelectAllIntsActionExecute
-    end
-    object SelectAllFloatsAction: TAction
-      Category = 'Select'
-      Caption = 'All Float Fields'
-      ImageIndex = 3
-      OnExecute = SelectAllFloatsActionExecute
-    end
-    object SelectAllStringsAction: TAction
-      Category = 'Select'
-      Caption = 'All String Fields'
-      ImageIndex = 6
-      OnExecute = SelectAllStringsActionExecute
-    end
-    object SelectAllBoolsAction: TAction
-      Category = 'Select'
-      Caption = 'All Boolean Fields'
-      ImageIndex = 1
-      OnExecute = SelectAllBoolsActionExecute
-    end
     object ExpandPageAction: TAction
       Caption = 'Extend Page'
       ImageIndex = 14
@@ -1054,15 +613,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Import data and structure from clipboard'
       ImageIndex = 18
       OnExecute = ImportCBActionExecute
-    end
-    object DataformPropertiesAction: TAction
-      Category = 'Edit'
-      Caption = 'Dataform Properties'
-      OnExecute = DataformPropertiesActionExecute
-    end
-    object DefineKeyAction: TAction
-      Caption = 'Define Key'
-      OnExecute = DefineKeyActionExecute
     end
   end
   object OtherFieldsPopup: TPopupMenu
@@ -1464,42 +1014,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     top = 304
     object EditPopupMenuItem: TMenuItem
       Action = EditControlAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        20000000000000040000640000006400000000000000000000007F4C04FF7F4C
-        04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF804C
-        04C280400008FFFFFF00FFFF0001D09A2D9DD19A2E95C892370E7F4C04FF804D
-        04E6804D0478804D0478804D0478804D0478804D0478804D0478804C04767744
-        000FFFFFFF00FFFFFF00D5952B0CCF9A2EA1D09A2EFFD19B2E7F7F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00CD8F0066CF8F0030FFFFFF00D29B2D33FFFF00017F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00CE8D0069CE8E00FFCE8E00FBCF8D0055FFFFFF00FFFFFF007F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD8D
-        0057CE8E00FDCE8E00FFCE8D00C1BF800008FFFFFF007E4B047D7F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD900047CE8E
-        00FACE8E00FFCD8E00CEC892000EFFFFFF007E4D05677F4C04FF7F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8F0039CE8E00F5CE8E
-        00FFCE8E00DAD18B0016FFFFFF00FFFFFF00804D04C87F4C04FF7F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFFFF00FFFFFF00D191002CCE8F00EECE8E00FFCE8E
-        00E4CE8C001FFFFFFF00FFFFFF00FFFFFF00804D04C87F4C04FF7F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFFFF00FFFFFF00D08D0031CE8E00CFCE8E00EDCE8C
-        002AFFFFFF00FFFFFF00FFFFFF00FFFFFF00804D04C87F4C04FF7F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFF0001CD8D0080CF8F0010BF800004D18B0021FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804D04C87F4C04FF7F4C04FF804C
-        04D0FFFFFF00FFFFFF00CD900047CE8E00FFCE8E00C4C68E0009FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804D04C87F4C04FF7F4C04FF804C
-        04D0FFFFFF00FFFFFF00CE8D0092CE8F0062BF800004FFFFFF00FFFFFF00FFFF
-        FF007C4D0821804D0560804D0560804D05607F4C03DD804C04EA7F4C04FF804C
-        04D0FFFFFF00FFFFFF00AAAA0003FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804B03587F4C04FF7F4C04FF7F4C04FF804C04D07B4A001F7F4C04FF804C
-        04D0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804B03587F4C04FF7F4C04FF7F4D04AD7446000BFFFFFF007F4C04FF804C
-        04E8804C0480804C0480804C0480804C0480804C0480804C0480804C0480804C
-        0480804C04AC804C04FE7F4B048100000001FFFFFF00FFFFFF007F4C04FF7F4C
-        04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C
-        04FF7F4C04F57E4B0355FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-      }
       GlyphShowMode = gsmSystem
     end
     object PopupMenuDivider1: TMenuItem
@@ -1519,240 +1033,24 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object PasteAsHeadingMenuItem: TMenuItem
       Action = PasteAsHeadingAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF824D0078824D
-        0078824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824D0078824D0078824D0078824D0078824D0078FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E0034CE8E0034FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00CD8F0029CE8E0058CE8E0058CE8E00F5CE8E00F5CE8E
-        0058CE8E0058CD8F0029FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00CE8E0078CE8E00FFCE8E00FFCE8E00FFCE8E00FFCE8E
-        00FFCE8E00FFCE8E0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00CE89001ACD8D0038CD8D0038CD8D0038CD8D0038CD8D
-        0038CD8D0038CE89001AFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824D0078824D
-        0078824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824D0078824D0078824D0078824D0078824D0078814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF
-      }
     end
     object PasteAsIntMenuItem: TMenuItem
       Action = PasteAsIntAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000814B00C1814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF804B
-        0095824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824D0078824D0078824D0078824C00B3814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD8E0024D1900027FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00CC8C003CCE8D00CACE8E00FFCE8E00FFCE8E
-        00D5D08D0041FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00CE8E00D7CE8E00EACF8C0045CF8C0045CE8E
-        00F6CE8E00E1FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00D5800006CE8E00B7CE8D0072FFFFFF00FFFFFF00CE8E
-        00CDCE8E00FBBF800008FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD8F0042CE8F0096CE8E
-        00FFCD8D00A4FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E007CCE8E00F1CE8E
-        00E6D192001CFFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00CE8D0072CE8E0073FFFFFF00D192001CCE8E
-        00F3CD8D00A4FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00CF8E007ACE8E00FACF8D004ACE8F0044CE8E
-        00FCCE8F00A8FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00D3900017CD8E00BECE8E00FECE8E00FFCE8E
-        00D4D1900027FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CF8F0020D1900027FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824B0070814C00FF814C00FF824C
-        00B3824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824D0078824D0078824D0078824B0095814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814D00C1
-      }
     end
     object PasteAsFloatMenuItem: TMenuItem
       Action = PasteAsFloatAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00B8824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824D0078824D0078824D0078814C00B8814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00CD8D0038D08E0036CA8D001DD192001CCF8F0040CF8F
-        0040CF8F0040CF8F0040CF8F0040D18B000B824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00CE8E00E0CD8E00D8CE8E00EBCE8D00A6CE8E00FFCE8E
-        00FFCE8E00FFCE8E00FFCE8E00FFCD8E0051824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00CE8E00E0CD8E00D8CF8F004BCF910025CD8E00BECE8E
-        00FCCE8E007ECF8F0030CF8F0030CE920015824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00CE8E00E0CD8E00D8FFFFFF00FFFFFF00C9940013CE8E
-        00B2CE8E00FFCD8E0090D5800006FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00CE8E00E0CD8E00D8FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00CF8E006ACE8E00F4CE8E00C2CC88000F824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00CE8E00E0CD8E00D8FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00CF910025CE8E00F6CE8E00A0824D0078814C00FF814C00FF824D
-        0078CE8E00C0CE8E00C0CE8E00F8CD8E00D8FFFFFF00FFFFFF00CC8C003CCE8E
-        00F0CC8A0023FFFFFF00CF8E009ECE8E00E8824D0078814C00FF814C00FF824D
-        0078CE8E00ABCE8E00E7CE8E00FFCD8E00D8FFFFFF00FFFFFF00FFFF0001CE8E
-        00DECE8E00BCCF8E005ACF8E00DDCE8F00B1824D0078814C00FF814C00FF824D
-        0078FFFFFF00D3900017CE8E00EDCD8E00D8FFFFFF00FFFFFF00FFFFFF00CD8E
-        0048CE8E00C6CE8E00FFCE8F00DCCE8E003F824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00D1900027D08E0036FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00CA8A0018FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824D0078814C00FF814C00FF814C
-        00B8824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824D0078824D0078824D0078814C00B8814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF
-      }
     end
     object PasteAsStringMenuItem: TMenuItem
       Action = PasteAsStringAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00B8824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824D0078824D0078824D0078814C00B8814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD8C
-        0033D08D0077CD8E0024FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CF8F004BCF8F004BCA8A
-        0018CE8E00A2CC88000FFFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00CE8E0058FFFFFF00FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00CE8E0058FFFFFF00FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0BF80
-        0008CD8E0095FFFF0001FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0D191
-        002CCA8A0018D18B0021FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8E00F0CE8E00F0FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00D08D0026CD8E0048CD8E0048CE8E00F4CE8E00F4CD8E
-        0048CD8E0048D08D0026FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00CE8F0088CE8E00FFCE8E00FFCE8E00FFCE8E00FFCE8E
-        00FFCE8E00FFCE8F0088FFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00CE8C002ACF8F0050CF8F0050CF8F0050CF8F0050CF8F
-        0050CF8F0050CE8C002AFFFFFF00FFFFFF00824D0078814C00FF814C00FF824D
-        0078FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00824D0078814C00FF814C00FF814C
-        00B8824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824D0078824D0078824D0078814C00B8814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF
-      }
     end
     object PasteAsDateMenuItem: TMenuItem
       Action = PasteAsDateAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00F3824E003BFFFFFF00FFFFFF00FFFFFF00814C00FF824C
-        00B3824D0078824D0078824D0078824D0078824D0078824D0078824D0078824D
-        0078824D0078824C00AB814C00F2804B003AFFFFFF00FFFFFF00814C00FF824B
-        0070FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00824D0060814C00FF814C00F2824C0039FFFFFF00814C00FF824B
-        0070AAAA0003CE8E0093CE8F0098CE8F0098CE8F0098CD8E0085FFFFFF00CF8E
-        004FCE8F008D824D0060814C00FF814C00FF814C00F1824A0037814C00FF824B
-        0070FFFFFF00CE8E00B7CE8E00F5CE8D009BCE8F0098CD8E0085FFFFFF00CE8D
-        0053CE8E00FF9E660037824D0060824D0060814B00A6814D00F0814C00FF824B
-        0070FFFFFF00CD8C0033CE8E00E6CE8E00BCC9940013FFFFFF00FFFFFF00CE92
-        0015CE8E00FFCD8E0048FFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00CE89001ACE8D00C1CE8F00DCD18B0021FFFFFF00FFFF
-        FF00CE8E00C2CE8E008CFFFFFF00FFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00CF8F005BD191002CFF800002CE8E00D2CE8D00A6FFFFFF00FFFF
-        FF00CE8D002FCE8E00F6CE8C002AFFFFFF00824B0070814C00FF814C00FF824B
-        0070FFFFFF00CE8F00A8CE8E00ACD5800006CD8E00B4CE8F00B1D595000CCA8A
-        0018CA8A0018CE8E00A0CE8E00C5FFFF0001824B0070814C00FF814C00FF824B
-        0070FFFFFF00CF8F0040CE8E00DFCE8E00F7CE8E00F1CE90003ECE8F0088CE8E
-        00FFCE8E00FFCE8E00FFCE8E00FFCA8A0018824B0070814C00FF814C00FF824B
-        0070FFFFFF00FFFFFF00FF800002CC900037BF800008FFFFFF00CC8F0019CF8F
-        0030CF8F0030CF8F0030CF8F0030BF800004824B0070814C00FF814C00FF814D
-        00AA824C0068824C0068824C0068824C0068824C0068824C0068824C0068824C
-        0068824C0068824C0068824C0068824C0068814D00AA814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00EE814B004B804C005E834C0065814C00FF814C00FF814C00FF814C
-        00FF844B005F804C005E814B004B814C00EE814C00FF814C00FF814D0088814D
-        0088814D007B824D0060814C00FF83480027814D0088814D0088814D0088814D
-        008880470024814C00FF824D0060814D007B814D0088814D0088FFFFFF00FFFF
-        FF00FFFFFF00824D0060814C00FF80500010FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF0080500010814C00FF824D0060FFFFFF00FFFFFF00FFFFFF00
-      }
     end
     object PopupMenuDivider3: TMenuItem
       Caption = '-'
     end
     object MenuItem5: TMenuItem
       Action = ShowAlignFormAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        20000000000000040000640000006400000000000000000000007F4C04FF7F4C
-        04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C
-        04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF804C04E8804C
-        04E8804C04E8804C04E8804C04E8804C04E8804C04E8804C04E8804C04E8804C
-        04E8804C04E8804C04E8804C04E8804C04E8804C04E8804C04E8FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD8F006BCD8F006BFFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D08D0031CE8E00F8CE8E00F8D08D
-        0031FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00D5800006CE8F00BACE8E00F7CE8E00F9CE8F
-        00BAD5800006FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8D00B8CF8E00C8FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD8E00DDCE8E00E7FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CF8E00DDCE8D00E7FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CE8D00B8CF8E00C8FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00D5800006CE8E00B6CE8E00F4CE8E00F7CE8E
-        00B6D5800006FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CF900035CE8E00FACE8E00FACF90
-        0035FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD8E0071CD8E0071FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804C04E8804C
-        04E8804C04E8804C04E8804C04E8804C04E8804C04E8804C04E8804C04E8804C
-        04E8804C04E8804C04E8804C04E8804C04E8804C04E8804C04E87F4C04FF7F4C
-        04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C
-        04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF
-      }
     end
     object MenuItem7: TMenuItem
       Caption = 'Data'
@@ -1768,42 +1066,6 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object DeletePopupMenuItem: TMenuItem
       Action = DeleteControlAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        20000000000000040000640000006400000000000000000000007F4C04FF7F4C
-        04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF804C04F6804D0446CF8F
-        0050CE8E00A0AAAA0003FFFFFF00CA8A0018CE8D00B8CB8F00227F4C04FF804C
-        04BC804D0478804D0478804D0478804D0478804D0478804B043ACC8C0014CE8E
-        00F3CE8E00FFCF8E00A9D192001CCE8E00D7CE8E00FFCE8E00BF7F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CD8E
-        0048CE8E00F8CE8E00FFCE8E00F6CE8E00FFCE8E00DBD192001C7F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00CE8D005ECE8E00FFCE8E00FFCE8E00F7CE8C001FFFFFFF007F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CA8A
-        0018CE8E00D7CE8E00FFCE8E00FFCE8E00FFCD8D00A4AAAA00037F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D58E0012CE8E
-        00D7CE8E00FFCE8E00DBCD8D005CCE8E00F6CE8E00FFCE8F00A17F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF0001CD8E
-        009ACE8E00DBD192001C804A0530CF8C0045CE8E00F3CE8E00587F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        0001C99400137E4C034D7F4C04FB804A0018CC8C0014FFFFFF007F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00804B03587F4C04FF80500820FFFFFF00FFFFFF007F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00804B03587F4C04FF80500820FFFFFF00FFFFFF007F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00804B03587F4C04FF80500820FFFFFF00FFFFFF007F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804A0018804D
-        0560804D05607F4C0397804C04F880510016FFFFFF00FFFFFF007F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804C04407F4C
-        04FF7F4C04FF804C04F8804A0448FFFFFF00FFFFFF00FFFFFF007F4C04FF804C
-        0480FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804C04407F4C
-        04FF804C04F8804A0448FFFFFF00FFFFFF00FFFFFF00FFFFFF007F4C04FF804C
-        04C0804C0480804C0480804C0480804C0480804C0480804C0480804D05A0804C
-        04F8804A0448FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF007F4C04FF7F4C
-        04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF7F4C04FF804C04F8804A
-        0448FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-      }
       GlyphShowMode = gsmSystem
       OnClick = DeleteControlActionExecute
     end
@@ -1811,5 +1073,96 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   object PrintDialog1: TPrintDialog
     left = 156
     top = 178
+  end
+  object NonAuthorizedDesignerActionList: TActionList
+    Images = DM.Icons16
+    OnUpdate = NonAuthorizedDesignerActionListUpdate
+    left = 416
+    top = 248
+    object ViewDatasetAction: TAction
+      Caption = 'Browse Data'
+      OnExecute = ViewDatasetActionExecute
+      OnUpdate = ViewDatasetActionUpdate
+    end
+    object PrintDataFormAction: TAction
+      Caption = '&Print Dataform'
+      Hint = 'Print Dataform'
+      ImageIndex = 22
+      OnExecute = PrintDataFormActionExecute
+    end
+    object EditControlAction: TAction
+      Caption = 'Edit'
+      Hint = 'Edit...'
+      ImageIndex = 13
+      OnExecute = EditControlActionExecute
+    end
+    object DataformPropertiesAction: TAction
+      Caption = 'Dataform Properties'
+      OnExecute = DataformPropertiesActionExecute
+    end
+    object SelectNextAction: TAction
+      Category = 'Select'
+      Caption = 'Select Next'
+      Hint = 'Select Next Control'
+      OnExecute = SelectNextActionExecute
+    end
+    object SelectPgDnAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPgDnAction'
+      OnExecute = SelectPgDnActionExecute
+    end
+    object SelectPriorAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPriorAction'
+      OnExecute = SelectPriorActionExecute
+    end
+    object SelectPgUpAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPgUpAction'
+      OnExecute = SelectPgUpActionExecute
+    end
+    object SelectFirstAction: TAction
+      Category = 'Select'
+      Caption = 'SelectFirstAction'
+      OnExecute = SelectFirstActionExecute
+    end
+    object SelectLastAction: TAction
+      Category = 'Select'
+      Caption = 'SelectLastAction'
+      OnExecute = SelectLastActionExecute
+    end
+    object SelectAllAction: TAction
+      Category = 'Select'
+      Caption = 'SelectAllAction'
+      OnExecute = SelectAllActionExecute
+    end
+    object SelectAllIntsAction: TAction
+      Category = 'Select'
+      Caption = 'All Integer Fields'
+      ImageIndex = 2
+      OnExecute = SelectAllIntsActionExecute
+    end
+    object SelectAllFloatsAction: TAction
+      Category = 'Select'
+      Caption = 'All Float Fields'
+      ImageIndex = 3
+      OnExecute = SelectAllFloatsActionExecute
+    end
+    object SelectAllStringsAction: TAction
+      Category = 'Select'
+      Caption = 'All String Fields'
+      ImageIndex = 6
+      OnExecute = SelectAllStringsActionExecute
+    end
+    object SelectAllBoolsAction: TAction
+      Category = 'Select'
+      Caption = 'All Boolean Fields'
+      ImageIndex = 1
+      OnExecute = SelectAllBoolsActionExecute
+    end
+    object DefineKeyAction: TAction
+      Caption = 'Define Key'
+      OnExecute = DefineKeyActionExecute
+    end
   end
 end

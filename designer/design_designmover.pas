@@ -147,9 +147,23 @@ begin
 end;
 
 procedure TDesignMover.MoverPaint(Sender: TObject);
+var
+  i: Integer;
 begin
   if Assigned(FOldPaint) then FOldPaint(Sender);
+
   inherited PaintDragRects;
+  // This below is not entirely correct, but it does draw something.
+{  for i := Low(FDragRects) to High(FDragRects) do
+    with FDesignPanel.Canvas do
+    begin
+      Pen.Style := psDash;
+      Pen.Color := clBlack;
+      Brush.Style := bsClear;
+
+      Rectangle(FDragRects[i]);
+    end;
+                     }
   PaintSnappingLines;
 end;
 {$ENDIF}

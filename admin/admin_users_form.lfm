@@ -1,0 +1,121 @@
+object DefineUsersForm: TDefineUsersForm
+  Left = 501
+  Height = 357
+  Top = 424
+  Width = 752
+  Caption = 'Define Users'
+  ClientHeight = 357
+  ClientWidth = 752
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
+  Position = poDefault
+  LCLVersion = '1.5'
+  object Panel6: TPanel
+    Left = 0
+    Height = 31
+    Top = 0
+    Width = 752
+    Align = alTop
+    AutoSize = True
+    ClientHeight = 31
+    ClientWidth = 752
+    TabOrder = 0
+    object Label4: TLabel
+      AnchorSideLeft.Control = Panel6
+      AnchorSideLeft.Side = asrCenter
+      Left = 348
+      Height = 19
+      Top = 6
+      Width = 57
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 5
+      BorderSpacing.Bottom = 5
+      Caption = 'Users:'
+      Font.Height = -16
+      Font.Name = 'Sans'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+  end
+  object Panel4: TPanel
+    Left = 0
+    Height = 50
+    Top = 307
+    Width = 752
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 752
+    TabOrder = 2
+    object BitBtn1: TBitBtn
+      Left = 663
+      Height = 34
+      Top = 8
+      Width = 73
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      DefaultCaption = True
+      Kind = bkClose
+      ModalResult = 11
+      TabOrder = 0
+    end
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 26
+    Top = 31
+    Width = 752
+    Caption = 'ToolBar1'
+    Images = DM.Icons16
+    TabOrder = 1
+    object ToolButton1: TToolButton
+      Left = 1
+      Top = 2
+      Action = AddUserAction
+    end
+    object ToolButton2: TToolButton
+      Left = 24
+      Top = 2
+      Action = DeleteUserAction
+    end
+    object ToolButton3: TToolButton
+      Left = 55
+      Top = 2
+      Action = EditUserAction
+    end
+    object ToolButton7: TToolButton
+      Left = 47
+      Height = 22
+      Top = 2
+      Width = 8
+      Caption = 'ToolButton7'
+      Style = tbsSeparator
+    end
+  end
+  object ActionList1: TActionList
+    Images = DM.Icons16
+    left = 296
+    top = 123
+    object AddUserAction: TAction
+      Caption = 'Add User'
+      ImageIndex = 31
+      OnExecute = AddUserActionExecute
+    end
+    object DeleteUserAction: TAction
+      Caption = 'Delete User'
+      ImageIndex = 32
+      OnExecute = DeleteUserActionExecute
+      OnUpdate = DeleteUserActionUpdate
+    end
+    object EditUserAction: TAction
+      Caption = 'Edit User'
+      ImageIndex = 13
+      OnExecute = EditUserActionExecute
+    end
+    object CloseAction: TAction
+      Caption = 'CloseAction'
+      OnExecute = CloseActionExecute
+      ShortCut = 27
+    end
+  end
+end

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, ComCtrls, StdCtrls, Buttons,
-  ExtCtrls, epicustombase, design_types, design_properties_baseframe;
+  ExtCtrls, epicustombase, design_types, design_properties_baseframe, design_properties_groupassign_frame;
 
 type
 
@@ -16,20 +16,11 @@ type
   TSectionPropertiesFrame = class(TDesignPropertiesFrame, IDesignPropertiesFrame)
     Image1: TImage;
     Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
     Label9: TLabel;
     NameEdit: TEdit;
     CaptionEdit: TEdit;
-    SectionGroupAccessGroupBox: TGroupBox;
-    Label1: TLabel;
     Label2: TLabel;
-    GroupAvailableListBox: TListBox;
-    GroupAssignedListBox: TListBox;
-    SectionPageControl: TPageControl;
-    GrpRightsMoveRight: TSpeedButton;
-    GrpRightsMoveLeft: TSpeedButton;
-    SectionBasicSheet: TTabSheet;
+    Panel1: TPanel;
   private
     { private declarations }
     FSections: TEpiCustomControlItemArray;
@@ -49,7 +40,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epidatafiles, LazUTF8, epistringutils, epiv_datamodule;
+  epidatafiles, LazUTF8, epistringutils, epiv_datamodule, epiadmin,
+  admin_authenticator;
 
 { TSectionPropertiesFrame }
 
@@ -57,24 +49,21 @@ procedure TSectionPropertiesFrame.UpdateVisibility;
 begin
   NameEdit.Enabled :=
     (Length(FSections) = 1) and
-    (FSections[0].Name <> 'MAIN');
-  CaptionEdit.Enabled := NameEdit.Enabled;
+    (FSections[0].Name <> 'MAIN') and
+    (IsAuthorized(earDefineProject));
 
-  {$IFNDEF EPI_DEBUG}
-  SectionGroupAccessGroupBox.Visible := false;
-  SectionGroupAccessGroupBox.Enabled := false;
-  {$ELSE}
-  SectionGroupAccessGroupBox.Visible := true;
-  {$ENDIF}
+  CaptionEdit.Enabled := NameEdit.Enabled;
 end;
 
 procedure TSectionPropertiesFrame.UpdateContent;
 var
   i: Integer;
+  S: TEpiSection;
 begin
   NameEdit.Text := FSections[0].Name;
   CaptionEdit.Text := TEpiSection(FSections[0]).Caption.Text;
   DM.Icons16.GetBitmap(DM.GetImageIndex(TEpiSection(FSections[0])), Image1.Picture.Bitmap);
+
 
   for i := Low(FSections)+1 to High(FSections) do
     if TEpiSection(FSections[i]).Caption.Text <> CaptionEdit.Text then
@@ -99,7 +88,8 @@ end;
 
 procedure TSectionPropertiesFrame.FocusOnNewControl;
 begin
-  CaptionEdit.SetFocus;
+  if CaptionEdit.CanFocus then
+    CaptionEdit.SetFocus;
 end;
 
 procedure TSectionPropertiesFrame.SetEpiControls(

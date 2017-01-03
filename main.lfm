@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 529
+  Left = 2151
   Height = 658
-  Top = 360
+  Top = 71
   Width = 886
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -44,7 +44,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 486
+      Left = 487
       Height = 27
       Top = 6
       Width = 62
@@ -59,7 +59,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 397
+      Left = 398
       Height = 27
       Top = 6
       Width = 74
@@ -76,7 +76,7 @@ object MainForm: TMainForm
       Left = 232
       Height = 27
       Top = 6
-      Width = 64
+      Width = 65
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Dataform'
@@ -88,7 +88,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 311
+      Left = 312
       Height = 27
       Top = 6
       Width = 71
@@ -131,6 +131,56 @@ object MainForm: TMainForm
       PopupMenu = DefineProjectPopupMenu
       ShowHint = True
       TabOrder = 5
+    end
+  end
+  object BetaPanel: TPanel
+    AnchorSideLeft.Control = PageControl1
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = PageControl1
+    AnchorSideTop.Side = asrCenter
+    Left = 304
+    Height = 204
+    Top = 234
+    Width = 279
+    ClientHeight = 204
+    ClientWidth = 279
+    Color = clYellow
+    ParentColor = False
+    TabOrder = 2
+    object Label1: TLabel
+      AnchorSideLeft.Control = BetaPanel
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = BetaPanel
+      Left = 19
+      Height = 15
+      Top = 21
+      Width = 240
+      BorderSpacing.Top = 20
+      Caption = 'Test Version of EpiData Manager'
+      Font.Height = -13
+      Font.Name = 'Sans'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object StaticText1: TStaticText
+      AnchorSideLeft.Control = Label1
+      AnchorSideTop.Control = Label1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Label1
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = BetaPanel
+      AnchorSideBottom.Side = asrBottom
+      Left = 19
+      Height = 127
+      Top = 56
+      Width = 240
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Top = 20
+      BorderSpacing.Bottom = 20
+      BorderStyle = sbsSunken
+      Caption = 'Do NOT use on routine data, work on copies of your data and send reports of testing to:'#10#10'- The EpiData-list   '#10'or'#10'- info@epidata.dk'
+      TabOrder = 0
     end
   end
   object MainMenu1: TMainMenu
@@ -289,9 +339,6 @@ object MainForm: TMainForm
       object ValueLabelsMenuItem: TMenuItem
         Caption = 'ValueLabels'
       end
-      object ProjectPasswordMenuItem: TMenuItem
-        Caption = 'Set Password'
-      end
       object StudyInfoMenuItem: TMenuItem
         Caption = 'StudyInfo'
       end
@@ -300,6 +347,51 @@ object MainForm: TMainForm
       end
       object ProjectPropertiesMenuItem: TMenuItem
         Caption = 'Properties'
+      end
+    end
+    object UserAccessMenu: TMenuItem
+      Caption = '&User Access'
+      object SinglePasswordMenuItem: TMenuItem
+        Caption = '&Single Password'
+        object SetSimplePasswordMenuItem: TMenuItem
+          Caption = 'SetSimplePassword'
+        end
+        object RemoveSimplePasswordMenuItem: TMenuItem
+          Caption = 'RemoveSimplePassword'
+        end
+      end
+      object ExtendedAccessMenuItem: TMenuItem
+        Caption = '&Extended Access'
+        object DefineExtendedAccessMenuItem: TMenuItem
+          Caption = 'DefineExtededAccess'
+        end
+        object DefineAccessDivider1: TMenuItem
+          Caption = '-'
+        end
+        object DefineGroupsMenuItem: TMenuItem
+          Caption = 'DefineGroups'
+        end
+        object DefineUsersMenuItem: TMenuItem
+          Caption = 'DefineUsers'
+        end
+        object DefineEntryRightsMenuItem: TMenuItem
+          Caption = 'DefineEntryRights'
+        end
+        object DefineAccessDivider2: TMenuItem
+          Caption = '-'
+        end
+        object ManagePasswordMenuItem: TMenuItem
+          Action = ManageUserPasswordAction
+        end
+        object ViewLogMenuItem: TMenuItem
+          Caption = 'ViewLog'
+        end
+        object MenuItem39: TMenuItem
+          Caption = '-'
+        end
+        object RemoveExtendedAccess: TMenuItem
+          Action = RemoveAdminAction
+        end
       end
     end
     object DataformMenu: TMenuItem
@@ -429,17 +521,13 @@ object MainForm: TMainForm
       object AboutMenuItem: TMenuItem
         Action = ShowAboutAction
       end
-      object MenuItem34: TMenuItem
-        Caption = 'EmailTest'
-        OnClick = MenuItem34Click
-      end
     end
   end
   object ActionList1: TActionList
     Images = DM.Icons16
     OnUpdate = ActionList1Update
-    left = 360
-    top = 336
+    left = 552
+    top = 144
     object NewProjectAction: TAction
       Category = 'File'
       Caption = '&New Project'
@@ -488,6 +576,7 @@ object MainForm: TMainForm
     object CloseProjectAction: TAction
       Category = 'File'
       Caption = '&Close Project'
+      Enabled = False
       ImageIndex = 42
       OnExecute = CloseProjectActionExecute
       OnUpdate = CloseProjectActionUpdate
@@ -512,6 +601,7 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Pack Datafiles'
       OnExecute = PackActionExecute
+      OnUpdate = ExtendedDataAuthActionUpdate
     end
     object ReportGeneratorAction: TAction
       Category = 'Tools'
@@ -522,47 +612,56 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Question List'
       OnExecute = QuestionListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ValueLabelListReportAction: TAction
       Category = 'Reports'
       Caption = 'Valuelabel List'
       OnExecute = ValueLabelListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ExtendedListReportAction: TAction
       Category = 'Reports'
       Caption = 'Extended List'
       OnExecute = ExtendedListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ProjectReportAction: TAction
       Category = 'Reports'
       Caption = 'Project Overview'
       OnExecute = ProjectReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ExportAction: TAction
       Category = 'Tools'
       Caption = 'Export...'
       ImageIndex = 17
-      OnExecute = Button1Click
+      OnExecute = ExportActionExecute
+      OnUpdate = ExportActionUpdate
     end
     object PrepareDoubleEntryAction: TAction
       Category = 'Tools'
       Caption = 'Prepare Double Entry'
       OnExecute = PrepareDoubleEntryActionExecute
+      OnUpdate = PrepareDoubleEntryActionUpdate
     end
     object VerifyDoubleEntryAction: TAction
       Category = 'Reports'
       Caption = 'Compare Duplicate Files'
       OnExecute = VerifyDoubleEntryActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object CountsReportAction: TAction
       Category = 'Reports'
       Caption = 'Count records by Id'
       OnExecute = CountsReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object CodeBookReportAction: TAction
       Category = 'Reports'
       Caption = 'CodeBook'
       OnExecute = CodeBookReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ImportInNewProjectAction: TAction
       Category = 'File'
@@ -574,6 +673,7 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Data Content Validation'
       OnExecute = ValidationReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object ImportCBInNewProjectAction: TAction
       Category = 'File'
@@ -585,11 +685,25 @@ object MainForm: TMainForm
       Category = 'Tools'
       Caption = 'Value Labels from Data'
       OnExecute = VLSetFromDataActionExecute
+      OnUpdate = DefineProjectAuthActionUpdate
     end
     object AppendAction: TAction
       Category = 'Tools'
       Caption = 'Append'
       OnExecute = AppendActionExecute
+      OnUpdate = ExtendedDataAuthActionUpdate
+    end
+    object ManageUserPasswordAction: TAction
+      Category = 'Admin'
+      Caption = 'Manage User Passwords'
+      OnExecute = ManageUserPasswordActionExecute
+      OnUpdate = ManageUserPasswordActionUpdate
+    end
+    object RemoveAdminAction: TAction
+      Category = 'Admin'
+      Caption = 'Remove User/Group Administration'
+      OnExecute = RemoveAdminActionExecute
+      OnUpdate = RemoveAdminActionUpdate
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
@@ -602,84 +716,12 @@ object MainForm: TMainForm
     top = 64
     object MenuItem7: TMenuItem
       Action = NewProjectAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-        FF00804C05D07F4C05FF7F4C05FF7F4C05FF7F4C05FF7F4C05FF7F4C05FF7F4C
-        05FF7F4C05FF7F4C05FF7F4C05FF804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D07F4C05CD804D0478804D0478804D0478804D0478804D0478804D
-        0478804D0478804D04787F4C05CD804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00804D05A0804C05D0FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804C
-        0536804D0560804D0560804B05C4804D05BEFFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804C
-        05907F4C05FF7F4C05FF7F4C05D7804A0018FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804D05A0FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00804C
-        05907F4C05FF7F4C05D7804A0018FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D0804C05D0804C0680804C0680804C0680804C0680804C0680804D
-        05C87F4C05D7804A0018FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00804C05D07F4C05FF7F4C05FF7F4C05FF7F4C05FF7F4C05FF7F4C05FF7F4C
-        05D7804A0018FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-      }
     end
     object MenuItem26: TMenuItem
       Caption = '-'
     end
     object MenuItem8: TMenuItem
       Action = OpenProjectAction
-      Bitmap.Data = {
-        36040000424D3604000000000000360000002800000010000000100000000100
-        2000000000000004000064000000640000000000000000000000FFFFFF00804D
-        0032814C0065814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF804C00A1FFFFFF00FFFFFF00814B
-        007D804A0030814C00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814B00D5FFFFFF00FFFFFF00814C
-        00C780400004814C00F7814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FD8B46000BFFFFFF00814C
-        00F685470019814C00C7814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF804D003C804A0018814C
-        00FF814C0043814D0092814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF824B0070804D0038814C
-        00FF824D006E814D005D814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00A4824B0058814C
-        00FF814B0098834B0029814C00FF814C00FF814C00FF814C00FF814C00FF814C
-        00FF814C00FF814C00FF814C00FF814C00FF814C00FF814C00D7824D0078814C
-        00FF814C00C280800002814C00CC804A0048804A0048804A0048804A0048804A
-        0048804A0048804A0048804A0048804C0076814C00A4814E0045804D0099814C
-        00FF814C00EC824C002F814C00B8FFFFFF00FFFFFF00CF992D50CF992D50CF99
-        2D50CF992D50CF983025FFFFFF00804C0040814C0080FFFFFF00824C00B9814C
-        00FF814C00FF814C00FF814B00BAFFFFFF00FFFFFF00D09A2F68D09A2F68D09A
-        2F68D09A2F68CF9A3030FFFFFF00804C0040814C0080FFFFFF00814C00D9814C
-        00FF814C00FF814C00FF814B00BAFFFFFF00FFFFFF00DF9F2008DF9F2008DF9F
-        2008DF9F2008AAAA5503FFFFFF00804C0040814C0080FFFFFF00814C00A8814B
-        00B0814B00B0814B00B0824C00B9FFFFFF00FFFFFF00D19A2EB0D19A2EB0D19A
-        2EB0D19A2EB0D09B2F52FFFFFF00804C0040814C0080FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00FFFFFF00804C0040814C0080FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00824D0078814D00F0814B00DF804E002EFFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00814C00B8FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00814C0080814C00E8804B002CFFFFFF00FFFFFF00FFFFFF00FFFF
-        FF00FFFFFF00FFFFFF00814D00E6814C00B8814C00B8814C00B8814C00B8814C
-        00B8814C00B8814C00C0834E0027FFFFFF00FFFFFF00FFFFFF00
-      }
     end
     object RecentFilesSubPopupMenu: TMenuItem
       Caption = 'Open Recent...'
@@ -804,7 +846,7 @@ object MainForm: TMainForm
     end
   end
   object RecentFilesActionList: TActionList
-    left = 488
-    top = 336
+    left = 632
+    top = 160
   end
 end

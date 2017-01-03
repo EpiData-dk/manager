@@ -3,51 +3,55 @@
 procedure InitShortCuts;
 begin
   // Main Form
-  M_NewProject           := KeyToShortCut(VK_N, [ssCtrl]);
-  M_Settings             := KeyToShortCut(VK_S, [ssAlt]);
-  M_Exit                 := KeyToShortCut(VK_Q, [ssCtrl]);
-  M_OpenRecent           := KeyToShortCut(VK_UNKNOWN, [ssShift, ssCtrl]);
-  M_ShowAbout            := KeyToShortCut(VK_UNKNOWN, []);
-  M_CopyProjectInfo      := KeyToShortCut(VK_UNKNOWN, []);
-  M_CheckVersion         := KeyToShortCut(VK_UNKNOWN, []);
-  M_DefaultPos           := KeyToShortCut(VK_0, [ssCtrl, ssShift]);
-  M_CloseProject         := KeyToShortCut(VK_W, [ssCtrl]);
-  M_OpenProject          := KeyToShortCut(VK_O, [ssCtrl]);
-  M_StartEntryClient     := KeyToShortCut(VK_UNKNOWN, []);
-  M_Pack                 := KeyToShortCut(VK_UNKNOWN, []);
-  M_Export               := KeyToShortCut(VK_UNKNOWN, []);
-  M_QuestionListReport   := KeyToShortCut(VK_UNKNOWN, []);
-  M_ValueLabelListReport := KeyToShortCut(VK_UNKNOWN, []);
-  M_ExtendedListReport   := KeyToShortCut(VK_UNKNOWN, []);
-  M_ProjectOverviewReport:= KeyToShortCut(VK_UNKNOWN, []);
+  M_NewProject                 := KeyToShortCut(VK_N,       [ssCtrl]);
+  M_Settings                   := KeyToShortCut(VK_S,       [ssAlt]);
+  M_Exit                       := KeyToShortCut(VK_Q,       [ssCtrl]);
+  M_OpenRecent                 := KeyToShortCut(VK_UNKNOWN, [ssShift, ssCtrl]);
+  M_ShowAbout                  := KeyToShortCut(VK_UNKNOWN, []);
+  M_CopyProjectInfo            := KeyToShortCut(VK_UNKNOWN, []);
+  M_CheckVersion               := KeyToShortCut(VK_UNKNOWN, []);
+  M_DefaultPos                 := KeyToShortCut(VK_0,       [ssCtrl, ssShift]);
+  M_CloseProject               := KeyToShortCut(VK_W,       [ssCtrl]);
+  M_OpenProject                := KeyToShortCut(VK_O,       [ssCtrl]);
+  M_StartEntryClient           := KeyToShortCut(VK_UNKNOWN, []);
+  M_Pack                       := KeyToShortCut(VK_UNKNOWN, []);
+  M_Export                     := KeyToShortCut(VK_UNKNOWN, []);
+  M_QuestionListReport         := KeyToShortCut(VK_UNKNOWN, []);
+  M_ValueLabelListReport       := KeyToShortCut(VK_UNKNOWN, []);
+  M_ExtendedListReport         := KeyToShortCut(VK_UNKNOWN, []);
+  M_ProjectOverviewReport      := KeyToShortCut(VK_UNKNOWN, []);
 
   // Project Frame
-  P_SaveProject                := KeyToShortCut(VK_S, [ssCtrl]);
-  P_SaveProjectAs              := KeyToShortCut(VK_S, [ssCtrl, ssShift]);
+  P_SaveProject                := KeyToShortCut(VK_S,       [ssCtrl]);
+  P_SaveProjectAs              := KeyToShortCut(VK_S,       [ssCtrl, ssShift]);
   P_NewDataForm                := KeyToShortCut(VK_UNKNOWN, []);
   P_DelDataForm                := KeyToShortCut(VK_UNKNOWN, []);
-  P_ProjectSettings            := KeyToShortCut(VK_P, [ssAlt]);
-  P_StartValueLabelEditor      := KeyToShortCut(VK_V, [ssAlt]);
+  P_ProjectSettings            := KeyToShortCut(VK_P,       [ssAlt]);
+  P_StartValueLabelEditor      := KeyToShortCut(VK_V,       [ssAlt]);
   P_OpenProject                := KeyToShortCut(VK_UNKNOWN, []);  // this overlaps with M_OpenProject!?!?!
   P_KeyFields                  := KeyToShortCut(VK_UNKNOWN, []);
+  P_ViewLog                    := KeyToShortCut(VK_L,       [ssCtrl]);
+  P_Users                      := KeyToShortCut(VK_U,       [ssCtrl]);
+  P_Groups                     := KeyToShortCut(VK_G,       [ssCtrl]);
+  P_EntryRight                 := KeyToShortCut(VK_E,       [ssCtrl]);
 
   // Designer Frame
-  D_NewIntField                := KeyToShortCut(VK_1, []);
-  D_NewIntField_Fast           := KeyToShortCut(VK_1, [ssShift]);
-  D_NewFloatField              := KeyToShortCut(VK_2, []);
-  D_NewFloatField_Fast         := KeyToShortCut(VK_2, [ssShift]);
-  D_NewStringField             := KeyToShortCut(VK_3, []);
-  D_NewStringField_Fast        := KeyToShortCut(VK_3, [ssShift]);
-  D_NewDateField               := KeyToShortCut(VK_4, []);
-  D_NewDateField_Fast          := KeyToShortCut(VK_4, [ssShift]);
-  D_NewTimeField               := KeyToShortCut(VK_5, []);
-  D_NewTimeField_Fast          := KeyToShortCut(VK_5, [ssShift]);
-  D_NewHeading                 := KeyToShortCut(VK_6, []);
-  D_NewHeading_Fast            := KeyToShortCut(VK_6, [ssShift]);
+  D_NewIntField                := KeyToShortCut(VK_1,       []);
+  D_NewIntField_Fast           := KeyToShortCut(VK_1,       [ssShift]);
+  D_NewFloatField              := KeyToShortCut(VK_2,       []);
+  D_NewFloatField_Fast         := KeyToShortCut(VK_2,       [ssShift]);
+  D_NewStringField             := KeyToShortCut(VK_3,       []);
+  D_NewStringField_Fast        := KeyToShortCut(VK_3,       [ssShift]);
+  D_NewDateField               := KeyToShortCut(VK_4,       []);
+  D_NewDateField_Fast          := KeyToShortCut(VK_4,       [ssShift]);
+  D_NewTimeField               := KeyToShortCut(VK_5,       []);
+  D_NewTimeField_Fast          := KeyToShortCut(VK_5,       [ssShift]);
+  D_NewHeading                 := KeyToShortCut(VK_6,       []);
+  D_NewHeading_Fast            := KeyToShortCut(VK_6,       [ssShift]);
   D_NewSection                 := KeyToShortCut(VK_UNKNOWN, []);
-  D_EditControl                := KeyToShortCut(VK_RETURN, []);
-  D_SelectAll                  := KeyToShortCut(VK_A, [ssCtrl]);
-  D_ExpandDataframe            := KeyToShortCut(VK_RETURN, [ssCtrl]);
+  D_EditControl                := KeyToShortCut(VK_RETURN,  []);
+  D_SelectAll                  := KeyToShortCut(VK_A,       [ssCtrl]);
+  D_ExpandDataframe            := KeyToShortCut(VK_RETURN,  [ssCtrl]);
 
   // - align
   D_AlignForm                  := KeyToShortCut(VK_A, [ssCtrl, ssShift]);
@@ -88,5 +92,24 @@ begin
   V_GRID_DeleteRow                := KeyToShortCut(VK_DELETE, []);
   V_GRID_DeleteRow_Fast           := KeyToShortCut(VK_DELETE, [ssShift]);
   V_GRID_InsertRow                := KeyToShortCut(VK_INSERT, []);
+
+  // Admin
+  A_NewGroup                      := KeyToShortCut(VK_G, [ssCtrl]);
+  A_NewUser                       := KeyToShortCut(VK_U, [ssCtrl]);
+  A_DeleteGroup                   := KeyToShortCut(VK_UNKNOWN, []);
+  A_DeleteUser                    := KeyToShortCut(VK_UNKNOWN, []);
+  A_AddUserToGroup                := KeyToShortCut(VK_UNKNOWN, []);
+  A_RemoveUserFromGroup           := KeyToShortCut(VK_UNKNOWN, []);
+
+  // Admin Groups:
+  AG_NewGroup                      := KeyToShortCut(VK_N, [ssCtrl]);
+  AG_DeleteGroup                   := KeyToShortCut(VK_DELETE, []);
+  AG_EditGroup                     := KeyToShortCut(VK_RETURN, []);
+
+  // Admin Users:
+  AU_NewUser                       := KeyToShortCut(VK_N, [ssCtrl]);
+  AU_DeleteUser                    := KeyToShortCut(VK_DELETE, []);
+  AU_EditUser                      := KeyToShortCut(VK_RETURN, []);
+
 end;
 

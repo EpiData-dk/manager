@@ -257,9 +257,10 @@ implementation
 {$R *.lfm}
 
 uses
-  epimiscutils, typinfo, epiranges, epiconvertutils,
-  epistringutils, LazUTF8, field_valuelabelseditor_form,
-  valuelabelseditor_form2, math, epirelations, epiv_datamodule;
+  epimiscutils, typinfo, epiranges, epiconvertutils, epiadmin,
+  epistringutils, LazUTF8, field_valuelabelseditor_form, admin_authenticator,
+  valuelabelseditor_form2, math, epidatafilerelations, epiv_datamodule,
+  epifields_helper;
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';
@@ -368,7 +369,12 @@ begin
   begin
     VL := ValueLabels[i];
 
-    case VL.LabelType of
+    DoAdd := Field.AcceptsValuelabelSet(VL,
+               StrToIntDef(LengthEdit.Text, (Field.Length - Field.Decimals - 1)),
+               StrToIntDef(DecimalsEdit.Text, Field.Decimals)
+             );
+
+{    case VL.LabelType of
       ftInteger:
         begin
           DoAdd := Field.FieldType in [ftInteger, ftFloat];
@@ -401,7 +407,7 @@ begin
             (DecL <= StrToIntDef(DecimalsEdit.Text, Field.Decimals));
         end;
       ftString:  DoAdd := Field.FieldType in [ftString, ftUpperString];
-    end;
+    end;}
 
     if DoAdd then
       ValueLabelComboBox.AddItem(VL.Name, VL)
@@ -1215,6 +1221,13 @@ begin
       AddEditValueLabelBtn.Caption := 'View';
       AddEditValueLabelBtn.Hint    := 'Can only be edited in the External file';
     end;
+
+  if (not Authenticator.IsAuthorized([earDefineProject]))
+  then
+    begin
+      AddEditValueLabelBtn.Caption := 'View';
+      AddEditValueLabelBtn.Hint    := 'You are not authorized to edit the Value Label Set';
+    end;
 end;
 
 procedure TFieldPropertiesFrame.RegisterValueLabelHook;
@@ -1383,33 +1396,43 @@ procedure TFieldPropertiesFrame.UpdateVisibility;
 begin
   // Visiblity
   // - basic
-  BasicSheet.Enabled              := not IsRelatedKeyField;
-  NameEdit.Enabled                := not (ManyFields or
+  BasicSheet.Enabled              := (not IsRelatedKeyField);
+  NameEdit.Enabled                := (not (ManyFields or
                                           IsReservedEpiFieldName(Field.Name) or
-                                          IsKeyField);
+                                          IsKeyField)) and
+                                     (IsAuthorized(earDefineProject));
+  QuestionEdit.Enabled            := (IsAuthorized(earDefineProject));
 
   FieldTypeImage.Visible          := FieldsHaveSameFieldType;
 
-  LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes);
+  LengthEdit.Visible              := FieldsMustHaveFieldTypes(IntFieldTypes + FloatFieldTypes + StringFieldTypes - [ftMemo]);
+  LengthEdit.Enabled              := (IsAuthorized(earDefineProject));
   if FieldsHaveFieldTypes(FloatFieldTypes) and FieldsHaveFieldTypes(IntFieldTypes + StringFieldTypes)
   then
     LengthEdit.Visible := false;
   LengthLabel.Visible             := LengthEdit.Visible;
 
   DecimalsEdit.Visible            := FieldsMustHaveFieldTypes(FloatFieldTypes);
+  DecimalsEdit.Enabled            := (IsAuthorized(earDefineProject));
   DecimalsLabel.Visible           := DecimalsEdit.Visible;
   if not DecimalsEdit.Visible then
     Bevel1.Left := QuestionEdit.Left + QuestionEdit.Width
   else
     Bevel1.Left := QuestionEdit.Left + ((QuestionEdit.Width - Bevel1.Width) div 2);
 
+  ValueLabelComboBox.Enabled      := (IsAuthorized(earDefineProject));
   ValueLabelGrpBox.Visible        := FieldsMustHaveFieldTypes(ValueLabelFieldTypes) and FieldsHaveSameFieldType;
+
+  UpdateModeRadioGrp.Enabled      := (IsAuthorized(earDefineProject));
   UpdateModeRadioGrp.Visible      := FieldsMustHaveFieldTypes(AutoUpdateFieldTypes);
+
+  RangesGrpBox.Enabled            := (IsAuthorized(earDefineProject));
   RangesGrpBox.Visible            := FieldsMustHaveFieldTypes(RangeFieldTypes) and FieldsHaveSameFieldType;
 
   // - extended
   ExtendedSheet.TabVisible        := not FieldsMustHaveFieldTypes(AutoFieldTypes);
-  ExtendedSheet.Enabled           := not IsRelatedKeyField;
+  ExtendedSheet.Enabled           := (not IsRelatedKeyField) and (IsAuthorized(earDefineProject));
+
   EntryRadioGroup.Visible         := FieldsMustHaveFieldTypes(EntryModeFieldTypes);
   ConfirmEntryChkBox.Visible      := FieldsMustHaveFieldTypes(ConfirmEntryFieldTypes);
   AutoValuesGrpBox.Visible        := FieldsMustHaveFieldTypes(RepeatValueFieldTypes + DefaultValueFieldTypes);
@@ -1422,21 +1445,22 @@ begin
 
   // - jumps
   JumpSheet.TabVisible            := FieldsMustHaveFieldTypes(JumpsFieldTypes) and FieldsHaveSameFieldType;
-  JumpSheet.Enabled               := not IsRelatedKeyField;
+  JumpSheet.Enabled               := (not IsRelatedKeyField) and (IsAuthorized(earDefineProject));
   UseJumpsCombo.Visible           := ManyFields;
   UseJumpsLabel.Visible           := ManyFields;
 
   // - relates
   RelateSheet.TabVisible          := (not (IsKeyField or IsRelatedKeyField)) and
                                      (Relation.DetailRelations.Count > 0);
+  RelateSheet.Enabled             := (IsAuthorized(earDefineProject));
 
   // - calc
-  CalcSheet.Enabled               := not IsRelatedKeyField;
+  CalcSheet.TabVisible            := (not IsRelatedKeyField) and FieldsMustHaveFieldTypes(CalculateFieldTypes);
+  CalcSheet.Enabled               := (IsAuthorized(earDefineProject));
   CalcUnchangedRadioBtn.Visible   := ManyFields;
-  CalcSheet.TabVisible            := (not FieldsMustHaveFieldTypes(AutoFieldTypes));
-
   // - notes
   NotesSheet.Visible              := FieldsMustHaveFieldTypes(NotesFieldTypes);
+  NotesSheet.Enabled              := (IsAuthorized(earDefineProject));
 end;
 
 procedure TFieldPropertiesFrame.UpdateContent;

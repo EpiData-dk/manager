@@ -92,7 +92,7 @@ implementation
 {$R *.lfm}
 
 uses
-  RegExpr, Dialogs, main;
+  RegExpr, Dialogs, main, admin_authenticator, epiadmin;
 
 { TStudyUnitFrame }
 
@@ -233,9 +233,15 @@ begin
 end;
 
 procedure TStudyUnitFrame.Activate;
+var
+  Allowed: Boolean;
+  i: Integer;
 begin
-//  BringToFront;
   Show;
+
+  Allowed := Authenticator.IsAuthorized([earDefineProject]);
+  for i := 0 to PageControl1.PageCount - 1 do
+    PageControl1.Pages[i].Enabled := Allowed;
 end;
 
 function TStudyUnitFrame.DeActivate(aHide: boolean): boolean;
