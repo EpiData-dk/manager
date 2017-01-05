@@ -267,7 +267,7 @@ end;
 
 function TProjectValidationFrame.GetFrameCaption: string;
 begin
-  result := 'Select all fields identifying an observation';
+  result := 'Select all variables identifying an observation';
 end;
 
 procedure TProjectValidationFrame.UpdateFrame(Selection: TStrings);
@@ -342,8 +342,8 @@ begin
   if not KFChecked then
   begin
     Res := MessageDlg('Warning!',
-             'No Key Fields selected! Report will be displayed in order of record number!' + LineEnding +
-             'Press Cancel to select Key Fields!',
+             'No Key Variables selected! Report will be displayed in order of record number!' + LineEnding +
+             'Press Cancel to select Key Variables!',
              mtWarning,
              mbOKCancel,
              0,

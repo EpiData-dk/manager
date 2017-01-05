@@ -12,10 +12,10 @@ object ExportCustomTextFrame: TExportCustomTextFrame
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
     Left = 0
-    Height = 22
+    Height = 18
     Top = 0
-    Width = 204
-    Caption = 'Export Field Name (first row)'
+    Width = 229
+    Caption = 'Export Variable Name (first row)'
     TabOrder = 0
   end
   object Label1: TLabel
@@ -26,7 +26,7 @@ object ExportCustomTextFrame: TExportCustomTextFrame
     AnchorSideBottom.Side = asrBottom
     Left = 0
     Height = 15
-    Top = 69
+    Top = 61
     Width = 110
     Anchors = [akLeft, akBottom]
     BorderSpacing.Top = 10
@@ -40,7 +40,7 @@ object ExportCustomTextFrame: TExportCustomTextFrame
     AnchorSideRight.Side = asrBottom
     Left = 349
     Height = 25
-    Top = 59
+    Top = 51
     Width = 28
     Anchors = [akTop, akRight]
     BorderSpacing.Top = 5
@@ -52,9 +52,9 @@ object ExportCustomTextFrame: TExportCustomTextFrame
     AnchorSideTop.Control = ExportFieldNameChkBox
     AnchorSideTop.Side = asrBottom
     Left = 0
-    Height = 22
-    Top = 32
-    Width = 157
+    Height = 18
+    Top = 28
+    Width = 155
     BorderSpacing.Top = 10
     Caption = 'Add Byte Order Mark'
     TabOrder = 1

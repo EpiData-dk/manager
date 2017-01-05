@@ -6,8 +6,8 @@ object ProjectValidationFrame2: TProjectValidationFrame2
   ClientHeight = 683
   ClientWidth = 777
   TabOrder = 0
-  DesignLeft = 791
-  DesignTop = 303
+  DesignLeft = 592
+  DesignTop = 206
   object FilePanel: TPanel
     Left = 0
     Height = 130
@@ -52,24 +52,24 @@ object ProjectValidationFrame2: TProjectValidationFrame2
     TabOrder = 4
     object SortTab: TTabSheet
       Caption = 'List by'
-      ClientHeight = 514
-      ClientWidth = 523
+      ClientHeight = 522
+      ClientWidth = 527
       object Panel1: TPanel
         Left = 0
         Height = 42
-        Top = 472
-        Width = 523
+        Top = 480
+        Width = 527
         Align = alBottom
         ClientHeight = 42
-        ClientWidth = 523
+        ClientWidth = 527
         TabOrder = 0
         object KFNoneBtn: TButton
           AnchorSideLeft.Control = Panel1
           AnchorSideTop.Control = Panel1
           AnchorSideTop.Side = asrCenter
           Left = 6
-          Height = 27
-          Top = 8
+          Height = 23
+          Top = 10
           Width = 42
           AutoSize = True
           BorderSpacing.Left = 5
@@ -86,9 +86,9 @@ object ProjectValidationFrame2: TProjectValidationFrame2
           AnchorSideTop.Control = KFNoneBtn
           AnchorSideTop.Side = asrCenter
           Left = 53
-          Height = 27
-          Top = 8
-          Width = 43
+          Height = 23
+          Top = 10
+          Width = 44
           AutoSize = True
           BorderSpacing.Left = 5
           Caption = 'Index'
@@ -102,10 +102,10 @@ object ProjectValidationFrame2: TProjectValidationFrame2
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = KFNoneBtn
           AnchorSideTop.Side = asrCenter
-          Left = 101
-          Height = 27
-          Top = 8
-          Width = 56
+          Left = 102
+          Height = 23
+          Top = 10
+          Width = 57
           AutoSize = True
           BorderSpacing.Left = 5
           Caption = 'AutoInc'
@@ -117,25 +117,25 @@ object ProjectValidationFrame2: TProjectValidationFrame2
       end
     end
     object ValidateTab: TTabSheet
-      Caption = 'Validate Fields'
-      ClientHeight = 514
-      ClientWidth = 523
+      Caption = 'Validate Variables'
+      ClientHeight = 522
+      ClientWidth = 527
       object Panel2: TPanel
         Left = 0
         Height = 47
-        Top = 467
-        Width = 523
+        Top = 475
+        Width = 527
         Align = alBottom
         ClientHeight = 47
-        ClientWidth = 523
+        ClientWidth = 527
         TabOrder = 0
         object CmpFAllNonKeyFBtn: TButton
           AnchorSideLeft.Control = Panel2
           AnchorSideTop.Control = Panel2
           AnchorSideTop.Side = asrCenter
           Left = 6
-          Height = 27
-          Top = 10
+          Height = 23
+          Top = 12
           Width = 89
           AutoSize = True
           BorderSpacing.Left = 5
@@ -152,9 +152,9 @@ object ProjectValidationFrame2: TProjectValidationFrame2
           AnchorSideTop.Control = CmpFAllNonKeyFBtn
           AnchorSideTop.Side = asrCenter
           Left = 100
-          Height = 27
-          Top = 10
-          Width = 46
+          Height = 23
+          Top = 12
+          Width = 42
           AutoSize = True
           BorderSpacing.Left = 5
           Caption = 'None'
@@ -168,13 +168,13 @@ object ProjectValidationFrame2: TProjectValidationFrame2
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = CmpFNoneBtn
           AnchorSideTop.Side = asrCenter
-          Left = 151
-          Height = 27
-          Top = 10
-          Width = 129
+          Left = 147
+          Height = 23
+          Top = 12
+          Width = 154
           AutoSize = True
           BorderSpacing.Left = 5
-          Caption = 'Exclude Text Fields'
+          Caption = 'Exclude Text Variables'
           OnClick = CmpFExcludeTextFBtnClick
           TabOrder = 2
         end
@@ -182,17 +182,17 @@ object ProjectValidationFrame2: TProjectValidationFrame2
     end
     object OptionsTab: TTabSheet
       Caption = 'Options'
-      ClientHeight = 514
-      ClientWidth = 523
+      ClientHeight = 522
+      ClientWidth = 527
       object OptionsChkGrp: TCheckGroup
         AnchorSideLeft.Control = OptionsTab
         AnchorSideTop.Control = OptionsTab
         AnchorSideRight.Control = OptionsTab
         AnchorSideRight.Side = asrBottom
         Left = 10
-        Height = 51
+        Height = 47
         Top = 10
-        Width = 503
+        Width = 507
         Align = alCustom
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
@@ -209,8 +209,8 @@ object ProjectValidationFrame2: TProjectValidationFrame2
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 34
-        ClientWidth = 499
+        ClientHeight = 30
+        ClientWidth = 503
         Items.Strings = (
           'A'
         )

@@ -27,7 +27,7 @@ uses
   epireport_types, epireport_report_controllist;
 
 resourcestring
-  rsReportFieldListTitle = 'List of questions/fields.';
+  rsReportFieldListTitle = 'List of variables/labels.';
 
 { TReportFieldLists }
 

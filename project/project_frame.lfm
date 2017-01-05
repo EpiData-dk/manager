@@ -162,7 +162,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 32
-      Width = 38
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
     end
@@ -170,7 +170,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 72
-      Width = 38
+      Width = 43
       Caption = 'Label2'
       ParentColor = False
     end
@@ -178,7 +178,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 104
-      Width = 38
+      Width = 43
       Caption = 'Label3'
       ParentColor = False
     end

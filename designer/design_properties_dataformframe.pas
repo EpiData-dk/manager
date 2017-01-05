@@ -508,7 +508,7 @@ begin
   begin
     if CaptionEdit.Text = '' then
     begin
-      ShowHintMsg('A dataform caption cannot be empty!', CaptionEdit);
+      ShowHintMsg('A dataform label cannot be empty!', CaptionEdit);
       Exit(false);
     end;
   end;

@@ -34,7 +34,7 @@ object ExportCSVFrame: TExportCSVFrame
       Left = 10
       Height = 15
       Top = 20
-      Width = 98
+      Width = 100
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -50,7 +50,7 @@ object ExportCSVFrame: TExportCSVFrame
       Left = 10
       Height = 15
       Top = 50
-      Width = 103
+      Width = 102
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -66,7 +66,7 @@ object ExportCSVFrame: TExportCSVFrame
       Left = 10
       Height = 15
       Top = 80
-      Width = 103
+      Width = 104
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -82,7 +82,7 @@ object ExportCSVFrame: TExportCSVFrame
       Left = 10
       Height = 15
       Top = 110
-      Width = 124
+      Width = 125
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -187,8 +187,8 @@ object ExportCSVFrame: TExportCSVFrame
     AnchorSideBottom.Side = asrBottom
     Left = 20
     Height = 15
-    Top = 232
-    Width = 61
+    Top = 228
+    Width = 64
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 20
     BorderSpacing.Top = 10
@@ -201,7 +201,7 @@ object ExportCSVFrame: TExportCSVFrame
     AnchorSideRight.Control = SeparatorGrpBox
     AnchorSideRight.Side = asrBottom
     Left = 453
-    Height = 29
+    Height = 25
     Top = 218
     Width = 140
     Anchors = [akTop, akRight]
@@ -215,12 +215,12 @@ object ExportCSVFrame: TExportCSVFrame
     AnchorSideTop.Control = NewLineCmbBox
     AnchorSideTop.Side = asrBottom
     Left = 20
-    Height = 22
-    Top = 257
-    Width = 204
+    Height = 18
+    Top = 253
+    Width = 229
     BorderSpacing.Left = 20
     BorderSpacing.Top = 10
-    Caption = 'Export Field Name (first row)'
+    Caption = 'Export Variable Name (first row)'
     TabOrder = 2
   end
   object ByteOrderMarkCheckBox: TCheckBox
@@ -228,9 +228,9 @@ object ExportCSVFrame: TExportCSVFrame
     AnchorSideTop.Control = ExportFieldNameChkBox
     AnchorSideTop.Side = asrBottom
     Left = 20
-    Height = 22
-    Top = 289
-    Width = 157
+    Height = 18
+    Top = 281
+    Width = 155
     BorderSpacing.Left = 20
     BorderSpacing.Top = 10
     Caption = 'Add Byte Order Mark'

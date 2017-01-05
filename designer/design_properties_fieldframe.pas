@@ -374,41 +374,6 @@ begin
                StrToIntDef(DecimalsEdit.Text, Field.Decimals)
              );
 
-{    case VL.LabelType of
-      ftInteger:
-        begin
-          DoAdd := Field.FieldType in [ftInteger, ftFloat];
-          if Field.FieldType = ftFloat then
-            DoAdd := DoAdd and (VL.MaxValueLength <= StrToIntDef(LengthEdit.Text, (Field.Length - Field.Decimals - 1)))
-          else
-            DoAdd := DoAdd and (VL.MaxValueLength <= StrToIntDef(LengthEdit.Text, Field.Length));
-        end;
-      ftFloat:
-        begin
-          DoAdd := Field.FieldType = ftFloat;
-
-          if DoAdd then
-          begin
-            IntL := 0;
-            DecL := 0;
-            for j := 0 to VL.Count - 1 do
-            begin
-              S := VL[j].ValueAsString;
-              l := Pos(DecimalSeparator, S);
-              if l = 0 then
-                IntL := Length(S)
-              else
-                IntL := Max(IntL, l - 1);
-              DecL := Max(DecL, Length(S) - (IntL+1));
-            end;
-          end;
-          DoAdd := DoAdd and
-            (IntL <= StrToIntDef(LengthEdit.Text, Field.Length - Field.Decimals - 1)) and
-            (DecL <= StrToIntDef(DecimalsEdit.Text, Field.Decimals));
-        end;
-      ftString:  DoAdd := Field.FieldType in [ftString, ftUpperString];
-    end;}
-
     if DoAdd then
       ValueLabelComboBox.AddItem(VL.Name, VL)
     else
@@ -693,7 +658,7 @@ var
 begin
   Combo.Items.BeginUpdate;
   Combo.Clear;
-  Combo.Items.AddObject('(Skip Next Field)', TObject(jtSkipNextField));
+  Combo.Items.AddObject('(Skip Next Variable)', TObject(jtSkipNextField));
   Combo.Items.AddObject('(Exit Section)', TObject(jtExitSection));
   Combo.Items.AddObject('(Save Record)', TObject(jtSaveRecord));
   for i := 0 to DataFile.Fields.Count - 1 do
@@ -1197,7 +1162,7 @@ begin
   if (FVLIncompatibleItemIndex > - 1) and
      (ValueLabelComboBox.ItemIndex > FVLIncompatibleItemIndex)
   then
-    ShowHintMsg('Warning: Selected value label set is not compatible with all fields',
+    ShowHintMsg('Warning: Selected value label set is not compatible with all variables',
       ValueLabelComboBox);
 
   AddEditValueLabelBtn.Caption := 'Edit';
@@ -1673,7 +1638,7 @@ begin
     S := S + ', ' + Fields[i].Name;
 
   S := EpiCutString(S, 20);
-  UpdateCaption('Field Properties: ' + S);
+  UpdateCaption('Variable Properties: ' + S);
 end;
 
 function TFieldPropertiesFrame.ValidateChanges: boolean;
@@ -1899,7 +1864,7 @@ begin
     if TimeCalcRadio.Checked then
     begin
       if ComboNoneSelected(TimeResultCombo) then
-        Exit(DoError('No result field assigned!', TimeResultCombo));
+        Exit(DoError('No result variable assigned!', TimeResultCombo));
 
       if ComboNoneSelected(StartDateCombo) and
          ComboNoneSelected(StartTimeCombo) then
@@ -1913,27 +1878,27 @@ begin
     if CombineDateRadio.Checked then
     begin
       if ComboNoneSelected(DateResultCombo) then
-        Exit(DoError('No result field assigned!', DateResultCombo));
+        Exit(DoError('No result variable assigned!', DateResultCombo));
 
       if ComboNoneSelected(DayCombo) then
-        Exit(DoError('No day field assigned!', DayCombo));
+        Exit(DoError('No day variable assigned!', DayCombo));
 
       if ComboNoneSelected(MonthCombo) then
-        Exit(DoError('No month field assigned!', MonthCombo));
+        Exit(DoError('No month variable assigned!', MonthCombo));
 
       if ComboNoneSelected(YearCombo) then
-        Exit(DoError('No year field assigned!', YearCombo));
+        Exit(DoError('No year variable assigned!', YearCombo));
     end;
 
     if CombineStringRadio.Checked then
     begin
       if ComboNoneSelected(StringResultCombo) then
-        Exit(DoError('No result field assigned!', StringResultCombo));
+        Exit(DoError('No result variable assigned!', StringResultCombo));
 
       if ComboNoneSelected(Field1Combo) and
          ComboNoneSelected(Field2Combo) and
          ComboNoneSelected(Field3Combo) then
-        Exit(DoError('At least one field must be assigned!', Field1Combo));
+        Exit(DoError('At least one variable must be assigned!', Field1Combo));
     end;
   end;
 

@@ -28,7 +28,7 @@ implementation
 
 
 resourcestring
-  rsReportCombinedListTitle = 'Combined list of fields/question and valuelabels.';
+  rsReportCombinedListTitle = 'Combined list of variables/labels and valuelabels.';
 
 { TReportCombinedList }
 

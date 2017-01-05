@@ -14,8 +14,8 @@ object ExportStataFrame: TExportStataFrame
     AnchorSideTop.Side = asrCenter
     Left = 20
     Height = 15
-    Top = 27
-    Width = 51
+    Top = 25
+    Width = 52
     BorderSpacing.Left = 20
     Caption = 'Version:'
     ParentColor = False
@@ -26,10 +26,10 @@ object ExportStataFrame: TExportStataFrame
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 81
-    Height = 29
+    Left = 82
+    Height = 25
     Top = 20
-    Width = 415
+    Width = 414
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 20
@@ -51,7 +51,7 @@ object ExportStataFrame: TExportStataFrame
     AutoSize = True
     BorderSpacing.Left = 20
     BorderSpacing.Right = 20
-    Caption = 'Field naming'
+    Caption = 'Variable naming'
     ChildSizing.LeftRightSpacing = 6
     ChildSizing.TopBottomSpacing = 6
     ChildSizing.EnlargeHorizontal = crsHomogenousChildResize

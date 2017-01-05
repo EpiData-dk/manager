@@ -52,25 +52,25 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     TabOrder = 4
     object KeyTab: TTabSheet
       Caption = 'Join by'
-      ClientHeight = 411
-      ClientWidth = 653
+      ClientHeight = 419
+      ClientWidth = 657
       object Panel1: TPanel
         Left = 0
         Height = 42
-        Top = 369
-        Width = 653
+        Top = 377
+        Width = 657
         Align = alBottom
         ClientHeight = 42
-        ClientWidth = 653
+        ClientWidth = 657
         TabOrder = 0
         object KFNoneBtn: TButton
           AnchorSideLeft.Control = Panel1
           AnchorSideTop.Control = Panel1
           AnchorSideTop.Side = asrCenter
           Left = 6
-          Height = 27
-          Top = 8
-          Width = 46
+          Height = 23
+          Top = 10
+          Width = 42
           AutoSize = True
           BorderSpacing.Left = 5
           BorderSpacing.Top = 5
@@ -85,10 +85,10 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = KFNoneBtn
           AnchorSideTop.Side = asrCenter
-          Left = 57
-          Height = 27
-          Top = 8
-          Width = 34
+          Left = 53
+          Height = 23
+          Top = 10
+          Width = 32
           AutoSize = True
           BorderSpacing.Left = 5
           Caption = 'Key'
@@ -101,24 +101,24 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     end
     object CompareTab: TTabSheet
       Caption = 'Compare'
-      ClientHeight = 411
-      ClientWidth = 653
+      ClientHeight = 419
+      ClientWidth = 657
       object Panel2: TPanel
         Left = 0
         Height = 47
-        Top = 364
-        Width = 653
+        Top = 372
+        Width = 657
         Align = alBottom
         ClientHeight = 47
-        ClientWidth = 653
+        ClientWidth = 657
         TabOrder = 0
         object CmpFAllNonKeyFBtn: TButton
           AnchorSideLeft.Control = Panel2
           AnchorSideTop.Control = Panel2
           AnchorSideTop.Side = asrCenter
           Left = 6
-          Height = 27
-          Top = 10
+          Height = 23
+          Top = 12
           Width = 89
           AutoSize = True
           BorderSpacing.Left = 5
@@ -135,9 +135,9 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
           AnchorSideTop.Control = CmpFAllNonKeyFBtn
           AnchorSideTop.Side = asrCenter
           Left = 100
-          Height = 27
-          Top = 10
-          Width = 46
+          Height = 23
+          Top = 12
+          Width = 42
           AutoSize = True
           BorderSpacing.Left = 5
           Caption = 'None'
@@ -151,13 +151,13 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
           AnchorSideLeft.Side = asrBottom
           AnchorSideTop.Control = CmpFNoneBtn
           AnchorSideTop.Side = asrCenter
-          Left = 151
-          Height = 27
-          Top = 10
-          Width = 129
+          Left = 147
+          Height = 23
+          Top = 12
+          Width = 154
           AutoSize = True
           BorderSpacing.Left = 5
-          Caption = 'Exclude Text Fields'
+          Caption = 'Exclude Text Variables'
           OnClick = CmpFExcludeTextFBtnClick
           TabOrder = 2
         end
@@ -165,17 +165,17 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
     end
     object OptionsTab: TTabSheet
       Caption = 'Options'
-      ClientHeight = 411
-      ClientWidth = 653
+      ClientHeight = 419
+      ClientWidth = 657
       object OptionsChkGrp: TCheckGroup
         AnchorSideLeft.Control = OptionsTab
         AnchorSideTop.Control = OptionsTab
         AnchorSideRight.Control = OptionsTab
         AnchorSideRight.Side = asrBottom
         Left = 10
-        Height = 117
+        Height = 101
         Top = 10
-        Width = 633
+        Width = 637
         Align = alCustom
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
@@ -192,13 +192,13 @@ object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 100
-        ClientWidth = 629
+        ClientHeight = 84
+        ClientWidth = 633
         Items.Strings = (
           'Exclude deleted records'
-          'Ignore case in text fields'
+          'Ignore case in text variables'
           'Ignore missing records in duplicate file'
-          'Add result field'
+          'Add result variable'
         )
         TabOrder = 0
         Data = {

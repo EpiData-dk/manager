@@ -25,7 +25,7 @@ uses
 
 
 resourcestring
-  rsReportFieldListTitleExtended = 'Extended list of questions/fields.';
+  rsReportFieldListTitleExtended = 'Extended list of variables/labels.';
 
 { TReportFieldExtended }
 

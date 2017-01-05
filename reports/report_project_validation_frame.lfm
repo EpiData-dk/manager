@@ -1,36 +1,36 @@
 object ProjectValidationFrame: TProjectValidationFrame
   Left = 0
-  Height = 450
+  Height = 419
   Top = 0
-  Width = 647
-  ClientHeight = 450
-  ClientWidth = 647
+  Width = 659
+  ClientHeight = 419
+  ClientWidth = 659
   TabOrder = 0
-  DesignLeft = 391
-  DesignTop = 50
+  DesignLeft = 533
+  DesignTop = 471
   object GroupBox3: TGroupBox
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Bevel1
     AnchorSideBottom.Control = OptionsChkGrp
     Left = 10
-    Height = 369
+    Height = 342
     Top = 10
-    Width = 304
+    Width = 324
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 10
     BorderSpacing.Bottom = 10
-    Caption = 'Key Fields:'
-    ClientHeight = 352
-    ClientWidth = 300
+    Caption = 'Key Variables:'
+    ClientHeight = 325
+    ClientWidth = 320
     TabOrder = 0
     object KFNoneBtn: TButton
       AnchorSideLeft.Control = GroupBox3
       AnchorSideTop.Control = Label7
       AnchorSideTop.Side = asrBottom
       Left = 5
-      Height = 27
+      Height = 23
       Top = 25
-      Width = 46
+      Width = 42
       Action = KFNoneAction
       AutoSize = True
       BorderSpacing.Left = 5
@@ -44,10 +44,10 @@ object ProjectValidationFrame: TProjectValidationFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = KFNoneBtn
       AnchorSideTop.Side = asrCenter
-      Left = 56
-      Height = 27
+      Left = 52
+      Height = 23
       Top = 25
-      Width = 46
+      Width = 44
       Action = KFIndexAction
       AutoSize = True
       BorderSpacing.Left = 5
@@ -60,10 +60,10 @@ object ProjectValidationFrame: TProjectValidationFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = KFNoneBtn
       AnchorSideTop.Side = asrCenter
-      Left = 107
-      Height = 27
+      Left = 101
+      Height = 23
       Top = 25
-      Width = 68
+      Width = 65
       Action = KFAutoIncAction
       AutoSize = True
       BorderSpacing.Left = 5
@@ -79,9 +79,9 @@ object ProjectValidationFrame: TProjectValidationFrame
       AnchorSideBottom.Control = GroupBox3
       AnchorSideBottom.Side = asrBottom
       Left = 5
-      Height = 290
-      Top = 57
-      Width = 263
+      Height = 267
+      Top = 53
+      Width = 283
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -100,10 +100,10 @@ object ProjectValidationFrame: TProjectValidationFrame
       Left = 5
       Height = 15
       Top = 5
-      Width = 156
+      Width = 186
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
-      Caption = 'Fields identifying records'
+      Caption = 'Variables identifying records'
       ParentColor = False
     end
     object Panel1: TPanel
@@ -111,9 +111,9 @@ object ProjectValidationFrame: TProjectValidationFrame
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = GroupBox3
       AnchorSideRight.Side = asrBottom
-      Left = 273
+      Left = 293
       Height = 48
-      Top = 178
+      Top = 162
       Width = 25
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -216,8 +216,8 @@ object ProjectValidationFrame: TProjectValidationFrame
     AnchorSideTop.Control = GroupBox3
     AnchorSideBottom.Control = GroupBox3
     AnchorSideBottom.Side = asrBottom
-    Left = 314
-    Height = 369
+    Left = 334
+    Height = 342
     Top = 10
     Width = 5
     Anchors = [akTop, akBottom]
@@ -230,16 +230,16 @@ object ProjectValidationFrame: TProjectValidationFrame
     AnchorSideTop.Control = Owner
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = OptionsChkGrp
-    Left = 319
-    Height = 369
+    Left = 339
+    Height = 342
     Top = 10
-    Width = 318
+    Width = 310
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Top = 10
     BorderSpacing.Bottom = 10
-    Caption = 'Validation Fields:'
-    ClientHeight = 352
-    ClientWidth = 314
+    Caption = 'Validation Variables:'
+    ClientHeight = 325
+    ClientWidth = 306
     TabOrder = 1
     object CmpFCheckList: TCheckListBox
       AnchorSideLeft.Control = GroupBox4
@@ -250,9 +250,9 @@ object ProjectValidationFrame: TProjectValidationFrame
       AnchorSideBottom.Control = GroupBox4
       AnchorSideBottom.Side = asrBottom
       Left = 5
-      Height = 290
-      Top = 57
-      Width = 304
+      Height = 267
+      Top = 53
+      Width = 296
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
@@ -270,13 +270,14 @@ object ProjectValidationFrame: TProjectValidationFrame
       AnchorSideTop.Control = Label8
       AnchorSideTop.Side = asrBottom
       Left = 5
-      Height = 27
+      Height = 23
       Top = 25
-      Width = 115
+      Width = 82
       Action = CFSelectAllNonKFAction
       AutoSize = True
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
+      Caption = 'All non-key'
       ParentShowHint = False
       ShowHint = True
       TabOrder = 1
@@ -286,10 +287,10 @@ object ProjectValidationFrame: TProjectValidationFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = CmpFAllNonKeyFBtn
       AnchorSideTop.Side = asrCenter
-      Left = 125
-      Height = 27
+      Left = 92
+      Height = 23
       Top = 25
-      Width = 46
+      Width = 42
       Action = CFSelectNoneAction
       AutoSize = True
       BorderSpacing.Left = 5
@@ -303,10 +304,10 @@ object ProjectValidationFrame: TProjectValidationFrame
       Left = 5
       Height = 15
       Top = 5
-      Width = 144
+      Width = 172
       BorderSpacing.Left = 5
       BorderSpacing.Top = 5
-      Caption = 'Validate Data in Fields:'
+      Caption = 'Validate Data in Variables:'
       ParentColor = False
     end
     object CmpFExcludeTextFBtn: TButton
@@ -314,13 +315,14 @@ object ProjectValidationFrame: TProjectValidationFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = CmpFNoneBtn
       AnchorSideTop.Side = asrCenter
-      Left = 176
-      Height = 27
+      Left = 139
+      Height = 23
       Top = 25
-      Width = 129
+      Width = 154
       Action = CFExcludeTxtAction
       AutoSize = True
       BorderSpacing.Left = 5
+      Caption = 'Exclude Text Variables'
       TabOrder = 3
     end
   end
@@ -331,9 +333,9 @@ object ProjectValidationFrame: TProjectValidationFrame
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 10
-    Height = 51
-    Top = 389
-    Width = 627
+    Height = 47
+    Top = 362
+    Width = 639
     Anchors = [akLeft, akRight, akBottom]
     AutoFill = True
     AutoSize = True
@@ -349,8 +351,8 @@ object ProjectValidationFrame: TProjectValidationFrame
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 2
-    ClientHeight = 34
-    ClientWidth = 623
+    ClientHeight = 30
+    ClientWidth = 635
     Columns = 2
     Items.Strings = (
       'A'

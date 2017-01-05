@@ -6,8 +6,8 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   ClientHeight = 564
   ClientWidth = 897
   TabOrder = 0
-  DesignLeft = 654
-  DesignTop = 441
+  DesignLeft = 639
+  DesignTop = 357
   object Panel1: TPanel
     Left = 632
     Height = 542
@@ -148,9 +148,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object IntToolButton: TToolButton
         Tag = 1
         Left = 86
-        Hint = 'New Integer Field'
+        Hint = 'New Integer Variable'
         Top = 1
-        Caption = 'New Integer Field'
+        Caption = 'New Integer Variable'
         ImageIndex = 2
         OnClick = FieldBtnClick
         ParentShowHint = False
@@ -159,9 +159,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object FloatToolButton: TToolButton
         Tag = 3
         Left = 106
-        Hint = 'New Float Field'
+        Hint = 'New Float Variable'
         Top = 1
-        Caption = 'New Float Field'
+        Caption = 'New Float Variable'
         ImageIndex = 3
         OnClick = FieldBtnClick
         ParentShowHint = False
@@ -170,9 +170,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object StringToolButton: TToolButton
         Tag = 12
         Left = 126
-        Hint = 'New String Field'
+        Hint = 'New String Variable'
         Top = 1
-        Caption = 'New String Field'
+        Caption = 'New String Variable'
         ImageIndex = 6
         OnClick = FieldBtnClick
         ParentShowHint = False
@@ -181,9 +181,9 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object DateToolButton: TToolButton
         Tag = 4
         Left = 166
-        Hint = 'New DMY Field'
+        Hint = 'New DMY Variable'
         Top = 1
-        Caption = 'New DMY Field'
+        Caption = 'New DMY Variable'
         ImageIndex = 4
         OnClick = FieldBtnClick
         ParentShowHint = False
@@ -191,7 +191,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object OtherToolButton: TToolButton
         Left = 226
-        Hint = 'Other Field Types...'
+        Hint = 'Other Variable Types...'
         Top = 1
         Caption = 'OtherToolButton'
         DropdownMenu = OtherFieldsPopup
@@ -293,7 +293,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object TimeToolButton: TToolButton
         Tag = 10
         Left = 186
-        Hint = 'New Time Field'
+        Hint = 'New Time Variable'
         Top = 1
         Caption = 'TimeToolButton'
         ImageIndex = 5
@@ -352,7 +352,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object AutoIncToolBtn: TToolButton
         Tag = 2
         Left = 206
-        Hint = 'New Auto-Increment Field'
+        Hint = 'New Auto-Increment Variable'
         Top = 1
         Caption = 'AutoIncToolBtn'
         ImageIndex = 7
@@ -460,7 +460,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object NewIntFieldAction: TAction
       Category = 'NewControls'
-      Caption = 'Int Field'
+      Caption = 'Int Variable'
       ImageIndex = 2
       OnExecute = NewIntFieldActionExecute
     end
@@ -605,7 +605,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnUpdate = RecodeDataActionUpdate
     end
     object RenameControlsAction: TAction
-      Caption = 'Rename Fields etc....'
+      Caption = 'Rename Variables etc....'
       OnExecute = RenameControlsActionExecute
     end
     object ImportCBAction: TAction
@@ -620,7 +620,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     left = 232
     top = 96
     object MenuItem1: TMenuItem
-      Caption = 'Date Fields'
+      Caption = 'Date Variable'
       object MenuItem2: TMenuItem
         Tag = 4
         Caption = 'DMY Date'
@@ -750,7 +750,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object TodayDateSubMenu: TMenuItem
       Caption = 'Auto Date...'
-      Hint = 'Today Fields'
+      Hint = 'Today Variable'
       object NewDMYTodayFieldMenu: TMenuItem
         Tag = 7
         Caption = 'Today (dmy)'
@@ -1097,7 +1097,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnExecute = EditControlActionExecute
     end
     object DataformPropertiesAction: TAction
-      Caption = 'Dataform Properties'
+      Caption = 'Dataset Properties'
       OnExecute = DataformPropertiesActionExecute
     end
     object SelectNextAction: TAction
@@ -1138,25 +1138,25 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
     end
     object SelectAllIntsAction: TAction
       Category = 'Select'
-      Caption = 'All Integer Fields'
+      Caption = 'All Integer Variables'
       ImageIndex = 2
       OnExecute = SelectAllIntsActionExecute
     end
     object SelectAllFloatsAction: TAction
       Category = 'Select'
-      Caption = 'All Float Fields'
+      Caption = 'All Float Variables'
       ImageIndex = 3
       OnExecute = SelectAllFloatsActionExecute
     end
     object SelectAllStringsAction: TAction
       Category = 'Select'
-      Caption = 'All String Fields'
+      Caption = 'All String Variables'
       ImageIndex = 6
       OnExecute = SelectAllStringsActionExecute
     end
     object SelectAllBoolsAction: TAction
       Category = 'Select'
-      Caption = 'All Boolean Fields'
+      Caption = 'All Boolean Variables'
       ImageIndex = 1
       OnExecute = SelectAllBoolsActionExecute
     end

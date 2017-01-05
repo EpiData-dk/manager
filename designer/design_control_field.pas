@@ -238,13 +238,13 @@ begin
           S := '';
 
           if Initiator is TEpiJump then
-            S := 'A Jump-to field was deleted: ' + TEpiField(Data).Name;
+            S := 'A Jump-to variable was deleted: ' + TEpiField(Data).Name;
 
           if Initiator is TEpiComparison then
-            S := 'Compare to field was deleted: ' + TEpiField(Data).Name;
+            S := 'Compare to variable was deleted: ' + TEpiField(Data).Name;
 
           if Initiator is TEpiCalculation then
-            S := 'A calculation field was deleted: ' + TEpiField(Data).Name;
+            S := 'A calculation variable was deleted: ' + TEpiField(Data).Name;
 
           if S <> '' then
             DoShowHint(S);
@@ -270,7 +270,7 @@ begin
 
         if (MaxLen <= FField.Length) then Exit;
 
-        DoShowHint('Warning: Valuelabel set is no longer compatible with length of field!');
+        DoShowHint('Warning: Valuelabel set is no longer compatible with length of variable!');
 
         UpdateValueLabelConnection(FField.ValueLabelSet, nil);
         FField.ValueLabelSet := nil;
@@ -475,7 +475,7 @@ begin
       FField.Relates := nil;
     end;
 
-    DoShowHint('Field was pasted to a different dataform' + LineEnding +
+    DoShowHint('Variable was pasted to a different dataform' + LineEnding +
                'Jumps, Calculations, Comparisons and Relates have been reset!');
   end;
   Section.Fields.AddItem(FField);

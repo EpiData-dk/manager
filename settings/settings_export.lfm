@@ -14,10 +14,10 @@ object Settings_ExportFrame: TSettings_ExportFrame
     AnchorSideTop.Control = Owner
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 103
-    Height = 29
+    Left = 106
+    Height = 25
     Top = 20
-    Width = 342
+    Width = 339
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Left = 10
     BorderSpacing.Top = 20
@@ -32,8 +32,8 @@ object Settings_ExportFrame: TSettings_ExportFrame
     AnchorSideTop.Side = asrCenter
     Left = 20
     Height = 15
-    Top = 27
-    Width = 73
+    Top = 25
+    Width = 76
     BorderSpacing.Left = 20
     Caption = 'Export Type'
     ParentColor = False
@@ -44,8 +44,8 @@ object Settings_ExportFrame: TSettings_ExportFrame
     AnchorSideTop.Side = asrCenter
     Left = 20
     Height = 15
-    Top = 71
-    Width = 62
+    Top = 65
+    Width = 63
     BorderSpacing.Left = 20
     Caption = 'Encoding:'
     ParentColor = False
@@ -56,10 +56,10 @@ object Settings_ExportFrame: TSettings_ExportFrame
     AnchorSideTop.Side = asrBottom
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
-    Left = 103
-    Height = 29
-    Top = 64
-    Width = 342
+    Left = 106
+    Height = 25
+    Top = 60
+    Width = 339
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 15
     BorderSpacing.Right = 20
@@ -72,19 +72,19 @@ object Settings_ExportFrame: TSettings_ExportFrame
     AnchorSideTop.Control = EncodingCmbBox
     AnchorSideTop.Side = asrBottom
     Left = 20
-    Height = 22
-    Top = 113
-    Width = 169
+    Height = 18
+    Top = 105
+    Width = 203
     BorderSpacing.Left = 20
     BorderSpacing.Top = 20
-    Caption = 'Export deleted records'
+    Caption = 'Export deleted observations'
     TabOrder = 2
   end
   object ExportReportChkBox: TCheckBox
     Left = 20
-    Height = 22
+    Height = 18
     Top = 151
-    Width = 157
+    Width = 155
     Caption = 'Create Export Report'
     TabOrder = 3
   end
@@ -96,7 +96,7 @@ object Settings_ExportFrame: TSettings_ExportFrame
     AnchorSideRight.Side = asrBottom
     Left = 20
     Height = 17
-    Top = 183
+    Top = 179
     Width = 425
     Anchors = [akTop, akLeft, akRight]
     AutoFill = True

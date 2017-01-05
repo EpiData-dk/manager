@@ -21,7 +21,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
-    Caption = 'Default Field Lengths'
+    Caption = 'Default Variable Lengths'
     ClientHeight = 122
     ClientWidth = 737
     TabOrder = 0
@@ -30,7 +30,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 15
       Hint = 'Default field length for:'#10'Integer and IdNum'
       Top = 11
-      Width = 49
+      Width = 50
       Caption = 'Integer:'
       ParentColor = False
       ParentShowHint = False
@@ -39,11 +39,11 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     object Label11: TLabel
       AnchorSideRight.Control = LengthGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 675
+      Left = 673
       Height = 15
       Hint = 'Default field length for:'#10'Float'
       Top = 48
-      Width = 57
+      Width = 59
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 5
       Caption = 'decimals'
@@ -67,7 +67,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideRight.Control = FloatIntEdit
       AnchorSideRight.Side = asrBottom
       Left = 78
-      Height = 23
+      Height = 25
       Hint = 'Default field length for:'#10'Integer and AutoIncrement'
       Top = 2
       Width = 301
@@ -83,7 +83,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     object FloatIntEdit: TMaskEdit
       AnchorSideRight.Control = Label9
       Left = 78
-      Height = 23
+      Height = 25
       Hint = 'Default field length for:'#10'Float'
       Top = 39
       Width = 301
@@ -101,7 +101,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideRight.Control = FloatIntEdit
       AnchorSideRight.Side = asrBottom
       Left = 78
-      Height = 23
+      Height = 25
       Hint = 'Default field length for:'#10'String and Uppercase'
       Top = 79
       Width = 301
@@ -119,10 +119,10 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideLeft.Side = asrBottom
       AnchorSideRight.Control = Label11
       Left = 389
-      Height = 23
+      Height = 25
       Hint = 'Default decimal length for:'#10'Float'
       Top = 39
-      Width = 281
+      Width = 279
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Right = 5
       CharCase = ecNormal
@@ -138,7 +138,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       Height = 15
       Hint = 'Default field length for:'#10'Float'
       Top = 48
-      Width = 35
+      Width = 36
       Caption = 'Float:'
       ParentColor = False
       ParentShowHint = False
@@ -173,7 +173,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
-    Caption = 'Field Naming'
+    Caption = 'Variable Naming'
     ClientHeight = 87
     ClientWidth = 737
     TabOrder = 1
@@ -183,11 +183,11 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideBottom.Side = asrBottom
       Left = 10
       Height = 15
-      Top = 18
-      Width = 67
+      Top = 20
+      Width = 94
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
-      Caption = 'Field Prefix'
+      Caption = 'Variable Prefix'
       ParentColor = False
     end
     object PrefixEdit: TEdit
@@ -196,10 +196,10 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideTop.Control = NamingGrpBox
       AnchorSideRight.Control = NamingGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 102
-      Height = 23
+      Left = 129
+      Height = 25
       Top = 10
-      Width = 625
+      Width = 598
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 25
       BorderSpacing.Top = 10
@@ -213,11 +213,11 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = NamingGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 233
-      Height = 27
+      Left = 264
+      Height = 21
       Hint = 'During read of .rec files, how should'#10'fieldnames be imported.'#10#10'This is important since Manager supports'#10'fieldnames with different case. This may'#10'cause confusion during import or tool-methods'#10'eg. Count. which depends on identical'#10'field names.'#10
-      Top = 43
-      Width = 494
+      Top = 45
+      Width = 463
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 25
       BorderSpacing.Top = 10
@@ -239,11 +239,11 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideBottom.Side = asrBottom
       Left = 10
       Height = 15
-      Top = 55
-      Width = 198
+      Top = 51
+      Width = 229
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
-      Caption = 'Fieldname casing (.rec import):'
+      Caption = 'Variable name casing (.rec import):'
       ParentColor = False
     end
   end
@@ -261,7 +261,7 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
     BorderSpacing.Left = 10
     BorderSpacing.Top = 10
     BorderSpacing.Right = 10
-    Caption = 'Default Field Types'
+    Caption = 'Default Variable Types'
     ClientHeight = 88
     ClientWidth = 737
     TabOrder = 2
@@ -271,8 +271,8 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideBottom.Side = asrBottom
       Left = 10
       Height = 15
-      Top = 18
-      Width = 79
+      Top = 16
+      Width = 81
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = 'Default date'
@@ -284,10 +284,10 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideTop.Control = TypesGrpBox
       AnchorSideRight.Control = TypesGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 114
-      Height = 23
+      Left = 116
+      Height = 21
       Top = 10
-      Width = 613
+      Width = 611
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 25
       BorderSpacing.Top = 10
@@ -308,10 +308,10 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = TypesGrpBox
       AnchorSideRight.Side = asrBottom
-      Left = 201
-      Height = 23
-      Top = 43
-      Width = 526
+      Left = 206
+      Height = 21
+      Top = 41
+      Width = 521
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 25
       BorderSpacing.Top = 10
@@ -334,8 +334,8 @@ object Settings_FieldDefinitionFrame: TSettings_FieldDefinitionFrame
       AnchorSideBottom.Side = asrBottom
       Left = 10
       Height = 15
-      Top = 51
-      Width = 166
+      Top = 47
+      Width = 171
       Anchors = [akLeft, akBottom]
       BorderSpacing.Left = 10
       Caption = 'Default paste special type'

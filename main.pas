@@ -749,7 +749,7 @@ begin
     end;
 
     if MessageDlg('Warning!',
-      'Packing the dataset will permanently remove ALL records marked for deletion!' + LineEnding +
+      'Packing the dataset will permanently remove ALL observations marked for deletion!' + LineEnding +
       'Do you wish to continue?',
       mtWarning,
       mbYesNo,
@@ -773,7 +773,7 @@ begin
     end;
 
     ShowMessage(
-      'Removed records:' +
+      'Removed observations:' +
       Str + LineEnding + LineEnding +
       'Total: ' + IntToStr(T));
 

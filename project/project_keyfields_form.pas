@@ -153,7 +153,7 @@ begin
   S := 'Add ';
   if DataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName) then
     S := 'Update ';
-  AddIndexFieldAction.Caption := S + 'Status Field';
+  AddIndexFieldAction.Caption := S + 'Status Variable';
 end;
 
 procedure TKeyFieldsForm.AddNewIndexActionExecute(Sender: TObject);
@@ -196,12 +196,12 @@ begin
   if (ModalResult = mrOK) and (not IndexCheck) then
   begin
     Res := MessageDlg('Index Error',
-                        'Records with Non-Unique key' + LineEnding +
-                        'or missing values in key fields exist.' + LineEnding +
+                        'Observations with Non-Unique key' + LineEnding +
+                        'or missing values in key variables exist.' + LineEnding +
                         BoolToStr(DataFile.Fields.ItemExistsByName(EpiIndexIntegrityFieldName),
-                          'Index status saved in field: '+ EpiIndexIntegrityFieldName + LineEnding, '') +
+                          'Index status saved in variable: '+ EpiIndexIntegrityFieldName + LineEnding, '') +
                         LineEnding +
-                        'Apply Key Fields?',
+                        'Apply Key Variables?',
                         mtWarning, mbYesNoCancel, 0, mbCancel);
 
     // On cancel do nothing, not even close the form.
@@ -340,7 +340,7 @@ begin
   if not PerformIndexCheck(FailedRecords, FailedValues) then
   begin
     ShowError('Warning: Index not uniquely defined!' + LineEnding +
-              'Use "List Records" to get a list of affected records (' + IntToStr(Length(FailedRecords)) + ').',
+              'Use "List Observations" to get a list of affected observations (' + IntToStr(Length(FailedRecords)) + ').',
               TComboBox(FDynamicKeyList.Last));
     ShowRecordsBtn.Enabled := true;
   end else
@@ -384,7 +384,7 @@ begin
   if not FIndexChecker.IndexIntegrity(DataFile, FailedRecords, FailedValues,
            false, FieldList) then
     ShowDataSetViewerForm(Self,
-      'List of non-unique records:',
+      'List of non-unique observations:',
       DataFile,
       FailedRecords,
       FieldList,

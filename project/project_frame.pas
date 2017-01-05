@@ -266,7 +266,7 @@ begin
       'External file "' + Fn + '" not found.' + LineEnding +
       'Please restore "' + Fn + '" to folder: ' + ExtractFilePath(FDocumentFile.FileName) + LineEnding +
       LineEnding +
-      'If you continue all fields referecing the valuelabelset will be lost!' + LineEnding +
+      'If you continue all variables referecing the valuelabelset will be lost!' + LineEnding +
       LineEnding +
       'Continue loading the project?',
       mtWarning,
@@ -787,7 +787,7 @@ begin
     if DF.KeyFields.Count = 0 then
     begin
       ShowMessage(
-        'You must define a key with at least 1 field' + LineEnding +
+        'You must define a key with at least 1 variable' + LineEnding +
         'before you can create a related dataform'
       );
       Exit;
@@ -799,7 +799,7 @@ begin
       if MR.Datafile.KeyFields.Count = Df.KeyFields.Count then
       begin
         ShowMessage(
-          'You must define a key with at least 1 field more than' + LineEnding +
+          'You must define a key with at least 1 variable more than' + LineEnding +
           'in the parent dataform!'
         );
         Exit;

@@ -5,7 +5,7 @@ unit report_project_validation_frame2;
 interface
 
 uses
-  Classes, SysUtils, fgl, FileUtil, Forms, Controls, ExtCtrls, StdCtrls,
+  Classes, SysUtils, FileUtil, Forms, Controls, ExtCtrls, StdCtrls,
   Buttons, Dialogs, ComCtrls, projectfilelist_frame, epiv_projecttreeview_frame,
   epiv_field_list_frame, epiv_dataform_treeview, epidatafilerelations,
   epitools_projectvalidate, epidocument, epicustombase, epidatafiles,

@@ -199,13 +199,13 @@ begin
   HintText := '';
 
   if ACol = (FValueFieldColumn.Index + 1) then
-    HintText := 'Select field for category content';
+    HintText := 'Select variable for category content';
 
   if ACol = (FLabelFieldColumn.Index + 1) then
-    HintText := 'Select field containing descriptive label';
+    HintText := 'Select variable containing descriptive label';
 
   if ACol = (FMissingFieldColumn.Index + 1) then
-    HintText := 'Select field indicating missing (value is 1, "Y", "TRUE")';
+    HintText := 'Select variable indicating missing (value is 1, "Y", "TRUE")';
 end;
 
 procedure TValueLabelDataImport.FormCloseQuery(Sender: TObject;

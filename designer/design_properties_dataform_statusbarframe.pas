@@ -200,7 +200,7 @@ begin
   begin
     AddObject('Data',    TObject(0));
     AddObject('Text',    TObject(1));
-    AddObject('Field',   TObject(2));
+    AddObject('Variable',TObject(2));
     AddObject('Caption', TObject(3));
   end;
 end;

@@ -14,9 +14,9 @@ object ReportOptionsFrameCounts: TReportOptionsFrameCounts
     Left = 10
     Height = 15
     Top = 10
-    Width = 99
+    Width = 128
     BorderSpacing.Top = 10
-    Caption = 'Available Fields:'
+    Caption = 'Available Variables:'
     ParentColor = False
   end
   object CheckListBox1: TCheckListBox
@@ -27,8 +27,8 @@ object ReportOptionsFrameCounts: TReportOptionsFrameCounts
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 10
-    Height = 333
-    Top = 72
+    Height = 337
+    Top = 68
     Width = 326
     Anchors = [akTop, akLeft, akRight, akBottom]
     BorderSpacing.Left = 10
@@ -43,9 +43,9 @@ object ReportOptionsFrameCounts: TReportOptionsFrameCounts
     AnchorSideTop.Control = Label1
     AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 27
+    Height = 23
     Top = 35
-    Width = 46
+    Width = 42
     Action = NoneAction
     AutoSize = True
     BorderSpacing.Left = 10
@@ -56,10 +56,10 @@ object ReportOptionsFrameCounts: TReportOptionsFrameCounts
     AnchorSideLeft.Control = Button1
     AnchorSideLeft.Side = asrBottom
     AnchorSideTop.Control = Button1
-    Left = 66
-    Height = 27
+    Left = 62
+    Height = 23
     Top = 35
-    Width = 46
+    Width = 44
     Action = IndexAction
     AutoSize = True
     BorderSpacing.Left = 10
@@ -72,7 +72,7 @@ object ReportOptionsFrameCounts: TReportOptionsFrameCounts
     AnchorSideRight.Side = asrBottom
     Left = 336
     Height = 51
-    Top = 213
+    Top = 211
     Width = 25
     Anchors = [akTop, akRight]
     AutoSize = True

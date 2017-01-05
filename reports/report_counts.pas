@@ -37,7 +37,7 @@ uses
 
 
 resourcestring
-  rsReportCountsTitle = 'Count of observations in files.';
+  rsReportCountsTitle = 'Count of observations in variables.';
 
 { TReportCounts }
 

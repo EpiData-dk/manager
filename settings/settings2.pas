@@ -681,7 +681,7 @@ begin
   begin
     FindNodeWithText('General').Data             := Pointer(TSettings_GeneralFrame.Create(Self));
     FindNodeWithText('Paths').Data               := Pointer(TSettings_PathsFrame.Create(Self));
-    FindNodeWithText('Field Definitions').Data   := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
+    FindNodeWithText('Variable Definitions').Data:= Pointer(TSettings_FieldDefinitionFrame.Create(Self));
     FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
     FindNodeWithText('Fonts').Data               := Pointer(TSettingsFontFrame.Create(Self));
     FindNodeWithText('Statusbar').Data           := Pointer(TSettingsStatusbar.Create(Self));
@@ -698,7 +698,7 @@ begin
     // Project options
     FindNodeWithText('Backup').Data              := Pointer(TProjectSettings_BackupFrame.Create(Self));
     FindNodeWithText('Auto Increment').Data       := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
-    FindNodeWithText('Display of Fields').Data   := Pointer(TProjectSettings_FieldFrame.Create(Self));
+    FindNodeWithText('Display of Variables').Data   := Pointer(TProjectSettings_FieldFrame.Create(Self));
   end;
 end;
 

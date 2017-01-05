@@ -83,7 +83,7 @@ begin
 
   S := '';
   if CheckBox1.Checked then
-    S += '/Fields';
+    S += '/Variables';
   if CheckBox2.Checked then
     S += '/Sections';
   if CheckBox3.Checked then

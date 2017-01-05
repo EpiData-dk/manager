@@ -49,7 +49,7 @@ uses
   LCLIntf, LMessages, epidocument, settings2_var, settings2, admin_authenticator, epiadmin;
 
 const
-  rsFormCaption = 'Field Valuelabel Editor';
+  rsFormCaption = 'Variable Valuelabel Editor';
 
 { TFieldValueLabelEditor }
 

@@ -2211,7 +2211,7 @@ begin
       if EpiCtrl is TEpiSection then
         S := 'Section: ';
       if EpiCtrl is TEpiField then
-        S := 'Field: ';
+        S := 'Variable: ';
       if EpiCtrl is TEpiHeading then
         S := 'Heading: ';
       S += EpiCtrl.Name;
@@ -2232,7 +2232,7 @@ begin
     if (DataFile.Size > 0) and
        ((EpiCtrl is TEpiField) or
          ((EpiCtrl is TEpiSection) and (TEpiSection(EpiCtrl).Fields.Count > 0))) and
-       (MessageDlg('Warning', 'Field(s) contains data.' + LineEnding +
+       (MessageDlg('Warning', 'Variable(s) contains data.' + LineEnding +
         'Are you sure you want to delete?', mtWarning, mbYesNo, 0, mbNo) = mrNo) then
       exit;
   end;
@@ -2549,13 +2549,13 @@ begin
       with TEpiField(EpiCtrl) do
       begin
         MI := TMenuItem.Create(SubMenu);
-        MI.Caption := 'All ' + EpiTypeNames[FieldType] + ' fields';
+        MI.Caption := 'All ' + EpiTypeNames[FieldType] + ' variables';
         MI.OnClick := @SelectAllFieldsType;
         MI.Tag := PtrInt(EpiCtrl);
         SubMenu.Add(MI);
 
         MI := TMenuItem.Create(SubMenu);
-        MI.Caption := 'All ' + EpiTypeNames[FieldType] + ' fields in section ' + Section.Caption.Text;
+        MI.Caption := 'All ' + EpiTypeNames[FieldType] + ' variables in section ' + Section.Caption.Text;
         MI.OnClick := @SelectAllFieldsTypeInSection;
         MI.Tag := PtrInt(EpiCtrl);
         SubMenu.Add(MI);
@@ -2634,7 +2634,7 @@ end;
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
 begin
   {$IFNDEF EPI_DEBUG}
-  if MessageDlg('Warning', 'Are you sure you want to clear dataform?',
+  if MessageDlg('Warning', 'Are you sure you want to clear dataset?',
     mtWarning, mbYesNo, 0, mbNo) = mrNo then exit;
   {$ENDIF}
 
@@ -2705,7 +2705,7 @@ begin
 
   if
     MessageDlg('WARNING',
-      'You are about to clear data from all selected fields!' + LineEnding +
+      'You are about to clear data from all selected variables!' + LineEnding +
       'Do you wish to proceed further?',
       mtWarning,
       mbYesNo,

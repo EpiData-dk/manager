@@ -14,7 +14,7 @@ object StatusbarContentFrame: TStatusbarContentFrame
     Left = 10
     Height = 15
     Top = 12
-    Width = 32
+    Width = 34
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 10
     BorderSpacing.Bottom = 5

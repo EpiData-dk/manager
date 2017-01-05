@@ -12,9 +12,9 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
     Height = 625
     Top = 0
     Width = 501
-    ActivePage = ExtendedSheet
+    ActivePage = BasicSheet
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
@@ -98,9 +98,9 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         Left = 10
         Height = 15
         Top = 62
-        Width = 62
+        Width = 39
         BorderSpacing.Top = 10
-        Caption = 'Question:'
+        Caption = 'Label:'
         ParentColor = False
       end
       object NameEdit: TEdit

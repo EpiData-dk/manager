@@ -138,12 +138,12 @@ begin
     Generator.Section('Dataform: ' + DF.Caption.Text);
 
     if (DFSettings.ToRecord - DFSettings.FromRecord) < 0 then
-      Generator.Line('Exported records: Structure only')
+      Generator.Line('Exported observations: Structure only')
     else
     if (DFSettings.ToRecord - DFSettings.FromRecord) = 0 then
-      Generator.Line('Exported record: no. ' + IntToStr(DFSettings.FromRecord + 1))
+      Generator.Line('Exported observation: no. ' + IntToStr(DFSettings.FromRecord + 1))
     else
-      Generator.Line('Exported records: ' + IntToStr(DFSettings.FromRecord + 1) + ' - ' + IntToStr(DFSettings.ToRecord + 1));
+      Generator.Line('Exported observations: ' + IntToStr(DFSettings.FromRecord + 1) + ' - ' + IntToStr(DFSettings.ToRecord + 1));
     Generator.Line('');
 
     R := TEpiReportControlList.Create(Generator);

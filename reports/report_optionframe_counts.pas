@@ -156,7 +156,7 @@ end;
 
 function TReportOptionsFrameCounts.GetFrameCaption: string;
 begin
-  result := 'Field Selection';
+  result := 'Variable Selection';
 end;
 
 procedure TReportOptionsFrameCounts.ApplyReportOptions(Report: TReportBase);

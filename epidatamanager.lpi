@@ -9,10 +9,6 @@
       <Title Value="EpiData Manager"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
-      <XPManifest>
-        <TextName Value="CompanyName.ProductName.AppName"/>
-        <TextDesc Value="Your application description."/>
-      </XPManifest>
       <Icon Value="0"/>
     </General>
     <VersionInfo>
@@ -21,7 +17,7 @@
       <BuildNr Value="94"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable SpecialBuild="ADMIN" ProductVersion="2.1.2.87"/>
+      <StringTable SpecialBuild="TRUNK"/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>

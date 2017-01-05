@@ -119,7 +119,7 @@ begin
   begin
     FindNodeWithText('Backup').Data             := Pointer(TProjectSettings_BackupFrame.Create(Self));
     FindNodeWithText('Auto Increment').Data     := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
-    FindNodeWithText('Display of Fields').Data  := Pointer(TProjectSettings_FieldFrame.Create(Self));
+    FindNodeWithText('Display of Variables').Data  := Pointer(TProjectSettings_FieldFrame.Create(Self));
   end;
 end;
 

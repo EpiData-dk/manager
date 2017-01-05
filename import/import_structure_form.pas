@@ -387,7 +387,7 @@ begin
 
         FProjectList.ReportError(
           Fn + ': Importing data is only possible when the imported' +
-          'dataset has the same fields (name + type) as the defined keyfields!'
+          'dataset has the same variables (name + type) as the defined key variables!'
         );
       end;
   end;
@@ -403,7 +403,7 @@ begin
   if Assigned(SG.Objects[Idx, ARow]) then
     HintText :=
       'Importing data is only possible when the imported' + LineEnding +
-      'dataset has the same fields (name + type) as the defined keyfields!';
+      'dataset has the same variables (name + type) as the defined key variables!';
 end;
 
 procedure TImportStructureForm.DocListHook(Sender: TObject);
