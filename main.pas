@@ -199,6 +199,8 @@ type
     MenuItem39: TMenuItem;
     BetaPanel: TPanel;
     Label1: TLabel;
+    AdminReportAction: TAction;
+    MenuItem34: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -253,6 +255,7 @@ type
     procedure RemoveAdminActionUpdate(Sender: TObject);
     procedure RemoveAdminActionExecute(Sender: TObject);
     procedure ManageUserPasswordActionUpdate(Sender: TObject);
+    procedure AdminReportActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -334,7 +337,8 @@ uses
   valuelabel_import_data,  append_form, epitools_append,
   manager_globals, reports_form,
   epiv_checkversionform, export_form2,
-  admin_authenticator, admin_users_form;
+  admin_authenticator, admin_users_form,
+  report_admin;
 
 { TMainForm }
 
@@ -1176,6 +1180,11 @@ begin
     TAction(Sender).Enabled := (Authenticator.Admin.Users.Count > 0) and (Authenticator.IsAuthorized([earPassword]))
   else
     TAction(Sender).Enabled := true;
+end;
+
+procedure TMainForm.AdminReportActionExecute(Sender: TObject);
+begin
+  RunReport(TReportAdmin);
 end;
 
 procedure TMainForm.SetCaption;

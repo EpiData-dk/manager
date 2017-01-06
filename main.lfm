@@ -422,6 +422,9 @@ object MainForm: TMainForm
         object ProjectOverviewReportMenuItem: TMenuItem
           Action = ProjectReportAction
         end
+        object MenuItem34: TMenuItem
+          Action = AdminReportAction
+        end
         object QuestionListReportMenuItem: TMenuItem
           Action = QuestionListReportAction
         end
@@ -704,6 +707,11 @@ object MainForm: TMainForm
       Caption = 'Remove User/Group Administration'
       OnExecute = RemoveAdminActionExecute
       OnUpdate = RemoveAdminActionUpdate
+    end
+    object AdminReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Admin Overview'
+      OnExecute = AdminReportActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
