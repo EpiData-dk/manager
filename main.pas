@@ -338,7 +338,7 @@ uses
   manager_globals, reports_form,
   epiv_checkversionform, export_form2,
   admin_authenticator, admin_users_form,
-  report_admin;
+  report_admin, report_logoverview;
 
 { TMainForm }
 
@@ -1184,7 +1184,8 @@ end;
 
 procedure TMainForm.AdminReportActionExecute(Sender: TObject);
 begin
-  RunReport(TReportAdmin);
+  RunReport(TReportLogOverview);
+//  RunReport(TReportAdmin);
 end;
 
 procedure TMainForm.SetCaption;

@@ -205,7 +205,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="111">
+    <Units Count="112">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -854,6 +854,10 @@
         <Filename Value="reports/report_admin.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit110>
+      <Unit111>
+        <Filename Value="reports/report_logoverview.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit111>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -877,7 +881,7 @@
       </Debugging>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG1
+      <CustomOptions Value="-dEPI_DEBUG
 -dMEM_LEAK_FINDER1
 -dEPI_DEVELOPMENT1"/>
       <ExecuteBefore>
