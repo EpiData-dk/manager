@@ -66,7 +66,7 @@ begin
   end;
 
   RowCount :=
-   4 +                                    // Header + Lines numbers + Start date + Blocked count
+   3 +                                    // Header + Lines numbers + Start date + Blocked count
    Integer(High(TEpiLogEntry));           // Count of each log type
 
   if (BlockedCount > 0) then
@@ -74,13 +74,13 @@ begin
 
   Generator.TableHeader('Log Overview', 2, RowCount);
 
-  Generator.TableCell('Task', 0, 0);
-  Generator.TableCell('Content', 1, 0);
+  Generator.TableCell('Task',                      0, 0);
+  Generator.TableCell('Content',                   1, 0);
 
-  Generator.TableCell('Log Entries', 0, 1);
-  Generator.TableCell(IntToStr(Log.Size), 1, 1);
+  Generator.TableCell('Log Entries',               0, 1);
+  Generator.TableCell(IntToStr(Log.Size),          1, 1);
 
-  Generator.TableCell('Start Date', 0, 2);
+  Generator.TableCell('Start Date',                0, 2);
   Generator.TableCell(DateTimeToStr(Log.FTime[0]), 1, 2);
 
   i := 3;
@@ -88,21 +88,22 @@ begin
   begin
     if LogTypeEnum = ltNone then continue;
 
-    Generator.TableCell(EpiLogEntryText[LogTypeEnum], 0, i);
+    Generator.TableCell(EpiLogEntryText[LogTypeEnum],        0, i);
     Generator.TableCell(IntToStr(LogTypeCount[LogTypeEnum]), 1, i);
     Inc(i);
   end;
 
-  Generator.TableCell('Blocked Attempts', 0, i);
+  Generator.TableCell('Blocked Attempts',     0, i);
   Generator.TableCell(IntToStr(BlockedCount), 1, i);
 
   Generator.TableFooter('');
 
   Generator.Line('');
 
-  Generator.TableHeader('Blocked Login Attempts', 2, BlockedCount + 1);
+  Generator.TableHeader('Blocked Login Attempts', 3, BlockedCount + 1);
   Generator.TableCell('Blocked machine', 0, 0);
-  Generator.TableCell('Date / Time',     1, 0);
+  Generator.TableCell('Latest login',    1, 0);
+  Generator.TableCell('Date / Time',     2, 0);
 
   i := 1;
   for j := 0 to Log.Size -1 do
@@ -115,7 +116,10 @@ begin
     then
       begin
         Generator.TableCell(Log.FLogContent.AsString[j], 0, i);
-        Generator.TableCell(Log.FTime.AsString[j],       1, i);
+        if (j > 0) then
+          Generator.TableCell(Log.FUserNames.AsString[j-1], 1, i);
+
+        Generator.TableCell(DateTimeToStr(Log.FTime.AsDateTime[j]), 2, i);
 
         Inc(i);
       end;

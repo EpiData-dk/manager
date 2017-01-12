@@ -5,6 +5,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   Width = 897
   ClientHeight = 564
   ClientWidth = 897
+  DesignTimePPI = 93
   TabOrder = 0
   DesignLeft = 639
   DesignTop = 357
@@ -168,7 +169,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object StringToolButton: TToolButton
-        Tag = 12
+        Tag = 13
         Left = 126
         Hint = 'New String Variable'
         Top = 1
@@ -361,6 +362,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       object MemoToolButton: TToolButton
         Tag = 14
         Left = 146
+        Hint = 'New Memo Variable'
         Top = 1
         Caption = 'MemoToolButton'
         ImageIndex = 50
@@ -965,7 +967,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       OnClick = NewOtherFieldClick
     end
     object NewUpperCaseMenu: TMenuItem
-      Tag = 13
+      Tag = 12
       Caption = 'Uppercase string'
       Bitmap.Data = {
         36040000424D3604000000000000360000002800000010000000100000000100

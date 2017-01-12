@@ -201,6 +201,10 @@ type
     Label1: TLabel;
     AdminReportAction: TAction;
     MenuItem34: TMenuItem;
+    LogOverviewReportAction: TAction;
+    MenuItem38: TMenuItem;
+    MenuItem40: TMenuItem;
+    MenuItem41: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -256,6 +260,7 @@ type
     procedure RemoveAdminActionExecute(Sender: TObject);
     procedure ManageUserPasswordActionUpdate(Sender: TObject);
     procedure AdminReportActionExecute(Sender: TObject);
+    procedure LogOverviewReportActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -1184,8 +1189,12 @@ end;
 
 procedure TMainForm.AdminReportActionExecute(Sender: TObject);
 begin
+  RunReport(TReportAdmin);
+end;
+
+procedure TMainForm.LogOverviewReportActionExecute(Sender: TObject);
+begin
   RunReport(TReportLogOverview);
-//  RunReport(TReportAdmin);
 end;
 
 procedure TMainForm.SetCaption;
