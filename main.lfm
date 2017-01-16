@@ -148,6 +148,7 @@ object MainForm: TMainForm
     Color = clYellow
     ParentColor = False
     TabOrder = 2
+    Visible = False
     object Label1: TLabel
       AnchorSideLeft.Control = BetaPanel
       AnchorSideLeft.Side = asrCenter
