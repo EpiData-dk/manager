@@ -17,7 +17,7 @@
       <BuildNr Value="95"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable ProductVersion="" SpecialBuild="TRUNK"/>
+      <StringTable SpecialBuild="TRUNK"/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
@@ -881,7 +881,7 @@
       </Debugging>
     </Linking>
     <Other>
-      <CustomOptions Value="-dEPI_DEBUG
+      <CustomOptions Value="-dEPI_DEBUG1
 -dMEM_LEAK_FINDER1
 -dEPI_DEVELOPMENT1"/>
       <ExecuteBefore>

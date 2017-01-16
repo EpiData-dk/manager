@@ -116,12 +116,16 @@ begin
   result := false;
 
   if NameEdit.Modified then
-    if not FSections[0].ValidateRename(NameEdit.Text, false)
-    then
-      begin
-        ShowHintMsg('Name already exists or invalid identifier', NameEdit);
-        Exit;
-      end;
+    begin
+      if not FSections[0].ValidateRename(NameEdit.Text, false)
+      then
+        begin
+          ShowHintMsg('Name already exists or invalid identifier', NameEdit);
+          Exit;
+        end;
+      FSections[0].Name := NameEdit.Text;
+    end;
+
 
   if CaptionEdit.Modified then
     for i := Low(FSections) to High(FSections) do
