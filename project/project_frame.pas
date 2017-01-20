@@ -89,6 +89,9 @@ type
   private
     { Core Logger }
     FCoreLoggerForm: TCoreLogger;
+    procedure DocumentHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer);
     procedure ShowCoreLogger;
     procedure CreateCoreLogger;
   private
@@ -581,6 +584,26 @@ begin
     FCoreLoggerForm.Show;
 end;
 
+procedure TProjectFrame.DocumentHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+var
+  PData: PEpiIdCaseErrorRecord;
+begin
+  FCoreLoggerForm.DocumentHook(Sender, Initiator, EventGroup, EventType, Data);
+
+  if (EventGroup <> eegCustomBase) then exit;
+  if (TEpiCustomChangeEventType(EventType) <> ecceIdCaseOnLoad) then exit;
+
+  PData := PEpiIdCaseErrorRecord(Data);
+
+  PData^.NewName := InputBox('Naming conflict',
+                             'This is already an item named "' + PData^.CurrentName + '"' + LineEnding +
+                             'Please suggest a new name:',
+                             PData^.CurrentName
+  );
+end;
+
 procedure TProjectFrame.CreateCoreLogger;
 begin
   FCoreLoggerForm := TCoreLogger.Create(Self);
@@ -763,7 +786,8 @@ end;
 function TProjectFrame.DoCreateNewDocumentFile: TDocumentFile;
 begin
   FDocumentFile := TDocumentFile.Create;
-  FDocumentFile.OnDocumentChangeEvent := @FCoreLoggerForm.DocumentHook;
+  FDocumentFile.OnDocumentChangeEvent := @DocumentHook;
+ //@FCoreLoggerForm.DocumentHook;
   FDocumentFile.OnProgress            := @DocumentProgress;
   FDocumentFile.OnLoadError           := @LoadError;
   FDocumentFile.DataDirectory         := ManagerSettings.WorkingDirUTF8;
