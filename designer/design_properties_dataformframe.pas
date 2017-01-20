@@ -496,7 +496,8 @@ begin
 
     if (NameEdit.Text <> DataFile.Name) then
     begin
-      if not TEpiCustomList(DataFile.Owner).ValidateRename(NameEdit.Text, false) then
+//      if not TEpiCustomList(DataFile.Owner).ValidateRename(NameEdit.Text, false) then
+      if not TEpiCustomItem(DataFile).ValidateRename(NameEdit.Text, false) then
       begin
         ShowHintMsg('Name already exists or invalid identifier', NameEdit);
         Exit(false);

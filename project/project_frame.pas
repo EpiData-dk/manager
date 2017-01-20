@@ -597,6 +597,7 @@ begin
 
   PData := PEpiIdCaseErrorRecord(Data);
 
+  PData^.ReturnState := crsRename;
   PData^.NewName := InputBox('Naming conflict',
                              'This is already an item named "' + PData^.CurrentName + '"' + LineEnding +
                              'Please suggest a new name:',
