@@ -14,10 +14,10 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="4"/>
-      <BuildNr Value="95"/>
+      <BuildNr Value="96"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable SpecialBuild="TRUNK"/>
+      <StringTable ProductVersion="4.0.0.95"/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
