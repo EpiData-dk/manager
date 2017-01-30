@@ -6,11 +6,11 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, ExtCtrls, ComCtrls, ActnList, Controls,
-  Dialogs, epidocument, epidatafiles, epicustombase, epidatafilerelations, epirelates,
-  epiadmin, manager_messages, LMessages, Menus, StdCtrls, epiv_documentfile,
-  types, design_runtimedesigner, project_types, epiv_projecttreeview_frame,
-  manager_types, core_logger, project_statusbar, epiv_custom_statusbar,
-  admin_logviewer_frame;
+  Dialogs, epidocument, epidatafiles, epicustombase, epidatafilerelations,
+  epirelates, epiadmin, epidatafilestypes, manager_messages, LMessages, Menus,
+  StdCtrls, epiv_documentfile, types, design_runtimedesigner, project_types,
+  epiv_projecttreeview_frame, manager_types, core_logger, project_statusbar,
+  epiv_custom_statusbar, admin_logviewer_frame;
 
 type
 
@@ -589,6 +589,7 @@ procedure TProjectFrame.DocumentHook(const Sender: TEpiCustomBase;
   Data: Pointer);
 var
   PData: PEpiIdCaseErrorRecord;
+  S: String;
 begin
   FCoreLoggerForm.DocumentHook(Sender, Initiator, EventGroup, EventType, Data);
 
@@ -598,11 +599,16 @@ begin
   PData := PEpiIdCaseErrorRecord(Data);
 
   PData^.ReturnState := crsRename;
-  PData^.NewName := InputBox('Naming conflict',
-                             'This is already an item named "' + PData^.CurrentName + '"' + LineEnding +
-                             'Please suggest a new name:',
-                             PData^.CurrentName
-  );
+  S := PData^.CurrentName;
+
+  if InputQuery('Naming conflict',
+                'This is already an item named "' + PData^.CurrentName + '"' + LineEnding +
+                'Please suggest a new name:',
+                S)
+  then
+    PData^.NewName := S
+  else
+    PData^.ReturnState := crsCancel;
 end;
 
 procedure TProjectFrame.CreateCoreLogger;
