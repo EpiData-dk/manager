@@ -357,6 +357,10 @@ begin
   UpdateSettings;
   UpdateRecentFiles;
 
+  {$IFDEF EPI_BETA}
+  BetaPanel.Visible := true;
+  {$ENDIF}
+
   Application.QueueAsyncCall(@CheckForUpdates, 0);
 end;
 
@@ -1273,14 +1277,18 @@ begin
   AssignActionLinks;
   SetCaption;
 
+  {$IFDEF EPI_BETA}
   BetaPanel.Visible := true;
+  {$ENDIF}
 end;
 
 procedure TMainForm.NewProjectFrame;
 var
   TabSheet: TTabSheet;
 begin
+  {$IFDEF EPI_BETA}
   BetaPanel.Visible := false;
+  {$ENDIF}
 
   TabSheet := TTabSheet.Create(PageControl1);
   TabSheet.PageControl := PageControl1;

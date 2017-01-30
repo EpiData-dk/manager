@@ -8,7 +8,6 @@ object MainForm: TMainForm
   Caption = 'MainForm'
   ClientHeight = 741
   ClientWidth = 947
-  DesignTimePPI = 93
   Menu = MainMenu1
   OnActivate = FormActivate
   OnCloseQuery = FormCloseQuery
