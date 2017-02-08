@@ -1,7 +1,7 @@
 object DefineGroupsForm: TDefineGroupsForm
-  Left = 766
+  Left = 2213
   Height = 502
-  Top = 364
+  Top = 170
   Width = 898
   Caption = 'Define Groups'
   ClientHeight = 502
@@ -9,7 +9,7 @@ object DefineGroupsForm: TDefineGroupsForm
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poDefault
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
   object Panel2: TPanel
     Left = 0
     Height = 452
@@ -92,10 +92,10 @@ object DefineGroupsForm: TDefineGroupsForm
     TabOrder = 3
     Visible = False
     object BitBtn1: TBitBtn
-      Left = 809
-      Height = 34
+      Left = 812
+      Height = 30
       Top = 8
-      Width = 73
+      Width = 70
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True
@@ -127,10 +127,10 @@ object DefineGroupsForm: TDefineGroupsForm
       object Label2: TLabel
         AnchorSideLeft.Control = Panel7
         AnchorSideLeft.Side = asrCenter
-        Left = 163
+        Left = 162
         Height = 19
         Top = 6
-        Width = 136
+        Width = 138
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         BorderSpacing.Bottom = 5

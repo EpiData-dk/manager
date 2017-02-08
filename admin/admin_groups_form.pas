@@ -369,7 +369,8 @@ var
 begin
   G := GroupRelationFromNode(Node).Group;
 
-  if (G = Admin.Admins) or
+  if //(G.ProtectedItem) or
+     (G = Admin.Admins) or
      (not Authenticator.AuthedUserInGroup(G, true))
   then
     begin
