@@ -313,9 +313,11 @@ begin
     CanSelect := StructureGrid.Cells[IncludeCol.Index + 1, aRow] = IncludeCol.ValueChecked;
 
 
-  if (aCol = FValueFieldColumn.Index + 1) or
-     (aCol = FLabelFieldColumn.Index + 1) or
-     (aCol = FMissingFieldColumn.Index + 1)
+  if ((aCol = FValueFieldColumn.Index + 1) or
+      (aCol = FLabelFieldColumn.Index + 1) or
+      (aCol = FMissingFieldColumn.Index + 1))
+     and
+      (CanSelect)
   then
   begin
     if ((FEditCol <> aCol) or (FEditRow <> aRow)) and
@@ -420,7 +422,9 @@ begin
   if FDocFile = AValue then Exit;
   FDocFile := AValue;
 
-  UpdateCaption;
+  ValueLabelSets := FDocFile.Document.ValueLabelSets;
+
+//  UpdateCaption;
 end;
 
 procedure TValueLabelDataImport.LoadGlyphs;
