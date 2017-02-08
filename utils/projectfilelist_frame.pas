@@ -46,6 +46,7 @@ type
     FOnSelectionChanged: TNotifyEvent;
     FOnDocumentMoved: TProjectFileListGridMoveEvent;
     FRequiredRights: TEpiManagerRights;
+    FOnError: TGetStrProc;
     procedure  AddDocumentToGrid(Const FileName: string; Const Doc: TEpiDocument);
     function   GetSelectedDocfileList: TEpiDocumentFileList;
     function   GetSelectedList: TStringList;
@@ -83,6 +84,7 @@ type
     property    OnAfterAddToGrid: TProjectFileListGridEvent read FOnAfterAddToGrid write FOnAfterAddToGrid;
     property    OnControlItemPosition: TEpiControlItemPosition read FOnControlItemPosition write FOnControlItemPosition;
     property    OnDocumentMoved: TProjectFileListGridMoveEvent read FOnDocumentMoved write FOnDocumentMoved;
+    property    OnError: TGetStrProc read FOnError write FOnError;
     property    SelectedList: TStringList read GetSelectedList;
     property    SelectedDocfileList: TEpiDocumentFileList read GetSelectedDocfileList;
     property    DocList: TStringList read FDocList;
@@ -367,10 +369,8 @@ end;
 
 procedure TProjectFileListFrame.DoReportError(const Msg: string);
 begin
-{  if not ErrorListBox.Visible then
-    ErrorListBox.Visible := true;
-
-  ErrorListBox.Items.Add(Msg);    }
+  if Assigned(OnError) then
+    OnError(Msg);
 end;
 
 procedure TProjectFileListFrame.SetOnAfterImportFile(

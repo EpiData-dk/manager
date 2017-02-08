@@ -47,6 +47,8 @@ type
     FImportData: boolean;
     FOldCheckBoxToggle: TToggledCheckboxEvent;
     FOldColRowMoved: TGridOperationEvent;
+    procedure ProjectListError(const S: string);
+    procedure AsyncShowHint(Data: PtrInt);
   private
     { private declarations }
     // The currently loaded datafile from projectfilelist_frame
@@ -158,6 +160,54 @@ begin
 
   if Assigned(Grid.Objects[aCol, aRow]) then
     Grid.Canvas.Brush.Color := clYellow;
+end;
+
+type
+  ShowHintRec = record
+    Ptxt: PString;
+    SG: TWinControl;
+  end;
+  PShowHintRec = ^ShowHintRec;
+
+procedure TImportStructureForm.ProjectListError(const S: string);
+var
+  hintrec: PShowHintRec;
+begin
+  hintrec := PShowHintRec(New(PShowHintRec));
+  hintrec^.Ptxt := NewStr(S);
+  hintrec^.SG   := FProjectList.StructureGrid;
+  Application.QueueAsyncCall(@AsyncShowHint, PtrInt(hintrec));
+end;
+
+procedure TImportStructureForm.AsyncShowHint(Data: PtrInt);
+var
+  HW: THintWindow;
+  R: TRect;
+  P: TPoint;
+  hintrec: PShowHintRec;
+begin
+  if (not (wcfHandleVisible in FWinControlFlags)) then
+  begin
+    // Make this check, because this is the only way to catch the situation where
+    // this is an error in files loaded before the form is properly shown.
+    Application.QueueAsyncCall(@AsyncShowHint, Data);
+    Exit;
+  end;
+
+  hintrec := PShowHintRec(Data);
+
+  HW := THintWindow.Create(self);
+  HW.AutoHide := true;
+  HW.HideInterval := 3000;
+  R := HW.CalcHintRect(0, hintrec^.Ptxt^, nil);
+  P.X := (hintrec^.SG.Width div 2) - (R.Right div 2);
+  P.Y := (hintrec^.SG.Height - R.Bottom);
+  P := hintrec^.SG.ClientToScreen(P);
+  OffsetRect(R, P.X, P.Y);
+  HW.ActivateHint(R, hintrec^.Ptxt^);
+
+  DisposeStr(hintrec^.Ptxt);
+  Dispose(hintrec);
 end;
 
 procedure TImportStructureForm.ImportHook(const Sender,
@@ -664,6 +714,7 @@ begin
     OnAfterImportFile  := @AfterLoad;
     OnAfterAddToGrid := @AfterAddToGrid;
     OnControlItemPosition := @ControlItemPosition;
+    OnError := @ProjectListError;
 
     StructureGrid.Options  := StructureGrid.Options + [goCellHints];
     StructureGrid.ShowHint := true;
