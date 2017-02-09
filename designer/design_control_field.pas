@@ -403,10 +403,11 @@ begin
   else
     BorderStyle := bsSingle;
 
-  if FField.EntryMode = emMustEnter then
-    Color := clRed
-  else
-    Color := clDefault;
+  case FField.EntryMode of
+    emDefault:   Color := clDefault;
+    emMustEnter: Color := clRed;
+    emNoEnter:   Color := clInactiveBorder;
+  end;
 end;
 
 procedure TDesignField.SetParent(NewParent: TWinControl);
