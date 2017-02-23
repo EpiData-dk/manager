@@ -191,7 +191,8 @@ begin
        ParseLine(P, IniFileShort, IniFileName)
     then
     begin
-      IniFileName := ExpandFileNameUTF8(IniFileName);
+      if IniFileName <> '' then
+        IniFileName := ExpandFileNameUTF8(IniFileName);
       Continue;
     end;
 
