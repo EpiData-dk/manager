@@ -1220,38 +1220,35 @@ begin
   if (Initiator = FValueLabels) and
      (EventGroup = eegCustomBase)
   then
-  case TEpiCustomChangeEventType(EventType) of
-    ecceDestroy: ;
-    ecceUpdate: ;
-    ecceName: ;
-    ecceAddItem:
-      begin
-        VL := TEpiValueLabelSet(Data);
-
-        if VL.LabelType = Field.FieldType then
-          ValueLabelComboBox.Items.AddObject(VL.Name, VL);
-      end;
-    ecceDelItem:
-      begin
-        VL := TEpiValueLabelSet(Data);
-
-        ValueLabelComboBox.Items.BeginUpdate;
-        Idx := ValueLabelComboBox.Items.IndexOfObject(VL);
-        if Idx > -1 then
+    case TEpiCustomChangeEventType(EventType) of
+      ecceDestroy: ;
+      ecceUpdate: ;
+      ecceName: ;
+      ecceAddItem:
         begin
-          if Idx = ValueLabelComboBox.ItemIndex then
-            ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FNoneObject);
-          ValueLabelComboBox.Items.Delete(Idx);
-
-          DoWarning('Warning: Valuelabels changed!', ValueLabelComboBox);
+          UpdateValueLabels;
         end;
-        ValueLabelComboBox.Items.EndUpdate;
-      end;
-    ecceSetItem: ;
-    ecceSetTop: ;
-    ecceSetLeft: ;
-    ecceText: ;
-  end;
+      ecceDelItem:
+        begin
+          VL := TEpiValueLabelSet(Data);
+
+          ValueLabelComboBox.Items.BeginUpdate;
+          Idx := ValueLabelComboBox.Items.IndexOfObject(VL);
+          if Idx > -1 then
+          begin
+            if Idx = ValueLabelComboBox.ItemIndex then
+              ValueLabelComboBox.ItemIndex := ValueLabelComboBox.Items.IndexOfObject(FNoneObject);
+            ValueLabelComboBox.Items.Delete(Idx);
+
+            DoWarning('Warning: Valuelabels changed!', ValueLabelComboBox);
+          end;
+          ValueLabelComboBox.Items.EndUpdate;
+        end;
+      ecceSetItem: ;
+      ecceSetTop: ;
+      ecceSetLeft: ;
+      ecceText: ;
+    end;
 
   if (Initiator is TEpiValueLabelSet) then
   begin
