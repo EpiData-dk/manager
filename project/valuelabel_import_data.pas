@@ -36,6 +36,7 @@ type
     procedure SelectCell(Sender: TObject; aCol, aRow: Integer;
       var CanSelect: Boolean);
   private
+    FOkBtnEnabled: boolean;
     FSuccesImportList: TStringList;
     FImportCount: Integer;
     FProjectFileListFrame: TProjectFileListFrame;
@@ -46,8 +47,16 @@ type
       CheckType: Byte  // 0=none, 1=Index, 2=Non-missing
       ): TStrings;
     procedure UpdateCaption;
+    procedure UpdateOkBtn;
+    procedure UpdateOkBtnCallBack(Sender: TObject; Document: TEpiDocument;
+      const Filename: string; const RowNo: Integer);
+    procedure DocumentIncludedChange(Sender: TObject; Document: TEpiDocument;
+      const Filename: string; const RowNo: Integer);
   private
     { Filelist frame - grid}
+    type
+      TFieldSelectionType = (fstNone, fstValid, fstInvalid);
+  private
     FDocFile: TEpiDocumentFile;
     FEditCol: Integer;
     FEditRow: Integer;
@@ -56,6 +65,8 @@ type
     FLabelFieldColumn: TGridColumn;
     FMissingFieldColumn: TGridColumn;
     FValueLabelSets: TEpiValueLabelSets;
+    function RowInclude(Arow: Integer): boolean;
+    function FieldSelectedType(ACol, ARow: Integer): TFieldSelectionType;
     procedure AsyncEditorMode(Data: PtrInt);
     procedure ProjectFileListCallBack(Sender: TObject; Document: TEpiDocument;
       const Filename: string; const RowNo: Integer);
@@ -199,10 +210,16 @@ begin
   HintText := '';
 
   if ACol = (FValueFieldColumn.Index + 1) then
-    HintText := 'Select variable for category content';
+    if (FieldSelectedType(ACol, ARow) = fstInvalid) then
+      HintText := 'Selected variable is not allowed. Please select a new variable.'
+    else
+      HintText := 'Select variable for category content';
 
   if ACol = (FLabelFieldColumn.Index + 1) then
-    HintText := 'Select variable containing descriptive label';
+    if (FieldSelectedType(ACol, ARow) = fstInvalid) then
+      HintText := 'Selected variable is not allowed. Please select a new variable.'
+    else
+      HintText := 'Select variable containing descriptive label';
 
   if ACol = (FMissingFieldColumn.Index + 1) then
     HintText := 'Select variable indicating missing (value is 1, "Y", "TRUE")';
@@ -269,6 +286,7 @@ begin
   begin
     FEditCol := -1;
     FEditRow := -1;
+    UpdateOkBtn;
   end;
 end;
 
@@ -287,10 +305,12 @@ begin
   finally
     Screen.Cursor := crDefault;
     Application.ProcessMessages;
-    FSuccesImportList.Insert(1, 'Successfully added ' + IntToStr(FImportCount) + ' Value Label Sets');
 
     if FImportCount > 0 then
+    begin
+      FSuccesImportList.Insert(1, 'Successfully added ' + IntToStr(FImportCount) + ' Value Label Sets');
       ShowMessage(FSuccesImportList.Text);
+    end;
   end;
 end;
 
@@ -454,19 +474,27 @@ begin
      (aCol = (FValueFieldColumn.Index + 1))
   then
   begin
-    if (not Assigned(TGridObject(SG.Objects[aCol, aRow]).SelectedField)) and
-       (SG.Cells[FProjectFileListFrame.IncludeCol.Index + 1, aRow] = FProjectFileListFrame.IncludeCol.ValueChecked)
-    then
-      FProjectFileListFrame.StructureGrid.Canvas.Brush.Color := clBtnShadow;
+    case FieldSelectedType(aCol, aRow) of
+      fstNone:
+        if RowInclude(aRow) then
+          SG.Canvas.Brush.Color := clBtnShadow;
+
+      fstValid:
+        ;
+
+      fstInvalid:
+        if RowInclude(aRow) then
+          SG.Canvas.Brush.Color := clRed;
+    end;
   end;
 
   if (aCol = (FMissingFieldColumn.Index + 1))
   then
   begin
-    if (not Assigned(TGridObject(SG.Objects[aCol, aRow]).SelectedField)) and
-       (SG.Cells[FProjectFileListFrame.IncludeCol.Index + 1, aRow] = FProjectFileListFrame.IncludeCol.ValueChecked)
+    if RowInclude(aRow) and
+       (FieldSelectedType(aCol, aRow) = fstNone)
     then
-      FProjectFileListFrame.StructureGrid.Canvas.Brush.Color := clBtnFace;
+      SG.Canvas.Brush.Color := clBtnFace;
   end;
 end;
 
@@ -624,6 +652,70 @@ begin
   Caption := S;
 end;
 
+procedure TValueLabelDataImport.UpdateOkBtn;
+begin
+  FOkBtnEnabled := true;
+  FProjectFileListFrame.ForEachIncluded(@UpdateOkBtnCallBack);
+  OkBtn.Enabled := FOkBtnEnabled;
+end;
+
+procedure TValueLabelDataImport.UpdateOkBtnCallBack(Sender: TObject;
+  Document: TEpiDocument; const Filename: string; const RowNo: Integer);
+var
+  ValIdx, LabIdx: Integer;
+  SG: TStringGrid;
+  FVal, FLab: TEpiField;
+begin
+  if (not FOkBtnEnabled) then
+    Exit;
+
+  ValIdx := FValueFieldColumn.Index + 1;
+  LabIdx := FLabelFieldColumn.Index + 1;
+
+  SG := FProjectFileListFrame.StructureGrid;
+  FVal := TEpiField(TGridObject(SG.Objects[ValIdx, RowNo]).SelectedField);
+  FLab := TEpiField(TGridObject(SG.Objects[LabIdx, RowNo]).SelectedField);
+
+  FOkBtnEnabled := Assigned(FVal) and Assigned(FLab);
+end;
+
+procedure TValueLabelDataImport.DocumentIncludedChange(Sender: TObject;
+  Document: TEpiDocument; const Filename: string; const RowNo: Integer);
+begin
+  UpdateOkBtn;
+end;
+
+function TValueLabelDataImport.RowInclude(Arow: Integer): boolean;
+begin
+  result := (FProjectFileListFrame.StructureGrid.Cells[FProjectFileListFrame.IncludeCol.Index + 1, aRow] = FProjectFileListFrame.IncludeCol.ValueChecked);
+end;
+
+function TValueLabelDataImport.FieldSelectedType(ACol, ARow: Integer
+  ): TFieldSelectionType;
+var
+  SG: TStringGrid;
+  S: String;
+  F: TEpiField;
+begin
+  result := fstNone;
+
+  SG := FProjectFileListFrame.StructureGrid;
+  S  := SG.Cells[ACol, ARow];
+
+  if (ARow > 0) and
+     ((ACol = FValueFieldColumn.Index + 1) or
+      (ACol = FLabelFieldColumn.Index + 1)
+     )
+  then
+    F  := TEpiField(TGridObject(SG.Objects[ACol, ARow]).SelectedField);
+
+  if (S <> '') then
+    if Assigned(F) then
+      result := fstValid
+    else
+      result := fstInvalid;
+end;
+
 constructor TValueLabelDataImport.Create(TheOwner: TComponent);
 var
   SG: TStringGrid;
@@ -636,6 +728,7 @@ begin
   FProjectFileListFrame.Parent := Self;
   FProjectFileListFrame.OnAfterImportFile := @AfterFileImport;
   FProjectFileListFrame.OnAfterAddToGrid := @AfterAddToGrid;
+  FProjectFileListFrame.OnDocumentIncludedChange := @DocumentIncludedChange;
 
   SG := FProjectFileListFrame.StructureGrid;
   SG.OnSelectEditor := @SelectEditor;
