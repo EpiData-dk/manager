@@ -35,6 +35,7 @@ type
     CalcFieldLabel: TLabel;
     CalcSheet: TTabSheet;
     FieldTypeImage: TImage;
+    LegalValuesGrpBox: TGroupBox;
     ZeroFilledChkBox: TCheckBox;
     GotoDataformLabel: TLabel;
     RelateValueBevel: TBevel;
@@ -47,7 +48,6 @@ type
     RelateTopBevel: TBevel;
     UseRelatesCombo: TComboBox;
     UseRelatesLabel: TLabel;
-    ValueLabelAsNoteChkBox: TCheckBox;
     CombineDateGrpBox: TGroupBox;
     CombineDateRadio: TRadioButton;
     CombineStringGrpBox: TGroupBox;
@@ -1388,11 +1388,14 @@ begin
   ValueLabelComboBox.Enabled      := (IsAuthorized(earDefineProject));
   ValueLabelGrpBox.Visible        := FieldsMustHaveFieldTypes(ValueLabelFieldTypes) and FieldsHaveSameFieldType;
 
-  UpdateModeRadioGrp.Enabled      := (IsAuthorized(earDefineProject));
-  UpdateModeRadioGrp.Visible      := FieldsMustHaveFieldTypes(AutoUpdateFieldTypes);
-
   RangesGrpBox.Enabled            := (IsAuthorized(earDefineProject));
   RangesGrpBox.Visible            := FieldsMustHaveFieldTypes(RangeFieldTypes) and FieldsHaveSameFieldType;
+
+  LegalValuesGrpBox.Enabled       := (IsAuthorized(earDefineProject));
+  LegalValuesGrpBox.Visible       := ValueLabelGrpBox.Visible or RangesGrpBox.Visible;
+
+  UpdateModeRadioGrp.Enabled      := (IsAuthorized(earDefineProject));
+  UpdateModeRadioGrp.Visible      := FieldsMustHaveFieldTypes(AutoUpdateFieldTypes);
 
   // - extended
   ExtendedSheet.TabVisible        := not FieldsMustHaveFieldTypes(AutoFieldTypes);
@@ -1578,11 +1581,6 @@ begin
   ShowValueLabelChkBox.Checked := Field.ShowValueLabel;
   for i := 1 to FieldCount - 1 do
     if ClearOrLeaveChkBox(ShowValueLabelChkBox, Fields[i].ShowValueLabel)
-    then break;
-
-  ValueLabelAsNoteChkBox.Checked := Field.ShowValueLabelNotes;
-  for i := 1 to FieldCount - 1 do
-    if ClearOrLeaveChkBox(ValueLabelAsNoteChkBox, Fields[i].ShowValueLabelNotes)
     then break;
 
   ForcePickListChkBox.Checked := Field.ForcePickList;
@@ -2070,11 +2068,6 @@ begin
   if ShowValueLabelChkBox.State <> cbGrayed then
     for i := 0 to FieldCount - 1 do
       Fields[i].ShowValueLabel := ShowValueLabelChkBox.Checked;
-
-  // Show valuelabel as notes
-  if ValueLabelAsNoteChkBox.State <> cbGrayed then
-    for i := 0 to FieldCount - 1 do
-      Fields[i].ShowValueLabelNotes := ValueLabelAsNoteChkBox.Checked;
 
   // Forcepicklist
   if ForcePickListChkBox.State <> cbGrayed then

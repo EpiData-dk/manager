@@ -1112,10 +1112,6 @@ begin
           for DetailField in DetailFields do
             DetailField.ShowValueLabel := MasterField.ShowValueLabel;
 
-        efceShowValueLabelNotes:
-          for DetailField in DetailFields do
-            DetailField.ShowValueLabelNotes := MasterField.ShowValueLabelNotes;
-
         efceRepeatValue:
           Exit;  // Ignore
 
