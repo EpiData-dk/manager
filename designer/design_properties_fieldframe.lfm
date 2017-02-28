@@ -178,13 +178,13 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
       end
       object UpdateModeRadioGrp: TRadioGroup
         AnchorSideLeft.Control = BasicSheet
-        AnchorSideTop.Control = LegalValuesGrpBox
+        AnchorSideTop.Control = EntryRadioGroup
         AnchorSideTop.Side = asrBottom
         AnchorSideRight.Control = BasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 76
-        Top = 360
+        Top = 456
         Width = 534
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
@@ -379,20 +379,16 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           end
         end
       end
-    end
-    object ExtendedSheet: TTabSheet
-      Caption = 'Extended'
-      ClientHeight = 567
-      ClientWidth = 554
       object EntryRadioGroup: TRadioGroup
-        AnchorSideLeft.Control = ExtendedSheet
-        AnchorSideTop.Control = ExtendedSheet
-        AnchorSideRight.Control = ExtendedSheet
+        AnchorSideLeft.Control = BasicSheet
+        AnchorSideTop.Control = LegalValuesGrpBox
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = BasicSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 86
-        Top = 10
-        Width = 475
+        Top = 360
+        Width = 534
         Anchors = [akTop, akLeft, akRight]
         AutoFill = True
         BorderSpacing.Left = 10
@@ -408,14 +404,14 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
         ClientHeight = 69
-        ClientWidth = 471
-        TabOrder = 0
+        ClientWidth = 530
+        TabOrder = 6
         object ConfirmEntryChkBox: TCheckBox
           AnchorSideLeft.Control = ExtendedSheet
           AnchorSideTop.Control = EntryRadioGroup
           AnchorSideRight.Control = EntryRadioGroup
           AnchorSideRight.Side = asrBottom
-          Left = 335
+          Left = 394
           Height = 22
           Top = 10
           Width = 130
@@ -426,24 +422,28 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           TabOrder = 0
         end
       end
+    end
+    object ExtendedSheet: TTabSheet
+      Caption = 'Extended'
+      ClientHeight = 567
+      ClientWidth = 554
       object AutoValuesGrpBox: TGroupBox
         AnchorSideLeft.Control = ExtendedSheet
-        AnchorSideTop.Control = EntryRadioGroup
-        AnchorSideTop.Side = asrBottom
+        AnchorSideTop.Control = ExtendedSheet
         AnchorSideRight.Control = ExtendedSheet
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 62
-        Top = 106
-        Width = 475
+        Top = 10
+        Width = 534
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Automatic Values:'
         ClientHeight = 45
-        ClientWidth = 471
-        TabOrder = 1
+        ClientWidth = 530
+        TabOrder = 0
         object RepeatValueChkBox: TCheckBox
           AnchorSideLeft.Control = AutoValuesGrpBox
           AnchorSideTop.Control = AutoValuesGrpBox
@@ -484,7 +484,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 251
           Height = 25
           Top = 10
-          Width = 210
+          Width = 269
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 7
@@ -500,8 +500,8 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 132
-        Top = 178
-        Width = 475
+        Top = 82
+        Width = 534
         Anchors = [akTop, akLeft, akRight]
         AutoSize = True
         BorderSpacing.Left = 10
@@ -510,8 +510,8 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         BorderSpacing.InnerBorder = 5
         Caption = 'Valuelabel Setting:'
         ClientHeight = 115
-        ClientWidth = 471
-        TabOrder = 2
+        ClientWidth = 530
+        TabOrder = 1
         object ValueLabelWriteToLabel: TLabel
           AnchorSideLeft.Control = ValueLabelSettingGrpBox
           AnchorSideTop.Control = ForcePickListChkBox
@@ -546,7 +546,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 10
           Height = 29
           Top = 76
-          Width = 451
+          Width = 510
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 10
           BorderSpacing.Top = 2
@@ -579,16 +579,16 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideRight.Side = asrBottom
         Left = 10
         Height = 62
-        Top = 320
-        Width = 475
+        Top = 224
+        Width = 534
         Anchors = [akTop, akLeft, akRight]
         BorderSpacing.Left = 10
         BorderSpacing.Top = 10
         BorderSpacing.Right = 10
         Caption = 'Comparison:'
         ClientHeight = 45
-        ClientWidth = 471
-        TabOrder = 3
+        ClientWidth = 530
+        TabOrder = 2
         object Label25: TLabel
           AnchorSideLeft.Control = CompareGroupBox
           AnchorSideTop.Control = CompareGroupBox
@@ -638,7 +638,7 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
           Left = 201
           Height = 29
           Top = 8
-          Width = 265
+          Width = 324
           Anchors = [akTop, akLeft, akRight]
           BorderSpacing.Left = 2
           BorderSpacing.Right = 5
@@ -653,12 +653,12 @@ object FieldPropertiesFrame: TFieldPropertiesFrame
         AnchorSideTop.Side = asrBottom
         Left = 10
         Height = 22
-        Top = 387
+        Top = 291
         Width = 130
         AllowGrayed = True
         BorderSpacing.Top = 5
         Caption = 'Add leading zero''s'
-        TabOrder = 4
+        TabOrder = 3
       end
     end
     object JumpSheet: TTabSheet
