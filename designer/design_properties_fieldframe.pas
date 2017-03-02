@@ -622,8 +622,8 @@ begin
     begin
       AddObject('Leave as is', TObject(jrLeaveAsIs));
       AddObject('System missing (.)', TObject(jrSystemMissing));
-      AddObject('Max defined missingvalue', TObject(jrMaxMissing));
-      AddObject('Second max defined missing value', TObject(jr2ndMissing));
+      AddObject('Last defined missingvalue', TObject(jrMaxMissing));
+      AddObject('Second last defined missingvalue', TObject(jr2ndMissing));
     end;
     if (FJumpComponentsList.Count > 0) then
       ItemIndex := TComboBox(PJumpComponents(FJumpComponentsList[FJumpComponentsList.Count - 1])^.ResetCombo).ItemIndex
