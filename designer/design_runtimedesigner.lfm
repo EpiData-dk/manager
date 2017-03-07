@@ -48,7 +48,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 352
-      Width = 38
+      Width = 43
       Caption = 'Label1'
       ParentColor = False
     end
@@ -56,7 +56,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 393
-      Width = 38
+      Width = 43
       Caption = 'Label2'
       ParentColor = False
     end
@@ -64,7 +64,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 439
-      Width = 38
+      Width = 43
       Caption = 'Label3'
       ParentColor = False
     end
@@ -72,7 +72,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 481
-      Width = 38
+      Width = 43
       Caption = 'Label4'
       ParentColor = False
     end
@@ -80,7 +80,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 31
       Height = 15
       Top = 514
-      Width = 38
+      Width = 43
       Caption = 'Label5'
       ParentColor = False
     end
@@ -88,7 +88,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 33
       Height = 15
       Top = 545
-      Width = 38
+      Width = 43
       Caption = 'Label6'
       ParentColor = False
     end

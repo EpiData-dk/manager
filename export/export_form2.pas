@@ -612,6 +612,7 @@ begin
     ShowHint           := True;
     ShowProject        := False;
     ShowRecordCount    := True;
+    ShowProtected      := True;
 
     OnTreeNodeSelected := @ProjectTreeSelected;
     OnTreeNodeSelecting := @ProjectTreeSelecting;

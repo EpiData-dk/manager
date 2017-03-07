@@ -2410,17 +2410,15 @@ begin
       if Ctrl is TDesignSection then
         EpiCtrl := DataFile.NewSection;
 
-//      if Ctrl is TDesignMemo then
-//        EpiCtrl := DataFile.NewSection;
-
-
       ApplyCommonCtrlSetting(Ctrl, EpiCtrl);
       FCreatingControl := false;
 
       MainForm.EndUpdatingForm;
     end;
 
-  if FDesignPanel.Surface.Count = 0 then
+  if (FDesignPanel.Surface.Count = 0) or
+     (Relation.ProtectedItem)
+  then
     Selection := DesignPanelAsJvObjectArray
   else
     Selection := FDesignPanel.Surface.Selected;
@@ -2813,7 +2811,7 @@ end;
 
 procedure TRuntimeDesignFrame.DataformPropertiesActionExecute(Sender: TObject);
 begin
-  FDesignPanel.Surface.Select(FDesignPanel);
+//  FDesignPanel.Surface.Select(FDesignPanel);
   SelectionChange(self);
   ShowPropertiesForm(false);
 end;
@@ -2823,7 +2821,8 @@ var
   F: TKeyFieldsForm;
 begin
   F := TKeyFieldsForm.Create(Self, Relation);
-  F.ReadOnly := not Authenticator.IsAuthorized([earDefineProject]);
+  F.ReadOnly := (not Authenticator.IsAuthorized([earDefineProject])) or
+                (Relation.ProtectedItem);
   F.ShowModal;
   F.Free;
 

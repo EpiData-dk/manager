@@ -788,8 +788,9 @@ begin
     else
       Label1.Caption := 'No auth';
 
+    if EpiDocument.Relations.Count > 0 then
+      FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
 
-    FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
     EpiDocument.Modified := false;
     Result := true;
 

@@ -505,6 +505,12 @@ begin
     if (not Assigned(DF)) then
       Exit;
 
+    if (DF.Document.DataFiles.Count = 0) then
+    begin
+      ShowMessage('No dataforms to export!');
+      Exit;
+    end;
+
     F := TExportForm2.Create(Self);
     F.DocumentFile := DF;
     if F.ShowModal <> mrOK then exit;
@@ -1112,8 +1118,15 @@ begin
 end;
 
 procedure TMainForm.ExportActionUpdate(Sender: TObject);
+var
+  ActionEnabled: Boolean;
 begin
-  TAction(Sender).Enabled := Authenticator.IsAuthorized([earExport]);
+  ActionEnabled := Authenticator.IsAuthorized([earExport]);
+
+  if Assigned(FActiveFrame) then
+    ActionEnabled := ActionEnabled and (FActiveFrame.EpiDocument.DataFiles.Count > 0);
+
+  TAction(Sender).Enabled := ActionEnabled;
 end;
 
 procedure TMainForm.ReportsAuthActionUpdate(Sender: TObject);
