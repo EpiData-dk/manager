@@ -5,20 +5,19 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
   Width = 897
   ClientHeight = 564
   ClientWidth = 897
-  DesignTimePPI = 93
   TabOrder = 0
-  DesignLeft = 639
-  DesignTop = 357
+  DesignLeft = 661
+  DesignTop = 469
   object Panel1: TPanel
     Left = 632
-    Height = 542
-    Top = 22
+    Height = 538
+    Top = 26
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 540
+    ClientHeight = 536
     ClientWidth = 263
     ParentColor = False
     TabOrder = 1
@@ -49,7 +48,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 352
-      Width = 43
+      Width = 38
       Caption = 'Label1'
       ParentColor = False
     end
@@ -57,7 +56,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 393
-      Width = 43
+      Width = 38
       Caption = 'Label2'
       ParentColor = False
     end
@@ -65,7 +64,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 439
-      Width = 43
+      Width = 38
       Caption = 'Label3'
       ParentColor = False
     end
@@ -73,7 +72,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 32
       Height = 15
       Top = 481
-      Width = 43
+      Width = 38
       Caption = 'Label4'
       ParentColor = False
     end
@@ -81,7 +80,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 31
       Height = 15
       Top = 514
-      Width = 43
+      Width = 38
       Caption = 'Label5'
       ParentColor = False
     end
@@ -89,35 +88,35 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Left = 33
       Height = 15
       Top = 545
-      Width = 43
+      Width = 38
       Caption = 'Label6'
       ParentColor = False
     end
   end
   object Splitter1: TSplitter
     Left = 627
-    Height = 542
-    Top = 22
+    Height = 538
+    Top = 26
     Width = 5
     Align = alRight
     ResizeAnchor = akRight
   end
   object ToolBarPanel: TPanel
     Left = 0
-    Height = 22
+    Height = 26
     Top = 0
     Width = 897
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 22
+    ClientHeight = 26
     ClientWidth = 897
     TabOrder = 0
     object DesignerToolBar: TToolBar
       Left = 0
       Height = 22
       Top = 0
-      Width = 897
+      Width = 893
       Align = alClient
       AutoSize = True
       ButtonHeight = 20
@@ -130,7 +129,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       TabOrder = 0
       Transparent = True
       object SelectorToolButton: TToolButton
-        Left = 61
+        Left = 51
         Hint = 'Point and select'
         Top = 1
         Caption = 'SelectorToolButton'
@@ -139,16 +138,15 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         OnClick = SelecterBtnClick
       end
       object Divider1: TToolButton
-        Left = 81
+        Left = 71
         Height = 20
         Top = 1
-        Width = 5
         Caption = 'Divider1'
         Style = tbsDivider
       end
       object IntToolButton: TToolButton
         Tag = 1
-        Left = 86
+        Left = 76
         Hint = 'New Integer Variable'
         Top = 1
         Caption = 'New Integer Variable'
@@ -159,7 +157,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object FloatToolButton: TToolButton
         Tag = 3
-        Left = 106
+        Left = 96
         Hint = 'New Float Variable'
         Top = 1
         Caption = 'New Float Variable'
@@ -170,7 +168,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object StringToolButton: TToolButton
         Tag = 13
-        Left = 126
+        Left = 116
         Hint = 'New String Variable'
         Top = 1
         Caption = 'New String Variable'
@@ -181,7 +179,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object DateToolButton: TToolButton
         Tag = 4
-        Left = 166
+        Left = 156
         Hint = 'New DMY Variable'
         Top = 1
         Caption = 'New DMY Variable'
@@ -191,7 +189,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object OtherToolButton: TToolButton
-        Left = 226
+        Left = 216
         Hint = 'Other Variable Types...'
         Top = 1
         Caption = 'OtherToolButton'
@@ -201,16 +199,15 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider2: TToolButton
-        Left = 246
+        Left = 236
         Height = 20
         Top = 1
-        Width = 10
         Caption = 'Divider2'
         Style = tbsDivider
       end
       object HeadingToolButton: TToolButton
         Tag = 5
-        Left = 256
+        Left = 241
         Hint = 'New Heading'
         Top = 1
         Caption = 'New Heading'
@@ -220,16 +217,15 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider3: TToolButton
-        Left = 276
+        Left = 261
         Height = 20
         Top = 1
-        Width = 5
         Caption = 'Divider3'
         Style = tbsDivider
       end
       object SectionToolButton: TToolButton
         Tag = 6
-        Left = 281
+        Left = 266
         Hint = 'New Section'
         Top = 1
         Caption = 'New Section'
@@ -239,53 +235,50 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object Divider4: TToolButton
-        Left = 331
+        Left = 311
         Height = 20
         Top = 1
-        Width = 10
         Caption = 'Divider4'
         Style = tbsDivider
       end
       object EditToolButton: TToolButton
-        Left = 341
+        Left = 316
         Top = 1
         Action = EditControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteToolButton: TToolButton
-        Left = 361
+        Left = 336
         Top = 1
         Action = DeleteControlAction
         ParentShowHint = False
         ShowHint = True
       end
       object DeleteAllToolButton: TToolButton
-        Left = 381
+        Left = 356
         Top = 1
         Action = DeleteAllAction
         ParentShowHint = False
         ShowHint = True
       end
       object Divider5: TToolButton
-        Left = 401
+        Left = 376
         Height = 20
         Top = 1
-        Width = 10
         Caption = 'Divider5'
         Style = tbsDivider
       end
       object Divider6: TToolButton
-        Left = 431
+        Left = 401
         Height = 20
         Top = 1
-        Width = 10
         Caption = 'Divider6'
         Style = tbsDivider
       end
       object TestToolButton: TToolButton
         Tag = 14
-        Left = 441
+        Left = 406
         Top = 1
         Caption = 'TestToolButton'
         ImageIndex = 0
@@ -293,7 +286,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object TimeToolButton: TToolButton
         Tag = 10
-        Left = 186
+        Left = 176
         Hint = 'New Time Variable'
         Top = 1
         Caption = 'TimeToolButton'
@@ -308,15 +301,14 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         ShowHint = True
       end
       object ToolButton4: TToolButton
-        Left = 51
+        Left = 46
         Height = 20
         Top = 1
-        Width = 10
         Caption = 'ToolButton4'
         Style = tbsDivider
       end
       object ExportToolButton: TToolButton
-        Left = 31
+        Left = 26
         Top = 1
         Action = PrintDataFormAction
         ParentShowHint = False
@@ -326,33 +318,31 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
         Left = 21
         Height = 20
         Top = 1
-        Width = 10
         Caption = 'ToolButton3'
         Style = tbsDivider
       end
       object ToolButton5: TToolButton
-        Left = 411
+        Left = 381
         Top = 1
         Action = ShowAlignFormAction
         ImageIndex = 23
       end
       object ToolButton6: TToolButton
-        Left = 311
+        Left = 291
         Hint = 'Extend dataform'
         Top = 1
         Action = ExpandPageAction
       end
       object ToolButton7: TToolButton
-        Left = 301
+        Left = 286
         Height = 20
         Top = 1
-        Width = 10
         Caption = 'ToolButton7'
         Style = tbsDivider
       end
       object AutoIncToolBtn: TToolButton
         Tag = 2
-        Left = 206
+        Left = 196
         Hint = 'New Auto-Increment Variable'
         Top = 1
         Caption = 'AutoIncToolBtn'
@@ -361,7 +351,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       end
       object MemoToolButton: TToolButton
         Tag = 14
-        Left = 146
+        Left = 136
         Hint = 'New Memo Variable'
         Top = 1
         Caption = 'MemoToolButton'
@@ -459,6 +449,7 @@ object RuntimeDesignFrame: TRuntimeDesignFrame
       Hint = 'Import data and structure from files'
       ImageIndex = 18
       OnExecute = ImportActionExecute
+      OnUpdate = ImportActionUpdate
     end
     object NewIntFieldAction: TAction
       Category = 'NewControls'

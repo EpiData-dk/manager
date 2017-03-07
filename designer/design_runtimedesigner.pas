@@ -170,6 +170,7 @@ type
     function FieldNamePrefix: string;
     procedure HeadingBtnClick(Sender: TObject);
     procedure ImportActionExecute(Sender: TObject);
+    procedure ImportActionUpdate(Sender: TObject);
     procedure ImportCBActionExecute(Sender: TObject);
     procedure NewDateFieldActionExecute(Sender: TObject);
     procedure NewDateFieldFastActionExecute(Sender: TObject);
@@ -463,6 +464,12 @@ begin
   finally
     Dlg.Free;
   end;
+end;
+
+procedure TRuntimeDesignFrame.ImportActionUpdate(Sender: TObject);
+begin
+  ImportAction.Enabled := Authenticator.IsAuthorized([earDefineProject]) and
+                          (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.ImportCBActionExecute(Sender: TObject);
@@ -842,7 +849,8 @@ begin
   then
     ActionEnable := false;
 
-  TAction(Sender).Enabled := ActionEnable;
+  TAction(Sender).Enabled := ActionEnable and
+                             (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.RedoActionExecute(Sender: TObject);
@@ -2628,7 +2636,8 @@ begin
   if Assigned(AAction) and
      (TAction(AAction).ActionList = AuthorizedDesignerActionList)
   then
-    TAction(AAction).Enabled := Authenticator.IsAuthorized([earDefineProject]);
+    TAction(AAction).Enabled := Authenticator.IsAuthorized([earDefineProject]) and
+                                (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
@@ -2765,7 +2774,8 @@ begin
     end;
   end;
 
-  ClearDataAction.Enabled := ActionEnabled;
+  ClearDataAction.Enabled := ActionEnabled and
+                             (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.AlignLeftActionExecute(Sender: TObject);
@@ -3049,17 +3059,20 @@ end;
 
 procedure TRuntimeDesignFrame.Activate;
 begin
-//  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate Start');
   Show;
   BringToFront;
-  FDesignPanel.Surface.Active := true;
-  FDesignPanel.Surface.Select(FDesignPanel);
-  FDesignPanel.Surface.SelectionChange;
+  FDesignPanel.Surface.Active := (not Relation.ProtectedItem);//  true;
+
+  if (not Relation.ProtectedItem) then
+  begin
+    FDesignPanel.Surface.Select(FDesignPanel);
+    FDesignPanel.Surface.SelectionChange;
+  end else
+    FDesignPanel.Enabled := false;
+
   MayHandleShortcuts := true;
-//  AuthorizedDesignerActionList.State := asNormal;
 
   UpdateFrame;
-//  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate End');
 end;
 
 function TRuntimeDesignFrame.DeActivate(aHide: boolean): boolean;

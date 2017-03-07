@@ -5,7 +5,6 @@ object ProjectFrame: TProjectFrame
   Width = 991
   ClientHeight = 678
   ClientWidth = 991
-  DesignTimePPI = 93
   TabOrder = 0
   DesignLeft = 2006
   DesignTop = 290
@@ -25,7 +24,7 @@ object ProjectFrame: TProjectFrame
       Left = 0
       Height = 22
       Top = 0
-      Width = 187
+      Width = 183
       AutoSize = True
       ButtonHeight = 20
       ButtonWidth = 20
@@ -47,7 +46,6 @@ object ProjectFrame: TProjectFrame
         Left = 47
         Height = 20
         Top = 1
-        Width = 5
         Caption = 'ToolButton1'
         Style = tbsDivider
       end
@@ -69,7 +67,6 @@ object ProjectFrame: TProjectFrame
         Left = 92
         Height = 20
         Top = 1
-        Width = 5
         Caption = 'ToolButton4'
         Style = tbsDivider
       end
@@ -91,7 +88,6 @@ object ProjectFrame: TProjectFrame
         Left = 145
         Height = 20
         Top = 1
-        Width = 5
         Caption = 'ToolButton7'
         Style = tbsDivider
       end
@@ -104,7 +100,6 @@ object ProjectFrame: TProjectFrame
         Left = 22
         Height = 20
         Top = 1
-        Width = 5
         Caption = 'ToolButton2'
         Style = tbsDivider
       end
@@ -112,7 +107,6 @@ object ProjectFrame: TProjectFrame
         Left = 137
         Height = 20
         Top = 1
-        Width = 8
         Caption = 'ToolButton3'
         Style = tbsSeparator
       end
@@ -163,7 +157,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 32
-      Width = 43
+      Width = 38
       Caption = 'Label1'
       ParentColor = False
     end
@@ -171,7 +165,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 72
-      Width = 43
+      Width = 38
       Caption = 'Label2'
       ParentColor = False
     end
@@ -179,7 +173,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 104
-      Width = 43
+      Width = 38
       Caption = 'Label3'
       ParentColor = False
     end

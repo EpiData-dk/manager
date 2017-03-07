@@ -248,8 +248,16 @@ begin
 end;
 
 procedure TProjectFrame.NewDataFormActionUpdate(Sender: TObject);
+var
+  ActionEnabled: Boolean;
 begin
-  NewDataFormAction.Enabled := Authenticator.IsAuthorized([earDefineProject]);
+  ActionEnabled := Authenticator.IsAuthorized([earDefineProject]);
+
+  if (FProjectTreeView.SelectedObjectType = otRelation) then
+    ActionEnabled := ActionEnabled and
+                     (not TEpiMasterRelation(FProjectTreeView.SelectedObject).ProtectedItem);
+
+  NewDataFormAction.Enabled := ActionEnabled;
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -365,7 +373,8 @@ procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
 begin
   DeleteDataFormAction.Enabled :=
     (Authenticator.IsAuthorized([earDefineProject])) and
-    (FProjectTreeView.SelectedObjectType = otRelation);
+    (FProjectTreeView.SelectedObjectType = otRelation) and
+    (not TEpiMasterRelation(FProjectTreeView.SelectedObject).ProtectedItem);
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -989,6 +998,10 @@ procedure TProjectFrame.ProjectTreeEditing(Sender: TObject;
 begin
   Allowed := Authenticator.IsAuthorized([earDefineProject]);
 
+  if (ObjectType = otRelation) then
+    Allowed := Allowed and
+               (not (TEpiCustomItem(AObject).ProtectedItem));
+
   if Allowed then
     (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).DeActivate(false);
 end;
@@ -1538,6 +1551,7 @@ begin
     EditStructure       := true;
     ShowHint            := true;
     ShowProject         := true;
+    ShowProtected       := true;
 
     OnDelete            := @ProjectTreeDelete;
     OnEdited            := @ProjectTreeEdited;

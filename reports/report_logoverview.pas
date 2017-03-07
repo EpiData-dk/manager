@@ -31,18 +31,18 @@ end;
 
 procedure TReportLogOverview.DoDocumentReport(
   const ADocumentFile: TEpiDocumentFile; const Index: Integer);
-var
+{var
   Logger: TEpiLogger;
   Log: TEpiLog;
   LogTypeField: TEpiEnumField;
   LogTypeCount: array[TEpiLogEntry] of integer;
   BlockedCount: Integer;
   i, j, RowCount: Integer;
-  LogTypeEnum: TEpiLogEntry;
+  LogTypeEnum: TEpiLogEntry;     }
 begin
   inherited DoDocumentReport(ADocumentFile, Index);
 
-  Logger := ADocumentFile.Document.Logger;
+ { Logger := ADocumentFile.Document.Logger;
   Log := Logger.Log;
 
   for LogTypeEnum := Low(LogTypeCount) to High(LogTypeCount) do
@@ -124,7 +124,7 @@ begin
         Inc(i);
       end;
   end;
-  Generator.TableFooter('');
+  Generator.TableFooter('');     }
 end;
 
 end.

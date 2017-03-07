@@ -408,7 +408,8 @@ end;
 
 procedure TDataformPropertiesFrame.UpdateVisibility;
 begin
-  BasicSheet.Enabled := IsAuthorized(earDefineProject);
+  BasicSheet.Enabled     := IsAuthorized(earDefineProject) and
+                            (not Relation.ProtectedItem);
 
   ChildRecGrpBox.Visible := Relation.InheritsFrom(TEpiDetailRelation);
 
@@ -419,10 +420,13 @@ begin
   AfterRecordSheet.TabVisible :=
     (Relation.DetailRelations.Count > 0) OR
     (Relation.InheritsFrom(TEpiDetailRelation));
-  AfterRecordSheet.Enabled := IsAuthorized(earDefineProject);;
-
+  AfterRecordSheet.Enabled := IsAuthorized(earDefineProject) and
+                              (not Relation.ProtectedItem);
 
   UpdateUserRightsFrameVisibility;
+
+  StatusbarContentSheet.Enabled := IsAuthorized(earDefineProject) and
+                                   (not Relation.ProtectedItem);
 end;
 
 procedure TDataformPropertiesFrame.UpdateContent;

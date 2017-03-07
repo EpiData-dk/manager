@@ -1358,7 +1358,7 @@ procedure TFieldPropertiesFrame.UpdateVisibility;
 begin
   // Visiblity
   // - basic
-  BasicSheet.Enabled              := (not IsRelatedKeyField);
+  BasicSheet.Enabled              := (not IsRelatedKeyField) and (IsAuthorized(earDefineProject));
   NameEdit.Enabled                := (not (ManyFields or
                                           IsReservedEpiFieldName(Field.Name) or
                                           IsKeyField)) and
