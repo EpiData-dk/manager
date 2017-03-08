@@ -185,7 +185,8 @@ begin
   Allowed :=
     (Authenticator.IsAuthorized([earDefineProject])) and
     (Assigned(VLSet)) and
-    (VLSet.LabelScope = vlsInternal);
+    (VLSet.LabelScope = vlsInternal) and
+    (not VLSet.ProtectedItem);
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeFocusChanging(Sender: TBaseVirtualTree;
@@ -200,6 +201,9 @@ begin
   if not Allowed then exit;
 
   FGridFrame.ValueLabelSet := ValueLabelSetFromNode(NewNode);
+
+  DelBtn.Enabled := (Assigned(FGridFrame.ValueLabelSet)) and
+                    (not FGridFrame.ValueLabelSet.ProtectedItem);
 
   PostMessage(Self.Handle, LM_VLEDIT_FOCUSCHECK, WPARAM(NewNode), 0);
 end;

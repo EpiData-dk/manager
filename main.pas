@@ -19,7 +19,6 @@ type
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
     StaticText1: TStaticText;
-    ViewLogMenuItem: TMenuItem;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
     MenuItem37: TMenuItem;
@@ -1399,7 +1398,7 @@ begin
   DefineGroupsMenuItem.Visible := Assigned(FActiveFrame);
   DefineUsersMenuItem.Visible := Assigned(FActiveFrame);
   DefineEntryRightsMenuItem.Visible := Assigned(FActiveFrame);
-  ViewLogMenuItem.Visible := Assigned(FActiveFrame);
+//  ViewLogMenuItem.Visible := Assigned(FActiveFrame);
   // -
   DefineAccessDivider2.Visible := Assigned(FActiveFrame);
 

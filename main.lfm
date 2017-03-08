@@ -383,9 +383,6 @@ object MainForm: TMainForm
         object ManagePasswordMenuItem: TMenuItem
           Action = ManageUserPasswordAction
         end
-        object ViewLogMenuItem: TMenuItem
-          Caption = 'ViewLog'
-        end
         object MenuItem39: TMenuItem
           Caption = '-'
         end

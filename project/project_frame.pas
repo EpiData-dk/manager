@@ -1775,7 +1775,7 @@ begin
     DefineGroupsMenuItem.Action           := DefineGroupsAction;
     DefineUsersMenuItem.Action            := DefineUsersAction;
     DefineEntryRightsMenuItem.Action      := DefineEntryRightsAction;
-    ViewLogMenuItem.Action                := ViewLogAction;
+//    ViewLogMenuItem.Action                := ViewLogAction;
   end;
 
   NewProjectToolBtn.Action := MainForm.NewProjectAction;

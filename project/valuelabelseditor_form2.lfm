@@ -11,7 +11,7 @@ object ValueLabelEditor2: TValueLabelEditor2
   OnDeactivate = FormDeactivate
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.5'
+  LCLVersion = '1.7'
   object Panel1: TPanel
     Left = 0
     Height = 577
@@ -49,7 +49,7 @@ object ValueLabelEditor2: TValueLabelEditor2
         OnClick = DelBtnClick
       end
       object ExternalToolBtn: TToolButton
-        Left = 71
+        Left = 66
         Top = 2
         AutoSize = True
         Caption = 'External...'
@@ -59,12 +59,11 @@ object ValueLabelEditor2: TValueLabelEditor2
         Left = 61
         Height = 22
         Top = 2
-        Width = 10
         Caption = 'Divider1'
         Style = tbsDivider
       end
       object ImportToolBtn: TToolButton
-        Left = 148
+        Left = 145
         Hint = 'Import Data from projects as Value Labels'
         Top = 2
         AutoSize = True
@@ -72,10 +71,9 @@ object ValueLabelEditor2: TValueLabelEditor2
         OnClick = ImportToolBtnClick
       end
       object Divider2: TToolButton
-        Left = 143
+        Left = 140
         Height = 22
         Top = 2
-        Width = 5
         Caption = 'Divider2'
         Style = tbsDivider
       end
@@ -103,10 +101,10 @@ object ValueLabelEditor2: TValueLabelEditor2
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel2
       AnchorSideRight.Side = asrBottom
-      Left = 734
-      Height = 34
-      Top = 8
-      Width = 73
+      Left = 737
+      Height = 30
+      Top = 10
+      Width = 70
       Anchors = [akTop, akRight]
       AutoSize = True
       BorderSpacing.Right = 10

@@ -287,7 +287,8 @@ procedure TValueLabelGridFrame.VLGChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
 begin
   if (ValueLabelSet.LabelScope = vlsExternal) or
-     (not Authenticator.IsAuthorized([earDefineProject]))
+     (not Authenticator.IsAuthorized([earDefineProject])) or
+     (ValueLabelSet.ProtectedItem)
   then
     begin
       Allowed := false;
@@ -306,7 +307,8 @@ end;
 procedure TValueLabelGridFrame.VLGEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
-  Allowed := Authenticator.IsAuthorized([earDefineProject]);
+  Allowed := Authenticator.IsAuthorized([earDefineProject]) and
+             (not ValueLabelSet.ProtectedItem);
 end;
 
 procedure TValueLabelGridFrame.VLGEditor(Sender: TBaseVirtualTree;
@@ -364,8 +366,11 @@ begin
   DoShowHintMsg(nil, '');
 
   // External valuelabels do not need shortcut keys
-  if Assigned(FValueLabelSet) and
-     (FValueLabelSet.LabelScope = vlsExternal)
+  if Assigned(ValueLabelSet) and
+     (
+      (ValueLabelSet.LabelScope = vlsExternal) or
+      (ValueLabelSet.ProtectedItem)
+     )
   then
     Exit;
 
@@ -479,7 +484,9 @@ begin
   else
     VLG.TreeOptions.MiscOptions := VLG.TreeOptions.MiscOptions + [toEditable];
 
-  Allowed := (FValueLabelSet.LabelScope = vlsInternal) and (Authenticator.IsAuthorized([earDefineProject]));
+  Allowed := (ValueLabelSet.LabelScope = vlsInternal) and
+             (Authenticator.IsAuthorized([earDefineProject])) and
+             (not ValueLabelSet.ProtectedItem);
 
   NewLineBtn.Enabled := Allowed;
   DelLineBtn.Enabled := Allowed;

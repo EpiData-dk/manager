@@ -63,7 +63,7 @@ implementation
 {$R *.lfm}
 
 uses
-  settings2, settings2_var;
+  settings2, settings2_var, epicustomlist_helper;
 
 { TToolsForm }
 
@@ -205,7 +205,7 @@ begin
   FEpiDocument := AValue;
 
   DataFileTreeView.NodeDataSize := SizeOf(TEpiMasterRelation);
-  DataFileTreeView.RootNodeCount := EpiDocument.Relations.Count;
+  DataFileTreeView.RootNodeCount := (EpiDocument.Relations.Count - EpiDocument.Relations.ProtectedCount);
 end;
 
 constructor TToolsForm.Create(TheOwner: TComponent);

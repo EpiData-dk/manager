@@ -24,9 +24,9 @@ object ToolsForm: TToolsForm
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
-      Left = 386
+      Left = 382
       Height = 28
-      Top = 11
+      Top = 9
       Width = 51
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -41,9 +41,9 @@ object ToolsForm: TToolsForm
       AnchorSideTop.Control = Panel1
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = BitBtn1
-      Left = 300
+      Left = 296
       Height = 28
-      Top = 11
+      Top = 9
       Width = 76
       Anchors = [akTop, akRight]
       AutoSize = True

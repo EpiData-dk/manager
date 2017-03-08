@@ -221,6 +221,7 @@ type
     procedure ViewDatasetActionExecute(Sender: TObject);
     procedure ViewDatasetActionUpdate(Sender: TObject);
     procedure MemoBtnClick(Sender: TObject);
+    procedure SelectUpdate(Sender: TObject);
   private
     FPopUpPoint: TPoint;
     FActiveButton: TToolButton;
@@ -599,6 +600,7 @@ procedure TRuntimeDesignFrame.PasteAsUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
     (Authenticator.IsAuthorized([earDefineProject])) and
+    (not Relation.ProtectedItem) and
     (ClipBoardHasText) and
      (
       ((FDesignPanel.Surface.Count = 1) and
@@ -803,7 +805,8 @@ procedure TRuntimeDesignFrame.PasteControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
     (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) and
-    (Authenticator.IsAuthorized([earDefineProject]));
+    (Authenticator.IsAuthorized([earDefineProject])) and
+    (not Relation.ProtectedItem);
 
     {and
      (
@@ -2365,6 +2368,11 @@ procedure TRuntimeDesignFrame.MemoBtnClick(Sender: TObject);
 begin
   FAddClass := 'TDesignMemo';
   DoToogleBtn(Sender);
+end;
+
+procedure TRuntimeDesignFrame.SelectUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);
