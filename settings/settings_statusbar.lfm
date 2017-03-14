@@ -13,11 +13,11 @@ object SettingsStatusbar: TSettingsStatusbar
     Height = 427
     Top = 0
     Width = 648
-    HorzScrollBar.Page = 315
+    HorzScrollBar.Page = 321
     VertScrollBar.Page = 97
     Align = alClient
-    ClientHeight = 425
-    ClientWidth = 646
+    ClientHeight = 423
+    ClientWidth = 644
     Color = clForm
     ParentColor = False
     TabOrder = 0
@@ -30,7 +30,7 @@ object SettingsStatusbar: TSettingsStatusbar
       AnchorSideBottom.Control = ScrollBox1
       AnchorSideBottom.Side = asrBottom
       Left = 32
-      Height = 378
+      Height = 376
       Top = 42
       Width = 5
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -46,7 +46,7 @@ object SettingsStatusbar: TSettingsStatusbar
       AnchorSideBottom.Control = Bevel1
       AnchorSideBottom.Side = asrBottom
       Left = 176
-      Height = 378
+      Height = 376
       Top = 42
       Width = 5
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -60,8 +60,8 @@ object SettingsStatusbar: TSettingsStatusbar
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = Bevel1
       AnchorSideBottom.Side = asrBottom
-      Left = 574
-      Height = 378
+      Left = 572
+      Height = 376
       Top = 42
       Width = 5
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -75,8 +75,8 @@ object SettingsStatusbar: TSettingsStatusbar
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = Bevel1
       AnchorSideBottom.Side = asrBottom
-      Left = 642
-      Height = 378
+      Left = 640
+      Height = 376
       Top = 42
       Width = 5
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -111,7 +111,7 @@ object SettingsStatusbar: TSettingsStatusbar
       Left = 186
       Height = 15
       Top = 12
-      Width = 388
+      Width = 386
       Alignment = taCenter
       Anchors = [akLeft, akRight, akBottom]
       BorderSpacing.Left = 5
@@ -125,7 +125,7 @@ object SettingsStatusbar: TSettingsStatusbar
       Left = 5
       Height = 5
       Top = 32
-      Width = 636
+      Width = 634
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 5
       BorderSpacing.Right = 5
@@ -145,7 +145,7 @@ object SettingsStatusbar: TSettingsStatusbar
       AnchorSideTop.Control = Bevel6
       AnchorSideBottom.Control = Bevel6
       AnchorSideBottom.Side = asrBottom
-      Left = 642
+      Left = 640
       Height = 22
       Top = 5
       Width = 5
@@ -158,7 +158,7 @@ object SettingsStatusbar: TSettingsStatusbar
       AnchorSideRight.Control = Img1
       AnchorSideBottom.Control = Bevel6
       AnchorSideBottom.Side = asrBottom
-      Left = 574
+      Left = 572
       Height = 22
       Top = 5
       Width = 5
@@ -183,7 +183,7 @@ object SettingsStatusbar: TSettingsStatusbar
       AnchorSideRight.Control = Img2
       AnchorSideBottom.Control = Bevel6
       AnchorSideBottom.Side = asrBottom
-      Left = 584
+      Left = 582
       Height = 24
       Top = 3
       Width = 24
@@ -196,7 +196,7 @@ object SettingsStatusbar: TSettingsStatusbar
       AnchorSideRight.Control = Bevel9
       AnchorSideBottom.Control = Bevel6
       AnchorSideBottom.Side = asrBottom
-      Left = 613
+      Left = 611
       Height = 24
       Top = 3
       Width = 24
