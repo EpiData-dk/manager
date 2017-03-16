@@ -67,7 +67,7 @@ implementation
 
 uses
   Graphics, Dialogs, LazUTF8, epimiscutils, Math, LCLIntf, Clipbrd, StdCtrls,
-  strutils, admin_authenticator, epiadmin;
+  strutils, admin_authenticator, epiadmin, epiconvertutils;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -128,6 +128,8 @@ var
   I: integer;
   F: Extended;
   S: TCaption;
+  D: EpiDate;
+  Msg: string;
 begin
   Result := not FStopping;
 
@@ -140,6 +142,7 @@ begin
           S := Edit.Text;
           result := TryStrToInt(S, I);
         end;
+
       ftFloat:
         begin
           S := StringsReplace(
@@ -150,8 +153,17 @@ begin
           );
           result := TryStrToFloat(S, F);
         end;
+
       ftString:
         S := Edit.Text;
+
+      ftDMYDate,
+      ftMDYDate,
+      ftYMDDate:
+        begin
+          S := Edit.Text;
+          result := EpiStrToDate(S, ['-', '/', '.'], Editor.FValueLabelSet.LabelType, D, Msg);
+        end;
     end;
 
     if not Result then
@@ -434,7 +446,8 @@ procedure TValueLabelGridFrame.VLGSetNodeText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; const NewText: String);
 var
   VL: TEpiCustomValueLabel;
-  S: String;
+  S, Msg: String;
+  D: EpiDate;
 begin
   VL := ValueLabelFromNode(Node);
 
@@ -454,7 +467,13 @@ begin
                           end;
            ftString:      TEpiStringValueLabel(VL).Value := NewText;
            ftUpperString: TEpiStringValueLabel(VL).Value := UTF8UpperCase(NewText);
-         end;
+           ftDMYDate,
+           ftMDYDate,
+           ftYMDDate:     begin
+                            EpiStrToDate(NewText, ['-', '/', '.'], FValueLabelSet.LabelType, D, Msg);
+                            TEpiDateValueLabel(VL).Value   := D;
+                          end;
+      end;
       1: TheLabel.Text := NewText;
       2: ; // do nothing
     end;
