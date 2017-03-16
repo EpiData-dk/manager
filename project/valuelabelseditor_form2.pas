@@ -30,6 +30,8 @@ type
     Divider1: TToolButton;
     ImportToolBtn: TToolButton;
     Divider2: TToolButton;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
     procedure DelBtnClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -41,6 +43,8 @@ type
     procedure AddBtnClick(Sender: TObject);
     procedure ExternalToolBtnClick(Sender: TObject);
     procedure ImportToolBtnClick(Sender: TObject);
+    procedure MenuItem4Click(Sender: TObject);
+    procedure MenuItem5Click(Sender: TObject);
   private
     { VLSetsTree }
     VLSetsTree: TVirtualStringTree;
@@ -176,6 +180,16 @@ begin
   F.ShowModal;
 end;
 
+procedure TValueLabelEditor2.MenuItem4Click(Sender: TObject);
+begin
+  DoAddNewValueLabelSet(ftDMYDate);
+end;
+
+procedure TValueLabelEditor2.MenuItem5Click(Sender: TObject);
+begin
+  DoAddNewValueLabelSet(ftTime);
+end;
+
 procedure TValueLabelEditor2.VLSetsEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 var
@@ -215,11 +229,7 @@ begin
   if Node^.Parent = Sender.RootNode then
     Exit;
 
-  Case ValueLabelSetFromNode(Node).LabelType of
-    ftInteger:     ImageIndex := 2;
-    ftFloat:       ImageIndex := 3;
-    ftString:      ImageIndex := 6;
-  end;
+  ImageIndex := DM.GetImageIndex(ValueLabelSetFromNode(Node).LabelType);
 end;
 
 procedure TValueLabelEditor2.VLSetsTreeGetText(Sender: TBaseVirtualTree;

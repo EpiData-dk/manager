@@ -130,6 +130,7 @@ var
   S: TCaption;
   D: EpiDate;
   Msg: string;
+  T: EpiTime;
 begin
   Result := not FStopping;
 
@@ -163,6 +164,12 @@ begin
         begin
           S := Edit.Text;
           result := EpiStrToDate(S, ['-', '/', '.'], Editor.FValueLabelSet.LabelType, D, Msg);
+        end;
+
+      ftTime:
+        begin
+          S := Edit.Text;
+          result := EpiStrToTime(S, ['.', ':'], T, Msg);
         end;
     end;
 
@@ -448,6 +455,7 @@ var
   VL: TEpiCustomValueLabel;
   S, Msg: String;
   D: EpiDate;
+  T: EpiTime;
 begin
   VL := ValueLabelFromNode(Node);
 
@@ -456,6 +464,7 @@ begin
     case Column of
       0: case FValueLabelSet.LabelType of
            ftInteger:     TEpiIntValueLabel(VL).Value := StrToInt(NewText);
+
            ftFloat:       begin
                             S := StringsReplace(
                                    NewText,
@@ -465,13 +474,21 @@ begin
                             );
                             TEpiFloatValueLabel(Vl).Value := StrToFloat(S);
                           end;
+
            ftString:      TEpiStringValueLabel(VL).Value := NewText;
+
            ftUpperString: TEpiStringValueLabel(VL).Value := UTF8UpperCase(NewText);
+
            ftDMYDate,
            ftMDYDate,
            ftYMDDate:     begin
                             EpiStrToDate(NewText, ['-', '/', '.'], FValueLabelSet.LabelType, D, Msg);
                             TEpiDateValueLabel(VL).Value   := D;
+                          end;
+
+           ftTime:        begin
+                            EpiStrToTimeGues(NewText, T, Msg);
+                            TEpiTimeValueLabel(VL).Value := T;
                           end;
       end;
       1: TheLabel.Text := NewText;

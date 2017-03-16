@@ -240,5 +240,15 @@ object ValueLabelEditor2: TValueLabelEditor2
       ImageIndex = 6
       OnClick = MenuItem3Click
     end
+    object MenuItem4: TMenuItem
+      Caption = 'Date Value Label'
+      ImageIndex = 4
+      OnClick = MenuItem4Click
+    end
+    object MenuItem5: TMenuItem
+      Caption = 'Time Value Label'
+      ImageIndex = 5
+      OnClick = MenuItem5Click
+    end
   end
 end

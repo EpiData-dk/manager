@@ -771,8 +771,6 @@ begin
 
     if Assigned(FDocumentFile.AuthedUser) then
     begin
-//      DoSaveProject(DocumentFile.FileName);
-
       Label1.Caption := 'User: ' + FDocumentFile.AuthedUser.FullName;
       Label2.Caption := 'Groups: ';
       Rights := [];
