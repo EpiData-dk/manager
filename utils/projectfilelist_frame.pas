@@ -303,7 +303,7 @@ begin
     else if (ext = '.epx') or (ext = '.epz') then
     begin
       DoBeforeImportFile(nil, FileName);
-      DocFile.OnProgress := @Progress;
+//      DocFile.OnProgress := @Progress;
       Res := DocFile.OpenFile(FileName, true);
       DoAfterImportFile(DocFile.Document, FileName);
     end

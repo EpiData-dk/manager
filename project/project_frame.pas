@@ -24,7 +24,6 @@ type
     MenuItem1: TMenuItem;
     Panel1: TPanel;
     ProjectRecentFilesDropDownMenu: TPopupMenu;
-    ProgressBar1: TProgressBar;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     StudyInformationAction: TAction;
@@ -59,9 +58,6 @@ type
     RemoveProjectPassword: TAction;
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
-    procedure DocumentProgress(const Sender: TEpiCustomBase;
-      ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
-      var Canceled: Boolean);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure NewDataFormActionUpdate(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -94,6 +90,8 @@ type
       EventType: Word; Data: Pointer);
     procedure ShowCoreLogger;
     procedure CreateCoreLogger;
+    procedure AfterDocumentCreated(const Sender: TObject;
+      const ADocument: TEpiDocument);
   private
     { private declarations }
     FDocumentFile: TDocumentFile;
@@ -228,7 +226,7 @@ uses
   align_form, RegExpr, project_studyunit_frame,
   design_properties_form, admin_form, epidatafilerelations_helper,
   admin_user_form, admin_groups_form, admin_users_form, admin_entryrights_form,
-  epiranges, empty_form
+  epiranges, empty_form, episervice_asynchandler
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -288,41 +286,6 @@ begin
   Continue := Res = mrYes;
 end;
 
-procedure TProjectFrame.DocumentProgress(const Sender: TEpiCustomBase;
-  ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
-  var Canceled: Boolean);
-Const
-  LastUpdate: Cardinal = 0;
-  ProgressUpdate: Cardinal = 0;
-begin
-  case ProgressType of
-    eptInit:
-      begin
-        ProgressUpdate := MaxPos div 50;
-        ProgressBar1.Position := CurrentPos;
-        ProgressBar1.Visible := true;
-        ProgressBar1.Max := MaxPos;
-        Application.ProcessMessages;
-      end;
-    eptFinish:
-      begin
-        ProgressBar1.Visible := false;
-        Application.ProcessMessages;
-        LastUpdate := 0;
-      end;
-    eptRecords:
-      begin
-        if CurrentPos > (LastUpdate + ProgressUpdate) then
-        begin
-          ProgressBar1.Position := CurrentPos;
-          {$IFNDEF MSWINDOWS}
-          Application.ProcessMessages;
-          {$ENDIF}
-          LastUpdate := CurrentPos;
-        end;
-      end;
-  end;
-end;
 
 procedure TProjectFrame.DeleteDataFormActionExecute(Sender: TObject);
 var
@@ -625,6 +588,13 @@ begin
   FCoreLoggerForm := TCoreLogger.Create(Self);
 end;
 
+procedure TProjectFrame.AfterDocumentCreated(const Sender: TObject;
+  const ADocument: TEpiDocument);
+begin
+  ADocument.RegisterOnChangeHook(@DocumentHook, true);
+  EpiAsyncHandlerGlobal.AddDocument(ADocument);
+end;
+
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
   Result := DoCreateNewDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
@@ -678,8 +648,7 @@ begin
   UpdateCaption;
   UpdateShortCuts;
   InitBackupTimer;
-  FStatusBar.Visible := true;
-  FStatusBar.DocFile := DocumentFile;
+//  FStatusBar.DocFile := DocumentFile;
 
   Splitter1.Visible    := true;
   ProjectPanel.Visible := true;
@@ -801,13 +770,13 @@ end;
 function TProjectFrame.DoCreateNewDocumentFile: TDocumentFile;
 begin
   FDocumentFile := TDocumentFile.Create;
-  FDocumentFile.OnDocumentChangeEvent := @DocumentHook;
- //@FCoreLoggerForm.DocumentHook;
-  FDocumentFile.OnProgress            := @DocumentProgress;
+  FDocumentFile.OnAfterDocumentCreated := @AfterDocumentCreated;
   FDocumentFile.OnLoadError           := @LoadError;
   FDocumentFile.DataDirectory         := ManagerSettings.WorkingDirUTF8;
 
   Result := FDocumentFile;
+  FStatusBar.Visible := true;
+  FStatusBar.DocFile := result;
 end;
 
 function TProjectFrame.DoNewDataForm(ParentRelation: TEpiMasterRelation
@@ -903,7 +872,6 @@ begin
 
   FActiveFrame := nil;
   FreeAndNil(FBackupTimer);
-  //FreeAndNil(Authenticator);
   FreeAndNil(FDocumentFile);
 
   Modified := false;
@@ -1674,15 +1642,8 @@ begin
 end;
 
 function TProjectFrame.OpenProject(const AFileName: string): boolean;
-var
-  T1: TDateTime;
-  T2: TDateTime;
 begin
-  T1 := Now;
   Result := DoOpenProject(AFileName);
-  T2 := now;
-//  if IsConsole then
-//    WriteLn('ProjectFrame.OpenProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
 end;
 
 function TProjectFrame.SaveProject(const ForceSaveAs: boolean): boolean;
