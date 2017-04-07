@@ -15,7 +15,8 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="4"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="105"/>
+      <RevisionNr Value="1"/>
+      <BuildNr Value="106"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable SpecialBuild="SECURITYLOG" ProductVersion="4.1.0.104"/>
@@ -172,6 +173,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <CommandLineParams Value="-r=~/.epidata.securitylog.recentfiles.ini -i=~/.epidata.securitylog.cfg"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
@@ -896,7 +898,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="6">
+    <Exceptions Count="7">
       <Item1>
         <Name Value="EAbort"/>
       </Item1>
@@ -915,6 +917,9 @@
       <Item6>
         <Name Value="EEpiPasswordCanceled"/>
       </Item6>
+      <Item7>
+        <Name Value="EEpiThreadSaveExecption"/>
+      </Item7>
     </Exceptions>
   </Debugging>
 </CONFIG>

@@ -92,6 +92,7 @@ type
     procedure CreateCoreLogger;
     procedure AfterDocumentCreated(const Sender: TObject;
       const ADocument: TEpiDocument);
+    procedure SaveThreadError(const FatalErrorObject: Exception);
   private
     { private declarations }
     FDocumentFile: TDocumentFile;
@@ -226,7 +227,7 @@ uses
   align_form, RegExpr, project_studyunit_frame,
   design_properties_form, admin_form, epidatafilerelations_helper,
   admin_user_form, admin_groups_form, admin_users_form, admin_entryrights_form,
-  epiranges, empty_form, episervice_asynchandler
+  epiranges, empty_form, episervice_asynchandler, epiopenfile
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -595,6 +596,20 @@ begin
   EpiAsyncHandlerGlobal.AddDocument(ADocument);
 end;
 
+procedure TProjectFrame.SaveThreadError(const FatalErrorObject: Exception);
+var
+  S: UTF8String;
+begin
+  S := 'A fatal error has happened during the saving process' + LineEnding +
+       'and the project has not been save.' + LineEnding +
+       LineEnding +
+       EEpiThreadSaveExecption(FatalErrorObject).FileName +
+       'In order to ensure futher functionality, use the Save As... option' + LineEnding +
+       'to save in another location';
+
+  ShowMessage(S);
+end;
+
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
   Result := DoCreateNewDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
@@ -772,6 +787,7 @@ begin
   FDocumentFile := TDocumentFile.Create;
   FDocumentFile.OnAfterDocumentCreated := @AfterDocumentCreated;
   FDocumentFile.OnLoadError           := @LoadError;
+  FDocumentFile.OnSaveThreadError := @SaveThreadError;
   FDocumentFile.DataDirectory         := ManagerSettings.WorkingDirUTF8;
 
   Result := FDocumentFile;
