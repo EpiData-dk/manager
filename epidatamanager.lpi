@@ -15,8 +15,8 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="4"/>
       <MinorVersionNr Value="1"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="106"/>
+      <RevisionNr Value="2"/>
+      <BuildNr Value="107"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable SpecialBuild="SECURITYLOG" ProductVersion="4.1.0.104"/>
@@ -51,7 +51,8 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dEPI_DEBUG1
--dMEM_LEAK_FINDER1"/>
+-dMEM_LEAK_FINDER1
+-dEPI_BETA"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -79,6 +80,7 @@
             </Debugging>
           </Linking>
           <Other>
+            <CustomOptions Value="-dEPI_BETA"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -115,7 +117,8 @@
             </Debugging>
           </Linking>
           <Other>
-            <CustomOptions Value="-dEPI_DEBUG1"/>
+            <CustomOptions Value="-dEPI_DEBUG1
+-dEPI_BETA"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -149,7 +152,8 @@
             </Debugging>
           </Linking>
           <Other>
-            <CustomOptions Value="-dEPI_DEBUG1"/>
+            <CustomOptions Value="-dEPI_DEBUG1
+-dEPI_BETA"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>

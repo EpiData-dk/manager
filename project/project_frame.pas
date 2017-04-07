@@ -1692,7 +1692,19 @@ begin
   end else
     Fn := DocumentFile.FileName;
 
-  Result := DoSaveProject(Fn);
+  try
+    result := DoSaveProject(Fn);
+  except
+    on E: Exception do
+      begin
+        MessageDlg('Error',
+          'Unable to save project to:' + LineEnding +
+          DocumentFile.FileName + LineEnding +
+          'Error message: ' + E.Message,
+          mtError, [mbOK], 0);
+        Exit;
+      end;
+  end;
   if Result then
     EpiDocument.Modified := false;
   UpdateCaption;
