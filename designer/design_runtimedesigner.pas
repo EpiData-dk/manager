@@ -2350,8 +2350,13 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.ViewDatasetActionExecute(Sender: TObject);
+var
+  Doc: TEpiDocument;
 begin
-  TEpiDocument(DataFile.RootOwner).Logger.LogSearch(nil);
+  Doc := TEpiDocument(DataFile.RootOwner);
+
+  if Assigned(Doc.Logger) then
+    Doc.Logger.LogSearch(nil);
 
   ShowDataSetViewerForm(
     Self,

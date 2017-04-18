@@ -107,12 +107,12 @@ type
     function  DoNewDataForm(ParentRelation: TEpiMasterRelation): TEpiMasterRelation;
     function  DoNewRuntimeFrame(Relation: TEpiMasterRelation): TRuntimeDesignFrame;
     // open existing
+    function  DoOpenProject(Const AFileName: string): boolean;
     function  DoSaveProject(AFileName: string): boolean;
     procedure OpenProjectOrderedWalkCallBack(
       const Relation: TEpiMasterRelation; const Depth: Cardinal;
       const Index: Cardinal; var aContinue: boolean;
       Data: Pointer = nil);
-    function  DoOpenProject(Const AFileName: string): boolean;
     // create new
     function  DoCreateNewDocumentFile: TDocumentFile;
     function  DoCreateNewDocument: TEpiDocument;
@@ -660,6 +660,11 @@ var
 begin
   Authenticator := TAuthenticator.Create(FDocumentFile);
 
+  // No need to do undo's if the usage does not require such a thing.
+  if (not Assigned(Authenticator.AuthedUser))
+  then
+    FDocumentFile.UndoCopy := false;
+
   UpdateCaption;
   UpdateShortCuts;
   InitBackupTimer;
@@ -786,9 +791,10 @@ function TProjectFrame.DoCreateNewDocumentFile: TDocumentFile;
 begin
   FDocumentFile := TDocumentFile.Create;
   FDocumentFile.OnAfterDocumentCreated := @AfterDocumentCreated;
-  FDocumentFile.OnLoadError           := @LoadError;
-  FDocumentFile.OnSaveThreadError := @SaveThreadError;
-  FDocumentFile.DataDirectory         := ManagerSettings.WorkingDirUTF8;
+  FDocumentFile.OnLoadError            := @LoadError;
+  FDocumentFile.OnSaveThreadError      := @SaveThreadError;
+  FDocumentFile.DataDirectory          := ManagerSettings.WorkingDirUTF8;
+  FDocumentFile.UndoCopy               := true;
 
   Result := FDocumentFile;
   FStatusBar.Visible := true;
