@@ -83,6 +83,7 @@ type
     procedure RemoveProjectPasswordUpdate(Sender: TObject);
     procedure ViewLogActionExecute(Sender: TObject);
   private
+    FSaveWarningRes: Integer;
     { Core Logger }
     FCoreLoggerForm: TCoreLogger;
     procedure DocumentHook(const Sender: TEpiCustomBase;
@@ -894,6 +895,13 @@ begin
 
   FActiveFrame := nil;
   FreeAndNil(FBackupTimer);
+
+  if (FSaveWarningRes = mrYes) and
+     (Assigned(FDocumentFile)) and
+     (FDocumentFile.UndoCopy)
+  then
+    FDocumentFile.UndoCopy := false;
+
   FreeAndNil(FDocumentFile);
 
   Modified := false;
@@ -1578,6 +1586,8 @@ procedure TProjectFrame.CloseQuery(var CanClose: boolean);
 var
   res: LongInt;
 begin
+  FSaveWarningRes := mrYes;
+
   // If Seleted Page is StudyUnit, then do a "silent" deactive in order to
   // check if content of page can actually be saved.
   if (Assigned(FActiveFrame)) and
@@ -1591,12 +1601,12 @@ begin
   if Modified or
     (Assigned(EpiDocument) and (EpiDocument.Modified)) then
   begin
-    Res := MessageDlg('Warning',
+    FSaveWarningRes := MessageDlg('Warning',
       'Project data content modified.' + LineEnding +
       'Store project permanently on disk before exit?',
       mtWarning, mbYesNoCancel, 0, mbCancel);
 
-    if Res = mrNo then
+    if FSaveWarningRes = mrNo then
     begin
       Res := MessageDlg('Warning',
         'Project content is NOT saved to disk.' + LineEnding +
@@ -1606,7 +1616,7 @@ begin
         mtWarning, mbYesNoCancel, 0, mbCancel);
     end;
 
-    case res of
+    case FSaveWarningRes of
       mrYes:    CanClose := SaveProject(False);
       mrCancel: CanClose := false;
     end;
