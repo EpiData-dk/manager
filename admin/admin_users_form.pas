@@ -63,7 +63,7 @@ type
     procedure AsyncOpenUserForm(Data: PtrInt);
     procedure InitUserVST;
     function UserFromNode(Node: PVirtualNode): TEpiUser;
-    function ShowUserForm(User: TEpiUser): TModalResult;
+    function ShowUserForm(User: TEpiUser; NewUser: boolean = false): TModalResult;
     procedure SetPasswordReset(AValue: boolean);
   public
     constructor Create(TheOwner: TComponent); override;
@@ -135,7 +135,7 @@ var
   User: TEpiUser;
 begin
   User := Admin.Users.NewUser;
-  if ShowUserForm(User) = mrCancel then
+  if ShowUserForm(User, True) = mrCancel then
     User.Free
   else
     InitUserVST;
@@ -145,8 +145,8 @@ procedure TDefineUsersForm.DeleteUserActionUpdate(Sender: TObject);
 var
   User: TEpiUser;
 begin
-  User := UserFromNode(FUsersVST.FocusedNode);
-  TAction(Sender).Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
+//  User := UserFromNode(FUsersVST.FocusedNode);
+//  TAction(Sender).Enabled := Authenticator.CheckAuthedUserHierachy(User, true);
 end;
 
 procedure TDefineUsersForm.DeleteUserActionExecute(Sender: TObject);
@@ -335,7 +335,8 @@ begin
   result := TEpiUser(FUsersVST.GetNodeData(Node)^);
 end;
 
-function TDefineUsersForm.ShowUserForm(User: TEpiUser): TModalResult;
+function TDefineUsersForm.ShowUserForm(User: TEpiUser; NewUser: boolean
+  ): TModalResult;
 var
   F: TAdminUserForm;
 begin
@@ -346,6 +347,7 @@ begin
   F.Admin := Admin;
   F.PasswordReset := PasswordReset;
   F.ShowGroups := (not PasswordReset);
+  F.NewUser := NewUser;
   Result := F.ShowModal;
   F.Free;
 

@@ -50,6 +50,7 @@ type
     FUser: TEpiUser;
     FPasswordModified: Boolean;
     FPasswordReset: boolean;
+    FNewUser: boolean;
     procedure FocusUserForm(Data: PtrInt);
     procedure PasswordEditOpen(Data: PtrInt);
     procedure FormShow(Sender: TObject);
@@ -81,6 +82,7 @@ type
     property Admin: TEpiAdmin read FAdmin write FAdmin;
     property ShowGroups: Boolean read FShowGroups write FShowGroups;
     property PasswordReset: boolean read FPasswordReset write FPasswordReset;
+    property NewUser: boolean read FNewUser write FNewUser;
   end;
 
 implementation
@@ -257,8 +259,7 @@ begin
 
   // Fill content!
   LoginEdit.Text       := User.Login;
-  LoginEdit.Enabled    := Authenticator.CheckAuthedUserHierachy(User, true) and
-                          (not PasswordReset);
+  LoginEdit.Enabled    := NewUser;
 
   FullnameEdit.Text    := User.FullName;
   FullnameEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true) and
@@ -464,6 +465,7 @@ begin
   inherited Create(TheOwner);
   FPasswordModified := false;
   FShowGroups       := false;
+  FNewUser          := false;
 
   FHintWindow       := THintWindow.Create(Self);
   FHintWindow.AutoHide     := true;

@@ -9,7 +9,7 @@ object DefineUsersForm: TDefineUsersForm
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poDefault
-  LCLVersion = '1.5'
+  LCLVersion = '1.9.0.0'
   object Panel6: TPanel
     Left = 0
     Height = 31
@@ -23,10 +23,10 @@ object DefineUsersForm: TDefineUsersForm
     object Label4: TLabel
       AnchorSideLeft.Control = Panel6
       AnchorSideLeft.Side = asrCenter
-      Left = 348
+      Left = 347
       Height = 19
       Top = 6
-      Width = 57
+      Width = 58
       BorderSpacing.Left = 10
       BorderSpacing.Top = 5
       BorderSpacing.Bottom = 5
@@ -48,10 +48,10 @@ object DefineUsersForm: TDefineUsersForm
     ClientWidth = 752
     TabOrder = 2
     object BitBtn1: TBitBtn
-      Left = 663
-      Height = 34
+      Left = 666
+      Height = 30
       Top = 8
-      Width = 73
+      Width = 70
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True
@@ -77,6 +77,7 @@ object DefineUsersForm: TDefineUsersForm
       Left = 24
       Top = 2
       Action = DeleteUserAction
+      Visible = False
     end
     object ToolButton3: TToolButton
       Left = 55
@@ -87,7 +88,6 @@ object DefineUsersForm: TDefineUsersForm
       Left = 47
       Height = 22
       Top = 2
-      Width = 8
       Caption = 'ToolButton7'
       Style = tbsSeparator
     end
