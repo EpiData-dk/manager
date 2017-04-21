@@ -202,8 +202,10 @@ type
     MenuItem34: TMenuItem;
     LogOverviewReportAction: TAction;
     MenuItem38: TMenuItem;
-    MenuItem40: TMenuItem;
     MenuItem41: TMenuItem;
+    MenuItem42: TMenuItem;
+    MenuItem43: TMenuItem;
+    MenuItem44: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);

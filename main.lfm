@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 531
+  Left = 452
   Height = 681
-  Top = 409
+  Top = 259
   Width = 878
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -16,7 +16,7 @@ object MainForm: TMainForm
   OnDropFiles = FormDropFiles
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '1.7'
+  LCLVersion = '1.9.0.0'
   object PageControl1: TPageControl
     Left = 0
     Height = 643
@@ -434,9 +434,6 @@ object MainForm: TMainForm
         object MenuItem34: TMenuItem
           Action = AdminReportAction
         end
-        object MenuItem40: TMenuItem
-          Action = LogOverviewReportAction
-        end
         object MenuItem41: TMenuItem
           Caption = '-'
         end
@@ -718,11 +715,13 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Admin Overview'
       OnExecute = AdminReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object LogOverviewReportAction: TAction
       Category = 'Reports'
       Caption = 'Log Overview'
       OnExecute = LogOverviewReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
@@ -820,6 +819,15 @@ object MainForm: TMainForm
       end
       object MenuItem12: TMenuItem
         Action = ValueLabelListReportAction
+      end
+      object MenuItem42: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem43: TMenuItem
+        Action = AdminReportAction
+      end
+      object MenuItem44: TMenuItem
+        Caption = '-'
       end
       object MenuItem27: TMenuItem
         Action = CodeBookReportAction
