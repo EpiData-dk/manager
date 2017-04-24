@@ -264,6 +264,7 @@ uses
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';
+  rsDefaultValNotInRange = 'Default Value is not within range or a valid valuelabel!';
 
 type
   TJumpComponents = record
@@ -1641,8 +1642,9 @@ var
   I: integer;
   I64: int64;
   F: Extended;
-  W1, W2, W3: Word;
   S: string;
+  D: EpiDate;
+  T: EpiTime;
 begin
   result := false;
 
@@ -1731,13 +1733,13 @@ begin
           end;
         ftTime:
           begin
-            if not EpiStrToTime(FromEdit.Text, TimeSeparator, W1, W2, W3, S) then
+            if not EpiStrToTime(FromEdit.Text, TimeSeparator, T, S) then
             begin
               DoError(S, FromEdit);
               Exit;
             end;
 
-            if not EpiStrToTime(ToEdit.Text, TimeSeparator, W1, W2, W3, S) then
+            if not EpiStrToTime(ToEdit.Text, TimeSeparator, T, S) then
             begin
               DoError(S, ToEdit);
               Exit;
@@ -1747,13 +1749,13 @@ begin
         ftMDYDate,
         ftYMDDate:
           begin
-            if not EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, W1, W2, W3, S) then
+            if not EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, D, S) then
             begin
               DoError(S, FromEdit);
               Exit;
             end;
 
-            if not EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, W1, W2, W3, S) then
+            if not EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, D, S) then
             begin
               DoError(S, ToEdit);
               Exit;
@@ -1772,6 +1774,69 @@ begin
   then
     with DefaultValueEdit do
     begin
+      case Field.FieldType of
+        ftBoolean:
+          begin
+            if (not TryStrToInt64(Text, I64)) then
+              Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), DefaultValueEdit));
+          end;
+
+        ftInteger,
+        ftAutoInc:
+          begin
+            if (not TryStrToInt64(Text, I64)) then
+              Exit(DoError(Format(rsNotAValidType, ['integer', Text]), DefaultValueEdit));
+
+            if (FromEdit.Text <> '') and (ToEdit.Text <> '') then
+               if (I64 < StrToInt(FromEdit.Text)) or (I64 > StrToInt(ToEdit.Text)) then
+                 Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
+
+//            if (valu
+          end;
+
+        ftFloat:
+          begin
+            if (not TryStrToFloat(Text, F)) then
+              Exit(DoError(Format(rsNotAValidType, ['float', Text]), DefaultValueEdit));
+
+            if (FromEdit.Text <> '') and (ToEdit.Text <> '') then
+               if (F < StrToFloat(FromEdit.Text)) or (F > StrToFloat(ToEdit.Text)) then
+                 Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
+          end;
+
+        ftDMYDate,
+        ftMDYDate,
+        ftYMDDate,
+        ftDMYAuto,
+        ftMDYAuto,
+        ftYMDAuto:
+          begin
+            if (not EpiStrToDate(Text, DateSeparator, Field.FieldType, D, S)) then
+              Exit(DoError(S, DefaultValueEdit));
+
+            if (FromEdit.Text <> '') and (ToEdit.Text <> '') then
+               if (D < EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, S)) or
+                  (D > EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, S))
+               then
+                 Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
+          end;
+
+        ftTime,
+        ftTimeAuto:
+          begin
+            if (not EpiStrToTime(Text, TimeSeparator, T, S)) then
+              Exit(DoError(S, DefaultValueEdit));
+
+            if (FromEdit.Text <> '') and (ToEdit.Text <> '') then
+               if (T < EpiStrToTime(FromEdit.Text, TimeSeparator, S)) or
+                  (T > EpiStrToTime(ToEdit.Text, TimeSeparator, S))
+               then
+                 Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
+          end;
+      end;
+
+{
+
       if (Field.FieldType in BoolFieldTypes) and (not TryStrToInt64(Text, I64)) then
         Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), DefaultValueEdit));
 
@@ -1785,7 +1850,7 @@ begin
         Exit(DoError(S, DefaultValueEdit));
 
       if (Field.FieldType in TimeFieldTypes) and (not EpiStrToTime(Text, TimeSeparator, W1, W2, W3, S)) then
-        Exit(DoError(S, DefaultValueEdit));
+        Exit(DoError(S, DefaultValueEdit));  }
     end;
 
   // *******
