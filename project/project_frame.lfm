@@ -24,7 +24,7 @@ object ProjectFrame: TProjectFrame
       Left = 0
       Height = 22
       Top = 0
-      Width = 183
+      Width = 187
       AutoSize = True
       ButtonHeight = 20
       ButtonWidth = 20
@@ -42,11 +42,11 @@ object ProjectFrame: TProjectFrame
         ParentShowHint = False
         ShowHint = True
       end
-      object ToolButton1: TToolButton
+      object Divider2: TToolButton
         Left = 47
         Height = 20
         Top = 1
-        Caption = 'ToolButton1'
+        Caption = 'Divider2'
         Style = tbsDivider
       end
       object SaveProjectToolBtn: TToolButton
@@ -63,11 +63,11 @@ object ProjectFrame: TProjectFrame
         ParentShowHint = False
         ShowHint = True
       end
-      object ToolButton4: TToolButton
+      object Divider3: TToolButton
         Left = 92
         Height = 20
         Top = 1
-        Caption = 'ToolButton4'
+        Caption = 'Divider3'
         Style = tbsDivider
       end
       object AddDataFormToolBtn: TToolButton
@@ -84,38 +84,31 @@ object ProjectFrame: TProjectFrame
         ParentShowHint = False
         ShowHint = True
       end
-      object ToolButton7: TToolButton
-        Left = 145
-        Height = 20
-        Top = 1
-        Caption = 'ToolButton7'
-        Style = tbsDivider
-      end
       object NewProjectToolBtn: TToolButton
         Left = 2
         Top = 1
         Caption = 'NewProjectToolBtn'
       end
-      object ToolButton2: TToolButton
+      object Divider1: TToolButton
         Left = 22
         Height = 20
         Top = 1
-        Caption = 'ToolButton2'
+        Caption = 'Divider1'
         Style = tbsDivider
       end
-      object ToolButton3: TToolButton
+      object Divider4: TToolButton
         Left = 137
         Height = 20
         Top = 1
-        Caption = 'ToolButton3'
-        Style = tbsSeparator
+        Caption = 'Divider4'
+        Style = tbsDivider
       end
-      object ToolButton5: TToolButton
-        Left = 150
+      object ProjectTestToolBtn: TToolButton
+        Left = 142
         Top = 1
-        Caption = 'ToolButton5'
+        Caption = 'ProjectTestToolBtn'
         ImageIndex = 37
-        OnClick = ToolButton5Click
+        OnClick = ProjectTestToolBtnClick
       end
     end
   end

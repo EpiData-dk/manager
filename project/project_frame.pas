@@ -31,9 +31,9 @@ type
     SetProjectPasswordAction: TAction;
     OpenProjectAction: TAction;
     NewProjectToolBtn: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
-    ToolButton5: TToolButton;
+    Divider1: TToolButton;
+    Divider4: TToolButton;
+    ProjectTestToolBtn: TToolButton;
     ValueLabelEditorAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
@@ -44,13 +44,12 @@ type
     ProjectPanel: TPanel;
     ToolBar1: TToolBar;
     OpenProjectToolBtn: TToolButton;
-    ToolButton1: TToolButton;
+    Divider2: TToolButton;
     SaveProjectToolBtn: TToolButton;
     SaveProjectAsToolBtn: TToolButton;
-    ToolButton4: TToolButton;
+    Divider3: TToolButton;
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
-    ToolButton7: TToolButton;
     DefineGroupsAction: TAction;
     DefineUsersAction: TAction;
     DefineEntryRightsAction: TAction;
@@ -69,7 +68,7 @@ type
     procedure SaveProjectActionUpdate(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
     procedure StudyInformationActionExecute(Sender: TObject);
-    procedure ToolButton5Click(Sender: TObject);
+    procedure ProjectTestToolBtnClick(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
     procedure DefineGroupsActionUpdate(Sender: TObject);
     procedure DefineGroupsActionExecute(Sender: TObject);
@@ -460,7 +459,7 @@ begin
   FProjectTreeView.SelectedObject := EpiDocument;
 end;
 
-procedure TProjectFrame.ToolButton5Click(Sender: TObject);
+procedure TProjectFrame.ProjectTestToolBtnClick(Sender: TObject);
 begin
   ShowCoreLogger;
 end;
@@ -1569,6 +1568,8 @@ begin
   {$IFNDEF EPI_DEBUG}
   Splitter2.Visible := False;
   Panel1.Visible := false;
+  Divider4.Visible := false;
+  ProjectTestToolBtn.Visible := false;
   {$ENDIF}
 
   UpdateRecentFilesDropDown;

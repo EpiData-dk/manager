@@ -891,7 +891,6 @@
       <CustomOptions Value="-dEPI_DEBUG1
 -dMEM_LEAK_FINDER1
 -dEPI_DEVELOPMENT1
-
 -dEPI_BETA"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>
