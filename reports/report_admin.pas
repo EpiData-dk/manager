@@ -143,6 +143,8 @@ begin
 
   for DF in DFs do
     begin
+      if DF.ProtectedItem then Continue;
+
       Generator.TableHeader(DF.Caption.Text, 5, OGrps.Count + 2);
 
       Generator.TableCell('Group',  0, 0);

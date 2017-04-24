@@ -1,5 +1,5 @@
 object DefineEntryRightsForm: TDefineEntryRightsForm
-  Left = 773
+  Left = 2170
   Height = 518
   Top = 313
   Width = 821
@@ -8,7 +8,7 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
   ClientWidth = 821
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
-  LCLVersion = '1.7'
+  LCLVersion = '1.9.0.0'
   object Panel4: TPanel
     Left = 0
     Height = 50
@@ -20,10 +20,10 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
     TabOrder = 0
     Visible = False
     object BitBtn1: TBitBtn
-      Left = 731
-      Height = 30
+      Left = 730
+      Height = 34
       Top = 8
-      Width = 70
+      Width = 71
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True

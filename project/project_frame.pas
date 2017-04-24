@@ -1408,6 +1408,7 @@ var
     F := TAdminUserForm.Create(Self);
     F.User  := User;
     F.Admin := EpiDocument.Admin;
+    F.NewUser := true;
     Result  := F.ShowModal;
     F.Free;
   end;
@@ -1415,7 +1416,7 @@ var
 begin
   Result := true;
 
-  if (EpiDocument.Admin.Users.Count = 0) then
+  if (not EpiDocument.Admin.Initialized) then
     begin
       Result := false;
 
