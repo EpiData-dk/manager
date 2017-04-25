@@ -230,6 +230,13 @@ type
   private
     { Calculation }
     procedure UpdateCalcFields;
+
+  private
+    { Check Edit Entries }
+    function CheckLengthAndType(Edit: TEdit): boolean;
+    function CheckRangeAndValuelabel(Edit: TEdit): boolean;
+
+
   private
     { private declarations }
     FFields: TEpiCustomControlItemArray;
@@ -260,7 +267,7 @@ uses
   epimiscutils, typinfo, epiranges, epiconvertutils, epiadmin,
   epistringutils, LazUTF8, field_valuelabelseditor_form, admin_authenticator,
   valuelabelseditor_form2, math, epidatafilerelations, epiv_datamodule,
-  epifields_helper;
+  epifields_helper, variants;
 
 resourcestring
   rsNotAValidType = 'Not a valid %s: %s';
@@ -994,6 +1001,179 @@ begin
     end;
 end;
 
+function TFieldPropertiesFrame.CheckLengthAndType(Edit: TEdit): boolean;
+var
+  S: TCaption;
+  AList: TStrings;
+  T: EpiTime;
+  D: EpiDate;
+  I64: int64;
+  F: Extended;
+  Len, Dec: LongInt;
+  Msg: string;
+begin
+  Result := false;
+
+  S := Edit.Text;
+  Len := StrToInt(LengthEdit.Text);
+  Dec := StrToInt(DecimalsEdit.Text);
+
+  Case Field.FieldType of
+    ftAutoInc,
+    ftInteger:
+      begin
+        if not TryStrToInt64(S, I64) then
+          begin
+            DoError(Format('Not a valid integer: %s', [S]), Edit);
+            Exit;
+          end;
+
+        if (UTF8Length(S) > Len) then
+          begin
+            DoError('Value exceeds length of variable', Edit);
+            Exit;
+          end;
+      end;
+
+    ftFloat:
+      begin
+        if not TryStrToFloat(S, F) then
+          begin
+            DoError(Format('Not a valid float: %s', [S]), Edit);
+            Exit;
+          end;
+
+        AList := TStringList.Create;
+        SplitString(S, AList, ['.', ',']);
+
+        if (UTF8Length(AList[0]) > Len) then
+          begin
+            DoError('Value exceeds length of variable', Edit);
+            Exit;
+          end;
+
+        if (AList.Count = 2) and (UTF8Length(AList[1]) > Dec)
+        then
+         begin
+           DoError('Value exceeds decimals of variable', Edit);
+           Exit;
+         end;
+
+        AList.Free;
+      end;
+
+    ftTime,
+    ftTimeAuto:
+      begin
+        if not EpiStrToTime(S, TimeSeparator, T, Msg) then
+        begin
+          DoError(Msg, Edit);
+          Exit;
+        end;
+      end;
+
+    ftDMYDate,
+    ftMDYDate,
+    ftYMDDate,
+    ftDMYAuto,
+    ftMDYAuto,
+    ftYMDAuto:
+      begin
+        if not EpiStrToDate(S, DateSeparator, Field.FieldType, D, Msg) then
+        begin
+          DoError(Msg, Edit);
+          Exit;
+        end;
+      end;
+
+    ftString,
+    ftUpperString:
+      begin
+        if (UTF8Length(S) > Len) then
+          begin
+            DoError('Value exceeds length of variable', Edit);
+            Exit;
+          end;
+      end;
+
+    ftMemo: ;  // No checks needed
+  end;
+  Result := true;
+end;
+
+function TFieldPropertiesFrame.CheckRangeAndValuelabel(Edit: TEdit): boolean;
+var
+  VL: TEpiValueLabelSet;
+  FromI, ToI: Int64;
+  FromF, ToF: Extended;
+  FromD, ToD: EpiDate;
+  FromT, ToT: EpiTime;
+  HasRange, HasVL: Boolean;
+  Msg: String;
+  Val: Variant;
+begin
+  Result := false;
+
+  VL := TEpiValueLabelSet(ComboSelectedObject(ValueLabelComboBox));
+
+  HasVL    := Assigned(VL);
+  HasRange := (FromEdit.Text <> '') and (ToEdit.Text <> '');
+
+  if not (HasRange or HasVL) then
+    Exit(true);
+
+  Val := Edit.Text;
+
+  if HasRange then
+    begin
+      FromI := StrToInt64Def(FromEdit.Text, -MaxSIntValue);
+      ToI   := StrToInt64Def(ToEdit.Text,    MaxSIntValue);
+
+      FromF := StrToFloatDef(FromEdit.Text, -MaxFloat);
+      ToF   := StrToFloatDef(ToEdit.Text,    MaxFloat);
+
+      FromD := EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, Msg);
+      ToD   := EpiStrToDate(ToEdit.Text,   DateSeparator, Field.FieldType, Msg);
+
+      FromT := EpiStrToTime(FromEdit.Text, TimeSeparator, Msg);
+      ToT   := EpiStrToTime(ToEdit.Text, TimeSeparator, Msg);
+
+      case Field.FieldType of
+        ftInteger,
+        ftAutoInc:
+          result := (Val >= FromI) and (Val <= ToI);
+
+        ftFloat:
+          result := (Val >= FromF) and (Val <= ToF);
+
+        ftDMYDate,
+        ftMDYDate,
+        ftYMDDate,
+        ftDMYAuto,
+        ftMDYAuto,
+        ftYMDAuto:
+          begin
+            Val    := EpiStrToDate(Edit.Text, DateSeparator, Field.FieldType, Msg);
+            result := (Val >= FromD) and (Val <= ToD);
+          end;
+
+        ftTime,
+        ftTimeAuto:
+          begin
+            Val    := EpiStrToTime(Edit.Text, TimeSeparator, Msg);
+            result := (Val >= FromT) and (Val <= ToT);
+          end;
+      end;
+
+    end;
+
+  if HasVL then
+    result := result or VL.ValueLabelExists[Val];
+
+  if (not Result) then
+    DoError(rsDefaultValNotInRange, Edit);
+end;
+
 function TFieldPropertiesFrame.DoError(const Msg: string; Ctrl: TWinControl
   ): boolean;
 begin
@@ -1645,6 +1825,7 @@ var
   S: string;
   D: EpiDate;
   T: EpiTime;
+  VL: TEpiValueLabelSet;
 begin
   result := false;
 
@@ -1702,66 +1883,11 @@ begin
 
     if ((FromEdit.Text <> '') and (ToEdit.Text <> '')) then
     begin
-      Case Field.FieldType of
-        ftInteger:
-          begin
-            if not TryStrToInt64(FromEdit.Text, I64) then
-            begin
-              DoError(Format('Not a valid integer: %s', [FromEdit.Text]), FromEdit);
-              Exit;
-            end;
+      if (not CheckLengthAndType(FromEdit)) then
+        Exit;
 
-            if not TryStrToInt64(ToEdit.Text, I64) then
-            begin
-              DoError(Format('Not a valid integer: %s', [ToEdit.Text]), ToEdit);
-              Exit;
-            end;
-          end;
-        ftFloat:
-          begin
-            if not TryStrToFloat(FromEdit.Text, F) then
-            begin
-              DoError(Format('Not a valid float: %s', [FromEdit.Text]), FromEdit);
-              Exit;
-            end;
-
-            if not TryStrToFloat(ToEdit.Text, F) then
-            begin
-              DoError(Format('Not a valid float: %s', [ToEdit.Text]), ToEdit);
-              Exit;
-            end;
-          end;
-        ftTime:
-          begin
-            if not EpiStrToTime(FromEdit.Text, TimeSeparator, T, S) then
-            begin
-              DoError(S, FromEdit);
-              Exit;
-            end;
-
-            if not EpiStrToTime(ToEdit.Text, TimeSeparator, T, S) then
-            begin
-              DoError(S, ToEdit);
-              Exit;
-            end;
-          end;
-        ftDMYDate,
-        ftMDYDate,
-        ftYMDDate:
-          begin
-            if not EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, D, S) then
-            begin
-              DoError(S, FromEdit);
-              Exit;
-            end;
-
-            if not EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, D, S) then
-            begin
-              DoError(S, ToEdit);
-              Exit;
-            end;
-          end;
-      end;
+      if (not CheckLengthAndType(ToEdit)) then
+        Exit;
     end;
   end;
 
@@ -1774,6 +1900,13 @@ begin
   then
     with DefaultValueEdit do
     begin
+      if (not CheckLengthAndType(DefaultValueEdit)) then
+        Exit;
+
+      if (not CheckRangeAndValuelabel(DefaultValueEdit)) then
+        Exit;
+
+      {
       case Field.FieldType of
         ftBoolean:
           begin
@@ -1791,7 +1924,6 @@ begin
                if (I64 < StrToInt(FromEdit.Text)) or (I64 > StrToInt(ToEdit.Text)) then
                  Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
 
-//            if (valu
           end;
 
         ftFloat:
@@ -1835,8 +1967,6 @@ begin
           end;
       end;
 
-{
-
       if (Field.FieldType in BoolFieldTypes) and (not TryStrToInt64(Text, I64)) then
         Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), DefaultValueEdit));
 
@@ -1865,7 +1995,15 @@ begin
 
       // This allow for using '*' as an "On any value" specifier.
       if TEdit(ValueEdit).Text <> TEpiJump.DefaultOnAnyValue then
-        with TEdit(ValueEdit) do
+        begin
+          if (not CheckLengthAndType(TEdit(ValueEdit))) then
+            Exit;
+
+          if (not CheckRangeAndValuelabel(TEdit(ValueEdit))) then
+            Exit;
+        end;
+
+       { with TEdit(ValueEdit) do
         case Field.FieldType of
           ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), TEdit(ValueEdit)));
           ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), TEdit(ValueEdit)));
@@ -1880,7 +2018,7 @@ begin
           ftString,
           ftUpperString:  ;
         end;
-
+              }
       if TComboBox(GotoCombo).ItemIndex = -1 then
         Exit(DoError('Invalid "Go To" selection"', TComboBox(GotoCombo)));
     end;
@@ -1898,14 +2036,24 @@ begin
 
       // This allow for using '.' as an "On any value" specifier.
       if ValueEdit.Text <> TEpiJump.DefaultOnAnyValue then
-        with ValueEdit do
+        begin
+          if (not CheckLengthAndType(TEdit(ValueEdit))) then
+            Exit;
+
+          if (not CheckRangeAndValuelabel(TEdit(ValueEdit))) then
+            Exit;
+        end;
+
+
+
+{        with ValueEdit do
         case Field.FieldType of
           ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), ValueEdit));
           ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), ValueEdit));
           ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format(rsNotAValidType, ['float', Text]), ValueEdit));
           ftString,
           ftUpperString:  ;
-        end;
+        end;  }
 
       if GotoCombo.ItemIndex = -1 then
         Exit(DoError('Invalid "Go To" selection"', GotoCombo));

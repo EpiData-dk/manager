@@ -113,11 +113,16 @@ type
       const Relation: TEpiMasterRelation; const Depth: Cardinal;
       const Index: Cardinal; var aContinue: boolean;
       Data: Pointer = nil);
+    // close
+    procedure DoCloseProject;
+    procedure CloseProjectOrderedWalkCallBack(
+      const Relation: TEpiMasterRelation; const Depth: Cardinal;
+      const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
     // create new
     function  DoCreateNewDocumentFile: TDocumentFile;
     function  DoCreateNewDocument: TEpiDocument;
     procedure DoCreateNewProject;
-    procedure DoCloseProject;
     procedure EpiDocumentModified(Sender: TObject);
     procedure UpdateDefaultExtension(Const Dlg: TOpenDialog);
     procedure SaveDlgTypeChange(Sender: TObject);
@@ -155,6 +160,7 @@ type
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure BindKeyFields(DR: TEpiDetailRelation);
+    procedure UnBindKeyFields(DR: TEpiDetailRelation);
   private
     { Hint }
     FHintWindow: THintWindow;
@@ -715,6 +721,14 @@ begin
     BindKeyFields(TEpiDetailRelation(Relation));
 end;
 
+procedure TProjectFrame.CloseProjectOrderedWalkCallBack(
+  const Relation: TEpiMasterRelation; const Depth: Cardinal;
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
+begin
+  if (Depth > 0) then
+    UnBindKeyFields(TEpiDetailRelation(Relation));
+end;
+
 function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
 var
   i: Integer;
@@ -901,6 +915,8 @@ begin
   then
     FDocumentFile.UndoCopy := false;
 
+  FDocumentFile.Document.Relations.OrderedWalk(@CloseProjectOrderedWalkCallBack, nil);
+
   FreeAndNil(FDocumentFile);
 
   Modified := false;
@@ -978,6 +994,9 @@ procedure TProjectFrame.ProjectTreeDelete(const Relation: TEpiMasterRelation);
 var
   Frame: TCustomFrame;
 begin
+  if (Relation.InheritsFrom(TEpiDetailRelation)) then
+    UnBindKeyFields(TEpiDetailRelation(Relation));
+
   Frame := TCustomFrame(Relation.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
   Frame.Free;
 end;
@@ -1028,7 +1047,6 @@ begin
       BindKeyFields(TEpiDetailRelation(Relation));
     end;
 
-
   Frame := DoNewRuntimeFrame(Relation);
   Frame.Activate;
   Frame.DeActivate(true);
@@ -1042,14 +1060,14 @@ begin
   then
     Exit;
 
-  FActiveFrame.Activate;
-  FActiveFrame.AssignActionLinks;
-
   if ObjectType = otRelation then
     begin
       AlignForm.DesignFrame := TRuntimeDesignFrame(AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
       FStatusBar.Datafile := TEpiMasterRelation(AObject).Datafile;
     end;
+
+  FActiveFrame.Activate;
+  FActiveFrame.AssignActionLinks;
 
   MainForm.DataFormBtn.Enabled := ObjectType = otRelation;
 end;
@@ -1233,6 +1251,37 @@ begin
       MasterField.AddCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY, ChildFields);
     end;
     ChildFields.AddItem(DetailField);
+  end;
+end;
+
+procedure TProjectFrame.UnBindKeyFields(DR: TEpiDetailRelation);
+var
+  MasterKeyFields: TEpiFields;
+  DetailKeyFields: TEpiFields;
+  MasterField: TEpiField;
+  DetailField: TEpiField;
+  ChildFields: TEpiFields;
+  i: Integer;
+begin
+  if not Assigned(DR) then exit;
+
+  MasterKeyFields := DR.MasterRelation.Datafile.KeyFields;
+  DetailKeyFields := DR.Datafile.KeyFields;
+
+  for i := 0 to MasterKeyFields.Count - 1 do
+  begin
+    MasterField := MasterKeyFields[i];
+    DetailField := DetailKeyFields.FieldByName[MasterField.Name];
+
+    MasterField.UnRegisterOnChangeHook(@KeyFieldEvent);
+
+    // Link to "child" field...
+    ChildFields := TEpiFields(MasterField.FindCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY));
+    if (Assigned(ChildFields)) then
+    begin
+      ChildFields.Free;
+      MasterField.RemoveCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY);
+    end;
   end;
 end;
 
