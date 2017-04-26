@@ -915,7 +915,8 @@ begin
   then
     FDocumentFile.UndoCopy := false;
 
-  FDocumentFile.Document.Relations.OrderedWalk(@CloseProjectOrderedWalkCallBack, nil);
+  if Assigned(FDocumentFile) then
+    FDocumentFile.Document.Relations.OrderedWalk(@CloseProjectOrderedWalkCallBack, nil);
 
   FreeAndNil(FDocumentFile);
 
