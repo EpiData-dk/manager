@@ -1,5 +1,5 @@
 object DefineEntryRightsForm: TDefineEntryRightsForm
-  Left = 773
+  Left = 2170
   Height = 518
   Top = 313
   Width = 821
@@ -8,7 +8,7 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
   ClientWidth = 821
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
-  LCLVersion = '1.5'
+  LCLVersion = '1.9.0.0'
   object Panel4: TPanel
     Left = 0
     Height = 50
@@ -20,10 +20,10 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
     TabOrder = 0
     Visible = False
     object BitBtn1: TBitBtn
-      Left = 732
+      Left = 730
       Height = 34
       Top = 8
-      Width = 73
+      Width = 71
       Anchors = [akTop, akRight]
       AutoSize = True
       DefaultCaption = True
@@ -55,10 +55,10 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
       object Label4: TLabel
         AnchorSideLeft.Control = Panel6
         AnchorSideLeft.Side = asrCenter
-        Left = 151
+        Left = 149
         Height = 19
         Top = 6
-        Width = 99
+        Width = 102
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         BorderSpacing.Bottom = 5
@@ -101,10 +101,10 @@ object DefineEntryRightsForm: TDefineEntryRightsForm
       object Label2: TLabel
         AnchorSideLeft.Control = Panel7
         AnchorSideLeft.Side = asrCenter
-        Left = 148
+        Left = 147
         Height = 19
         Top = 6
-        Width = 115
+        Width = 117
         BorderSpacing.Left = 10
         BorderSpacing.Top = 5
         BorderSpacing.Bottom = 5

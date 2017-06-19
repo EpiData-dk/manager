@@ -14,11 +14,12 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="4"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="99"/>
+      <MinorVersionNr Value="1"/>
+      <RevisionNr Value="3"/>
+      <BuildNr Value="111"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
-      <StringTable SpecialBuild="TRUNK" ProductVersion="4.0.0.95"/>
+      <StringTable SpecialBuild="SECURITYLOG" ProductVersion="4.1.0.104"/>
     </VersionInfo>
     <BuildModes Count="5">
       <Item1 Name="Default" Default="True"/>
@@ -50,7 +51,8 @@
           </Linking>
           <Other>
             <CustomOptions Value="-dEPI_DEBUG1
--dMEM_LEAK_FINDER1"/>
+-dMEM_LEAK_FINDER1
+-dEPI_BETA"/>
           </Other>
         </CompilerOptions>
       </Item2>
@@ -78,6 +80,7 @@
             </Debugging>
           </Linking>
           <Other>
+            <CustomOptions Value="-dEPI_BETA"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -114,7 +117,8 @@
             </Debugging>
           </Linking>
           <Other>
-            <CustomOptions Value="-dEPI_DEBUG1"/>
+            <CustomOptions Value="-dEPI_DEBUG1
+-dEPI_BETA"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -148,7 +152,8 @@
             </Debugging>
           </Linking>
           <Other>
-            <CustomOptions Value="-dEPI_DEBUG1"/>
+            <CustomOptions Value="-dEPI_DEBUG1
+-dEPI_BETA"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
@@ -172,19 +177,20 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
+        <CommandLineParams Value="-r=~/.epidata.securitylog.recentfiles.ini -i=~/.epidata.securitylog.cfg"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
     <RequiredPackages Count="8">
       <Item1>
         <PackageName Value="epidatacore_visuals"/>
-        <MaxVersion Major="4" Valid="True"/>
-        <MinVersion Major="4" Valid="True"/>
+        <MaxVersion Major="4" Minor="1" Valid="True"/>
+        <MinVersion Major="4" Minor="1" Valid="True"/>
       </Item1>
       <Item2>
         <PackageName Value="epidatacore"/>
-        <MaxVersion Major="4" Valid="True"/>
-        <MinVersion Major="4" Valid="True"/>
+        <MaxVersion Major="4" Minor="1" Valid="True"/>
+        <MinVersion Major="4" Minor="1" Valid="True"/>
       </Item2>
       <Item3>
         <PackageName Value="LazControls"/>
@@ -885,7 +891,6 @@
       <CustomOptions Value="-dEPI_DEBUG1
 -dMEM_LEAK_FINDER1
 -dEPI_DEVELOPMENT1
-
 -dEPI_BETA"/>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>
@@ -896,7 +901,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="6">
+    <Exceptions Count="8">
       <Item1>
         <Name Value="EAbort"/>
       </Item1>
@@ -915,6 +920,12 @@
       <Item6>
         <Name Value="EEpiPasswordCanceled"/>
       </Item6>
+      <Item7>
+        <Name Value="EEpiThreadSaveExecption"/>
+      </Item7>
+      <Item8>
+        <Name Value="EEpiTooManyFailedLogins"/>
+      </Item8>
     </Exceptions>
   </Debugging>
 </CONFIG>

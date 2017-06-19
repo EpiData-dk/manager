@@ -18,8 +18,9 @@ type
 
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
+    MenuItem40: TMenuItem;
+    MenuItem45: TMenuItem;
     StaticText1: TStaticText;
-    ViewLogMenuItem: TMenuItem;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
     MenuItem37: TMenuItem;
@@ -203,8 +204,10 @@ type
     MenuItem34: TMenuItem;
     LogOverviewReportAction: TAction;
     MenuItem38: TMenuItem;
-    MenuItem40: TMenuItem;
     MenuItem41: TMenuItem;
+    MenuItem42: TMenuItem;
+    MenuItem43: TMenuItem;
+    MenuItem44: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -504,6 +507,12 @@ begin
 
     if (not Assigned(DF)) then
       Exit;
+
+    if (DF.Document.DataFiles.Count = 0) then
+    begin
+      ShowMessage('No dataforms to export!');
+      Exit;
+    end;
 
     F := TExportForm2.Create(Self);
     F.DocumentFile := DF;
@@ -1112,8 +1121,15 @@ begin
 end;
 
 procedure TMainForm.ExportActionUpdate(Sender: TObject);
+var
+  ActionEnabled: Boolean;
 begin
-  TAction(Sender).Enabled := Authenticator.IsAuthorized([earExport]);
+  ActionEnabled := Authenticator.IsAuthorized([earExport]);
+
+  if Assigned(FActiveFrame) then
+    ActionEnabled := ActionEnabled and (FActiveFrame.EpiDocument.DataFiles.Count > 0);
+
+  TAction(Sender).Enabled := ActionEnabled;
 end;
 
 procedure TMainForm.ReportsAuthActionUpdate(Sender: TObject);
@@ -1386,7 +1402,7 @@ begin
   DefineGroupsMenuItem.Visible := Assigned(FActiveFrame);
   DefineUsersMenuItem.Visible := Assigned(FActiveFrame);
   DefineEntryRightsMenuItem.Visible := Assigned(FActiveFrame);
-  ViewLogMenuItem.Visible := Assigned(FActiveFrame);
+//  ViewLogMenuItem.Visible := Assigned(FActiveFrame);
   // -
   DefineAccessDivider2.Visible := Assigned(FActiveFrame);
 

@@ -24,7 +24,6 @@ type
     MenuItem1: TMenuItem;
     Panel1: TPanel;
     ProjectRecentFilesDropDownMenu: TPopupMenu;
-    ProgressBar1: TProgressBar;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     StudyInformationAction: TAction;
@@ -32,9 +31,9 @@ type
     SetProjectPasswordAction: TAction;
     OpenProjectAction: TAction;
     NewProjectToolBtn: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
-    ToolButton5: TToolButton;
+    Divider1: TToolButton;
+    Divider4: TToolButton;
+    ProjectTestToolBtn: TToolButton;
     ValueLabelEditorAction: TAction;
     ProjectSettingsAction: TAction;
     DeleteDataFormAction: TAction;
@@ -45,13 +44,12 @@ type
     ProjectPanel: TPanel;
     ToolBar1: TToolBar;
     OpenProjectToolBtn: TToolButton;
-    ToolButton1: TToolButton;
+    Divider2: TToolButton;
     SaveProjectToolBtn: TToolButton;
     SaveProjectAsToolBtn: TToolButton;
-    ToolButton4: TToolButton;
+    Divider3: TToolButton;
     AddDataFormToolBtn: TToolButton;
     DeleteDataFormToolBtn: TToolButton;
-    ToolButton7: TToolButton;
     DefineGroupsAction: TAction;
     DefineUsersAction: TAction;
     DefineEntryRightsAction: TAction;
@@ -59,9 +57,6 @@ type
     RemoveProjectPassword: TAction;
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
-    procedure DocumentProgress(const Sender: TEpiCustomBase;
-      ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
-      var Canceled: Boolean);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure NewDataFormActionUpdate(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -73,7 +68,7 @@ type
     procedure SaveProjectActionUpdate(Sender: TObject);
     procedure SaveProjectAsActionExecute(Sender: TObject);
     procedure StudyInformationActionExecute(Sender: TObject);
-    procedure ToolButton5Click(Sender: TObject);
+    procedure ProjectTestToolBtnClick(Sender: TObject);
     procedure ValueLabelEditorActionExecute(Sender: TObject);
     procedure DefineGroupsActionUpdate(Sender: TObject);
     procedure DefineGroupsActionExecute(Sender: TObject);
@@ -87,6 +82,7 @@ type
     procedure RemoveProjectPasswordUpdate(Sender: TObject);
     procedure ViewLogActionExecute(Sender: TObject);
   private
+    FSaveWarningRes: Integer;
     { Core Logger }
     FCoreLoggerForm: TCoreLogger;
     procedure DocumentHook(const Sender: TEpiCustomBase;
@@ -94,6 +90,9 @@ type
       EventType: Word; Data: Pointer);
     procedure ShowCoreLogger;
     procedure CreateCoreLogger;
+    procedure AfterDocumentCreated(const Sender: TObject;
+      const ADocument: TEpiDocument);
+    procedure SaveThreadError(const FatalErrorObject: Exception);
   private
     { private declarations }
     FDocumentFile: TDocumentFile;
@@ -108,17 +107,22 @@ type
     function  DoNewDataForm(ParentRelation: TEpiMasterRelation): TEpiMasterRelation;
     function  DoNewRuntimeFrame(Relation: TEpiMasterRelation): TRuntimeDesignFrame;
     // open existing
+    function  DoOpenProject(Const AFileName: string): boolean;
     function  DoSaveProject(AFileName: string): boolean;
     procedure OpenProjectOrderedWalkCallBack(
       const Relation: TEpiMasterRelation; const Depth: Cardinal;
       const Index: Cardinal; var aContinue: boolean;
       Data: Pointer = nil);
-    function  DoOpenProject(Const AFileName: string): boolean;
+    // close
+    procedure DoCloseProject;
+    procedure CloseProjectOrderedWalkCallBack(
+      const Relation: TEpiMasterRelation; const Depth: Cardinal;
+      const Index: Cardinal; var aContinue: boolean;
+      Data: Pointer = nil);
     // create new
     function  DoCreateNewDocumentFile: TDocumentFile;
     function  DoCreateNewDocument: TEpiDocument;
     procedure DoCreateNewProject;
-    procedure DoCloseProject;
     procedure EpiDocumentModified(Sender: TObject);
     procedure UpdateDefaultExtension(Const Dlg: TOpenDialog);
     procedure SaveDlgTypeChange(Sender: TObject);
@@ -156,6 +160,7 @@ type
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
       EventType: Word; Data: Pointer);
     procedure BindKeyFields(DR: TEpiDetailRelation);
+    procedure UnBindKeyFields(DR: TEpiDetailRelation);
   private
     { Hint }
     FHintWindow: THintWindow;
@@ -228,7 +233,7 @@ uses
   align_form, RegExpr, project_studyunit_frame,
   design_properties_form, admin_form, epidatafilerelations_helper,
   admin_user_form, admin_groups_form, admin_users_form, admin_entryrights_form,
-  epiranges, empty_form
+  epiranges, empty_form, episervice_asynchandler, epiopenfile
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -248,8 +253,16 @@ begin
 end;
 
 procedure TProjectFrame.NewDataFormActionUpdate(Sender: TObject);
+var
+  ActionEnabled: Boolean;
 begin
-  NewDataFormAction.Enabled := Authenticator.IsAuthorized([earDefineProject]);
+  ActionEnabled := Authenticator.IsAuthorized([earDefineProject]);
+
+  if (FProjectTreeView.SelectedObjectType = otRelation) then
+    ActionEnabled := ActionEnabled and
+                     (not TEpiMasterRelation(FProjectTreeView.SelectedObject).ProtectedItem);
+
+  NewDataFormAction.Enabled := ActionEnabled;
 end;
 
 procedure TProjectFrame.LoadError(const Sender: TEpiCustomBase;
@@ -280,41 +293,6 @@ begin
   Continue := Res = mrYes;
 end;
 
-procedure TProjectFrame.DocumentProgress(const Sender: TEpiCustomBase;
-  ProgressType: TEpiProgressType; CurrentPos, MaxPos: Cardinal;
-  var Canceled: Boolean);
-Const
-  LastUpdate: Cardinal = 0;
-  ProgressUpdate: Cardinal = 0;
-begin
-  case ProgressType of
-    eptInit:
-      begin
-        ProgressUpdate := MaxPos div 50;
-        ProgressBar1.Position := CurrentPos;
-        ProgressBar1.Visible := true;
-        ProgressBar1.Max := MaxPos;
-        Application.ProcessMessages;
-      end;
-    eptFinish:
-      begin
-        ProgressBar1.Visible := false;
-        Application.ProcessMessages;
-        LastUpdate := 0;
-      end;
-    eptRecords:
-      begin
-        if CurrentPos > (LastUpdate + ProgressUpdate) then
-        begin
-          ProgressBar1.Position := CurrentPos;
-          {$IFNDEF MSWINDOWS}
-          Application.ProcessMessages;
-          {$ENDIF}
-          LastUpdate := CurrentPos;
-        end;
-      end;
-  end;
-end;
 
 procedure TProjectFrame.DeleteDataFormActionExecute(Sender: TObject);
 var
@@ -365,7 +343,8 @@ procedure TProjectFrame.DeleteDataFormActionUpdate(Sender: TObject);
 begin
   DeleteDataFormAction.Enabled :=
     (Authenticator.IsAuthorized([earDefineProject])) and
-    (FProjectTreeView.SelectedObjectType = otRelation);
+    (FProjectTreeView.SelectedObjectType = otRelation) and
+    (not TEpiMasterRelation(FProjectTreeView.SelectedObject).ProtectedItem);
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -486,7 +465,7 @@ begin
   FProjectTreeView.SelectedObject := EpiDocument;
 end;
 
-procedure TProjectFrame.ToolButton5Click(Sender: TObject);
+procedure TProjectFrame.ProjectTestToolBtnClick(Sender: TObject);
 begin
   ShowCoreLogger;
 end;
@@ -616,6 +595,27 @@ begin
   FCoreLoggerForm := TCoreLogger.Create(Self);
 end;
 
+procedure TProjectFrame.AfterDocumentCreated(const Sender: TObject;
+  const ADocument: TEpiDocument);
+begin
+  ADocument.RegisterOnChangeHook(@DocumentHook, true);
+  EpiAsyncHandlerGlobal.AddDocument(ADocument);
+end;
+
+procedure TProjectFrame.SaveThreadError(const FatalErrorObject: Exception);
+var
+  S: UTF8String;
+begin
+  S := 'A fatal error has happened during the saving process' + LineEnding +
+       'and the project has not been save.' + LineEnding +
+       LineEnding +
+       EEpiThreadSaveExecption(FatalErrorObject).FileName +
+       'In order to ensure futher functionality, use the Save As... option' + LineEnding +
+       'to save in another location';
+
+  ShowMessage(S);
+end;
+
 function TProjectFrame.DoCreateNewDocument: TEpiDocument;
 begin
   Result := DoCreateNewDocumentFile.CreateNewDocument(ManagerSettings.StudyLang);
@@ -666,11 +666,15 @@ var
 begin
   Authenticator := TAuthenticator.Create(FDocumentFile);
 
+  // No need to do undo's if the usage does not require such a thing.
+  if (not Assigned(Authenticator.AuthedUser))
+  then
+    FDocumentFile.UndoCopy := false;
+
   UpdateCaption;
   UpdateShortCuts;
   InitBackupTimer;
-  FStatusBar.Visible := true;
-  FStatusBar.DocFile := DocumentFile;
+//  FStatusBar.DocFile := DocumentFile;
 
   Splitter1.Visible    := true;
   ProjectPanel.Visible := true;
@@ -715,6 +719,14 @@ begin
   Relation.AddCustomData(PROJECT_RUNTIMEFRAME_KEY, Frame);
   if Depth > 0 then
     BindKeyFields(TEpiDetailRelation(Relation));
+end;
+
+procedure TProjectFrame.CloseProjectOrderedWalkCallBack(
+  const Relation: TEpiMasterRelation; const Depth: Cardinal;
+  const Index: Cardinal; var aContinue: boolean; Data: Pointer);
+begin
+  if (Depth > 0) then
+    UnBindKeyFields(TEpiDetailRelation(Relation));
 end;
 
 function TProjectFrame.DoOpenProject(const AFileName: string): boolean;
@@ -762,8 +774,6 @@ begin
 
     if Assigned(FDocumentFile.AuthedUser) then
     begin
-      DoSaveProject(DocumentFile.FileName);
-
       Label1.Caption := 'User: ' + FDocumentFile.AuthedUser.FullName;
       Label2.Caption := 'Groups: ';
       Rights := [];
@@ -779,8 +789,9 @@ begin
     else
       Label1.Caption := 'No auth';
 
+    if EpiDocument.Relations.Count > 0 then
+      FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
 
-    FProjectTreeView.SelectedObject := EpiDocument.Relations[0];
     EpiDocument.Modified := false;
     Result := true;
 
@@ -793,13 +804,15 @@ end;
 function TProjectFrame.DoCreateNewDocumentFile: TDocumentFile;
 begin
   FDocumentFile := TDocumentFile.Create;
-  FDocumentFile.OnDocumentChangeEvent := @DocumentHook;
- //@FCoreLoggerForm.DocumentHook;
-  FDocumentFile.OnProgress            := @DocumentProgress;
-  FDocumentFile.OnLoadError           := @LoadError;
-  FDocumentFile.DataDirectory         := ManagerSettings.WorkingDirUTF8;
+  FDocumentFile.OnAfterDocumentCreated := @AfterDocumentCreated;
+  FDocumentFile.OnLoadError            := @LoadError;
+  FDocumentFile.OnSaveThreadError      := @SaveThreadError;
+  FDocumentFile.DataDirectory          := ManagerSettings.WorkingDirUTF8;
+  FDocumentFile.UndoCopy               := true;
 
   Result := FDocumentFile;
+  FStatusBar.Visible := true;
+  FStatusBar.DocFile := result;
 end;
 
 function TProjectFrame.DoNewDataForm(ParentRelation: TEpiMasterRelation
@@ -895,7 +908,16 @@ begin
 
   FActiveFrame := nil;
   FreeAndNil(FBackupTimer);
-  //FreeAndNil(Authenticator);
+
+  if (FSaveWarningRes = mrYes) and
+     (Assigned(FDocumentFile)) and
+     (FDocumentFile.UndoCopy)
+  then
+    FDocumentFile.UndoCopy := false;
+
+  if Assigned(FDocumentFile) then
+    FDocumentFile.Document.Relations.OrderedWalk(@CloseProjectOrderedWalkCallBack, nil);
+
   FreeAndNil(FDocumentFile);
 
   Modified := false;
@@ -973,6 +995,9 @@ procedure TProjectFrame.ProjectTreeDelete(const Relation: TEpiMasterRelation);
 var
   Frame: TCustomFrame;
 begin
+  if (Relation.InheritsFrom(TEpiDetailRelation)) then
+    UnBindKeyFields(TEpiDetailRelation(Relation));
+
   Frame := TCustomFrame(Relation.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
   Frame.Free;
 end;
@@ -988,6 +1013,10 @@ procedure TProjectFrame.ProjectTreeEditing(Sender: TObject;
   var Allowed: Boolean);
 begin
   Allowed := Authenticator.IsAuthorized([earDefineProject]);
+
+  if (ObjectType = otRelation) then
+    Allowed := Allowed and
+               (not (TEpiCustomItem(AObject).ProtectedItem));
 
   if Allowed then
     (AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY) as IProjectFrame).DeActivate(false);
@@ -1019,7 +1048,6 @@ begin
       BindKeyFields(TEpiDetailRelation(Relation));
     end;
 
-
   Frame := DoNewRuntimeFrame(Relation);
   Frame.Activate;
   Frame.DeActivate(true);
@@ -1033,14 +1061,14 @@ begin
   then
     Exit;
 
-  FActiveFrame.Activate;
-  FActiveFrame.AssignActionLinks;
-
   if ObjectType = otRelation then
     begin
       AlignForm.DesignFrame := TRuntimeDesignFrame(AObject.FindCustomData(PROJECT_RUNTIMEFRAME_KEY));
       FStatusBar.Datafile := TEpiMasterRelation(AObject).Datafile;
     end;
+
+  FActiveFrame.Activate;
+  FActiveFrame.AssignActionLinks;
 
   MainForm.DataFormBtn.Enabled := ObjectType = otRelation;
 end;
@@ -1227,6 +1255,37 @@ begin
   end;
 end;
 
+procedure TProjectFrame.UnBindKeyFields(DR: TEpiDetailRelation);
+var
+  MasterKeyFields: TEpiFields;
+  DetailKeyFields: TEpiFields;
+  MasterField: TEpiField;
+  DetailField: TEpiField;
+  ChildFields: TEpiFields;
+  i: Integer;
+begin
+  if not Assigned(DR) then exit;
+
+  MasterKeyFields := DR.MasterRelation.Datafile.KeyFields;
+  DetailKeyFields := DR.Datafile.KeyFields;
+
+  for i := 0 to MasterKeyFields.Count - 1 do
+  begin
+    MasterField := MasterKeyFields[i];
+    DetailField := DetailKeyFields.FieldByName[MasterField.Name];
+
+    MasterField.UnRegisterOnChangeHook(@KeyFieldEvent);
+
+    // Link to "child" field...
+    ChildFields := TEpiFields(MasterField.FindCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY));
+    if (Assigned(ChildFields)) then
+    begin
+      ChildFields.Free;
+      MasterField.RemoveCustomData(PROJECT_RELATION_KEYFIELD_CHILD_KEY);
+    end;
+  end;
+end;
+
 procedure TProjectFrame.ShowHintMsg(Sender: TObject; Ctrl: TControl;
   const Msg: string);
 var
@@ -1398,6 +1457,7 @@ var
     F := TAdminUserForm.Create(Self);
     F.User  := User;
     F.Admin := EpiDocument.Admin;
+    F.NewUser := true;
     Result  := F.ShowModal;
     F.Free;
   end;
@@ -1405,7 +1465,7 @@ var
 begin
   Result := true;
 
-  if (EpiDocument.Admin.Users.Count = 0) then
+  if (not EpiDocument.Admin.Initialized) then
     begin
       Result := false;
 
@@ -1538,6 +1598,7 @@ begin
     EditStructure       := true;
     ShowHint            := true;
     ShowProject         := true;
+    ShowProtected       := true;
 
     OnDelete            := @ProjectTreeDelete;
     OnEdited            := @ProjectTreeEdited;
@@ -1557,6 +1618,8 @@ begin
   {$IFNDEF EPI_DEBUG}
   Splitter2.Visible := False;
   Panel1.Visible := false;
+  Divider4.Visible := false;
+  ProjectTestToolBtn.Visible := false;
   {$ENDIF}
 
   UpdateRecentFilesDropDown;
@@ -1575,6 +1638,8 @@ procedure TProjectFrame.CloseQuery(var CanClose: boolean);
 var
   res: LongInt;
 begin
+  FSaveWarningRes := mrYes;
+
   // If Seleted Page is StudyUnit, then do a "silent" deactive in order to
   // check if content of page can actually be saved.
   if (Assigned(FActiveFrame)) and
@@ -1588,12 +1653,12 @@ begin
   if Modified or
     (Assigned(EpiDocument) and (EpiDocument.Modified)) then
   begin
-    Res := MessageDlg('Warning',
+    FSaveWarningRes := MessageDlg('Warning',
       'Project data content modified.' + LineEnding +
       'Store project permanently on disk before exit?',
       mtWarning, mbYesNoCancel, 0, mbCancel);
 
-    if Res = mrNo then
+    if FSaveWarningRes = mrNo then
     begin
       Res := MessageDlg('Warning',
         'Project content is NOT saved to disk.' + LineEnding +
@@ -1603,7 +1668,7 @@ begin
         mtWarning, mbYesNoCancel, 0, mbCancel);
     end;
 
-    case res of
+    case FSaveWarningRes of
       mrYes:    CanClose := SaveProject(False);
       mrCancel: CanClose := false;
     end;
@@ -1661,15 +1726,8 @@ begin
 end;
 
 function TProjectFrame.OpenProject(const AFileName: string): boolean;
-var
-  T1: TDateTime;
-  T2: TDateTime;
 begin
-  T1 := Now;
   Result := DoOpenProject(AFileName);
-  T2 := now;
-//  if IsConsole then
-//    WriteLn('ProjectFrame.OpenProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
 end;
 
 function TProjectFrame.SaveProject(const ForceSaveAs: boolean): boolean;
@@ -1702,7 +1760,19 @@ begin
   end else
     Fn := DocumentFile.FileName;
 
-  Result := DoSaveProject(Fn);
+  try
+    result := DoSaveProject(Fn);
+  except
+    on E: Exception do
+      begin
+        MessageDlg('Error',
+          'Unable to save project to:' + LineEnding +
+          DocumentFile.FileName + LineEnding +
+          'Error message: ' + E.Message,
+          mtError, [mbOK], 0);
+        Exit;
+      end;
+  end;
   if Result then
     EpiDocument.Modified := false;
   UpdateCaption;
@@ -1760,7 +1830,7 @@ begin
     DefineGroupsMenuItem.Action           := DefineGroupsAction;
     DefineUsersMenuItem.Action            := DefineUsersAction;
     DefineEntryRightsMenuItem.Action      := DefineEntryRightsAction;
-    ViewLogMenuItem.Action                := ViewLogAction;
+//    ViewLogMenuItem.Action                := ViewLogAction;
   end;
 
   NewProjectToolBtn.Action := MainForm.NewProjectAction;

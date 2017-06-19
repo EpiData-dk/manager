@@ -1,23 +1,22 @@
 object ProjectFrame: TProjectFrame
   Left = 0
-  Height = 678
+  Height = 537
   Top = 0
-  Width = 991
-  ClientHeight = 678
-  ClientWidth = 991
-  DesignTimePPI = 93
+  Width = 886
+  ClientHeight = 537
+  ClientWidth = 886
   TabOrder = 0
-  DesignLeft = 2006
-  DesignTop = 290
+  DesignLeft = 2001
+  DesignTop = 184
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
-    Height = 658
+    Height = 537
     Top = 0
     Width = 187
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 658
+    ClientHeight = 537
     ClientWidth = 187
     TabOrder = 0
     Visible = False
@@ -43,12 +42,11 @@ object ProjectFrame: TProjectFrame
         ParentShowHint = False
         ShowHint = True
       end
-      object ToolButton1: TToolButton
+      object Divider2: TToolButton
         Left = 47
         Height = 20
         Top = 1
-        Width = 5
-        Caption = 'ToolButton1'
+        Caption = 'Divider2'
         Style = tbsDivider
       end
       object SaveProjectToolBtn: TToolButton
@@ -65,12 +63,11 @@ object ProjectFrame: TProjectFrame
         ParentShowHint = False
         ShowHint = True
       end
-      object ToolButton4: TToolButton
+      object Divider3: TToolButton
         Left = 92
         Height = 20
         Top = 1
-        Width = 5
-        Caption = 'ToolButton4'
+        Caption = 'Divider3'
         Style = tbsDivider
       end
       object AddDataFormToolBtn: TToolButton
@@ -87,83 +84,60 @@ object ProjectFrame: TProjectFrame
         ParentShowHint = False
         ShowHint = True
       end
-      object ToolButton7: TToolButton
-        Left = 145
-        Height = 20
-        Top = 1
-        Width = 5
-        Caption = 'ToolButton7'
-        Style = tbsDivider
-      end
       object NewProjectToolBtn: TToolButton
         Left = 2
         Top = 1
         Caption = 'NewProjectToolBtn'
       end
-      object ToolButton2: TToolButton
+      object Divider1: TToolButton
         Left = 22
         Height = 20
         Top = 1
-        Width = 5
-        Caption = 'ToolButton2'
+        Caption = 'Divider1'
         Style = tbsDivider
       end
-      object ToolButton3: TToolButton
+      object Divider4: TToolButton
         Left = 137
         Height = 20
         Top = 1
-        Width = 8
-        Caption = 'ToolButton3'
-        Style = tbsSeparator
+        Caption = 'Divider4'
+        Style = tbsDivider
       end
-      object ToolButton5: TToolButton
-        Left = 150
+      object ProjectTestToolBtn: TToolButton
+        Left = 142
         Top = 1
-        Caption = 'ToolButton5'
+        Caption = 'ProjectTestToolBtn'
         ImageIndex = 37
-        OnClick = ToolButton5Click
+        OnClick = ProjectTestToolBtnClick
       end
     end
   end
-  object ProgressBar1: TProgressBar
-    Left = 0
-    Height = 20
-    Top = 658
-    Width = 991
-    Align = alBottom
-    Position = 50
-    Smooth = True
-    Step = 1
-    TabOrder = 2
-    Visible = False
-    BarShowText = True
-  end
   object Splitter1: TSplitter
     Left = 187
-    Height = 658
+    Height = 537
     Top = 0
     Width = 5
     Beveled = True
     Visible = False
   end
   object Panel1: TPanel
-    Left = 726
-    Height = 658
+    Left = 621
+    Height = 537
     Top = 0
     Width = 265
     Align = alRight
     BevelInner = bvLowered
     BorderWidth = 3
     BorderStyle = bsSingle
-    ClientHeight = 656
+    ClientHeight = 535
     ClientWidth = 263
     ParentColor = False
-    TabOrder = 3
+    TabOrder = 2
     object Label1: TLabel
       Left = 32
       Height = 15
       Top = 32
-      Width = 43
+      Width = 38
       Caption = 'Label1'
       ParentColor = False
     end
@@ -171,7 +145,7 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 72
-      Width = 43
+      Width = 38
       Caption = 'Label2'
       ParentColor = False
     end
@@ -179,14 +153,14 @@ object ProjectFrame: TProjectFrame
       Left = 32
       Height = 15
       Top = 104
-      Width = 43
+      Width = 38
       Caption = 'Label3'
       ParentColor = False
     end
   end
   object Splitter2: TSplitter
-    Left = 721
-    Height = 658
+    Left = 616
+    Height = 537
     Top = 0
     Width = 5
     Align = alRight

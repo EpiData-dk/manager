@@ -67,7 +67,7 @@ implementation
 
 uses
   Graphics, Dialogs, LazUTF8, epimiscutils, Math, LCLIntf, Clipbrd, StdCtrls,
-  strutils, admin_authenticator, epiadmin;
+  strutils, admin_authenticator, epiadmin, epiconvertutils;
 
 type
   PEpiValueLabel = ^TEpiCustomValueLabel;
@@ -128,6 +128,9 @@ var
   I: integer;
   F: Extended;
   S: TCaption;
+  D: EpiDate;
+  Msg: string;
+  T: EpiTime;
 begin
   Result := not FStopping;
 
@@ -140,6 +143,7 @@ begin
           S := Edit.Text;
           result := TryStrToInt(S, I);
         end;
+
       ftFloat:
         begin
           S := StringsReplace(
@@ -150,8 +154,23 @@ begin
           );
           result := TryStrToFloat(S, F);
         end;
+
       ftString:
         S := Edit.Text;
+
+      ftDMYDate,
+      ftMDYDate,
+      ftYMDDate:
+        begin
+          S := Edit.Text;
+          result := EpiStrToDate(S, ['-', '/', '.'], Editor.FValueLabelSet.LabelType, D, Msg);
+        end;
+
+      ftTime:
+        begin
+          S := Edit.Text;
+          result := EpiStrToTime(S, ['.', ':'], T, Msg);
+        end;
     end;
 
     if not Result then
@@ -287,7 +306,8 @@ procedure TValueLabelGridFrame.VLGChecking(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
 begin
   if (ValueLabelSet.LabelScope = vlsExternal) or
-     (not Authenticator.IsAuthorized([earDefineProject]))
+     (not Authenticator.IsAuthorized([earDefineProject])) or
+     (ValueLabelSet.ProtectedItem)
   then
     begin
       Allowed := false;
@@ -306,7 +326,8 @@ end;
 procedure TValueLabelGridFrame.VLGEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
-  Allowed := Authenticator.IsAuthorized([earDefineProject]);
+  Allowed := Authenticator.IsAuthorized([earDefineProject]) and
+             (not ValueLabelSet.ProtectedItem);
 end;
 
 procedure TValueLabelGridFrame.VLGEditor(Sender: TBaseVirtualTree;
@@ -364,8 +385,11 @@ begin
   DoShowHintMsg(nil, '');
 
   // External valuelabels do not need shortcut keys
-  if Assigned(FValueLabelSet) and
-     (FValueLabelSet.LabelScope = vlsExternal)
+  if Assigned(ValueLabelSet) and
+     (
+      (ValueLabelSet.LabelScope = vlsExternal) or
+      (ValueLabelSet.ProtectedItem)
+     )
   then
     Exit;
 
@@ -429,7 +453,9 @@ procedure TValueLabelGridFrame.VLGSetNodeText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; const NewText: String);
 var
   VL: TEpiCustomValueLabel;
-  S: String;
+  S, Msg: String;
+  D: EpiDate;
+  T: EpiTime;
 begin
   VL := ValueLabelFromNode(Node);
 
@@ -438,6 +464,7 @@ begin
     case Column of
       0: case FValueLabelSet.LabelType of
            ftInteger:     TEpiIntValueLabel(VL).Value := StrToInt(NewText);
+
            ftFloat:       begin
                             S := StringsReplace(
                                    NewText,
@@ -447,9 +474,23 @@ begin
                             );
                             TEpiFloatValueLabel(Vl).Value := StrToFloat(S);
                           end;
+
            ftString:      TEpiStringValueLabel(VL).Value := NewText;
+
            ftUpperString: TEpiStringValueLabel(VL).Value := UTF8UpperCase(NewText);
-         end;
+
+           ftDMYDate,
+           ftMDYDate,
+           ftYMDDate:     begin
+                            EpiStrToDate(NewText, ['-', '/', '.'], FValueLabelSet.LabelType, D, Msg);
+                            TEpiDateValueLabel(VL).Value   := D;
+                          end;
+
+           ftTime:        begin
+                            EpiStrToTimeGues(NewText, T, Msg);
+                            TEpiTimeValueLabel(VL).Value := T;
+                          end;
+      end;
       1: TheLabel.Text := NewText;
       2: ; // do nothing
     end;
@@ -479,7 +520,9 @@ begin
   else
     VLG.TreeOptions.MiscOptions := VLG.TreeOptions.MiscOptions + [toEditable];
 
-  Allowed := (FValueLabelSet.LabelScope = vlsInternal) and (Authenticator.IsAuthorized([earDefineProject]));
+  Allowed := (ValueLabelSet.LabelScope = vlsInternal) and
+             (Authenticator.IsAuthorized([earDefineProject])) and
+             (not ValueLabelSet.ProtectedItem);
 
   NewLineBtn.Enabled := Allowed;
   DelLineBtn.Enabled := Allowed;

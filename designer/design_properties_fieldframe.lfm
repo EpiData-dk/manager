@@ -1,24 +1,24 @@
 object FieldPropertiesFrame: TFieldPropertiesFrame
-  Left = 585
+  Left = 1920
   Height = 588
-  Top = 337
+  Top = 63
   Width = 560
   ClientHeight = 588
   ClientWidth = 560
-  LCLVersion = '1.7'
+  LCLVersion = '1.9.0.0'
   object FieldPageControl: TPageControl
     AnchorSideLeft.Control = Owner
     Left = 0
     Height = 588
     Top = 0
     Width = 560
-    ActivePage = JumpSheet
+    ActivePage = BasicSheet
     Align = alClient
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 0
     object BasicSheet: TTabSheet
       Caption = 'Basic'
-      ClientHeight = 563
+      ClientHeight = 586
       ClientWidth = 558
       object DecimalsEdit: TEdit
         AnchorSideLeft.Control = Bevel1

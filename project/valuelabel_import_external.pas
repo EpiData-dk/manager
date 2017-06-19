@@ -235,7 +235,7 @@ var
 begin
   Docfile := TDocumentFile.Create;
   try
-    Docfile.OnProgress := @FileProgress;
+//    Docfile.OnProgress := @FileProgress;
     Docfile.OnError := @ReportError;
     if Docfile.OpenFile(FileName, true) then
       AddToGrid(DocFile);

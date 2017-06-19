@@ -1,7 +1,7 @@
 object DefineGroupsForm: TDefineGroupsForm
-  Left = 2213
+  Left = 450
   Height = 502
-  Top = 170
+  Top = 308
   Width = 898
   Caption = 'Define Groups'
   ClientHeight = 502
@@ -75,7 +75,6 @@ object DefineGroupsForm: TDefineGroupsForm
         Left = 47
         Height = 22
         Top = 2
-        Width = 8
         Caption = 'ToolButton8'
         Style = tbsSeparator
       end

@@ -170,6 +170,7 @@ type
     function FieldNamePrefix: string;
     procedure HeadingBtnClick(Sender: TObject);
     procedure ImportActionExecute(Sender: TObject);
+    procedure ImportActionUpdate(Sender: TObject);
     procedure ImportCBActionExecute(Sender: TObject);
     procedure NewDateFieldActionExecute(Sender: TObject);
     procedure NewDateFieldFastActionExecute(Sender: TObject);
@@ -220,6 +221,7 @@ type
     procedure ViewDatasetActionExecute(Sender: TObject);
     procedure ViewDatasetActionUpdate(Sender: TObject);
     procedure MemoBtnClick(Sender: TObject);
+    procedure SelectUpdate(Sender: TObject);
   private
     FPopUpPoint: TPoint;
     FActiveButton: TToolButton;
@@ -465,6 +467,12 @@ begin
   end;
 end;
 
+procedure TRuntimeDesignFrame.ImportActionUpdate(Sender: TObject);
+begin
+  ImportAction.Enabled := Authenticator.IsAuthorized([earDefineProject]) and
+                          (not Relation.ProtectedItem);
+end;
+
 procedure TRuntimeDesignFrame.ImportCBActionExecute(Sender: TObject);
 var
   Files: TStringList;
@@ -592,6 +600,7 @@ procedure TRuntimeDesignFrame.PasteAsUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
     (Authenticator.IsAuthorized([earDefineProject])) and
+    (not Relation.ProtectedItem) and
     (ClipBoardHasText) and
      (
       ((FDesignPanel.Surface.Count = 1) and
@@ -796,7 +805,8 @@ procedure TRuntimeDesignFrame.PasteControlActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled :=
     (ClipBoardHasText or Clipboard.HasFormat(CF_Component)) and
-    (Authenticator.IsAuthorized([earDefineProject]));
+    (Authenticator.IsAuthorized([earDefineProject])) and
+    (not Relation.ProtectedItem);
 
     {and
      (
@@ -842,7 +852,8 @@ begin
   then
     ActionEnable := false;
 
-  TAction(Sender).Enabled := ActionEnable;
+  TAction(Sender).Enabled := ActionEnable and
+                             (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.RedoActionExecute(Sender: TObject);
@@ -2339,8 +2350,13 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.ViewDatasetActionExecute(Sender: TObject);
+var
+  Doc: TEpiDocument;
 begin
-  TEpiDocument(DataFile.RootOwner).Logger.LogSearch(nil);
+  Doc := TEpiDocument(DataFile.RootOwner);
+
+  if Assigned(Doc.Logger) then
+    Doc.Logger.LogSearch(nil);
 
   ShowDataSetViewerForm(
     Self,
@@ -2357,6 +2373,11 @@ procedure TRuntimeDesignFrame.MemoBtnClick(Sender: TObject);
 begin
   FAddClass := 'TDesignMemo';
   DoToogleBtn(Sender);
+end;
+
+procedure TRuntimeDesignFrame.SelectUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled := (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.SelectionChange(Sender: TObject);
@@ -2402,17 +2423,15 @@ begin
       if Ctrl is TDesignSection then
         EpiCtrl := DataFile.NewSection;
 
-//      if Ctrl is TDesignMemo then
-//        EpiCtrl := DataFile.NewSection;
-
-
       ApplyCommonCtrlSetting(Ctrl, EpiCtrl);
       FCreatingControl := false;
 
       MainForm.EndUpdatingForm;
     end;
 
-  if FDesignPanel.Surface.Count = 0 then
+  if (FDesignPanel.Surface.Count = 0) or
+     (Relation.ProtectedItem)
+  then
     Selection := DesignPanelAsJvObjectArray
   else
     Selection := FDesignPanel.Surface.Selected;
@@ -2628,7 +2647,8 @@ begin
   if Assigned(AAction) and
      (TAction(AAction).ActionList = AuthorizedDesignerActionList)
   then
-    TAction(AAction).Enabled := Authenticator.IsAuthorized([earDefineProject]);
+    TAction(AAction).Enabled := Authenticator.IsAuthorized([earDefineProject]) and
+                                (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.DeleteAllActionExecute(Sender: TObject);
@@ -2765,7 +2785,8 @@ begin
     end;
   end;
 
-  ClearDataAction.Enabled := ActionEnabled;
+  ClearDataAction.Enabled := ActionEnabled and
+                             (not Relation.ProtectedItem);
 end;
 
 procedure TRuntimeDesignFrame.AlignLeftActionExecute(Sender: TObject);
@@ -2803,7 +2824,7 @@ end;
 
 procedure TRuntimeDesignFrame.DataformPropertiesActionExecute(Sender: TObject);
 begin
-  FDesignPanel.Surface.Select(FDesignPanel);
+//  FDesignPanel.Surface.Select(FDesignPanel);
   SelectionChange(self);
   ShowPropertiesForm(false);
 end;
@@ -2813,7 +2834,8 @@ var
   F: TKeyFieldsForm;
 begin
   F := TKeyFieldsForm.Create(Self, Relation);
-  F.ReadOnly := not Authenticator.IsAuthorized([earDefineProject]);
+  F.ReadOnly := (not Authenticator.IsAuthorized([earDefineProject])) or
+                (Relation.ProtectedItem);
   F.ShowModal;
   F.Free;
 
@@ -3049,17 +3071,20 @@ end;
 
 procedure TRuntimeDesignFrame.Activate;
 begin
-//  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate Start');
   Show;
   BringToFront;
-  FDesignPanel.Surface.Active := true;
-  FDesignPanel.Surface.Select(FDesignPanel);
-  FDesignPanel.Surface.SelectionChange;
+  FDesignPanel.Surface.Active := (not Relation.ProtectedItem);//  true;
+
+  if (not Relation.ProtectedItem) then
+  begin
+    FDesignPanel.Surface.Select(FDesignPanel);
+    FDesignPanel.Surface.SelectionChange;
+  end else
+    FDesignPanel.Enabled := false;
+
   MayHandleShortcuts := true;
-//  AuthorizedDesignerActionList.State := asNormal;
 
   UpdateFrame;
-//  WriteLn('Runtime (', DataFile.Caption.Text, '): Activate End');
 end;
 
 function TRuntimeDesignFrame.DeActivate(aHide: boolean): boolean;

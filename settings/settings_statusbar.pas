@@ -48,7 +48,8 @@ uses
   epiv_datamodule,
   epiv_custom_statusbar, epiv_statusbar_item_recordcount, epiv_statusbar_item_cycleno,
   epiv_statusbar_item_currentuser, epiv_statusbar_item_savetime,
-  epiv_statusbar_item_selectionnames;
+  epiv_statusbar_item_selectionnames, epiv_statusbar_item_progressbar,
+  epiv_statusbar_item_saveicon;
 
 type
   TControlsRec = record

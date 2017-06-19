@@ -395,6 +395,9 @@ begin
   G := GroupRelationFromNode(Node).Group;
   UsersResetChecks(G);
   UpdateUsersCaption(G);
+
+  // Needed to repaint the users background colour
+  FUsersVST.Invalidate;
 end;
 
 procedure TDefineGroupsForm.GroupFreeNode(Sender: TBaseVirtualTree;
@@ -525,7 +528,8 @@ begin
 
   Allowed :=
      (User <> Authenticator.AuthedUser) and
-     (Authenticator.AuthedUserInGroup(Group, true));
+     (Authenticator.AuthedUserInGroup(Group, true)) and
+     (Authenticator.IsAuthorized([earUsers]));
 
   if (Sender.CheckState[Node] = csMixedNormal) or
      (not Allowed)
@@ -586,7 +590,8 @@ begin
 
   Allowed :=
      (User <> Authenticator.AuthedUser) and
-     (Authenticator.AuthedUserInGroup(Group, true));
+     (Authenticator.AuthedUserInGroup(Group, true)) and
+     (Authenticator.IsAuthorized([earUsers]));
 end;
 procedure TDefineGroupsForm.UsersGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;

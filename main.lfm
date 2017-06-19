@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 243
+  Left = 373
   Height = 681
-  Top = 404
+  Top = 256
   Width = 878
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -16,7 +16,7 @@ object MainForm: TMainForm
   OnDropFiles = FormDropFiles
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '1.7'
+  LCLVersion = '1.9.0.0'
   object PageControl1: TPageControl
     Left = 0
     Height = 620
@@ -44,9 +44,9 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 487
-      Height = 27
-      Top = 6
+      Left = 508
+      Height = 23
+      Top = 8
       Width = 62
       Action = ExportAction
       AutoSize = True
@@ -59,10 +59,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 398
-      Height = 27
-      Top = 6
-      Width = 74
+      Left = 416
+      Height = 23
+      Top = 8
+      Width = 77
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -73,10 +73,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 232
-      Height = 27
-      Top = 6
-      Width = 65
+      Left = 241
+      Height = 23
+      Top = 8
+      Width = 70
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Dataform'
@@ -88,10 +88,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 312
-      Height = 27
-      Top = 6
-      Width = 71
+      Left = 326
+      Height = 23
+      Top = 8
+      Width = 75
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Document'
@@ -104,10 +104,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 120
-      Height = 27
-      Top = 6
-      Width = 97
+      Left = 123
+      Height = 23
+      Top = 8
+      Width = 103
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -120,9 +120,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 27
-      Top = 6
-      Width = 94
+      Height = 23
+      Top = 8
+      Width = 97
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Se&lect Project'
@@ -382,9 +382,6 @@ object MainForm: TMainForm
         end
         object ManagePasswordMenuItem: TMenuItem
           Action = ManageUserPasswordAction
-        end
-        object ViewLogMenuItem: TMenuItem
-          Caption = 'ViewLog'
         end
         object MenuItem39: TMenuItem
           Caption = '-'
@@ -721,11 +718,13 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Admin Overview'
       OnExecute = AdminReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
     object LogOverviewReportAction: TAction
       Category = 'Reports'
       Caption = 'Log Overview'
       OnExecute = LogOverviewReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
@@ -823,6 +822,18 @@ object MainForm: TMainForm
       end
       object MenuItem12: TMenuItem
         Action = ValueLabelListReportAction
+      end
+      object MenuItem42: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem43: TMenuItem
+        Action = AdminReportAction
+      end
+      object MenuItem45: TMenuItem
+        Action = LogOverviewReportAction
+      end
+      object MenuItem44: TMenuItem
+        Caption = '-'
       end
       object MenuItem27: TMenuItem
         Action = CodeBookReportAction

@@ -22,6 +22,9 @@ type
 
 implementation
 
+uses
+  episecuritylog, epiglobals;
+
 { TReportLogOverview }
 
 function TReportLogOverview.GetTitle: string;
@@ -31,18 +34,100 @@ end;
 
 procedure TReportLogOverview.DoDocumentReport(
   const ADocumentFile: TEpiDocumentFile; const Index: Integer);
-var
+{var
   Logger: TEpiLogger;
   Log: TEpiLog;
   LogTypeField: TEpiEnumField;
   LogTypeCount: array[TEpiLogEntry] of integer;
   BlockedCount: Integer;
   i, j, RowCount: Integer;
+  LogTypeEnum: TEpiLogEntry;     }
+var
+  Document: TEpiDocument;
+  LogTypeCount: array[TEpiLogEntry] of integer;
+  SecurityLog: TEpiSecurityDatafile;
+  DataLog: TEpiSecurityDataEventLog;
+  KeyLog: TEpiSecurityKeyFieldLog;
   LogTypeEnum: TEpiLogEntry;
+  RowCount, i, blockedcount, j: Integer;
 begin
   inherited DoDocumentReport(ADocumentFile, Index);
 
-  Logger := ADocumentFile.Document.Logger;
+  Document := ADocumentFile.Document;
+  SecurityLog := TEpiSecurityDatafile(Document.DataFiles.GetDataFileByName(EpiSecurityLogDatafileName));
+  DataLog     := TEpiSecurityDataEventLog(Document.Datafiles.GetDataFileByName(EpiSecurityLogDataEventName));
+  KeyLog      := TEpiSecurityKeyFieldLog(Document.DataFiles.GetDataFileByName(EpiSecurityLogKeyDataName));
+
+  blockedcount := 0;
+  for LogTypeEnum := Low(LogTypeCount) to High(LogTypeCount) do
+    LogTypeCount[LogTypeEnum] := 0;
+
+  for i := 0 to SecurityLog.Size -1 do
+  begin
+    LogTypeEnum := TEpiLogEntry(SecurityLog.LogType.AsInteger[i]);
+    LogTypeCount[LogTypeEnum] := LogTypeCount[LogTypeEnum] + 1;
+
+    if LogTypeEnum = ltBlockedLogin then
+      inc(blockedcount);
+  end;
+
+  RowCount :=
+   3 +                                    // Header + Lines numbers + Start date + Blocked count
+   Integer(High(TEpiLogEntry));           // Count of each log type
+
+  Generator.TableHeader('Log Overview', 2, RowCount);
+
+  Generator.TableCell('Task',                      0, 0);
+  Generator.TableCell('Content',                   1, 0);
+
+  Generator.TableCell('Log Entries',               0, 1);
+  Generator.TableCell(IntToStr(SecurityLog.Size),  1, 1);
+
+  Generator.TableCell('Start Date',                0, 2);
+  Generator.TableCell(DateTimeToStr(SecurityLog.Date.AsDateTime[0] +
+                                    SecurityLog.Time.AsDateTime[0]),
+                      1, 2);
+
+
+  i := 3;
+  for LogTypeEnum := Low(LogTypeCount) to High(LogTypeCount) do
+  begin
+    if LogTypeEnum = ltNone then continue;
+
+    Generator.TableCell(EpiLogEntryText[LogTypeEnum],        0, i);
+    Generator.TableCell(IntToStr(LogTypeCount[LogTypeEnum]), 1, i);
+    Inc(i);
+  end;
+
+  Generator.TableFooter('');
+
+  Generator.Line('');
+
+  Generator.TableHeader('Blocked Login Attempts', 3, BlockedCount + 1);
+  Generator.TableCell('Blocked machine', 0, 0);
+  Generator.TableCell('Latest login',    1, 0);
+  Generator.TableCell('Date / Time',     2, 0);
+
+  i := 1;
+  for j := 0 to SecurityLog.Size -1 do
+  begin
+    LogTypeEnum := TEpiLogEntry(SecurityLog.LogType.AsInteger[j]);
+
+    if (LogTypeEnum = ltBlockedLogin)
+    then
+      begin
+        Generator.TableCell(SecurityLog.LogContent.AsString[j], 0, i);
+        Generator.TableCell(SecurityLog.UserName.AsString[j], 1, i);
+        Generator.TableCell(DateTimeToStr(SecurityLog.Date.AsDateTime[j] +
+                                          SecurityLog.Time.AsDateTime[j]),
+                            2, i);
+
+        Inc(i);
+      end;
+  end;
+  Generator.TableFooter('');
+
+ { Logger := ADocumentFile.Document.Logger;
   Log := Logger.Log;
 
   for LogTypeEnum := Low(LogTypeCount) to High(LogTypeCount) do
@@ -124,7 +209,7 @@ begin
         Inc(i);
       end;
   end;
-  Generator.TableFooter('');
+  Generator.TableFooter('');     }
 end;
 
 end.

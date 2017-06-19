@@ -17,6 +17,7 @@ type
     Button1: TButton;
     Panel1: TPanel;
     Panel2: TPanel;
+    Splitter1: TSplitter;
   private
     FAdmin: TEpiAdmin;
     FGroupRights: TEpiGroupRights;
@@ -37,6 +38,8 @@ type
 
   { GroupRightsVST }
   private
+    // Hitinfo is obtained in MouseMove and used in AfterPaint to correctly paint hot-states for check boxes
+    FHitInfo: THitInfo;
     FDataFileRelation: TEpiMasterRelation;
     FGroupRightsVst: TVirtualStringTree;
 
@@ -64,6 +67,8 @@ type
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure GroupVSTKeyAction(Sender: TBaseVirtualTree; var CharCode: Word;
       var Shift: TShiftState; var DoDefault: Boolean);
+    procedure GroupVSTMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
     procedure GroupVSTNodeClick(Sender: TBaseVirtualTree; const HitInfo: THitInfo);
   public
     constructor Create(TheOwner: TComponent); override;
@@ -77,7 +82,8 @@ implementation
 {$R *.lfm}
 
 uses
-  Themes, LCLType, admin_authenticator, epicustomrelations;
+  Themes, LCLType, admin_authenticator, epicustomrelations,
+  typinfo;
 
 const
   CHECKED_NODE_KEY = 'CHECKED_NODE_KEY';
@@ -309,16 +315,27 @@ var
   Sz: TSize;
   FCheckBoxWidth: Integer;
   FCheckBoxHeight: Integer;
+  P: TPoint;
 begin
   if Column = 0 then exit;
 
   { Paint Check boxes by ourselves - since VT's only allow for one checkbox column }
   Checked := NodeChecked(Node, TEpiEntryRight(Column - 1));
 
-  if Checked then
-    Details := ThemeServices.GetElementDetails(tbCheckBoxCheckedNormal)
+  if (FHitInfo.HitNode = Node) and
+     (FHitInfo.HitColumn = Column)
+  then
+    begin
+      if Checked then
+        Details := ThemeServices.GetElementDetails(tbCheckBoxCheckedHot)
+      else
+        Details := ThemeServices.GetElementDetails(tbCheckBoxUncheckedHot);
+    end
   else
-    Details := ThemeServices.GetElementDetails(tbCheckBoxUncheckedNormal);
+    if Checked then
+      Details := ThemeServices.GetElementDetails(tbCheckBoxCheckedNormal)
+    else
+      Details := ThemeServices.GetElementDetails(tbCheckBoxUncheckedNormal);
 
   Sz := ThemeServices.GetDetailSize(Details);
 
@@ -430,6 +447,20 @@ begin
     end;
 end;
 
+procedure TGroupsAssignFrame.GroupVSTMouseMove(Sender: TObject;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  // This will invalidate a node just in case we are leaving it.
+  if Assigned(FHitInfo.HitNode) then
+    FGroupRightsVst.InvalidateNode(FHitInfo.HitNode);
+
+  FGroupRightsVst.GetHitTestInfoAt(X, Y, true, FHitInfo);
+
+  // Now invalidate the node we got to, since hot states may have changed.
+  if Assigned(FHitInfo.HitNode) then
+    FGroupRightsVst.InvalidateNode(FHitInfo.HitNode);
+end;
+
 procedure TGroupsAssignFrame.GroupVSTNodeClick(Sender: TBaseVirtualTree;
   const HitInfo: THitInfo);
 var
@@ -519,6 +550,8 @@ begin
     OnKeyAction       := @GroupVSTKeyAction;
 
     OnNodeClick       := @GroupVSTNodeClick;
+    OnMouseMove       := @GroupVSTMouseMove;
+
 
     EndUpdate;
   end;

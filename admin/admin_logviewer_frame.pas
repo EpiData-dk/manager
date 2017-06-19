@@ -15,7 +15,7 @@ type
   TLogViewerFrame = class(TFrame)
   private
     FDocument: TEpiDocument;
-    FLog: TEpiLog;
+//    FLog: TEpiLog;
     FVst: TVirtualStringTree;
     procedure LogGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
@@ -42,7 +42,7 @@ var
   Df: TEpiDataFile;
   S: String;
 begin
-  Idx := PtrInt(FVst.GetNodeData(Node)^);
+{  Idx := PtrInt(FVst.GetNodeData(Node)^);
 
   with FLog do
     case Column of
@@ -118,30 +118,30 @@ begin
             ltExport: ;}
           end;
         end;
-    end;
+    end;   }
 end;
 
 procedure TLogViewerFrame.LogInitNode(Sender: TBaseVirtualTree; ParentNode,
   Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
-  PtrInt(FVst.GetNodeData(Node)^) := Node^.Index;
+ // PtrInt(FVst.GetNodeData(Node)^) := Node^.Index;
 end;
 
 procedure TLogViewerFrame.SetDocument(AValue: TEpiDocument);
 begin
   if FDocument = AValue then Exit;
   FDocument := AValue;
-  FLog := FDocument.Logger.Log;
+//  FLog := FDocument.Logger.Log;
 
-  FVst.RootNodeCount := FLog.Size;
-  FVSt.Header.AutoFitColumns(false);
+//  FVst.RootNodeCount := FLog.Size;
+//  FVSt.Header.AutoFitColumns(false);
 end;
 
 constructor TLogViewerFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-  FVst := TVirtualStringTree.Create(Self);
+{  FVst := TVirtualStringTree.Create(Self);
   with FVst do
   begin
     BeginUpdate;
@@ -255,7 +255,7 @@ begin
 //    OnNodeDblClick    := @UsersNodeDblClick;
 
     EndUpdate;
-  end;
+  end;   }
 end;
 
 end.

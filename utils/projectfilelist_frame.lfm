@@ -10,7 +10,7 @@ object ProjectFileListFrame: TProjectFileListFrame
   DesignTop = 364
   object StructureGrid: TStringGrid
     Left = 0
-    Height = 350
+    Height = 346
     Top = 0
     Width = 878
     Align = alClient
@@ -30,20 +30,20 @@ object ProjectFileListFrame: TProjectFileListFrame
   end
   object Panel1: TPanel
     Left = 0
-    Height = 100
-    Top = 350
+    Height = 104
+    Top = 346
     Width = 878
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
-    ClientHeight = 100
+    ClientHeight = 104
     ClientWidth = 878
     TabOrder = 1
     object ProgressBar1: TProgressBar
       Left = 0
       Height = 20
       Top = 80
-      Width = 878
+      Width = 874
       Align = alBottom
       Smooth = True
       Step = 1
@@ -54,10 +54,11 @@ object ProjectFileListFrame: TProjectFileListFrame
       Left = 0
       Height = 80
       Top = 0
-      Width = 878
+      Width = 874
       Align = alClient
       ItemHeight = 0
-      ScrollWidth = 874
+      Options = [lboDrawFocusRect]
+      ScrollWidth = 870
       TabOrder = 1
       TopIndex = -1
       Visible = False

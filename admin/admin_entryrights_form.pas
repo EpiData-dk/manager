@@ -82,7 +82,7 @@ implementation
 {$R *.lfm}
 
 uses
-  Themes, epiadmin, settings2, settings2_var, epicustomrelations;
+  Themes, epiadmin, settings2, settings2_var, epicustomrelations, epicustomlist_helper;
 
 var
   DefineEntryRightsForm: TDefineEntryRightsForm = nil;
@@ -243,7 +243,7 @@ begin
   if not Assigned(FDocument) then exit;
   if (csDestroying in ComponentState) then exit;
 
-  FDataFormsVST.RootNodeCount := FDocument.Relations.Count;
+  FDataFormsVST.RootNodeCount := FDocument.Relations.Count - FDocument.Relations.ProtectedCount;
   FDataFormsVST.ReinitNode(nil, true);
   FDataFormsVST.FullExpand();
   FDataFormsVST.FocusedNode := FDataFormsVST.GetFirst();
