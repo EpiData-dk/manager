@@ -50,14 +50,15 @@ uses
   rename_form, report_export, valuelabel_import_external,
   valuelabel_import_data, project_types, project_studyunit_frame,
   design_properties_dataformframe, append_form, append_form2,
-  epiv_projecttreeview_frame, epiv_datamodule, epidatacore,
-  report_project_validation_frame2, reports_form, report_counts_frame,
-  lazcontrols, design_control_memo, export_form2, admin_form, admin_user_form,
-  admin_group_form, admin_authenticator, design_properties_groupassign_frame,
-  core_logger, admin_groups_form, admin_users_form, admin_entryrights_form,
+  epiv_projecttreeview_frame, epiv_datamodule, report_project_validation_frame2,
+  reports_form, report_counts_frame, lazcontrols, design_control_memo,
+  export_form2, admin_form, admin_user_form, admin_group_form,
+  admin_authenticator, design_properties_groupassign_frame, core_logger,
+  admin_groups_form, admin_users_form, admin_entryrights_form,
   admin_users_accum_rights_frame, project_statusbar,
   design_properties_dataform_statusbarframe, settings_statusbar,
-  admin_logviewer_frame, empty_form, report_admin, report_logoverview, epicustomlist_helper;
+  admin_logviewer_frame, empty_form, report_admin, report_logoverview,
+  epicustomlist_helper, epidatacore;
 
 {$R *.res}
 
