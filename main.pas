@@ -362,6 +362,8 @@ begin
 
   {$IFDEF EPI_BETA}
   BetaPanel.Visible := true;
+  {$ELSE}
+  BetaPanel.Visible := false;
   {$ENDIF}
 
   Application.QueueAsyncCall(@CheckForUpdates, 0);
