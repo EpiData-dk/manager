@@ -208,6 +208,8 @@ type
     MenuItem42: TMenuItem;
     MenuItem43: TMenuItem;
     MenuItem44: TMenuItem;
+    MenuItem46: TMenuItem;
+    ShowChangeLogAction: TAction;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -264,6 +266,7 @@ type
     procedure ManageUserPasswordActionUpdate(Sender: TObject);
     procedure AdminReportActionExecute(Sender: TObject);
     procedure LogOverviewReportActionExecute(Sender: TObject);
+    procedure ShowChangeLogActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -1217,6 +1220,11 @@ end;
 procedure TMainForm.LogOverviewReportActionExecute(Sender: TObject);
 begin
   RunReport(TReportLogOverview);
+end;
+
+procedure TMainForm.ShowChangeLogActionExecute(Sender: TObject);
+begin
+  OpenURL('http://epidata.dk/epidatamanager.changelog.txt');
 end;
 
 procedure TMainForm.SetCaption;

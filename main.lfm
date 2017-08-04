@@ -6,7 +6,7 @@ object MainForm: TMainForm
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
   Caption = 'MainForm'
-  ClientHeight = 658
+  ClientHeight = 656
   ClientWidth = 878
   Menu = MainMenu1
   OnActivate = FormActivate
@@ -19,7 +19,7 @@ object MainForm: TMainForm
   LCLVersion = '1.9.0.0'
   object PageControl1: TPageControl
     Left = 0
-    Height = 620
+    Height = 618
     Top = 38
     Width = 878
     Align = alClient
@@ -45,8 +45,8 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 508
-      Height = 23
-      Top = 8
+      Height = 25
+      Top = 7
       Width = 62
       Action = ExportAction
       AutoSize = True
@@ -60,8 +60,8 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 416
-      Height = 23
-      Top = 8
+      Height = 25
+      Top = 7
       Width = 77
       Action = StartEntryClientAction
       AutoSize = True
@@ -74,8 +74,8 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 241
-      Height = 23
-      Top = 8
+      Height = 25
+      Top = 7
       Width = 70
       AutoSize = True
       BorderSpacing.Left = 15
@@ -89,8 +89,8 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 326
-      Height = 23
-      Top = 8
+      Height = 25
+      Top = 7
       Width = 75
       AutoSize = True
       BorderSpacing.Left = 15
@@ -105,8 +105,8 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 123
-      Height = 23
-      Top = 8
+      Height = 25
+      Top = 7
       Width = 103
       AutoSize = True
       BorderSpacing.Left = 15
@@ -120,8 +120,8 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 23
-      Top = 8
+      Height = 25
+      Top = 7
       Width = 97
       AutoSize = True
       BorderSpacing.Left = 10
@@ -140,7 +140,7 @@ object MainForm: TMainForm
     AnchorSideTop.Side = asrCenter
     Left = 300
     Height = 204
-    Top = 246
+    Top = 245
     Width = 279
     ClientHeight = 204
     ClientWidth = 279
@@ -153,7 +153,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = BetaPanel
       Left = 19
-      Height = 15
+      Height = 17
       Top = 21
       Width = 240
       BorderSpacing.Top = 20
@@ -173,8 +173,8 @@ object MainForm: TMainForm
       AnchorSideBottom.Control = BetaPanel
       AnchorSideBottom.Side = asrBottom
       Left = 19
-      Height = 127
-      Top = 56
+      Height = 125
+      Top = 58
       Width = 240
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Top = 20
@@ -525,6 +525,9 @@ object MainForm: TMainForm
       object CheckVersionMenuItem: TMenuItem
         Action = CheckVersionAction
       end
+      object MenuItem46: TMenuItem
+        Action = ShowChangeLogAction
+      end
       object HelpMenuDivider3: TMenuItem
         Caption = '-'
       end
@@ -726,6 +729,11 @@ object MainForm: TMainForm
       Caption = 'Log Overview'
       OnExecute = LogOverviewReportActionExecute
       OnUpdate = ReportsAuthActionUpdate
+    end
+    object ShowChangeLogAction: TAction
+      Category = 'Help'
+      Caption = 'Show Release Notes'
+      OnExecute = ShowChangeLogActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
