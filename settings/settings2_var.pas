@@ -82,6 +82,7 @@ type
     ExportCSVTimeSep:      string;
     ExportCSVDecSep:       string;
     ExportCSVNewLine:      integer;
+    ExportCSVMemoNewLine:  string;
 
     // - SAS
     ExportSASValueLabels:  boolean;

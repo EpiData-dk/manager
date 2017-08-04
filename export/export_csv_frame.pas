@@ -18,8 +18,10 @@ type
     ExportFieldNameChkBox: TCheckBox;
     FieldSepEdit: TEdit;
     DateSepEdit: TEdit;
+    NewLineConversionEdit: TEdit;
     QuoteCharLabel: TLabel;
     QuoteCharEdit: TEdit;
+    NewLineConversionLabel1: TLabel;
     TimeSepEdit: TEdit;
     DecimalSepEdit: TEdit;
     NewLineCmbBox: TComboBox;
@@ -106,6 +108,7 @@ begin
     DateSeparator     := DateSepEdit.Text;
     TimeSeparator     := TimeSepEdit.Text;
     DecimalSeparator  := DecimalSepEdit.Text;
+    MemoNewLine       := NewLineConversionEdit.Text;
     NewLine           := TString(NewLineCmbBox.Items.Objects[NewLineCmbBox.ItemIndex]).Str;
     QuoteChar         := QuoteCharEdit.Text;
     ExportFieldNames  := ExportFieldNameChkBox.Checked;
@@ -133,6 +136,7 @@ begin
     DecimalSepEdit.Text                                               := ExportCSVDecSep;
     ExportFieldNameChkBox.Checked                                     := ExportCSVFieldName;
     QuoteCharEdit.Text                                                := ExportCSVQuote;
+    NewLineConversionEdit.Text                                        := ExportCSVMemoNewLine;
     NewLineCmbBox.ItemIndex                                           := ExportCSVNewLine;
   end;
 end;
@@ -149,13 +153,14 @@ begin
 
   with FData^ do
   begin
-    ExportCSVFieldSep  := FieldSepEdit.Text;
-    ExportCSVDateSep   := DateSepEdit.Text;
-    ExportCSVTimeSep   := TimeSepEdit.Text;
-    ExportCSVDecSep    := DecimalSepEdit.Text;
-    ExportCSVFieldName := ExportFieldNameChkBox.Checked;
-    ExportCSVQuote     := QuoteCharEdit.Text;
-    ExportCSVNewLine   := NewLineCmbBox.ItemIndex;
+    ExportCSVFieldSep    := FieldSepEdit.Text;
+    ExportCSVDateSep     := DateSepEdit.Text;
+    ExportCSVTimeSep     := TimeSepEdit.Text;
+    ExportCSVDecSep      := DecimalSepEdit.Text;
+    ExportCSVFieldName   := ExportFieldNameChkBox.Checked;
+    ExportCSVQuote       := QuoteCharEdit.Text;
+    ExportCSVMemoNewLine := NewLineConversionEdit.Text;
+    ExportCSVNewLine     := NewLineCmbBox.ItemIndex;
   end;
 end;
 

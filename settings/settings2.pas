@@ -214,6 +214,7 @@ begin
       WriteString(sec, 'ExportCSVDateSep', ExportCSVDateSep);
       WriteString(sec, 'ExportCSVTimeSep', ExportCSVTimeSep);
       WriteString(sec, 'ExportCSVDecSep', ExportCSVDecSep);
+      WriteString(sec, 'ExportCSVMemoNewLine', ExportCSVMemoNewLine);
 
       sec := 'exportsas';
       WriteBool(sec, 'ExportSASValueLabels', ExportSASValueLabels);
@@ -378,6 +379,7 @@ begin
       ExportCSVDateSep       := ReadString(sec, 'ExportCSVDateSep', ExportCSVDateSep);
       ExportCSVTimeSep       := ReadString(sec, 'ExportCSVTimeSep', ExportCSVTimeSep);
       ExportCSVDecSep        := ReadString(sec, 'ExportCSVDecSep', ExportCSVDecSep);
+      ExportCSVMemoNewLine   := ReadString(sec, 'ExportCSVMemoNewLine', ExportCSVMemoNewLine);
 
       sec := 'exportsas';
       ExportSASValueLabels   := ReadBool(sec, 'ExportSASValueLabels', ExportSASValueLabels);
@@ -786,6 +788,7 @@ const
     ExportCSVTimeSep:      ':';
     ExportCSVDecSep:       '.';
     ExportCSVNewLine:      0;
+    ExportCSVMemoNewLine:  ' ';
 
     // - SAS
     ExportSASValueLabels:  true;

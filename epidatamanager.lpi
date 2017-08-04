@@ -176,7 +176,6 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="-r=~/.epidata.securitylog.recentfiles.ini -i=~/.epidata.securitylog.cfg"/>
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
@@ -900,7 +899,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="8">
+    <Exceptions Count="9">
       <Item1>
         <Name Value="EAbort"/>
       </Item1>
@@ -925,6 +924,9 @@
       <Item8>
         <Name Value="EEpiTooManyFailedLogins"/>
       </Item8>
+      <Item9>
+        <Name Value="EKeyNotFoundException"/>
+      </Item9>
     </Exceptions>
   </Debugging>
 </CONFIG>
