@@ -214,7 +214,12 @@ begin
       WriteString(sec, 'ExportCSVDateSep', ExportCSVDateSep);
       WriteString(sec, 'ExportCSVTimeSep', ExportCSVTimeSep);
       WriteString(sec, 'ExportCSVDecSep', ExportCSVDecSep);
-      WriteString(sec, 'ExportCSVMemoNewLine', ExportCSVMemoNewLine);
+
+      // TODO: If INI files start supporting space as value then change this!
+      if ExportCSVMemoNewLine = ' ' then
+        WriteString(sec, 'ExportCSVMemoNewLine', '" "')
+      else
+        WriteString(sec, 'ExportCSVMemoNewLine', ExportCSVMemoNewLine);
 
       sec := 'exportsas';
       WriteBool(sec, 'ExportSASValueLabels', ExportSASValueLabels);
@@ -380,6 +385,8 @@ begin
       ExportCSVTimeSep       := ReadString(sec, 'ExportCSVTimeSep', ExportCSVTimeSep);
       ExportCSVDecSep        := ReadString(sec, 'ExportCSVDecSep', ExportCSVDecSep);
       ExportCSVMemoNewLine   := ReadString(sec, 'ExportCSVMemoNewLine', ExportCSVMemoNewLine);
+      if ExportCSVMemoNewLine = '" "' then
+        ExportCSVMemoNewLine := ' ';
 
       sec := 'exportsas';
       ExportSASValueLabels   := ReadBool(sec, 'ExportSASValueLabels', ExportSASValueLabels);
