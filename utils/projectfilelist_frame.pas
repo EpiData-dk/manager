@@ -129,6 +129,9 @@ type
     FImportedFileName: string;
   protected
     function GetFileName: string; override;
+    procedure SaveHook(const Sender: TEpiCustomBase;
+      const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
+      EventType: Word; Data: Pointer); override;
   public
     constructor Create; override;
   end;
@@ -141,6 +144,14 @@ begin
     Result := inherited GetFileName
   else
     Result := FImportedFileName;
+end;
+
+procedure TImportedDocumentFile.SaveHook(const Sender: TEpiCustomBase;
+  const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup; EventType: Word;
+  Data: Pointer);
+begin
+  // All imports skip the savehook since we don't wan't to do
+  // any autosaving etc...
 end;
 
 constructor TImportedDocumentFile.Create;
