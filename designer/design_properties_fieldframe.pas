@@ -672,8 +672,15 @@ begin
   for i := 0 to DataFile.Fields.Count - 1 do
   begin
     F := DataFile.Field[i];
-    if (DataFile.KeyFields.IndexOf(F) = -1) then
-      AddFieldToCombo(F, AllFieldTypes - AutoFieldTypes, Combo);
+
+    // If this is a detail relation, and this field is a key in both this and the parent dataform,
+    // then it is by default locked and cannot be jumped to.
+    if (Relation is TEpiDetailRelation) and
+       (TEpiDetailRelation(Relation).MasterRelation.Datafile.KeyFields.ItemExistsByName(F.Name))
+    then
+      Continue;
+
+    AddFieldToCombo(F, AllFieldTypes - AutoFieldTypes, Combo);
   end;
   Combo.ItemIndex := 0;
   Combo.Items.EndUpdate;
