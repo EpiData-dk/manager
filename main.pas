@@ -1132,7 +1132,9 @@ begin
   ActionEnabled := Authenticator.IsAuthorized([earExport]);
 
   if Assigned(FActiveFrame) then
-    ActionEnabled := ActionEnabled and (FActiveFrame.EpiDocument.DataFiles.Count > 0);
+    ActionEnabled := ActionEnabled and
+                     (Assigned(FActiveFrame.EpiDocument)) and
+                     (FActiveFrame.EpiDocument.DataFiles.Count > 0);
 
   TAction(Sender).Enabled := ActionEnabled;
 end;
