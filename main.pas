@@ -1749,30 +1749,34 @@ end;
 procedure TMainForm.UpdateRecentFiles;
 var
   Mi: TMenuItem;
-  i: Integer;
+  i, RecentFilesRunner: Integer;
   A: TAction;
 begin
   LoadRecentFilesIni(GetRecentIniFileName);
 
-  RecentFilesSubMenu.Visible := RecentFiles.Count > 0;
   RecentFilesSubMenu.Clear;
-  RecentFilesSubPopupMenu.Visible := RecentFilesSubMenu.Visible;
   RecentFilesSubPopupMenu.Clear;
 
+  RecentFilesRunner := 0;
   for i := 0 to MaxRecentFiles - 1 do
   begin
     // Main menu
     A := TAction(RecentFilesActionList.Actions[i]);
 
+    while (RecentFilesRunner < RecentFiles.Count) and
+          (ExtractFileExt(RecentFiles[RecentFilesRunner]) <> '.epx')
+    do
+      Inc(RecentFilesRunner);
+
     // Disable actions if the list of recentfiles is not long enough.
-    if i >= RecentFiles.Count then
+    if (RecentFilesRunner >= RecentFiles.Count) then
     begin
       A.Enabled := false;
       Continue;
     end;
 
     A.Enabled := true;
-    A.Caption := RecentFiles[i];
+    A.Caption := RecentFiles.ValueFromIndex[RecentFilesRunner];
 
     Mi := TMenuItem.Create(RecentFilesSubMenu);
     Mi.Name := 'recent' + inttostr(i);
@@ -1783,7 +1787,12 @@ begin
     Mi := TMenuItem.Create(RecentFilesSubPopupMenu);
     Mi.Action := A;
     RecentFilesSubPopupMenu.Add(Mi);
+
+    Inc(RecentFilesRunner);
   end;
+
+  RecentFilesSubMenu.Visible := RecentFilesSubMenu.Count > 0;
+  RecentFilesSubPopupMenu.Visible := RecentFilesSubMenu.Visible;
 end;
 
 procedure TMainForm.AssignActionLinks;
