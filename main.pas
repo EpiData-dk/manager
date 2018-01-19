@@ -1776,7 +1776,7 @@ begin
     end;
 
     A.Enabled := true;
-    A.Caption := RecentFiles.ValueFromIndex[RecentFilesRunner];
+    A.Caption := RecentFiles[RecentFilesRunner];
 
     Mi := TMenuItem.Create(RecentFilesSubMenu);
     Mi.Name := 'recent' + inttostr(i);
