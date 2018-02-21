@@ -386,6 +386,7 @@ begin
 
   Obj := TObject(PtrInt(DataFile.AfterRecordState));
   Idx := AfterRecordGrpBox.Items.IndexOfObject(Obj);
+  if (Idx < 0) then Idx := 0;
   AfterRecordGrpBox.ItemIndex := Idx;
   FAfterRecordIndex := Idx;
 end;

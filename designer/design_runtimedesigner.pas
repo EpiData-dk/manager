@@ -2554,7 +2554,12 @@ begin
     // Create submenu for selected component.
     SubMenu := TMenuItem.Create(DesignControlPopUpMenu);
     SubMenu.Caption := 'Select...';
-    SubMenu.Enabled := false;
+
+    MI := TMenuItem.Create(SubMenu);
+    MI.Caption := 'All';
+    MI.Action  := SelectAllAction;
+    MI.Tag := 0;
+    SubMenu.Add(MI);
 
     if (Selector.Count = 1) and
        (Ctrl is TDesignField)
