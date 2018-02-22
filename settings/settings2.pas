@@ -251,6 +251,10 @@ begin
       WriteString(Sec, 'EmailSubject', EmailSubject);
       WriteString(Sec, 'EmailContent', EmailContent);
 
+      // - Extended Access
+      Sec := 'ExtendedAccess';
+      WriteInteger(Sec, 'DaysBetweenPasswordChange', DaysBetweenPassword);
+
       // - Fields:
       Sec := 'ProjectFields';
       WriteBool(Sec, 'ShowNames', ShowNames);
@@ -456,6 +460,9 @@ begin
       EmailAddress          := ReadString(Sec, 'EmailAddress', EmailAddress);
       EmailSubject          := ReadString(Sec, 'EmailSubject', EmailSubject);
       EmailContent          := ReadString(Sec, 'EmailContent', EmailContent);
+      // - Extended Access
+      Sec := 'ExtendedAccess';
+      DaysBetweenPassword   := ReadInteger(Sec, 'DaysBetweenPasswordChange', DaysBetweenPassword);
       // - Fields:
       Sec := 'ProjectFields';
       ShowNames             := ReadBool(Sec, 'ShowNames', ShowNames);
@@ -824,11 +831,12 @@ const
     EmailAddress:          '';
     EmailContent:          '';
     EmailSubject:          '';
+    // - Extended Access
+    DaysBetweenPassword:   90;
     // - Fields:
     ShowNames:             false;
     ShowBorders:           true;
     ShowValuelabelText:    true;
-    DaysBetweenPassword:   90;
     // - Study:
     StudyTitle:            'Untitled Project';
     StudyIndent:           '';

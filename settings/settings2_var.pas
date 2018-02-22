@@ -110,11 +110,13 @@ type
     EmailContent:          UTF8String;
     EmailSubject:          UTF8String;
 
+    // - Extended Access
+    DaysBetweenPassword:   Integer;
+
     // - Fields:
     ShowNames:             boolean;
     ShowBorders:           boolean;
     ShowValuelabelText:    boolean;
-    DaysBetweenPassword:   Integer;
     // - Study:
     StudyTitle:            string;
     StudyIndent:           string;
