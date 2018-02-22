@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, StdCtrls, Buttons, Spin,
   MaskEdit, ComCtrls, ExtCtrls, design_properties_baseframe, design_types,
   epicustombase, epidatafiles, epirelates, admin_users_accum_rights_frame, types,
-  design_properties_dataform_statusbarframe;
+  design_properties_dataform_statusbarframe, project_keyfields_form;
 
 type
 
@@ -40,6 +40,7 @@ type
     AfterRecordSheet: TTabSheet;
     RightsTabSheet: TTabSheet;
     StatusbarContentSheet: TTabSheet;
+    KeySheet: TTabSheet;
     procedure AddRelateBtnClick(Sender: TObject);
     procedure MaskEdit1EditingDone(Sender: TObject);
     procedure NoLimitRadioBtnClick(Sender: TObject);
@@ -65,6 +66,10 @@ type
     { Statusbar }
     FStatusbarContentFrame: TStatusbarContentFrame;
     procedure UpdateStatusbarFrameContent;
+  private
+    { KeySheet fields }
+    FKeyFieldsFrame: TKeyFieldsFrame;
+    procedure UpdateKeyFieldFrameContent;
   private
     procedure DataFileCaptionHook(const Sender: TEpiCustomBase;
       const Initiator: TEpiCustomBase; EventGroup: TEpiEventGroup;
@@ -336,7 +341,7 @@ end;
 
 procedure TDataformPropertiesFrame.DoUpdateCaption;
 begin
-  UpdateCaption('DataForm Properties: ' + DataFile.Caption.Text);
+  UpdateCaption('Dataset Properties: ' + DataFile.Caption.Text);
 end;
 
 procedure TDataformPropertiesFrame.UpdateAfterRecordRadioBoxVisibility;
@@ -407,6 +412,11 @@ begin
   FStatusbarContentFrame.Relation := Relation;
 end;
 
+procedure TDataformPropertiesFrame.UpdateKeyFieldFrameContent;
+begin
+  FKeyFieldsFrame.Relation  := Relation;
+end;
+
 procedure TDataformPropertiesFrame.UpdateVisibility;
 begin
   BasicSheet.Enabled     := IsAuthorized(earDefineProject) and
@@ -427,6 +437,9 @@ begin
   UpdateUserRightsFrameVisibility;
 
   StatusbarContentSheet.Enabled := IsAuthorized(earDefineProject) and
+                                   (not Relation.ProtectedItem);
+
+  KeySheet.Enabled              := IsAuthorized(earDefineProject) and
                                    (not Relation.ProtectedItem);
 end;
 
@@ -460,6 +473,7 @@ begin
   UpdateAfterRecordRadioBoxContent;
   UpdateUserRightsFrameContent;
   UpdateStatusbarFrameContent;
+  UpdateKeyFieldFrameContent;
 end;
 
 procedure TDataformPropertiesFrame.RegisterDataFileHooks;
@@ -536,7 +550,9 @@ begin
   //  AfterRecord
   // ********************
 
-  Result := Result and FStatusbarContentFrame.ValidateContent;
+  Result := Result and
+            FStatusbarContentFrame.ValidateContent and
+            FKeyFieldsFrame.ValidateContent;
 end;
 
 procedure TDataformPropertiesFrame.InternalApply;
@@ -590,6 +606,7 @@ begin
 
 
   FStatusbarContentFrame.ApplyContent;
+  FKeyFieldsFrame.ApplyContent;
 end;
 
 procedure TDataformPropertiesFrame.SetReadOnly(AValue: Boolean);
@@ -617,6 +634,10 @@ begin
   FStatusbarContentFrame := TStatusbarContentFrame.Create(Self);
   FStatusbarContentFrame.Align := alClient;
   FStatusbarContentFrame.Parent := StatusbarContentSheet;
+
+  FKeyFieldsFrame := TKeyFieldsFrame.Create(Self);
+  FKeyFieldsFrame.Align := alClient;
+  FKeyFieldsFrame.Parent := KeySheet;
 end;
 
 destructor TDataformPropertiesFrame.Destroy;

@@ -81,7 +81,6 @@ type
     MenuItem5: TMenuItem;
     CountsReportAction: TAction;
     AddStructureMenuItem: TMenuItem;
-    KeyFieldsMenuItem: TMenuItem;
     EditMenuDivider0: TMenuItem;
     AlignMenu: TMenuItem;
     AlignBottomMenuItem: TMenuItem;
@@ -93,7 +92,6 @@ type
     DefineProjectPopupMenu: TPopupMenu;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
-    KeyFieldsPopupMenuItem: TMenuItem;
     DocumentPopupMenu: TPopupMenu;
     MenuItem9: TMenuItem;
     ValueLabelEditorPopupMenuItem: TMenuItem;

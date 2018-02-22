@@ -491,9 +491,9 @@
       <Unit45>
         <Filename Value="project/project_keyfields_form.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="KeyFieldsForm"/>
+        <ComponentName Value="KeyFieldsFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
+        <ResourceBaseClass Value="Frame"/>
       </Unit45>
       <Unit46>
         <Filename Value="utils/manager_globals.pas"/>

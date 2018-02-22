@@ -6,28 +6,25 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Buttons, ActnList, epitools_integritycheck, epidatafiles, epidocument,
-  epivaluelabels, project_types, epidatafilerelations;
+  StdCtrls, Buttons, ActnList, epitools_integritycheck, epidatafiles,
+  epivaluelabels, epidatafilerelations;
 
 type
 
-  { TKeyFieldsForm }
+  { TKeyFieldsFrame }
 
-  TKeyFieldsForm = class(TForm)
+  TKeyFieldsFrame = class(TFrame)
     DeleteIndexAction: TAction;
     AddNewIndexAction: TAction;
     AddIndexFieldAction: TAction;
     ActionList1: TActionList;
     AddIndexComboBtn: TSpeedButton;
     Bevel3: TBevel;
-    AddIndexFieldBtn: TButton;
     Label1: TLabel;
     RealTimeStatusChkBox: TCheckBox;
     RemoveIndexBtn: TSpeedButton;
     RightBevel: TBevel;
     ScrollBox1: TScrollBox;
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
     ShowRecordsBtn: TButton;
     Panel1: TPanel;
     TopBevel: TBevel;
@@ -65,16 +62,18 @@ type
       out FailedValues: TBoundArray): Boolean;
     function  ShowError(Const Msg: string; Const Ctrl: TControl): boolean;
     procedure LoadGlyphs;
+    procedure SetRelation(AValue: TEpiMasterRelation);
   protected
     property  DataFile: TEpiDataFile read GetDataFile;
-    property  Relation: TEpiMasterRelation read FRelation;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent;
-      ARelation: TEpiMasterRelation);
+    constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+    property Relation: TEpiMasterRelation read FRelation write SetRelation;
     property ReadOnly: boolean read FReadOnly write SetReadOnly;
-    class procedure RestoreDefaultPos;
+    procedure UpdateContent;
+    procedure ApplyContent;
+    function  ValidateContent: Boolean;
   end;
 
 implementation
@@ -89,9 +88,9 @@ uses
 const
   FormName = 'KeyFieldsForm';
 
-{ TKeyFieldsForm }
+{ TKeyFieldsFrame }
 
-procedure TKeyFieldsForm.AddIndexFieldActionExecute(Sender: TObject);
+procedure TKeyFieldsFrame.AddIndexFieldActionExecute(Sender: TObject);
 var
   i: Integer;
   F: TEpiField;
@@ -146,7 +145,7 @@ begin
   AddIndexFieldAction.Update;
 end;
 
-procedure TKeyFieldsForm.AddIndexFieldActionUpdate(Sender: TObject);
+procedure TKeyFieldsFrame.AddIndexFieldActionUpdate(Sender: TObject);
 var
   S: String;
 begin
@@ -156,22 +155,22 @@ begin
   AddIndexFieldAction.Caption := S + 'Status Variable';
 end;
 
-procedure TKeyFieldsForm.AddNewIndexActionExecute(Sender: TObject);
+procedure TKeyFieldsFrame.AddNewIndexActionExecute(Sender: TObject);
 begin
   FDynamicKeyList.Add(DoAddNewKey);
 end;
 
-procedure TKeyFieldsForm.AddNewIndexActionUpdate(Sender: TObject);
+procedure TKeyFieldsFrame.AddNewIndexActionUpdate(Sender: TObject);
 begin
   TAction(Sender).Enabled := Relation.DetailRelations.Count = 0;
 end;
 
-procedure TKeyFieldsForm.DeleteIndexActionExecute(Sender: TObject);
+procedure TKeyFieldsFrame.DeleteIndexActionExecute(Sender: TObject);
 begin
   DoDeleteKey;
 end;
 
-procedure TKeyFieldsForm.DeleteIndexActionUpdate(Sender: TObject);
+procedure TKeyFieldsFrame.DeleteIndexActionUpdate(Sender: TObject);
 var
   Cmb: TComboBox;
 begin
@@ -182,7 +181,7 @@ begin
     Cmb.Enabled;
 end;
 
-procedure TKeyFieldsForm.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+procedure TKeyFieldsFrame.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 var
   FailedRecords: TBoundArray;
   Res: Integer;
@@ -193,7 +192,7 @@ var
 begin
   IndexCheck := PerformIndexCheck(FailedRecords, FailedValues);
 
-  if (ModalResult = mrOK) and (not IndexCheck) then
+{  if (ModalResult = mrOK) and (not IndexCheck) then
   begin
     Res := MessageDlg('Index Error',
                         'Observations with Non-Unique key' + LineEnding +
@@ -226,21 +225,21 @@ begin
   end;
 
   if ManagerSettings.SaveWindowPositions then
-    SaveFormPosition(Self, FormName);
+    SaveFormPosition(Self, FormName); }
 end;
 
-procedure TKeyFieldsForm.FormShow(Sender: TObject);
+procedure TKeyFieldsFrame.FormShow(Sender: TObject);
 begin
-  if ManagerSettings.SaveWindowPositions then
-    LoadFormPosition(Self, FormName);
+{  if ManagerSettings.SaveWindowPositions then
+    LoadFormPosition(Self, FormName);  }
 end;
 
-procedure TKeyFieldsForm.RealTimeStatusChkBoxChange(Sender: TObject);
+procedure TKeyFieldsFrame.RealTimeStatusChkBoxChange(Sender: TObject);
 begin
   IndexCheckError;
 end;
 
-procedure TKeyFieldsForm.ComboSelect(Sender: TObject);
+procedure TKeyFieldsFrame.ComboSelect(Sender: TObject);
 var
   Cmb: TComboBox;
   i: Integer;
@@ -265,7 +264,7 @@ begin
   Selecting := false;
 end;
 
-procedure TKeyFieldsForm.SetReadOnly(AValue: boolean);
+procedure TKeyFieldsFrame.SetReadOnly(AValue: boolean);
 begin
   if FReadOnly = AValue then Exit;
   FReadOnly := AValue;
@@ -273,7 +272,7 @@ begin
   ScrollBox1.Enabled := (not ReadOnly);
 end;
 
-procedure TKeyFieldsForm.UpdateComboContent(const Combo: TComboBox);
+procedure TKeyFieldsFrame.UpdateComboContent(const Combo: TComboBox);
 var
   SelectedField: TEpiField;
   Idx: Integer;
@@ -297,7 +296,7 @@ begin
   Combo.Items.EndUpdate;
 end;
 
-function TKeyFieldsForm.GetFieldList: TEpiFields;
+function TKeyFieldsFrame.GetFieldList: TEpiFields;
 var
   i: Integer;
   Cmb: TComboBox;
@@ -321,7 +320,7 @@ begin
   end;
 end;
 
-function TKeyFieldsForm.FieldSelected(Field: TEpiField): Boolean;
+function TKeyFieldsFrame.FieldSelected(Field: TEpiField): Boolean;
 var
   FieldList: TEpiFields;
 begin
@@ -330,7 +329,7 @@ begin
   FieldList.Free;
 end;
 
-procedure TKeyFieldsForm.IndexCheckError;
+procedure TKeyFieldsFrame.IndexCheckError;
 var
   FailedRecords: TBoundArray;
   FailedValues: TBoundArray;
@@ -347,7 +346,7 @@ begin
     ShowRecordsBtn.Enabled := false;
 end;
 
-function TKeyFieldsForm.PerformIndexCheck(out FailedRecords: TBoundArray; out
+function TKeyFieldsFrame.PerformIndexCheck(out FailedRecords: TBoundArray; out
   FailedValues: TBoundArray): Boolean;
 var
   FieldList: TEpiFields;
@@ -364,7 +363,7 @@ begin
   FieldList.Free;
 end;
 
-procedure TKeyFieldsForm.ShowRecordsBtnClick(Sender: TObject);
+procedure TKeyFieldsFrame.ShowRecordsBtnClick(Sender: TObject);
 var
   FieldList: TEpiFields;
   i: Integer;
@@ -395,7 +394,7 @@ begin
   FieldList.Free;
 end;
 
-function TKeyFieldsForm.DoAddNewKey: TComboBox;
+function TKeyFieldsFrame.DoAddNewKey: TComboBox;
 var
   TopCtrl: TControl;
 begin
@@ -423,40 +422,45 @@ begin
   AddIndexComboBtn.AnchorVerticalCenterTo(result);
 end;
 
-function TKeyFieldsForm.DoDeleteKey: boolean;
+function TKeyFieldsFrame.DoDeleteKey: boolean;
 var
   Cmb: TComboBox;
 begin
-  Result := true;
+  if (FDynamicKeyList.Count = 0) then
+    Exit(false);
 
   Cmb := TComboBox(FDynamicKeyList.Last);
   FDynamicKeyList.Delete(FDynamicKeyList.Count - 1);
 
-  if FDynamicKeyList.Count = 0  then
-  begin
-    if FFixedKeyList.Count = 0 then
+  if FDynamicKeyList.Count = 0 then
     begin
-      AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
-      AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
-    end else
-    AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FFixedKeyList.Last));
-  end else
+      if FFixedKeyList.Count = 0 then
+        begin
+          AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
+          AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
+        end
+      else
+        AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FFixedKeyList.Last));
+    end
+  else
     AddIndexComboBtn.AnchorVerticalCenterTo(TControl(FDynamicKeyList.Last));
 
   ComboSelect(Cmb);
   Cmb.Free;
 
   IndexCheckError;
+
+  Result := (FDynamicKeyList.Count > 0);
 end;
 
-function TKeyFieldsForm.GetDataFile: TEpiDataFile;
+function TKeyFieldsFrame.GetDataFile: TEpiDataFile;
 begin
   Result := nil;
   if Assigned(Relation) then
     Result := Relation.Datafile;
 end;
 
-procedure TKeyFieldsForm.SetItemIndexOnField(Combo: TComboBox; Field: TEpiField
+procedure TKeyFieldsFrame.SetItemIndexOnField(Combo: TComboBox; Field: TEpiField
   );
 var
   Idx: Integer;
@@ -486,7 +490,7 @@ begin
   end;
 end;
 
-procedure TKeyFieldsForm.AddFieldsToCombo(Combo: TComboBox);
+procedure TKeyFieldsFrame.AddFieldsToCombo(Combo: TComboBox);
 var
   Flds: TEpiFields;
   F: TEpiField;
@@ -514,7 +518,7 @@ begin
 end;
 
 
-function TKeyFieldsForm.ShowError(const Msg: string; const Ctrl: TControl
+function TKeyFieldsFrame.ShowError(const Msg: string; const Ctrl: TControl
   ): boolean;
 var
   R: TRect;
@@ -534,21 +538,26 @@ begin
   FHintWindow.ActivateHint(R, Msg);
 end;
 
-procedure TKeyFieldsForm.LoadGlyphs;
+procedure TKeyFieldsFrame.LoadGlyphs;
 begin
   DM.Icons16.GetBitmap(31, AddIndexComboBtn.Glyph);
   DM.Icons16.GetBitmap(32, RemoveIndexBtn.Glyph);
 end;
 
-constructor TKeyFieldsForm.Create(TheOwner: TComponent;
-  ARelation: TEpiMasterRelation);
+procedure TKeyFieldsFrame.SetRelation(AValue: TEpiMasterRelation);
+var
+  i: Integer;
+begin
+  FRelation := AValue;
+  FValueLabelSets := FRelation.Datafile.ValueLabels;
+  UpdateContent;
+end;
+
+constructor TKeyFieldsFrame.Create(TheOwner: TComponent);
 var
   i: Integer;
 begin
   inherited Create(TheOwner);
-
-  FRelation := ARelation;
-  FValueLabelSets := ARelation.Datafile.ValueLabels;
 
   FIndexChecker := TEpiIntegrityChecker.Create;
   FFixedKeyList := TList.Create;
@@ -559,15 +568,9 @@ begin
   FHintWindow.AutoHide := true;
 
   LoadGlyphs;
-
-  with DataFile do
-    for i := 0 to KeyFields.Count - 1 do
-      SetItemIndexOnField(DoAddNewKey, KeyFields[i]);
-
-  Caption := 'Define Key (' + Datafile.Caption.Text + ')';
 end;
 
-destructor TKeyFieldsForm.Destroy;
+destructor TKeyFieldsFrame.Destroy;
 begin
   FFixedKeyList.Free;
   FDynamicKeyList.Free;
@@ -576,17 +579,66 @@ begin
   inherited Destroy;
 end;
 
-class procedure TKeyFieldsForm.RestoreDefaultPos;
+procedure TKeyFieldsFrame.UpdateContent;
 var
-  Aform: TForm;
+  i: Integer;
+  Cmb: TComboBox;
 begin
-  Aform := TForm.Create(nil);
-  Aform.Width := 600;
-  Aform.Height := 480;
-  Aform.top := (Screen.Monitors[0].Height - Aform.Height) div 2;
-  Aform.Left := (Screen.Monitors[0].Width - Aform.Width) div 2;
-  SaveFormPosition(Aform, FormName);
-  AForm.free;
+  // Put the add/delete keys back to top.
+  AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
+  AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
+
+  while (FDynamicKeyList.Count > 0) do
+    begin
+      Cmb := TComboBox(FDynamicKeyList.Last);
+      FDynamicKeyList.Remove(Cmb);
+      Cmb.Free;
+    end;
+
+  while (FFixedKeyList.Count > 0) do
+    begin
+      Cmb := TComboBox(FFixedKeyList.Last);
+      FFixedKeyList.Remove(Cmb);
+      Cmb.Free;
+    end;
+
+  with DataFile do
+    for i := 0 to KeyFields.Count - 1 do
+      SetItemIndexOnField(DoAddNewKey, KeyFields[i]);
+end;
+
+procedure TKeyFieldsFrame.ApplyContent;
+var
+  FL: TEpiFields;
+  F: TEpiField;
+begin
+  FL := GetFieldList;
+  DataFile.KeyFields.Clear;
+  for F in FL do
+    DataFile.KeyFields.AddItem(F);
+  Fl.Free;
+end;
+
+function TKeyFieldsFrame.ValidateContent: Boolean;
+var
+  Res: TModalResult;
+  IndexCheck: Boolean;
+  FailedRecords, FailedValues: TBoundArray;
+begin
+  IndexCheck := PerformIndexCheck(FailedRecords, FailedValues);
+
+  Res := mrYes;
+  if (not IndexCheck) then
+    Res := MessageDlg('Index Error',
+                      'Observations with Non-Unique key' + LineEnding +
+                       'or missing values in key variables exist.' + LineEnding +
+                       'Apply with index error?',
+                      mtWarning,
+                      mbYesNo,
+                      0,
+                      mbNo);
+
+  result := Res = mrYes;
 end;
 
 end.

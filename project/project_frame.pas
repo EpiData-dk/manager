@@ -1039,7 +1039,7 @@ procedure TProjectFrame.ProjectTreeNewRelation(
 var
   Frame: TRuntimeDesignFrame;
 begin
-  Relation.Datafile.Caption.Text := 'Dataform ' + IntToStr(FrameCount);
+  Relation.Datafile.Caption.Text := 'Dataset ' + IntToStr(FrameCount);
 
   if Relation.InheritsFrom(TEpiDetailRelation)
   then
@@ -1699,7 +1699,7 @@ begin
   RestoreDefaultPosDefineGroupsForm;
 
   TProjectSettingsForm.RestoreDefaultPos;
-  TKeyFieldsForm.RestoreDefaultPos;
+  //TKeyFieldsForm.RestoreDefaultPos;
   TAlignmentForm.RestoreDefaultPos;
   TPropertiesForm.RestoreDefaultPos(PropertiesForm);
   TRuntimeDesignFrame.RestoreDefaultPos(nil);

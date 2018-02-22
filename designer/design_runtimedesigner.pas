@@ -2835,14 +2835,14 @@ begin
 end;
 
 procedure TRuntimeDesignFrame.DefineKeyActionExecute(Sender: TObject);
-var
-  F: TKeyFieldsForm;
+//var
+ // F: TKeyFieldsForm;
 begin
-  F := TKeyFieldsForm.Create(Self, Relation);
+  {F := TKeyFieldsForm.Create(Self, Relation);
   F.ReadOnly := (not Authenticator.IsAuthorized([earDefineProject])) or
                 (Relation.ProtectedItem);
   F.ShowModal;
-  F.Free;
+  F.Free;     }
 
   PropertiesForm.ReloadControls;
 end;
@@ -3149,8 +3149,6 @@ begin
     SelectAllBoolMenuItem.Action     := SelectAllBoolsAction;
 
     // Dataform
-    KeyFieldsMenuItem.Action         := DefineKeyAction;
-    KeyFieldsPopupMenuItem.Action    := DefineKeyAction;
     DataformPropertiesMenuItem.Action := DataformPropertiesAction;
     DataformPropertiesPopupMenuItem.Action := DataformPropertiesAction;
 
