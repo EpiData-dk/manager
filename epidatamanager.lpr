@@ -58,7 +58,7 @@ uses
   admin_users_accum_rights_frame, project_statusbar,
   design_properties_dataform_statusbarframe, settings_statusbar,
   admin_logviewer_frame, empty_form, report_admin, report_logoverview,
-  epicustomlist_helper, epidatacore;
+  epicustomlist_helper, epidatacore, project_settings_extended_access;
 
 {$R *.res}
 

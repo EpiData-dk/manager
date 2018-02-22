@@ -1,29 +1,29 @@
 object ProjectSettingsForm: TProjectSettingsForm
-  Left = 643
-  Height = 378
-  Top = 382
-  Width = 627
+  Left = 732
+  Height = 443
+  Top = 371
+  Width = 672
   ActiveControl = ProjectSettingsView
   Caption = 'Project Properties'
-  ClientHeight = 378
-  ClientWidth = 627
+  ClientHeight = 443
+  ClientWidth = 672
   Constraints.MinHeight = 200
   Constraints.MinWidth = 450
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   Position = poMainFormCenter
-  LCLVersion = '1.7'
+  LCLVersion = '1.9.0.0'
   object Panel1: TPanel
     Left = 0
     Height = 50
-    Top = 328
-    Width = 627
+    Top = 393
+    Width = 672
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 627
+    ClientWidth = 672
     TabOrder = 2
     object BitBtn1: TBitBtn
-      Left = 454
+      Left = 499
       Height = 28
       Top = 10
       Width = 76
@@ -36,7 +36,7 @@ object ProjectSettingsForm: TProjectSettingsForm
       TabOrder = 0
     end
     object BitBtn2: TBitBtn
-      Left = 567
+      Left = 612
       Height = 28
       Top = 10
       Width = 51
@@ -51,12 +51,11 @@ object ProjectSettingsForm: TProjectSettingsForm
   end
   object ProjectSettingsView: TTreeView
     Left = 0
-    Height = 328
+    Height = 393
     Top = 0
-    Width = 157
+    Width = 173
     Align = alLeft
     Constraints.MinWidth = 100
-    DefaultItemHeight = 18
     ExpandSignSize = 11
     ReadOnly = True
     ScrollBars = ssAutoBoth
@@ -73,8 +72,8 @@ object ProjectSettingsForm: TProjectSettingsForm
     }
   end
   object Splitter1: TSplitter
-    Left = 157
-    Height = 328
+    Left = 173
+    Height = 393
     Top = 0
     Width = 5
     Beveled = True

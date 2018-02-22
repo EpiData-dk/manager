@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  ComCtrls, Buttons, epicustombase;
+  ComCtrls, Buttons, epicustombase, epidocument;
 
 type
 
@@ -25,14 +25,14 @@ type
       var AllowChange: Boolean);
   private
     { private declarations }
-    FEpiDocument: TEpiCustomBase;
+    FEpiDocument: TEpiDocument;
     FActiveFrame: TFrame;
     function ApplySettingForCurrentFrame: boolean;
   protected
     constructor Create(TheOwner: TComponent); override;
   public
     { public declarations }
-    constructor Create(TheOwner: TComponent; AEpiDocument: TEpiCustomBase);
+    constructor Create(TheOwner: TComponent; AEpiDocument: TEpiDocument);
     class procedure RestoreDefaultPos;
   end; 
 
@@ -43,7 +43,7 @@ implementation
 uses
   project_settings_field_frame, project_settings_interface,
   project_settings_general_frame, settings2, settings2_var,
-  project_settings_autoincrement_frame,
+  project_settings_autoincrement_frame, project_settings_extended_access,
   main;
 
 { TProjectSettingsForm }
@@ -110,7 +110,7 @@ begin
 end;
 
 constructor TProjectSettingsForm.Create(TheOwner: TComponent;
-  AEpiDocument: TEpiCustomBase);
+  AEpiDocument: TEpiDocument);
 begin
   Create(TheOwner);
   FEpiDocument := AEpiDocument;
@@ -121,6 +121,15 @@ begin
     FindNodeWithText('Auto Increment').Data     := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
     FindNodeWithText('Display of Variables').Data  := Pointer(TProjectSettings_FieldFrame.Create(Self));
   end;
+
+  // Extended Access
+  if FEpiDocument.Admin.Initialized then
+    begin
+      ProjectSettingsView.Items.AddObject(
+        nil, 'Extended Access',
+        TProjectSettings_ExternalAccessFrame.Create(Self)
+      );
+    end;
 end;
 
 class procedure TProjectSettingsForm.RestoreDefaultPos;

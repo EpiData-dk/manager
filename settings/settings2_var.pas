@@ -114,6 +114,7 @@ type
     ShowNames:             boolean;
     ShowBorders:           boolean;
     ShowValuelabelText:    boolean;
+    DaysBetweenPassword:   Integer;
     // - Study:
     StudyTitle:            string;
     StudyIndent:           string;

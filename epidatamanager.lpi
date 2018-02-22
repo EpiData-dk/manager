@@ -217,7 +217,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="112">
+    <Units Count="114">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -870,6 +870,17 @@
         <Filename Value="reports/report_logoverview.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit111>
+      <Unit112>
+        <Filename Value="project/project_settings_extended_access.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+      </Unit112>
+      <Unit113>
+        <Filename Value="project/project_settings_extended_access.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="ProjectSettings_ExternalAccessFrame"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit113>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

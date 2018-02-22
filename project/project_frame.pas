@@ -509,7 +509,7 @@ end;
 
 procedure TProjectFrame.DefineExtendedAccessActionExecute(Sender: TObject);
 begin
- IsProjectSetupForAdmin;
+  IsProjectSetupForAdmin;
 end;
 
 procedure TProjectFrame.DefineExtendedAccessActionUpdate(Sender: TObject);
@@ -1522,6 +1522,7 @@ begin
         Exit;
       end;
 
+      EpiDocument.Admin.DaysBetweenPasswordChange := ManagerSettings.DaysBetweenPassword;
       Res := MessageDlg('Information',
                         'User/Group Administration successfully added.' + LineEnding +
                         'Re-open project as "' + User.Login + '": ' + LineEnding +

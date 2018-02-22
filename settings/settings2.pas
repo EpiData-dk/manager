@@ -79,7 +79,8 @@ uses
   export_ddi_frame, export_epx_frame,
 
   // project settings
-  project_settings_field_frame, project_settings_general_frame, project_settings_autoincrement_frame;
+  project_settings_field_frame, project_settings_general_frame,
+  project_settings_autoincrement_frame, project_settings_extended_access;
 
 var
   PrefixesUsed: TBits = nil;
@@ -706,8 +707,9 @@ begin
 
     // Project options
     FindNodeWithText('Backup').Data              := Pointer(TProjectSettings_BackupFrame.Create(Self));
-    FindNodeWithText('Auto Increment').Data       := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
-    FindNodeWithText('Display of Variables').Data   := Pointer(TProjectSettings_FieldFrame.Create(Self));
+    FindNodeWithText('Auto Increment').Data      := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
+    FindNodeWithText('Display of Variables').Data := Pointer(TProjectSettings_FieldFrame.Create(Self));
+    FindNodeWithText('Extended Access').Data     := Pointer(TProjectSettings_ExternalAccessFrame.Create(Self));
   end;
 end;
 
@@ -826,6 +828,7 @@ const
     ShowNames:             false;
     ShowBorders:           true;
     ShowValuelabelText:    true;
+    DaysBetweenPassword:   90;
     // - Study:
     StudyTitle:            'Untitled Project';
     StudyIndent:           '';
