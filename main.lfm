@@ -384,6 +384,9 @@ object MainForm: TMainForm
         object ManagePasswordMenuItem: TMenuItem
           Action = ManageUserPasswordAction
         end
+        object MenuItem47: TMenuItem
+          Action = ExportSecurityLogAction
+        end
         object MenuItem39: TMenuItem
           Caption = '-'
         end
@@ -731,6 +734,11 @@ object MainForm: TMainForm
       Category = 'Help'
       Caption = 'Show Release Notes'
       OnExecute = ShowChangeLogActionExecute
+    end
+    object ExportSecurityLogAction: TAction
+      Category = 'Admin'
+      Caption = 'Export Security Logs...'
+      OnExecute = ExportSecurityLogActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

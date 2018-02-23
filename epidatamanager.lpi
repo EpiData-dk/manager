@@ -217,7 +217,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="113">
+    <Units Count="114">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -875,6 +875,10 @@
         <IsPartOfProject Value="True"/>
         <HasResources Value="True"/>
       </Unit112>
+      <Unit113>
+        <Filename Value="export/export_securitylog_form.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit113>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

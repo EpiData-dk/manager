@@ -208,6 +208,8 @@ type
     MenuItem44: TMenuItem;
     MenuItem46: TMenuItem;
     ShowChangeLogAction: TAction;
+    ExportSecurityLogAction: TAction;
+    MenuItem47: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -265,6 +267,7 @@ type
     procedure AdminReportActionExecute(Sender: TObject);
     procedure LogOverviewReportActionExecute(Sender: TObject);
     procedure ShowChangeLogActionExecute(Sender: TObject);
+    procedure ExportSecurityLogActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -346,7 +349,7 @@ uses
   valuelabel_import_data,  append_form, epitools_append,
   manager_globals, reports_form,
   epiv_checkversionform, export_form2,
-  admin_authenticator, admin_users_form,
+  admin_authenticator, admin_users_form, export_securitylog_form,
   report_admin, report_logoverview;
 
 { TMainForm }
@@ -1225,6 +1228,17 @@ end;
 procedure TMainForm.ShowChangeLogActionExecute(Sender: TObject);
 begin
   OpenURL('http://epidata.dk/epidatamanager.changelog.txt');
+end;
+
+procedure TMainForm.ExportSecurityLogActionExecute(Sender: TObject);
+var
+  F: TExportSecurityLogForm;
+begin
+  F := TExportSecurityLogForm.Create(Self);
+  if Assigned(FActiveFrame) then
+    F.DocFile := FActiveFrame.DocumentFile;
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TMainForm.SetCaption;
