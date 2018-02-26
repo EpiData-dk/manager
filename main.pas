@@ -208,8 +208,7 @@ type
     MenuItem44: TMenuItem;
     MenuItem46: TMenuItem;
     ShowChangeLogAction: TAction;
-    ExportSecurityLogAction: TAction;
-    MenuItem47: TMenuItem;
+    ExportSecurityLogMenuItem: TMenuItem;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -267,7 +266,6 @@ type
     procedure AdminReportActionExecute(Sender: TObject);
     procedure LogOverviewReportActionExecute(Sender: TObject);
     procedure ShowChangeLogActionExecute(Sender: TObject);
-    procedure ExportSecurityLogActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -1230,17 +1228,6 @@ begin
   OpenURL('http://epidata.dk/epidatamanager.changelog.txt');
 end;
 
-procedure TMainForm.ExportSecurityLogActionExecute(Sender: TObject);
-var
-  F: TExportSecurityLogForm;
-begin
-  F := TExportSecurityLogForm.Create(Self);
-  if Assigned(FActiveFrame) then
-    F.DocFile := FActiveFrame.DocumentFile;
-  F.ShowModal;
-  F.Free;
-end;
-
 procedure TMainForm.SetCaption;
 begin
   Caption := 'EpiData Manager (v' + GetManagerVersion + ')';
@@ -1426,7 +1413,7 @@ begin
   DefineGroupsMenuItem.Visible := Assigned(FActiveFrame);
   DefineUsersMenuItem.Visible := Assigned(FActiveFrame);
   DefineEntryRightsMenuItem.Visible := Assigned(FActiveFrame);
-//  ViewLogMenuItem.Visible := Assigned(FActiveFrame);
+  ExportSecurityLogMenuItem.Visible := Assigned(FActiveFrame);
   // -
   DefineAccessDivider2.Visible := Assigned(FActiveFrame);
 

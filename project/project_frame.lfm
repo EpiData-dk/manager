@@ -6,8 +6,8 @@ object ProjectFrame: TProjectFrame
   ClientHeight = 537
   ClientWidth = 886
   TabOrder = 0
-  DesignLeft = 423
-  DesignTop = 252
+  DesignLeft = 2212
+  DesignTop = 308
   object ProjectPanel: TPanel
     Cursor = crIBeam
     Left = 0
@@ -271,6 +271,12 @@ object ProjectFrame: TProjectFrame
       Category = 'Admin'
       Caption = 'View Log'
       OnExecute = ViewLogActionExecute
+    end
+    object ExportLogAction: TAction
+      Category = 'Admin'
+      Caption = 'Export Security Log...'
+      OnExecute = ExportLogActionExecute
+      OnUpdate = ExportLogActionUpdate
     end
   end
   object ProjectRecentFilesDropDownMenu: TPopupMenu

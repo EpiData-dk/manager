@@ -44,10 +44,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 497
-      Height = 25
-      Top = 7
-      Width = 62
+      Left = 517
+      Height = 29
+      Top = 5
+      Width = 66
       Action = ExportAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -59,10 +59,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 405
-      Height = 25
-      Top = 7
-      Width = 77
+      Left = 421
+      Height = 29
+      Top = 5
+      Width = 81
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -73,10 +73,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 241
-      Height = 25
-      Top = 7
-      Width = 59
+      Left = 249
+      Height = 29
+      Top = 5
+      Width = 63
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Dataset'
@@ -88,10 +88,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 315
-      Height = 25
-      Top = 7
-      Width = 75
+      Left = 327
+      Height = 29
+      Top = 5
+      Width = 79
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Document'
@@ -104,10 +104,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 123
-      Height = 25
-      Top = 7
-      Width = 103
+      Left = 127
+      Height = 29
+      Top = 5
+      Width = 107
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -120,9 +120,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 25
-      Top = 7
-      Width = 97
+      Height = 29
+      Top = 5
+      Width = 101
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Se&lect Project'
@@ -152,10 +152,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Control = BetaPanel
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = BetaPanel
-      Left = 19
+      Left = 18
       Height = 17
       Top = 21
-      Width = 240
+      Width = 243
       BorderSpacing.Top = 20
       Caption = 'Test Version of EpiData Manager'
       Font.Height = -13
@@ -172,10 +172,10 @@ object MainForm: TMainForm
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = BetaPanel
       AnchorSideBottom.Side = asrBottom
-      Left = 19
+      Left = 18
       Height = 125
       Top = 58
-      Width = 240
+      Width = 243
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Top = 20
       BorderSpacing.Bottom = 20
@@ -384,8 +384,8 @@ object MainForm: TMainForm
         object ManagePasswordMenuItem: TMenuItem
           Action = ManageUserPasswordAction
         end
-        object MenuItem47: TMenuItem
-          Action = ExportSecurityLogAction
+        object ExportSecurityLogMenuItem: TMenuItem
+          Caption = 'Export Security Logs...'
         end
         object MenuItem39: TMenuItem
           Caption = '-'
@@ -734,11 +734,6 @@ object MainForm: TMainForm
       Category = 'Help'
       Caption = 'Show Release Notes'
       OnExecute = ShowChangeLogActionExecute
-    end
-    object ExportSecurityLogAction: TAction
-      Category = 'Admin'
-      Caption = 'Export Security Logs...'
-      OnExecute = ExportSecurityLogActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

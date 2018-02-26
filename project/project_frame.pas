@@ -17,6 +17,7 @@ type
   { TProjectFrame }
 
   TProjectFrame = class(TFrame)
+    ExportLogAction: TAction;
     ViewLogAction: TAction;
     Label1: TLabel;
     Label2: TLabel;
@@ -57,6 +58,8 @@ type
     RemoveProjectPassword: TAction;
     procedure DeleteDataFormActionExecute(Sender: TObject);
     procedure DeleteDataFormActionUpdate(Sender: TObject);
+    procedure ExportLogActionExecute(Sender: TObject);
+    procedure ExportLogActionUpdate(Sender: TObject);
     procedure NewDataFormActionExecute(Sender: TObject);
     procedure NewDataFormActionUpdate(Sender: TObject);
     procedure OpenProjectActionExecute(Sender: TObject);
@@ -233,7 +236,8 @@ uses
   align_form, RegExpr, project_studyunit_frame,
   design_properties_form, admin_form, epidatafilerelations_helper,
   admin_user_form, admin_groups_form, admin_users_form, admin_entryrights_form,
-  epiranges, empty_form, episervice_asynchandler, epiopenfile
+  epiranges, empty_form, episervice_asynchandler, epiopenfile, export_securitylog_form,
+  epitools_export_seclog
   {$IFDEF LINUX},gtk2{$ENDIF}
   ;
 
@@ -345,6 +349,35 @@ begin
     (Authenticator.IsAuthorized([earDefineProject])) and
     (FProjectTreeView.SelectedObjectType = otRelation) and
     (not TEpiMasterRelation(FProjectTreeView.SelectedObject).ProtectedItem);
+end;
+
+procedure TProjectFrame.ExportLogActionExecute(Sender: TObject);
+var
+  F: TExportSecurityLogForm;
+  Tool: TEpiTool_ExportSecurityLog;
+begin
+  F := TExportSecurityLogForm.Create(Self);
+  F.DocFile := DocumentFile;
+
+  if (F.ShowModal = mrOK) then
+    begin
+      Tool := TEpiTool_ExportSecurityLog.Create;
+      Tool.DocumentFileClass := TDocumentFile;
+
+      if (not Tool.ExportSecLog(EpiDocument, F.ExportAfterNoDays, F.DeleteLog, F.Filename)) then
+        ShowMessage('Security log export failed!');
+
+      Tool.Free;
+    end;
+
+  F.Free;
+end;
+
+procedure TProjectFrame.ExportLogActionUpdate(Sender: TObject);
+begin
+  TAction(Sender).Enabled :=
+    Assigned(Authenticator.AuthedUser) and
+    Authenticator.IsAuthorized([earExport]);
 end;
 
 procedure TProjectFrame.OpenProjectActionExecute(Sender: TObject);
@@ -1831,6 +1864,7 @@ begin
     DefineGroupsMenuItem.Action           := DefineGroupsAction;
     DefineUsersMenuItem.Action            := DefineUsersAction;
     DefineEntryRightsMenuItem.Action      := DefineEntryRightsAction;
+    ExportSecurityLogMenuItem.Action      := ExportLogAction;
 //    ViewLogMenuItem.Action                := ViewLogAction;
   end;
 
