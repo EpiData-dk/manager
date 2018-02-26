@@ -23,15 +23,24 @@ type
     FDocFile: TEpiDocumentFile;
     procedure SetDocFile(AValue: TEpiDocumentFile);
     procedure UpdateCaption;
+    procedure InternalCloseQuery(Sender: TObject; var CanClose: boolean);
+  private
+    // get from components
+    function GetExportAfterNoDays: integer;
+    function GetDeleteLog: boolean;
+    function GetFilename: utf8string;
   public
     constructor Create(TheOwner: TComponent); override;
     property DocFile: TEpiDocumentFile read FDocFile write SetDocFile;
+    property ExportAfterNoDays: integer read GetExportAfterNoDays;
+    property DeleteLog: boolean read GetDeleteLog;
+    property Filename: utf8string read GetFilename;
   end;
 
 implementation
 
 uses
-  Controls, epimiscutils, ExtCtrls;
+  Controls, epimiscutils, ExtCtrls, Dialogs, epiv_datamodule;
 
 { TExportSecurityLogForm }
 
@@ -49,12 +58,40 @@ begin
     Caption := 'Export security log: ' + FDocFile.Document.Study.Title.Text;
 end;
 
+procedure TExportSecurityLogForm.InternalCloseQuery(Sender: TObject;
+  var CanClose: boolean);
+var
+  dummy: Longint;
+begin
+  if (not TryStrToInt(FDaysEdit.Text, dummy)) then
+    begin
+      ShowMessage(FDaysEdit.Text + ' is not a valid value for number of days');
+      CanClose := false;
+    end;
+end;
+
+function TExportSecurityLogForm.GetExportAfterNoDays: integer;
+begin
+  result := StrToInt(FDaysEdit.Text);
+end;
+
+function TExportSecurityLogForm.GetDeleteLog: boolean;
+begin
+  result := FDeleteLogCheckbox.Checked;
+end;
+
+function TExportSecurityLogForm.GetFilename: utf8string;
+begin
+  result := UTF8String(FFilenameEdit.FileName);
+end;
+
 constructor TExportSecurityLogForm.Create(TheOwner: TComponent);
 var
   MainPanel: TPanel;
 begin
   inherited CreateNew(TheOwner);
 
+  // Components setup
   MainPanel          := TPanel.Create(Self);
   FLabel1            := TLabel.Create(MainPanel);
   FDaysEdit          := TEdit.Create(MainPanel);
@@ -100,19 +137,24 @@ begin
   FLabel2.AnchorToNeighbour(akTop, 15, FDeleteLogCheckbox);
   FLabel2.Caption := 'Filename:';
 
-  FFilenameEdit.Parent      := MainPanel;
-  FFilenameEdit.Anchors     := [];
-  FFilenameEdit.Filter      := GetEpiDialogFilter([dfEPX, dfEPZ]);
-  FFilenameEdit.DefaultExt  := GetEpiDialogFilterExt([dfEPX]);
-  FFilenameEdit.DialogKind  := dkSave;
-  FFilenameEdit.DialogTitle := 'Export Log Filename';
+  FFilenameEdit.Parent        := MainPanel;
+  FFilenameEdit.Anchors       := [];
+  FFilenameEdit.Filter        := GetEpiDialogFilter([dfEPX, dfEPZ]);
+  FFilenameEdit.DefaultExt    := GetEpiDialogFilterExt([dfEPX]);
+  FFilenameEdit.DialogKind    := dkSave;
+  FFilenameEdit.DialogTitle   := 'Export Log Filename';
+  FFilenameEdit.DialogOptions := [ofEnableSizing, ofViewDetail, ofOverwritePrompt, ofExtensionDifferent];
   FFilenameEdit.AnchorParallel(akLeft, 10, MainPanel);
   FFilenameEdit.AnchorParallel(akRight, 10, MainPanel);
   FFilenameEdit.AnchorToNeighbour(akTop, 10, FLabel2);
+  FFilenameEdit.BorderSpacing.Bottom := 10;
 
-
+  // Misc.
   Position := poOwnerFormCenter;
   AutoSize := true;
+
+  // Events
+  OnCloseQuery := @InternalCloseQuery;
 end;
 
 end.
