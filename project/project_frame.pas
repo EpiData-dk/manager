@@ -365,7 +365,9 @@ begin
       Tool.DocumentFileClass := TDocumentFile;
 
       if (not Tool.ExportSecLog(EpiDocument, F.ExportAfterNoDays, F.DeleteLog, F.Filename)) then
-        ShowMessage('Security log export failed!');
+        ShowMessage('Security log export failed:' + LineEnding +
+          Tool.ErrorMessage
+        );
 
       Tool.Free;
     end;

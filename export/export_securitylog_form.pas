@@ -45,11 +45,19 @@ uses
 { TExportSecurityLogForm }
 
 procedure TExportSecurityLogForm.SetDocFile(AValue: TEpiDocumentFile);
+var
+  DayDiff: Int64;
 begin
   if FDocFile = AValue then Exit;
   FDocFile := AValue;
 
   UpdateCaption;
+
+  if (not Assigned(FDocFile)) then exit;
+  if (FDocFile.Document.Logger.SecurityLog.Size = 0) then exit;
+
+  DayDiff := Trunc(Now) - FDocFile.Document.Logger.SecurityLog.Date.AsDate[0];
+  FDaysEdit.TextHint := IntToStr(DayDiff) + ' days of security log';
 end;
 
 procedure TExportSecurityLogForm.UpdateCaption;
@@ -63,6 +71,12 @@ procedure TExportSecurityLogForm.InternalCloseQuery(Sender: TObject;
 var
   dummy: Longint;
 begin
+  if (ModalResult = mrCancel) then
+    begin
+      CanClose := true;
+      Exit;
+    end;
+
   if (not TryStrToInt(FDaysEdit.Text, dummy)) then
     begin
       ShowMessage(FDaysEdit.Text + ' is not a valid value for number of days');
