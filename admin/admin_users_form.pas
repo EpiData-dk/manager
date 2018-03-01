@@ -294,6 +294,10 @@ begin
          CellText := DateTimeToStr(User.LastLogin)
        else
          CellText := '(N/A)';
+    4: if User.LastPWChange > 0 then
+         CellText := DateTimeToStr(User.LastPWChange)
+       else
+         CellText := '(N/A)';
   end;
 end;
 
@@ -425,6 +429,17 @@ begin
       with Columns.Add do
       begin
         Text := 'Last Login';
+        CheckBox   := false;
+        CheckType  := ctNone;
+        Options    := [coAllowClick, coEnabled, coParentBidiMode,
+                       coParentColor, coResizable, coVisible,
+                       coSmartResize, coAllowFocus];
+        Width      := 150;
+      end;
+
+      with Columns.Add do
+      begin
+        Text := 'Last Password Change';
         CheckBox   := false;
         CheckType  := ctNone;
         Options    := [coAllowClick, coEnabled, coParentBidiMode,
