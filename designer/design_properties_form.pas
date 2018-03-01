@@ -71,7 +71,9 @@ procedure TPropertiesForm.FormCloseQuery(Sender: TObject; var CanClose: boolean
   );
 begin
 //  if Assigned(FFrame) then
-  CanClose := ValidateControls;// (FFrame as IDesignPropertiesFrame).ApplyChanges;
+  // No need
+  if (ModalResult = mrOK) then
+    CanClose := ValidateControls;// (FFrame as IDesignPropertiesFrame).ApplyChanges;
 
   if CanClose and
      ManagerSettings.SaveWindowPositions

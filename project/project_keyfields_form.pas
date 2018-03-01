@@ -333,14 +333,20 @@ procedure TKeyFieldsFrame.IndexCheckError;
 var
   FailedRecords: TBoundArray;
   FailedValues: TBoundArray;
+  Cmb: TComboBox;
 begin
   if not RealTimeStatusChkBox.Checked then exit;
+
+  if (FDynamicKeyList.Count > 0) then
+    Cmb := TComboBox(FDynamicKeyList.Last)
+  else
+    Cmb := TComboBox(FFixedKeyList.Last);
 
   if not PerformIndexCheck(FailedRecords, FailedValues) then
   begin
     ShowError('Warning: Index not uniquely defined!' + LineEnding +
               'Use "List Observations" to get a list of affected observations (' + IntToStr(Length(FailedRecords)) + ').',
-              TComboBox(FDynamicKeyList.Last));
+              Cmb);
     ShowRecordsBtn.Enabled := true;
   end else
     ShowRecordsBtn.Enabled := false;
@@ -372,6 +378,15 @@ var
   FailedValues: TBoundArray;
 begin
   FieldList := TEpiFields.Create(nil);
+
+  for i := 0 to FFixedKeyList.Count - 1 do
+  begin
+    Cmb := TComboBox(FFixedKeyList[i]);
+    if Cmb.ItemIndex = -1 then  continue;
+
+    FieldList.AddItem(TEpiField(Cmb.Items.Objects[Cmb.ItemIndex]));
+  end;
+
   for i := 0 to FDynamicKeyList.Count - 1 do
   begin
     Cmb := TComboBox(FDynamicKeyList[i]);
@@ -584,7 +599,7 @@ var
   i: Integer;
   Cmb: TComboBox;
 begin
-  // Put the add/delete keys back to top.
+   // Put the add/delete keys back to top.
   AddIndexComboBtn.Anchors := AddIndexComboBtn.Anchors - [akTop];
   AddIndexComboBtn.AnchorToNeighbour(akBottom, 3, TopBevel);
 
@@ -605,6 +620,9 @@ begin
   with DataFile do
     for i := 0 to KeyFields.Count - 1 do
       SetItemIndexOnField(DoAddNewKey, KeyFields[i]);
+
+  RealTimeStatusChkBox.Checked := false;
+  ShowRecordsBtn.Enabled := false;
 end;
 
 procedure TKeyFieldsFrame.ApplyContent;
@@ -621,24 +639,21 @@ end;
 
 function TKeyFieldsFrame.ValidateContent: Boolean;
 var
-  Res: TModalResult;
   IndexCheck: Boolean;
   FailedRecords, FailedValues: TBoundArray;
 begin
+  Result := true;
   IndexCheck := PerformIndexCheck(FailedRecords, FailedValues);
 
-  Res := mrYes;
   if (not IndexCheck) then
-    Res := MessageDlg('Index Error',
-                      'Observations with Non-Unique key' + LineEnding +
-                       'or missing values in key variables exist.' + LineEnding +
-                       'Apply with index error?',
-                      mtWarning,
-                      mbYesNo,
-                      0,
-                      mbNo);
-
-  result := Res = mrYes;
+    begin
+      ShowError('Observations with Non-Unique key' + LineEnding +
+                  'or missing values in key variables exist.' + LineEnding +
+                  LineEnding +
+                  'Use "List Observations" to see the conflicting observations',
+                ShowRecordsBtn);
+    end;
+  ShowRecordsBtn.Enabled := not IndexCheck;
 end;
 
 end.
