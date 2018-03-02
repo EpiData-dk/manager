@@ -30,6 +30,7 @@ type
     Splitter1: TSplitter;
     Label2: TLabel;
     NotesMemo: TMemo;
+    PWExpiresLabel: TLabel;
     procedure LoginEditKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure OkBtnClick(Sender: TObject);
@@ -250,6 +251,8 @@ begin
 end;
 
 procedure TAdminUserForm.FormShow(Sender: TObject);
+var
+  DateExpires: TDateTime;
 begin
   if ManagerSettings.SaveWindowPositions then
     begin
@@ -260,6 +263,17 @@ begin
   // Fill content!
   LoginEdit.Text       := User.Login;
   LoginEdit.Enabled    := NewUser;
+
+  if Admin.DaysBetweenPasswordChange > 0 then
+    begin
+      DateExpires := User.LastPWChange + Admin.DaysBetweenPasswordChange;
+      if (DateExpires > Now) then
+        PWExpiresLabel.Caption := 'Expired: ' + DateToStr(DateExpires)
+      else
+        PWExpiresLabel.Caption := 'Expires: ' + DateToStr(DateExpires);
+    end
+  else
+    PWExpiresLabel.Caption := '(never expires)';
 
   FullnameEdit.Text    := User.FullName;
   FullnameEdit.Enabled := Authenticator.CheckAuthedUserHierachy(User, true) and

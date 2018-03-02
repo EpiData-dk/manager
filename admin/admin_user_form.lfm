@@ -1,7 +1,7 @@
 object AdminUserForm: TAdminUserForm
-  Left = 796
+  Left = 960
   Height = 462
-  Top = 299
+  Top = 311
   Width = 618
   Caption = 'User Properties'
   ClientHeight = 462
@@ -56,7 +56,7 @@ object AdminUserForm: TAdminUserForm
     object Label5: TLabel
       AnchorSideLeft.Control = Panel1
       Left = 11
-      Height = 15
+      Height = 17
       Top = 10
       Width = 39
       BorderSpacing.Left = 10
@@ -71,8 +71,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
       Left = 11
-      Height = 25
-      Top = 30
+      Height = 27
+      Top = 32
       Width = 290
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
@@ -85,10 +85,11 @@ object AdminUserForm: TAdminUserForm
     end
     object Label6: TLabel
       AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = PasswordEdit
       AnchorSideTop.Side = asrBottom
       Left = 11
-      Height = 15
-      Top = 120
+      Height = 17
+      Top = 133
       Width = 43
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -102,8 +103,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
       Left = 11
-      Height = 25
-      Top = 140
+      Height = 27
+      Top = 155
       Width = 290
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
@@ -116,8 +117,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideTop.Control = FullnameEdit
       AnchorSideTop.Side = asrBottom
       Left = 11
-      Height = 15
-      Top = 175
+      Height = 17
+      Top = 192
       Width = 52
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -131,8 +132,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
       Left = 11
-      Height = 25
-      Top = 195
+      Height = 27
+      Top = 214
       Width = 290
       CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
       DateOrder = doNone
@@ -151,8 +152,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideRight.Control = ExpiresDateEdit
       AnchorSideRight.Side = asrBottom
       Left = 243
-      Height = 19
-      Top = 173
+      Height = 21
+      Top = 190
       Width = 58
       Anchors = [akTop, akRight]
       Caption = 'Never'
@@ -164,8 +165,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideTop.Control = LoginEdit
       AnchorSideTop.Side = asrBottom
       Left = 11
-      Height = 15
-      Top = 65
+      Height = 17
+      Top = 69
       Width = 61
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -179,8 +180,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideRight.Control = Panel1
       AnchorSideRight.Side = asrBottom
       Left = 11
-      Height = 25
-      Top = 90
+      Height = 27
+      Top = 96
       Width = 290
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
@@ -197,8 +198,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideTop.Control = ExpiresDateEdit
       AnchorSideTop.Side = asrBottom
       Left = 11
-      Height = 15
-      Top = 230
+      Height = 17
+      Top = 251
       Width = 42
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -214,8 +215,8 @@ object AdminUserForm: TAdminUserForm
       AnchorSideBottom.Control = Panel1
       AnchorSideBottom.Side = asrBottom
       Left = 11
-      Height = 151
-      Top = 250
+      Height = 128
+      Top = 273
       Width = 290
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 10
@@ -223,6 +224,19 @@ object AdminUserForm: TAdminUserForm
       BorderSpacing.Right = 10
       BorderSpacing.Bottom = 10
       TabOrder = 5
+    end
+    object PWExpiresLabel: TLabel
+      AnchorSideRight.Control = LoginEdit
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Label1
+      AnchorSideBottom.Side = asrBottom
+      Left = 243
+      Height = 17
+      Top = 69
+      Width = 58
+      Anchors = [akRight, akBottom]
+      Caption = '(expires)'
+      ParentColor = False
     end
   end
   object Splitter1: TSplitter

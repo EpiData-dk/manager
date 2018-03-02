@@ -294,10 +294,7 @@ begin
          CellText := DateTimeToStr(User.LastLogin)
        else
          CellText := '(N/A)';
-    4: if User.LastPWChange > 0 then
-         CellText := DateTimeToStr(User.LastPWChange)
-       else
-         CellText := '(N/A)';
+    4: CellText := DateTimeToStr(User.LastPWChange);
   end;
 end;
 

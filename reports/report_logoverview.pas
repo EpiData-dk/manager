@@ -34,14 +34,6 @@ end;
 
 procedure TReportLogOverview.DoDocumentReport(
   const ADocumentFile: TEpiDocumentFile; const Index: Integer);
-{var
-  Logger: TEpiLogger;
-  Log: TEpiLog;
-  LogTypeField: TEpiEnumField;
-  LogTypeCount: array[TEpiLogEntry] of integer;
-  BlockedCount: Integer;
-  i, j, RowCount: Integer;
-  LogTypeEnum: TEpiLogEntry;     }
 var
   Document: TEpiDocument;
   LogTypeCount: array[TEpiLogEntry] of integer;
