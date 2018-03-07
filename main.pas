@@ -18,7 +18,6 @@ type
 
   TMainForm = class(TForm)
     AppleMenuItem: TMenuItem;
-    MenuItem40: TMenuItem;
     MenuItem45: TMenuItem;
     StaticText1: TStaticText;
     MenuItem35: TMenuItem;
@@ -200,7 +199,6 @@ type
     Label1: TLabel;
     AdminReportAction: TAction;
     MenuItem34: TMenuItem;
-    LogOverviewReportAction: TAction;
     MenuItem38: TMenuItem;
     MenuItem41: TMenuItem;
     MenuItem42: TMenuItem;
@@ -209,6 +207,8 @@ type
     MenuItem46: TMenuItem;
     ShowChangeLogAction: TAction;
     ExportSecurityLogMenuItem: TMenuItem;
+    AccessLogOverviewMenuItem: TMenuItem;
+    AccessLogOverviewAction: TAction;
     procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure AppendActionExecute(Sender: TObject);
     procedure CheckVersionActionExecute(Sender: TObject);
@@ -264,8 +264,8 @@ type
     procedure RemoveAdminActionExecute(Sender: TObject);
     procedure ManageUserPasswordActionUpdate(Sender: TObject);
     procedure AdminReportActionExecute(Sender: TObject);
-    procedure LogOverviewReportActionExecute(Sender: TObject);
     procedure ShowChangeLogActionExecute(Sender: TObject);
+    procedure AccessLogOverviewActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -1218,14 +1218,14 @@ begin
   RunReport(TReportAdmin);
 end;
 
-procedure TMainForm.LogOverviewReportActionExecute(Sender: TObject);
-begin
-  RunReport(TReportLogOverview);
-end;
-
 procedure TMainForm.ShowChangeLogActionExecute(Sender: TObject);
 begin
   OpenURL('http://epidata.dk/epidatamanager.changelog.txt');
+end;
+
+procedure TMainForm.AccessLogOverviewActionExecute(Sender: TObject);
+begin
+  RunReport(TReportLogOverview);
 end;
 
 procedure TMainForm.SetCaption;

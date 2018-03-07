@@ -152,10 +152,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Control = BetaPanel
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = BetaPanel
-      Left = 19
+      Left = 18
       Height = 17
       Top = 21
-      Width = 240
+      Width = 243
       BorderSpacing.Top = 20
       Caption = 'Test Version of EpiData Manager'
       Font.Height = -13
@@ -172,10 +172,10 @@ object MainForm: TMainForm
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = BetaPanel
       AnchorSideBottom.Side = asrBottom
-      Left = 19
+      Left = 18
       Height = 125
       Top = 58
-      Width = 240
+      Width = 243
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Top = 20
       BorderSpacing.Bottom = 20
@@ -387,6 +387,9 @@ object MainForm: TMainForm
         object ExportSecurityLogMenuItem: TMenuItem
           Caption = 'Export Security Logs...'
         end
+        object AccessLogOverviewMenuItem: TMenuItem
+          Action = AccessLogOverviewAction
+        end
         object MenuItem39: TMenuItem
           Caption = '-'
         end
@@ -434,9 +437,6 @@ object MainForm: TMainForm
         end
         object MenuItem34: TMenuItem
           Action = AdminReportAction
-        end
-        object MenuItem40: TMenuItem
-          Action = LogOverviewReportAction
         end
         object MenuItem41: TMenuItem
           Caption = '-'
@@ -724,16 +724,15 @@ object MainForm: TMainForm
       OnExecute = AdminReportActionExecute
       OnUpdate = ReportsAuthActionUpdate
     end
-    object LogOverviewReportAction: TAction
-      Category = 'Reports'
-      Caption = 'Log Overview'
-      OnExecute = LogOverviewReportActionExecute
-      OnUpdate = ReportsAuthActionUpdate
-    end
     object ShowChangeLogAction: TAction
       Category = 'Help'
       Caption = 'Show Release Notes'
       OnExecute = ShowChangeLogActionExecute
+    end
+    object AccessLogOverviewAction: TAction
+      Category = 'Reports'
+      Caption = 'Access Log Overview'
+      OnExecute = AccessLogOverviewActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
@@ -803,7 +802,7 @@ object MainForm: TMainForm
         Action = AdminReportAction
       end
       object MenuItem45: TMenuItem
-        Action = LogOverviewReportAction
+        Caption = 'Log Overview'
       end
       object MenuItem44: TMenuItem
         Caption = '-'
