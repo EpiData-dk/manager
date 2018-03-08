@@ -117,7 +117,7 @@ begin
     if (LogTypeEnum = ltBlockedLogin)
     then
       begin
-        Generator.TableCell(SecurityLog.LogContent.AsString[j], 0, i);
+        Generator.TableCell(SecurityLog.MachineName.AsString[j], 0, i);
         Generator.TableCell(SecurityLog.UserName.AsString[j], 1, i);
         Generator.TableCell(DateTimeToStr(SecurityLog.Date.AsDateTime[j] +
                                           SecurityLog.Time.AsDateTime[j]),
