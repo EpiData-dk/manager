@@ -27,7 +27,7 @@ implementation
 
 uses
   admin_authenticator, strutils, epigrouprelation_helper, epidatafilerelations_helper,
-  epireport_types, epirights;
+  epireport_types, epirights, epireport_report_userlist;
 
 { TReportAdmin }
 
@@ -72,49 +72,14 @@ var
   OGrps: TEpiGroupRelationList;
   GroupRights: TEpiGroupRight;
   EntryRights: TEpiEntryRights;
+  R: TEpiReportUserList;
 begin
   Admin := Document.Admin;
-  Users := Admin.Users;
 
-  Generator.TableHeader('Users', 8, Users.Count + 1);
-
-  Generator.TableCell('Login',         0, 0);
-  Generator.TableCell('Name',          1, 0);
-  Generator.TableCell('Created',       2, 0);
-  Generator.TableCell('Last Modified', 3, 0);
-  Generator.TableCell('Last Login',    4, 0);
-  Generator.TableCell('Expires',       5, 0);
-  Generator.TableCell('Notes',         6, 0);
-  Generator.TableCell('Groups',        7, 0);
-
-  i := 1;
-  for U in Users do
-    begin
-      Generator.TableCell(U.Login,                      0, i);
-      Generator.TableCell(U.FullName,                   1, i);
-      Generator.TableCell(DateTimeToStr(U.Created),     2, i);
-      Generator.TableCell(DateTimeToStr(U.Modified),    3, i);
-
-      if U.LastLogin = 0 then
-        Generator.TableCell('N/A',                      4, i)
-      else
-        Generator.TableCell(DateTimeToStr(U.LastLogin), 4, i);
-
-      if U.ExpireDate = 0 then
-        Generator.TableCell('Never',                    5, i)
-      else
-        Generator.TableCell(DateTimeToStr(U.ExpireDate),5, i);
-
-      Generator.TableCell(U.Notes,                      6, i);
-
-      S := '';
-      for G in U.Groups do
-        S += G.Caption.Text + LineEnding;
-
-      Generator.TableCell(S,                            7, i);
-      Inc(i);
-    end;
-  Generator.TableFooter('');
+  R := TEpiReportUserList.Create(Generator);
+  R.Admin := Document.Admin;
+  R.RunReport;
+  R.Free;
 
   Generator.Line('');
 

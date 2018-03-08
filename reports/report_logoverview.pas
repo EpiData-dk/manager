@@ -23,13 +23,13 @@ type
 implementation
 
 uses
-  episecuritylog, epiglobals;
+  episecuritylog, epiglobals, epireport_report_userlist;
 
 { TReportLogOverview }
 
 function TReportLogOverview.GetTitle: string;
 begin
-
+  result := 'Access Log Overview';
 end;
 
 procedure TReportLogOverview.DoDocumentReport(
@@ -42,10 +42,19 @@ var
   KeyLog: TEpiSecurityKeyFieldLog;
   LogTypeEnum: TEpiLogEntry;
   RowCount, i, blockedcount, j: Integer;
+  R: TEpiReportUserList;
 begin
   inherited DoDocumentReport(ADocumentFile, Index);
 
   Document := ADocumentFile.Document;
+
+  R := TEpiReportUserList.Create(Generator);
+  R.Admin := Document.Admin;
+  R.RunReport;
+  R.Free;
+
+  Generator.Line('');
+
   SecurityLog := TEpiSecurityDatafile(Document.DataFiles.GetDataFileByName(EpiSecurityLogDatafileName));
   DataLog     := TEpiSecurityDataEventLog(Document.Datafiles.GetDataFileByName(EpiSecurityLogDataEventName));
   KeyLog      := TEpiSecurityKeyFieldLog(Document.DataFiles.GetDataFileByName(EpiSecurityLogKeyDataName));
