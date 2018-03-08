@@ -73,7 +73,7 @@ begin
   end;
 
   RowCount :=
-   3 +                                    // Header + Lines numbers + Start date + Blocked count
+   6 +                                    // Header + Lines numbers + Start date + Blocked count
    Integer(High(TEpiLogEntry));           // Count of each log type
 
   Generator.TableHeader('Log Overview', 2, RowCount);
@@ -81,16 +81,24 @@ begin
   Generator.TableCell('Task',                      0, 0);
   Generator.TableCell('Content',                   1, 0);
 
-  Generator.TableCell('Log Entries',               0, 1);
-  Generator.TableCell(IntToStr(SecurityLog.Size),  1, 1);
-
-  Generator.TableCell('Start Date',                0, 2);
+  Generator.TableCell('Start Date',                0, 1);
   Generator.TableCell(DateTimeToStr(SecurityLog.Date.AsDateTime[0] +
                                     SecurityLog.Time.AsDateTime[0]),
-                      1, 2);
+                      1, 1);
 
+  Generator.TableCell('Log Entries',               0, 2);
+  Generator.TableCell(IntToStr(SecurityLog.Size),  1, 2);
 
-  i := 3;
+  Generator.TableCell('First id#',                 0, 3);
+  Generator.TableCell(SecurityLog.ID.AsString[1],  1, 3);
+
+  Generator.TableCell('Last id#',                  0, 4);
+  Generator.TableCell(SecurityLog.ID.AsString[SecurityLog.Size - 1], 1, 4);
+
+  Generator.TableCell('Exported entries',          0, 5);
+  Generator.TableCell(IntToStr(SecurityLog.ID.AsInteger[1] - 1)    , 1, 5);
+
+  i := 6;
   for LogTypeEnum := Low(LogTypeCount) to High(LogTypeCount) do
   begin
     if LogTypeEnum = ltNone then continue;
