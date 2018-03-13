@@ -86,19 +86,23 @@ begin
   // Happens before the change...
   if csDestroying in ComponentState then exit;
 
-  FActiveFrame := TFrame(Node.Data);
+//  FActiveFrame := TFrame(Node.Data);
   AllowChange := ApplySettingForCurrentFrame;
   if not AllowChange then exit;
 
-  FActiveFrame.Hide;
+  if (Assigned(FActiveFrame)) then
+    FActiveFrame.Hide;
 end;
 
 function TProjectSettingsForm.ApplySettingForCurrentFrame: boolean;
 begin
+  Result := true;
+
   Mainform.Cursor := crHourGlass;
   Application.ProcessMessages;
   MainForm.BeginUpdatingForm;
-  Result := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
+  if (Assigned(FActiveFrame)) then
+    Result := (FActiveFrame as IProjectSettingsFrame).ApplySettings;
   MainForm.EndUpdatingForm;
   MainForm.Cursor := crDefault;
   Application.ProcessMessages;

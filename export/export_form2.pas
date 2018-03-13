@@ -384,6 +384,8 @@ begin
 end;
 
 procedure TExportForm2.SetDocumentFile(AValue: TEpiDocumentFile);
+var
+  i: Integer;
 begin
   if FDocumentFile = AValue then Exit;
   FDocumentFile := AValue;
@@ -396,7 +398,16 @@ begin
   FProjectTree.AddDocument(FDocumentFile.Document);
   FProjectTree.CheckAll;
 
-  FDataFormViewer.DataFile := FDocumentFile.Document.DataFiles[0];
+  i := 0;
+  while (FDocumentFile.Document.Relations[i].ProtectedItem) and
+        (i < FDocumentFile.Document.Relations.Count)
+  do
+    Inc(i);
+
+  if (i = FDocumentFile.Document.Relations.Count) then
+    i := 0;
+
+  FDataFormViewer.DataFile := FDocumentFile.Document.Relations[i].Datafile;
   FDataFormViewer.SelectAll;
 end;
 
