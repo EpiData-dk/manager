@@ -1551,13 +1551,15 @@ begin
 
       EpiDocument.Admin.InitAdmin;
       User.Groups.AddItem(EpiDocument.Admin.Admins);
+      EpiDocument.Admin.Created := Now;
+      EpiDocument.Admin.DaysBetweenPasswordChange := ManagerSettings.DaysBetweenPassword;
+
       if (not SaveProject(false)) then
       begin
         User.Free;
         Exit;
       end;
 
-      EpiDocument.Admin.DaysBetweenPasswordChange := ManagerSettings.DaysBetweenPassword;
       Res := MessageDlg('Information',
                         'User/Group Administration successfully added.' + LineEnding +
                         'Re-open project as "' + User.Login + '": ' + LineEnding +
@@ -1567,7 +1569,6 @@ begin
                         mbOK
                        );
 
-      EpiDocument.Admin.Created := Now;
       PostMessage(MainForm.Handle, LM_MAIN_CLOSEPROJECT, 1, 0);
       if (Res = mrOK) then
         PostMessage(MainForm.Handle, LM_MAIN_OPENRECENT, 0, 0);
