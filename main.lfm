@@ -1,5 +1,5 @@
 object MainForm: TMainForm
-  Left = 461
+  Left = 459
   Height = 681
   Top = 317
   Width = 878
@@ -44,10 +44,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 497
-      Height = 25
-      Top = 7
-      Width = 62
+      Left = 517
+      Height = 29
+      Top = 5
+      Width = 66
       Action = ExportAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -59,10 +59,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 405
-      Height = 25
-      Top = 7
-      Width = 77
+      Left = 421
+      Height = 29
+      Top = 5
+      Width = 81
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -73,10 +73,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 241
-      Height = 25
-      Top = 7
-      Width = 59
+      Left = 249
+      Height = 29
+      Top = 5
+      Width = 63
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Dataset'
@@ -88,10 +88,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 315
-      Height = 25
-      Top = 7
-      Width = 75
+      Left = 327
+      Height = 29
+      Top = 5
+      Width = 79
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Document'
@@ -104,10 +104,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 123
-      Height = 25
-      Top = 7
-      Width = 103
+      Left = 127
+      Height = 29
+      Top = 5
+      Width = 107
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -120,9 +120,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 25
-      Top = 7
-      Width = 97
+      Height = 29
+      Top = 5
+      Width = 101
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Se&lect Project'
@@ -488,6 +488,15 @@ object MainForm: TMainForm
       object ToolMenuDivider1: TMenuItem
         Caption = '-'
       end
+      object CreateArchiveMenuItem: TMenuItem
+        Action = CreateArchiveAction
+      end
+      object ExtractArchiveMenuItem: TMenuItem
+        Action = ExtractArchiveAction
+      end
+      object MenuItem48: TMenuItem
+        Caption = '-'
+      end
       object EntryClientMenuItem: TMenuItem
         Action = StartEntryClientAction
       end
@@ -539,8 +548,8 @@ object MainForm: TMainForm
   object ActionList1: TActionList
     Images = DM.Icons16
     OnUpdate = ActionList1Update
-    left = 552
-    top = 144
+    left = 480
+    top = 160
     object NewProjectAction: TAction
       Category = 'File'
       Caption = '&New Project'
@@ -733,6 +742,15 @@ object MainForm: TMainForm
       Category = 'Reports'
       Caption = 'Access Log Overview'
       OnExecute = AccessLogOverviewActionExecute
+    end
+    object CreateArchiveAction: TAction
+      Category = 'Tools'
+      Caption = 'Create Archive...'
+      OnExecute = CreateArchiveActionExecute
+    end
+    object ExtractArchiveAction: TAction
+      Category = 'Tools'
+      Caption = 'Extract Archive...'
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

@@ -17,8 +17,13 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    ExtractArchiveAction: TAction;
+    CreateArchiveAction: TAction;
     AppleMenuItem: TMenuItem;
+    CreateArchiveMenuItem: TMenuItem;
     MenuItem45: TMenuItem;
+    ExtractArchiveMenuItem: TMenuItem;
+    MenuItem48: TMenuItem;
     StaticText1: TStaticText;
     MenuItem35: TMenuItem;
     MenuItem36: TMenuItem;
@@ -218,6 +223,7 @@ type
     procedure CodeBookReportActionExecute(Sender: TObject);
     procedure CopyProjectInfoActionExecute(Sender: TObject);
     procedure CountsReportActionExecute(Sender: TObject);
+    procedure CreateArchiveActionExecute(Sender: TObject);
     procedure DataFormBtnClick(Sender: TObject);
     procedure DefaultWindowPosActionExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -348,7 +354,7 @@ uses
   manager_globals, reports_form,
   epiv_checkversionform, export_form2,
   admin_authenticator, admin_users_form, export_securitylog_form,
-  report_admin, report_logoverview;
+  report_admin, report_logoverview, archive_form;
 
 { TMainForm }
 
@@ -418,6 +424,15 @@ end;
 procedure TMainForm.CountsReportActionExecute(Sender: TObject);
 begin
   RunReportEx(TReportCounts);
+end;
+
+procedure TMainForm.CreateArchiveActionExecute(Sender: TObject);
+var
+  F: TArchiveForm;
+begin
+  F := TArchiveForm.Create(self);
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TMainForm.DataFormBtnClick(Sender: TObject);
