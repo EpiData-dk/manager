@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  EditBtn, Buttons, FileCtrl, ComboEx, CheckLst, FileUtil;
+  EditBtn, Buttons, FileCtrl, ComboEx, CheckLst, ComCtrls, FileUtil;
 
 type
 
@@ -17,6 +17,10 @@ type
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     FilterChkList: TCheckListBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    ProgressBar1: TProgressBar;
+    ProgressBar2: TProgressBar;
     SubDirChkBox: TCheckBox;
     EncryptCheckBox: TCheckBox;
     FolderEdit: TDirectoryEdit;
@@ -43,9 +47,12 @@ type
     procedure SingleFileEditAcceptFileName(Sender: TObject; var Value: String);
     procedure FolderEditEditingDone(Sender: TObject);
   private
+    LastUpdate: QWord;
     FHintWindow: THintWindow;
     function ShowError(Ctrl: TControl; Const Msg: UTF8String): boolean;
     function SanityCheck: boolean;
+    procedure ToolProgress(Sender: TObject; OverallProgress, Fileprogress: Integer;
+      const Filename: String; out Cancel: boolean);
     procedure UpdateSaveAsFileName;
     procedure AsyncUpdateSaveAsFileName(Data: PtrInt);
     procedure FileSearcherFileFound(FileIterator: TFileIterator);
@@ -76,8 +83,6 @@ type
   public
     property CompressTool: TEpiToolCompressor read FCompressTool write FCompressTool;
   end;
-
-
 
 
 { TArchiveForm }
@@ -118,6 +123,7 @@ var
   Tool: TEpiToolCompressor;
   FileSearcher: TArchiveFileSearcher;
   S: String;
+  Res: Boolean;
 begin
   if (not SanityCheck) then
     begin
@@ -152,14 +158,38 @@ begin
   if (EncryptCheckBox.Checked) then
     Tool.Password := PasswordEdit.Text;
 
+  ProgressBar1.Max     := Tool.Files.Count;
+  ProgressBar1.Visible := true;
+  ProgressBar2.Visible := true;
+  Label7.Visible       := true;
+  Label8.Visible       := true;
+  LastUpdate           := 0;
+
   Tool.OnCompressError := @ToolCompressError;
   Tool.OnEncryptionError := @ToolEncryptionError;
+  Tool.OnProgress := @ToolProgress;
 
   Screen.Cursor := crHourGlass;
   Application.ProcessMessages;
-  Tool.CompressToFile(SaveAsEdit.FileName);
+  Res := Tool.CompressToFile(SaveAsEdit.FileName);
   Tool.Free;
   Screen.Cursor := crDefault;
+
+  if (not Res) then
+    begin
+      ShowMessage('Compression was canceled!');
+      ModalResult := mrNone;
+    end
+  else
+    begin
+      ShowMessage('Successfull created archive: ' + LineEnding +
+                  SaveAsEdit.FileName);
+    end;
+
+  ProgressBar1.Visible := false;
+  ProgressBar2.Visible := false;
+  Label7.Visible       := false;
+  Label8.Visible       := false;
 end;
 
 procedure TArchiveForm.EncryptCheckBoxChange(Sender: TObject);
@@ -260,6 +290,21 @@ begin
     end;
 
   result := true;
+end;
+
+procedure TArchiveForm.ToolProgress(Sender: TObject; OverallProgress,
+  Fileprogress: Integer; const Filename: String; out Cancel: boolean);
+begin
+  ProgressBar1.Position := OverallProgress;
+  ProgressBar2.Position := Fileprogress;
+
+  if (GetTickCount64 - LastUpdate) > 50 then
+    begin
+      Application.ProcessMessages;
+      LastUpdate := GetTickCount64;
+    end;
+
+  Cancel := (ModalResult = mrCancel);
 end;
 
 procedure TArchiveForm.UpdateSaveAsFileName;
