@@ -658,6 +658,9 @@ end;
 procedure TSettingsForm.FormShow(Sender: TObject);
 begin
   FActiveFrame := TFrame(SettingsView.Items[0].Data);
+
+  // Force an update in the frame... this is not done (at least on GTK2) for some odd reason.
+  SettingsViewChange(SettingsView, SettingsView.Items[0]);
   SettingsView.Selected := SettingsView.Items[0];
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'SettingsForm');
@@ -693,30 +696,28 @@ constructor TSettingsForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-
   with SettingsView.Items do
   begin
-    FindNodeWithText('General').Data             := Pointer(TSettings_GeneralFrame.Create(Self));
-    FindNodeWithText('Paths').Data               := Pointer(TSettings_PathsFrame.Create(Self));
-    FindNodeWithText('Variable Definitions').Data:= Pointer(TSettings_FieldDefinitionFrame.Create(Self));
-    FindNodeWithText('Visual Design').Data       := Pointer(TSettings_VisualDesign.Create(Self));
-    FindNodeWithText('Fonts').Data               := Pointer(TSettingsFontFrame.Create(Self));
-    FindNodeWithText('Statusbar').Data           := Pointer(TSettingsStatusbar.Create(Self));
+    FindNodeWithText('General').Data              := Pointer(TSettings_GeneralFrame.Create(Self));
+    FindNodeWithText('Paths').Data                := Pointer(TSettings_PathsFrame.Create(Self));
+    FindNodeWithText('Variable Definitions').Data := Pointer(TSettings_FieldDefinitionFrame.Create(Self));
+    FindNodeWithText('Visual Design').Data        := Pointer(TSettings_VisualDesign.Create(Self));
+    FindNodeWithText('Fonts').Data                := Pointer(TSettingsFontFrame.Create(Self));
+    FindNodeWithText('Statusbar').Data            := Pointer(TSettingsStatusbar.Create(Self));
 
     // Export
-    FindNodeWithText('Export').Data              := Pointer(TSettings_ExportFrame.Create(Self));
-    FindNodeWithText('Stata').Data               := Pointer(TExportStataFrame.Create(Self));
-    FindNodeWithText('CSV').Data                 := Pointer(TExportCSVFrame.Create(Self));
-    FindNodeWithText('SPSS').Data                := Pointer(TExportSPSSFrame.Create(Self));
-//    FindNodeWithText('SAS').Data                 := Pointer(TExportSASFrame.Create(Self));
-    FindNodeWithText('DDI').Data                 := Pointer(TExportDDIFrame.Create(Self));
-    FindNodeWithText('EPX').Data                 := Pointer(TExportEPXFrame.Create(Self));
+    FindNodeWithText('Export').Data               := Pointer(TSettings_ExportFrame.Create(Self));
+    FindNodeWithText('Stata').Data                := Pointer(TExportStataFrame.Create(Self));
+    FindNodeWithText('CSV').Data                  := Pointer(TExportCSVFrame.Create(Self));
+    FindNodeWithText('SPSS').Data                 := Pointer(TExportSPSSFrame.Create(Self));
+    FindNodeWithText('DDI').Data                  := Pointer(TExportDDIFrame.Create(Self));
+    FindNodeWithText('EPX').Data                  := Pointer(TExportEPXFrame.Create(Self));
 
     // Project options
-    FindNodeWithText('Backup').Data              := Pointer(TProjectSettings_BackupFrame.Create(Self));
-    FindNodeWithText('Auto Increment').Data      := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
+    FindNodeWithText('Backup').Data               := Pointer(TProjectSettings_BackupFrame.Create(Self));
+    FindNodeWithText('Auto Increment').Data       := Pointer(TProjectSettings_AutoIncFrame.Create(Self));
     FindNodeWithText('Display of Variables').Data := Pointer(TProjectSettings_FieldFrame.Create(Self));
-    FindNodeWithText('Extended Access').Data     := Pointer(TProjectSettings_ExternalAccessFrame.Create(Self));
+    FindNodeWithText('Extended Access').Data      := Pointer(TProjectSettings_ExternalAccessFrame.Create(Self));
   end;
 end;
 

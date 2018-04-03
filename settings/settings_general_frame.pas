@@ -80,6 +80,7 @@ begin
   DefaultSaveTypeComboBox.AddItem(Copy2SymbDel(S, '|'), nil); Copy2SymbDel(S, '|');
   DefaultSaveTypeComboBox.AddItem(Copy2SymbDel(S, '|'), nil); Copy2SymbDel(S, '|');
   DefaultSaveTypeComboBox.ItemIndex := 0;
+  OutputFormatRadioGrp.ItemIndex := 0;
   {$IFNDEF WINDOWS}
   AssociateBtn.Visible := false;
   UnAssociateBtn.Visible := false;
