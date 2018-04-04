@@ -272,6 +272,7 @@ type
     procedure AdminReportActionExecute(Sender: TObject);
     procedure ShowChangeLogActionExecute(Sender: TObject);
     procedure AccessLogOverviewActionExecute(Sender: TObject);
+    procedure ExtractArchiveActionExecute(Sender: TObject);
   private
     { private declarations }
     FModified: boolean;
@@ -354,7 +355,7 @@ uses
   manager_globals, reports_form,
   epiv_checkversionform, export_form2,
   admin_authenticator, admin_users_form, export_securitylog_form,
-  report_admin, report_logoverview, archive_form;
+  report_admin, report_logoverview, archive_form, unarchive_form;
 
 { TMainForm }
 
@@ -1241,6 +1242,15 @@ end;
 procedure TMainForm.AccessLogOverviewActionExecute(Sender: TObject);
 begin
   RunReport(TReportLogOverview);
+end;
+
+procedure TMainForm.ExtractArchiveActionExecute(Sender: TObject);
+var
+  F: TUnArchiveForm;
+begin
+  F := TUnArchiveForm.Create(Self);
+  F.ShowModal;
+  F.Free;
 end;
 
 procedure TMainForm.SetCaption;

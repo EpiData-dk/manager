@@ -751,6 +751,7 @@ object MainForm: TMainForm
     object ExtractArchiveAction: TAction
       Category = 'Tools'
       Caption = 'Extract Archive...'
+      OnExecute = ExtractArchiveActionExecute
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog

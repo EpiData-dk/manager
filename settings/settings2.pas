@@ -631,7 +631,6 @@ begin
   begin
     SettingsView.Selected := SettingsView.Items.FindNodeWithText('Project Defaults').GetFirstChild;
     Node := SettingsView.Selected;
-//    Exit;
   end;
 
   FActiveFrame := TFrame(Node.Data);
@@ -648,7 +647,15 @@ begin
   if csDestroying in ComponentState then exit;
   if Node.Text = 'Project Defaults' then exit;
 
-  FActiveFrame := TFrame(Node.Data);
+  if (not Assigned(SettingsView.Selected)) or
+     (not Assigned(SettingsView.Selected.Data))
+  then
+    begin
+      AllowChange := true;
+      Exit;
+    end;
+
+  FActiveFrame := TFrame(SettingsView.Selected.Data);
   AllowChange := (FActiveFrame as ISettingsFrame).ApplySettings;
   if not AllowChange then exit;
 
@@ -660,7 +667,7 @@ begin
   FActiveFrame := TFrame(SettingsView.Items[0].Data);
 
   // Force an update in the frame... this is not done (at least on GTK2) for some odd reason.
-  SettingsViewChange(SettingsView, SettingsView.Items[0]);
+//  SettingsViewChange(SettingsView, SettingsView.Items[0]);
   SettingsView.Selected := SettingsView.Items[0];
   if ManagerSettings.SaveWindowPositions then
     LoadFormPosition(Self, 'SettingsForm');

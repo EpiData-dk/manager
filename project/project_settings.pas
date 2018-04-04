@@ -86,7 +86,6 @@ begin
   // Happens before the change...
   if csDestroying in ComponentState then exit;
 
-//  FActiveFrame := TFrame(Node.Data);
   AllowChange := ApplySettingForCurrentFrame;
   if not AllowChange then exit;
 
