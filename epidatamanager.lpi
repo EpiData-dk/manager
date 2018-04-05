@@ -891,6 +891,7 @@
         <Filename Value="tools/unarchive_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="UnArchiveForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit115>
     </Units>
