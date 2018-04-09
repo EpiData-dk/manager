@@ -40,7 +40,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epitools_archieve, LazFileUtils;
+  epitools_archieve, LazFileUtils, types;
 
 { TUnArchiveForm }
 
@@ -57,7 +57,7 @@ begin
     Tool.DecompressFromFile(FileNameEdit1.FileName);
 
   if DecryptChkBox.Checked and (not UnzipChkBox.Checked) then
-    Tool.DecryptFromFile(FileNameEdit1.FileName);
+    Tool.DecryptFromFile(FileNameEdit1.FileName, '');
 
   Tool.Free;
 end;
@@ -79,10 +79,10 @@ end;
 function TUnArchiveForm.SanityCheck: boolean;
 begin
   if (FileNameEdit1.FileName = '') then
-    Exit(ShowError(FileNameEdit1, 'No archive selected!')
+    Exit(ShowError(FileNameEdit1, 'No archive selected!'));
 
   if (FileExistsUTF8(FileNameEdit1.FileName)) then
-    Exit(ShowError(FileNameEdit1, 'File does not exist!')
+    Exit(ShowError(FileNameEdit1, 'File does not exist!'));
 
 
   if (UnzipChkBox.Checked) then
