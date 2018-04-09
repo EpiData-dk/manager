@@ -25,10 +25,11 @@ type
     ButtonPanel1: TButtonPanel;
     procedure OKButtonClick(Sender: TObject);
   private
+    FHintWindow: THintWindow;
     function ShowError(Ctrl: TControl; Const Msg: UTF8String): boolean;
     function SanityCheck: boolean;
   public
-
+    constructor Create(TheOwner: TComponent); override;
   end;
 
 var
@@ -39,7 +40,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epitools_archieve;
+  epitools_archieve, LazFileUtils;
 
 { TUnArchiveForm }
 
@@ -80,12 +81,27 @@ begin
   if (FileNameEdit1.FileName = '') then
     Exit(ShowError(FileNameEdit1, 'No archive selected!')
 
+  if (FileExistsUTF8(FileNameEdit1.FileName)) then
+    Exit(ShowError(FileNameEdit1, 'File does not exist!')
 
-  if (UnzipChkBox.Checked) and
-     (DirectoryEdit1.Directory = '')
-  then
-    Exit(ShowError(DirectoryEdit1, 'No destination directory selected!'));
 
+  if (UnzipChkBox.Checked) then
+    begin
+      if (DirectoryEdit1.Directory = '') then
+        Exit(ShowError(DirectoryEdit1, 'No destination directory selected!'));
+
+      if (DirectoryExistsUTF8(DirectoryEdit1.Directory)) then
+        Exit(ShowError(DirectoryEdit1, 'Destination directory does not exist!'));
+    end;
+end;
+
+constructor TUnArchiveForm.Create(TheOwner: TComponent);
+begin
+  inherited Create(TheOwner);
+
+  FHintWindow := THintWindow.Create(Self);
+  FHintWindow.AutoHide := true;
+  FHintWindow.HideInterval := 2000;
 end;
 
 end.
