@@ -1,10 +1,10 @@
 object UnArchiveForm: TUnArchiveForm
   Left = 673
-  Height = 255
+  Height = 250
   Top = 317
   Width = 448
   Caption = 'UnArchiveForm'
-  ClientHeight = 255
+  ClientHeight = 250
   ClientWidth = 448
   Position = poOwnerFormCenter
   LCLVersion = '1.9.0.0'
@@ -50,6 +50,7 @@ object UnArchiveForm: TUnArchiveForm
     Width = 71
     BorderSpacing.Top = 15
     Caption = 'Decrypt'
+    OnChange = DecryptChkBoxChange
     TabOrder = 1
   end
   object UnzipChkBox: TCheckBox
@@ -62,9 +63,10 @@ object UnArchiveForm: TUnArchiveForm
     Width = 57
     BorderSpacing.Top = 10
     Caption = 'Unzip'
+    OnChange = UnzipChkBoxChange
     TabOrder = 2
   end
-  object Edit1: TEdit
+  object PasswordEdit: TEdit
     AnchorSideLeft.Control = Label2
     AnchorSideLeft.Side = asrBottom
     AnchorSideRight.Control = FileNameEdit1
@@ -77,6 +79,7 @@ object UnArchiveForm: TUnArchiveForm
     Width = 265
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 10
+    Enabled = False
     TabOrder = 3
   end
   object Label2: TLabel
@@ -103,10 +106,11 @@ object UnArchiveForm: TUnArchiveForm
     Width = 79
     BorderSpacing.Top = 10
     Caption = 'Destination:'
+    Enabled = False
     ParentColor = False
   end
-  object CheckBox3: TCheckBox
-    AnchorSideRight.Control = DirectoryEdit1
+  object ReplaceChkBox: TCheckBox
+    AnchorSideRight.Control = DestinationFolderEdit
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Label3
     AnchorSideBottom.Side = asrBottom
@@ -116,9 +120,10 @@ object UnArchiveForm: TUnArchiveForm
     Width = 72
     Anchors = [akRight, akBottom]
     Caption = 'Replace'
+    Enabled = False
     TabOrder = 4
   end
-  object DirectoryEdit1: TDirectoryEdit
+  object DestinationFolderEdit: TDirectoryEdit
     AnchorSideLeft.Control = Label1
     AnchorSideTop.Control = Label3
     AnchorSideTop.Side = asrBottom
@@ -133,13 +138,14 @@ object UnArchiveForm: TUnArchiveForm
     NumGlyphs = 1
     Anchors = [akTop, akLeft, akRight]
     BorderSpacing.Top = 10
+    Enabled = False
     MaxLength = 0
     TabOrder = 5
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
     Height = 36
-    Top = 213
+    Top = 208
     Width = 436
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True

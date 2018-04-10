@@ -57,8 +57,8 @@ type
     procedure AsyncUpdateSaveAsFileName(Data: PtrInt);
     procedure FileSearcherFileFound(FileIterator: TFileIterator);
     function GetFilterList(Const Seperator: UTF8String): UTF8String;
-    procedure ToolCompressError(Sender: TObject);
-    procedure ToolEncryptionError(Sender: TObject);
+    procedure ToolCompressError(Sender: TObject; Const Msg: String);
+    procedure ToolEncryptionError(Sender: TObject; Const Msg: String);
   public
     constructor Create(TheOwner: TComponent); override;
   end;
@@ -71,7 +71,7 @@ implementation
 {$R *.lfm}
 
 uses
-  epimiscutils, epitools_archieve, types, LazFileUtils;
+  epimiscutils, epitools_archieve, types, LazFileUtils, archive_progressform;
 
 type
 
@@ -124,6 +124,7 @@ var
   FileSearcher: TArchiveFileSearcher;
   S: String;
   Res: Boolean;
+  ProgressForm: TArchiveProgressForm;
 begin
   if (not SanityCheck) then
     begin
@@ -158,22 +159,31 @@ begin
   if (EncryptCheckBox.Checked) then
     Tool.Password := PasswordEdit.Text;
 
-  ProgressBar1.Max     := Tool.Files.Count;
+  ProgressForm := TArchiveProgressForm.Create(Self);
+  ProgressForm.MaxFileCount := Tool.Files.Count;
+
+{  ProgressBar1.Max     := Tool.Files.Count;
   ProgressBar1.Visible := true;
   ProgressBar2.Visible := true;
   Label7.Visible       := true;
   Label8.Visible       := true;
-  LastUpdate           := 0;
+  LastUpdate           := 0;    }
 
-  Tool.OnCompressError := @ToolCompressError;
+  Tool.OnCompressError   := @ToolCompressError;
   Tool.OnEncryptionError := @ToolEncryptionError;
-  Tool.OnProgress := @ToolProgress;
+  Tool.OnProgress        := @ProgressForm.Progress;
 
-  Screen.Cursor := crHourGlass;
-  Application.ProcessMessages;
-  Res := Tool.CompressToFile(SaveAsEdit.FileName);
-  Tool.Free;
-  Screen.Cursor := crDefault;
+  try
+    ProgressForm.Show;
+
+    Screen.Cursor := crHourGlass;
+    Application.ProcessMessages;
+    Res := Tool.CompressToFile(SaveAsEdit.FileName);
+  finally
+    Tool.Free;
+    ProgressForm.Free;
+    Screen.Cursor := crDefault;
+  end;
 
   if (not Res) then
     begin
@@ -298,6 +308,7 @@ begin
   ProgressBar1.Position := OverallProgress;
   ProgressBar2.Position := Fileprogress;
 
+  // Check every 50 milliseconds.
   if (GetTickCount64 - LastUpdate) > 50 then
     begin
       Application.ProcessMessages;
@@ -369,14 +380,14 @@ begin
   Delete(Result, 1, 1);
 end;
 
-procedure TArchiveForm.ToolCompressError(Sender: TObject);
+procedure TArchiveForm.ToolCompressError(Sender: TObject; const Msg: String);
 begin
-
+  //
 end;
 
-procedure TArchiveForm.ToolEncryptionError(Sender: TObject);
+procedure TArchiveForm.ToolEncryptionError(Sender: TObject; const Msg: String);
 begin
-
+  //
 end;
 
 constructor TArchiveForm.Create(TheOwner: TComponent);

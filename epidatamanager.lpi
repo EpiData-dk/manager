@@ -218,7 +218,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="116">
+    <Units Count="117">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -894,6 +894,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit115>
+      <Unit116>
+        <Filename Value="tools/archive_progressform.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit116>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

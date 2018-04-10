@@ -1,7 +1,7 @@
 object ArchiveForm: TArchiveForm
-  Left = 565
+  Left = 1031
   Height = 600
-  Top = 253
+  Top = 279
   Width = 600
   AutoSize = True
   Caption = 'Create Archive'

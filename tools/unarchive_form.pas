@@ -17,17 +17,22 @@ type
     FileNameEdit1: TFileNameEdit;
     DecryptChkBox: TCheckBox;
     UnzipChkBox: TCheckBox;
-    Edit1: TEdit;
+    PasswordEdit: TEdit;
     Label2: TLabel;
     Label3: TLabel;
-    CheckBox3: TCheckBox;
-    DirectoryEdit1: TDirectoryEdit;
+    ReplaceChkBox: TCheckBox;
+    DestinationFolderEdit: TDirectoryEdit;
     ButtonPanel1: TButtonPanel;
     procedure OKButtonClick(Sender: TObject);
+    procedure DecryptChkBoxChange(Sender: TObject);
+    procedure UnzipChkBoxChange(Sender: TObject);
   private
     FHintWindow: THintWindow;
     function ShowError(Ctrl: TControl; Const Msg: UTF8String): boolean;
     function SanityCheck: boolean;
+    procedure DecompressError(Sender: TObject; const Msg: String);
+    procedure ExtractProgress(Sender: TObject; FileNo, FileProgress: Integer;
+      const Filename: String; out Cancel: boolean);
   public
     constructor Create(TheOwner: TComponent); override;
   end;
@@ -48,10 +53,12 @@ procedure TUnArchiveForm.OKButtonClick(Sender: TObject);
 var
   Tool: TEpiToolDeCompressor;
 begin
-  //
   Tool := TEpiToolDeCompressor.Create;
-  Tool.DestinationDir := DirectoryEdit1.Directory;
-  Tool.Password := Edit1.Text;
+  Tool.DestinationDir := DestinationFolderEdit.Directory;
+  Tool.Password := PasswordEdit.Text;
+  Tool.OnDecompressionError := @DecompressError;
+  Tool.OnDecryptionError    := @DecompressError;
+  Tool.OnProgress           := @ExtractProgress;
 
   if UnzipChkBox.Checked then
     Tool.DecompressFromFile(FileNameEdit1.FileName);
@@ -60,6 +67,18 @@ begin
     Tool.DecryptFromFile(FileNameEdit1.FileName, '');
 
   Tool.Free;
+end;
+
+procedure TUnArchiveForm.DecryptChkBoxChange(Sender: TObject);
+begin
+  PasswordEdit.Enabled := DecryptChkBox.Checked;
+end;
+
+procedure TUnArchiveForm.UnzipChkBoxChange(Sender: TObject);
+begin
+  Label3.Enabled                := UnzipChkBox.Checked;
+  DestinationFolderEdit.Enabled := UnzipChkBox.Checked;
+  ReplaceChkBox.Enabled         := UnzipChkBox.Checked;
 end;
 
 function TUnArchiveForm.ShowError(Ctrl: TControl; const Msg: UTF8String
@@ -87,12 +106,23 @@ begin
 
   if (UnzipChkBox.Checked) then
     begin
-      if (DirectoryEdit1.Directory = '') then
-        Exit(ShowError(DirectoryEdit1, 'No destination directory selected!'));
+      if (DestinationFolderEdit.Directory = '') then
+        Exit(ShowError(DestinationFolderEdit, 'No destination directory selected!'));
 
-      if (DirectoryExistsUTF8(DirectoryEdit1.Directory)) then
-        Exit(ShowError(DirectoryEdit1, 'Destination directory does not exist!'));
+      if (DirectoryExistsUTF8(DestinationFolderEdit.Directory)) then
+        Exit(ShowError(DestinationFolderEdit, 'Destination directory does not exist!'));
     end;
+end;
+
+procedure TUnArchiveForm.DecompressError(Sender: TObject; const Msg: String);
+begin
+  //
+end;
+
+procedure TUnArchiveForm.ExtractProgress(Sender: TObject; FileNo,
+  FileProgress: Integer; const Filename: String; out Cancel: boolean);
+begin
+  //
 end;
 
 constructor TUnArchiveForm.Create(TheOwner: TComponent);
