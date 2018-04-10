@@ -17,10 +17,6 @@ type
     BitBtn1: TBitBtn;
     BitBtn2: TBitBtn;
     FilterChkList: TCheckListBox;
-    Label7: TLabel;
-    Label8: TLabel;
-    ProgressBar1: TProgressBar;
-    ProgressBar2: TProgressBar;
     SubDirChkBox: TCheckBox;
     EncryptCheckBox: TCheckBox;
     FolderEdit: TDirectoryEdit;
@@ -51,8 +47,6 @@ type
     FHintWindow: THintWindow;
     function ShowError(Ctrl: TControl; Const Msg: UTF8String): boolean;
     function SanityCheck: boolean;
-    procedure ToolProgress(Sender: TObject; OverallProgress, Fileprogress: Integer;
-      const Filename: String; out Cancel: boolean);
     procedure UpdateSaveAsFileName;
     procedure AsyncUpdateSaveAsFileName(Data: PtrInt);
     procedure FileSearcherFileFound(FileIterator: TFileIterator);
@@ -162,13 +156,6 @@ begin
   ProgressForm := TArchiveProgressForm.Create(Self);
   ProgressForm.MaxFileCount := Tool.Files.Count;
 
-{  ProgressBar1.Max     := Tool.Files.Count;
-  ProgressBar1.Visible := true;
-  ProgressBar2.Visible := true;
-  Label7.Visible       := true;
-  Label8.Visible       := true;
-  LastUpdate           := 0;    }
-
   Tool.OnCompressError   := @ToolCompressError;
   Tool.OnEncryptionError := @ToolEncryptionError;
   Tool.OnProgress        := @ProgressForm.Progress;
@@ -195,11 +182,6 @@ begin
       ShowMessage('Successfull created archive: ' + LineEnding +
                   SaveAsEdit.FileName);
     end;
-
-  ProgressBar1.Visible := false;
-  ProgressBar2.Visible := false;
-  Label7.Visible       := false;
-  Label8.Visible       := false;
 end;
 
 procedure TArchiveForm.EncryptCheckBoxChange(Sender: TObject);
@@ -300,22 +282,6 @@ begin
     end;
 
   result := true;
-end;
-
-procedure TArchiveForm.ToolProgress(Sender: TObject; OverallProgress,
-  Fileprogress: Integer; const Filename: String; out Cancel: boolean);
-begin
-  ProgressBar1.Position := OverallProgress;
-  ProgressBar2.Position := Fileprogress;
-
-  // Check every 50 milliseconds.
-  if (GetTickCount64 - LastUpdate) > 50 then
-    begin
-      Application.ProcessMessages;
-      LastUpdate := GetTickCount64;
-    end;
-
-  Cancel := (ModalResult = mrCancel);
 end;
 
 procedure TArchiveForm.UpdateSaveAsFileName;

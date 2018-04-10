@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, EditBtn,
-  ButtonPanel, ComCtrls;
+  ButtonPanel, ComCtrls, archive_progressform;
 
 type
 
@@ -27,12 +27,14 @@ type
     procedure DecryptChkBoxChange(Sender: TObject);
     procedure UnzipChkBoxChange(Sender: TObject);
   private
+    FProgressForm: TArchiveProgressForm;
     FHintWindow: THintWindow;
     function ShowError(Ctrl: TControl; Const Msg: UTF8String): boolean;
     function SanityCheck: boolean;
     procedure DecompressError(Sender: TObject; const Msg: String);
     procedure ExtractProgress(Sender: TObject; FileNo, FileProgress: Integer;
       const Filename: String; out Cancel: boolean);
+    procedure ToolTotalFileCount(Sender: TObject; TotalCount: Integer);
   public
     constructor Create(TheOwner: TComponent); override;
   end;
@@ -58,13 +60,37 @@ begin
   Tool.Password := PasswordEdit.Text;
   Tool.OnDecompressionError := @DecompressError;
   Tool.OnDecryptionError    := @DecompressError;
-  Tool.OnProgress           := @ExtractProgress;
 
   if UnzipChkBox.Checked then
-    Tool.DecompressFromFile(FileNameEdit1.FileName);
+  begin
+    FProgressForm := TArchiveProgressForm.Create(Self);
+    Tool.OnProgress           := @FProgressForm.Progress;
+    Tool.OnTotalFileCount     := @ToolTotalFileCount;
+
+    try
+      if (not Tool.DecompressFromFile(FileNameEdit1.FileName)) then
+        begin
+          ShowMessage('Decompression was canceled!');
+          ModalResult := mrNone;
+        end
+      else
+        begin
+          ShowMessage('Successfull extracted archive!');
+        end;
+    finally
+      FProgressForm.Free;
+    end;
+  end;
 
   if DecryptChkBox.Checked and (not UnzipChkBox.Checked) then
-    Tool.DecryptFromFile(FileNameEdit1.FileName, '');
+    if Tool.DecryptFromFile(FileNameEdit1.FileName, '') then
+      begin
+
+      end
+    else
+      begin
+
+      end;
 
   Tool.Free;
 end;
@@ -123,6 +149,13 @@ procedure TUnArchiveForm.ExtractProgress(Sender: TObject; FileNo,
   FileProgress: Integer; const Filename: String; out Cancel: boolean);
 begin
   //
+end;
+
+procedure TUnArchiveForm.ToolTotalFileCount(Sender: TObject; TotalCount: Integer
+  );
+begin
+  FProgressForm.MaxFileCount := TotalCount;
+  FProgressForm.Show;
 end;
 
 constructor TUnArchiveForm.Create(TheOwner: TComponent);

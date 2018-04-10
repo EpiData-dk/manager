@@ -1,7 +1,7 @@
 object ArchiveForm: TArchiveForm
-  Left = 1031
+  Left = 2251
   Height = 600
-  Top = 279
+  Top = 234
   Width = 600
   AutoSize = True
   Caption = 'Create Archive'
@@ -55,7 +55,7 @@ object ArchiveForm: TArchiveForm
       AnchorSideRight.Side = asrBottom
       Left = 122
       Height = 27
-      Top = 349
+      Top = 355
       Width = 434
       DialogKind = dkSave
       DialogOptions = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
@@ -91,7 +91,7 @@ object ArchiveForm: TArchiveForm
       AnchorSideRight.Side = asrBottom
       Left = 10
       Height = 17
-      Top = 170
+      Top = 172
       Width = 102
       BorderSpacing.Left = 10
       Caption = 'Files to include:'
@@ -104,7 +104,7 @@ object ArchiveForm: TArchiveForm
       AnchorSideBottom.Side = asrBottom
       Left = 56
       Height = 17
-      Top = 359
+      Top = 365
       Width = 56
       Anchors = [akRight, akBottom]
       Caption = 'Save As:'
@@ -116,9 +116,9 @@ object ArchiveForm: TArchiveForm
       AnchorSideTop.Control = FolderEdit
       AnchorSideTop.Side = asrBottom
       Left = 122
-      Height = 19
+      Height = 22
       Top = 52
-      Width = 146
+      Width = 150
       BorderSpacing.Top = 15
       Caption = 'All Files in folder(s)'
       Checked = True
@@ -132,9 +132,9 @@ object ArchiveForm: TArchiveForm
       AnchorSideTop.Control = RadioButton1
       AnchorSideTop.Side = asrBottom
       Left = 122
-      Height = 19
-      Top = 86
-      Width = 86
+      Height = 22
+      Top = 89
+      Width = 90
       BorderSpacing.Top = 15
       Caption = 'Use Filter:'
       OnChange = RadioButton1Change
@@ -146,9 +146,9 @@ object ArchiveForm: TArchiveForm
       AnchorSideTop.Control = FilterChkList
       AnchorSideTop.Side = asrBottom
       Left = 122
-      Height = 19
+      Height = 22
       Top = 286
-      Width = 89
+      Width = 93
       BorderSpacing.Top = 15
       Caption = 'Single file:'
       OnChange = RadioButton1Change
@@ -160,10 +160,10 @@ object ArchiveForm: TArchiveForm
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = RadioButton3
       AnchorSideBottom.Side = asrBottom
-      Left = 223
+      Left = 227
       Height = 27
-      Top = 278
-      Width = 333
+      Top = 281
+      Width = 329
       OnAcceptFileName = SingleFileEditAcceptFileName
       FilterIndex = 0
       HideDirectories = False
@@ -179,9 +179,9 @@ object ArchiveForm: TArchiveForm
       AnchorSideTop.Control = RadioButton3
       AnchorSideTop.Side = asrBottom
       Left = 122
-      Height = 19
-      Top = 320
-      Width = 143
+      Height = 22
+      Top = 323
+      Width = 147
       BorderSpacing.Top = 15
       Caption = 'Include sub folders'
       TabOrder = 6
@@ -193,10 +193,10 @@ object ArchiveForm: TArchiveForm
       AnchorSideRight.Control = FolderEdit
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Side = asrBottom
-      Left = 223
-      Height = 185
-      Top = 86
-      Width = 333
+      Left = 227
+      Height = 182
+      Top = 89
+      Width = 329
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 15
       Enabled = False
@@ -221,9 +221,9 @@ object ArchiveForm: TArchiveForm
       AnchorSideBottom.Control = PasswordEdit
       AnchorSideBottom.Side = asrBottom
       Left = 122
-      Height = 18
-      Top = 19
-      Width = 18
+      Height = 22
+      Top = 15
+      Width = 22
       Anchors = [akLeft, akBottom]
       OnChange = EncryptCheckBoxChange
       TabOrder = 0
@@ -248,10 +248,10 @@ object ArchiveForm: TArchiveForm
       AnchorSideTop.Control = GroupBox2
       AnchorSideRight.Control = GroupBox2
       AnchorSideRight.Side = asrBottom
-      Left = 274
+      Left = 278
       Height = 27
       Top = 10
-      Width = 282
+      Width = 278
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -266,7 +266,7 @@ object ArchiveForm: TArchiveForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = PasswordEdit
       AnchorSideBottom.Side = asrBottom
-      Left = 160
+      Left = 164
       Height = 17
       Top = 20
       Width = 104
@@ -282,7 +282,7 @@ object ArchiveForm: TArchiveForm
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = RepeatPasswordEdit
       AnchorSideBottom.Side = asrBottom
-      Left = 148
+      Left = 152
       Height = 17
       Top = 57
       Width = 116
@@ -298,10 +298,10 @@ object ArchiveForm: TArchiveForm
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = PasswordEdit
       AnchorSideRight.Side = asrBottom
-      Left = 274
+      Left = 278
       Height = 27
       Top = 47
-      Width = 282
+      Width = 278
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
       BorderSpacing.Top = 10
@@ -326,10 +326,10 @@ object ArchiveForm: TArchiveForm
       AnchorSideRight.Side = asrBottom
       AnchorSideBottom.Control = Panel1
       AnchorSideBottom.Side = asrCenter
-      Left = 528
-      Height = 28
-      Top = 11
-      Width = 51
+      Left = 522
+      Height = 34
+      Top = 8
+      Width = 57
       Anchors = [akRight, akBottom]
       AutoSize = True
       BorderSpacing.Right = 20
@@ -344,10 +344,10 @@ object ArchiveForm: TArchiveForm
       AnchorSideRight.Control = BitBtn1
       AnchorSideBottom.Control = Panel1
       AnchorSideBottom.Side = asrCenter
-      Left = 442
-      Height = 28
-      Top = 11
-      Width = 76
+      Left = 430
+      Height = 34
+      Top = 8
+      Width = 82
       Anchors = [akRight, akBottom]
       AutoSize = True
       BorderSpacing.Right = 10
@@ -356,70 +356,6 @@ object ArchiveForm: TArchiveForm
       Kind = bkCancel
       ModalResult = 2
       TabOrder = 1
-    end
-    object ProgressBar1: TProgressBar
-      AnchorSideLeft.Control = ProgressBar2
-      AnchorSideTop.Control = Panel1
-      AnchorSideRight.Control = BitBtn2
-      Left = 98
-      Height = 20
-      Top = 3
-      Width = 334
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Top = 2
-      BorderSpacing.Right = 10
-      Smooth = True
-      Step = 1
-      TabOrder = 2
-      Visible = False
-      BarShowText = True
-    end
-    object ProgressBar2: TProgressBar
-      AnchorSideLeft.Control = Label8
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideRight.Control = BitBtn2
-      AnchorSideBottom.Control = Panel1
-      AnchorSideBottom.Side = asrBottom
-      Left = 98
-      Height = 20
-      Top = 27
-      Width = 334
-      Anchors = [akLeft, akRight, akBottom]
-      BorderSpacing.Left = 10
-      BorderSpacing.Right = 10
-      BorderSpacing.Bottom = 2
-      Smooth = True
-      TabOrder = 3
-      Visible = False
-      BarShowText = True
-    end
-    object Label7: TLabel
-      AnchorSideLeft.Control = Panel1
-      AnchorSideBottom.Control = ProgressBar1
-      AnchorSideBottom.Side = asrBottom
-      Left = 11
-      Height = 17
-      Top = 6
-      Width = 51
-      Anchors = [akLeft, akBottom]
-      BorderSpacing.Left = 10
-      Caption = 'Overall:'
-      ParentColor = False
-      Visible = False
-    end
-    object Label8: TLabel
-      AnchorSideLeft.Control = Panel1
-      AnchorSideBottom.Control = ProgressBar2
-      AnchorSideBottom.Side = asrBottom
-      Left = 11
-      Height = 17
-      Top = 30
-      Width = 77
-      Anchors = [akLeft, akBottom]
-      BorderSpacing.Left = 10
-      Caption = 'Current file:'
-      ParentColor = False
-      Visible = False
     end
   end
 end
