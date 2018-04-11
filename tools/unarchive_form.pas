@@ -14,7 +14,7 @@ type
 
   TUnArchiveForm = class(TForm)
     Label1: TLabel;
-    FileNameEdit1: TFileNameEdit;
+    InputFileNameEdit: TFileNameEdit;
     DecryptChkBox: TCheckBox;
     UnzipChkBox: TCheckBox;
     PasswordEdit: TEdit;
@@ -23,6 +23,7 @@ type
     ReplaceChkBox: TCheckBox;
     DestinationFolderEdit: TDirectoryEdit;
     ButtonPanel1: TButtonPanel;
+    OutputFileNameEdit: TFileNameEdit;
     procedure OKButtonClick(Sender: TObject);
     procedure DecryptChkBoxChange(Sender: TObject);
     procedure UnzipChkBoxChange(Sender: TObject);
@@ -35,6 +36,7 @@ type
     procedure ExtractProgress(Sender: TObject; FileNo, FileProgress: Integer;
       const Filename: String; out Cancel: boolean);
     procedure ToolTotalFileCount(Sender: TObject; TotalCount: Integer);
+    procedure DestinationFilenameChange;
   public
     constructor Create(TheOwner: TComponent); override;
   end;
@@ -55,6 +57,12 @@ procedure TUnArchiveForm.OKButtonClick(Sender: TObject);
 var
   Tool: TEpiToolDeCompressor;
 begin
+  if (not SanityCheck) then
+    begin
+      ModalResult := mrNone;
+      Exit;
+    end;
+
   Tool := TEpiToolDeCompressor.Create;
   Tool.DestinationDir := DestinationFolderEdit.Directory;
   Tool.Password := PasswordEdit.Text;
@@ -68,7 +76,7 @@ begin
     Tool.OnTotalFileCount     := @ToolTotalFileCount;
 
     try
-      if (not Tool.DecompressFromFile(FileNameEdit1.FileName)) then
+      if (not Tool.DecompressFromFile(InputFileNameEdit.FileName)) then
         begin
           ShowMessage('Decompression was canceled!');
           ModalResult := mrNone;
@@ -83,13 +91,14 @@ begin
   end;
 
   if DecryptChkBox.Checked and (not UnzipChkBox.Checked) then
-    if Tool.DecryptFromFile(FileNameEdit1.FileName, '') then
+    if Tool.DecryptFromFile(InputFileNameEdit.FileName, OutputFileNameEdit.FileName) then
       begin
-
+        ShowMessage('Decryption failed!');
+        ModalResult := mrNone;
       end
     else
       begin
-
+        ShowMessage('Decryption completed');
       end;
 
   Tool.Free;
@@ -98,13 +107,12 @@ end;
 procedure TUnArchiveForm.DecryptChkBoxChange(Sender: TObject);
 begin
   PasswordEdit.Enabled := DecryptChkBox.Checked;
+  DestinationFilenameChange;
 end;
 
 procedure TUnArchiveForm.UnzipChkBoxChange(Sender: TObject);
 begin
-  Label3.Enabled                := UnzipChkBox.Checked;
-  DestinationFolderEdit.Enabled := UnzipChkBox.Checked;
-  ReplaceChkBox.Enabled         := UnzipChkBox.Checked;
+  DestinationFilenameChange;
 end;
 
 function TUnArchiveForm.ShowError(Ctrl: TControl; const Msg: UTF8String
@@ -123,20 +131,25 @@ end;
 
 function TUnArchiveForm.SanityCheck: boolean;
 begin
-  if (FileNameEdit1.FileName = '') then
-    Exit(ShowError(FileNameEdit1, 'No archive selected!'));
+  if (InputFileNameEdit.FileName = '') then
+    Exit(ShowError(InputFileNameEdit, 'No archive selected!'));
 
-  if (FileExistsUTF8(FileNameEdit1.FileName)) then
-    Exit(ShowError(FileNameEdit1, 'File does not exist!'));
-
+  if (not FileExistsUTF8(InputFileNameEdit.FileName)) then
+    Exit(ShowError(InputFileNameEdit, 'File does not exist!'));
 
   if (UnzipChkBox.Checked) then
     begin
       if (DestinationFolderEdit.Directory = '') then
         Exit(ShowError(DestinationFolderEdit, 'No destination directory selected!'));
 
-      if (DirectoryExistsUTF8(DestinationFolderEdit.Directory)) then
+      if (not DirectoryExistsUTF8(DestinationFolderEdit.Directory)) then
         Exit(ShowError(DestinationFolderEdit, 'Destination directory does not exist!'));
+    end;
+
+  if (OutputFileNameEdit.Enabled) then
+    begin
+      if (OutputFileNameEdit.FileName = '') then
+        Exit(ShowError(OutputFileNameEdit, 'No filename specified!'));
     end;
 end;
 
@@ -156,6 +169,18 @@ procedure TUnArchiveForm.ToolTotalFileCount(Sender: TObject; TotalCount: Integer
 begin
   FProgressForm.MaxFileCount := TotalCount;
   FProgressForm.Show;
+end;
+
+procedure TUnArchiveForm.DestinationFilenameChange;
+begin
+  Label3.Enabled                := UnzipChkBox.Checked;
+  DestinationFolderEdit.Visible := UnzipChkBox.Checked or (not DecryptChkBox.Checked);
+  DestinationFolderEdit.Enabled := UnzipChkBox.Checked;
+  ReplaceChkBox.Visible         := UnzipChkBox.Checked or (not DecryptChkBox.Checked);
+  ReplaceChkBox.Enabled         := UnzipChkBox.Checked;
+
+  OutputFileNameEdit.Visible    := DecryptChkBox.Checked and (not UnzipChkBox.Checked);
+  OutputFileNameEdit.Enabled    := DecryptChkBox.Checked and (not UnzipChkBox.Checked);
 end;
 
 constructor TUnArchiveForm.Create(TheOwner: TComponent);
