@@ -76,7 +76,7 @@ begin
   FOverallProgress.AnchorParallel(akRight, 10, Self);
   FOverallProgress.Smooth := true;
   FOverallProgress.BarShowText := true;
-  FOverallProgress.Min := 0;
+  FOverallProgress.Min := 1;
   FOverallProgress.Max := 1;
 
   ALabel := TLabel.Create(Self);
@@ -104,8 +104,12 @@ begin
   FCancelBtn.Anchors := [];
   FCancelBtn.AnchorHorizontalCenterTo(Self);
   FCancelBtn.AnchorToNeighbour(akTop, 10, FFileProgress);
+  FCancelBtn.BorderSpacing.Bottom := 10;
   FCancelBtn.AutoSize := true;
   FCancelBtn.OnClick := @CancelClick;
+
+  Constraints.MinWidth := 400;
+  AutoSize := true;
 
   FLastUpdate := 0;
   FCancel := false;

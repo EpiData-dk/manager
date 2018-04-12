@@ -29,6 +29,7 @@ type
     procedure UnzipChkBoxChange(Sender: TObject);
   private
     FProgressForm: TArchiveProgressForm;
+    FErrorHandled: boolean;
     FHintWindow: THintWindow;
     function ShowError(Ctrl: TControl; Const Msg: UTF8String): boolean;
     function SanityCheck: boolean;
@@ -63,6 +64,7 @@ begin
       Exit;
     end;
 
+  FErrorHandled := false;
   Tool := TEpiToolDeCompressor.Create;
   Tool.DestinationDir := DestinationFolderEdit.Directory;
   Tool.Password := PasswordEdit.Text;
@@ -78,7 +80,8 @@ begin
     try
       if (not Tool.DecompressFromFile(InputFileNameEdit.FileName)) then
         begin
-          ShowMessage('Decompression was canceled!');
+          if (not FErrorHandled) then
+            ShowMessage('Decompression was canceled!');
           ModalResult := mrNone;
         end
       else
@@ -155,7 +158,8 @@ end;
 
 procedure TUnArchiveForm.DecompressError(Sender: TObject; const Msg: String);
 begin
-  //
+  ShowMessage(Msg);
+  FErrorHandled := true;
 end;
 
 procedure TUnArchiveForm.ExtractProgress(Sender: TObject; FileNo,
