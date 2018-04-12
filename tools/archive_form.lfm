@@ -1,7 +1,7 @@
 object ArchiveForm: TArchiveForm
-  Left = 691
+  Left = 583
   Height = 600
-  Top = 237
+  Top = 251
   Width = 600
   AutoSize = True
   Caption = 'Create Archive'
@@ -14,7 +14,7 @@ object ArchiveForm: TArchiveForm
   object ArchiveBox: TGroupBox
     AnchorSideBottom.Side = asrBottom
     Left = 10
-    Height = 411
+    Height = 430
     Top = 10
     Width = 580
     Align = alTop
@@ -22,67 +22,52 @@ object ArchiveForm: TArchiveForm
     AutoSize = True
     BorderSpacing.Around = 10
     Caption = 'Archive'
-    ClientHeight = 392
+    ClientHeight = 411
     ClientWidth = 576
     TabOrder = 0
     object FolderEdit: TDirectoryEdit
-      AnchorSideLeft.Control = Label1
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = ArchiveBox
+      AnchorSideLeft.Control = FilterChkList
+      AnchorSideTop.Control = RadioButton1
+      AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = ArchiveBox
       AnchorSideRight.Side = asrBottom
-      Left = 122
+      Left = 223
       Height = 27
-      Top = 10
-      Width = 434
+      Top = 44
+      Width = 333
       OnAcceptDirectory = FolderEditAcceptDirectory
       ShowHidden = False
       ButtonWidth = 23
       NumGlyphs = 1
       Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Left = 10
       BorderSpacing.Top = 10
       BorderSpacing.Right = 20
       MaxLength = 0
-      TabOrder = 0
+      TabOrder = 1
       OnEditingDone = FolderEditEditingDone
     end
     object SaveAsEdit: TFileNameEdit
-      AnchorSideLeft.Control = FolderEdit
-      AnchorSideTop.Control = SubDirChkBox
+      AnchorSideLeft.Control = RadioButton1
+      AnchorSideTop.Control = RadioButton3
       AnchorSideTop.Side = asrBottom
       AnchorSideRight.Control = ArchiveBox
       AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = ArchiveBox
+      AnchorSideBottom.Side = asrBottom
       Left = 122
       Height = 27
-      Top = 349
+      Top = 374
       Width = 434
       DialogKind = dkSave
-      DialogOptions = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
       FilterIndex = 0
       HideDirectories = False
       ButtonWidth = 23
       NumGlyphs = 1
-      Anchors = [akTop, akLeft, akRight]
-      BorderSpacing.Top = 10
+      Anchors = [akLeft, akRight, akBottom]
       BorderSpacing.Right = 20
       BorderSpacing.Bottom = 10
       MaxLength = 0
-      TabOrder = 1
-    end
-    object Label1: TLabel
-      AnchorSideTop.Side = asrCenter
-      AnchorSideRight.Control = Label2
-      AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = FolderEdit
-      AnchorSideBottom.Side = asrBottom
-      Left = 68
-      Height = 17
-      Top = 20
-      Width = 44
-      Anchors = [akRight, akBottom]
-      Caption = 'Folder:'
-      ParentColor = False
+      TabOrder = 7
     end
     object Label2: TLabel
       AnchorSideLeft.Control = ArchiveBox
@@ -91,45 +76,46 @@ object ArchiveForm: TArchiveForm
       AnchorSideRight.Side = asrBottom
       Left = 10
       Height = 17
-      Top = 170
+      Top = 198
       Width = 102
       BorderSpacing.Left = 10
       Caption = 'Files to include:'
       ParentColor = False
     end
     object Label3: TLabel
-      AnchorSideRight.Control = Label1
-      AnchorSideRight.Side = asrBottom
+      AnchorSideRight.Control = SaveAsEdit
       AnchorSideBottom.Control = SaveAsEdit
       AnchorSideBottom.Side = asrBottom
       Left = 56
       Height = 17
-      Top = 359
+      Top = 384
       Width = 56
       Anchors = [akRight, akBottom]
+      BorderSpacing.Right = 10
       Caption = 'Save As:'
       ParentColor = False
     end
     object RadioButton1: TRadioButton
       Tag = 1
-      AnchorSideLeft.Control = FolderEdit
-      AnchorSideTop.Control = FolderEdit
-      AnchorSideTop.Side = asrBottom
+      AnchorSideLeft.Control = Label2
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ArchiveBox
       Left = 122
       Height = 19
-      Top = 52
-      Width = 146
+      Top = 15
+      Width = 150
+      BorderSpacing.Left = 10
       BorderSpacing.Top = 15
-      Caption = 'All Files in folder(s)'
+      Caption = 'All Files in folder(s):'
       Checked = True
       OnChange = RadioButton1Change
-      TabOrder = 2
+      TabOrder = 0
       TabStop = True
     end
     object RadioButton2: TRadioButton
       Tag = 2
       AnchorSideLeft.Control = RadioButton1
-      AnchorSideTop.Control = RadioButton1
+      AnchorSideTop.Control = FolderEdit
       AnchorSideTop.Side = asrBottom
       Left = 122
       Height = 19
@@ -143,16 +129,17 @@ object ArchiveForm: TArchiveForm
     object RadioButton3: TRadioButton
       Tag = 3
       AnchorSideLeft.Control = RadioButton1
-      AnchorSideTop.Control = FilterChkList
       AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Control = SaveAsEdit
       Left = 122
       Height = 19
-      Top = 286
+      Top = 345
       Width = 89
-      BorderSpacing.Top = 15
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Bottom = 10
       Caption = 'Single file:'
       OnChange = RadioButton1Change
-      TabOrder = 4
+      TabOrder = 5
     end
     object SingleFileEdit: TFileNameEdit
       AnchorSideLeft.Control = FilterChkList
@@ -162,7 +149,7 @@ object ArchiveForm: TArchiveForm
       AnchorSideBottom.Side = asrBottom
       Left = 223
       Height = 27
-      Top = 278
+      Top = 337
       Width = 333
       OnAcceptFileName = SingleFileEditAcceptFileName
       FilterIndex = 0
@@ -172,19 +159,21 @@ object ArchiveForm: TArchiveForm
       Anchors = [akLeft, akRight, akBottom]
       Enabled = False
       MaxLength = 0
-      TabOrder = 5
+      TabOrder = 6
     end
     object SubDirChkBox: TCheckBox
-      AnchorSideLeft.Control = RadioButton1
-      AnchorSideTop.Control = RadioButton3
       AnchorSideTop.Side = asrBottom
-      Left = 122
+      AnchorSideRight.Control = FolderEdit
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = RadioButton1
+      AnchorSideBottom.Side = asrBottom
+      Left = 413
       Height = 19
-      Top = 320
+      Top = 15
       Width = 143
-      BorderSpacing.Top = 15
+      Anchors = [akRight, akBottom]
       Caption = 'Include sub folders'
-      TabOrder = 6
+      TabOrder = 2
     end
     object FilterChkList: TCheckListBox
       AnchorSideLeft.Control = RadioButton2
@@ -192,29 +181,30 @@ object ArchiveForm: TArchiveForm
       AnchorSideTop.Control = RadioButton2
       AnchorSideRight.Control = FolderEdit
       AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Side = asrBottom
+      AnchorSideBottom.Control = SingleFileEdit
       Left = 223
-      Height = 185
+      Height = 241
       Top = 86
       Width = 333
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Left = 15
+      BorderSpacing.Bottom = 10
       Enabled = False
       ItemHeight = 0
       MultiSelect = True
-      TabOrder = 7
+      TabOrder = 4
       TopIndex = -1
     end
   end
   object GroupBox2: TGroupBox
     Left = 10
-    Height = 109
-    Top = 431
+    Height = 98
+    Top = 450
     Width = 580
     Align = alClient
     BorderSpacing.Around = 10
     Caption = 'Encrypt'
-    ClientHeight = 90
+    ClientHeight = 79
     ClientWidth = 576
     TabOrder = 1
     object EncryptCheckBox: TCheckBox
@@ -312,50 +302,21 @@ object ArchiveForm: TArchiveForm
       TabOrder = 2
     end
   end
-  object Panel1: TPanel
-    Left = 0
-    Height = 50
-    Top = 550
-    Width = 600
-    Align = alBottom
-    ClientHeight = 50
-    ClientWidth = 600
+  object ButtonPanel1: TButtonPanel
+    Left = 6
+    Height = 36
+    Top = 558
+    Width = 588
+    OKButton.Name = 'OKButton'
+    OKButton.DefaultCaption = True
+    OKButton.OnClick = BitBtn1Click
+    HelpButton.Name = 'HelpButton'
+    HelpButton.DefaultCaption = True
+    CloseButton.Name = 'CloseButton'
+    CloseButton.DefaultCaption = True
+    CancelButton.Name = 'CancelButton'
+    CancelButton.DefaultCaption = True
     TabOrder = 2
-    object BitBtn1: TBitBtn
-      AnchorSideRight.Control = Panel1
-      AnchorSideRight.Side = asrBottom
-      AnchorSideBottom.Control = Panel1
-      AnchorSideBottom.Side = asrCenter
-      Left = 528
-      Height = 28
-      Top = 11
-      Width = 51
-      Anchors = [akRight, akBottom]
-      AutoSize = True
-      BorderSpacing.Right = 20
-      Default = True
-      DefaultCaption = True
-      Kind = bkOK
-      ModalResult = 1
-      OnClick = BitBtn1Click
-      TabOrder = 0
-    end
-    object BitBtn2: TBitBtn
-      AnchorSideRight.Control = BitBtn1
-      AnchorSideBottom.Control = Panel1
-      AnchorSideBottom.Side = asrCenter
-      Left = 442
-      Height = 28
-      Top = 11
-      Width = 76
-      Anchors = [akRight, akBottom]
-      AutoSize = True
-      BorderSpacing.Right = 10
-      Cancel = True
-      DefaultCaption = True
-      Kind = bkCancel
-      ModalResult = 2
-      TabOrder = 1
-    end
+    ShowButtons = [pbOK, pbCancel]
   end
 end

@@ -27,6 +27,9 @@ type
     procedure OKButtonClick(Sender: TObject);
     procedure DecryptChkBoxChange(Sender: TObject);
     procedure UnzipChkBoxChange(Sender: TObject);
+    procedure InputFileNameEditEditingDone(Sender: TObject);
+    procedure InputFileNameEditAcceptFileName(Sender: TObject; var Value: String
+      );
   private
     FProgressForm: TArchiveProgressForm;
     FErrorHandled: boolean;
@@ -34,10 +37,9 @@ type
     function ShowError(Ctrl: TControl; Const Msg: UTF8String): boolean;
     function SanityCheck: boolean;
     procedure DecompressError(Sender: TObject; const Msg: String);
-    procedure ExtractProgress(Sender: TObject; FileNo, FileProgress: Integer;
-      const Filename: String; out Cancel: boolean);
     procedure ToolTotalFileCount(Sender: TObject; TotalCount: Integer);
     procedure DestinationFilenameChange;
+    procedure UpdateDestinationFilename(Data: PtrInt = 0);
   public
     constructor Create(TheOwner: TComponent); override;
   end;
@@ -86,7 +88,8 @@ begin
         end
       else
         begin
-          ShowMessage('Successfull extracted archive!');
+          ShowMessage('Successfull extracted archive!' + LineEnding +
+                      'Files extrated: ' + IntToStr(FProgressForm.MaxFileCount));
         end;
     finally
       FProgressForm.Free;
@@ -118,6 +121,17 @@ begin
   DestinationFilenameChange;
 end;
 
+procedure TUnArchiveForm.InputFileNameEditEditingDone(Sender: TObject);
+begin
+  UpdateDestinationFilename;
+end;
+
+procedure TUnArchiveForm.InputFileNameEditAcceptFileName(Sender: TObject;
+  var Value: String);
+begin
+  Application.QueueAsyncCall(@UpdateDestinationFilename, 0);
+end;
+
 function TUnArchiveForm.ShowError(Ctrl: TControl; const Msg: UTF8String
   ): boolean;
 var
@@ -139,6 +153,11 @@ begin
 
   if (not FileExistsUTF8(InputFileNameEdit.FileName)) then
     Exit(ShowError(InputFileNameEdit, 'File does not exist!'));
+
+  if (PasswordEdit.Enabled) and
+     (PasswordEdit.Text = '')
+  then
+    Exit(ShowError(PasswordEdit, 'Empty passwords not allowed!'));
 
   if (UnzipChkBox.Checked) then
     begin
@@ -162,12 +181,6 @@ begin
   FErrorHandled := true;
 end;
 
-procedure TUnArchiveForm.ExtractProgress(Sender: TObject; FileNo,
-  FileProgress: Integer; const Filename: String; out Cancel: boolean);
-begin
-  //
-end;
-
 procedure TUnArchiveForm.ToolTotalFileCount(Sender: TObject; TotalCount: Integer
   );
 begin
@@ -185,6 +198,24 @@ begin
 
   OutputFileNameEdit.Visible    := DecryptChkBox.Checked and (not UnzipChkBox.Checked);
   OutputFileNameEdit.Enabled    := DecryptChkBox.Checked and (not UnzipChkBox.Checked);
+
+  UpdateDestinationFilename;
+end;
+
+procedure TUnArchiveForm.UpdateDestinationFilename(Data: PtrInt);
+begin
+  if (InputFileNameEdit.FileName = '') then
+    Exit;
+
+  if DestinationFolderEdit.Enabled then
+    begin
+      DestinationFolderEdit.Directory := ExtractFilePath(InputFileNameEdit.FileName);
+    end;
+
+  if OutputFileNameEdit.Enabled then
+    begin
+      OutputFileNameEdit.FileName := ChangeFileExt(InputFileNameEdit.FileName, '.zip');
+    end;
 end;
 
 constructor TUnArchiveForm.Create(TheOwner: TComponent);

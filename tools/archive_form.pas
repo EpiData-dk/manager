@@ -7,15 +7,14 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  EditBtn, Buttons, FileCtrl, ComboEx, CheckLst, ComCtrls, FileUtil;
+  EditBtn, Buttons, FileCtrl, ComboEx, CheckLst, ComCtrls, ButtonPanel,
+  FileUtil;
 
 type
 
   { TArchiveForm }
 
   TArchiveForm = class(TForm)
-    BitBtn1: TBitBtn;
-    BitBtn2: TBitBtn;
     FilterChkList: TCheckListBox;
     SubDirChkBox: TCheckBox;
     EncryptCheckBox: TCheckBox;
@@ -26,16 +25,15 @@ type
     SingleFileEdit: TFileNameEdit;
     ArchiveBox: TGroupBox;
     GroupBox2: TGroupBox;
-    Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
-    Panel1: TPanel;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     RadioButton3: TRadioButton;
+    ButtonPanel1: TButtonPanel;
     procedure RadioButton1Change(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure EncryptCheckBoxChange(Sender: TObject);
@@ -119,6 +117,7 @@ var
   S: String;
   Res: Boolean;
   ProgressForm: TArchiveProgressForm;
+  TotalFileCount: Integer;
 begin
   if (not SanityCheck) then
     begin
@@ -142,12 +141,20 @@ begin
         S := GetFilterList(FileSearcher.MaskSeparator);
 
       FileSearcher.Search(Tool.RootDir, S, SubDirChkBox.Checked);
+      FileSearcher.Free;
     end;
 
   if (RadioButton3.Checked) then
     begin
       Tool.RootDir := ExtractFilePath(SingleFileEdit.Text);
       Tool.Files.Add(SingleFileEdit.Text);
+    end;
+
+  if (Tool.Files.Count = 0) then
+    begin
+      ShowMessage('No files found. Stopping compression');
+      ModalResult := mrNone;
+      Exit;
     end;
 
   if (EncryptCheckBox.Checked) then
@@ -167,6 +174,7 @@ begin
     Application.ProcessMessages;
     Res := Tool.CompressToFile(SaveAsEdit.FileName);
   finally
+    TotalFileCount := Tool.Files.Count;
     Tool.Free;
     ProgressForm.Free;
     Screen.Cursor := crDefault;
@@ -180,7 +188,8 @@ begin
   else
     begin
       ShowMessage('Successfull created archive: ' + LineEnding +
-                  SaveAsEdit.FileName);
+                  SaveAsEdit.FileName + LineEnding +
+                  'Files archived: ' + IntToStr(TotalFileCount));
     end;
 end;
 
@@ -233,6 +242,7 @@ end;
 function TArchiveForm.SanityCheck: boolean;
 var
   i: Integer;
+  Res: TModalResult;
 begin
   result := false;
 
@@ -270,6 +280,26 @@ begin
   // Save as??
   if (SaveAsEdit.FileName = '') then
     Exit(ShowError(SaveAsEdit, 'No file selected!'));
+
+  if (FileExistsUTF8(SaveAsEdit.FileName)) then
+    begin
+      Res := MessageDlg('Replace',
+                        'The file:' + LineEnding +
+                          SaveAsEdit.FileName + LineEnding +
+                          LineEnding +
+                          'already exists exist. Do you want to overwrite it?',
+                        mtWarning,
+                        mbOKCancel,
+                        0,
+                        mbCancel
+      );
+
+      if (Res = mrCancel) then
+        begin
+          ModalResult := mrNone;
+          Exit;
+        end;
+    end;
 
   // Encryptions
   if EncryptCheckBox.Checked then

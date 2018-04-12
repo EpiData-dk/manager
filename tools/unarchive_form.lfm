@@ -1,11 +1,11 @@
 object UnArchiveForm: TUnArchiveForm
-  Left = 2240
-  Height = 266
-  Top = 397
-  Width = 427
+  Left = 689
+  Height = 248
+  Top = 351
+  Width = 445
   Caption = 'UnArchiveForm'
-  ClientHeight = 266
-  ClientWidth = 427
+  ClientHeight = 248
+  ClientWidth = 445
   Position = poOwnerFormCenter
   LCLVersion = '1.9.0.0'
   object Label1: TLabel
@@ -29,7 +29,8 @@ object UnArchiveForm: TUnArchiveForm
     Left = 10
     Height = 27
     Top = 37
-    Width = 407
+    Width = 425
+    OnAcceptFileName = InputFileNameEditAcceptFileName
     FilterIndex = 0
     HideDirectories = False
     ButtonWidth = 23
@@ -39,15 +40,16 @@ object UnArchiveForm: TUnArchiveForm
     BorderSpacing.Right = 10
     MaxLength = 0
     TabOrder = 0
+    OnEditingDone = InputFileNameEditEditingDone
   end
   object DecryptChkBox: TCheckBox
     AnchorSideLeft.Control = Label1
     AnchorSideTop.Control = InputFileNameEdit
     AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 22
+    Height = 19
     Top = 79
-    Width = 75
+    Width = 71
     BorderSpacing.Top = 15
     Caption = 'Decrypt'
     OnChange = DecryptChkBoxChange
@@ -58,13 +60,13 @@ object UnArchiveForm: TUnArchiveForm
     AnchorSideTop.Control = DecryptChkBox
     AnchorSideTop.Side = asrBottom
     Left = 10
-    Height = 22
-    Top = 111
-    Width = 61
+    Height = 19
+    Top = 108
+    Width = 57
     BorderSpacing.Top = 10
     Caption = 'Unzip'
     OnChange = UnzipChkBoxChange
-    TabOrder = 2
+    TabOrder = 3
   end
   object PasswordEdit: TEdit
     AnchorSideLeft.Control = Label2
@@ -73,23 +75,25 @@ object UnArchiveForm: TUnArchiveForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = DecryptChkBox
     AnchorSideBottom.Side = asrBottom
-    Left = 177
+    Left = 173
     Height = 27
-    Top = 74
-    Width = 240
+    Top = 71
+    Width = 262
     Anchors = [akLeft, akRight, akBottom]
     BorderSpacing.Left = 10
+    EchoMode = emPassword
     Enabled = False
-    TabOrder = 3
+    PasswordChar = '*'
+    TabOrder = 2
   end
   object Label2: TLabel
     AnchorSideLeft.Control = DecryptChkBox
     AnchorSideLeft.Side = asrBottom
     AnchorSideBottom.Control = DecryptChkBox
     AnchorSideBottom.Side = asrBottom
-    Left = 105
+    Left = 101
     Height = 17
-    Top = 84
+    Top = 81
     Width = 62
     Anchors = [akLeft, akBottom]
     BorderSpacing.Left = 20
@@ -102,7 +106,7 @@ object UnArchiveForm: TUnArchiveForm
     AnchorSideTop.Side = asrBottom
     Left = 10
     Height = 17
-    Top = 143
+    Top = 137
     Width = 79
     BorderSpacing.Top = 10
     Caption = 'Destination:'
@@ -114,14 +118,14 @@ object UnArchiveForm: TUnArchiveForm
     AnchorSideRight.Side = asrBottom
     AnchorSideBottom.Control = Label3
     AnchorSideBottom.Side = asrBottom
-    Left = 341
-    Height = 22
-    Top = 138
-    Width = 76
+    Left = 363
+    Height = 19
+    Top = 135
+    Width = 72
     Anchors = [akRight, akBottom]
     Caption = 'Replace'
     Enabled = False
-    TabOrder = 4
+    TabOrder = 6
   end
   object DestinationFolderEdit: TDirectoryEdit
     AnchorSideLeft.Control = Label1
@@ -131,8 +135,8 @@ object UnArchiveForm: TUnArchiveForm
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 27
-    Top = 170
-    Width = 407
+    Top = 164
+    Width = 425
     ShowHidden = False
     ButtonWidth = 23
     NumGlyphs = 1
@@ -140,13 +144,13 @@ object UnArchiveForm: TUnArchiveForm
     BorderSpacing.Top = 10
     Enabled = False
     MaxLength = 0
-    TabOrder = 5
+    TabOrder = 4
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
-    Height = 42
-    Top = 218
-    Width = 415
+    Height = 36
+    Top = 206
+    Width = 433
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     OKButton.OnClick = OKButtonClick
@@ -156,7 +160,7 @@ object UnArchiveForm: TUnArchiveForm
     CloseButton.DefaultCaption = True
     CancelButton.Name = 'CancelButton'
     CancelButton.DefaultCaption = True
-    TabOrder = 6
+    TabOrder = 7
     ShowButtons = [pbOK, pbCancel]
     ShowGlyphs = [pbOK, pbCancel]
   end
@@ -168,8 +172,8 @@ object UnArchiveForm: TUnArchiveForm
     AnchorSideRight.Side = asrBottom
     Left = 10
     Height = 27
-    Top = 170
-    Width = 407
+    Top = 164
+    Width = 425
     DialogKind = dkSave
     DialogOptions = [ofOverwritePrompt, ofEnableSizing, ofViewDetail]
     FilterIndex = 0
@@ -180,7 +184,7 @@ object UnArchiveForm: TUnArchiveForm
     BorderSpacing.Top = 10
     Enabled = False
     MaxLength = 0
-    TabOrder = 7
+    TabOrder = 5
     Visible = False
   end
 end
