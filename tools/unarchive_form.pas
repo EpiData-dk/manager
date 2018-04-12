@@ -97,9 +97,10 @@ begin
   end;
 
   if DecryptChkBox.Checked and (not UnzipChkBox.Checked) then
-    if Tool.DecryptFromFile(InputFileNameEdit.FileName, OutputFileNameEdit.FileName) then
+    if (not Tool.DecryptFromFile(InputFileNameEdit.FileName, OutputFileNameEdit.FileName)) then
       begin
-        ShowMessage('Decryption failed!');
+        if (not FErrorHandled) then
+          ShowMessage('Decryption failed!');
         ModalResult := mrNone;
       end
     else

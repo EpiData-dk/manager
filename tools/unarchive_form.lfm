@@ -3,7 +3,7 @@ object UnArchiveForm: TUnArchiveForm
   Height = 248
   Top = 351
   Width = 445
-  Caption = 'UnArchiveForm'
+  Caption = 'Extract Archive'
   ClientHeight = 248
   ClientWidth = 445
   Position = poOwnerFormCenter
