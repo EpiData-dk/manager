@@ -124,7 +124,9 @@ object UnArchiveForm: TUnArchiveForm
     Width = 72
     Anchors = [akRight, akBottom]
     Caption = 'Replace'
+    Checked = True
     Enabled = False
+    State = cbChecked
     TabOrder = 6
   end
   object DestinationFolderEdit: TDirectoryEdit
@@ -153,6 +155,7 @@ object UnArchiveForm: TUnArchiveForm
     Width = 433
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
+    OKButton.Enabled = False
     OKButton.OnClick = OKButtonClick
     HelpButton.Name = 'HelpButton'
     HelpButton.DefaultCaption = True

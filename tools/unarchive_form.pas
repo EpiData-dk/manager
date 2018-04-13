@@ -52,13 +52,14 @@ implementation
 {$R *.lfm}
 
 uses
-  epitools_archieve, LazFileUtils, types;
+  epitools_archieve, LazFileUtils, types, Clipbrd;
 
 { TUnArchiveForm }
 
 procedure TUnArchiveForm.OKButtonClick(Sender: TObject);
 var
   Tool: TEpiToolDeCompressor;
+  S: String;
 begin
   if (not SanityCheck) then
     begin
@@ -78,6 +79,7 @@ begin
     FProgressForm := TArchiveProgressForm.Create(Self);
     Tool.OnProgress           := @FProgressForm.Progress;
     Tool.OnTotalFileCount     := @ToolTotalFileCount;
+    Tool.ReplaceFiles         := ReplaceChkBox.Checked;
 
     try
       if (not Tool.DecompressFromFile(InputFileNameEdit.FileName)) then
@@ -88,8 +90,17 @@ begin
         end
       else
         begin
-          ShowMessage('Successfull extracted archive!' + LineEnding +
-                      'Files extrated: ' + IntToStr(FProgressForm.MaxFileCount));
+          S := 'Successfull extracted archive!' + LineEnding +
+               LineEnding +
+               'Source: ' + InputFileNameEdit.FileName + LineEnding +
+               'Destination: ' + DestinationFolderEdit.Directory + LineEnding +
+               '(files: ' + IntToStr(Tool.ExtractedFiles + Tool.SkippedFiles) + ')';
+
+          if (not ReplaceChkBox.Checked) then
+            S := S + LineEnding + '(skipped: ' + IntToStr(Tool.SkippedFiles) + ')';
+
+          ShowMessage(S);
+
         end;
     finally
       FProgressForm.Free;
@@ -105,8 +116,15 @@ begin
       end
     else
       begin
-        ShowMessage('Decryption completed');
+        S := 'Decryption completed!' + LineEnding +
+             LineEnding +
+             'Source: ' + InputFileNameEdit.FileName + LineEnding +
+             'Destination: ' + OutputFileNameEdit.FileName;
+
+        ShowMessage(S);
       end;
+
+  Clipboard.AsText := S;
 
   Tool.Free;
 end;
@@ -199,6 +217,8 @@ begin
 
   OutputFileNameEdit.Visible    := DecryptChkBox.Checked and (not UnzipChkBox.Checked);
   OutputFileNameEdit.Enabled    := DecryptChkBox.Checked and (not UnzipChkBox.Checked);
+
+  ButtonPanel1.OKButton.Enabled := DecryptChkBox.Checked or UnzipChkBox.Checked;
 
   UpdateDestinationFilename;
 end;

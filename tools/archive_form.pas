@@ -63,7 +63,8 @@ implementation
 {$R *.lfm}
 
 uses
-  epimiscutils, epitools_archieve, types, LazFileUtils, archive_progressform;
+  epimiscutils, epitools_archieve, types, LazFileUtils, archive_progressform,
+  Clipbrd;
 
 type
 
@@ -174,8 +175,6 @@ begin
     Application.ProcessMessages;
     Res := Tool.CompressToFile(SaveAsEdit.FileName);
   finally
-    TotalFileCount := Tool.Files.Count;
-    Tool.Free;
     ProgressForm.Free;
     Screen.Cursor := crDefault;
   end;
@@ -187,10 +186,25 @@ begin
     end
   else
     begin
-      ShowMessage('Successfull created archive: ' + LineEnding +
-                  SaveAsEdit.FileName + LineEnding +
-                  'Files archived: ' + IntToStr(TotalFileCount));
+      S :=
+        'Successfull created archive: ' + LineEnding +
+        LineEnding +
+        'Source: ';
+
+      if Tool.Files.Count = 1 then
+        S := S + Tool.Files[0]
+      else
+        S := S + Tool.RootDir;
+
+      S := S + LineEnding +
+           'Destination: ' + SaveAsEdit.FileName + LineEnding +
+           '(files: ' + IntToStr(Tool.Files.Count) + ')';
+
+      ShowMessage(S);
+      Clipboard.AsText := S;
     end;
+
+  Tool.Free;
 end;
 
 procedure TArchiveForm.EncryptCheckBoxChange(Sender: TObject);
