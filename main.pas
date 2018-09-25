@@ -292,7 +292,6 @@ type
     procedure UpdateShortCuts;
     procedure UpdateSettings;
     procedure LoadGlyphs;
-    procedure CheckForUpdates(Data: PtrInt);
     procedure OpenRecentMenuItemClick(Sender: TObject);
     function  ToolsCheckOpenFile(Const ReadOnly: boolean;
       out LocalDoc: boolean; Const RequiredRights: TEpiManagerRights;
@@ -374,8 +373,6 @@ begin
   {$ELSE}
   BetaPanel.Visible := false;
   {$ENDIF}
-
-  Application.QueueAsyncCall(@CheckForUpdates, 0);
 end;
 
 procedure TMainForm.ImportCBInNewProjectActionExecute(Sender: TObject);
@@ -616,9 +613,7 @@ var
 begin
   F := TCheckVersionForm.Create(Self);
   F.Caption := 'EpiData Manager';
-  F.CheckBoxValue := ManagerSettings.CheckForUpdates;
   F.ShowModal;
-  ManagerSettings.CheckForUpdates := F.CheckBoxValue;
   F.Free;
 end;
 
@@ -1512,28 +1507,6 @@ begin
   DM.Icons16.GetBitmap(43, DocumentBtn.Glyph);
   DM.Icons16.GetBitmap(44, DataFormBtn.Glyph);
   DM.Icons16.GetBitmap(45, ProjectDetailsBtn.Glyph);
-end;
-
-procedure TMainForm.CheckForUpdates(Data: PtrInt);
-var
-  F: TCheckVersionForm;
-  D: Extended;
-  N: TDateTime;
-begin
-  // User does not want to show updates.
-  if not ManagerSettings.CheckForUpdates then exit;
-
-  // Check if it is time to search for updates.
-  D := (ManagerSettings.LastUpdateCheck + ManagerSettings.DaysBetweenChecks);
-  N := Now;
-
-  if (ManagerSettings.LastUpdateCheck + ManagerSettings.DaysBetweenChecks) >= Now
-  then
-    Exit;
-
-  CheckVersionAction.Execute;
-
-  ManagerSettings.LastUpdateCheck := Now;
 end;
 
 procedure TMainForm.OpenRecentMenuItemClick(Sender: TObject);

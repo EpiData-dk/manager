@@ -24,7 +24,6 @@ type
                                      //   0: .epx
                                      //   1: .epz
     ImportCasing:          TEpiFieldNamingCase;
-    CheckForUpdates:       Boolean;
     DaysBetweenChecks:     Byte;
     LastUpdateCheck:       TDateTime;
 
