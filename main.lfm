@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 511
+  Left = 2748
   Height = 681
-  Top = 218
+  Top = 252
   Width = 878
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -16,7 +16,7 @@ object MainForm: TMainForm
   OnDropFiles = FormDropFiles
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '1.9.0.0'
+  LCLVersion = '2.0.0.4'
   object PageControl1: TPageControl
     Left = 0
     Height = 618

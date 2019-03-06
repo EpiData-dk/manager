@@ -59,7 +59,8 @@ uses
   design_properties_dataform_statusbarframe, settings_statusbar,
   admin_logviewer_frame, empty_form, report_admin, report_logoverview,
   epicustomlist_helper, epidatacore, project_settings_extended_access,
-  export_securitylog_form, archive_form, unarchive_form, archive_progressform;
+  export_securitylog_form, archive_form, unarchive_form, archive_progressform,
+  wizard_form;
 
 {$R *.res}
 
@@ -98,6 +99,10 @@ begin
 
   // Parse commandline options!
   ParseCommandLineOpts;
+
+  // Check if this is first run.
+  if (not CheckAndStartWizard(GetIniFileName)) then
+    Exit;
 
   // Load ini before anything else - it contains start-up info.
   LoadIniFiles;
