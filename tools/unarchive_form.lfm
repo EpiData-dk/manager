@@ -6,8 +6,9 @@ object UnArchiveForm: TUnArchiveForm
   Caption = 'Extract Archive'
   ClientHeight = 248
   ClientWidth = 445
+  OnClose = FormClose
   Position = poOwnerFormCenter
-  LCLVersion = '1.9.0.0'
+  LCLVersion = '2.0.0.4'
   object Label1: TLabel
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -150,13 +151,12 @@ object UnArchiveForm: TUnArchiveForm
   end
   object ButtonPanel1: TButtonPanel
     Left = 6
-    Height = 36
-    Top = 206
+    Height = 38
+    Top = 204
     Width = 433
     OKButton.Name = 'OKButton'
     OKButton.DefaultCaption = True
     OKButton.Enabled = False
-    OKButton.OnClick = OKButtonClick
     HelpButton.Name = 'HelpButton'
     HelpButton.DefaultCaption = True
     CloseButton.Name = 'CloseButton'
