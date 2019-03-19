@@ -24,6 +24,7 @@ type
     DestinationFolderEdit: TDirectoryEdit;
     ButtonPanel1: TButtonPanel;
     OutputFileNameEdit: TFileNameEdit;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure OKButtonClick(Sender: TObject);
     procedure DecryptChkBoxChange(Sender: TObject);
     procedure UnzipChkBoxChange(Sender: TObject);
@@ -127,6 +128,13 @@ begin
   Clipboard.AsText := S;
 
   Tool.Free;
+end;
+
+procedure TUnArchiveForm.FormClose(Sender: TObject;
+  var CloseAction: TCloseAction);
+begin
+  if (ModalResult = mrOK) then
+    OKButtonClick(nil);
 end;
 
 procedure TUnArchiveForm.DecryptChkBoxChange(Sender: TObject);
@@ -242,8 +250,6 @@ end;
 constructor TUnArchiveForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-
-  ButtonPanel1.OnClick := @OKButtonClick;
 
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.AutoHide := true;

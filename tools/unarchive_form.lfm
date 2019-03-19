@@ -6,6 +6,7 @@ object UnArchiveForm: TUnArchiveForm
   Caption = 'Extract Archive'
   ClientHeight = 248
   ClientWidth = 445
+  OnClose = FormClose
   Position = poOwnerFormCenter
   LCLVersion = '2.0.0.4'
   object Label1: TLabel
