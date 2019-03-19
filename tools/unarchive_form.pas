@@ -243,6 +243,8 @@ constructor TUnArchiveForm.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
+  ButtonPanel1.OKButton.OnClick := @OKButtonClick;
+
   FHintWindow := THintWindow.Create(Self);
   FHintWindow.AutoHide := true;
   FHintWindow.HideInterval := 2000;
