@@ -1263,7 +1263,7 @@ var
   ARight: Integer;
   ATop: Integer;
   ABot: Integer;
-  i: Integer;
+  i, InitialPageNum: Integer;
   Sz: TSize;
 
   procedure SetFont(Const AFont: TFont);
@@ -1311,6 +1311,7 @@ begin
 
     BeginDoc;
 
+    InitialPageNum := PageNumber;
     i := 0;
     while i < DataFile.ControlItems.Count do
     begin
@@ -1321,7 +1322,7 @@ begin
         continue;
       end;
 
-      ATop := (Round(ControlItemTop(CI) * yscale) - (PageNumber - 1) * pClientHeight) + TopMarg;
+      ATop := (Round(ControlItemTop(CI) * yscale) - (PageNumber - InitialPageNum) * pClientHeight) + TopMarg;
       ALeft := Round(ControlItemLeft(CI) * xscale) + LeftMarg;
 
       if (CI is TEpiSection) then
