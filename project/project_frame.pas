@@ -1649,7 +1649,10 @@ begin
   end;
   FProjectTreeView.Align  := alClient;
   FProjectTreeView.Parent := ProjectPanel;
-
+  {IFDEF LCLCocoa}
+     FProjectTreeView.BorderSpacing.Left := 10;
+     ToolBar1.BorderSpacing.Left := 10;
+  {ENDIF}
   CreateCoreLogger;
 
   {$IFNDEF EPI_DEBUG}
