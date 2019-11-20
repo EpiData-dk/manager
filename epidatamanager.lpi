@@ -15,7 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="4"/>
       <MinorVersionNr Value="5"/>
-      <BuildNr Value="2"/>
+      <BuildNr Value="3"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="4.1.0.104"/>
@@ -55,41 +55,7 @@
           </Other>
         </CompilerOptions>
       </Item2>
-      <Item3 Name="Linux i386">
-        <CompilerOptions>
-          <Version Value="11"/>
-          <Target>
-            <Filename Value="epidatamanager"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
-            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename;admin"/>
-            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
-          </SearchPaths>
-          <CodeGeneration>
-            <TargetCPU Value="i386"/>
-            <TargetOS Value="linux"/>
-            <Optimizations>
-              <OptimizationLevel Value="0"/>
-            </Optimizations>
-          </CodeGeneration>
-          <Linking>
-            <Debugging>
-              <DebugInfoType Value="dsDwarf2Set"/>
-            </Debugging>
-          </Linking>
-          <Other>
-            <CustomOptions Value="-dEPI_BETA"/>
-            <ExecuteBefore>
-              <CompileReasons Compile="False" Build="False" Run="False"/>
-            </ExecuteBefore>
-            <ExecuteAfter>
-              <CompileReasons Compile="False" Build="False" Run="False"/>
-            </ExecuteAfter>
-          </Other>
-        </CompilerOptions>
-      </Item3>
-      <Item4 Name="Win64">
+      <Item3 Name="Win64">
         <MacroValues Count="1">
           <Macro1 Name="LCLWidgetType" Value="win32"/>
         </MacroValues>
@@ -118,6 +84,40 @@
           <Other>
             <CustomOptions Value="-dEPI_DEBUG1
 -dEPI_BETA"/>
+            <ExecuteBefore>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
+            </ExecuteBefore>
+            <ExecuteAfter>
+              <CompileReasons Compile="False" Build="False" Run="False"/>
+            </ExecuteAfter>
+          </Other>
+        </CompilerOptions>
+      </Item3>
+      <Item4 Name="Linux i386">
+        <CompilerOptions>
+          <Version Value="11"/>
+          <Target>
+            <Filename Value="epidatamanager"/>
+          </Target>
+          <SearchPaths>
+            <IncludeFiles Value="$(ProjOutDir);include;include/$(TargetOS)"/>
+            <OtherUnitFiles Value="designer;utils;project;settings;import;tools;reports;export;designer/align;designer/rename;admin"/>
+            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+          </SearchPaths>
+          <CodeGeneration>
+            <TargetCPU Value="i386"/>
+            <TargetOS Value="linux"/>
+            <Optimizations>
+              <OptimizationLevel Value="0"/>
+            </Optimizations>
+          </CodeGeneration>
+          <Linking>
+            <Debugging>
+              <DebugInfoType Value="dsDwarf2Set"/>
+            </Debugging>
+          </Linking>
+          <Other>
+            <CustomOptions Value="-dEPI_BETA"/>
             <ExecuteBefore>
               <CompileReasons Compile="False" Build="False" Run="False"/>
             </ExecuteBefore>
