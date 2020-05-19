@@ -129,13 +129,21 @@ end;
 procedure TAdminUserForm.PasswordEditKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if (Key = VK_RETURN) and (Shift = [])
+  if ((Key = VK_RETURN) or (Key = VK_TAB)) and (Shift = [])
   then
     begin
+      // Bug in Cocoa? PasswordEdit.Modified is always FALSE
+      // This is not a proper fix, but at least the form will work
+      {$IFDEF LCLCocoa}
+      PasswordEdit.Modified := true;
+      Application.QueueAsyncCall(@PasswordEditOpen, 0);
+      PasswordEdit.PerformTab(true);
+      {$ELSE}
       if PasswordEdit.Modified then
         Application.QueueAsyncCall(@PasswordEditOpen, 0)
       else
         PasswordEdit.PerformTab(true);
+      {$ENDIF}
     end;
 end;
 
@@ -547,4 +555,3 @@ begin
 end;
 
 end.
-
