@@ -248,6 +248,10 @@ begin
   ApplyBtn.AutoSize := true;
   ApplyBtn.Parent := P;
   ApplyBtn.OnClick := @ApplyClick;
+  {$IFDEF LCLCocoa}
+  // DefaultControl property is not respected, but this is
+  ApplyBtn.Default := true;
+  {$ENDIF}
 
   Btn := TBitBtn.Create(Self);
   Btn.Kind := bkCustom;

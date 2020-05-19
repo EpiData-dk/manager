@@ -185,14 +185,10 @@
     </RunParams>
     <RequiredPackages Count="8">
       <Item1>
-        <PackageName Value="epidatacore"/>
-        <MaxVersion Major="4" Minor="4" Valid="True"/>
-        <MinVersion Major="4" Minor="3" Valid="True"/>
+        <PackageName Value="epidatacore_visuals"/>
       </Item1>
       <Item2>
-        <PackageName Value="epidatacore_visuals"/>
-        <MaxVersion Major="4" Minor="4" Valid="True"/>
-        <MinVersion Major="4" Minor="1" Valid="True"/>
+        <PackageName Value="epidatacore"/>
       </Item2>
       <Item3>
         <PackageName Value="LazControls"/>
@@ -921,6 +917,14 @@
 -dMEM_LEAK_FINDER1
 -dEPI_DEVELOPMENT1
 -dEPI_BETA"/>
+      <OtherDefines Count="6">
+        <Define0 Value="EPI_DEBUG1"/>
+        <Define1 Value="MEM_LEAK_FINDER1"/>
+        <Define2 Value="EPI_DEVELOPMENT1"/>
+        <Define3 Value="EPI_BETA"/>
+        <Define4 Value="VerboseClipboard"/>
+        <Define5 Value="COCOA"/>
+      </OtherDefines>
       <ExecuteBefore>
         <CompileReasons Compile="False" Build="False" Run="False"/>
       </ExecuteBefore>
