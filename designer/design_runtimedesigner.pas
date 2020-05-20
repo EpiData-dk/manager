@@ -2671,6 +2671,10 @@ procedure TRuntimeDesignFrame.CopyControlActionExecute(Sender: TObject);
 begin
   GlobalCopyListClear;
   FDesignPanel.Surface.Selector.RemoveFromSelection(FExtender);
+  {$IFDEF LCLCocoa}
+  ShowMessage('This version of Manager - macOS 64-bit - cannot copy fields');
+  exit;
+  {$ENDIF}
   FDesignPanel.Surface.CopyComponents;
 end;
 
@@ -2825,6 +2829,10 @@ procedure TRuntimeDesignFrame.CutControlActionExecute(Sender: TObject);
 begin
   GlobalCopyListClear;
   FDesignPanel.Surface.Selector.RemoveFromSelection(FExtender);
+  {$IFDEF LCLCocoa}
+  ShowMessage('This version of Manager - macOS 64-bit - cannot cut fields');
+  exit;
+  {$ENDIF}
   FDesignPanel.Surface.CutComponents;
 end;
 
