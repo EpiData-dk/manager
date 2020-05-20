@@ -222,6 +222,18 @@ begin
   P.Height := 48;
   P.Parent := Self;
 
+  // Cocoa seems to default to the first button, regardless of
+  // the setting of DefaultControl
+  ApplyBtn := TBitBtn.Create(Self);
+  ApplyBtn.Kind := bkRetry;
+  ApplyBtn.Anchors := [];
+  ApplyBtn.Caption := 'Apply';
+  ApplyBtn.AnchorVerticalCenterTo(P);
+  ApplyBtn.AnchorParallel(akLeft, 10, P);
+  ApplyBtn.AutoSize := true;
+  ApplyBtn.Parent := P;
+  ApplyBtn.OnClick := @ApplyClick;
+
   CloseBtn := TBitBtn.Create(Self);
   CloseBtn.Kind := bkClose;
   CloseBtn.Anchors := [];
@@ -239,20 +251,6 @@ begin
   Btn.Parent := P;
   Btn.OnClick := @CancelClick;
 
-  ApplyBtn := TBitBtn.Create(Self);
-  ApplyBtn.Kind := bkRetry;
-  ApplyBtn.Anchors := [];
-  ApplyBtn.Caption := 'Apply';
-  ApplyBtn.AnchorVerticalCenterTo(P);
-  ApplyBtn.AnchorParallel(akLeft, 10, P);
-  ApplyBtn.AutoSize := true;
-  ApplyBtn.Parent := P;
-  ApplyBtn.OnClick := @ApplyClick;
-  {$IFDEF LCLCocoa}
-  // DefaultControl property is not respected, but this is
-  ApplyBtn.Default := true;
-  {$ENDIF}
-
   Btn := TBitBtn.Create(Self);
   Btn.Kind := bkCustom;
   Btn.Anchors := [];
@@ -267,6 +265,7 @@ begin
   OnDeactivate := @FormDeactivate;
   OnCloseQuery := @FormCloseQuery;
 
+  // this does not work with Cocoa!
   DefaultControl := ApplyBtn;
 //  KeyPreview := true;
   EndFormUpdate;
