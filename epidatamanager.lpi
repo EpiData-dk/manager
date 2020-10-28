@@ -14,8 +14,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="4"/>
-      <MinorVersionNr Value="5"/>
-      <BuildNr Value="3"/>
+      <MinorVersionNr Value="7"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="4.1.0.104"/>
@@ -185,14 +184,10 @@
     </RunParams>
     <RequiredPackages Count="8">
       <Item1>
-        <PackageName Value="epidatacore"/>
-        <MaxVersion Major="4" Minor="4" Valid="True"/>
-        <MinVersion Major="4" Minor="3" Valid="True"/>
+        <PackageName Value="epidatacore_visuals"/>
       </Item1>
       <Item2>
-        <PackageName Value="epidatacore_visuals"/>
-        <MaxVersion Major="4" Minor="4" Valid="True"/>
-        <MinVersion Major="4" Minor="1" Valid="True"/>
+        <PackageName Value="epidatacore"/>
       </Item2>
       <Item3>
         <PackageName Value="LazControls"/>
