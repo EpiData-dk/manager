@@ -15,6 +15,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="4"/>
       <MinorVersionNr Value="7"/>
+      <BuildNr Value="1"/>
       <Language Value="0809"/>
       <CharSet Value="04B0"/>
       <StringTable ProductVersion="4.1.0.104"/>
@@ -925,7 +926,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="9">
+    <Exceptions Count="10">
       <Item1>
         <Name Value="EAbort"/>
       </Item1>
@@ -953,6 +954,9 @@
       <Item9>
         <Name Value="EKeyNotFoundException"/>
       </Item9>
+      <Item10>
+        <Name Value="Unknown"/>
+      </Item10>
     </Exceptions>
   </Debugging>
 </CONFIG>

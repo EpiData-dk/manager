@@ -784,8 +784,8 @@ begin
       Exit;
     end;
     T2 := Now;
-//    if IsConsole then
-//      WriteLn('LoadProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
+    if IsConsole then
+      WriteLn('LoadProject: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
   except
     FreeAndNil(FDocumentFile);
     // If ever this happens then it is because something not right happened
