@@ -2880,7 +2880,6 @@ begin
   FSettingDataFile := true;
 
   DisableAutoSizing;
-  T1 := Now;
   With DataFile do
   begin
     for i := 0 to Sections.Count - 1 do
@@ -2888,15 +2887,7 @@ begin
       S := Section[i];
 
       if S <> MainSection then
-      begin
-        // This should help on very long dataforms to not have problems with
-        // autosizing to many controls.
-        if Fields.Count > 200 then
-          EnableAutoSizing;
-        Selected := NewDesignSection(Bounds(S.Left, S.Top, S.Width, S.Height), S);
-        if Fields.Count > 200 then
-          DisableAutoSizing;
-      end
+        Selected := NewDesignSection(Bounds(S.Left, S.Top, S.Width, S.Height), S)
       else
         Selected := FDesignPanel;
 
@@ -2921,16 +2912,7 @@ begin
         end;
     end;
   end;
-  T2 := Now;
-//  Showmessage('Control count: ' + IntToStr(GetChildCount));
   EnableAutoSizing;
-  T3 := Now;
-
-  if IsConsole then
-  begin
-//    WriteLn('T1 -> T2: ', FormatDateTime('NN:SS:ZZZ', T2-T1));
-//    WriteLn('T2 -> T3: ', FormatDateTime('NN:SS:ZZZ', T3-T2));
-  end;
 
   Controller.ClearDragRect;
   Surface.Select(FDesignPanel);

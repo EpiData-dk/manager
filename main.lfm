@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 2748
+  Left = 2392
   Height = 681
-  Top = 252
+  Top = 260
   Width = 878
   ActiveControl = ProcessToolPanel
   AllowDropFiles = True
@@ -16,7 +16,7 @@ object MainForm: TMainForm
   OnDropFiles = FormDropFiles
   OnShow = FormShow
   Position = poScreenCenter
-  LCLVersion = '2.0.0.4'
+  LCLVersion = '2.0.10.0'
   object PageControl1: TPageControl
     Left = 0
     Height = 618
@@ -44,10 +44,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 497
-      Height = 25
-      Top = 7
-      Width = 62
+      Left = 537
+      Height = 33
+      Top = 3
+      Width = 70
       Action = ExportAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -59,10 +59,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 405
-      Height = 25
-      Top = 7
-      Width = 77
+      Left = 437
+      Height = 33
+      Top = 3
+      Width = 85
       Action = StartEntryClientAction
       AutoSize = True
       BorderSpacing.Left = 15
@@ -73,10 +73,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 241
-      Height = 25
-      Top = 7
-      Width = 59
+      Left = 257
+      Height = 33
+      Top = 3
+      Width = 67
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Dataset'
@@ -88,10 +88,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 315
-      Height = 25
-      Top = 7
-      Width = 75
+      Left = 339
+      Height = 33
+      Top = 3
+      Width = 83
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Document'
@@ -104,10 +104,10 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
-      Left = 123
-      Height = 25
-      Top = 7
-      Width = 103
+      Left = 131
+      Height = 33
+      Top = 3
+      Width = 111
       AutoSize = True
       BorderSpacing.Left = 15
       Caption = 'Project Details'
@@ -120,9 +120,9 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ProcessToolPanel
       AnchorSideTop.Side = asrCenter
       Left = 11
-      Height = 25
-      Top = 7
-      Width = 97
+      Height = 33
+      Top = 3
+      Width = 105
       AutoSize = True
       BorderSpacing.Left = 10
       Caption = 'Se&lect Project'
@@ -153,9 +153,9 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrCenter
       AnchorSideTop.Control = BetaPanel
       Left = 19
-      Height = 17
+      Height = 15
       Top = 21
-      Width = 241
+      Width = 240
       BorderSpacing.Top = 20
       Caption = 'Test Version of EpiData Manager'
       Font.Height = -13
@@ -173,9 +173,9 @@ object MainForm: TMainForm
       AnchorSideBottom.Control = BetaPanel
       AnchorSideBottom.Side = asrBottom
       Left = 19
-      Height = 125
-      Top = 58
-      Width = 241
+      Height = 127
+      Top = 56
+      Width = 240
       Anchors = [akTop, akLeft, akRight, akBottom]
       BorderSpacing.Top = 20
       BorderSpacing.Bottom = 20
@@ -186,8 +186,8 @@ object MainForm: TMainForm
   end
   object MainMenu1: TMainMenu
     Images = DM.Icons16
-    left = 264
-    top = 400
+    Left = 264
+    Top = 400
     object AppleMenuItem: TMenuItem
       Caption = 'epidatamanager'
       object MenuItem35: TMenuItem
@@ -548,8 +548,8 @@ object MainForm: TMainForm
   object ActionList1: TActionList
     Images = DM.Icons16
     OnUpdate = ActionList1Update
-    left = 480
-    top = 160
+    Left = 480
+    Top = 160
     object NewProjectAction: TAction
       Category = 'File'
       Caption = '&New Project'
@@ -755,13 +755,13 @@ object MainForm: TMainForm
     end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    left = 208
-    top = 336
+    Left = 208
+    Top = 336
   end
   object DefineProjectPopupMenu: TPopupMenu
     Images = DM.Icons16
-    left = 80
-    top = 64
+    Left = 80
+    Top = 64
     object MenuItem7: TMenuItem
       Action = NewProjectAction
     end
@@ -778,8 +778,8 @@ object MainForm: TMainForm
   end
   object ProjectPopupMenu: TPopupMenu
     Images = DM.Icons16
-    left = 128
-    top = 184
+    Left = 128
+    Top = 184
     object ValueLabelEditorPopupMenuItem: TMenuItem
       Caption = 'ValueLabelEditor'
     end
@@ -798,8 +798,8 @@ object MainForm: TMainForm
   end
   object DocumentPopupMenu: TPopupMenu
     Images = DM.Icons16
-    left = 304
-    top = 160
+    Left = 304
+    Top = 160
     object MenuItem9: TMenuItem
       Caption = 'Report Structure'
       object MenuItem10: TMenuItem
@@ -848,8 +848,8 @@ object MainForm: TMainForm
   end
   object DataformPopupMenu: TPopupMenu
     Images = DM.Icons16
-    left = 248
-    top = 64
+    Left = 248
+    Top = 64
     object RenameControlsPopupMenuItem: TMenuItem
       Caption = 'RenameControls'
     end
@@ -867,7 +867,7 @@ object MainForm: TMainForm
     end
   end
   object RecentFilesActionList: TActionList
-    left = 632
-    top = 160
+    Left = 632
+    Top = 160
   end
 end
