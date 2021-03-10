@@ -1,0 +1,179 @@
+object ProjectSettings_BackupFrame: TProjectSettings_BackupFrame
+  Left = 0
+  Height = 456
+  Top = 0
+  Width = 455
+  ClientHeight = 456
+  ClientWidth = 455
+  TabOrder = 0
+  DesignLeft = 2401
+  DesignTop = 413
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = BackupIntervalEdit
+    AnchorSideTop.Side = asrCenter
+    Left = 10
+    Height = 15
+    Hint = 'Number of minuts between timed recovery backup.'#13#10'Set to 0 for no backup (NOT recommended).'
+    Top = 21
+    Width = 188
+    BorderSpacing.Left = 10
+    Caption = 'Timed Recovery Backup Interval:'
+    ParentColor = False
+  end
+  object BackupIntervalEdit: TMaskEdit
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 286
+    Height = 25
+    Hint = 'Number of minuts between timed recovery backup.'#13#10'Set to 0 for no backup (NOT recommended).'
+    Top = 16
+    Width = 159
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    CharCase = ecNormal
+    MaxLength = 3
+    TabOrder = 0
+    EditMask = '999;0;_'
+    SpaceChar = '_'
+  end
+  object BackupOnShutdownChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = BackupIntervalEdit
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 22
+    Hint = 'Automatically create a backup file of the'#13#10'entire project when program i closed.'
+    Top = 51
+    Width = 338
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Save backup project file after Entry with date in name?'
+    TabOrder = 1
+  end
+  object EmailOnShutdownChkBox: TCheckBox
+    AnchorSideLeft.Control = BackupOnShutdownChkBox
+    AnchorSideTop.Control = BackupOnShutdownChkBox
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 22
+    Top = 83
+    Width = 233
+    BorderSpacing.Top = 10
+    Caption = 'Send backup file in email after Entry'
+    TabOrder = 2
+  end
+  object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = EmailOnShutdownChkBox
+    AnchorSideTop.Control = EmailOnShutdownChkBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = BackupIntervalEdit
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 20
+    Height = 321
+    Top = 115
+    Width = 415
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    BorderSpacing.Bottom = 20
+    Caption = 'Email:'
+    ClientHeight = 304
+    ClientWidth = 411
+    TabOrder = 3
+    object Label2: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideBottom.Control = EmailAddressEdit
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 15
+      Width = 88
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Email Address:'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideBottom.Control = EmailSubjectEdit
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 50
+      Width = 80
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Subject Line::'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Control = Label3
+      AnchorSideTop.Side = asrBottom
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 80
+      Width = 83
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 15
+      Caption = 'Body Content:'
+      ParentColor = False
+    end
+    object EmailContentMemo: TMemo
+      AnchorSideLeft.Control = Label4
+      AnchorSideTop.Control = Label4
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = GroupBox1
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 189
+      Top = 105
+      Width = 391
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 10
+      BorderSpacing.Bottom = 10
+      TabOrder = 2
+    end
+    object EmailAddressEdit: TEdit
+      AnchorSideLeft.Control = Label2
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = GroupBox1
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 108
+      Height = 25
+      Top = 5
+      Width = 293
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      TabOrder = 0
+    end
+    object EmailSubjectEdit: TEdit
+      AnchorSideLeft.Control = EmailAddressEdit
+      AnchorSideTop.Control = EmailAddressEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 108
+      Height = 25
+      Top = 40
+      Width = 293
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 10
+      TabOrder = 1
+    end
+  end
+end

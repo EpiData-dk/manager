@@ -1,0 +1,28 @@
+object ProjectTreeViewFrame: TProjectTreeViewFrame
+  Left = 0
+  Height = 494
+  Top = 0
+  Width = 450
+  ClientHeight = 494
+  ClientWidth = 450
+  TabOrder = 0
+  DesignLeft = 790
+  DesignTop = 236
+  object VST: TVirtualStringTree
+    Left = 0
+    Height = 494
+    Top = 0
+    Width = 450
+    Align = alClient
+    DefaultText = 'Node'
+    Header.AutoSizeIndex = 0
+    Header.Columns = <>
+    Header.DefaultHeight = 17
+    Header.MainColumn = -1
+    ScrollBarOptions.AlwaysVisible = True
+    ScrollBarOptions.ScrollBars = ssAutoBoth
+    TabOrder = 0
+    TreeOptions.AutoOptions = [toAutoDropExpand, toAutoScrollOnExpand, toAutoDeleteMovedNodes]
+    TreeOptions.MiscOptions = [toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toEditOnClick]
+  end
+end

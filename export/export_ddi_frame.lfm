@@ -1,0 +1,127 @@
+object ExportDDIFrame: TExportDDIFrame
+  Left = 0
+  Height = 397
+  Top = 0
+  Width = 642
+  ClientHeight = 397
+  ClientWidth = 642
+  TabOrder = 0
+  DesignLeft = 1022
+  DesignTop = 332
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
+    Height = 15
+    Top = 10
+    Width = 67
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Language:'
+    ParentColor = False
+  end
+  object ComboBox1: TComboBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 25
+    Top = 27
+    Width = 622
+    Anchors = [akTop, akLeft, akRight]
+    AutoComplete = True
+    AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 2
+    BorderSpacing.Right = 10
+    DropDownCount = 20
+    ItemHeight = 0
+    TabOrder = 0
+  end
+  object XMLOptionPanel: TPanel
+    AnchorSideLeft.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 160
+    Top = 227
+    Width = 622
+    Anchors = [akLeft, akRight, akBottom]
+    BorderSpacing.Left = 10
+    BorderSpacing.Right = 10
+    BorderSpacing.Bottom = 10
+    BevelOuter = bvNone
+    ClientHeight = 160
+    ClientWidth = 622
+    TabOrder = 1
+    object RemoveVLCheckBox: TCheckBox
+      AnchorSideLeft.Control = XMLOptionPanel
+      AnchorSideTop.Control = XMLOptionPanel
+      Left = 0
+      Height = 18
+      Top = 0
+      Width = 282
+      Caption = 'Remove Value Labels indicating missing'
+      TabOrder = 0
+    end
+    object FilterTagIsUserIdChkBox: TCheckBox
+      AnchorSideLeft.Control = XMLOptionPanel
+      AnchorSideTop.Control = RemoveVLCheckBox
+      AnchorSideTop.Side = asrBottom
+      Left = 0
+      Height = 18
+      Top = 28
+      Width = 333
+      BorderSpacing.Top = 10
+      Caption = 'Use <UserId> for filter (default: <Description>)'
+      TabOrder = 1
+    end
+    object SectionHeaderIsQTextChkBox: TCheckBox
+      AnchorSideLeft.Control = XMLOptionPanel
+      AnchorSideTop.Control = FilterTagIsUserIdChkBox
+      AnchorSideTop.Side = asrBottom
+      Left = 0
+      Height = 18
+      Top = 56
+      Width = 398
+      BorderSpacing.Top = 10
+      Caption = 'Use section caption as <Question Text> for sub questions'
+      TabOrder = 2
+    end
+    object RenameVariablesChkBox: TCheckBox
+      AnchorSideLeft.Control = XMLOptionPanel
+      AnchorSideTop.Control = SectionHeaderIsQTextChkBox
+      AnchorSideTop.Side = asrBottom
+      Left = 0
+      Height = 18
+      Top = 84
+      Width = 242
+      BorderSpacing.Top = 10
+      Caption = 'Rename variables (DDA Standard)'
+      OnChange = RenameVariablesChkBoxChange
+      TabOrder = 3
+    end
+    object VarPrefixEdit: TEdit
+      AnchorSideLeft.Control = RenameVariablesChkBox
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideBottom.Control = RenameVariablesChkBox
+      AnchorSideBottom.Side = asrBottom
+      Left = 252
+      Height = 25
+      Hint = 'Variable prefix used for renaming.'#10#10'All variable will be renamed to <Prefix>x,'#10'where x is a number from 1 -> number of'#10'variables. Eg. V1 -> V10'#10#10'The original name is stored in <UserID> tag'#10'with type="dk.dda.variable.orgvariablename".'
+      Top = 77
+      Width = 25
+      Alignment = taCenter
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Enabled = False
+      MaxLength = 1
+      TabOrder = 4
+      Text = 'V'
+    end
+  end
+end

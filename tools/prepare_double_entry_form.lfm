@@ -1,0 +1,170 @@
+object PrepareDoubleEntryForm: TPrepareDoubleEntryForm
+  Left = 816
+  Height = 305
+  Top = 396
+  Width = 523
+  Caption = 'Prepare copy for second independent entry'
+  ClientHeight = 305
+  ClientWidth = 523
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
+  LCLVersion = '1.5'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 255
+    Width = 523
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 523
+    TabOrder = 1
+    object BitBtn1: TBitBtn
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 453
+      Height = 32
+      Top = 9
+      Width = 54
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      BorderSpacing.Right = 15
+      Default = True
+      DefaultCaption = True
+      Kind = bkOK
+      ModalResult = 1
+      TabOrder = 1
+    end
+    object BitBtn2: TBitBtn
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = BitBtn1
+      Left = 362
+      Height = 34
+      Top = 8
+      Width = 81
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      BorderSpacing.Right = 10
+      Cancel = True
+      DefaultCaption = True
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 0
+    end
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 255
+    Top = 0
+    Width = 523
+    Align = alClient
+    ClientHeight = 255
+    ClientWidth = 523
+    TabOrder = 0
+    object GroupBox1: TGroupBox
+      AnchorSideLeft.Control = Panel2
+      AnchorSideTop.Control = Owner
+      AnchorSideRight.Control = Panel2
+      AnchorSideRight.Side = asrBottom
+      Left = 16
+      Height = 97
+      Top = 15
+      Width = 491
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 15
+      BorderSpacing.Top = 15
+      BorderSpacing.Right = 15
+      Caption = 'Existing Project:'
+      ClientHeight = 80
+      ClientWidth = 487
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 16
+        Height = 15
+        Top = 18
+        Width = 61
+        Caption = 'Filename:'
+        ParentColor = False
+      end
+      object Label2: TLabel
+        Left = 16
+        Height = 15
+        Top = 50
+        Width = 30
+        Caption = 'Title:'
+        ParentColor = False
+      end
+      object FileNameLabel: TLabel
+        Left = 96
+        Height = 15
+        Top = 18
+        Width = 93
+        Caption = 'FileNameLabel'
+        ParentColor = False
+      end
+      object TitleLabel: TLabel
+        Left = 96
+        Height = 15
+        Top = 50
+        Width = 60
+        Caption = 'TitleLabel'
+        ParentColor = False
+      end
+    end
+    object GroupBox2: TGroupBox
+      AnchorSideLeft.Control = GroupBox1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = GroupBox1
+      AnchorSideRight.Side = asrBottom
+      Left = 16
+      Height = 117
+      Top = 127
+      Width = 491
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 15
+      Caption = 'New Project:'
+      ClientHeight = 100
+      ClientWidth = 487
+      TabOrder = 1
+      object Label3: TLabel
+        Left = 16
+        Height = 15
+        Top = 26
+        Width = 61
+        Caption = 'Filename:'
+        ParentColor = False
+      end
+      object FileNameEdit: TFileNameEdit
+        Left = 96
+        Height = 25
+        Top = 17
+        Width = 353
+        FilterIndex = 0
+        HideDirectories = False
+        ButtonWidth = 23
+        NumGlyphs = 1
+        Anchors = [akTop, akLeft, akRight]
+        MaxLength = 0
+        TabOrder = 0
+      end
+      object Label4: TLabel
+        Left = 16
+        Height = 15
+        Top = 58
+        Width = 30
+        Caption = 'Title:'
+        ParentColor = False
+      end
+      object TitleEdit: TEdit
+        Left = 96
+        Height = 25
+        Top = 49
+        Width = 353
+        Anchors = [akTop, akLeft, akRight]
+        TabOrder = 1
+      end
+    end
+  end
+end

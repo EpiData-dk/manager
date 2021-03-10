@@ -1,0 +1,41 @@
+object ProjectSettings_ExternalAccessFrame: TProjectSettings_ExternalAccessFrame
+  Left = 0
+  Height = 247
+  Top = 0
+  Width = 430
+  ClientHeight = 247
+  ClientWidth = 430
+  TabOrder = 0
+  DesignLeft = 602
+  DesignTop = 451
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideBottom.Control = DBPCEdit
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 17
+    Top = 20
+    Width = 214
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 10
+    Caption = 'Days between password change:'
+    ParentColor = False
+  end
+  object DBPCEdit: TEdit
+    AnchorSideLeft.Control = Label1
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 244
+    Height = 27
+    Top = 10
+    Width = 176
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 20
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    NumbersOnly = True
+    TabOrder = 0
+  end
+end

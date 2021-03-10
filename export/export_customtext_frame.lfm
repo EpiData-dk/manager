@@ -1,0 +1,62 @@
+object ExportCustomTextFrame: TExportCustomTextFrame
+  Left = 0
+  Height = 217
+  Top = 0
+  Width = 377
+  ClientHeight = 217
+  ClientWidth = 377
+  TabOrder = 0
+  DesignLeft = 2118
+  DesignTop = 343
+  object ExportFieldNameChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 0
+    Height = 18
+    Top = 0
+    Width = 229
+    Caption = 'Export Variable Name (first row)'
+    TabOrder = 0
+  end
+  object Label1: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ExportFieldNameChkBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideBottom.Control = QuoteCharEdit
+    AnchorSideBottom.Side = asrBottom
+    Left = 0
+    Height = 15
+    Top = 61
+    Width = 110
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Top = 10
+    Caption = 'Quote Character:'
+    ParentColor = False
+  end
+  object QuoteCharEdit: TEdit
+    AnchorSideTop.Control = ByteOrderMarkCheckBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 349
+    Height = 25
+    Top = 51
+    Width = 28
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 5
+    MaxLength = 1
+    TabOrder = 2
+  end
+  object ByteOrderMarkCheckBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ExportFieldNameChkBox
+    AnchorSideTop.Side = asrBottom
+    Left = 0
+    Height = 18
+    Top = 28
+    Width = 155
+    BorderSpacing.Top = 10
+    Caption = 'Add Byte Order Mark'
+    TabOrder = 1
+  end
+end

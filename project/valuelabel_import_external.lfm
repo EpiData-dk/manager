@@ -1,0 +1,189 @@
+object ExtVLSetForm: TExtVLSetForm
+  Left = 512
+  Height = 334
+  Top = 368
+  Width = 840
+  Caption = 'External Value Label Sets'
+  ClientHeight = 334
+  ClientWidth = 840
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '1.3'
+  object StringGrid1: TStringGrid
+    Left = 0
+    Height = 184
+    Top = 0
+    Width = 840
+    Align = alClient
+    AutoFillColumns = True
+    ColCount = 6
+    Columns = <    
+      item
+        ButtonStyle = cbsCheckboxColumn
+        MinSize = 30
+        MaxSize = 30
+        SizePriority = 0
+        Title.Caption = 'Add'
+        Width = 40
+      end    
+      item
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'Filename'
+        Width = 150
+      end    
+      item
+        ReadOnly = True
+        Title.Caption = 'Set Name'
+        Width = 398
+      end    
+      item
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'Type'
+        Width = 50
+      end    
+      item
+        Alignment = taRightJustify
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'Value labels'
+        Width = 100
+      end    
+      item
+        Alignment = taRightJustify
+        ReadOnly = True
+        SizePriority = 0
+        Title.Caption = 'Missings'
+        Width = 100
+      end>
+    ExtendedSelect = False
+    FixedCols = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll, goCellHints]
+    ParentShowHint = False
+    RowCount = 1
+    ShowHint = True
+    TabOrder = 0
+    TitleStyle = tsNative
+    OnGetCellHint = StringGrid1GetCellHint
+    OnGetCheckboxState = StringGrid1GetCheckboxState
+    OnPrepareCanvas = StringGrid1PrepareCanvas
+    ColWidths = (
+      40
+      150
+      398
+      50
+      100
+      100
+    )
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 150
+    Top = 184
+    Width = 840
+    Align = alBottom
+    AutoSize = True
+    BevelOuter = bvNone
+    Caption = 'Panel2'
+    ClientHeight = 150
+    ClientWidth = 840
+    TabOrder = 1
+    object Panel1: TPanel
+      Left = 0
+      Height = 100
+      Top = 0
+      Width = 840
+      Align = alClient
+      AutoSize = True
+      BevelOuter = bvNone
+      ClientHeight = 100
+      ClientWidth = 840
+      TabOrder = 0
+      object ProgressBar1: TProgressBar
+        Left = 0
+        Height = 20
+        Top = 80
+        Width = 840
+        Align = alBottom
+        Smooth = True
+        Step = 1
+        TabOrder = 0
+        Visible = False
+      end
+      object ErrorListBox: TListBox
+        Left = 0
+        Height = 80
+        Top = 0
+        Width = 840
+        Align = alClient
+        ItemHeight = 0
+        ScrollWidth = 838
+        TabOrder = 1
+        TopIndex = -1
+        Visible = False
+      end
+    end
+    object Panel3: TPanel
+      Left = 0
+      Height = 50
+      Top = 100
+      Width = 840
+      Align = alBottom
+      ClientHeight = 50
+      ClientWidth = 840
+      TabOrder = 1
+      object BitBtn1: TBitBtn
+        AnchorSideTop.Control = Panel3
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = Panel3
+        AnchorSideRight.Side = asrBottom
+        Left = 775
+        Height = 32
+        Top = 9
+        Width = 54
+        Anchors = [akTop, akRight]
+        AutoSize = True
+        BorderSpacing.Right = 10
+        Default = True
+        DefaultCaption = True
+        Kind = bkOK
+        ModalResult = 1
+        OnClick = BitBtn1Click
+        TabOrder = 0
+      end
+      object BitBtn2: TBitBtn
+        AnchorSideTop.Control = Panel3
+        AnchorSideTop.Side = asrCenter
+        AnchorSideRight.Control = BitBtn1
+        Left = 684
+        Height = 34
+        Top = 8
+        Width = 81
+        Anchors = [akTop, akRight]
+        AutoSize = True
+        BorderSpacing.Right = 10
+        Cancel = True
+        DefaultCaption = True
+        Kind = bkCancel
+        ModalResult = 2
+        TabOrder = 1
+      end
+      object BitBtn3: TBitBtn
+        AnchorSideLeft.Control = Panel3
+        AnchorSideTop.Control = Panel3
+        AnchorSideTop.Side = asrCenter
+        Left = 11
+        Height = 27
+        Top = 12
+        Width = 80
+        AutoSize = True
+        BorderSpacing.Left = 10
+        Caption = 'Add Files...'
+        OnClick = BitBtn3Click
+        TabOrder = 2
+      end
+    end
+  end
+end

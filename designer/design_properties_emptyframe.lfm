@@ -1,0 +1,20 @@
+object EmptyPropertiesFrame: TEmptyPropertiesFrame
+  Left = 729
+  Height = 316
+  Top = 318
+  Width = 395
+  ClientHeight = 316
+  ClientWidth = 395
+  OnResize = FrameResize
+  LCLVersion = '1.1'
+  object Label1: TLabel
+    Left = 80
+    Height = 15
+    Top = 144
+    Width = 259
+    Caption = 'No common properties can be set!'
+    Font.Style = [fsBold, fsUnderline]
+    ParentColor = False
+    ParentFont = False
+  end
+end

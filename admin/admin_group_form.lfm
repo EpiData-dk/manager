@@ -1,0 +1,201 @@
+object AdminGroupForm: TAdminGroupForm
+  Left = 641
+  Height = 520
+  Top = 332
+  Width = 472
+  Caption = 'Group Properties'
+  ClientHeight = 520
+  ClientWidth = 472
+  LCLVersion = '1.5'
+  object Panel2: TPanel
+    Left = 0
+    Height = 50
+    Top = 470
+    Width = 472
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 472
+    TabOrder = 1
+    object BitBtn1: TBitBtn
+      Left = 395
+      Height = 34
+      Top = 8
+      Width = 57
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Default = True
+      DefaultCaption = True
+      Kind = bkOK
+      ModalResult = 1
+      OnClick = BitBtn1Click
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 305
+      Height = 34
+      Top = 8
+      Width = 78
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Cancel = True
+      DefaultCaption = True
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 470
+    Top = 0
+    Width = 472
+    Align = alClient
+    ClientHeight = 470
+    ClientWidth = 472
+    TabOrder = 0
+    object DataAccessChkGrp: TCheckGroup
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = UserManagementChkGrp
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 21
+      Height = 17
+      Top = 162
+      Width = 430
+      Anchors = [akTop, akLeft, akRight]
+      AutoFill = True
+      AutoSize = True
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 20
+      Caption = 'Data Access Manager:'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.TopBottomSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+    end
+    object UserManagementChkGrp: TCheckGroup
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = AssignProjectrightsChkGrp
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 21
+      Height = 17
+      Top = 135
+      Width = 430
+      Anchors = [akTop, akLeft, akRight]
+      AutoFill = True
+      AutoSize = True
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 20
+      Caption = 'User Management:'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.TopBottomSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+    end
+    object AssignProjectrightsChkGrp: TCheckGroup
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = ProjectContentDesignChkGrp
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 21
+      Height = 17
+      Top = 108
+      Width = 430
+      Anchors = [akTop, akLeft, akRight]
+      AutoFill = True
+      AutoSize = True
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 20
+      Caption = 'Assign Project Rights:'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.TopBottomSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+    end
+    object ProjectContentDesignChkGrp: TCheckGroup
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = CaptionEdit
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 21
+      Height = 17
+      Top = 81
+      Width = 430
+      Anchors = [akTop, akLeft, akRight]
+      AutoFill = True
+      AutoSize = True
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 20
+      Caption = 'Project Content Design:'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.TopBottomSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 1
+    end
+    object CaptionEdit: TEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label3
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 21
+      Height = 25
+      Top = 46
+      Width = 430
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 20
+      TabOrder = 0
+    end
+    object Label3: TLabel
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Panel1
+      Left = 21
+      Height = 15
+      Top = 21
+      Width = 77
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 20
+      Caption = 'Group Name:'
+      ParentColor = False
+    end
+  end
+end

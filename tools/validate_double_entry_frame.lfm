@@ -1,0 +1,210 @@
+object ValidateDoubleEntryFrame: TValidateDoubleEntryFrame
+  Left = 0
+  Height = 580
+  Top = 0
+  Width = 907
+  ClientHeight = 580
+  ClientWidth = 907
+  TabOrder = 0
+  DesignLeft = 568
+  DesignTop = 291
+  object FilePanel: TPanel
+    Left = 0
+    Height = 130
+    Top = 0
+    Width = 907
+    Align = alTop
+    Caption = 'FilePanel'
+    TabOrder = 0
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 6
+    Top = 130
+    Width = 907
+    Align = alTop
+    ResizeAnchor = akTop
+  end
+  object ProjectPanel: TPanel
+    Left = 0
+    Height = 444
+    Top = 136
+    Width = 243
+    Align = alLeft
+    Caption = 'ProjectPanel'
+    TabOrder = 2
+  end
+  object Splitter2: TSplitter
+    Left = 243
+    Height = 444
+    Top = 136
+    Width = 5
+  end
+  object PageControl: TPageControl
+    Left = 248
+    Height = 444
+    Top = 136
+    Width = 659
+    ActivePage = OptionsTab
+    Align = alClient
+    TabIndex = 2
+    TabOrder = 4
+    object KeyTab: TTabSheet
+      Caption = 'Join by'
+      ClientHeight = 419
+      ClientWidth = 657
+      object Panel1: TPanel
+        Left = 0
+        Height = 42
+        Top = 377
+        Width = 657
+        Align = alBottom
+        ClientHeight = 42
+        ClientWidth = 657
+        TabOrder = 0
+        object KFNoneBtn: TButton
+          AnchorSideLeft.Control = Panel1
+          AnchorSideTop.Control = Panel1
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 23
+          Top = 10
+          Width = 42
+          AutoSize = True
+          BorderSpacing.Left = 5
+          BorderSpacing.Top = 5
+          Caption = 'None'
+          OnClick = KFNoneBtnClick
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object KFIndexBtn: TButton
+          AnchorSideLeft.Control = KFNoneBtn
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = KFNoneBtn
+          AnchorSideTop.Side = asrCenter
+          Left = 53
+          Height = 23
+          Top = 10
+          Width = 32
+          AutoSize = True
+          BorderSpacing.Left = 5
+          Caption = 'Key'
+          OnClick = KFIndexBtnClick
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+      end
+    end
+    object CompareTab: TTabSheet
+      Caption = 'Compare'
+      ClientHeight = 419
+      ClientWidth = 657
+      object Panel2: TPanel
+        Left = 0
+        Height = 47
+        Top = 372
+        Width = 657
+        Align = alBottom
+        ClientHeight = 47
+        ClientWidth = 657
+        TabOrder = 0
+        object CmpFAllNonKeyFBtn: TButton
+          AnchorSideLeft.Control = Panel2
+          AnchorSideTop.Control = Panel2
+          AnchorSideTop.Side = asrCenter
+          Left = 6
+          Height = 23
+          Top = 12
+          Width = 89
+          AutoSize = True
+          BorderSpacing.Left = 5
+          BorderSpacing.Top = 5
+          Caption = 'All non-keys'
+          OnClick = CmpFAllNonKeyFBtnClick
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+        end
+        object CmpFNoneBtn: TButton
+          AnchorSideLeft.Control = CmpFAllNonKeyFBtn
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = CmpFAllNonKeyFBtn
+          AnchorSideTop.Side = asrCenter
+          Left = 100
+          Height = 23
+          Top = 12
+          Width = 42
+          AutoSize = True
+          BorderSpacing.Left = 5
+          Caption = 'None'
+          OnClick = CmpFNoneBtnClick
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+        end
+        object CmpFExcludeTextFBtn: TButton
+          AnchorSideLeft.Control = CmpFNoneBtn
+          AnchorSideLeft.Side = asrBottom
+          AnchorSideTop.Control = CmpFNoneBtn
+          AnchorSideTop.Side = asrCenter
+          Left = 147
+          Height = 23
+          Top = 12
+          Width = 154
+          AutoSize = True
+          BorderSpacing.Left = 5
+          Caption = 'Exclude Text Variables'
+          OnClick = CmpFExcludeTextFBtnClick
+          TabOrder = 2
+        end
+      end
+    end
+    object OptionsTab: TTabSheet
+      Caption = 'Options'
+      ClientHeight = 419
+      ClientWidth = 657
+      object OptionsChkGrp: TCheckGroup
+        AnchorSideLeft.Control = OptionsTab
+        AnchorSideTop.Control = OptionsTab
+        AnchorSideRight.Control = OptionsTab
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 101
+        Top = 10
+        Width = 637
+        Align = alCustom
+        Anchors = [akTop, akLeft, akRight]
+        AutoFill = True
+        AutoSize = True
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        Caption = 'Options:'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        ClientHeight = 84
+        ClientWidth = 633
+        Items.Strings = (
+          'Exclude deleted records'
+          'Ignore case in text variables'
+          'Ignore missing records in duplicate file'
+          'Add result variable'
+        )
+        TabOrder = 0
+        Data = {
+          0400000002020202
+        }
+      end
+    end
+  end
+end

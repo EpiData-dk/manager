@@ -1,0 +1,49 @@
+object ProjectSettings_FieldFrame: TProjectSettings_FieldFrame
+  Left = 0
+  Height = 356
+  Top = 0
+  Width = 488
+  ClientHeight = 356
+  ClientWidth = 488
+  TabOrder = 0
+  DesignLeft = 422
+  DesignTop = 333
+  object ShowFieldNamesChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 10
+    Height = 18
+    Top = 10
+    Width = 317
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Show variable names (besides variable label)'
+    TabOrder = 0
+  end
+  object ShowFieldBordersChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ShowFieldNamesChkBox
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 38
+    Width = 302
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Show variable border (box around variable)'
+    TabOrder = 1
+  end
+  object ShowValueLabelTextChkBox: TCheckBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = ShowFieldBordersChkBox
+    AnchorSideTop.Side = asrBottom
+    Left = 10
+    Height = 18
+    Top = 66
+    Width = 244
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    Caption = 'Show value label text during entry'
+    TabOrder = 2
+  end
+end

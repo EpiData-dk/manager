@@ -1,0 +1,183 @@
+object RenameForm: TRenameForm
+  Left = 495
+  Height = 230
+  Top = 296
+  Width = 300
+  Caption = 'Rename All'
+  ClientHeight = 230
+  ClientWidth = 300
+  Constraints.MaxHeight = 400
+  Constraints.MaxWidth = 500
+  Constraints.MinHeight = 230
+  Constraints.MinWidth = 300
+  Position = poOwnerFormCenter
+  LCLVersion = '1.7'
+  object Edit1: TEdit
+    AnchorSideTop.Control = Shape1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 195
+    Height = 25
+    Top = 70
+    Width = 80
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 15
+    BorderSpacing.Right = 25
+    Enabled = False
+    TabOrder = 1
+    Text = 'V'
+  end
+  object Edit2: TEdit
+    AnchorSideTop.Control = Edit1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Edit1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 195
+    Height = 25
+    Top = 105
+    Width = 80
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 10
+    Enabled = False
+    TabOrder = 3
+    Text = 'Section'
+  end
+  object Edit3: TEdit
+    AnchorSideTop.Control = Edit2
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Edit1
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Side = asrBottom
+    Left = 195
+    Height = 25
+    Top = 140
+    Width = 80
+    Anchors = [akTop, akRight]
+    BorderSpacing.Top = 10
+    Enabled = False
+    TabOrder = 5
+    Text = 'Header'
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 44
+    Top = 186
+    Width = 300
+    Align = alBottom
+    ClientHeight = 44
+    ClientWidth = 300
+    TabOrder = 6
+    object BitBtn1: TBitBtn
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 223
+      Height = 28
+      Top = 8
+      Width = 51
+      Anchors = [akRight]
+      AutoSize = True
+      BorderSpacing.Right = 25
+      Default = True
+      DefaultCaption = True
+      Kind = bkOK
+      ModalResult = 1
+      OnClick = BitBtn1Click
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      AnchorSideTop.Control = Panel1
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = BitBtn1
+      Left = 137
+      Height = 28
+      Top = 8
+      Width = 76
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      BorderSpacing.Right = 10
+      Cancel = True
+      DefaultCaption = True
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object CheckBox1: TCheckBox
+    Tag = 1
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Edit1
+    AnchorSideTop.Side = asrCenter
+    Left = 25
+    Height = 18
+    Top = 73
+    Width = 84
+    BorderSpacing.Left = 25
+    BorderSpacing.Top = 10
+    Caption = 'Variables:'
+    OnChange = CheckBox1Change
+    TabOrder = 0
+  end
+  object CheckBox2: TCheckBox
+    Tag = 2
+    AnchorSideLeft.Control = CheckBox1
+    AnchorSideTop.Control = Edit2
+    AnchorSideTop.Side = asrCenter
+    Left = 25
+    Height = 18
+    Top = 108
+    Width = 79
+    BorderSpacing.Top = 15
+    Caption = 'Sections:'
+    OnChange = CheckBox1Change
+    TabOrder = 2
+  end
+  object CheckBox3: TCheckBox
+    Tag = 3
+    AnchorSideLeft.Control = CheckBox1
+    AnchorSideTop.Control = Edit3
+    AnchorSideTop.Side = asrCenter
+    Left = 25
+    Height = 18
+    Top = 143
+    Width = 85
+    BorderSpacing.Top = 15
+    Caption = 'Headings:'
+    OnChange = CheckBox1Change
+    TabOrder = 4
+  end
+  object Label4: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    Left = 27
+    Height = 30
+    Top = 10
+    Width = 246
+    Alignment = taCenter
+    BorderSpacing.Top = 10
+    Caption = 'Names will be changed for fields,'#10'sections and headers to:'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object Shape1: TShape
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label4
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 10
+    Top = 45
+    Width = 280
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 10
+  end
+end

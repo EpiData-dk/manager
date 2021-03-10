@@ -1,0 +1,9 @@
+object UsersAccumulatedRightsFrame: TUsersAccumulatedRightsFrame
+  Left = 0
+  Height = 455
+  Top = 0
+  Width = 427
+  TabOrder = 0
+  DesignLeft = 639
+  DesignTop = 312
+end

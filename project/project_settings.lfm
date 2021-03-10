@@ -1,0 +1,81 @@
+object ProjectSettingsForm: TProjectSettingsForm
+  Left = 732
+  Height = 443
+  Top = 371
+  Width = 672
+  ActiveControl = ProjectSettingsView
+  Caption = 'Project Properties'
+  ClientHeight = 443
+  ClientWidth = 672
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 450
+  OnCloseQuery = FormCloseQuery
+  OnShow = FormShow
+  Position = poMainFormCenter
+  LCLVersion = '1.9.0.0'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 393
+    Width = 672
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 672
+    TabOrder = 2
+    object BitBtn1: TBitBtn
+      Left = 499
+      Height = 28
+      Top = 10
+      Width = 76
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Cancel = True
+      Caption = 'Cancel'
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 612
+      Height = 28
+      Top = 10
+      Width = 51
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Caption = '&OK'
+      Default = True
+      Kind = bkOK
+      ModalResult = 1
+      TabOrder = 1
+    end
+  end
+  object ProjectSettingsView: TTreeView
+    Left = 0
+    Height = 393
+    Top = 0
+    Width = 173
+    Align = alLeft
+    Constraints.MinWidth = 100
+    ExpandSignSize = 11
+    ReadOnly = True
+    ScrollBars = ssAutoBoth
+    TabOrder = 0
+    OnChange = ProjectSettingsViewChange
+    OnChanging = ProjectSettingsViewChanging
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    Items.Data = {
+      F9FFFFFF020003000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+      000000060000004261636B7570FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000
+      0000000000000E0000004175746F20496E6372656D656E74FFFFFFFFFFFFFFFF
+      FFFFFFFFFFFFFFFF00000000000000000014000000446973706C6179206F6620
+      5661726961626C6573
+    }
+  end
+  object Splitter1: TSplitter
+    Left = 173
+    Height = 393
+    Top = 0
+    Width = 5
+    Beveled = True
+  end
+end

@@ -1,0 +1,45 @@
+object ProjectSettings_AutoIncFrame: TProjectSettings_AutoIncFrame
+  Left = 0
+  Height = 268
+  Top = 0
+  Width = 581
+  ClientHeight = 268
+  ClientWidth = 581
+  TabOrder = 0
+  DesignLeft = 941
+  DesignTop = 318
+  object Label3: TLabel
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Side = asrCenter
+    AnchorSideBottom.Control = AutoIncStartEdit
+    AnchorSideBottom.Side = asrBottom
+    Left = 10
+    Height = 15
+    Top = 20
+    Width = 154
+    Anchors = [akLeft, akBottom]
+    BorderSpacing.Left = 10
+    Caption = 'Auto Increment start at:'
+    ParentColor = False
+  end
+  object AutoIncStartEdit: TMaskEdit
+    AnchorSideLeft.Control = Label3
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 189
+    Height = 25
+    Top = 10
+    Width = 382
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Left = 25
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    CharCase = ecNormal
+    MaxLength = 6
+    TabOrder = 0
+    EditMask = '999999;0;_'
+    SpaceChar = '_'
+  end
+end

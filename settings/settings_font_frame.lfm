@@ -1,0 +1,465 @@
+object SettingsFontFrame: TSettingsFontFrame
+  Left = 0
+  Height = 558
+  Top = 0
+  Width = 705
+  ClientHeight = 558
+  ClientWidth = 705
+  TabOrder = 0
+  DesignLeft = 833
+  DesignTop = 292
+  object FontGrpBox: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 97
+    Top = 10
+    Width = 685
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    BorderSpacing.Bottom = 10
+    Caption = 'Fonts:'
+    ChildSizing.TopBottomSpacing = 10
+    ClientHeight = 80
+    ClientWidth = 681
+    TabOrder = 0
+    object FieldFontEditBtn: TEditButton
+      AnchorSideTop.Control = FontGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 204
+      Height = 25
+      Top = 10
+      Width = 407
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      MaxLength = 0
+      NumGlyphs = 1
+      OnButtonClick = FontChangeClick
+      PasswordChar = #0
+      TabOrder = 0
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = FontGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = FieldFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 20
+      Width = 154
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Label / Variable Names:'
+      ParentColor = False
+    end
+    object SectionFontEditBtn: TEditButton
+      AnchorSideLeft.Control = FieldFontEditBtn
+      AnchorSideTop.Control = FieldFontEditBtn
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = FieldFontEditBtn
+      AnchorSideRight.Side = asrBottom
+      Left = 204
+      Height = 25
+      Top = 45
+      Width = 407
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      MaxLength = 0
+      NumGlyphs = 1
+      OnButtonClick = FontChangeClick
+      PasswordChar = #0
+      TabOrder = 1
+    end
+    object Label10: TLabel
+      AnchorSideLeft.Control = FontGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = SectionFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 55
+      Width = 59
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Sections:'
+      ParentColor = False
+    end
+    object FieldColourBtn: TColorButton
+      AnchorSideLeft.Control = FieldFontEditBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = FieldFontEditBtn
+      AnchorSideRight.Control = FontGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = FieldFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 639
+      Height = 25
+      Top = 10
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      OnColorChanged = FontColorChange
+    end
+    object SectionColourBtn: TColorButton
+      AnchorSideLeft.Control = SectionFontEditBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = SectionFontEditBtn
+      AnchorSideRight.Control = FontGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = SectionFontEditBtn
+      AnchorSideBottom.Side = asrBottom
+      Left = 639
+      Height = 25
+      Top = 45
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      OnColorChanged = FontColorChange
+    end
+  end
+  object HeadingsGrpBox: TGroupBox
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = FontGrpBox
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    Left = 10
+    Height = 202
+    Top = 117
+    Width = 685
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Heading Fonts'
+    ChildSizing.TopBottomSpacing = 10
+    ClientHeight = 185
+    ClientWidth = 681
+    TabOrder = 1
+    object Label3: TLabel
+      AnchorSideLeft.Control = HeadingsGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = HeadingFontEditBtn1
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 20
+      Width = 70
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Heading 1:'
+      ParentColor = False
+    end
+    object HeadingFontEditBtn1: TEditButton
+      AnchorSideLeft.Control = Label3
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingsGrpBox
+      AnchorSideRight.Side = asrBottom
+      Left = 100
+      Height = 25
+      Top = 10
+      Width = 511
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      MaxLength = 0
+      NumGlyphs = 1
+      OnButtonClick = FontChangeClick
+      PasswordChar = #0
+      TabOrder = 0
+    end
+    object HeadingColourBtn1: TColorButton
+      AnchorSideLeft.Control = HeadingFontEditBtn1
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn1
+      AnchorSideRight.Control = HeadingsGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = HeadingFontEditBtn1
+      AnchorSideBottom.Side = asrBottom
+      Left = 639
+      Height = 25
+      Top = 10
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      OnColorChanged = FontColorChange
+    end
+    object Label4: TLabel
+      AnchorSideLeft.Control = HeadingsGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = HeadingFontEditBtn2
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 55
+      Width = 70
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Heading 2:'
+      ParentColor = False
+    end
+    object HeadingFontEditBtn2: TEditButton
+      AnchorSideLeft.Control = Label4
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = HeadingFontEditBtn1
+      AnchorSideRight.Side = asrBottom
+      Left = 100
+      Height = 25
+      Top = 45
+      Width = 511
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      MaxLength = 0
+      NumGlyphs = 1
+      OnButtonClick = FontChangeClick
+      PasswordChar = #0
+      TabOrder = 1
+    end
+    object HeadingColourBtn2: TColorButton
+      AnchorSideLeft.Control = HeadingFontEditBtn2
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn2
+      AnchorSideRight.Control = HeadingsGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = HeadingFontEditBtn2
+      AnchorSideBottom.Side = asrBottom
+      Left = 639
+      Height = 25
+      Top = 45
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      OnColorChanged = FontColorChange
+    end
+    object Label5: TLabel
+      AnchorSideLeft.Control = HeadingsGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = HeadingFontEditBtn3
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 90
+      Width = 70
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Heading 3:'
+      ParentColor = False
+    end
+    object HeadingFontEditBtn3: TEditButton
+      AnchorSideLeft.Control = Label5
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn2
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = HeadingFontEditBtn1
+      AnchorSideRight.Side = asrBottom
+      Left = 100
+      Height = 25
+      Top = 80
+      Width = 511
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      MaxLength = 0
+      NumGlyphs = 1
+      OnButtonClick = FontChangeClick
+      PasswordChar = #0
+      TabOrder = 2
+    end
+    object HeadingColourBtn3: TColorButton
+      AnchorSideLeft.Control = HeadingFontEditBtn3
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn3
+      AnchorSideRight.Control = HeadingsGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = HeadingFontEditBtn3
+      AnchorSideBottom.Side = asrBottom
+      Left = 639
+      Height = 25
+      Top = 80
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      OnColorChanged = FontColorChange
+    end
+    object Label6: TLabel
+      AnchorSideLeft.Control = HeadingsGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = HeadingFontEditBtn4
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 125
+      Width = 70
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Heading 4:'
+      ParentColor = False
+    end
+    object HeadingFontEditBtn4: TEditButton
+      AnchorSideLeft.Control = Label6
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn3
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = HeadingFontEditBtn1
+      AnchorSideRight.Side = asrBottom
+      Left = 100
+      Height = 25
+      Top = 115
+      Width = 511
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      ButtonWidth = 23
+      MaxLength = 0
+      NumGlyphs = 1
+      OnButtonClick = FontChangeClick
+      PasswordChar = #0
+      TabOrder = 3
+    end
+    object HeadingColourBtn4: TColorButton
+      AnchorSideLeft.Control = HeadingFontEditBtn4
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn4
+      AnchorSideRight.Control = HeadingsGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = HeadingFontEditBtn4
+      AnchorSideBottom.Side = asrBottom
+      Left = 639
+      Height = 25
+      Top = 115
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      OnColorChanged = FontColorChange
+    end
+    object Label7: TLabel
+      AnchorSideLeft.Control = HeadingsGrpBox
+      AnchorSideTop.Side = asrCenter
+      AnchorSideBottom.Control = HeadingFontEditBtn5
+      AnchorSideBottom.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 160
+      Width = 70
+      Anchors = [akLeft, akBottom]
+      BorderSpacing.Left = 10
+      Caption = 'Heading 5:'
+      ParentColor = False
+    end
+    object HeadingFontEditBtn5: TEditButton
+      AnchorSideLeft.Control = Label7
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn4
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = HeadingFontEditBtn1
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = HeadingsGrpBox
+      AnchorSideBottom.Side = asrBottom
+      Left = 100
+      Height = 25
+      Top = 150
+      Width = 511
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 20
+      BorderSpacing.Top = 10
+      BorderSpacing.Bottom = 10
+      ButtonWidth = 23
+      MaxLength = 0
+      NumGlyphs = 1
+      OnButtonClick = FontChangeClick
+      PasswordChar = #0
+      TabOrder = 4
+    end
+    object HeadingColourBtn5: TColorButton
+      AnchorSideLeft.Control = HeadingFontEditBtn5
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = HeadingFontEditBtn5
+      AnchorSideRight.Control = HeadingsGrpBox
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = HeadingFontEditBtn5
+      AnchorSideBottom.Side = asrBottom
+      Left = 639
+      Height = 25
+      Top = 150
+      Width = 32
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 28
+      BorderSpacing.Right = 10
+      BorderWidth = 2
+      ButtonColorSize = 16
+      ButtonColor = clBlack
+      OnColorChanged = FontColorChange
+    end
+  end
+  object FontDialog1: TFontDialog
+    MinFontSize = 0
+    MaxFontSize = 0
+    left = 217
+    top = 357
+  end
+  object ColorDialog1: TColorDialog
+    Color = clBlack
+    CustomColors.Strings = (
+      'ColorA=000000'
+      'ColorB=000080'
+      'ColorC=008000'
+      'ColorD=008080'
+      'ColorE=800000'
+      'ColorF=800080'
+      'ColorG=808000'
+      'ColorH=808080'
+      'ColorI=C0C0C0'
+      'ColorJ=0000FF'
+      'ColorK=00FF00'
+      'ColorL=00FFFF'
+      'ColorM=FF0000'
+      'ColorN=FF00FF'
+      'ColorO=FFFF00'
+      'ColorP=FFFFFF'
+      'ColorQ=C0DCC0'
+      'ColorR=F0CAA6'
+      'ColorS=F0FBFF'
+      'ColorT=A4A0A0'
+    )
+    left = 312
+    top = 360
+  end
+end

@@ -1,0 +1,748 @@
+object StudyUnitFrame: TStudyUnitFrame
+  Left = 0
+  Height = 576
+  Top = 0
+  Width = 659
+  ClientHeight = 576
+  ClientWidth = 659
+  TabOrder = 0
+  DesignLeft = 595
+  DesignTop = 304
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 576
+    Top = 0
+    Width = 659
+    ActivePage = WelcomeSheet
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 0
+    TabPosition = tpRight
+    object WelcomeSheet: TTabSheet
+      Caption = 'Welcome'
+      ClientHeight = 570
+      ClientWidth = 546
+      object BitBtn1: TBitBtn
+        AnchorSideRight.Control = WelcomeSheet
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = WelcomeSheet
+        AnchorSideBottom.Side = asrBottom
+        Left = 434
+        Height = 28
+        Top = 532
+        Width = 102
+        Anchors = [akRight, akBottom]
+        AutoSize = True
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        Caption = '&Close Page'
+        Glyph.Data = {
+          36040000424D3604000000000000360000002800000010000000100000000100
+          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF003F3DED413B38EB08FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00211FE3081E1CE241FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF004A47F0414F4CF2FF403EEDFD3C39EB08FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF002725E5082422E4FC312FEAFF1F1DE241FFFFFF00FFFFFF00FFFFFF005451
+          F3415856F5FF6361FAFF5855F6FF413FEDFC3D3AEC08FFFFFF00FFFFFF00302D
+          E7082C2AE6FC413FF1FF4C4AF6FF312FEAFF1F1DE241FFFFFF00FFFFFF005956
+          F52B5B58F6FF6562FAFF7170FFFF5956F6FF4240EEFC3E3BEC083937EB083532
+          E9FC4745F2FF6362FFFF4A48F4FF2F2DE9FF2220E32BFFFFFF00FFFFFF00FFFF
+          FF005A57F52B5B59F6FF6663FAFF7471FFFF5A58F6FF4341EEFC3E3CECFD504D
+          F4FF6867FFFF504EF5FF3634EBFF2A27E52BFFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF005B58F62B5C5AF6FF6764FAFF7472FFFF7370FFFF706EFFFF6E6C
+          FFFF5755F7FF3F3DEEFF3230E82BFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF005C59F62B5D5BF7FF7976FFFF5956FFFF5754FFFF7270
+          FFFF4846F0FF3C39EB2BFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00615EF8085D5AF6FD7D79FFFF5E5BFFFF5B58FFFF7674
+          FFFF4643EFFD413FED08FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF006967FB086663F9FC706DFBFF807EFFFF7E7BFFFF7C79FFFF7977
+          FFFF5E5CF7FF4744EFFC4240EE08FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00716EFD086E6BFCFC7774FDFF8682FFFF7673FCFF6462F8FF605DF7FF6D6A
+          FAFF7B79FFFF605DF7FF4845EFFC4341EE08FFFFFF00FFFFFF00FFFFFF007673
+          FF087471FEFD7D7AFEFF8A87FFFF7C79FDFF6C69FBFF6361F92B5F5CF72B615E
+          F8FF6E6CFAFF7D7AFFFF615FF7FF4946F0FC4441EE05FFFFFF00FFFFFF007774
+          FF1F7A77FFFF817EFFFF817EFEFF7471FDFF6C69FB2BFFFFFF00FFFFFF00605D
+          F72B625FF8FF6F6DFBFF7E7CFFFF625FF8FF4A47F06F4542EE02FFFFFF00FFFF
+          FF007774FF1F7A77FFFF7976FEFF726FFD2BFFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00615EF82B6461F8FF6A68F9FF5451F3A84F4DF229FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF007774FF1F7774FF2BFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00625FF82B5D5BF76F5956F53EFFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+          FF00FFFFFF00FFFFFF006360F80AFFFFFF00FFFFFF00FFFFFF00
+        }
+        OnClick = BitBtn1Click
+        TabOrder = 0
+      end
+      object Memo1: TMemo
+        AnchorSideLeft.Control = WelcomeSheet
+        AnchorSideTop.Control = WelcomeSheet
+        AnchorSideRight.Control = WelcomeSheet
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = BitBtn1
+        Left = 10
+        Height = 512
+        Top = 10
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Around = 10
+        Lines.Strings = (
+          'Create single dataforms by using "dataform 1"'
+          ''
+          'For relational datasets select "dataform 1":'
+          '   1 Define Key variables on the first form'
+          '   2 Add other related dataforms and extend keys: one by one '
+          '   3 On each dataform define the following in properties of that dataform:'
+          '           The type relation (1:1, 1:x or 1:many)'
+          '           Where to continue after each dataform'
+          '   4 Test in EntryClient that the flow between dataforms is correct'
+          '      If you wish to change keys start again from the beginning with a new project'
+          '   5 Finalize the details of each dataform for alle fields.'
+          '        Including jumps from specific fields to other dataforms.'
+          ''
+        )
+        ReadOnly = True
+        ScrollBars = ssAutoBoth
+        TabOrder = 1
+      end
+    end
+    object TitleSheet: TTabSheet
+      Caption = 'Title/Abstract'
+      ClientHeight = 570
+      ClientWidth = 546
+      object Label1: TLabel
+        AnchorSideLeft.Control = TitleSheet
+        AnchorSideTop.Control = TitleSheet
+        Left = 10
+        Height = 15
+        Top = 10
+        Width = 30
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Title:'
+        ParentColor = False
+      end
+      object TitleEdit: TEdit
+        AnchorSideLeft.Control = TitleSheet
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TitleSheet
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Top = 27
+        Width = 526
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        OnEditingDone = TitleEditEditingDone
+        TabOrder = 0
+      end
+      object AbstractMemo: TMemo
+        AnchorSideLeft.Control = TitleSheet
+        AnchorSideTop.Control = Label14
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TitleSheet
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TitleSheet
+        AnchorSideBottom.Side = asrBottom
+        Left = 10
+        Height = 481
+        Top = 79
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 1
+      end
+      object Label14: TLabel
+        AnchorSideLeft.Control = TitleSheet
+        AnchorSideTop.Control = TitleEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 62
+        Width = 54
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Abstract'
+        ParentColor = False
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Coverage'
+      ClientHeight = 570
+      ClientWidth = 546
+      object Label5: TLabel
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Control = TabSheet3
+        Left = 10
+        Height = 15
+        Top = 10
+        Width = 88
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Geographical:'
+        ParentColor = False
+      end
+      object GeoCoverageEdit: TEdit
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet3
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Top = 27
+        Width = 526
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 0
+      end
+      object Label6: TLabel
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Control = LanguageEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 114
+        Width = 131
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Data time coverage:'
+        ParentColor = False
+      end
+      object Label7: TLabel
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 166
+        Width = 71
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Population:'
+        ParentColor = False
+      end
+      object PopulationMemo: TMemo
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Control = Label7
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet3
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = Label18
+        Left = 10
+        Height = 164
+        Top = 186
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 4
+      end
+      object Label3: TLabel
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Control = GeoCoverageEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 62
+        Width = 67
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Language:'
+        ParentColor = False
+      end
+      object LanguageEdit: TEdit
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Control = Label3
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet3
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Hint = 'Default language - two letter ISO. Eg:'#10'en, de, da, fr'
+        Top = 79
+        Width = 526
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        Enabled = False
+        MaxLength = 2
+        OnEditingDone = StudyEditingDone
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+      end
+      object FromDateEdit: TDateEdit
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Control = Label6
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 25
+        Top = 134
+        Width = 131
+        CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+        OKCaption = 'OK'
+        CancelCaption = 'Cancel'
+        DateOrder = doDMY
+        ButtonWidth = 23
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        NumGlyphs = 1
+        MaxLength = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 2
+        Text = '  -  -    '
+      end
+      object ToDateEdit: TDateEdit
+        AnchorSideLeft.Control = Label16
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = FromDateEdit
+        AnchorSideTop.Side = asrCenter
+        Left = 194
+        Height = 25
+        Top = 134
+        Width = 147
+        CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+        OKCaption = 'OK'
+        CancelCaption = 'Cancel'
+        DateOrder = doDMY
+        ButtonWidth = 23
+        BorderSpacing.Left = 10
+        NumGlyphs = 1
+        MaxLength = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 3
+        Text = '  -  -    '
+      end
+      object Label16: TLabel
+        AnchorSideLeft.Control = FromDateEdit
+        AnchorSideLeft.Side = asrBottom
+        AnchorSideTop.Control = FromDateEdit
+        AnchorSideTop.Side = asrCenter
+        Left = 171
+        Height = 15
+        Top = 139
+        Width = 13
+        BorderSpacing.Left = 30
+        Caption = 'to'
+        ParentColor = False
+      end
+      object Label18: TLabel
+        AnchorSideLeft.Control = TabSheet3
+        Left = 10
+        Height = 15
+        Top = 360
+        Width = 125
+        Anchors = [akLeft]
+        BorderSpacing.Left = 10
+        Caption = 'Unit of observation:'
+        ParentColor = False
+      end
+      object UnitOfObsMemo: TMemo
+        AnchorSideLeft.Control = TabSheet3
+        AnchorSideTop.Control = Label18
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet3
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TabSheet3
+        AnchorSideBottom.Side = asrBottom
+        Left = 10
+        Height = 175
+        Top = 385
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 5
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'Description'
+      ClientHeight = 570
+      ClientWidth = 546
+      object Label8: TLabel
+        AnchorSideLeft.Control = TabSheet4
+        AnchorSideTop.Control = KeywordsEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 65
+        Width = 56
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Purpose:'
+        ParentColor = False
+      end
+      object Label10: TLabel
+        AnchorSideLeft.Control = TabSheet4
+        AnchorSideTop.Control = PurposeMemo
+        AnchorSideTop.Side = asrBottom
+        AnchorSideBottom.Control = CitationsMemo
+        Left = 10
+        Height = 15
+        Top = 218
+        Width = 60
+        Anchors = [akLeft]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Bottom = 5
+        Caption = 'Citations:'
+        ParentColor = False
+      end
+      object PurposeMemo: TMemo
+        AnchorSideLeft.Control = TabSheet4
+        AnchorSideTop.Control = Label8
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet4
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = Label10
+        Left = 10
+        Height = 123
+        Top = 85
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 1
+      end
+      object CitationsMemo: TMemo
+        AnchorSideLeft.Control = TabSheet4
+        AnchorSideTop.Control = Label10
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet4
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = Label17
+        Left = 10
+        Height = 151
+        Top = 243
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 2
+      end
+      object Label11: TLabel
+        AnchorSideLeft.Control = TabSheet4
+        AnchorSideTop.Control = TabSheet4
+        Left = 10
+        Height = 15
+        Top = 10
+        Width = 63
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Keywords:'
+        ParentColor = False
+      end
+      object KeywordsEdit: TEdit
+        AnchorSideLeft.Control = TabSheet4
+        AnchorSideTop.Control = Label11
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet4
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Top = 30
+        Width = 526
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 0
+      end
+      object DesignMemo: TMemo
+        AnchorSideLeft.Control = TabSheet4
+        AnchorSideTop.Control = Label17
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet4
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TabSheet4
+        AnchorSideBottom.Side = asrBottom
+        Left = 10
+        Height = 131
+        Top = 429
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        OnEditingDone = StudyEditingDone
+        TabOrder = 3
+      end
+      object Label17: TLabel
+        AnchorSideLeft.Control = TabSheet4
+        AnchorSideTop.Control = CitationsMemo
+        AnchorSideTop.Side = asrBottom
+        AnchorSideBottom.Control = DesignMemo
+        Left = 10
+        Height = 15
+        Top = 404
+        Width = 48
+        Anchors = [akLeft]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Bottom = 10
+        Caption = 'Design:'
+        ParentColor = False
+      end
+    end
+    object TabSheet5: TTabSheet
+      Caption = 'Ownership'
+      ClientHeight = 570
+      ClientWidth = 546
+      object Label9: TLabel
+        AnchorSideLeft.Control = TabSheet5
+        AnchorSideTop.Control = AgencyEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 120
+        Width = 137
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Authors/Contributors:'
+        ParentColor = False
+      end
+      object Label12: TLabel
+        AnchorSideLeft.Control = TabSheet5
+        AnchorSideTop.Control = AuthorsMemo
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 328
+        Width = 43
+        Anchors = [akLeft]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Rights:'
+        ParentColor = False
+      end
+      object Label13: TLabel
+        AnchorSideLeft.Control = TabSheet5
+        AnchorSideTop.Control = TabSheet5
+        Left = 10
+        Height = 15
+        Top = 10
+        Width = 141
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Organisation/Institute:'
+        ParentColor = False
+      end
+      object PublisherEdit: TEdit
+        AnchorSideLeft.Control = Label13
+        AnchorSideTop.Control = Label13
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet5
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Hint = 'Organisation to contact and contact information'
+        Top = 30
+        Width = 526
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
+        OnEditingDone = StudyEditingDone
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+      end
+      object RightsMemo: TMemo
+        AnchorSideLeft.Control = Label12
+        AnchorSideTop.Control = Label12
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet5
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TabSheet5
+        AnchorSideBottom.Side = asrBottom
+        Left = 10
+        Height = 212
+        Hint = 'Who has the copyright to these data'
+        Top = 348
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        OnEditingDone = StudyEditingDone
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 3
+      end
+      object AuthorsMemo: TMemo
+        AnchorSideLeft.Control = Label9
+        AnchorSideTop.Control = Label9
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet5
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = Label12
+        Left = 10
+        Height = 178
+        Hint = 'Who created the data set and study, including contributors'
+        Top = 140
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
+        OnEditingDone = StudyEditingDone
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 2
+      end
+      object Label15: TLabel
+        AnchorSideLeft.Control = TabSheet5
+        AnchorSideTop.Control = PublisherEdit
+        AnchorSideTop.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 65
+        Width = 394
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Agency (Short acronym for organisation where data is stored)'
+        ParentColor = False
+      end
+      object AgencyEdit: TEdit
+        AnchorSideLeft.Control = Label15
+        AnchorSideTop.Control = Label15
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet5
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Hint = 'Can be the same as Organisation/Institute'
+        Top = 85
+        Width = 526
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Top = 5
+        BorderSpacing.Right = 10
+        OnEditingDone = StudyEditingDone
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+      end
+    end
+    object TabSheet6: TTabSheet
+      Caption = 'Funding'
+      ClientHeight = 570
+      ClientWidth = 546
+      object FundingMemo: TMemo
+        AnchorSideLeft.Control = TabSheet6
+        AnchorSideTop.Control = TabSheet6
+        AnchorSideRight.Control = TabSheet6
+        AnchorSideRight.Side = asrBottom
+        AnchorSideBottom.Control = TabSheet6
+        AnchorSideBottom.Side = asrBottom
+        Left = 10
+        Height = 550
+        Hint = 'Contributors'
+        Top = 10
+        Width = 526
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        BorderSpacing.Right = 10
+        BorderSpacing.Bottom = 10
+        OnEditingDone = StudyEditingDone
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+      end
+    end
+    object TabSheet7: TTabSheet
+      Caption = 'Version Details'
+      ClientHeight = 570
+      ClientWidth = 546
+      object Label2: TLabel
+        AnchorSideLeft.Control = TabSheet7
+        AnchorSideTop.Control = TabSheet7
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 10
+        Width = 231
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Identifier (e.g. local unique study id) '
+        ParentColor = False
+      end
+      object IdentfierEdit: TEdit
+        AnchorSideLeft.Control = TabSheet7
+        AnchorSideTop.Control = Label2
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet7
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Hint = 'Project identifier in local systems or Good Clinical Practice Study Id'
+        Top = 27
+        Width = 526
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        OnEditingDone = StudyEditingDone
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+      end
+      object Label4: TLabel
+        AnchorSideLeft.Control = TabSheet7
+        AnchorSideTop.Control = IdentfierEdit
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 15
+        Top = 62
+        Width = 51
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 10
+        Caption = 'Version:'
+        ParentColor = False
+      end
+      object VersionEdit: TEdit
+        AnchorSideLeft.Control = TabSheet7
+        AnchorSideTop.Control = Label4
+        AnchorSideTop.Side = asrBottom
+        AnchorSideRight.Control = TabSheet7
+        AnchorSideRight.Side = asrBottom
+        Left = 10
+        Height = 25
+        Hint = 'User specified version in free text'
+        Top = 79
+        Width = 526
+        Anchors = [akTop, akLeft, akRight]
+        BorderSpacing.Left = 10
+        BorderSpacing.Top = 2
+        BorderSpacing.Right = 10
+        OnEditingDone = StudyEditingDone
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+      end
+    end
+  end
+end

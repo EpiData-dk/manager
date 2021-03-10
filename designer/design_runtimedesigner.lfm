@@ -1,0 +1,848 @@
+object RuntimeDesignFrame: TRuntimeDesignFrame
+  Left = 0
+  Height = 564
+  Top = 0
+  Width = 897
+  ClientHeight = 564
+  ClientWidth = 897
+  TabOrder = 0
+  DesignLeft = 2460
+  DesignTop = 269
+  object Panel1: TPanel
+    Left = 632
+    Height = 542
+    Top = 22
+    Width = 265
+    Align = alRight
+    BevelInner = bvLowered
+    BorderWidth = 3
+    BorderStyle = bsSingle
+    ClientHeight = 540
+    ClientWidth = 263
+    ParentColor = False
+    TabOrder = 1
+    object Memo1: TMemo
+      Left = 8
+      Height = 138
+      Top = 8
+      Width = 248
+      Anchors = [akTop, akLeft, akRight]
+      Lines.Strings = (
+        'Memo1'
+      )
+      ReadOnly = True
+      ScrollBars = ssAutoBoth
+      TabOrder = 0
+      WantReturns = False
+    end
+    object Button1: TButton
+      Left = 168
+      Height = 25
+      Top = 168
+      Width = 75
+      Caption = 'Button1'
+      OnClick = Button1Click
+      TabOrder = 1
+    end
+    object Label1: TLabel
+      Left = 32
+      Height = 15
+      Top = 352
+      Width = 43
+      Caption = 'Label1'
+      ParentColor = False
+    end
+    object Label2: TLabel
+      Left = 32
+      Height = 15
+      Top = 393
+      Width = 43
+      Caption = 'Label2'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 32
+      Height = 15
+      Top = 439
+      Width = 43
+      Caption = 'Label3'
+      ParentColor = False
+    end
+    object Label4: TLabel
+      Left = 32
+      Height = 15
+      Top = 481
+      Width = 43
+      Caption = 'Label4'
+      ParentColor = False
+    end
+    object Label5: TLabel
+      Left = 31
+      Height = 15
+      Top = 514
+      Width = 43
+      Caption = 'Label5'
+      ParentColor = False
+    end
+    object Label6: TLabel
+      Left = 33
+      Height = 15
+      Top = 545
+      Width = 43
+      Caption = 'Label6'
+      ParentColor = False
+    end
+  end
+  object Splitter1: TSplitter
+    Left = 627
+    Height = 542
+    Top = 22
+    Width = 5
+    Align = alRight
+    ResizeAnchor = akRight
+  end
+  object ToolBarPanel: TPanel
+    Left = 0
+    Height = 22
+    Top = 0
+    Width = 897
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ClientHeight = 22
+    ClientWidth = 897
+    TabOrder = 0
+    object DesignerToolBar: TToolBar
+      Left = 0
+      Height = 22
+      Top = 0
+      Width = 897
+      Align = alClient
+      AutoSize = True
+      ButtonHeight = 20
+      ButtonWidth = 20
+      Caption = 'DesignerToolBar'
+      EdgeBorders = [ebTop, ebRight, ebBottom]
+      EdgeInner = esNone
+      EdgeOuter = esRaised
+      Images = DM.Icons16
+      TabOrder = 0
+      Transparent = True
+      object SelectorToolButton: TToolButton
+        Left = 51
+        Hint = 'Point and select'
+        Top = 1
+        Caption = 'SelectorToolButton'
+        Down = True
+        ImageIndex = 0
+        OnClick = SelecterBtnClick
+      end
+      object Divider1: TToolButton
+        Left = 71
+        Height = 20
+        Top = 1
+        Caption = 'Divider1'
+        Style = tbsDivider
+      end
+      object IntToolButton: TToolButton
+        Tag = 1
+        Left = 76
+        Hint = 'New Integer Variable'
+        Top = 1
+        Caption = 'New Integer Variable'
+        ImageIndex = 2
+        OnClick = FieldBtnClick
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object FloatToolButton: TToolButton
+        Tag = 3
+        Left = 96
+        Hint = 'New Float Variable'
+        Top = 1
+        Caption = 'New Float Variable'
+        ImageIndex = 3
+        OnClick = FieldBtnClick
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object StringToolButton: TToolButton
+        Tag = 13
+        Left = 116
+        Hint = 'New String Variable'
+        Top = 1
+        Caption = 'New String Variable'
+        ImageIndex = 6
+        OnClick = FieldBtnClick
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object DateToolButton: TToolButton
+        Tag = 4
+        Left = 156
+        Hint = 'New DMY Variable'
+        Top = 1
+        Caption = 'New DMY Variable'
+        ImageIndex = 4
+        OnClick = FieldBtnClick
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object OtherToolButton: TToolButton
+        Left = 216
+        Hint = 'Other Variable Types...'
+        Top = 1
+        Caption = 'OtherToolButton'
+        DropdownMenu = OtherFieldsPopup
+        ImageIndex = 12
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider2: TToolButton
+        Left = 236
+        Height = 20
+        Top = 1
+        Caption = 'Divider2'
+        Style = tbsDivider
+      end
+      object HeadingToolButton: TToolButton
+        Tag = 5
+        Left = 241
+        Hint = 'New Heading'
+        Top = 1
+        Caption = 'New Heading'
+        ImageIndex = 11
+        OnClick = HeadingBtnClick
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider3: TToolButton
+        Left = 261
+        Height = 20
+        Top = 1
+        Caption = 'Divider3'
+        Style = tbsDivider
+      end
+      object SectionToolButton: TToolButton
+        Tag = 6
+        Left = 266
+        Hint = 'New Section'
+        Top = 1
+        Caption = 'New Section'
+        ImageIndex = 10
+        OnClick = SectionBtnClick
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider4: TToolButton
+        Left = 311
+        Height = 20
+        Top = 1
+        Caption = 'Divider4'
+        Style = tbsDivider
+      end
+      object EditToolButton: TToolButton
+        Left = 316
+        Top = 1
+        Action = EditControlAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object DeleteToolButton: TToolButton
+        Left = 336
+        Top = 1
+        Action = DeleteControlAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object DeleteAllToolButton: TToolButton
+        Left = 356
+        Top = 1
+        Action = DeleteAllAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Divider5: TToolButton
+        Left = 376
+        Height = 20
+        Top = 1
+        Caption = 'Divider5'
+        Style = tbsDivider
+      end
+      object Divider6: TToolButton
+        Left = 401
+        Height = 20
+        Top = 1
+        Caption = 'Divider6'
+        Style = tbsDivider
+      end
+      object TestToolButton: TToolButton
+        Tag = 14
+        Left = 406
+        Top = 1
+        Caption = 'TestToolButton'
+        ImageIndex = 0
+        OnClick = TestToolButtonClick
+      end
+      object TimeToolButton: TToolButton
+        Tag = 10
+        Left = 176
+        Hint = 'New Time Variable'
+        Top = 1
+        Caption = 'TimeToolButton'
+        ImageIndex = 5
+        OnClick = FieldBtnClick
+      end
+      object ImportToolButton: TToolButton
+        Left = 1
+        Top = 1
+        Action = ImportAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object ToolButton4: TToolButton
+        Left = 46
+        Height = 20
+        Top = 1
+        Caption = 'ToolButton4'
+        Style = tbsDivider
+      end
+      object ExportToolButton: TToolButton
+        Left = 26
+        Top = 1
+        Action = PrintDataFormAction
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object ToolButton3: TToolButton
+        Left = 21
+        Height = 20
+        Top = 1
+        Caption = 'ToolButton3'
+        Style = tbsDivider
+      end
+      object ToolButton5: TToolButton
+        Left = 381
+        Top = 1
+        Action = ShowAlignFormAction
+        ImageIndex = 23
+      end
+      object ToolButton6: TToolButton
+        Left = 291
+        Hint = 'Extend dataform'
+        Top = 1
+        Action = ExpandPageAction
+      end
+      object ToolButton7: TToolButton
+        Left = 286
+        Height = 20
+        Top = 1
+        Caption = 'ToolButton7'
+        Style = tbsDivider
+      end
+      object AutoIncToolBtn: TToolButton
+        Tag = 2
+        Left = 196
+        Hint = 'New Auto-Increment Variable'
+        Top = 1
+        Caption = 'AutoIncToolBtn'
+        ImageIndex = 7
+        OnClick = FieldBtnClick
+      end
+      object MemoToolButton: TToolButton
+        Tag = 14
+        Left = 136
+        Hint = 'New Memo Variable'
+        Top = 1
+        Caption = 'MemoToolButton'
+        ImageIndex = 50
+        OnClick = MemoBtnClick
+      end
+    end
+  end
+  object AuthorizedDesignerActionList: TActionList
+    Images = DM.Icons16
+    OnUpdate = AuthorizedDesignerActionListUpdate
+    left = 416
+    top = 160
+    object DeleteControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Delete'
+      Hint = 'Delete Selected'
+      ImageIndex = 15
+      OnExecute = DeleteControlActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object DeleteAllAction: TAction
+      Category = 'Edit'
+      Caption = 'Delete All'
+      Hint = 'Delete All'
+      ImageIndex = 16
+      OnExecute = DeleteAllActionExecute
+    end
+    object CopyControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Copy'
+      Hint = 'Copy'
+      OnExecute = CopyControlActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object PasteControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Paste'
+      Hint = 'Paste'
+      OnExecute = PasteControlActionExecute
+      OnUpdate = PasteControlActionUpdate
+    end
+    object CutControlAction: TAction
+      Category = 'Edit'
+      Caption = 'Cut'
+      Hint = 'Cut'
+      OnExecute = CutControlActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object ClearSelectionAction: TAction
+      Category = 'Edit'
+      Caption = 'Clear Selection'
+      Hint = 'Clear Selected Controls'
+      ImageIndex = 15
+      OnExecute = ClearSelectionActionExecute
+    end
+    object PasteAsHeadingAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As Headings'
+      Hint = 'Paste As Headings...'
+      ImageIndex = 11
+      OnExecute = PasteAsHeadingActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object PasteAsIntAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As Integer'
+      ImageIndex = 2
+      OnExecute = PasteAsIntActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object PasteAsFloatAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As Float'
+      ImageIndex = 3
+      OnExecute = PasteAsFloatActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object PasteAsStringAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As String'
+      ImageIndex = 6
+      OnExecute = PasteAsStringActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object PasteAsDateAction: TAction
+      Category = 'PasteAs'
+      Caption = 'Paste As Date'
+      ImageIndex = 4
+      OnExecute = PasteAsDateActionExecute
+      OnUpdate = PasteAsUpdate
+    end
+    object ImportAction: TAction
+      Caption = 'Import file...'
+      Hint = 'Import data and structure from files'
+      ImageIndex = 18
+      OnExecute = ImportActionExecute
+      OnUpdate = ImportActionUpdate
+    end
+    object NewIntFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'Int Variable'
+      ImageIndex = 2
+      OnExecute = NewIntFieldActionExecute
+    end
+    object NewIntFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewIntFieldFastAction'
+      ImageIndex = 2
+      OnExecute = NewIntFieldFastActionExecute
+    end
+    object NewFloatFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewFloatFieldAction'
+      ImageIndex = 3
+      OnExecute = NewFloatFieldActionExecute
+    end
+    object NewFloatFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewFloatFieldFastAction'
+      ImageIndex = 3
+      OnExecute = NewFloatFieldFastActionExecute
+    end
+    object NewStringFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewStringFieldAction'
+      ImageIndex = 6
+      OnExecute = NewStringFieldActionExecute
+    end
+    object NewStringFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewStringFieldFastAction'
+      ImageIndex = 6
+      OnExecute = NewStringFieldFastActionExecute
+    end
+    object NewDateFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewDateFieldAction'
+      ImageIndex = 4
+      OnExecute = NewDateFieldActionExecute
+    end
+    object NewDateFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewDateFieldFastAction'
+      ImageIndex = 4
+      OnExecute = NewDateFieldFastActionExecute
+    end
+    object NewHeadingAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewHeadingAction'
+      ImageIndex = 11
+      OnExecute = NewHeadingActionExecute
+    end
+    object NewHeadingFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewHeadingFastAction'
+      ImageIndex = 11
+      OnExecute = NewHeadingFastActionExecute
+    end
+    object DeleteControlFastAction: TAction
+      Category = 'Edit'
+      Caption = 'DeleteControlFastAction'
+      ImageIndex = 15
+      OnExecute = DeleteControlFastActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object NewTimeFieldAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewTimeFieldAction'
+      ImageIndex = 5
+      OnExecute = NewTimeFieldActionExecute
+    end
+    object NewTimeFieldFastAction: TAction
+      Category = 'NewControls'
+      Caption = 'NewTimeFieldFastAction'
+      ImageIndex = 5
+      OnExecute = NewTimeFieldFastActionExecute
+    end
+    object UndoAction: TAction
+      Category = 'Edit'
+      Caption = 'Undo'
+      Hint = 'Undo last action'
+      OnExecute = UndoActionExecute
+      OnUpdate = UndoActionUpdate
+    end
+    object RedoAction: TAction
+      Category = 'Edit'
+      Caption = 'Redo'
+      Hint = 'Redo last action'
+      OnExecute = RedoActionExecute
+      OnUpdate = RedoActionUpdate
+    end
+    object AlignLeftAction: TAction
+      Category = 'Align'
+      Caption = 'Align Left'
+      ImageIndex = 25
+      OnExecute = AlignLeftActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignBottomAction: TAction
+      Category = 'Align'
+      Caption = 'Align Bottom'
+      ImageIndex = 30
+      OnExecute = AlignBottomActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignTopAction: TAction
+      Category = 'Align'
+      Caption = 'Align Top'
+      ImageIndex = 29
+      OnExecute = AlignTopActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object AlignRightAction: TAction
+      Category = 'Align'
+      Caption = 'Align Right'
+      ImageIndex = 26
+      OnExecute = AlignRightActionExecute
+      OnUpdate = CutCopyControlUpdate
+    end
+    object ShowAlignFormAction: TAction
+      Category = 'Align'
+      Caption = 'Alignment...'
+      Hint = 'Alignment...'
+      ImageIndex = 28
+      OnExecute = ShowAlignFormActionExecute
+    end
+    object ExpandPageAction: TAction
+      Caption = 'Extend Page'
+      ImageIndex = 14
+      OnExecute = ExpandPageActionExecute
+    end
+    object ClearDataAction: TAction
+      Category = 'Data'
+      Caption = 'Clear Data'
+      Hint = 'Clear data in field(s) to system missing!'
+      OnExecute = ClearDataActionExecute
+      OnUpdate = ClearDataActionUpdate
+    end
+    object RecodeDataAction: TAction
+      Category = 'Data'
+      Caption = 'Recode...'
+      OnExecute = RecodeDataActionExecute
+      OnUpdate = RecodeDataActionUpdate
+    end
+    object RenameControlsAction: TAction
+      Caption = 'Rename Variables etc....'
+      OnExecute = RenameControlsActionExecute
+    end
+    object ImportCBAction: TAction
+      Caption = 'Import from clipboard'
+      Hint = 'Import data and structure from clipboard'
+      ImageIndex = 18
+      OnExecute = ImportCBActionExecute
+    end
+  end
+  object OtherFieldsPopup: TPopupMenu
+    Images = DM.Icons16
+    left = 232
+    top = 96
+    object MenuItem1: TMenuItem
+      Caption = 'Date Variable'
+      object MenuItem2: TMenuItem
+        Tag = 4
+        Caption = 'DMY Date'
+        ImageIndex = 4
+        OnClick = NewOtherFieldClick
+      end
+      object MenuItem4: TMenuItem
+        Tag = 5
+        Caption = 'MDY Date'
+        ImageIndex = 4
+        OnClick = NewOtherFieldClick
+      end
+      object MenuItem3: TMenuItem
+        Tag = 6
+        Caption = 'YMD Date'
+        ImageIndex = 4
+        OnClick = NewOtherFieldClick
+      end
+    end
+    object TodayDateSubMenu: TMenuItem
+      Caption = 'Auto Date...'
+      Hint = 'Today Variable'
+      object NewDMYTodayFieldMenu: TMenuItem
+        Tag = 7
+        Caption = 'Today (dmy)'
+        ImageIndex = 8
+        OnClick = NewOtherFieldClick
+      end
+      object NewMDYTodayFieldMenu: TMenuItem
+        Tag = 8
+        Caption = 'Today (mdy)'
+        ImageIndex = 8
+        OnClick = NewOtherFieldClick
+      end
+      object NewYMDTodayFieldMenu: TMenuItem
+        Tag = 9
+        Caption = 'Today (ymd)'
+        ImageIndex = 8
+        OnClick = NewOtherFieldClick
+      end
+    end
+    object TimeSubMenu: TMenuItem
+      Caption = 'Auto Time...'
+      object NewTimeNowFieldMenu: TMenuItem
+        Tag = 11
+        Caption = 'Time (Auto)'
+        ImageIndex = 9
+        OnClick = NewOtherFieldClick
+      end
+    end
+    object NewBooleanMenu: TMenuItem
+      Caption = 'Boolean'
+      ImageIndex = 1
+      OnClick = NewOtherFieldClick
+    end
+    object NewUpperCaseMenu: TMenuItem
+      Tag = 12
+      Caption = 'Uppercase string'
+      ImageIndex = 6
+      OnClick = NewOtherFieldClick
+    end
+  end
+  object DesignControlPopUpMenu: TPopupMenu
+    Images = DM.Icons16
+    OnPopup = DesignControlPopUpMenuPopup
+    left = 232
+    top = 304
+    object EditPopupMenuItem: TMenuItem
+      Action = EditControlAction
+      GlyphShowMode = gsmSystem
+    end
+    object PopupMenuDivider1: TMenuItem
+      Caption = '-'
+    end
+    object PasteControlPopupMenuItem: TMenuItem
+      Action = CutControlAction
+    end
+    object CopyControlPopupMenuItem: TMenuItem
+      Action = CopyControlAction
+    end
+    object PasteControPopupMenuItem: TMenuItem
+      Action = PasteControlAction
+    end
+    object PopupMenuDivider2: TMenuItem
+      Caption = '-'
+    end
+    object PasteAsHeadingMenuItem: TMenuItem
+      Action = PasteAsHeadingAction
+    end
+    object PasteAsIntMenuItem: TMenuItem
+      Action = PasteAsIntAction
+    end
+    object PasteAsFloatMenuItem: TMenuItem
+      Action = PasteAsFloatAction
+    end
+    object PasteAsStringMenuItem: TMenuItem
+      Action = PasteAsStringAction
+    end
+    object PasteAsDateMenuItem: TMenuItem
+      Action = PasteAsDateAction
+    end
+    object PopupMenuDivider3: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem5: TMenuItem
+      Action = ShowAlignFormAction
+    end
+    object MenuItem7: TMenuItem
+      Caption = 'Data'
+      object MenuItem8: TMenuItem
+        Action = RecodeDataAction
+      end
+      object ClearDataMenuItem: TMenuItem
+        Action = ClearDataAction
+      end
+    end
+    object MenuItem6: TMenuItem
+      Caption = '-'
+    end
+    object DeletePopupMenuItem: TMenuItem
+      Action = DeleteControlAction
+      GlyphShowMode = gsmSystem
+      OnClick = DeleteControlActionExecute
+    end
+  end
+  object PrintDialog1: TPrintDialog
+    left = 156
+    top = 178
+  end
+  object NonAuthorizedDesignerActionList: TActionList
+    Images = DM.Icons16
+    OnUpdate = NonAuthorizedDesignerActionListUpdate
+    left = 416
+    top = 248
+    object ViewDatasetAction: TAction
+      Caption = 'Browse Data'
+      OnExecute = ViewDatasetActionExecute
+      OnUpdate = ViewDatasetActionUpdate
+    end
+    object PrintDataFormAction: TAction
+      Caption = '&Print Dataform'
+      Hint = 'Print Dataform'
+      ImageIndex = 22
+      OnExecute = PrintDataFormActionExecute
+    end
+    object EditControlAction: TAction
+      Caption = 'Edit'
+      Hint = 'Edit...'
+      ImageIndex = 13
+      OnExecute = EditControlActionExecute
+    end
+    object DataformPropertiesAction: TAction
+      Caption = 'Dataset Properties'
+      OnExecute = DataformPropertiesActionExecute
+    end
+    object SelectNextAction: TAction
+      Category = 'Select'
+      Caption = 'Select Next'
+      Hint = 'Select Next Control'
+      OnExecute = SelectNextActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectPgDnAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPgDnAction'
+      OnExecute = SelectPgDnActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectPriorAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPriorAction'
+      OnExecute = SelectPriorActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectPgUpAction: TAction
+      Category = 'Select'
+      Caption = 'SelectPgUpAction'
+      OnExecute = SelectPgUpActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectFirstAction: TAction
+      Category = 'Select'
+      Caption = 'SelectFirstAction'
+      OnExecute = SelectFirstActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectLastAction: TAction
+      Category = 'Select'
+      Caption = 'SelectLastAction'
+      OnExecute = SelectLastActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectAllAction: TAction
+      Category = 'Select'
+      Caption = 'Select All'
+      OnExecute = SelectAllActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectAllIntsAction: TAction
+      Category = 'Select'
+      Caption = 'All Integer Variables'
+      ImageIndex = 2
+      OnExecute = SelectAllIntsActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectAllFloatsAction: TAction
+      Category = 'Select'
+      Caption = 'All Float Variables'
+      ImageIndex = 3
+      OnExecute = SelectAllFloatsActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectAllStringsAction: TAction
+      Category = 'Select'
+      Caption = 'All String Variables'
+      ImageIndex = 6
+      OnExecute = SelectAllStringsActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object SelectAllBoolsAction: TAction
+      Category = 'Select'
+      Caption = 'All Boolean Variables'
+      ImageIndex = 1
+      OnExecute = SelectAllBoolsActionExecute
+      OnUpdate = SelectUpdate
+    end
+    object DefineKeyAction: TAction
+      Caption = 'Define Key'
+      OnExecute = DefineKeyActionExecute
+    end
+  end
+end

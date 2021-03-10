@@ -1,0 +1,86 @@
+object SectionPropertiesFrame: TSectionPropertiesFrame
+  Left = 560
+  Height = 427
+  Top = 308
+  Width = 549
+  ClientHeight = 427
+  ClientWidth = 549
+  DesignTimePPI = 93
+  LCLVersion = '1.7'
+  object Panel1: TPanel
+    Left = 0
+    Height = 427
+    Top = 0
+    Width = 549
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 427
+    ClientWidth = 549
+    TabOrder = 0
+    object Image1: TImage
+      AnchorSideRight.Control = NameEdit
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Label4
+      AnchorSideBottom.Side = asrBottom
+      Left = 523
+      Height = 16
+      Top = 9
+      Width = 16
+      Anchors = [akRight, akBottom]
+    end
+    object Label9: TLabel
+      AnchorSideLeft.Control = NameEdit
+      AnchorSideTop.Control = NameEdit
+      AnchorSideTop.Side = asrBottom
+      Left = 10
+      Height = 15
+      Top = 62
+      Width = 39
+      BorderSpacing.Top = 10
+      Caption = 'Label:'
+      ParentColor = False
+    end
+    object CaptionEdit: TEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label9
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 25
+      Top = 79
+      Width = 529
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 10
+      TabOrder = 0
+    end
+    object Label4: TLabel
+      AnchorSideLeft.Control = NameEdit
+      Left = 10
+      Height = 15
+      Top = 10
+      Width = 43
+      BorderSpacing.Top = 10
+      Caption = 'Name:'
+      ParentColor = False
+    end
+    object NameEdit: TEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label4
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 10
+      Height = 25
+      Top = 27
+      Width = 529
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 2
+      BorderSpacing.Right = 10
+      TabOrder = 1
+    end
+  end
+end

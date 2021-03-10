@@ -1,0 +1,248 @@
+object AdminUserForm: TAdminUserForm
+  Left = 960
+  Height = 462
+  Top = 311
+  Width = 618
+  Caption = 'User Properties'
+  ClientHeight = 462
+  ClientWidth = 618
+  LCLVersion = '1.9.0.0'
+  object Panel2: TPanel
+    Left = 0
+    Height = 50
+    Top = 412
+    Width = 618
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 618
+    TabOrder = 2
+    object OkBtn: TBitBtn
+      Left = 543
+      Height = 28
+      Top = 8
+      Width = 51
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Default = True
+      DefaultCaption = True
+      Kind = bkOK
+      ModalResult = 1
+      OnClick = OkBtnClick
+      TabOrder = 0
+    end
+    object BitBtn2: TBitBtn
+      Left = 449
+      Height = 28
+      Top = 8
+      Width = 76
+      Anchors = [akTop, akRight]
+      AutoSize = True
+      Cancel = True
+      DefaultCaption = True
+      Kind = bkCancel
+      ModalResult = 2
+      TabOrder = 1
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Height = 412
+    Top = 0
+    Width = 312
+    Align = alLeft
+    ClientHeight = 412
+    ClientWidth = 312
+    TabOrder = 0
+    object Label5: TLabel
+      AnchorSideLeft.Control = Panel1
+      Left = 11
+      Height = 17
+      Top = 10
+      Width = 39
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Login:'
+      ParentColor = False
+    end
+    object LoginEdit: TEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label5
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 11
+      Height = 27
+      Top = 32
+      Width = 290
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      OnChange = LoginEditChange
+      OnExit = LoginEditExit
+      OnKeyDown = LoginEditKeyDown
+      TabOrder = 0
+    end
+    object Label6: TLabel
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = PasswordEdit
+      AnchorSideTop.Side = asrBottom
+      Left = 11
+      Height = 17
+      Top = 133
+      Width = 43
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Name:'
+      ParentColor = False
+    end
+    object FullnameEdit: TEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label6
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 11
+      Height = 27
+      Top = 155
+      Width = 290
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      TabOrder = 2
+    end
+    object Label7: TLabel
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = FullnameEdit
+      AnchorSideTop.Side = asrBottom
+      Left = 11
+      Height = 17
+      Top = 192
+      Width = 52
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Expires:'
+      ParentColor = False
+    end
+    object ExpiresDateEdit: TDateEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label7
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 11
+      Height = 27
+      Top = 214
+      Width = 290
+      CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+      DateOrder = doNone
+      ButtonWidth = 23
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      NumGlyphs = 1
+      MaxLength = 0
+      TabOrder = 4
+    end
+    object NeverExpireChkBox: TCheckBoxThemed
+      AnchorSideTop.Control = Label7
+      AnchorSideTop.Side = asrCenter
+      AnchorSideRight.Control = ExpiresDateEdit
+      AnchorSideRight.Side = asrBottom
+      Left = 243
+      Height = 21
+      Top = 190
+      Width = 58
+      Anchors = [akTop, akRight]
+      Caption = 'Never'
+      TabOrder = 3
+      OnChange = CheckBoxThemed1Change
+    end
+    object Label1: TLabel
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = LoginEdit
+      AnchorSideTop.Side = asrBottom
+      Left = 11
+      Height = 17
+      Top = 69
+      Width = 61
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Password'
+      ParentColor = False
+    end
+    object PasswordEdit: TEdit
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      Left = 11
+      Height = 27
+      Top = 96
+      Width = 290
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      BorderSpacing.Right = 10
+      EchoMode = emPassword
+      OnExit = PasswordEditExit
+      OnKeyDown = PasswordEditKeyDown
+      PasswordChar = '*'
+      TabOrder = 1
+    end
+    object Label2: TLabel
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = ExpiresDateEdit
+      AnchorSideTop.Side = asrBottom
+      Left = 11
+      Height = 17
+      Top = 251
+      Width = 42
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 10
+      Caption = 'Notes:'
+      ParentColor = False
+    end
+    object NotesMemo: TMemo
+      AnchorSideLeft.Control = Panel1
+      AnchorSideTop.Control = Label2
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Panel1
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Panel1
+      AnchorSideBottom.Side = asrBottom
+      Left = 11
+      Height = 128
+      Top = 273
+      Width = 290
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 5
+      BorderSpacing.Right = 10
+      BorderSpacing.Bottom = 10
+      TabOrder = 5
+    end
+    object PWExpiresLabel: TLabel
+      AnchorSideRight.Control = LoginEdit
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = Label1
+      AnchorSideBottom.Side = asrBottom
+      Left = 243
+      Height = 17
+      Top = 69
+      Width = 58
+      Anchors = [akRight, akBottom]
+      Caption = '(expires)'
+      ParentColor = False
+    end
+  end
+  object Splitter1: TSplitter
+    Left = 312
+    Height = 412
+    Top = 0
+    Width = 5
+  end
+end

@@ -1,0 +1,873 @@
+object MainForm: TMainForm
+  Left = 2748
+  Height = 681
+  Top = 252
+  Width = 878
+  ActiveControl = ProcessToolPanel
+  AllowDropFiles = True
+  Caption = 'MainForm'
+  ClientHeight = 656
+  ClientWidth = 878
+  Menu = MainMenu1
+  OnActivate = FormActivate
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnDropFiles = FormDropFiles
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.0.4'
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 618
+    Top = 38
+    Width = 878
+    Align = alClient
+    ParentShowHint = False
+    ShowHint = True
+    ShowTabs = False
+    TabOrder = 1
+  end
+  object ProcessToolPanel: TPanel
+    Left = 0
+    Height = 38
+    Top = 0
+    Width = 878
+    Align = alTop
+    ClientHeight = 38
+    ClientWidth = 878
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 0
+    object ExportBtn: TBitBtn
+      AnchorSideLeft.Control = EnterDataBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 497
+      Height = 25
+      Top = 7
+      Width = 62
+      Action = ExportAction
+      AutoSize = True
+      BorderSpacing.Left = 15
+      GlyphShowMode = gsmAlways
+      TabOrder = 3
+    end
+    object EnterDataBtn: TBitBtn
+      AnchorSideLeft.Control = DocumentBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 405
+      Height = 25
+      Top = 7
+      Width = 77
+      Action = StartEntryClientAction
+      AutoSize = True
+      BorderSpacing.Left = 15
+      TabOrder = 2
+    end
+    object DataFormBtn: TBitBtn
+      AnchorSideLeft.Control = ProjectDetailsBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 241
+      Height = 25
+      Top = 7
+      Width = 59
+      AutoSize = True
+      BorderSpacing.Left = 15
+      Caption = 'Dataset'
+      OnClick = DataFormBtnClick
+      TabOrder = 0
+    end
+    object DocumentBtn: TBitBtn
+      AnchorSideLeft.Control = DataFormBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 315
+      Height = 25
+      Top = 7
+      Width = 75
+      AutoSize = True
+      BorderSpacing.Left = 15
+      Caption = 'Document'
+      OnClick = DocumentBtnClick
+      PopupMenu = DocumentPopupMenu
+      TabOrder = 1
+    end
+    object ProjectDetailsBtn: TBitBtn
+      AnchorSideLeft.Control = SelectProjectBtn
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 123
+      Height = 25
+      Top = 7
+      Width = 103
+      AutoSize = True
+      BorderSpacing.Left = 15
+      Caption = 'Project Details'
+      OnClick = ProjectDetailsBtnClick
+      PopupMenu = ProjectPopupMenu
+      TabOrder = 4
+    end
+    object SelectProjectBtn: TBitBtn
+      AnchorSideLeft.Control = ProcessToolPanel
+      AnchorSideTop.Control = ProcessToolPanel
+      AnchorSideTop.Side = asrCenter
+      Left = 11
+      Height = 25
+      Top = 7
+      Width = 97
+      AutoSize = True
+      BorderSpacing.Left = 10
+      Caption = 'Se&lect Project'
+      OnClick = SelectProjectBtnClick
+      ParentShowHint = False
+      PopupMenu = DefineProjectPopupMenu
+      ShowHint = True
+      TabOrder = 5
+    end
+  end
+  object BetaPanel: TPanel
+    AnchorSideLeft.Control = PageControl1
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = PageControl1
+    AnchorSideTop.Side = asrCenter
+    Left = 300
+    Height = 204
+    Top = 245
+    Width = 279
+    ClientHeight = 204
+    ClientWidth = 279
+    Color = clYellow
+    ParentColor = False
+    TabOrder = 2
+    Visible = False
+    object Label1: TLabel
+      AnchorSideLeft.Control = BetaPanel
+      AnchorSideLeft.Side = asrCenter
+      AnchorSideTop.Control = BetaPanel
+      Left = 19
+      Height = 17
+      Top = 21
+      Width = 241
+      BorderSpacing.Top = 20
+      Caption = 'Test Version of EpiData Manager'
+      Font.Height = -13
+      Font.Name = 'Sans'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object StaticText1: TStaticText
+      AnchorSideLeft.Control = Label1
+      AnchorSideTop.Control = Label1
+      AnchorSideTop.Side = asrBottom
+      AnchorSideRight.Control = Label1
+      AnchorSideRight.Side = asrBottom
+      AnchorSideBottom.Control = BetaPanel
+      AnchorSideBottom.Side = asrBottom
+      Left = 19
+      Height = 125
+      Top = 58
+      Width = 241
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      BorderSpacing.Top = 20
+      BorderSpacing.Bottom = 20
+      BorderStyle = sbsSunken
+      Caption = 'Do NOT use on routine data, work on copies of your data and send reports of testing to:'#10#10'- The EpiData-list   '#10'or'#10'- info@epidata.dk'
+      TabOrder = 0
+    end
+  end
+  object MainMenu1: TMainMenu
+    Images = DM.Icons16
+    left = 264
+    top = 400
+    object AppleMenuItem: TMenuItem
+      Caption = 'epidatamanager'
+      object MenuItem35: TMenuItem
+        Action = ShowAboutAction
+      end
+      object MenuItem36: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem37: TMenuItem
+        Action = SettingsAction
+      end
+    end
+    object FileMenuItem: TMenuItem
+      Caption = '&File'
+      OnClick = FileMenuItemClick
+      object NewProjectMenuItem: TMenuItem
+        Action = NewProjectAction
+      end
+      object FileMenuDivider1: TMenuItem
+        Caption = '-'
+      end
+      object OpenProjectMenuItem: TMenuItem
+        Action = OpenProjectAction
+      end
+      object RecentFilesSubMenu: TMenuItem
+        Caption = 'Open &Recent...'
+        ImageIndex = 19
+      end
+      object SaveProjectMenuItem: TMenuItem
+        Caption = '&Save'
+        Hint = 'Save Project'
+      end
+      object SaveProjectAsMenuItem: TMenuItem
+        Caption = 'Save &As'
+      end
+      object CloseProjectMenuItem: TMenuItem
+        Action = CloseProjectAction
+      end
+      object FileMenuDivider2: TMenuItem
+        Caption = '-'
+      end
+      object AddStructureMenuItem: TMenuItem
+        Caption = 'AddStructure'
+      end
+      object AddStructFromBLMenuItem: TMenuItem
+        Caption = 'AddStructureCB'
+      end
+      object FileMenuDivider3: TMenuItem
+        Caption = '-'
+      end
+      object PrintDataFormMenuItem: TMenuItem
+        Caption = 'Print'
+      end
+      object FileMenuDivider4: TMenuItem
+        Caption = '-'
+      end
+      object FileExitMenuItem: TMenuItem
+        Action = FileExitAction
+      end
+    end
+    object EditMenuItem: TMenuItem
+      Caption = '&Edit'
+      object UndoMenuItem: TMenuItem
+        Caption = 'Undo'
+      end
+      object RedoMenuItem: TMenuItem
+        Caption = 'Redo'
+      end
+      object EditMenuDivider0: TMenuItem
+        Caption = '-'
+      end
+      object CutMenuItem: TMenuItem
+        Caption = 'Cut'
+      end
+      object CopyMenuItem: TMenuItem
+        Caption = 'Copy'
+      end
+      object PasteMenuItem: TMenuItem
+        Caption = 'Paste'
+      end
+      object EditMenuDivider4: TMenuItem
+        Caption = '-'
+      end
+      object AlignMenu: TMenuItem
+        Caption = 'Align'
+        object AlignLeftMenuItem: TMenuItem
+          Caption = 'AlLeft'
+        end
+        object AlignRightMenuItem: TMenuItem
+          Caption = 'AlRight'
+        end
+        object AlignTopMenuItem: TMenuItem
+          Caption = 'AlTop'
+        end
+        object AlignBottomMenuItem: TMenuItem
+          Caption = 'AlBot'
+        end
+        object MenuItem6: TMenuItem
+          Caption = '-'
+        end
+        object AlignMenuItem: TMenuItem
+          Caption = 'Align...'
+        end
+      end
+      object SelectMenu: TMenuItem
+        Caption = 'Select'
+        object SelectAllIntsMenuItem: TMenuItem
+          Caption = 'AllInts'
+        end
+        object SelectAllFloatMenuItem: TMenuItem
+          Caption = 'AllFloats'
+        end
+        object SelectAllStringMenuItem: TMenuItem
+          Caption = 'AllStrings'
+        end
+        object SelectAllBoolMenuItem: TMenuItem
+          Caption = 'AllBools'
+        end
+      end
+      object MenuItem25: TMenuItem
+        Caption = '-'
+      end
+      object PasteAsHeadingMenuItem: TMenuItem
+        Caption = 'HeadingPaste'
+      end
+      object PasteAsIntMenuItem: TMenuItem
+        Caption = 'IntPaste'
+      end
+      object PasteAsFloatMenuItem: TMenuItem
+        Caption = 'FloatPaste'
+      end
+      object PasteAsStringMenuItem: TMenuItem
+        Caption = 'StringPaste'
+      end
+      object PasteAsDateMenuItem: TMenuItem
+        Caption = 'DatePaste'
+      end
+      object EditMenuDivider7: TMenuItem
+        Caption = '-'
+      end
+      object SettingsMenuItem: TMenuItem
+        Action = SettingsAction
+      end
+      object ResetWindowPosMenuItem: TMenuItem
+        Action = DefaultWindowPosAction
+      end
+    end
+    object ProjectMenu: TMenuItem
+      Caption = 'P&roject'
+      object ValueLabelsMenuItem: TMenuItem
+        Caption = 'ValueLabels'
+      end
+      object StudyInfoMenuItem: TMenuItem
+        Caption = 'StudyInfo'
+      end
+      object MenuItem30: TMenuItem
+        Caption = '-'
+      end
+      object ProjectPropertiesMenuItem: TMenuItem
+        Caption = 'Properties'
+      end
+    end
+    object UserAccessMenu: TMenuItem
+      Caption = '&User Access'
+      object SinglePasswordMenuItem: TMenuItem
+        Caption = '&Single Password'
+        object SetSimplePasswordMenuItem: TMenuItem
+          Caption = 'SetSimplePassword'
+        end
+        object RemoveSimplePasswordMenuItem: TMenuItem
+          Caption = 'RemoveSimplePassword'
+        end
+      end
+      object ExtendedAccessMenuItem: TMenuItem
+        Caption = '&Extended Access'
+        object DefineExtendedAccessMenuItem: TMenuItem
+          Caption = 'DefineExtededAccess'
+        end
+        object DefineAccessDivider1: TMenuItem
+          Caption = '-'
+        end
+        object DefineGroupsMenuItem: TMenuItem
+          Caption = 'DefineGroups'
+        end
+        object DefineUsersMenuItem: TMenuItem
+          Caption = 'DefineUsers'
+        end
+        object DefineEntryRightsMenuItem: TMenuItem
+          Caption = 'DefineEntryRights'
+        end
+        object DefineAccessDivider2: TMenuItem
+          Caption = '-'
+        end
+        object ManagePasswordMenuItem: TMenuItem
+          Action = ManageUserPasswordAction
+        end
+        object ExportSecurityLogMenuItem: TMenuItem
+          Caption = 'Export Security Logs...'
+        end
+        object AccessLogOverviewMenuItem: TMenuItem
+          Action = AccessLogOverviewAction
+        end
+        object MenuItem39: TMenuItem
+          Caption = '-'
+        end
+        object RemoveExtendedAccess: TMenuItem
+          Action = RemoveAdminAction
+        end
+      end
+    end
+    object DataformMenu: TMenuItem
+      Caption = 'D&ataset'
+      object RenameControlsMenuItem: TMenuItem
+        Caption = 'RenameControls'
+      end
+      object MenuItem3: TMenuItem
+        Caption = '-'
+      end
+      object BrowseDataMenuItem: TMenuItem
+        Caption = 'BrowseData'
+      end
+      object MenuItem1: TMenuItem
+        Caption = '-'
+      end
+      object DataformPropertiesMenuItem: TMenuItem
+        Caption = 'Properties'
+      end
+    end
+    object MenuItem21: TMenuItem
+      Caption = '&Document'
+      object MenuItem2: TMenuItem
+        Caption = 'Report Structure'
+        object ProjectOverviewReportMenuItem: TMenuItem
+          Action = ProjectReportAction
+        end
+        object QuestionListReportMenuItem: TMenuItem
+          Action = QuestionListReportAction
+        end
+        object ExtendedReportMenuItem: TMenuItem
+          Action = ExtendedListReportAction
+        end
+        object ValueLabaleListReportMenuItem: TMenuItem
+          Action = ValueLabelListReportAction
+        end
+        object MenuItem38: TMenuItem
+          Caption = '-'
+        end
+        object MenuItem34: TMenuItem
+          Action = AdminReportAction
+        end
+        object MenuItem41: TMenuItem
+          Caption = '-'
+        end
+        object CodeBookReportMenuItem: TMenuItem
+          Action = CodeBookReportAction
+        end
+      end
+      object MenuItem4: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem22: TMenuItem
+        Action = VerifyDoubleEntryAction
+      end
+      object MenuItem23: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem24: TMenuItem
+        Action = CountsReportAction
+      end
+      object MenuItem13: TMenuItem
+        Action = ValidationReportAction
+      end
+    end
+    object ToolsMenu: TMenuItem
+      Caption = '&Tools'
+      object MenuItem5: TMenuItem
+        Action = PrepareDoubleEntryAction
+      end
+      object MenuItem18: TMenuItem
+        Caption = '-'
+      end
+      object ExportMenuItem: TMenuItem
+        Action = ExportAction
+      end
+      object PackMenuItem: TMenuItem
+        Action = PackAction
+      end
+      object MenuItem31: TMenuItem
+        Action = VLSetFromDataAction
+      end
+      object MenuItem33: TMenuItem
+        Action = AppendAction
+      end
+      object ClearAllDataFormsMenuItem: TMenuItem
+        Caption = 'Clear All Dataforms'
+        OnClick = ClearAllDataFormsMenuItemClick
+      end
+      object ToolMenuDivider1: TMenuItem
+        Caption = '-'
+      end
+      object CreateArchiveMenuItem: TMenuItem
+        Action = CreateArchiveAction
+      end
+      object ExtractArchiveMenuItem: TMenuItem
+        Action = ExtractArchiveAction
+      end
+      object MenuItem48: TMenuItem
+        Caption = '-'
+      end
+      object EntryClientMenuItem: TMenuItem
+        Action = StartEntryClientAction
+      end
+    end
+    object HelpMenu: TMenuItem
+      Caption = '&Help'
+      object TutorialSubMenu: TMenuItem
+        Caption = 'Tutorials (Local)'
+      end
+      object EpiDataTutorialsMenuItem: TMenuItem
+        Caption = 'Tutorials (EpiData Wiki)'
+        OnClick = EpiDataTutorialsMenuItemClick
+      end
+      object WebTutorialsMenuItem: TMenuItem
+        Caption = 'Tutorials On Web'
+        OnClick = WebTutorialsMenuItem12Click
+      end
+      object HelpMenuDivider1: TMenuItem
+        Caption = '-'
+      end
+      object ShortIntroMenuItem: TMenuItem
+        Caption = 'Short &Introduction'
+        OnClick = ShortIntroMenuItemClick
+      end
+      object ShortCutKeysMenuItem: TMenuItem
+        Caption = 'Show &Shortcuts'
+        OnClick = ShortCutKeysMenuItemClick
+      end
+      object HelpMenuDivider2: TMenuItem
+        Caption = '-'
+      end
+      object CopyVersionInfoMenuItem: TMenuItem
+        Action = CopyProjectInfoAction
+      end
+      object CheckVersionMenuItem: TMenuItem
+        Action = CheckVersionAction
+      end
+      object MenuItem46: TMenuItem
+        Action = ShowChangeLogAction
+      end
+      object HelpMenuDivider3: TMenuItem
+        Caption = '-'
+      end
+      object AboutMenuItem: TMenuItem
+        Action = ShowAboutAction
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Images = DM.Icons16
+    OnUpdate = ActionList1Update
+    left = 480
+    top = 160
+    object NewProjectAction: TAction
+      Category = 'File'
+      Caption = '&New Project'
+      Hint = 'New Project'
+      ImageIndex = 41
+      OnExecute = NewProjectActionExecute
+      ShortCut = 16462
+    end
+    object SettingsAction: TAction
+      Category = 'Edit'
+      Caption = 'Preferences...'
+      Hint = 'Settings'
+      OnExecute = SettingsActionExecute
+    end
+    object FileExitAction: TFileExit
+      Category = 'File'
+      Caption = 'E&xit'
+      Hint = 'Exit'
+      ShortCut = 16465
+      SecondaryShortCuts.Strings = (
+        'Alt+Q'
+      )
+    end
+    object ShowAboutAction: TAction
+      Category = 'Help'
+      Caption = 'About'
+      ImageIndex = 40
+      OnExecute = ShowAboutActionExecute
+    end
+    object CopyProjectInfoAction: TAction
+      Category = 'Help'
+      Caption = 'Copy Version Info'
+      OnExecute = CopyProjectInfoActionExecute
+    end
+    object CheckVersionAction: TAction
+      Category = 'Help'
+      Caption = 'Check Version Online'
+      Hint = 'Check for latest version online (requires internet)'
+      OnExecute = CheckVersionActionExecute
+    end
+    object DefaultWindowPosAction: TAction
+      Category = 'Edit'
+      Caption = 'Default Window Position'
+      OnExecute = DefaultWindowPosActionExecute
+    end
+    object CloseProjectAction: TAction
+      Category = 'File'
+      Caption = '&Close Project'
+      Enabled = False
+      ImageIndex = 42
+      OnExecute = CloseProjectActionExecute
+      OnUpdate = CloseProjectActionUpdate
+      ShortCut = 16471
+    end
+    object OpenProjectAction: TAction
+      Category = 'File'
+      Caption = '&Open Project'
+      Hint = 'Open Project'
+      ImageIndex = 19
+      OnExecute = OpenProjectActionExecute
+      ShortCut = 16463
+    end
+    object StartEntryClientAction: TAction
+      Category = 'Tools'
+      Caption = 'Enter Data'
+      ImageIndex = 39
+      OnExecute = StartEntryClientActionExecute
+      OnUpdate = StartEntryClientActionUpdate
+    end
+    object PackAction: TAction
+      Category = 'Tools'
+      Caption = 'Pack Datafiles'
+      OnExecute = PackActionExecute
+      OnUpdate = ExtendedDataAuthActionUpdate
+    end
+    object ReportGeneratorAction: TAction
+      Category = 'Tools'
+      Caption = 'Report Generator...'
+      OnExecute = ReportGeneratorActionExecute
+    end
+    object QuestionListReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Question List'
+      OnExecute = QuestionListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object ValueLabelListReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Valuelabel List'
+      OnExecute = ValueLabelListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object ExtendedListReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Extended List'
+      OnExecute = ExtendedListReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object ProjectReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Project Overview'
+      OnExecute = ProjectReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object ExportAction: TAction
+      Category = 'Tools'
+      Caption = 'Export...'
+      ImageIndex = 17
+      OnExecute = ExportActionExecute
+      OnUpdate = ExportActionUpdate
+    end
+    object PrepareDoubleEntryAction: TAction
+      Category = 'Tools'
+      Caption = 'Prepare Double Entry'
+      OnExecute = PrepareDoubleEntryActionExecute
+      OnUpdate = PrepareDoubleEntryActionUpdate
+    end
+    object VerifyDoubleEntryAction: TAction
+      Category = 'Reports'
+      Caption = 'Compare Duplicate Files'
+      OnExecute = VerifyDoubleEntryActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object CountsReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Count records by Id'
+      OnExecute = CountsReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object CodeBookReportAction: TAction
+      Category = 'Reports'
+      Caption = 'CodeBook'
+      OnExecute = CodeBookReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object ImportInNewProjectAction: TAction
+      Category = 'File'
+      Caption = 'Import file...'
+      ImageIndex = 18
+      OnExecute = ImportInNewProjectActionExecute
+    end
+    object ValidationReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Data Content Validation'
+      OnExecute = ValidationReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object ImportCBInNewProjectAction: TAction
+      Category = 'File'
+      Caption = 'Import from clipboard'
+      ImageIndex = 18
+      OnExecute = ImportCBInNewProjectActionExecute
+    end
+    object VLSetFromDataAction: TAction
+      Category = 'Tools'
+      Caption = 'Value Labels from Data'
+      OnExecute = VLSetFromDataActionExecute
+      OnUpdate = DefineProjectAuthActionUpdate
+    end
+    object AppendAction: TAction
+      Category = 'Tools'
+      Caption = 'Append'
+      OnExecute = AppendActionExecute
+      OnUpdate = ExtendedDataAuthActionUpdate
+    end
+    object ManageUserPasswordAction: TAction
+      Category = 'Admin'
+      Caption = 'Manage User Passwords'
+      OnExecute = ManageUserPasswordActionExecute
+      OnUpdate = ManageUserPasswordActionUpdate
+    end
+    object RemoveAdminAction: TAction
+      Category = 'Admin'
+      Caption = 'Remove User/Group Administration'
+      OnExecute = RemoveAdminActionExecute
+      OnUpdate = RemoveAdminActionUpdate
+    end
+    object AdminReportAction: TAction
+      Category = 'Reports'
+      Caption = 'Admin Overview'
+      OnExecute = AdminReportActionExecute
+      OnUpdate = ReportsAuthActionUpdate
+    end
+    object ShowChangeLogAction: TAction
+      Category = 'Help'
+      Caption = 'Show Release Notes'
+      OnExecute = ShowChangeLogActionExecute
+    end
+    object AccessLogOverviewAction: TAction
+      Category = 'Reports'
+      Caption = 'Access Log Overview'
+      OnExecute = AccessLogOverviewActionExecute
+    end
+    object CreateArchiveAction: TAction
+      Category = 'Tools'
+      Caption = 'Create Archive...'
+      OnExecute = CreateArchiveActionExecute
+    end
+    object ExtractArchiveAction: TAction
+      Category = 'Tools'
+      Caption = 'Extract Archive...'
+      OnExecute = ExtractArchiveActionExecute
+    end
+  end
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
+    left = 208
+    top = 336
+  end
+  object DefineProjectPopupMenu: TPopupMenu
+    Images = DM.Icons16
+    left = 80
+    top = 64
+    object MenuItem7: TMenuItem
+      Action = NewProjectAction
+    end
+    object MenuItem26: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem8: TMenuItem
+      Action = OpenProjectAction
+    end
+    object RecentFilesSubPopupMenu: TMenuItem
+      Caption = 'Open Recent...'
+      ImageIndex = 19
+    end
+  end
+  object ProjectPopupMenu: TPopupMenu
+    Images = DM.Icons16
+    left = 128
+    top = 184
+    object ValueLabelEditorPopupMenuItem: TMenuItem
+      Caption = 'ValueLabelEditor'
+    end
+    object SetPasswordPopupMenuItem: TMenuItem
+      Caption = 'Password'
+    end
+    object StudyInfoPopupMenuItem: TMenuItem
+      Caption = 'StudyInfo'
+    end
+    object MenuItem32: TMenuItem
+      Caption = '-'
+    end
+    object ProjectPropertiesPopupMenuItem: TMenuItem
+      Caption = 'Properties'
+    end
+  end
+  object DocumentPopupMenu: TPopupMenu
+    Images = DM.Icons16
+    left = 304
+    top = 160
+    object MenuItem9: TMenuItem
+      Caption = 'Report Structure'
+      object MenuItem10: TMenuItem
+        Action = ProjectReportAction
+      end
+      object MenuItem11: TMenuItem
+        Action = QuestionListReportAction
+      end
+      object MenuItem14: TMenuItem
+        Action = ExtendedListReportAction
+      end
+      object MenuItem12: TMenuItem
+        Action = ValueLabelListReportAction
+      end
+      object MenuItem42: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem43: TMenuItem
+        Action = AdminReportAction
+      end
+      object MenuItem45: TMenuItem
+        Caption = 'Log Overview'
+      end
+      object MenuItem44: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem27: TMenuItem
+        Action = CodeBookReportAction
+      end
+    end
+    object MenuItem16: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem17: TMenuItem
+      Action = VerifyDoubleEntryAction
+    end
+    object MenuItem19: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem20: TMenuItem
+      Action = CountsReportAction
+    end
+    object MenuItem28: TMenuItem
+      Action = ValidationReportAction
+    end
+  end
+  object DataformPopupMenu: TPopupMenu
+    Images = DM.Icons16
+    left = 248
+    top = 64
+    object RenameControlsPopupMenuItem: TMenuItem
+      Caption = 'RenameControls'
+    end
+    object MenuItem15: TMenuItem
+      Caption = '-'
+    end
+    object BrowseDatasetMenuItem: TMenuItem
+      Caption = 'BrowseData'
+    end
+    object MenuItem29: TMenuItem
+      Caption = '-'
+    end
+    object DataformPropertiesPopupMenuItem: TMenuItem
+      Caption = 'Properties'
+    end
+  end
+  object RecentFilesActionList: TActionList
+    left = 632
+    top = 160
+  end
+end

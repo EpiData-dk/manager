@@ -1,0 +1,65 @@
+object ImportForm: TImportForm
+  Left = 872
+  Height = 128
+  Top = 357
+  Width = 426
+  ActiveControl = ImportFileEdit
+  Caption = 'Import...'
+  ClientHeight = 128
+  ClientWidth = 426
+  LCLVersion = '0.9.29'
+  object ImportFileEdit: TFileNameEdit
+    Left = 8
+    Height = 27
+    Top = 24
+    Width = 392
+    OnAcceptFileName = ImportFileEditAcceptFileName
+    DialogOptions = []
+    Filter = 'Datafiles|*.rec;*.REC;*.dta;*.DTA|All files|*.*'
+    FilterIndex = 0
+    HideDirectories = False
+    ButtonWidth = 23
+    NumGlyphs = 0
+    MaxLength = 0
+    TabOrder = 0
+    OnEditingDone = ImportFileEditEditingDone
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 18
+    Top = 8
+    Width = 83
+    Caption = 'Import from:'
+    ParentColor = False
+  end
+  object BitBtn1: TBitBtn
+    Left = 240
+    Height = 30
+    Top = 96
+    Width = 75
+    Caption = '&OK'
+    Default = True
+    Kind = bkOK
+    ModalResult = 1
+    TabOrder = 1
+  end
+  object BitBtn2: TBitBtn
+    Left = 328
+    Height = 30
+    Top = 96
+    Width = 91
+    Cancel = True
+    Caption = 'Cancel'
+    Kind = bkCancel
+    ModalResult = 2
+    TabOrder = 2
+  end
+  object ImportDataChkBox: TCheckBox
+    Left = 8
+    Height = 22
+    Top = 64
+    Width = 100
+    Caption = 'Import data'
+    TabOrder = 3
+  end
+end
