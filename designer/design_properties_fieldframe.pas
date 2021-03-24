@@ -1674,19 +1674,10 @@ begin
     then break;
 
   // LENGTH
-  if Field.FieldType = ftFloat then
-    LengthEdit.Text     := IntToStr(Field.Length - (Field.Decimals + 1))
-  else
-    LengthEdit.Text     := IntToStr(Field.Length);
+  LengthEdit.Text     := IntToStr(Field.Length);
   for i := 1 to FieldCount - 1 do
-    if (Fields[i].FieldType = ftFloat) then
-    begin
-      if ClearOrLeaveEdit(LengthEdit, IntToStr(Fields[i].Length - (Fields[i].Decimals + 1)))
-      then break;
-    end else begin
-      if ClearOrLeaveEdit(LengthEdit, IntToStr(Fields[i].Length))
-      then break;
-    end;
+    if ClearOrLeaveEdit(LengthEdit, IntToStr(Fields[i].Length))
+    then break;
 
   // DECIMAL
   DecimalsEdit.Text     := IntToStr(Field.Decimals);
@@ -1833,6 +1824,7 @@ var
   D: EpiDate;
   T: EpiTime;
   VL: TEpiValueLabelSet;
+  Len, Dec: Longint;
 begin
   result := false;
 
@@ -1854,7 +1846,7 @@ begin
        (I <= 0)
     then
     begin
-      DoError('Invalid length', LengthEdit);
+      DoError('Invalid Total length', LengthEdit);
       Exit;
     end;
 
@@ -1864,6 +1856,15 @@ begin
        (I <= 0) then
     begin
       DoError('Invalid decimals', DecimalsEdit);
+      Exit;
+    end;
+
+  if (LengthEdit.Modified or DecimalsEdit.Modified) then
+    if (not TryStrToInt(LengthEdit.Text, Len)) or
+       (not TryStrToInt(DecimalsEdit.Text, Dec)) or
+       (Len < (Dec + 1)) then
+    begin
+      DoError('Total Length must be at least one large than Decimals', LengthEdit);
       Exit;
     end;
 
@@ -1912,82 +1913,6 @@ begin
 
       if (not CheckRangeAndValuelabel(DefaultValueEdit)) then
         Exit;
-
-      {
-      case Field.FieldType of
-        ftBoolean:
-          begin
-            if (not TryStrToInt64(Text, I64)) then
-              Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), DefaultValueEdit));
-          end;
-
-        ftInteger,
-        ftAutoInc:
-          begin
-            if (not TryStrToInt64(Text, I64)) then
-              Exit(DoError(Format(rsNotAValidType, ['integer', Text]), DefaultValueEdit));
-
-            if (FromEdit.Text <> '') and (ToEdit.Text <> '') then
-               if (I64 < StrToInt(FromEdit.Text)) or (I64 > StrToInt(ToEdit.Text)) then
-                 Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
-
-          end;
-
-        ftFloat:
-          begin
-            if (not TryStrToFloat(Text, F)) then
-              Exit(DoError(Format(rsNotAValidType, ['float', Text]), DefaultValueEdit));
-
-            if (FromEdit.Text <> '') and (ToEdit.Text <> '') then
-               if (F < StrToFloat(FromEdit.Text)) or (F > StrToFloat(ToEdit.Text)) then
-                 Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
-          end;
-
-        ftDMYDate,
-        ftMDYDate,
-        ftYMDDate,
-        ftDMYAuto,
-        ftMDYAuto,
-        ftYMDAuto:
-          begin
-            if (not EpiStrToDate(Text, DateSeparator, Field.FieldType, D, S)) then
-              Exit(DoError(S, DefaultValueEdit));
-
-            if (FromEdit.Text <> '') and (ToEdit.Text <> '') then
-               if (D < EpiStrToDate(FromEdit.Text, DateSeparator, Field.FieldType, S)) or
-                  (D > EpiStrToDate(ToEdit.Text, DateSeparator, Field.FieldType, S))
-               then
-                 Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
-          end;
-
-        ftTime,
-        ftTimeAuto:
-          begin
-            if (not EpiStrToTime(Text, TimeSeparator, T, S)) then
-              Exit(DoError(S, DefaultValueEdit));
-
-            if (FromEdit.Text <> '') and (ToEdit.Text <> '') then
-               if (T < EpiStrToTime(FromEdit.Text, TimeSeparator, S)) or
-                  (T > EpiStrToTime(ToEdit.Text, TimeSeparator, S))
-               then
-                 Exit(DoError(rsDefaultValNotInRange, DefaultValueEdit));
-          end;
-      end;
-
-      if (Field.FieldType in BoolFieldTypes) and (not TryStrToInt64(Text, I64)) then
-        Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), DefaultValueEdit));
-
-      if (Field.FieldType in IntFieldTypes) and (not TryStrToInt64(Text, I64)) then
-        Exit(DoError(Format(rsNotAValidType, ['integer', Text]), DefaultValueEdit));
-
-      if (Field.FieldType in FloatFieldTypes) and (not TryStrToFloat(Text, F)) then
-        Exit(DoError(Format(rsNotAValidType, ['float', Text]), DefaultValueEdit));
-
-      if (Field.FieldType in DateFieldTypes) and (not EpiStrToDate(Text, DateSeparator, Field.FieldType, W1, W2, W3, S)) then
-        Exit(DoError(S, DefaultValueEdit));
-
-      if (Field.FieldType in TimeFieldTypes) and (not EpiStrToTime(Text, TimeSeparator, W1, W2, W3, S)) then
-        Exit(DoError(S, DefaultValueEdit));  }
     end;
 
   // *******
@@ -2010,22 +1935,6 @@ begin
             Exit;
         end;
 
-       { with TEdit(ValueEdit) do
-        case Field.FieldType of
-          ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), TEdit(ValueEdit)));
-          ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), TEdit(ValueEdit)));
-          ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format(rsNotAValidType, ['float', Text]), TEdit(ValueEdit)));
-
-          ftDMYDate,
-          ftMDYDate,
-          ftYMDDate: ;
-
-          ftTime: ;
-
-          ftString,
-          ftUpperString:  ;
-        end;
-              }
       if TComboBox(GotoCombo).ItemIndex = -1 then
         Exit(DoError('Invalid "Go To" selection"', TComboBox(GotoCombo)));
     end;
@@ -2050,17 +1959,6 @@ begin
           if (not CheckRangeAndValuelabel(TEdit(ValueEdit))) then
             Exit;
         end;
-
-
-
-{        with ValueEdit do
-        case Field.FieldType of
-          ftBoolean:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['boolean', Text]), ValueEdit));
-          ftInteger:      if not TryStrToInt64(Text, I64) then Exit(DoError(Format(rsNotAValidType, ['integer', Text]), ValueEdit));
-          ftFloat:        if not TryStrToFloat(Text, F)   then Exit(DoError(Format(rsNotAValidType, ['float', Text]), ValueEdit));
-          ftString,
-          ftUpperString:  ;
-        end;  }
 
       if GotoCombo.ItemIndex = -1 then
         Exit(DoError('Invalid "Go To" selection"', GotoCombo));
@@ -2169,21 +2067,13 @@ begin
 
   // Length
   if LengthEdit.Modified then
-    if Field.FieldType = ftFloat then
-      for i := 0 to FieldCount - 1 do
-        Fields[i].Length := StrToInt(LengthEdit.Text) + TEpiField(FFields[i]).Decimals + 1
-    else
-      for i := 0 to FieldCount - 1 do
-        Fields[i].Length := StrToInt(LengthEdit.Text);
+    for i := 0 to FieldCount - 1 do
+      Fields[i].Length := StrToInt(LengthEdit.Text);
 
   // Decimal
   if DecimalsEdit.Modified then
     for i := 0 to FieldCount - 1 do
-    begin
-      L := Fields[i].Length - Fields[i].Decimals - 1;
       Fields[i].Decimals := StrToInt(DecimalsEdit.Text);
-      Fields[i].Length := L + Fields[i].Decimals + 1;
-    end;
 
   // Valuelabels
   if not ComboIgnoreSelected(ValueLabelComboBox) then
