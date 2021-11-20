@@ -7,7 +7,7 @@
     <parent>
         <groupId>dk.epidata.parent</groupId>
         <artifactId>epidata-parent</artifactId>
-        <version>[1.0,1.1)</version>
+        <version>1.0.1</version>
     </parent>
 
     <groupId>dk.epidata.manager</groupId>
@@ -165,7 +165,7 @@
         <dependency>
             <groupId>dk.epidata.core</groupId>
             <artifactId>epidata-core</artifactId>
-            <version>[4.0,4.1)</version>
+            <version>[4.6,4.7)</version>
             <type>pom</type>
         </dependency>
     </dependencies>
