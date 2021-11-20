@@ -1,0 +1,29 @@
+# options:
+-Scih
+-XX
+-Xs
+-O2
+#ifdef windows
+-WG
+#endif
+
+# Output:
+-FE%TARGET_PATH/binary/$fpctarget
+-FU%TARGET_PATH/units/$fpctarget
+
+# Units:
+-Fu.
+-Fu./admin
+-Fu./designer
+-Fu./designer/align
+-Fu./designer/rename
+-Fu./export
+-Fu./import
+-Fu./project
+-Fu./reports
+-Fu./settings
+-Fu./tools
+-Fu./utils
+
+# Includes
+-Fiinclude/$fpcos
