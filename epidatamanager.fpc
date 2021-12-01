@@ -12,18 +12,18 @@
 -FU%TARGET_PATH/units/$fpctarget
 
 # Units:
--Fu.
--Fu./admin
--Fu./designer
--Fu./designer/align
--Fu./designer/rename
--Fu./export
--Fu./import
--Fu./project
--Fu./reports
--Fu./settings
--Fu./tools
--Fu./utils
+-Fu./src
+-Fu./src/admin
+-Fu./src/designer
+-Fu./src/designer/align
+-Fu./src/designer/rename
+-Fu./src/export
+-Fu./src/import
+-Fu./src/project
+-Fu./src/reports
+-Fu./src/settings
+-Fu./src/tools
+-Fu./src/utils
 
 # Includes
--Fiinclude/$fpcos
+-Fi./src/include/$fpcos
