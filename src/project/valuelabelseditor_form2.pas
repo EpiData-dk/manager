@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, Buttons, StdCtrls, ComCtrls, Menus, VirtualTrees, epidatafilestypes,
+  ExtCtrls, Buttons, StdCtrls, ComCtrls, Menus, laz.VirtualTrees, epidatafilestypes,
   valuelabelgrid_frame, epivaluelabels, manager_messages, LMessages, ActnList,
   epicustombase, ImgList;
 
@@ -47,7 +47,7 @@ type
     procedure MenuItem5Click(Sender: TObject);
   private
     { VLSetsTree }
-    VLSetsTree: TVirtualStringTree;
+    VLSetsTree: TLazVirtualStringTree;
     procedure VLSetsEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
     procedure VLSetsTreeFocusChanging(Sender: TBaseVirtualTree; OldNode,
@@ -580,7 +580,7 @@ constructor TValueLabelEditor2.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-  VLSetsTree := TVirtualStringTree.Create(Self);
+  VLSetsTree := TLazVirtualStringTree.Create(Self);
 
   with VLSetsTree do
   begin

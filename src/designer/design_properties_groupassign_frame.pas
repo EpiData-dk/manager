@@ -5,7 +5,7 @@ unit design_properties_groupassign_frame;
 interface
 
 uses
-  Classes, SysUtils, types, FileUtil, Forms, Controls, epiadmin, VirtualTrees,
+  Classes, SysUtils, types, FileUtil, Forms, Controls, epiadmin, laz.VirtualTrees,
   epirights, Graphics, StdCtrls, ExtCtrls, epidatafilerelations, epidatafiles,
   epicustombase;
 
@@ -41,7 +41,7 @@ type
     // Hitinfo is obtained in MouseMove and used in AfterPaint to correctly paint hot-states for check boxes
     FHitInfo: THitInfo;
     FDataFileRelation: TEpiMasterRelation;
-    FGroupRightsVst: TVirtualStringTree;
+    FGroupRightsVst: TLazVirtualStringTree;
 
     procedure InitGroupVST;
 
@@ -486,7 +486,7 @@ var
 begin
   inherited Create(TheOwner);
 
-  FGroupRightsVst := TVirtualStringTree.Create(self);
+  FGroupRightsVst := TLazVirtualStringTree.Create(self);
   with FGroupRightsVst do
   begin
     BeginUpdate;

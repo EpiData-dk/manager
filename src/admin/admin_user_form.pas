@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, types, FileUtil, CheckBoxThemed, Forms, Controls, Graphics,
   Dialogs, ExtCtrls, StdCtrls, ComboEx, EditBtn, Buttons, ComCtrls, CheckLst,
-  epiadmin, LCLType, VirtualTrees, epistringutils;
+  epiadmin, LCLType, laz.VirtualTrees, epistringutils;
 
 type
 
@@ -59,7 +59,7 @@ type
 
   { Groups }
   private
-    FGroupVST: TVirtualStringTree;
+    FGroupVST: TLazVirtualStringTree;
     FUpdatingGroupVST: Boolean;
     procedure FillGroupList;
     // VST Aux methods
@@ -485,7 +485,7 @@ begin
   FHintWindow.AutoHide     := true;
   FHintWindow.HideInterval := 2500;  //2.5 secs.
 
-  FGroupVST := TVirtualStringTree.Create(Self);
+  FGroupVST := TLazVirtualStringTree.Create(Self);
   with FGroupVST do
   begin
     BeginUpdate;

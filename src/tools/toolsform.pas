@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  ExtCtrls, StdCtrls, Buttons, VirtualTrees,
+  ExtCtrls, StdCtrls, Buttons, laz.VirtualTrees,
   epidocument, epidatafiles, epidatafilerelations, contnrs;
 
 type
@@ -29,7 +29,7 @@ type
     SectionCountPanel: TPanel;
     RecordCountPanel: TPanel;
     DeletedCountPanel: TPanel;
-    DataFileTreeView: TVirtualStringTree;
+    DataFileTreeView: TLazVirtualStringTree;
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormShow(Sender: TObject);
     procedure DataFileTreeViewChecked(Sender: TBaseVirtualTree;

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   Buttons, Grids, StdCtrls, ComCtrls, ActnList, CheckLst, epiadmin,
-  epicustombase, VirtualTrees;
+  epicustombase, laz.VirtualTrees;
 
 type
 
@@ -82,7 +82,7 @@ type
   { Group vars/methods }
   private
     FUpdatingGroupVST: boolean;
-    FGroupVST: TVirtualStringTree;
+    FGroupVST: TLazVirtualStringTree;
     function GroupFromNode(Const Node: PVirtualNode): TEpiGroup;
     function GroupFromSelectedNode: TEpiGroup;
     function RelationFromNode(Const Node: PVirtualNode): TEpiGroupRelation;
@@ -104,7 +104,7 @@ type
   { Users in Group vars/methods }
   private
     FUpdatingUserInGroupVST: boolean;
-    FUserInGroupVST: TVirtualStringTree;
+    FUserInGroupVST: TLazVirtualStringTree;
     function UsersInGroup_UserFromNode(Const Node: PVirtualNode): TEpiUser;
     procedure UsersInGroupRemoveUserFromChildGroups(
         Const Relation: TEpiGroupRelation;
@@ -628,7 +628,7 @@ begin
 
   FAdmin := AAdmin;
 
-  FGroupVST := TVirtualStringTree.Create(Self);
+  FGroupVST := TLazVirtualStringTree.Create(Self);
   with FGroupVST do
   begin
     BeginUpdate;
@@ -691,7 +691,7 @@ begin
     EndUpdate;
   end;
 
-  FUserInGroupVST := TVirtualStringTree.Create(Self);
+  FUserInGroupVST := TLazVirtualStringTree.Create(Self);
   with FUserInGroupVST do
   begin
     BeginUpdate;

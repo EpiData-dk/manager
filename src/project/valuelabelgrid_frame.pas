@@ -5,7 +5,7 @@ unit valuelabelgrid_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, VirtualTrees, epivaluelabels,
+  Classes, SysUtils, FileUtil, Forms, Controls, laz.VirtualTrees, epivaluelabels,
   epidatafilestypes, LCLType, ComCtrls, design_types, epicustombase, LMessages,
   manager_messages;
 
@@ -21,7 +21,7 @@ type
     procedure NewLineBtnClick(Sender: TObject);
   private
     { StringTree privates }
-    FVLG: TVirtualStringTree;
+    FVLG: TLazVirtualStringTree;
     procedure DoAddLine;
     procedure VLGChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VLGChecking(Sender: TBaseVirtualTree; Node: PVirtualNode; var NewState: TCheckState; var Allowed: Boolean);
@@ -57,7 +57,7 @@ type
     destructor  Destroy; override;
     function    ValidateGridEntries: boolean;
     property    ValueLabelSet: TEpiValueLabelSet read FValueLabelSet write SetValueLabelSet;
-    property    VLG: TVirtualStringTree read FVLG;
+    property    VLG: TLazVirtualStringTree read FVLG;
     property    OnShowHintMsg: TDesignFrameShowHintEvent read FOnShowHintMsg write FOnShowHintMsg;
   end; 
 
@@ -630,7 +630,7 @@ constructor TValueLabelGridFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-  FVLG := TVirtualStringTree.Create(Self);
+  FVLG := TLazVirtualStringTree.Create(Self);
   FVLG.BeginUpdate;
 
   with VLG do

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  Buttons, ComCtrls, ActnList, StdCtrls, VirtualTrees, epiadmin, epicustombase;
+  Buttons, ComCtrls, ActnList, StdCtrls, laz.VirtualTrees, epiadmin, epicustombase;
 
 type
 
@@ -45,7 +45,7 @@ type
 
   { Users }
   private
-    FUsersVST: TVirtualStringTree;
+    FUsersVST: TLazVirtualStringTree;
     FPasswordReset: boolean;
 
     { VST Events }
@@ -367,7 +367,7 @@ begin
   Screen.AddHandlerActiveFormChanged(@FormChanged);
   PasswordReset := false;
 
-  FUsersVST := TVirtualStringTree.Create(Self);
+  FUsersVST := TLazVirtualStringTree.Create(Self);
   with FUsersVST do
   begin
     BeginUpdate;

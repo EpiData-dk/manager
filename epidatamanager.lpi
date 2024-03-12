@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="11"/>
+    <Version Value="12"/>
     <General>
+      <Flags>
+        <CompatibilityMode Value="True"/>
+      </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <MainUnit Value="0"/>
       <AutoCreateForms Value="False"/>
       <Title Value="EpiData Manager"/>
       <ResourceType Value="res"/>
@@ -172,35 +174,35 @@
     </PublishOptions>
     <RunParams>
       <local>
-        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T &apos;Lazarus Run Output&apos; -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
       <FormatVersion Value="2"/>
       <Modes Count="1">
         <Mode0 Name="default">
           <local>
-            <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+            <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T &apos;Lazarus Run Output&apos; -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
           </local>
         </Mode0>
       </Modes>
     </RunParams>
     <RequiredPackages Count="8">
       <Item1>
-        <PackageName Value="epidatacore_visuals"/>
+        <PackageName Value="laz.virtualtreeview_package"/>
       </Item1>
       <Item2>
-        <PackageName Value="epidatacore"/>
+        <PackageName Value="epidatacore_visuals"/>
       </Item2>
       <Item3>
-        <PackageName Value="LazControls"/>
+        <PackageName Value="epidatacore"/>
       </Item3>
       <Item4>
-        <PackageName Value="jvRuntimeDesign"/>
+        <PackageName Value="LazControls"/>
       </Item4>
       <Item5>
-        <PackageName Value="Printer4Lazarus"/>
+        <PackageName Value="jvRuntimeDesign"/>
       </Item5>
       <Item6>
-        <PackageName Value="virtualtreeview_package"/>
+        <PackageName Value="Printer4Lazarus"/>
       </Item6>
       <Item7>
         <PackageName Value="LCLBase"/>
@@ -210,7 +212,7 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="117">
+    <Units Count="116">
       <Unit0>
         <Filename Value="epidatamanager.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -306,7 +308,7 @@
         <IsPartOfProject Value="True"/>
         <ComponentName Value="HeadingPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
+        <ResourceBaseClass Value="Frame"/>
       </Unit15>
       <Unit16>
         <Filename Value="src/designer/design_properties_baseframe.pas"/>
@@ -422,474 +424,467 @@
         <ResourceBaseClass Value="Frame"/>
       </Unit35>
       <Unit36>
-        <Filename Value="src/export/export_form.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="ExportForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit36>
-      <Unit37>
         <Filename Value="src/export/export_stata_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportStataFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit37>
-      <Unit38>
+      </Unit36>
+      <Unit37>
         <Filename Value="src/export/export_customvaluelabel_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CustomValueLabelFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit38>
-      <Unit39>
+      </Unit37>
+      <Unit38>
         <Filename Value="src/export/export_frame_types.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit39>
-      <Unit40>
+      </Unit38>
+      <Unit39>
         <Filename Value="src/export/export_csv_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportCSVFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit40>
-      <Unit41>
+      </Unit39>
+      <Unit40>
         <Filename Value="src/export/export_customtext_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportCustomTextFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit41>
-      <Unit42>
+      </Unit40>
+      <Unit41>
         <Filename Value="src/export/export_spss_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportSPSSFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit42>
-      <Unit43>
+      </Unit41>
+      <Unit42>
         <Filename Value="src/export/export_sas_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportSASFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit43>
-      <Unit44>
+      </Unit42>
+      <Unit43>
         <Filename Value="src/tools/prepare_double_entry_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="PrepareDoubleEntryForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit44>
-      <Unit45>
+      </Unit43>
+      <Unit44>
         <Filename Value="src/project/project_keyfields_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="KeyFieldsFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+      </Unit44>
+      <Unit45>
+        <Filename Value="src/utils/manager_globals.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit45>
       <Unit46>
-        <Filename Value="src/utils/manager_globals.pas"/>
+        <Filename Value="src/reports/report_double_entry_validation.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit46>
       <Unit47>
-        <Filename Value="src/reports/report_double_entry_validation.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit47>
-      <Unit48>
         <Filename Value="src/reports/viewer_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ReportViewerForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit48>
-      <Unit49>
+      </Unit47>
+      <Unit48>
         <Filename Value="src/designer/design_runtimedesigner.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="RuntimeDesignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+      </Unit48>
+      <Unit49>
+        <Filename Value="src/designer/design_control_field.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit49>
       <Unit50>
-        <Filename Value="src/designer/design_control_field.pas"/>
+        <Filename Value="src/designer/design_control_heading.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit50>
       <Unit51>
-        <Filename Value="src/designer/design_control_heading.pas"/>
+        <Filename Value="src/designer/design_control_section.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit51>
       <Unit52>
-        <Filename Value="src/designer/design_control_section.pas"/>
+        <Filename Value="src/designer/design_designpanel.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit52>
       <Unit53>
-        <Filename Value="src/designer/design_designpanel.pas"/>
+        <Filename Value="src/designer/design_properties_form.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit53>
       <Unit54>
-        <Filename Value="src/designer/design_properties_form.pas"/>
+        <Filename Value="src/designer/design_designcontroller.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit54>
       <Unit55>
-        <Filename Value="src/designer/design_designcontroller.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit55>
-      <Unit56>
         <Filename Value="src/designer/design_properties_fieldframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FieldPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit56>
-      <Unit57>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit55>
+      <Unit56>
         <Filename Value="src/designer/design_properties_sectionframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SectionPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit56>
+      <Unit57>
+        <Filename Value="src/designer/design_designmessenger.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit57>
       <Unit58>
-        <Filename Value="src/designer/design_designmessenger.pas"/>
+        <Filename Value="src/designer/design_commander.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit58>
       <Unit59>
-        <Filename Value="src/designer/design_commander.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit59>
-      <Unit60>
         <Filename Value="src/designer/design_properties_emptyframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="EmptyPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit59>
+      <Unit60>
+        <Filename Value="src/designer/design_designmover.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit60>
       <Unit61>
-        <Filename Value="src/designer/design_designmover.pas"/>
+        <Filename Value="src/designer/design_designsizer.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit61>
       <Unit62>
-        <Filename Value="src/designer/design_designsizer.pas"/>
+        <Filename Value="src/designer/design_designbander.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit62>
       <Unit63>
-        <Filename Value="src/designer/design_designbander.pas"/>
+        <Filename Value="src/include/win32/initfont.inc"/>
         <IsPartOfProject Value="True"/>
       </Unit63>
       <Unit64>
-        <Filename Value="src/include/win32/initfont.inc"/>
-        <IsPartOfProject Value="True"/>
-      </Unit64>
-      <Unit65>
         <Filename Value="src/designer/align/align_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AlignmentForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit65>
-      <Unit66>
+      </Unit64>
+      <Unit65>
         <Filename Value="src/reports/report_counts.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit66>
-      <Unit67>
+      </Unit65>
+      <Unit66>
         <Filename Value="src/reports/report_optionframe_counts.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ReportOptionsFrameCounts"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+      </Unit66>
+      <Unit67>
+        <Filename Value="src/reports/report_types.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit67>
       <Unit68>
-        <Filename Value="src/reports/report_types.pas"/>
+        <Filename Value="src/tools/dataset_form.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit68>
       <Unit69>
-        <Filename Value="src/tools/dataset_form.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit69>
-      <Unit70>
         <Filename Value="src/utils/ok_cancel_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="OkCancelForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit70>
-      <Unit71>
+      </Unit69>
+      <Unit70>
         <Filename Value="src/tools/validate_double_entry_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ValidateDoubleEntryFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit71>
-      <Unit72>
+      </Unit70>
+      <Unit71>
         <Filename Value="src/project/project_settings_autoincrement_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectSettings_AutoIncFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit72>
-      <Unit73>
+      </Unit71>
+      <Unit72>
         <Filename Value="src/settings/settings_font_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SettingsFontFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit73>
-      <Unit74>
+      </Unit72>
+      <Unit73>
         <Filename Value="src/reports/report_codebook.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit74>
-      <Unit75>
+      </Unit73>
+      <Unit74>
         <Filename Value="src/export/export_ddi_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportDDIFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+      </Unit74>
+      <Unit75>
+        <Filename Value="src/designer/design_control_extender.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit75>
       <Unit76>
-        <Filename Value="src/designer/design_control_extender.pas"/>
+        <Filename Value="src/utils/manager_types.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit76>
       <Unit77>
-        <Filename Value="src/utils/manager_types.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit77>
-      <Unit78>
         <Filename Value="src/export/export_epx_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportEPXFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit78>
-      <Unit79>
+      </Unit77>
+      <Unit78>
         <Filename Value="src/reports/report_project_validation.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit79>
-      <Unit80>
+      </Unit78>
+      <Unit79>
         <Filename Value="src/reports/report_project_validation_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectValidationFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit80>
-      <Unit81>
+      </Unit79>
+      <Unit80>
         <Filename Value="src/tools/recode_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="RecodeForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit81>
-      <Unit82>
+      </Unit80>
+      <Unit81>
         <Filename Value="src/designer/rename/rename_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="RenameForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit82>
-      <Unit83>
+      </Unit81>
+      <Unit82>
         <Filename Value="src/reports/report_export.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit83>
-      <Unit84>
+      </Unit82>
+      <Unit83>
         <Filename Value="src/project/valuelabel_import_external.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExtVLSetForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit84>
-      <Unit85>
+      </Unit83>
+      <Unit84>
         <Filename Value="src/project/valuelabel_import_data.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ValueLabelDataImport"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit85>
-      <Unit86>
+      </Unit84>
+      <Unit85>
         <Filename Value="src/project/project_types.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit86>
-      <Unit87>
+      </Unit85>
+      <Unit86>
         <Filename Value="src/project/project_studyunit_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="StudyUnitFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit87>
-      <Unit88>
+      </Unit86>
+      <Unit87>
         <Filename Value="src/designer/design_properties_dataformframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DataformPropertiesFrame"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit88>
-      <Unit89>
+        <ResourceBaseClass Value="Frame"/>
+      </Unit87>
+      <Unit88>
         <Filename Value="src/tools/append_form2.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AppendForm2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit89>
-      <Unit90>
+      </Unit88>
+      <Unit89>
         <Filename Value="src/reports/report_project_validation_frame2.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ProjectValidationFrame2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit90>
-      <Unit91>
+      </Unit89>
+      <Unit90>
         <Filename Value="src/reports/reports_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ReportForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit91>
-      <Unit92>
+      </Unit90>
+      <Unit91>
         <Filename Value="src/reports/report_counts_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CountByIdFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit92>
-      <Unit93>
+      </Unit91>
+      <Unit92>
         <Filename Value="src/designer/design_control_memo.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit93>
-      <Unit94>
+      </Unit92>
+      <Unit93>
         <Filename Value="src/admin/admin_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AdminForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit94>
-      <Unit95>
+      </Unit93>
+      <Unit94>
         <Filename Value="src/admin/admin_user_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AdminUserForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit95>
-      <Unit96>
+      </Unit94>
+      <Unit95>
         <Filename Value="src/admin/admin_group_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="AdminGroupForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit96>
-      <Unit97>
+      </Unit95>
+      <Unit96>
         <Filename Value="src/export/export_form2.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ExportForm2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit97>
-      <Unit98>
+      </Unit96>
+      <Unit97>
         <Filename Value="src/admin/admin_authenticator.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit98>
-      <Unit99>
+      </Unit97>
+      <Unit98>
         <Filename Value="src/designer/design_properties_groupassign_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="GroupsAssignFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit99>
-      <Unit100>
+      </Unit98>
+      <Unit99>
         <Filename Value="src/tools/core_logger.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="CoreLogger"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit100>
-      <Unit101>
+      </Unit99>
+      <Unit100>
         <Filename Value="src/admin/admin_groups_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DefineGroupsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit101>
-      <Unit102>
+      </Unit100>
+      <Unit101>
         <Filename Value="src/admin/admin_users_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DefineUsersForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit102>
-      <Unit103>
+      </Unit101>
+      <Unit102>
         <Filename Value="src/admin/admin_entryrights_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="DefineEntryRightsForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit103>
-      <Unit104>
+      </Unit102>
+      <Unit103>
         <Filename Value="src/admin/admin_users_accum_rights_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="UsersAccumulatedRightsFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit104>
-      <Unit105>
+      </Unit103>
+      <Unit104>
         <Filename Value="src/project/project_statusbar.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit105>
-      <Unit106>
+      </Unit104>
+      <Unit105>
         <Filename Value="src/designer/design_properties_dataform_statusbarframe.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="StatusbarContentFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit106>
-      <Unit107>
+      </Unit105>
+      <Unit106>
         <Filename Value="src/settings/settings_statusbar.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SettingsStatusbar"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit107>
-      <Unit108>
+      </Unit106>
+      <Unit107>
         <Filename Value="src/admin/admin_logviewer_frame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="LogViewerFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+      </Unit107>
+      <Unit108>
+        <Filename Value="src/utils/empty_form.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit108>
       <Unit109>
-        <Filename Value="src/utils/empty_form.pas"/>
+        <Filename Value="src/reports/report_admin.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit109>
       <Unit110>
-        <Filename Value="src/reports/report_admin.pas"/>
+        <Filename Value="src/reports/report_logoverview.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit110>
       <Unit111>
-        <Filename Value="src/reports/report_logoverview.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit111>
-      <Unit112>
         <Filename Value="src/project/project_settings_extended_access.pas"/>
         <IsPartOfProject Value="True"/>
         <HasResources Value="True"/>
-      </Unit112>
-      <Unit113>
+      </Unit111>
+      <Unit112>
         <Filename Value="src/export/export_securitylog_form.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit113>
-      <Unit114>
+      </Unit112>
+      <Unit113>
         <Filename Value="src/tools/archive_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="ArchiveForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit114>
-      <Unit115>
+      </Unit113>
+      <Unit114>
         <Filename Value="src/tools/unarchive_form.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="UnArchiveForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit115>
-      <Unit116>
+      </Unit114>
+      <Unit115>
         <Filename Value="src/tools/archive_progressform.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit116>
+      </Unit115>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
