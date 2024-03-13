@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, ComCtrls, Buttons, ActnList, VirtualTrees, epiadmin, epicustombase;
+  StdCtrls, ComCtrls, Buttons, ActnList, laz.VirtualTrees, epiadmin, epicustombase;
 
 type
 
@@ -56,7 +56,7 @@ type
 
    { Group }
   private
-    FGroupVST: TVirtualStringTree;
+    FGroupVST: TLazVirtualStringTree;
     FGroupVSTUpdating: Boolean;
 
     { VST Events }
@@ -88,7 +88,7 @@ type
 
   { Users }
   private
-    FUsersVST: TVirtualStringTree;
+    FUsersVST: TLazVirtualStringTree;
     FUpdatingUserChecks: boolean;
 
     { VST Events }
@@ -679,7 +679,7 @@ begin
   inherited Create(TheOwner);
   Screen.AddHandlerActiveFormChanged(@FormChanged);
 
-  FGroupVST := TVirtualStringTree.Create(Self);
+  FGroupVST := TLazVirtualStringTree.Create(Self);
   with FGroupVST do
   begin
     BeginUpdate;
@@ -747,7 +747,7 @@ begin
     EndUpdate;
   end;
 
-  FUsersVST := TVirtualStringTree.Create(Self);
+  FUsersVST := TLazVirtualStringTree.Create(Self);
   with FUsersVST do
   begin
     BeginUpdate;

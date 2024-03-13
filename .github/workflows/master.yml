@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  MANAGER_VERSION: "1.1"
+  MANAGER_VERSION: "2.0"
 
 jobs:
   setup:

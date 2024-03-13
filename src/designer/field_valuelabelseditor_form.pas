@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, types, FileUtil, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, ComCtrls, Buttons, VirtualTrees, epivaluelabels,
+  ExtCtrls, StdCtrls, ComCtrls, Buttons, laz.VirtualTrees, epivaluelabels,
   epidatafilestypes, LCLType, valuelabelgrid_frame;
 
 type

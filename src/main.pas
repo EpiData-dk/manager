@@ -337,7 +337,7 @@ implementation
 
 uses
   epiv_datamodule, LazFileUtils,
-  LCLProc, LCLIntf, LazUTF8Classes,
+  LCLProc, LCLIntf,
   settings2, settings2_var, about, Clipbrd, epiversionutils,
   epimiscutils,
   epicustombase, UTF8Process,
@@ -508,7 +508,7 @@ var
   R: TReportExport;
   S: String;
   FileList: TEpiDocumentFileList;
-  FS: TFileStreamUTF8;
+  FS: TFileStream;
   ReportTitle: String;
   ReportText: String;
   i: Integer;
@@ -558,7 +558,7 @@ begin
         ReportTitle := R.ReportTitle;
         ReportText := R.RunReport;
 
-        FS := TFileStreamUTF8.Create(R.ReportFileName, fmCreate);
+        FS := TFileStream.Create(R.ReportFileName, fmCreate);
         FS.Write(ReportText[1], Length(ReportText));
 
         R.Free;

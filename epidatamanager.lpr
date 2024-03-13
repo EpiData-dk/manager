@@ -12,7 +12,7 @@ uses
   clocale,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, printer4lazarus, virtualtreeview_package,
+  Forms, printer4lazarus,
   jvRuntimeDesign, main, project_frame,
   managerprocs, sysutils, about,
 

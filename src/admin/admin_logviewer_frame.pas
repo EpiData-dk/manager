@@ -5,7 +5,7 @@ unit admin_logviewer_frame;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, VirtualTrees, epilogger,
+  Classes, SysUtils, FileUtil, Forms, Controls, laz.VirtualTrees, epilogger,
   epidatafiles, epidocument;
 
 type
@@ -16,7 +16,7 @@ type
   private
     FDocument: TEpiDocument;
 //    FLog: TEpiLog;
-    FVst: TVirtualStringTree;
+    FVst: TLazVirtualStringTree;
     procedure LogGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure LogInitNode(Sender: TBaseVirtualTree; ParentNode,
@@ -141,7 +141,7 @@ constructor TLogViewerFrame.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
 
-{  FVst := TVirtualStringTree.Create(Self);
+{  FVst := TLazVirtualStringTree.Create(Self);
   with FVst do
   begin
     BeginUpdate;

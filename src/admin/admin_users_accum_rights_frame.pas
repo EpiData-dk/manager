@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Types, FileUtil, Forms, Controls, epidatafiles,
-  VirtualTrees, epiadmin, epirights, Graphics, epicustombase;
+  laz.VirtualTrees, epiadmin, epirights, Graphics, epicustombase;
 
 type
 
@@ -14,7 +14,7 @@ type
 
   TUsersAccumulatedRightsFrame = class(TFrame)
   private
-    FUsersRightsVST: TVirtualStringTree;
+    FUsersRightsVST: TLazVirtualStringTree;
 
     { Other }
     procedure InitUserRightsVST;
@@ -266,7 +266,7 @@ var
 begin
   inherited Create(TheOwner);
 
-  FUsersRightsVST := TVirtualStringTree.Create(Self);
+  FUsersRightsVST := TLazVirtualStringTree.Create(Self);
   with FUsersRightsVST do
   begin
     BeginUpdate;

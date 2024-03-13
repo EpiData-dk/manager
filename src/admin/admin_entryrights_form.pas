@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   Buttons, StdCtrls, ComCtrls, ActnList, epiv_projecttreeview_frame,
   epidocument, epicustombase, design_properties_groupassign_frame,
-  epidatafilerelations, VirtualTrees;
+  epidatafilerelations, laz.VirtualTrees;
 
 type
 
@@ -50,7 +50,7 @@ type
 
   { Project Tree View }
   private
-    FDataFormsVST: TVirtualStringTree;
+    FDataFormsVST: TLazVirtualStringTree;
     procedure InitDataFormTree;
     function RelationFromNode(Node: PVirtualNode): TEpiMasterRelation;
     procedure RelationToNode(Node: PVirtualNode; Relation: TEpiMasterRelation);
@@ -306,7 +306,7 @@ begin
   inherited Create(TheOwner);
   Screen.AddHandlerActiveFormChanged(@FormChanged);
 
-  FDataFormsVST := TVirtualStringTree.Create(Self);
+  FDataFormsVST := TLazVirtualStringTree.Create(Self);
   with FDataFormsVST do
   begin
     NodeDataSize    := SizeOf(TEpiMasterRelation);

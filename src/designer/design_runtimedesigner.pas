@@ -359,7 +359,6 @@ implementation
 {$R *.lfm}
 
 uses
-  lazutf8sysutils,
   JvDesignImp, design_designpanel,
   Graphics, design_designcontroller, design_designmessenger,
   main, JvDesignUtils, settings2_var,
