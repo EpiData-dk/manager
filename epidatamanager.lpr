@@ -88,7 +88,7 @@ begin
   SetHeapTraceOutput(MemTraceFileName);
   {$ENDIF}
 
-  Application.Title:='EpiData Manager';
+  Application.Title := 'EpiData Manager';
   OnGetApplicationName := @EpiDataApplicationName;
   OnGetVendorName := @EpiDataVendorName;
 
