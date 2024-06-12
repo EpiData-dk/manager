@@ -7,7 +7,7 @@
     <parent>
         <groupId>dk.epidata.parent</groupId>
         <artifactId>epidata-parent</artifactId>
-        <version>1.0.3</version>
+        <version>2.0.1</version>
     </parent>
 
     <groupId>dk.epidata.manager</groupId>
@@ -20,21 +20,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
-                <inherited>false</inherited>
-                <configuration>
-                    <descriptors>
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
