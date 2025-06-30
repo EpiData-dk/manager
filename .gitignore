@@ -3,6 +3,7 @@
 target/
 *.iml
 backup/
+lib/
 epidatamanager
 epidatamanager.exe
 target/
