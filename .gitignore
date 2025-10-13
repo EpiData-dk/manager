@@ -8,3 +8,4 @@ epidatamanager.exe
 target/
 *.resolved
 *.lps
+lib/
